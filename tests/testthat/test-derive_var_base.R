@@ -37,6 +37,29 @@ test_that("`BASE` is set to `AVAL` where `ABL01FL == 'Y'`", {
   expect_identical(derive_var_chg(input), expected_output)
 })
 
+test_that("`derive_var_base()` only adds the `BASE` variable", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL, ~ANL01FL,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      "Y",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "N",      "Y",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "N",      "Y",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",      "Y",
+    "TEST01", "PAT01",  "PARAM02", NA,    "N",      "Y",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "N",      "Y",
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL, ~ANL01FL, ~BASE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "N",      "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "N",      "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",      "Y",       8.35,
+    "TEST01", "PAT01",  "PARAM02", NA,    "N",      "Y",       8.35,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "N",      "Y",       8.35
+  )
+
+  expect_identical(derive_var_chg(input), expected_output)
+})
+
 test_that("`derive_var_base()` fails when required variables are missing", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL,

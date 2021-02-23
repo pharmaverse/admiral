@@ -29,8 +29,7 @@ derive_var_chg <- function(bds_dataset) {
 
   base <- bds_dataset %>%
     filter(ABL01FL == "Y") %>%
-    select(-ABL01FL) %>%
-    rename(BASE = AVAL)
+    select(STUDYID, USUBJID, PARAMCD, BASE = AVAL)
 
   left_join(bds_dataset, base, by = c("STUDYID", "USUBJID", "PARAMCD"))
 }
