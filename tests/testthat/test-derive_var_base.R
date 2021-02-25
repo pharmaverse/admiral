@@ -2,36 +2,36 @@ context("test-derive_var_base")
 
 test_that("`BASE` is set to `AVAL` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",
-    "TEST01", "PAT01",  "PARAM02", NA,    "",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",
 
-    "TEST01", "PAT02",  "PARAM01", 29,    "Y",
-    "TEST01", "PAT02",  "PARAM01", 19.7,  "",
-    "TEST01", "PAT02",  "PARAM01", 18.01, "",
-    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",
-    "TEST01", "PAT02",  "PARAM02",  9,    "",
-    "TEST01", "PAT02",  "PARAM02",  5.35, "",
+    "TEST01", "PAT02",  "PARAM01", 29,    "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM01", 19.7,  "",     "LAST",
+    "TEST01", "PAT02",  "PARAM01", 18.01, "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02",  9,    "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST"
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      10.12,
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",       10.12,
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",       10.12,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",       8.35,
-    "TEST01", "PAT01",  "PARAM02", NA,    "",        8.35,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",        8.35,
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",      8.35,
+    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",      8.35,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",      8.35,
 
-    "TEST01", "PAT02",  "PARAM01", 29,    "Y",      29,
-    "TEST01", "PAT02",  "PARAM01", 19.7,  "",       29,
-    "TEST01", "PAT02",  "PARAM01", 18.01, "",       29,
-    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",       8.9,
-    "TEST01", "PAT02",  "PARAM02",  9,    "",        8.9,
-    "TEST01", "PAT02",  "PARAM02",  5.35, "",        8.9,
+    "TEST01", "PAT02",  "PARAM01", 29,    "Y",    "LAST",     29,
+    "TEST01", "PAT02",  "PARAM01", 19.7,  "",     "LAST",     29,
+    "TEST01", "PAT02",  "PARAM01", 18.01, "",     "LAST",     29,
+    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",    "LAST",      8.9,
+    "TEST01", "PAT02",  "PARAM02",  9,    "",     "LAST",      8.9,
+    "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST",      8.9
   )
 
   expect_identical(derive_var_base(input), expected_output)
@@ -39,22 +39,22 @@ test_that("`BASE` is set to `AVAL` where `ABLFL == 'Y'`", {
 
 test_that("`BASE` is set to `NA` if a baseline record is missing", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",
-    "TEST01", "PAT01",  "PARAM02",  4.9,  "",
-    "TEST01", "PAT01",  "PARAM02",  7.1,  "",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  4.9,  "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  7.1,  "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST"
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      10.12,
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",       10.12,
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",       10.12,
-    "TEST01", "PAT01",  "PARAM02",  4.9,  "",       NA,
-    "TEST01", "PAT01",  "PARAM02",  7.1,  "",       NA,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",       NA,
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",     10.12,
+    "TEST01", "PAT01",  "PARAM02",  4.9,  "",     "LAST",     NA,
+    "TEST01", "PAT01",  "PARAM02",  7.1,  "",     "LAST",     NA,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",     NA
   )
 
   expect_identical(derive_var_base(input), expected_output)
@@ -62,22 +62,22 @@ test_that("`BASE` is set to `NA` if a baseline record is missing", {
 
 test_that("`derive_var_base()` only adds the `BASE` variable", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~ANL01FL,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      "Y",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",       "Y",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",       "Y",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",      "Y",
-    "TEST01", "PAT01",  "PARAM02", NA,    "",       "Y",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",       "Y",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",    "Y",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",    "Y",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",    "Y",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",    "Y",
+    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",    "Y",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",    "Y"
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~ANL01FL, ~BASE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      "Y",      10.12,
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",       "Y",      10.12,
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",       "Y",      10.12,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",      "Y",       8.35,
-    "TEST01", "PAT01",  "PARAM02", NA,    "",       "Y",       8.35,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",       "Y",       8.35
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL, ~BASE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",    "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",    "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",    "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",    "Y",       8.35,
+    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",    "Y",       8.35,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",    "Y",       8.35
   )
 
   expect_identical(derive_var_base(input), expected_output)
@@ -85,20 +85,20 @@ test_that("`derive_var_base()` only adds the `BASE` variable", {
 
 test_that("`derive_var_base()` fails when required variables are missing", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",
-    "TEST01", "PAT01",  "PARAM02", NA,    "",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",
 
-    "TEST01", "PAT02",  "PARAM01", 29,    "Y",
-    "TEST01", "PAT02",  "PARAM01", 19.7,  "",
-    "TEST01", "PAT02",  "PARAM01", 18.01, "",
-    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",
-    "TEST01", "PAT02",  "PARAM02",  9,    "",
-    "TEST01", "PAT02",  "PARAM02",  5.35, "",
+    "TEST01", "PAT02",  "PARAM01", 29,    "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM01", 19.7,  "",     "LAST",
+    "TEST01", "PAT02",  "PARAM01", 18.01, "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02",  9,    "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST"
   )
 
   expect_error(
@@ -129,36 +129,36 @@ test_that("`derive_var_base()` fails when required variables are missing", {
 
 test_that("`BASEC` is set to `AVALC` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",
-    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",     "LAST",
 
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",     "LAST",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",     "LAST"
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,  ~ABLFL, ~BASEC,
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",     "LOW",
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "",      "LOW",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",      "LOW",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",     "HIGH",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",      "HIGH",
-    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",      "HIGH",
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,  ~ABLFL, ~BASETYPE, ~BASEC,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",   "LAST",    "LOW",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "",    "LAST",    "LOW",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",    "LAST",    "LOW",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",   "LAST",    "HIGH",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",    "LAST",    "HIGH",
+    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",    "LAST",    "HIGH",
 
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",     "MEDIUM",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",      "MEDIUM",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",      "MEDIUM",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",     "LOW",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "",      "LOW",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",      "LOW"
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",   "LAST",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",    "LAST",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",    "LAST",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",   "LAST",     "LOW",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "",    "LAST",     "LOW",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",    "LAST",     "LOW"
   )
 
   expect_identical(derive_var_basec(input), expected_output)

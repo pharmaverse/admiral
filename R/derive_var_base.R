@@ -61,7 +61,7 @@ derive_var_basec <- function(bds_dataset) {
 derive_baseline <- function(bds_dataset, source, target) {
   assert_has_variables(
     bds_dataset,
-    c("STUDYID", "USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL")
+    c("STUDYID", "USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL", "BASETYPE")
   )
 
   base <- bds_dataset %>%
