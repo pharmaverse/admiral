@@ -126,3 +126,41 @@ test_that("`derive_var_base()` fails when required variables are missing", {
     "Required variables `AVAL` and `ABL01FL` are missing."
   )
 })
+
+test_that("`BASEC` is set to `AVALC` where `ABL01FL == 'Y'`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABL01FL,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "N",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
+    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",
+
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "N",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "N",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "N",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "N",
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,  ~ABL01FL, ~BASEC,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",     "LOW",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "N",     "LOW",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",     "LOW",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",     "HIGH",
+    "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",     "HIGH",
+    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",     "HIGH",
+
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "N",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "N",     "MEDIUM",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",     "LOW",
+    "TEST01", "PAT02",  "PARAM02", "LOW",    "N",     "LOW",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "N",     "LOW"
+  )
+
+  expect_identical(derive_var_basec(input), expected_output)
+})
+
