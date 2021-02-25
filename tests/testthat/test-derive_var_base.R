@@ -37,6 +37,29 @@ test_that("`BASE` is set to `AVAL` where `ABL01FL == 'Y'`", {
   expect_identical(derive_var_base(input), expected_output)
 })
 
+test_that("`BASE` is set to `NA` if a baseline record is missing", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "N",
+    "TEST01", "PAT01",  "PARAM01", 15.01, "N",
+    "TEST01", "PAT01",  "PARAM02",  4.9,  "N",
+    "TEST01", "PAT01",  "PARAM02",  7.1,  "N",
+    "TEST01", "PAT01",  "PARAM02",  8.35, "N",
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL, ~BASE,
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",      10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "N",      10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "N",      10.12,
+    "TEST01", "PAT01",  "PARAM02",  4.9,  "N",      NA,
+    "TEST01", "PAT01",  "PARAM02",  7.1,  "N",      NA,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "N",      NA,
+  )
+
+  expect_identical(derive_var_base(input), expected_output)
+})
+
 test_that("`derive_var_base()` only adds the `BASE` variable", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL, ~ANL01FL,
