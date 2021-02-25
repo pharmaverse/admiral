@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' bds_dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABL01FL,
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
 #'   "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
 #'   "TEST01", "PAT01",  "PARAM01",  9.7,  "N",
 #'   "TEST01", "PAT01",  "PARAM01", 15.01, "N",
@@ -44,7 +44,7 @@ derive_var_base <- function(bds_dataset) {
 #'
 #' @examples
 #' bds_dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABL01FL,
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
 #'   "TEST01", "PAT01",  "PARAM01", "LOW,     "Y",
 #'   "TEST01", "PAT01",  "PARAM01", "LOW,     "N",
 #'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
@@ -61,14 +61,12 @@ derive_var_basec <- function(bds_dataset) {
 derive_baseline <- function(bds_dataset, source, target) {
   assert_has_variables(
     bds_dataset,
-    c("STUDYID", "USUBJID", "PARAMCD", deparse(substitute(source)), "ABL01FL")
+    c("STUDYID", "USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL")
   )
 
   base <- bds_dataset %>%
-    filter(ABL01FL == "Y") %>%
+    filter(ABLFL == "Y") %>%
     select(STUDYID, USUBJID, PARAMCD, !!enquo(target) := !!enquo(source))
 
   left_join(bds_dataset, base, by = c("STUDYID", "USUBJID", "PARAMCD"))
 }
-
-
