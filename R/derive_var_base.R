@@ -22,9 +22,9 @@
 #'   "TEST01", "PAT01",  "PARAM02", NA,    "N",
 #'   "TEST01", "PAT01",  "PARAM02",  8.35, "N",
 #' )
-#' derive_var_chg(bds_dataset)
+#' derive_var_base(bds_dataset)
 #'
-derive_var_chg <- function(bds_dataset) {
+derive_var_base <- function(bds_dataset) {
   assert_has_variables(bds_dataset, c("STUDYID", "USUBJID", "PARAMCD", "AVAL", "ABL01FL"))
 
   base <- bds_dataset %>%

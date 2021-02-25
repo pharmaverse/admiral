@@ -34,7 +34,7 @@ test_that("`BASE` is set to `AVAL` where `ABL01FL == 'Y'`", {
     "TEST01", "PAT02",  "PARAM02",  5.35, "N",       8.9,
   )
 
-  expect_identical(derive_var_chg(input), expected_output)
+  expect_identical(derive_var_base(input), expected_output)
 })
 
 test_that("`derive_var_base()` only adds the `BASE` variable", {
@@ -57,7 +57,7 @@ test_that("`derive_var_base()` only adds the `BASE` variable", {
     "TEST01", "PAT01",  "PARAM02",  8.35, "N",      "Y",       8.35
   )
 
-  expect_identical(derive_var_chg(input), expected_output)
+  expect_identical(derive_var_base(input), expected_output)
 })
 
 test_that("`derive_var_base()` fails when required variables are missing", {
@@ -79,27 +79,27 @@ test_that("`derive_var_base()` fails when required variables are missing", {
   )
 
   expect_error(
-    input %>% select(-STUDYID) %>% derive_var_chg(),
+    input %>% select(-STUDYID) %>% derive_var_base(),
     "Required variable `STUDYID` is missing."
   )
   expect_error(
-    input %>% select(-USUBJID) %>% derive_var_chg(),
+    input %>% select(-USUBJID) %>% derive_var_base(),
     "Required variable `USUBJID` is missing."
   )
   expect_error(
-    input %>% select(-PARAMCD) %>% derive_var_chg(),
+    input %>% select(-PARAMCD) %>% derive_var_base(),
     "Required variable `PARAMCD` is missing."
   )
   expect_error(
-    input %>% select(-AVAL) %>% derive_var_chg(),
+    input %>% select(-AVAL) %>% derive_var_base(),
     "Required variable `AVAL` is missing."
   )
   expect_error(
-    input %>% select(-ABL01FL) %>% derive_var_chg(),
+    input %>% select(-ABL01FL) %>% derive_var_base(),
     "Required variable `ABL01FL` is missing."
   )
   expect_error(
-    input %>% select(-c(AVAL, ABL01FL)) %>% derive_var_chg(),
+    input %>% select(-c(AVAL, ABL01FL)) %>% derive_var_base(),
     "Required variables `AVAL` and `ABL01FL` are missing."
   )
 })
