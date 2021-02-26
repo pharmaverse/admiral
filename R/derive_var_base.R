@@ -3,6 +3,8 @@
 #' Derive the `BASE` variable in a BDS dataset
 #'
 #' @param bds_dataset `data.frame`
+#' @param by `character` vector of columns uniqely identifying a set
+#'        of records for which to calculate `BASE`
 #'
 #' @return
 #' A new `data.frame` containing all records and variables of the input
@@ -24,15 +26,15 @@
 #' )
 #' derive_var_base(bds_dataset)
 #'
-derive_var_base <- function(bds_dataset) {
-  derive_baseline(bds_dataset, AVAL, BASE)
+derive_var_base <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE")) {
+  derive_baseline(bds_dataset, by, AVAL, BASE)
 }
 
 #' Derive BASEC
 #'
 #' Derive the `BASEC` variable in a BDS dataset
 #'
-#' @param bds_dataset `data.frame`
+#' @inheritParams derive_var_base
 #'
 #' @return
 #' A new `data.frame` containing all records and variables of the input
@@ -54,19 +56,19 @@ derive_var_base <- function(bds_dataset) {
 #' )
 #' derive_var_basec(bds_dataset)
 #'
-derive_var_basec <- function(bds_dataset) {
-  derive_baseline(bds_dataset, AVALC, BASEC)
+derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE")) {
+  derive_baseline(bds_dataset, by, AVALC, BASEC)
 }
 
-derive_baseline <- function(bds_dataset, source, target) {
+derive_baseline <- function(bds_dataset, by, source, target) {
   assert_has_variables(
     bds_dataset,
-    c("USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL", "BASETYPE")
+    c(by, deparse(substitute(source)), "ABLFL")
   )
 
   base <- bds_dataset %>%
     filter(ABLFL == "Y") %>%
-    select(USUBJID, PARAMCD, !!enquo(target) := !!enquo(source))
+    select(!!!syms(by), !!enquo(target) := !!enquo(source))
 
-  left_join(bds_dataset, base, by = c("USUBJID", "PARAMCD"))
+  left_join(bds_dataset, base, by = by)
 }
