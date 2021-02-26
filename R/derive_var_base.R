@@ -61,12 +61,12 @@ derive_var_basec <- function(bds_dataset) {
 derive_baseline <- function(bds_dataset, source, target) {
   assert_has_variables(
     bds_dataset,
-    c("STUDYID", "USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL", "BASETYPE")
+    c("USUBJID", "PARAMCD", deparse(substitute(source)), "ABLFL", "BASETYPE")
   )
 
   base <- bds_dataset %>%
     filter(ABLFL == "Y") %>%
-    select(STUDYID, USUBJID, PARAMCD, !!enquo(target) := !!enquo(source))
+    select(USUBJID, PARAMCD, !!enquo(target) := !!enquo(source))
 
-  left_join(bds_dataset, base, by = c("STUDYID", "USUBJID", "PARAMCD"))
+  left_join(bds_dataset, base, by = c("USUBJID", "PARAMCD"))
 }

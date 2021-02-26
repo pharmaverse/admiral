@@ -102,10 +102,6 @@ test_that("`derive_var_base()` fails when required variables are missing", {
   )
 
   expect_error(
-    input %>% select(-STUDYID) %>% derive_var_base(),
-    "Required variable `STUDYID` is missing."
-  )
-  expect_error(
     input %>% select(-USUBJID) %>% derive_var_base(),
     "Required variable `USUBJID` is missing."
   )
