@@ -60,6 +60,32 @@ derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE
   derive_baseline(bds_dataset, by, AVALC, BASEC)
 }
 
+#' Derive BASE or BASEC
+#'
+#' Derive the `BASE` or `BASEC` variable in a BDS dataset
+#'
+#' @inheritParams derive_var_base
+#' @param source Either `AVAL` or `AVALC`
+#' @param target Either `BASE` or `BASEC`
+#'
+#' @return
+#' A new `data.frame` containing all records and variables of the input
+#' dataset plus the `BASE` or `BASEC` variable
+#'
+#' @author Thomas Neitmann
+#'
+#' @examples
+#' bds_dataset <- tibble::tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
+#'   "TEST01", "PAT01",  "PARAM01", "LOW,     "Y",
+#'   "TEST01", "PAT01",  "PARAM01", "LOW,     "N",
+#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
+#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",
+#' )
+#' derive_baseline(bds_dataset, source = AVALC, target = BASEC)
+#'
 derive_baseline <- function(bds_dataset, by, source, target) {
   assert_has_variables(
     bds_dataset,
