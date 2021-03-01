@@ -70,5 +70,7 @@ derive_baseline <- function(bds_dataset, by, source, target) {
     filter(ABLFL == "Y") %>%
     select(!!!syms(by), !!enquo(target) := !!enquo(source))
 
+  assert_has_only_one_baseline_record(base, by)
+
   left_join(bds_dataset, base, by = by)
 }

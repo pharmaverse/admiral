@@ -123,6 +123,21 @@ test_that("`derive_var_base()` fails when required variables are missing", {
   )
 })
 
+test_that("An error is thrown if a subject has multiple records per `PARAMCD` and `BASETYPE`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",     "LAST",
+    "TEST01", "PAT02",  "PARAM02", "MEDIUM", "",     "LAST",
+  )
+
+  expect_error(derive_var_basec(input), "Dataset contains multiple baseline records.")
+})
+
 test_that("`BASEC` is set to `AVALC` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
@@ -159,4 +174,3 @@ test_that("`BASEC` is set to `AVALC` where `ABLFL == 'Y'`", {
 
   expect_identical(derive_var_basec(input), expected_output)
 })
-
