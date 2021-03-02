@@ -21,13 +21,13 @@ Derive the `BASE` variable in a BDS dataset
 }
 \examples{
 bds_dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-  "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-  "TEST01", "PAT01",  "PARAM01",  9.7,  "N",
-  "TEST01", "PAT01",  "PARAM01", 15.01, "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35, "Y",
-  "TEST01", "PAT01",  "PARAM02", NA,    "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35, "N",
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
+  "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
+  "TEST01", "PAT01",  "PARAM01",  9.7,  "N",    "LAST",
+  "TEST01", "PAT01",  "PARAM01", 15.01, "N",    "LAST",
+  "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",
+  "TEST01", "PAT01",  "PARAM02", NA,    "N",    "LAST",
+  "TEST01", "PAT01",  "PARAM02",  8.35, "N",    "LAST"
 )
 derive_var_base(bds_dataset)
 
