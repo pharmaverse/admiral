@@ -18,7 +18,7 @@ Derive the `BASEC` variable in a BDS dataset
 }
 \examples{
 bds_dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABL01FL,
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
   "TEST01", "PAT01",  "PARAM01", "LOW,     "Y",
   "TEST01", "PAT01",  "PARAM01", "LOW,     "N",
   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
