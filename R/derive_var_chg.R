@@ -6,7 +6,8 @@
 #'
 #' @details
 #' Change from baseline is calculated by subtracting the baseline value
-#' from the analysis value.
+#' from the analysis value. Thus, the input dataset has to contain a
+#' `AVAL` and `BASE` variable.
 #'
 #' @author Thomas Neitmann
 #'
@@ -39,7 +40,8 @@ derive_var_chg <- function(bds_dataset) {
 #'
 #' @details
 #' Percent change from baseline is calculate by dividing change from
-#' baseline by the baseine value.
+#' baseline by the baseine value. Thus, the input dataset has to contain
+#' a `BASE` and `CHG` variable.
 #'
 #' @author Thomas Neitmann
 #'
