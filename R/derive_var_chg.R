@@ -63,5 +63,5 @@ derive_var_pchg <- function(bds_dataset) {
   assert_has_variables(bds_dataset, c("BASE", "CHG"))
 
   bds_dataset %>%
-    mutate(PCHG = CHG / BASE * 100)
+    mutate(PCHG = if_else(BASE == 0, NA_real_, CHG / BASE * 100))
 }

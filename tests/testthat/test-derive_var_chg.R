@@ -74,3 +74,21 @@ test_that("`PCHG` is calculated as `CHG / BASE`", {
 
   expect_equal(derive_var_pchg(input)$PCHG, expected_output$PCHG, tolerance = 1e-5)
 })
+
+test_that("`PCHG` is set to `NA` if `BASE == 0`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,  ~CHG,
+    "TEST01", "PAT01",  "PARAM01",  0,    "Y",    "LAST",     0,     0,
+    "TEST01", "PAT01",  "PARAM01",  1.7,  "",     "LAST",     0,     1.7,
+    "TEST01", "PAT01",  "PARAM01",  3.01, "",     "LAST",     0,     3.01,
+  )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,  ~CHG,  ~PCHG,
+    "TEST01", "PAT01",  "PARAM01", 0,     "Y",    "LAST",     0,     0,     NA_real_,
+    "TEST01", "PAT01",  "PARAM01", 1.7,   "",     "LAST",     0,     1.7,   NA_real_,
+    "TEST01", "PAT01",  "PARAM01", 3.01,  "",     "LAST",     0,     3.01,  NA_real_,
+  )
+
+  expect_equal(derive_var_pchg(input)$PCHG, expected_output$PCHG, tolerance = 1e-7)
+})
