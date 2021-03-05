@@ -41,7 +41,7 @@ derive_var_chg <- function(bds_dataset) {
 #'
 #' @details
 #' Percent change from baseline is calculated by dividing change from
-#' baseline by the baseline value.
+#' baseline by the baseline value and multiplying the result by `100`.
 #'
 #' @author Thomas Neitmann
 #'
@@ -63,5 +63,5 @@ derive_var_pchg <- function(bds_dataset) {
   assert_has_variables(bds_dataset, c("BASE", "CHG"))
 
   bds_dataset %>%
-    mutate(PCHG = CHG / BASE)
+    mutate(PCHG = CHG / BASE * 100)
 }
