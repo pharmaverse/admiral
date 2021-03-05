@@ -39,8 +39,8 @@ derive_var_chg <- function(bds_dataset) {
 #' @param bds_dataset `data.frame`
 #'
 #' @details
-#' Percent change from baseline is calculate by dividing change from
-#' baseline by the baseine value. Thus, the input dataset has to contain
+#' Percent change from baseline is calculated by dividing change from
+#' baseline by the baseline value. Thus, the input dataset has to contain
 #' a `BASE` and `CHG` variable.
 #'
 #' @author Thomas Neitmann

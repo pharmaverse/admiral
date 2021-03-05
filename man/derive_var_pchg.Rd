@@ -16,8 +16,9 @@ The input dataset with an additional column named `PCHG`
 Derive percent change from baseline (`PCHG`) in a BDS dataset
 }
 \details{
-Percent change from baseline is calculate by dividing change from
-baseline by the baseine value.
+Percent change from baseline is calculated by dividing change from
+baseline by the baseline value. Thus, the input dataset has to contain
+a `BASE` and `CHG` variable.
 }
 \examples{
 advs <- tibble::tribble(

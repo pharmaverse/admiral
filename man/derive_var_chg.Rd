@@ -17,7 +17,8 @@ Derive change from baseline (`CHG`) in a BDS dataset
 }
 \details{
 Change from baseline is calculated by subtracting the baseline value
-from the analysis value.
+from the analysis value. Thus, the input dataset has to contain a
+`AVAL` and `BASE` variable.
 }
 \examples{
 advs <- tibble::tribble(
