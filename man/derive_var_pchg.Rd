@@ -18,7 +18,8 @@ Derive percent change from baseline (`PCHG`) in a BDS dataset
 }
 \details{
 Percent change from baseline is calculated by dividing change from
-baseline by the baseline value and multiplying the result by `100`.
+baseline by the absolute value of the baseline value and
+multiplying the result by `100`.
 }
 \examples{
 advs <- tibble::tribble(
