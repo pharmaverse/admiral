@@ -7,7 +7,8 @@
 derive_var_pchg(bds_dataset)
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{bds_dataset}{`data.frame`. Required variables are `BASE` and
+`CHG`.}
 }
 \value{
 The input dataset with an additional column named `PCHG`
@@ -17,8 +18,7 @@ Derive percent change from baseline (`PCHG`) in a BDS dataset
 }
 \details{
 Percent change from baseline is calculated by dividing change from
-baseline by the baseline value. Thus, the input dataset has to contain
-a `BASE` and `CHG` variable.
+baseline by the baseline value.
 }
 \examples{
 advs <- tibble::tribble(

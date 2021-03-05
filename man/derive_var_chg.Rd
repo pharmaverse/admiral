@@ -7,7 +7,8 @@
 derive_var_chg(bds_dataset)
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{bds_dataset}{`data.frame`. Required variables are `AVAL` and
+`BASE`.}
 }
 \value{
 The input dataset with an additional column named `CHG`
@@ -17,8 +18,7 @@ Derive change from baseline (`CHG`) in a BDS dataset
 }
 \details{
 Change from baseline is calculated by subtracting the baseline value
-from the analysis value. Thus, the input dataset has to contain a
-`AVAL` and `BASE` variable.
+from the analysis value.
 }
 \examples{
 advs <- tibble::tribble(

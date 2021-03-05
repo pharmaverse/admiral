@@ -2,12 +2,12 @@
 #'
 #' Derive change from baseline (`CHG`) in a BDS dataset
 #'
-#' @param bds_dataset `data.frame`
+#' @param bds_dataset `data.frame`. Required variables are `AVAL` and
+#' `BASE`.
 #'
 #' @details
 #' Change from baseline is calculated by subtracting the baseline value
-#' from the analysis value. Thus, the input dataset has to contain a
-#' `AVAL` and `BASE` variable.
+#' from the analysis value.
 #'
 #' @author Thomas Neitmann
 #'
@@ -36,12 +36,12 @@ derive_var_chg <- function(bds_dataset) {
 #'
 #' Derive percent change from baseline (`PCHG`) in a BDS dataset
 #'
-#' @param bds_dataset `data.frame`
+#' @param bds_dataset `data.frame`. Required variables are `BASE` and
+#' `CHG`.
 #'
 #' @details
 #' Percent change from baseline is calculated by dividing change from
-#' baseline by the baseline value. Thus, the input dataset has to contain
-#' a `BASE` and `CHG` variable.
+#' baseline by the baseline value.
 #'
 #' @author Thomas Neitmann
 #'
