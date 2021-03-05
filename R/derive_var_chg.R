@@ -36,8 +36,8 @@ derive_var_chg <- function(bds_dataset) {
 #'
 #' Derive percent change from baseline (`PCHG`) in a BDS dataset
 #'
-#' @param bds_dataset `data.frame`. Required variables are `BASE` and
-#' `CHG`.
+#' @param bds_dataset `data.frame`. Required variables are `AVAL` and
+#' `BASE`.
 #'
 #' @details
 #' Percent change from baseline is calculated by dividing change from
@@ -51,12 +51,12 @@ derive_var_chg <- function(bds_dataset) {
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE, ~CHG,
-#'   "P01",    "WEIGHT", 80,    "Y",    80,    0,
-#'   "P01",    "WEIGHT", 80.8,  "",     80,    0.8,
-#'   "P01",    "WEIGHT", 81.4,  "",     80,    1.4,
-#'   "P02",    "WEIGHT", 75.3,  "Y",    75.3,  0,
-#'   "P02",    "WEIGHT", 76,    "",     75.3,  0.7
+#'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
+#'   "P01",    "WEIGHT", 80,    "Y",    80,
+#'   "P01",    "WEIGHT", 80.8,  "",     80,
+#'   "P01",    "WEIGHT", 81.4,  "",     80,
+#'   "P02",    "WEIGHT", 75.3,  "Y",    75.3,
+#'   "P02",    "WEIGHT", 76,    "",     75.3
 #' )
 #' derive_var_pchg(advs)
 #'
@@ -64,5 +64,5 @@ derive_var_pchg <- function(bds_dataset) {
   assert_has_variables(bds_dataset, c("BASE", "CHG"))
 
   bds_dataset %>%
-    mutate(PCHG = if_else(BASE == 0, NA_real_, CHG / abs(BASE) * 100))
+    mutate(PCHG = if_else(BASE == 0, NA_real_, (AVAL - BASE) / abs(BASE) * 100))
 }

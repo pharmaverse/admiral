@@ -41,8 +41,8 @@ test_that("`PCHG` is calculated as `CHG / abs(BASE)`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~ABLFL, ~BASETYPE, ~BASE,  ~CHG,
     "TEST01", "PAT01",  "PARAM01", -10.12, "Y",    "LAST",    -10.12,  0,
-    "TEST01", "PAT01",  "PARAM01",  -9.7,  "",     "LAST",    -10.12, -0.42,
-    "TEST01", "PAT01",  "PARAM01", -15.01, "",     "LAST",    -10.12,  4.89,
+    "TEST01", "PAT01",  "PARAM01",  -9.7,  "",     "LAST",    -10.12,  0.42,
+    "TEST01", "PAT01",  "PARAM01", -15.01, "",     "LAST",    -10.12, -4.89,
     "TEST01", "PAT01",  "PARAM02",   8.35, "Y",    "LAST",      8.35,  0,
     "TEST01", "PAT01",  "PARAM02", NA,     "",     "LAST",      8.35, NA,
     "TEST01", "PAT01",  "PARAM02",   8.35, "",     "LAST",      8.35,  0,
@@ -58,8 +58,8 @@ test_that("`PCHG` is calculated as `CHG / abs(BASE)`", {
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,  ~CHG,  ~PCHG,
     "TEST01", "PAT01",  "PARAM01", -10.12, "Y",    "LAST",    -10.12,  0,      0,
-    "TEST01", "PAT01",  "PARAM01",  -9.7,  "",     "LAST",    -10.12, -0.42,  -4.150198,
-    "TEST01", "PAT01",  "PARAM01", -15.01, "",     "LAST",    -10.12,  4.89,  48.32016,
+    "TEST01", "PAT01",  "PARAM01",  -9.7,  "",     "LAST",    -10.12, -0.42,   4.150198,
+    "TEST01", "PAT01",  "PARAM01", -15.01, "",     "LAST",    -10.12,  4.89, -48.32016,
     "TEST01", "PAT01",  "PARAM02",   8.35, "Y",    "LAST",      8.35,  0,      0,
     "TEST01", "PAT01",  "PARAM02", NA,     "",     "LAST",      8.35, NA,    NA,
     "TEST01", "PAT01",  "PARAM02",   8.35, "",     "LAST",      8.35,  0,      0,
