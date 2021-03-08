@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_base.R
 \name{derive_baseline}
 \alias{derive_baseline}
-\title{Derive BASE or BASEC}
+\title{Derive Basline}
 \usage{
 derive_baseline(bds_dataset, by, source, target)
 }
@@ -12,16 +12,18 @@ derive_baseline(bds_dataset, by, source, target)
 \item{by}{`character` vector of columns uniqely identifying a set
 of records for which to calculate `BASE`}
 
-\item{source}{Either `AVAL` or `AVALC`}
+\item{source}{The column from which to extract the baseline value,
+e.g. `AVAL`}
 
-\item{target}{Either `BASE` or `BASEC`}
+\item{target}{The name of the newly created baseline column, e.g.
+`BASE`}
 }
 \value{
 A new `data.frame` containing all records and variables of the input
-dataset plus the `BASE` or `BASEC` variable
+dataset plus the `target` variable.
 }
 \description{
-Derive the `BASE` or `BASEC` variable in a BDS dataset
+Derive a baseline variable, e.g. `BASE`, in a BDS dataset
 }
 \author{
 Thomas Neitmann

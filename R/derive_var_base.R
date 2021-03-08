@@ -60,17 +60,19 @@ derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE
   derive_baseline(bds_dataset, by, AVALC, BASEC)
 }
 
-#' Derive BASE or BASEC
+#' Derive Basline
 #'
-#' Derive the `BASE` or `BASEC` variable in a BDS dataset
+#' Derive a baseline variable, e.g. `BASE`, in a BDS dataset
 #'
 #' @inheritParams derive_var_base
-#' @param source Either `AVAL` or `AVALC`
-#' @param target Either `BASE` or `BASEC`
+#' @param source The column from which to extract the baseline value,
+#' e.g. `AVAL`
+#' @param target The name of the newly created baseline column, e.g.
+#' `BASE`
 #'
 #' @return
 #' A new `data.frame` containing all records and variables of the input
-#' dataset plus the `BASE` or `BASEC` variable
+#' dataset plus the `target` variable.
 #'
 #' @author Thomas Neitmann
 #'
