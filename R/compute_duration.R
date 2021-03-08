@@ -58,22 +58,23 @@
 #'
 #' @examples
 #' # derive duration in days (integer), i.e., relative day
-#' duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'))
+#' compute_duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'))
 #'
 #' # derive duration in days (float)
-#' duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'), floor_in = FALSE, add_one = FALSE)
+#' compute_duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'), floor_in = FALSE, add_one = FALSE)
 #'
 #' # derive age
-#' duration(ymd('1984-09-06'), ymd('2020-12-24'), in_unit = 'years', out_unit = 'year', add_one = FALSE)
+#' compute_duration(ymd('1984-09-06'), ymd('2020-02-24'), trunc_out = TRUE, out_unit = 'years', add_one = FALSE)
 #'
 
 
-duration <- function(startdate,
-                     enddate,
-                     in_unit = 'days',
-                     out_unit = 'days',
-                     floor_in = TRUE,
-                     add_one = TRUE) {
+compute_duration <- function(startdate,
+                             enddate,
+                             in_unit = 'days',
+                             out_unit = 'days',
+                             floor_in = TRUE,
+                             add_one = TRUE,
+                             trunc_out = FALSE) {
     # Checks
     assert_that(arg_specified(startdate), arg_specified(enddate))
     assert_that(is_date(startdate), is_date(enddate))
@@ -81,16 +82,25 @@ duration <- function(startdate,
 
     # Derivation
     if (floor_in) {
+      # remove information moe precise than the input unit, e.g., if input unit
+      # is days, the time part of the dates is removed.
       startdate <- floor_date(startdate, unit = in_unit)
       enddate <- floor_date(enddate, unit = in_unit)
     }
 
+    # derive the duration in the output unit
     duration <- time_length(startdate %--% enddate, unit = out_unit)
     if (add_one) {
+      # add one unit of the input unit (converted to the output unit), e.g., if
+      # input unit is days and output unit is hours, 24 hours are added
       duration <- duration + time_length(if_else(duration >= 0,
                                                  lubridate::duration(1, unit = in_unit),
                                                  lubridate::duration(0, unit = in_unit)),
                                          unit = out_unit)
+    }
+    if (trunc_out) {
+      # remove fractional part
+      duration <- trunc(duration)
     }
     return(duration)
   }

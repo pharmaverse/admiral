@@ -76,14 +76,16 @@ derive_duration <- function(dataset,
                             in_unit = 'days',
                             out_unit = 'days',
                             floor_in = TRUE,
-                            add_one = TRUE) {
+                            add_one = TRUE,
+                            trunc_out = FALSE) {
   dataset <-
-    dataset %>% mutate(!!enquo(newcol) := duration(!!enquo(startdate),
-                                                 !!enquo(enddate),
-                                                 in_unit = in_unit,
-                                                 out_unit = out_unit,
-                                                 floor_in = floor_in,
-                                                 add_one = add_one))
+    dataset %>% mutate(!!enquo(newcol) := compute_duration(!!enquo(startdate),
+                                                           !!enquo(enddate),
+                                                           in_unit = in_unit,
+                                                           out_unit = out_unit,
+                                                           floor_in = floor_in,
+                                                           add_one = add_one,
+                                                           trunc_out = trunc_out))
   if(!missing(unitcol)){
     dataset %>% mutate(!!enquo(unitcol) := toupper(out_unit))
   }
