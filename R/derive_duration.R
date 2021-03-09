@@ -3,6 +3,11 @@
 #' Derives duration between two dates, e.g., duration of adverse events, relative
 #' day, age, ...
 #'
+#' @param dataset Input dataset
+#'
+#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   expected.
+#'
 #' @param startdate The start date
 #'
 #'   A date or date-time object is expected.
@@ -68,14 +73,18 @@
 #' @seealso [compute_duration()]
 #'
 #' @examples
-#' # derive duration in days (integer), i.e., relative day
-#' duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'))
+#' data <- tibble::tribble(
+#'   ~BRTHDT, ~RANDDT,
+#'   ymd('1984-09-06'), ymd('2020-02-24'))
 #'
-#' # derive duration in days (float)
-#' duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'), floor_in = FALSE, add_one = FALSE)
-#'
-#' # derive age
-#' duration(ymd('1984-09-06'), ymd('2020-12-24'), in_unit = 'years', out_unit = 'year', add_one = FALSE)
+#' derive_duration(data,
+#'                 newcol = AAGE,
+#'                 unitcol = AAGEU,
+#'                 startdate = BRTHDT,
+#'                 enddate = RANDDT,
+#'                 out_unit = 'years',
+#'                 add_one = FALSE,
+#'                 trunc_out = TRUE)
 #'
 
 
@@ -98,6 +107,7 @@ derive_duration <- function(dataset,
                                                            add_one = add_one,
                                                            trunc_out = trunc_out))
   if(!missing(unitcol)){
-    dataset %>% mutate(!!enquo(unitcol) := toupper(out_unit))
+    dataset <- dataset %>% mutate(!!enquo(unitcol) := toupper(out_unit))
   }
+  return(dataset)
 }

@@ -2,16 +2,58 @@
 % Please edit documentation in R/derive_aage.R
 \name{derive_aage}
 \alias{derive_aage}
-\title{Title}
+\title{Derive Analysis Age}
 \usage{
-derive_aage(data)
+derive_aage(dataset, startdate = BRTHDT, enddate = RANDDT,
+  unit = "years")
 }
 \arguments{
-\item{data}{An ADSL-like dataset}
+\item{dataset}{Input dataset
+
+  The columns specified by the `startdate` and the `enddate` parameter are
+  expected.}
+
+\item{startdate}{The start date
+
+  A date or date-time object is expected.
+
+  Default: `BRTHDT`}
+
+\item{enddate}{The end date
+
+  A date or date-time object is expected.
+
+  Default: `RANDDT`}
+
+\item{unit}{Unit
+
+  The age is derived in the specified unit
+
+  Default: 'years'
+
+  Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 }
 \value{
-The input datasets plus AAGE and AAGEU variables
+The input dataset with ``AAGE`` and ``AAGEU`` added
 }
 \description{
-Title
+Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`)
+}
+\details{
+The age is derived as the integer part of the duration from start to
+  end date in the specified unit.
+}
+\examples{
+data <- tibble::tribble(
+  ~BRTHDT, ~RANDDT,
+  ymd('1984-09-06'), ymd('2020-02-24'))
+
+derive_aage(data)
+
+}
+\seealso{
+[derive_duration()]
+}
+\author{
+Stefan Bundfuss
 }
