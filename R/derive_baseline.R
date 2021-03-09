@@ -27,7 +27,7 @@
 #' derive_var_base(bds_dataset)
 #'
 derive_var_base <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE")) {
-  derive_baseline(bds_dataset, by, AVAL, BASE)
+  derive_baseline(bds_dataset, by = by, source = AVAL, target = BASE)
 }
 
 #' Derive BASEC
@@ -57,7 +57,7 @@ derive_var_base <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE"
 #' derive_var_basec(bds_dataset)
 #'
 derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE")) {
-  derive_baseline(bds_dataset, by, AVALC, BASEC)
+  derive_baseline(bds_dataset, by = by, source = AVALC, target = BASEC)
 }
 
 #' Derive Basline
