@@ -76,6 +76,23 @@ derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE
 #'
 #' @author Thomas Neitmann
 #'
+#' @examples
+#' bds_dataset <- tibble::tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
+#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",    "LAST",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",    "LAST",
+#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
+#' )
+#' derive_baseline(
+#'   bds_dataset,
+#'   by = c("USUBJID", "PARAMCD", "BASETYPE"),
+#'   source = AVALC,
+#'   target = BASEC
+#' )
+#'
 derive_baseline <- function(bds_dataset, by, source, target) {
   assert_has_variables(
     bds_dataset,
