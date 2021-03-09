@@ -83,46 +83,6 @@ test_that("`derive_var_base()` only adds the `BASE` variable", {
   expect_identical(derive_var_base(input), expected_output)
 })
 
-test_that("`derive_var_base()` fails when required variables are missing", {
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",
-
-    "TEST01", "PAT02",  "PARAM01", 29,    "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM01", 19.7,  "",     "LAST",
-    "TEST01", "PAT02",  "PARAM01", 18.01, "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM02",  9,    "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST"
-  )
-
-  expect_error(
-    input %>% select(-USUBJID) %>% derive_var_base(),
-    "Required variable `USUBJID` is missing."
-  )
-  expect_error(
-    input %>% select(-PARAMCD) %>% derive_var_base(),
-    "Required variable `PARAMCD` is missing."
-  )
-  expect_error(
-    input %>% select(-AVAL) %>% derive_var_base(),
-    "Required variable `AVAL` is missing."
-  )
-  expect_error(
-    input %>% select(-ABLFL) %>% derive_var_base(),
-    "Required variable `ABLFL` is missing."
-  )
-  expect_error(
-    input %>% select(-c(AVAL, ABLFL)) %>% derive_var_base(),
-    "Required variables `AVAL` and `ABLFL` are missing."
-  )
-})
-
 test_that("An error is thrown if a subject has multiple records per `PARAMCD` and `BASETYPE`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
