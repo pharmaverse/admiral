@@ -18,7 +18,7 @@ arg_specified <- function(arg){
   return(!missing(arg))
 }
 
-on_failure(arg_specified) <- function(call, env) {
+assertthat::on_failure(arg_specified) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), " is not specified.")
 }
 
@@ -41,7 +41,7 @@ is_date <- function(arg){
   return(is.instant(arg))
 }
 
-on_failure(is_date) <- function(call, env) {
+assertthat::on_failure(is_date) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a lubridate date.")
 }
 
@@ -64,7 +64,7 @@ is_timeunit <- function(arg){
   return(arg %in% c('years', 'months', 'days', 'hours', 'minutes', 'seconds'))
 }
 
-on_failure(is_timeunit) <- function(call, env) {
+assertthat::on_failure(is_timeunit) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid time unit.",
          " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'.")
 }

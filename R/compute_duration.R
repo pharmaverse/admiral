@@ -1,7 +1,7 @@
 #' Derive Duration
 #'
-#' Derive duration between two dates, e.g., duration of adverse events, relative
-#' day, age, ...
+#' Derives duration between two dates, e.g., duration of adverse events,
+#' relative day, age, ...
 #'
 #' @param startdate The start date
 #'
@@ -42,6 +42,16 @@
 #'   duration can not be zero.
 #'
 #'   Default: ``TRUE``
+#'
+#'   Permitted Values: ``TRUE``, ``FALSE``
+#'
+#' @param trunc_out Return integer part
+#'
+#'   The fractional part of the duration (in output unit) is removed, i.e., the
+#'   integer part is returned.
+#'
+#'   Default: ``FALSE``
+#'
 #'   Permitted Values: ``TRUE``, ``FALSE``
 #'
 #' @details The duration is derived as time from start to end date in the
