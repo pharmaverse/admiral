@@ -2,19 +2,26 @@
 #'
 #' Adds the analysis study day (``ADY``) to the dataset, i.e., study day of analysis date.
 #'
-#' @param refdate The reference date column, e.g., date of first treatment
+#' @param dataset Input dataset
+#'
+#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   expected.
+#'
+#' @param startdate The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
 #'
-#'   The default is ``TRTSDTM``.
+#'   The default is ``TRTSDT``.
 #'
-#' @param date The date column for which the study day should be derived
+#' @param enddate The end date column for which the study day should be derived
 #'
 #'   A date or date-time object column is expected.
 #'
 #'   The default is ``ADT``
 #'
-#' @inherit studyday details
+#' @details The study day is derived as number of days from the start date
+#'   to the end date. If it is nonnegative, one is added. I.e., the study day of the
+#'   start date is 1.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -23,8 +30,16 @@
 #' @export
 #'
 #' @examples
-#' derive_var_ady(adlb)
+#' data <- tibble::tribble(
+#'   ~TRTSDT, ~ADT,
+#'   ymd('2020-01-01'), ymd('2020-02-24'))
+#'
+#' derive_var_ady(data)
+#'
 
-derive_var_ady <- function(ds, refdate = TRTSDTM, date = ADT){
-  derive_studyday(ds, newcol = ADY, refdate = !!enquo(refdate), date = !!enquo(date))
+derive_var_ady <- function(dataset, startdate = TRTSDT, enddate = ADT){
+  derive_duration(dataset,
+                  newcol = ADY,
+                  startdate = !!enquo(startdate),
+                  enddate = !!enquo(enddate))
 }

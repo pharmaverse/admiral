@@ -1,0 +1,13 @@
+context("test-derive_var_astdy")
+
+
+test_that("ASTDY is added", {
+  input <- tibble::tribble(
+    ~TRTSDT, ~ASTDT,
+    ymd('2020-01-01'), ymd('2020-02-24'))
+
+  expected_output <- input %>% mutate(ASTDY := 55)
+
+  expect_equal(derive_var_astdy(input),
+               expected_output)}
+)
