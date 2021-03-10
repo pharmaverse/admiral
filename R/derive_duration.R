@@ -5,14 +5,14 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   The columns specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
-#' @param startdate The start date
+#' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
 #'
-#' @param enddate The end date
+#' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
 #'
@@ -80,8 +80,8 @@
 #' derive_duration(data,
 #'                 newcol = AAGE,
 #'                 unitcol = AAGEU,
-#'                 startdate = BRTHDT,
-#'                 enddate = RANDDT,
+#'                 start_date = BRTHDT,
+#'                 end_date = RANDDT,
 #'                 out_unit = 'years',
 #'                 add_one = FALSE,
 #'                 trunc_out = TRUE)
@@ -91,16 +91,16 @@
 derive_duration <- function(dataset,
                             newcol,
                             unitcol,
-                            startdate,
-                            enddate,
+                            start_date,
+                            end_date,
                             in_unit = 'days',
                             out_unit = 'days',
                             floor_in = TRUE,
                             add_one = TRUE,
                             trunc_out = FALSE) {
   dataset <-
-    dataset %>% mutate(!!enquo(newcol) := compute_duration(!!enquo(startdate),
-                                                           !!enquo(enddate),
+    dataset %>% mutate(!!enquo(newcol) := compute_duration(!!enquo(start_date),
+                                                           !!enquo(end_date),
                                                            in_unit = in_unit,
                                                            out_unit = out_unit,
                                                            floor_in = floor_in,

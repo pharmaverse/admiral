@@ -3,7 +3,7 @@
 #' Derives duration between two dates, e.g., duration of adverse events,
 #' relative day, age, ...
 #'
-#' @param startdate The start date
+#' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
 #'
@@ -78,7 +78,7 @@
 #'
 
 
-compute_duration <- function(startdate,
+compute_duration <- function(start_date,
                              enddate,
                              in_unit = 'days',
                              out_unit = 'days',
@@ -86,20 +86,19 @@ compute_duration <- function(startdate,
                              add_one = TRUE,
                              trunc_out = FALSE) {
     # Checks
-    assert_that(arg_specified(startdate), arg_specified(enddate))
-    assert_that(is_date(startdate), is_date(enddate))
+    assert_that(is_date(start_date), is_date(enddate))
     assert_that(is_timeunit(in_unit), is_timeunit(out_unit))
 
     # Derivation
     if (floor_in) {
       # remove information moe precise than the input unit, e.g., if input unit
       # is days, the time part of the dates is removed.
-      startdate <- floor_date(startdate, unit = in_unit)
+      start_date <- floor_date(start_date, unit = in_unit)
       enddate <- floor_date(enddate, unit = in_unit)
     }
 
     # derive the duration in the output unit
-    duration <- time_length(startdate %--% enddate, unit = out_unit)
+    duration <- time_length(start_date %--% enddate, unit = out_unit)
     if (add_one) {
       # add one unit of the input unit (converted to the output unit), e.g., if
       # input unit is days and output unit is hours, 24 hours are added
