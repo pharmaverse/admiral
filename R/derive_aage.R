@@ -4,16 +4,16 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   The columns specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
-#' @param startdate The start date
+#' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
 #'
 #'   Default: `BRTHDT`
 #'
-#' @param enddate The end date
+#' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
 #'
@@ -47,14 +47,14 @@
 #'
 
 derive_aage <- function(dataset,
-                        startdate = BRTHDT,
-                        enddate = RANDDT,
+                        start_date = BRTHDT,
+                        end_date = RANDDT,
                         unit = 'years'){
   derive_duration(dataset,
                   newcol = AAGE ,
                   unitcol = AAGEU,
-                  startdate = !!enquo(startdate),
-                  enddate = !!enquo(enddate),
+                  start_date = !!enquo(start_date),
+                  end_date = !!enquo(end_date),
                   out_unit = unit,
                   add_one = FALSE,
                   trunc_out = TRUE)

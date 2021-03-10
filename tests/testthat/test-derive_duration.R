@@ -10,8 +10,8 @@ test_that("duration and unit variable are added", {
 
   expect_equal(derive_duration(input,
                                newcol = AGE,
-                               startdate = BRTHDT,
-                               enddate = RANDDT,
+                               start_date = BRTHDT,
+                               end_date = RANDDT,
                                unitcol = AGEU,
                                out_unit = 'years',
                                trunc_out = TRUE),

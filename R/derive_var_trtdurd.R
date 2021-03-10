@@ -4,16 +4,16 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   The columns specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
-#' @param startdate The start date
+#' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
 #'
 #'   Default: `TRTSDT`
 #'
-#' @param enddate The end date
+#' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
 #'
@@ -39,10 +39,10 @@
 #'
 
 derive_var_trtdurd <- function(dataset,
-                               startdate = TRTSDT,
-                               enddate = TRTEDT){
+                               start_date = TRTSDT,
+                               end_date = TRTEDT){
   derive_duration(dataset,
                   newcol = TRTDURD,
-                  startdate = !!enquo(startdate),
-                  enddate = !!enquo(enddate))
+                  start_date = !!enquo(start_date),
+                  end_date = !!enquo(end_date))
 }

@@ -4,21 +4,21 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, newcol, unitcol, startdate, enddate,
+derive_duration(dataset, newcol, unitcol, start_date, end_date,
   in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `startdate` and the `enddate` parameter are
+  The columns specified by the `start_date` and the `end_date` parameter are
   expected.}
 
-\item{startdate}{The start date
+\item{start_date}{The start date
 
   A date or date-time object is expected.}
 
-\item{enddate}{The end date
+\item{end_date}{The end date
 
   A date or date-time object is expected.}
 
@@ -84,8 +84,8 @@ data <- tibble::tribble(
 derive_duration(data,
                 newcol = AAGE,
                 unitcol = AAGEU,
-                startdate = BRTHDT,
-                enddate = RANDDT,
+                start_date = BRTHDT,
+                end_date = RANDDT,
                 out_unit = 'years',
                 add_one = FALSE,
                 trunc_out = TRUE)

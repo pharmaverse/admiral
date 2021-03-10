@@ -4,21 +4,21 @@
 \alias{derive_var_trtdurd}
 \title{Derive Total Treatment Duration (days)}
 \usage{
-derive_var_trtdurd(dataset, startdate = TRTSDT, enddate = TRTEDT)
+derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `startdate` and the `enddate` parameter are
+  The columns specified by the `start_date` and the `end_date` parameter are
   expected.}
 
-\item{startdate}{The start date
+\item{start_date}{The start date
 
   A date or date-time object is expected.
 
   Default: `TRTSDT`}
 
-\item{enddate}{The end date
+\item{end_date}{The end date
 
   A date or date-time object is expected.
 

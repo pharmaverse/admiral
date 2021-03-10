@@ -1,27 +1,3 @@
-#' Argument Specified
-#'
-#' Checks if an argument was specified
-#'
-#' @param arg The argument to check
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return ``TRUE`` if the argument was specified, ``FALSE`` otherwise
-#'
-#' @export
-#'
-#' @examples
-#' assert_that(arg_specified(refdate), arg_specified(date))
-
-
-arg_specified <- function(arg){
-  return(!missing(arg))
-}
-
-assertthat::on_failure(arg_specified) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), " is not specified.")
-}
-
 #' Is Date/Date-time?
 #'
 #' Checks if a date or date-time vector was specified
@@ -38,7 +14,7 @@ assertthat::on_failure(arg_specified) <- function(call, env) {
 #' assert_that(is_date(refdate), is_date(date))
 
 is_date <- function(arg){
-  return(is.instant(arg))
+  is.instant(arg)
 }
 
 assertthat::on_failure(is_date) <- function(call, env) {
@@ -61,7 +37,7 @@ assertthat::on_failure(is_date) <- function(call, env) {
 #' assert_that(is_timeunit(unit))
 
 is_timeunit <- function(arg){
-  return(arg %in% c('years', 'months', 'days', 'hours', 'minutes', 'seconds'))
+  arg %in% c('years', 'months', 'days', 'hours', 'minutes', 'seconds')
 }
 
 assertthat::on_failure(is_timeunit) <- function(call, env) {

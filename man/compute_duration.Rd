@@ -4,12 +4,12 @@
 \alias{compute_duration}
 \title{Derive Duration}
 \usage{
-compute_duration(startdate, enddate, in_unit = "days",
+compute_duration(start_date, enddate, in_unit = "days",
   out_unit = "days", floor_in = TRUE, add_one = TRUE,
   trunc_out = FALSE)
 }
 \arguments{
-\item{startdate}{The start date
+\item{start_date}{The start date
 
   A date or date-time object is expected.}
 
