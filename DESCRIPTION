@@ -14,4 +14,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
+Import:
+    lubridate,
+    assertthat,
+    dplyr
 VignetteBuilder: knitr
