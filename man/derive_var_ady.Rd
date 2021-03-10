@@ -4,21 +4,21 @@
 \alias{derive_var_ady}
 \title{Derive Analysis Study Day}
 \usage{
-derive_var_ady(dataset, startdate = TRTSDT, enddate = ADT)
+derive_var_ady(dataset, start_date = TRTSDT, end_date = ADT)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `startdate` and the `enddate` parameter are
+  The columns specified by the `start_date` and the `end_date` parameter are
   expected.}
 
-\item{startdate}{The start date column, e.g., date of first treatment
+\item{start_date}{The start date column, e.g., date of first treatment
 
   A date or date-time object column is expected.
 
   The default is ``TRTSDT``.}
 
-\item{enddate}{The end date column for which the study day should be derived
+\item{end_date}{The end date column for which the study day should be derived
 
   A date or date-time object column is expected.
 

@@ -4,16 +4,16 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `startdate` and the `enddate` parameter are
+#'   The columns specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
-#' @param startdate The start date column, e.g., date of first treatment
+#' @param start_date The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
 #'
 #'   The default is ``TRTSDT``.
 #'
-#' @param enddate The end date column for which the study day should be derived
+#' @param end_date The end date column for which the study day should be derived
 #'
 #'   A date or date-time object column is expected.
 #'
@@ -36,10 +36,10 @@
 #'
 #' derive_var_aendy(data)
 
-derive_var_aendy <- function(dataset, startdate = TRTSDT, enddate = AENDT){
+derive_var_aendy <- function(dataset, start_date = TRTSDT, end_date = AENDT){
   derive_duration(dataset,
                   newcol = AENDY,
-                  startdate = !!enquo(startdate),
-                  enddate = !!enquo(enddate))
+                  start_date = !!enquo(start_date),
+                  end_date = !!enquo(end_date))
 
 }
