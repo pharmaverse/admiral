@@ -39,7 +39,7 @@
 
 derive_var_astdy <- function(dataset, start_date = TRTSDT, end_date = ASTDT){
   derive_duration(dataset,
-                  newcol = ASTDY,
+                  new_col = ASTDY,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }

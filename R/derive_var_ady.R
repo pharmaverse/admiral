@@ -39,7 +39,7 @@
 
 derive_var_ady <- function(dataset, start_date = TRTSDT, end_date = ADT){
   derive_duration(dataset,
-                  newcol = ADY,
+                  new_col = ADY,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }
