@@ -4,7 +4,7 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, newcol, unitcol, start_date, end_date,
+derive_duration(dataset, new_col, unit_col, start_date, end_date,
   in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
@@ -82,8 +82,8 @@ data <- tibble::tribble(
   ymd('1984-09-06'), ymd('2020-02-24'))
 
 derive_duration(data,
-                newcol = AAGE,
-                unitcol = AAGEU,
+                new_col = AAGE,
+                unit_col = AAGEU,
                 start_date = BRTHDT,
                 end_date = RANDDT,
                 out_unit = 'years',
