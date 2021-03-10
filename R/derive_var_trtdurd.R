@@ -42,7 +42,7 @@ derive_var_trtdurd <- function(dataset,
                                start_date = TRTSDT,
                                end_date = TRTEDT){
   derive_duration(dataset,
-                  newcol = TRTDURD,
+                  new_col = TRTDURD,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }

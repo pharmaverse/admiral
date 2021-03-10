@@ -78,8 +78,8 @@
 #'   ymd('1984-09-06'), ymd('2020-02-24'))
 #'
 #' derive_duration(data,
-#'                 newcol = AAGE,
-#'                 unitcol = AAGEU,
+#'                 new_col = AAGE,
+#'                 unit_col = AAGEU,
 #'                 start_date = BRTHDT,
 #'                 end_date = RANDDT,
 #'                 out_unit = 'years',
@@ -89,8 +89,8 @@
 
 
 derive_duration <- function(dataset,
-                            newcol,
-                            unitcol,
+                            new_col,
+                            unit_col,
                             start_date,
                             end_date,
                             in_unit = 'days',
@@ -99,15 +99,15 @@ derive_duration <- function(dataset,
                             add_one = TRUE,
                             trunc_out = FALSE) {
   dataset <-
-    dataset %>% mutate(!!enquo(newcol) := compute_duration(!!enquo(start_date),
+    dataset %>% mutate(!!enquo(new_col) := compute_duration(!!enquo(start_date),
                                                            !!enquo(end_date),
                                                            in_unit = in_unit,
                                                            out_unit = out_unit,
                                                            floor_in = floor_in,
                                                            add_one = add_one,
                                                            trunc_out = trunc_out))
-  if(!missing(unitcol)){
-    dataset <- dataset %>% mutate(!!enquo(unitcol) := toupper(out_unit))
+  if(!missing(unit_col)){
+    dataset <- dataset %>% mutate(!!enquo(unit_col) := toupper(out_unit))
   }
   return(dataset)
 }

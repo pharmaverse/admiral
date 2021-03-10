@@ -7,7 +7,7 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#' @param enddate The end date
+#' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
 #'
@@ -79,26 +79,27 @@
 
 
 compute_duration <- function(start_date,
-                             enddate,
+                             end_date,
                              in_unit = 'days',
                              out_unit = 'days',
                              floor_in = TRUE,
                              add_one = TRUE,
                              trunc_out = FALSE) {
     # Checks
-    assert_that(is_date(start_date), is_date(enddate))
+    assert_that(is_date(start_date), is_date(end_date))
     assert_that(is_timeunit(in_unit), is_timeunit(out_unit))
+    assert_that(is.logical(floor_in), is.logical(add_one), is.logical(trunc_out))
 
     # Derivation
     if (floor_in) {
       # remove information moe precise than the input unit, e.g., if input unit
       # is days, the time part of the dates is removed.
       start_date <- floor_date(start_date, unit = in_unit)
-      enddate <- floor_date(enddate, unit = in_unit)
+      end_date <- floor_date(end_date, unit = in_unit)
     }
 
     # derive the duration in the output unit
-    duration <- time_length(start_date %--% enddate, unit = out_unit)
+    duration <- time_length(start_date %--% end_date, unit = out_unit)
     if (add_one) {
       # add one unit of the input unit (converted to the output unit), e.g., if
       # input unit is days and output unit is hours, 24 hours are added

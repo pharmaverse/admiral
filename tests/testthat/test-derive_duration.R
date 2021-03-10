@@ -9,10 +9,10 @@ test_that("duration and unit variable are added", {
   expected_output <- input %>% mutate(AGE := 20, AGEU := 'YEARS')
 
   expect_equal(derive_duration(input,
-                               newcol = AGE,
+                               new_col = AGE,
                                start_date = BRTHDT,
                                end_date = RANDDT,
-                               unitcol = AGEU,
+                               unit_col = AGEU,
                                out_unit = 'years',
                                trunc_out = TRUE),
                expected_output)}
