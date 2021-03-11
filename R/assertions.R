@@ -10,3 +10,18 @@ assert_has_variables <- function(dataset, required_vars) {
     abort(err_msg)
   }
 }
+
+assert_has_only_one_baseline_record <- function(dataset, by) {
+  is_duplicate <- duplicated(select(dataset, !!!syms(by)))
+  if (any(is_duplicate)) {
+    duplicates <- dataset %>%
+      select(!!!syms(by)) %>%
+      filter(is_duplicate)
+    tbl <- capture.output(print(duplicates))
+    err_msg <- paste0(
+      "Dataset contains multiple baseline records.\n",
+      paste(tbl[-c(1, 3)], collapse = "\n")
+    )
+    abort(err_msg)
+  }
+}

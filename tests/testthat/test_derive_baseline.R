@@ -1,6 +1,6 @@
-context("test-derive_var_base")
+context("test_derive_baseline")
 
-test_that("`BASE` is set to `AVAL` where `ABLFL == 'Y'`", {
+test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
@@ -34,10 +34,13 @@ test_that("`BASE` is set to `AVAL` where `ABLFL == 'Y'`", {
     "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST",      8.9
   )
 
-  expect_identical(derive_var_base(input), expected_output)
+  expect_identical(
+    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    expected_output
+  )
 })
 
-test_that("`BASE` is set to `NA` if a baseline record is missing", {
+test_that("`target` is set to `NA` if a baseline record is missing", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
@@ -49,18 +52,21 @@ test_that("`BASE` is set to `NA` if a baseline record is missing", {
   )
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",     10.12,
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",     10.12,
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",     10.12,
-    "TEST01", "PAT01",  "PARAM02",  4.9,  "",     "LAST",     NA,
-    "TEST01", "PAT01",  "PARAM02",  7.1,  "",     "LAST",     NA,
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",     NA
+    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",    10.12,
+    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",    10.12,
+    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",    10.12,
+    "TEST01", "PAT01",  "PARAM02",  4.9,  "",     "LAST",    NA,
+    "TEST01", "PAT01",  "PARAM02",  7.1,  "",     "LAST",    NA,
+    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",    NA
   )
 
-  expect_identical(derive_var_base(input), expected_output)
+  expect_identical(
+    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    expected_output
+  )
 })
 
-test_that("`derive_var_base()` only adds the `BASE` variable", {
+test_that("only the `target` variable is added to the input dataset", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL,
     "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",    "Y",
@@ -80,54 +86,31 @@ test_that("`derive_var_base()` only adds the `BASE` variable", {
     "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",    "Y",       8.35
   )
 
-  expect_identical(derive_var_base(input), expected_output)
+  expect_identical(
+    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    expected_output
+  )
 })
 
-test_that("`derive_var_base()` fails when required variables are missing", {
+test_that("An error is thrown if a subject has multiple records per `PARAMCD` and `BASETYPE`", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
-    "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01",  9.7,  "",     "LAST",
-    "TEST01", "PAT01",  "PARAM01", 15.01, "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM02", NA,    "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02",  8.35, "",     "LAST",
-
-    "TEST01", "PAT02",  "PARAM01", 29,    "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM01", 19.7,  "",     "LAST",
-    "TEST01", "PAT02",  "PARAM01", 18.01, "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02",  8.9,  "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM02",  9,    "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02",  5.35, "",     "LAST"
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01", "LOW",    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",     "LAST",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02", "HIGH",   "Y",    "LAST",
+    "TEST01", "PAT02",  "PARAM02", "MEDIUM", "",     "LAST",
   )
 
   expect_error(
-    input %>% select(-STUDYID) %>% derive_var_base(),
-    "Required variable `STUDYID` is missing."
-  )
-  expect_error(
-    input %>% select(-USUBJID) %>% derive_var_base(),
-    "Required variable `USUBJID` is missing."
-  )
-  expect_error(
-    input %>% select(-PARAMCD) %>% derive_var_base(),
-    "Required variable `PARAMCD` is missing."
-  )
-  expect_error(
-    input %>% select(-AVAL) %>% derive_var_base(),
-    "Required variable `AVAL` is missing."
-  )
-  expect_error(
-    input %>% select(-ABLFL) %>% derive_var_base(),
-    "Required variable `ABLFL` is missing."
-  )
-  expect_error(
-    input %>% select(-c(AVAL, ABLFL)) %>% derive_var_base(),
-    "Required variables `AVAL` and `ABLFL` are missing."
+    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVALC, target = BASEC),
+    "Dataset contains multiple baseline records."
   )
 })
 
-test_that("`BASEC` is set to `AVALC` where `ABLFL == 'Y'`", {
+test_that("a `BASEC` column of type `character` is added to the input dataset", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
@@ -136,31 +119,26 @@ test_that("`BASEC` is set to `AVALC` where `ABLFL == 'Y'`", {
     "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
     "TEST01", "PAT01",  "PARAM02", "HIGH",   "",     "LAST",
     "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",     "LAST",
-
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",     "LAST",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",    "LAST",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "",     "LAST",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",     "LAST"
   )
-  expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,  ~ABLFL, ~BASETYPE, ~BASEC,
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",   "LAST",    "LOW",
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "",    "LAST",    "LOW",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",    "LAST",    "LOW",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",   "LAST",    "HIGH",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",    "LAST",    "HIGH",
-    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",    "LAST",    "HIGH",
+  output <- derive_var_basec(input)
 
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Y",   "LAST",     "MEDIUM",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",    "LAST",     "MEDIUM",
-    "TEST01", "PAT02",  "PARAM01", "MEDIUM", "",    "LAST",     "MEDIUM",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "Y",   "LAST",     "LOW",
-    "TEST01", "PAT02",  "PARAM02", "LOW",    "",    "LAST",     "LOW",
-    "TEST01", "PAT02",  "PARAM02", "HIGH",   "",    "LAST",     "LOW"
-  )
-
-  expect_identical(derive_var_basec(input), expected_output)
+  expect_true("BASEC" %in% colnames(output))
+  expect_true(is.character(output$BASEC))
 })
 
+test_that("a `BASE` column of type `numeric` is added to the input dataset", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,   ~ABLFL, ~BASETYPE,
+    "TEST01", "PAT01",  "PARAM01",  1,      "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM01",  1,      "",     "LAST",
+    "TEST01", "PAT01",  "PARAM01",  2.5,    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02", 32.1,    "Y",    "LAST",
+    "TEST01", "PAT01",  "PARAM02", 35.9,    "",     "LAST",
+    "TEST01", "PAT01",  "PARAM02", 34.45,   "",     "LAST",
+
+  )
+  output <- derive_var_base(input)
+
+  expect_true("BASE" %in% colnames(output))
+  expect_true(is.numeric(output$BASE))
+})
