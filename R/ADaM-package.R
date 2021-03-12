@@ -3,4 +3,6 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort enquo syms
 #' @importFrom utils capture.output
+#' @importFrom assertthat assert_that
+#' @importFrom lubridate floor_date time_length %--% ymd ymd_hms is.instant
 "_PACKAGE"
