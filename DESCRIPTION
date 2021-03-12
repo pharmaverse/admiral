@@ -10,13 +10,15 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Imports:
+    assertthat,
+    dplyr,
+    lubridate,
+    magrittr,
+    rlang
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
     tibble
 VignetteBuilder: knitr
-Imports: 
-    dplyr,
-    magrittr,
-    rlang
