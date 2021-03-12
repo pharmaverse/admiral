@@ -1,6 +1,0 @@
-context("Change from Baseline")
-
-test_that("multiplication works", {
-
-  expect_equal(2 * 2, 5)
-})
