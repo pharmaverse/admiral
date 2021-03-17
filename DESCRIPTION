@@ -15,7 +15,9 @@ Imports:
     dplyr,
     lubridate,
     magrittr,
-    rlang
+    purrr,
+    rlang,
+    stringr
 Suggests: 
     testthat,
     knitr,
