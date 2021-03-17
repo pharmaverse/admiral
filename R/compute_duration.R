@@ -68,13 +68,21 @@
 #'
 #' @examples
 #' # derive duration in days (integer), i.e., relative day
-#' compute_duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'))
+#' compute_duration(lubridate::ymd_hms('2020-12-06T15:00:00'),
+#'                  lubridate::ymd_hms('2020-12-24T08:15:00'))
 #'
 #' # derive duration in days (float)
-#' compute_duration(ymd_hms('2020-12-06T15:00:00'), ymd_hms('2020-12-24T08:15:00'), floor_in = FALSE, add_one = FALSE)
+#' compute_duration(lubridate::ymd_hms('2020-12-06T15:00:00'),
+#'                  lubridate::ymd_hms('2020-12-24T08:15:00'),
+#'                  floor_in = FALSE,
+#'                  add_one = FALSE)
 #'
 #' # derive age
-#' compute_duration(ymd('1984-09-06'), ymd('2020-02-24'), trunc_out = TRUE, out_unit = 'years', add_one = FALSE)
+#' compute_duration(lubridate::ymd('1984-09-06'),
+#'                  lubridate::ymd('2020-02-24'),
+#'                  trunc_out = TRUE,
+#'                  out_unit = 'years',
+#'                  add_one = FALSE)
 #'
 
 

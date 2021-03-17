@@ -41,7 +41,7 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   ymd('1984-09-06'), ymd('2020-02-24'))
+#'   lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_aage(data)
 #'

@@ -79,7 +79,7 @@ The duration is derived as time from start to end date in the
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  ymd('1984-09-06'), ymd('2020-02-24'))
+  lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 
 derive_duration(data,
                 new_col = AAGE,
@@ -94,7 +94,9 @@ derive_duration(data,
 \seealso{
 [compute_duration()]
 
-Other {general functions}: \code{\link{compute_duration}}
+Other {general functions}: \code{\link{compute_duration}},
+  \code{\link{derive_merged_vars}},
+  \code{\link{filter_first}}
 }
 \author{
 Stefan Bundfuss
