@@ -2,6 +2,7 @@
 
 export(compute_duration)
 export(derive_aage)
+export(derive_baseline)
 export(derive_duration)
 export(derive_var_ady)
 export(derive_var_aendy)

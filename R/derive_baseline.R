@@ -74,6 +74,8 @@ derive_var_basec <- function(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYP
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `new_var` variable.
 #'
+#' @export
+#'
 #' @author Thomas Neitmann
 #'
 #' @examples
