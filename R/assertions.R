@@ -72,3 +72,49 @@ assertthat::on_failure(is_timeunit) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid time unit.",
          " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'.")
 }
+
+
+is_valid_sec_min<-function(arg){
+  arg %in% seq(from=0,to=59)
+}
+is_valid_hour<-function(arg){
+  arg %in% seq(from=0,to=23)
+}
+is_valid_day<-function(arg){
+  arg %in% seq(1:31) | arg=="LAST"
+}
+is_valid_month<-function(arg){
+  arg %in% seq(1:12)
+}
+is_valid_year<-function(arg){
+  nchar(arg)==4
+}
+assertthat::on_failure(is_valid_sec_min) <- function(call, env) {
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid min/sec.",
+         "Values must be between between 0-59")
+}
+assertthat::on_failure(is_valid_hour) <- function(call, env) {
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid day.",
+         "Values must be between 0-23")
+}
+assertthat::on_failure(is_valid_day) <- function(call, env) {
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid day.",
+         "Values must be between 1-31 or 'LAST'")
+}
+assertthat::on_failure(is_valid_month) <- function(call, env) {
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid month",
+         "Values must be between 1-12")
+}
+assertthat::on_failure(is_valid_year) <- function(call, env) {
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid year",
+         "Expecting a 4-digit number")
+}
+
+assert_has_a_date_variable <- function(dataset, dates) {
+  is_missing <- !dates %in% colnames(dataset)
+  if (all(is_missing)) {
+    err_msg <- paste("Required a date variable: `", dates[1], dates[2], "` is missing.")
+    abort(err_msg)
+  }
+}
+
