@@ -4,8 +4,8 @@
 \alias{derive_var_trtedtm}
 \title{Derive datetime of Last Exposure to Treatment (TRTEDTM)}
 \usage{
-derive_var_trtedtm(dataset, dataset_ex = ex, filter_ex = exprs(EXDOSE >
-  0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))))
+derive_var_trtedtm(dataset, dataset_ex, filter_ex = exprs(EXDOSE > 0 |
+  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))))
 }
 \arguments{
 \item{dataset}{Input dataset

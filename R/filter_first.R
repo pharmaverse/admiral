@@ -46,7 +46,14 @@
 filter_first <- function(dataset,
                          order,
                          by_vars){
-  dataset %>% group_by(!!!by_vars) %>%
-    arrange(!!!order, .by_group = TRUE) %>%
+  if (!missing(by_vars)){
+    data <- dataset %>% group_by(!!!by_vars) %>%
+      arrange(!!!order, .by_group = TRUE)
+  }
+  else{
+    data <- dataset %>%
+      arrange(!!!order)
+  }
+  data %>%
     slice(1)
 }
