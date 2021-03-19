@@ -45,7 +45,7 @@
 
 <meta property="og:title" content="Derive Analysis Study Day — derive_var_ady" />
 
-<meta property="og:description" content="Adds the analysis study day (``ADY``) to the dataset, i.e., study day of analysis date." />
+<meta property="og:description" content="Adds the analysis study day (ADY) to the dataset, i.e., study day of analysis date." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -131,7 +131,7 @@
 
     <div class="ref-description">
     
-    <p>Adds the analysis study day (``ADY``) to the dataset, i.e., study day of analysis date.</p>
+    <p>Adds the analysis study day (<code>ADY</code>) to the dataset, i.e., study day of analysis date.</p>
     
     </div>
 
@@ -143,32 +143,32 @@
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The columns specified by the `start_date` and the `end_date` parameter are
-  expected.</p></td>
+<p>The columns specified by the <code>start_date</code> and the <code>end_date</code> parameter are
+expected.</p></td>
     </tr>
     <tr>
       <th>start_date</th>
       <td><p>The start date column, e.g., date of first treatment</p>
 <p>A date or date-time object column is expected.</p>
-<p>The default is ``TRTSDT``.</p></td>
+<p>The default is <code>TRTSDT</code>.</p></td>
     </tr>
     <tr>
       <th>end_date</th>
       <td><p>The end date column for which the study day should be derived</p>
 <p>A date or date-time object column is expected.</p>
-<p>The default is ``ADT``</p></td>
+<p>The default is <code>ADT</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with ``ADY`` column added</p>
+    <p>The input dataset with <code>ADY</code> column added</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The study day is derived as number of days from the start date
-  to the end date. If it is nonnegative, one is added. I.e., the study day of the
-  start date is 1.</p>
+to the end date. If it is nonnegative, one is added. I.e., the study day of the
+start date is 1.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

@@ -142,11 +142,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>A `data.frame`</p></td>
+      <td><p>A <code>data.frame</code></p></td>
     </tr>
     <tr>
       <th>vars</th>
-      <td><p>`character` vector of columns to check for in `dataset`</p></td>
+      <td><p><code>character</code> vector of columns to check for in <code>dataset</code></p></td>
     </tr>
     </table>
     
@@ -155,7 +155,8 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dm</span>)
 
 <span class='co'>## No warning as `AAGE` doesn't exist in `dm`</span>
-<span class='fu'>warn_if_vars_exist</span>(<span class='no'>dm</span>, <span class='st'>"AAGE"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in warn_if_vars_exist(dm, "AAGE"): could not find function "warn_if_vars_exist"</span></div><div class='input'>
+<span class='fu'>warn_if_vars_exist</span>(<span class='no'>dm</span>, <span class='st'>"AAGE"</span>)
+
 <span class='co'>## Issues a warning</span>
 <span class='fu'>warn_if_vars_exists</span>(<span class='no'>dm</span>, <span class='st'>"ARM"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in warn_if_vars_exists(dm, "ARM"): could not find function "warn_if_vars_exists"</span></div><div class='input'>
 </div></pre>
