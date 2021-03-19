@@ -98,6 +98,8 @@ derive_duration <- function(dataset,
                             floor_in = TRUE,
                             add_one = TRUE,
                             trunc_out = FALSE) {
+  warn_if_vars_exist(dataset, c(deparse(substitute(new_col)), deparse(substitute(unit_col))))
+
   dataset <-
     dataset %>% mutate(!!enquo(new_col) := compute_duration(!!enquo(start_date),
                                                            !!enquo(end_date),
@@ -106,8 +108,8 @@ derive_duration <- function(dataset,
                                                            floor_in = floor_in,
                                                            add_one = add_one,
                                                            trunc_out = trunc_out))
-  if(!missing(unit_col)){
+  if (!missing(unit_col)) {
     dataset <- dataset %>% mutate(!!enquo(unit_col) := toupper(out_unit))
   }
-  return(dataset)
+  dataset
 }
