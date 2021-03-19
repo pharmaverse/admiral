@@ -94,6 +94,7 @@ derive_var_basec <- function(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE
 #' )
 #'
 derive_baseline <- function(bds_dataset, by, source, target) {
+  warn_if_vars_exist(bds_dataset, deparse(substitute(target)))
   assert_has_variables(
     bds_dataset,
     c(by, deparse(substitute(source)), "ABLFL")
