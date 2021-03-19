@@ -10,7 +10,7 @@ is_timeunit(arg)
 \item{arg}{The argument to check}
 }
 \value{
-``TRUE`` if the argument is a time unit, ``FALSE`` otherwise
+\code{TRUE} if the argument is a time unit, \code{FALSE} otherwise
 }
 \description{
 Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours', 'minutes', or 'seconds'.

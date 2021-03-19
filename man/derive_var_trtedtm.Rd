@@ -10,32 +10,32 @@ derive_var_trtedtm(dataset, dataset_ex, filter_ex = exprs(EXDOSE > 0 |
 \arguments{
 \item{dataset}{Input dataset
 
-  The variables specified by the `by_vars` parameter are expected.}
+The variables specified by the \code{by_vars} parameter are expected.}
 
-\item{dataset_ex}{`ex` dataset
+\item{dataset_ex}{\code{ex} dataset
 
-  The variables `EXENDTC`, `EXSEQ`, and those specified by the `filter_ex`
-  parameter are expected.}
+The variables \code{EXENDTC}, \code{EXSEQ}, and those specified by the \code{filter_ex}
+parameter are expected.}
 
 \item{filter_ex}{Fiter condition for the ex dataset
 
-  Only observations of the ex dataset which fulfill the specified condition
-  are considered for the treatment start date.
+Only observations of the ex dataset which fulfill the specified condition
+are considered for the treatment start date.
 
-  Default: `exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))`
+Default: \code{exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))}
 
-  Permitted Values: logical expression}
+Permitted Values: logical expression}
 }
 \value{
-The input dataset with `TRTEDTM` variable added
+The input dataset with \code{TRTEDTM} variable added
 }
 \description{
 Derives datetime of Last Exposure to Treatment (TRTEDTM)
 }
 \details{
 For each group (with respect to the variables specified for the
-  `by_vars` parameter) the first observation (with respect to the order
-  specified for the `order` parameter) is included in the output dataset.
+\code{by_vars} parameter) the first observation (with respect to the order
+specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 data("ex")

@@ -11,54 +11,54 @@ compute_duration(start_date, end_date, in_unit = "days",
 \arguments{
 \item{start_date}{The start date
 
-  A date or date-time object is expected.}
+A date or date-time object is expected.}
 
 \item{end_date}{The end date
 
-  A date or date-time object is expected.}
+A date or date-time object is expected.}
 
 \item{in_unit}{Input unit
 
-  See floor_in and add_one parameter for details.
+See floor_in and add_one parameter for details.
 
-  Default: 'days'
+Default: 'days'
 
-  Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 
 \item{out_unit}{Output unit
 
-  The duration is derived in the specified unit
+The duration is derived in the specified unit
 
-  Default: 'days'
+Default: 'days'
 
-  Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 
 \item{floor_in}{Round down input dates?
 
-  The input dates are round down with respect to the input unit, e.g., if the
-  input unit is 'days', the time of the input dates is ignored.
+The input dates are round down with respect to the input unit, e.g., if the
+input unit is 'days', the time of the input dates is ignored.
 
-  Default: ``TRUE```
+Default: ``TRUE```
 
-  Permitted Values: ``TRUE``, ``FALSE``}
+Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{add_one}{Add one input unit?
 
-  If the duration is non-negative, one input unit is added. I.e., the
-  duration can not be zero.
+If the duration is non-negative, one input unit is added. I.e., the
+duration can not be zero.
 
-  Default: ``TRUE``
+Default: \code{TRUE}
 
-  Permitted Values: ``TRUE``, ``FALSE``}
+Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{trunc_out}{Return integer part
 
-  The fractional part of the duration (in output unit) is removed, i.e., the
-  integer part is returned.
+The fractional part of the duration (in output unit) is removed, i.e., the
+integer part is returned.
 
-  Default: ``FALSE``
+Default: \code{FALSE}
 
-  Permitted Values: ``TRUE``, ``FALSE``}
+Permitted Values: \code{TRUE}, \code{FALSE}}
 }
 \value{
 The duration between the two date in the specified unit
@@ -69,8 +69,8 @@ relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-  specied output unit. If the end date is before the start date, the duration
-  is negative.
+specied output unit. If the end date is before the start date, the duration
+is negative.
 }
 \examples{
 # derive duration in days (integer), i.e., relative day

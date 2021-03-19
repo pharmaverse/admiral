@@ -9,14 +9,14 @@ filter_first(dataset, order, by_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-  The variables specified by the `order` and the `by_vars` parameter are
-  expected.}
+The variables specified by the \code{order} and the \code{by_vars} parameter are
+expected.}
 
 \item{order}{Sort order
 
-  Within each by group the observations are ordered by the specified order.
+Within each by group the observations are ordered by the specified order.
 
-  Permitted Values: list of variables or functions of variables}
+Permitted Values: list of variables or functions of variables}
 
 \item{by_vars}{Grouping variables}
 }
@@ -28,10 +28,10 @@ Filters out the first observation for each group.
 }
 \details{
 For each group (with respect to the variables specified for the
-  `by_vars` parameter) the first observation (with respect to the order
-  specified for the `order` parameter) is included in the output dataset.
+\code{by_vars} parameter) the first observation (with respect to the order
+specified for the \code{order} parameter) is included in the output dataset.
 
-  Permitted Values: list of variables
+Permitted Values: list of variables
 }
 \examples{
 data("ex")

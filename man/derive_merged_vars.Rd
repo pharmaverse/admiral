@@ -10,38 +10,38 @@ derive_merged_vars(dataset, dataset_add, filter_add, new_vars,
 \arguments{
 \item{dataset}{Input dataset
 
-  The variables specified by the `by_vars` parameter are expected.}
+The variables specified by the \code{by_vars} parameter are expected.}
 
 \item{dataset_add}{Dataset to add
 
-  The variables specified by the `by_vars`, the `filter_add`, and the
-  `filter_first_order` parameter are expected.}
+The variables specified by the \code{by_vars}, the \code{filter_add}, and the
+\code{filter_first_order} parameter are expected.}
 
 \item{filter_add}{Fiter condition for dataset to add
 
-  Only observations of the add dataset which fulfill the specified condition
-  are used for merging.
+Only observations of the add dataset which fulfill the specified condition
+are used for merging.
 
-  Permitted Values: logical expression}
+Permitted Values: logical expression}
 
 \item{new_vars}{Variable to add
 
-  The specified variables are created in the add dataset and then merge to
-  the input dataset.
+The specified variables are created in the add dataset and then merge to
+the input dataset.
 
-  Permitted Values: list of name-value pairs}
+Permitted Values: list of name-value pairs}
 
 \item{by_vars}{Grouping variables
 
-  Default: `exprs(USUBJID)`
-  Permitted Values: list of variables}
+Default: \code{exprs(USUBJID)}
+Permitted Values: list of variables}
 
 \item{filter_first_order}{Sort order
 
-  If the parameter is specified, the add dataset is ordered by the specified
-  order and only the first observation in each by group is used for merging.
+If the parameter is specified, the add dataset is ordered by the specified
+order and only the first observation in each by group is used for merging.
 
-  Permitted Values: list of variables or functions of variables}
+Permitted Values: list of variables or functions of variables}
 }
 \value{
 The input dataset with variables from the add dataset
@@ -53,8 +53,8 @@ group.
 }
 \details{
 For each group (with respect to the variables specified for the
-  `by_vars` parameter) the first observation (with respect to the order
-  specified for the `order` parameter) is included in the output dataset.
+\code{by_vars} parameter) the first observation (with respect to the order
+specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 data("ex")
