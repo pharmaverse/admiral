@@ -1,0 +1,8 @@
+external.libraries: /opt/mango/R/3.5.2/lib/R/library_sec,
+    /opt/mango/R/3.5.2/lib/R/library
+ignored.packages:
+package.dependency.fields: Imports, Depends, LinkingTo
+r.version:
+snapshot.type: implicit
+use.cache: TRUE
+vcs.ignore.library: TRUE
