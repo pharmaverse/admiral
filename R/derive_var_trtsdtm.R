@@ -37,9 +37,11 @@
 #' derive_var_trtsdtm(dm)
 #'
 
-derive_var_trtsdtm <- function(dataset,
-                               dataset_ex,
-                               filter_ex = exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')))){
+derive_var_trtsdtm <- function(
+  dataset,
+  dataset_ex,
+  filter_ex = exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))){
+
   derive_merged_vars(dataset,
                      dataset_add = dataset_ex,
                      filter_add = filter_ex,
