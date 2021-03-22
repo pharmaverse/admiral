@@ -13,10 +13,22 @@ compute_imputed_dtc<-function(dtc,
   assert_that(is_valid_year(year))
   assert_that(is.logical(impute))
 
-  if(day != "LAST") {
+  if(!day %in% c("FIRST", "MID", "LAST")) {
     d<-sprintf("%02d", as.integer(day))}
-  else {d<-"01"}
+  else {
+    if (day %in% c("FIRST",  "LAST")){
+      d<-"01"}
+    else {
+      if (day =="MID"){
+        d<-"15"
+      }
+    }
+  }
+
+
   mo<-sprintf("%02d", as.integer(month))
+  y<-sprintf("%04d", as.integer(year))
+
   h<-sprintf("%02d", as.integer(hour))
   mi<-sprintf("%02d", as.integer(min))
   s<-sprintf("%02d", as.integer(sec))
@@ -24,12 +36,14 @@ compute_imputed_dtc<-function(dtc,
   if (impute==TRUE){
     #add missing text in date/time
     tmp__ <- case_when(
-         nchar(dtc)>10 ~ dtc,
+         nchar(dtc)==19 ~ dtc,
+         nchar(dtc)==16 ~ paste0(dtc,":", s),
          nchar(dtc)==10 ~ paste0(dtc,"T",h,":", mi,":", s),
-         nchar(dtc)==9 ~  paste0(substr(dtc,1,4), "-",mo,"-",d,"T",h,":", mi,":", s),
+         nchar(dtc)==9 ~  paste0(substr(dtc,1,4), "-",mo,"-",d,"T",h,":", mi,":", s),#dates like 2021---14 - use only year part
          nchar(dtc)==7 ~  paste0(dtc,"-",d,"T",h,":", mi,":", s),
          nchar(dtc)==4  ~  paste0(dtc, "-",mo,"-",d,"T",h,":", mi,":", s),
-         TRUE ~ as.character(dtc)
+         nchar(dtc)<4  ~  paste0(y, "-",mo,"-",d,"T",h,":", mi,":", s),
+         #TRUE ~ as.character(dtc)
        )
     if (day=="LAST"){
       #last day of the month
@@ -40,7 +54,8 @@ compute_imputed_dtc<-function(dtc,
   #No imputation: keep the datetime or teh date with a time set to 0
   else{
     tmp__ <- case_when(
-      nchar(dtc)>10 ~ dtc,
+      nchar(dtc)==19 ~ dtc,
+      nchar(dtc)==16 ~ paste0(dtc,":", s),
       nchar(dtc)==10 ~ paste0(dtc,"T00:00:00"),
       TRUE ~ "" #as.character(dtc)
     )
@@ -62,23 +77,21 @@ dtc_dtm<-function(dtc){
 
 compute_dtf <- function(dtc,dt){
 
-  flag<-case_when(
+  case_when(
     (!is.na(dt) & nchar(dtc)>=10)| is.na(dt) ~" ",
     !is.na(dt) & nchar(dtc)==7~"D",
     !is.na(dt) & nchar(dtc)==4 ~"M"
   )
-  return(flag)
 }
 
 compute_tmf <- function(dtc,dt){
 
-  flag<-case_when(
+  case_when(
     (!is.na(dt) & nchar(dtc)==19)| is.na(dt) ~" ",
     !is.na(dt) & nchar(dtc)==15~"S",
     !is.na(dt) & nchar(dtc)==13~"M",
-    !is.na(dt) & nchar(dtc)==10~"H"
+    (!is.na(dt) & nchar(dtc)==10) | (nchar(dtc)> 0 & nchar(dtc) <10) ~"H"
   )
-  return(flag)
 }
 
 derive_date_vars<- function(
@@ -92,8 +105,7 @@ derive_date_vars<- function(
                       DT=TRUE, DTM=TRUE, DTF=TRUE, TMF=TRUE
                     ){
   #Check DTC is present in input dataset
-  dtcvar<-str_replace_all(deparse(expr(!!enquo(dtc))),'~','')
-  assert_has_variables(dataset, dtcvar)
+  assert_has_variables(dataset, deparse(substitute(dtc)))
 
   tmp<-dataset
   if(DT==TRUE){
@@ -138,4 +150,5 @@ derive_date_vars<- function(
   return(tmp)
 
 }
+
 
