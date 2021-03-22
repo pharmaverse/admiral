@@ -20,8 +20,11 @@ Imports:
     rlang,
     stringr
 Suggests: 
+    lintr,
     testthat,
     knitr,
+    miniUI,
     rmarkdown,
+    styler,
     tibble
 VignetteBuilder: knitr

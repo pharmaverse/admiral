@@ -46,14 +46,30 @@
 filter_first <- function(dataset,
                          order,
                          by_vars){
+  # group and sort input dataset
   if (!missing(by_vars)){
+    assert_has_variables(dataset, by_vars)
+
     data <- dataset %>% group_by(!!!by_vars) %>%
       arrange(!!!order, .by_group = TRUE)
+
+    # check for unique records
+    assert_has_unique_records(data,
+                              by_vars = by_vars ,
+                              order = order ,
+                              message_type = 'warning')
   }
   else{
     data <- dataset %>%
       arrange(!!!order)
+
+    # check for unique records
+    assert_has_unique_records(data,
+                              order = order,
+                              message_type = 'warning')
   }
+
+  # select first observation (for each group)
   data %>%
     slice(1)
 }

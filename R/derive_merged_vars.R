@@ -69,6 +69,9 @@ derive_merged_vars <- function(dataset,
                                new_vars,
                                by_vars = exprs(USUBJID),
                                filter_first_order){
+  assert_has_variables(dataset, by_vars)
+  assert_has_variables(dataset_add, by_vars)
+
   if (!missing(filter_add)){
      add <- dataset_add %>%
        filter(!!!filter_add)
