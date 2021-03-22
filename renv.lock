@@ -3,8 +3,8 @@
     "Version": "3.5.3",
     "Repositories": [
       {
-        "Name": "CRAN",
-        "URL": "https://cran.rstudio.com"
+        "Name": null,
+        "URL": "https://cran.microsoft.com/snapshot/2019-02-01"
       }
     ]
   },
@@ -156,6 +156,13 @@
       "Repository": "CRAN",
       "Hash": "74aa264d2e3b6214529cd33a5850a07f"
     },
+    "httpuv": {
+      "Package": "httpuv",
+      "Version": "1.4.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6db7d2196b1c704ea0f0877860fe3cf8"
+    },
     "httr": {
       "Package": "httr",
       "Version": "1.4.0",
@@ -183,6 +190,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "888eec2b56cbed1b55689b1422d55c32"
+    },
+    "later": {
+      "Package": "later",
+      "Version": "0.7.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "199a279622f4eb8eaceca87046e37a20"
     },
     "lattice": {
       "Package": "lattice",
@@ -233,6 +247,13 @@
       "Repository": "CRAN",
       "Hash": "65dd22e780565119a78036189cb3b885"
     },
+    "miniUI": {
+      "Package": "miniUI",
+      "Version": "0.1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fec5f52652d60615fdb3957b3d74324a"
+    },
     "openssl": {
       "Package": "openssl",
       "Version": "1.2.1",
@@ -267,6 +288,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a555924add98c99d2f411e37e7d25e9f"
+    },
+    "promises": {
+      "Package": "promises",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e1983a27d5a79e89fe302623a758d88e"
     },
     "purrr": {
       "Package": "purrr",
@@ -319,10 +347,24 @@
     },
     "rstudioapi": {
       "Package": "rstudioapi",
-      "Version": "0.9.0",
+      "Version": "0.11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "79bc85df79c294122fc63583c24dbcda"
+      "Hash": "33a5b27a03da82ac4b1d43268f80088a"
+    },
+    "shiny": {
+      "Package": "shiny",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4dad5c94a7fcd08d9e29192d9bb80a3b"
+    },
+    "sourcetools": {
+      "Package": "sourcetools",
+      "Version": "0.1.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "947e4e02a79effa5d512473e10f41797"
     },
     "stringdist": {
       "Package": "stringdist",
@@ -407,6 +449,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b0571aabc44e19321142d1c4708bd0df"
+    },
+    "xtable": {
+      "Package": "xtable",
+      "Version": "1.8-3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7f777cd034efddabf07fcaf2f287ec43"
     },
     "yaml": {
       "Package": "yaml",
