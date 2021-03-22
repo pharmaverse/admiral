@@ -17,8 +17,10 @@ Imports:
     magrittr,
     rlang
 Suggests: 
+    lintr,
     testthat,
     knitr,
     rmarkdown,
+    styler,
     tibble
 VignetteBuilder: knitr
