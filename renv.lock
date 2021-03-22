@@ -3,8 +3,8 @@
     "Version": "3.5.3",
     "Repositories": [
       {
-        "Name": null,
-        "URL": "https://cran.microsoft.com/snapshot/2019-02-01"
+        "Name": "CRAN",
+        "URL": "https://cran.rstudio.com"
       }
     ]
   },
