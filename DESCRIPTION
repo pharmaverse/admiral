@@ -9,6 +9,7 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Imports:
     assertthat,
@@ -17,8 +18,11 @@ Imports:
     magrittr,
     rlang
 Suggests: 
+    lintr,
     testthat,
     knitr,
+    miniUI,
     rmarkdown,
+    styler,
     tibble
 VignetteBuilder: knitr
