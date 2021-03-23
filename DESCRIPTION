@@ -19,7 +19,8 @@ Imports:
     lubridate,
     magrittr,
     rlang
-Suggests: 
+Suggests:
+    devtools,
     lintr,
     pkgdown,
     testthat,
