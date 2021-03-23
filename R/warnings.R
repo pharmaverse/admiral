@@ -1,4 +1,4 @@
-#' Warn If a Variable Alreafy Exists
+#' Warn If a Variable Already Exists
 #'
 #' Warn if a variable already exists inside a dataset
 #'
@@ -6,7 +6,7 @@
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
 #' @author Thomas Neitmann
-#' @return
+#'
 #' @export
 #'
 #' @examples

@@ -55,7 +55,7 @@
 #'   Permitted Values: ``TRUE``, ``FALSE``
 #'
 #' @details The duration is derived as time from start to end date in the
-#'   specied output unit. If the end date is before the start date, the duration
+#'   specified output unit. If the end date is before the start date, the duration
 #'   is negative.
 #'
 #' @author Stefan Bundfuss

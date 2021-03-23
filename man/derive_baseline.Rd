@@ -2,14 +2,14 @@
 % Please edit documentation in R/derive_baseline.R
 \name{derive_baseline}
 \alias{derive_baseline}
-\title{Derive Basline}
+\title{Derive Baseline}
 \usage{
 derive_baseline(dataset, by_vars, source_var, new_var)
 }
 \arguments{
 \item{dataset}{\code{data.frame}}
 
-\item{by_vars}{\code{character} vector of columns uniqely identifying a set
+\item{by_vars}{\code{character} vector of columns uniquely identifying a set
 of records for which to calculate \code{BASE}}
 
 \item{source_var}{The column from which to extract the baseline value,

@@ -9,7 +9,7 @@ derive_var_basec(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"))
 \arguments{
 \item{dataset}{\code{data.frame}}
 
-\item{by_vars}{\code{character} vector of columns uniqely identifying a set
+\item{by_vars}{\code{character} vector of columns uniquely identifying a set
 of records for which to calculate \code{BASE}}
 }
 \value{

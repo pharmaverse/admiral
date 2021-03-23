@@ -3,7 +3,7 @@
 #' Derive the `BASE` variable in a BDS dataset
 #'
 #' @param dataset `data.frame`
-#' @param by_vars `character` vector of columns uniqely identifying a set
+#' @param by_vars `character` vector of columns uniquely identifying a set
 #'        of records for which to calculate `BASE`
 #'
 #' @return
@@ -58,7 +58,7 @@ derive_var_basec <- function(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYP
   derive_baseline(dataset, by_vars = by_vars, source_var = AVALC, new_var = BASEC)
 }
 
-#' Derive Basline
+#' Derive Baseline
 #'
 #' Derive a baseline variable, e.g. `BASE`, in a BDS dataset
 #'
