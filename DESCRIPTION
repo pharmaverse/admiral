@@ -27,6 +27,7 @@ Suggests:
     knitr,
     miniUI,
     rmarkdown,
+    spelling,
     styler,
     tibble
 VignetteBuilder: knitr
