@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive Basline — derive_baseline • admiral</title>
+<title>Derive Baseline — derive_baseline • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -18,8 +18,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -43,7 +43,7 @@
 
 
 
-<meta property="og:title" content="Derive Basline — derive_baseline" />
+<meta property="og:title" content="Derive Baseline — derive_baseline" />
 
 <meta property="og:description" content="Derive a baseline variable, e.g. BASE, in a BDS dataset" />
 
@@ -124,7 +124,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive Basline</h1>
+    <h1>Derive Baseline</h1>
     
     <div class="hidden name"><code>derive_baseline.Rd</code></div>
     </div>
@@ -135,27 +135,27 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_baseline</span>(<span class='no'>bds_dataset</span>, <span class='no'>by</span>, <span class='no'>source</span>, <span class='no'>target</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_baseline</span>(<span class='no'>dataset</span>, <span class='no'>by_vars</span>, <span class='no'>source_var</span>, <span class='no'>new_var</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bds_dataset</th>
+      <th>dataset</th>
       <td><p><code>data.frame</code></p></td>
     </tr>
     <tr>
-      <th>by</th>
-      <td><p><code>character</code> vector of columns uniqely identifying a set
+      <th>by_vars</th>
+      <td><p><code>character</code> vector of columns uniquely identifying a set
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     <tr>
-      <th>source</th>
+      <th>source_var</th>
       <td><p>The column from which to extract the baseline value,
 e.g. <code>AVAL</code></p></td>
     </tr>
     <tr>
-      <th>target</th>
+      <th>new_var</th>
       <td><p>The name of the newly created baseline column, e.g.
 <code>BASE</code></p></td>
     </tr>
@@ -164,11 +164,11 @@ e.g. <code>AVAL</code></p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A new <code>data.frame</code> containing all records and variables of the input
-dataset plus the <code>target</code> variable.</p>
+dataset plus the <code>new_var</code> variable.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>bds_dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+    <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVALC</span>,   ~<span class='no'>ABLFL</span>, ~<span class='no'>BASETYPE</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
@@ -178,12 +178,11 @@ dataset plus the <code>target</code> variable.</p>
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>
 )
 <span class='fu'>derive_baseline</span>(
-  <span class='no'>bds_dataset</span>,
-  <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>),
-  <span class='kw'>source</span> <span class='kw'>=</span> <span class='no'>AVALC</span>,
-  <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>BASEC</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in derive_baseline(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE"),     source = AVALC, target = BASEC): could not find function "derive_baseline"</span></div><div class='input'>
-</div></pre>
+  <span class='no'>dataset</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>),
+  <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>AVALC</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BASEC</span>
+)</div><div class='output co'>#&gt; <span class='error'>Error in warn_if_vars_exist(bds_dataset, deparse(substitute(target))): object 'bds_dataset' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive Duration — derive_duration • admiral</title>
+<title>Does a Dataset Contain All Required Variables? — assert_has_variables • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,9 @@
 
 
 
-<meta property="og:title" content="Derive Duration — derive_duration" />
+<meta property="og:title" content="Does a Dataset Contain All Required Variables? — assert_has_variables" />
 
-<meta property="og:description" content="Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ..." />
+<meta property="og:description" content="Checks if a dataset contains all required variables" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -125,110 +124,42 @@ day, age, ..." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive Duration</h1>
+    <h1>Does a Dataset Contain All Required Variables?</h1>
     
-    <div class="hidden name"><code>derive_duration.Rd</code></div>
+    <div class="hidden name"><code>assert_has_variables.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ...</p>
+    <p>Checks if a dataset contains all required variables</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_duration</span>(<span class='no'>dataset</span>, <span class='no'>new_col</span>, <span class='no'>unit_col</span>, <span class='no'>start_date</span>, <span class='no'>end_date</span>,
-  <span class='kw'>in_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>, <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>, <span class='kw'>floor_in</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>assert_has_variables</span>(<span class='no'>dataset</span>, <span class='no'>required_vars</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The columns specified by the <code>start_date</code> and the <code>end_date</code> parameter are
-expected.</p></td>
+      <td><p>A <code>data.frame</code></p></td>
     </tr>
     <tr>
-      <th>start_date</th>
-      <td><p>The start date</p>
-<p>A date or date-time object is expected.</p></td>
-    </tr>
-    <tr>
-      <th>end_date</th>
-      <td><p>The end date</p>
-<p>A date or date-time object is expected.</p></td>
-    </tr>
-    <tr>
-      <th>in_unit</th>
-      <td><p>Input unit</p>
-<p>See floor_in and add_one parameter for details.</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'</p></td>
-    </tr>
-    <tr>
-      <th>out_unit</th>
-      <td><p>Output unit</p>
-<p>The duration is derived in the specified unit</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'</p></td>
-    </tr>
-    <tr>
-      <th>floor_in</th>
-      <td><p>Round down input dates?</p>
-<p>The input dates are round down with respect to the input unit, e.g., if the
-input unit is 'days', the time of the input dates is ignored.</p>
-<p>Default: ``TRUE```</p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>add_one</th>
-      <td><p>Add one input unit?</p>
-<p>If the duration is non-negative, one input unit is added. I.e., the
-duration can not be zero.</p>
-<p>Default: <code>TRUE</code>
-Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>trunc_out</th>
-      <td><p>Return integer part</p>
-<p>The fractional part of the duration (in output unit) is removed, i.e., the
-integer part is returned.</p>
-<p>Default: <code>FALSE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
+      <th>required_vars</th>
+      <td><p>A <code>character</code> vector of variable names</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with the duration and unit variable added</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the duration
-is negative.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='compute_duration.html'>compute_duration()</a></code></p>
-<p>Other general functions: <code><a href='compute_duration.html'>compute_duration</a></code></p></div>
+    <p>The function throws an error if any of the required variables are
+missing in the input dataset</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>BRTHDT</span>, ~<span class='no'>RANDDT</span>,
-  <span class='fu'>ymd</span>(<span class='st'>'1984-09-06'</span>), <span class='fu'>ymd</span>(<span class='st'>'2020-02-24'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in ymd("1984-09-06"): could not find function "ymd"</span></div><div class='input'>
-<span class='fu'>derive_duration</span>(<span class='no'>data</span>,
-                <span class='kw'>new_col</span> <span class='kw'>=</span> <span class='no'>AAGE</span>,
-                <span class='kw'>unit_col</span> <span class='kw'>=</span> <span class='no'>AAGEU</span>,
-                <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>BRTHDT</span>,
-                <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>RANDDT</span>,
-                <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>'years'</span>,
-                <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-                <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod("mutate_"): no applicable method for 'mutate_' applied to an object of class "function"</span></div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dm</span>)
+<span class='fu'>assert_has_variables</span>(<span class='no'>dm</span>, <span class='st'>"STUDYID"</span>)
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) <span class='fu'>assert_has_variables</span>(<span class='no'>dm</span>, <span class='st'>"AVAL"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

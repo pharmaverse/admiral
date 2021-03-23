@@ -18,8 +18,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
@@ -135,18 +135,18 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>bds_dataset</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>))</pre>
+    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bds_dataset</th>
+      <th>dataset</th>
       <td><p><code>data.frame</code></p></td>
     </tr>
     <tr>
-      <th>by</th>
-      <td><p><code>character</code> vector of columns uniqely identifying a set
+      <th>by_vars</th>
+      <td><p><code>character</code> vector of columns uniquely identifying a set
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     </table>
@@ -158,7 +158,7 @@ dataset plus the <code>BASEC</code> variable</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>bds_dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+    <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVALC</span>,   ~<span class='no'>ABLFL</span>, ~<span class='no'>BASETYPE</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
@@ -167,16 +167,7 @@ dataset plus the <code>BASEC</code> variable</p>
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>
 )
-<span class='fu'>derive_var_basec</span>(<span class='no'>bds_dataset</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span><span>
-#&gt;   STUDYID USUBJID PARAMCD AVALC  ABLFL BASETYPE BASEC
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> TEST01  PAT01   PARAM01 LOW    Y     LAST     LOW  
-#&gt; </span><span style='color: #555555;'>2</span><span> TEST01  PAT01   PARAM01 LOW    N     LAST     LOW  
-#&gt; </span><span style='color: #555555;'>3</span><span> TEST01  PAT01   PARAM01 MEDIUM N     LAST     LOW  
-#&gt; </span><span style='color: #555555;'>4</span><span> TEST01  PAT01   PARAM02 HIGH   Y     LAST     HIGH 
-#&gt; </span><span style='color: #555555;'>5</span><span> TEST01  PAT01   PARAM02 HIGH   N     LAST     HIGH 
-#&gt; </span><span style='color: #555555;'>6</span><span> TEST01  PAT01   PARAM02 MEDIUM N     LAST     HIGH </div><div class='input'>
-</div></span></pre>
+<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>)</div><div class='output co'>#&gt; <span class='error'>Error in warn_if_vars_exist(bds_dataset, deparse(substitute(target))): object 'bds_dataset' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
