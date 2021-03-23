@@ -7,9 +7,9 @@
 warn_if_vars_exist(dataset, vars)
 }
 \arguments{
-\item{dataset}{A `data.frame`}
+\item{dataset}{A \code{data.frame}}
 
-\item{vars}{`character` vector of columns to check for in `dataset`}
+\item{vars}{\code{character} vector of columns to check for in \code{dataset}}
 }
 \description{
 Warn if a variable already exists inside a dataset

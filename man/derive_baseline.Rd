@@ -7,23 +7,23 @@
 derive_baseline(bds_dataset, by, source, target)
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{bds_dataset}{\code{data.frame}}
 
-\item{by}{`character` vector of columns uniqely identifying a set
-of records for which to calculate `BASE`}
+\item{by}{\code{character} vector of columns uniqely identifying a set
+of records for which to calculate \code{BASE}}
 
 \item{source}{The column from which to extract the baseline value,
-e.g. `AVAL`}
+e.g. \code{AVAL}}
 
 \item{target}{The name of the newly created baseline column, e.g.
-`BASE`}
+\code{BASE}}
 }
 \value{
-A new `data.frame` containing all records and variables of the input
-dataset plus the `target` variable.
+A new \code{data.frame} containing all records and variables of the input
+dataset plus the \code{target} variable.
 }
 \description{
-Derive a baseline variable, e.g. `BASE`, in a BDS dataset
+Derive a baseline variable, e.g. \code{BASE}, in a BDS dataset
 }
 \examples{
 bds_dataset <- tibble::tribble(

@@ -9,31 +9,31 @@ derive_var_ady(dataset, start_date = TRTSDT, end_date = ADT)
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `start_date` and the `end_date` parameter are
-  expected.}
+The columns specified by the \code{start_date} and the \code{end_date} parameter are
+expected.}
 
 \item{start_date}{The start date column, e.g., date of first treatment
 
-  A date or date-time object column is expected.
+A date or date-time object column is expected.
 
-  The default is ``TRTSDT``.}
+The default is \code{TRTSDT}.}
 
 \item{end_date}{The end date column for which the study day should be derived
 
-  A date or date-time object column is expected.
+A date or date-time object column is expected.
 
-  The default is ``ADT``}
+The default is \code{ADT}}
 }
 \value{
-The input dataset with ``ADY`` column added
+The input dataset with \code{ADY} column added
 }
 \description{
-Adds the analysis study day (``ADY``) to the dataset, i.e., study day of analysis date.
+Adds the analysis study day (\code{ADY}) to the dataset, i.e., study day of analysis date.
 }
 \details{
 The study day is derived as number of days from the start date
-  to the end date. If it is nonnegative, one is added. I.e., the study day of the
-  start date is 1.
+to the end date. If it is nonnegative, one is added. I.e., the study day of the
+start date is 1.
 }
 \examples{
 data <- tibble::tribble(

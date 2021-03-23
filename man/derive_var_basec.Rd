@@ -7,17 +7,17 @@
 derive_var_basec(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE"))
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{bds_dataset}{\code{data.frame}}
 
-\item{by}{`character` vector of columns uniqely identifying a set
-of records for which to calculate `BASE`}
+\item{by}{\code{character} vector of columns uniqely identifying a set
+of records for which to calculate \code{BASE}}
 }
 \value{
-A new `data.frame` containing all records and variables of the input
-dataset plus the `BASEC` variable
+A new \code{data.frame} containing all records and variables of the input
+dataset plus the \code{BASEC} variable
 }
 \description{
-Derive the `BASEC` variable in a BDS dataset
+Derive the \code{BASEC} variable in a BDS dataset
 }
 \examples{
 bds_dataset <- tibble::tribble(

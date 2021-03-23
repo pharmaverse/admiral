@@ -7,14 +7,14 @@
 derive_var_chg(bds_dataset)
 }
 \arguments{
-\item{bds_dataset}{`data.frame`. Required variables are `AVAL` and
-`BASE`.}
+\item{bds_dataset}{\code{data.frame}. Required variables are \code{AVAL} and
+\code{BASE}.}
 }
 \value{
-The input dataset with an additional column named `CHG`
+The input dataset with an additional column named \code{CHG}
 }
 \description{
-Derive change from baseline (`CHG`) in a BDS dataset
+Derive change from baseline (\code{CHG}) in a BDS dataset
 }
 \details{
 Change from baseline is calculated by subtracting the baseline value
