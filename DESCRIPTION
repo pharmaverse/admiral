@@ -19,6 +19,7 @@ Imports:
     rlang
 Suggests: 
     lintr,
+    pkgdown,
     testthat,
     knitr,
     miniUI,
