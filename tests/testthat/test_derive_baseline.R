@@ -35,7 +35,7 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   )
 
   expect_identical(
-    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    derive_baseline(input, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"), source_var = AVAL, new_var = BASE),
     expected_output
   )
 })
@@ -61,7 +61,7 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
   )
 
   expect_identical(
-    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    derive_baseline(input, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"), source_var = AVAL, new_var = BASE),
     expected_output
   )
 })
@@ -87,7 +87,7 @@ test_that("only the `target` variable is added to the input dataset", {
   )
 
   expect_identical(
-    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVAL, target = BASE),
+    derive_baseline(input, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"), source_var = AVAL, new_var = BASE),
     expected_output
   )
 })
@@ -105,7 +105,7 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
   )
 
   expect_error(
-    derive_baseline(input, by = c("USUBJID", "PARAMCD", "BASETYPE"), source = AVALC, target = BASEC),
+    derive_baseline(input, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"), source_var = AVALC, new_var = BASEC),
     "Dataset contains multiple baseline records."
   )
 })
