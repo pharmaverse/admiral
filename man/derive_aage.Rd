@@ -10,49 +10,49 @@ derive_aage(dataset, start_date = BRTHDT, end_date = RANDDT,
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `start_date` and the `end_date` parameter are
-  expected.}
+The columns specified by the \code{start_date} and the \code{end_date} parameter are
+expected.}
 
 \item{start_date}{The start date
 
-  A date or date-time object is expected.
+A date or date-time object is expected.
 
-  Default: `BRTHDT`}
+Default: \code{BRTHDT}}
 
 \item{end_date}{The end date
 
-  A date or date-time object is expected.
+A date or date-time object is expected.
 
-  Default: `RANDDT`}
+Default: \code{RANDDT}}
 
 \item{unit}{Unit
 
-  The age is derived in the specified unit
+The age is derived in the specified unit
 
-  Default: 'years'
+Default: 'years'
 
-  Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 }
 \value{
-The input dataset with ``AAGE`` and ``AAGEU`` added
+The input dataset with \code{AAGE} and \code{AAGEU} added
 }
 \description{
-Derives analysis age (`AAGE`) and analysis age unit (`AAGEU`)
+Derives analysis age (\code{AAGE}) and analysis age unit (\code{AAGEU})
 }
 \details{
 The age is derived as the integer part of the duration from start to
-  end date in the specified unit.
+end date in the specified unit.
 }
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  ymd('1984-09-06'), ymd('2020-02-24'))
+  lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 
 derive_aage(data)
 
 }
 \seealso{
-[derive_duration()]
+\code{\link[=derive_duration]{derive_duration()}}
 }
 \author{
 Stefan Bundfuss

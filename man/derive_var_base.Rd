@@ -7,17 +7,17 @@
 derive_var_base(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"))
 }
 \arguments{
-\item{dataset}{`data.frame`}
+\item{dataset}{\code{data.frame}}
 
-\item{by_vars}{`character` vector of columns uniqely identifying a set
-of records for which to calculate `BASE`}
+\item{by_vars}{\code{character} vector of columns uniqely identifying a set
+of records for which to calculate \code{BASE}}
 }
 \value{
-A new `data.frame` containing all records and variables of the input
-dataset plus the `BASE` variable
+A new \code{data.frame} containing all records and variables of the input
+dataset plus the \code{BASE} variable
 }
 \description{
-Derive the `BASE` variable in a BDS dataset
+Derive the \code{BASE} variable in a BDS dataset
 }
 \examples{
 dataset <- tibble::tribble(
@@ -30,7 +30,6 @@ dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02",  8.35, "N",    "LAST"
 )
 derive_var_base(dataset)
-
 }
 \author{
 Thomas Neitmann
