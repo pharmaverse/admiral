@@ -1,3 +1,21 @@
+#' Does a Dataset Contain All Required Variables?
+#'
+#' Checks if a dataset contains all required variables
+#'
+#' @param dataset A `data.frame`
+#' @param required_vars A `character` vector of variable names
+#'
+#' @author Thomas Neitmann
+#'
+#' @return The function throws an error if any of the required variables are
+#' missing in the input dataset
+#'
+#' @export
+#'
+#' @examples
+#' data(dm)
+#' assert_has_variables(dm, "STUDYID")
+#' \dontrun{assert_has_variables(dm, "AVAL")}
 assert_has_variables <- function(dataset, required_vars) {
   is_missing <- !required_vars %in% colnames(dataset)
   if (any(is_missing)) {
@@ -11,6 +29,20 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+#' Are There Multiple Baseline Records?
+#'
+#' Checks if a dataset contains multiple baseline records
+#'
+#' @param dataset A `data.frame`
+#' @param by A `character` vector of variable names which uniquely identify a
+#' set of records that should only contain a single baseline record
+#'
+#' @author Thomas Neitmann
+#'
+#' @return The function throws an error if a subject has multiple baseline
+#' records
+#'
+#' @export
 assert_has_only_one_baseline_record <- function(dataset, by) {
   is_duplicate <- duplicated(select(dataset, !!!syms(by)))
   if (any(is_duplicate)) {
@@ -34,19 +66,24 @@ assert_has_only_one_baseline_record <- function(dataset, by) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return ``TRUE`` if the argument is a date or date-time, ``FALSE`` otherwise
+#' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
 #'
 #' @export
 #'
 #' @examples
 #' assert_that(is_date(refdate), is_date(date))
-
-is_date <- function(arg){
+is_date <- function(arg) {
   is.instant(arg)
 }
 
-assertthat::on_failure(is_date) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a lubridate date.")
+on_failure(is_date) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    "=",
+    eval(call$arg, envir = env),
+    " is not a lubridate date."
+  )
 }
 
 #' Is Time Unit?
@@ -57,18 +94,23 @@ assertthat::on_failure(is_date) <- function(call, env) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return ``TRUE`` if the argument is a time unit, ``FALSE`` otherwise
+#' @return `TRUE` if the argument is a time unit, `FALSE` otherwise
 #'
 #' @export
 #'
 #' @examples
 #' assert_that(is_timeunit(unit))
-
-is_timeunit <- function(arg){
-  arg %in% c('years', 'months', 'days', 'hours', 'minutes', 'seconds')
+is_timeunit <- function(arg) {
+  arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
-assertthat::on_failure(is_timeunit) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid time unit.",
-         " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'.")
+on_failure(is_timeunit) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    "=",
+    eval(call$arg, envir = env),
+    " is not a valid time unit.",
+    " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'."
+  )
 }
