@@ -6,6 +6,8 @@
 \alias{admiral-package}
 \title{admiral: ADaM in R Asset Library}
 \description{
+\if{html}{\figure{logo.png}{options: align='right'}}
+
 More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 }

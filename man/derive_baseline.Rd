@@ -4,29 +4,29 @@
 \alias{derive_baseline}
 \title{Derive Basline}
 \usage{
-derive_baseline(bds_dataset, by, source, target)
+derive_baseline(dataset, by_vars, source_var, new_var)
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{dataset}{`data.frame`}
 
-\item{by}{`character` vector of columns uniqely identifying a set
+\item{by_vars}{`character` vector of columns uniqely identifying a set
 of records for which to calculate `BASE`}
 
-\item{source}{The column from which to extract the baseline value,
+\item{source_var}{The column from which to extract the baseline value,
 e.g. `AVAL`}
 
-\item{target}{The name of the newly created baseline column, e.g.
+\item{new_var}{The name of the newly created baseline column, e.g.
 `BASE`}
 }
 \value{
 A new `data.frame` containing all records and variables of the input
-dataset plus the `target` variable.
+dataset plus the `new_var` variable.
 }
 \description{
 Derive a baseline variable, e.g. `BASE`, in a BDS dataset
 }
 \examples{
-bds_dataset <- tibble::tribble(
+dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
   "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
   "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
@@ -36,10 +36,10 @@ bds_dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
 )
 derive_baseline(
-  bds_dataset,
-  by = c("USUBJID", "PARAMCD", "BASETYPE"),
-  source = AVALC,
-  target = BASEC
+  dataset,
+  by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+  source_var = AVALC,
+  new_var = BASEC
 )
 
 }
