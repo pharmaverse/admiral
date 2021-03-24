@@ -38,7 +38,7 @@ Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: \code{TRUE}
+Default: `TRUE``
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 
@@ -69,27 +69,32 @@ relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-specied output unit. If the end date is before the start date, the duration
+specified output unit. If the end date is before the start date, the duration
 is negative.
 }
 \examples{
 # derive duration in days (integer), i.e., relative day
-compute_duration(lubridate::ymd_hms('2020-12-06T15:00:00'),
-                 lubridate::ymd_hms('2020-12-24T08:15:00'))
+compute_duration(
+  start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
+  end_date = lubridate::ymd_hms("2020-12-24T08:15:00")
+)
 
 # derive duration in days (float)
-compute_duration(lubridate::ymd_hms('2020-12-06T15:00:00'),
-                 lubridate::ymd_hms('2020-12-24T08:15:00'),
-                 floor_in = FALSE,
-                 add_one = FALSE)
+compute_duration(
+  start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
+  end_date = lubridate::ymd_hms("2020-12-24T08:15:00"),
+  floor_in = FALSE,
+  add_one = FALSE
+)
 
 # derive age
-compute_duration(lubridate::ymd('1984-09-06'),
-                 lubridate::ymd('2020-02-24'),
-                 trunc_out = TRUE,
-                 out_unit = 'years',
-                 add_one = FALSE)
-
+compute_duration(
+  start_date = lubridate::ymd("1984-09-06"),
+  end_date = lubridate::ymd("2020-02-24"),
+  trunc_out = TRUE,
+  out_unit = "years",
+  add_one = FALSE
+)
 }
 \author{
 Stefan Bundfuss

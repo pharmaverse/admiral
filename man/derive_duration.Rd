@@ -4,7 +4,7 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, new_col, unit_col, start_date, end_date,
+derive_duration(dataset, new_var, new_var_unit, start_date, end_date,
   in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
@@ -13,6 +13,11 @@ derive_duration(dataset, new_col, unit_col, start_date, end_date,
 
 The columns specified by the \code{start_date} and the \code{end_date} parameter are
 expected.}
+
+\item{new_var}{Name of variable to create}
+
+\item{new_var_unit}{Name of the unit variable
+If the parameter is not specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
@@ -43,7 +48,7 @@ Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: ``TRUE```
+Default: `TRUE``
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 
@@ -73,23 +78,24 @@ day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-specied output unit. If the end date is before the start date, the duration
+specified output unit. If the end date is before the start date, the duration
 is negative.
 }
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
+  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+)
 
 derive_duration(data,
-                new_col = AAGE,
-                unit_col = AAGEU,
-                start_date = BRTHDT,
-                end_date = RANDDT,
-                out_unit = 'years',
-                add_one = FALSE,
-                trunc_out = TRUE)
-
+  new_var = AAGE,
+  new_var_unit = AAGEU,
+  start_date = BRTHDT,
+  end_date = RANDDT,
+  out_unit = "years",
+  add_one = FALSE,
+  trunc_out = TRUE
+)
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}

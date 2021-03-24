@@ -2,15 +2,17 @@ Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(
+    person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
+    person("Stefan", "Bundfuss", email = "stefan.bundfuss@roche.com", role = "aut")
+    )
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Imports:
     assertthat,
     dplyr,
@@ -18,13 +20,18 @@ Imports:
     magrittr,
     purrr,
     rlang,
-    stringr
-Suggests: 
+    stringr,
+    rlang
+Suggests:
+    devtools,
     lintr,
+    pkgdown,
     testthat,
     knitr,
     miniUI,
     rmarkdown,
+    roxygen2,
+    spelling,
     styler,
     tibble
 VignetteBuilder: knitr
