@@ -42,26 +42,26 @@
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: ``TRUE```
+#'   Default: `TRUE``
 #'
-#'   Permitted Values: ``TRUE``, ``FALSE``
+#'   Permitted Values: `TRUE`, `FALSE`
 #'
 #' @param add_one Add one input unit?
 #'
 #'   If the duration is non-negative, one input unit is added. I.e., the
 #'   duration can not be zero.
 #'
-#'   Default: ``TRUE``
-#'   Permitted Values: ``TRUE``, ``FALSE``
+#'   Default: `TRUE`
+#'   Permitted Values: `TRUE`, `FALSE`
 #'
 #' @param trunc_out Return integer part
 #'
 #'   The fractional part of the duration (in output unit) is removed, i.e., the
 #'   integer part is returned.
 #'
-#'   Default: ``FALSE``
+#'   Default: `FALSE`
 #'
-#'   Permitted Values: ``TRUE``, ``FALSE``
+#'   Permitted Values: `TRUE`, `FALSE`
 #'
 #' @details The duration is derived as time from start to end date in the
 #'   specified output unit. If the end date is before the start date, the duration
@@ -80,19 +80,18 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
+#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#' )
 #'
 #' derive_duration(data,
-#'                 new_var = AAGE,
-#'                 new_var_unit = AAGEU,
-#'                 start_date = BRTHDT,
-#'                 end_date = RANDDT,
-#'                 out_unit = 'years',
-#'                 add_one = FALSE,
-#'                 trunc_out = TRUE)
-#'
-
-
+#'   new_var = AAGE,
+#'   new_var_unit = AAGEU,
+#'   start_date = BRTHDT,
+#'   end_date = RANDDT,
+#'   out_unit = "years",
+#'   add_one = FALSE,
+#'   trunc_out = TRUE
+#' )
 derive_duration <- function(dataset,
                             new_var,
                             new_var_unit,
@@ -103,12 +102,16 @@ derive_duration <- function(dataset,
                             floor_in = TRUE,
                             add_one = TRUE,
                             trunc_out = FALSE) {
-  warn_if_vars_exist(dataset,
-                     c(deparse(substitute(new_var)),
-                       deparse(substitute(new_var_unit))))
+  warn_if_vars_exist(
+    dataset,
+    c(
+      deparse(substitute(new_var)),
+      deparse(substitute(new_var_unit))
+    )
+  )
 
-  dataset <-
-    dataset %>% mutate(
+  dataset <- dataset %>%
+    mutate(
       !!enquo(new_var) := compute_duration(
         !!enquo(start_date),
         !!enquo(end_date),

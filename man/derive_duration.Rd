@@ -48,7 +48,7 @@ Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: ``TRUE```
+Default: `TRUE``
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 
@@ -84,17 +84,18 @@ is negative.
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
+  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+)
 
 derive_duration(data,
-                new_var = AAGE,
-                new_var_unit = AAGEU,
-                start_date = BRTHDT,
-                end_date = RANDDT,
-                out_unit = 'years',
-                add_one = FALSE,
-                trunc_out = TRUE)
-
+  new_var = AAGE,
+  new_var_unit = AAGEU,
+  start_date = BRTHDT,
+  end_date = RANDDT,
+  out_unit = "years",
+  add_one = FALSE,
+  trunc_out = TRUE
+)
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
