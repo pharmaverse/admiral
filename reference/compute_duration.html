@@ -211,11 +211,19 @@ is negative.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># derive duration in days (integer), i.e., relative day</span>
-<span class='fu'>compute_duration</span>(<span class='fu'>ymd_hms</span>(<span class='st'>'2020-12-06T15:00:00'</span>), <span class='fu'>ymd_hms</span>(<span class='st'>'2020-12-24T08:15:00'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in ymd_hms("2020-12-06T15:00:00"): could not find function "ymd_hms"</span></div><div class='input'>
+<span class='fu'>compute_duration</span>(<span class='kw'>start_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>'2020-12-06T15:00:00'</span>),
+                 <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>'2020-12-24T08:15:00'</span>))</div><div class='output co'>#&gt; [1] 19</div><div class='input'>
 <span class='co'># derive duration in days (float)</span>
-<span class='fu'>compute_duration</span>(<span class='fu'>ymd_hms</span>(<span class='st'>'2020-12-06T15:00:00'</span>), <span class='fu'>ymd_hms</span>(<span class='st'>'2020-12-24T08:15:00'</span>), <span class='kw'>floor_in</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ymd_hms("2020-12-06T15:00:00"): could not find function "ymd_hms"</span></div><div class='input'>
+<span class='fu'>compute_duration</span>(<span class='kw'>start_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>'2020-12-06T15:00:00'</span>),
+                 <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>'2020-12-24T08:15:00'</span>),
+                 <span class='kw'>floor_in</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                 <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 17.71875</div><div class='input'>
 <span class='co'># derive age</span>
-<span class='fu'>compute_duration</span>(<span class='fu'>ymd</span>(<span class='st'>'1984-09-06'</span>), <span class='fu'>ymd</span>(<span class='st'>'2020-02-24'</span>), <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>'years'</span>, <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ymd("1984-09-06"): could not find function "ymd"</span></div><div class='input'>
+<span class='fu'>compute_duration</span>(<span class='kw'>start_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>'1984-09-06'</span>),
+                 <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>'2020-02-24'</span>),
+                 <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+                 <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>'years'</span>,
+                 <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 35</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
