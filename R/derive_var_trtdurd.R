@@ -33,7 +33,7 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~TRTSDT, ~TRTEDT,
-#'   ymd('2020-01-01'), ymd('2020-02-24'))
+#'   lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_var_trtdurd(data)
 #'
@@ -42,7 +42,7 @@ derive_var_trtdurd <- function(dataset,
                                start_date = TRTSDT,
                                end_date = TRTEDT){
   derive_duration(dataset,
-                  new_col = TRTDURD,
+                  new_var = TRTDURD,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }

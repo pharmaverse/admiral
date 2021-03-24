@@ -2,14 +2,14 @@
 % Please edit documentation in R/warnings.R
 \name{warn_if_vars_exist}
 \alias{warn_if_vars_exist}
-\title{Warn If a Variable Alreafy Exists}
+\title{Warn If a Variable Already Exists}
 \usage{
 warn_if_vars_exist(dataset, vars)
 }
 \arguments{
-\item{dataset}{A `data.frame`}
+\item{dataset}{A \code{data.frame}}
 
-\item{vars}{`character` vector of columns to check for in `dataset`}
+\item{vars}{\code{character} vector of columns to check for in \code{dataset}}
 }
 \description{
 Warn if a variable already exists inside a dataset
@@ -21,7 +21,7 @@ data(dm)
 warn_if_vars_exist(dm, "AAGE")
 
 ## Issues a warning
-warn_if_vars_exists(dm, "ARM")
+warn_if_vars_exist(dm, "ARM")
 
 }
 \author{

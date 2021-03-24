@@ -5,7 +5,9 @@ assert_has_variables <- function(dataset, required_vars) {
     if (length(missing_vars) == 1L) {
       err_msg <- paste0("Required variable `", missing_vars, "` is missing.")
     } else {
-      err_msg <- paste0("Required variables ", enumerate(missing_vars), " are missing.")
+      err_msg <- paste0("Required variables ",
+                        enumerate(missing_vars),
+                        " are missing.")
     }
     abort(err_msg)
   }
@@ -39,14 +41,17 @@ assert_has_only_one_baseline_record <- function(dataset, by) {
 #' @export
 #'
 #' @examples
-#' assert_that(is_date(refdate), is_date(date))
+#' refdate <- lubridate::ymd('2020-01-02')
+#' date <- lubridate::ymd('2020-02-03')
+#' assertthat::assert_that(is_date(refdate), is_date(date))
 
 is_date <- function(arg){
   is.instant(arg)
 }
 
 assertthat::on_failure(is_date) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a lubridate date.")
+  paste0("Argument ", deparse(call$arg), "=",
+         eval(call$arg, envir = env), " is not a lubridate date.")
 }
 
 #' Is Time Unit?
@@ -62,13 +67,16 @@ assertthat::on_failure(is_date) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' assert_that(is_timeunit(unit))
+#' unit <- 'days'
+#' assertthat::assert_that(is_timeunit(unit))
 
 is_timeunit <- function(arg){
-  arg %in% c('years', 'months', 'days', 'hours', 'minutes', 'seconds')
+  arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
 assertthat::on_failure(is_timeunit) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid time unit.",
-         " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'.")
+  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env),
+         " is not a valid time unit.",
+         " Valid time units are 'years', 'months', 'days', 'hours', ",
+         "'minutes', and 'seconds'.")
 }

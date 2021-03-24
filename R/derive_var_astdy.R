@@ -33,13 +33,13 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~TRTSDT, ~ASTDT,
-#'   ymd('2020-01-01'), ymd('2020-02-24'))
+#'   lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_var_astdy(data)
 
 derive_var_astdy <- function(dataset, start_date = TRTSDT, end_date = ASTDT){
   derive_duration(dataset,
-                  new_col = ASTDY,
+                  new_var = ASTDY,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }

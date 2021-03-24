@@ -41,7 +41,7 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   ymd('1984-09-06'), ymd('2020-02-24'))
+#'   lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_aage(data)
 #'
@@ -49,10 +49,10 @@
 derive_aage <- function(dataset,
                         start_date = BRTHDT,
                         end_date = RANDDT,
-                        unit = 'years'){
+                        unit = "years"){
   derive_duration(dataset,
-                  new_col = AAGE ,
-                  unit_col = AAGEU,
+                  new_var = AAGE,
+                  new_var_unit = AAGEU,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date),
                   out_unit = unit,

@@ -9,41 +9,41 @@ derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `start_date` and the `end_date` parameter are
-  expected.}
+The columns specified by the \code{start_date} and the \code{end_date} parameter are
+expected.}
 
 \item{start_date}{The start date
 
-  A date or date-time object is expected.
+A date or date-time object is expected.
 
-  Default: `TRTSDT`}
+Default: \code{TRTSDT}}
 
 \item{end_date}{The end date
 
-  A date or date-time object is expected.
+A date or date-time object is expected.
 
-  Default: `TRTEDT`}
+Default: \code{TRTEDT}}
 }
 \value{
-The input dataset with `TRTDURD` added
+The input dataset with \code{TRTDURD} added
 }
 \description{
-Derives total treatment duration (days) (`TRTDURD`)
+Derives total treatment duration (days) (\code{TRTDURD})
 }
 \details{
 The total treatment duration is derived as the number of days from start to
-  end date plus one.
+end date plus one.
 }
 \examples{
 data <- tibble::tribble(
   ~TRTSDT, ~TRTEDT,
-  ymd('2020-01-01'), ymd('2020-02-24'))
+  lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 
 derive_var_trtdurd(data)
 
 }
 \seealso{
-[derive_duration()]
+\code{\link[=derive_duration]{derive_duration()}}
 }
 \author{
 Stefan Bundfuss
