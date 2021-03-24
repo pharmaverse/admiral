@@ -2,3 +2,4 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^pkgdown$
