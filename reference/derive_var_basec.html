@@ -167,7 +167,15 @@ dataset plus the <code>BASEC</code> variable</p>
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>
 )
-<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>)</div><div class='output co'>#&gt; <span class='error'>Error in warn_if_vars_exist(bds_dataset, deparse(substitute(target))): object 'bds_dataset' not found</span></div></pre>
+<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span><span>
+#&gt;   STUDYID USUBJID PARAMCD AVALC  ABLFL BASETYPE BASEC
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> TEST01  PAT01   PARAM01 LOW    Y     LAST     LOW  
+#&gt; </span><span style='color: #555555;'>2</span><span> TEST01  PAT01   PARAM01 LOW    N     LAST     LOW  
+#&gt; </span><span style='color: #555555;'>3</span><span> TEST01  PAT01   PARAM01 MEDIUM N     LAST     LOW  
+#&gt; </span><span style='color: #555555;'>4</span><span> TEST01  PAT01   PARAM02 HIGH   Y     LAST     HIGH 
+#&gt; </span><span style='color: #555555;'>5</span><span> TEST01  PAT01   PARAM02 HIGH   N     LAST     HIGH 
+#&gt; </span><span style='color: #555555;'>6</span><span> TEST01  PAT01   PARAM02 MEDIUM N     LAST     HIGH </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -183,7 +191,7 @@ dataset plus the <code>BASEC</code> variable</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

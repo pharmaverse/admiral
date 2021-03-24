@@ -1,7 +1,7 @@
 pandoc: 2.9.2
-pkgdown: 1.5.0
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   how-to-get-started: how-to-get-started.html
-last_built: 2021-03-23T15:10Z
+last_built: 2021-03-24T11:01Z
 
