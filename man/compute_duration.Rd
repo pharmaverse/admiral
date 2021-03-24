@@ -38,7 +38,7 @@ Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
 The input dates are round down with respect to the input unit, e.g., if the
 input unit is 'days', the time of the input dates is ignored.
 
-Default: ``TRUE```
+Default: \code{TRUE}
 
 Permitted Values: \code{TRUE}, \code{FALSE}}
 
@@ -91,12 +91,8 @@ compute_duration(lubridate::ymd('1984-09-06'),
                  add_one = FALSE)
 
 }
-\seealso{
-Other {general functions}: \code{\link{derive_duration}},
-  \code{\link{derive_merged_vars}},
-  \code{\link{filter_first}}
-}
 \author{
 Stefan Bundfuss
 }
-\concept{{general functions}}
+\keyword{general}
+\keyword{time}

@@ -93,12 +93,10 @@ derive_duration(data,
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
-
-Other {general functions}: \code{\link{compute_duration}},
-  \code{\link{derive_merged_vars}},
-  \code{\link{filter_first}}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{{general functions}}
+\keyword{derivation}
+\keyword{general}
+\keyword{time}

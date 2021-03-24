@@ -66,7 +66,7 @@
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
-#' @family {general functions}
+#' @keywords general time derivation
 #'
 #' @export
 #'

@@ -28,13 +28,16 @@
 #'
 #' @return The input dataset with `TRTEDTM` variable added
 #'
+#' @keywords adsl time derivation
+#'
 #' @export
 #'
 #' @examples
 #' data("ex")
 #' data("dm")
 #'
-#' derive_var_trtedtm(dm)
+#' derive_var_trtedtm(dm,
+#'                    dataset_ex = ex)
 #'
 
 derive_var_trtedtm <- function(

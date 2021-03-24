@@ -32,7 +32,7 @@
 #'   The input dates are round down with respect to the input unit, e.g., if the
 #'   input unit is 'days', the time of the input dates is ignored.
 #'
-#'   Default: ``TRUE```
+#'   Default: ``TRUE``
 #'
 #'   Permitted Values: ``TRUE``, ``FALSE``
 #'
@@ -62,7 +62,7 @@
 #'
 #' @return The duration between the two date in the specified unit
 #'
-#' @family {general functions}
+#' @keywords general time
 #'
 #' @export
 #'

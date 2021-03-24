@@ -69,8 +69,7 @@ derive_merged_vars(dm,
 
 }
 \seealso{
-Other {general functions}: \code{\link{compute_duration}},
-  \code{\link{derive_duration}}, \code{\link{filter_first}}
+Other {general functions}: \code{\link{filter_first}}
 }
 \author{
 Stefan Bundfuss

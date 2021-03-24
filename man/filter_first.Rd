@@ -48,9 +48,7 @@ filter_first(ex,
 
 }
 \seealso{
-Other {general functions}: \code{\link{compute_duration}},
-  \code{\link{derive_duration}},
-  \code{\link{derive_merged_vars}}
+Other {general functions}: \code{\link{derive_merged_vars}}
 }
 \author{
 Stefan Bundfuss

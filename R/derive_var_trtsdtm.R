@@ -30,11 +30,14 @@
 #'
 #' @export
 #'
+#' @keywords adsl time derivation
+#'
 #' @examples
 #' data("ex")
 #' data("dm")
 #'
-#' derive_var_trtsdtm(dm)
+#' derive_var_trtsdtm(dm,
+#'                    dataset_ex = ex)
 #'
 
 derive_var_trtsdtm <- function(

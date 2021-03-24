@@ -41,9 +41,13 @@ specified for the \code{order} parameter) is included in the output dataset.
 data("ex")
 data("dm")
 
-derive_var_trtsdtm(dm)
+derive_var_trtsdtm(dm,
+                   dataset_ex = ex)
 
 }
 \author{
 Stefan Bundfuss
 }
+\keyword{adsl}
+\keyword{derivation}
+\keyword{time}
