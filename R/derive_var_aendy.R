@@ -32,13 +32,13 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~TRTSDT, ~AENDT,
-#'   ymd('2020-01-01'), ymd('2020-02-24'))
+#'   lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_var_aendy(data)
 
 derive_var_aendy <- function(dataset, start_date = TRTSDT, end_date = AENDT){
   derive_duration(dataset,
-                  new_col = AENDY,
+                  new_var = AENDY,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 

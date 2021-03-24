@@ -4,7 +4,7 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, new_col, unit_col, start_date, end_date,
+derive_duration(dataset, new_var, new_var_unit, start_date, end_date,
   in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
@@ -13,6 +13,11 @@ derive_duration(dataset, new_col, unit_col, start_date, end_date,
 
 The columns specified by the \code{start_date} and the \code{end_date} parameter are
 expected.}
+
+\item{new_var}{Name of variable to create}
+
+\item{new_var_unit}{Name of the unit variable
+If the parameter is not specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
@@ -79,11 +84,11 @@ is negative.
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  ymd('1984-09-06'), ymd('2020-02-24'))
+  lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 
 derive_duration(data,
-                new_col = AAGE,
-                unit_col = AAGEU,
+                new_var = AAGE,
+                new_var_unit = AAGEU,
                 start_date = BRTHDT,
                 end_date = RANDDT,
                 out_unit = 'years',

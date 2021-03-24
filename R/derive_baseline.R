@@ -95,7 +95,7 @@ derive_var_basec <- function(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYP
 #'   new_var = BASEC
 #' )
 derive_baseline <- function(dataset, by_vars, source_var, new_var) {
-  warn_if_vars_exist(bds_dataset, deparse(substitute(target)))
+  warn_if_vars_exist(dataset, deparse(substitute(target)))
   assert_has_variables(
     dataset,
     c(by_vars, deparse(substitute(source_var)), "ABLFL")

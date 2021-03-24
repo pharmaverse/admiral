@@ -3,5 +3,18 @@ globalVariables(c(
   "AVAL",
   "AVALC",
   "BASE",
-  "BASEC"
+  "BASEC",
+  "AAGE",
+  "AAGEU",
+  "ADT",
+  "ADY",
+  "AENDT",
+  "AENDY",
+  "ASTDT",
+  "ASTDY",
+  "BRTHDT",
+  "RANDDT",
+  "TRTDURD",
+  "TRTEDT",
+  "TRTSDT"
 ))

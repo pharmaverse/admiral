@@ -37,7 +37,7 @@ end date plus one.
 \examples{
 data <- tibble::tribble(
   ~TRTSDT, ~TRTEDT,
-  ymd('2020-01-01'), ymd('2020-02-24'))
+  lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 
 derive_var_trtdurd(data)
 

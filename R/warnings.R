@@ -16,7 +16,7 @@
 #' warn_if_vars_exist(dm, "AAGE")
 #'
 #' ## Issues a warning
-#' warn_if_vars_exists(dm, "ARM")
+#' warn_if_vars_exist(dm, "ARM")
 #'
 warn_if_vars_exist <- function(dataset, vars) {
   existing_vars <- vars[vars %in% colnames(dataset)]

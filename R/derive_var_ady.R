@@ -32,14 +32,14 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~TRTSDT, ~ADT,
-#'   ymd('2020-01-01'), ymd('2020-02-24'))
+#'   lubridate::ymd('2020-01-01'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_var_ady(data)
 #'
 
 derive_var_ady <- function(dataset, start_date = TRTSDT, end_date = ADT){
   derive_duration(dataset,
-                  new_col = ADY,
+                  new_var = ADY,
                   start_date = !!enquo(start_date),
                   end_date = !!enquo(end_date))
 }

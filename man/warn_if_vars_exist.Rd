@@ -21,7 +21,7 @@ data(dm)
 warn_if_vars_exist(dm, "AAGE")
 
 ## Issues a warning
-warn_if_vars_exists(dm, "ARM")
+warn_if_vars_exist(dm, "ARM")
 
 }
 \author{

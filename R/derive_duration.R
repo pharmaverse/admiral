@@ -8,6 +8,11 @@
 #'   The columns specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
+#' @param new_var Name of variable to create
+#'
+#' @param new_var_unit Name of the unit variable
+#'   If the parameter is not specified, no variable for the unit is created.
+#'
 #' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
@@ -75,11 +80,11 @@
 #' @examples
 #' data <- tibble::tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   ymd('1984-09-06'), ymd('2020-02-24'))
+#'   lubridate::ymd('1984-09-06'), lubridate::ymd('2020-02-24'))
 #'
 #' derive_duration(data,
-#'                 new_col = AAGE,
-#'                 unit_col = AAGEU,
+#'                 new_var = AAGE,
+#'                 new_var_unit = AAGEU,
 #'                 start_date = BRTHDT,
 #'                 end_date = RANDDT,
 #'                 out_unit = 'years',
@@ -89,27 +94,34 @@
 
 
 derive_duration <- function(dataset,
-                            new_col,
-                            unit_col,
+                            new_var,
+                            new_var_unit,
                             start_date,
                             end_date,
-                            in_unit = 'days',
-                            out_unit = 'days',
+                            in_unit = "days",
+                            out_unit = "days",
                             floor_in = TRUE,
                             add_one = TRUE,
                             trunc_out = FALSE) {
-  warn_if_vars_exist(dataset, c(deparse(substitute(new_col)), deparse(substitute(unit_col))))
+  warn_if_vars_exist(dataset,
+                     c(deparse(substitute(new_var)),
+                       deparse(substitute(new_var_unit))))
 
   dataset <-
-    dataset %>% mutate(!!enquo(new_col) := compute_duration(!!enquo(start_date),
-                                                           !!enquo(end_date),
-                                                           in_unit = in_unit,
-                                                           out_unit = out_unit,
-                                                           floor_in = floor_in,
-                                                           add_one = add_one,
-                                                           trunc_out = trunc_out))
-  if (!missing(unit_col)) {
-    dataset <- dataset %>% mutate(!!enquo(unit_col) := toupper(out_unit))
+    dataset %>% mutate(
+      !!enquo(new_var) := compute_duration(
+        !!enquo(start_date),
+        !!enquo(end_date),
+        in_unit = in_unit,
+        out_unit = out_unit,
+        floor_in = floor_in,
+        add_one = add_one,
+        trunc_out = trunc_out
+      )
+    )
+
+  if (!missing(new_var_unit)) {
+    dataset <- dataset %>% mutate(!!enquo(new_var_unit) := toupper(out_unit))
   }
   dataset
 }
