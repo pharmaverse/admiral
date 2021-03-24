@@ -86,6 +86,13 @@
       "Repository": "CRAN",
       "Hash": "c1835e06daacf34f97ba8e9ff0ef1804"
     },
+    "brew": {
+      "Package": "brew",
+      "Version": "1.0-6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "92a5f887f9ae3035ac7afde22ba73ee9"
+    },
     "callr": {
       "Package": "callr",
       "Version": "3.2.0",
@@ -491,6 +498,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "68f84cf3de61451cfd72ec1ead1caa95"
+    },
+    "roxygen2": {
+      "Package": "roxygen2",
+      "Version": "6.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d07df876e123f09c16e68e9326522762"
     },
     "rprojroot": {
       "Package": "rprojroot",
