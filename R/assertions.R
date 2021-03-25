@@ -105,20 +105,13 @@ assertthat::on_failure(is_valid_month) <- function(call, env) {
          "Values must be between 1-12")
 }
 is_valid_year<-function(arg){
-  nchar(arg)==4
+  nchar(arg)==4 & (is.number(arg) | arg=="NONE")
 }
 
 
 assertthat::on_failure(is_valid_year) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid year",
-         "Expecting a 4-digit number")
+         "Expecting a 4-digit number or 'NONE' if missing dates should not be imputed")
 }
 
-assert_has_a_date_variable <- function(dataset, dates) {
-  is_missing <- !dates %in% colnames(dataset)
-  if (all(is_missing)) {
-    err_msg <- paste("Required at least a date variable: `", dates[1], dates[2], "` Please set DT = TRUE or DTM = TRUE.")
-    abort(err_msg)
-  }
-}
 
