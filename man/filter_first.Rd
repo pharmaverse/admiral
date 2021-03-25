@@ -38,13 +38,13 @@ data("ex")
 
 # selecting first dose for each patient
 filter_first(ex,
-             order = exprs(EXSEQ),
-             by_vars = exprs(USUBJID))
+             order = rlang::exprs(EXSEQ),
+             by_vars = rlang::exprs(USUBJID))
 
 # selecting highest dose for each patient
 filter_first(ex,
-             order = exprs(desc(EXDOSE)),
-             by_vars = exprs(USUBJID))
+             order = rlang::exprs(desc(EXDOSE)),
+             by_vars = rlang::exprs(USUBJID))
 
 }
 \seealso{

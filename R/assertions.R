@@ -100,8 +100,8 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   # variables formatted for the message
   all_vars_msg <- list()
 
-  # dataset to check
-  data_ext <- dataset
+  # dataset to check (remove grouping)
+  data_ext <- ungroup(dataset)
 
   if (!missing(by_vars)){
     all_vars <- by_vars
@@ -111,7 +111,7 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
     # add order variables to the input dataset
     order_vars <- order
     names(order_vars) <- paste0('ordvar', 1:length(order_vars))
-    data_ext <- dataset %>%
+    data_ext <- data_ext %>%
       mutate(!!!order_vars)
 
     # add order variables to the variables for check

@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @importFrom dplyr arrange desc filter group_by mutate left_join rename select slice if_else transmute
+#' @importFrom dplyr arrange desc filter group_by mutate left_join rename select slice if_else transmute ungroup
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort as_string enquo exprs syms warn
 #' @importFrom utils capture.output
