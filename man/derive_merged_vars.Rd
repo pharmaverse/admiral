@@ -69,7 +69,9 @@ derive_merged_vars(dm,
 
 }
 \seealso{
-Other {general functions}: \code{\link{filter_first}}
+Other {general functions}: \code{\link{compute_imputed_dtc}},
+  \code{\link{derive_vars_dtm}},
+  \code{\link{derive_vars_dt}}, \code{\link{filter_first}}
 }
 \author{
 Stefan Bundfuss

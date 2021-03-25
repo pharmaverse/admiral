@@ -48,7 +48,10 @@ filter_first(ex,
 
 }
 \seealso{
-Other {general functions}: \code{\link{derive_merged_vars}}
+Other {general functions}: \code{\link{compute_imputed_dtc}},
+  \code{\link{derive_merged_vars}},
+  \code{\link{derive_vars_dtm}},
+  \code{\link{derive_vars_dt}}
 }
 \author{
 Stefan Bundfuss

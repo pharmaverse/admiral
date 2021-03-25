@@ -4,8 +4,8 @@
 \alias{derive_var_trtsdtm}
 \title{Derive datetime of First Exposure to Treatment (TRTSDTM)}
 \usage{
-derive_var_trtsdtm(dataset, dataset_ex, filter_ex = exprs(EXDOSE > 0 |
-  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))))
+derive_var_trtsdtm(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
+  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & length(EXSTDTC) >= 10))
 }
 \arguments{
 \item{dataset}{Input dataset
