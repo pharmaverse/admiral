@@ -83,7 +83,7 @@ assert_has_only_one_baseline_record <- function(dataset, by) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return ``TRUE`` if the argument is a date or date-time, ``FALSE`` otherwise
+#' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
 #'
 #' @export
 #'

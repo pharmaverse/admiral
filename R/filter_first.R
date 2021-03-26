@@ -71,5 +71,6 @@ filter_first <- function(dataset,
 
   # select first observation (for each group)
   data %>%
-    slice(1)
+    slice(1) %>%
+    ungroup()
 }

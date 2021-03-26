@@ -84,7 +84,6 @@ derive_merged_vars <- function(dataset,
       filter_first(order = filter_first_order,
                    by_vars = by_vars)
   }
-  add <- add %>% transmute(!!!new_vars)
-  result <- left_join(dataset, add, by = map_chr(by_vars, as_string))
-  return(result)
+  add <- add %>% transmute(!!!by_vars, !!!new_vars)
+  left_join(dataset, add, by = map_chr(by_vars, as_string))
 }
