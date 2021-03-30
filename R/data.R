@@ -2,8 +2,15 @@
 #'
 #' A SDTM AE dataset from the CDISC pilot project
 #'
-#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/dm.xpt}
+#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/ae.xpt}
 "ae"
+
+#' Concomitant Medication Dataset
+#'
+#' A SDTM CM dataset from the CDISC pilot project
+#'
+#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/cm.xpt}
+"cm"
 
 #' Demography Dataset
 #'
@@ -39,6 +46,13 @@
 #'
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/mh.xpt}
 "mh"
+
+#' Trial Design Dataset
+#'
+#' A SDTM TS dataset from the CDISC pilot project
+#'
+#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/ts.xpt}
+"ts"
 
 #' Vital Signs Dataset
 #'
