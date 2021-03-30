@@ -15,12 +15,12 @@
 #' })
 #'
 expect_dfs_equal <- function(base, compare, keys, ...) {
-  diff <- suppressWarnings(diffdf::diffdf(base, compare, keys, ...))
-  if (length(diff) == 0L) {
-    testthat::succeed()
-    invisible()
-  } else {
+  diff <- diffdf::diffdf(base, compare, keys, suppress_warnings = TRUE, ...)
+  if (diffdf::diffdf_has_issues(diff)) {
     msg <- capture.output(print(diff))
     testthat::fail(msg)
+  } else {
+    testthat::succeed()
+    invisible()
   }
 }
