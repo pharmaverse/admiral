@@ -5,42 +5,30 @@
 #'
 #' @param dtc The --DTC date to impute
 #'
-#'   A character date is expected in a format like yyy-mm-yy
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+#'   if the year part is not recorded (missing date), no imputation is done
 #'
-#' @param impute Whether to impute partial date or no
+#' @param date_imputation The value to impute the day/month when a datepart is missing
 #'
-#'   A logical value is expected.
+#'   If NULL: no date imputation is perfomed and partial dates are returned as missing
 #'
-#'   Default: TRUE
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
 #'
-#' @param day The value to impute the day when day is missing
+#'   Default is NULL
 #'
-#'   Permitted Values: number from 1 to 31, text 'FIRST', 'MID', 'LAST'
-#'   'FIRST' must be used to impute to the first day of the month
-#'   'MID' must be used to impute to the 15th of the month
-#'   'LAST' must be used to impute to the last day of the month
+#' @param time_imputation The value to impute the time when a timepart is missing
 #'
-#'   Default: 1
+#'   A character value is expected, either as a
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
-#' @param month the value to impute the month when month is missing
-#'
-#'   Permitted Values: number from 1 to 12
-#'
-#'   Default: 1
-#'
-#' @param year the value to impute the year when year is missing
-#'
-#'   Permitted Values: any 4-digit number or 'NONE' if a missing date shoudl not be imputed
-#'
-#'   Default: 'NONE'
+#'   Default is '00:00:00'
 #'
 #' @author Samia Kabi
 #'
-#' @return  a character
-#'  when impute = TRUE: with a complete/time  : e.g. 2021-03-13T00:00:00
-#'  when impute = FALSE: with a complete date/time if the date is complete,
-#'  or a "" if the date is partial
-#'
+#' @return  a character vector
 #'
 #' @family {general functions}
 #'
@@ -48,85 +36,168 @@
 #'
 #' @examples
 #'
-#' date<-"2019-07-18T15:25"
-#' compute_imputed_dtc(dtc="2019-07-18T15:25")#returns "2019-07-18T15:25:00"
-#' compute_imputed_dtc(dtc="2019-07-18")#returns "2019-07-18T00:00:00"
-#' compute_imputed_dtc(dtc="2019-07")#returns "2019-07-01T00:00:00"
-#' compute_imputed_dtc(dtc="2019", day="LAST")#returns "2019-01-31T00:00:00"
-#' compute_imputed_dtc(dtc="2019", day="LAST", month=12)#returns "2019-12-31T00:00:00"
-#' compute_imputed_dtc(dtc="2019-07", day="LAST", hour=23, min=59, sec=59)#returns "2019-07-31T23:59:59"
-#' ompute_imputed_dtc(dtc="2019-07", day="FIRST")#returns "2019-07-01T00:00:00"
-#' compute_imputed_dtc(dtc="2019-07", day="MID")#returns "2019-07-15T00:00:00"
-#' compute_imputed_dtc(dtc="2019")#returns "2019-01-01T00:00:00"
-#' compute_imputed_dtc(dtc="2019---07")#returns "2019-01-01T00:00:00"
+#' mhdt <- tibble::tribble(
+#' ~MHSTDTC,
+#' "2019-07-18T15:25:40",
+#' "2019-07-18T15:25",
+#' "2019-07-18T15",
+#' "2019-07-18",
+#' "2019-02",
+#' "2019",
+#' "2019",
+#' "2019---07",
+#' "")
+#' #No date imputation (date_imputation defaulted to NULL)
+#' #Missing time part imputed with 00:00:00 portion by default
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC)
 #'
-compute_imputed_dtc<-function(dtc,
-                              impute=TRUE,
-                              day=01, month=01,year='NONE',
-                              hour=0, min=0, sec=0)
+#' #No date imputation (date_imputation defaulted to NULL)
+#' #Missing time part imputed with 23:59:59 portion
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                 time_imputation = "23:59:59")
+#' #same as above
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                  time_imputation = "LAST")
+#'
+#' #impute to first day/month if date is partial
+#' #Missing time part imputed with 00:00:00 portion by default
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                  date_imputation="01-01")
+#' #same as above
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                  date_imputation="FIRST")
+#'
+#' #impute to last day/month if date is partial
+#' #Missing time part imputed with 23:59:59 portion
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                  date_imputation="LAST",
+#'                  time_imputation = "LAST")
+#'
+#' #impute to Mid day/month if date is partial
+#' #Missing time part imputed with 00:00:00 portion by default
+#' idtc<-impute_dtc(dtc=mhdt$MHSTDTC,
+#'                   date_imputation="MID")
+#'
+
+impute_dtc<-function(dtc,
+                     date_imputation=NULL,
+                     time_imputation="00:00:00"
+                     )
   {
 
-  #check inputs are valid
-  assert_that(is_valid_sec_min(sec))
-  assert_that(is_valid_sec_min(min))
-  assert_that(is_valid_hour(hour))
-  assert_that(is_valid_day(day))
-  assert_that(is_valid_month(month))
-  assert_that(is_valid_year(year))
-  assert_that(is.logical(impute))
-
-  if(!day %in% c("FIRST", "MID", "LAST")) {
-    d<-sprintf("%02d", as.integer(day))}
-  else {
-    if (day %in% c("FIRST",  "LAST")){
-      d<-"01"}
+  #date imputation
+  if (!is.null(date_imputation)){
+    #check input for date_imputation
+    assert_that(is_valid_date_entry(date_imputation))
+    #Specific setup for FISRT/MID/LAST
+    if(date_imputation =="FIRST") {
+      d<-"01"
+      mo<-"01"
+    }
+    else if(date_imputation== "MID") {
+      d<-"15"
+      mo<-"06"
+    }
+    else if(date_imputation =="LAST") {
+      d<-"01"
+      mo<-"12"
+    }
+    #otherwise, use time_imputation input
     else {
-      if (day =="MID"){
-        d<-"15"
-      }
+      mo__=as.integer(sub(".*-","",date_imputation))
+      day__=as.integer(sub("-.*","",date_imputation))
+      #check input for day and moth are valid
+      assert_that(is_valid_day(day__))
+      assert_that(is_valid_month(mo__))
+
+      d<-sprintf("%02d", day__)
+      mo<-sprintf("%02d", mo__)
+    }
+    imputed_date <- case_when(
+      nchar(dtc)>=10 ~ substr(dtc,1,10),
+      nchar(dtc)==9 ~  paste0(substr(dtc,1,4), "-",mo,"-",d),#dates like 2021---14 - use only year part
+      nchar(dtc)==7 ~  paste0(dtc,"-",d),
+      nchar(dtc)==4  ~  paste0(dtc, "-",mo,"-",d),
+      TRUE ~ ""
+    )
+    if (date_imputation== "LAST"){
+      imputed_date<-case_when(
+        nchar(imputed_date)>0 & nchar(dtc)<10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        TRUE~imputed_date
+      )
     }
   }
-
-  mo<-sprintf("%02d", as.integer(month))
-  if (year !='NONE'){y<-sprintf("%04d", as.integer(year))}
-
-  h<-sprintf("%02d", as.integer(hour))
-  mi<-sprintf("%02d", as.integer(min))
-  s<-sprintf("%02d", as.integer(sec))
-
-  if (impute==TRUE){
-    #add missing text in date/time
-    tmp__ <- case_when(
-         nchar(dtc)==19 ~ dtc,
-         nchar(dtc)==16 ~ paste0(dtc,":", s),
-         nchar(dtc)==10 ~ paste0(dtc,"T",h,":", mi,":", s),
-         nchar(dtc)==9 ~  paste0(substr(dtc,1,4), "-",mo,"-",d,"T",h,":", mi,":", s),#dates like 2021---14 - use only year part
-         nchar(dtc)==7 ~  paste0(dtc,"-",d,"T",h,":", mi,":", s),
-         nchar(dtc)==4  ~  paste0(dtc, "-",mo,"-",d,"T",h,":", mi,":", s),
-         if (year !='NONE'){
-           nchar(dtc)<4  ~  paste0(y, "-",mo,"-",d,"T",h,":", mi,":", s)
-         }
-         else {TRUE ~ ""}
-       )
-    if (day=="LAST"){
-        tmp__<-if_else(nchar(tmp__)>0,
-                    paste0(as.character(ceiling_date(as.Date(tmp__, format = "%Y-%m-%dT%H:%M:%S"), "month") - days(1)),"T",h,":", mi,":", s)
-                    ,"")
-    }
-  }
-  #No imputation: keep the datetime or teh date with a time set to 0
+  #no imputation
   else{
-    tmp__ <- case_when(
-      nchar(dtc)==19 ~ dtc,
-      nchar(dtc)==16 ~ paste0(dtc,":", s),
-      nchar(dtc)==10 ~ paste0(dtc,"T00:00:00"),
-      TRUE ~ "" #as.character(dtc)
+    imputed_date <- case_when(
+      nchar(dtc)>=10 ~ substr(dtc,1,10),
+      TRUE ~ ""
     )
   }
-  return(tmp__)
+
+  #impute time
+  assert_that(is_valid_time_entry(time_imputation))
+  if(time_imputation =="FIRST") {
+    imputed_time<-"00:00:00"
+    sec<-":00"
+    min<-":00"
+    h<-"00"
+  }
+  else {
+    if(time_imputation =="LAST") {
+      imputed_time<-"23:59:59"
+      sec<-":59"
+      min<-":59"
+      h<-"23"
+    }
+    else {
+      imputed_time<-time_imputation
+      sec<-paste0(":",paste0(substr(dtc,18,19), substr(time_imputation,7,8)))
+      min<-paste0(":",paste0(substr(dtc,15,16), substr(time_imputation,4,5)))
+      h<-paste0(substr(dtc,12,13),substr(time_imputation,1,2))
+    }
+  }
+
+  imputed_time <- case_when(
+    nchar(dtc)==19 ~ substr(dtc,12,19),
+    nchar(dtc)==16 ~ paste0(substr(dtc,12,16),sec),
+    nchar(dtc)==13 ~ paste0(substr(dtc,12,13),min,sec),
+    nchar(dtc)==10 ~ paste0(h,min,sec),
+    TRUE ~ imputed_time
+  )
+
+  imputed_dtc<-if_else(imputed_date!="",paste0(imputed_date,"T", imputed_time),"")
+
+  return(imputed_dtc)
 }
 
-
+#' Convert a --DTC to a --DT
+#'
+#' Convert a complete character --DTC variable into a date object
+#'
+#' @param dtc The --DTC date to convert
+#'
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+#'   a partial date will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   Note: you can use impute_dtc function to build a complete date
+#'
+#' @author Samia Kabi
+#'
+#' @return  a date object
+#'
+#' @family {general functions}
+#'
+#' @export
+#'
+#' @examples
+#'
+#' dtc_dt("2019-07-18")
+#' [1] "2019-07-18"
+#' dtc_dt("2019-07")
+#' [1] NA
+#'  Warning message:
+#'    All formats failed to parse. No formats found.
+#'
 dtc_dt<-function(dtc){
   case_when(
     nchar(dtc)>=10 ~ymd(substr(dtc,1,10)),
@@ -135,6 +206,35 @@ dtc_dt<-function(dtc){
 
 }
 
+#' Convert a --DTC to a --DTM
+#'
+#' Convert a complete character --DTC variable into a datetime object
+#'
+#' @param dtc The --DTC date to convert
+#'
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss
+#'   a partial datetime will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   Note: you can use impute_dtc function to build a complete datetime
+#'
+#' @author Samia Kabi
+#'
+#' @return  a datetime  object
+#'
+#' @family {general functions}
+#'
+#' @export
+#'
+#' @examples
+#'
+#' dtc_dtm("2019-07-18T15:25:00")
+#' [1] "2019-07-18 15:25:00 UTC"
+#' dtc_dtm("2019-07-18T00:00:00")
+#' [1] "2019-07-18 UTC" #note Time = 00:00:00 is not printed
+#' dtc_dtm("2019-07-18")
+#' [1] NA
+#' Warning message:
+#'   All formats failed to parse. No formats found.
+#'
 dtc_dtm<-function(dtc){
 
   #note T00:00:00 is not printed in dataframe
@@ -144,7 +244,33 @@ dtc_dtm<-function(dtc){
   )
 }
 
-
+#' Derive --DTF
+#'
+#' Derive --DTF based on --DTC and --DT
+#'
+#' @param dtc The --DTC used as input for --DT
+#'
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)
+#'
+#' @param dt The --DT resulting from the imputation of --DTC
+#'
+#'   A date object is expected
+#'
+#' @author Samia Kabi
+#'
+#' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
+#'
+#' @family {general functions}
+#'
+#' @export
+#'
+#' @examples
+#'
+#' compute_dtf(dtc= "2019-07",dt=as.Date("2019-07-18"))
+#' [1] "D"
+#' > compute_dtf(dtc= "2019",dt=as.Date("2019-07-18"))
+#' [1] "M"
+#'
 compute_dtf <- function(dtc,dt){
 
   case_when(
@@ -153,261 +279,266 @@ compute_dtf <- function(dtc,dt){
     !is.na(dt) & nchar(dtc)==7 ~"D",
     !is.na(dt) & nchar(dtc)==9 ~"M",#dates like "2019---07"
     (!is.na(dt) & nchar(dtc)>=10) | is.na(dt) ~" "
-
   )
 }
 
-compute_tmf <- function(dtc,dt){
-
-  case_when(
-    (!is.na(dt) & nchar(dtc)==19)| is.na(dt) ~" ",
-    !is.na(dt) & nchar(dtc)==16~"S",
-    !is.na(dt) & nchar(dtc)==13~"M",
-    (!is.na(dt) & nchar(dtc)==10) | (nchar(dtc)> 0 & nchar(dtc) <10) ~"H"
-  )
-}
-
-#' derive_vars_dt
+#' Derive --TMF
 #'
-#' Add --DT/--DTF variable(s) based on --DTC
-#' --DT is imputed basd on user input
+#' Derive --TMF based on --DTC and --DT
 #'
-#' @param dataset Input dataset
+#' @param dtc The --DTC used as input for --DT
 #'
-#'   The --DTC variable must be present.
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)
 #'
-#' @param new_vars_prefix
+#' @param dtm The --DTM resulting from the imputation of --DTC
 #'
-#' Prefix used for the output variable: e.g new_vars_prefix="AST" will output ASTDT and ASTDTF
-#'
-#' @param dtc The --DTC date to impute
-#'
-#'   A character date is expected in a format like yyy-mm-yy
-#'
-#' @param impute Whether to impute partial date or no
-#'
-#'   A logical value is expected.
-#'
-#'   Default: TRUE
-#'
-#' @param day The value to impute the day when day is missing
-#'
-#'   Permitted Values: number from 1 to 31, text 'FIRST', 'MID', 'LAST'
-#'   'FIRST' must be used to impute to the first day of the month
-#'   'MID' must be used to impute to the 15th of the month
-#'   'LAST' must be used to impute to the last day of the month
-#'
-#'   Default: 1
-#'
-#' @param month the value to impute the month when month is missing
-#'
-#'   Permitted Values: number from 1 to 12
-#'
-#'   Default: 1
-#'
-#' @param year the value to impute the year when year is missing
-#'
-#'   Permitted Values: any 4-digit number or 'NONE' if a missing date shoudl not be imputed
-#'
-#'   Default: 'NONE'
-#'
-#' @param DTF Whether to add the date iomputation flag
-#'
-#'   A logical value is expected.
-#'
-#'   Default: TRUE
+#'   A datetime object is expected
 #'
 #' @author Samia Kabi
 #'
-#' @return The input dataset with --DT (and --DTF if DTF=TRUE)
-#'
+#' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
 #'
 #' @family {general functions}
 #'
 #' @export
 #'
 #' @examples
-#' mhdt <- tibble::tribble(
-#' ~MHSTDTC,
-#' "2019-07-18T15:25:40",
-#' "2019-07-18T15:25",
-#' "2019-07-18",
-#' "2019-02",
-#' "2019",
-#' "2019---07",
-#' "")
-##Derive ASTDT and ASDTF based on MHSTDTC - day/month are imputed to 01 by default, missing dates are not imputed
-#mhdt1<-derive_vars_dt(mhdt,new_vars_prefix = "AST", dtc=MHSTDTC)
-#
-##Derive AENDT and AENTF based on MHSTDTC - day/month are imputed are imputed to the last, missing dates are not imputed
-#mhdt2<-derive_vars_dt(mhdt,new_vars_prefix = "AST", dtc=MHSTDTC, day="LAST", month=12)
-#
+#'
+#' compute_tmf(dtc= "2019-07-18T15:25",dtm=as.POSIXct("2019-07-18T15:25:00"))
+#' [1] "S"
+#' > compute_tmf(dtc= "2019-07-18T15",dtm=as.POSIXct("2019-07-18T15:25:00"))
+#' [1] "M"
+#' > compute_tmf(dtc= "2019-07-18",dtm=as.POSIXct("2019-07-18"))
+#' [1] "H"
+#'
+compute_tmf <- function(dtc,dtm){
 
+  case_when(
+    (!is.na(dtm) & nchar(dtc)==19)| is.na(dtm) ~" ",
+    !is.na(dtm) & nchar(dtc)==16~"S",
+    !is.na(dtm) & nchar(dtc)==13~"M",
+    (!is.na(dtm) & nchar(dtc)==10) | (nchar(dtc)> 0 & nchar(dtc) <10) ~"H"
+  )
+}
+
+
+#' Derive --DT (and --DTF)
+#'
+#' Derive --DT based on --DTC. --DT is imputed based on user input
+#' Derive --DTF if needed based on --DTC and --DT
+#'
+#' @param dataset Input dataset
+#'
+#'   The --DTC variable must be present.
+#'
+#' @param new_vars_prefix Prefix used for the output variable(s)
+#'
+#' a character is expected: e.g new_vars_prefix="AST"
+#'
+#' @param dtc The --DTC date used to derive/impute --DT
+#'
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+#'   if the year part is not recorded (missing date), no imputation is done
+#'
+#' @param date_imputation The value to impute the day/month when a datepart is missing
+#'
+#'   If NULL: no date imputation is perfomed and partial dates are returned as missing
+#'
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'
+#'   Default is NULL
+#'
+#' @param flag_imputation Whether the --DTF variable must also be derived
+#'
+#' A logical value
+#'
+#' Default: TRUE
+#'
+#'@example
+#'mhdt <- tibble::tribble(~MHSTDTC,
+#'"2019-07-18T15:25:40",
+#'"2019-07-18T15:25",
+#'"2019-07-18",
+#'"2019-02",
+#'"2019",
+#'"2019---07",
+#'"")
+#'
+#'#Create ASTDT and ASTDTF
+#'#no imputation for partial date
+#'mhdt1<-derive_vars_dt(mhdt,
+#'                      new_vars_prefix = "AST",
+#'                      dtc=MHSTDTC)
+#'
+#'#Create ASTDT and ASTDTF
+#'#Impute partial dates to first day/month
+#'mhdt2<-derive_vars_dt(mhdt,
+#'                      new_vars_prefix = "AST",
+#'                      dtc=MHSTDTC,
+#'                      date_imputation = "FIRST")
+#'#Impute partial dates to 4th of june
+#'mhdt2a<-derive_vars_dt(mhdt,
+#'                       new_vars_prefix = "AST",
+#'                       dtc=MHSTDTC,
+#'                       date_imputation = "04-06")
+#'#Create AENDT and AENDTF
+#'#Impute partial dates to last day/month
+#'mhdt3<-derive_vars_dt(mhdt,
+#'                      new_vars_prefix = "AEN",
+#'                      dtc=MHSTDTC,
+#'                      date_imputation="LAST"
+#'                      )
+#'#Create BIRTHDT
+#'#Impute partial dates to 15of june. No DTF
+#'mhdt4<-derive_vars_dt(mhdt,
+#'                      new_vars_prefix = "BIRTH",
+#'                      dtc=MHSTDTC,
+#'                      date_imputation="MID",
+#'                      flag_imputation=FALSE
+#'                      )
 
 derive_vars_dt<- function(
   dataset,
   new_vars_prefix,
   dtc,
-  impute=TRUE,
-  day=01,#use "FIRST", "LAST", "MID"  to have the first/last/15th day of teh month
-  month=01, year='NONE',#2020,
-  DTF=TRUE
+  date_imputation=NULL,# "02-01" or "LAST"
+  flag_imputation=TRUE
 ){
   #Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))
 
-  tmp<-dataset
-  warn_if_vars_exist(dataset, paste0(deparse(substitute(new_vars_prefix)),"DT") )
-  tmp<-tmp %>%
-    mutate(dt=dtc_dt(dtc=compute_imputed_dtc(dtc=!!enquo(dtc),
-                                             impute=impute,
-                                             year=year, month=month, day=day,
-                                             hour=0, min=0, sec=0)
-                     )
-    )
+  #output varname
+  dt <- paste0(new_vars_prefix, "DT")
+  warn_if_vars_exist(dataset,dt)
 
-  if(DTF==TRUE){
-    warn_if_vars_exist(dataset, paste0(deparse(substitute(new_vars_prefix)),"DTF") )
-    tmp<-tmp %>%
-        mutate(dtf=compute_dtf(dtc=!!enquo(dtc), dt=dt))#use dt since as.name(paste0(new_vars_prefix,"DT")) does not resolve...
-    #rename DTF with relevant prefix
-    names(tmp)[names(tmp) == "dtf"] <- paste0(new_vars_prefix,"DTF")
+  #derive --DT var
+  dataset<-dataset %>%
+    mutate(
+      idtc__=impute_dtc(dtc=!!enquo(dtc),
+                            date_imputation=date_imputation),
+      !!sym(dt):=dtc_dt(dtc=idtc__)
+    )%>%
+    select(-ends_with(("__")))
+
+
+  #derive DTF
+  if(flag_imputation){
+    dtf <- paste0(new_vars_prefix, "DTF")
+    warn_if_vars_exist(dataset, dtf)
+    dataset<-dataset  %>%
+        mutate(!!sym(dtf) := compute_dtf(dtc=!!enquo(dtc), dt=!!sym(dt)))
   }
-  #rename DT with relevant prefix
-  names(tmp)[names(tmp) == "dt"] <- paste0(new_vars_prefix,"DT")
-
-  return(tmp)
-
+  return(dataset)
 }
 
 
-#' derive_vars_dtm
+#' Derive --DTM (and --DTF/--TMF)
 #'
-#' Add --DTM/--TMF variable(s) based on --DTC
-#' --DTM is imputed basd on user input
+#' Derive --DTM based on --DTC. --DTM is imputed based on user input
+#' Derive --DTF/--TMF if needed based on --DTC and --DT
 #'
 #' @param dataset Input dataset
 #'
 #'   The --DTC variable must be present.
 #'
-#' @param new_vars_prefix
+#' @param new_vars_prefix Prefix used for the output variable(s)
 #'
-#' Prefix used for the output variable: e.g new_vars_prefix="AST" will output ASTDT and ASTDTF
+#' a character is expected: e.g new_vars_prefix="AST"
 #'
-#' @param dtc The --DTC date to impute
+#' @param dtc The --DTC date used to derive/impute --DT
 #'
-#'   A character date is expected in a format like yyy-mm-yy
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+#'   if the year part is not recorded (missing date), no imputation is done
 #'
-#' @param impute Whether to impute partial date or no
+#' @param date_imputation The value to impute the day/month when a datepart is missing
 #'
-#'   A logical value is expected.
+#'   If NULL: no date imputation is perfomed and partial dates are returned as missing
 #'
-#'   Default: TRUE
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
 #'
-#' @param day The value to impute the day when day is missing
+#'   Default is NULL
 #'
-#'   Permitted Values: number from 1 to 31, text 'FIRST', 'MID', 'LAST'
-#'   'FIRST' must be used to impute to the first day of the month
-#'   'MID' must be used to impute to the 15th of the month
-#'   'LAST' must be used to impute to the last day of the month
+#' @param time_imputation The value to impute the time when a timepart is missing
 #'
-#'   Default: 1
+#'   A character value is expected, either as a
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
-#' @param month the value to impute the month when month is missing
-#'
-#'   Permitted Values: number from 1 to 12
-#'
-#'   Default: 1
-#'
-#' @param year the value to impute the year when year is missing
-#'
-#'   Permitted Values: any 4-digit number or 'NONE' if a missing date shoudl not be imputed
-#'
-#'   Default: 'NONE'
-#'
-#' @param hour the value to impute the hour when time is missing
-#'
-#'   Permitted Values: number from 0 to 23
-#'
-#'   Default: 0
-#'
-#' @param min the value to impute the minutes when time is missing
-#'
-#'   Permitted Values: number from 0 to 59
-#'
-#'   Default: 0
-#'
-#' @param sec the value to impute the seconds when time is missing
-#'
-#'   Permitted Values: number from 0 to 59
-#'
-#'   Default: 0
-#'
-#' @param TMF Whether to add the time imputation flag
-#'
-#'   A logical value is expected.
-#'
-#'   Default: TRUE
-#'
-#' @author Samia Kabi
-#'
-#' @return The input dataset with --DTM (and --TMF if DTF=TRUE)
-#'
-#'
-#' @family {general functions}
-#'
-#' @export
-#'
-#' @examples
-#' mhdt <- tibble::tribble(
-#' ~MHSTDTC,
-#' "2019-07-18T15:25:40",
-#' "2019-07-18T15:25",
-#' "2019-07-18",
-#' "2019-02",
-#' "2019",
-#' "2019---07",
-#' "")
-#' #Derive ASTDTM and ASTTMF based on MHSTDTC - day/month are imputed to 01 by default, time is imputed to 00:00
-#' by defaul, missing dates are not imputed
-#' mhdt1<-derive_vars_dtm(mhdt,new_vars_prefix = "A", dtc=MHSTDTC)
-#' #Derive AENDTM and AENTMF based on MHSTDTC - day/month are imputed are imputed to the last, missing dates are not imputed
-#' mhdt2<-derive_vars_dtm(mhdt,new_vars_prefix = "AST", dtc=MHSTDTC, day="LAST", month=12, hour=23, min=59, sec=59)
-#'
+#'   Default is '00:00:00'
 #'
 
+#' @param flag_imputation Whether the --DTF and or --TMF variable must also be derived
+#'
+#' A logical value
+#'
+#' Default: TRUE
+#'
+#' @details:
+#'
+#' the presence of --DTF is checked and the variable is not derived if it already exists in the input datasets
+#' however, if --TMF already exists in the dataset, a warning is issued and --TMF will be overwritten
+#'
+#'@example
+#'mhdt <- tibble::tribble(~MHSTDTC,
+#'"2019-07-18T15:25:40",
+#'"2019-07-18T15:25",
+#'"2019-07-18",
+#'"2019-02",
+#'"2019",
+#'"2019---07",
+#'"")
+#'
 derive_vars_dtm<- function(
   dataset,
   new_vars_prefix,
   dtc,
-  impute=TRUE,
-  day=01,#use "FIRST", "LAST", "MID"  to have the first/last/15th day of teh month
-  month=01, year=2020,
-  hour=0, min=0, sec=0 ,
-  TMF=TRUE
+  date_imputation=NULL,# "02-01" or "LAST"
+  time_imputation="00:00:00",#or 'FIRST' 'LAST'
+  flag_imputation=TRUE
 ){
+
   #Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))
 
-  tmp<-dataset
-  warn_if_vars_exist(dataset, paste0(deparse(substitute(new_vars_prefix)),"DTM") )
-  tmp<-tmp %>%
-    mutate(dtm=dtc_dtm(dtc=compute_imputed_dtc(dtc=!!enquo(dtc),
-                                               impute=impute,
-                                               year=year, month=month, day=day,
-                                               hour=hour, min=min, sec=sec)
-                       )
-    )
-   if(TMF==TRUE){
-    warn_if_vars_exist(dataset, paste0(deparse(substitute(new_vars_prefix)),"TMF") )
-    tmp<-tmp %>%
-      mutate(tmf=compute_tmf(dtc=!!enquo(dtc), dt=dtm))
+  dtm <- paste0(new_vars_prefix, "DTM")
 
-    names(tmp)[names(tmp) == "tmf"] <- paste0(new_vars_prefix,"TMF")
-  }
-  names(tmp)[names(tmp) == "dtm"] <- paste0(new_vars_prefix,"DTM")
+  #Issue a warning if --DTM already exists
+  warn_if_vars_exist(dataset, dtm)
+  dataset<-dataset %>%
+    mutate(
+      idtc__=impute_dtc(dtc=!!enquo(dtc),
+                        date_imputation=date_imputation,
+                        time_imputation=time_imputation
+                                  ),
+      !!sym(dtm):=dtc_dtm(dtc=idtc__)
+      )%>%
+    select(-ends_with(("__")))
 
-  return(tmp)
+  if(flag_imputation){
+    dtf<-paste0(new_vars_prefix, "DTF")
+    tmf <- paste0(new_vars_prefix, "TMF")
+
+    #add --DTF if not there already
+    dtf_exist<- dtf %in% colnames(dataset)
+    if (!dtf_exist){
+      dataset<-dataset %>%
+        mutate(!!sym(dtf):=compute_dtf(dtc=!!enquo(dtc), dt=!!sym(dtm)))
+
+    }
+    else{
+      print(paste0(dtf, " was already present in dataset ", dtf , " is not derived."  ))
+    }
+    #add --TMF
+    warn_if_vars_exist(dataset, tmf )
+    dataset<-dataset %>%
+       mutate(!!sym(tmf):=compute_tmf(dtc=!!enquo(dtc), dtm=!!sym(dtm)))
+   }
+
+  return(dataset)
 
 }
 
