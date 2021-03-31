@@ -14,7 +14,10 @@ test_that("TRTSDTM variable is added", {
                                               ymd_hms('2020-01-02T00:00:00'),
                                               ymd_hms('2020-03-13T00:00:00')))
 
-  expect_equal(derive_var_trtsdtm(adsl,
-                                  dataset_ex = ex),
-               expected_output)
+  actual_output <- derive_var_trtsdtm(adsl,
+                                      dataset_ex = ex)
+
+  expect_dfs_equal(base = expected_output,
+                   compare = actual_output,
+                   keys = c("USUBJID"))
 })

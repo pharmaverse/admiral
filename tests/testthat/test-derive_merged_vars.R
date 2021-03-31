@@ -13,12 +13,15 @@ test_that("variable is added from the first observation in each group", {
 
   expected_output <- mutate(adsl, FIRSTVISN = c(1, 2, 3), FIRSTAVAL = c(12, 42, 10))
 
-  expect_equal(derive_merged_vars(adsl,
-                                  dataset_add = adlb,
-                                  new_vars = exprs(FIRSTVISN = AVISITN, FIRSTAVAL = AVAL),
-                                  filter_first_order = exprs(AVISITN, AVAL),
-                                  by_vars = exprs(USUBJID)),
-               expected_output)
+  actual_output <- derive_merged_vars(adsl,
+                                      dataset_add = adlb,
+                                      new_vars = exprs(FIRSTVISN = AVISITN, FIRSTAVAL = AVAL),
+                                      filter_first_order = exprs(AVISITN, AVAL),
+                                      by_vars = exprs(USUBJID))
+
+  expect_dfs_equal(base = expected_output,
+                   compare = actual_output,
+                   keys = c('USUBJID'))
 })
 
 test_that("filter_add parameter works, all observations from dataset are kept", {
@@ -34,11 +37,16 @@ test_that("filter_add parameter works, all observations from dataset are kept", 
 
   expected_output <- mutate(adsl, FIRSTAVAL = c(9, NA, 14))
 
-  expect_equal(derive_merged_vars(adsl,
-                                  dataset_add = adlb,
-                                  filter_add = exprs(AVISITN == 3),
-                                  new_vars = exprs(FIRSTAVAL = AVAL),
-                                  filter_first_order = exprs(desc(AVAL)),
-                                  by_vars = exprs(USUBJID)),
-               expected_output)
+  actual_output <- derive_merged_vars(
+    adsl,
+    dataset_add = adlb,
+    filter_add = exprs(AVISITN == 3),
+    new_vars = exprs(FIRSTAVAL = AVAL),
+    filter_first_order = exprs(desc(AVAL)),
+    by_vars = exprs(USUBJID)
+  )
+
+  expect_dfs_equal(base = expected_output,
+                   compare = actual_output,
+                   keys = c('USUBJID'))
 })
