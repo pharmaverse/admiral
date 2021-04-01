@@ -49,6 +49,6 @@ derive_var_trtedtm <- function(
     dataset,
     dataset_add = dataset_ex,
     filter_add = filter_ex,
-    new_vars = exprs(TRTEDTM := dtc_dtm(compute_imputed_dtc(EXENDTC, hour = 23, min = 59, sec = 59))),
+    new_vars = exprs(TRTEDTM := dtc_dtm(impute_dtc(EXENDTC, time_imputation = 'LAST'))),
     filter_first_order = exprs(desc(EXENDTC), desc(EXSEQ)))
 }
