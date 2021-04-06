@@ -4,23 +4,23 @@
 \alias{derive_var_basec}
 \title{Derive BASEC}
 \usage{
-derive_var_basec(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE"))
+derive_var_basec(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"))
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{dataset}{\code{data.frame}}
 
-\item{by}{`character` vector of columns uniqely identifying a set
-of records for which to calculate `BASE`}
+\item{by_vars}{\code{character} vector of columns uniquely identifying a set
+of records for which to calculate \code{BASE}}
 }
 \value{
-A new `data.frame` containing all records and variables of the input
-dataset plus the `BASEC` variable
+A new \code{data.frame} containing all records and variables of the input
+dataset plus the \code{BASEC} variable
 }
 \description{
-Derive the `BASEC` variable in a BDS dataset
+Derive the \code{BASEC} variable in a BDS dataset
 }
 \examples{
-bds_dataset <- tibble::tribble(
+dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
   "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
   "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
@@ -29,8 +29,7 @@ bds_dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",    "LAST",
   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
 )
-derive_var_basec(bds_dataset)
-
+derive_var_basec(dataset)
 }
 \author{
 Thomas Neitmann

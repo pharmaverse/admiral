@@ -10,13 +10,15 @@ is_date(arg)
 \item{arg}{The argument to check}
 }
 \value{
-``TRUE`` if the argument is a date or date-time, ``FALSE`` otherwise
+\code{TRUE} if the argument is a date or date-time, \code{FALSE} otherwise
 }
 \description{
 Checks if a date or date-time vector was specified
 }
 \examples{
-assert_that(is_date(refdate), is_date(date))
+refdate <- lubridate::ymd('2020-01-02')
+date <- lubridate::ymd('2020-02-03')
+assertthat::assert_that(is_date(refdate), is_date(date))
 }
 \author{
 Stefan Bundfuss

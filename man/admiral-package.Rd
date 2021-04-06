@@ -6,7 +6,18 @@
 \alias{admiral-package}
 \title{admiral: ADaM in R Asset Library}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+}
+\author{
+\strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
+
+Authors:
+\itemize{
+  \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
+}
+
 }
 \keyword{internal}

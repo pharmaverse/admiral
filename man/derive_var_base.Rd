@@ -4,23 +4,23 @@
 \alias{derive_var_base}
 \title{Derive BASE}
 \usage{
-derive_var_base(bds_dataset, by = c("USUBJID", "PARAMCD", "BASETYPE"))
+derive_var_base(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"))
 }
 \arguments{
-\item{bds_dataset}{`data.frame`}
+\item{dataset}{\code{data.frame}}
 
-\item{by}{`character` vector of columns uniqely identifying a set
-of records for which to calculate `BASE`}
+\item{by_vars}{\code{character} vector of columns uniquely identifying a set
+of records for which to calculate \code{BASE}}
 }
 \value{
-A new `data.frame` containing all records and variables of the input
-dataset plus the `BASE` variable
+A new \code{data.frame} containing all records and variables of the input
+dataset plus the \code{BASE} variable
 }
 \description{
-Derive the `BASE` variable in a BDS dataset
+Derive the \code{BASE} variable in a BDS dataset
 }
 \examples{
-bds_dataset <- tibble::tribble(
+dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE,
   "TEST01", "PAT01",  "PARAM01", 10.12, "Y",    "LAST",
   "TEST01", "PAT01",  "PARAM01",  9.7,  "N",    "LAST",
@@ -29,8 +29,7 @@ bds_dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", NA,    "N",    "LAST",
   "TEST01", "PAT01",  "PARAM02",  8.35, "N",    "LAST"
 )
-derive_var_base(bds_dataset)
-
+derive_var_base(dataset)
 }
 \author{
 Thomas Neitmann

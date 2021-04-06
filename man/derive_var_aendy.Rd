@@ -9,36 +9,37 @@ derive_var_aendy(dataset, start_date = TRTSDT, end_date = AENDT)
 \arguments{
 \item{dataset}{Input dataset
 
-  The columns specified by the `start_date` and the `end_date` parameter are
-  expected.}
+The columns specified by the \code{start_date} and the \code{end_date} parameter are
+expected.}
 
 \item{start_date}{The start date column, e.g., date of first treatment
 
-  A date or date-time object column is expected.
+A date or date-time object column is expected.
 
-  The default is ``TRTSDT``.}
+The default is \code{TRTSDT}.}
 
 \item{end_date}{The end date column for which the study day should be derived
 
-  A date or date-time object column is expected.
+A date or date-time object column is expected.
 
-  The default is ``AENDT``}
+The default is \code{AENDT}}
 }
 \value{
-The input dataset with ``AENDY`` column added
+The input dataset with \code{AENDY} column added
 }
 \description{
-Adds the analysis end relative day (``AENDY``) to the dataset, i.e., study day of analysis end date.
+Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e., study day of analysis end date.
 }
 \details{
 The study day is derived as number of days from the start date
-  to the end date. If it is nonnegative, one is added. I.e., the study day of the
-  start date is 1.
+to the end date. If it is nonnegative, one is added. I.e., the study day of the
+start date is 1.
 }
 \examples{
 data <- tibble::tribble(
   ~TRTSDT, ~AENDT,
-  ymd('2020-01-01'), ymd('2020-02-24'))
+  lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
+)
 
 derive_var_aendy(data)
 }
