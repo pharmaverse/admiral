@@ -130,5 +130,58 @@ assertthat::on_failure(is_valid_month) <- function(call, env) {
          "Values for month must be between 1-12. Please check the date_imputation input: it should be sepcified as 'dd-mm'")
 }
 
+is_valid_dtc<-function(arg){
+  pattern0<-"^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$"
+  pattern1<-"^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$"
+  pattern2<-"^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$"
+  pattern3<-"^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$"
+  pattern4<-"^(\\d{4})-(\\d{2})-(\\d{2})$"
+  pattern5<-"^(\\d{4})-(\\d{2})$"
+  pattern6<-"^(\\d{4})$"
+  pattern7<-"^(\\d{4})---(\\d{2})$"
+
+
+  grepl(pattern0,arg)|
+  grepl(pattern1,arg)|
+  grepl(pattern2,arg)|
+  grepl(pattern3,arg)|
+  grepl(pattern4,arg)|
+  grepl(pattern5,arg)|
+  grepl(pattern6,arg)|
+  grepl(pattern7,arg)
+}
+
+assert_is_valid_dtc <- function(dtc) {
+  is_valid_dtc <- is_valid_dtc(dtc)
+
+  if (!all(is_valid_dtc)) {
+    incorrect_dtc <- dtc[is_valid_dtc==FALSE]
+    incorrect_dtc_row <- rownames(as.data.frame(dtc))[is_valid_dtc==FALSE]
+    tbl <- paste("Row: ",incorrect_dtc_row, ", --DTC: ",incorrect_dtc)
+    msg<-"Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
+    warn(msg)
+    warn(tbl)
+
+    msg3 <- paste0(
+      "The following representations are handled: \n",
+      "2003-12-15T13:15:17.123\n",
+      "2003-12-15T13:15:17\n",
+      "2003-12-15T13:15\n",
+      "2003-12-15T13\n",
+      "2003-12-15\n",
+      "2003-12\n",
+      "2003\n",
+      "2003---15\n\n",
+      "The following representations are NOT handled: \n",
+      "2003-12-15T-:15:18\n",
+      "2003-12-15T13:-:19\n",
+      "--12-15\n",
+      "-----T07:15"
+      )
+    warn(msg3)
+
+  }
+}
+
 
 

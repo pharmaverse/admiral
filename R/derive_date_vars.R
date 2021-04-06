@@ -85,6 +85,9 @@ impute_dtc<-function(dtc,
                      )
   {
 
+  # check format of DTC is as expected
+  assert_is_valid_dtc(dtc)
+
   #date imputation
   if (!is.null(date_imputation)){
     #check input for date_imputation
@@ -159,7 +162,7 @@ impute_dtc<-function(dtc,
   }
 
   imputed_time <- case_when(
-    nchar(dtc)==19 ~ substr(dtc,12,19),
+    nchar(dtc)>=19 ~ substr(dtc,12,19),
     nchar(dtc)==16 ~ paste0(substr(dtc,12,16),sec),
     nchar(dtc)==13 ~ paste0(substr(dtc,12,13),min,sec),
     nchar(dtc)==10 ~ paste0(h,min,sec),
@@ -169,6 +172,7 @@ impute_dtc<-function(dtc,
   imputed_dtc<-if_else(imputed_date!="",paste0(imputed_date,"T", imputed_time),"")
 
   return(imputed_dtc)
+
 }
 
 #' Convert a --DTC to a --DT
@@ -191,14 +195,10 @@ impute_dtc<-function(dtc,
 #'
 #' @examples
 #'
-#' dtc_dt("2019-07-18")
-#' [1] "2019-07-18"
-#' dtc_dt("2019-07")
-#' [1] NA
-#'  Warning message:
-#'    All formats failed to parse. No formats found.
+#' convert_dtc_dt("2019-07-18")
+#' convert_dtc_dt("2019-07")
 #'
-dtc_dt<-function(dtc){
+convert_dtc_to_dt<-function(dtc){
   case_when(
     nchar(dtc)>=10 ~ymd(substr(dtc,1,10)),
     TRUE ~ymd(NA)
@@ -226,16 +226,11 @@ dtc_dt<-function(dtc){
 #'
 #' @examples
 #'
-#' dtc_dtm("2019-07-18T15:25:00")
-#' [1] "2019-07-18 15:25:00 UTC"
-#' dtc_dtm("2019-07-18T00:00:00")
-#' [1] "2019-07-18 UTC" #note Time = 00:00:00 is not printed
-#' dtc_dtm("2019-07-18")
-#' [1] NA
-#' Warning message:
-#'   All formats failed to parse. No formats found.
+#' convert_dtc_dtm("2019-07-18T15:25:00")
+#' convert_dtc_dtm("2019-07-18T00:00:00")#note Time = 00:00:00 is not printed
+#' convert_dtc_dtm("2019-07-18")
 #'
-dtc_dtm<-function(dtc){
+convert_dtc_dtm<-function(dtc){
 
   #note T00:00:00 is not printed in dataframe
   case_when(
@@ -267,9 +262,7 @@ dtc_dtm<-function(dtc){
 #' @examples
 #'
 #' compute_dtf(dtc= "2019-07",dt=as.Date("2019-07-18"))
-#' [1] "D"
-#' > compute_dtf(dtc= "2019",dt=as.Date("2019-07-18"))
-#' [1] "M"
+#' compute_dtf(dtc= "2019",dt=as.Date("2019-07-18"))
 #'
 compute_dtf <- function(dtc,dt){
 
@@ -305,19 +298,17 @@ compute_dtf <- function(dtc,dt){
 #' @examples
 #'
 #' compute_tmf(dtc= "2019-07-18T15:25",dtm=as.POSIXct("2019-07-18T15:25:00"))
-#' [1] "S"
-#' > compute_tmf(dtc= "2019-07-18T15",dtm=as.POSIXct("2019-07-18T15:25:00"))
-#' [1] "M"
-#' > compute_tmf(dtc= "2019-07-18",dtm=as.POSIXct("2019-07-18"))
-#' [1] "H"
+#' compute_tmf(dtc= "2019-07-18T15",dtm=as.POSIXct("2019-07-18T15:25:00"))
+#' compute_tmf(dtc= "2019-07-18",dtm=as.POSIXct("2019-07-18"))
 #'
 compute_tmf <- function(dtc,dtm){
 
   case_when(
-    (!is.na(dtm) & nchar(dtc)==19)| is.na(dtm) ~" ",
+    (!is.na(dtm) & nchar(dtc)>=19)|is.na(dtm) ~" ",
     !is.na(dtm) & nchar(dtc)==16~"S",
     !is.na(dtm) & nchar(dtc)==13~"M",
-    (!is.na(dtm) & nchar(dtc)==10) | (nchar(dtc)> 0 & nchar(dtc) <10) ~"H"
+    (!is.na(dtm) & (nchar(dtc)==10|is_valid_dtc(dtc)==FALSE)) |
+      (nchar(dtc)> 0 & nchar(dtc) <10) ~"H"
   )
 }
 
@@ -356,7 +347,8 @@ compute_tmf <- function(dtc,dtm){
 #'
 #' Default: TRUE
 #'
-#'@example
+#'@examples
+#'
 #'mhdt <- tibble::tribble(~MHSTDTC,
 #'"2019-07-18T15:25:40",
 #'"2019-07-18T15:25",
@@ -418,7 +410,7 @@ derive_vars_dt<- function(
     mutate(
       idtc__=impute_dtc(dtc=!!enquo(dtc),
                             date_imputation=date_imputation),
-      !!sym(dt):=dtc_dt(dtc=idtc__)
+      !!sym(dt):=convert_dtc_dt(dtc=idtc__)
     )%>%
     select(-ends_with(("__")))
 
@@ -482,7 +474,8 @@ derive_vars_dt<- function(
 #' the presence of --DTF is checked and the variable is not derived if it already exists in the input datasets
 #' however, if --TMF already exists in the dataset, a warning is issued and --TMF will be overwritten
 #'
-#'@example
+#'@examples
+#'
 #'mhdt <- tibble::tribble(~MHSTDTC,
 #'"2019-07-18T15:25:40",
 #'"2019-07-18T15:25",
@@ -514,7 +507,7 @@ derive_vars_dtm<- function(
                         date_imputation=date_imputation,
                         time_imputation=time_imputation
                                   ),
-      !!sym(dtm):=dtc_dtm(dtc=idtc__)
+      !!sym(dtm):=convert_dtc_dtm(dtc=idtc__)
       )%>%
     select(-ends_with(("__")))
 
@@ -541,5 +534,6 @@ derive_vars_dtm<- function(
   return(dataset)
 
 }
+
 
 
