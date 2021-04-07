@@ -7,12 +7,7 @@ input <- c(
   "2019-07-18",
   "2019-02",
   "2019",
-  "2019---07",
-  "2019-07-18T-:25:40",
-  "2019-07-18T15:-:40",
-  "--12-15",
-  "-----T07:15",
-  ""
+  "2019---07"
 )
 
 test_that("default: no date imputation, time part set o 00:00:00", {
@@ -21,11 +16,6 @@ test_that("default: no date imputation, time part set o 00:00:00", {
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:00",
     "2019-07-18T00:00:00",
-    "",
-    "",
-    "",
-    "",
-    "",
     "",
     "",
     ""
@@ -39,11 +29,6 @@ test_that("default: no date imputation,Missing time part imputed with 23:59:59 p
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:59",
     "2019-07-18T23:59:59",
-    "",
-    "",
-    "",
-    "",
-    "",
     "",
     "",
     ""
@@ -73,19 +58,14 @@ test_that("impute to first day/month if date is partial,Missing time part impute
     "2019-07-18T00:00:00",
     "2019-02-01T00:00:00",
     "2019-01-01T00:00:00",
-    "2019-01-01T00:00:00",
-    "",
-    "",
-    "",
-    "",
-    ""
+    "2019-01-01T00:00:00"
   )
   expect_equal(
     impute_dtc(
       dtc = input,
       date_imputation = "FIRST"
     ),
-    expected_output$IDTC
+    expected_output
   )
 
   expect_equal(
@@ -101,16 +81,11 @@ test_that("impute to last day/month if date is partial,Missing time part imputed
   expected_output <- c(
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:40",
-    "2019-07-18T15:25:00",
+    "2019-07-18T15:25:59",
     "2019-07-18T23:59:59",
     "2019-02-28T23:59:59",
     "2019-12-31T23:59:59",
-    "2019-12-31T23:59:59",
-    "",
-    "",
-    "",
-    "",
-    ""
+    "2019-12-31T23:59:59"
   )
   expect_equal(
     impute_dtc(
@@ -130,12 +105,7 @@ test_that("impute to MID day/month if date is partial,Missing time part imputed 
     "2019-07-18T00:00:00",
     "2019-02-15T00:00:00",
     "2019-06-15T00:00:00",
-    "2019-06-15T00:00:00",
-    "",
-    "",
-    "",
-    "",
-    ""
+    "2019-06-15T00:00:00"
   )
   expect_equal(
     impute_dtc(

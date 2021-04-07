@@ -94,8 +94,8 @@ impute_dtc <- function(dtc,
                        date_imputation = NULL,
                        time_imputation = "00:00:00") {
 
-  # check format of DTC is as expected
-  assert_is_valid_dtc(dtc)
+  # Issue a warning if incorrect  DTC is present
+  warn_if_invalid_dtc(dtc)
 
   # date imputation
   if (!is.null(date_imputation)) {
@@ -415,7 +415,7 @@ derive_vars_dt <- function(dataset,
         dtc = !!enquo(dtc),
         date_imputation = date_imputation
       ),
-      !!sym(dt) := convert_dtc_dt(dtc = idtc__)
+      !!sym(dt) := convert_dtc_to_dt(dtc = idtc__)
     ) %>%
     select(-ends_with(("__")))
 
@@ -527,7 +527,7 @@ derive_vars_dtm <- function(dataset,
         mutate(!!sym(dtf) := compute_dtf(dtc = !!enquo(dtc), dt = !!sym(dtm)))
     }
     else {
-      warn(paste0(dtf, " was already present in dataset ", dtf, " is not derived."))
+      print(paste0(dtf, " was already present in dataset ", dtf, " is not re-derived."))
     }
     # add --TMF
     warn_if_vars_exist(dataset, tmf)
