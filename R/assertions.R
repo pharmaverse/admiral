@@ -15,7 +15,9 @@
 #' @examples
 #' data(dm)
 #' assert_has_variables(dm, "STUDYID")
-#' \dontrun{assert_has_variables(dm, "AVAL")}
+#' \dontrun{
+#' assert_has_variables(dm, "AVAL")
+#' }
 assert_has_variables <- function(dataset, required_vars) {
   is_missing <- !required_vars %in% colnames(dataset)
   if (any(is_missing)) {
@@ -23,9 +25,11 @@ assert_has_variables <- function(dataset, required_vars) {
     if (length(missing_vars) == 1L) {
       err_msg <- paste0("Required variable `", missing_vars, "` is missing.")
     } else {
-      err_msg <- paste0("Required variables ",
-                        enumerate(missing_vars),
-                        " are missing.")
+      err_msg <- paste0(
+        "Required variables ",
+        enumerate(missing_vars),
+        " are missing."
+      )
     }
     abort(err_msg)
   }
@@ -73,18 +77,17 @@ assert_has_only_one_baseline_record <- function(dataset, by) {
 #' @export
 #'
 #' @examples
-#' refdate <- lubridate::ymd('2020-01-02')
-#' date <- lubridate::ymd('2020-02-03')
+#' refdate <- lubridate::ymd("2020-01-02")
+#' date <- lubridate::ymd("2020-02-03")
 #' assertthat::assert_that(is_date(refdate), is_date(date))
 is_date <- function(arg) {
   is.instant(arg)
 }
-
 on_failure(is_date) <- function(call, env) {
   paste0(
     "Argument ",
     deparse(call$arg),
-    "=",
+    " = ",
     eval(call$arg, envir = env),
     " is not a lubridate date."
   )
@@ -103,24 +106,21 @@ on_failure(is_date) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' unit <- 'days'
+#' unit <- "days"
 #' assertthat::assert_that(is_timeunit(unit))
 is_timeunit <- function(arg) {
   arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
-
 on_failure(is_timeunit) <- function(call, env) {
   paste0(
     "Argument ",
     deparse(call$arg),
-    "=",
+    " = ",
     eval(call$arg, envir = env),
     " is not a valid time unit.",
     " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'."
   )
 }
-
-
 
 #' Check validity of the date imputation input
 #'
@@ -136,18 +136,24 @@ on_failure(is_timeunit) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_date_entry("01-02"))
-#' assertthat::assert_that(is_valid_date_entry(FIRST"))
+#' assertthat::assert_that(is_valid_date_entry("FIRST"))
+is_valid_date_entry <- function(arg) {
+  pattern <- "^([0-9]{2})-([0-9]{2})$"
+  grepl(pattern, arg) | arg %in% c("FIRST", "MID", "LAST")
+}
+on_failure(is_valid_date_entry) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a valid date entry.\n",
+    "date_imputation should be specified as 'dd-mm' (e.g. '01-01') or ",
+    "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
+  )
+}
 
-is_valid_date_entry<-function(arg){
-  pattern<-"^([0-9]{2})-([0-9]{2})$"
-  grepl(pattern,arg) | arg %in% c("FIRST", "MID", "LAST")
-}
-assertthat::on_failure(is_valid_date_entry) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid date entry.\n",
-         "Date_imputation should be specified as 'dd-mm' (e.g. '01-01') or 'FIRST', 'MID', 'LAST' to get the first/mid/last day/month")
-}
 #' Check validity of the time imputation input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
@@ -162,18 +168,24 @@ assertthat::on_failure(is_valid_date_entry) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(is_valid_time_entry(FIRST"))
-#'
-is_valid_time_entry<-function(arg){
-  pattern<-"^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern,arg) | arg %in% c("FIRST", "LAST")
+#' assertthat::assert_that(is_valid_time_entry("FIRST"))
+is_valid_time_entry <- function(arg) {
+  pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
+  grepl(pattern, arg) | arg %in% c("FIRST", "LAST")
 }
-assertthat::on_failure(is_valid_time_entry) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid time entry.\n",
-         "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or 'FIRST','LAST' to get the first/last time of teh day")
+on_failure(is_valid_time_entry) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a valid time entry.\n",
+    "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or ",
+    "'FIRST', 'LAST' to get the first/last time of the day"
+  )
 }
+
 #' Check validity of the minute/second portion in the time input
 #'
 #' Minutes and seconds are expected to range from 0 to 59
@@ -187,16 +199,21 @@ assertthat::on_failure(is_valid_time_entry) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_sec_min(59))
-#'
-is_valid_sec_min<-function(arg){
+is_valid_sec_min <- function(arg) {
   arg %in% 0:59
 }
-assertthat::on_failure(is_valid_sec_min) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid min/sec.\n",
-         "Values must be between between 0-59")
+on_failure(is_valid_sec_min) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a valid min/sec.\n",
+    "Values must be between between 0-59"
+  )
 }
+
 #' Check validity of the hour portion in the time input
 #'
 #' Hours are expected to range from 0 to 23
@@ -210,16 +227,19 @@ assertthat::on_failure(is_valid_sec_min) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_hour(20))
-#'
-
-is_valid_hour<-function(arg){
+is_valid_hour <- function(arg) {
   arg %in% 0:23
 }
-assertthat::on_failure(is_valid_hour) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid hour.\n",
-         "Values must be between 0-23")
+on_failure(is_valid_hour) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    "=",
+    eval(call$arg, envir = env),
+    " is not a valid hour.\n",
+    "Values must be between 0-23"
+  )
 }
 
 #' Check validity of the day portion in the date input
@@ -235,16 +255,19 @@ assertthat::on_failure(is_valid_hour) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_day(20))
-#'
-
-is_valid_day<-function(arg){
+is_valid_day <- function(arg) {
   arg %in% 1:31
 }
-assertthat::on_failure(is_valid_day) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid day.\n",
-         "Values must be between 1-31")
+on_failure(is_valid_day) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a valid day.\n",
+    "Values must be between 1-31"
+  )
 }
 
 #' Check validity of the month portion in the date input
@@ -260,14 +283,18 @@ assertthat::on_failure(is_valid_day) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#'
 #' assertthat::assert_that(is_valid_month(20))
-#'
-
-is_valid_month<-function(arg){
+is_valid_month <- function(arg) {
   arg %in% 1:12
 }
-assertthat::on_failure(is_valid_month) <- function(call, env) {
-  paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid month.\n",
-         "Values for month must be between 1-12. Please check the date_imputation input: it should be sepcified as 'dd-mm'")
+on_failure(is_valid_month) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a valid month.\n",
+    "Values for month must be between 1-12. ",
+    "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
+  )
 }

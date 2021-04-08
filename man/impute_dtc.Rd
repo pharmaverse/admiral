@@ -9,12 +9,12 @@ impute_dtc(dtc, date_imputation = NULL, time_imputation = "00:00:00")
 \arguments{
 \item{dtc}{The --DTC date to impute
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-if the year part is not recorded (missing date), no imputation is done}
+A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+If the year part is not recorded (missing date), no imputation is performed.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is missing
 
-If NULL: no date imputation is perfomed and partial dates are returned as missing
+If NULL: no date imputation is performed and partial dates are returned as missing
 
 Otherwise, a character value is expected, either as a
 \itemize{
@@ -99,13 +99,12 @@ idtc <- impute_dtc(
 )
 }
 \seealso{
-Other {general functions}: 
-\code{\link{compute_dtf}()},
-\code{\link{compute_duration}()},
-\code{\link{compute_tmf}()},
-\code{\link{convert_dtc_to_dtm}()},
-\code{\link{convert_dtc_to_dt}()},
-\code{\link{derive_duration}()}
+Other {general functions}: \code{\link{compute_dtf}},
+  \code{\link{compute_duration}},
+  \code{\link{compute_tmf}},
+  \code{\link{convert_dtc_to_dtm}},
+  \code{\link{convert_dtc_to_dt}},
+  \code{\link{derive_duration}}
 }
 \author{
 Samia Kabi

@@ -4,14 +4,8 @@
 \alias{derive_vars_dtm}
 \title{Derive --DTM (and --DTF/--TMF)}
 \usage{
-derive_vars_dtm(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  time_imputation = "00:00:00",
-  flag_imputation = TRUE
-)
+derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
+  time_imputation = "00:00:00", flag_imputation = TRUE)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -20,16 +14,16 @@ The --DTC variable must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s)
 
-a character is expected: e.g new_vars_prefix="AST"}
+a character is expected, e.g new_vars_prefix="AST"}
 
 \item{dtc}{The --DTC date used to derive/impute --DT
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-if the year part is not recorded (missing date), no imputation is done}
+A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+If the year part is not recorded (missing date), no imputation is performed.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing
+\item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is perfomed and partial dates are returned as missing
+If NULL: no date imputation is performed and partial dates are returned as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
@@ -60,13 +54,11 @@ Derive --DTM based on --DTC. --DTM is imputed based on user input
 Derive --DTF/--TMF if needed based on --DTC and --DT
 }
 \details{
-:
-
-the presence of --DTF is checked and the variable is not derived if it already exists in the input datasets
-however, if --TMF already exists in the dataset, a warning is issued and --TMF will be overwritten
+The presence of a --DTF variable is checked and the variable is not derived
+if it already exists in the input dataset. However, if --TMF already exists
+in the input dataset, a warning is issued and --TMF will be overwritten
 }
 \examples{
-
 mhdt <- tibble::tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
@@ -76,5 +68,13 @@ mhdt <- tibble::tribble(
   "2019",
   "2019---07",
   ""
+)
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "FIRST",
+  time_imputation = "FIRST"
 )
 }

@@ -4,13 +4,8 @@
 \alias{derive_vars_dt}
 \title{Derive --DT (and --DTF)}
 \usage{
-derive_vars_dt(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  flag_imputation = TRUE
-)
+derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
+  flag_imputation = TRUE)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -49,7 +44,6 @@ Derive --DT based on --DTC. --DT is imputed based on user input
 Derive --DTF if needed based on --DTC and --DT
 }
 \examples{
-
 mhdt <- tibble::tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
@@ -63,34 +57,42 @@ mhdt <- tibble::tribble(
 
 # Create ASTDT and ASTDTF
 # no imputation for partial date
-mhdt1 <- derive_vars_dt(mhdt,
+mhdt1 <- derive_vars_dt(
+  mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC
 )
 
 # Create ASTDT and ASTDTF
 # Impute partial dates to first day/month
-mhdt2 <- derive_vars_dt(mhdt,
+mhdt2 <- derive_vars_dt(
+  mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
   date_imputation = "FIRST"
 )
+
 # Impute partial dates to 4th of june
-mhdt2a <- derive_vars_dt(mhdt,
+mhdt2a <- derive_vars_dt(
+  mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
   date_imputation = "04-06"
 )
+
 # Create AENDT and AENDTF
 # Impute partial dates to last day/month
-mhdt3 <- derive_vars_dt(mhdt,
+mhdt3 <- derive_vars_dt(
+  mhdt,
   new_vars_prefix = "AEN",
   dtc = MHSTDTC,
   date_imputation = "LAST"
 )
+
 # Create BIRTHDT
-# Impute partial dates to 15of june. No DTF
-mhdt4 <- derive_vars_dt(mhdt,
+# Impute partial dates to 15th of June. No DTF
+mhdt4 <- derive_vars_dt(
+  mhdt,
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
   date_imputation = "MID",
