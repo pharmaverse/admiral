@@ -120,10 +120,26 @@ on_failure(is_timeunit) <- function(call, env) {
   )
 }
 
-######################################################
-#assertions for date time derivations
-######################################################
-#check validity of the date imputation input
+
+
+#' Check validity of the date imputation input
+#'
+#' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
+#' or as a keyword: "FISRT", "MID", "LAST"
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_date_entry("01-02"))
+#' assertthat::assert_that(is_valid_date_entry(FIRST"))
+
 is_valid_date_entry<-function(arg){
   pattern<-"^([0-9]{2})-([0-9]{2})$"
   grepl(pattern,arg) | arg %in% c("FIRST", "MID", "LAST")
@@ -132,7 +148,24 @@ assertthat::on_failure(is_valid_date_entry) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid date entry.\n",
          "Date_imputation should be specified as 'dd-mm' (e.g. '01-01') or 'FIRST', 'MID', 'LAST' to get the first/mid/last day/month")
 }
-#check validity of the time imputation input
+#' Check validity of the time imputation input
+#'
+#' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
+#' or as a keyword: "FISRT", "LAST"
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a valid time_imputation input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_time_entry("23:59:59"))
+#' assertthat::assert_that(is_valid_time_entry(FIRST"))
+#'
 is_valid_time_entry<-function(arg){
   pattern<-"^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
   grepl(pattern,arg) | arg %in% c("FIRST", "LAST")
@@ -141,8 +174,22 @@ assertthat::on_failure(is_valid_time_entry) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid time entry.\n",
          "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or 'FIRST','LAST' to get the first/last time of teh day")
 }
-
-#seconds, minutes, hours
+#' Check validity of the minute/second portion in the time input
+#'
+#' Minutes and seconds are expected to range from 0 to 59
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a valid min/sec input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_sec_min(59))
+#'
 is_valid_sec_min<-function(arg){
   arg %in% 0:59
 }
@@ -150,6 +197,22 @@ assertthat::on_failure(is_valid_sec_min) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid min/sec.\n",
          "Values must be between between 0-59")
 }
+#' Check validity of the hour portion in the time input
+#'
+#' Hours are expected to range from 0 to 23
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a valid hour input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_hour(20))
+#'
 
 is_valid_hour<-function(arg){
   arg %in% 0:23
@@ -159,15 +222,47 @@ assertthat::on_failure(is_valid_hour) <- function(call, env) {
          "Values must be between 0-23")
 }
 
-#day, month
+#' Check validity of the day portion in the date input
+#'
+#' Days are expected to range from 1 to 31
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a day input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_day(20))
+#'
+
 is_valid_day<-function(arg){
-  arg %in% 1:31 | arg %in% c("FIRST","MID", "LAST")
+  arg %in% 1:31
 }
 assertthat::on_failure(is_valid_day) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), "=", eval(call$arg, envir = env), " is not a valid day.\n",
-         "Values must be between 1-31 or 'FISRT', 'MID', 'LAST'")
+         "Values must be between 1-31")
 }
 
+#' Check validity of the month portion in the date input
+#'
+#' Days are expected to range from 1 to 12
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a month input, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#'
+#' assertthat::assert_that(is_valid_month(20))
+#'
 
 is_valid_month<-function(arg){
   arg %in% 1:12
@@ -176,6 +271,3 @@ assertthat::on_failure(is_valid_month) <- function(call, env) {
   paste0("Argument ", deparse(call$arg), " = ", eval(call$arg, envir = env), " is not a valid month.\n",
          "Values for month must be between 1-12. Please check the date_imputation input: it should be sepcified as 'dd-mm'")
 }
-
-
-
