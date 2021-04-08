@@ -26,16 +26,13 @@ Derive --TMF based on --DTC and --DT
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-
 }
 \seealso{
-Other {general functions}: 
-\code{\link{compute_dtf}()},
-\code{\link{compute_duration}()},
-\code{\link{convert_dtc_to_dtm}()},
-\code{\link{convert_dtc_to_dt}()},
-\code{\link{derive_duration}()},
-\code{\link{impute_dtc}()}
+Other {general functions}: \code{\link{compute_dtf}},
+  \code{\link{compute_duration}},
+  \code{\link{convert_dtc_to_dtm}},
+  \code{\link{convert_dtc_to_dt}},
+  \code{\link{derive_duration}}, \code{\link{impute_dtc}}
 }
 \author{
 Samia Kabi

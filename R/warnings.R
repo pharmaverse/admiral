@@ -73,8 +73,8 @@ warn_if_invalid_dtc <- function(dtc) {
   is_valid_dtc <- is_valid_dtc(dtc)
 
   if (!all(is_valid_dtc)) {
-    incorrect_dtc <- dtc[is_valid_dtc == FALSE]
-    incorrect_dtc_row <- rownames(as.data.frame(dtc))[is_valid_dtc == FALSE]
+    incorrect_dtc <- dtc[!is_valid_dtc]
+    incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid_dtc]
     tbl <- paste("Row", incorrect_dtc_row, ": --DTC = ", incorrect_dtc)
     msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
     warn(msg)
