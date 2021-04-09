@@ -3,10 +3,12 @@ on:
     branches:
       - main
       - master
+      - 7_ci
   pull_request:
     branches:
       - main
       - master
+      - 7_ci
 
 name: lint
 
