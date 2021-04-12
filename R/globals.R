@@ -13,6 +13,7 @@ globalVariables(c(
   "ASTDT",
   "ASTDY",
   "BRTHDT",
+  "idtc__",
   "RANDDT",
   "TRTDURD",
   "TRTEDT",
