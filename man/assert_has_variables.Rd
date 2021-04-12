@@ -21,7 +21,9 @@ Checks if a dataset contains all required variables
 \examples{
 data(dm)
 assert_has_variables(dm, "STUDYID")
-\dontrun{assert_has_variables(dm, "AVAL")}
+\dontrun{
+assert_has_variables(dm, "AVAL")
+}
 }
 \author{
 Thomas Neitmann
