@@ -14,13 +14,15 @@ name: lint
 
 jobs:
   lint:
-    runs-on: {os: macOS-latest, r: '3.5'}
+    runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.5
 
       - name: Query dependencies
         run: |
