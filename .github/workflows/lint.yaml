@@ -3,18 +3,16 @@ on:
     branches:
       - main
       - master
-      - 7_ci
   pull_request:
     branches:
       - main
       - master
-      - 7_ci
 
 name: lint
 
 jobs:
   lint:
-    runs-on: macOS-latest
+    runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:

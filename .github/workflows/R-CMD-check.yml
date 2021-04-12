@@ -3,12 +3,10 @@
 on:
   push:
     branches:
-      - 7_ci
       - main
       - master
   pull_request:
     branches:
-      - 7_ci
       - main
       - master
 
@@ -24,8 +22,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.5'}
-          - {os: macOS-latest, r: '3.5'}
           - {os: ubuntu-20.04, r: '3.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
