@@ -21,7 +21,7 @@ library(dplyr)
 data(vs)
 vs \%>\%
   derive_aval() \%>\%
-  select(USUBJID, PARAMCD, VSSTRES, AVALC, VSSTRESN, AVAL, VSSTRESU, AVALU)
+  select(USUBJID, VSTESTCD, VSSTRESC, AVALC, VSSTRESN, AVAL, VSSTRESU, AVALU)
 }
 \author{
 Thomas Neitmann
