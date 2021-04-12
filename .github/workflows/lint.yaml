@@ -14,7 +14,7 @@ name: lint
 
 jobs:
   lint:
-    runs-on: macOS-latest
+    runs-on: {os: macOS-latest, r: '3.5'}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
