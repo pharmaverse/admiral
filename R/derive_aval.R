@@ -17,11 +17,20 @@
 #'   derive_aval() %>%
 #'   select(USUBJID, VSTESTCD, VSSTRESC, AVALC, VSSTRESN, AVAL, VSSTRESU, AVALU)
 derive_aval <- function(dataset) {
-  select_col <- function(pattern) grep(pattern, colnames(dataset), value = TRUE)
+  select_col <- function(pattern) {
+    full_pattern <- paste0("^[A-Z]{2}", pattern, "$")
+    col <- grep(full_pattern, colnames(dataset), value = TRUE)
+    if (length(col) == 0L) {
+      msg <- paste0("The input dataset doesn't contain a `--", pattern, "` variable")
+      abort(msg)
+    } else {
+      col
+    }
+  }
 
-  stresc <- select_col("^[A-Z]{2}STRESC$")
-  stresn <- select_col("^[A-Z]{2}STRESN$")
-  stresu <- select_col("^[A-Z]{2}STRESU$")
+  stresc <- select_col("STRESC")
+  stresn <- select_col("STRESN")
+  stresu <- select_col("STRESU")
 
   mutate(
     dataset,
