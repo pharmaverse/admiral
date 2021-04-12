@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: ~/Library/Application Support/renv
+          path: ~/.local/share/renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
             ${{ runner.os }}-renv-
