@@ -99,3 +99,27 @@ warn_if_invalid_dtc <- function(dtc) {
     warn(msg3)
   }
 }
+
+#' Warn If Mapping a `PARAM` Failed
+#'
+#' Warn if a variable already exists inside a dataset
+#'
+#' @param dataset A `data.frame`
+#' @param vars `character` vector of columns to check for in `dataset`
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+warn_if_param_missing <- function(dataset, by_vars) {
+  missing_params <- dataset %>%
+    filter(PARAM == "" | is.na(PARAM)) %>%
+    select(!!!syms(by_vars), PARAM)
+
+  if (nrow(missing_params) > 0L) {
+    msg <- paste0(
+      "Mapping a `PARAM` failed for the following records:\n",
+      toString(missing_params)
+    )
+    warn(msg)
+  }
+}
