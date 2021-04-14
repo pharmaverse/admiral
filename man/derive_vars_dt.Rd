@@ -2,16 +2,24 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dt}
 \alias{derive_vars_dt}
+<<<<<<< HEAD
 \title{derive_vars_dt}
 \usage{
 derive_vars_dt(dataset, new_vars_prefix, dtc, impute = TRUE, day = 1,
   month = 1, year = "NONE", DTF = TRUE)
+=======
+\title{Derive --DT (and --DTF)}
+\usage{
+derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
+  flag_imputation = TRUE)
+>>>>>>> master
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The --DTC variable must be present.}
 
+<<<<<<< HEAD
 \item{new_vars_prefix}{Prefix used for the output variable: e.g new_vars_prefix="AST" will output ASTDT and ASTDTF}
 
 \item{dtc}{The --DTC date to impute
@@ -78,3 +86,92 @@ Other {general functions}: \code{\link{compute_imputed_dtc}},
 Samia Kabi
 }
 \concept{{general functions}}
+=======
+\item{new_vars_prefix}{Prefix used for the output variable(s)
+
+a character is expected: e.g new_vars_prefix="AST"}
+
+\item{dtc}{The --DTC date used to derive/impute --DT
+
+A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+if the year part is not recorded (missing date), no imputation is done}
+
+\item{date_imputation}{The value to impute the day/month when a datepart is missing
+
+If NULL: no date imputation is perfomed and partial dates are returned as missing
+
+Otherwise, a character value is expected, either as a
+\itemize{
+\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+}
+
+Default is NULL}
+
+\item{flag_imputation}{Whether the --DTF variable must also be derived
+
+A logical value
+
+Default: TRUE}
+}
+\description{
+Derive --DT based on --DTC. --DT is imputed based on user input
+Derive --DTF if needed based on --DTC and --DT
+}
+\examples{
+mhdt <- tibble::tribble(
+  ~MHSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+# Create ASTDT and ASTDTF
+# no imputation for partial date
+mhdt1 <- derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC
+)
+
+# Create ASTDT and ASTDTF
+# Impute partial dates to first day/month
+mhdt2 <- derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "FIRST"
+)
+
+# Impute partial dates to 4th of june
+mhdt2a <- derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "04-06"
+)
+
+# Create AENDT and AENDTF
+# Impute partial dates to last day/month
+mhdt3 <- derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "AEN",
+  dtc = MHSTDTC,
+  date_imputation = "LAST"
+)
+
+# Create BIRTHDT
+# Impute partial dates to 15th of June. No DTF
+mhdt4 <- derive_vars_dt(
+  mhdt,
+  new_vars_prefix = "BIRTH",
+  dtc = MHSTDTC,
+  date_imputation = "MID",
+  flag_imputation = FALSE
+)
+}
+>>>>>>> master
