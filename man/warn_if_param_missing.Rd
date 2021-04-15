@@ -9,7 +9,8 @@ warn_if_param_missing(dataset, by_vars)
 \arguments{
 \item{dataset}{A \code{data.frame}}
 
-\item{vars}{\code{character} vector of columns to check for in \code{dataset}}
+\item{by_vars}{\code{character} vector of columns that define the mapping to a
+\code{PARAM} value}
 }
 \description{
 Warn if a variable already exists inside a dataset
