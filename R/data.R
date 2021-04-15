@@ -60,3 +60,8 @@
 #'
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/vs.xpt}
 "vs"
+
+#' ADVS Parameter Mapping
+#'
+#' A dataset containing mappings from VS variables to ADVS `PARAM` values
+"advs_param"
