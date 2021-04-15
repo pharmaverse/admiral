@@ -26,10 +26,14 @@ Derive PARAM and PARAMCD
 data(vs)
 data(advs_param)
 
-derive_param(vs, advs_param, by_vars = c("VSTESTCD", "VSPOS"))
+vs \%>\%
+  derive_param(advs_param, by_vars = c("VSTESTCD", "VSPOS")) \%>\%
+  select(USUBJID, VSTESTCD, VSPOS, PARAM, PARAMCD, VSSTRESN)
 
 ## Disregard the `VSPOS` variable for mapping
-derive_param(vs, advs_param, by_vars = c("VSTESTCD"))
+vs \%>\%
+  derive_param(advs_param, by_vars = c("VSTESTCD")) \%>\%
+  select(USUBJID, VSTESTCD, PARAM, PARAMCD, VSSTRESN)
 }
 \author{
 Thomas Neitmann
