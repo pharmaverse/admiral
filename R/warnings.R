@@ -105,7 +105,8 @@ warn_if_invalid_dtc <- function(dtc) {
 #' Warn if a variable already exists inside a dataset
 #'
 #' @param dataset A `data.frame`
-#' @param vars `character` vector of columns to check for in `dataset`
+#' @param by_vars `character` vector of columns that define the mapping to a
+#'        `PARAM` value
 #'
 #' @author Thomas Neitmann
 #'
