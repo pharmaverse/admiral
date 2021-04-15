@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' data(vs)
 #' data(advs_param)
 #'

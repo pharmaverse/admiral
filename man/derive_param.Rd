@@ -23,6 +23,7 @@ The input dataset with additional columns \code{PARAM} and \code{PARAMCD}
 Derive PARAM and PARAMCD
 }
 \examples{
+library(dplyr)
 data(vs)
 data(advs_param)
 
