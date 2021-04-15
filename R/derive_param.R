@@ -3,12 +3,13 @@
 #' @param dataset The input dataset
 #' @param mapping A dataset containing the mapping of one or more SDTM variables
 #'        to `PARAM` and `PARAMCD`
-#' @param by_vars The variables used to join `dataset` and `mapping`
+#' @param by_vars The variables used to join `dataset` and `mapping`. By default,
+#'        these are all variables in `mapping` but `PARAM` and `PARAMCD`.
 #'
 #' @author Thomas Neitmann
 #'
-#' @return
-#' @export The input dataset with additional columns `PARAM` and `PARAMCD`
+#' @return The input dataset with additional columns `PARAM` and `PARAMCD`
+#' @export
 #'
 #' @examples
 #' data(vs)
@@ -18,7 +19,9 @@
 #'
 #' ## Disregard the `VSPOS` variable for mapping
 #' derive_param(vs, advs_param, by_vars = c("VSTESTCD"))
-derive_param <- function(dataset, mapping, by_vars) {
+derive_param <- function(dataset,
+                         mapping,
+                         by_vars = setdiff(colnames(mapping), c("PARAM", "PARAMCD"))) {
   assert_has_variables(dataset, by_vars)
   assert_has_variables(mapping, c("PARAM", "PARAMCD", by_vars))
 

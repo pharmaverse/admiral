@@ -4,7 +4,8 @@
 \alias{derive_param}
 \title{Derive PARAM and PARAMCD}
 \usage{
-derive_param(dataset, mapping, by_vars)
+derive_param(dataset, mapping, by_vars = setdiff(colnames(mapping),
+  c("PARAM", "PARAMCD")))
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -12,7 +13,11 @@ derive_param(dataset, mapping, by_vars)
 \item{mapping}{A dataset containing the mapping of one or more SDTM variables
 to \code{PARAM} and \code{PARAMCD}}
 
-\item{by_vars}{The variables used to join \code{dataset} and \code{mapping}}
+\item{by_vars}{The variables used to join \code{dataset} and \code{mapping}. By default,
+these are all variables in \code{mapping} but \code{PARAM} and \code{PARAMCD}.}
+}
+\value{
+The input dataset with additional columns \code{PARAM} and \code{PARAMCD}
 }
 \description{
 Derive PARAM and PARAMCD
