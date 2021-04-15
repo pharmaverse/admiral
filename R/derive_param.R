@@ -22,18 +22,23 @@
 derive_param <- function(dataset,
                          mapping,
                          by_vars = setdiff(colnames(mapping), c("PARAM", "PARAMCD"))) {
+  assert_that(
+    is.data.frame(dataset),
+    is.data.frame(mapping),
+    is.character(by_vars)
+  )
   assert_has_variables(dataset, by_vars)
   assert_has_variables(mapping, c("PARAM", "PARAMCD", by_vars))
 
   keys <- colnames(mapping)[!colnames(mapping) %in% c("PARAM", "PARAMCD")]
 
-  mapping <- mapping %>%
+  unique_mapping <- mapping %>%
     arrange(!!!syms(keys)) %>%
     group_by(!!!syms(by_vars)) %>%
     slice(1L) %>%
     select(PARAM, PARAMCD, !!!syms(by_vars))
 
-  result <- left_join(dataset, mapping, by = by_vars)
+  result <- left_join(dataset, unique_mapping, by = by_vars)
 
   warn_if_param_missing(result, by_vars)
 
