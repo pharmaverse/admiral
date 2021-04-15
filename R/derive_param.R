@@ -42,7 +42,9 @@ derive_param <- function(dataset,
     slice(1L) %>%
     select(PARAM, PARAMCD, !!!syms(by_vars))
 
-  result <- left_join(dataset, unique_mapping, by = by_vars)
+  # Avoid printing a warning like 'Column `xyz` has different attributes on LHS
+  # and RHS of join'
+  result <- suppressWarnings(left_join(dataset, unique_mapping, by = by_vars))
 
   warn_if_param_missing(result, by_vars)
 
