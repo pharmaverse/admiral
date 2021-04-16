@@ -4,7 +4,8 @@
 \alias{filter_extreme}
 \title{Filter out the first or last observation for each group}
 \usage{
-filter_extreme(dataset, order, by_vars, mode = "last")
+filter_extreme(dataset, order, by_vars, mode = "last",
+  check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -29,6 +30,16 @@ included in the output dataset. If \code{"last"} is specified, the last
 observation of each by group is included in the output dataset.
 
 Permitted Values:  \code{"first"}, \code{"last"}}
+
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"} or \code{"error"} is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
+
+Default: \code{"none"}
+
+Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 A dataset containing the first or last observation of each by group
@@ -43,18 +54,24 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
+library(dplyr)
+library(magrittr)
+
 data("ex")
 
 # selecting first dose for each patient
 filter_extreme(ex,
                order = rlang::exprs(EXSEQ),
                by_vars = rlang::exprs(USUBJID),
-               mode = 'first')
+               mode = 'first') \%>\%
+  select(USUBJID, EXSEQ)
 
 # selecting highest dose for each patient
 filter_extreme(ex,
                order = rlang::exprs(EXDOSE),
-               by_vars = rlang::exprs(USUBJID))
+               by_vars = rlang::exprs(USUBJID),
+               check_type = "none") \%>\%
+  select(USUBJID, EXDOSE)
 
 }
 \author{

@@ -33,11 +33,15 @@
 #' @keywords adsl timing derivation
 #'
 #' @examples
+#' library(dplyr)
+#' library(magrittr)
+#'
 #' data("ex")
 #' data("dm")
 #'
 #' derive_var_trtsdtm(dm,
-#'                    dataset_ex = ex)
+#'                    dataset_ex = ex) %>%
+#'   select(USUBJID, TRTSDTM)
 #'
 
 derive_var_trtsdtm <- function(

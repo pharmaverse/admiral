@@ -25,6 +25,16 @@
 #'
 #'   Permitted Values:  `"first"`, `"last"`
 #'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'   Default: `"none"`
+#'
+#'   Permitted Values: `"none"`, `"warning"`, `"error"`
+#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the mode specified for the
@@ -39,25 +49,33 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(magrittr)
+#'
 #' data("ex")
 #'
 #' # selecting first dose for each patient
 #' filter_extreme(ex,
 #'                order = rlang::exprs(EXSEQ),
 #'                by_vars = rlang::exprs(USUBJID),
-#'                mode = 'first')
+#'                mode = 'first') %>%
+#'   select(USUBJID, EXSEQ)
 #'
 #' # selecting highest dose for each patient
 #' filter_extreme(ex,
 #'                order = rlang::exprs(EXDOSE),
-#'                by_vars = rlang::exprs(USUBJID))
+#'                by_vars = rlang::exprs(USUBJID),
+#'                check_type = "none") %>%
+#'   select(USUBJID, EXDOSE)
 #'
 
 filter_extreme <- function(dataset,
                            order,
                            by_vars,
-                           mode = "last"){
+                           mode = "last",
+                           check_type = "warning"){
   arg_match(mode, c("first", "last"))
+  arg_match(check_type, c("none", "warning", "error"))
 
   # group and sort input dataset
   if (!missing(by_vars)){
@@ -66,12 +84,12 @@ filter_extreme <- function(dataset,
     data <- dataset %>%
       derive_obs_number(order = order,
                         by_vars = by_vars,
-                        check_type = "warning") %>%
+                        check_type = check_type) %>%
       group_by(!!!by_vars)
   }
   else{
     data <- dataset %>% derive_obs_number(order = order,
-                                          check_type = "warning")
+                                          check_type = check_type)
   }
 
   if (mode == "first"){

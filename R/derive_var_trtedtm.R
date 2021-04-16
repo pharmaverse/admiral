@@ -33,11 +33,15 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(magrittr)
+#'
 #' data("ex")
 #' data("dm")
 #'
 #' derive_var_trtedtm(dm,
-#'                    dataset_ex = ex)
+#'                    dataset_ex = ex) %>%
+#'   select(USUBJID, TRTEDTM)
 #'
 
 derive_var_trtedtm <- function(

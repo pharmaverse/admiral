@@ -63,6 +63,9 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(magrittr)
+#'
 #' data("ex")
 #' data("dm")
 #'
@@ -72,7 +75,8 @@
 #'                    filter_add = rlang::exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
 #'                    new_vars = rlang::exprs(TRTSDT := ymd(EXSTDTC)),
 #'                    filter_order = rlang::exprs(EXSTDTC, EXSEQ),
-#'                    filter_mode = "first")
+#'                    filter_mode = "first") %>%
+#'   select(USUBJID, TRTSDT)
 #'
 
 derive_merged_vars <- function(dataset,

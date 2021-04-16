@@ -68,6 +68,9 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
+library(dplyr)
+library(magrittr)
+
 data("ex")
 data("dm")
 
@@ -77,7 +80,8 @@ derive_merged_vars(dm,
                    filter_add = rlang::exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
                    new_vars = rlang::exprs(TRTSDT := ymd(EXSTDTC)),
                    filter_order = rlang::exprs(EXSTDTC, EXSEQ),
-                   filter_mode = "first")
+                   filter_mode = "first") \%>\%
+  select(USUBJID, TRTSDT)
 
 }
 \author{

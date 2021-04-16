@@ -38,11 +38,15 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
+library(dplyr)
+library(magrittr)
+
 data("ex")
 data("dm")
 
 derive_var_trtedtm(dm,
-                   dataset_ex = ex)
+                   dataset_ex = ex) \%>\%
+  select(USUBJID, TRTEDTM)
 
 }
 \author{
