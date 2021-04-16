@@ -21,8 +21,7 @@ Imports:
     magrittr,
     purrr,
     rlang,
-    stringr,
-    rlang
+    stringr
 Suggests:
     devtools,
     diffdf,

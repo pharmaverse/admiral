@@ -71,7 +71,7 @@
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
-#' @keywords general time derivation
+#' @keywords adam timing derivation
 #'
 #' @export
 #'

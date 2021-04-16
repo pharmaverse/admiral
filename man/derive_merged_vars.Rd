@@ -5,7 +5,7 @@
 \title{Merge variables from a second dataset}
 \usage{
 derive_merged_vars(dataset, dataset_add, filter_add, new_vars,
-  by_vars = exprs(USUBJID), filter_first_order)
+  by_vars = exprs(USUBJID), filter_order, filter_mode = "last")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -34,14 +34,25 @@ Permitted Values: list of name-value pairs}
 \item{by_vars}{Grouping variables
 
 Default: \code{exprs(USUBJID)}
+
 Permitted Values: list of variables}
 
-\item{filter_first_order}{Sort order
+\item{filter_order}{Sort order
 
 If the parameter is specified, the add dataset is ordered by the specified
-order and only the first observation in each by group is used for merging.
+order and only the first or last observation (depending on the filter mode)
+in each by group is used for merging.
 
 Permitted Values: list of variables or functions of variables}
+
+\item{filter_mode}{Filter mode
+
+If the \code{filter_order} parameter is specified, the filter mode determines if
+the first or last observation of each by group is selected.
+
+Default: \code{"last"}
+
+Permitted Values: \code{"first"}, \code{"last"}}
 }
 \value{
 The input dataset with variables from the add dataset
@@ -65,15 +76,12 @@ derive_merged_vars(dm,
                    dataset_add = ex,
                    filter_add = rlang::exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
                    new_vars = rlang::exprs(TRTSDT := ymd(EXSTDTC)),
-                   filter_first_order = rlang::exprs(EXSTDTC, EXSEQ))
+                   filter_order = rlang::exprs(EXSTDTC, EXSEQ),
+                   filter_mode = "first")
 
-}
-\seealso{
-Other {general functions}: \code{\link{compute_imputed_dtc}},
-  \code{\link{derive_vars_dtm}},
-  \code{\link{derive_vars_dt}}, \code{\link{filter_first}}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{{general functions}}
+\keyword{adam}
+\keyword{derivation}

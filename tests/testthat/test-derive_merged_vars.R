@@ -16,7 +16,8 @@ test_that("variable is added from the first observation in each group", {
   actual_output <- derive_merged_vars(adsl,
                                       dataset_add = adlb,
                                       new_vars = exprs(FIRSTVISN = AVISITN, FIRSTAVAL = AVAL),
-                                      filter_first_order = exprs(AVISITN, AVAL),
+                                      filter_order = exprs(AVISITN, AVAL),
+                                      filter_mode = 'first',
                                       by_vars = exprs(USUBJID))
 
   expect_dfs_equal(base = expected_output,
@@ -42,7 +43,8 @@ test_that("filter_add parameter works, all observations from dataset are kept", 
     dataset_add = adlb,
     filter_add = exprs(AVISITN == 3),
     new_vars = exprs(FIRSTAVAL = AVAL),
-    filter_first_order = exprs(desc(AVAL)),
+    filter_order = exprs(desc(AVAL)),
+    filter_mode = 'first',
     by_vars = exprs(USUBJID)
   )
 

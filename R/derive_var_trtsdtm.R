@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @keywords adsl time derivation
+#' @keywords adsl timing derivation
 #'
 #' @examples
 #' data("ex")
@@ -48,6 +48,7 @@ derive_var_trtsdtm <- function(
   derive_merged_vars(dataset,
                      dataset_add = dataset_ex,
                      filter_add = filter_ex,
-                     new_vars = exprs(TRTSDTM := dtc_dtm(impute_dtc(EXSTDTC))),
-                     filter_first_order = exprs(EXSTDTC, EXSEQ))
+                     new_vars = exprs(TRTSDTM := convert_dtc_to_dtm(impute_dtc(EXSTDTC))),
+                     filter_order = exprs(EXSTDTC, EXSEQ),
+                     filter_mode = 'first')
 }

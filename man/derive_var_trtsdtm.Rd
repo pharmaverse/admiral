@@ -50,4 +50,4 @@ Stefan Bundfuss
 }
 \keyword{adsl}
 \keyword{derivation}
-\keyword{time}
+\keyword{timing}

@@ -26,5 +26,6 @@ globalVariables(c(
   "TRTSDTM",
   "USUBJID",
   "desc",
-  "ex"
+  "ex",
+  "temp_obs_nr"
 ))

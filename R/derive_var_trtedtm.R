@@ -28,7 +28,7 @@
 #'
 #' @return The input dataset with `TRTEDTM` variable added
 #'
-#' @keywords adsl time derivation
+#' @keywords adsl timing derivation
 #'
 #' @export
 #'
@@ -49,6 +49,6 @@ derive_var_trtedtm <- function(
     dataset,
     dataset_add = dataset_ex,
     filter_add = filter_ex,
-    new_vars = exprs(TRTEDTM := dtc_dtm(impute_dtc(EXENDTC, time_imputation = 'LAST'))),
-    filter_first_order = exprs(desc(EXENDTC), desc(EXSEQ)))
+    new_vars = exprs(TRTEDTM := convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = 'LAST'))),
+    filter_order = exprs(EXENDTC, EXSEQ))
 }

@@ -27,16 +27,27 @@
 #'
 #'   Permitted Values: list of name-value pairs
 #'
-#' @param filter_first_order Sort order
+#' @param filter_order Sort order
 #'
 #'   If the parameter is specified, the add dataset is ordered by the specified
-#'   order and only the first observation in each by group is used for merging.
+#'   order and only the first or last observation (depending on the filter mode)
+#'   in each by group is used for merging.
 #'
 #'   Permitted Values: list of variables or functions of variables
+#'
+#' @param filter_mode Filter mode
+#'
+#'   If the `filter_order` parameter is specified, the filter mode determines if
+#'   the first or last observation of each by group is selected.
+#'
+#'   Default: `"last"`
+#'
+#'   Permitted Values: `"first"`, `"last"`
 #'
 #' @param by_vars Grouping variables
 #'
 #'   Default: `exprs(USUBJID)`
+#'
 #'   Permitted Values: list of variables
 #'
 #' @details For each group (with respect to the variables specified for the
@@ -47,7 +58,7 @@
 #'
 #' @return The input dataset with variables from the add dataset
 #'
-#' @family {general functions}
+#' @keywords derivation adam
 #'
 #' @export
 #'
@@ -60,7 +71,8 @@
 #'                    dataset_add = ex,
 #'                    filter_add = rlang::exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
 #'                    new_vars = rlang::exprs(TRTSDT := ymd(EXSTDTC)),
-#'                    filter_first_order = rlang::exprs(EXSTDTC, EXSEQ))
+#'                    filter_order = rlang::exprs(EXSTDTC, EXSEQ),
+#'                    filter_mode = "first")
 #'
 
 derive_merged_vars <- function(dataset,
@@ -68,9 +80,10 @@ derive_merged_vars <- function(dataset,
                                filter_add,
                                new_vars,
                                by_vars = exprs(USUBJID),
-                               filter_first_order){
-  assert_has_variables(dataset, by_vars)
-  assert_has_variables(dataset_add, by_vars)
+                               filter_order,
+                               filter_mode = "last"){
+  assert_has_variables(dataset, map_chr(by_vars, as_string))
+  assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 
   if (!missing(filter_add)){
      add <- dataset_add %>%
@@ -79,10 +92,11 @@ derive_merged_vars <- function(dataset,
   else{
     add <- dataset_add
   }
-  if (!missing(filter_first_order)){
+  if (!missing(filter_order)){
     add <- add %>%
-      filter_first(order = filter_first_order,
-                   by_vars = by_vars)
+      filter_extreme(order = filter_order,
+                     by_vars = by_vars,
+                     mode = filter_mode)
   }
   add <- add %>% transmute(!!!by_vars, !!!new_vars)
   left_join(dataset, add, by = map_chr(by_vars, as_string))

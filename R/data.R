@@ -60,3 +60,9 @@
 #'
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/vs.xpt}
 "vs"
+
+#' Subject Level Analysis Dataset
+#'
+#' An example subject level analysis dataset
+#'
+"adsl"
