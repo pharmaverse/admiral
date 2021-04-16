@@ -27,5 +27,6 @@ globalVariables(c(
   "USUBJID",
   "desc",
   "ex",
+  "idtc__",
   "temp_obs_nr"
 ))

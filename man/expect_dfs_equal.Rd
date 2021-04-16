@@ -12,7 +12,7 @@ expect_dfs_equal(base, compare, keys, ...)
 \item{compare}{Comparison dataset}
 
 \item{keys}{\code{character} vector of variables that define a unique row in the
-base and compare datasets}
+\code{base} and \code{compare} datasets}
 
 \item{...}{Additional arguments passed onto \code{\link[diffdf:diffdf]{diffdf::diffdf()}}}
 }
@@ -20,9 +20,13 @@ base and compare datasets}
 Uses \code{\link[diffdf:diffdf]{diffdf::diffdf()}} to compares 2 datasets for any differences
 }
 \examples{
+\dontrun{
 testthat::test_that("a missing row is detected", {
   data(dm)
   expect_dfs_equal(dm, dm[-1L, ], keys = "USUBJID")
 })
-
+}
+}
+\author{
+Thomas Neitmann
 }

@@ -2,117 +2,16 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dtm}
 \alias{derive_vars_dtm}
-<<<<<<< HEAD
-\title{derive_vars_dtm}
-\usage{
-derive_vars_dtm(dataset, new_vars_prefix, dtc, impute = TRUE, day = 1,
-  month = 1, year = 2020, hour = 0, min = 0, sec = 0,
-  TMF = TRUE)
-=======
 \title{Derive --DTM (and --DTF/--TMF)}
 \usage{
 derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
   time_imputation = "00:00:00", flag_imputation = TRUE)
->>>>>>> master
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The --DTC variable must be present.}
 
-<<<<<<< HEAD
-\item{new_vars_prefix}{Prefix used for the output variable: e.g new_vars_prefix="AST" will output ASTDT and ASTDTF}
-
-\item{dtc}{The --DTC date to impute
-
-A character date is expected in a format like yyy-mm-yy}
-
-\item{impute}{Whether to impute partial date or no
-
-A logical value is expected.
-
-Default: TRUE}
-
-\item{day}{The value to impute the day when day is missing
-
-Permitted Values: number from 1 to 31, text 'FIRST', 'MID', 'LAST'
-'FIRST' must be used to impute to the first day of the month
-'MID' must be used to impute to the 15th of the month
-'LAST' must be used to impute to the last day of the month
-
-Default: 1}
-
-\item{month}{the value to impute the month when month is missing
-
-Permitted Values: number from 1 to 12
-
-Default: 1}
-
-\item{year}{the value to impute the year when year is missing
-
-Permitted Values: any 4-digit number or 'NONE' if a missing date shoudl not be imputed
-
-Default: 'NONE'}
-
-\item{hour}{the value to impute the hour when time is missing
-
-Permitted Values: number from 0 to 23
-
-Default: 0}
-
-\item{min}{the value to impute the minutes when time is missing
-
-Permitted Values: number from 0 to 59
-
-Default: 0}
-
-\item{sec}{the value to impute the seconds when time is missing
-
-Permitted Values: number from 0 to 59
-
-Default: 0}
-
-\item{TMF}{Whether to add the time imputation flag
-
-A logical value is expected.
-
-Default: TRUE}
-}
-\value{
-The input dataset with --DTM (and --TMF if DTF=TRUE)
-}
-\description{
-Add --DTM/--TMF variable(s) based on --DTC
---DTM is imputed basd on user input
-}
-\examples{
-mhdt <- tibble::tribble(
-~MHSTDTC,
-"2019-07-18T15:25:40",
-"2019-07-18T15:25",
-"2019-07-18",
-"2019-02",
-"2019",
-"2019---07",
-"")
-#Derive ASTDTM and ASTTMF based on MHSTDTC - day/month are imputed to 01 by default, time is imputed to 00:00
-by defaul, missing dates are not imputed
-mhdt1<-derive_vars_dtm(mhdt,new_vars_prefix = "A", dtc=MHSTDTC)
-#Derive AENDTM and AENTMF based on MHSTDTC - day/month are imputed are imputed to the last, missing dates are not imputed
-mhdt2<-derive_vars_dtm(mhdt,new_vars_prefix = "AST", dtc=MHSTDTC, day="LAST", month=12, hour=23, min=59, sec=59)
-
-
-}
-\seealso{
-Other {general functions}: \code{\link{compute_imputed_dtc}},
-  \code{\link{derive_merged_vars}},
-  \code{\link{derive_vars_dt}}, \code{\link{filter_first}}
-}
-\author{
-Samia Kabi
-}
-\concept{{general functions}}
-=======
 \item{new_vars_prefix}{Prefix used for the output variable(s)
 
 a character is expected, e.g new_vars_prefix="AST"}
@@ -179,4 +78,6 @@ derive_vars_dtm(
   time_imputation = "FIRST"
 )
 }
->>>>>>> master
+\author{
+Samia Kabi
+}

@@ -2,91 +2,16 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dt}
 \alias{derive_vars_dt}
-<<<<<<< HEAD
-\title{derive_vars_dt}
-\usage{
-derive_vars_dt(dataset, new_vars_prefix, dtc, impute = TRUE, day = 1,
-  month = 1, year = "NONE", DTF = TRUE)
-=======
 \title{Derive --DT (and --DTF)}
 \usage{
 derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
   flag_imputation = TRUE)
->>>>>>> master
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The --DTC variable must be present.}
 
-<<<<<<< HEAD
-\item{new_vars_prefix}{Prefix used for the output variable: e.g new_vars_prefix="AST" will output ASTDT and ASTDTF}
-
-\item{dtc}{The --DTC date to impute
-
-A character date is expected in a format like yyy-mm-yy}
-
-\item{impute}{Whether to impute partial date or no
-
-A logical value is expected.
-
-Default: TRUE}
-
-\item{day}{The value to impute the day when day is missing
-
-Permitted Values: number from 1 to 31, text 'FIRST', 'MID', 'LAST'
-'FIRST' must be used to impute to the first day of the month
-'MID' must be used to impute to the 15th of the month
-'LAST' must be used to impute to the last day of the month
-
-Default: 1}
-
-\item{month}{the value to impute the month when month is missing
-
-Permitted Values: number from 1 to 12
-
-Default: 1}
-
-\item{year}{the value to impute the year when year is missing
-
-Permitted Values: any 4-digit number or 'NONE' if a missing date shoudl not be imputed
-
-Default: 'NONE'}
-
-\item{DTF}{Whether to add the date iomputation flag
-
-A logical value is expected.
-
-Default: TRUE}
-}
-\value{
-The input dataset with --DT (and --DTF if DTF=TRUE)
-}
-\description{
-Add --DT/--DTF variable(s) based on --DTC
---DT is imputed basd on user input
-}
-\examples{
-mhdt <- tibble::tribble(
-~MHSTDTC,
-"2019-07-18T15:25:40",
-"2019-07-18T15:25",
-"2019-07-18",
-"2019-02",
-"2019",
-"2019---07",
-"")
-}
-\seealso{
-Other {general functions}: \code{\link{compute_imputed_dtc}},
-  \code{\link{derive_merged_vars}},
-  \code{\link{derive_vars_dtm}}, \code{\link{filter_first}}
-}
-\author{
-Samia Kabi
-}
-\concept{{general functions}}
-=======
 \item{new_vars_prefix}{Prefix used for the output variable(s)
 
 a character is expected: e.g new_vars_prefix="AST"}
@@ -174,4 +99,6 @@ mhdt4 <- derive_vars_dt(
   flag_imputation = FALSE
 )
 }
->>>>>>> master
+\author{
+Samia Kabi
+}

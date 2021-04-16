@@ -337,6 +337,10 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' Default: TRUE
 #'
+#' @author Samia Kabi
+#'
+#' @export
+#'
 #' @examples
 #' mhdt <- tibble::tribble(
 #'   ~MHSTDTC,
@@ -473,6 +477,10 @@ derive_vars_dt <- function(dataset,
 #' The presence of a --DTF variable is checked and the variable is not derived
 #' if it already exists in the input dataset. However, if --TMF already exists
 #' in the input dataset, a warning is issued and --TMF will be overwritten
+#'
+#' @author Samia Kabi
+#'
+#' @export
 #'
 #' @examples
 #' mhdt <- tibble::tribble(
