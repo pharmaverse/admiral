@@ -1,6 +1,6 @@
 #' Derive On-Treatment Flag Variable
 #'
-#' Derive on-treatment flag (`ONTRTFL`) in an ADaM BDS dataset with a single
+#' Derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
 #' assessment date
 #'
 #' @param dataset `data.frame`.
