@@ -74,10 +74,9 @@ derive_obs_number <- function(dataset,
   if (!missing(by_vars) | !missing(order)) {
     # group and sort input dataset
     if (!missing(by_vars)) {
-      map_chr(by_vars, as_string)
-      assert_has_variables(dataset, map_chr(by_vars, as_string))
+      assert_has_variables(data, map_chr(by_vars, as_string))
 
-      data <- dataset %>% group_by(!!!by_vars) %>%
+      data <- data %>% group_by(!!!by_vars) %>%
         arrange(!!!order, .by_group = TRUE)
 
       if (check_type != "none") {
@@ -91,14 +90,14 @@ derive_obs_number <- function(dataset,
       }
     }
     else{
-      data <- dataset %>%
+      data <- data %>%
         arrange(!!!order)
 
       if (check_type != "none") {
         # check for unique records
         assert_has_unique_records(data,
                                   order = order,
-                                  message_type = "warning")
+                                  message_type = check_type)
       }
     }
   }
