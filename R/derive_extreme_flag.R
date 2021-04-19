@@ -32,6 +32,24 @@
 #'
 #'   Permitted Values: list of variables
 #'
+#' @param flag_filter Filter for flag data
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for flagging. If the parameter is not specified, all observations are
+#'   considered.
+#'
+#'   Permitted Values: a condition
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the input dataset are not unique with respect to the
+#'   by variables and the order.
+#'
+#'   Default: `"warning"`
+#'
+#'   Permitted Values: `"none"`, `"warning"`, `"error"`
+#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the flag mode) is included in
@@ -51,11 +69,13 @@
 #'
 #' data("vs")
 #'
-#' # flag last value for each patient, test, and visit
+#' # flag last value for each patient, test, and visit, baseline observations are ignored
 #' derive_extreme_flag(vs,
 #'                     new_var = LASTFL,
 #'                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
-#'                    order = rlang::exprs(VSTPTNUM)) %>%
+#'                     order = rlang::exprs(VSTPTNUM),
+#'                     flag_filter = rlang::expr(VISIT != "BASELINE")) %>%
+#'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 #'
 
@@ -64,12 +84,26 @@ derive_extreme_flag <- function(dataset,
                                 by_vars,
                                 order,
                                 mode = "last",
+                                flag_filter,
                                 check_type = "warning"){
+  # check input parameters
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
   assert_has_variables(dataset, map_chr(by_vars, as_string))
 
-  data <- dataset %>%
+  # select data to consider for flagging
+  if (!missing(flag_filter)){
+    data <- dataset %>% filter(!!flag_filter)
+    data_ignore <- dataset %>%
+      filter(!(!!flag_filter)) %>%
+      mutate(!!enquo(new_var) := "")
+  }
+  else{
+    data <- dataset
+  }
+
+  # create flag
+  data <- data %>%
     derive_obs_number(order = order,
                       by_vars = by_vars,
                       check_type = check_type)
@@ -84,5 +118,12 @@ derive_extreme_flag <- function(dataset,
       mutate(!!enquo(new_var) := if_else(temp_obs_nr == n(), "Y", "")) %>%
       ungroup()
   }
+
+  # add ignored data
+  if (!missing(flag_filter)){
+    data <- data %>% bind_rows(data_ignore)
+  }
+
+  # remove temporary variable
   data %>% select(-temp_obs_nr)
 }

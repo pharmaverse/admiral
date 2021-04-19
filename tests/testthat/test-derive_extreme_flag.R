@@ -20,7 +20,7 @@ test_that("first observation for each group is flagged", {
                expected_output)
 })
 
-test_that("last observation for each group is flagged", {
+test_that("last observation for each group is flagged, flag_filter works", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
@@ -29,11 +29,12 @@ test_that("last observation for each group is flagged", {
     3, 3, 14,
     3, 3, 10)
 
-  expected_output <- input %>% mutate(lastfl := c("", "Y", "Y", "", "Y"))
+  expected_output <- input %>% mutate(lastfl := c("", "Y", "", "", "Y"))
 
   expect_equal(derive_extreme_flag(input,
                                    new_var = lastfl,
                                    order = exprs(AVISITN, desc(AVAL)),
-                                   by_vars = exprs(USUBJID)),
+                                   by_vars = exprs(USUBJID),
+                                   flag_filter = expr(USUBJID != 2)),
                expected_output)
 })

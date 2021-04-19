@@ -5,7 +5,7 @@
 \title{Adds a variable flagging the first or last observation within each by group}
 \usage{
 derive_extreme_flag(dataset, new_var, by_vars, order, mode = "last",
-  check_type = "warning")
+  flag_filter, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -37,6 +37,24 @@ Determines of the first or last observation is flagged.
 Default: \code{"last"}
 
 Permitted Values: \code{"first"}, \code{"last"}}
+
+\item{flag_filter}{Filter for flag data
+
+Only observations fulfilling the specified condition are taken into account
+for flagging. If the parameter is not specified, all observations are
+considered.
+
+Permitted Values: a condition}
+
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"} or \code{"error"} is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
+
+Default: \code{"warning"}
+
+Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 The input dataset with the new flag variable added
@@ -56,11 +74,13 @@ library(magrittr)
 
 data("vs")
 
-# flag last value for each patient, test, and visit
+# flag last value for each patient, test, and visit, baseline observations are ignored
 derive_extreme_flag(vs,
                     new_var = LASTFL,
                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
-                   order = rlang::exprs(VSTPTNUM)) \%>\%
+                    order = rlang::exprs(VSTPTNUM),
+                    flag_filter = rlang::expr(VISIT != "BASELINE")) \%>\%
+  arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 
 }
