@@ -3,7 +3,7 @@ on:
     branches:
       - main
       - master
-      - 20_lintr
+      - 8_lintr
   pull_request:
     branches:
       - main
