@@ -283,7 +283,7 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' assertthat::assert_that(is_valid_month(20))
+#' assertthat::assert_that(is_valid_month(12))
 is_valid_month <- function(arg) {
   arg %in% 1:12
 }

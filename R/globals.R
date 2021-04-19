@@ -15,6 +15,7 @@ globalVariables(c(
   "BRTHDT",
   "PARAM",
   "PARAMCD",
+  "idtc__",
   "RANDDT",
   "TRTDURD",
   "TRTEDT",
