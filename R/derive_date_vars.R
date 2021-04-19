@@ -126,7 +126,8 @@ impute_dtc <- function(dtc,
 
     imputed_date <- case_when(
       nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d), # dates like 2021---14 - use only year part
+      # dates like 2021---14 - use only year part
+      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
       nchar(dtc) == 4 & is_valid_dtc(dtc)~ paste0(dtc, "-", mo, "-", d),
       TRUE ~ ""
@@ -134,7 +135,7 @@ impute_dtc <- function(dtc,
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
         TRUE ~ imputed_date
       )
     }
@@ -417,7 +418,7 @@ derive_vars_dt <- function(dataset,
       ),
       !!sym(dt) := convert_dtc_to_dt(dtc = idtc__)
     ) %>%
-    select(-ends_with(("__")))
+    select(-ends_with("__"))
 
   # derive DTF
   if (flag_imputation) {
@@ -525,7 +526,7 @@ derive_vars_dtm <- function(dataset,
       ),
       !!sym(dtm) := convert_dtc_to_dtm(dtc = idtc__)
     ) %>%
-    select(-ends_with(("__")))
+    select(-ends_with("__"))
 
   if (flag_imputation) {
     dtf <- paste0(new_vars_prefix, "DTF")
@@ -537,10 +538,13 @@ derive_vars_dtm <- function(dataset,
       dataset <- dataset %>%
         mutate(!!sym(dtf) := compute_dtf(dtc = !!enquo(dtc), dt = !!sym(dtm)))
     } else {
-      msg <- paste0("The ", dtf, " variable is already present in the input dataset and will not be re-derived.")
+      msg <- sprintf(
+        "The %s variable is already present in the input dataset and will not be re-derived.",
+        dtf
+      )
       inform(msg)
     }
-    # add --TMF
+    # add --TMF variable
     warn_if_vars_exist(dataset, tmf)
     dataset <- dataset %>%
       mutate(!!sym(tmf) := compute_tmf(dtc = !!enquo(dtc), dtm = !!sym(dtm)))
