@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Is Date/Date-time? — is_date • admiral</title>
+<title>Convert a --DTC to a --DT — convert_dtc_to_dt • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,9 @@
 
 
 
-<meta property="og:title" content="Is Date/Date-time? — is_date" />
+<meta property="og:title" content="Convert a --DTC to a --DT — convert_dtc_to_dt" />
 
-<meta property="og:description" content="Checks if a date or date-time vector was specified" />
+<meta property="og:description" content="Convert a complete character --DTC variable into a date object" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -124,37 +124,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Is Date/Date-time?</h1>
+    <h1>Convert a --DTC to a --DT</h1>
     
-    <div class="hidden name"><code>is_date.Rd</code></div>
+    <div class="hidden name"><code>convert_dtc_to_dt.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Checks if a date or date-time vector was specified</p>
+    <p>Convert a complete character --DTC variable into a date object</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>is_date</span>(<span class='no'>arg</span>)</pre>
+    <pre class="usage"><span class='fu'>convert_dtc_to_dt</span>(<span class='no'>dtc</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>arg</th>
-      <td><p>The argument to check</p></td>
+      <th>dtc</th>
+      <td><p>The --DTC date to convert</p>
+<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
+a partial date will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+Note: you can use impute_dtc function to build a complete date</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the argument is a date or date-time, <code>FALSE</code> otherwise</p>
+    <p>a date object</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other general functions: <code><a href='compute_dtf.html'>compute_dtf</a></code>,
+  <code><a href='compute_duration.html'>compute_duration</a></code>,
+  <code><a href='compute_tmf.html'>compute_tmf</a></code>,
+  <code><a href='convert_dtc_to_dtm.html'>convert_dtc_to_dtm</a></code>,
+  <code><a href='derive_duration.html'>derive_duration</a></code>, <code><a href='impute_dtc.html'>impute_dtc</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>refdate</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02"</span>)
-<span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-03"</span>)
-<span class='kw pkg'>assertthat</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/assertthat/man/assert_that.html'>assert_that</a></span>(<span class='fu'>is_date</span>(<span class='no'>refdate</span>), <span class='fu'>is_date</span>(<span class='no'>date</span>))</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+    <pre class="examples"><div class='input'>
+<span class='fu'>convert_dtc_to_dt</span>(<span class='st'>"2019-07-18"</span>)</div><div class='output co'>#&gt; [1] "2019-07-18"</div><div class='input'><span class='fu'>convert_dtc_to_dt</span>(<span class='st'>"2019-07"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='output co'>#&gt; [1] NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
