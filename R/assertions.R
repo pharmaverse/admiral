@@ -49,7 +49,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' records
 #'
 #' @export
-assert_has_only_one_baseline_record <- function(dataset, by) {
+assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
   is_duplicate <- duplicated(select(dataset, !!!syms(by)))
   if (any(is_duplicate)) {
     duplicates <- dataset %>%
@@ -95,7 +95,8 @@ on_failure(is_date) <- function(call, env) {
 
 #' Is Time Unit?
 #'
-#' Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours', 'minutes', or 'seconds'.
+#' Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours',
+#' 'minutes', or 'seconds'.
 #'
 #' @param arg The argument to check
 #'
