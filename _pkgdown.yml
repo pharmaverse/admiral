@@ -1,3 +1,30 @@
 template:
   params:
     bootswatch: flatly
+reference:
+- title: Derivations
+- contents:
+  - starts_with("derive")
+- title: Utilities
+- contents:
+  - starts_with("compute")
+- title: Assertions
+- contents:
+  - starts_with("assert")
+- title: Predicates
+- contents:
+  - starts_with("is")
+- title: Warnings
+- contents:
+  - starts_with("warn")
+- title: SDTM Datasets
+- contents:
+  - ae
+  - cm
+  - dm
+  - ds
+  - ex
+  - lb
+  - mh
+  - ts
+  - vs
