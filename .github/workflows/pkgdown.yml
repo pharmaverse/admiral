@@ -47,7 +47,7 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          remotes::install_version("rlang", "0.4.0")
+          remotes::install_version("rlang", "0.4.0", upgrade = "never", repos = "https://cran.rstudio.com")
         shell: Rscript {0}
 
       - name: Install package
