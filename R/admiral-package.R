@@ -1,6 +1,6 @@
 #' @keywords internal
 #' @importFrom dplyr case_when ends_with filter mutate left_join rename select
-#'             if_else arrange group_by slice
+#'             if_else arrange group_by slice anti_join pull
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort enquo inform sym syms warn
 #' @importFrom utils capture.output
