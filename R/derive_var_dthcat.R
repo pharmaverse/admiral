@@ -4,11 +4,10 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `start_date` and the `end_date` parameter are
-#'   expected.
+#'   The columns "DTHDOM" and "DTHCAUS" are expected.
 #'
-#' @details The total treatment duration is derived as the number of days from start to
-#'   end date plus one.
+#' @details The cause of death category is derived based on DTHDOM and DTHCAUS
+#'   values.
 #'
 #' @keywords Roche
 #'
