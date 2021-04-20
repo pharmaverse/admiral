@@ -21,7 +21,8 @@
 #' @param time_imputation The value to impute the time when a timepart is missing
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+#'     the start of the day
 #'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
 #'   Default is '00:00:00'
@@ -184,7 +185,8 @@ impute_dtc <- function(dtc,
 #' @param dtc The --DTC date to convert
 #'
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-#'   a partial date will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   a partial date will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'
 #'   Note: you can use impute_dtc function to build a complete date
 #'
 #' @author Samia Kabi
@@ -213,7 +215,8 @@ convert_dtc_to_dt <- function(dtc) {
 #' @param dtc The --DTC date to convert
 #'
 #'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-#'   a partial datetime will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   a partial datetime will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'
 #'   Note: you can use impute_dtc function to build a complete datetime
 #'
 #' @author Samia Kabi
@@ -463,7 +466,8 @@ derive_vars_dt <- function(dataset,
 #' @param time_imputation The value to impute the time when a timepart is missing
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+#'     the start of the day
 #'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
 #'   Default is '00:00:00'
