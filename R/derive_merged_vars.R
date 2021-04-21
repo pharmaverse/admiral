@@ -77,26 +77,23 @@
 #'                    filter_order = rlang::exprs(EXSTDTC, EXSEQ),
 #'                    filter_mode = "first") %>%
 #'   select(USUBJID, TRTSDT)
-#'
-
 derive_merged_vars <- function(dataset,
                                dataset_add,
                                filter_add,
                                new_vars,
                                by_vars = exprs(USUBJID),
                                filter_order,
-                               filter_mode = "last"){
+                               filter_mode = "last") {
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 
-  if (!missing(filter_add)){
+  if (!missing(filter_add)) {
      add <- dataset_add %>%
        filter(!!!filter_add)
-  }
-  else{
+  } else {
     add <- dataset_add
   }
-  if (!missing(filter_order)){
+  if (!missing(filter_order)) {
     add <- add %>%
       filter_extreme(order = filter_order,
                      by_vars = by_vars,
