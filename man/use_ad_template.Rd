@@ -17,7 +17,7 @@ use_ad_template(save_path, dom_name = "adsl", open = interactive())
 A helper function to create a template script.
 }
 \examples{
-use_ad_template(".", "adsl")
+use_ad_template("./ad_adsl.R", "adsl")
 }
 \author{
 Shimeng Huang

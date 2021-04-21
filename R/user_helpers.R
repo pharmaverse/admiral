@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' use_ad_template(".", "adsl")
+#' use_ad_template("./ad_adsl.R", "adsl")
 use_ad_template <- function(save_path, dom_name = "adsl", open = interactive()) {
   usethis::use_template(
     template = paste0("ad_", tolower(dom_name), ".R"),
