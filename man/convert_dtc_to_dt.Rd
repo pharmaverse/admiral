@@ -26,10 +26,9 @@ convert_dtc_to_dt("2019-07")
 }
 \seealso{
 Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
   \code{\link{compute_tmf}},
   \code{\link{convert_dtc_to_dtm}},
-  \code{\link{derive_duration}}, \code{\link{impute_dtc}}
+  \code{\link{impute_dtc}}
 }
 \author{
 Samia Kabi

@@ -65,3 +65,9 @@
 #'
 #' A dataset containing mappings from VS variables to ADVS `PARAM` values
 "advs_param"
+
+#' Subject Level Analysis Dataset
+#'
+#' An example subject level analysis dataset
+#'
+"adsl"

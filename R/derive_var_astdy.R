@@ -28,6 +28,8 @@
 #'
 #' @return The input dataset with `ASTDY` column added
 #'
+#' @keywords adam timing derivation
+#'
 #' @export
 #'
 #' @examples
