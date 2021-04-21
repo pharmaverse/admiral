@@ -100,11 +100,9 @@ idtc <- impute_dtc(
 }
 \seealso{
 Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
   \code{\link{compute_tmf}},
   \code{\link{convert_dtc_to_dtm}},
-  \code{\link{convert_dtc_to_dt}},
-  \code{\link{derive_duration}}
+  \code{\link{convert_dtc_to_dt}}
 }
 \author{
 Samia Kabi

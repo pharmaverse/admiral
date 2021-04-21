@@ -99,14 +99,10 @@ derive_duration(data,
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
-
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dtm}},
-  \code{\link{convert_dtc_to_dt}}, \code{\link{impute_dtc}}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{{general functions}}
+\keyword{adam}
+\keyword{derivation}
+\keyword{timing}
