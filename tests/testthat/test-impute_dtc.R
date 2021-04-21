@@ -50,7 +50,7 @@ test_that("default: no date imputation,Missing time part imputed with 23:59:59 p
   )
 })
 
-test_that("impute to first day/month if date is partial,Missing time part imputed with  00:00:00 portion", {
+test_that("impute to first day/month if date is partial,Missing time part imputed with  00:00:00 portion", { # nolint
   expected_output <- c(
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:40",
@@ -77,7 +77,7 @@ test_that("impute to first day/month if date is partial,Missing time part impute
   )
 })
 
-test_that("impute to last day/month if date is partial,Missing time part imputed with 23:59:59 portion", {
+test_that("impute to last day/month if date is partial,Missing time part imputed with 23:59:59 portion", { # nolint
   expected_output <- c(
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:40",
@@ -97,7 +97,7 @@ test_that("impute to last day/month if date is partial,Missing time part imputed
   )
 })
 
-test_that("impute to MID day/month if date is partial,Missing time part imputed with 00:00:00 portion", {
+test_that("impute to MID day/month if date is partial,Missing time part imputed with 00:00:00 portion", { # nolint
   expected_output <- c(
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:40",

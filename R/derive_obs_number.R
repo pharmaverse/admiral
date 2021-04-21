@@ -61,13 +61,11 @@
 #'   filter(VSTESTCD %in% c("HEIGHT", "WEIGHT")) %>%
 #'   derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
 #'                     order = exprs(VISITNUM, VSTPTNUM))
-#'
-
 derive_obs_number <- function(dataset,
                               new_var = temp_obs_nr,
                               order,
                               by_vars,
-                              check_type = "none"){
+                              check_type = "none") {
   arg_match(check_type, c("none", "warning", "error"))
   data <- dataset
 
@@ -76,7 +74,8 @@ derive_obs_number <- function(dataset,
     if (!missing(by_vars)) {
       assert_has_variables(data, map_chr(by_vars, as_string))
 
-      data <- data %>% group_by(!!!by_vars) %>%
+      data <- data %>%
+        group_by(!!!by_vars) %>%
         arrange(!!!order, .by_group = TRUE)
 
       if (check_type != "none") {
