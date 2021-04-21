@@ -97,7 +97,7 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #'                           by_vars = rlang::exprs(USUBJID) ,
 #'                           order = rlang::exprs(desc(EXENDTC)))
 
-assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = 'error') {
+assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
   # variables used for check
   all_vars <- list()
 
@@ -107,14 +107,14 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   # dataset to check (remove grouping)
   data_ext <- ungroup(dataset)
 
-  if (!missing(by_vars)){
+  if (!missing(by_vars)) {
     all_vars <- by_vars
     all_vars_msg <- by_vars
   }
-  if (!missing(order)){
+  if (!missing(order)) {
     # add order variables to the input dataset
     order_vars <- order
-    names(order_vars) <- paste0('ordvar', 1:length(order_vars))
+    names(order_vars) <- paste0("ordvar", 1:length(order_vars))
     data_ext <- data_ext %>%
       mutate(!!!order_vars)
 
@@ -123,7 +123,7 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
 
     # create list of variables for the message, order variables are displayed
     # as ordvar<n> = <expression for order>, e.g., ordvar1 = desc(VISITNUM)
-    all_vars_msg <- append(all_vars_msg, paste(names(order_vars), '=', order_vars))
+    all_vars_msg <- append(all_vars_msg, paste(names(order_vars), "=", order_vars))
   }
 
   # select variables for check
@@ -139,18 +139,18 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
     # create message
     tbl <- capture.output(print(duplicates))
     if (missing(message)) {
-      message <- paste0('Dataset contains multiple records with respect to ',
-                       paste(all_vars_msg, collapse = ', '),
-                       '.')
+      message <- paste0("Dataset contains multiple records with respect to ",
+                       paste(all_vars_msg, collapse = ", "),
+                       ".")
     }
     err_msg <- paste0(
       message,
-      '\n',
+      "\n",
       paste(tbl[-c(1, 3)], collapse = "\n")
     )
 
     # issue message
-    if (message_type == 'error'){
+    if (message_type == "error"){
       abort(err_msg)
     }
     else
