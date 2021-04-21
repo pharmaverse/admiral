@@ -114,7 +114,7 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   if (!missing(order)) {
     # add order variables to the input dataset
     order_vars <- order
-    names(order_vars) <- paste0("ordvar", 1:length(order_vars))
+    names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
     data_ext <- data_ext %>%
       mutate(!!!order_vars)
 
@@ -150,11 +150,11 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
     )
 
     # issue message
-    if (message_type == "error"){
+    if (message_type == "error") {
       abort(err_msg)
+    } else {
+      warn(err_msg)
     }
-    else
-      warning(err_msg)
   }
 }
 
