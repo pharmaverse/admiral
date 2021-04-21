@@ -47,3 +47,6 @@ derive_var_astdy(data)
 \author{
 Stefan Bundfuss
 }
+\keyword{adam}
+\keyword{derivation}
+\keyword{timing}

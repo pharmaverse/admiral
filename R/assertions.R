@@ -64,6 +64,100 @@ assert_has_only_one_baseline_record <- function(dataset, by) {
   }
 }
 
+#' Are records unique?
+#'
+#' Checks if the reords of a dateset are unique with respect to the specified
+#' list of by variables and order.
+#'
+#' @param dataset The input dataset to check
+#'
+#' @param by_vars List of by variables
+#'
+#' @param order Order of observation
+#'   If the parameter is specified, it is checked if the observations are unique
+#'   with respect to the by variables and the order. If the check fails, the
+#'   order values are written as variables in the output.
+#'
+#' @param message Error message
+#'   The message to be displayed if the check fails.
+#'
+#' @param message_type Message type
+#'   If `'error'` is specified, an error is issued if the check fails. Otherwise
+#'   an warning is issued.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#' data(ex)
+#' assert_has_unique_records(ex,
+#'                           by_vars = rlang::exprs(USUBJID) ,
+#'                           order = rlang::exprs(desc(EXENDTC)))
+
+assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = 'error') {
+  # variables used for check
+  all_vars <- list()
+
+  # variables formatted for the message
+  all_vars_msg <- list()
+
+  # dataset to check (remove grouping)
+  data_ext <- ungroup(dataset)
+
+  if (!missing(by_vars)){
+    all_vars <- by_vars
+    all_vars_msg <- by_vars
+  }
+  if (!missing(order)){
+    # add order variables to the input dataset
+    order_vars <- order
+    names(order_vars) <- paste0('ordvar', 1:length(order_vars))
+    data_ext <- data_ext %>%
+      mutate(!!!order_vars)
+
+    # add order variables to the variables for check
+    all_vars <- append(all_vars, syms(names(order_vars)))
+
+    # create list of variables for the message, order variables are displayed
+    # as ordvar<n> = <expression for order>, e.g., ordvar1 = desc(VISITNUM)
+    all_vars_msg <- append(all_vars_msg, paste(names(order_vars), '=', order_vars))
+  }
+
+  # select variables for check
+  data_by <- data_ext %>% select(!!!all_vars)
+
+  # check for duplicates
+  is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
+  if (any(is_duplicate)) {
+    # filter out duplicate observations of the input dataset
+    duplicates <- data_ext %>%
+      filter(is_duplicate)
+
+    # create message
+    tbl <- capture.output(print(duplicates))
+    if (missing(message)) {
+      message <- paste0('Dataset contains multiple records with respect to ',
+                       paste(all_vars_msg, collapse = ', '),
+                       '.')
+    }
+    err_msg <- paste0(
+      message,
+      '\n',
+      paste(tbl[-c(1, 3)], collapse = "\n")
+    )
+
+    # issue message
+    if (message_type == 'error'){
+      abort(err_msg)
+    }
+    else
+      warning(err_msg)
+  }
+}
+
 #' Is Date/Date-time?
 #'
 #' Checks if a date or date-time vector was specified

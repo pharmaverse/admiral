@@ -27,6 +27,8 @@
 #'
 #' @return The input dataset with `AENDY` column added
 #'
+#' @keywords adam timing derivation
+#'
 #' @export
 #'
 #' @examples

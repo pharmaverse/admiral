@@ -46,3 +46,5 @@ derive_var_ady(data)
 \author{
 Stefan Bundfuss
 }
+\keyword{bds}
+\keyword{timing}
