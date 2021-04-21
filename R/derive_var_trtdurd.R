@@ -26,6 +26,8 @@
 #'
 #' @return The input dataset with `TRTDURD` added
 #'
+#' @keywords adsl timing derivation
+#'
 #' @export
 #'
 #' @seealso [derive_duration()]
