@@ -127,7 +127,12 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
   )
 
   expect_error(
-    derive_baseline(input, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"), source_var = AVALC, new_var = BASEC),
+    derive_baseline(
+      input,
+      by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+      source_var = AVALC,
+      new_var = BASEC
+    ),
     "Dataset contains multiple baseline records."
   )
 })
