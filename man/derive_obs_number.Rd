@@ -66,7 +66,6 @@ vs \%>\%
   filter(VSTESTCD \%in\% c("HEIGHT", "WEIGHT")) \%>\%
   derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
                     order = exprs(VISITNUM, VSTPTNUM))
-
 }
 \author{
 Stefan Bundfuss

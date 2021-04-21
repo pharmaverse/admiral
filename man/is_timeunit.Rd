@@ -13,7 +13,8 @@ is_timeunit(arg)
 \code{TRUE} if the argument is a time unit, \code{FALSE} otherwise
 }
 \description{
-Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours', 'minutes', or 'seconds'.
+Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours',
+'minutes', or 'seconds'.
 }
 \examples{
 unit <- "days"
