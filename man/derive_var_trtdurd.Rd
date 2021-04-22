@@ -48,3 +48,6 @@ derive_var_trtdurd(data)
 \author{
 Stefan Bundfuss
 }
+\keyword{adsl}
+\keyword{derivation}
+\keyword{timing}

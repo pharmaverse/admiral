@@ -1,6 +1,7 @@
 #' Derive Analysis End Relative Day
 #'
-#' Adds the analysis end relative day (`AENDY`) to the dataset, i.e., study day of analysis end date.
+#' Adds the analysis end relative day (`AENDY`) to the dataset, i.e. study day
+#' of analysis end date
 #'
 #' @param dataset Input dataset
 #'
@@ -26,6 +27,8 @@
 #'   start date is 1.
 #'
 #' @return The input dataset with `AENDY` column added
+#'
+#' @keywords adam timing derivation
 #'
 #' @export
 #'

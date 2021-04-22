@@ -27,6 +27,8 @@
 #'
 #' @return The input dataset with `ADY` column added
 #'
+#' @keywords bds timing
+#'
 #' @export
 #'
 #' @examples

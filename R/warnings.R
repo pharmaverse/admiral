@@ -51,6 +51,7 @@ is_valid_dtc <- function(arg) {
     grepl(pattern7, arg) |
     arg == ""
 }
+
 #' Warn If a vector contains unknown datetime format
 #'
 #' Warn if the vector contains unknown datetime format such as

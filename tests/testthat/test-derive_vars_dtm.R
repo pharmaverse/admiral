@@ -103,7 +103,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
   )
 })
 
-test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59:59, no imputation flag", {
+test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59:59, no imputation flag", { # nolint
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~AENDTM,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),

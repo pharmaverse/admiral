@@ -15,9 +15,20 @@ globalVariables(c(
   "BRTHDT",
   "PARAM",
   "PARAMCD",
-  "idtc__",
+  "EXDOSE",
+  "EXENDTC",
+  "EXSEQ",
+  "EXSTDTC",
+  "EXTRT",
   "RANDDT",
   "TRTDURD",
   "TRTEDT",
-  "TRTSDT"
+  "TRTEDTM",
+  "TRTSDT",
+  "TRTSDTM",
+  "USUBJID",
+  "desc",
+  "ex",
+  "idtc__",
+  "temp_obs_nr"
 ))
