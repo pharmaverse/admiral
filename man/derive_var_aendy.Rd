@@ -4,21 +4,21 @@
 \alias{derive_var_aendy}
 \title{Derive Analysis End Relative Day}
 \usage{
-derive_var_aendy(dataset, start_date = TRTSDT, end_date = AENDT)
+derive_var_aendy(dataset, reference_date = TRTSDT, date = AENDT)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
+The columns specified by the \code{reference_date} and the \code{date} parameter are
 expected.}
 
-\item{start_date}{The start date column, e.g., date of first treatment
+\item{reference_date}{The start date column, e.g., date of first treatment
 
 A date or date-time object column is expected.
 
 The default is \code{TRTSDT}.}
 
-\item{end_date}{The end date column for which the study day should be derived
+\item{date}{The end date column for which the study day should be derived
 
 A date or date-time object column is expected.
 
@@ -28,7 +28,8 @@ The default is \code{AENDT}}
 The input dataset with \code{AENDY} column added
 }
 \description{
-Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e., study day of analysis end date.
+Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e. study day
+of analysis end date
 }
 \details{
 The study day is derived as number of days from the start date
