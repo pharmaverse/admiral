@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive Analysis Start Relative Day — derive_var_astdy • admiral</title>
+<title>Derive datetime of First Exposure to Treatment (TRTSDTM) — derive_var_trtsdtm • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,9 @@
 
 
 
-<meta property="og:title" content="Derive Analysis Start Relative Day — derive_var_astdy" />
+<meta property="og:title" content="Derive datetime of First Exposure to Treatment (TRTSDTM) — derive_var_trtsdtm" />
 
-<meta property="og:description" content="Adds the analysis start relative day (ASTDY) to the dataset, i.e., study
-day of analysis start date." />
+<meta property="og:description" content="Derives datetime of First Exposure to Treatment (TRTSDTM)" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -125,19 +124,19 @@ day of analysis start date." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive Analysis Start Relative Day</h1>
+    <h1>Derive datetime of First Exposure to Treatment (TRTSDTM)</h1>
     
-    <div class="hidden name"><code>derive_var_astdy.Rd</code></div>
+    <div class="hidden name"><code>derive_var_trtsdtm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds the analysis start relative day (<code>ASTDY</code>) to the dataset, i.e., study
-day of analysis start date.</p>
+    <p>Derives datetime of First Exposure to Treatment (TRTSDTM)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_astdy</span>(<span class='no'>dataset</span>, <span class='kw'>reference_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ASTDT</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dataset</span>, <span class='no'>dataset_ex</span>, <span class='kw'>filter_ex</span> <span class='kw'>=</span> <span class='fu'>exprs</span>((<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span>
+  (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>"PLACEBO"</span>))) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>EXSTDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,44 +144,59 @@ day of analysis start date.</p>
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The columns specified by the <code>reference_date</code> and the <code>date</code> parameter are
-expected.</p></td>
+<p>The variables specified by the <code>by_vars</code> parameter are expected.</p></td>
     </tr>
     <tr>
-      <th>reference_date</th>
-      <td><p>The start date column, e.g., date of first treatment</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>TRTSDT</code>.</p></td>
+      <th>dataset_ex</th>
+      <td><p><code>ex</code> dataset</p>
+<p>The variables <code>EXSTDTC</code>, <code>EXSEQ</code>, and those specified by the <code>filter_ex</code>
+parameter are expected.</p></td>
     </tr>
     <tr>
-      <th>date</th>
-      <td><p>The end date column for which the study day should be derived</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>ASTDT</code></p></td>
+      <th>filter_ex</th>
+      <td><p>Fiter condition for the ex dataset</p>
+<p>Only observations of the ex dataset which fulfill the specified condition
+are considered for the treatment start date.</p>
+<p>Default: <code>exprs(EXDOSE &gt; 0 | (EXDOSE == 0 &amp; str_detect(EXTRT, 'PLACEBO'))</code></p>
+<p>Permitted Values: logical expression</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with <code>ASTDY</code> column added</p>
+    <p>The input dataset with <code>TRTSDTM</code> variable added</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The study day is derived as number of days from the start date
-to the end date. If it is nonnegative, one is added. I.e., the study day of the
-start date is 1.</p>
+    <p>For each group (with respect to the variables specified for the
+<code>by_vars</code> parameter) the first observation (with respect to the order
+specified for the <code>order</code> parameter) is included in the output dataset.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>TRTSDT</span>, ~<span class='no'>ASTDT</span>,
-  <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>)
-)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
 
-<span class='fu'>derive_var_astdy</span>(<span class='no'>data</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 3
-#&gt;   TRTSDT     ASTDT      ASTDY
-#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;
-#&gt; 1 2020-01-01 2020-02-24    55</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
+
+<span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dm</span>,
+                   <span class='kw'>dataset_ex</span> <span class='kw'>=</span> <span class='no'>ex</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTSDTM</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
+#&gt;    USUBJID     TRTSDTM            
+#&gt;    &lt;chr&gt;       &lt;dttm&gt;             
+#&gt;  1 01-701-1015 2014-01-02 00:00:00
+#&gt;  2 01-701-1023 2012-08-05 00:00:00
+#&gt;  3 01-701-1028 2013-07-19 00:00:00
+#&gt;  4 01-701-1033 2014-03-18 00:00:00
+#&gt;  5 01-701-1034 2014-07-01 00:00:00
+#&gt;  6 01-701-1047 2013-02-12 00:00:00
+#&gt;  7 01-701-1057 NA                 
+#&gt;  8 01-701-1097 2014-01-01 00:00:00
+#&gt;  9 01-701-1111 2012-09-07 00:00:00
+#&gt; 10 01-701-1115 2012-11-30 00:00:00
+#&gt; # … with 296 more rows</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

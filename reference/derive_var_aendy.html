@@ -45,7 +45,8 @@
 
 <meta property="og:title" content="Derive Analysis End Relative Day — derive_var_aendy" />
 
-<meta property="og:description" content="Adds the analysis end relative day (AENDY) to the dataset, i.e., study day of analysis end date." />
+<meta property="og:description" content="Adds the analysis end relative day (AENDY) to the dataset, i.e. study day
+of analysis end date" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -131,11 +132,12 @@
 
     <div class="ref-description">
     
-    <p>Adds the analysis end relative day (<code>AENDY</code>) to the dataset, i.e., study day of analysis end date.</p>
+    <p>Adds the analysis end relative day (<code>AENDY</code>) to the dataset, i.e. study day
+of analysis end date</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_aendy</span>(<span class='no'>dataset</span>, <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>AENDT</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_var_aendy</span>(<span class='no'>dataset</span>, <span class='kw'>reference_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>AENDT</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,17 +145,17 @@
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The columns specified by the <code>start_date</code> and the <code>end_date</code> parameter are
+<p>The columns specified by the <code>reference_date</code> and the <code>date</code> parameter are
 expected.</p></td>
     </tr>
     <tr>
-      <th>start_date</th>
+      <th>reference_date</th>
       <td><p>The start date column, e.g., date of first treatment</p>
 <p>A date or date-time object column is expected.</p>
 <p>The default is <code>TRTSDT</code>.</p></td>
     </tr>
     <tr>
-      <th>end_date</th>
+      <th>date</th>
       <td><p>The end date column for which the study day should be derived</p>
 <p>A date or date-time object column is expected.</p>
 <p>The default is <code>AENDT</code></p></td>

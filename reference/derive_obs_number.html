@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive Analysis Start Relative Day — derive_var_astdy • admiral</title>
+<title>Adds a variable numbering the observations within by group — derive_obs_number • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,9 @@
 
 
 
-<meta property="og:title" content="Derive Analysis Start Relative Day — derive_var_astdy" />
+<meta property="og:title" content="Adds a variable numbering the observations within by group — derive_obs_number" />
 
-<meta property="og:description" content="Adds the analysis start relative day (ASTDY) to the dataset, i.e., study
-day of analysis start date." />
+<meta property="og:description" content="Adds a variable numbering the observations within by group" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -125,19 +124,19 @@ day of analysis start date." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive Analysis Start Relative Day</h1>
+    <h1>Adds a variable numbering the observations within by group</h1>
     
-    <div class="hidden name"><code>derive_var_astdy.Rd</code></div>
+    <div class="hidden name"><code>derive_obs_number.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds the analysis start relative day (<code>ASTDY</code>) to the dataset, i.e., study
-day of analysis start date.</p>
+    <p>Adds a variable numbering the observations within by group</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_astdy</span>(<span class='no'>dataset</span>, <span class='kw'>reference_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ASTDT</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_obs_number</span>(<span class='no'>dataset</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>temp_obs_nr</span>, <span class='no'>order</span>, <span class='no'>by_vars</span>,
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"none"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,44 +144,79 @@ day of analysis start date.</p>
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The columns specified by the <code>reference_date</code> and the <code>date</code> parameter are
+<p>The variables specified by the <code>order</code> and the <code>by_vars</code> parameter are
 expected.</p></td>
     </tr>
     <tr>
-      <th>reference_date</th>
-      <td><p>The start date column, e.g., date of first treatment</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>TRTSDT</code>.</p></td>
+      <th>new_var</th>
+      <td><p>Name of variable to create</p>
+<p>The new variable is set to the observation number for each by group. The
+numbering starts with 1.</p>
+<p>Default: <code>temp_obs_nr</code></p></td>
     </tr>
     <tr>
-      <th>date</th>
-      <td><p>The end date column for which the study day should be derived</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>ASTDT</code></p></td>
+      <th>order</th>
+      <td><p>Sort order</p>
+<p>Within each by group the observations are ordered by the specified order.</p>
+<p>Permitted Values: list of variables or functions of variables</p></td>
+    </tr>
+    <tr>
+      <th>by_vars</th>
+      <td><p>Grouping variables</p>
+<p>Permitted Values: list of variables</p></td>
+    </tr>
+    <tr>
+      <th>check_type</th>
+      <td><p>Check uniqueness?</p>
+<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.</p>
+<p>Default: <code>"none"</code></p>
+<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with <code>ASTDY</code> column added</p>
+    <p>A dataset containing all observations and variables of the input
+dataset and additionally the variable specified by the <code>new_var</code> parameter.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The study day is derived as number of days from the start date
-to the end date. If it is nonnegative, one is added. I.e., the study day of the
-start date is 1.</p>
+    <p>For each group (with respect to the variables specified for the
+<code>by_vars</code> parameter) the first or last observation (with respect to the
+order specified for the <code>order</code> parameter and the mode specified for the
+<code>mode</code> parameter) is included in the output dataset.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>TRTSDT</span>, ~<span class='no'>ASTDT</span>,
-  <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>)
-)
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rlang</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘rlang’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    set_names</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
 
-<span class='fu'>derive_var_astdy</span>(<span class='no'>data</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 3
-#&gt;   TRTSDT     ASTDT      ASTDY
-#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;
-#&gt; 1 2020-01-01 2020-02-24    55</div></pre>
+<span class='no'>vs</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>VSTESTCD</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HEIGHT"</span>, <span class='st'>"WEIGHT"</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_obs_number</span>(<span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tidyeval.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>),
+                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tidyeval.html'>exprs</a></span>(<span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>))</div><div class='output co'>#&gt; # A tibble: 2,304 x 5
+#&gt;    USUBJID     VSTESTCD VISITNUM VSTPTNUM temp_obs_nr
+#&gt;    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
+#&gt;  1 01-701-1015 HEIGHT          1       NA           1
+#&gt;  2 01-701-1015 WEIGHT          1       NA           1
+#&gt;  3 01-701-1015 WEIGHT          3       NA           2
+#&gt;  4 01-701-1015 WEIGHT          4       NA           3
+#&gt;  5 01-701-1015 WEIGHT          5       NA           4
+#&gt;  6 01-701-1015 WEIGHT          7       NA           5
+#&gt;  7 01-701-1015 WEIGHT          8       NA           6
+#&gt;  8 01-701-1015 WEIGHT          9       NA           7
+#&gt;  9 01-701-1015 WEIGHT         10       NA           8
+#&gt; 10 01-701-1015 WEIGHT         11       NA           9
+#&gt; # … with 2,294 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

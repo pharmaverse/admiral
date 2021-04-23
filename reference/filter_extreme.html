@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive Analysis Start Relative Day — derive_var_astdy • admiral</title>
+<title>Filter out the first or last observation for each group — filter_extreme • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,9 @@
 
 
 
-<meta property="og:title" content="Derive Analysis Start Relative Day — derive_var_astdy" />
+<meta property="og:title" content="Filter out the first or last observation for each group — filter_extreme" />
 
-<meta property="og:description" content="Adds the analysis start relative day (ASTDY) to the dataset, i.e., study
-day of analysis start date." />
+<meta property="og:description" content="Filters out the first or last observation for each group." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -125,19 +124,19 @@ day of analysis start date." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive Analysis Start Relative Day</h1>
+    <h1>Filter out the first or last observation for each group</h1>
     
-    <div class="hidden name"><code>derive_var_astdy.Rd</code></div>
+    <div class="hidden name"><code>filter_extreme.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds the analysis start relative day (<code>ASTDY</code>) to the dataset, i.e., study
-day of analysis start date.</p>
+    <p>Filters out the first or last observation for each group.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_astdy</span>(<span class='no'>dataset</span>, <span class='kw'>reference_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ASTDT</span>)</pre>
+    <pre class="usage"><span class='fu'>filter_extreme</span>(<span class='no'>dataset</span>, <span class='no'>order</span>, <span class='no'>by_vars</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,44 +144,96 @@ day of analysis start date.</p>
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The columns specified by the <code>reference_date</code> and the <code>date</code> parameter are
+<p>The variables specified by the <code>order</code> and the <code>by_vars</code> parameter are
 expected.</p></td>
     </tr>
     <tr>
-      <th>reference_date</th>
-      <td><p>The start date column, e.g., date of first treatment</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>TRTSDT</code>.</p></td>
+      <th>order</th>
+      <td><p>Sort order</p>
+<p>Within each by group the observations are ordered by the specified order.</p>
+<p>Permitted Values: list of variables or functions of variables</p></td>
     </tr>
     <tr>
-      <th>date</th>
-      <td><p>The end date column for which the study day should be derived</p>
-<p>A date or date-time object column is expected.</p>
-<p>The default is <code>ASTDT</code></p></td>
+      <th>by_vars</th>
+      <td><p>Grouping variables</p>
+<p>Permitted Values: list of variables</p></td>
+    </tr>
+    <tr>
+      <th>mode</th>
+      <td><p>Selection mode (first or last)</p>
+<p>If <code>"first"</code> is specified, the first observation of each by group is
+included in the output dataset. If <code>"last"</code> is specified, the last
+observation of each by group is included in the output dataset.</p>
+<p>Permitted Values:  <code>"first"</code>, <code>"last"</code></p></td>
+    </tr>
+    <tr>
+      <th>check_type</th>
+      <td><p>Check uniqueness?</p>
+<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.</p>
+<p>Default: <code>"none"</code></p>
+<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with <code>ASTDY</code> column added</p>
+    <p>A dataset containing the first or last observation of each by group</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The study day is derived as number of days from the start date
-to the end date. If it is nonnegative, one is added. I.e., the study day of the
-start date is 1.</p>
+    <p>For each group (with respect to the variables specified for the
+<code>by_vars</code> parameter) the first or last observation (with respect to the
+order specified for the <code>order</code> parameter and the mode specified for the
+<code>mode</code> parameter) is included in the output dataset.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>TRTSDT</span>, ~<span class='no'>ASTDT</span>,
-  <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>)
-)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
 
-<span class='fu'>derive_var_astdy</span>(<span class='no'>data</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 3
-#&gt;   TRTSDT     ASTDT      ASTDY
-#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;
-#&gt; 1 2020-01-01 2020-02-24    55</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
+
+<span class='co'># selecting first dose for each patient</span>
+<span class='fu'>filter_extreme</span>(<span class='no'>ex</span>,
+               <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSEQ</span>),
+               <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
+               <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>'first'</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>EXSEQ</span>)</div><div class='output co'>#&gt; # A tibble: 254 x 2
+#&gt;    USUBJID     EXSEQ
+#&gt;    &lt;chr&gt;       &lt;dbl&gt;
+#&gt;  1 01-701-1015     1
+#&gt;  2 01-701-1023     1
+#&gt;  3 01-701-1028     1
+#&gt;  4 01-701-1033     1
+#&gt;  5 01-701-1034     1
+#&gt;  6 01-701-1047     1
+#&gt;  7 01-701-1097     1
+#&gt;  8 01-701-1111     1
+#&gt;  9 01-701-1115     1
+#&gt; 10 01-701-1118     1
+#&gt; # … with 244 more rows</div><div class='input'>
+<span class='co'># selecting highest dose for each patient</span>
+<span class='fu'>filter_extreme</span>(<span class='no'>ex</span>,
+               <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span>),
+               <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
+               <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"none"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>EXDOSE</span>)</div><div class='output co'>#&gt; # A tibble: 254 x 2
+#&gt;    USUBJID     EXDOSE
+#&gt;    &lt;chr&gt;        &lt;dbl&gt;
+#&gt;  1 01-701-1015      0
+#&gt;  2 01-701-1023      0
+#&gt;  3 01-701-1028     81
+#&gt;  4 01-701-1033     54
+#&gt;  5 01-701-1034     81
+#&gt;  6 01-701-1047      0
+#&gt;  7 01-701-1097     54
+#&gt;  8 01-701-1111     54
+#&gt;  9 01-701-1115     54
+#&gt; 10 01-701-1118      0
+#&gt; # … with 244 more rows</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
