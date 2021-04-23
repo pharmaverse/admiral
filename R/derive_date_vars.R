@@ -31,6 +31,8 @@
 #'
 #' @return  a character vector
 #'
+#' @keywords computation timing
+#'
 #' @family {general functions}
 #'
 #' @export
@@ -193,6 +195,8 @@ impute_dtc <- function(dtc,
 #'
 #' @return  a date object
 #'
+#' @keywords computation timing
+#'
 #' @family {general functions}
 #'
 #' @export
@@ -222,6 +226,8 @@ convert_dtc_to_dt <- function(dtc) {
 #' @author Samia Kabi
 #'
 #' @return  a datetime  object
+#'
+#' @keywords computation timing
 #'
 #' @family {general functions}
 #'
@@ -255,6 +261,8 @@ convert_dtc_to_dtm <- function(dtc) {
 #'
 #' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
 #'
+#' @keywords computation timing
+#'
 #' @family {general functions}
 #'
 #' @export
@@ -287,6 +295,8 @@ compute_dtf <- function(dtc, dt) {
 #' @author Samia Kabi
 #'
 #' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
+#'
+#' @keywords computation timing
 #'
 #' @family {general functions}
 #'
@@ -342,6 +352,8 @@ compute_tmf <- function(dtc, dtm) {
 #' Default: TRUE
 #'
 #' @author Samia Kabi
+#'
+#' @keywords derivation timing
 #'
 #' @export
 #'
@@ -484,6 +496,8 @@ derive_vars_dt <- function(dataset,
 #' in the input dataset, a warning is issued and --TMF will be overwritten
 #'
 #' @author Samia Kabi
+#'
+#' @keywords derivation timing
 #'
 #' @export
 #'

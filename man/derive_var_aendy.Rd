@@ -28,7 +28,8 @@ The default is \code{AENDT}}
 The input dataset with \code{AENDY} column added
 }
 \description{
-Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e., study day of analysis end date.
+Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e. study day
+of analysis end date
 }
 \details{
 The study day is derived as number of days from the start date

@@ -34,3 +34,5 @@ Other {general functions}: \code{\link{compute_tmf}},
 Samia Kabi
 }
 \concept{{general functions}}
+\keyword{computation}
+\keyword{timing}

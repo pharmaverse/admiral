@@ -28,7 +28,8 @@ Default is NULL}
 
 A character value is expected, either as a
 \itemize{
-\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+the start of the day
 \item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 }
 
@@ -108,3 +109,5 @@ Other {general functions}: \code{\link{compute_dtf}},
 Samia Kabi
 }
 \concept{{general functions}}
+\keyword{computation}
+\keyword{timing}

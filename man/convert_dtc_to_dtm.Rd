@@ -10,7 +10,8 @@ convert_dtc_to_dtm(dtc)
 \item{dtc}{The --DTC date to convert
 
 A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-a partial datetime will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+a partial datetime will return a NA date and a warning will be issued:
+'All formats failed to parse. No formats found.'
 Note: you can use impute_dtc function to build a complete datetime}
 }
 \value{
@@ -33,3 +34,5 @@ Other {general functions}: \code{\link{compute_dtf}},
 Samia Kabi
 }
 \concept{{general functions}}
+\keyword{computation}
+\keyword{timing}

@@ -36,3 +36,5 @@ Other {general functions}: \code{\link{compute_dtf}},
 Samia Kabi
 }
 \concept{{general functions}}
+\keyword{computation}
+\keyword{timing}

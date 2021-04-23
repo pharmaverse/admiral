@@ -1,0 +1,105 @@
+---
+title: "Getting Started"
+author: "Stefan Bundfuss"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Main Idea
+
+The main idea of admiral is that an ADaM dataset is build by a sequence of
+derivations. Each derivation adds one ore more variables or parameters to the
+processed dataset. This modular approach makes it easy to adjust code by adding,
+removing, or modifying derivations. Each derivation is a function call. Consider
+for example the following script which creates a (very simple) ADSL dataset.
+
+```r
+library(dplyr)
+library(lubridate)
+library(admiral)
+
+# read in predecessor variables from dm
+data("dm")
+
+# read other required SDTM datasets
+data("ds")
+data("ex")
+
+# derive treatment variables (TRT01P, TRT01A)
+adsl <- dm %>%
+  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
+
+  # derive treatment start date (TRTSDTM, TRTSDT)
+  derive_var_trtsdtm(dataset_ex = ex) %>%
+  mutate(TRTSDT = date(TRTSDTM)) %>%
+
+  # derive treatment end date (TRTEDTM, TRTEDT)
+  derive_var_trtedtm(dataset_ex = ex) %>%
+  mutate(TRTEDT = date(TRTEDTM)) %>%
+
+  # derive treatment duration (TRTDURD)
+  derive_var_trtdurd()
+
+  # derive study completion/discontinuation variables
+  derive_merged_vars(
+    dataset_add = ds,
+    filter_add = exprs(DSCAT == "DISPOSITION EVENT"),
+    new_vars = exprs(
+      EOSDT = convert_dtc_to_dt(impute_dtc(DSSTDTC, date_imputation = "FIRST")),
+      EOSSTT = if_else(DSDECOD == "COMPLETED", "COMPLETED", "DISCONTINUED"),
+      DCSREAS = if_else(DSDECOD != "COMPLETED", DSDECOD, "")
+    ))
+```
+
+# Derivations
+
+The most important functions in admiral are the
+[derivations](../reference/index.html#section-derivations). These functions
+start with `derive_`. The first parameter of these expects the processed
+dataset. This allows to string together derivations using the `%>%` operator.
+
+Functions which derive a dedicated variable start with `derive_var_` followed by
+the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
+
+## Input and Output
+
+It is expected that the input dataset is not grouped. Otherwise an error is
+issued.
+
+The input dataset should not include variables starting with `temp_`. These
+variable names are reserved for temporary variable within the derivation and are
+removed from the output dataset. If the input dataset contains such variables an
+error is issued.
+
+The output dataset is ungrouped. The observations are not ordered in a dedicated
+way. In particular, the order of the observations of the input dataset may not
+be preserved.
+
+# Computations
+
+[Computations](../reference/index.html#section-computations) expect vectors as
+input and return a vector. These function can be used in expressions like
+`convert_dtc_to_dt()` and `impute_dtc()` in the derivation of `EOSDT` in the
+example above.
+
+# Validation
+
+All functions are reviewed and tested to ensure that they work as described in
+the documentation. They are **not validated** yet.
+
+Although admiral follows CDISC standard it does not claim that the dataset
+resulting from calling admiral functions is ADaM compliant. This has to be
+ensured by the user.
+
+# Support
