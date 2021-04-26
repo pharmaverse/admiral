@@ -4,21 +4,21 @@
 \alias{derive_var_astdy}
 \title{Derive Analysis Start Relative Day}
 \usage{
-derive_var_astdy(dataset, start_date = TRTSDT, end_date = ASTDT)
+derive_var_astdy(dataset, reference_date = TRTSDT, date = ASTDT)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
+The columns specified by the \code{reference_date} and the \code{date} parameter are
 expected.}
 
-\item{start_date}{The start date column, e.g., date of first treatment
+\item{reference_date}{The start date column, e.g., date of first treatment
 
 A date or date-time object column is expected.
 
 The default is \code{TRTSDT}.}
 
-\item{end_date}{The end date column for which the study day should be derived
+\item{date}{The end date column for which the study day should be derived
 
 A date or date-time object column is expected.
 
