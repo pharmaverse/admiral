@@ -5,3 +5,4 @@
 ^pkgdown$
 ^_pkgdown.yml$
 ^.github$
+^.lintr$

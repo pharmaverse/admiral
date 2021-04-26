@@ -47,7 +47,7 @@
 derive_var_trtedtm <- function(
   dataset,
   dataset_ex,
-  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)){
+  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)) { # nolint
 
   derive_merged_vars(
     dataset,
