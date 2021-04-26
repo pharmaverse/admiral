@@ -49,7 +49,7 @@ adsl <- dm %>%
   mutate(TRTEDT = date(TRTEDTM)) %>%
 
   # derive treatment duration (TRTDURD)
-  derive_var_trtdurd()
+  derive_var_trtdurd() %>%
 
   # derive study completion/discontinuation variables
   derive_merged_vars(
@@ -66,11 +66,13 @@ adsl <- dm %>%
 
 The most important functions in admiral are the
 [derivations](../reference/index.html#section-derivations). These functions
-start with `derive_`. The first parameter of these expects the processed
-dataset. This allows to string together derivations using the `%>%` operator.
+start with `derive_`. The first parameter of these functions expects the
+processed dataset. This allows to string together derivations using the `%>%`
+operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
+
 
 ## Input and Output
 
@@ -78,9 +80,9 @@ It is expected that the input dataset is not grouped. Otherwise an error is
 issued.
 
 The input dataset should not include variables starting with `temp_`. These
-variable names are reserved for temporary variable within the derivation and are
-removed from the output dataset. If the input dataset contains such variables an
-error is issued.
+variable names are reserved for temporary variable used within the derivation
+and are removed from the output dataset. If the input dataset contains such
+variables, an error is issued.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
@@ -92,6 +94,26 @@ be preserved.
 input and return a vector. These function can be used in expressions like
 `convert_dtc_to_dt()` and `impute_dtc()` in the derivation of `EOSDT` in the
 example above.
+
+# Parameters
+
+Parameters which expect variable names or expressions of variable names expect
+symbols or expressions rather than strings. The `expr()` and the `exprs()`
+function of the `rlang::` package can be used to quote expressions where
+necessary.
+
+- For parameters which expects a single variable name the name can be specified
+without quotes and quotation. For example ``new_var = TEMPBL``
+
+- For parameters which expects one or more variable names a list of symbols is
+expected. E.g., ``by_vars = exprs(PARAMCD, AVISIT)``
+
+- For parameters which expects a single expression the expression needs to be
+quoted. For examples ``filter = expr(PARAMCD == ‘TEMP’)``
+
+- For parameters which expects one or more expressions a list of expressions is
+expected. E.g., ``order = exprs(AVISIT, worst_severity(AESEV))`` or ``new_vars=
+exprs(TEMPBL = AVAL, TEMPBLU = AVALU)``.
 
 # Validation
 
