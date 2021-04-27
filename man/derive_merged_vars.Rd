@@ -82,7 +82,6 @@ derive_merged_vars(dm,
                    filter_order = rlang::exprs(EXSTDTC, EXSEQ),
                    filter_mode = "first") \%>\%
   select(USUBJID, TRTSDT)
-
 }
 \author{
 Stefan Bundfuss
