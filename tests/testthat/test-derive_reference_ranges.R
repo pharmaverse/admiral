@@ -27,7 +27,7 @@ test_that("reference ranges are mapped correctly", {
   )
 })
 
-test_that("reference ranges are mapped correctly 2", {
+test_that("implicitly missing extreme ranges are supported", {
   ref_ranges <- tibble::tribble(
     ~PARAMCD, ~ANRLO, ~ANRHI,
     "DIABP",  60,      80,
@@ -54,7 +54,7 @@ test_that("reference ranges are mapped correctly 2", {
   )
 })
 
-test_that("reference ranges are mapped correctly 3", {
+test_that("explicitly missing extreme ranges are supported", {
   ref_ranges <- tibble::tribble(
     ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
     "DIABP",  60,      80,    40,    90,
@@ -81,7 +81,7 @@ test_that("reference ranges are mapped correctly 3", {
   )
 })
 
-test_that("reference ranges are mapped correctly 4", {
+test_that("one-sided reference ranges work", {
   ref_ranges <- tibble::tribble(
     ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
     "DIABP",  60,     NA,     40,    NA,
