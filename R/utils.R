@@ -10,4 +10,4 @@ backquote <- function(x) {
   paste0("`", x, "`")
 }
 
-'%!in%' <- Negate(`%in%`)
+`%!in%` <- Negate(`%in%`)

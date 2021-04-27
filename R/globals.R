@@ -16,5 +16,6 @@ globalVariables(c(
   "RANDDT",
   "TRTDURD",
   "TRTEDT",
-  "TRTSDT"
+  "TRTSDT",
+  "ONTRTFL"
 ))

@@ -53,7 +53,7 @@
 #'
 #' @return The input dataset with an additional column named by default
 #' `ONTRTFL` with a value of Y or NA
-
+#'
 #' @export
 #'
 #' @examples
@@ -91,31 +91,26 @@ derive_var_ontrtfl <- function(dataset,
                                date,
                                ref_start_date,
                                ref_end_date = NULL,
-                               new_var = ONTRTFL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL) {
+
+   new_var <- expr(ONTRTFL)
 
    warn_if_vars_exist(
       dataset,
       c(deparse(substitute(new_var)))
    )
 
-   new_var <- enquo(new_var)
+   assert_that(
+      is.data.frame(dataset),
+      is.numeric(ref_end_window)
+   )
+   assert_has_variables(dataset, c(deparse(substitute(date)),
+                                   deparse(substitute(ref_start_date))))
+
    date <- enquo(date)
    ref_start_date <- enquo(ref_start_date)
    ref_end_date <- enquo(ref_end_date)
-
-   if (quo_text(ref_end_date) == "NULL") {
-      dataset <- dataset %>%
-         mutate(TEMP_REF_END_DATE = NA)
-   }else {
-      dataset <- dataset %>%
-         mutate(TEMP_REF_END_DATE = !!ref_end_date + days(x = ref_end_window))
-   }
-
-   #Derive On-Treatment flag
-   #Scenario 1: No treatment end date is passed
-   #Scenario 2: Treatment end date is passed, window added above
 
    dataset <- dataset %>%
       mutate(!!new_var :=
@@ -123,24 +118,28 @@ derive_var_ontrtfl <- function(dataset,
                           !is.na(!!date) & !is.na(!!ref_start_date) &
                              !!ref_start_date == !!date ~ "Y"))
 
-   if (!missing(filter_pre_timepoint)) {
+   if (!quo_is_null(enquo(filter_pre_timepoint))) {
       dataset <- dataset  %>%
          mutate(!!new_var := if_else(!!!filter_pre_timepoint, NA_character_, !!new_var))
    }
 
-   if (quo_text(ref_end_date) == "NULL") {
+   if (quo_is_null(ref_end_date)) {
+      #Scenario 1: No treatment end date is passed
       dataset <- dataset %>%
          mutate(!!new_var := if_else(!is.na(!!ref_start_date) &
-                                       !!ref_start_date < !!date,
-                                    "Y", !!new_var))
+                                        !is.na(!!date) &
+                                        !!ref_start_date < !!date,
+                                     "Y", !!new_var))
    } else {
+      #Scenario 2: Treatment end date is passed, window added above
       dataset <- dataset %>%
          mutate(!!new_var :=
-                   if_else(!is.na(!!ref_start_date) & !!ref_start_date < !!date &
-                             !is.na(TEMP_REF_END_DATE) &
-                             !!date <= TEMP_REF_END_DATE, "Y", !!new_var))
+                   if_else(!is.na(!!ref_start_date) &
+                              !is.na(!!date) & !!ref_start_date < !!date &
+                              !is.na(!!ref_end_date) &
+                              !!date <= (!!ref_end_date + days(x = !!ref_end_window)), "Y", !!new_var))
    }
 
-   dataset <- select(dataset, -TEMP_REF_END_DATE)
+   dataset
 
 }
