@@ -81,6 +81,33 @@ test_that("reference ranges are mapped correctly 3", {
   )
 })
 
+test_that("reference ranges are mapped correctly 4", {
+  ref_ranges <- tibble::tribble(
+    ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+    "DIABP",  60,     NA,     40,    NA,
+    "PUL",    NA,     100,    NA,    120
+  )
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
+    "P01",    "PUL",    1,     101,   NA,     100,    NA,    120,   "HIGH",
+    "P01",    "PUL",    2,      99,   NA,     100,    NA,    120,   "NORMAL",
+    "P01",    "PUL",    3,     123,   NA,     100,    NA,    120,   "HIGH HIGH",
+    "P01",    "DIABP",  1,     102,   60,      NA,    40,    NA,    "NORMAL",
+    "P02",    "PUL",    1,     109,   NA,     100,    NA,    120,   "HIGH",
+    "P02",    "PUL",    2,     100,   NA,     100,    NA,    120,   "NORMAL",
+    "P02",    "DIABP",  1,      58,   60,      NA,    40,    NA,    "LOW",
+    "P03",    "PUL",    1,      39,   NA,     100,    NA,    120,   "NORMAL",
+    "P03",    "PUL",    2,      40,   NA,     100,    NA,    120,   "NORMAL"
+  )
+  input <- select(expected_output, USUBJID:AVAL)
+
+  expect_dfs_equal(
+    derive_reference_ranges(input, ref_ranges),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "ASEQ")
+  )
+})
+
 test_that("a warning is issued if reference ranges are missing for a parameter", {
   ref_ranges <- tibble::tribble(
     ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,

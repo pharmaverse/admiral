@@ -9,7 +9,9 @@
 #' @details
 #' `ANRIND` is set to
 #' - `"NORMAL"` if `AVAL` is greater or equal `ANRLO` and less than
-#'   or equal `ANRHI`
+#'   or equal `ANRHI`; or if `AVAL` is greater than or equal `ANRLO` and `ANRHI`
+#'   is missing; or if `AVAL` is less than or equal `ANRHI` and `ANRLO` is
+#'   missing
 #' - `"LOW"` if `AVAL` is less than `ANRLO` and either `A1LO` is missing or `AVAL`
 #'   is greater than or equal `A1LO`
 #' - `"HIGH"` if `AVAL` is greater than `ANRHI` and either `A1HI` is missing or `AVAL`
@@ -53,19 +55,21 @@ derive_reference_ranges <- function(dataset,
 
   has_a1lo <- "A1LO" %in% colnames(meta_ref_ranges)
   has_a1hi <- "A1HI" %in% colnames(meta_ref_ranges)
-  if (!has_a1lo) meta_ref_ranges$A1LO <- NA
-  if (!has_a1hi) meta_ref_ranges$A1HI <- NA
+  if (!has_a1lo) meta_ref_ranges$A1LO <- NA_character_
+  if (!has_a1hi) meta_ref_ranges$A1HI <- NA_character_
 
   result <- dataset %>%
     left_join(meta_ref_ranges, by = by_var) %>%
     mutate(
       ANRIND = case_when(
+        AVAL >= ANRLO & is.na(ANRHI) ~ "NORMAL",
+        AVAL <= ANRHI & is.na(ANRLO) ~ "NORMAL",
         AVAL >= ANRLO & AVAL <= ANRHI ~ "NORMAL",
         AVAL < ANRLO & (is.na(A1LO) | AVAL >= A1LO) ~ "LOW",
         AVAL > ANRHI & (is.na(A1HI) | AVAL <= A1HI) ~ "HIGH",
         AVAL < A1LO ~ "LOW LOW",
         AVAL > A1HI ~ "HIGH HIGH",
-        TRUE ~ ""
+        TRUE ~ NA_character_
       )
     )
 

@@ -26,7 +26,9 @@ Derive Reference Ranges and Range Indicator
 \code{ANRIND} is set to
 \itemize{
 \item \code{"NORMAL"} if \code{AVAL} is greater or equal \code{ANRLO} and less than
-or equal \code{ANRHI}
+or equal \code{ANRHI}; or if \code{AVAL} is greater than or equal \code{ANRLO} and \code{ANRHI}
+is missing; or if \code{AVAL} is less than or equal \code{ANRHI} and \code{ANRLO} is
+missing
 \item \code{"LOW"} if \code{AVAL} is less than \code{ANRLO} and either \code{A1LO} is missing or \code{AVAL}
 is greater than or equal \code{A1LO}
 \item \code{"HIGH"} if \code{AVAL} is greater than \code{ANRHI} and either \code{A1HI} is missing or \code{AVAL}
