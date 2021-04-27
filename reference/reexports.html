@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive datetime of Last Exposure to Treatment (TRTEDTM) — derive_var_trtedtm • admiral</title>
+<title>Objects exported from other packages — reexports • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,14 @@
 
 
 
-<meta property="og:title" content="Derive datetime of Last Exposure to Treatment (TRTEDTM) — derive_var_trtedtm" />
+<meta property="og:title" content="Objects exported from other packages — reexports" />
 
-<meta property="og:description" content="Derives datetime of Last Exposure to Treatment (TRTEDTM)" />
+<meta property="og:description" content="These objects are imported from other packages. Follow the links
+below to see their documentation.
+
+  rlangexpr, exprs
+
+" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -124,79 +129,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive datetime of Last Exposure to Treatment (TRTEDTM)</h1>
+    <h1>Objects exported from other packages</h1>
     
-    <div class="hidden name"><code>derive_var_trtedtm.Rd</code></div>
+    <div class="hidden name"><code>reexports.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Derives datetime of Last Exposure to Treatment (TRTEDTM)</p>
+    <p>These objects are imported from other packages. Follow the links
+below to see their documentation.</p>
+<dl'>
+  <dt>rlang</dt><dd><p><code><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></code>, <code><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></code></p></dd>
+
+</dl>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_trtedtm</span>(<span class='no'>dataset</span>, <span class='no'>dataset_ex</span>, <span class='kw'>filter_ex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>((<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span>
-  (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>"PLACEBO"</span>))) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>EXENDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>))</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>dataset_ex</th>
-      <td><p><code>ex</code> dataset</p>
-<p>The variables <code>EXENDTC</code>, <code>EXSEQ</code>, and those specified by the <code>filter_ex</code>
-parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>filter_ex</th>
-      <td><p>Fiter condition for the ex dataset</p>
-<p>Only observations of the ex dataset which fulfill the specified condition
-are considered for the treatment start date.</p>
-<p>Default: <code>exprs(EXDOSE &gt; 0 | (EXDOSE == 0 &amp; str_detect(EXTRT, 'PLACEBO'))</code></p>
-<p>Permitted Values: logical expression</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
 
-    <p>The input dataset with <code>TRTEDTM</code> variable added</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first observation (with respect to the order
-specified for the <code>order</code> parameter) is included in the output dataset.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
-
-<span class='fu'>derive_var_trtedtm</span>(<span class='no'>dm</span>,
-                   <span class='kw'>dataset_ex</span> <span class='kw'>=</span> <span class='no'>ex</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTEDTM</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
-#&gt;    USUBJID     TRTEDTM            
-#&gt;    &lt;chr&gt;       &lt;dttm&gt;             
-#&gt;  1 01-701-1015 2014-07-02 23:59:59
-#&gt;  2 01-701-1023 2012-09-01 23:59:59
-#&gt;  3 01-701-1028 2014-01-14 23:59:59
-#&gt;  4 01-701-1033 2014-03-31 23:59:59
-#&gt;  5 01-701-1034 2014-12-30 23:59:59
-#&gt;  6 01-701-1047 2013-03-09 23:59:59
-#&gt;  7 01-701-1057 NA                 
-#&gt;  8 01-701-1097 2014-07-09 23:59:59
-#&gt;  9 01-701-1111 2012-09-16 23:59:59
-#&gt; 10 01-701-1115 2013-01-23 23:59:59
-#&gt; # … with 296 more rows</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

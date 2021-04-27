@@ -140,7 +140,7 @@ group.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_merged_vars</span>(<span class='no'>dataset</span>, <span class='no'>dataset_add</span>, <span class='no'>filter_add</span>, <span class='no'>new_vars</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'>exprs</span>(<span class='no'>USUBJID</span>), <span class='no'>filter_order</span>, <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>)</pre>
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>), <span class='no'>filter_order</span>, <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,7 +173,7 @@ the input dataset.</p>
     <tr>
       <th>by_vars</th>
       <td><p>Grouping variables</p>
-<p>Default: <code>exprs(USUBJID)</code></p>
+<p>Default: <code><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs(USUBJID)</a></code></p>
 <p>Permitted Values: list of variables</p></td>
     </tr>
     <tr>
@@ -219,9 +219,9 @@ specified for the <code>order</code> parameter) is included in the output datase
 <span class='co'># adding first treatment start date for each patient</span>
 <span class='fu'>derive_merged_vars</span>(<span class='no'>dm</span>,
                    <span class='kw'>dataset_add</span> <span class='kw'>=</span> <span class='no'>ex</span>,
-                   <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>'PLACEBO'</span>)),
-                   <span class='kw'>new_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>TRTSDT</span> <span class='kw'>:=</span> <span class='fu'>ymd</span>(<span class='no'>EXSTDTC</span>)),
-                   <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSTDTC</span>, <span class='no'>EXSEQ</span>),
+                   <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>'PLACEBO'</span>)),
+                   <span class='kw'>new_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>TRTSDT</span> <span class='kw'>:=</span> <span class='fu'>ymd</span>(<span class='no'>EXSTDTC</span>)),
+                   <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSTDTC</span>, <span class='no'>EXSEQ</span>),
                    <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"first"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTSDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
 #&gt;    USUBJID     TRTSDT    

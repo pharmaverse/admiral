@@ -135,7 +135,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dataset</span>, <span class='no'>dataset_ex</span>, <span class='kw'>filter_ex</span> <span class='kw'>=</span> <span class='fu'>exprs</span>((<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span>
+    <pre class="usage"><span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dataset</span>, <span class='no'>dataset_ex</span>, <span class='kw'>filter_ex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>((<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span>
   (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>"PLACEBO"</span>))) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>EXSTDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>

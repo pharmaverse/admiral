@@ -202,8 +202,8 @@ order specified for the <code>order</code> parameter and the mode specified for 
 <span class='no'>vs</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>VSTESTCD</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HEIGHT"</span>, <span class='st'>"WEIGHT"</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_obs_number</span>(<span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tidyeval.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>),
-                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/tidyeval.html'>exprs</a></span>(<span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>))</div><div class='output co'>#&gt; # A tibble: 2,304 x 5
+  <span class='fu'>derive_obs_number</span>(<span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>),
+                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>))</div><div class='output co'>#&gt; # A tibble: 2,304 x 5
 #&gt;    USUBJID     VSTESTCD VISITNUM VSTPTNUM temp_obs_nr
 #&gt;    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
 #&gt;  1 01-701-1015 HEIGHT          1       NA           1
