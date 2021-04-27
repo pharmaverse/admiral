@@ -1,6 +1,6 @@
 derive_var_randdt <- function(dataset,
                               dataset_ds,
-                              filter_ds = exprs(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "RANDOMIZATION"),
+                              filter_ds = expr(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "RANDOMIZATION"),
                               date_imputation = NULL) {
   derive_merged_vars(
     dataset,

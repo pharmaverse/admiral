@@ -1,7 +1,7 @@
 
 derive_var_enrldt <- function(dataset,
                               dataset_ds,
-                              filter_ds = exprs(DSDECOD == "ENROLLED"),
+                              filter_ds = expr(DSDECOD == "ENROLLED"),
                               date_imputation = NULL) {
 
 

@@ -1,7 +1,7 @@
 
 derive_var_dcsreas <- function(dataset,
                                dataset_ds,
-                               filter_ds = exprs(DSCAT == "DISPOSITION EVENT" & DSSCAT == "STUDY COMPLETION/EARLY DISCONTINUATION")) {
+                               filter_ds = expr(DSCAT == "DISPOSITION EVENT" & DSSCAT == "STUDY COMPLETION/EARLY DISCONTINUATION")) {
   derive_merged_vars(
     dataset,
     dataset_add = dataset_ds,

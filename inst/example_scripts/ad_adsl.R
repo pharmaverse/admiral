@@ -18,7 +18,7 @@ data("ds")
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ARMCD,
          #simulate date of birth
-         BRTHDTC=if_else("SEX" =="F", "1970", "1970-01-01")
+         BRTHDTC=if_else(SEX =="F", "1970", "1970-01-01")
          ) %>%
 
   # derive treatment start date (TRTSDTM, TRTSDT)
