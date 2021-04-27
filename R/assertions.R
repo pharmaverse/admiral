@@ -398,5 +398,9 @@ is_named_exprs <- function(arg) {
   is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
 }
 on_failure(is_named_exprs) <- function(call, env) {
-  paste0("Argument `", deparse(call$arg), "` is not a named list of expressions created using `exprs()`")
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a named list of expressions created using `exprs()`"
+  )
 }
