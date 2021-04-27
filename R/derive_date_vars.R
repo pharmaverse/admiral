@@ -133,7 +133,7 @@ impute_dtc <- function(dtc,
       nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
       nchar(dtc) == 4 & is_valid_dtc(dtc) ~ paste0(dtc, "-", mo, "-", d),
-      TRUE ~ as.character(NA)
+      TRUE ~ NA_character_
     )
 
     if (date_imputation == "LAST") {
@@ -146,7 +146,7 @@ impute_dtc <- function(dtc,
     # no imputation
     imputed_date <- case_when(
       nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      TRUE ~ as.character(NA)
+      TRUE ~ NA_character_
     )
   }
 
@@ -177,7 +177,7 @@ impute_dtc <- function(dtc,
     TRUE ~ imputed_time
   )
 
-  if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), as.character(NA))
+  if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), NA_character_)
 }
 
 #' Convert a --DTC to a --DT
@@ -277,7 +277,7 @@ compute_dtf <- function(dtc, dt) {
     !is.na(dt) & nchar(dtc) == 4 ~ "M",
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
     !is.na(dt) & nchar(dtc) == 9 ~ "M", # dates like "2019---07"
-    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ as.character(NA)
+    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ NA_character_
   )
 }
 
@@ -310,7 +310,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ as.character(NA),
+    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ NA_character_,
     !is.na(dtm) & nchar(dtc) == 16 ~ "S",
     !is.na(dtm) & nchar(dtc) == 13 ~ "M",
     (!is.na(dtm) & (nchar(dtc) == 10 | is_valid_dtc(dtc) == FALSE)) |
@@ -352,7 +352,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' Default: TRUE
 #'
-#' @return  the input dataset with the date --DT (and the date imputation flag --DTF) added#'
+#' @return  the input dataset with the date --DT (and the date imputation flag --DTF) added
 #'
 #' @author Samia Kabi
 #'
@@ -498,7 +498,8 @@ derive_vars_dt <- function(dataset,
 #' if it already exists in the input dataset. However, if --TMF already exists
 #' in the input dataset, a warning is issued and --TMF will be overwritten
 #'
-#' @return  the input dataset with the datetime --DTM (and the date/time imputation flag --DTF, --TMF) added
+#' @return  the input dataset with the datetime --DTM (and the date/time imputation
+#' flag --DTF, --TMF) added
 #'
 #' @author Samia Kabi
 #'
