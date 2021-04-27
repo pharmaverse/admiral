@@ -61,15 +61,15 @@ data("ex")
 
 # selecting first dose for each patient
 filter_extreme(ex,
-               order = rlang::exprs(EXSEQ),
-               by_vars = rlang::exprs(USUBJID),
+               order = exprs(EXSEQ),
+               by_vars = exprs(USUBJID),
                mode = 'first') \%>\%
   select(USUBJID, EXSEQ)
 
 # selecting highest dose for each patient
 filter_extreme(ex,
-               order = rlang::exprs(EXDOSE),
-               by_vars = rlang::exprs(USUBJID),
+               order = exprs(EXDOSE),
+               by_vars = exprs(USUBJID),
                check_type = "none") \%>\%
   select(USUBJID, EXDOSE)
 

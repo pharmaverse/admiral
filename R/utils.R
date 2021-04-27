@@ -1,3 +1,9 @@
+#' @export
+rlang::expr
+
+#'@export
+rlang::exprs
+
 enumerate <- function(x) {
   paste(
     paste0(backquote(x[-length(x)]), collapse = ", "),
