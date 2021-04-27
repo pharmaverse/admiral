@@ -51,9 +51,9 @@ Each function must use at least one of the following keywords.
 | general_utility                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
 | getadata                                                                          | A function that provides Metadata functionality.                                                                         |
 | derivation                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
-| assertion                                                                         | Returns an error message if TRUE                                                                                         |
+| assertion                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
 | warning                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
-| predicates                                                                        | returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
+| predicate                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
 | Across ADaM dataset structures keywords: ADaM                                     | A function that is applicable across ADaM datasets.                                                                      |
 | ADaM dataset structure specific keywords: ADSL, OCCDS, BDS, OTHER                 | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
 | ADaM dataset specific keywords:  ADEX, ADLB, ...                                  | A function specific to a ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
