@@ -14,7 +14,7 @@ inputdt <- c(
 )
 test_that("compute DTF", {
   expected_output <- c(
-    "",
+    NA,
     "D",
     "M",
     "M"

@@ -14,13 +14,13 @@ date <- tibble::tribble(
 test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), "", "",
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), "", "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), "", "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), "", "H",
-    "2019-02", ymd_hms(""), "", "",
-    "2019", ymd_hms(""), "", "",
-    "2019---07", ymd_hms(""), "", "",
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), as.character(NA), as.character(NA),
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), as.character(NA), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), as.character(NA), "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), as.character(NA), "H",
+    "2019-02", ymd_hms(NA), as.character(NA), as.character(NA),
+    "2019", ymd_hms(NA), as.character(NA), as.character(NA),
+    "2019---07", ymd_hms(NA), as.character(NA), as.character(NA)
   )
 
   actual_output <- derive_vars_dtm(date,
@@ -37,10 +37,10 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF",
 test_that("Partial date imputed to the first day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), "", "",
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), "", "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), "", "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), "", "H",
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), as.character(NA), as.character(NA),
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), as.character(NA), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), as.character(NA), "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), as.character(NA), "H",
     "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
@@ -70,10 +70,10 @@ test_that("Partial date imputed to the first day/month", {
 test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59:59", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~AENDTM, ~AENDTF, ~AENTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), "", "",
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59"), "", "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59"), "", "M",
-    "2019-07-18", ymd_hms("2019-07-18T23:59:59"), "", "H",
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), as.character(NA), as.character(NA),
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59"), as.character(NA), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59"), as.character(NA), "M",
+    "2019-07-18", ymd_hms("2019-07-18T23:59:59"), as.character(NA), "H",
     "2019-02", ymd_hms("2019-02-28T23:59:59"), "D", "H",
     "2019", ymd_hms("2019-12-31T23:59:59"), "M", "H",
     "2019---07", ymd_hms("2019-12-31T23:59:59"), "M", "H"
@@ -132,10 +132,10 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
 test_that("Partial date imputed to the mid day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), "", "",
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), "", "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), "", "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), "", "H",
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), as.character(NA), as.character(NA),
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), as.character(NA), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), as.character(NA), "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), as.character(NA), "H",
     "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-06-15T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
