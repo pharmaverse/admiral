@@ -12,4 +12,4 @@ An open source modular approach that provides companies and communities with a t
 
 ### Usage
 
-Please go to [Get Started](articles/admiral.html) section to start using admiral.
+Please go to [Get Started](https://roche-gsk.github.io/admiral/articles/admiral.html) section to start using admiral.
