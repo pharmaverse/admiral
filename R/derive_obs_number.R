@@ -63,15 +63,15 @@
 #'                     order = exprs(VISITNUM, VSTPTNUM))
 derive_obs_number <- function(dataset,
                               new_var = temp_obs_nr,
-                              order,
-                              by_vars,
+                              order = NULL,
+                              by_vars = NULL,
                               check_type = "none") {
   arg_match(check_type, c("none", "warning", "error"))
   data <- dataset
 
-  if (!missing(by_vars) | !missing(order)) {
+  if (!quo_is_null(enquo(by_vars)) | !quo_is_null(enquo(order))) {
     # group and sort input dataset
-    if (!missing(by_vars)) {
+    if (!quo_is_null(enquo(by_vars))) {
       assert_has_variables(data, map_chr(by_vars, as_string))
 
       data <- data %>%

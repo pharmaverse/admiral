@@ -94,7 +94,7 @@
 #' )
 derive_duration <- function(dataset,
                             new_var,
-                            new_var_unit,
+                            new_var_unit = NULL,
                             start_date,
                             end_date,
                             in_unit = "days",
@@ -123,7 +123,7 @@ derive_duration <- function(dataset,
       )
     )
 
-  if (!missing(new_var_unit)) {
+  if (!quo_is_null(enquo(new_var_unit))) {
     dataset <- dataset %>% mutate(!!enquo(new_var_unit) := toupper(out_unit))
   }
   dataset

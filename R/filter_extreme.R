@@ -71,14 +71,14 @@
 
 filter_extreme <- function(dataset,
                            order,
-                           by_vars,
+                           by_vars = NULL,
                            mode = "last",
                            check_type = "warning"){
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
 
   # group and sort input dataset
-  if (!missing(by_vars)){
+  if (!quo_is_null(enquo(by_vars))){
     assert_has_variables(dataset, map_chr(by_vars, as_string))
 
     data <- dataset %>%

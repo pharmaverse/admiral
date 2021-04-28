@@ -97,7 +97,11 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #'                           by_vars = rlang::exprs(USUBJID) ,
 #'                           order = rlang::exprs(desc(EXENDTC)))
 
-assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
+assert_has_unique_records <- function(dataset,
+                                      by_vars = NULL,
+                                      order = NULL,
+                                      message = NULL,
+                                      message_type = "error") {
   # variables used for check
   all_vars <- list()
 
@@ -107,11 +111,11 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   # dataset to check (remove grouping)
   data_ext <- ungroup(dataset)
 
-  if (!missing(by_vars)) {
+  if (!quo_is_null(enquo(by_vars))) {
     all_vars <- by_vars
     all_vars_msg <- by_vars
   }
-  if (!missing(order)) {
+  if (!quo_is_null(enquo(order))) {
     # add order variables to the input dataset
     order_vars <- order
     names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
@@ -138,7 +142,7 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
 
     # create message
     tbl <- capture.output(print(duplicates))
-    if (missing(message)) {
+    if (quo_is_null(enquo(message))) {
       message <- paste0("Dataset contains multiple records with respect to ",
                        paste(all_vars_msg, collapse = ", "),
                        ".")

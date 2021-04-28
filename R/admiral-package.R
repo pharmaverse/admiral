@@ -3,7 +3,7 @@
 #'             left_join rename row_number select slice starts_with if_else transmute
 #'             ungroup
 #' @importFrom magrittr %>%
-#' @importFrom rlang := abort arg_match as_string enquo exprs inform sym syms warn
+#' @importFrom rlang := abort arg_match as_string enquo exprs inform quo_is_null sym syms warn
 #' @importFrom utils capture.output
 #' @importFrom purrr map_chr
 #' @importFrom stringr str_c str_detect
