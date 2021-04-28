@@ -56,15 +56,15 @@
 #'
 #' # selecting first dose for each patient
 #' filter_extreme(ex,
-#'                order = rlang::exprs(EXSEQ),
-#'                by_vars = rlang::exprs(USUBJID),
+#'                order = exprs(EXSEQ),
+#'                by_vars = exprs(USUBJID),
 #'                mode = 'first') %>%
 #'   select(USUBJID, EXSEQ)
 #'
 #' # selecting highest dose for each patient
 #' filter_extreme(ex,
-#'                order = rlang::exprs(EXDOSE),
-#'                by_vars = rlang::exprs(USUBJID),
+#'                order = exprs(EXDOSE),
+#'                by_vars = exprs(USUBJID),
 #'                check_type = "none") %>%
 #'   select(USUBJID, EXDOSE)
 #'
@@ -73,7 +73,7 @@ filter_extreme <- function(dataset,
                            order,
                            by_vars = NULL,
                            mode = "last",
-                           check_type = "warning"){
+                           check_type = "warning") {
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
 
@@ -87,17 +87,17 @@ filter_extreme <- function(dataset,
                         check_type = check_type) %>%
       group_by(!!!by_vars)
   }
-  else{
+  else {
     data <- dataset %>% derive_obs_number(order = order,
                                           check_type = check_type)
   }
 
-  if (mode == "first"){
+  if (mode == "first") {
     # select first observation (for each group)
     data <- data %>%
       slice(1)
   }
-  else{
+  else {
     # select last observation (for each group)
     data <- data %>%
       slice(n())

@@ -29,9 +29,9 @@
 #'
 #' @author Samia Kabi
 #'
-#' @return  a character vector
+#' @return a character vector
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -130,8 +130,8 @@ impute_dtc <- function(dtc,
       # dates like 2021---14 - use only year part
       nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
-      nchar(dtc) == 4 & is_valid_dtc(dtc)~ paste0(dtc, "-", mo, "-", d),
-      TRUE ~ ""
+      nchar(dtc) == 4 & is_valid_dtc(dtc) ~ paste0(dtc, "-", mo, "-", d),
+      TRUE ~ NA_character_
     )
 
     if (date_imputation == "LAST") {
@@ -144,7 +144,7 @@ impute_dtc <- function(dtc,
     # no imputation
     imputed_date <- case_when(
       nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      TRUE ~ ""
+      TRUE ~ NA_character_
     )
   }
 
@@ -175,7 +175,7 @@ impute_dtc <- function(dtc,
     TRUE ~ imputed_time
   )
 
-  if_else(imputed_date != "", paste0(imputed_date, "T", imputed_time), "")
+  if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), NA_character_)
 }
 
 #' Convert a --DTC to a --DT
@@ -193,7 +193,7 @@ impute_dtc <- function(dtc,
 #'
 #' @return  a date object
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -223,7 +223,7 @@ convert_dtc_to_dt <- function(dtc) {
 #'
 #' @return  a datetime  object
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -255,11 +255,12 @@ convert_dtc_to_dtm <- function(dtc) {
 #'
 #' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
 #' @examples
+#'
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
@@ -268,7 +269,7 @@ compute_dtf <- function(dtc, dt) {
     !is.na(dt) & nchar(dtc) == 4 ~ "M",
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
     !is.na(dt) & nchar(dtc) == 9 ~ "M", # dates like "2019---07"
-    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ ""
+    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ NA_character_
   )
 }
 
@@ -288,7 +289,7 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -299,7 +300,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ "",
+    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ NA_character_,
     !is.na(dtm) & nchar(dtc) == 16 ~ "S",
     !is.na(dtm) & nchar(dtc) == 13 ~ "M",
     (!is.na(dtm) & (nchar(dtc) == 10 | is_valid_dtc(dtc) == FALSE)) |
@@ -341,7 +342,11 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' Default: TRUE
 #'
+#' @return  the input dataset with the date --DT (and the date imputation flag --DTF) added
+#'
 #' @author Samia Kabi
+#'
+#' @keywords ADaM computation timing
 #'
 #' @export
 #'
@@ -482,6 +487,9 @@ derive_vars_dt <- function(dataset,
 #' The presence of a --DTF variable is checked and the variable is not derived
 #' if it already exists in the input dataset. However, if --TMF already exists
 #' in the input dataset, a warning is issued and --TMF will be overwritten
+#'
+#' @return  the input dataset with the datetime --DTM (and the date/time imputation
+#' flag --DTF, --TMF) added
 #'
 #' @author Samia Kabi
 #'
