@@ -85,20 +85,19 @@ derive_extreme_flag <- function(dataset,
                                 order,
                                 mode = "last",
                                 flag_filter,
-                                check_type = "warning"){
+                                check_type = "warning") {
   # check input parameters
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
   assert_has_variables(dataset, map_chr(by_vars, as_string))
 
   # select data to consider for flagging
-  if (!missing(flag_filter)){
+  if (!missing(flag_filter)) {
     data <- dataset %>% filter(!!flag_filter)
     data_ignore <- dataset %>%
-      filter(!(!!flag_filter)) %>%
-      mutate(!!enquo(new_var) := "")
+      filter(!(!!flag_filter) | is.na(!!flag_filter))
   }
-  else{
+  else {
     data <- dataset
   }
 
@@ -108,19 +107,19 @@ derive_extreme_flag <- function(dataset,
                       by_vars = by_vars,
                       check_type = check_type)
 
-  if (mode == "first"){
+  if (mode == "first") {
     data <- data %>%
-      mutate(!!enquo(new_var) := if_else(temp_obs_nr == 1, "Y", ""))
+      mutate(!!enquo(new_var) := if_else(temp_obs_nr == 1, "Y", NA_character_))
   }
   else{
     data <- data %>%
       group_by(!!!by_vars) %>%
-      mutate(!!enquo(new_var) := if_else(temp_obs_nr == n(), "Y", "")) %>%
+      mutate(!!enquo(new_var) := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
   }
 
   # add ignored data
-  if (!missing(flag_filter)){
+  if (!missing(flag_filter)) {
     data <- data %>% bind_rows(data_ignore)
   }
 
