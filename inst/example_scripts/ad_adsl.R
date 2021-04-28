@@ -16,10 +16,11 @@ data("ds")
 
 # derive treatment variables (TRT01P, TRT01A)
 adsl <- dm %>%
-  mutate(TRT01P = ARMCD, TRT01A = ARMCD,
-         #simulate date of birth
-         BRTHDTC=if_else(SEX =="F", "1970", "1970-01-01")
-         ) %>%
+  mutate(
+    TRT01P = ARMCD, TRT01A = ARMCD,
+    # simulate date of birth
+    BRTHDTC = if_else(SEX == "F", "1970", "1970-01-01")
+  ) %>%
 
   # derive treatment start date (TRTSDTM, TRTSDT)
   derive_var_trtsdtm(dataset_ex = ex) %>%
@@ -32,10 +33,10 @@ adsl <- dm %>%
   # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%
 
-  #Impute date of birth as needed
+  # Impute date of birth as needed
   derive_var_brthdt() %>%
-  #Derive ade based on TRT starts
-  derive_aage(  start_date = BRTHDT,end_date = TRTSDT ) %>%
+  # Derive ade based on TRT starts
+  derive_aage(start_date = BRTHDT, end_date = TRTSDT) %>%
 
   # Derive date of IC, rando, enrollement
   # Derived by default from dataset_ds.DSSTDTC
@@ -78,8 +79,20 @@ adsl <- dm %>%
   derive_var_dcsreasp(
     dataset_ds = ds,
     filter_ds = expr(DSCAT == "DISPOSITION EVENT" & !(DSDECOD %in% c("SCREEN FAILURE")))
+  ) %>%
+
+  # Option to discuss: 1 function can derive multiple variables vs 1 function per variable
+  derive_disposition_dt(
+    dataset_ds = ds,
+    new_var = RFICDT2,
+    dtc = DSSTDTC,
+    filter = expr(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "INFORMED CONSENT OBTAINED")
+  ) %>%
+  derive_disposition_dt(
+    dataset_ds = ds,
+    new_var = FRVDT,
+    dtc = DSSTDTC,
+    filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
   )
-
-
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)

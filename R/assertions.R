@@ -1,3 +1,31 @@
+#' Does a Dataset exist?
+#'
+#' Checks if a dataset exists in the environement
+#'
+#' @param dataset A `data.frame`
+#'
+#' @author Samia Kabi
+#'
+#' @return The function throws an error if the datasets is not present
+#' in the local environment
+#'
+#' @export
+#'
+#' @examples
+#' data(dm)
+#' assert_dataset_exist("dm")
+assert_dataset_exist <- function(dataset) {
+  if (!exists(dataset)) {
+    err_msg <- paste0(
+      "dataset ",
+      dataset,
+      " does not exist."
+    )
+    abort(err_msg)
+  }
+}
+
+
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
@@ -94,9 +122,9 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' @examples
 #' data(ex)
 #' assert_has_unique_records(ex,
-#'                           by_vars = rlang::exprs(USUBJID) ,
-#'                           order = rlang::exprs(desc(EXENDTC)))
-
+#'   by_vars = rlang::exprs(USUBJID),
+#'   order = rlang::exprs(desc(EXENDTC))
+#' )
 assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
   # variables used for check
   all_vars <- list()
@@ -139,9 +167,11 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
     # create message
     tbl <- capture.output(print(duplicates))
     if (missing(message)) {
-      message <- paste0("Dataset contains multiple records with respect to ",
-                       paste(all_vars_msg, collapse = ", "),
-                       ".")
+      message <- paste0(
+        "Dataset contains multiple records with respect to ",
+        paste(all_vars_msg, collapse = ", "),
+        "."
+      )
     }
     err_msg <- paste0(
       message,
