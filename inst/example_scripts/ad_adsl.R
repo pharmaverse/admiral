@@ -93,6 +93,13 @@ adsl <- dm %>%
     new_var = FRVDT,
     dtc = DSSTDTC,
     filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
+  )%>%
+  derive_disposition_eoxxstt(
+    dataset_ds = ds,
+    new_var = EOS01STT,
+    status_var = DSDECOD,
+    filter = expr(DSCAT == "DISPOSITION EVENT" & !(DSDECOD %in% c("SCREEN FAILURE")))
   )
+
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)

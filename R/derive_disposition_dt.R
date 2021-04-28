@@ -30,6 +30,8 @@
 #'
 #'   Default is NULL
 #'
+#' @return the input dataset with the disposition date (new_var) added
+#'
 #' @author Samia Kabi
 #'
 #' @export
