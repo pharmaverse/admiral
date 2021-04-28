@@ -1,11 +1,6 @@
 context("test-derive_reference_ranges")
 
-test_that("reference ranges are mapped correctly", {
-  ref_ranges <- tibble::tribble(
-    ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-    "DIABP",  60,      80,    40,     90,
-    "PUL",    60,     100,    40,    110
-  )
+test_that("two-sided reference ranges work", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01",    "PUL",    1,      70,   60,     100,    40,    110,   "NORMAL",
@@ -18,21 +13,16 @@ test_that("reference ranges are mapped correctly", {
     "P03",    "PUL",    1,      39,   60,     100,    40,    110,   "LOW LOW",
     "P03",    "PUL",    2,      40,   60,     100,    40,    110,   "LOW"
   )
-  input <- select(expected_output, USUBJID:AVAL)
+  input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_reference_ranges(input, ref_ranges),
+    derive_var_anrind(input),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
 test_that("implicitly missing extreme ranges are supported", {
-  ref_ranges <- tibble::tribble(
-    ~PARAMCD, ~ANRLO, ~ANRHI,
-    "DIABP",  60,      80,
-    "PUL",    60,     100
-  )
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~ANRIND,
     "P01",    "PUL",    1,      70,   60,     100,    "NORMAL",
@@ -45,21 +35,16 @@ test_that("implicitly missing extreme ranges are supported", {
     "P03",    "PUL",    1,      39,   60,     100,    "LOW",
     "P03",    "PUL",    2,      40,   60,     100,    "LOW"
   )
-  input <- select(expected_output, USUBJID:AVAL)
+  input <- select(expected_output, USUBJID:ANRHI)
 
   expect_dfs_equal(
-    derive_reference_ranges(input, ref_ranges),
+    derive_var_anrind(input),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
 test_that("explicitly missing extreme ranges are supported", {
-  ref_ranges <- tibble::tribble(
-    ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-    "DIABP",  60,      80,    40,    90,
-    "PUL",    60,     100,    NA,    NA
-  )
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01",    "PUL",    1,      70,   60,     100,    NA,    NA,    "NORMAL",
@@ -72,21 +57,16 @@ test_that("explicitly missing extreme ranges are supported", {
     "P03",    "PUL",    1,      39,   60,     100,    NA,    NA,    "LOW",
     "P03",    "PUL",    2,      40,   60,     100,    NA,    NA,    "LOW"
   )
-  input <- select(expected_output, USUBJID:AVAL)
+  input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_reference_ranges(input, ref_ranges),
+    derive_var_anrind(input),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
 test_that("one-sided reference ranges work", {
-  ref_ranges <- tibble::tribble(
-    ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-    "DIABP",  60,     NA,     40,    NA,
-    "PUL",    NA,     100,    NA,    120
-  )
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01",    "PUL",    1,     101,   NA,     100,    NA,    120,   "HIGH",
@@ -99,29 +79,29 @@ test_that("one-sided reference ranges work", {
     "P03",    "PUL",    1,      39,   NA,     100,    NA,    120,   "NORMAL",
     "P03",    "PUL",    2,      40,   NA,     100,    NA,    120,   "NORMAL"
   )
-  input <- select(expected_output, USUBJID:AVAL)
+  input <- select(expected_output, USUBJID:A1HI)
 
   expect_dfs_equal(
-    derive_reference_ranges(input, ref_ranges),
+    derive_var_anrind(input),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "ASEQ")
   )
 })
 
-test_that("a warning is issued if reference ranges are missing for a parameter", {
-  ref_ranges <- tibble::tribble(
-    ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-    "DIABP",  60,      80,    40,     90
-  )
-  input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,
-    "P01",    "PUL",    1,      70,
-    "P01",    "TEMP",   1,      36.8,
-    "P02",    "DIABP",  1,      80
-  )
-
-  expect_warning(
-    derive_reference_ranges(input, ref_ranges),
-    "Reference ranges are missing for the following `PARAMCD`: 'PUL' and 'TEMP'"
-  )
-})
+# test_that("a warning is issued if reference ranges are missing for a parameter", {
+#   ref_ranges <- tibble::tribble(
+#     ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+#     "DIABP",  60,      80,    40,     90
+#   )
+#   input <- tibble::tribble(
+#     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,
+#     "P01",    "PUL",    1,      70,
+#     "P01",    "TEMP",   1,      36.8,
+#     "P02",    "DIABP",  1,      80
+#   )
+#
+#   expect_warning(
+#     derive_reference_ranges(input, ref_ranges),
+#     "Reference ranges are missing for the following `PARAMCD`: 'PUL' and 'TEMP'"
+#   )
+# })

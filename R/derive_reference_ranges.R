@@ -1,10 +1,6 @@
-#' Derive Reference Ranges and Range Indicator
+#' Derive Reference Range Indicator
 #'
 #' @param dataset The input dataset
-#' @param meta_ref_ranges A dataset containing the references ranges. Required
-#'        variables are `by_var`, `ANRLO`, `ANRHI`. `A1LO` and `A1HI` are optional.
-#' @param by_var A `character` vector of variables by which to join `dataset` and
-#'        `meta_ref_ranges`. By default, `"PARAMCD"`.
 #'
 #' @details
 #' `ANRIND` is set to
@@ -19,8 +15,7 @@
 #' - `"LOW LOW"` if `AVAL` is less than `A1LO`
 #' - `"HIGH HIGH"` if `AVAL` is greater than `A1HI`
 #'
-#' @return The input dataset with additional columns `ANRLO`, `ANRHI`, `ANRIND`
-#'         and---if present in `meta_ref_ranges`---`A1LO` as well as `A1HI`
+#' @return The input dataset with additional column `ANRIND`
 #' @export
 #'
 #' @examples
@@ -38,28 +33,20 @@
 #'     AVAL = VSSTRESN
 #'   ) %>%
 #'   filter(PARAMCD %in% c("PULSE", "DIABP")) %>%
-#'   derive_reference_ranges(ref_ranges) %>%
+#'   left_join(ref_ranges, by = "PARAMCD") %>%
+#'   derive_var_anrind() %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
-derive_reference_ranges <- function(dataset,
-                                    meta_ref_ranges,
-                                    by_var = "PARAMCD") {
-  assert_that(
-    is.data.frame(dataset),
-    is.data.frame(meta_ref_ranges),
-    is.character(by_var)
-  )
-  assert_has_variables(dataset, by_var)
-  assert_has_variables(meta_ref_ranges, c(by_var, "ANRLO", "ANRHI"))
+derive_var_anrind <- function(dataset) {
+  assert_that(is.data.frame(dataset))
+  assert_has_variables(dataset, c("ANRLO", "ANRHI"))
 
-  warn_if_ref_ranges_missing(dataset, meta_ref_ranges, by_var)
-
-  has_a1lo <- "A1LO" %in% colnames(meta_ref_ranges)
-  has_a1hi <- "A1HI" %in% colnames(meta_ref_ranges)
-  if (!has_a1lo) meta_ref_ranges$A1LO <- NA_character_
-  if (!has_a1hi) meta_ref_ranges$A1HI <- NA_character_
+  # Temporarily add these variables to the dataset if they are not included
+  has_a1lo <- "A1LO" %in% colnames(dataset)
+  has_a1hi <- "A1HI" %in% colnames(dataset)
+  if (!has_a1lo) dataset$A1LO <- NA_character_
+  if (!has_a1hi) dataset$A1HI <- NA_character_
 
   result <- dataset %>%
-    left_join(meta_ref_ranges, by = by_var) %>%
     mutate(
       ANRIND = case_when(
         AVAL >= ANRLO & is.na(ANRHI) ~ "NORMAL",
@@ -73,6 +60,7 @@ derive_reference_ranges <- function(dataset,
       )
     )
 
+  # Remove the variables if they have been added above
   if (!has_a1lo) result$A1LO <- NULL
   if (!has_a1hi) result$A1HI <- NULL
 
