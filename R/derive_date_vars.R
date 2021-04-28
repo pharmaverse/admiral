@@ -29,9 +29,7 @@
 #'
 #' @author Samia Kabi
 #'
-#' @return  a character vector
-#'
-#' @family {general functions}
+#' @return a character vector
 #'
 #' @keywords computation timing
 #'
@@ -195,8 +193,6 @@ impute_dtc <- function(dtc,
 #'
 #' @return  a date object
 #'
-#' @family {general functions}
-#'
 #' @keywords computation timing
 #'
 #' @export
@@ -227,10 +223,8 @@ convert_dtc_to_dt <- function(dtc) {
 #'
 #' @return  a datetime  object
 #'
-#' @family {general functions}
-#'
 #' @keywords computation timing
-#' #'
+#'
 #' @export
 #'
 #' @examples
@@ -260,8 +254,6 @@ convert_dtc_to_dtm <- function(dtc) {
 #' @author Samia Kabi
 #'
 #' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
-#'
-#' @family {general functions}
 #'
 #' @keywords computation timing
 #'
@@ -296,8 +288,6 @@ compute_dtf <- function(dtc, dt) {
 #' @author Samia Kabi
 #'
 #' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
-#'
-#' @family {general functions}
 #'
 #' @keywords computation timing
 #'
