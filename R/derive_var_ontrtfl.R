@@ -56,19 +56,18 @@
 #' @examples
 #' library(lubridate)
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL
+#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL,
 #'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
-#'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01"), "N")
+#'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01"), "N"
 #' )
-#' #' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT,
-#'                       ref_end_date = TRTEDT)
+#' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT, ref_end_date = TRTEDT)
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL
+#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL,
 #'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"), "N",
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
-#'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), "Y")
+#'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), "Y"
 #' )
 #' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT,
 #'                    ref_end_date = TRTEDT, ref_end_window=60)
