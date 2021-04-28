@@ -10,7 +10,8 @@ convert_dtc_to_dtm(dtc)
 \item{dtc}{The --DTC date to convert
 
 A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-a partial datetime will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+a partial datetime will return a NA date and a warning will be issued:
+'All formats failed to parse. No formats found.'
 Note: you can use impute_dtc function to build a complete datetime}
 }
 \value{
@@ -24,14 +25,6 @@ convert_dtc_to_dtm("2019-07-18T15:25:00")
 convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 convert_dtc_to_dtm("2019-07-18")
 }
-\seealso{
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dt}},
-  \code{\link{derive_duration}}, \code{\link{impute_dtc}}
-}
 \author{
 Samia Kabi
 }
-\concept{{general functions}}

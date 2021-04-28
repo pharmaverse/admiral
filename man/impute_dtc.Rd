@@ -28,7 +28,8 @@ Default is NULL}
 
 A character value is expected, either as a
 \itemize{
-\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+the start of the day
 \item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 }
 
@@ -98,15 +99,6 @@ idtc <- impute_dtc(
   date_imputation = "MID"
 )
 }
-\seealso{
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dtm}},
-  \code{\link{convert_dtc_to_dt}},
-  \code{\link{derive_duration}}
-}
 \author{
 Samia Kabi
 }
-\concept{{general functions}}

@@ -10,7 +10,8 @@ convert_dtc_to_dt(dtc)
 \item{dtc}{The --DTC date to convert
 
 A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-a partial date will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+a partial date will return a NA date and a warning will be issued:
+'All formats failed to parse. No formats found.'
 Note: you can use impute_dtc function to build a complete date}
 }
 \value{
@@ -24,14 +25,6 @@ Convert a complete character --DTC variable into a date object
 convert_dtc_to_dt("2019-07-18")
 convert_dtc_to_dt("2019-07")
 }
-\seealso{
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dtm}},
-  \code{\link{derive_duration}}, \code{\link{impute_dtc}}
-}
 \author{
 Samia Kabi
 }
-\concept{{general functions}}

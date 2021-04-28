@@ -17,3 +17,31 @@ reference:
 - title: Warnings
 - contents:
   - starts_with("warn")
+- title: SDTM Datasets
+- contents:
+  - ae
+  - cm
+  - dm
+  - ds
+  - ex
+  - lb
+  - mh
+  - ts
+  - vs
+- title: CDISC Hierarchy
+- subtitle: ADaM
+  desc: General functions which can be used for any ADaM dataset
+  contents:
+  - has_keyword('adam')
+- subtitle: BDS
+  desc: BDS specific functions
+  contents:
+  - has_keyword('bds')
+- subtitle: ADSL
+  desc: Functions specific for ADSL
+  contents:
+  - has_keyword('adsl')
+- title: Timing
+  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
+  contents:
+  - has_keyword('timing')

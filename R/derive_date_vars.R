@@ -21,16 +21,17 @@
 #' @param time_imputation The value to impute the time when a timepart is missing
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+#'     the start of the day
 #'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
 #'   Default is '00:00:00'
 #'
 #' @author Samia Kabi
 #'
-#' @return  a character vector
+#' @return a character vector
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -126,15 +127,16 @@ impute_dtc <- function(dtc,
 
     imputed_date <- case_when(
       nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d), # dates like 2021---14 - use only year part
+      # dates like 2021---14 - use only year part
+      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
-      nchar(dtc) == 4 & is_valid_dtc(dtc)~ paste0(dtc, "-", mo, "-", d),
-      TRUE ~ ""
+      nchar(dtc) == 4 & is_valid_dtc(dtc) ~ paste0(dtc, "-", mo, "-", d),
+      TRUE ~ NA_character_
     )
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
         TRUE ~ imputed_date
       )
     }
@@ -142,7 +144,7 @@ impute_dtc <- function(dtc,
     # no imputation
     imputed_date <- case_when(
       nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      TRUE ~ ""
+      TRUE ~ NA_character_
     )
   }
 
@@ -173,7 +175,7 @@ impute_dtc <- function(dtc,
     TRUE ~ imputed_time
   )
 
-  if_else(imputed_date != "", paste0(imputed_date, "T", imputed_time), "")
+  if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), NA_character_)
 }
 
 #' Convert a --DTC to a --DT
@@ -183,14 +185,15 @@ impute_dtc <- function(dtc,
 #' @param dtc The --DTC date to convert
 #'
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-#'   a partial date will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   a partial date will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'
 #'   Note: you can use impute_dtc function to build a complete date
 #'
 #' @author Samia Kabi
 #'
 #' @return  a date object
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -212,14 +215,15 @@ convert_dtc_to_dt <- function(dtc) {
 #' @param dtc The --DTC date to convert
 #'
 #'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-#'   a partial datetime will return a NA date and a warning will be issued: 'All formats failed to parse. No formats found.'
+#'   a partial datetime will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'
 #'   Note: you can use impute_dtc function to build a complete datetime
 #'
 #' @author Samia Kabi
 #'
 #' @return  a datetime  object
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -251,11 +255,12 @@ convert_dtc_to_dtm <- function(dtc) {
 #'
 #' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
 #' @examples
+#'
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
@@ -264,7 +269,7 @@ compute_dtf <- function(dtc, dt) {
     !is.na(dt) & nchar(dtc) == 4 ~ "M",
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
     !is.na(dt) & nchar(dtc) == 9 ~ "M", # dates like "2019---07"
-    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ ""
+    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ NA_character_
   )
 }
 
@@ -284,7 +289,7 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
 #'
-#' @family {general functions}
+#' @keywords computation timing
 #'
 #' @export
 #'
@@ -295,7 +300,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ "",
+    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ NA_character_,
     !is.na(dtm) & nchar(dtc) == 16 ~ "S",
     !is.na(dtm) & nchar(dtc) == 13 ~ "M",
     (!is.na(dtm) & (nchar(dtc) == 10 | is_valid_dtc(dtc) == FALSE)) |
@@ -336,6 +341,14 @@ compute_tmf <- function(dtc, dtm) {
 #' A logical value
 #'
 #' Default: TRUE
+#'
+#' @return  the input dataset with the date --DT (and the date imputation flag --DTF) added
+#'
+#' @author Samia Kabi
+#'
+#' @keywords ADaM computation timing
+#'
+#' @export
 #'
 #' @examples
 #' mhdt <- tibble::tribble(
@@ -413,7 +426,7 @@ derive_vars_dt <- function(dataset,
       ),
       !!sym(dt) := convert_dtc_to_dt(dtc = idtc__)
     ) %>%
-    select(-ends_with(("__")))
+    select(-ends_with("__"))
 
   # derive DTF
   if (flag_imputation) {
@@ -458,7 +471,8 @@ derive_vars_dt <- function(dataset,
 #' @param time_imputation The value to impute the time when a timepart is missing
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for the start of the day
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
+#'     the start of the day
 #'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
 #'
 #'   Default is '00:00:00'
@@ -473,6 +487,13 @@ derive_vars_dt <- function(dataset,
 #' The presence of a --DTF variable is checked and the variable is not derived
 #' if it already exists in the input dataset. However, if --TMF already exists
 #' in the input dataset, a warning is issued and --TMF will be overwritten
+#'
+#' @return  the input dataset with the datetime --DTM (and the date/time imputation
+#' flag --DTF, --TMF) added
+#'
+#' @author Samia Kabi
+#'
+#' @export
 #'
 #' @examples
 #' mhdt <- tibble::tribble(
@@ -517,7 +538,7 @@ derive_vars_dtm <- function(dataset,
       ),
       !!sym(dtm) := convert_dtc_to_dtm(dtc = idtc__)
     ) %>%
-    select(-ends_with(("__")))
+    select(-ends_with("__"))
 
   if (flag_imputation) {
     dtf <- paste0(new_vars_prefix, "DTF")
@@ -529,10 +550,13 @@ derive_vars_dtm <- function(dataset,
       dataset <- dataset %>%
         mutate(!!sym(dtf) := compute_dtf(dtc = !!enquo(dtc), dt = !!sym(dtm)))
     } else {
-      msg <- paste0("The ", dtf, " variable is already present in the input dataset and will not be re-derived.")
+      msg <- sprintf(
+        "The %s variable is already present in the input dataset and will not be re-derived.",
+        dtf
+      )
       inform(msg)
     }
-    # add --TMF
+    # add --TMF variable
     warn_if_vars_exist(dataset, tmf)
     dataset <- dataset %>%
       mutate(!!sym(tmf) := compute_tmf(dtc = !!enquo(dtc), dtm = !!sym(dtm)))

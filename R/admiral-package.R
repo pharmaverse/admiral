@@ -1,8 +1,13 @@
 #' @keywords internal
-#' @importFrom dplyr case_when ends_with filter mutate left_join rename select if_else
+#' @importFrom dplyr arrange case_when desc ends_with filter group_by mutate n
+#'             left_join rename row_number select slice starts_with if_else transmute
+#'             ungroup
 #' @importFrom magrittr %>%
-#' @importFrom rlang := abort enquo inform sym syms warn expr exprs quo_is_null
+#' @importFrom rlang := abort arg_match as_string enquo expr exprs inform quo_is_null sym syms warn
 #' @importFrom utils capture.output
-#' @importFrom assertthat assert_that on_failure<-
-#' @importFrom lubridate ceiling_date days duration floor_date time_length %--% ymd ymd_hms is.instant
+#' @importFrom purrr map_chr
+#' @importFrom stringr str_c str_detect
+#' @importFrom assertthat assert_that is.number on_failure<-
+#' @importFrom lubridate ceiling_date days duration floor_date time_length %--%
+#'             ymd ymd_hms is.instant
 "_PACKAGE"
