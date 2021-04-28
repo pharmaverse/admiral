@@ -1,10 +1,10 @@
 ---
-title: "Getting Started"
+title: "Get Started"
 author: "Stefan Bundfuss"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started}
+  %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 # Main Idea
 
 The main idea of admiral is that an ADaM dataset is build by a sequence of
-derivations. Each derivation adds one ore more variables or parameters to the
+derivations. Each derivation adds one or more variables or parameters to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following script which creates a (very simple) ADSL dataset.
@@ -29,26 +29,18 @@ library(dplyr)
 library(lubridate)
 library(admiral)
 
-# read in predecessor variables from dm
+# read in SDTM datasets
 data("dm")
-
-# read other required SDTM datasets
 data("ds")
 data("ex")
 
-# derive treatment variables (TRT01P, TRT01A)
+# derive treatment variables
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
-
-  # derive treatment start date (TRTSDTM, TRTSDT)
   derive_var_trtsdtm(dataset_ex = ex) %>%
   mutate(TRTSDT = date(TRTSDTM)) %>%
-
-  # derive treatment end date (TRTEDTM, TRTEDT)
   derive_var_trtedtm(dataset_ex = ex) %>%
   mutate(TRTEDT = date(TRTEDTM)) %>%
-
-  # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%
 
   # derive study completion/discontinuation variables
@@ -67,12 +59,14 @@ adsl <- dm %>%
 The most important functions in admiral are the
 [derivations](../reference/index.html#section-derivations). These functions
 start with `derive_`. The first parameter of these functions expects the
-processed dataset. This allows to string together derivations using the `%>%`
+input dataset. This allows to string together derivations using the `%>%`
 operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 
+Functions which derive a dedicated parameter start with `derive_param_` followed by
+the parameter name, e.g., `derive_param_os()` derives the `OS` parameter.
 
 ## Input and Output
 
@@ -97,10 +91,10 @@ example above.
 
 # Parameters
 
-Parameters which expect variable names or expressions of variable names expect
-symbols or expressions rather than strings. The `expr()` and the `exprs()`
-function of the `rlang::` package can be used to quote expressions where
-necessary.
+For parameters which expect variable names or expressions of variable names
+symbols or expressions must be specified rather than strings. The `expr()` and
+the `exprs()` function of the `rlang` package can be used to quote expressions
+where necessary.
 
 - For parameters which expects a single variable name the name can be specified
 without quotes and quotation. For example ``new_var = TEMPBL``
@@ -120,7 +114,7 @@ exprs(TEMPBL = AVAL, TEMPBLU = AVALU)``.
 All functions are reviewed and tested to ensure that they work as described in
 the documentation. They are **not validated** yet.
 
-Although admiral follows CDISC standard it does not claim that the dataset
+Although admiral follows CDISC standards it does not claim that the dataset
 resulting from calling admiral functions is ADaM compliant. This has to be
 ensured by the user.
 
