@@ -154,12 +154,6 @@ Note: you can use impute_dtc function to build a complete datetime</p></td>
 
     <p>a datetime  object</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other general functions: <code><a href='compute_dtf.html'>compute_dtf</a></code>,
-  <code><a href='compute_tmf.html'>compute_tmf</a></code>,
-  <code><a href='convert_dtc_to_dt.html'>convert_dtc_to_dt</a></code>, <code><a href='impute_dtc.html'>impute_dtc</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>convert_dtc_to_dtm</span>(<span class='st'>"2019-07-18T15:25:00"</span>)</div><div class='output co'>#&gt; [1] "2019-07-18 15:25:00 UTC"</div><div class='input'><span class='fu'>convert_dtc_to_dtm</span>(<span class='st'>"2019-07-18T00:00:00"</span>) <span class='co'># note Time = 00:00:00 is not printed</span></div><div class='output co'>#&gt; [1] "2019-07-18 UTC"</div><div class='input'><span class='fu'>convert_dtc_to_dtm</span>(<span class='st'>"2019-07-18"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='output co'>#&gt; [1] NA</div></pre>
