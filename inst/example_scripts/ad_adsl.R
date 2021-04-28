@@ -2,9 +2,7 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input:
-#   - dm
-#   - ex
+# Input: dm, ex
 #
 
 library(dplyr)

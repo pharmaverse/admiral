@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @importFrom dplyr arrange case_when desc ends_with filter group_by mutate n
+#' @importFrom dplyr arrange bind_rows case_when desc ends_with filter group_by mutate n
 #'             left_join rename row_number select slice starts_with if_else transmute
 #'             ungroup
 #' @importFrom magrittr %>%
