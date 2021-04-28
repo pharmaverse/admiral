@@ -3,12 +3,14 @@
 ADaM in R Asset Library
 
 ### Purpose
-An open source modular approach that provides companies and communities with a toolbox to develop R-based ADaM datasets. 
+
+To provide an open source modularized toolbox that enables companies and communities to develop ADaM datasets in R.
 
 ### Scope
-* Build a modular toolboxmade up of functions that can be utilizedto wrap together to create ADaM datasets in R.
-* It is intended that users contribute to admiral and that company/therapeutic area/molecule or study-specific ADaM in R functions are added to the admiral package, following the same programming strategy.
-* All functions are created based upon the ADaM Implementation Guide and aim to facilitate the programming of ADaM datasets.
+
+* Build a toolboxof re-usable functions and utilitiesto create ADaM datasets in R in a modular manner.
+* Communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach, in terms of  global/company/therapeutic area/molecule or study-specific functions.
+* All functions are created based upon the ADaM Implementation Guide and aim to facilitate the programming of ADaM dataset standards.
 
 ### Usage
 
