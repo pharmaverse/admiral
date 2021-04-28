@@ -12,8 +12,9 @@ test_that("`target` is set to NA when `date` < `ref_start_date`", {
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT)
+    date = ADT,
+    ref_start_date = TRTSDT
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -34,8 +35,9 @@ test_that("`target` is set to NA when `ref_start_date` is NA", {
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT)
+    date = ADT,
+    ref_start_date = TRTSDT
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -58,8 +60,9 @@ test_that("`target` is set to `Y` when `date` is NA", {
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT)
+    date = ADT,
+    ref_start_date = TRTSDT
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -83,8 +86,9 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT)
+    date = ADT,
+    ref_start_date = TRTSDT
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -108,9 +112,10 @@ test_that("`target` is set to `Y` when `filter_pre_timepoint` is not PRE and`dat
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT,
-    filter_pre_timepoint = exprs(TPT == "PRE"))
+    date = ADT,
+    ref_start_date = TRTSDT,
+    filter_pre_timepoint = exprs(TPT == "PRE")
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -140,9 +145,10 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and `date` <=
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT,
-    ref_end_date = TRTEDT)
+    date = ADT,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT
+  )
 
   expect_dfs_equal(
     expected_output,
@@ -168,10 +174,11 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and `date` <=
 
   actual_output <- derive_var_ontrtfl(
     input,
-    ADT,
-    TRTSDT,
+    date = ADT,
+    ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
-    ref_end_window = 5)
+    ref_end_window = 5
+  )
 
   expect_dfs_equal(
     expected_output,

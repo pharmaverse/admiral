@@ -17,9 +17,6 @@
 #'   considered on-treatment.
 #'   Default is NULL.
 #'
-#' @param new_var Variable name to store the on-treatment flag
-#'   Optional; default: ONTRTFL
-#'
 #' @param ref_end_window A window to add to the upper bound `ref_end_date`
 #'   measured in days
 #'   (e.g. 7 if 7 days should be added to the upper bound)
@@ -64,7 +61,8 @@
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
 #'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01"), "N")
 #' )
-#' #' derive_var_ontrtfl(advs, ADT, TRTSDT, ref_end_date = TRTEDT)
+#' #' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT,
+#'                       ref_end_date = TRTEDT)
 #'
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL
@@ -72,8 +70,8 @@
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
 #'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), "Y")
 #' )
-#' derive_var_ontrtfl(advs, ADT, TRTSDT, ref_end_date = TRTEDT,
-#'   ref_end_window=60)
+#' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT,
+#'                    ref_end_date = TRTEDT, ref_end_window=60)
 #'
 #' advs <- tibble::tribble(
 #' ~USUBJID, ~ADTM, ~TRTSDTM, ~TRTEDTM, ~TPT, ~ONTRTFL,
@@ -84,8 +82,8 @@
 #' "P03",    ymd("2019-12-31"), ymd_hm("2020-01-01T12:00"),
 #'           ymd_hm("2020-03-01T12:00"), "", NA
 #' )
-#' derive_var_ontrtfl(advs, ADTM, TRTSDTM, ref_end_date = TRTEDTM,
-#' filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
+#' derive_var_ontrtfl(advs, date = ADTM, ref_start_date = TRTSDTM,
+#'                    ref_end_date = TRTEDTM, filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
 #'
 derive_var_ontrtfl <- function(dataset,
                                date,
@@ -98,7 +96,7 @@ derive_var_ontrtfl <- function(dataset,
 
    warn_if_vars_exist(
       dataset,
-      c(deparse(substitute(new_var)))
+      c(deparse(new_var))
    )
 
    assert_that(
@@ -118,7 +116,7 @@ derive_var_ontrtfl <- function(dataset,
                           !is.na(!!date) & !is.na(!!ref_start_date) &
                              !!ref_start_date == !!date ~ "Y"))
 
-   if (!quo_is_null(enquo(filter_pre_timepoint))) {
+   if (!is.null(filter_pre_timepoint)) {
       dataset <- dataset  %>%
          mutate(!!new_var := if_else(!!!filter_pre_timepoint, NA_character_, !!new_var))
    }
