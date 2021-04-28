@@ -8,7 +8,7 @@ To provide an open source modularized toolbox that enables companies and communi
 
 ### Scope
 
-* Build a toolboxof re-usable functions and utilitiesto create ADaM datasets in R in a modular manner.
+* Build a toolbox of re-usable functions and utilities to create ADaM datasets in R in a modular manner.
 * Communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach, in terms of  global/company/therapeutic area/molecule or study-specific functions.
 * All functions are created based upon the ADaM Implementation Guide and aim to facilitate the programming of ADaM dataset standards.
 
