@@ -15,3 +15,5 @@ enumerate <- function(x) {
 backquote <- function(x) {
   paste0("`", x, "`")
 }
+
+`%!in%` <- Negate(`%in%`)

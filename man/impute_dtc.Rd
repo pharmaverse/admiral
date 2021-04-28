@@ -99,15 +99,8 @@ idtc <- impute_dtc(
   date_imputation = "MID"
 )
 }
-\seealso{
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dtm}},
-  \code{\link{convert_dtc_to_dt}}
-}
 \author{
 Samia Kabi
 }
-\concept{{general functions}}
 \keyword{computation}
 \keyword{timing}
