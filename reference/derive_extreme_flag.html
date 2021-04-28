@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge variables from a second dataset — derive_merged_vars • admiral</title>
+<title>Adds a variable flagging the first or last observation within each by group — derive_extreme_flag • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,11 +43,9 @@
 
 
 
-<meta property="og:title" content="Merge variables from a second dataset — derive_merged_vars" />
+<meta property="og:title" content="Adds a variable flagging the first or last observation within each by group — derive_extreme_flag" />
 
-<meta property="og:description" content="Merges variables from a second dataset. The observations to merge can be
-selected by a condition and/or by selecting the first observation in each by
-group." />
+<meta property="og:description" content="Adds a variable flagging the first or last observation within each by group" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -126,21 +124,19 @@ group." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge variables from a second dataset</h1>
+    <h1>Adds a variable flagging the first or last observation within each by group</h1>
     
-    <div class="hidden name"><code>derive_merged_vars.Rd</code></div>
+    <div class="hidden name"><code>derive_extreme_flag.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Merges variables from a second dataset. The observations to merge can be
-selected by a condition and/or by selecting the first observation in each by
-group.</p>
+    <p>Adds a variable flagging the first or last observation within each by group</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_merged_vars</span>(<span class='no'>dataset</span>, <span class='no'>dataset_add</span>, <span class='no'>filter_add</span>, <span class='no'>new_vars</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>), <span class='no'>filter_order</span>, <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_extreme_flag</span>(<span class='no'>dataset</span>, <span class='no'>new_var</span>, <span class='no'>by_vars</span>, <span class='no'>order</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
+  <span class='no'>flag_filter</span>, <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,88 +147,94 @@ group.</p>
 <p>The variables specified by the <code>by_vars</code> parameter are expected.</p></td>
     </tr>
     <tr>
-      <th>dataset_add</th>
-      <td><p>Dataset to add</p>
-<p>The variables specified by the <code>by_vars</code>, the <code>filter_add</code>, and the
-<code>filter_first_order</code> parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>filter_add</th>
-      <td><p>Fiter condition for dataset to add</p>
-<p>Only observations of the add dataset which fulfill the specified condition
-are used for merging.</p>
-<p>Permitted Values: logical expression</p></td>
-    </tr>
-    <tr>
-      <th>new_vars</th>
+      <th>new_var</th>
       <td><p>Variable to add</p>
-<p>The specified variables are created in the add dataset and then merge to
-the input dataset.</p>
+<p>The specified variable is added to the output dataset. It is set to <code>"Y"</code>
+for the first or last observation (depending on the mode) of each by group.</p>
 <p>Permitted Values: list of name-value pairs</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
       <td><p>Grouping variables</p>
-<p>Default: <code><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs(USUBJID)</a></code></p>
 <p>Permitted Values: list of variables</p></td>
     </tr>
     <tr>
-      <th>filter_order</th>
+      <th>order</th>
       <td><p>Sort order</p>
-<p>If the parameter is specified, the add dataset is ordered by the specified
-order and only the first or last observation (depending on the filter mode)
-in each by group is used for merging.</p>
+<p>The first or last observation is determined with respect to the specified
+order.</p>
 <p>Permitted Values: list of variables or functions of variables</p></td>
     </tr>
     <tr>
-      <th>filter_mode</th>
-      <td><p>Filter mode</p>
-<p>If the <code>filter_order</code> parameter is specified, the filter mode determines if
-the first or last observation of each by group is selected.</p>
+      <th>mode</th>
+      <td><p>Flag mode</p>
+<p>Determines of the first or last observation is flagged.</p>
 <p>Default: <code>"last"</code></p>
 <p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></td>
+    </tr>
+    <tr>
+      <th>flag_filter</th>
+      <td><p>Filter for flag data</p>
+<p>Only observations fulfilling the specified condition are taken into account
+for flagging. If the parameter is not specified, all observations are
+considered.</p>
+<p>Permitted Values: a condition</p></td>
+    </tr>
+    <tr>
+      <th>check_type</th>
+      <td><p>Check uniqueness?</p>
+<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.</p>
+<p>Default: <code>"warning"</code></p>
+<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with variables from the add dataset</p>
+    <p>The input dataset with the new flag variable added</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first observation (with respect to the order
-specified for the <code>order</code> parameter) is included in the output dataset.</p>
+<code>by_vars</code> parameter) the first or last observation (with respect to the
+order specified for the <code>order</code> parameter and the flag mode) is included in
+the output dataset.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
 
-<span class='co'># adding first treatment start date for each patient</span>
-<span class='fu'>derive_merged_vars</span>(<span class='no'>dm</span>,
-                   <span class='kw'>dataset_add</span> <span class='kw'>=</span> <span class='no'>ex</span>,
-                   <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>'PLACEBO'</span>)),
-                   <span class='kw'>new_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>TRTSDT</span> <span class='kw'>:=</span> <span class='fu'>ymd</span>(<span class='no'>EXSTDTC</span>)),
-                   <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSTDTC</span>, <span class='no'>EXSEQ</span>),
-                   <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"first"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTSDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
-#&gt;    USUBJID     TRTSDT    
-#&gt;    &lt;chr&gt;       &lt;date&gt;    
-#&gt;  1 01-701-1015 2014-01-02
-#&gt;  2 01-701-1023 2012-08-05
-#&gt;  3 01-701-1028 2013-07-19
-#&gt;  4 01-701-1033 2014-03-18
-#&gt;  5 01-701-1034 2014-07-01
-#&gt;  6 01-701-1047 2013-02-12
-#&gt;  7 01-701-1057 NA        
-#&gt;  8 01-701-1097 2014-01-01
-#&gt;  9 01-701-1111 2012-09-07
-#&gt; 10 01-701-1115 2012-11-30
-#&gt; # … with 296 more rows</div></pre>
+<span class='co'># flag last value for each patient, test, and visit, baseline observations are ignored</span>
+<span class='fu'>derive_extreme_flag</span>(<span class='no'>vs</span>,
+                    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
+                    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>),
+                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>VSTPTNUM</span>),
+                    <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>, <span class='no'>VSTPTNUM</span>, <span class='no'>VSSTRESN</span>, <span class='no'>LASTFL</span>)</div><div class='output co'>#&gt; # A tibble: 29,643 x 6
+#&gt;    USUBJID     VSTESTCD VISIT               VSTPTNUM VSSTRESN LASTFL
+#&gt;    &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;                  &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; 
+#&gt;  1 01-701-1015 DIABP    SCREENING 1              815       64 &lt;NA&gt;  
+#&gt;  2 01-701-1015 DIABP    SCREENING 1              816       83 &lt;NA&gt;  
+#&gt;  3 01-701-1015 DIABP    SCREENING 1              817       57 Y     
+#&gt;  4 01-701-1015 DIABP    SCREENING 2              815       68 &lt;NA&gt;  
+#&gt;  5 01-701-1015 DIABP    SCREENING 2              816       59 &lt;NA&gt;  
+#&gt;  6 01-701-1015 DIABP    SCREENING 2              817       71 Y     
+#&gt;  7 01-701-1015 DIABP    BASELINE                 815       56 &lt;NA&gt;  
+#&gt;  8 01-701-1015 DIABP    BASELINE                 816       51 &lt;NA&gt;  
+#&gt;  9 01-701-1015 DIABP    BASELINE                 817       61 &lt;NA&gt;  
+#&gt; 10 01-701-1015 DIABP    AMBUL ECG PLACEMENT      815       67 &lt;NA&gt;  
+#&gt; # … with 29,633 more rows</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
