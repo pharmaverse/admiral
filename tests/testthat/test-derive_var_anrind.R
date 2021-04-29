@@ -88,20 +88,16 @@ test_that("one-sided reference ranges work", {
   )
 })
 
-# test_that("a warning is issued if reference ranges are missing for a parameter", {
-#   ref_ranges <- tibble::tribble(
-#     ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-#     "DIABP",  60,      80,    40,     90
-#   )
-#   input <- tibble::tribble(
-#     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,
-#     "P01",    "PUL",    1,      70,
-#     "P01",    "TEMP",   1,      36.8,
-#     "P02",    "DIABP",  1,      80
-#   )
-#
-#   expect_warning(
-#     derive_reference_ranges(input, ref_ranges),
-#     "Reference ranges are missing for the following `PARAMCD`: 'PUL' and 'TEMP'"
-#   )
-# })
+test_that("missing `AVAL` is handled properly", {
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,    ~ANRLO, ~ANRHI, ~ANRIND,
+    "P01",    "PUL",    1,     NA_real_, 60,     100,    NA_character_
+  )
+  input <- select(expected_output, USUBJID:ANRHI)
+
+  expect_dfs_equal(
+    derive_var_anrind(input),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "ASEQ")
+  )
+})
