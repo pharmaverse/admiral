@@ -84,25 +84,25 @@
 #' "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
 #' )
 #'
-#' Last observation
+#' #Last observation
 #' derive_var_ablfl(input,
 #'                  by_vars = exprs(USUBJID, PARAMCD),
 #'                  order = exprs(ADT),
 #'                  flag_filter = expr(AVISIT == "BASELINE"))
 #'
-#' Worst observation - Direction = High
+#' #Worst observation - Direction = High
 #' derive_var_ablfl(input,
 #'                  by_vars = exprs(USUBJID, PARAMCD),
 #'                  order = exprs(AVAL, ADT),
 #'                  flag_filter = expr(AVISIT == "BASELINE"))
 #'
-#' Worst observation - Direction = Lo
+#' #Worst observation - Direction = Lo
 #' derive_var_ablfl(input,
 #'                  by_vars = exprs(USUBJID, PARAMCD),
 #'                  order = exprs(desc(AVAL), ADT),
 #'                  flag_filter = expr(AVISIT == "BASELINE"))
 #'
-#' Average observation
+#' #Average observation
 #' derive_var_ablfl(input,
 #'                  by_vars = exprs(USUBJID, PARAMCD),
 #'                  order = exprs(ADT, desc(AVAL)),
