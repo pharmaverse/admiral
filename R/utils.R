@@ -1,3 +1,9 @@
+#' @export
+rlang::expr
+
+#'@export
+rlang::exprs
+
 enumerate <- function(x, quote_fun = backquote) {
   paste(
     paste0(quote_fun(x[-length(x)]), collapse = ", "),
@@ -13,3 +19,5 @@ squote <- function(x) {
 backquote <- function(x) {
   paste0("`", x, "`")
 }
+
+`%!in%` <- Negate(`%in%`)
