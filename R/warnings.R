@@ -49,7 +49,8 @@ is_valid_dtc <- function(arg) {
     grepl(pattern5, arg) |
     grepl(pattern6, arg) |
     grepl(pattern7, arg) |
-    arg == ""
+    arg == "" |
+    is.na(arg)
 }
 
 #' Warn If a vector contains unknown datetime format
@@ -98,5 +99,21 @@ warn_if_invalid_dtc <- function(dtc) {
       "-----T07:15"
     )
     warn(msg3)
+  }
+}
+
+warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
+  missing_ref_ranges <- dataset %>%
+    anti_join(meta_ref_ranges, by = by_var) %>%
+    pull(!!sym(by_var)) %>%
+    unique()
+
+  if (length(missing_ref_ranges) >= 1L) {
+    msg <- sprintf(
+      "Reference ranges are missing for the following `%s`: %s",
+      by_var,
+      enumerate(missing_ref_ranges, quote_fun = squote)
+    )
+    warn(msg)
   }
 }

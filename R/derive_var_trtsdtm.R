@@ -47,12 +47,13 @@
 derive_var_trtsdtm <- function(
   dataset,
   dataset_ex,
-  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10)){
+  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
+                    & nchar(EXSTDTC) >= 10)) {
 
   derive_merged_vars(dataset,
                      dataset_add = dataset_ex,
                      filter_add = filter_ex,
                      new_vars = exprs(TRTSDTM := convert_dtc_to_dtm(impute_dtc(EXSTDTC))),
                      filter_order = exprs(EXSTDTC, EXSEQ),
-                     filter_mode = 'first')
+                     filter_mode = "first")
 }

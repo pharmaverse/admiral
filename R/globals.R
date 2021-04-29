@@ -18,6 +18,7 @@ globalVariables(c(
   "EXSEQ",
   "EXSTDTC",
   "EXTRT",
+  "ONTRTFL",
   "RANDDT",
   "TRTDURD",
   "TRTEDT",

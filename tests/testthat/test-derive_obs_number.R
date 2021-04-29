@@ -19,7 +19,7 @@ test_that("first observation for each group are selected", {
   expect_equal(filter_extreme(input,
                               order = exprs(AVISITN, AVAL),
                               by_vars = exprs(USUBJID),
-                              mode = 'first'),
+                              mode = "first"),
                expected_output)
 })
 
@@ -38,6 +38,6 @@ test_that("first observation is selected without grouping", {
 
   expect_equal(filter_extreme(input,
                               order = exprs(AVISITN, AVAL),
-                              mode = 'first'),
+                              mode = "first"),
                expected_output)
 })
