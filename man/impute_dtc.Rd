@@ -102,3 +102,5 @@ idtc <- impute_dtc(
 \author{
 Samia Kabi
 }
+\keyword{computation}
+\keyword{timing}

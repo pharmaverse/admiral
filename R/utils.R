@@ -4,12 +4,16 @@ rlang::expr
 #'@export
 rlang::exprs
 
-enumerate <- function(x) {
+enumerate <- function(x, quote_fun = backquote) {
   paste(
-    paste0(backquote(x[-length(x)]), collapse = ", "),
+    paste0(quote_fun(x[-length(x)]), collapse = ", "),
     "and",
-    backquote(x[length(x)])
+    quote_fun(x[length(x)])
   )
+}
+
+squote <- function(x) {
+  paste0("'", x, "'")
 }
 
 backquote <- function(x) {

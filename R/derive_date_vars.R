@@ -493,6 +493,8 @@ derive_vars_dt <- function(dataset,
 #'
 #' @author Samia Kabi
 #'
+#' @keywords derivation timing
+#'
 #' @export
 #'
 #' @examples
