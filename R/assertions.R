@@ -96,7 +96,6 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' assert_has_unique_records(ex,
 #'                           by_vars = exprs(USUBJID) ,
 #'                           order = exprs(desc(EXENDTC)))
-
 assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
   # variables used for check
   all_vars <- list()

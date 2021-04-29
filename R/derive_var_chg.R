@@ -2,7 +2,7 @@
 #'
 #' Derive change from baseline (`CHG`) in a BDS dataset
 #'
-#' @param bds_dataset `data.frame`. Required variables are `AVAL` and
+#' @param dataset The input dataset. Required variables are `AVAL` and
 #' `BASE`.
 #'
 #' @details
@@ -12,6 +12,7 @@
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `CHG`
+#' @keywords ADaM BDS derivation
 #' @export
 #'
 #' @examples
@@ -24,10 +25,9 @@
 #'   "P02",    "WEIGHT", 76,    "",     75.3
 #' )
 #' derive_var_chg(advs)
-#'
-derive_var_chg <- function(bds_dataset) {
-  assert_has_variables(bds_dataset, c("AVAL", "BASE"))
+derive_var_chg <- function(dataset) {
+  assert_has_variables(dataset, c("AVAL", "BASE"))
 
-  bds_dataset %>%
+  dataset %>%
     mutate(CHG = AVAL - BASE)
 }
