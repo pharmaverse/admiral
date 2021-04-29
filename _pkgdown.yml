@@ -3,20 +3,15 @@ template:
     bootswatch: flatly
 reference:
 - title: Derivations
+  desc: Derivations add one ore more variables or parameters to the input
+        dataset and return the extended dataset.
 - contents:
   - starts_with("derive")
-- title: Utilities
-- contents:
-  - starts_with("compute")
-- title: Assertions
-- contents:
-  - starts_with("assert")
-- title: Predicates
-- contents:
-  - starts_with("is")
-- title: Warnings
-- contents:
-  - starts_with("warn")
+- title: Computations
+  desc: Computations expect vectors as input and return a vector
+  contents:
+  - has_keyword('computation')
+
 - title: CDISC Hierarchy
 - subtitle: ADaM
   desc: General functions which can be used for any ADaM dataset
@@ -31,7 +26,31 @@ reference:
   contents:
   - has_keyword('adsl')
 
-- title: Timing
+- title: Other Keywords
+- subtitle: Timing
   desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
   contents:
   - has_keyword('timing')
+
+- title: SDTM Datasets
+- contents:
+  - ae
+  - cm
+  - dm
+  - ds
+  - ex
+  - lb
+  - mh
+  - ts
+  - vs
+
+- title: Developer Utilities
+- subtitle: Assertions
+- contents:
+  - starts_with("assert")
+- subtitle: Predicates
+- contents:
+  - starts_with("is")
+- subtitle: Warnings
+- contents:
+  - starts_with("warn")
