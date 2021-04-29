@@ -108,33 +108,40 @@
 #' )
 #'
 #' # Last observation
-#' derive_extreme_flag(input,
-#'                     new_var = ABLFL,
-#'                     by_vars = exprs(USUBJID, PARAMCD),
-#'                     order = exprs(ADT),
-#'                     flag_filter = expr(AVISIT == "BASELINE"))
+#' derive_extreme_flag(
+#'   input,
+#'   new_var = ABLFL,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   order = exprs(ADT),
+#'   flag_filter = expr(AVISIT == "BASELINE")
+#' )
 #'
 #' # Worst observation - Direction = High
-#' derive_extreme_flag(input,
-#'                     new_var = ABLFL,
-#'                     by_vars = exprs(USUBJID, PARAMCD),
-#'                     order = exprs(AVAL, ADT),
-#'                     flag_filter = expr(AVISIT == "BASELINE"))
+#' derive_extreme_flag(
+#'   input,
+#'   new_var = ABLFL,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   order = exprs(AVAL, ADT),
+#'   flag_filter = expr(AVISIT == "BASELINE")
+#' )
 #'
 #' # Worst observation - Direction = Lo
-#' derive_extreme_flag(input,
-#'                     new_var = ABLFL,
-#'                     by_vars = exprs(USUBJID, PARAMCD),
-#'                     order = exprs(desc(AVAL), ADT),
-#'                     flag_filter = expr(AVISIT == "BASELINE"))
+#' derive_extreme_flag(
+#'   input,
+#'   new_var = ABLFL,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   order = exprs(desc(AVAL), ADT),
+#'   flag_filter = expr(AVISIT == "BASELINE")
+#' )
 #'
 #' # Average observation
-#' derive_extreme_flag(input,
-#'                     new_var = ABLFL,
-#'                     by_vars = exprs(USUBJID, PARAMCD),
-#'                     order = exprs(ADT, desc(AVAL)),
-#'                     flag_filter = expr(AVISIT == "BASELINE" &
-#'                     DTYPE == "AVERAGE")
+#' derive_extreme_flag(
+#'   input,
+#'   new_var = ABLFL,
+#'   by_vars = exprs(USUBJID, PARAMCD),
+#'   order = exprs(ADT, desc(AVAL)),
+#'   flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+#' )
 #'
 
 derive_extreme_flag <- function(dataset,
