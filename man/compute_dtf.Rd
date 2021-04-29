@@ -22,9 +22,12 @@ the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
 Derive --DTF based on --DTC and --DT
 }
 \examples{
+
 compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 }
 \author{
 Samia Kabi
 }
+\keyword{computation}
+\keyword{timing}
