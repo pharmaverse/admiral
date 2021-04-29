@@ -206,8 +206,10 @@ impute_dtc <- function(dtc,
 #' convert_dtc_to_dt("2019-07-18")
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
+  # Check dtc is character
+  assert_that(is_character(dtc))
   case_when(
-    nchar(dtc) >= 10 ~ ymd(substr(dtc, 1, 10)),
+    nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
     TRUE ~ ymd(NA)
   )
 }
@@ -230,7 +232,7 @@ convert_dtc_to_dt <- function(dtc) {
 #' @family {general functions}
 #'
 #' @keywords computation timing
-#' #'
+#'
 #' @export
 #'
 #' @examples
@@ -238,9 +240,11 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
+  # Check dtc is character
+  assert_that(is_character(dtc))
   # note T00:00:00 is not printed in dataframe
   case_when(
-    nchar(dtc) == 19 ~ ymd_hms(dtc),
+    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
     TRUE ~ ymd_hms(NA)
   )
 }
@@ -272,12 +276,19 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
+  # Check dtc is character
+  assert_that(is_character(dtc))
+  # check dt is a date
+  assert_that(is_date(dt))
+
   case_when(
+    (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
+      is.na(dt) |
+      !is_valid_dtc(dtc) ~ NA_character_,
     !is.na(dt) & nchar(dtc) < 4 ~ "Y",
     !is.na(dt) & nchar(dtc) == 4 ~ "M",
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
-    !is.na(dt) & nchar(dtc) == 9 ~ "M", # dates like "2019---07"
-    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ NA_character_
+    !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
   )
 }
 
@@ -309,11 +320,18 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
+  # Check dtc is character
+  assert_that(is_character(dtc))
+  # check dt is a date
+  assert_that(is_date(dtm))
+
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ NA_character_,
+    (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
+      is.na(dtm) |
+      !is_valid_dtc(dtc) ~ NA_character_,
     !is.na(dtm) & nchar(dtc) == 16 ~ "S",
     !is.na(dtm) & nchar(dtc) == 13 ~ "M",
-    (!is.na(dtm) & (nchar(dtc) == 10 | is_valid_dtc(dtc) == FALSE)) |
+    (!is.na(dtm) & (nchar(dtc) == 10)) |
       (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
   )
 }

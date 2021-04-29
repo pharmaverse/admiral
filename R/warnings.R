@@ -83,7 +83,7 @@ warn_if_invalid_dtc <- function(dtc) {
     warn(paste(capture.output(print(tbl)), collapse = "\n"))
 
     msg3 <- paste0(
-      "The following representations are handled: \n",
+      "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
       "2003-12-15T13:15\n",
@@ -92,7 +92,7 @@ warn_if_invalid_dtc <- function(dtc) {
       "2003-12\n",
       "2003\n",
       "2003---15\n\n",
-      "The following representations are NOT handled: \n",
+      "The following ISO representations, and any other representation are NOT handled: \n",
       "2003-12-15T-:15:18\n",
       "2003-12-15T13:-:19\n",
       "--12-15\n",
