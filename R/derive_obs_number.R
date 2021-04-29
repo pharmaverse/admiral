@@ -12,7 +12,7 @@
 #'   The new variable is set to the observation number for each by group. The
 #'   numbering starts with 1.
 #'
-#'   Default: `temp_obs_nr`
+#'   Default: `ASEQ`
 
 #' @param order Sort order
 #'
@@ -62,7 +62,7 @@
 #'   derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
 #'                     order = exprs(VISITNUM, VSTPTNUM))
 derive_obs_number <- function(dataset,
-                              new_var = temp_obs_nr,
+                              new_var = ASEQ ,
                               order,
                               by_vars,
                               check_type = "none") {
@@ -78,26 +78,20 @@ derive_obs_number <- function(dataset,
         group_by(!!!by_vars) %>%
         arrange(!!!order, .by_group = TRUE)
 
-      if (check_type != "none") {
-        # check for unique records
-        assert_has_unique_records(
+      has_unique_records(
           data,
           by_vars = by_vars,
           order = order,
           message_type = check_type
         )
-      }
     }
     else{
       data <- data %>%
         arrange(!!!order)
 
-      if (check_type != "none") {
-        # check for unique records
-        assert_has_unique_records(data,
-                                  order = order,
-                                  message_type = check_type)
-      }
+      has_unique_records(data,
+                         order = order,
+                         message_type = check_type)
     }
   }
 

@@ -66,7 +66,7 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 
 #' Are records unique?
 #'
-#' Checks if the reords of a dateset are unique with respect to the specified
+#' Checks if the records of a dateset are unique with respect to the specified
 #' list of by variables and order.
 #'
 #' @param dataset The input dataset to check
@@ -89,13 +89,15 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #'
 #' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
 #'
+#' @keywords check
+#'
 #' @export
 #'
 #' @examples
 #' data(ex)
-#' assert_has_unique_records(ex,
-#'                           by_vars = exprs(USUBJID) ,
-#'                           order = exprs(desc(EXENDTC)))
+#' has_unique_records(ex,
+#'                    by_vars = exprs(USUBJID) ,
+#'                    order = exprs(desc(EXENDTC)))
 
 assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
   # variables used for check
