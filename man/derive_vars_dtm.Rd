@@ -50,6 +50,10 @@ A logical value
 
 Default: TRUE}
 }
+\value{
+the input dataset with the datetime --DTM (and the date/time imputation
+flag --DTF, --TMF) added
+}
 \description{
 Derive --DTM based on --DTC. --DTM is imputed based on user input
 Derive --DTF/--TMF if needed based on --DTC and --DT
