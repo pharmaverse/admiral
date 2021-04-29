@@ -5,7 +5,7 @@
 \title{Merge variables from a second dataset}
 \usage{
 derive_merged_vars(dataset, dataset_add, filter_add, new_vars,
-  by_vars = exprs(USUBJID), filter_order, filter_mode = "last")
+  by_vars = exprs(USUBJID), filter_order, filter_mode)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -17,7 +17,7 @@ The variables specified by the \code{by_vars} parameter are expected.}
 The variables specified by the \code{by_vars}, the \code{filter_add}, and the
 \code{filter_first_order} parameter are expected.}
 
-\item{filter_add}{Fiter condition for dataset to add
+\item{filter_add}{Filter condition for dataset to add
 
 Only observations of the add dataset which fulfill the specified condition
 are used for merging.
@@ -49,8 +49,6 @@ Permitted Values: list of variables or functions of variables}
 
 If the \code{filter_order} parameter is specified, the filter mode determines if
 the first or last observation of each by group is selected.
-
-Default: \code{"last"}
 
 Permitted Values: \code{"first"}, \code{"last"}}
 }

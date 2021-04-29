@@ -24,8 +24,6 @@
 #'
 #'   Determines of the first or last observation is flagged.
 #'
-#'   Default: `"last"`
-#'
 #'   Permitted Values: `"first"`, `"last"`
 #'
 #' @param by_vars Grouping variables
@@ -74,6 +72,7 @@
 #'                     new_var = LASTFL,
 #'                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
 #'                     order = rlang::exprs(VSTPTNUM),
+#'                     mode = "last",
 #'                     flag_filter = rlang::expr(VISIT != "BASELINE")) %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
@@ -83,7 +82,7 @@ derive_extreme_flag <- function(dataset,
                                 new_var,
                                 by_vars,
                                 order,
-                                mode = "last",
+                                mode,
                                 flag_filter,
                                 check_type = "warning") {
   # check input parameters

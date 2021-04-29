@@ -10,6 +10,7 @@ globalVariables(c(
   "ADY",
   "AENDT",
   "AENDY",
+  "ASEQ",
   "ASTDT",
   "ASTDY",
   "BRTHDT",

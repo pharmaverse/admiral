@@ -58,21 +58,21 @@
 #' filter_extreme(ex,
 #'                order = exprs(EXSEQ),
 #'                by_vars = exprs(USUBJID),
-#'                mode = 'first') %>%
+#'                mode = "first") %>%
 #'   select(USUBJID, EXSEQ)
 #'
 #' # selecting highest dose for each patient
 #' filter_extreme(ex,
 #'                order = exprs(EXDOSE),
 #'                by_vars = exprs(USUBJID),
+#'                mode = "last",
 #'                check_type = "none") %>%
 #'   select(USUBJID, EXDOSE)
-#'
 
 filter_extreme <- function(dataset,
                            order,
                            by_vars,
-                           mode = "last",
+                           mode,
                            check_type = "warning") {
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
@@ -89,9 +89,10 @@ filter_extreme <- function(dataset,
       group_by(!!!by_vars)
   }
   else {
-    data <- dataset %>% derive_obs_number(new_var = temp_obs_nr,
-                                          order = order,
-                                          check_type = check_type)
+    data <- dataset %>%
+      derive_obs_number(new_var = temp_obs_nr,
+                        order = order,
+                        check_type = check_type)
   }
 
   if (mode == "first") {

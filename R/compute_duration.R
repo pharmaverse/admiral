@@ -62,7 +62,7 @@
 #'
 #' @return The duration between the two date in the specified unit
 #'
-#' @keywords general time
+#' @keywords computation adam timing
 #'
 #' @export
 #'
@@ -89,7 +89,6 @@
 #'   out_unit = "years",
 #'   add_one = FALSE
 #' )
-
 compute_duration <- function(start_date,
                              end_date,
                              in_unit = "days",

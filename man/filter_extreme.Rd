@@ -4,8 +4,7 @@
 \alias{filter_extreme}
 \title{Filter out the first or last observation for each group}
 \usage{
-filter_extreme(dataset, order, by_vars, mode = "last",
-  check_type = "warning")
+filter_extreme(dataset, order, by_vars, mode, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -63,16 +62,16 @@ data("ex")
 filter_extreme(ex,
                order = exprs(EXSEQ),
                by_vars = exprs(USUBJID),
-               mode = 'first') \%>\%
+               mode = "first") \%>\%
   select(USUBJID, EXSEQ)
 
 # selecting highest dose for each patient
 filter_extreme(ex,
                order = exprs(EXDOSE),
                by_vars = exprs(USUBJID),
+               mode = "last",
                check_type = "none") \%>\%
   select(USUBJID, EXDOSE)
-
 }
 \author{
 Stefan Bundfuss

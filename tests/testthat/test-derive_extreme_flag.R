@@ -38,6 +38,7 @@ test_that("last observation for each group is flagged, flag_filter works", {
                                        new_var = lastfl,
                                        order = exprs(AVISITN, desc(AVAL)),
                                        by_vars = exprs(USUBJID),
+                                       mode = "last",
                                        flag_filter = expr(USUBJID != 2))
   expect_dfs_equal(base = expected_output,
                    compare = actual_output,

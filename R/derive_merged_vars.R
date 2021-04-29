@@ -13,7 +13,7 @@
 #'   The variables specified by the `by_vars`, the `filter_add`, and the
 #'   `filter_first_order` parameter are expected.
 #'
-#' @param filter_add Fiter condition for dataset to add
+#' @param filter_add Filter condition for dataset to add
 #'
 #'   Only observations of the add dataset which fulfill the specified condition
 #'   are used for merging.
@@ -39,8 +39,6 @@
 #'
 #'   If the `filter_order` parameter is specified, the filter mode determines if
 #'   the first or last observation of each by group is selected.
-#'
-#'   Default: `"last"`
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
@@ -83,7 +81,7 @@ derive_merged_vars <- function(dataset,
                                new_vars,
                                by_vars = exprs(USUBJID),
                                filter_order,
-                               filter_mode = "last") {
+                               filter_mode) {
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 

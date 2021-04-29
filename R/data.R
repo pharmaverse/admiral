@@ -65,4 +65,5 @@
 #'
 #' An example subject level analysis dataset
 #'
+#' @source \url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R}
 "adsl"

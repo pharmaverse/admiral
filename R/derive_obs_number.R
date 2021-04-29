@@ -78,20 +78,24 @@ derive_obs_number <- function(dataset,
         group_by(!!!by_vars) %>%
         arrange(!!!order, .by_group = TRUE)
 
-      has_unique_records(
+      if (check_type != "none") {
+        has_unique_records(
           data,
           by_vars = by_vars,
           order = order,
           message_type = check_type
         )
+      }
     }
     else{
       data <- data %>%
         arrange(!!!order)
 
-      has_unique_records(data,
-                         order = order,
-                         message_type = check_type)
+      if (check_type != "none") {
+        has_unique_records(data,
+                           order = order,
+                           message_type = check_type)
+      }
     }
   }
 

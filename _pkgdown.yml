@@ -44,13 +44,17 @@ reference:
   - ts
   - vs
 
+- title: ADaM Datasets
+- contents:
+  - adsl
+
 - title: Developer Utilities
 - subtitle: Assertions
 - contents:
-  - starts_with("assert")
-- subtitle: Predicates
+  - has_keyword("assertion")
+- subtitle: Checks
 - contents:
-  - starts_with("is")
+  - has_keyword("check")
 - subtitle: Warnings
 - contents:
-  - starts_with("warn")
+  - has_keyword("warning")

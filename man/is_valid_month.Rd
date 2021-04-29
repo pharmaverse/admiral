@@ -21,3 +21,4 @@ assertthat::assert_that(is_valid_month(12))
 \author{
 Samia Kabi
 }
+\keyword{check}

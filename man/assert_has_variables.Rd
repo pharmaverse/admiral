@@ -28,3 +28,4 @@ assert_has_variables(dm, "AVAL")
 \author{
 Thomas Neitmann
 }
+\keyword{assertion}
