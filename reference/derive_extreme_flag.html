@@ -237,6 +237,155 @@ the output dataset.</p>
 #&gt;  9 01-701-1015 DIABP    BASELINE                 817       61 &lt;NA&gt;  
 #&gt; 10 01-701-1015 DIABP    AMBUL ECG PLACEMENT      815       67 &lt;NA&gt;  
 #&gt; # … with 29,633 more rows</div><div class='input'>
+<span class='co'># Baseline (ABLFL) examples:</span>
+
+<span class='no'>input</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVISIT</span>,    ~<span class='no'>ADT</span>,                 ~<span class='no'>AVAL</span>, ~<span class='no'>DTYPE</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
+
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='st'>"AVERAGE"</span>,
+
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
+
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='fl'>NA</span>,
+<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>
+)
+
+<span class='co'># Last observation</span>
+<span class='fu'>derive_extreme_flag</span>(
+  <span class='no'>input</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>),
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+)</div><div class='output co'>#&gt; # A tibble: 20 x 8
+#&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  2 TEST01  PAT01   PARAM01 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  3 TEST01  PAT01   PARAM01 BASELINE  2021-04-27    15 &lt;NA&gt;    Y    
+#&gt;  4 TEST01  PAT01   PARAM02 BASELINE  2021-04-27    10 AVERAGE Y    
+#&gt;  5 TEST01  PAT02   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  6 TEST01  PAT02   PARAM01 BASELINE  2021-04-25    14 AVERAGE Y    
+#&gt;  7 TEST01  PAT02   PARAM02 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  8 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    Y    
+#&gt;  9 TEST01  PAT01   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 10 TEST01  PAT01   PARAM01 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 11 TEST01  PAT02   PARAM01 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 12 TEST01  PAT02   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 13 TEST01  PAT02   PARAM01 WEEK 2    2021-04-30    12 AVERAGE &lt;NA&gt; 
+#&gt; 14 TEST01  PAT01   PARAM02 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 15 TEST01  PAT01   PARAM02 SCREENING 2021-04-25    14 AVERAGE &lt;NA&gt; 
+#&gt; 16 TEST01  PAT01   PARAM02 SCREENING 2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 17 TEST01  PAT01   PARAM02 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 18 TEST01  PAT02   PARAM02 SCREENING 2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 19 TEST01  PAT02   PARAM02 WEEK 1    2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 20 TEST01  PAT02   PARAM02 WEEK 1    2021-04-27    10 &lt;NA&gt;    &lt;NA&gt; </div><div class='input'>
+<span class='co'># Worst observation - Direction = High</span>
+<span class='fu'>derive_extreme_flag</span>(
+  <span class='no'>input</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>AVAL</span>, <span class='no'>ADT</span>),
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+)</div><div class='output co'>#&gt; # A tibble: 20 x 8
+#&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  2 TEST01  PAT01   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  3 TEST01  PAT01   PARAM01 BASELINE  2021-04-27    15 &lt;NA&gt;    Y    
+#&gt;  4 TEST01  PAT01   PARAM02 BASELINE  2021-04-27    10 AVERAGE Y    
+#&gt;  5 TEST01  PAT02   PARAM01 BASELINE  2021-04-25    14 AVERAGE &lt;NA&gt; 
+#&gt;  6 TEST01  PAT02   PARAM01 BASELINE  2021-04-23    15 AVERAGE Y    
+#&gt;  7 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  8 TEST01  PAT02   PARAM02 BASELINE  2021-04-25    14 &lt;NA&gt;    Y    
+#&gt;  9 TEST01  PAT01   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 10 TEST01  PAT01   PARAM01 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 11 TEST01  PAT02   PARAM01 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 12 TEST01  PAT02   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 13 TEST01  PAT02   PARAM01 WEEK 2    2021-04-30    12 AVERAGE &lt;NA&gt; 
+#&gt; 14 TEST01  PAT01   PARAM02 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 15 TEST01  PAT01   PARAM02 SCREENING 2021-04-25    14 AVERAGE &lt;NA&gt; 
+#&gt; 16 TEST01  PAT01   PARAM02 SCREENING 2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 17 TEST01  PAT01   PARAM02 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 18 TEST01  PAT02   PARAM02 SCREENING 2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 19 TEST01  PAT02   PARAM02 WEEK 1    2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 20 TEST01  PAT02   PARAM02 WEEK 1    2021-04-27    10 &lt;NA&gt;    &lt;NA&gt; </div><div class='input'>
+<span class='co'># Worst observation - Direction = Lo</span>
+<span class='fu'>derive_extreme_flag</span>(
+  <span class='no'>input</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>), <span class='no'>ADT</span>),
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+)</div><div class='output co'>#&gt; # A tibble: 20 x 8
+#&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  2 TEST01  PAT01   PARAM01 BASELINE  2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  3 TEST01  PAT01   PARAM01 BASELINE  2021-04-25    14 &lt;NA&gt;    Y    
+#&gt;  4 TEST01  PAT01   PARAM02 BASELINE  2021-04-27    10 AVERAGE Y    
+#&gt;  5 TEST01  PAT02   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  6 TEST01  PAT02   PARAM01 BASELINE  2021-04-25    14 AVERAGE Y    
+#&gt;  7 TEST01  PAT02   PARAM02 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  8 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    Y    
+#&gt;  9 TEST01  PAT01   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 10 TEST01  PAT01   PARAM01 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 11 TEST01  PAT02   PARAM01 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 12 TEST01  PAT02   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 13 TEST01  PAT02   PARAM01 WEEK 2    2021-04-30    12 AVERAGE &lt;NA&gt; 
+#&gt; 14 TEST01  PAT01   PARAM02 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 15 TEST01  PAT01   PARAM02 SCREENING 2021-04-25    14 AVERAGE &lt;NA&gt; 
+#&gt; 16 TEST01  PAT01   PARAM02 SCREENING 2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 17 TEST01  PAT01   PARAM02 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 18 TEST01  PAT02   PARAM02 SCREENING 2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 19 TEST01  PAT02   PARAM02 WEEK 1    2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 20 TEST01  PAT02   PARAM02 WEEK 1    2021-04-27    10 &lt;NA&gt;    &lt;NA&gt; </div><div class='input'>
+<span class='co'># Average observation</span>
+<span class='fu'>derive_extreme_flag</span>(
+  <span class='no'>input</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>)),
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>)
+)</div><div class='output co'>#&gt; # A tibble: 20 x 8
+#&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 BASELINE  2021-04-23    15 AVERAGE Y    
+#&gt;  2 TEST01  PAT01   PARAM02 BASELINE  2021-04-27    10 AVERAGE Y    
+#&gt;  3 TEST01  PAT02   PARAM01 BASELINE  2021-04-23    15 AVERAGE &lt;NA&gt; 
+#&gt;  4 TEST01  PAT02   PARAM01 BASELINE  2021-04-25    14 AVERAGE Y    
+#&gt;  5 TEST01  PAT01   PARAM01 BASELINE  2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  6 TEST01  PAT01   PARAM01 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  7 TEST01  PAT01   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt;  8 TEST01  PAT01   PARAM01 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt;  9 TEST01  PAT02   PARAM01 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 10 TEST01  PAT02   PARAM01 WEEK 1    2021-04-27    10 AVERAGE &lt;NA&gt; 
+#&gt; 11 TEST01  PAT02   PARAM01 WEEK 2    2021-04-30    12 AVERAGE &lt;NA&gt; 
+#&gt; 12 TEST01  PAT01   PARAM02 SCREENING 2021-04-27    15 AVERAGE &lt;NA&gt; 
+#&gt; 13 TEST01  PAT01   PARAM02 SCREENING 2021-04-25    14 AVERAGE &lt;NA&gt; 
+#&gt; 14 TEST01  PAT01   PARAM02 SCREENING 2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 15 TEST01  PAT01   PARAM02 WEEK 2    2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 16 TEST01  PAT02   PARAM02 SCREENING 2021-04-27    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 17 TEST01  PAT02   PARAM02 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 18 TEST01  PAT02   PARAM02 WEEK 1    2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 19 TEST01  PAT02   PARAM02 WEEK 1    2021-04-27    10 &lt;NA&gt;    &lt;NA&gt; 
+#&gt; 20 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -249,7 +398,7 @@ the output dataset.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Stefan Bundfuss.</p>
+  <p>Developed by Thomas Neitmann, Stefan Bundfuss, Alice Ehmann.</p>
 </div>
 
 <div class="pkgdown">
