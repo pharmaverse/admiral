@@ -20,7 +20,7 @@ test_that("compute TMF", {
     as.POSIXct("2019-01-01")
   )
   expected_output <- c(
-    "",
+    NA_character_,
     "S",
     "M",
     "H",

@@ -39,6 +39,9 @@ A logical value
 
 Default: TRUE}
 }
+\value{
+the input dataset with the date --DT (and the date imputation flag --DTF) added
+}
 \description{
 Derive --DT based on --DTC. --DT is imputed based on user input
 Derive --DTF if needed based on --DTC and --DT
@@ -102,3 +105,6 @@ mhdt4 <- derive_vars_dt(
 \author{
 Samia Kabi
 }
+\keyword{ADaM}
+\keyword{computation}
+\keyword{timing}
