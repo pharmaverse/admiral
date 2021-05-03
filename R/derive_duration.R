@@ -123,8 +123,9 @@ derive_duration <- function(dataset,
       )
     )
 
-  if (!quo_is_null(enquo(new_var_unit))) {
-    dataset <- dataset %>% mutate(!!enquo(new_var_unit) := toupper(out_unit))
+  new_var_unit <- enquo(new_var_unit)
+  if (!quo_is_null(new_var_unit)) {
+    dataset <- dataset %>% mutate(!!new_var_unit := toupper(out_unit))
   }
   dataset
 }

@@ -30,3 +30,5 @@ compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 \author{
 Samia Kabi
 }
+\keyword{computation}
+\keyword{timing}

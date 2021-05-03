@@ -111,11 +111,11 @@ assert_has_unique_records <- function(dataset,
   # dataset to check (remove grouping)
   data_ext <- ungroup(dataset)
 
-  if (!quo_is_null(enquo(by_vars))) {
+  if (!is.null(by_vars)) {
     all_vars <- by_vars
     all_vars_msg <- by_vars
   }
-  if (!quo_is_null(enquo(order))) {
+  if (!is.null(order)) {
     # add order variables to the input dataset
     order_vars <- order
     names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
@@ -142,7 +142,7 @@ assert_has_unique_records <- function(dataset,
 
     # create message
     tbl <- capture.output(print(duplicates))
-    if (quo_is_null(enquo(message))) {
+    if (is.null(message)) {
       message <- paste0("Dataset contains multiple records with respect to ",
                        paste(all_vars_msg, collapse = ", "),
                        ".")

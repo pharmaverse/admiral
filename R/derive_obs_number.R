@@ -69,9 +69,9 @@ derive_obs_number <- function(dataset,
   arg_match(check_type, c("none", "warning", "error"))
   data <- dataset
 
-  if (!quo_is_null(enquo(by_vars)) | !quo_is_null(enquo(order))) {
+  if (!is.null(by_vars) | !is.null(order)) {
     # group and sort input dataset
-    if (!quo_is_null(enquo(by_vars))) {
+    if (!is.null(by_vars)) {
       assert_has_variables(data, map_chr(by_vars, as_string))
 
       data <- data %>%

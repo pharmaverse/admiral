@@ -87,13 +87,13 @@ derive_merged_vars <- function(dataset,
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 
-  if (!quo_is_null(enquo(filter_add))) {
+  if (!is.null(filter_add)) {
      add <- dataset_add %>%
        filter(!!!filter_add)
   } else {
     add <- dataset_add
   }
-  if (!quo_is_null(enquo(filter_order))) {
+  if (!is.null(filter_order)) {
     add <- add %>%
       filter_extreme(order = filter_order,
                      by_vars = by_vars,
