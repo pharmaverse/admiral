@@ -61,7 +61,7 @@ mhdt <- tibble::tribble(
 
 # Create ASTDT and ASTDTF
 # no imputation for partial date
-mhdt1 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC
@@ -69,7 +69,7 @@ mhdt1 <- derive_vars_dt(
 
 # Create ASTDT and ASTDTF
 # Impute partial dates to first day/month
-mhdt2 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -77,7 +77,7 @@ mhdt2 <- derive_vars_dt(
 )
 
 # Impute partial dates to 4th of june
-mhdt2a <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -86,7 +86,7 @@ mhdt2a <- derive_vars_dt(
 
 # Create AENDT and AENDTF
 # Impute partial dates to last day/month
-mhdt3 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AEN",
   dtc = MHSTDTC,
@@ -95,7 +95,7 @@ mhdt3 <- derive_vars_dt(
 
 # Create BIRTHDT
 # Impute partial dates to 15th of June. No DTF
-mhdt4 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
@@ -107,5 +107,5 @@ mhdt4 <- derive_vars_dt(
 Samia Kabi
 }
 \keyword{ADaM}
-\keyword{computation}
+\keyword{derivation}
 \keyword{timing}

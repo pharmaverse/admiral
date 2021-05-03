@@ -7,9 +7,9 @@
 derive_baseline(dataset, by_vars, source_var, new_var)
 }
 \arguments{
-\item{dataset}{\code{data.frame}}
+\item{dataset}{The input dataset}
 
-\item{by_vars}{\code{character} vector of columns uniquely identifying a set
+\item{by_vars}{Grouping variables uniquely identifying a set
 of records for which to calculate \code{BASE}}
 
 \item{source_var}{The column from which to extract the baseline value,
@@ -37,7 +37,7 @@ dataset <- tibble::tribble(
 )
 derive_baseline(
   dataset,
-  by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+  by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
   source_var = AVALC,
   new_var = BASEC
 )

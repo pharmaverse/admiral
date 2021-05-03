@@ -43,9 +43,7 @@ Imputation partial date/time portion of a --DTC variable.
 based on user input.
 }
 \examples{
-
-mhdt <- tibble::tribble(
-  ~MHSTDTC,
+dates <- c(
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
   "2019-07-18T15",
@@ -56,46 +54,48 @@ mhdt <- tibble::tribble(
   "2019---07",
   ""
 )
+
 # No date imputation (date_imputation defaulted to NULL)
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(dtc = mhdt$MHSTDTC)
+impute_dtc(dtc = dates)
 
 # No date imputation (date_imputation defaulted to NULL)
 # Missing time part imputed with 23:59:59 portion
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   time_imputation = "23:59:59"
 )
-# same as above
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+
+# Same as above
+impute_dtc(
+  dtc = dates,
   time_imputation = "LAST"
 )
 
-# impute to first day/month if date is partial
+# Impute to first day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "01-01"
 )
 # same as above
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "FIRST"
 )
 
-# impute to last day/month if date is partial
+# Impute to last day/month if date is partial
 # Missing time part imputed with 23:59:59 portion
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "LAST",
   time_imputation = "LAST"
 )
 
-# impute to Mid day/month if date is partial
+# Impute to mid day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "MID"
 )
 }
