@@ -1,21 +1,18 @@
-#' Derive --DTM (and --DTF/--TMF)
+#' Derive a disposition date
 #'
-#' Derive --DTM based on --DTC. --DTM is imputed based on user input
-#' Derive --DTF/--TMF if needed based on --DTC and --DT
+#' Derive a disposition status date from the the relevant records in the disposition domain.
 #'
 #' @param dataset Input dataset
 #'
-#' @param dataset_ds Datasets containiung the disposition information
-#' (usually: ds)
+#' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
 #'
-#' The variable specified in the dtc parameter must be in dataset_ds
-#'
+#' The variable specified in dtc parameter must be in dataset_ds
 #'
 #' @param new_var Name of the disposition date variable
 #'
 #' a variable name is expected
 #'
-#' @param dtc The --DTC date used to derive/impute --DT
+#' @param dtc The character date used to derive/impute the disposition date
 #'
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
 #'   If the year part is not recorded (missing date), no imputation is performed.
@@ -31,6 +28,8 @@
 #'   Default is NULL
 #'
 #' @return the input dataset with the disposition date (new_var) added
+#'
+#' @keywords adsl timing
 #'
 #' @author Samia Kabi
 #'
@@ -48,26 +47,29 @@ derive_disposition_dt <- function(dataset,
                                   dataset_ds,
                                   new_var,
                                   dtc,
-                                  filter = NULL,
+                                  filter_ds,
                                   date_imputation = NULL) {
-  # check if dataset_ds exists
-  assert_dataset_exist(deparse(substitute(dataset_ds)))
-  # Check DTC is present in dataset_ds
+
+  # Checks
+  warn_if_vars_exist(dataset, deparse(substitute(new_var)))
+  assert_that(is.data.frame(dataset_ds))
   assert_has_variables(dataset_ds, deparse(substitute(dtc)))
 
-  # Warn if the variable to derive already exists in the input dataset
-  warn_if_vars_exist(dataset, deparse(substitute(new_var)))
+  # Process the disposition data
+  prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
+  newvar <- paste0(prefix, "DT")
+  ds_subset <- dataset_ds %>%
+    filter(!!filter_ds) %>%
+    mutate(datedtc = !!enquo(dtc)) %>%
+    derive_vars_dt(
+      new_vars_prefix = prefix,
+      dtc = datedtc,
+      date_imputation = date_imputation,
+      flag_imputation = FALSE
+    ) %>%
+    select(STUDYID, USUBJID, !!enquo(new_var) := !!sym(newvar))
 
-  # if DS needs to be filtered, filter
-  if (!is.null(filter)) {
-    ds_subset <- dataset_ds %>%
-      filter(!!!filter)
-  }
-  else {
-    ds_subset <- dataset_ds
-  }
-
-  # only 1 record per subject is expected - issue a warning otherwise
+  # Expect 1 record per subject - issue a warning otherwise
   assert_has_unique_records(
     dataset = ds_subset,
     by_vars = "USUBJID",
@@ -75,24 +77,7 @@ derive_disposition_dt <- function(dataset,
     message = "the filter used for DS results in several records per patient - please check"
   )
 
-  # set DTC in datedtc (resolves in mutate)
-  ds_subset <- ds_subset %>%
-    mutate(datedtc = !!enquo(dtc))
-
-  # Prefix to use in derive_vars_dt ("RFIC--", "ENRL--",...)
-  prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
-  newvar <- paste0(prefix, "DT")
-  # Create the new dispo date
-  ds__ <- derive_vars_dt(
-    ds_subset,
-    new_vars_prefix = prefix,
-    dtc = datedtc,
-    date_imputation = date_imputation,
-    flag_imputation = FALSE
-  ) %>%
-    select(STUDYID, USUBJID, !!enquo(new_var) := !!sym(newvar))
-
   # add the new dispo date to the input dataset
   dataset %>%
-    left_join(ds__, by = c("STUDYID", "USUBJID"))
+    left_join(ds_subset, by = c("STUDYID", "USUBJID"))
 }

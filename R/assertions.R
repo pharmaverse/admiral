@@ -1,31 +1,3 @@
-#' Does a Dataset exist?
-#'
-#' Checks if a dataset exists in the environement
-#'
-#' @param dataset A `data.frame`
-#'
-#' @author Samia Kabi
-#'
-#' @return The function throws an error if the datasets is not present
-#' in the local environment
-#'
-#' @export
-#'
-#' @examples
-#' data(dm)
-#' assert_dataset_exist("dm")
-assert_dataset_exist <- function(dataset) {
-  if (!exists(dataset)) {
-    err_msg <- paste0(
-      "dataset ",
-      dataset,
-      " does not exist."
-    )
-    abort(err_msg)
-  }
-}
-
-
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
