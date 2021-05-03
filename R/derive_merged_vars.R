@@ -13,7 +13,7 @@
 #'   The variables specified by the `by_vars`, the `filter_add`, and the
 #'   `filter_first_order` parameter are expected.
 #'
-#' @param filter_add Fiter condition for dataset to add
+#' @param filter_add Filter condition for dataset to add
 #'
 #'   Only observations of the add dataset which fulfill the specified condition
 #'   are used for merging.

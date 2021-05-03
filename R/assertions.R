@@ -96,7 +96,6 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' assert_has_unique_records(ex,
 #'                           by_vars = exprs(USUBJID) ,
 #'                           order = exprs(desc(EXENDTC)))
-
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,
                                       order = NULL,
@@ -395,5 +394,45 @@ on_failure(is_valid_month) <- function(call, env) {
     " is not a valid month.\n",
     "Values for month must be between 1-12. ",
     "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
+  )
+}
+
+
+#' Is the object a character?
+#'
+#' Checks if a character vector was specified
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a character, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#' date <- "2020-02-03"
+#' assertthat::assert_that(is_character(date))
+is_character <- function(arg) {
+  is.character(arg)
+}
+on_failure(is_character) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a character."
+  )
+}
+
+is_named_exprs <- function(arg) {
+  is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
+}
+on_failure(is_named_exprs) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a named list of expressions created using `exprs()`"
   )
 }

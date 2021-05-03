@@ -1,31 +1,31 @@
 #' Impute partial date/time portion of a --DTC variable
 #'
-#' Imputation partial date/time portion of a --DTC variable
-#' based on user input
+#' Imputation partial date/time portion of a --DTC variable.
+#' based on user input.
 #'
 #' @param dtc The --DTC date to impute
 #'
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
 #'   If the year part is not recorded (missing date), no imputation is performed.
 #'
-#' @param date_imputation The value to impute the day/month when a datepart is missing
+#' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing
+#'   If NULL: no date imputation is performed and partial dates are returned as missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 #'
-#'   Default is NULL
+#'   Default is NULL.
 #'
-#' @param time_imputation The value to impute the time when a timepart is missing
+#' @param time_imputation The value to impute the time when a timepart is missing.
 #'
 #'   A character value is expected, either as a
 #'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-#'     the start of the day
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
+#'     the start of the day,
+#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
 #'
-#'   Default is '00:00:00'
+#'   Default is '00:00:00'.
 #'
 #' @author Samia Kabi
 #'
@@ -178,20 +178,20 @@ impute_dtc <- function(dtc,
   if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), NA_character_)
 }
 
-#' Convert a --DTC to a --DT
+#' Convert a date character vector into a Date object.
 #'
-#' Convert a complete character --DTC variable into a date object
+#' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
 #'
-#' @param dtc The --DTC date to convert
+#' @param dtc The --DTC date to convert.
 #'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-#'   a partial date will return a NA date and a warning will be issued:
-#'   'All formats failed to parse. No formats found.'
-#'   Note: you can use impute_dtc function to build a complete date
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+#'   A partial date will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'.
+#'   Note: you can use impute_dtc function to build a complete date.
 #'
 #' @author Samia Kabi
 #'
-#' @return  a date object
+#' @return a date object
 #'
 #' @keywords computation timing
 #'
@@ -202,26 +202,30 @@ impute_dtc <- function(dtc,
 #' convert_dtc_to_dt("2019-07-18")
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
-  case_when(
-    nchar(dtc) >= 10 ~ ymd(substr(dtc, 1, 10)),
+  # Check dtc is character
+  assert_that(is_character(dtc))
+  dt <- case_when(
+    nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
     TRUE ~ ymd(NA)
   )
+  warn_if_invalid_dtc(dtc)
+  dt
 }
 
-#' Convert a --DTC to a --DTM
+#' Convert a date character vector into a Date time object.
 #'
-#' Convert a complete character --DTC variable into a datetime object
+#' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DTM').
 #'
-#' @param dtc The --DTC date to convert
+#' @param dtc The --DTC date to convert.
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-#'   a partial datetime will return a NA date and a warning will be issued:
-#'   'All formats failed to parse. No formats found.'
-#'   Note: you can use impute_dtc function to build a complete datetime
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
+#'   A partial datetime will return a NA date and a warning will be issued:
+#'   'All formats failed to parse. No formats found.'.
+#'   Note: you can use impute_dtc function to build a complete datetime.
 #'
 #' @author Samia Kabi
 #'
-#' @return  a datetime  object
+#' @return a datetime  object
 #'
 #' @keywords computation timing
 #'
@@ -232,28 +236,32 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
+  # Check dtc is character
+  assert_that(is_character(dtc))
   # note T00:00:00 is not printed in dataframe
-  case_when(
-    nchar(dtc) == 19 ~ ymd_hms(dtc),
+  dtm <- case_when(
+    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
     TRUE ~ ymd_hms(NA)
   )
+  warn_if_invalid_dtc(dtc)
+  dtm
 }
-
-#' Derive --DTF
+#' Derive the date imputation flag
 #'
-#' Derive --DTF based on --DTC and --DT
+#' Derive the date imputation flag ('--DTF') comparing a date character vector
+#' ('--DTC') with a Date vector ('--DT').
 #'
-#' @param dtc The --DTC used as input for --DT
+#' @param dtc The date character vector ('--DTC').
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).
 #'
-#' @param dt The --DT resulting from the imputation of --DTC
+#' @param dt The  Date vector to compare.
 #'
-#'   A date object is expected
+#'   A date object is expected.
 #'
 #' @author Samia Kabi
 #'
-#' @return  the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
+#' @return the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )
 #'
 #' @keywords computation timing
 #'
@@ -264,30 +272,40 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
-  case_when(
+  # Check dtc is character
+  assert_that(is_character(dtc))
+  # check dt is a date
+  assert_that(is_date(dt))
+
+  dtf <- case_when(
+    (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
+      is.na(dt) |
+      !is_valid_dtc(dtc) ~ NA_character_,
     !is.na(dt) & nchar(dtc) < 4 ~ "Y",
     !is.na(dt) & nchar(dtc) == 4 ~ "M",
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
-    !is.na(dt) & nchar(dtc) == 9 ~ "M", # dates like "2019---07"
-    (!is.na(dt) & nchar(dtc) >= 10) | is.na(dt) ~ NA_character_
+    !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
   )
+  warn_if_invalid_dtc(dtc)
+  dtf
 }
 
-#' Derive --TMF
+#' Derive the time imputation flag
 #'
-#' Derive --TMF based on --DTC and --DT
+#' Derive the time imputation flag ('--TMF') comparing a date character vector
+#' ('--DTC') with a Datetime vector ('--DTM').
 #'
-#' @param dtc The --DTC used as input for --DT
+#' @param dtc The date character vector ('--DTC').
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)
+#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).
 #'
-#' @param dtm The --DTM resulting from the imputation of --DTC
+#' @param dtm The  Date vector to compare ('--DTM').
 #'
-#'   A datetime object is expected
+#'   A datetime object is expected.
 #'
 #' @author Samia Kabi
 #'
-#' @return  the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
+#' @return the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)
 #'
 #' @keywords computation timing
 #'
@@ -299,50 +317,60 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
-  case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19) | is.na(dtm) ~ NA_character_,
+  # Check dtc is character
+  assert_that(is_character(dtc))
+  # check dt is a date
+  assert_that(is_date(dtm))
+
+  tmf <- case_when(
+    (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
+      is.na(dtm) |
+      !is_valid_dtc(dtc) ~ NA_character_,
     !is.na(dtm) & nchar(dtc) == 16 ~ "S",
     !is.na(dtm) & nchar(dtc) == 13 ~ "M",
-    (!is.na(dtm) & (nchar(dtc) == 10 | is_valid_dtc(dtc) == FALSE)) |
+    (!is.na(dtm) & (nchar(dtc) == 10)) |
       (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
   )
+  warn_if_invalid_dtc(dtc)
+  tmf
 }
 
-#' Derive --DT (and --DTF)
+#' Derive/Impute a date from a date character vector
 #'
-#' Derive --DT based on --DTC. --DT is imputed based on user input
-#' Derive --DTF if needed based on --DTC and --DT
+#' Derive a date ('--DT') from a date character vector ('---DTC').
+#' The date can be imputed (see date_imputation parameter)
+#' and the date imputation flag ('--DTF') can be added.
 #'
-#' @param dataset Input dataset
+#' @param dataset Input dataset.
 #'
-#'   The --DTC variable must be present.
+#'   The date character vector (dtc) must be present.
 #'
-#' @param new_vars_prefix Prefix used for the output variable(s)
+#' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g new_vars_prefix="AST"
+#' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The --DTC date used to derive/impute --DT
+#' @param dtc The date character vector used to derive/impute the date.
 #'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-#'   if the year part is not recorded (missing date), no imputation is done
+#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+#'   if the year part is not recorded (missing date), no imputation is done.
 #'
-#' @param date_imputation The value to impute the day/month when a datepart is missing
+#' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
-#'   If NULL: no date imputation is perfomed and partial dates are returned as missing
+#'   If NULL: no date imputation is performed and partial dates are returned as missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 #'
-#'   Default is NULL
+#'   Default is NULL.
 #'
-#' @param flag_imputation Whether the --DTF variable must also be derived
+#' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
 #'
-#' @return  the input dataset with the date --DT (and the date imputation flag --DTF) added
+#' @return  the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
 #'
 #' @author Samia Kabi
 #'
@@ -439,59 +467,62 @@ derive_vars_dt <- function(dataset,
   dataset
 }
 
-
-#' Derive --DTM (and --DTF/--TMF)
+#' Derive/Impute a datetime from a date character vector
 #'
-#' Derive --DTM based on --DTC. --DTM is imputed based on user input
-#' Derive --DTF/--TMF if needed based on --DTC and --DT
+#' Derive a datetime object ('--DTM') from a date character vector ('---DTC').
+#' The date and time can be imputed (see date_imputation/time_imputation parameters)
+#' and the date/time imputation flag ('--DTF', '--TMF') can be added.
 #'
 #' @param dataset Input dataset
 #'
-#'   The --DTC variable must be present.
+#'   The date character vector (dtc) must be present.
 #'
-#' @param new_vars_prefix Prefix used for the output variable(s)
+#' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected, e.g new_vars_prefix="AST"
+#' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The --DTC date used to derive/impute --DT
+#' @param dtc The date character vector used to derive/impute the date.
 #'
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   If the year part is not recorded (missing date), no imputation is performed.
+#'   if the year part is not recorded (missing date), no imputation is done.
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
 #'   If NULL: no date imputation is performed and partial dates are returned as missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 #'
-#'   Default is NULL
+#'   Default is NULL.
 #'
-#' @param time_imputation The value to impute the time when a timepart is missing
+#' @param time_imputation The value to impute the time when a timepart is missing.
 #'
 #'   A character value is expected, either as a
 #'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-#'     the start of the day
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
+#'     the start of the day,
+#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
 #'
-#'   Default is '00:00:00'
+#'   Default is '00:00:00'.
 #'
-#' @param flag_imputation Whether the --DTF and or --TMF variable must also be derived
+#' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
 #'
+#'
 #' @details
 #' The presence of a --DTF variable is checked and the variable is not derived
 #' if it already exists in the input dataset. However, if --TMF already exists
-#' in the input dataset, a warning is issued and --TMF will be overwritten
+#' in the input dataset, a warning is issued and --TMF will be overwritten.
 #'
-#' @return  the input dataset with the datetime --DTM (and the date/time imputation
-#' flag --DTF, --TMF) added
+#' @return  the input dataset with the datetime '--DTM' (and the date/time imputation
+#' flag '--DTF', '--TMF') added.
 #'
 #' @author Samia Kabi
+#'
+#' @keywords derivation timing
 #'
 #' @export
 #'
