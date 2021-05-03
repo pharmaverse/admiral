@@ -14,6 +14,8 @@
 #'
 #' @author Thomas Neitmann
 #'
+#' @keywords bds derivation
+#'
 #' @examples
 #' dataset <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
@@ -42,6 +44,8 @@ derive_var_base <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)
 #' @export
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords bds derivation
 #'
 #' @examples
 #' dataset <- tibble::tribble(
@@ -77,6 +81,8 @@ derive_var_basec <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE
 #' @export
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords bds derivation
 #'
 #' @examples
 #' dataset <- tibble::tribble(

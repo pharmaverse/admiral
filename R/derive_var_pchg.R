@@ -13,7 +13,7 @@
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `PCHG`
-#' @keywords ADaM BDS derivation
+#' @keywords bds derivation
 #' @export
 #'
 #' @examples

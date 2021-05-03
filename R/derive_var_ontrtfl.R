@@ -48,6 +48,8 @@
 #'
 #' @author Alice Ehmann
 #'
+#' @keywords bds derivation
+#'
 #' @return The input dataset with an additional column named
 #' `ONTRTFL` with a value of `"Y"` or `NA`
 #'
