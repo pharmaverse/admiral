@@ -145,11 +145,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p><code>data.frame</code></p></td>
+      <td><p>The input dataset</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
-      <td><p><code>character</code> vector of columns uniquely identifying a set
+      <td><p>Grouping variables uniquely identifying a set
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     <tr>
@@ -182,7 +182,7 @@ dataset plus the <code>new_var</code> variable.</p>
 )
 <span class='fu'>derive_baseline</span>(
   <span class='no'>dataset</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>, <span class='no'>BASETYPE</span>),
   <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>AVALC</span>,
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BASEC</span>
 )</div><div class='output co'>#&gt; # A tibble: 6 x 7

@@ -138,18 +138,18 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>))</pre>
+    <pre class="usage"><span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>, <span class='no'>BASETYPE</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p><code>data.frame</code></p></td>
+      <td><p>The input dataset</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
-      <td><p><code>character</code> vector of columns uniquely identifying a set
+      <td><p>Grouping variables uniquely identifying a set
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     </table>
@@ -162,23 +162,23 @@ dataset plus the <code>BASE</code> variable</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVAL</span>, ~<span class='no'>ABLFL</span>, ~<span class='no'>BASETYPE</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>10.12</span>, <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>,  <span class='fl'>9.7</span>,  <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>15.01</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='fl'>NA</span>,    <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>
+  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVAL</span>, ~<span class='no'>ABLFL</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>10.12</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>,  <span class='fl'>9.7</span>,  <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>15.01</span>, <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='fl'>NA</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"N"</span>
 )
-<span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 7
-#&gt;   STUDYID USUBJID PARAMCD  AVAL ABLFL BASETYPE  BASE
-#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
-#&gt; 1 TEST01  PAT01   PARAM01 10.1  Y     LAST     10.1 
-#&gt; 2 TEST01  PAT01   PARAM01  9.7  N     LAST     10.1 
-#&gt; 3 TEST01  PAT01   PARAM01 15.0  N     LAST     10.1 
-#&gt; 4 TEST01  PAT01   PARAM02  8.35 Y     LAST      8.35
-#&gt; 5 TEST01  PAT01   PARAM02 NA    N     LAST      8.35
-#&gt; 6 TEST01  PAT01   PARAM02  8.35 N     LAST      8.35</div></pre>
+<span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 6
+#&gt;   STUDYID USUBJID PARAMCD  AVAL ABLFL  BASE
+#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+#&gt; 1 TEST01  PAT01   PARAM01 10.1  Y     10.1 
+#&gt; 2 TEST01  PAT01   PARAM01  9.7  N     10.1 
+#&gt; 3 TEST01  PAT01   PARAM01 15.0  N     10.1 
+#&gt; 4 TEST01  PAT01   PARAM02  8.35 Y      8.35
+#&gt; 5 TEST01  PAT01   PARAM02 NA    N      8.35
+#&gt; 6 TEST01  PAT01   PARAM02  8.35 N      8.35</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

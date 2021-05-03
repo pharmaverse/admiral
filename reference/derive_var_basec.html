@@ -138,18 +138,18 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"USUBJID"</span>, <span class='st'>"PARAMCD"</span>, <span class='st'>"BASETYPE"</span>))</pre>
+    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>, <span class='no'>BASETYPE</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p><code>data.frame</code></p></td>
+      <td><p>The input dataset</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
-      <td><p><code>character</code> vector of columns uniquely identifying a set
+      <td><p>Grouping variables uniquely identifying a set
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     </table>
@@ -162,23 +162,23 @@ dataset plus the <code>BASEC</code> variable</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVALC</span>,   ~<span class='no'>ABLFL</span>, ~<span class='no'>BASETYPE</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"Y"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,    <span class='st'>"LAST"</span>
+  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVALC</span>,   ~<span class='no'>ABLFL</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"LOW"</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>
 )
-<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 7
-#&gt;   STUDYID USUBJID PARAMCD AVALC  ABLFL BASETYPE BASEC
-#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;
-#&gt; 1 TEST01  PAT01   PARAM01 LOW    Y     LAST     LOW  
-#&gt; 2 TEST01  PAT01   PARAM01 LOW    N     LAST     LOW  
-#&gt; 3 TEST01  PAT01   PARAM01 MEDIUM N     LAST     LOW  
-#&gt; 4 TEST01  PAT01   PARAM02 HIGH   Y     LAST     HIGH 
-#&gt; 5 TEST01  PAT01   PARAM02 HIGH   N     LAST     HIGH 
-#&gt; 6 TEST01  PAT01   PARAM02 MEDIUM N     LAST     HIGH </div></pre>
+<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 6
+#&gt;   STUDYID USUBJID PARAMCD AVALC  ABLFL BASEC
+#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
+#&gt; 1 TEST01  PAT01   PARAM01 LOW    Y     LOW  
+#&gt; 2 TEST01  PAT01   PARAM01 LOW    N     LOW  
+#&gt; 3 TEST01  PAT01   PARAM01 MEDIUM N     LOW  
+#&gt; 4 TEST01  PAT01   PARAM02 HIGH   Y     HIGH 
+#&gt; 5 TEST01  PAT01   PARAM02 HIGH   N     HIGH 
+#&gt; 6 TEST01  PAT01   PARAM02 MEDIUM N     HIGH </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
