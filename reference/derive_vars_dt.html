@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive --DT (and --DTF) — derive_vars_dt • admiral</title>
+<title>Derive/Impute a date from a date character vector — derive_vars_dt • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,11 @@
 
 
 
-<meta property="og:title" content="Derive --DT (and --DTF) — derive_vars_dt" />
+<meta property="og:title" content="Derive/Impute a date from a date character vector — derive_vars_dt" />
 
-<meta property="og:description" content="Derive --DT based on --DTC. --DT is imputed based on user input
-Derive --DTF if needed based on --DTC and --DT" />
+<meta property="og:description" content="Derive a date ('--DT') from a date character vector ('---DTC').
+The date can be imputed (see date_imputation parameter)
+and the date imputation flag ('--DTF') can be added." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -128,15 +129,16 @@ Derive --DTF if needed based on --DTC and --DT" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive --DT (and --DTF)</h1>
+    <h1>Derive/Impute a date from a date character vector</h1>
     
     <div class="hidden name"><code>derive_vars_dt.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Derive --DT based on --DTC. --DT is imputed based on user input
-Derive --DTF if needed based on --DTC and --DT</p>
+    <p>Derive a date ('--DT') from a date character vector ('---DTC').
+The date can be imputed (see date_imputation parameter)
+and the date imputation flag ('--DTF') can be added.</p>
     
     </div>
 
@@ -148,34 +150,34 @@ Derive --DTF if needed based on --DTC and --DT</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The --DTC variable must be present.</p></td>
+      <td><p>Input dataset.</p>
+<p>The date character vector (dtc) must be present.</p></td>
     </tr>
     <tr>
       <th>new_vars_prefix</th>
-      <td><p>Prefix used for the output variable(s)</p>
-<p>a character is expected: e.g new_vars_prefix="AST"</p></td>
+      <td><p>Prefix used for the output variable(s).</p>
+<p>a character is expected: e.g new_vars_prefix="AST".</p></td>
     </tr>
     <tr>
       <th>dtc</th>
-      <td><p>The --DTC date used to derive/impute --DT</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-if the year part is not recorded (missing date), no imputation is done</p></td>
+      <td><p>The date character vector used to derive/impute the date.</p>
+<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+if the year part is not recorded (missing date), no imputation is done.</p></td>
     </tr>
     <tr>
       <th>date_imputation</th>
-      <td><p>The value to impute the day/month when a datepart is missing</p>
-<p>If NULL: no date imputation is perfomed and partial dates are returned as missing</p>
+      <td><p>The value to impute the day/month when a datepart is missing.</p>
+<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
+<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
 </ul>
 
-<p>Default is NULL</p></td>
+<p>Default is NULL.</p></td>
     </tr>
     <tr>
       <th>flag_imputation</th>
-      <td><p>Whether the --DTF variable must also be derived</p>
+      <td><p>Whether the date imputation flag must also be derived.</p>
 <p>A logical value</p>
 <p>Default: TRUE</p></td>
     </tr>
@@ -183,7 +185,7 @@ if the year part is not recorded (missing date), no imputation is done</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the input dataset with the date --DT (and the date imputation flag --DTF) added</p>
+    <p>the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -200,47 +202,88 @@ if the year part is not recorded (missing date), no imputation is done</p></td>
 
 <span class='co'># Create ASTDT and ASTDTF</span>
 <span class='co'># no imputation for partial date</span>
-<span class='no'>mhdt1</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_vars_dt</span>(
+<span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>
-)
-
+)</div><div class='output co'>#&gt; # A tibble: 7 x 3
+#&gt;   MHSTDTC             ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
+#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
+#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
+#&gt; 4 2019-02             NA         &lt;NA&gt;  
+#&gt; 5 2019                NA         &lt;NA&gt;  
+#&gt; 6 2019---07           NA         &lt;NA&gt;  
+#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create ASTDT and ASTDTF</span>
 <span class='co'># Impute partial dates to first day/month</span>
-<span class='no'>mhdt2</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_vars_dt</span>(
+<span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"FIRST"</span>
-)
-
+)</div><div class='output co'>#&gt; # A tibble: 7 x 3
+#&gt;   MHSTDTC             ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
+#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
+#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
+#&gt; 4 2019-02             2019-02-01 D     
+#&gt; 5 2019                2019-01-01 M     
+#&gt; 6 2019---07           2019-01-01 M     
+#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Impute partial dates to 4th of june</span>
-<span class='no'>mhdt2a</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_vars_dt</span>(
+<span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"04-06"</span>
-)
-
+)</div><div class='output co'>#&gt; # A tibble: 7 x 3
+#&gt;   MHSTDTC             ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
+#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
+#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
+#&gt; 4 2019-02             2019-02-04 D     
+#&gt; 5 2019                2019-06-04 M     
+#&gt; 6 2019---07           2019-06-04 M     
+#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create AENDT and AENDTF</span>
 <span class='co'># Impute partial dates to last day/month</span>
-<span class='no'>mhdt3</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_vars_dt</span>(
+<span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AEN"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"LAST"</span>
-)
-
+)</div><div class='output co'>#&gt; # A tibble: 7 x 3
+#&gt;   MHSTDTC             AENDT      AENDTF
+#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
+#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
+#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
+#&gt; 4 2019-02             2019-02-28 D     
+#&gt; 5 2019                2019-12-31 M     
+#&gt; 6 2019---07           2019-12-31 M     
+#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create BIRTHDT</span>
 <span class='co'># Impute partial dates to 15th of June. No DTF</span>
-<span class='no'>mhdt4</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_vars_dt</span>(
+<span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"BIRTH"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"MID"</span>,
   <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</div></pre>
+)</div><div class='output co'>#&gt; # A tibble: 7 x 2
+#&gt;   MHSTDTC             BIRTHDT   
+#&gt;   &lt;chr&gt;               &lt;date&gt;    
+#&gt; 1 2019-07-18T15:25:40 2019-07-18
+#&gt; 2 2019-07-18T15:25    2019-07-18
+#&gt; 3 2019-07-18          2019-07-18
+#&gt; 4 2019-02             2019-02-15
+#&gt; 5 2019                2019-06-15
+#&gt; 6 2019---07           2019-06-15
+#&gt; 7 ""                  NA        </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

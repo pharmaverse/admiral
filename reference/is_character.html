@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge variables from a second dataset — derive_merged_vars • admiral</title>
+<title>Is the object a character? — is_character • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,11 +43,9 @@
 
 
 
-<meta property="og:title" content="Merge variables from a second dataset — derive_merged_vars" />
+<meta property="og:title" content="Is the object a character? — is_character" />
 
-<meta property="og:description" content="Merges variables from a second dataset. The observations to merge can be
-selected by a condition and/or by selecting the first observation in each by
-group." />
+<meta property="og:description" content="Checks if a character vector was specified" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -129,114 +127,36 @@ group." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge variables from a second dataset</h1>
+    <h1>Is the object a character?</h1>
     
-    <div class="hidden name"><code>derive_merged_vars.Rd</code></div>
+    <div class="hidden name"><code>is_character.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Merges variables from a second dataset. The observations to merge can be
-selected by a condition and/or by selecting the first observation in each by
-group.</p>
+    <p>Checks if a character vector was specified</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_merged_vars</span>(<span class='no'>dataset</span>, <span class='no'>dataset_add</span>, <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>new_vars</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>), <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>)</pre>
+    <pre class="usage"><span class='fu'>is_character</span>(<span class='no'>arg</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The variables specified by the <code>by_vars</code> parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>dataset_add</th>
-      <td><p>Dataset to add</p>
-<p>The variables specified by the <code>by_vars</code>, the <code>filter_add</code>, and the
-<code>filter_first_order</code> parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>filter_add</th>
-      <td><p>Filter condition for dataset to add</p>
-<p>Only observations of the add dataset which fulfill the specified condition
-are used for merging.</p>
-<p>Permitted Values: logical expression</p></td>
-    </tr>
-    <tr>
-      <th>new_vars</th>
-      <td><p>Variable to add</p>
-<p>The specified variables are created in the add dataset and then merge to
-the input dataset.</p>
-<p>Permitted Values: list of name-value pairs</p></td>
-    </tr>
-    <tr>
-      <th>by_vars</th>
-      <td><p>Grouping variables</p>
-<p>Default: <code><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs(USUBJID)</a></code></p>
-<p>Permitted Values: list of variables</p></td>
-    </tr>
-    <tr>
-      <th>filter_order</th>
-      <td><p>Sort order</p>
-<p>If the parameter is specified, the add dataset is ordered by the specified
-order and only the first or last observation (depending on the filter mode)
-in each by group is used for merging.</p>
-<p>Permitted Values: list of variables or functions of variables</p></td>
-    </tr>
-    <tr>
-      <th>filter_mode</th>
-      <td><p>Filter mode</p>
-<p>If the <code>filter_order</code> parameter is specified, the filter mode determines if
-the first or last observation of each by group is selected.</p>
-<p>Default: <code>"last"</code></p>
-<p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></td>
+      <th>arg</th>
+      <td><p>The argument to check</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with variables from the add dataset</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first observation (with respect to the order
-specified for the <code>order</code> parameter) is included in the output dataset.</p>
+    <p><code>TRUE</code> if the argument is a character, <code>FALSE</code> otherwise</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflict</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
-
-<span class='co'># adding first treatment start date for each patient</span>
-<span class='fu'>derive_merged_vars</span>(
-  <span class='no'>dm</span>,
-  <span class='kw'>dataset_add</span> <span class='kw'>=</span> <span class='no'>ex</span>,
-  <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> <span class='fu'>str_detect</span>(<span class='no'>EXTRT</span>, <span class='st'>'PLACEBO'</span>)),
-  <span class='kw'>new_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>TRTSDT</span> <span class='kw'>:=</span> <span class='fu'>ymd</span>(<span class='no'>EXSTDTC</span>)),
-  <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSTDTC</span>, <span class='no'>EXSEQ</span>),
-  <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"first"</span>
-) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTSDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
-#&gt;    USUBJID     TRTSDT    
-#&gt;    &lt;chr&gt;       &lt;date&gt;    
-#&gt;  1 01-701-1015 2014-01-02
-#&gt;  2 01-701-1023 2012-08-05
-#&gt;  3 01-701-1028 2013-07-19
-#&gt;  4 01-701-1033 2014-03-18
-#&gt;  5 01-701-1034 2014-07-01
-#&gt;  6 01-701-1047 2013-02-12
-#&gt;  7 01-701-1057 NA        
-#&gt;  8 01-701-1097 2014-01-01
-#&gt;  9 01-701-1111 2012-09-07
-#&gt; 10 01-701-1115 2012-11-30
-#&gt; # … with 296 more rows</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>date</span> <span class='kw'>&lt;-</span> <span class='st'>"2020-02-03"</span>
+<span class='kw pkg'>assertthat</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/assertthat/man/assert_that.html'>assert_that</a></span>(<span class='fu'>is_character</span>(<span class='no'>date</span>))</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

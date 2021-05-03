@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive --DTF — compute_dtf • admiral</title>
+<title>Derive the date imputation flag — compute_dtf • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,10 @@
 
 
 
-<meta property="og:title" content="Derive --DTF — compute_dtf" />
+<meta property="og:title" content="Derive the date imputation flag — compute_dtf" />
 
-<meta property="og:description" content="Derive --DTF based on --DTC and --DT" />
+<meta property="og:description" content="Derive the date imputation flag ('--DTF') comparing a date character vector
+('--DTC') with a Date vector ('--DT')." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -127,14 +128,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive --DTF</h1>
+    <h1>Derive the date imputation flag</h1>
     
     <div class="hidden name"><code>compute_dtf.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Derive --DTF based on --DTC and --DT</p>
+    <p>Derive the date imputation flag ('--DTF') comparing a date character vector
+('--DTC') with a Date vector ('--DT').</p>
     
     </div>
 
@@ -145,24 +147,23 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dtc</th>
-      <td><p>The --DTC used as input for --DT</p>
-<p>A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)</p></td>
+      <td><p>The date character vector ('--DTC').</p>
+<p>A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).</p></td>
     </tr>
     <tr>
       <th>dt</th>
-      <td><p>The --DT resulting from the imputation of --DTC</p>
-<p>A date object is expected</p></td>
+      <td><p>The  Date vector to compare.</p>
+<p>A date object is expected.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )</p>
+    <p>the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>compute_dtf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019-07"</span>, <span class='kw'>dt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>))</div><div class='output co'>#&gt; [1] "D"</div><div class='input'><span class='fu'>compute_dtf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019"</span>, <span class='kw'>dt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>))</div><div class='output co'>#&gt; [1] "M"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>compute_dtf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019-07"</span>, <span class='kw'>dt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>))</div><div class='output co'>#&gt; [1] "D"</div><div class='input'><span class='fu'>compute_dtf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019"</span>, <span class='kw'>dt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>))</div><div class='output co'>#&gt; [1] "M"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

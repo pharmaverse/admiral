@@ -193,16 +193,16 @@ order specified for the <code>order</code> parameter and the mode specified for 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
-
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflict</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
 
 <span class='co'># selecting first dose for each patient</span>
-<span class='fu'>filter_extreme</span>(<span class='no'>ex</span>,
-               <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSEQ</span>),
-               <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
-               <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>'first'</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'>filter_extreme</span>(
+  <span class='no'>ex</span>,
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXSEQ</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>EXSEQ</span>)</div><div class='output co'>#&gt; # A tibble: 254 x 2
 #&gt;    USUBJID     EXSEQ
 #&gt;    &lt;chr&gt;       &lt;dbl&gt;
@@ -218,10 +218,12 @@ order specified for the <code>order</code> parameter and the mode specified for 
 #&gt; 10 01-701-1118     1
 #&gt; # … with 244 more rows</div><div class='input'>
 <span class='co'># selecting highest dose for each patient</span>
-<span class='fu'>filter_extreme</span>(<span class='no'>ex</span>,
-               <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span>),
-               <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
-               <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"none"</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'>filter_extreme</span>(
+  <span class='no'>ex</span>,
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>EXDOSE</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>),
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"none"</span>
+) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>EXDOSE</span>)</div><div class='output co'>#&gt; # A tibble: 254 x 2
 #&gt;    USUBJID     EXDOSE
 #&gt;    &lt;chr&gt;        &lt;dbl&gt;
@@ -235,8 +237,7 @@ order specified for the <code>order</code> parameter and the mode specified for 
 #&gt;  8 01-701-1111     54
 #&gt;  9 01-701-1115     54
 #&gt; 10 01-701-1118      0
-#&gt; # … with 244 more rows</div><div class='input'>
-</div></pre>
+#&gt; # … with 244 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a --DTC to a --DT — convert_dtc_to_dt • admiral</title>
+<title>Convert a date character vector into a Date object. — convert_dtc_to_dt • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,9 @@
 
 
 
-<meta property="og:title" content="Convert a --DTC to a --DT — convert_dtc_to_dt" />
+<meta property="og:title" content="Convert a date character vector into a Date object. — convert_dtc_to_dt" />
 
-<meta property="og:description" content="Convert a complete character --DTC variable into a date object" />
+<meta property="og:description" content="Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT')." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -127,14 +127,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a --DTC to a --DT</h1>
+    <h1>Convert a date character vector into a Date object.</h1>
     
     <div class="hidden name"><code>convert_dtc_to_dt.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Convert a complete character --DTC variable into a date object</p>
+    <p>Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').</p>
     
     </div>
 
@@ -145,11 +145,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dtc</th>
-      <td><p>The --DTC date to convert</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-a partial date will return a NA date and a warning will be issued:
-'All formats failed to parse. No formats found.'
-Note: you can use impute_dtc function to build a complete date</p></td>
+      <td><p>The --DTC date to convert.</p>
+<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+A partial date will return a NA date and a warning will be issued:
+'All formats failed to parse. No formats found.'.
+Note: you can use impute_dtc function to build a complete date.</p></td>
     </tr>
     </table>
     

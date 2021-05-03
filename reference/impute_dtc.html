@@ -45,8 +45,8 @@
 
 <meta property="og:title" content="Impute partial date/time portion of a --DTC variable — impute_dtc" />
 
-<meta property="og:description" content="Imputation partial date/time portion of a --DTC variable
-based on user input" />
+<meta property="og:description" content="Imputation partial date/time portion of a --DTC variable.
+based on user input." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -135,8 +135,8 @@ based on user input" />
 
     <div class="ref-description">
     
-    <p>Imputation partial date/time portion of a --DTC variable
-based on user input</p>
+    <p>Imputation partial date/time portion of a --DTC variable.
+based on user input.</p>
     
     </div>
 
@@ -153,25 +153,25 @@ If the year part is not recorded (missing date), no imputation is performed.</p>
     </tr>
     <tr>
       <th>date_imputation</th>
-      <td><p>The value to impute the day/month when a datepart is missing</p>
-<p>If NULL: no date imputation is performed and partial dates are returned as missing</p>
+      <td><p>The value to impute the day/month when a datepart is missing.</p>
+<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
+<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
 </ul>
 
-<p>Default is NULL</p></td>
+<p>Default is NULL.</p></td>
     </tr>
     <tr>
       <th>time_imputation</th>
-      <td><p>The value to impute the time when a timepart is missing</p>
+      <td><p>The value to impute the time when a timepart is missing.</p>
 <p>A character value is expected, either as a</p><ul>
 <li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day</p></li>
-<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day</p></li>
+the start of the day,</p></li>
+<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.</p></li>
 </ul>
 
-<p>Default is '00:00:00'</p></td>
+<p>Default is '00:00:00'.</p></td>
     </tr>
     </table>
     
@@ -181,9 +181,7 @@ the start of the day</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='no'>mhdt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>MHSTDTC</span>,
+    <pre class="examples"><div class='input'><span class='no'>dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
   <span class='st'>"2019-07-18T15:25:40"</span>,
   <span class='st'>"2019-07-18T15:25"</span>,
   <span class='st'>"2019-07-18T15"</span>,
@@ -194,48 +192,58 @@ the start of the day</p></li>
   <span class='st'>"2019---07"</span>,
   <span class='st'>""</span>
 )
-<span class='co'># No date imputation (date_imputation defaulted to NULL)</span>
-<span class='co'># Missing time part imputed with 00:00:00 portion by default</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>)
 
 <span class='co'># No date imputation (date_imputation defaulted to NULL)</span>
+<span class='co'># Missing time part imputed with 00:00:00 portion by default</span>
+<span class='fu'>impute_dtc</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:00" "2019-07-18T15:00:00"
+#&gt; [4] "2019-07-18T00:00:00" NA                    NA                   
+#&gt; [7] NA                    NA                    NA                   </div><div class='input'>
+<span class='co'># No date imputation (date_imputation defaulted to NULL)</span>
 <span class='co'># Missing time part imputed with 23:59:59 portion</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"23:59:59"</span>
-)
-<span class='co'># same as above</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:59" "2019-07-18T15:59:59"
+#&gt; [4] "2019-07-18T23:59:59" NA                    NA                   
+#&gt; [7] NA                    NA                    NA                   </div><div class='input'>
+<span class='co'># Same as above</span>
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"LAST"</span>
-)
-
-<span class='co'># impute to first day/month if date is partial</span>
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:59" "2019-07-18T15:59:59"
+#&gt; [4] "2019-07-18T23:59:59" NA                    NA                   
+#&gt; [7] NA                    NA                    NA                   </div><div class='input'>
+<span class='co'># Impute to first day/month if date is partial</span>
 <span class='co'># Missing time part imputed with 00:00:00 portion by default</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"01-01"</span>
-)
-<span class='co'># same as above</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:00" "2019-07-18T15:00:00"
+#&gt; [4] "2019-07-18T00:00:00" "2019-02-01T00:00:00" "2019-01-01T00:00:00"
+#&gt; [7] "2019-01-01T00:00:00" "2019-01-01T00:00:00" NA                   </div><div class='input'><span class='co'># same as above</span>
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"FIRST"</span>
-)
-
-<span class='co'># impute to last day/month if date is partial</span>
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:00" "2019-07-18T15:00:00"
+#&gt; [4] "2019-07-18T00:00:00" "2019-02-01T00:00:00" "2019-01-01T00:00:00"
+#&gt; [7] "2019-01-01T00:00:00" "2019-01-01T00:00:00" NA                   </div><div class='input'>
+<span class='co'># Impute to last day/month if date is partial</span>
 <span class='co'># Missing time part imputed with 23:59:59 portion</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"LAST"</span>,
   <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"LAST"</span>
-)
-
-<span class='co'># impute to Mid day/month if date is partial</span>
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:59" "2019-07-18T15:59:59"
+#&gt; [4] "2019-07-18T23:59:59" "2019-02-28T23:59:59" "2019-12-31T23:59:59"
+#&gt; [7] "2019-12-31T23:59:59" "2019-12-31T23:59:59" NA                   </div><div class='input'>
+<span class='co'># Impute to mid day/month if date is partial</span>
 <span class='co'># Missing time part imputed with 00:00:00 portion by default</span>
-<span class='no'>idtc</span> <span class='kw'>&lt;-</span> <span class='fu'>impute_dtc</span>(
-  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>mhdt</span>$<span class='no'>MHSTDTC</span>,
+<span class='fu'>impute_dtc</span>(
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>dates</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"MID"</span>
-)</div></pre>
+)</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:00" "2019-07-18T15:00:00"
+#&gt; [4] "2019-07-18T00:00:00" "2019-02-15T00:00:00" "2019-06-15T00:00:00"
+#&gt; [7] "2019-06-15T00:00:00" "2019-06-15T00:00:00" NA                   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

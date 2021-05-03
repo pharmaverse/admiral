@@ -188,8 +188,8 @@ Optional; default = NULL</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with an additional column named by default
-<code>ONTRTFL</code> with a value of Y or NA</p>
+    <p>The input dataset with an additional column named
+<code>ONTRTFL</code> with a value of <code>"Y"</code> or <code>NA</code></p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -212,50 +212,70 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘lubridate’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    date</span></div><div class='input'><span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>, ~<span class='no'>TRTSDT</span>, ~<span class='no'>TRTEDT</span>, ~<span class='no'>ONTRTFL</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"Y"</span>,
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"Y"</span>,
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"N"</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflict</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
 )
-<span class='fu'>derive_var_ontrtfl</span>(<span class='no'>advs</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>, <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>, <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Variable `ONTRTFL` already exists in the dataset</span></div><div class='output co'>#&gt; # A tibble: 3 x 5
+<span class='fu'>derive_var_ontrtfl</span>(
+  <span class='no'>advs</span>,
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
+  <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
+  <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>
+)</div><div class='output co'>#&gt; # A tibble: 3 x 5
 #&gt;   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  
 #&gt; 1 P01     2020-02-24 2020-01-01 2020-03-01 Y      
 #&gt; 2 P02     2020-01-01 2020-01-01 2020-03-01 Y      
 #&gt; 3 P03     2019-12-31 2020-01-01 2020-03-01 &lt;NA&gt;   </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>, ~<span class='no'>TRTSDT</span>, ~<span class='no'>TRTEDT</span>, ~<span class='no'>ONTRTFL</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-07-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"N"</span>,
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"Y"</span>,
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='st'>"Y"</span>
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-07-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
 )
-<span class='fu'>derive_var_ontrtfl</span>(<span class='no'>advs</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>, <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
-                   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>, <span class='kw'>ref_end_window</span><span class='kw'>=</span><span class='fl'>60</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Variable `ONTRTFL` already exists in the dataset</span></div><div class='output co'>#&gt; # A tibble: 3 x 5
+<span class='fu'>derive_var_ontrtfl</span>(
+  <span class='no'>advs</span>,
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
+  <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
+  <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>,
+  <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>60</span>
+)</div><div class='output co'>#&gt; # A tibble: 3 x 5
 #&gt;   USUBJID ADT        TRTSDT     TRTEDT     ONTRTFL
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  
 #&gt; 1 P01     2020-07-01 2020-01-01 2020-03-01 &lt;NA&gt;   
 #&gt; 2 P02     2020-04-30 2020-01-01 2020-03-01 Y      
 #&gt; 3 P03     2020-03-15 2020-01-01 2020-03-01 Y      </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-~<span class='no'>USUBJID</span>, ~<span class='no'>ADTM</span>, ~<span class='no'>TRTSDTM</span>, ~<span class='no'>TRTEDTM</span>, ~<span class='no'>TPT</span>, ~<span class='no'>ONTRTFL</span>,
-<span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>),
-          <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>, <span class='st'>"Y"</span>,
-<span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>),
-          <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>, <span class='fl'>NA</span>,
-<span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>),
-          <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>, <span class='fl'>NA</span>
-)</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='input'><span class='fu'>derive_var_ontrtfl</span>(<span class='no'>advs</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>, <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDTM</span>,
-                   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDTM</span>, <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>TPT</span> <span class='kw'>==</span> <span class='st'>"PRE"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Variable `ONTRTFL` already exists in the dataset</span></div><div class='output co'>#&gt; # A tibble: 3 x 6
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADTM</span>,                   ~<span class='no'>TRTSDTM</span>,                   ~<span class='no'>TRTEDTM</span>,                   ~<span class='no'>TPT</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>,
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>,
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>
+)</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='input'><span class='fu'>derive_var_ontrtfl</span>(
+  <span class='no'>advs</span>,
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>,
+  <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDTM</span>,
+  <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDTM</span>,
+  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>TPT</span> <span class='kw'>==</span> <span class='st'>"PRE"</span>)
+)</div><div class='output co'>#&gt; <span class='warning'>Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0.</span>
+#&gt; <span class='warning'>Please use `!!` instead.</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'>  # Bad:</span>
+#&gt; <span class='warning'>  dplyr::select(data, !!!enquo(x))</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'>  # Good:</span>
+#&gt; <span class='warning'>  dplyr::select(data, !!enquo(x))    # Unquote single quosure</span>
+#&gt; <span class='warning'>  dplyr::select(data, !!!enquos(x))  # Splice list of quosures</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'>This warning is displayed once per session.</span></div><div class='output co'>#&gt; # A tibble: 3 x 6
 #&gt;   USUBJID ADTM       TRTSDTM             TRTEDTM             TPT   ONTRTFL
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt; &lt;chr&gt;  
 #&gt; 1 P01     NA         2020-01-01 12:00:00 2020-03-01 12:00:00 ""    Y      
 #&gt; 2 P02     2020-01-01 2020-01-01 12:00:00 2020-03-01 12:00:00 PRE   &lt;NA&gt;   
-#&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 ""    &lt;NA&gt;   </div><div class='input'>
-</div></pre>
+#&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 ""    &lt;NA&gt;   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

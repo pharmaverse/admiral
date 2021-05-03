@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive --DTM (and --DTF/--TMF) — derive_vars_dtm • admiral</title>
+<title>Derive/Impute a datetime from a date character vector — derive_vars_dtm • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,11 @@
 
 
 
-<meta property="og:title" content="Derive --DTM (and --DTF/--TMF) — derive_vars_dtm" />
+<meta property="og:title" content="Derive/Impute a datetime from a date character vector — derive_vars_dtm" />
 
-<meta property="og:description" content="Derive --DTM based on --DTC. --DTM is imputed based on user input
-Derive --DTF/--TMF if needed based on --DTC and --DT" />
+<meta property="og:description" content="Derive a datetime object ('--DTM') from a date character vector ('---DTC').
+The date and time can be imputed (see date_imputation/time_imputation parameters)
+and the date/time imputation flag ('--DTF', '--TMF') can be added." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -128,15 +129,16 @@ Derive --DTF/--TMF if needed based on --DTC and --DT" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive --DTM (and --DTF/--TMF)</h1>
+    <h1>Derive/Impute a datetime from a date character vector</h1>
     
     <div class="hidden name"><code>derive_vars_dtm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Derive --DTM based on --DTC. --DTM is imputed based on user input
-Derive --DTF/--TMF if needed based on --DTC and --DT</p>
+    <p>Derive a datetime object ('--DTM') from a date character vector ('---DTC').
+The date and time can be imputed (see date_imputation/time_imputation parameters)
+and the date/time imputation flag ('--DTF', '--TMF') can be added.</p>
     
     </div>
 
@@ -149,44 +151,44 @@ Derive --DTF/--TMF if needed based on --DTC and --DT</p>
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The --DTC variable must be present.</p></td>
+<p>The date character vector (dtc) must be present.</p></td>
     </tr>
     <tr>
       <th>new_vars_prefix</th>
-      <td><p>Prefix used for the output variable(s)</p>
-<p>a character is expected, e.g new_vars_prefix="AST"</p></td>
+      <td><p>Prefix used for the output variable(s).</p>
+<p>a character is expected: e.g new_vars_prefix="AST".</p></td>
     </tr>
     <tr>
       <th>dtc</th>
-      <td><p>The --DTC date used to derive/impute --DT</p>
+      <td><p>The date character vector used to derive/impute the date.</p>
 <p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-If the year part is not recorded (missing date), no imputation is performed.</p></td>
+if the year part is not recorded (missing date), no imputation is done.</p></td>
     </tr>
     <tr>
       <th>date_imputation</th>
       <td><p>The value to impute the day/month when a datepart is missing.</p>
 <p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
+<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
 </ul>
 
-<p>Default is NULL</p></td>
+<p>Default is NULL.</p></td>
     </tr>
     <tr>
       <th>time_imputation</th>
-      <td><p>The value to impute the time when a timepart is missing</p>
+      <td><p>The value to impute the time when a timepart is missing.</p>
 <p>A character value is expected, either as a</p><ul>
 <li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day</p></li>
-<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day</p></li>
+the start of the day,</p></li>
+<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.</p></li>
 </ul>
 
-<p>Default is '00:00:00'</p></td>
+<p>Default is '00:00:00'.</p></td>
     </tr>
     <tr>
       <th>flag_imputation</th>
-      <td><p>Whether the --DTF and or --TMF variable must also be derived</p>
+      <td><p>Whether the date/time imputation flag(s) must also be derived.</p>
 <p>A logical value</p>
 <p>Default: TRUE</p></td>
     </tr>
@@ -194,14 +196,14 @@ the start of the day</p></li>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the input dataset with the datetime --DTM (and the date/time imputation
-flag --DTF, --TMF) added</p>
+    <p>the input dataset with the datetime '--DTM' (and the date/time imputation
+flag '--DTF', '--TMF') added.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The presence of a --DTF variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if --TMF already exists
-in the input dataset, a warning is issued and --TMF will be overwritten</p>
+in the input dataset, a warning is issued and --TMF will be overwritten.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

@@ -178,13 +178,10 @@ specified for the <code>order</code> parameter) is included in the output datase
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
-
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
 
-<span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dm</span>,
-                   <span class='kw'>dataset_ex</span> <span class='kw'>=</span> <span class='no'>ex</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'>derive_var_trtsdtm</span>(<span class='no'>dm</span>, <span class='kw'>dataset_ex</span> <span class='kw'>=</span> <span class='no'>ex</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>TRTSDTM</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
 #&gt;    USUBJID     TRTSDTM            
 #&gt;    &lt;chr&gt;       &lt;dttm&gt;             
@@ -198,8 +195,7 @@ specified for the <code>order</code> parameter) is included in the output datase
 #&gt;  8 01-701-1097 2014-01-01 00:00:00
 #&gt;  9 01-701-1111 2012-09-07 00:00:00
 #&gt; 10 01-701-1115 2012-11-30 00:00:00
-#&gt; # … with 296 more rows</div><div class='input'>
-</div></pre>
+#&gt; # … with 296 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
