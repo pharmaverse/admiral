@@ -84,7 +84,7 @@
 #' )
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,                   ~TPT
+#'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
 #'   "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "",
 #'   "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
 #'   "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), ""
