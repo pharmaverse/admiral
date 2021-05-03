@@ -2,9 +2,7 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input:
-#   - dm
-#   - ex
+# Input: dm, ex
 #
 
 library(dplyr)
@@ -28,6 +26,16 @@ adsl <- dm %>%
   mutate(TRTEDT = date(TRTEDTM)) %>%
 
   # derive treatment duration (TRTDURD)
-  derive_var_trtdurd()
+  derive_var_trtdurd() %>%
+
+  # derive study completion/discontinuation variables
+  derive_merged_vars(
+    dataset_add = ds,
+    filter_add = exprs(DSCAT == "DISPOSITION EVENT"),
+    new_vars = exprs(
+      EOSDT = convert_dtc_to_dt(impute_dtc(DSSTDTC, date_imputation = "FIRST")),
+      EOSSTT = if_else(DSDECOD == "COMPLETED", "COMPLETED", "DISCONTINUED"),
+      DCSREAS = if_else(DSDECOD != "COMPLETED", DSDECOD, "")
+    ))
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)

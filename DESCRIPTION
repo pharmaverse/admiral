@@ -4,7 +4,8 @@ Title: ADaM in R Asset Library
 Version: 0.1.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
-    person("Stefan", "Bundfuss", email = "stefan.bundfuss@roche.com", role = "aut")
+    person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
+    person("Stefan", "Bundfuss", email = "stefan.bundfuss@roche.com", role = "aut"),
     person("Samia", "Kabi", email = "samia.kabi@roche.com", role = "aut")
     )
 Description: More about what it does (maybe more than one line)

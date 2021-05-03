@@ -1,4 +1,4 @@
-#' Impute partial date/time portion of a --DTC variable.
+#' Impute partial date/time portion of a --DTC variable
 #'
 #' Imputation partial date/time portion of a --DTC variable.
 #' based on user input.
@@ -29,7 +29,7 @@
 #'
 #' @author Samia Kabi
 #'
-#' @return  a character vector.
+#' @return a character vector
 #'
 #' @keywords computation timing
 #'
@@ -191,7 +191,7 @@ impute_dtc <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
-#' @return  a date object.
+#' @return a date object
 #'
 #' @keywords computation timing
 #'
@@ -225,7 +225,7 @@ convert_dtc_to_dt <- function(dtc) {
 #'
 #' @author Samia Kabi
 #'
-#' @return  a datetime  object.
+#' @return a datetime  object
 #'
 #' @keywords computation timing
 #'
@@ -261,7 +261,7 @@ convert_dtc_to_dtm <- function(dtc) {
 #'
 #' @author Samia Kabi
 #'
-#' @return  the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA ).
+#' @return the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )
 #'
 #' @keywords computation timing
 #'
@@ -305,7 +305,7 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @author Samia Kabi
 #'
-#' @return  the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA).
+#' @return the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)
 #'
 #' @keywords computation timing
 #'
@@ -521,6 +521,8 @@ derive_vars_dt <- function(dataset,
 #' flag '--DTF', '--TMF') added.
 #'
 #' @author Samia Kabi
+#'
+#' @keywords derivation timing
 #'
 #' @export
 #'

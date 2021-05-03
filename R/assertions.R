@@ -394,6 +394,7 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
+
 #' Is the object a character?
 #'
 #' Checks if a character vector was specified
@@ -419,5 +420,16 @@ on_failure(is_character) <- function(call, env) {
     " = ",
     eval(call$arg, envir = env),
     " is not a character."
+  )
+}
+
+is_named_exprs <- function(arg) {
+  is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
+}
+on_failure(is_named_exprs) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a named list of expressions created using `exprs()`"
   )
 }
