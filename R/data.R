@@ -65,4 +65,7 @@
 #'
 #' An example subject level analysis dataset
 #'
+#' @source
+#' Derived from the [dm] and [ds] datasets using `{admiral}`
+#'
 "adsl"
