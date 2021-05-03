@@ -4,8 +4,9 @@
 \alias{derive_merged_vars}
 \title{Merge variables from a second dataset}
 \usage{
-derive_merged_vars(dataset, dataset_add, filter_add, new_vars,
-  by_vars = exprs(USUBJID), filter_order, filter_mode = "last")
+derive_merged_vars(dataset, dataset_add, filter_add = NULL, new_vars,
+  by_vars = exprs(USUBJID), filter_order = NULL,
+  filter_mode = "last")
 }
 \arguments{
 \item{dataset}{Input dataset

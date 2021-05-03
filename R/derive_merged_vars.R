@@ -79,21 +79,21 @@
 #'   select(USUBJID, TRTSDT)
 derive_merged_vars <- function(dataset,
                                dataset_add,
-                               filter_add,
+                               filter_add = NULL,
                                new_vars,
                                by_vars = exprs(USUBJID),
-                               filter_order,
+                               filter_order = NULL,
                                filter_mode = "last") {
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 
-  if (!missing(filter_add)) {
+  if (!is.null(filter_add)) {
      add <- dataset_add %>%
        filter(!!!filter_add)
   } else {
     add <- dataset_add
   }
-  if (!missing(filter_order)) {
+  if (!is.null(filter_order)) {
     add <- add %>%
       filter_extreme(order = filter_order,
                      by_vars = by_vars,
