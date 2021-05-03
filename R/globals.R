@@ -28,8 +28,12 @@ globalVariables(c(
   "TRTSDT",
   "TRTSDTM",
   "USUBJID",
+  "Dataset",
+  "Derivation",
+  "Derivation / Comment",
   "desc",
   "ex",
   "idtc__",
+  "Source",
   "temp_obs_nr"
 ))
