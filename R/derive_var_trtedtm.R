@@ -34,20 +34,14 @@
 #'
 #' @examples
 #' library(dplyr)
-#' library(magrittr)
-#'
 #' data("ex")
 #' data("dm")
 #'
-#' derive_var_trtedtm(dm,
-#'                    dataset_ex = ex) %>%
+#' derive_var_trtedtm(dm, dataset_ex = ex) %>%
 #'   select(USUBJID, TRTEDTM)
-#'
-
-derive_var_trtedtm <- function(
-  dataset,
-  dataset_ex,
-  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)) { # nolint
+derive_var_trtedtm <- function(dataset,
+                               dataset_ex,
+                               filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)) { # nolint
 
   derive_merged_vars(
     dataset,
@@ -55,5 +49,6 @@ derive_var_trtedtm <- function(
     filter_add = filter_ex,
     new_vars = exprs(TRTEDTM := convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))),
     filter_order = exprs(EXENDTC, EXSEQ),
-    filter_mode = "last")
+    filter_mode = "last"
+  )
 }

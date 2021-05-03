@@ -2,27 +2,27 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{compute_tmf}
 \alias{compute_tmf}
-\title{Derive --TMF}
+\title{Derive the time imputation flag}
 \usage{
 compute_tmf(dtc, dtm)
 }
 \arguments{
-\item{dtc}{The --DTC used as input for --DT
+\item{dtc}{The date character vector ('--DTC').
 
-A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)}
+A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).}
 
-\item{dtm}{The --DTM resulting from the imputation of --DTC
+\item{dtm}{The  Date vector to compare ('--DTM').
 
-A datetime object is expected}
+A datetime object is expected.}
 }
 \value{
-the time imputation flag --DTF (character value of 'H', 'M' , 'S' or missing)
+the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)
 }
 \description{
-Derive --TMF based on --DTC and --DT
+Derive the time imputation flag ('--TMF') comparing a date character vector
+('--DTC') with a Datetime vector ('--DTM').
 }
 \examples{
-
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))

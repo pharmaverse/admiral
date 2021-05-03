@@ -105,10 +105,9 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 has_unique_records <- function(dataset,
                                by_vars = NULL,
                                order = NULL,
-                               message,
+                               message = NULL,
                                message_type = "error") {
   arg_match(message_type, c("none", "warning", "error"))
-
   # variables used for check
   all_vars <- list()
 
@@ -118,11 +117,11 @@ has_unique_records <- function(dataset,
   # dataset to check (remove grouping)
   data_ext <- ungroup(dataset)
 
-  if (!quo_is_null(enquo(by_vars))) {
+  if (!is.null(by_vars)) {
     all_vars <- by_vars
     all_vars_msg <- by_vars
   }
-  if (!quo_is_null(enquo(order))) {
+  if (!is.null(order)) {
     # add order variables to the input dataset
     order_vars <- order
     names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
@@ -143,7 +142,7 @@ has_unique_records <- function(dataset,
   # check for duplicates
   is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
   if (any(is_duplicate)) {
-    if (message_type != "none"){
+    if (message_type != "none") {
       # filter out duplicate observations of the input dataset
       duplicates <- data_ext %>%
         filter(is_duplicate)
@@ -464,6 +463,35 @@ on_failure(is_valid_month) <- function(call, env) {
     " is not a valid month.\n",
     "Values for month must be between 1-12. ",
     "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
+  )
+}
+
+
+#' Is the object a character?
+#'
+#' Checks if a character vector was specified
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a character, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#' date <- "2020-02-03"
+#' assertthat::assert_that(is_character(date))
+is_character <- function(arg) {
+  is.character(arg)
+}
+on_failure(is_character) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a character."
   )
 }
 

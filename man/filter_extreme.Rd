@@ -4,7 +4,8 @@
 \alias{filter_extreme}
 \title{Filter out the first or last observation for each group}
 \usage{
-filter_extreme(dataset, order, by_vars, mode, check_type = "warning")
+filter_extreme(dataset, order, by_vars = NULL, mode,
+  check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -53,9 +54,7 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflict = FALSE)
 data("ex")
 
 # selecting first dose for each patient

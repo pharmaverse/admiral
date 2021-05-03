@@ -4,8 +4,8 @@
 \alias{derive_obs_number}
 \title{Adds a variable numbering the observations within by group}
 \usage{
-derive_obs_number(dataset, new_var = ASEQ, order, by_vars,
-  check_type = "none")
+derive_obs_number(dataset, new_var = ASEQ, order = NULL,
+  by_vars = NULL, check_type = "none")
 }
 \arguments{
 \item{dataset}{Input dataset

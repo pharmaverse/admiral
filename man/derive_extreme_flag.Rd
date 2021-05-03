@@ -67,9 +67,7 @@ order specified for the \code{order} parameter and the flag mode) is included in
 the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflicts = FALSE)
 data("vs")
 
 # flag last value for each patient, test, and visit, baseline observations are ignored
@@ -81,6 +79,75 @@ derive_extreme_flag(vs,
                     flag_filter = rlang::expr(VISIT != "BASELINE")) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
+
+# Baseline (ABLFL) examples:
+
+input <- tibble::tribble(
+~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
+"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
+"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
+"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
+"TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
+"TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
+
+"TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
+"TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
+"TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
+"TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
+"TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
+
+"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
+"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
+"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
+"TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
+"TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
+
+"TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
+"TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
+"TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
+"TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
+"TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
+)
+
+# Last observation
+derive_extreme_flag(
+  input,
+  new_var = ABLFL,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADT),
+  mode = "last",
+  flag_filter = expr(AVISIT == "BASELINE")
+)
+
+# Worst observation - Direction = High
+derive_extreme_flag(
+  input,
+  new_var = ABLFL,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(AVAL, ADT),
+  mode = "last",
+  flag_filter = expr(AVISIT == "BASELINE")
+)
+
+# Worst observation - Direction = Lo
+derive_extreme_flag(
+  input,
+  new_var = ABLFL,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(desc(AVAL), ADT),
+  mode = "last",
+  flag_filter = expr(AVISIT == "BASELINE")
+)
+
+# Average observation
+derive_extreme_flag(
+  input,
+  new_var = ABLFL,
+  by_vars = exprs(USUBJID, PARAMCD),
+  order = exprs(ADT, desc(AVAL)),
+  mode = "last",
+  flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+)
 
 }
 \author{

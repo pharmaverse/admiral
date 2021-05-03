@@ -4,8 +4,8 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, new_var, new_var_unit, start_date, end_date,
-  in_unit = "days", out_unit = "days", floor_in = TRUE,
+derive_duration(dataset, new_var, new_var_unit = NULL, start_date,
+  end_date, in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
 \arguments{

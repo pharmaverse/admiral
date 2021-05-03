@@ -49,9 +49,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflict = FALSE)
 #' data("ex")
 #'
 #' # selecting first dose for each patient
@@ -71,14 +69,14 @@
 
 filter_extreme <- function(dataset,
                            order,
-                           by_vars,
+                           by_vars = NULL,
                            mode,
                            check_type = "warning") {
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
 
   # group and sort input dataset
-  if (!missing(by_vars)) {
+  if (!is.null(by_vars)) {
     assert_has_variables(dataset, map_chr(by_vars, as_string))
 
     data <- dataset %>%
@@ -98,9 +96,8 @@ filter_extreme <- function(dataset,
   if (mode == "first") {
     # select first observation (for each group)
     data <- data %>%
-      slice(1)
-  }
-  else {
+      slice(1L)
+  } else {
     # select last observation (for each group)
     data <- data %>%
       slice(n())
