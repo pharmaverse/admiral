@@ -105,6 +105,7 @@ test_that("ABLFL = Y using last observation within a subset", {
     new_var = ABLFL,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT),
+    mode = "last",
     flag_filter = expr(AVISIT == "BASELINE")
   )
 
@@ -175,6 +176,7 @@ test_that("ABLFL = Y worst observation = HI within a subset", {
     new_var = ABLFL,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(AVAL, ADT),
+    mode = "last",
     flag_filter = expr(AVISIT == "BASELINE")
   )
 
@@ -245,6 +247,7 @@ test_that("ABLFL = Y worst observation = LO within a subset", {
     new_var = ABLFL,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(desc(AVAL), ADT),
+    mode = "last",
     flag_filter = expr(AVISIT == "BASELINE")
   )
 
@@ -315,6 +318,7 @@ test_that("ABLFL = Y average records within a subset", {
     new_var = ABLFL,
     by_vars = exprs(USUBJID, PARAMCD),
     order = exprs(ADT, desc(AVAL)),
+    mode = "last",
     flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
   )
 
@@ -386,7 +390,8 @@ test_that("ABLFL = Y using last observation within a subset and multiple baselin
     new_var = ABLFL,
     by_vars = exprs(USUBJID, PARAMCD, AVISIT),
     order = exprs(ADT),
-    flag_filter = expr(AVISIT %in% c("BASELINE","WEEK 1"))
+    mode = "last",
+    flag_filter = expr(AVISIT %in% c("BASELINE", "WEEK 1"))
   )
 
   expect_dfs_equal(
