@@ -207,7 +207,7 @@ has_unique_records <- function(dataset,
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,
                                       order = NULL,
-                                      message){
+                                      message) {
   has_unique_records(dataset = dataset,
                      by_vars = by_vars,
                      order = order,
