@@ -48,42 +48,54 @@
 #'
 #' @author Alice Ehmann
 #'
-#' @return The input dataset with an additional column named by default
-#' `ONTRTFL` with a value of Y or NA
+#' @return The input dataset with an additional column named
+#' `ONTRTFL` with a value of `"Y"` or `NA`
 #'
 #' @export
 #'
 #' @examples
-#' library(lubridate)
-#' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL,
-#'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
-#'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
-#'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01"), "N"
-#' )
-#' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT, ref_end_date = TRTEDT)
+#' library(lubridate, warn.conflict = FALSE)
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT, ~ONTRTFL,
-#'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"), "N",
-#'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), "Y",
-#'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), "Y"
+#'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+#'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
+#'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+#'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
-#' derive_var_ontrtfl(advs, date = ADT, ref_start_date = TRTSDT,
-#'                    ref_end_date = TRTEDT, ref_end_window=60)
+#' derive_var_ontrtfl(
+#'   advs,
+#'   date = ADT,
+#'   ref_start_date = TRTSDT,
+#'   ref_end_date = TRTEDT
+#' )
 #'
 #' advs <- tibble::tribble(
-#' ~USUBJID, ~ADTM, ~TRTSDTM, ~TRTEDTM, ~TPT, ~ONTRTFL,
-#' "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"),
-#'           ymd_hm("2020-03-01T12:00"), "", "Y",
-#' "P02",    ymd("2020-01-01"), ymd_hm("2020-01-01T12:00"),
-#'           ymd_hm("2020-03-01T12:00"), "PRE", NA,
-#' "P03",    ymd("2019-12-31"), ymd_hm("2020-01-01T12:00"),
-#'           ymd_hm("2020-03-01T12:00"), "", NA
+#'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+#'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+#'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
+#'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
-#' derive_var_ontrtfl(advs, date = ADTM, ref_start_date = TRTSDTM,
-#'                    ref_end_date = TRTEDTM, filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
+#' derive_var_ontrtfl(
+#'   advs,
+#'   date = ADT,
+#'   ref_start_date = TRTSDT,
+#'   ref_end_date = TRTEDT,
+#'   ref_end_window = 60
+#' )
 #'
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
+#'   "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "",
+#'   "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
+#'   "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), ""
+#' )
+#' derive_var_ontrtfl(
+#'   advs,
+#'   date = ADTM,
+#'   ref_start_date = TRTSDTM,
+#'   ref_end_date = TRTEDTM,
+#'   filter_pre_timepoint = expr(TPT == "PRE")
+#' )
 derive_var_ontrtfl <- function(dataset,
                                date,
                                ref_start_date,

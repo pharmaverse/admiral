@@ -49,26 +49,26 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflict = FALSE)
 #' data("ex")
 #'
 #' # selecting first dose for each patient
-#' filter_extreme(ex,
-#'                order = exprs(EXSEQ),
-#'                by_vars = exprs(USUBJID),
-#'                mode = 'first') %>%
+#' filter_extreme(
+#'   ex,
+#'   order = exprs(EXSEQ),
+#'   by_vars = exprs(USUBJID),
+#'   mode = "first"
+#' ) %>%
 #'   select(USUBJID, EXSEQ)
 #'
 #' # selecting highest dose for each patient
-#' filter_extreme(ex,
-#'                order = exprs(EXDOSE),
-#'                by_vars = exprs(USUBJID),
-#'                check_type = "none") %>%
+#' filter_extreme(
+#'   ex,
+#'   order = exprs(EXDOSE),
+#'   by_vars = exprs(USUBJID),
+#'   check_type = "none"
+#' ) %>%
 #'   select(USUBJID, EXDOSE)
-#'
-
 filter_extreme <- function(dataset,
                            order,
                            by_vars = NULL,
@@ -82,22 +82,23 @@ filter_extreme <- function(dataset,
     assert_has_variables(dataset, map_chr(by_vars, as_string))
 
     data <- dataset %>%
-      derive_obs_number(order = order,
-                        by_vars = by_vars,
-                        check_type = check_type) %>%
+      derive_obs_number(
+        order = order,
+        by_vars = by_vars,
+        check_type = check_type
+      ) %>%
       group_by(!!!by_vars)
   }
   else {
-    data <- dataset %>% derive_obs_number(order = order,
-                                          check_type = check_type)
+    data <- dataset %>%
+      derive_obs_number(order = order, check_type = check_type)
   }
 
   if (mode == "first") {
     # select first observation (for each group)
     data <- data %>%
-      slice(1)
-  }
-  else {
+      slice(1L)
+  } else {
     # select last observation (for each group)
     data <- data %>%
       slice(n())
