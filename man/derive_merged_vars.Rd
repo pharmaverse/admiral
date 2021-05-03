@@ -68,19 +68,19 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflict = FALSE)
 data("ex")
 data("dm")
 
 # adding first treatment start date for each patient
-derive_merged_vars(dm,
-                   dataset_add = ex,
-                   filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
-                   new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
-                   filter_order = exprs(EXSTDTC, EXSEQ),
-                   filter_mode = "first") \%>\%
+derive_merged_vars(
+  dm,
+  dataset_add = ex,
+  filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
+  new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
+  filter_order = exprs(EXSTDTC, EXSEQ),
+  filter_mode = "first"
+) \%>\%
   select(USUBJID, TRTSDT)
 }
 \author{

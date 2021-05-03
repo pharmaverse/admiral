@@ -69,9 +69,7 @@ order specified for the \code{order} parameter and the flag mode) is included in
 the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflicts = FALSE)
 data("vs")
 
 # flag last value for each patient, test, and visit, baseline observations are ignored

@@ -36,9 +36,7 @@
 #' @export
 #'
 #' @examples
-#'
-#' mhdt <- tibble::tribble(
-#'   ~MHSTDTC,
+#' dates <- c(
 #'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
 #'   "2019-07-18T15",
@@ -49,46 +47,48 @@
 #'   "2019---07",
 #'   ""
 #' )
+#'
 #' # No date imputation (date_imputation defaulted to NULL)
 #' # Missing time part imputed with 00:00:00 portion by default
-#' idtc <- impute_dtc(dtc = mhdt$MHSTDTC)
+#' impute_dtc(dtc = dates)
 #'
 #' # No date imputation (date_imputation defaulted to NULL)
 #' # Missing time part imputed with 23:59:59 portion
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#' impute_dtc(
+#'   dtc = dates,
 #'   time_imputation = "23:59:59"
 #' )
-#' # same as above
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#'
+#' # Same as above
+#' impute_dtc(
+#'   dtc = dates,
 #'   time_imputation = "LAST"
 #' )
 #'
-#' # impute to first day/month if date is partial
+#' # Impute to first day/month if date is partial
 #' # Missing time part imputed with 00:00:00 portion by default
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#' impute_dtc(
+#'   dtc = dates,
 #'   date_imputation = "01-01"
 #' )
 #' # same as above
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#' impute_dtc(
+#'   dtc = dates,
 #'   date_imputation = "FIRST"
 #' )
 #'
-#' # impute to last day/month if date is partial
+#' # Impute to last day/month if date is partial
 #' # Missing time part imputed with 23:59:59 portion
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#' impute_dtc(
+#'   dtc = dates,
 #'   date_imputation = "LAST",
 #'   time_imputation = "LAST"
 #' )
 #'
-#' # impute to Mid day/month if date is partial
+#' # Impute to mid day/month if date is partial
 #' # Missing time part imputed with 00:00:00 portion by default
-#' idtc <- impute_dtc(
-#'   dtc = mhdt$MHSTDTC,
+#' impute_dtc(
+#'   dtc = dates,
 #'   date_imputation = "MID"
 #' )
 impute_dtc <- function(dtc,
@@ -268,7 +268,6 @@ convert_dtc_to_dtm <- function(dtc) {
 #' @export
 #'
 #' @examples
-#'
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
@@ -312,7 +311,6 @@ compute_dtf <- function(dtc, dt) {
 #' @export
 #'
 #' @examples
-#'
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
@@ -374,7 +372,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @author Samia Kabi
 #'
-#' @keywords ADaM computation timing
+#' @keywords ADaM derivation timing
 #'
 #' @export
 #'
@@ -392,7 +390,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' # Create ASTDT and ASTDTF
 #' # no imputation for partial date
-#' mhdt1 <- derive_vars_dt(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC
@@ -400,7 +398,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' # Create ASTDT and ASTDTF
 #' # Impute partial dates to first day/month
-#' mhdt2 <- derive_vars_dt(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
@@ -408,7 +406,7 @@ compute_tmf <- function(dtc, dtm) {
 #' )
 #'
 #' # Impute partial dates to 4th of june
-#' mhdt2a <- derive_vars_dt(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
@@ -417,7 +415,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' # Create AENDT and AENDTF
 #' # Impute partial dates to last day/month
-#' mhdt3 <- derive_vars_dt(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AEN",
 #'   dtc = MHSTDTC,
@@ -426,7 +424,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' # Create BIRTHDT
 #' # Impute partial dates to 15th of June. No DTF
-#' mhdt4 <- derive_vars_dt(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "BIRTH",
 #'   dtc = MHSTDTC,

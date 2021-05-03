@@ -39,15 +39,11 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr)
-library(magrittr)
-
 data("ex")
 data("dm")
 
-derive_var_trtsdtm(dm,
-                   dataset_ex = ex) \%>\%
+derive_var_trtsdtm(dm, dataset_ex = ex) \%>\%
   select(USUBJID, TRTSDTM)
-
 }
 \author{
 Stefan Bundfuss
