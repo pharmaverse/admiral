@@ -49,7 +49,8 @@ is_valid_dtc <- function(arg) {
     grepl(pattern5, arg) |
     grepl(pattern6, arg) |
     grepl(pattern7, arg) |
-    arg == ""
+    arg == "" |
+    is.na(arg)
 }
 
 #' Warn If a vector contains unknown datetime format
@@ -82,7 +83,7 @@ warn_if_invalid_dtc <- function(dtc) {
     warn(paste(capture.output(print(tbl)), collapse = "\n"))
 
     msg3 <- paste0(
-      "The following representations are handled: \n",
+      "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
       "2003-12-15T13:15\n",
@@ -91,12 +92,28 @@ warn_if_invalid_dtc <- function(dtc) {
       "2003-12\n",
       "2003\n",
       "2003---15\n\n",
-      "The following representations are NOT handled: \n",
+      "The following ISO representations, and any other representation are NOT handled: \n",
       "2003-12-15T-:15:18\n",
       "2003-12-15T13:-:19\n",
       "--12-15\n",
       "-----T07:15"
     )
     warn(msg3)
+  }
+}
+
+warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
+  missing_ref_ranges <- dataset %>%
+    anti_join(meta_ref_ranges, by = by_var) %>%
+    pull(!!sym(by_var)) %>%
+    unique()
+
+  if (length(missing_ref_ranges) >= 1L) {
+    msg <- sprintf(
+      "Reference ranges are missing for the following `%s`: %s",
+      by_var,
+      enumerate(missing_ref_ranges, quote_fun = squote)
+    )
+    warn(msg)
   }
 }

@@ -16,9 +16,9 @@ test_that("default: no date imputation, time part set o 00:00:00", {
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:00",
     "2019-07-18T00:00:00",
-    "",
-    "",
-    ""
+    NA_character_,
+    NA_character_,
+    NA_character_
   )
   expect_equal(impute_dtc(dtc = input), expected_output)
 })
@@ -29,9 +29,9 @@ test_that("default: no date imputation,Missing time part imputed with 23:59:59 p
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:59",
     "2019-07-18T23:59:59",
-    "",
-    "",
-    ""
+    NA_character_,
+    NA_character_,
+    NA_character_
   )
   expect_equal(
     impute_dtc(
