@@ -2,49 +2,50 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dt}
 \alias{derive_vars_dt}
-\title{Derive --DT (and --DTF)}
+\title{Derive/Impute a date from a date character vector}
 \usage{
 derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
   flag_imputation = TRUE)
 }
 \arguments{
-\item{dataset}{Input dataset
+\item{dataset}{Input dataset.
 
-The --DTC variable must be present.}
+The date character vector (dtc) must be present.}
 
-\item{new_vars_prefix}{Prefix used for the output variable(s)
+\item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g new_vars_prefix="AST"}
+a character is expected: e.g new_vars_prefix="AST".}
 
-\item{dtc}{The --DTC date used to derive/impute --DT
+\item{dtc}{The date character vector used to derive/impute the date.
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-if the year part is not recorded (missing date), no imputation is done}
+A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
+if the year part is not recorded (missing date), no imputation is done.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing
+\item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is perfomed and partial dates are returned as missing
+If NULL: no date imputation is performed and partial dates are returned as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is NULL.}
 
-\item{flag_imputation}{Whether the --DTF variable must also be derived
+\item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 A logical value
 
 Default: TRUE}
 }
 \value{
-the input dataset with the date --DT (and the date imputation flag --DTF) added
+the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
 }
 \description{
-Derive --DT based on --DTC. --DT is imputed based on user input
-Derive --DTF if needed based on --DTC and --DT
+Derive a date ('--DT') from a date character vector ('---DTC').
+The date can be imputed (see date_imputation parameter)
+and the date imputation flag ('--DTF') can be added.
 }
 \examples{
 mhdt <- tibble::tribble(

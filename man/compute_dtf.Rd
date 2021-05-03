@@ -2,24 +2,25 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{compute_dtf}
 \alias{compute_dtf}
-\title{Derive --DTF}
+\title{Derive the date imputation flag}
 \usage{
 compute_dtf(dtc, dt)
 }
 \arguments{
-\item{dtc}{The --DTC used as input for --DT
+\item{dtc}{The date character vector ('--DTC').
 
-A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete)}
+A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).}
 
-\item{dt}{The --DT resulting from the imputation of --DTC
+\item{dt}{The  Date vector to compare.
 
-A date object is expected}
+A date object is expected.}
 }
 \value{
-the date imputation flag --DTF (character value of 'D', 'M' , 'Y' or missing )
+the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )
 }
 \description{
-Derive --DTF based on --DTC and --DT
+Derive the date imputation flag ('--DTF') comparing a date character vector
+('--DTC') with a Date vector ('--DT').
 }
 \examples{
 

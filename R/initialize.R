@@ -1,20 +1,42 @@
-initialize <- function(dataset, metadata, source_datasets) {
+#' Derive Predecessors Based Upon Specification
+#'
+#' Derive all predecessor variables of an ADaM dataset based upon metadata
+#'
+#' @param dataset_name The name of the ADaM dataset to create, e.g. `"ADVS"`
+#' @param metadata The result of [read_dap_m3()]
+#' @param source_datasets A `list` of source datasets
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' A dataset containing all predecessor variables as listed in `metadata`
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data("adsl")
+#' data("vs")
+#' meta <- read_dap_m3("DAP_M3.xlsx")
+#' initialize("ADVS", meta, list(adsl, vs))
+#' }
+initialize <- function(dataset_name, metadata, source_datasets) {
   assert_that(
-    is.character(dataset),
+    is.character(dataset_name),
     inherits(metadata, "DAP_M3"),
     is.list(source_datasets)
   )
 
-  if (dataset %!in% names(metadata)) {
-    msg <- paste0("Metadata does not contain a dataset named ", squote(dataset))
+  if (dataset_name %!in% names(metadata)) {
+    msg <- paste0("Metadata does not contain a dataset named ", squote(dataset_name))
     abort(msg)
   }
 
-  predecessors <- metadata[[dataset]] %>%
+  predecessors <- metadata[[dataset_name]] %>%
     rename(Derivation = `Derivation / Comment`) %>%
     mutate(Derivation = str_trim(Derivation)) %>%
     filter(
-      Dataset == dataset,
+      Dataset == dataset_name,
       Source == "Predecessor",
       grepl("^[A-Z]{2,8}\\.[A-Z]{1,8}$", Derivation)
     ) %>%

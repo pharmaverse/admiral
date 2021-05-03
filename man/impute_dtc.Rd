@@ -12,35 +12,35 @@ impute_dtc(dtc, date_imputation = NULL, time_imputation = "00:00:00")
 A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
 If the year part is not recorded (missing date), no imputation is performed.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing
+\item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is performed and partial dates are returned as missing
+If NULL: no date imputation is performed and partial dates are returned as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is NULL.}
 
-\item{time_imputation}{The value to impute the time when a timepart is missing
+\item{time_imputation}{The value to impute the time when a timepart is missing.
 
 A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day
-\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
+the start of the day,
+\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
 }
 
-Default is '00:00:00'}
+Default is '00:00:00'.}
 }
 \value{
 a character vector
 }
 \description{
-Imputation partial date/time portion of a --DTC variable
-based on user input
+Imputation partial date/time portion of a --DTC variable.
+based on user input.
 }
 \examples{
 
