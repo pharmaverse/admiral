@@ -158,7 +158,7 @@
 <span class='fu'>warn_if_invalid_dtc</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2021-04-06"</span>)
 
 <span class='co'>## Issues a warning</span>
-<span class='fu'>warn_if_invalid_dtc</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2021-04-06T-:30:30"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: [1] "Row 1 : --DTC =  2021-04-06T-:30:30"</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following representations are handled: </span>
+<span class='fu'>warn_if_invalid_dtc</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2021-04-06T-:30:30"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)</span></div><div class='output co'>#&gt; <span class='warning'>Warning: [1] "Row 1 : --DTC =  2021-04-06T-:30:30"</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following ISO representations are handled: </span>
 #&gt; <span class='warning'>2003-12-15T13:15:17.123</span>
 #&gt; <span class='warning'>2003-12-15T13:15:17</span>
 #&gt; <span class='warning'>2003-12-15T13:15</span>
@@ -168,7 +168,7 @@
 #&gt; <span class='warning'>2003</span>
 #&gt; <span class='warning'>2003---15</span>
 #&gt; <span class='warning'></span>
-#&gt; <span class='warning'>The following representations are NOT handled: </span>
+#&gt; <span class='warning'>The following ISO representations, and any other representation are NOT handled: </span>
 #&gt; <span class='warning'>2003-12-15T-:15:18</span>
 #&gt; <span class='warning'>2003-12-15T13:-:19</span>
 #&gt; <span class='warning'>--12-15</span>
@@ -184,7 +184,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Stefan Bundfuss, Alice Ehmann.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
 </div>
 
 <div class="pkgdown">
