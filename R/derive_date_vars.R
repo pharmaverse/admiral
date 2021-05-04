@@ -372,7 +372,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @author Samia Kabi
 #'
-#' @keywords ADaM derivation timing
+#' @keywords adam derivation timing
 #'
 #' @export
 #'

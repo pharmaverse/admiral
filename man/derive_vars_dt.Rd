@@ -106,6 +106,6 @@ derive_vars_dt(
 \author{
 Samia Kabi
 }
-\keyword{ADaM}
+\keyword{adam}
 \keyword{derivation}
 \keyword{timing}
