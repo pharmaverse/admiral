@@ -21,7 +21,7 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords adam bds
+#' @keywords bds derivation
 #'
 #' @export
 #'

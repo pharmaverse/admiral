@@ -35,6 +35,5 @@ derive_var_pchg(advs)
 \author{
 Thomas Neitmann
 }
-\keyword{ADaM}
-\keyword{BDS}
+\keyword{bds}
 \keyword{derivation}

@@ -49,3 +49,8 @@ vs \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 }
+\author{
+Thomas Neitmann
+}
+\keyword{bds}
+\keyword{derivation}

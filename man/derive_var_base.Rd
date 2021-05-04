@@ -34,3 +34,5 @@ derive_var_base(dataset, by_vars = exprs(USUBJID, PARAMCD))
 \author{
 Thomas Neitmann
 }
+\keyword{bds}
+\keyword{derivation}
