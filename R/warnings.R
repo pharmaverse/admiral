@@ -102,6 +102,30 @@ warn_if_invalid_dtc <- function(dtc) {
   }
 }
 
+warn_if_incomplete_dtc<-function(dtc, n) {
+  is_complete_dtc <- (nchar(dtc) >= n | is.na(dtc))
+  if (n==10){
+    dt_dtm<-"date"
+    funtext<-"convert_dtc_to_dt"
+  }
+  else if(n==19){
+    dt_dtm<-"datetime"
+    funtext<-"convert_dtc_to_dtm"
+  }
+  if (!all(is_complete_dtc)) {
+    incomplete_dtc <- dtc[!is_complete_dtc]
+    incomplete_dtc_row <- rownames(as.data.frame(dtc))[!is_complete_dtc]
+    tbl <- paste("Row", incomplete_dtc_row, ": --DTC = ", incomplete_dtc)
+    msg <- paste0("Dataset contains partial ", dt_dtm, " format. ",
+                  "The function ",funtext," expect a complete ", dt_dtm, ". ",
+                  "Please use the function impute_dtc to build a complete ", dt_dtm, ".")
+    warn(msg)
+    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+
+  }
+}
+
+
 warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   missing_ref_ranges <- dataset %>%
     anti_join(meta_ref_ranges, by = by_var) %>%
