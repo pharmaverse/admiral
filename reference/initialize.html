@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Subject Level Analysis Dataset — adsl • admiral</title>
+<title>Derive Predecessors Based Upon Specification — initialize • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,9 @@
 
 
 
-<meta property="og:title" content="Subject Level Analysis Dataset — adsl" />
+<meta property="og:title" content="Derive Predecessors Based Upon Specification — initialize" />
 
-<meta property="og:description" content="An example subject level analysis dataset" />
+<meta property="og:description" content="Derive all predecessor variables of an ADaM dataset based upon metadata" />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -127,28 +127,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Subject Level Analysis Dataset</h1>
+    <h1>Derive Predecessors Based Upon Specification</h1>
     
-    <div class="hidden name"><code>adsl.Rd</code></div>
+    <div class="hidden name"><code>initialize.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>An example subject level analysis dataset</p>
+    <p>Derive all predecessor variables of an ADaM dataset based upon metadata</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>adsl</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>tbl_df</code> (inherits from <code>tbl</code>, <code>data.frame</code>) with 306 rows and 35 columns.</p>
+    <pre class="usage"><span class='fu'>initialize</span>(<span class='no'>dataset_name</span>, <span class='no'>metadata</span>, <span class='no'>source_datasets</span>)</pre>
     
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dataset_name</th>
+      <td><p>The name of the ADaM dataset to create, e.g. <code>"ADVS"</code></p></td>
+    </tr>
+    <tr>
+      <th>metadata</th>
+      <td><p>The result of <code><a href='read_dap_m3.html'>read_dap_m3()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>source_datasets</th>
+      <td><p>A <code>list</code> of source datasets</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Derived from the <a href='dm.html'>dm</a> and <a href='ds.html'>ds</a> datasets using <code>{admiral}</code></p>
+    <p>A dataset containing all predecessor variables as listed in <code>metadata</code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"adsl"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
+<span class='no'>meta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='read_dap_m3.html'>read_dap_m3</a></span>(<span class='st'>"DAP_M3.xlsx"</span>)
+<span class='fu'>initialize</span>(<span class='st'>"ADVS"</span>, <span class='no'>meta</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>adsl</span>, <span class='no'>vs</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
