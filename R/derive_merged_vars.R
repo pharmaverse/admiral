@@ -40,8 +40,6 @@
 #'   If the `filter_order` parameter is specified, the filter mode determines if
 #'   the first or last observation of each by group is selected.
 #'
-#'   Default: `"last"`
-#'
 #'   Permitted Values: `"first"`, `"last"`
 #'
 #' @param by_vars Grouping variables
@@ -83,7 +81,7 @@ derive_merged_vars <- function(dataset,
                                new_vars,
                                by_vars = exprs(USUBJID),
                                filter_order = NULL,
-                               filter_mode = "last") {
+                               filter_mode) {
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 

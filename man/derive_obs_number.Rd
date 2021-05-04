@@ -4,7 +4,7 @@
 \alias{derive_obs_number}
 \title{Adds a variable numbering the observations within by group}
 \usage{
-derive_obs_number(dataset, new_var = temp_obs_nr, order = NULL,
+derive_obs_number(dataset, new_var = ASEQ, order = NULL,
   by_vars = NULL, check_type = "none")
 }
 \arguments{
@@ -18,7 +18,7 @@ expected.}
 The new variable is set to the observation number for each by group. The
 numbering starts with 1.
 
-Default: \code{temp_obs_nr}}
+Default: \code{ASEQ}}
 
 \item{order}{Sort order
 

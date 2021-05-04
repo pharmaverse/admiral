@@ -22,3 +22,4 @@ Checks if a dataset contains multiple baseline records
 \author{
 Thomas Neitmann
 }
+\keyword{assertion}

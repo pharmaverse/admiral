@@ -21,3 +21,4 @@ assertthat::assert_that(is_valid_sec_min(59))
 \author{
 Samia Kabi
 }
+\keyword{check}

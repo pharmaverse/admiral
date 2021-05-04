@@ -1,6 +1,6 @@
-#' Derive datetime of Last Exposure to Treatment (TRTEDTM)
+#' Derive datetime of Last Exposure to Treatment
 #'
-#' Derives datetime of Last Exposure to Treatment (TRTEDTM)
+#' Derives datetime of Last Exposure to Treatment (`TRTEDTM`)
 #'
 #' @param dataset Input dataset
 #'
@@ -48,6 +48,7 @@ derive_var_trtedtm <- function(dataset,
     dataset_add = dataset_ex,
     filter_add = filter_ex,
     new_vars = exprs(TRTEDTM := convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))),
-    filter_order = exprs(EXENDTC, EXSEQ)
+    filter_order = exprs(EXENDTC, EXSEQ),
+    filter_mode = "last"
   )
 }

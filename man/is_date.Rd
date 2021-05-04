@@ -23,3 +23,4 @@ assertthat::assert_that(is_date(refdate), is_date(date))
 \author{
 Stefan Bundfuss
 }
+\keyword{check}
