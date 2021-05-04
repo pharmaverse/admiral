@@ -143,8 +143,7 @@ group.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_merged_vars</span>(<span class='no'>dataset</span>, <span class='no'>dataset_add</span>, <span class='kw'>filter_add</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>new_vars</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>), <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>)</pre>
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>), <span class='kw'>filter_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>filter_mode</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,7 +192,6 @@ in each by group is used for merging.</p>
       <td><p>Filter mode</p>
 <p>If the <code>filter_order</code> parameter is specified, the filter mode determines if
 the first or last observation of each by group is selected.</p>
-<p>Default: <code>"last"</code></p>
 <p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></td>
     </tr>
     </table>

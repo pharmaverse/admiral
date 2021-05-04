@@ -138,8 +138,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_extreme_flag</span>(<span class='no'>dataset</span>, <span class='no'>new_var</span>, <span class='no'>by_vars</span>, <span class='no'>order</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='no'>flag_filter</span>, <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_extreme_flag</span>(<span class='no'>dataset</span>, <span class='no'>new_var</span>, <span class='no'>by_vars</span>, <span class='no'>order</span>, <span class='no'>mode</span>, <span class='no'>flag_filter</span>,
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,6 @@ order.</p>
       <th>mode</th>
       <td><p>Flag mode</p>
 <p>Determines of the first or last observation is flagged.</p>
-<p>Default: <code>"last"</code></p>
 <p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></td>
     </tr>
     <tr>
@@ -215,6 +214,7 @@ the output dataset.</p>
                     <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
                     <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>),
                     <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>VSTPTNUM</span>),
+                    <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
                     <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>, <span class='no'>VSTPTNUM</span>, <span class='no'>VSSTRESN</span>, <span class='no'>LASTFL</span>)</div><div class='output co'>#&gt; # A tibble: 29,643 x 6
@@ -266,6 +266,7 @@ the output dataset.</p>
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
   <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
@@ -296,6 +297,7 @@ the output dataset.</p>
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>AVAL</span>, <span class='no'>ADT</span>),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
   <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
@@ -326,6 +328,7 @@ the output dataset.</p>
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>), <span class='no'>ADT</span>),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
   <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
@@ -356,6 +359,7 @@ the output dataset.</p>
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>)),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
   <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL

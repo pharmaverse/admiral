@@ -45,8 +45,8 @@
 
 <meta property="og:title" content="Are records unique? — assert_has_unique_records" />
 
-<meta property="og:description" content="Checks if the reords of a dateset are unique with respect to the specified
-list of by variables and order." />
+<meta property="og:description" content="Checks if the records of a dateset are unique with respect to the specified
+list of by variables and order. If the check fails, an error is issued." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -135,13 +135,13 @@ list of by variables and order." />
 
     <div class="ref-description">
     
-    <p>Checks if the reords of a dateset are unique with respect to the specified
-list of by variables and order.</p>
+    <p>Checks if the records of a dateset are unique with respect to the specified
+list of by variables and order. If the check fails, an error is issued.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>assert_has_unique_records</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>message_type</span> <span class='kw'>=</span> <span class='st'>"error"</span>)</pre>
+  <span class='no'>message</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,17 +166,11 @@ order values are written as variables in the output.</p></td>
       <td><p>Error message
 The message to be displayed if the check fails.</p></td>
     </tr>
-    <tr>
-      <th>message_type</th>
-      <td><p>Message type
-If <code>'error'</code> is specified, an error is issued if the check fails. Otherwise
-an warning is issued.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the argument is a date or date-time, <code>FALSE</code> otherwise</p>
+    <p><code>TRUE</code> if the records are unique, <code>FALSE</code> otherwise</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -184,7 +178,7 @@ an warning is issued.</p></td>
 <span class='fu'>assert_has_unique_records</span>(<span class='no'>ex</span>,
                           <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>) ,
                           <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='fu'>desc</span>(<span class='no'>EXENDTC</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: The `printer` argument is deprecated as of rlang 0.3.0.</span>
-#&gt; <span class='warning'>This warning is displayed once per session.</span></div></pre>
+#&gt; <span class='warning'>This warning is displayed once per session.</span></div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

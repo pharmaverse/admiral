@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds a variable numbering the observations within by group — derive_obs_number • admiral</title>
+<title>Are records unique? — has_unique_records • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,9 +43,10 @@
 
 
 
-<meta property="og:title" content="Adds a variable numbering the observations within by group — derive_obs_number" />
+<meta property="og:title" content="Are records unique? — has_unique_records" />
 
-<meta property="og:description" content="Adds a variable numbering the observations within by group" />
+<meta property="og:description" content="Checks if the records of a dateset are unique with respect to the specified
+list of by variables and order." />
 
 <meta property="og:image" content="/logo.png" />
 
@@ -127,101 +128,62 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds a variable numbering the observations within by group</h1>
+    <h1>Are records unique?</h1>
     
-    <div class="hidden name"><code>derive_obs_number.Rd</code></div>
+    <div class="hidden name"><code>has_unique_records.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds a variable numbering the observations within by group</p>
+    <p>Checks if the records of a dateset are unique with respect to the specified
+list of by variables and order.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>derive_obs_number</span>(<span class='no'>dataset</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ASEQ</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"none"</span>)</pre>
+    <pre class="usage"><span class='fu'>has_unique_records</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>message_type</span> <span class='kw'>=</span> <span class='st'>"error"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The variables specified by the <code>order</code> and the <code>by_vars</code> parameter are
-expected.</p></td>
-    </tr>
-    <tr>
-      <th>new_var</th>
-      <td><p>Name of variable to create</p>
-<p>The new variable is set to the observation number for each by group. The
-numbering starts with 1.</p>
-<p>Default: <code>ASEQ</code></p></td>
-    </tr>
-    <tr>
-      <th>order</th>
-      <td><p>Sort order</p>
-<p>Within each by group the observations are ordered by the specified order.</p>
-<p>Permitted Values: list of variables or functions of variables</p></td>
+      <td><p>The input dataset to check</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
-      <td><p>Grouping variables</p>
-<p>Permitted Values: list of variables</p></td>
+      <td><p>List of by variables</p></td>
     </tr>
     <tr>
-      <th>check_type</th>
-      <td><p>Check uniqueness?</p>
-<p>If <code>"warning"</code> or <code>"error"</code> is specified, the specified message is issued
-if the observations of the input dataset are not unique with respect to the
-by variables and the order.</p>
-<p>Default: <code>"none"</code></p>
-<p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
+      <th>order</th>
+      <td><p>Order of observation
+If the parameter is specified, it is checked if the observations are unique
+with respect to the by variables and the order. If the check fails, the
+order values are written as variables in the output.</p></td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td><p>Error message
+The message to be displayed if the check fails.</p></td>
+    </tr>
+    <tr>
+      <th>message_type</th>
+      <td><p>Message type
+If <code>'error'</code> is specified, an error is issued if the check fails. Otherwise
+an warning is issued.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataset containing all observations and variables of the input
-dataset and additionally the variable specified by the <code>new_var</code> parameter.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first or last observation (with respect to the
-order specified for the <code>order</code> parameter and the mode specified for the
-<code>mode</code> parameter) is included in the output dataset.</p>
+    <p><code>TRUE</code> if the records are unique, <code>FALSE</code> otherwise</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rlang</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘rlang’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    set_names</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:admiral’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    is_character</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
-
-<span class='no'>vs</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>VSTESTCD</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HEIGHT"</span>, <span class='st'>"WEIGHT"</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_obs_number</span>(<span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>),
-                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>))</div><div class='output co'>#&gt; # A tibble: 2,304 x 5
-#&gt;    USUBJID     VSTESTCD VISITNUM VSTPTNUM  ASEQ
-#&gt;    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-#&gt;  1 01-701-1015 HEIGHT          1       NA     1
-#&gt;  2 01-701-1015 WEIGHT          1       NA     1
-#&gt;  3 01-701-1015 WEIGHT          3       NA     2
-#&gt;  4 01-701-1015 WEIGHT          4       NA     3
-#&gt;  5 01-701-1015 WEIGHT          5       NA     4
-#&gt;  6 01-701-1015 WEIGHT          7       NA     5
-#&gt;  7 01-701-1015 WEIGHT          8       NA     6
-#&gt;  8 01-701-1015 WEIGHT          9       NA     7
-#&gt;  9 01-701-1015 WEIGHT         10       NA     8
-#&gt; 10 01-701-1015 WEIGHT         11       NA     9
-#&gt; # … with 2,294 more rows</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ex</span>)
+<span class='fu'>has_unique_records</span>(<span class='no'>ex</span>,
+                   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>) ,
+                   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='fu'>desc</span>(<span class='no'>EXENDTC</span>)))</div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
