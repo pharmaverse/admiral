@@ -23,3 +23,4 @@ assertthat::assert_that(is_timeunit(unit))
 \author{
 Stefan Bundfuss
 }
+\keyword{check}

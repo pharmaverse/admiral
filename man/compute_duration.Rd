@@ -99,5 +99,6 @@ compute_duration(
 \author{
 Stefan Bundfuss
 }
-\keyword{general}
-\keyword{time}
+\keyword{adam}
+\keyword{computation}
+\keyword{timing}

@@ -49,55 +49,55 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflict = FALSE)
 #' data("ex")
 #'
 #' # selecting first dose for each patient
 #' filter_extreme(ex,
 #'                order = exprs(EXSEQ),
 #'                by_vars = exprs(USUBJID),
-#'                mode = 'first') %>%
+#'                mode = "first") %>%
 #'   select(USUBJID, EXSEQ)
 #'
 #' # selecting highest dose for each patient
 #' filter_extreme(ex,
 #'                order = exprs(EXDOSE),
 #'                by_vars = exprs(USUBJID),
+#'                mode = "last",
 #'                check_type = "none") %>%
 #'   select(USUBJID, EXDOSE)
-#'
 
 filter_extreme <- function(dataset,
                            order,
-                           by_vars,
-                           mode = "last",
+                           by_vars = NULL,
+                           mode,
                            check_type = "warning") {
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
 
   # group and sort input dataset
-  if (!missing(by_vars)) {
+  if (!is.null(by_vars)) {
     assert_has_variables(dataset, map_chr(by_vars, as_string))
 
     data <- dataset %>%
-      derive_obs_number(order = order,
+      derive_obs_number(new_var = temp_obs_nr,
+                        order = order,
                         by_vars = by_vars,
                         check_type = check_type) %>%
       group_by(!!!by_vars)
   }
   else {
-    data <- dataset %>% derive_obs_number(order = order,
-                                          check_type = check_type)
+    data <- dataset %>%
+      derive_obs_number(new_var = temp_obs_nr,
+                        order = order,
+                        check_type = check_type)
   }
 
   if (mode == "first") {
     # select first observation (for each group)
     data <- data %>%
-      slice(1)
-  }
-  else {
+      slice(1L)
+  } else {
     # select last observation (for each group)
     data <- data %>%
       slice(n())
