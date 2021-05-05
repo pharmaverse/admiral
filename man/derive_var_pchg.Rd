@@ -4,10 +4,10 @@
 \alias{derive_var_pchg}
 \title{Derive Percent Change from Baseline}
 \usage{
-derive_var_pchg(bds_dataset)
+derive_var_pchg(dataset)
 }
 \arguments{
-\item{bds_dataset}{\code{data.frame}. Required variables are \code{AVAL} and
+\item{dataset}{The input dataset. Required variables are \code{AVAL} and
 \code{BASE}.}
 }
 \value{
@@ -31,8 +31,9 @@ advs <- tibble::tribble(
   "P02",    "WEIGHT", 76,    "",     75.3
 )
 derive_var_pchg(advs)
-
 }
 \author{
 Thomas Neitmann
 }
+\keyword{bds}
+\keyword{derivation}

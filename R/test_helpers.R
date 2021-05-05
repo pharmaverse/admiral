@@ -9,7 +9,7 @@
 #' @param ... Additional arguments passed onto [diffdf::diffdf()]
 #'
 #' @author Thomas Neitmann
-#'
+#' @keywords test_helper
 #' @export
 #'
 #' @examples

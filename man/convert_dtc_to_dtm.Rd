@@ -2,23 +2,23 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{convert_dtc_to_dtm}
 \alias{convert_dtc_to_dtm}
-\title{Convert a --DTC to a --DTM}
+\title{Convert a date character vector into a Date time object.}
 \usage{
 convert_dtc_to_dtm(dtc)
 }
 \arguments{
-\item{dtc}{The --DTC date to convert
+\item{dtc}{The --DTC date to convert.
 
-A character date is expected in a format like yyyy-mm-ddThh:mm:ss
-a partial datetime will return a NA date and a warning will be issued:
-'All formats failed to parse. No formats found.'
-Note: you can use impute_dtc function to build a complete datetime}
+A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
+A partial datetime will return a NA date and a warning will be issued:
+'All formats failed to parse. No formats found.'.
+Note: you can use impute_dtc function to build a complete datetime.}
 }
 \value{
 a datetime  object
 }
 \description{
-Convert a complete character --DTC variable into a datetime object
+Convert a date character vector (usually '--DTC') into a Date vector (usually '--DTM').
 }
 \examples{
 convert_dtc_to_dtm("2019-07-18T15:25:00")

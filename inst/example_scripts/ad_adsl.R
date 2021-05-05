@@ -34,7 +34,11 @@ adsl <- dm %>%
   # Disposition date - option 1
   derive_disposition_dt(
     dataset_ds = ds,
+<<<<<<< HEAD
     new_var = EOSDT1,
+=======
+    new_var = RFICDT,
+>>>>>>> 4f79f263bbd29f16ece636aa83e572fd35f3bff7
     dtc = DSSTDTC,
     filter = expr(DSCAT == "DISPOSITION EVENT")
   ) %>%

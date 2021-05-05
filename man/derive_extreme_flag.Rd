@@ -4,8 +4,8 @@
 \alias{derive_extreme_flag}
 \title{Adds a variable flagging the first or last observation within each by group}
 \usage{
-derive_extreme_flag(dataset, new_var, by_vars, order, mode = "last",
-  flag_filter, check_type = "warning")
+derive_extreme_flag(dataset, new_var, by_vars, order, mode, flag_filter,
+  check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -33,8 +33,6 @@ Permitted Values: list of variables or functions of variables}
 \item{mode}{Flag mode
 
 Determines of the first or last observation is flagged.
-
-Default: \code{"last"}
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
@@ -69,9 +67,7 @@ order specified for the \code{order} parameter and the flag mode) is included in
 the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflicts = FALSE)
 data("vs")
 
 # flag last value for each patient, test, and visit, baseline observations are ignored
@@ -79,6 +75,7 @@ derive_extreme_flag(vs,
                     new_var = LASTFL,
                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
                     order = rlang::exprs(VSTPTNUM),
+                    mode = "last",
                     flag_filter = rlang::expr(VISIT != "BASELINE")) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
@@ -118,6 +115,7 @@ derive_extreme_flag(
   new_var = ABLFL,
   by_vars = exprs(USUBJID, PARAMCD),
   order = exprs(ADT),
+  mode = "last",
   flag_filter = expr(AVISIT == "BASELINE")
 )
 
@@ -127,6 +125,7 @@ derive_extreme_flag(
   new_var = ABLFL,
   by_vars = exprs(USUBJID, PARAMCD),
   order = exprs(AVAL, ADT),
+  mode = "last",
   flag_filter = expr(AVISIT == "BASELINE")
 )
 
@@ -136,6 +135,7 @@ derive_extreme_flag(
   new_var = ABLFL,
   by_vars = exprs(USUBJID, PARAMCD),
   order = exprs(desc(AVAL), ADT),
+  mode = "last",
   flag_filter = expr(AVISIT == "BASELINE")
 )
 
@@ -145,6 +145,7 @@ derive_extreme_flag(
   new_var = ABLFL,
   by_vars = exprs(USUBJID, PARAMCD),
   order = exprs(ADT, desc(AVAL)),
+  mode = "last",
   flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
 )
 

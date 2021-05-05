@@ -13,7 +13,7 @@
 #'   The variables specified by the `by_vars`, the `filter_add`, and the
 #'   `filter_first_order` parameter are expected.
 #'
-#' @param filter_add Fiter condition for dataset to add
+#' @param filter_add Filter condition for dataset to add
 #'
 #'   Only observations of the add dataset which fulfill the specified condition
 #'   are used for merging.
@@ -40,8 +40,6 @@
 #'   If the `filter_order` parameter is specified, the filter mode determines if
 #'   the first or last observation of each by group is selected.
 #'
-#'   Default: `"last"`
-#'
 #'   Permitted Values: `"first"`, `"last"`
 #'
 #' @param by_vars Grouping variables
@@ -63,37 +61,37 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflict = FALSE)
 #' data("ex")
 #' data("dm")
 #'
 #' # adding first treatment start date for each patient
-#' derive_merged_vars(dm,
-#'                    dataset_add = ex,
-#'                    filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
-#'                    new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
-#'                    filter_order = exprs(EXSTDTC, EXSEQ),
-#'                    filter_mode = "first") %>%
+#' derive_merged_vars(
+#'   dm,
+#'   dataset_add = ex,
+#'   filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
+#'   new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
+#'   filter_order = exprs(EXSTDTC, EXSEQ),
+#'   filter_mode = "first"
+#' ) %>%
 #'   select(USUBJID, TRTSDT)
 derive_merged_vars <- function(dataset,
                                dataset_add,
-                               filter_add,
+                               filter_add = NULL,
                                new_vars,
                                by_vars = exprs(USUBJID),
-                               filter_order,
-                               filter_mode = "last") {
+                               filter_order = NULL,
+                               filter_mode) {
   assert_has_variables(dataset, map_chr(by_vars, as_string))
   assert_has_variables(dataset_add, map_chr(by_vars, as_string))
 
-  if (!missing(filter_add)) {
+  if (!is.null(filter_add)) {
      add <- dataset_add %>%
        filter(!!!filter_add)
   } else {
     add <- dataset_add
   }
-  if (!missing(filter_order)) {
+  if (!is.null(filter_order)) {
     add <- add %>%
       filter_extreme(order = filter_order,
                      by_vars = by_vars,

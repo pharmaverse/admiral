@@ -36,6 +36,8 @@
 #' @export
 #'
 #' @examples
+#' data("dm")
+#' data("ds")
 #' derive_disposition_dt(
 #'   dataset = dm,
 #'   dataset_ds = ds,
@@ -48,7 +50,7 @@ derive_disposition_dt <- function(dataset,
                                   new_var,
                                   dtc,
                                   filter_ds,
-                                  date_imputation = NULL) {
+                                 date_imputation = NULL) {
 
   # Checks
   warn_if_vars_exist(dataset, deparse(substitute(new_var)))

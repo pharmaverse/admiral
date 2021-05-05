@@ -12,40 +12,38 @@ impute_dtc(dtc, date_imputation = NULL, time_imputation = "00:00:00")
 A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
 If the year part is not recorded (missing date), no imputation is performed.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing
+\item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is performed and partial dates are returned as missing
+If NULL: no date imputation is performed and partial dates are returned as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is NULL.}
 
-\item{time_imputation}{The value to impute the time when a timepart is missing
+\item{time_imputation}{The value to impute the time when a timepart is missing.
 
 A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day
-\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
+the start of the day,
+\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
 }
 
-Default is '00:00:00'}
+Default is '00:00:00'.}
 }
 \value{
 a character vector
 }
 \description{
-Imputation partial date/time portion of a --DTC variable
-based on user input
+Imputation partial date/time portion of a --DTC variable.
+based on user input.
 }
 \examples{
-
-mhdt <- tibble::tribble(
-  ~MHSTDTC,
+dates <- c(
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
   "2019-07-18T15",
@@ -56,46 +54,48 @@ mhdt <- tibble::tribble(
   "2019---07",
   ""
 )
+
 # No date imputation (date_imputation defaulted to NULL)
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(dtc = mhdt$MHSTDTC)
+impute_dtc(dtc = dates)
 
 # No date imputation (date_imputation defaulted to NULL)
 # Missing time part imputed with 23:59:59 portion
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   time_imputation = "23:59:59"
 )
-# same as above
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+
+# Same as above
+impute_dtc(
+  dtc = dates,
   time_imputation = "LAST"
 )
 
-# impute to first day/month if date is partial
+# Impute to first day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "01-01"
 )
 # same as above
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "FIRST"
 )
 
-# impute to last day/month if date is partial
+# Impute to last day/month if date is partial
 # Missing time part imputed with 23:59:59 portion
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "LAST",
   time_imputation = "LAST"
 )
 
-# impute to Mid day/month if date is partial
+# Impute to mid day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-idtc <- impute_dtc(
-  dtc = mhdt$MHSTDTC,
+impute_dtc(
+  dtc = dates,
   date_imputation = "MID"
 )
 }

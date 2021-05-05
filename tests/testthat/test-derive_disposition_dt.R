@@ -78,8 +78,9 @@ test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates
       date_imputation = "FIRST"
     )
 
-  expect_equal(
+  expect_dfs_equal(
     expected_output,
-    actual_output
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
   )
 })
