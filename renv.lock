@@ -16,6 +16,13 @@
       "Repository": "CRAN",
       "Hash": "f4605d46264b35f53072fc9ee7ace15f"
     },
+    "MASS": {
+      "Package": "MASS",
+      "Version": "7.3-53.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4ef21dd0348b9abb7f8bd1d77e4cd0c3"
+    },
     "Matrix": {
       "Package": "Matrix",
       "Version": "1.2-17",
@@ -92,6 +99,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "e968f494679838e2a12dbc15aa94c9ee"
+    },
+    "cellranger": {
+      "Package": "cellranger",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f61dbaec772ccd2e17705c1e872e9e7c"
     },
     "cli": {
       "Package": "cli",
@@ -232,6 +246,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "84f2260779f595849141086fc94b52f0"
+    },
+    "hms": {
+      "Package": "hms",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b1d40b416da234147d5869a009458702"
     },
     "htmltools": {
       "Package": "htmltools",
@@ -429,6 +450,13 @@
       "Repository": "CRAN",
       "Hash": "6e1b10667cecfb3e471cc47002a841af"
     },
+    "progress": {
+      "Package": "progress",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0ecf0b69c567b4d05914f3589c079717"
+    },
     "promises": {
       "Package": "promises",
       "Version": "1.0.1",
@@ -456,6 +484,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b9343c89dec4d41a13181df4bcd5136f"
+    },
+    "readxl": {
+      "Package": "readxl",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "29864ca183f6378d9a6e2462ad9bdc6f"
+    },
+    "rematch": {
+      "Package": "rematch",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c66b930d20bb6d858cd18e1cebcfae5c"
     },
     "rematch2": {
       "Package": "rematch2",

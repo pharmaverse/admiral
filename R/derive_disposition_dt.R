@@ -36,12 +36,14 @@
 #' @export
 #'
 #' @examples
+#' data("dm")
+#' data("ds")
 #' derive_disposition_dt(
 #'   dataset = dm,
 #'   dataset_ds = ds,
-#'   new_var = RFICDT,
+#'   new_var = FRVDT,
 #'   dtc = DSSTDTC,
-#'   filter = expr(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "INFORMED CONSENT OBTAINED")
+#'   filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
 #' )
 derive_disposition_dt <- function(dataset,
                                   dataset_ds,
@@ -49,7 +51,6 @@ derive_disposition_dt <- function(dataset,
                                   dtc,
                                   filter_ds,
                                   date_imputation = NULL) {
-
   # Checks
   warn_if_vars_exist(dataset, deparse(substitute(new_var)))
   assert_that(is.data.frame(dataset_ds))

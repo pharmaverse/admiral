@@ -12,6 +12,8 @@
 #'
 #' @export
 #'
+#' @keywords assertion
+#'
 #' @examples
 #' data(dm)
 #' assert_has_variables(dm, "STUDYID")
@@ -48,6 +50,8 @@ assert_has_variables <- function(dataset, required_vars) {
 #' @return The function throws an error if a subject has multiple baseline
 #' records
 #'
+#' @keywords assertion
+#'
 #' @export
 assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
   is_duplicate <- duplicated(select(dataset, !!!syms(by)))
@@ -66,7 +70,7 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 
 #' Are records unique?
 #'
-#' Checks if the reords of a dateset are unique with respect to the specified
+#' Checks if the records of a dateset are unique with respect to the specified
 #' list of by variables and order.
 #'
 #' @param dataset The input dataset to check
@@ -87,17 +91,24 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
+#' @return `TRUE` if the records are unique, `FALSE` otherwise
+#'
+#' @keywords check
 #'
 #' @export
 #'
 #' @examples
 #' data(ex)
-#' assert_has_unique_records(ex,
-#'   by_vars = rlang::exprs(USUBJID),
-#'   order = rlang::exprs(desc(EXENDTC))
+#' has_unique_records(ex,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(EXENDTC))
 #' )
-assert_has_unique_records <- function(dataset, by_vars, order, message, message_type = "error") {
+has_unique_records <- function(dataset,
+                               by_vars = NULL,
+                               order = NULL,
+                               message = NULL,
+                               message_type = "error") {
+  arg_match(message_type, c("none", "warning", "error"))
   # variables used for check
   all_vars <- list()
 
@@ -107,11 +118,11 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   # dataset to check (remove grouping)
   data_ext <- ungroup(dataset)
 
-  if (!missing(by_vars)) {
+  if (!is.null(by_vars)) {
     all_vars <- by_vars
     all_vars_msg <- by_vars
   }
-  if (!missing(order)) {
+  if (!is.null(order)) {
     # add order variables to the input dataset
     order_vars <- order
     names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
@@ -132,32 +143,81 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
   # check for duplicates
   is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
   if (any(is_duplicate)) {
-    # filter out duplicate observations of the input dataset
-    duplicates <- data_ext %>%
-      filter(is_duplicate)
+    if (message_type != "none") {
+      # filter out duplicate observations of the input dataset
+      duplicates <- data_ext %>%
+        filter(is_duplicate)
 
-    # create message
-    tbl <- capture.output(print(duplicates))
-    if (missing(message)) {
-      message <- paste0(
-        "Dataset contains multiple records with respect to ",
-        paste(all_vars_msg, collapse = ", "),
-        "."
+      # create message
+      tbl <- capture.output(print(duplicates))
+      if (missing(message)) {
+        message <- paste0(
+          "Dataset contains multiple records with respect to ",
+          paste(all_vars_msg, collapse = ", "),
+          "."
+        )
+      }
+      err_msg <- paste0(
+        message,
+        "\n",
+        paste(tbl[-c(1, 3)], collapse = "\n")
       )
-    }
-    err_msg <- paste0(
-      message,
-      "\n",
-      paste(tbl[-c(1, 3)], collapse = "\n")
-    )
 
-    # issue message
-    if (message_type == "error") {
-      abort(err_msg)
-    } else {
-      warn(err_msg)
+      # issue message
+      if (message_type == "error") {
+        abort(err_msg)
+      } else {
+        warn(err_msg)
+      }
     }
+    TRUE
   }
+  else {
+    FALSE
+  }
+}
+
+#' Are records unique?
+#'
+#' Checks if the records of a dateset are unique with respect to the specified
+#' list of by variables and order. If the check fails, an error is issued.
+#'
+#' @param dataset The input dataset to check
+#'
+#' @param by_vars List of by variables
+#'
+#' @param order Order of observation
+#'   If the parameter is specified, it is checked if the observations are unique
+#'   with respect to the by variables and the order. If the check fails, the
+#'   order values are written as variables in the output.
+#'
+#' @param message Error message
+#'   The message to be displayed if the check fails.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return `TRUE` if the records are unique, `FALSE` otherwise
+#'
+#' @keywords assertion
+#'
+#' @export
+#'
+#' @examples
+#' data(ex)
+#' assert_has_unique_records(ex,
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(EXENDTC))
+#' )
+assert_has_unique_records <- function(dataset,
+                                      by_vars = NULL,
+                                      order = NULL,
+                                      message) {
+  has_unique_records(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    message_type = "error"
+  )
 }
 
 #' Is Date/Date-time?
@@ -169,6 +229,8 @@ assert_has_unique_records <- function(dataset, by_vars, order, message, message_
 #' @author Stefan Bundfuss
 #'
 #' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
+#'
+#' @keywords check
 #'
 #' @export
 #'
@@ -200,6 +262,8 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a time unit, `FALSE` otherwise
 #'
+#' @keywords check
+#'
 #' @export
 #'
 #' @examples
@@ -229,6 +293,8 @@ on_failure(is_timeunit) <- function(call, env) {
 #' @author Samia Kabi
 #'
 #' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
+#'
+#' @keywords check
 #'
 #' @export
 #'
@@ -262,6 +328,8 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid time_imputation input, `FALSE` otherwise
 #'
+#' @keywords check
+#'
 #' @export
 #'
 #' @examples
@@ -293,6 +361,8 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid min/sec input, `FALSE` otherwise
 #'
+#' @keywords check
+#'
 #' @export
 #'
 #' @examples
@@ -320,6 +390,8 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #' @author Samia Kabi
 #'
 #' @return `TRUE` if the argument is a valid hour input, `FALSE` otherwise
+#'
+#' @keywords check
 #'
 #' @export
 #'
@@ -349,6 +421,8 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a day input, `FALSE` otherwise
 #'
+#' @keywords check
+#'
 #' @export
 #'
 #' @examples
@@ -376,6 +450,8 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @author Samia Kabi
 #'
 #' @return `TRUE` if the argument is a month input, `FALSE` otherwise
+#'
+#' @keywords check
 #'
 #' @export
 #'

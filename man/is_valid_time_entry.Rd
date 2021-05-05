@@ -23,3 +23,4 @@ assertthat::assert_that(is_valid_time_entry("FIRST"))
 \author{
 Samia Kabi
 }
+\keyword{check}
