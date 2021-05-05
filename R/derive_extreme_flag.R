@@ -24,8 +24,6 @@
 #'
 #'   Determines of the first or last observation is flagged.
 #'
-#'   Default: `"last"`
-#'
 #'   Permitted Values: `"first"`, `"last"`
 #'
 #' @param by_vars Grouping variables
@@ -64,9 +62,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #'
 #' # flag last value for each patient, test, and visit, baseline observations are ignored
@@ -74,6 +70,7 @@
 #'                     new_var = LASTFL,
 #'                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
 #'                     order = rlang::exprs(VSTPTNUM),
+#'                     mode = "last",
 #'                     flag_filter = rlang::expr(VISIT != "BASELINE")) %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
@@ -113,6 +110,7 @@
 #'   new_var = ABLFL,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   order = exprs(ADT),
+#'   mode = "last",
 #'   flag_filter = expr(AVISIT == "BASELINE")
 #' )
 #'
@@ -122,6 +120,7 @@
 #'   new_var = ABLFL,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   order = exprs(AVAL, ADT),
+#'   mode = "last",
 #'   flag_filter = expr(AVISIT == "BASELINE")
 #' )
 #'
@@ -131,6 +130,7 @@
 #'   new_var = ABLFL,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   order = exprs(desc(AVAL), ADT),
+#'   mode = "last",
 #'   flag_filter = expr(AVISIT == "BASELINE")
 #' )
 #'
@@ -140,15 +140,15 @@
 #'   new_var = ABLFL,
 #'   by_vars = exprs(USUBJID, PARAMCD),
 #'   order = exprs(ADT, desc(AVAL)),
+#'   mode = "last",
 #'   flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
 #' )
 #'
-
 derive_extreme_flag <- function(dataset,
                                 new_var,
                                 by_vars,
                                 order,
-                                mode = "last",
+                                mode,
                                 flag_filter,
                                 check_type = "warning") {
   # check input parameters
@@ -168,7 +168,8 @@ derive_extreme_flag <- function(dataset,
 
   # create flag
   data <- data %>%
-    derive_obs_number(order = order,
+    derive_obs_number(new_var = temp_obs_nr,
+                      order = order,
                       by_vars = by_vars,
                       check_type = check_type)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_trtsdtm.R
 \name{derive_var_trtsdtm}
 \alias{derive_var_trtsdtm}
-\title{Derive datetime of First Exposure to Treatment (TRTSDTM)}
+\title{Derive datetime of First Exposure to Treatment}
 \usage{
 derive_var_trtsdtm(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
   (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10))
@@ -30,7 +30,7 @@ Permitted Values: logical expression}
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-Derives datetime of First Exposure to Treatment (TRTSDTM)
+Derives datetime of First Exposure to Treatment (\code{TRTSDTM})
 }
 \details{
 For each group (with respect to the variables specified for the
@@ -39,15 +39,11 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr)
-library(magrittr)
-
 data("ex")
 data("dm")
 
-derive_var_trtsdtm(dm,
-                   dataset_ex = ex) \%>\%
+derive_var_trtsdtm(dm, dataset_ex = ex) \%>\%
   select(USUBJID, TRTSDTM)
-
 }
 \author{
 Stefan Bundfuss

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dtm}
 \alias{derive_vars_dtm}
-\title{Derive --DTM (and --DTF/--TMF)}
+\title{Derive/Impute a datetime from a date character vector}
 \usage{
 derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
   time_imputation = "00:00:00", flag_imputation = TRUE)
@@ -10,16 +10,16 @@ derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
 \arguments{
 \item{dataset}{Input dataset
 
-The --DTC variable must be present.}
+The date character vector (dtc) must be present.}
 
-\item{new_vars_prefix}{Prefix used for the output variable(s)
+\item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected, e.g new_vars_prefix="AST"}
+a character is expected: e.g new_vars_prefix="AST".}
 
-\item{dtc}{The --DTC date used to derive/impute --DT
+\item{dtc}{The date character vector used to derive/impute the date.
 
 A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-If the year part is not recorded (missing date), no imputation is performed.}
+if the year part is not recorded (missing date), no imputation is done.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
@@ -27,41 +27,42 @@ If NULL: no date imputation is performed and partial dates are returned as missi
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is NULL.}
 
-\item{time_imputation}{The value to impute the time when a timepart is missing
+\item{time_imputation}{The value to impute the time when a timepart is missing.
 
 A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day
-\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day
+the start of the day,
+\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
 }
 
-Default is '00:00:00'}
+Default is '00:00:00'.}
 
-\item{flag_imputation}{Whether the --DTF and or --TMF variable must also be derived
+\item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
 A logical value
 
 Default: TRUE}
 }
 \value{
-the input dataset with the datetime --DTM (and the date/time imputation
-flag --DTF, --TMF) added
+the input dataset with the datetime '--DTM' (and the date/time imputation
+flag '--DTF', '--TMF') added.
 }
 \description{
-Derive --DTM based on --DTC. --DTM is imputed based on user input
-Derive --DTF/--TMF if needed based on --DTC and --DT
+Derive a datetime object ('--DTM') from a date character vector ('---DTC').
+The date and time can be imputed (see date_imputation/time_imputation parameters)
+and the date/time imputation flag ('--DTF', '--TMF') can be added.
 }
 \details{
 The presence of a --DTF variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if --TMF already exists
-in the input dataset, a warning is issued and --TMF will be overwritten
+in the input dataset, a warning is issued and --TMF will be overwritten.
 }
 \examples{
 mhdt <- tibble::tribble(

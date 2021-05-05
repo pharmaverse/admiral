@@ -4,8 +4,8 @@
 \alias{derive_merged_vars}
 \title{Merge variables from a second dataset}
 \usage{
-derive_merged_vars(dataset, dataset_add, filter_add, new_vars,
-  by_vars = exprs(USUBJID), filter_order, filter_mode = "last")
+derive_merged_vars(dataset, dataset_add, filter_add = NULL, new_vars,
+  by_vars = exprs(USUBJID), filter_order = NULL, filter_mode)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -17,7 +17,7 @@ The variables specified by the \code{by_vars} parameter are expected.}
 The variables specified by the \code{by_vars}, the \code{filter_add}, and the
 \code{filter_first_order} parameter are expected.}
 
-\item{filter_add}{Fiter condition for dataset to add
+\item{filter_add}{Filter condition for dataset to add
 
 Only observations of the add dataset which fulfill the specified condition
 are used for merging.
@@ -50,8 +50,6 @@ Permitted Values: list of variables or functions of variables}
 If the \code{filter_order} parameter is specified, the filter mode determines if
 the first or last observation of each by group is selected.
 
-Default: \code{"last"}
-
 Permitted Values: \code{"first"}, \code{"last"}}
 }
 \value{
@@ -68,19 +66,19 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflict = FALSE)
 data("ex")
 data("dm")
 
 # adding first treatment start date for each patient
-derive_merged_vars(dm,
-                   dataset_add = ex,
-                   filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
-                   new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
-                   filter_order = exprs(EXSTDTC, EXSEQ),
-                   filter_mode = "first") \%>\%
+derive_merged_vars(
+  dm,
+  dataset_add = ex,
+  filter_add = exprs(EXDOSE > 0 | str_detect(EXTRT, 'PLACEBO')),
+  new_vars = exprs(TRTSDT := ymd(EXSTDTC)),
+  filter_order = exprs(EXSTDTC, EXSEQ),
+  filter_mode = "first"
+) \%>\%
   select(USUBJID, TRTSDT)
 }
 \author{

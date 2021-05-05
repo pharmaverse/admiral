@@ -12,7 +12,7 @@
 #'   The new variable is set to the observation number for each by group. The
 #'   numbering starts with 1.
 #'
-#'   Default: `temp_obs_nr`
+#'   Default: `ASEQ`
 
 #' @param order Sort order
 #'
@@ -62,16 +62,16 @@
 #'   derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
 #'                     order = exprs(VISITNUM, VSTPTNUM))
 derive_obs_number <- function(dataset,
-                              new_var = temp_obs_nr,
-                              order,
-                              by_vars,
+                              new_var = ASEQ,
+                              order = NULL,
+                              by_vars = NULL,
                               check_type = "none") {
   arg_match(check_type, c("none", "warning", "error"))
   data <- dataset
 
-  if (!missing(by_vars) | !missing(order)) {
+  if (!is.null(by_vars) | !is.null(order)) {
     # group and sort input dataset
-    if (!missing(by_vars)) {
+    if (!is.null(by_vars)) {
       assert_has_variables(data, map_chr(by_vars, as_string))
 
       data <- data %>%
@@ -79,8 +79,7 @@ derive_obs_number <- function(dataset,
         arrange(!!!order, .by_group = TRUE)
 
       if (check_type != "none") {
-        # check for unique records
-        assert_has_unique_records(
+        has_unique_records(
           data,
           by_vars = by_vars,
           order = order,
@@ -93,10 +92,9 @@ derive_obs_number <- function(dataset,
         arrange(!!!order)
 
       if (check_type != "none") {
-        # check for unique records
-        assert_has_unique_records(data,
-                                  order = order,
-                                  message_type = check_type)
+        has_unique_records(data,
+                           order = order,
+                           message_type = check_type)
       }
     }
   }

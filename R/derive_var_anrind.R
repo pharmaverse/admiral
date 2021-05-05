@@ -16,6 +16,11 @@
 #' - `"HIGH HIGH"` if `AVAL` is greater than `A1HI`
 #'
 #' @return The input dataset with additional column `ANRIND`
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords bds derivation
+#'
 #' @export
 #'
 #' @examples
