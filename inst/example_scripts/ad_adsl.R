@@ -12,6 +12,7 @@ library(admiral)
 # read in predecessor variables from dm
 data("dm")
 data("ex")
+data("ds")
 
 # derive treatment variables (TRT01P, TRT01A)
 adsl <- dm %>%
