@@ -1,6 +1,12 @@
 template:
   params:
     bootswatch: flatly
+repo:
+  url:
+    home: https://github.com/Roche-GSK/admiral/
+    source: https://github.com/Roche-GSK/admiral/blob/master/
+    issue: https://github.com/Roche-GSK/admiral/issues/
+    user: https://github.com/
 reference:
 - title: Derivations
   desc: Derivations add one ore more variables or parameters to the input
