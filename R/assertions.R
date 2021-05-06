@@ -1,31 +1,3 @@
-#' Does a Dataset exist?
-#'
-#' Checks if a dataset exists in the environement
-#'
-#' @param dataset A `data.frame`
-#'
-#' @author Samia Kabi
-#'
-#' @return The function throws an error if the datasets is not present
-#' in the local environment
-#'
-#' @export
-#'
-#' @examples
-#' data(dm)
-#' assert_dataset_exist("dm")
-assert_dataset_exist <- function(dataset) {
-  if (!exists(dataset)) {
-    err_msg <- paste0(
-      "dataset ",
-      dataset,
-      " does not exist."
-    )
-    abort(err_msg)
-  }
-}
-
-
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
@@ -491,5 +463,45 @@ on_failure(is_valid_month) <- function(call, env) {
     " is not a valid month.\n",
     "Values for month must be between 1-12. ",
     "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
+  )
+}
+
+
+#' Is the object a character?
+#'
+#' Checks if a character vector was specified
+#'
+#' @param arg The argument to check
+#'
+#' @author Samia Kabi
+#'
+#' @return `TRUE` if the argument is a character, `FALSE` otherwise
+#'
+#' @export
+#'
+#' @examples
+#' date <- "2020-02-03"
+#' assertthat::assert_that(is_character(date))
+is_character <- function(arg) {
+  is.character(arg)
+}
+on_failure(is_character) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " = ",
+    eval(call$arg, envir = env),
+    " is not a character."
+  )
+}
+
+is_named_exprs <- function(arg) {
+  is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
+}
+on_failure(is_named_exprs) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a named list of expressions created using `exprs()`"
   )
 }
