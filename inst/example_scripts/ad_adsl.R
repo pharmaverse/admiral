@@ -2,11 +2,7 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-<<<<<<< HEAD
-# Input: dm, ex
-=======
 # Input: dm, ex, ds
->>>>>>> origin/devel
 #
 
 library(dplyr)
@@ -16,16 +12,13 @@ library(admiral)
 # read in predecessor variables from dm
 data("dm")
 data("ex")
+data("ds")
 
 # derive treatment variables (TRT01P, TRT01A)
 adsl <- dm %>%
-<<<<<<< HEAD
-  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
-=======
   mutate(
     TRT01P = ARMCD, TRT01A = ARMCD
   ) %>%
->>>>>>> origin/devel
 
   # derive treatment start date (TRTSDTM, TRTSDT)
   derive_var_trtsdtm(dataset_ex = ex) %>%
@@ -38,8 +31,6 @@ adsl <- dm %>%
   # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%
 
-<<<<<<< HEAD
-=======
   # Disposition date - option 1
   derive_disposition_dt(
     dataset_ds = ds,
@@ -55,7 +46,6 @@ adsl <- dm %>%
   ) %>%
 
   # Option 2
->>>>>>> origin/devel
   # derive study completion/discontinuation variables
   derive_merged_vars(
     dataset_add = ds,
@@ -64,11 +54,7 @@ adsl <- dm %>%
       EOSDT = convert_dtc_to_dt(impute_dtc(DSSTDTC, date_imputation = "FIRST")),
       EOSSTT = if_else(DSDECOD == "COMPLETED", "COMPLETED", "DISCONTINUED"),
       DCSREAS = if_else(DSDECOD != "COMPLETED", DSDECOD, "")
-<<<<<<< HEAD
-    ))
-=======
     )
   )
->>>>>>> origin/devel
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)
