@@ -240,7 +240,6 @@ convert_dtc_to_dtm <- function(dtc) {
   assert_that(is.character(dtc))
   warn_if_incomplete_dtc(dtc, n = 19)
   warn_if_invalid_dtc(dtc)
-
   # note T00:00:00 is not printed in dataframe
   dtm <- ymd_hms(NA)
   case_when(
@@ -316,9 +315,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
-  # Check dtc is character
   assert_that(is.character(dtc))
-  # check dt is a date
   assert_that(is_date(dtm))
 
   tmf <- case_when(
