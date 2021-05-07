@@ -17,6 +17,12 @@
 #'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
 #'   If the year part is not recorded (missing date), no imputation is performed.
 #'
+#' @param filter_ds Filter condition for the disposition data.
+#'
+#'   Filter used to select the relevant disposition data.
+#'
+#'   Permitted Values: logical expression
+#'
 #' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
 #'   If NULL: no date imputation is performed and partial dates are returned as missing.
@@ -61,17 +67,17 @@ derive_disposition_dt <- function(dataset,
   newvar <- paste0(prefix, "DT")
   ds_subset <- dataset_ds %>%
     filter(!!filter_ds) %>%
-    mutate(datedtc = !!enquo(dtc)) %>%
+    mutate(datedtc___ = !!enquo(dtc)) %>%
     derive_vars_dt(
       new_vars_prefix = prefix,
-      dtc = datedtc,
+      dtc = datedtc___,
       date_imputation = date_imputation,
       flag_imputation = FALSE
     ) %>%
     select(STUDYID, USUBJID, !!enquo(new_var) := !!sym(newvar))
 
   # Expect 1 record per subject - issue a warning otherwise
-  assert_has_unique_records(
+  has_unique_records(
     dataset = ds_subset,
     by_vars = "USUBJID",
     message_type = "warning",

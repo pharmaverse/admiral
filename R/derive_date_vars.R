@@ -203,7 +203,7 @@ impute_dtc <- function(dtc,
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
   # Check dtc is character
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   dt <- case_when(
     nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
     TRUE ~ ymd(NA)
@@ -237,7 +237,7 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
   # Check dtc is character
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   # note T00:00:00 is not printed in dataframe
   dtm <- case_when(
     nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
@@ -272,7 +272,7 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
   # Check dtc is character
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   # check dt is a date
   assert_that(is_date(dt))
 
@@ -316,7 +316,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   # Check dtc is character
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   # check dt is a date
   assert_that(is_date(dtm))
 
