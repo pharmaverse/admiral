@@ -203,7 +203,7 @@ impute_dtc <- function(dtc,
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
 
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   warn_if_incomplete_dtc(dtc,n=10)
   warn_if_invalid_dtc(dtc)
 
@@ -240,7 +240,7 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
 
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   warn_if_incomplete_dtc(dtc, n=19)
   warn_if_invalid_dtc(dtc)
 
@@ -277,9 +277,8 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
-  # Check dtc is character
-  assert_that(is_character(dtc))
-  # check dt is a date
+
+  assert_that(is.character(dtc))
   assert_that(is_date(dt))
 
   dtf <- case_when(
@@ -322,7 +321,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   # Check dtc is character
-  assert_that(is_character(dtc))
+  assert_that(is.character(dtc))
   # check dt is a date
   assert_that(is_date(dtm))
 
