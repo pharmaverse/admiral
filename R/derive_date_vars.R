@@ -206,10 +206,9 @@ convert_dtc_to_dt <- function(dtc) {
   warn_if_incomplete_dtc(dtc, n = 10)
   warn_if_invalid_dtc(dtc)
 
-  dt <- ymd(NA)
   dt <- case_when(
     nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
-    TRUE ~ dt
+    TRUE ~ ymd(NA)
   )
 }
 
@@ -240,10 +239,9 @@ convert_dtc_to_dtm <- function(dtc) {
   warn_if_incomplete_dtc(dtc, n = 19)
   warn_if_invalid_dtc(dtc)
   # note T00:00:00 is not printed in dataframe
-  dtm <- ymd_hms(NA)
   case_when(
     nchar(dtc) >= 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
-    TRUE ~ dtm
+    TRUE ~ ymd_hms(NA)
   )
 }
 
