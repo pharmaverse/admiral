@@ -55,6 +55,8 @@ Derives new variables which depend on either input dataset or joined dataset or 
 Additionally, pre-/post- filters can be supplied to filder the joined/resulting dataset.
 }
 \examples{
+library(magrittr)
+
 data(ae)
 data(ex)
 ae \%>\%
