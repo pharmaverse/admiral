@@ -61,7 +61,9 @@ ae \%>\%
   derive_vars_dtm(new_vars_prefix = "AST", dtc = AESTDTC) \%>\%
   derive_joined_vars(
     dataset_join = ex,
-    new_vars = exprs(LDOSEDTM = compute_dtm(dtc = EXENDTC, date_imputation = NULL, time_imputation = NULL)),
+    new_vars = exprs(LDOSEDTM = compute_dtm(dtc = EXENDTC,
+                                            date_imputation = NULL,
+                                            time_imputation = NULL)),
     pre_filter = exprs(is_valid_dose()),
     by_vars = exprs(USUBJID),
     order = exprs(EXENDTC),
