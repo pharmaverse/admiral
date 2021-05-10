@@ -51,6 +51,8 @@
 #' @export
 #'
 #' @examples
+#' library(magrittr)
+#'
 #' data(ae)
 #' data(ex)
 #' ae %>%
