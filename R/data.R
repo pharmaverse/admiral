@@ -69,3 +69,12 @@
 #' Derived from the [dm] and [ds] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R})
 #'
 "adsl"
+
+#' Time definitions dataset
+#'
+#' An example time definitions dataset
+#'
+#' @source
+#' Created manually based on [dm]
+#'
+"time_def"
