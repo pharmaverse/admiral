@@ -92,9 +92,23 @@ observations to merge can be selected by a condition and/or by selecting the
 first or last observation in each by group.
 }
 \details{
-For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first observation (with respect to the order
-specified for the \code{order} parameter) is included in the output dataset.
+The following steps are performed to create the output dataset:
+
+\enumerate{
+\item For each source dataset the observations as specified by the \code{filter}
+element are selected. If the \code{order} element is specified, for each by group
+the first or last element (depending on the \code{mode} element) with respect to
+the specified order is selected.
+
+\item The selected observations of all source datasets are combined into a
+single dataset. The variable \code{temp_source_nr} is added. It is set to the
+source number.
+
+\item For each group (with respect to the variables specified for the
+\code{by_vars} parameter) the first or last observation (with respect to the order
+specified for the \code{order} parameter and the \code{mode} parameter) from the single
+dataset is selected and the new variables are merged to the input dataset.
+}
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
@@ -124,6 +138,9 @@ derive_merged_multisource(dm,
   select(USUBJID, LSTALVDT)
 
 # derive death cause and domain from AE and DS dataset
+# if death is reported in both AE and DS the cause from AE is selected
+# using the temporary variable temp_source_nr created within the
+# derive_merged_multisource function
 dthae <- list(dataset = ae,
               vars = exprs(DTHDOM = "AE", DTHCAUS = AEDECOD),
               filter = expr(AEOUT == "FATAL"))

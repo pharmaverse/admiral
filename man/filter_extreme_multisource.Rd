@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_extreme_multisource.R
 \name{filter_extreme_multisource}
 \alias{filter_extreme_multisource}
-\title{Merge variables from more than one dataset}
+\title{Filters observations from more than one dataset}
 \usage{
 filter_extreme_multisource(sources, by_vars, order, mode)
 }
@@ -12,7 +12,7 @@ filter_extreme_multisource(sources, by_vars, order, mode)
 For each source the observations are selected as specified. The selected
 observations of all sources are collected in one dataset and then for each
 by group one observation (with respect to the \code{order} and \code{mode} parameter)
-is selected and merged to the input dataset.
+is selected.
 
 Each element of the list must be a list with the following named elements.
 
@@ -32,8 +32,8 @@ are used for merging.
 
 \item \emph{new_vars:} Variable to add
 
-The specified variables are created in the add dataset and then merge to
-the input dataset.
+The specified variables are created in the source dataset and added to the
+output dataset.
 
 \emph{Permitted Values:} list of name-value pairs
 
@@ -83,14 +83,28 @@ A dataset containing the first or last observation of each by group.
 Only the by variables and the new variables are included.
 }
 \description{
-Merges variables from more than one dataset. For each dataset the
-observations to merge can be selected by a condition and/or by selecting the
-first or last observation in each by group.
+Filters observations from more than one dataset. For each dataset the
+observations can be selected by a condition and/or by selecting the first or
+last observation in each by group.
 }
 \details{
-For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first observation (with respect to the order
-specified for the \code{order} parameter) is included in the output dataset.
+The following steps are performed to create the output dataset:
+
+\enumerate{
+\item For each source dataset the observations as specified by the \code{filter}
+element are selected. If the \code{order} element is specified, for each by group
+the first or last element (depending on the \code{mode} element) with respect to
+the specified order is selected.
+
+\item The selected observations of all source datasets are combined into a
+single dataset. The variable \code{temp_source_nr} is added. It is set to the
+source number.
+
+\item For each group (with respect to the variables specified for the
+\code{by_vars} parameter) the first or last observation (with respect to the order
+specified for the \code{order} parameter and the \code{mode} parameter) from the single
+dataset is added to the output dataset.
+}
 }
 \author{
 Stefan Bundfuss

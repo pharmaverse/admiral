@@ -1,15 +1,15 @@
-#' Merge variables from more than one dataset
+#' Filters observations from more than one dataset
 #'
-#' Merges variables from more than one dataset. For each dataset the
-#' observations to merge can be selected by a condition and/or by selecting the
-#' first or last observation in each by group.
+#' Filters observations from more than one dataset. For each dataset the
+#' observations can be selected by a condition and/or by selecting the first or
+#' last observation in each by group.
 #'
 #' @param sources List of sources
 #'
 #'   For each source the observations are selected as specified. The selected
 #'   observations of all sources are collected in one dataset and then for each
 #'   by group one observation (with respect to the `order` and `mode` parameter)
-#'   is selected and merged to the input dataset.
+#'   is selected.
 #'
 #'   Each element of the list must be a list with the following named elements.
 #'
@@ -29,8 +29,8 @@
 #'
 #'   \item \emph{new_vars:} Variable to add
 #'
-#'   The specified variables are created in the add dataset and then merge to
-#'   the input dataset.
+#'   The specified variables are created in the source dataset and added to the
+#'   output dataset.
 #'
 #'   \emph{Permitted Values:} list of name-value pairs
 #'
@@ -75,9 +75,23 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first observation (with respect to the order
-#'   specified for the `order` parameter) is included in the output dataset.
+#' @details The following steps are performed to create the output dataset:
+#'
+#' \enumerate{
+#' \item For each source dataset the observations as specified by the `filter`
+#' element are selected. If the `order` element is specified, for each by group
+#' the first or last element (depending on the `mode` element) with respect to
+#' the specified order is selected.
+#'
+#' \item The selected observations of all source datasets are combined into a
+#' single dataset. The variable `temp_source_nr` is added. It is set to the
+#' source number.
+#'
+#' \item For each group (with respect to the variables specified for the
+#' `by_vars` parameter) the first or last observation (with respect to the order
+#' specified for the `order` parameter and the `mode` parameter) from the single
+#' dataset is added to the output dataset.
+#' }
 #'
 #' @author Stefan Bundfuss
 #'

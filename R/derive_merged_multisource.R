@@ -79,9 +79,23 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first observation (with respect to the order
-#'   specified for the `order` parameter) is included in the output dataset.
+#' @details The following steps are performed to create the output dataset:
+#'
+#' \enumerate{
+#' \item For each source dataset the observations as specified by the `filter`
+#' element are selected. If the `order` element is specified, for each by group
+#' the first or last element (depending on the `mode` element) with respect to
+#' the specified order is selected.
+#'
+#' \item The selected observations of all source datasets are combined into a
+#' single dataset. The variable `temp_source_nr` is added. It is set to the
+#' source number.
+#'
+#' \item For each group (with respect to the variables specified for the
+#' `by_vars` parameter) the first or last observation (with respect to the order
+#' specified for the `order` parameter and the `mode` parameter) from the single
+#' dataset is selected and the new variables are merged to the input dataset.
+#' }
 #'
 #' @author Stefan Bundfuss
 #'
@@ -119,6 +133,9 @@
 #'   select(USUBJID, LSTALVDT)
 #'
 #' # derive death cause and domain from AE and DS dataset
+#' # if death is reported in both AE and DS the cause from AE is selected
+#' # using the temporary variable temp_source_nr created within the
+#' # derive_merged_multisource function
 #' dthae <- list(dataset = ae,
 #'               vars = exprs(DTHDOM = "AE", DTHCAUS = AEDECOD),
 #'               filter = expr(AEOUT == "FATAL"))
@@ -140,6 +157,5 @@ derive_merged_multisource <- function(dataset,
                                          by_vars = by_vars,
                                          order = order,
                                          mode = mode)
-  left_join(dataset, all_data, by = map_chr(by_vars, as_string)) %>%
-    select(-starts_with("temp_"))
+  left_join(dataset, all_data, by = map_chr(by_vars, as_string))
 }
