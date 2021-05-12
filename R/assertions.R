@@ -100,8 +100,9 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' @examples
 #' data(ex)
 #' has_unique_records(ex,
-#'                    by_vars = exprs(USUBJID) ,
-#'                    order = exprs(desc(EXENDTC)))
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(EXENDTC))
+#' )
 has_unique_records <- function(dataset,
                                by_vars = NULL,
                                order = NULL,
@@ -150,9 +151,11 @@ has_unique_records <- function(dataset,
       # create message
       tbl <- capture.output(print(duplicates))
       if (missing(message)) {
-        message <- paste0("Dataset contains multiple records with respect to ",
-                          paste(all_vars_msg, collapse = ", "),
-                          ".")
+        message <- paste0(
+          "Dataset contains multiple records with respect to ",
+          paste(all_vars_msg, collapse = ", "),
+          "."
+        )
       }
       err_msg <- paste0(
         message,
@@ -169,7 +172,7 @@ has_unique_records <- function(dataset,
     }
     TRUE
   }
-  else{
+  else {
     FALSE
   }
 }
@@ -202,16 +205,19 @@ has_unique_records <- function(dataset,
 #' @examples
 #' data(ex)
 #' assert_has_unique_records(ex,
-#'                           by_vars = exprs(USUBJID) ,
-#'                           order = exprs(desc(EXENDTC)))
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(EXENDTC))
+#' )
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,
                                       order = NULL,
                                       message) {
-  has_unique_records(dataset = dataset,
-                     by_vars = by_vars,
-                     order = order,
-                     message_type = "error")
+  has_unique_records(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    message_type = "error"
+  )
 }
 
 #' Is Date/Date-time?
@@ -466,34 +472,6 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-
-#' Is the object a character?
-#'
-#' Checks if a character vector was specified
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a character, `FALSE` otherwise
-#'
-#' @export
-#'
-#' @examples
-#' date <- "2020-02-03"
-#' assertthat::assert_that(is_character(date))
-is_character <- function(arg) {
-  is.character(arg)
-}
-on_failure(is_character) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a character."
-  )
-}
 
 is_named_exprs <- function(arg) {
   is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
