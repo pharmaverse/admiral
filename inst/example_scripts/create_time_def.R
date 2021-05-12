@@ -27,9 +27,14 @@ time_def <- tibble(
          # duration of each subjects participation
          duration = as_date(end) - as_date(start),
          # randomly assign period durations (ends) within the overall subject participation
-         period_end_tmp = `if`(is.na(duration[1]), NA, sort(sample(1:as.numeric(duration), n(), replace = F))),
-         # end of last duration needs to be the end of participation, otherwise it is the start + duration
-         period_end = ifelse(row_number() == n(), end, as.character(as_date(start) + days(period_end_tmp))),
+         period_end_tmp = `if`(is.na(duration[1]),
+                               NA,
+                               sort(sample(1:as.numeric(duration), n(), replace = F))),
+         # end of last duration needs to be the end of participation,
+         # otherwise it is the start + duration
+         period_end = ifelse(row_number() == n(),
+                             end,
+                             as.character(as_date(start) + days(period_end_tmp))),
          # start of a period needs to be just after the end of previous period
          period_start = as.character(as_date(dplyr::lag(period_end)) + days(1)),
          # start of the first period needs to be the start of the subjects participation
@@ -39,15 +44,12 @@ time_def <- tibble(
          period_start = ifelse(period_start == "", NA, period_start)) %>%
   ungroup %>%
   left_join(select(dm, USUBJID, TRTP = ARMCD, TRTA = ARM), by = "USUBJID") %>%
-  select(STUDYID, USUBJID, APERIOD, APERIODC, TRTP, TRTA, STARTDTM = period_start, ENDDTM = period_end)
+  select(STUDYID, USUBJID, APERIOD, APERIODC, TRTP, TRTA,
+         STARTDTM = period_start, ENDDTM = period_end)
 
 warnings() # only date parsing -> fine ...
 
 attr(time_def$STUDYID, "label") <- attr(dm$STUDYID, "label")
 attr(time_def$USUBJID, "label") <- attr(dm$USUBJID, "label")
 
-# View(time_def)
-
 save(time_def, file = "data/time_def.rda")
-
-# load("data/time_def.rda")
