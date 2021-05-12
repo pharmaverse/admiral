@@ -63,13 +63,12 @@ ae \%>\%
   derive_vars_dtm(new_vars_prefix = "AST", dtc = AESTDTC) \%>\%
   derive_joined_vars(
     dataset_join = ex,
-    new_vars = exprs(LDOSEDTM = compute_dtm(dtc = EXENDTC,
-                                            date_imputation = NULL,
-                                            time_imputation = NULL)),
-    pre_filter = exprs(is_valid_dose()),
-    by_vars = exprs(USUBJID),
+    new_vars = exprs(LDOSEDTM = convert_dtc_to_dtm(dtc = EXENDTC)),
+    pre_filter = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &
+                         nchar(EXENDTC) >= 10),
+    by_vars = exprs(STUDYID, USUBJID),
     order = exprs(EXENDTC),
-    post_filter = exprs(ASTDTM <= c(dtc = EXENDTC))
+    post_filter = exprs(ASTDTM <= convert_dtc_to_dt(dtc = EXENDTC))
   )
 
 data(time_def)
