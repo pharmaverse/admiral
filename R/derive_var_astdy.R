@@ -5,16 +5,16 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `start_date` and the `end_date` parameter are
+#'   The columns specified by the `reference_date` and the `date` parameter are
 #'   expected.
 #'
-#' @param start_date The start date column, e.g., date of first treatment
+#' @param reference_date The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
 #'
 #'   The default is `TRTSDT`.
 #'
-#' @param end_date The end date column for which the study day should be derived
+#' @param date The end date column for which the study day should be derived
 #'
 #'   A date or date-time object column is expected.
 #'
@@ -28,6 +28,8 @@
 #'
 #' @return The input dataset with `ASTDY` column added
 #'
+#' @keywords adam timing derivation
+#'
 #' @export
 #'
 #' @examples
@@ -37,11 +39,11 @@
 #' )
 #'
 #' derive_var_astdy(data)
-derive_var_astdy <- function(dataset, start_date = TRTSDT, end_date = ASTDT) {
+derive_var_astdy <- function(dataset, reference_date = TRTSDT, date = ASTDT) {
   derive_duration(
     dataset,
     new_var = ASTDY,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date)
+    start_date = !!enquo(reference_date),
+    end_date = !!enquo(date)
   )
 }

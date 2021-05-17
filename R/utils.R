@@ -1,11 +1,47 @@
-enumerate <- function(x) {
+#' @export
+rlang::expr
+
+#'@export
+rlang::exprs
+
+#' Enumerate Multiple Strings
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' enumerate(letters[1:6])
+enumerate <- function(x, quote_fun = backquote) {
   paste(
-    paste0(backquote(x[-length(x)]), collapse = ", "),
+    paste0(quote_fun(x[-length(x)]), collapse = ", "),
     "and",
-    backquote(x[length(x)])
+    quote_fun(x[length(x)])
   )
 }
 
+#' Wrap a String in Backquotes
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' backquote("foo")
 backquote <- function(x) {
   paste0("`", x, "`")
 }
+
+#' Wrap a String in SIngle Quotes
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' squote("foo")
+squote <- function(x) {
+  paste0("'", x, "'")
+}
+
+`%!in%` <- Negate(`%in%`)

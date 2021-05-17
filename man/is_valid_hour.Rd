@@ -21,3 +21,4 @@ assertthat::assert_that(is_valid_hour(20))
 \author{
 Samia Kabi
 }
+\keyword{check}

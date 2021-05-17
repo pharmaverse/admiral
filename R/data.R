@@ -60,3 +60,12 @@
 #'
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/vs.xpt}
 "vs"
+
+#' Subject Level Analysis Dataset
+#'
+#' An example subject level analysis dataset
+#'
+#' @source
+#' Derived from the [dm] and [ds] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R})
+#'
+"adsl"

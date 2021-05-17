@@ -62,7 +62,7 @@
 #'
 #' @return The duration between the two date in the specified unit
 #'
-#' @family {general functions}
+#' @keywords computation adam timing
 #'
 #' @export
 #'

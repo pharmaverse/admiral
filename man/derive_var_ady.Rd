@@ -4,21 +4,21 @@
 \alias{derive_var_ady}
 \title{Derive Analysis Study Day}
 \usage{
-derive_var_ady(dataset, start_date = TRTSDT, end_date = ADT)
+derive_var_ady(dataset, reference_date = TRTSDT, date = ADT)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
+The columns specified by the \code{reference_date} and the \code{date} parameter are
 expected.}
 
-\item{start_date}{The start date column, e.g., date of first treatment
+\item{reference_date}{The start date column, e.g., date of first treatment
 
 A date or date-time object column is expected.
 
 The default is \code{TRTSDT}.}
 
-\item{end_date}{The end date column for which the study day should be derived
+\item{date}{The end date column for which the study day should be derived
 
 A date or date-time object column is expected.
 
@@ -46,3 +46,5 @@ derive_var_ady(data)
 \author{
 Stefan Bundfuss
 }
+\keyword{bds}
+\keyword{timing}

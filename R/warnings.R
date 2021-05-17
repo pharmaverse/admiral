@@ -7,6 +7,8 @@
 #'
 #' @author Thomas Neitmann
 #'
+#' @keywords warning
+#'
 #' @export
 #'
 #' @examples
@@ -49,8 +51,10 @@ is_valid_dtc <- function(arg) {
     grepl(pattern5, arg) |
     grepl(pattern6, arg) |
     grepl(pattern7, arg) |
-    arg == ""
+    arg == "" |
+    is.na(arg)
 }
+
 #' Warn If a vector contains unknown datetime format
 #'
 #' Warn if the vector contains unknown datetime format such as
@@ -59,6 +63,8 @@ is_valid_dtc <- function(arg) {
 #' @param dtc a character vector containing the dates
 #'
 #' @author Samia Kabi
+#'
+#' @keywords warning
 #'
 #' @export
 #'
@@ -81,7 +87,7 @@ warn_if_invalid_dtc <- function(dtc) {
     warn(paste(capture.output(print(tbl)), collapse = "\n"))
 
     msg3 <- paste0(
-      "The following representations are handled: \n",
+      "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
       "2003-12-15T13:15\n",
@@ -90,7 +96,7 @@ warn_if_invalid_dtc <- function(dtc) {
       "2003-12\n",
       "2003\n",
       "2003---15\n\n",
-      "The following representations are NOT handled: \n",
+      "The following ISO representations, and any other representation are NOT handled: \n",
       "2003-12-15T-:15:18\n",
       "2003-12-15T13:-:19\n",
       "--12-15\n",
@@ -98,4 +104,60 @@ warn_if_invalid_dtc <- function(dtc) {
     )
     warn(msg3)
   }
+}
+
+warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
+  missing_ref_ranges <- dataset %>%
+    anti_join(meta_ref_ranges, by = by_var) %>%
+    pull(!!sym(by_var)) %>%
+    unique()
+
+  if (length(missing_ref_ranges) >= 1L) {
+    msg <- sprintf(
+      "Reference ranges are missing for the following `%s`: %s",
+      by_var,
+      enumerate(missing_ref_ranges, quote_fun = squote)
+    )
+    warn(msg)
+  }
+}
+
+#' Are records unique?
+#'
+#' Checks if the records of a dateset are unique with respect to the specified
+#' list of by variables and order. If the check fails, a warning is issued.
+#'
+#' @param dataset The input dataset to check
+#'
+#' @param by_vars List of by variables
+#'
+#' @param order Order of observation
+#'   If the parameter is specified, it is checked if the observations are unique
+#'   with respect to the by variables and the order. If the check fails, the
+#'   order values are written as variables in the output.
+#'
+#' @param message Error message
+#'   The message to be displayed if the check fails.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return `TRUE` if the records are unique, `FALSE` otherwise
+#'
+#' @keywords warning
+#'
+#' @export
+#'
+#' @examples
+#' data(ex)
+#' warn_has_unique_records(ex,
+#'                         by_vars = exprs(USUBJID) ,
+#'                         order = exprs(desc(EXENDTC)))
+warn_has_unique_records <- function(dataset,
+                                      by_vars = NULL,
+                                      order = NULL,
+                                      message){
+  has_unique_records(dataset = dataset,
+                     by_vars = by_vars,
+                     order = order,
+                     message_type = "warning")
 }

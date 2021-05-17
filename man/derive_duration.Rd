@@ -4,8 +4,8 @@
 \alias{derive_duration}
 \title{Derive Duration}
 \usage{
-derive_duration(dataset, new_var, new_var_unit, start_date, end_date,
-  in_unit = "days", out_unit = "days", floor_in = TRUE,
+derive_duration(dataset, new_var, new_var_unit = NULL, start_date,
+  end_date, in_unit = "days", out_unit = "days", floor_in = TRUE,
   add_one = TRUE, trunc_out = FALSE)
 }
 \arguments{
@@ -99,14 +99,10 @@ derive_duration(data,
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
-
-Other {general functions}: \code{\link{compute_dtf}},
-  \code{\link{compute_duration}},
-  \code{\link{compute_tmf}},
-  \code{\link{convert_dtc_to_dtm}},
-  \code{\link{convert_dtc_to_dt}}, \code{\link{impute_dtc}}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{{general functions}}
+\keyword{adam}
+\keyword{derivation}
+\keyword{timing}

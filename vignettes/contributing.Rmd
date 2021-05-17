@@ -1,0 +1,360 @@
+---
+title: "Contributing to admiral"
+author: "admiral team"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Contributing to admiral}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+As admiral is intended to be contributed by the user community, 
+this article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
+In order to keep the framework robust across the whole community, 
+we have defined a programming strategy that should be followed in such cases.
+These contributions could include, for example, company specific derivations of ADaM datasets. 
+
+
+# Functional Workflow
+
+* Overall programming will follow a functional approach.
+* Each ADaM dataset is built with a set of functions and not with free flow code.
+* Each ADaM dataset has a specific programming workflow.
+* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an admiral function or a company specific function.
+* Admiral functions can be re-used for company specific functions.
+* Each function belongs to a category or multiple categories.
+* Each function that is used to derive a or multiple variable(s) requires to be unit tested.
+* Functions do have a naming convention.
+* Double coding is not used as a QC method (only if absolutely necessary)
+* ADaMs are created  including readable code and submission ready.
+
+
+# Categorization of Functions
+
+The functions are categorized by keywords. The keywords can be specified in the function header via the `@keywords` field. 
+Each function must use at least one of the following keywords.
+
+| Keyword                                                                           | Description                                                                                                              |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| general_utility                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
+| getadata                                                                          | A function that provides Metadata functionality.                                                                         |
+| derivation                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
+| assertion                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
+| warning                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
+| predicate                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
+| Across ADaM dataset structures keywords: ADaM                                     | A function that is applicable across ADaM datasets.                                                                      |
+| ADaM dataset structure specific keywords: ADSL, OCCDS, BDS, OTHER                 | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
+| ADaM dataset specific keywords:  ADEX, ADLB, ...                                  | A function specific to a ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
+| timing                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
+| computation                                                                       | Function which performs a computation that is used by other functions to derive a ADaM variable                          |
+| Therapeutic Area specific functions: Oncology, Infectious Diseases, Neuroscience  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
+| Company specific keywords                                                         |                                                                                                                          |
+
+
+# Functions in R
+
+## Input, Output, and Side-effects
+
+* The behavior of the function is only determined by its input, not by any global object. 
+I.e., all input like datasets, variable names, options, … must be provided to the function by parameters.
+* It is expected that the input datasets are not grouped. If not, the function must issue an error.
+* If a function requires grouping, the function must provide the by_vars parameter.
+* The output dataset must be ungrouped.
+* If the function needs to create temporary variables in an input dataset, these variables must start with temp_
+and must be removed from the output dataset (link to remove function).
+* If the input dataset includes variables starting with temp_, an error must be issued (link to check function).
+* The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
+
+
+## Function Names
+
+* Function names should start with a verb and use snake case, e.g. derive_baseline. 
+
+| Function name prefix                         | Description                                                                                         |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `assert_` / `warn_` / `is_`                  | Functions that check other functions’ inputs                                                        |
+| `derive_`                                    | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
+| `derive_var_` (e.g. `derive_var_trtdurd`)    | Functions which add a single variable                                                               |
+| `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
+| `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
+
+
+## Function Parameters
+
+The default value of optional parameters should be NULL (or some other valid value, but never missing).
+
+Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`. 
+
+For example:
+
+* `new_var = TEMPBL`
+* `by_vars = exprs(PARAMCD, AVISIT)`
+* `filter = exprs(PARAMCD == ‘TEMP’)`
+* `order = exprs(AVISIT, worst(AESEV))`
+* `new_vars = exprs(TEMPBL := AVAL, TEMPBLU := AVALU)`
+
+Each function parameter needs to be tested with `assert_` type of function. 
+
+Each expression needs to be tested for the following:
+* whether it is an expression (or a list of expressions, depending on the function)
+* whether it is a valid expression (i.e. whether it evaluates without error)
+There is a utility function for that.
+
+
+## Common Function Parameters Naming Convention
+
+The first parameter of `derive_` functions should be the input dataset and it should be named `dataset`. 
+If more than one input dataset is required, the other input dataset should start with `dataset_`, e.g., `dataset_ex.`
+
+Parameters for specifying items to add should start with `new_`. 
+If a variable is added, the second part of the parameter name should be var, if a parameter is added, it should be `param.` 
+For example: `new_var`, `new_var_unit`, `new_param`.
+
+Parameters which expect a boolean or boolean vector must start with a verb, e.g., `is_imputed` or `impute_date`.
+
+
+## List of Common Parameters
+
+| Parameter Name   | Description                                                                                                       |
+|------------------|-------------------------------------------------------------------------------------------------------------------|
+| `start_date`     | The start date of an event/interval. Expects a date object.                                                       |
+| `end_date`       | The end date of an event/interval. Expects a date object.                                                         |
+| `start_dtc`      |                                                                                                                   |
+| `dtc`            | (Partial) date/datetime in ISO 8601 format                                                                        |
+| `by_vars`        | Variables to group by                                                                                             |
+| `new_var`        | Name of a single variable to be added to the dataset                                                              |
+| `new_vars`       | List of variables to be added to the dataset                                                                      |
+| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter. |
+| `filter`         | Expression to filter a dataset, e.g., exprs(PARAMCD == ‘TEMP’)                                                    |
+| `order`          | List of expression for sorting a dataset, e.g., exprs(PARAMCD, AVISITN, desc(AVAL))                               |
+
+
+## Source Code Formatting
+
+All source code should be formatted according to the [tidyverse](https://style.tidyverse.org/) style guide. 
+The [lintr](https://github.com/jimhester/lintr) package will be used to check and enforce this.
+
+
+## Input Checking
+
+In line with the [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) design principle 
+function inputs should be checked for validity 
+and if there’s an invalid input the function should stop immediately with an error. 
+An exception is the case where a variable to-be-added by a function already exists in the input dataset: 
+here only a warning should be displayed and the function should continue executing.
+
+Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in `R/assertions.R`. 
+These custom assertion functions should either return an error in case of an invalid input or return nothing.
+
+For function parameters that can only take a fixed set of values as arguments, 
+the validity of the user-provided value should be checked using `rlang::arg_match()`. 
+As an example, if a function has a parameter named unit that can be either "days", "months" or "years" 
+the following line of code should be added to the function body:
+`arg_match(unit, c("days", "months", "years"))`.
+
+
+## Function Header
+
+Every function that is exported from the package must have an accompanying header 
+that should be formatted according to the [roxygen2](https://CRAN.R-project.org/package=pkgname) convention. 
+
+In addition to the roxygen2 parameters `@author` and `@keywords` are added in addition. 
+
+Author is the owner of the function while the keywords are used to categorize the function. 
+Please see section "Categorization of functions".
+
+An example is given below:
+```{r, eval=F}
+#' Derive Analysis Study Day
+#'
+#' Adds the analysis study day (`ADY`) to the dataset, i.e., study day #' of analysis date.
+#'
+#' @param dataset Input dataset
+#'
+#'   The columns specified by the `reference_date` and the `date` #'parameter are
+#'   expected.
+#'
+#' @param reference_date The start date column, e.g., date of first #'treatment
+#'
+#'   A date or date-time object column is expected.
+#'
+#'   The default is `TRTSDT`.
+#'
+#' @param date The end date column for which the study day should be #'derived
+#'
+#'   A date or date-time object column is expected.
+#'
+#'   The default is `ADT`
+#'
+#' @details The study day is derived as number of days from the start #'date
+#'   to the end date. If it is non-negative, one is added. I.e., the #'study day of the
+#'   start date is 1.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The input dataset with `ADY` column added
+#'
+#' @keywords bds timing
+#'
+#' @export
+#'
+#' @examples
+#' data <- tibble::tribble(
+#'   ~TRTSDT, ~ADT,
+#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
+#' )
+#'
+#' derive_var_ady(data)
+```
+
+
+The following fields are mandatory:
+
+* `@param`: One entry per function parameter. 
+The following attributes should be described: expected data type (e.g. `data.frame`, `logical`, `numeric` etc.), default value (if any), permitted values (if applicable), optionality (i.e. is this a required parameter). 
+If the expected input is a dataset then the required variables should be clearly stated.
+* `@details`: A natural-language description of the derivation used inside the function.
+* `@author`: The person who wrote the function. In case a function is later on updated by another person the name should be appended to the list of authors.
+* `@keyword`: One or more keywords applicable to the function.
+* `@return`: A description of the return value of the function.
+* `@examples`: A fully-self contained example of how to use the function. 
+Self-contained means that if this code is executed in a new R session it will run without errors. 
+That requires any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
+
+Variable names, expressions, functions, and any other code must be enclosed
+which backticks. This will render it as code.
+
+For functions which derive a specific CDISC variable (i.e., those starting with
+`derive_var_`). The title must state the label of the variable without the
+variable name. The variable should be stated in the description.
+
+# Missing values
+
+Missing values (NAs) need to be explicitly shown.
+
+Regarding character vectors converted from SAS files: SAS treats missing values as blank. 
+Those are imported into R as empty strings (“”) although in nature they are missing values (`NA`). 
+All empty strings that originate like this need to be converted to proper R missing values `NA.`
+
+
+# R Package Dependencies
+
+Package dependencies have to be documented in the `DESCRIPTION` file. 
+If a package is used only in examples and/or unit tests then it should be listed in `Suggests`, otherwise in `Imports`.
+
+Functions from other packages have to be explicitly imported by using the` @importFrom` tag in the `R/admiral-package.R` file. 
+To import the `if_else` and `mutate` function from `dplyr` the following line would have to be included in that file:
+`#' @importFrom dplyr if_else mutate`.
+
+
+# Metadata
+
+Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
+
+
+# Unit Testing
+
+Any function require a set of unit tests to verify they produce the expected result. 
+If a function is defined in a file named `R/derive_baseline.R` then its accompanying unit tests should be stored in `tests/testthat/test-derive_baseline.R`.
+
+The testing framework to be used is [testthat](https://testthat.r-lib.org/).
+
+Unit tests should cover the functionality of the function.
+If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
+This should be tested by the unit tests of g, i.e., unit tests should be added at the lowest level.
+
+The input and expected output for the unit tests must follow the following rules:
+
+* Input and output should be as simple as possible.
+* Values should be hard-coded whenever possible.
+* If values need to be derived, only unit tested functions can be used.
+
+If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+
+
+# Readable Code for ADaM
+
+General Guidance explaining the why and the definition of readable code:
+[General Readable Code Guidance](https://drive.google.com/file/d/107VOGN9lvKZfjBmz13fuiOYWpNoOVtgK/view).
+
+
+## Basic Rules
+
+All R code that produces ADaM datasets should be based on readable code for their 1st line code. 
+Producing Readable Code should not be part or the responsibility of any QC activities or 2nd line programming.
+
+ADaMs in R will be highly modularized. This means code needs to be commented across the set of functions that produces the final ADaM dataset.
+
+This guidance is built on the assumption that each ADaM dataset will have one R script that will call a set of functions needed to produce the corresponding ADaM dataset. 
+
+
+## Header for the main R-Script
+
+The main R-script would contain all functional calls to create the ADaM dataset. In the header describe the ADaM dataset that will be produced:
+
+* Name
+* Label
+* Input SDTMs and ADaMs
+* Short description of its purpose if not obvious by the label (novel endpoints mainly)
+
+
+### Header for functions
+
+* See Function header
+
+
+### Functions
+
+* Function calls should have a preceding comment which is a short and meaningful description for which purpose the function is called, like: 
+    * Derive variable X if function name is not descriptive or if it is a customized variable.
+    * Ideally use plain english to describe what a function is deriving.
+        * \# derive analysis study day
+        * \# derive age group <= 18
+    * Impute date with missing days.
+    * Check for missing values.
+* A comment can cover multiple function calls that belong to a category or group of variables. 
+Ideally one keeps it in line with the ADaM IG terminology, like Treatment Variables, Timing Variables, Identifier Variables as much as possible
+    * \# derive all population indicator variables RANDFL, SAFFL ...
+* Functions that create user defined variables, specific to the molecule or study or support a specific endpoint should be called out specifically, like: 
+the following function calls flag the special Adverse Events or a comment that highlights a molecule specific endoint
+* A function that covers a whole algorithm should have a preceding comment that indicates the purpose of the algorithm, like
+    * \# derive secondary endpoint XYZ
+
+
+### Code
+
+The code itself should be described in meaningful plain english, so that a reviewer can understand how the piece of code works. E.g. 
+
+* \# calculates the sum of scores divided by the non missing numbers of scores to calculate the average score
+
+Code within function that creates a specific variable should have a starting comment and an ending comment. E.g.
+
+```{r, eval=F}
+# calculate X
+# describe how the code works in meaningful plain english
+ "<code>"
+# end of X
+```
+
+If meaningful, comments can cover multiple variables within a piece of code
+
+```{r, eval=F}
+# creates X, Y, Z
+# describe how the code works in meaningful plain english
+ "<code>"
+# end of X, Y, Z
+
+```
+
