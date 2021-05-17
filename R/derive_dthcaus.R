@@ -36,36 +36,34 @@ derive_dthcaus <- function(dataset, dataset_ae, dataset_ds,
 
   # extract from AE
   dataset_ae <- filter_extreme(dataset_ae %>%
-                                 filter(!!filter_ae),
+                                 filter(!!!filter_ae),
                                order = exprs(AEDTHDTC),
                                by_vars = exprs(USUBJID),
-                               mode = "first") %>%
-    mutate(temp_source_nr = 1)
+                               mode = "first")
 
   if (typeof(dthcaus_ae) == "symbol") {
     dataset_ae <- dataset_ae %>%
-      transmute(DTHDOM = "AE", DTHCAUS = !!dthcaus_ae)
+      transmute(USUBJID, DTHDOM = "AE", DTHCAUS = !!dthcaus_ae, temp_source_nr = 1)
   } else if (typeof(dthcaus_ae) == "character") {
     dataset_ae <- dataset_ae %>%
-      transmute(DTHDOM = "AE", DTHCAUS = dthcaus_ae)
+      transmute(USUBJID, DTHDOM = "AE", DTHCAUS = dthcaus_ae, temp_source_nr = 1)
   } else {
     stop("Type of `dthcaus_ae` must be either symbol or character.")
   }
 
   # extract from DS
-  dataset_ds <- filter_extreme(dataset_ae %>%
-                                 filter(!!filter_ds),
+  dataset_ds <- filter_extreme(dataset_ds %>%
+                                 filter(!!!filter_ds),
                                order = exprs(DSSTDTC),
                                by_vars = exprs(USUBJID),
-                               mode = "first") %>%
-    mutate(temp_source_nr = 2)
+                               mode = "first")
 
   if (typeof(dthcaus_ds) == "symbol") {
     dataset_ds <- dataset_ds %>%
-      transmute(DTHDOM = "DS", DTHCAUS = !!dthcaus_ds)
+      transmute(USUBJID, DTHDOM = "DS", DTHCAUS = !!dthcaus_ds, temp_source_nr = 2)
   } else if (typeof(dthcaus_ds) == "character") {
     dataset_ds <- dataset_ds %>%
-      transmute(DTHDOM = "DS", DTHCAUS = dthcaus_ds)
+      transmute(USUBJID, DTHDOM = "DS", DTHCAUS = dthcaus_ds, temp_source_nr = 2)
   } else {
     stop("Type of `dthcaus_ds` must be either symbol or character.")
   }
@@ -73,7 +71,7 @@ derive_dthcaus <- function(dataset, dataset_ae, dataset_ds,
   # combine together and take AE one if exists
   dataset_add <- bind_rows(dataset_ae, dataset_ds) %>%
     filter_extreme(by_vars = exprs(USUBJID),
-                   order = temp_source_nr,
+                   order = exprs(temp_source_nr),
                    mode = "first") %>%
     select(-starts_with("temp_"))
 
