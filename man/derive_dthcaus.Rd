@@ -26,7 +26,10 @@ Additional fields can also be supplied:
 \item order: variables to be used to sort the source dataset,
 e.g., \code{exprs(AEDTHDTC)}.
 \item mode: filtering "first" or "last" when multiple records exist.
-}}
+}
+
+Note: If a subject has death info from multiple sources, the one from the
+first source will be kept.}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.

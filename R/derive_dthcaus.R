@@ -19,6 +19,9 @@
 #'   e.g., `exprs(AEDTHDTC)`.
 #'   * mode: filtering "first" or "last" when multiple records exist.
 #'
+#' Note: If a subject has death info from multiple sources, the one from the
+#'   first source will be kept.
+#'
 #' @keywords adsl
 #'
 #' @author Shimeng Huang
@@ -127,6 +130,7 @@ derive_dthcaus <- function(dataset, sources) {
 
   }
 
+  # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
     filter_extreme(by_vars = exprs(USUBJID),
                    order = exprs(temp_source_nr),
