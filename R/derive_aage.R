@@ -109,8 +109,6 @@ compute_agegr <- function(x, breaks, labels = NULL, geq = TRUE) {
   # determine functions for comparing numbers
   lower <- `if`(geq, `<`, `<=`)
   lbl_lower <- `if`(geq, "<", "<=")
-
-  greater <- `if`(geq, `>=`, `>`)
   lbl_greater <- `if`(geq, ">=", ">")
 
   # use ifelse for binary outcome
