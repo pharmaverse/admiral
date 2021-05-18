@@ -4,7 +4,7 @@
 \alias{derive_dthcaus}
 \title{Derive Death Cause and Source Domain}
 \usage{
-derive_dthcaus(dataset, sources, by_vars = exprs(USUBJID))
+derive_dthcaus(dataset, sources)
 }
 \arguments{
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}

@@ -53,7 +53,7 @@
 #' )
 #'
 #' derive_dthcaus(adsl, list(src_ae, src_ds))
-derive_dthcaus <- function(dataset, sources, by_vars = exprs(USUBJID)) {
+derive_dthcaus <- function(dataset, sources) {
 
   # check and clean up input
   for (ii in seq_along(sources)) {
@@ -87,25 +87,24 @@ derive_dthcaus <- function(dataset, sources, by_vars = exprs(USUBJID)) {
     }
 
     if (!is.null(sources[[ii]]$order)){
-      add_data[[ii]] <- filter_extreme(add_data[[ii]],
-                                       order = sources[[ii]]$order,
-                                       by_vars = by_vars,
-                                       mode = sources[[ii]]$mode)
+      add_data[[ii]] <- add_data[[ii]] %>%
+        filter_extreme(order = sources[[ii]]$order,
+                       by_vars = exprs(USUBJID),
+                       mode = sources[[ii]]$mode)
     }
     add_data[[ii]] <- transmute(add_data[[ii]],
                                 temp_source_nr = ii,
                                 DTHDOM = sources[[ii]]$dthdom,
-                                !!!by_vars,
                                 DTHCAUS := !!sources[[ii]]$dthcaus)
   }
 
   dataset_add <- bind_rows(add_data) %>%
-    filter_extreme(by_vars = by_vars,
+    filter_extreme(by_vars = exprs(USUBJID),
                    order = exprs(temp_source_nr),
                    mode = "first") %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = map_chr(by_vars, as_string))
+  left_join(dataset, dataset_add, by = "USUBJID")
 }
 
 # derive_dthcaus <- function(dataset, dataset_ae, dataset_ds,
