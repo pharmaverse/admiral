@@ -4,27 +4,16 @@
 \alias{derive_dthcaus}
 \title{Derive Death Cause and Source Domain}
 \usage{
-derive_dthcaus(dataset, dataset_ae, dataset_ds, filter_ae = exprs(AEOUT
-  == "FATAL"), filter_ds = exprs(DSDECOD == "DEATH",
-  grepl("DEATH DUE TO", DSTERM)), dthcaus_ae = expr(AEDECOD),
-  dthcaus_ds = expr(DSTERM))
+derive_dthcaus(dataset, sources, by_vars = exprs(USUBJID))
 }
 \arguments{
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
-\item{dataset_ae}{Source AE dataset. \code{AEDTHDTC} is an expected column.}
+\item{sources}{A list of sources.}
 
-\item{dataset_ds}{Source DS dataset. \code{DSSTDTC} is an expected column.}
+\item{by_vars}{Grouping variables.
 
-\item{filter_ae}{An expression to filter \code{dataset_ae}.}
-
-\item{filter_ds}{An expression to filter \code{dataset_ds}.}
-
-\item{dthcaus_ae}{Column name (as symbol) in AE or value (as character) to
-be set as \code{DTHCAUS} from AE.}
-
-\item{dthcaus_ds}{Column name (as symbol) in DS or value (as character) to
-be set as \code{DTHCAUS} from DS.}
+Default: \code{exprs(USUBJID)}}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
@@ -33,12 +22,40 @@ The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
 Derives death cause (\code{DTHCAUS}) and source domain (\code{DTHDOM}).
 }
 \examples{
-data("adsl")
-data("ae")
-data("ds")
+adsl <- tibble::tribble(
+ ~STUDYID, ~USUBJID,
+ "STUDY01", "PAT01",
+ "STUDY01", "PAT02"
+)
+ae <- tibble::tribble(
+  ~STUDYID, ~USUBJID, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+  "STUDY01", "PAT01", "SUDDEN DEATH" , "FATAL", "2021-04-04"
+)
+ds <- tibble::tribble(
+  ~STUDYID, ~USUBJID, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+  "STUDY01", "PAT02", "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
+  "STUDY01", "PAT02", "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+  "STUDY01", "PAT02", "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
+)
 
-derive_dthcaus(data, ae, ds)
+src_ae <- list(
+  dataset = ae,
+  filter = exprs(AEOUT == "FATAL"),
+  order = exprs(AEDTHDTC),
+  mode = "first",
+  dthdom = "AE",
+  dthcaus = expr(AEDECOD)
+)
+src_ds <- list(
+  dataset = ds,
+  filter = exprs(DSDECOD == "DEATH", grepl("DEATH DUE TO", DSTERM)),
+  order = exprs(DSSTDTC),
+  mode = "first",
+  dthdom = "DS",
+  dthcaus = expr(DSTERM)
+)
 
+derive_dthcaus(adsl, list(src_ae, src_ds))
 }
 \author{
 Shimeng Huang
