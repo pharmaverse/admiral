@@ -70,6 +70,7 @@ derive_aage <- function(dataset,
 #' @param breaks Numeric vector providing the breaks for the age groups.
 #' @param labels Character vector providing the labels of the age groups.
 #' The length of `labels` needs to be greater by one than the length of `breaks`.
+#' If not given, the labels are automatically generated based on `breaks`.
 #' @param geq Should intervals be defined as "lower or equal" or "greater or equal"?
 #' Defaults to the latter (i.e. `geq = TRUE`).
 #'
@@ -81,13 +82,17 @@ derive_aage <- function(dataset,
 #'
 #' @examples
 #' compute_agegr(1:10, 5)
+#'
 #' # provide arbitrary labels
-#' compute_agegr(1:10, 5, labels = c("Less than 5 years old",
-#'                                   "More or equal to 5 years old"))
+#' compute_agegr(1:10, 5, labels = c("Younger than 5 years old",
+#'                                   "Older or equal to 5 years old"))
+#'
 #' # change the interval borders
 #' compute_agegr(1:10, 5, geq = FALSE)
+#'
 #' # add more breaks
 #' compute_agegr(0:100, c(30, 60))
+#'
 #' # compare factor with numeric output
 #' compute_agegr(1:10, 5)
 #' compute_agegrn(1:10, 5)
