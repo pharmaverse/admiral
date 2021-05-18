@@ -1,32 +1,37 @@
-#' Derive Death Cause and Domain.
+#' Derive Death Cause and Source Domain
 #'
-#' Derives death cause (`DTHCAUS`) and domain (`DTHDOM`).
+#' Derives death cause (`DTHCAUS`) and source domain (`DTHDOM`).
 #'
-#' @param dataset Input dataset
+#' @param dataset Input dataset. `USUBJID` is an expected column.
 #'
-#' @param dataset_ae Source AE dataset
+#' @param dataset_ae Source AE dataset. `AEDTHDTC` is an expected column.
 #'
-#' @param dataset_ds Source DS dataset
+#' @param dataset_ds Source DS dataset. `DSSTDTC` is an expected column.
 #'
 #' @param filter_ae An expression to filter `dataset_ae`.
 #'
 #' @param filter_ds An expression to filter `dataset_ds`.
 #'
-#' @param dthcaus_ae Variable name (as symbol) or value (as character) to
+#' @param dthcaus_ae Column name (as symbol) in AE or value (as character) to
 #'   be set as `DTHCAUS` from AE.
 #'
-#' @param dthcaus_ds Variable name (as symbol) in DS or value (as character) to
+#' @param dthcaus_ds Column name (as symbol) in DS or value (as character) to
 #'   be set as `DTHCAUS` from DS.
 #'
-#' @keywords Roche
+#' @keywords Roche adsl
 #'
 #' @author Shimeng Huang
 #'
-#' @return The input dataset with `DTHCAT` added.
+#' @return The input dataset with `DTHCAUS` and `DTHDOM` added.
 #'
 #' @export
 #'
-#' @examples ...
+#' @examples
+#' data("adsl")
+#' data("ae")
+#' data("ds")
+#'
+#' derive_dthcaus(data, ae, ds)
 #'
 derive_dthcaus <- function(dataset, dataset_ae, dataset_ds,
                            filter_ae = exprs(AEOUT == "FATAL"),

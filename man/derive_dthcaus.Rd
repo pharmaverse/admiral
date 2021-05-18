@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_dthcaus.R
 \name{derive_dthcaus}
 \alias{derive_dthcaus}
-\title{Derive Death Cause and Domain.}
+\title{Derive Death Cause and Source Domain}
 \usage{
 derive_dthcaus(dataset, dataset_ae, dataset_ds, filter_ae = exprs(AEOUT
   == "FATAL"), filter_ds = exprs(DSDECOD == "DEATH",
@@ -10,33 +10,38 @@ derive_dthcaus(dataset, dataset_ae, dataset_ds, filter_ae = exprs(AEOUT
   dthcaus_ds = expr(DSTERM))
 }
 \arguments{
-\item{dataset}{Input dataset}
+\item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
-\item{dataset_ae}{Source AE dataset}
+\item{dataset_ae}{Source AE dataset. \code{AEDTHDTC} is an expected column.}
 
-\item{dataset_ds}{Source DS dataset}
+\item{dataset_ds}{Source DS dataset. \code{DSSTDTC} is an expected column.}
 
 \item{filter_ae}{An expression to filter \code{dataset_ae}.}
 
 \item{filter_ds}{An expression to filter \code{dataset_ds}.}
 
-\item{dthcaus_ae}{Variable name (as symbol) or value (as character) to
+\item{dthcaus_ae}{Column name (as symbol) in AE or value (as character) to
 be set as \code{DTHCAUS} from AE.}
 
-\item{dthcaus_ds}{Variable name (as symbol) in DS or value (as character) to
+\item{dthcaus_ds}{Column name (as symbol) in DS or value (as character) to
 be set as \code{DTHCAUS} from DS.}
 }
 \value{
-The input dataset with \code{DTHCAT} added.
+The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
 }
 \description{
-Derives death cause (\code{DTHCAUS}) and domain (\code{DTHDOM}).
+Derives death cause (\code{DTHCAUS}) and source domain (\code{DTHDOM}).
 }
 \examples{
-...
+data("adsl")
+data("ae")
+data("ds")
+
+derive_dthcaus(data, ae, ds)
 
 }
 \author{
 Shimeng Huang
 }
 \keyword{Roche}
+\keyword{adsl}
