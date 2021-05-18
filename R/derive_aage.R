@@ -70,8 +70,8 @@ derive_aage <- function(dataset,
 #' @param breaks Numeric vector providing the breaks for the age groups.
 #' @param labels Character vector providing the labels of the age groups.
 #' The length of `labels` needs to be greater by one than the length of `breaks`.
-#' @param leq Should intervals be defined as "lower or equal" or "greater or equal"?
-#' Defaults to the first.
+#' @param geq Should intervals be defined as "lower or equal" or "greater or equal"?
+#' Defaults to the latter (i.e. `geq = TRUE`).
 #'
 #' @return Factor (for `compute_agegr`) or numeric (for `compute_agegrn`) with defined age groups.
 #'
@@ -85,28 +85,28 @@ derive_aage <- function(dataset,
 #' compute_agegr(1:10, 5, labels = c("Less than 5 years old",
 #'                                   "More or equal to 5 years old"))
 #' # change the interval borders
-#' compute_agegr(1:10, 5, leq = TRUE)
+#' compute_agegr(1:10, 5, geq = FALSE)
 #' # add more breaks
 #' compute_agegr(0:100, c(30, 60))
 #' # compare factor with numeric output
 #' compute_agegr(1:10, 5)
 #' compute_agegrn(1:10, 5)
-compute_agegr <- function(x, breaks, labels = NULL, leq = TRUE) {
+compute_agegr <- function(x, breaks, labels = NULL, geq = TRUE) {
   assert_that(
     is.numeric(x),
     length(x) > 0,
     is.numeric(breaks),
     length(breaks) > 0,
     is.null(labels) | is.character(labels),
-    is.logical(leq)
+    is.logical(geq)
   )
 
   # determine functions for comparing numbers
-  lower <- `if`(leq, `<=`, `<`)
-  lbl_lower <- `if`(leq, "<=", "<")
+  lower <- `if`(geq, `<`, `<=`)
+  lbl_lower <- `if`(geq, "<", "<=")
 
-  greater <- `if`(leq, `>`, `>=`)
-  lbl_greater <- `if`(leq, ">", ">=")
+  greater <- `if`(geq, `>=`, `>`)
+  lbl_greater <- `if`(geq, ">=", ">")
 
   # use ifelse for binary outcome
   if (length(breaks) == 1) {
@@ -122,17 +122,19 @@ compute_agegr <- function(x, breaks, labels = NULL, leq = TRUE) {
     # otherwise use cut function
     # define labels if not given
     if (is.null(labels)) {
-      lbr <- `if`(leq, "(", "[")
-      rbr <- `if`(leq, "]", ")")
+      lbr <- `if`(geq, "[", "(")
+      rbr <- `if`(geq, ")", "]")
       labels <- c(
         paste0(lbl_lower, breaks[1]),
-        paste0(lbr, breaks[1:(length(breaks) - 1)], ", ", breaks[2:length(breaks)], rbr),
+        paste0(lbr, breaks[1:(length(breaks) - 1)], ", ",
+               breaks[2:length(breaks)], rbr),
         paste0(lbl_greater, breaks[length(breaks)])
       )
     } else {
       assert_that(length(labels) == length(breaks) + 1)
     }
-    out <- cut(x, breaks = c(-Inf, breaks, Inf), labels = labels, include.lowest = T, right = leq)
+    out <- cut(x, breaks = c(-Inf, breaks, Inf), labels = labels,
+               include.lowest = T, right = !geq)
   }
 
   return(out)
@@ -140,6 +142,6 @@ compute_agegr <- function(x, breaks, labels = NULL, leq = TRUE) {
 
 #' @describeIn compute_agegr Calculate age groups and return the number of the group.
 #' @export
-compute_agegrn <- function(x, breaks, labels = NULL, leq = FALSE) {
+compute_agegrn <- function(x, breaks, labels = NULL, geq = TRUE) {
   as.integer(do.call(compute_agegr, as.list(environment(NULL))))
 }

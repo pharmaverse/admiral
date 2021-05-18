@@ -5,9 +5,9 @@
 \alias{compute_agegrn}
 \title{Calculate age groups}
 \usage{
-compute_agegr(x, breaks, labels = NULL, leq = TRUE)
+compute_agegr(x, breaks, labels = NULL, geq = TRUE)
 
-compute_agegrn(x, breaks, labels = NULL, leq = FALSE)
+compute_agegrn(x, breaks, labels = NULL, geq = TRUE)
 }
 \arguments{
 \item{x}{Numeric vector providing the age.}
@@ -17,8 +17,8 @@ compute_agegrn(x, breaks, labels = NULL, leq = FALSE)
 \item{labels}{Character vector providing the labels of the age groups.
 The length of \code{labels} needs to be greater by one than the length of \code{breaks}.}
 
-\item{leq}{Should intervals be defined as "lower or equal" or "greater or equal"?
-Defaults to the first.}
+\item{geq}{Should intervals be defined as "lower or equal" or "greater or equal"?
+Defaults to the latter (i.e. \code{geq = TRUE}).}
 }
 \value{
 Factor (for \code{compute_agegr}) or numeric (for \code{compute_agegrn}) with defined age groups.
@@ -37,7 +37,7 @@ compute_agegr(1:10, 5)
 compute_agegr(1:10, 5, labels = c("Less than 5 years old",
                                   "More or equal to 5 years old"))
 # change the interval borders
-compute_agegr(1:10, 5, leq = TRUE)
+compute_agegr(1:10, 5, geq = FALSE)
 # add more breaks
 compute_agegr(0:100, c(30, 60))
 # compare factor with numeric output
