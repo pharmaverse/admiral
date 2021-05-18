@@ -3,6 +3,8 @@
 export(assert_has_only_one_baseline_record)
 export(assert_has_unique_records)
 export(assert_has_variables)
+export(compute_agegr)
+export(compute_agegrn)
 export(compute_dtf)
 export(compute_duration)
 export(compute_tmf)
