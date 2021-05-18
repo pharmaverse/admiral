@@ -28,6 +28,33 @@ test_that("variable is added from the first observation in each group", {
     "TEST01", "PAT03", "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
   )
 
-  actual_output <- derive_dthcaus(dataset = adsl, dataset_ae = ae, dataset_ds = ds)
+  src_ae <- list(
+    dataset = ae,
+    filter = exprs(AEOUT == "FATAL"),
+    order = exprs(AEDTHDTC),
+    mode = "first",
+    dthdom = "AE",
+    dthcaus = expr(AEDECOD)
+  )
 
+  src_ds <- list(
+    dataset = ds,
+    filter = exprs(DSDECOD == "DEATH", grepl("DEATH DUE TO", DSTERM)),
+    order = exprs(DSSTDTC),
+    mode = "first",
+    dthdom = "DS",
+    dthcaus = expr(DSTERM)
+  )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHDOM, ~DTHCAUS,
+    "TEST01", "PAT01", "DS", "DEATH DUE TO PROGRESSION OF DISEASE",
+    "TEST01", "PAT02", NA, NA,
+    "TEST01", "PAT03", "AE", "SUDDEN DEATH"
+  )
+
+  actual_output <- derive_dthcaus(dataset = adsl,
+                                  list(src_ae, src_ds))
+
+  expect_equal(expected_output, actual_output)
 })
