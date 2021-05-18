@@ -6,6 +6,19 @@
 #'
 #' @param sources A list of sources.
 #'
+#' Each element is a list containing at least
+#'   the following fields:
+#'   * dataset: the source dataset.
+#'   * dthdom: name of the source domain as a string, e.g. "AE".
+#'   * dthcaus: a symbol or a string --- if a symbol, e.g., `expr(AEDECOD)`,
+#'   it is the variable in the source dataset to be used to assign values to
+#'   `DTHCAUS`; if a string, it is the fixed value to be assigned to `DTHCAUS`.
+#'
+#' Additional fields can also be supplied:
+#'   * order: variables to be used to sort the source dataset,
+#'   e.g., `exprs(AEDTHDTC)`.
+#'   * mode: filtering "first" or "last" when multiple records exist.
+#'
 #' @keywords adsl
 #'
 #' @author Shimeng Huang
@@ -65,8 +78,8 @@ derive_dthcaus <- function(dataset, sources) {
       sources[[ii]]$mode <- "first"
     }
 
-    if (typeof(sources[[ii]]$dthcaus) != "symbol") {
-      stop("`dthcaus` must be a single expression.")
+    if (typeof(sources[[ii]]$dthcaus) != "symbol" | typeof(sources[[ii]]$dthcaus) != "character") {
+      stop("`dthcaus` must be a single expression or a string.")
     }
   }
 
@@ -88,10 +101,20 @@ derive_dthcaus <- function(dataset, sources) {
                        by_vars = exprs(USUBJID),
                        mode = sources[[ii]]$mode)
     }
-    add_data[[ii]] <- transmute(add_data[[ii]],
-                                temp_source_nr = ii,
-                                DTHDOM = sources[[ii]]$dthdom,
-                                DTHCAUS := !!sources[[ii]]$dthcaus)
+
+    if (typeof(sources[[ii]]$dthcaus) != "symbol") {
+      add_data[[ii]] <- transmute(add_data[[ii]],
+                                  temp_source_nr = ii,
+                                  DTHDOM = sources[[ii]]$dthdom,
+                                  DTHCAUS := !!sources[[ii]]$dthcaus)
+    }
+    else {
+      add_data[[ii]] <- transmute(add_data[[ii]],
+                                  temp_source_nr = ii,
+                                  DTHDOM = sources[[ii]]$dthdom,
+                                  DTHCAUS = sources[[ii]]$dthcaus)
+    }
+
   }
 
   dataset_add <- bind_rows(add_data) %>%

@@ -9,7 +9,24 @@ derive_dthcaus(dataset, sources)
 \arguments{
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
-\item{sources}{A list of sources.}
+\item{sources}{A list of sources.
+
+Each element is a list containing at least
+the following fields:
+\itemize{
+\item dataset: the source dataset.
+\item dthdom: name of the source domain as a string, e.g. "AE".
+\item dthcaus: a symbol or a string --- if a symbol, e.g., \code{expr(AEDECOD)},
+it is the variable in the source dataset to be used to assign values to
+\code{DTHCAUS}; if a string, it is the fixed value to be assigned to \code{DTHCAUS}.
+}
+
+Additional fields can also be supplied:
+\itemize{
+\item order: variables to be used to sort the source dataset,
+e.g., \code{exprs(AEDTHDTC)}.
+\item mode: filtering "first" or "last" when multiple records exist.
+}}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
