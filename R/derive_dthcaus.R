@@ -73,13 +73,23 @@ derive_dthcaus <- function(dataset, sources) {
                   paste0(mandatory_fields, collapse = ", ")))
     }
 
-    # default to "first" if mode is not given
-    if ("mode" %!in% names(sources[[ii]])) {
-      sources[[ii]]$mode <- "first"
+    if (!is.character(sources[[ii]]$dthdom)) {
+      stop("`dthdom` must be a string.")
     }
 
-    if (typeof(sources[[ii]]$dthcaus) != "symbol" | typeof(sources[[ii]]$dthcaus) != "character") {
+    if (typeof(sources[[ii]]$dthcaus) != "symbol" |
+        typeof(sources[[ii]]$dthcaus) != "character") {
       stop("`dthcaus` must be a single expression or a string.")
+    }
+
+    if ("mode" %in% names(sources[[ii]])) {
+      if (sources[[ii]]$mode %!in% c("first", "last")) {
+        stop("`mode` must be one of 'first' or 'last'.")
+      }
+    }
+    else if ("mode" %!in% names(sources[[ii]])) {
+      # default to "first" if mode is not given
+      sources[[ii]]$mode <- "first"
     }
   }
 
