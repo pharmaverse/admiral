@@ -10,10 +10,6 @@ derive_dthcaus(dataset, sources)
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
 \item{sources}{A list of sources.}
-
-\item{by_vars}{Grouping variables.
-
-Default: \code{exprs(USUBJID)}}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
@@ -60,5 +56,4 @@ derive_dthcaus(adsl, list(src_ae, src_ds))
 \author{
 Shimeng Huang
 }
-\keyword{Roche}
 \keyword{adsl}
