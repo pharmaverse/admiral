@@ -82,4 +82,3 @@ derive_last_dose <- function(dataset,
 
   return(out)
 }
-
