@@ -1,29 +1,31 @@
 
-#' Title
+#' Helper function to calculate last dose
 #'
-#' @param exendtc
-#' @param aestdtc
-#' @param exdose
+#' @param exendtc EX.EXENDTC
+#' @param aestdtc ADAE.AESTDTC
+#' @param exdose EX.EXDOSE
 #'
-#' @return
+#' @return date-time vector
 calc_ldosedtm <- function(exendtc, aestdtc, exdose) {
-    ifelse(
-      !is.na(exendtc) & !is.na(aestdtc) & exdose >= 0,
-      `if`(any(exendtc <= aestdtc),
-           as.character(max(exendtc[exendtc <= aestdtc])),
-           NA_character_),
-      NA_character_
-  )
+    if (any(!is.na(exendtc) & !is.na(aestdtc) & exdose >= 0) && any(exendtc <= aestdtc)) {
+      max(exendtc[exendtc <= aestdtc])
+    } else {
+      as.POSIXct(NA)
+    }
 }
 
-#' Title
+#' Derive last dose date(-time)
 #'
-#' @param dataset
-#' @param dataset_ex
-#' @param filter_ex
-#' @param by_vars
+#' @param dataset Input AE dataset.
+#' @param dataset_ex Input EX dataset.
+#' @param filter_ex Filtering condition applied to EX dataset.
+#' For example, it can be used to filter for valid dose.
+#' @param by_vars Variables to join by.
 #'
-#' @return
+#' @return AE dataset with additional columns `LDOSEDTM` and `LDOSEDT`.
+#'
+#' @author Ondrej Slama
+#'
 #' @export
 #'
 #' @examples
@@ -31,7 +33,9 @@ calc_ldosedtm <- function(exendtc, aestdtc, exdose) {
 #' derive_last_dose(ae, ex)
 derive_last_dose <- function(dataset,
                              dataset_ex,
-                             filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10),
+                             filter_ex = exprs(
+                               (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &  #nolint
+                                 nchar(EXENDTC) >= 10),
                              by_vars = exprs(STUDYID, USUBJID)) {
 
   if (!is.null(filter_ex)) {
@@ -40,7 +44,7 @@ derive_last_dose <- function(dataset,
 
   dataset_ex <- select(dataset_ex, !!!by_vars, .data$EXENDTC, .data$EXDOSE)
 
-  out <- dataset %>%
+  res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = map_chr(by_vars, as_string)) %>%
     group_by(!!!by_vars) %>%
@@ -60,14 +64,21 @@ derive_last_dose <- function(dataset,
             time_imputation = "23:59:59"
           )
         ),
-        exdose = .data$EXDOSE),
-      LDOSEDT = as.character(as.Date(LDOSEDTM)),
-      LDOSEDTM = as.character(LDOSEDTM)) %>%
+        exdose = .data$EXDOSE)) %>%
     ungroup() %>%
-    mutate(EXENDTC = NULL, EXDOSE = NULL)
+    mutate(
+      LDOSEDT = format(LDOSEDTM, "%Y-%m-%d"),
+      LDOSEDTM = format(LDOSEDTM, "%Y-%m-%dT%H:%M:%S"),
+      EXENDTC = NULL,
+      EXDOSE = NULL
+    )
 
-  attr(out$LDOSEDTM, "label") <- "End Date/Time of Last Dose"
-  attr(out$LDOSEDT, "label") <- "End Date of Last Dose"
+  attr(res$LDOSEDTM, "label") <- "End Date/Time of Last Dose"
+  attr(res$LDOSEDT, "label") <- "End Date of Last Dose"
+
+  out <- left_join(dataset,
+                   distinct(res, !!!by_vars, .data$LDOSEDTM, .data$LDOSEDT),
+                   by = map_chr(by_vars, as_string))
 
   return(out)
 }
