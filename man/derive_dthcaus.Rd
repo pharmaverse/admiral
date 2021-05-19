@@ -56,7 +56,7 @@ ds <- tibble::tribble(
 
 src_ae <- list(
   dataset = ae,
-  filter = exprs(AEOUT == "FATAL"),
+  filter = expr(AEOUT == "FATAL"),
   order = exprs(AEDTHDTC),
   mode = "first",
   dthdom = "AE",
@@ -64,7 +64,7 @@ src_ae <- list(
 )
 src_ds <- list(
   dataset = ds,
-  filter = exprs(DSDECOD == "DEATH", grepl("DEATH DUE TO", DSTERM)),
+  filter = expr(DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM)),
   order = exprs(DSSTDTC),
   mode = "first",
   dthdom = "DS",

@@ -49,7 +49,7 @@
 #'
 #' src_ae <- list(
 #'   dataset = ae,
-#'   filter = exprs(AEOUT == "FATAL"),
+#'   filter = expr(AEOUT == "FATAL"),
 #'   order = exprs(AEDTHDTC),
 #'   mode = "first",
 #'   dthdom = "AE",
@@ -57,7 +57,7 @@
 #' )
 #' src_ds <- list(
 #'   dataset = ds,
-#'   filter = exprs(DSDECOD == "DEATH", grepl("DEATH DUE TO", DSTERM)),
+#'   filter = expr(DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM)),
 #'   order = exprs(DSSTDTC),
 #'   mode = "first",
 #'   dthdom = "DS",
@@ -139,4 +139,36 @@ derive_dthcaus <- function(dataset, sources) {
     select(-starts_with("temp_"))
 
   left_join(dataset, dataset_add, by = "USUBJID")
+}
+
+#' Create an `dthcaus_source` object
+#'
+#' @param dataset A data.frame containint a source dataset.
+#' @param filter A symbol returned by `expr` to be used for filtering `dataset`.
+#' @param order Alist returned by `exprs` to be used for sorting `dataset`.
+#' @param mode One of "first" or "last".
+dthcaus_source <- function(dataset, filter, order, mode = "first",
+                           dthdom, dthcaus) {
+
+  out <- list(
+    dataset = dataset,
+    filter = filter,
+    order = order,
+    mode = mode,
+    dthdom = dthdom,
+    dthcaus = dthcaus
+  )
+  class(out) <- "dthcaus_source"
+  validate_dthcaus_source(out)
+}
+
+validate_dthcaus_source <- function(x) {
+  values <- unclass(x)
+  stopifnot("data.frame" %in% class(values$dataset))
+  stopifnot(is_expr(values$filter))
+  stopifnot(is_unnamed_exprs(values$order))
+  match.arg(values$mode, c("first", "last"))
+  stopifnot(is.character(values$dthdom))
+  stopifnot(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
+  x
 }
