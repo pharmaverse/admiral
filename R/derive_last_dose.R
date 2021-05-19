@@ -67,8 +67,8 @@ derive_last_dose <- function(dataset,
         exdose = .data$EXDOSE)) %>%
     ungroup() %>%
     mutate(
-      LDOSEDT = format(LDOSEDTM, "%Y-%m-%d"),
-      LDOSEDTM = format(LDOSEDTM, "%Y-%m-%dT%H:%M:%S"),
+      LDOSEDT = format(.data$LDOSEDTM, "%Y-%m-%d"),
+      LDOSEDTM = format(.data$LDOSEDTM, "%Y-%m-%dT%H:%M:%S"),
       EXENDTC = NULL,
       EXDOSE = NULL
     )
@@ -77,7 +77,7 @@ derive_last_dose <- function(dataset,
   attr(res$LDOSEDT, "label") <- "End Date of Last Dose"
 
   out <- left_join(dataset,
-                   distinct(res, !!!by_vars, .data$LDOSEDTM, .data$LDOSEDT),
+                   dplyr::distinct(res, !!!by_vars, .data$LDOSEDTM, .data$LDOSEDT),
                    by = map_chr(by_vars, as_string))
 
   return(out)
