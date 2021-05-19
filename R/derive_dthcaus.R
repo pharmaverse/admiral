@@ -80,7 +80,7 @@ derive_dthcaus <- function(dataset, sources) {
       stop("`dthdom` must be a string.")
     }
 
-    if (typeof(sources[[ii]]$dthcaus) != "symbol" |
+    if (typeof(sources[[ii]]$dthcaus) != "symbol" &
         typeof(sources[[ii]]$dthcaus) != "character") {
       stop("`dthcaus` must be a single expression or a string.")
     }
@@ -115,19 +115,20 @@ derive_dthcaus <- function(dataset, sources) {
                        mode = sources[[ii]]$mode)
     }
 
-    if (typeof(sources[[ii]]$dthcaus) != "symbol") {
-      add_data[[ii]] <- transmute(add_data[[ii]],
-                                  temp_source_nr = ii,
-                                  DTHDOM = sources[[ii]]$dthdom,
-                                  DTHCAUS := !!sources[[ii]]$dthcaus)
+    if (typeof(sources[[ii]]$dthcaus) == "symbol") {
+      add_data[[ii]] <- add_data[[ii]] %>%
+        transmute(USUBJID,
+                  temp_source_nr = ii,
+                  DTHDOM = sources[[ii]]$dthdom,
+                  DTHCAUS := !!sources[[ii]]$dthcaus)
     }
     else {
-      add_data[[ii]] <- transmute(add_data[[ii]],
-                                  temp_source_nr = ii,
-                                  DTHDOM = sources[[ii]]$dthdom,
-                                  DTHCAUS = sources[[ii]]$dthcaus)
+      add_data[[ii]] <- add_data[[ii]] %>%
+        transmute(USUBJID,
+                  temp_source_nr = ii,
+                  DTHDOM = sources[[ii]]$dthdom,
+                  DTHCAUS = sources[[ii]]$dthcaus)
     }
-
   }
 
   # if a subject has multiple death info, keep the one from the first source
