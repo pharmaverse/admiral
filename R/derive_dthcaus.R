@@ -4,20 +4,7 @@
 #'
 #' @param dataset Input dataset. `USUBJID` is an expected column.
 #'
-#' @param sources A list of sources.
-#'
-#' Each element is a list containing at least
-#'   the following fields:
-#'   * dataset: the source dataset.
-#'   * dthdom: name of the source domain as a string, e.g. "AE".
-#'   * dthcaus: a symbol or a string --- if a symbol, e.g., `expr(AEDECOD)`,
-#'   it is the variable in the source dataset to be used to assign values to
-#'   `DTHCAUS`; if a string, it is the fixed value to be assigned to `DTHCAUS`.
-#'
-#' Additional fields can also be supplied:
-#'   * order: variables to be used to sort the source dataset,
-#'   e.g., `exprs(AEDTHDTC)`.
-#'   * mode: filtering "first" or "last" when multiple records exist.
+#' @param ... Objects of class "dthcaus_source" created by `dthcaus_source`.
 #'
 #' Note: If a subject has death info from multiple sources, the one from the
 #'   first source will be kept.
@@ -29,6 +16,8 @@
 #' @return The input dataset with `DTHCAUS` and `DTHDOM` added.
 #'
 #' @export
+#'
+#' @seealso [dthcaus_source()]
 #'
 #' @examples
 #' adsl <- tibble::tribble(
@@ -47,7 +36,7 @@
 #'   "STUDY01", "PAT02", "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 #' )
 #'
-#' src_ae <- list(
+#' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = expr(AEOUT == "FATAL"),
 #'   order = exprs(AEDTHDTC),
@@ -55,7 +44,8 @@
 #'   dthdom = "AE",
 #'   dthcaus = expr(AEDECOD)
 #' )
-#' src_ds <- list(
+#'
+#' src_ds <- dthcaus_source(
 #'   dataset = ds,
 #'   filter = expr(DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM)),
 #'   order = exprs(DSSTDTC),
@@ -64,36 +54,14 @@
 #'   dthcaus = expr(DSTERM)
 #' )
 #'
-#' derive_dthcaus(adsl, list(src_ae, src_ds))
-derive_dthcaus <- function(dataset, sources) {
+#' derive_dthcaus(adsl, src_ae, src_ds)
+derive_dthcaus <- function(dataset, ...) {
+
+  sources <- list(...)
 
   # check and clean up input
-  for (ii in seq_along(sources)) {
-
-    mandatory_fields <- c("dataset", "dthcaus", "dthdom")
-    if (!all(mandatory_fields %in% names(sources[[ii]]))) {
-      stop(paste0("Each list in `sources` must have certain fields: ",
-                  paste0(mandatory_fields, collapse = ", ")))
-    }
-
-    if (!is.character(sources[[ii]]$dthdom)) {
-      stop("`dthdom` must be a string.")
-    }
-
-    if (typeof(sources[[ii]]$dthcaus) != "symbol" &
-        typeof(sources[[ii]]$dthcaus) != "character") {
-      stop("`dthcaus` must be a single expression or a string.")
-    }
-
-    if ("mode" %in% names(sources[[ii]])) {
-      if (sources[[ii]]$mode %!in% c("first", "last")) {
-        stop("`mode` must be one of 'first' or 'last'.")
-      }
-    }
-    else if ("mode" %!in% names(sources[[ii]])) {
-      # default to "first" if mode is not given
-      sources[[ii]]$mode <- "first"
-    }
+  for (ss in sources) {
+    validate_dthcaus_source(ss)
   }
 
   # process each source
@@ -133,8 +101,8 @@ derive_dthcaus <- function(dataset, sources) {
 
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
-    filter_extreme(by_vars = exprs(USUBJID),
-                   order = exprs(temp_source_nr),
+    filter_extreme(order = exprs(temp_source_nr),
+                   by_vars = exprs(USUBJID),
                    mode = "first") %>%
     select(-starts_with("temp_"))
 
@@ -147,9 +115,16 @@ derive_dthcaus <- function(dataset, sources) {
 #' @param filter A symbol returned by `expr` to be used for filtering `dataset`.
 #' @param order Alist returned by `exprs` to be used for sorting `dataset`.
 #' @param mode One of "first" or "last".
+#' @param dthdom Name of the source domain as a string, e.g. "AE".
+#' @param dthcaus A symbol or a string --- if a symbol, e.g., `expr(AEDECOD)`,
+#'   it is the variable in the source dataset to be used to assign values to
+#'   `DTHCAUS`; if a string, it is the fixed value to be assigned to `DTHCAUS`.
+#'
+#' @author Shimeng Huang
+#'
+#' @return An object of class "dthcaus_source".
 dthcaus_source <- function(dataset, filter, order, mode = "first",
                            dthdom, dthcaus) {
-
   out <- list(
     dataset = dataset,
     filter = filter,
@@ -163,6 +138,7 @@ dthcaus_source <- function(dataset, filter, order, mode = "first",
 }
 
 validate_dthcaus_source <- function(x) {
+  stopifnot(inherits(x, "dthcaus_source"))
   values <- unclass(x)
   stopifnot("data.frame" %in% class(values$dataset))
   stopifnot(is_expr(values$filter))

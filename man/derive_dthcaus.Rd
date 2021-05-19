@@ -4,29 +4,12 @@
 \alias{derive_dthcaus}
 \title{Derive Death Cause and Source Domain}
 \usage{
-derive_dthcaus(dataset, sources)
+derive_dthcaus(dataset, ...)
 }
 \arguments{
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
-\item{sources}{A list of sources.
-
-Each element is a list containing at least
-the following fields:
-\itemize{
-\item dataset: the source dataset.
-\item dthdom: name of the source domain as a string, e.g. "AE".
-\item dthcaus: a symbol or a string --- if a symbol, e.g., \code{expr(AEDECOD)},
-it is the variable in the source dataset to be used to assign values to
-\code{DTHCAUS}; if a string, it is the fixed value to be assigned to \code{DTHCAUS}.
-}
-
-Additional fields can also be supplied:
-\itemize{
-\item order: variables to be used to sort the source dataset,
-e.g., \code{exprs(AEDTHDTC)}.
-\item mode: filtering "first" or "last" when multiple records exist.
-}
+\item{...}{Objects of class "dthcaus_source" created by \code{dthcaus_source}.
 
 Note: If a subject has death info from multiple sources, the one from the
 first source will be kept.}
@@ -54,7 +37,7 @@ ds <- tibble::tribble(
   "STUDY01", "PAT02", "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 )
 
-src_ae <- list(
+src_ae <- dthcaus_source(
   dataset = ae,
   filter = expr(AEOUT == "FATAL"),
   order = exprs(AEDTHDTC),
@@ -62,7 +45,8 @@ src_ae <- list(
   dthdom = "AE",
   dthcaus = expr(AEDECOD)
 )
-src_ds <- list(
+
+src_ds <- dthcaus_source(
   dataset = ds,
   filter = expr(DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM)),
   order = exprs(DSSTDTC),
@@ -71,7 +55,10 @@ src_ds <- list(
   dthcaus = expr(DSTERM)
 )
 
-derive_dthcaus(adsl, list(src_ae, src_ds))
+derive_dthcaus(adsl, src_ae, src_ds)
+}
+\seealso{
+\code{\link[=dthcaus_source]{dthcaus_source()}}
 }
 \author{
 Shimeng Huang

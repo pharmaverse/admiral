@@ -1,6 +1,6 @@
 context("test-derive_dthcaus")
 
-test_that("variable is added from the first observation in each group", {
+test_that("DTHCAUS and DTHDOM are added from AE and DS", {
 
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
@@ -28,18 +28,18 @@ test_that("variable is added from the first observation in each group", {
     "TEST01", "PAT03", "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
   )
 
-  src_ae <- list(
+  src_ae <- dthcaus_source(
     dataset = ae,
-    filter = exprs(AEOUT == "FATAL"),
+    filter = expr(AEOUT == "FATAL"),
     order = exprs(AEDTHDTC),
     mode = "first",
     dthdom = "AE",
     dthcaus = expr(AEDECOD)
   )
 
-  src_ds <- list(
+  src_ds <- dthcaus_source(
     dataset = ds,
-    filter = exprs(DSDECOD == "DEATH", grepl("DEATH DUE TO", DSTERM)),
+    filter = expr(DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM)),
     order = exprs(DSSTDTC),
     mode = "first",
     dthdom = "DS",
@@ -53,8 +53,7 @@ test_that("variable is added from the first observation in each group", {
     "TEST01", "PAT03", "AE", "SUDDEN DEATH"
   )
 
-  actual_output <- derive_dthcaus(dataset = adsl,
-                                  list(src_ae, src_ds))
+  actual_output <- derive_dthcaus(dataset = adsl, src_ae, src_ds)
 
-  expect_equal(expected_output, actual_output)
+  expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })

@@ -14,7 +14,19 @@ dthcaus_source(dataset, filter, order, mode = "first", dthdom, dthcaus)
 \item{order}{Alist returned by \code{exprs} to be used for sorting \code{dataset}.}
 
 \item{mode}{One of "first" or "last".}
+
+\item{dthdom}{Name of the source domain as a string, e.g. "AE".}
+
+\item{dthcaus}{A symbol or a string --- if a symbol, e.g., \code{expr(AEDECOD)},
+it is the variable in the source dataset to be used to assign values to
+\code{DTHCAUS}; if a string, it is the fixed value to be assigned to \code{DTHCAUS}.}
+}
+\value{
+An object of class "dthcaus_source".
 }
 \description{
 Create an \code{dthcaus_source} object
+}
+\author{
+Shimeng Huang
 }
