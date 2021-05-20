@@ -7,7 +7,7 @@
 dthcaus_source(dataset, filter, order, mode = "first", dthdom, dthcaus)
 }
 \arguments{
-\item{dataset}{A data.frame containint a source dataset.}
+\item{dataset}{A data.frame containing a source dataset.}
 
 \item{filter}{A symbol returned by \code{expr} to be used for filtering \code{dataset}.}
 

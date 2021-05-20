@@ -107,7 +107,7 @@ derive_dthcaus <- function(dataset, ...) {
 
 #' Create an `dthcaus_source` object
 #'
-#' @param dataset A data.frame containint a source dataset.
+#' @param dataset A data.frame containing a source dataset.
 #' @param filter A symbol returned by `expr` to be used for filtering `dataset`.
 #' @param order Alist returned by `exprs` to be used for sorting `dataset`.
 #' @param mode One of "first" or "last".
