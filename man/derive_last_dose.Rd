@@ -6,7 +6,7 @@
 \usage{
 derive_last_dose(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
   (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10),
-  by_vars = exprs(STUDYID, USUBJID))
+  by_vars = exprs(STUDYID, USUBJID), check_dates_only = FALSE)
 }
 \arguments{
 \item{dataset}{Input AE dataset.}
@@ -17,6 +17,10 @@ derive_last_dose(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
 For example, it can be used to filter for valid dose.}
 
 \item{by_vars}{Variables to join by.}
+
+\item{check_dates_only}{Logical. An assumption that start and end dates of treatment match is checked.
+By default (\code{TRUE}), the date as well as the time component is checked.
+If set to \code{FALSE}, then only the date component of those variables is checked.}
 }
 \value{
 AE dataset with additional columns \code{LDOSEDTM} and \code{LDOSEDT}.

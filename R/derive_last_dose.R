@@ -6,6 +6,9 @@
 #' @param filter_ex Filtering condition applied to EX dataset.
 #' For example, it can be used to filter for valid dose.
 #' @param by_vars Variables to join by.
+#' @param check_dates_only Logical. An assumption that start and end dates of treatment match is checked.
+#' By default (`TRUE`), the date as well as the time component is checked.
+#' If set to `FALSE`, then only the date component of those variables is checked.
 #'
 #' @return AE dataset with additional columns `LDOSEDTM` and `LDOSEDT`.
 #'
@@ -20,14 +23,27 @@ derive_last_dose <- function(dataset,
                              dataset_ex,
                              filter_ex = exprs(
                                (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10), #nolint
-                             by_vars = exprs(STUDYID, USUBJID)) {
+                             by_vars = exprs(STUDYID, USUBJID),
+                             check_dates_only = FALSE) {
 
+  stopifnot(rlang::is_scalar_logical(check_dates_only))
+
+  # apply filtering condition
   if (!is.null(filter_ex)) {
     dataset_ex <- filter(dataset_ex, !!!filter_ex)
   }
 
+  # assumption for last dose derivation: start and end dates (datetimes) need to match
+  if (check_dates_only) {
+    dataset_ex <- filter(dataset_ex, as.Date(.data$EXSTDTC) == as.Date(.data$EXENDTC))
+  } else {
+    dataset_ex <- filter(dataset_ex, .data$EXSTDTC == .data$EXENDTC)
+  }
+
+  # select only a subset of columns
   dataset_ex <- select(dataset_ex, !!!by_vars, .data$EXENDTC, .data$EXDOSE)
 
+  # calculate last dose date
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = map_chr(by_vars, as_string)) %>%
