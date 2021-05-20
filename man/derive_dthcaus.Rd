@@ -10,15 +10,19 @@ derive_dthcaus(dataset, ...)
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
 \item{...}{Objects of class "dthcaus_source" created by \code{dthcaus_source}.
-
-Note: If a subject has death info from multiple sources, the one from the
-first source will be kept.}
+See \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
 }
 \description{
 Derives death cause (\code{DTHCAUS}) and source domain (\code{DTHDOM}).
+}
+\details{
+This function derives \code{DTHCAUS} along with the source domain
+\code{DTHDOM}. If a subject has death info from multiple sources, the one from
+the first source will be kept, so the user should provide the inputs in
+the preferred order.
 }
 \examples{
 adsl <- tibble::tribble(

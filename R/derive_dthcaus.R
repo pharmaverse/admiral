@@ -2,12 +2,15 @@
 #'
 #' Derives death cause (`DTHCAUS`) and source domain (`DTHDOM`).
 #'
+#' @details This function derives `DTHCAUS` along with the source domain
+#'   `DTHDOM`. If a subject has death info from multiple sources, the one from
+#'   the first source will be kept, so the user should provide the inputs in
+#'   the preferred order.
+#'
 #' @param dataset Input dataset. `USUBJID` is an expected column.
 #'
 #' @param ... Objects of class "dthcaus_source" created by `dthcaus_source`.
-#'
-#' Note: If a subject has death info from multiple sources, the one from the
-#'   first source will be kept.
+#'   See [dthcaus_source()].
 #'
 #' @keywords adsl
 #'
@@ -58,11 +61,7 @@
 derive_dthcaus <- function(dataset, ...) {
 
   sources <- list(...)
-
-  # check and clean up input
-  for (ss in sources) {
-    validate_dthcaus_source(ss)
-  }
+  purrr::walk(sources, validate_dthcaus_source)
 
   # process each source
   add_data <- vector("list", length(sources))
@@ -71,8 +70,7 @@ derive_dthcaus <- function(dataset, ...) {
     if (!is.null(sources[[ii]]$filter)) {
       add_data[[ii]] <- sources[[ii]]$dataset %>%
         filter(!!!(sources[[ii]]$filter))
-    }
-    else {
+    } else {
       add_data[[ii]] <- sources[[ii]]$dataset
     }
 
@@ -88,9 +86,8 @@ derive_dthcaus <- function(dataset, ...) {
         transmute(USUBJID,
                   temp_source_nr = ii,
                   DTHDOM = sources[[ii]]$dthdom,
-                  DTHCAUS := !!sources[[ii]]$dthcaus)
-    }
-    else {
+                  DTHCAUS = !!sources[[ii]]$dthcaus)
+    } else {
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(USUBJID,
                   temp_source_nr = ii,
@@ -122,6 +119,8 @@ derive_dthcaus <- function(dataset, ...) {
 #'
 #' @author Shimeng Huang
 #'
+#' @export
+#'
 #' @return An object of class "dthcaus_source".
 dthcaus_source <- function(dataset, filter, order, mode = "first",
                            dthdom, dthcaus) {
@@ -133,18 +132,27 @@ dthcaus_source <- function(dataset, filter, order, mode = "first",
     dthdom = dthdom,
     dthcaus = dthcaus
   )
-  class(out) <- "dthcaus_source"
+  class(out) <- c("dthcaus_source", "list")
   validate_dthcaus_source(out)
 }
 
+#' Validate an object is indeed a `dthcaus_source` object
+#'
+#' @param x An object to be validated.
+#'
+#' @author Shimeng Huang
+#'
+#' @export
+#'
+#' @return The original object.
 validate_dthcaus_source <- function(x) {
-  stopifnot(inherits(x, "dthcaus_source"))
+  assert_that(inherits(x, "dthcaus_source"))
   values <- unclass(x)
-  stopifnot("data.frame" %in% class(values$dataset))
-  stopifnot(is_expr(values$filter))
-  stopifnot(is_unnamed_exprs(values$order))
-  match.arg(values$mode, c("first", "last"))
-  stopifnot(is.character(values$dthdom))
-  stopifnot(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
+  assert_that("data.frame" %in% class(values$dataset))
+  assert_that(is_expr(values$filter))
+  assert_that(is_unnamed_exprs(values$order))
+  assert_that(values$mode %in% c("first", "last"))
+  assert_that(is.character(values$dthdom))
+  assert_that(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
   x
 }
