@@ -1,6 +1,6 @@
 context("test-derive_dthcaus")
 
-test_that("error on a dthcaus_source object with invalid mode") {
+test_that("error on a dthcaus_source object with invalid mode", {
   tmp <- list(
     dataset = ae,
     filter = expr(AEOUT == "FATAL"),
@@ -11,7 +11,7 @@ test_that("error on a dthcaus_source object with invalid mode") {
   )
   class(tmp) <- "dthcaus_source"
   expect_error(validate_dthcaus_source(tmp))
-}
+})
 
 test_that("DTHCAUS and DTHDOM are added from AE and DS", {
 

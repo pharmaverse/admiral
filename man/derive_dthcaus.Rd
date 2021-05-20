@@ -9,8 +9,7 @@ derive_dthcaus(dataset, ...)
 \arguments{
 \item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
 
-\item{...}{Objects of class "dthcaus_source" created by \code{dthcaus_source}.
-See \code{\link[=dthcaus_source]{dthcaus_source()}}.}
+\item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 }
 \value{
 The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.

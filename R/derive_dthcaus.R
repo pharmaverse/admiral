@@ -9,8 +9,7 @@
 #'
 #' @param dataset Input dataset. `USUBJID` is an expected column.
 #'
-#' @param ... Objects of class "dthcaus_source" created by `dthcaus_source`.
-#'   See [dthcaus_source()].
+#' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
 #'
 #' @keywords adsl
 #'
@@ -61,7 +60,7 @@
 derive_dthcaus <- function(dataset, ...) {
 
   sources <- list(...)
-  purrr::walk(sources, validate_dthcaus_source)
+  walk(sources, validate_dthcaus_source)
 
   # process each source
   add_data <- vector("list", length(sources))
@@ -74,7 +73,7 @@ derive_dthcaus <- function(dataset, ...) {
       add_data[[ii]] <- sources[[ii]]$dataset
     }
 
-    if (!is.null(sources[[ii]]$order)){
+    if (!is.null(sources[[ii]]$order)) {
       add_data[[ii]] <- add_data[[ii]] %>%
         filter_extreme(order = sources[[ii]]$order,
                        by_vars = exprs(USUBJID),
@@ -148,7 +147,7 @@ dthcaus_source <- function(dataset, filter, order, mode = "first",
 validate_dthcaus_source <- function(x) {
   assert_that(inherits(x, "dthcaus_source"))
   values <- unclass(x)
-  assert_that("data.frame" %in% class(values$dataset))
+  assert_that(is.data.frame(values$dataset))
   assert_that(is_expr(values$filter))
   assert_that(is_unnamed_exprs(values$order))
   assert_that(values$mode %in% c("first", "last"))
