@@ -38,5 +38,6 @@ globalVariables(c(
   "ex",
   "idtc__",
   "Source",
-  "temp_obs_nr"
+  "temp_obs_nr",
+  "status___"
 ))
