@@ -4,14 +4,12 @@
 \alias{compute_ldosedtm}
 \title{Helper function to calculate last dose}
 \usage{
-compute_ldosedtm(exendtc, aestdtc, exdose)
+compute_ldosedtm(exendtc, aestdtc)
 }
 \arguments{
-\item{exendtc}{EX.EXENDTC}
+\item{exendtc}{dose end date}
 
-\item{aestdtc}{ADAE.AESTDTC}
-
-\item{exdose}{EX.EXDOSE}
+\item{aestdtc}{analysis date}
 }
 \value{
 date-time vector

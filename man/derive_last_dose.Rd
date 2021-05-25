@@ -4,9 +4,9 @@
 \alias{derive_last_dose}
 \title{Derive last dose date(-time)}
 \usage{
-derive_last_dose(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
-  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10),
-  by_vars = exprs(STUDYID, USUBJID), check_dates_only = FALSE)
+derive_last_dose(dataset, dataset_ex, filter_ex, by_vars = exprs(STUDYID,
+  USUBJID), dose_start, dose_end, analysis_date, output_var,
+  output_datetime = TRUE, check_dates_only = FALSE)
 }
 \arguments{
 \item{dataset}{Input AE dataset.}
@@ -18,19 +18,56 @@ For example, it can be used to filter for valid dose.}
 
 \item{by_vars}{Variables to join by.}
 
-\item{check_dates_only}{Logical. An assumption that start and end dates of treatment match is checked.
-By default (\code{TRUE}), the date as well as the time component is checked.
-If set to \code{FALSE}, then only the date component of those variables is checked.}
+\item{dose_start}{The dose start date variable.}
+
+\item{dose_end}{The dose end date variable.}
+
+\item{analysis_date}{The analysis date variable.}
+
+\item{output_var}{The output variable.}
+
+\item{output_datetime}{Logical. Should only date or date-time variable be returned?
+Defaults to \code{TRUE} (i.e. date-time variable).}
+
+\item{check_dates_only}{Logical.
+An assumption that start and end dates of treatment match is checked.
+By default (\code{FALSE}), the date as well as the time component is checked.
+If set to \code{TRUE}, then only the date component of those variables is checked.}
 }
 \value{
-AE dataset with additional columns \code{LDOSEDTM} and \code{LDOSEDT}.
+AE dataset with additional column \code{output_var}.
 }
 \description{
 Derive last dose date(-time)
 }
+\details{
+All date (date-time) variables need to be characters in standard ISO format.
+See \code{\link{impute_dtc}}, parameter \code{dtc} for further details.
+
+The last dose date is derived as follows:
+Firstly, the \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
+This is useful for, for example, filtering for valid dose only.
+Secondly, the datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
+Thirdly, the last dose date is derived using provided variables.
+The last dose date is the maximum date where \code{dose_end} is lower to or equal to
+\code{analysis_date}, subject to both date values are non-NA.
+Lastly, the last dose date is appended to the \code{dataset} and returned to the user.
+}
 \examples{
 data(ae); data(ex)
-derive_last_dose(ae, ex)
+derive_last_dose(
+  ae,
+  ex,
+  filter_ex = exprs(
+    (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10
+  ),
+  dose_start = EXSTDTC,
+  dose_end = EXENDTC,
+  analysis_date = AESTDTC,
+  output_var = LDOSEDTM,
+  output_datetime = TRUE,
+  check_dates_only = FALSE
+)
 }
 \author{
 Ondrej Slama
