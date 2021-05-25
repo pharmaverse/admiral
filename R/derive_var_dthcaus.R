@@ -57,7 +57,7 @@
 #' )
 #'
 #' derive_dthcaus(adsl, src_ae, src_ds)
-derive_dthcaus <- function(dataset, ...) {
+derive_var_dthcaus <- function(dataset, ...) {
 
   sources <- list(...)
   walk(sources, validate_dthcaus_source)
@@ -75,7 +75,7 @@ derive_dthcaus <- function(dataset, ...) {
 
     if (!is.null(sources[[ii]]$order)) {
       add_data[[ii]] <- add_data[[ii]] %>%
-        filter_extreme(order = sources[[ii]]$order,
+        filter_extreme(order = sources[[ii]]$date,
                        by_vars = exprs(USUBJID),
                        mode = sources[[ii]]$mode)
     }
@@ -84,20 +84,45 @@ derive_dthcaus <- function(dataset, ...) {
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(USUBJID,
                   temp_source_nr = ii,
-                  DTHDOM = sources[[ii]]$dthdom,
+                  temp_date = !!sources[[ii]]$date,
                   DTHCAUS = !!sources[[ii]]$dthcaus)
     } else {
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(USUBJID,
                   temp_source_nr = ii,
-                  DTHDOM = sources[[ii]]$dthdom,
+                  temp_date = !!sources[[ii]]$date,
                   DTHCAUS = sources[[ii]]$dthcaus)
+    }
+
+    #print(sources[[ii]]$traceabilty[1])
+    #print(sources[[ii]]$traceabilty[[1]])
+    #print(names(sources[[ii]]$traceabilty[1]))
+    trace<-sources[[ii]]$traceabilty
+
+    #print(is_missing(sources[[ii]]$traceability))
+    #print(is.null(sources[[ii]]$traceability))
+
+    print(unlist(trace))
+    if (!is.null(trace)) {
+      #1 elemnt should give the domain as character,
+      #the other elemnet shoudl give the seq variable
+      #(( assert_that(is.character(values$traceabilty[1]))
+      #  & assert_that(is.symbol(values$traceabilty[2]))
+      #)
+      #| (assert_that(is.character(values$traceabilty[2]))
+      #   & assert_that(is.symbol(values$traceabilty[1]))
+      #))
+
+      print("#######HERE##########")
+      print(names(sources[[ii]]$traceability[[1]]))
+      add_data[[ii]] <- add_data[[ii]] #%>%
+        mutate(unlist(trace))
     }
   }
 
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
-    filter_extreme(order = exprs(temp_source_nr),
+    filter_extreme(order = exprs(temp_date,temp_source_nr),
                    by_vars = exprs(USUBJID),
                    mode = "first") %>%
     select(-starts_with("temp_"))
@@ -109,27 +134,28 @@ derive_dthcaus <- function(dataset, ...) {
 #'
 #' @param dataset A data.frame containing a source dataset.
 #' @param filter A symbol returned by `expr` to be used for filtering `dataset`.
-#' @param order Alist returned by `exprs` to be used for sorting `dataset`.
+#' @param date Alist returned by `exprs` to be used for sorting `dataset`.
 #' @param mode One of "first" or "last".
-#' @param dthdom Name of the source domain as a string, e.g. "AE".
 #' @param dthcaus A symbol or a string --- if a symbol, e.g., `expr(AEDECOD)`,
 #'   it is the variable in the source dataset to be used to assign values to
 #'   `DTHCAUS`; if a string, it is the fixed value to be assigned to `DTHCAUS`.
+#' @param dthdom Name of the source domain as a string, e.g. "AE".
 #'
 #' @author Shimeng Huang
 #'
 #' @export
 #'
 #' @return An object of class "dthcaus_source".
-dthcaus_source <- function(dataset, filter, order, mode = "first",
-                           dthdom, dthcaus) {
+dthcaus_source <- function(dataset, filter, date, mode = "first", dthcaus,
+                           traceabilty=NULL) {
   out <- list(
     dataset = dataset,
     filter = filter,
-    order = order,
+    date = date,
     mode = mode,
-    dthdom = dthdom,
-    dthcaus = dthcaus
+    dthcaus = dthcaus,
+    #dthdom = dthdom
+    traceabilty=traceabilty
   )
   class(out) <- c("dthcaus_source", "list")
   validate_dthcaus_source(out)
@@ -149,9 +175,17 @@ validate_dthcaus_source <- function(x) {
   values <- unclass(x)
   assert_that(is.data.frame(values$dataset))
   assert_that(is_expr(values$filter))
-  assert_that(is_unnamed_exprs(values$order))
+  #assert_that(is_unnamed_exprs(values$date))
+  assert_that(is_expr(values$date))
   assert_that(values$mode %in% c("first", "last"))
-  assert_that(is.character(values$dthdom))
   assert_that(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
   x
 }
+
+
+
+
+
+
+
+
