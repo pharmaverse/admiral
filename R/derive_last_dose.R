@@ -81,7 +81,7 @@ derive_last_dose <- function(dataset,
   }
 
   # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, !!analysis_date)
+  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end)
 
   # calculate last dose date
   res <- dataset %>%
