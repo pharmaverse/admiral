@@ -1,16 +1,16 @@
 
 library(admiral)
 library(dplyr)
-library(lubridate)
 data(ex)
 
-
-ex %>% filter(EXDOSE %in% c(0, 54)) %>%
+# check that there is only one start/end date of exposure per subject and visit
+check_cond <- ex %>%
+  filter(EXDOSE %in% c(0, 54)) %>%
   group_by(USUBJID, VISIT) %>%
   summarise(check1 = n_distinct(EXSTDTC), check2 = n_distinct(EXENDTC)) %>%
   ungroup() %>%
   distinct(check1, check2)
-# should only by 1 and 1
+stopifnot(check_cond$check1 == 1 && check_cond$check2 == 1)
 
 dates <- ex %>%
   filter(EXDOSE %in% c(0, 54)) %>%
