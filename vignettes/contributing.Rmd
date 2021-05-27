@@ -164,6 +164,9 @@ As an example, if a function has a parameter named unit that can be either "days
 the following line of code should be added to the function body:
 `arg_match(unit, c("days", "months", "years"))`.
 
+Parameter which expect keywords should handle them case-insensitive, e.g., both
+`date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
+
 
 ## Function Header
 

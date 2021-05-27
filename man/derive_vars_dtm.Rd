@@ -5,7 +5,8 @@
 \title{Derive/Impute a datetime from a date character vector}
 \usage{
 derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
-  time_imputation = "00:00:00", flag_imputation = TRUE)
+  time_imputation = "00:00:00", flag_imputation = TRUE,
+  min_dates = NULL, max_dates = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -49,6 +50,28 @@ Default is '00:00:00'.}
 A logical value
 
 Default: TRUE}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates are considered. For example\preformatted{impute_dtc("2020-11",
+           min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                            ymd_hms("2020-11-11T11:11:11")),
+           date_imputation = "first")
+}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored.}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.}
 }
 \value{
 the input dataset with the datetime '--DTM' (and the date/time imputation
@@ -83,6 +106,21 @@ derive_vars_dtm(
   date_imputation = "FIRST",
   time_imputation = "FIRST"
 )
+
+# Impute AE end date to the last date and ensure that the imputed date is not
+# after the death or data cut off date
+adae <- tibble::tribble(
+  ~AEENDTC, ~DTHDT, ~DCUTDT,
+  "2020-12", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24"),
+  "2020-11", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24")
+)
+
+derive_vars_dtm(adae,
+                dtc = AEENDTC,
+                new_vars_prefix = 'AEN',
+                date_imputation = 'last',
+                time_imputation = 'last',
+                max_dates = list(DTHDT, DCUTDT))
 }
 \author{
 Samia Kabi
