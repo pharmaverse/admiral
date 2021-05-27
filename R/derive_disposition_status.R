@@ -52,7 +52,7 @@
 #' #- DISCONTINUED when status_var != COMPLETED
 #' #- ONGOING otherwise
 #'
-#' derive_disposition_eoxxstt(
+#' derive_disposition_status(
 #'   dataset = dm,
 #'   dataset_ds = ds,
 #'   new_var = EOSSTT,
@@ -75,7 +75,7 @@
 #'   )
 #' }
 #'
-#' derive_disposition_eoxxstt(
+#' derive_disposition_status(
 #'   dataset = dm,
 #'   dataset_ds = ds,
 #'   new_var = EOSSTT,
@@ -83,7 +83,7 @@
 #'   format_new_var = format_eoxxstt1,
 #'   filter_ds = expr(DSCAT == "DISPOSITION EVENT")
 #' )
-derive_disposition_eoxxstt <- function(dataset,
+derive_disposition_status <- function(dataset,
                                        dataset_ds,
                                        new_var,
                                        status_var,
