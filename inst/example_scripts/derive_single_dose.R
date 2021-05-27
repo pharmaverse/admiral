@@ -25,11 +25,16 @@ attr(dates$VISIT, "label") <- "Visit Name"
 
 ex_single <- dates %>%
   left_join(filter(ex, EXDOSE %in% c(0, 54)), by = c("USUBJID", "VISIT")) %>%
+  # set dates as single doses
   mutate(EXSTDTC = seq_dates,
          EXENDTC = seq_dates) %>%
   group_by(USUBJID) %>%
+  # adjust exseq
   arrange(seq_dates) %>%
   mutate(EXSEQ = row_number()) %>%
+  # adjust EXSTDY and EXENDY
+  mutate(EXSTDY = ifelse(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
+         EXENDY = EXSTDY) %>%
   ungroup() %>%
   mutate(seq_dates = NULL)
 
