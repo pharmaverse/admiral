@@ -108,7 +108,7 @@ adsl <- dm %>%
     new_var = FRVDT,
     dtc = DSSTDTC,
     filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
-  )%>%
+  ) %>%
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
