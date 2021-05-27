@@ -92,7 +92,7 @@ adsl <- dm %>%
   ) %>%
 
   # EOS status
-  derive_disposition_eoxxstt(
+  derive_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
