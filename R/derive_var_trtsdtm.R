@@ -43,12 +43,20 @@ derive_var_trtsdtm <- function(dataset,
                                dataset_ex,
                                filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10)) { # nolint
 
-  derive_merged_vars(
-    dataset,
-    dataset_add = dataset_ex,
-    filter_add = filter_ex,
-    new_vars = exprs(TRTSDTM := convert_dtc_to_dtm(impute_dtc(EXSTDTC))),
-    filter_order = exprs(EXSTDTC, EXSEQ),
-    filter_mode = "first"
-  )
+  assert_has_variables(dataset, c("USUBJID"))
+  assert_has_variables(dataset_ex, c("USUBJID", "EXSTDTC", "EXSEQ"))
+
+  if (!is.null(filter_ex)) {
+    add <- dataset_ex %>%
+      filter(!!!filter_ex)
+  } else {
+    add <- dataset_ex
+  }
+  add <- add %>%
+      filter_extreme(order = exprs(EXSTDTC, EXSEQ),
+                     by_vars = exprs(USUBJID),
+                     mode = "first") %>%
+      transmute(USUBJID, TRTSDTM = convert_dtc_to_dtm(impute_dtc(EXSTDTC)))
+
+  left_join(dataset, add, by = c("USUBJID"))
 }
