@@ -56,10 +56,10 @@ the last dose date is the maximum date where \code{dose_end} is lower to or equa
 Lastly, the last dose date is appended to the \code{dataset} and returned to the user.
 }
 \examples{
-data(ae); data(ex)
+data(ae); data(ex_single)
 derive_last_dose(
   ae,
-  ex,
+  ex_single,
   filter_ex = exprs(
     (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10
   ),

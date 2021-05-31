@@ -38,10 +38,10 @@
 #' @export
 #'
 #' @examples
-#' data(ae); data(ex)
+#' data(ae); data(ex_single)
 #' derive_last_dose(
 #'   ae,
-#'   ex,
+#'   ex_single,
 #'   filter_ex = exprs(
 #'     (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10
 #'   ),
