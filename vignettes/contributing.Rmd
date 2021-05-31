@@ -125,7 +125,7 @@ following is **not acceptable**.
 ```
     ...
     new_var = expr(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
-                                                         date_imputation = "last"
+                                                         date_imputation = "last",
                                                          time_imputation = "last"))),
     ...
 ```
