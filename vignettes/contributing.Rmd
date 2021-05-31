@@ -65,6 +65,17 @@ Each function must use at least one of the following keywords.
 
 # Functions in R
 
+Functions in admiral must follow the modular approach, i.e., functions which add
+variables should add only a single variable except if other variables are
+closely related to the derived variable and can not be derived without it. For
+example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
+by the same function because it does not make sense to derive `AAGEU` without
+`AAGE`.
+
+Variables like `BASE` (baseline value) and `BNRIND` (baseline reference range
+indicator) must be derived by two separate function calls as it is reasonable to
+derive only one of them.
+
 ## Input, Output, and Side-effects
 
 * The behavior of the function is only determined by its input, not by any global object. 
@@ -72,8 +83,9 @@ I.e., all input like datasets, variable names, options, … must be provided to 
 * It is expected that the input datasets are not grouped. If not, the function must issue an error.
 * If a function requires grouping, the function must provide the by_vars parameter.
 * The output dataset must be ungrouped.
-* If the function needs to create temporary variables in an input dataset, these variables must start with temp_
-and must be removed from the output dataset (link to remove function).
+* If the function needs to create temporary variables in an input dataset, these
+variables must start with `temp_` and must be removed from the output dataset
+(link to remove function).
 * If the input dataset includes variables starting with temp_, an error must be issued (link to check function).
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
@@ -104,6 +116,28 @@ For example:
 * `filter = exprs(PARAMCD == ‘TEMP’)`
 * `order = exprs(AVISIT, worst(AESEV))`
 * `new_vars = exprs(TEMPBL := AVAL, TEMPBLU := AVALU)`
+
+Parameter must not accept expressions for assigning the value of the new
+variable. Instead separate parameters need to be provided for defining the
+value. For example if a function derives a variable which may be imputed, the
+following is **not acceptable**.
+
+```
+    ...
+    new_var = expr(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
+                                                         date_imputation = "last",
+                                                         time_imputation = "last"))),
+    ...
+```
+Separate parameters for the imputation must be provided, e.g.:
+```
+    ...
+    new_var = mydtm,
+    source_var = cmstdtc,
+    date_imputation = "last",
+    time_imputation = "last",
+    ...
+```
 
 Each function parameter needs to be tested with `assert_` type of function. 
 
