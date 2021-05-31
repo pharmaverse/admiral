@@ -150,14 +150,65 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 #' @examples
 #' data(ex)
 #' warn_has_unique_records(ex,
-#'                         by_vars = exprs(USUBJID) ,
-#'                         order = exprs(desc(EXENDTC)))
+#'   by_vars = exprs(USUBJID),
+#'   order = exprs(desc(EXENDTC))
+#' )
 warn_has_unique_records <- function(dataset,
-                                      by_vars = NULL,
-                                      order = NULL,
-                                      message){
-  has_unique_records(dataset = dataset,
-                     by_vars = by_vars,
-                     order = order,
-                     message_type = "warning")
+                                    by_vars = NULL,
+                                    order = NULL,
+                                    message) {
+  has_unique_records(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    message_type = "warning"
+  )
+}
+
+#' Warn if 2 list have not the same names or length
+#'
+#' Checks if 2 list inputs have the same names and same number of elements, issue a warning otherwise.
+#'
+#' @param base A named list
+#'
+#' @param compare A named list
+#'
+#' @param i the index id to compare the 2 lists
+#'
+#' @author Samia Kabi
+#'
+#' @return a `warning` if the 2 lists have different names or length
+#'
+#' @keywords warning
+#'
+#' @export
+#'
+#' @examples
+#' # no warning
+#' warn_if_inconsitent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+#' )
+#' # warning
+#' warn_if_inconsitent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+#' )
+warn_if_inconsitent_list <- function(base, compare, i = 2) {
+  if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
+    warn(
+      paste("The variables used for traceability in `dthcaus_source()` are not consistent,",
+        "please check:",
+        paste(
+          "source ", i - 1, ", Variables are given as: ",
+          paste(sort(names(base)), collapse = " ")
+        ),
+        paste(
+          "source ", i, ", Variables are given as: ",
+          paste(sort(names(compare)), collapse = " ")
+        ),
+        sep = "\n"
+      )
+    )
+  }
 }
