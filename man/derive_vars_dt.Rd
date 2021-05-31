@@ -25,18 +25,18 @@ imputation is performed.}
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If NULL: no date imputation is performed and partial dates are returned as
+If \code{NULL}: no date imputation is performed and partial dates are returned as
 missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th
+\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
 of June,
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
 }
 
-Default is NULL.}
+Default is \code{NULL}.}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
@@ -49,10 +49,12 @@ Default: TRUE}
 A list of dates is expected. It is ensured that the imputed date is not
 before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
-range of possible dates are considered. For example\preformatted{impute_dtc("2020-11",
-           min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-                            ymd_hms("2020-11-11T11:11:11")),
-           date_imputation = "first")
+range of possible dates are considered. For example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
 }
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
@@ -138,11 +140,13 @@ adae <- tibble::tribble(
   "2020-11", lubridate::ymd_hms("2020-12-06T12:12:12")
 )
 
-derive_vars_dt(adae,
-               dtc = AESTDTC,
-               new_vars_prefix = 'AST',
-               date_imputation = 'first',
-               min_dates = list(TRTSDTM))
+derive_vars_dt(
+  adae,
+  dtc = AESTDTC,
+  new_vars_prefix = "AST",
+  date_imputation = "first",
+  min_dates = list(TRTSDTM)
+)
 }
 \author{
 Samia Kabi

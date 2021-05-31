@@ -12,26 +12,26 @@
 #' @param date_imputation The value to impute the day/month when a datepart is
 #'   missing.
 #'
-#'   If NULL: no date imputation is performed and partial dates are returned as
+#'   If `NULL`: no date imputation is performed and partial dates are returned as
 #'   missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th
+#'   - format with day and month specified as 'dd-mm': e.g. `"15-06"` for the 15th
 #'   of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last
+#'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
 #'   day/month.
 #'
-#'   Default is NULL.
+#'   Default is `NULL`.
 #'
 #' @param time_imputation The value to impute the time when a timepart is
 #'   missing.
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00'
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. `"00:00:00"`
 #'   for the start of the day,
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
+#'   - or as a keyword: `"FIRST"`,`"LAST"` to impute to the start/end of a day.
 #'
-#'   Default is '00:00:00'.
+#'   Default is `"00:00:00"`.
 #'
 #' @param min_dates Minimum dates
 #'
@@ -41,10 +41,12 @@
 #' range of possible dates are considered. For example
 #'
 #' ```
-#' impute_dtc("2020-11",
-#'            min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                             ymd_hms("2020-11-11T11:11:11")),
-#'            date_imputation = "first")
+#' impute_dtc(
+#'   "2020-11",
+#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   date_imputation = "first"
+#' )
 #' ```
 #' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
 #' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
@@ -124,16 +126,19 @@
 #'
 #' # Impute a date and ensure that the imputed date is not before a list of
 #' # minimum dates
-#' impute_dtc("2020-12",
-#'            min_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
-#'                             lubridate::ymd_hms("2020-11-11T11:11:11")),
-#'            date_imputation = 'first')
+#' impute_dtc(
+#'   "2020-12",
+#'   min_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
+#'                    lubridate::ymd_hms("2020-11-11T11:11:11")),
+#'   date_imputation = "first"
+#' )
 #'
-impute_dtc <- function(dtc,
-                       date_imputation = NULL,
-                       time_imputation = "00:00:00",
-                       min_dates = NULL,
-                       max_dates = NULL) {
+impute_dtc <- function(
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
+  min_dates = NULL,
+  max_dates = NULL) {
 
   # Issue a warning if incorrect  DTC is present
   warn_if_invalid_dtc(dtc)
@@ -511,19 +516,24 @@ compute_tmf <- function(dtc, dtm) {
 #'   "2020-11", lubridate::ymd_hms("2020-12-06T12:12:12")
 #' )
 #'
-#' derive_vars_dt(adae,
-#'                dtc = AESTDTC,
-#'                new_vars_prefix = 'AST',
-#'                date_imputation = 'first',
-#'                min_dates = list(TRTSDTM))
+#' derive_vars_dt(
+#'   adae,
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AST",
+#'   date_imputation = "first",
+#'   min_dates = list(TRTSDTM)
+#' )
 
-derive_vars_dt <- function(dataset,
-                           new_vars_prefix,
-                           dtc,
-                           date_imputation = NULL, # "02-01" or "LAST"
-                           flag_imputation = TRUE,
-                           min_dates = NULL,
-                           max_dates = NULL) {
+derive_vars_dt <- function(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  # "02-01" or "LAST"
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL) {
+
   # Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))
 
@@ -619,20 +629,24 @@ derive_vars_dt <- function(dataset,
 #'   "2020-11", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24")
 #' )
 #'
-#' derive_vars_dtm(adae,
-#'                 dtc = AEENDTC,
-#'                 new_vars_prefix = 'AEN',
-#'                 date_imputation = 'last',
-#'                 time_imputation = 'last',
-#'                 max_dates = list(DTHDT, DCUTDT))
-derive_vars_dtm <- function(dataset,
-                            new_vars_prefix,
-                            dtc,
-                            date_imputation = NULL, # "02-01" or "LAST"
-                            time_imputation = "00:00:00", # or 'FIRST' 'LAST'
-                            flag_imputation = TRUE,
-                            min_dates = NULL,
-                            max_dates = NULL) {
+#' derive_vars_dtm(
+#'   adae,
+#'   dtc = AEENDTC,
+#'   new_vars_prefix = "AEN",
+#'   date_imputation = "last",
+#'   time_imputation = "last",
+#'   max_dates = list(DTHDT, DCUTDT))
+derive_vars_dtm <- function(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  # "02-01" or "LAST"
+  time_imputation = "00:00:00",
+  # or 'FIRST' 'LAST'
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL) {
 
   # Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))

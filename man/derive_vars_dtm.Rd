@@ -26,30 +26,30 @@ imputation is performed.}
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If NULL: no date imputation is performed and partial dates are returned as
+If \code{NULL}: no date imputation is performed and partial dates are returned as
 missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th
+\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
 of June,
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
 }
 
-Default is NULL.}
+Default is \code{NULL}.}
 
 \item{time_imputation}{The value to impute the time when a timepart is
 missing.
 
 A character value is expected, either as a
 \itemize{
-\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00'
+\item format with hour, min and sec specified as 'hh:mm:ss': e.g. \code{"00:00:00"}
 for the start of the day,
-\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
+\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
 }
 
-Default is '00:00:00'.}
+Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
@@ -62,10 +62,12 @@ Default: TRUE}
 A list of dates is expected. It is ensured that the imputed date is not
 before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
-range of possible dates are considered. For example\preformatted{impute_dtc("2020-11",
-           min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-                            ymd_hms("2020-11-11T11:11:11")),
-           date_imputation = "first")
+range of possible dates are considered. For example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
 }
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
@@ -121,12 +123,13 @@ adae <- tibble::tribble(
   "2020-11", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24")
 )
 
-derive_vars_dtm(adae,
-                dtc = AEENDTC,
-                new_vars_prefix = 'AEN',
-                date_imputation = 'last',
-                time_imputation = 'last',
-                max_dates = list(DTHDT, DCUTDT))
+derive_vars_dtm(
+  adae,
+  dtc = AEENDTC,
+  new_vars_prefix = "AEN",
+  date_imputation = "last",
+  time_imputation = "last",
+  max_dates = list(DTHDT, DCUTDT))
 }
 \author{
 Samia Kabi
