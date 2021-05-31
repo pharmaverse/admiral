@@ -17,15 +17,17 @@
 #' By default (`FALSE`), the date as well as the time component is checked.
 #' If set to `TRUE`, then only the date component of those variables is checked.
 #'
-#' @details All date (date-time) variables need to be characters in standard ISO format.
-#' See [`impute_dtc`], parameter `dtc` for further details.
+#' @details All date (date-time) variables can be characters in standard ISO format or
+#' of date / date-time class.
+#' For ISO format, see [`impute_dtc`], parameter `dtc` for further details.
 #'
 #' The last dose date is derived as follows:
 #' Firstly, the `dataset_ex` is filtered using `filter_ex`, if provided.
 #' This is useful for, for example, filtering for valid dose only.
-#' Secondly, the datasets `dataset` and `dataset_ex` are joined using `by_vars`.
-#' Thirdly, the last dose date is derived using provided variables.
-#' The last dose date is the maximum date where `dose_end` is lower to or equal to
+#' Secondly, the datasets `dataset` and `dataset_ex` are joined using `by_vars`
+#' and `AESEQ` variable.
+#' Thirdly, the last dose date is derived:
+#' the last dose date is the maximum date where `dose_end` is lower to or equal to
 #' `analysis_date`, subject to both date values are non-NA.
 #' Lastly, the last dose date is appended to the `dataset` and returned to the user.
 #'
@@ -61,7 +63,12 @@ derive_last_dose <- function(dataset,
                              output_datetime = TRUE,
                              check_dates_only = FALSE) {
 
-  stopifnot(rlang::is_scalar_logical(check_dates_only))
+  assert_that(
+    rlang::is_scalar_logical(output_datetime),
+    rlang::is_scalar_logical(check_dates_only),
+    !dplyr::is_grouped_df(dataset),
+    !dplyr::is_grouped_df(dataset_ex)
+  )
 
   # apply filtering condition
   if (!is.null(filter_ex)) {
@@ -73,11 +80,33 @@ derive_last_dose <- function(dataset,
   analysis_date <- enquo(analysis_date)
   output_var <- enquo(output_var)
 
+  # check variables existence
+  assert_has_variables(
+    dataset,
+    c(map_chr(by_vars, as_string),
+      "AESEQ",
+      as_string(rlang::quo_get_expr(analysis_date))
+    )
+  )
+
+  assert_has_variables(
+    dataset_ex,
+    c(map_chr(by_vars, as_string),
+      as_string(rlang::quo_get_expr(dose_start)),
+      as_string(rlang::quo_get_expr(dose_end)))
+  )
+
   # assumption for last dose derivation: start and end dates (datetimes) need to match
   if (check_dates_only) {
-    dataset_ex <- filter(dataset_ex, as.Date(!!dose_start) == as.Date(!!dose_end))
+    check_cond <- summarise(dataset_ex, all_equal = all(as.Date(!!dose_start) == as.Date(!!dose_end)))
   } else {
-    dataset_ex <- filter(dataset_ex, !!dose_start == !!dose_end)
+    check_cond <- summarise(dataset_ex, all_equal = all(!!dose_start == !!dose_end))
+  }
+  if (!check_cond$all_equal) {
+    stop(paste(
+      "Not all values of", as_string(rlang::quo_get_expr(dose_start)),
+      "are equal to", as_string(rlang::quo_get_expr(dose_end))
+    ))
   }
 
   # select only a subset of columns
@@ -87,7 +116,9 @@ derive_last_dose <- function(dataset,
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = map_chr(by_vars, as_string)) %>%
-    group_by(!!!by_vars) %>%
+    mutate_at(vars(!!dose_end, !!analysis_date),
+              ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
+    group_by(!!!by_vars, .data$AESEQ) %>%
     mutate(
       tmp_exendtc = impute_dtc(dtc = !!dose_end,
                                date_imputation = NULL,
@@ -96,9 +127,9 @@ derive_last_dose <- function(dataset,
       tmp_aestdtc = impute_dtc(dtc = !!analysis_date,
                                date_imputation = NULL,
                                time_imputation = "23:59:59") %>%
-        convert_dtc_to_dtm(),
-      !!output_var := compute_ldosedtm(exendtc = .data$tmp_exendtc,
-                                       aestdtc = .data$tmp_aestdtc)) %>%
+        convert_dtc_to_dtm()) %>%
+    summarise(!!output_var := compute_ldosedtm(exendtc = .data$tmp_exendtc,
+                                               aestdtc = .data$tmp_aestdtc)) %>%
     ungroup()
 
   # return either date or date-time variable
@@ -108,8 +139,8 @@ derive_last_dose <- function(dataset,
 
   # return dataset with additional column
   left_join(dataset,
-            dplyr::distinct(res, !!!by_vars, !!output_var),
-            by = map_chr(by_vars, as_string))
+            dplyr::distinct(res, !!!by_vars, .data$AESEQ, !!output_var),
+            by = c(map_chr(by_vars, as_string), "AESEQ"))
 }
 
 #' Helper function to calculate last dose
@@ -124,4 +155,19 @@ compute_ldosedtm <- function(exendtc, aestdtc) {
   } else {
     as.POSIXct(NA)
   }
+}
+
+#' Helper function to convert date (or date-time) objects to characters of dtc format
+#' (-DTC type of variable)
+#'
+#' @param dtm date or date-time
+#'
+#' @return character
+#'
+#' @examples
+#' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
+#' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
+convert_dtm_to_dtc <- function(dtm) {
+  stopifnot(lubridate::is.instant(dtm))
+  format(dtm, "%Y-%m-%dT%H:%M:%S")
 }

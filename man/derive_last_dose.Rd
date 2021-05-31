@@ -41,15 +41,17 @@ AE dataset with additional column \code{output_var}.
 Derive last dose date(-time)
 }
 \details{
-All date (date-time) variables need to be characters in standard ISO format.
-See \code{\link{impute_dtc}}, parameter \code{dtc} for further details.
+All date (date-time) variables can be characters in standard ISO format or
+of date / date-time class.
+For ISO format, see \code{\link{impute_dtc}}, parameter \code{dtc} for further details.
 
 The last dose date is derived as follows:
 Firstly, the \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
 This is useful for, for example, filtering for valid dose only.
-Secondly, the datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
-Thirdly, the last dose date is derived using provided variables.
-The last dose date is the maximum date where \code{dose_end} is lower to or equal to
+Secondly, the datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}
+and \code{AESEQ} variable.
+Thirdly, the last dose date is derived:
+the last dose date is the maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
 Lastly, the last dose date is appended to the \code{dataset} and returned to the user.
 }
