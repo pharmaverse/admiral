@@ -9,18 +9,13 @@
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   rows. Providing the names of variables in [c()] will create a groupwise
 #'   summary and generate summary rows for the specified groups.
-#' @param fns Functions used for aggregations. This can include base functions
-#'   like `mean`, `min`, `max`, `median`, `sd`, or `sum` or any other
-#'   user-defined aggregation function. Multiple summary can be done by
-#'   supplying the function(s) within a `list()`. Possible values are:
-#'
-#'   - A function, e.g. `mean`.
-#'     Default, `AVAL` to derive summary value.
-#'   - A purrr-style lambda, e.g. `~ mean(AVAL, na.rm = TRUE)`
-#'   - A list of functions/lambdas, e.g.
-#'     `list(mean(AVAL),  SUM = ~ sum(is.na(AVAL))`
-#'
-#' @param filter Logical expression indicating rows to keep.
+#' @param fns List of formulas specifying variable to use for aggregations.
+#'   This can include base functions like `mean`, `min`, `max`, `median`, `sd`,
+#'   or `sum` or any other user-defined aggregation function. For example,
+#'   `fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE)`. In the formula
+#'   representation, a `.` serves as the data to be summarized
+#'   (e.g., `sum(CHG, na.rm = TRUE)`).
+#' @param filter Logical expression indicating rows to keep during aggregations.
 #' @param values_set A list of variable name-value pairs. Use this argument if
 #'   you need to change the values of any newly derived rows. For example,
 #'   `values_set = list(AVISITN = 9999, AVISIT= "Endpoint")` would change of
@@ -58,10 +53,8 @@
 #' )
 #' derive_row_summary(adeg,
 #'                    by_vars = c(USUBJID, PARAM, VISIT, AVISIT),
-#'                    fns = mean,
+#'                    fns = list(AVAL ~ mean(., na.rm = TRUE)),
 #'                    values_drop = c(EGSEQ, EGREPNUM, EGDTC))
-
-
 derive_row_summary <- function(dataset,
                                by_vars,
                                fns,
@@ -69,8 +62,44 @@ derive_row_summary <- function(dataset,
                                values_set = list(),
                                values_drop = NULL
                                ) {
+  fns <- fns
   group_vars <- dplyr::select(dataset, !! rlang::enquo(by_vars)) %>% names()
   drop_vars <- dplyr::select(dataset, !! rlang::enquo(values_drop)) %>% names()
+  browser()
+
 }
+
+# Helper ------------------------------------------------------------------
+
+setup_fns <- function(fns, env = rlang::caller_env()) {
+  if (is.function(fns)) {
+    list(fun = fns, var = "AVAL")
+  } else if (rlang::is_formula(fns)) {
+    var <- rlang::f_rhs(fns)[[2]] %>% as_string()
+    list(fun = rlang::as_closure(fns), var = var)
+  } else if (is.list(fns)) {
+    chk_fns <- vapply(fns,
+                          function(x) { rlang::is_formula(x, lhs = FALSE) },
+                          logical(1L))
+    if (length(fns[!chk_fns]) > 0) {
+      rlang::abort(
+        c(paste("Problem with input `fns` at index", enumerate(which(chk_fns))),
+        i = "`fns` must be list of formulas.")
+      )
+    }
+
+    funs <- lapply(fns, rlang::as_closure)
+    vars <- lapply(fns, function(x) {
+      rlang::f_rhs(x)[[2]] %>% as_string()
+    })
+    list(fun = funs, var = vars)
+  } else {
+    rlang::abort(
+      c("Problem with input `fns`.",
+      i = "`.fns` must be a function, a formula, or a list of functions/formulas."
+    ))
+  }
+}
+
 
 
