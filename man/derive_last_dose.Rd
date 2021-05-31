@@ -59,8 +59,8 @@ Lastly, the last dose date is appended to the \code{dataset} and returned to the
 \examples{
 data(ae); data(ex_single)
 derive_last_dose(
-  ae,
-  ex_single,
+  head(ae, 100),
+  head(ex_single, 100),
   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
     nchar(as.character(EXENDTC)) >= 10,
   dose_start = EXSTDTC,
