@@ -116,8 +116,8 @@ derive_last_dose <- function(dataset,
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = map_chr(by_vars, as_string)) %>%
-    mutate_at(vars(!!dose_end, !!analysis_date),
-              ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
+    dplyr::mutate_at(dplyr::vars(!!dose_end, !!analysis_date),
+                     ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
     group_by(!!!by_vars, .data$AESEQ) %>%
     mutate(
       tmp_exendtc = impute_dtc(dtc = !!dose_end,
@@ -128,8 +128,8 @@ derive_last_dose <- function(dataset,
                                date_imputation = NULL,
                                time_imputation = "23:59:59") %>%
         convert_dtc_to_dtm()) %>%
-    summarise(!!output_var := compute_ldosedtm(exendtc = .data$tmp_exendtc,
-                                               aestdtc = .data$tmp_aestdtc)) %>%
+    dplyr::summarise(!!output_var := compute_ldosedtm(exendtc = .data$tmp_exendtc,
+                                                      aestdtc = .data$tmp_aestdtc)) %>%
     ungroup()
 
   # return either date or date-time variable
