@@ -38,7 +38,10 @@
 #' A list of dates is expected. It is ensured that the imputed date is not
 #' before any of the specified dates, e.g., that the imputed adverse event start
 #' date is not before the first treatment date. Only dates which are in the
-#' range of possible dates are considered. For example
+#' range of possible dates of the dtc value are considered. The possible dates
+#' are defined by the missing parts of the dtc date (see example below). This
+#' ensures that the non-missing parts of the dtc date are not changed. For
+#' example
 #'
 #' ```
 #' impute_dtc(
@@ -50,7 +53,8 @@
 #' ```
 #' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
 #' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
-#' `"2020-12-06T12:12:12"` is ignored.
+#' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
+#' have changed the month although it is not missing (in the dtc date).
 #'
 #' @param max_dates Maximum dates
 #'

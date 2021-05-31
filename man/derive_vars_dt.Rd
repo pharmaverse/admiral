@@ -49,7 +49,10 @@ Default: TRUE}
 A list of dates is expected. It is ensured that the imputed date is not
 before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
-range of possible dates are considered. For example\preformatted{impute_dtc(
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example\preformatted{impute_dtc(
   "2020-11",
   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
                    ymd_hms("2020-11-11T11:11:11")),
@@ -59,7 +62,8 @@ range of possible dates are considered. For example\preformatted{impute_dtc(
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
-\code{"2020-12-06T12:12:12"} is ignored.}
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the dtc date).}
 
 \item{max_dates}{Maximum dates
 
