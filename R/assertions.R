@@ -483,3 +483,39 @@ on_failure(is_named_exprs) <- function(call, env) {
     "` is not a named list of expressions created using `exprs()`"
   )
 }
+
+is_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, rlang::quo_is_symbol))
+}
+on_failure(is_vars) <- function(call, env) {
+  print(call)
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a list of variables created using `vars()`"
+  )
+}
+
+is_order_vars <- function(arg) {
+  quo_is_desc_call <- function(quo) {
+    expr <- quo_get_expr(quo)
+    is_call(expr) &&
+      length(expr) == 2L &&
+      deparse(expr[[1L]]) == "desc" &&
+      is_symbol(expr[[2L]])
+  }
+
+  inherits(arg, "quosures") &&
+    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
+}
+on_failure(is_order_vars) <- function(call, env) {
+  paste0(
+    backquote(deparse(call$arg)),
+    " is not a valid input for `order_vars`.",
+    " Valid inputs are created using `vars()` and may only contain symbols or calls using `desc()`.\n\n",
+    "  # Bad:\n",
+    "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
+    "  # Good:\n",
+    "  vars(AVAL, desc(ADT))"
+  )
+}
