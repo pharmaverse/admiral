@@ -13,7 +13,6 @@ data("dm")
 data("ex")
 data("ds")
 
-
 # User defined functions
 # Grouping
 format_agegr1 <- function(x) {
@@ -23,6 +22,7 @@ format_agegr1 <- function(x) {
     x >= 65 ~ ">= 65"
   )
 }
+
 format_racegr1 <- function(x) {
   case_when(
     !is.na(x) & x == "WHITE" ~ "White",
@@ -30,6 +30,7 @@ format_racegr1 <- function(x) {
     TRUE ~ "Missing"
   )
 }
+
 format_region1 <- function(x) {
   case_when(
     x %in% c("CAN", "USA") ~ "NA",
@@ -37,6 +38,7 @@ format_region1 <- function(x) {
     TRUE ~ "Missing"
   )
 }
+
 format_lddthgr1 <- function(x) {
   case_when(
     !is.na(x) & x <= 30 ~ "<= 30",
@@ -54,8 +56,6 @@ format_eoxxstt <- function(x) {
     TRUE ~ "ONGOING"
   )
 }
-# end of user defined functions
-
 
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
@@ -83,7 +83,6 @@ adsl <- dm %>%
     filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE")
   ) %>%
 
-  # EOS date
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
@@ -100,8 +99,6 @@ adsl <- dm %>%
     filter = expr(DSCAT == "DISPOSITION EVENT")
   ) %>%
 
-  # study specific variables
-
   # Last retrieval date
   derive_disposition_dt(
     dataset_ds = ds,
@@ -109,6 +106,7 @@ adsl <- dm %>%
     dtc = DSSTDTC,
     filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
   ) %>%
+
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
@@ -122,6 +120,7 @@ adsl <- dm %>%
     start_date = TRTSDT,
     end_date = DTHDT
   ) %>%
+
   # Elapsed Days from Last Dose to Death
   derive_duration(
     new_var = LDDTHELD,

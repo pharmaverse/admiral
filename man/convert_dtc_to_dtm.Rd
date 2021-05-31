@@ -10,8 +10,7 @@ convert_dtc_to_dtm(dtc)
 \item{dtc}{The --DTC date to convert.
 
 A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
-A partial datetime will return a NA date and a warning will be issued:
-'All formats failed to parse. No formats found.'.
+A partial datetime will issue a warning.
 Note: you can use impute_dtc function to build a complete datetime.}
 }
 \value{

@@ -62,6 +62,7 @@ test_that("Derive RANDDT from the relevant ds.DSSTDTC", {
     keys = c("STUDYID", "USUBJID")
   )
 })
+
 test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with 1st day/month", { # nolint
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHDT,
