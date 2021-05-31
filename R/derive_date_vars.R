@@ -203,10 +203,9 @@ impute_dtc <- function(dtc,
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
   assert_that(is.character(dtc))
-  warn_if_incomplete_dtc(dtc, n = 10)
   warn_if_invalid_dtc(dtc)
 
-  dt <- case_when(
+  case_when(
     nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
     TRUE ~ ymd(NA)
   )
@@ -236,15 +235,14 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
   assert_that(is.character(dtc))
-  warn_if_incomplete_dtc(dtc, n = 19)
   warn_if_invalid_dtc(dtc)
+  
   # note T00:00:00 is not printed in dataframe
   case_when(
-    nchar(dtc) >= 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
+    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
     TRUE ~ ymd_hms(NA)
   )
 }
-
 #' Derive the date imputation flag
 #'
 #' Derive the date imputation flag ('--DTF') comparing a date character vector
@@ -270,10 +268,10 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
-  assert_that(is.character(dtc))
-  assert_that(is_date(dt))
+  assert_that(is.character(dtc), is_date(dt))
+  warn_if_invalid_dtc(dtc)
 
-  dtf <- case_when(
+  case_when(
     (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
       is.na(dt) |
       !is_valid_dtc(dtc) ~ NA_character_,
@@ -282,8 +280,6 @@ compute_dtf <- function(dtc, dt) {
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
     !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
   )
-  warn_if_invalid_dtc(dtc)
-  dtf
 }
 
 #' Derive the time imputation flag
@@ -312,10 +308,10 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
-  assert_that(is.character(dtc))
-  assert_that(is_date(dtm))
+  assert_that(is.character(dtc), is_date(dtm))
+  warn_if_invalid_dtc(dtc)
 
-  tmf <- case_when(
+  case_when(
     (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
       is.na(dtm) |
       !is_valid_dtc(dtc) ~ NA_character_,
@@ -324,8 +320,6 @@ compute_tmf <- function(dtc, dtm) {
     (!is.na(dtm) & (nchar(dtc) == 10)) |
       (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
   )
-  warn_if_invalid_dtc(dtc)
-  tmf
 }
 
 #' Derive/Impute a date from a date character vector
