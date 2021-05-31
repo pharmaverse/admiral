@@ -5,7 +5,8 @@
 #' @param dataset_ex Input EX dataset.
 #' @param filter_ex Filtering condition applied to EX dataset.
 #' For example, it can be used to filter for valid dose.
-#' @param by_vars Variables to join by.
+#' Defaults to NULL.
+#' @param by_vars Variables to join by (type `vars`).
 #' @param dose_start The dose start date variable.
 #' @param dose_end The dose end date variable.
 #' @param analysis_date The analysis date variable.
@@ -42,9 +43,7 @@
 #' derive_last_dose(
 #'   ae,
 #'   ex_single,
-#'   filter_ex = exprs(
-#'     (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10
-#'   ),
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(as.character(EXENDTC)) >= 10, #nolint
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
@@ -52,10 +51,11 @@
 #'   output_datetime = TRUE,
 #'   check_dates_only = FALSE
 #' )
+#'
 derive_last_dose <- function(dataset,
                              dataset_ex,
-                             filter_ex,
-                             by_vars = exprs(STUDYID, USUBJID),
+                             filter_ex = NULL,
+                             by_vars = vars(STUDYID, USUBJID),
                              dose_start,
                              dose_end,
                              analysis_date,
@@ -64,26 +64,32 @@ derive_last_dose <- function(dataset,
                              check_dates_only = FALSE) {
 
   assert_that(
-    rlang::is_scalar_logical(output_datetime),
-    rlang::is_scalar_logical(check_dates_only),
     !dplyr::is_grouped_df(dataset),
-    !dplyr::is_grouped_df(dataset_ex)
+    !dplyr::is_grouped_df(dataset_ex),
+    is.list(by_vars),
+    rlang::is_scalar_logical(output_datetime),
+    rlang::is_scalar_logical(check_dates_only)
   )
 
   # apply filtering condition
-  if (!is.null(filter_ex)) {
-    dataset_ex <- filter(dataset_ex, !!!filter_ex)
+  filter_ex <- enquo(filter_ex)
+  if (!is.null(rlang::quo_get_expr(filter_ex))) {
+    dataset_ex <- filter(dataset_ex, !!filter_ex)
   }
 
   dose_start <- enquo(dose_start)
   dose_end <- enquo(dose_end)
   analysis_date <- enquo(analysis_date)
   output_var <- enquo(output_var)
+  by_vars_str <- vapply(by_vars,
+                        function(x) as_string(rlang::quo_get_expr(x)),
+                        character(1),
+                        USE.NAMES = F)
 
   # check variables existence
   assert_has_variables(
     dataset,
-    c(map_chr(by_vars, as_string),
+    c(by_vars_str,
       "AESEQ",
       as_string(rlang::quo_get_expr(analysis_date))
     )
@@ -91,16 +97,18 @@ derive_last_dose <- function(dataset,
 
   assert_has_variables(
     dataset_ex,
-    c(map_chr(by_vars, as_string),
+    c(by_vars_str,
       as_string(rlang::quo_get_expr(dose_start)),
       as_string(rlang::quo_get_expr(dose_end)))
   )
 
   # assumption for last dose derivation: start and end dates (datetimes) need to match
   if (check_dates_only) {
-    check_cond <- dplyr::summarise(dataset_ex, all_equal = all(as.Date(!!dose_start) == as.Date(!!dose_end)))
+    check_cond <- dplyr::summarise(dataset_ex,
+                                   all_equal = all(as.Date(!!dose_start) == as.Date(!!dose_end)))
   } else {
-    check_cond <- dplyr::summarise(dataset_ex, all_equal = all(!!dose_start == !!dose_end))
+    check_cond <- dplyr::summarise(dataset_ex,
+                                   all_equal = all(!!dose_start == !!dose_end))
   }
   if (!check_cond$all_equal) {
     stop(paste(
@@ -115,7 +123,7 @@ derive_last_dose <- function(dataset,
   # calculate last dose date
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
-    inner_join(dataset_ex, by = map_chr(by_vars, as_string)) %>%
+    inner_join(dataset_ex, by = by_vars_str) %>%
     dplyr::mutate_at(dplyr::vars(!!dose_end, !!analysis_date),
                      ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
     group_by(!!!by_vars, .data$AESEQ) %>%
@@ -140,7 +148,7 @@ derive_last_dose <- function(dataset,
   # return dataset with additional column
   left_join(dataset,
             dplyr::distinct(res, !!!by_vars, .data$AESEQ, !!output_var),
-            by = c(map_chr(by_vars, as_string), "AESEQ"))
+            by = c(by_vars_str, "AESEQ"))
 }
 
 #' Helper function to calculate last dose

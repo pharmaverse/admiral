@@ -4,9 +4,9 @@
 \alias{derive_last_dose}
 \title{Derive last dose date(-time)}
 \usage{
-derive_last_dose(dataset, dataset_ex, filter_ex, by_vars = exprs(STUDYID,
-  USUBJID), dose_start, dose_end, analysis_date, output_var,
-  output_datetime = TRUE, check_dates_only = FALSE)
+derive_last_dose(dataset, dataset_ex, filter_ex = NULL,
+  by_vars = vars(STUDYID, USUBJID), dose_start, dose_end, analysis_date,
+  output_var, output_datetime = TRUE, check_dates_only = FALSE)
 }
 \arguments{
 \item{dataset}{Input AE dataset.}
@@ -14,9 +14,10 @@ derive_last_dose(dataset, dataset_ex, filter_ex, by_vars = exprs(STUDYID,
 \item{dataset_ex}{Input EX dataset.}
 
 \item{filter_ex}{Filtering condition applied to EX dataset.
-For example, it can be used to filter for valid dose.}
+For example, it can be used to filter for valid dose.
+Defaults to NULL.}
 
-\item{by_vars}{Variables to join by.}
+\item{by_vars}{Variables to join by (type \code{vars}).}
 
 \item{dose_start}{The dose start date variable.}
 
@@ -60,9 +61,7 @@ data(ae); data(ex_single)
 derive_last_dose(
   ae,
   ex_single,
-  filter_ex = exprs(
-    (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10
-  ),
+  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(as.character(EXENDTC)) >= 10, #nolint
   dose_start = EXSTDTC,
   dose_end = EXENDTC,
   analysis_date = AESTDTC,
@@ -70,6 +69,7 @@ derive_last_dose(
   output_datetime = TRUE,
   check_dates_only = FALSE
 )
+
 }
 \author{
 Ondrej Slama
