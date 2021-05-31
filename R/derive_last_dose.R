@@ -98,9 +98,9 @@ derive_last_dose <- function(dataset,
 
   # assumption for last dose derivation: start and end dates (datetimes) need to match
   if (check_dates_only) {
-    check_cond <- summarise(dataset_ex, all_equal = all(as.Date(!!dose_start) == as.Date(!!dose_end)))
+    check_cond <- dplyr::summarise(dataset_ex, all_equal = all(as.Date(!!dose_start) == as.Date(!!dose_end)))
   } else {
-    check_cond <- summarise(dataset_ex, all_equal = all(!!dose_start == !!dose_end))
+    check_cond <- dplyr::summarise(dataset_ex, all_equal = all(!!dose_start == !!dose_end))
   }
   if (!check_cond$all_equal) {
     stop(paste(
