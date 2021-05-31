@@ -236,6 +236,25 @@ If the expected input is a dataset then the required variables should be clearly
 Self-contained means that if this code is executed in a new R session it will run without errors. 
 That requires any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
 
+Copying descriptions should be avoided as it makes the documentation hard to
+maintain. For example if the same parameter with the same description is used by
+more than one function, the parameter should be described for one function and
+the other functions should use `@inheritParams <function name where the
+parameter is described>`.
+
+Please note that if `@inheritParams func_first` is used in the header of the
+`func_second()` function, those parameter descriptions of `func_first()` are
+included in the documentation of `func_second()` for which
+
+- the parameter is offered by `func_second()` and
+- no `@param` tag for the parameter is included in the header of
+`func_second()`.
+
+The order of the `@param` tags should be the same as in the function definition.
+The `@inheritParams` tags should be after the `@param`. This does not affect the
+order of the parameter description in the rendered documentation but makes it
+easier to maintain the headers.
+
 Variable names, expressions, functions, and any other code must be enclosed
 which backticks. This will render it as code.
 

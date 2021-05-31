@@ -431,50 +431,13 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The date character vector used to derive/impute the date.
-#'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   if the year part is not recorded (missing date), no imputation is done.
-#'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
-#'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-#'
-#'   Default is NULL.
-#'
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
 #'
-#' @param min_dates Minimum dates
-#'
-#' A list of dates is expected. It is ensured that the imputed date is not
-#' before any of the specified dates, e.g., that the imputed adverse event start
-#' date is not before the first treatment date. Only dates which are in the
-#' range of possible dates are considered. For example
-#'
-#' ```
-#' impute_dtc("2020-11",
-#'            min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                             ymd_hms("2020-11-11T11:11:11")),
-#'            date_imputation = "first")
-#' ```
-#' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
-#' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
-#' `"2020-12-06T12:12:12"` is ignored.
-#'
-#' @param max_dates Maximum dates
-#'
-#' A list of dates is expected. It is ensured that the imputed date is not after
-#' any of the specified dates, e.g., that the imputed date is not after the data
-#' cut off date. Only dates which are in the range of possible dates are
-#' considered.
+#' @inheritParams impute_dtc
 #'
 #' @return  the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
 #'
@@ -606,60 +569,13 @@ derive_vars_dt <- function(dataset,
 #'
 #' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The date character vector used to derive/impute the date.
-#'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   if the year part is not recorded (missing date), no imputation is done.
-#'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
-#'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-#'
-#'   Default is NULL.
-#'
-#' @param time_imputation The value to impute the time when a timepart is missing.
-#'
-#'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-#'     the start of the day,
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
-#'
-#'   Default is '00:00:00'.
-#'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
 #'
-#' @param min_dates Minimum dates
-#'
-#' A list of dates is expected. It is ensured that the imputed date is not
-#' before any of the specified dates, e.g., that the imputed adverse event start
-#' date is not before the first treatment date. Only dates which are in the
-#' range of possible dates are considered. For example
-#'
-#' ```
-#' impute_dtc("2020-11",
-#'            min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                             ymd_hms("2020-11-11T11:11:11")),
-#'            date_imputation = "first")
-#' ```
-#' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
-#' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
-#' `"2020-12-06T12:12:12"` is ignored.
-#'
-#' @param max_dates Maximum dates
-#'
-#' A list of dates is expected. It is ensured that the imputed date is not after
-#' any of the specified dates, e.g., that the imputed date is not after the data
-#' cut off date. Only dates which are in the range of possible dates are
-#' considered.
-#'
+#' @inheritParams impute_dtc
 #'
 #' @details
 #' The presence of a --DTF variable is checked and the variable is not derived
