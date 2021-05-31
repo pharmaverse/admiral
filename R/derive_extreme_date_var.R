@@ -123,7 +123,7 @@ derive_extreme_date_var <- function(dataset,
                                     new_var,
                                     sources,
                                     by_vars = exprs(USUBJID),
-                                    mode){
+                                    mode) {
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     if (!is.null(sources[[i]]$filter)) {
@@ -133,7 +133,7 @@ derive_extreme_date_var <- function(dataset,
     else {
       add_data[[i]] <- sources[[i]]$dataset
     }
-    if (!is.null(sources[[i]]$order)){
+    if (!is.null(sources[[i]]$order)) {
       add_data[[i]] <- filter_extreme(add_data[[i]],
                                       order = sources[[i]]$order,
                                       by_vars = by_vars,
