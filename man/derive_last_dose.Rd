@@ -61,7 +61,8 @@ data(ae); data(ex_single)
 derive_last_dose(
   ae,
   ex_single,
-  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(as.character(EXENDTC)) >= 10, #nolint
+  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
+    nchar(as.character(EXENDTC)) >= 10,
   dose_start = EXSTDTC,
   dose_end = EXENDTC,
   analysis_date = AESTDTC,
