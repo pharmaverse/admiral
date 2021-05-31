@@ -62,89 +62,67 @@ derive_aage <- function(dataset,
 }
 
 
-#' Calculate age groups
+#' Derive age groups
 #'
-#' Calculates age groups by given breaks and returns either factor or numeric.
+#' Functions for deriving standardized age groups.
 #'
-#' @param x Numeric vector providing the age.
-#' @param breaks Numeric vector providing the breaks for the age groups.
-#' @param labels Character vector providing the labels of the age groups.
-#' The length of `labels` needs to be greater by one than the length of `breaks`.
-#' If not given, the labels are automatically generated based on `breaks`.
-#' @param geq Should intervals be defined as "lower or equal" or "greater or equal"?
-#' Defaults to the latter (i.e. `geq = TRUE`).
+#' @param dataset Input dataset.
+#' @param age_var AGE variable.
+#' @param new_var New variable to be created.
 #'
-#' @return Factor (for `compute_agegr`) or numeric (for `compute_agegrn`) with defined age groups.
+#' @return `dataset` with new column `new_var` of class factor.
 #'
 #' @author Ondrej Slama
 #'
+#' @name derive_agegr_fda
+NULL
+
+#' @rdname derive_agegr_fda
 #' @export
-#'
+#' @details `derive_agegr_fda` Derive age groups according to FDA ().
 #' @examples
-#' compute_agegr(1:10, 5)
-#'
-#' # provide arbitrary labels
-#' compute_agegr(1:10, 5, labels = c("Younger than 5 years old",
-#'                                   "Older or equal to 5 years old"))
-#'
-#' # change the interval borders
-#' compute_agegr(1:10, 5, geq = FALSE)
-#'
-#' # add more breaks
-#' compute_agegr(0:100, c(30, 60))
-#'
-#' # compare factor with numeric output
-#' compute_agegr(1:10, 5)
-#' compute_agegrn(1:10, 5)
-compute_agegr <- function(x, breaks, labels = NULL, geq = TRUE) {
-  assert_that(
-    is.numeric(x),
-    length(x) > 0,
-    is.numeric(breaks),
-    length(breaks) > 0,
-    is.null(labels) | is.character(labels),
-    is.logical(geq)
+#' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+derive_agegr_fda <- function(dataset, age_var, new_var) {
+  assert_that(is.data.frame(dataset))
+
+  age_var <- enquo(age_var)
+  new_var <- enquo(new_var)
+
+  assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
+
+  mutate(
+    dataset,
+    !!new_var := cut(
+      x = !!age_var,
+      breaks = c(-Inf, 19, 65, Inf),
+      labels = c(NA_character_, "19-64", ">=65"),
+      include.lowest = T,
+      right = F
+    )
   )
-
-  # determine functions for comparing numbers
-  lower <- `if`(geq, `<`, `<=`)
-  lbl_lower <- `if`(geq, "<", "<=")
-  lbl_greater <- `if`(geq, ">=", ">")
-
-  # use ifelse for binary outcome
-  if (length(breaks) == 1) {
-    # define labels if not given
-    if (is.null(labels)) {
-      labels <- paste0(c(lbl_lower, lbl_greater), breaks)
-    } else {
-      assert_that(length(labels) == 2)
-    }
-    out <- factor(ifelse(lower(x, breaks), labels[1], labels[2]),
-                  levels = labels)
-  } else {
-    # otherwise use cut function
-    # define labels if not given
-    if (is.null(labels)) {
-      lbr <- `if`(geq, "[", "(")
-      rbr <- `if`(geq, ")", "]")
-      labels <- c(
-        paste0(lbl_lower, breaks[1]),
-        paste0(lbr, breaks[1:(length(breaks) - 1)], ", ",
-               breaks[2:length(breaks)], rbr),
-        paste0(lbl_greater, breaks[length(breaks)])
-      )
-    } else {
-      assert_that(length(labels) == length(breaks) + 1)
-    }
-    out <- cut(x, breaks = c(-Inf, breaks, Inf), labels = labels,
-               include.lowest = T, right = !geq)
-  }
-
-  return(out)
 }
 
-#' @describeIn compute_agegr Calculate age groups and return the number of the group.
+#' @rdname derive_agegr_fda
 #' @export
-compute_agegrn <- function(x, breaks, labels = NULL, geq = TRUE) {
-  as.integer(do.call(compute_agegr, as.list(environment(NULL))))
+#' @details `derive_agegr_ema` Derive age groups according to EMA ().
+#' @examples
+#' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+derive_agegr_ema <- function(dataset, age_var, new_var) {
+  assert_that(is.data.frame(dataset))
+
+  age_var <- enquo(age_var)
+  new_var <- enquo(new_var)
+
+  assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
+
+  mutate(
+    dataset,
+    !!new_var := cut(
+      x = !!age_var,
+      breaks = c(-Inf, 18, 65, 85, Inf),
+      labels = c(NA_character_, "18-64", "65-84", ">=85"),
+      include.lowest = T,
+      right = F
+    )
+  )
 }
