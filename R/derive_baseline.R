@@ -26,8 +26,8 @@
 #'   "TEST01", "PAT01",  "PARAM02", NA,    "N",
 #'   "TEST01", "PAT01",  "PARAM02",  8.35, "N"
 #' )
-#' derive_var_base(dataset, by_vars = exprs(USUBJID, PARAMCD))
-derive_var_base <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)) {
+#' derive_var_base(dataset, by_vars = vars(USUBJID, PARAMCD))
+derive_var_base <- function(dataset, by_vars = vars(USUBJID, PARAMCD, BASETYPE)) {
   derive_baseline(dataset, by_vars = by_vars, source_var = AVAL, new_var = BASE)
 }
 
@@ -57,8 +57,8 @@ derive_var_base <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)
 #'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
 #'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
 #' )
-#' derive_var_basec(dataset, by_vars = exprs(USUBJID, PARAMCD))
-derive_var_basec <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)) {
+#' derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
+derive_var_basec <- function(dataset, by_vars = vars(USUBJID, PARAMCD, BASETYPE)) {
   derive_baseline(dataset, by_vars = by_vars, source_var = AVALC, new_var = BASEC)
 }
 
@@ -96,7 +96,7 @@ derive_var_basec <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE
 #' )
 #' derive_baseline(
 #'   dataset,
-#'   by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
+#'   by_vars = vars(USUBJID, PARAMCD, BASETYPE),
 #'   source_var = AVALC,
 #'   new_var = BASEC
 #' )
