@@ -57,19 +57,23 @@ order specified for the \code{order} parameter and the mode specified for the
 library(dplyr, warn.conflict = FALSE)
 data("ex")
 
-# selecting first dose for each patient
-filter_extreme(ex,
-               order = exprs(EXSEQ),
-               by_vars = exprs(USUBJID),
-               mode = "first") \%>\%
+# Select first dose for each patient
+ex \%>\%
+  filter_extreme(
+    order = vars(EXSEQ),
+    by_vars = vars(USUBJID),
+    mode = "first"
+  ) \%>\%
   select(USUBJID, EXSEQ)
 
-# selecting highest dose for each patient
-filter_extreme(ex,
-               order = exprs(EXDOSE),
-               by_vars = exprs(USUBJID),
-               mode = "last",
-               check_type = "none") \%>\%
+# Select highest dose for each patient
+ex \%>\%
+  filter_extreme(
+    order = vars(EXDOSE),
+    by_vars = vars(USUBJID),
+    mode = "last",
+    check_type = "none"
+  ) \%>\%
   select(USUBJID, EXDOSE)
 }
 \author{

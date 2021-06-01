@@ -100,8 +100,8 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' @examples
 #' data(ex)
 #' has_unique_records(ex,
-#'   by_vars = exprs(USUBJID),
-#'   order = exprs(desc(EXENDTC))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
 #' )
 has_unique_records <- function(dataset,
                                by_vars = NULL,
@@ -205,8 +205,8 @@ has_unique_records <- function(dataset,
 #' @examples
 #' data(ex)
 #' assert_has_unique_records(ex,
-#'   by_vars = exprs(USUBJID),
-#'   order = exprs(desc(EXENDTC))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
 #' )
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,

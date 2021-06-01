@@ -68,10 +68,10 @@
 #' # flag last value for each patient, test, and visit, baseline observations are ignored
 #' derive_extreme_flag(vs,
 #'                     new_var = LASTFL,
-#'                     by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
-#'                     order = rlang::exprs(VSTPTNUM),
+#'                     by_vars = vars(USUBJID, VSTESTCD, VISIT),
+#'                     order = vars(VSTPTNUM),
 #'                     mode = "last",
-#'                     flag_filter = rlang::expr(VISIT != "BASELINE")) %>%
+#'                     flag_filter = VISIT != "BASELINE") %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 #'
@@ -108,40 +108,40 @@
 #' derive_extreme_flag(
 #'   input,
 #'   new_var = ABLFL,
-#'   by_vars = exprs(USUBJID, PARAMCD),
-#'   order = exprs(ADT),
+#'   by_vars = vars(USUBJID, PARAMCD),
+#'   order = vars(ADT),
 #'   mode = "last",
-#'   flag_filter = expr(AVISIT == "BASELINE")
+#'   flag_filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = High
 #' derive_extreme_flag(
 #'   input,
 #'   new_var = ABLFL,
-#'   by_vars = exprs(USUBJID, PARAMCD),
-#'   order = exprs(AVAL, ADT),
+#'   by_vars = vars(USUBJID, PARAMCD),
+#'   order = vars(AVAL, ADT),
 #'   mode = "last",
-#'   flag_filter = expr(AVISIT == "BASELINE")
+#'   flag_filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = Lo
 #' derive_extreme_flag(
 #'   input,
 #'   new_var = ABLFL,
-#'   by_vars = exprs(USUBJID, PARAMCD),
-#'   order = exprs(desc(AVAL), ADT),
+#'   by_vars = vars(USUBJID, PARAMCD),
+#'   order = vars(desc(AVAL), ADT),
 #'   mode = "last",
-#'   flag_filter = expr(AVISIT == "BASELINE")
+#'   flag_filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Average observation
 #' derive_extreme_flag(
 #'   input,
 #'   new_var = ABLFL,
-#'   by_vars = exprs(USUBJID, PARAMCD),
-#'   order = exprs(ADT, desc(AVAL)),
+#'   by_vars = vars(USUBJID, PARAMCD),
+#'   order = vars(ADT, desc(AVAL)),
 #'   mode = "last",
-#'   flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+#'   flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
 #'
 derive_extreme_flag <- function(dataset,
@@ -149,20 +149,20 @@ derive_extreme_flag <- function(dataset,
                                 by_vars,
                                 order,
                                 mode,
-                                flag_filter,
+                                flag_filter = NULL,
                                 check_type = "warning") {
   # check input parameters
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
-  assert_has_variables(dataset, map_chr(by_vars, as_string))
+  assert_has_variables(dataset, vars2chr(by_vars))
+  flag_filter <- enquo(flag_filter)
 
   # select data to consider for flagging
-  if (!missing(flag_filter)) {
+  if (!quo_is_null(flag_filter)) {
     data <- dataset %>% filter(!!flag_filter)
     data_ignore <- dataset %>%
       filter(!(!!flag_filter) | is.na(!!flag_filter))
-  }
-  else {
+  } else {
     data <- dataset
   }
 
@@ -176,8 +176,7 @@ derive_extreme_flag <- function(dataset,
   if (mode == "first") {
     data <- data %>%
       mutate(!!enquo(new_var) := if_else(temp_obs_nr == 1, "Y", NA_character_))
-  }
-  else{
+  } else {
     data <- data %>%
       group_by(!!!by_vars) %>%
       mutate(!!enquo(new_var) := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
@@ -185,7 +184,7 @@ derive_extreme_flag <- function(dataset,
   }
 
   # add ignored data
-  if (!missing(flag_filter)) {
+  if (!quo_is_null(flag_filter)) {
     data <- data %>% bind_rows(data_ignore)
   }
 

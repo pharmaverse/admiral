@@ -4,8 +4,8 @@
 \alias{derive_extreme_flag}
 \title{Adds a variable flagging the first or last observation within each by group}
 \usage{
-derive_extreme_flag(dataset, new_var, by_vars, order, mode, flag_filter,
-  check_type = "warning")
+derive_extreme_flag(dataset, new_var, by_vars, order, mode,
+  flag_filter = NULL, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -73,10 +73,10 @@ data("vs")
 # flag last value for each patient, test, and visit, baseline observations are ignored
 derive_extreme_flag(vs,
                     new_var = LASTFL,
-                    by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
-                    order = rlang::exprs(VSTPTNUM),
+                    by_vars = vars(USUBJID, VSTESTCD, VISIT),
+                    order = vars(VSTPTNUM),
                     mode = "last",
-                    flag_filter = rlang::expr(VISIT != "BASELINE")) \%>\%
+                    flag_filter = VISIT != "BASELINE") \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 
@@ -113,40 +113,40 @@ input <- tibble::tribble(
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = High
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(AVAL, ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(AVAL, ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = Lo
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(desc(AVAL), ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(desc(AVAL), ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Average observation
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(ADT, desc(AVAL)),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(ADT, desc(AVAL)),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+  flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
 
 }

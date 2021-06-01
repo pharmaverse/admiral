@@ -3,6 +3,8 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
+\alias{vars}
+\alias{desc}
 \alias{expr}
 \alias{exprs}
 \title{Objects exported from other packages}
@@ -12,6 +14,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{desc}}}
+
   \item{rlang}{\code{\link[rlang]{expr}}, \code{\link[rlang]{exprs}}}
 }}
 

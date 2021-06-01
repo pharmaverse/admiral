@@ -1,9 +1,10 @@
 #' @keywords internal
 #' @importFrom dplyr anti_join arrange bind_rows case_when desc ends_with full_join filter group_by
-#'             if_else mutate n left_join pull rename row_number select slice starts_with
+#'             if_else mutate n left_join pull rename row_number select slice starts_with vars
 #'             transmute ungroup
 #' @importFrom magrittr %>%
-#' @importFrom rlang := abort arg_match as_string enquo expr exprs inform quo_is_null sym syms warn
+#' @importFrom rlang := abort arg_match as_string enquo expr exprs inform is_call
+#'             is_symbol quo_get_expr quo_is_null sym syms warn
 #' @importFrom utils capture.output
 #' @importFrom purrr map map2 map_chr map_lgl reduce
 #' @importFrom stringr str_c str_detect str_remove str_trim

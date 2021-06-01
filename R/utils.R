@@ -1,11 +1,14 @@
 #' @export
+dplyr::vars
+
+#' @export
+dplyr::desc
+
+#' @export
 rlang::expr
 
 #' @export
 rlang::exprs
-
-#' @export
-dplyr::vars
 
 #' Enumerate Multiple Strings
 #'
@@ -66,6 +69,14 @@ squote <- function(x) {
   !(x %in% table)
 }
 
+#' Turn a List of Quosures into a Character Vector
+#'
+#' @param quosures A `list` of `quosures` created using [`vars()`]
+#'
+#' @noRd
+#'
+#' @examples
+#' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }

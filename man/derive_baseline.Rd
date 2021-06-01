@@ -37,7 +37,7 @@ dataset <- tibble::tribble(
 )
 derive_baseline(
   dataset,
-  by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
+  by_vars = vars(USUBJID, PARAMCD, BASETYPE),
   source_var = AVALC,
   new_var = BASEC
 )
