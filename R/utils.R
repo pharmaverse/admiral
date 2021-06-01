@@ -4,6 +4,9 @@ rlang::expr
 #' @export
 rlang::exprs
 
+#' @export
+dplyr::vars
+
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
@@ -43,6 +46,7 @@ backquote <- function(x) {
 squote <- function(x) {
   paste0("'", x, "'")
 }
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
@@ -60,4 +64,8 @@ squote <- function(x) {
 #' "a" %!in% c("b", "v", "k")
 `%!in%` <- function(x, table) {
   !(x %in% table)
+}
+
+vars2chr <- function(quosures) {
+  map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
