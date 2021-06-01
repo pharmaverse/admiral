@@ -92,7 +92,7 @@ derive_last_dose(
   output_var = LDOSEDTM,
   output_datetime = TRUE,
   check_dates_only = FALSE,
-  traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+  traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
 )
 
 }
