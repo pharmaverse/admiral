@@ -7,7 +7,7 @@
 \usage{
 derive_agegr_fda(dataset, age_var, new_var)
 
-derive_agegr_ema(dataset, age_var, new_var)
+derive_agegr_ema(dataset, age_var, new_var, adults = TRUE)
 }
 \arguments{
 \item{dataset}{Input dataset.}
@@ -15,21 +15,27 @@ derive_agegr_ema(dataset, age_var, new_var)
 \item{age_var}{AGE variable.}
 
 \item{new_var}{New variable to be created.}
+
+\item{adults}{Logical, should the age group be valid for adults studies or pediatric studies?
+Defaults to \code{TRUE} (adult studies).}
 }
 \value{
 \code{dataset} with new column \code{new_var} of class factor.
 }
 \description{
-Functions for deriving standardized age groups
+Functions for deriving standardized age groups.
 }
 \details{
-\code{derive_agegr_fda} Derive age groups according to FDA ().
+\code{derive_agegr_fda} Derive age groups according to FDA
+(\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} -> Baseline Measure Information).
 
-\code{derive_agegr_ema} Derive age groups according to EMA ().
+\code{derive_agegr_ema} Derive age groups according to EMA
+(\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 }
 \examples{
 derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = F)
 }
 \author{
 Ondrej Slama
