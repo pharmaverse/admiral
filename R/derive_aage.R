@@ -111,7 +111,7 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
 #' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
-#' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = F)
+#' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
   assert_that(
     is.data.frame(dataset),
