@@ -10,6 +10,8 @@
 #' @param dose_start The dose start date variable.
 #' @param dose_end The dose end date variable.
 #' @param analysis_date The analysis date variable.
+#' @param dataset_seq_var The sequence variable
+#' (this together with `by_vars` creates the keys of `dataset`).
 #' @param output_var The output variable.
 #' @param output_datetime Logical. Should only date or date-time variable be returned?
 #' Defaults to `TRUE` (i.e. date-time variable).
@@ -17,6 +19,8 @@
 #' An assumption that start and end dates of treatment match is checked.
 #' By default (`FALSE`), the date as well as the time component is checked.
 #' If set to `TRUE`, then only the date component of those variables is checked.
+#' @param traceability_vars A named list returned by `vars` listing the traceability variables,
+#' e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`
 #'
 #' @details All date (date-time) variables can be characters in standard ISO format or
 #' of date / date-time class.
@@ -48,9 +52,26 @@
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
+#'   dataset_seq_var = AESEQ,
 #'   output_var = LDOSEDTM,
 #'   output_datetime = TRUE,
 #'   check_dates_only = FALSE
+#' )
+#'
+#' # or with traceability variables
+#' derive_last_dose(
+#'   head(ae, 100),
+#'   head(ex_single, 100),
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
+#'     nchar(as.character(EXENDTC)) >= 10,
+#'   dose_start = EXSTDTC,
+#'   dose_end = EXENDTC,
+#'   analysis_date = AESTDTC,
+#'   dataset_seq_var = AESEQ,
+#'   output_var = LDOSEDTM,
+#'   output_datetime = TRUE,
+#'   check_dates_only = FALSE,
+#'   traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
 #' )
 #'
 derive_last_dose <- function(dataset,
@@ -60,16 +81,19 @@ derive_last_dose <- function(dataset,
                              dose_start,
                              dose_end,
                              analysis_date,
+                             dataset_seq_var,
                              output_var,
                              output_datetime = TRUE,
-                             check_dates_only = FALSE) {
+                             check_dates_only = FALSE,
+                             traceability_vars = vars()) {
 
   assert_that(
     !dplyr::is_grouped_df(dataset),
     !dplyr::is_grouped_df(dataset_ex),
     is.list(by_vars),
     rlang::is_scalar_logical(output_datetime),
-    rlang::is_scalar_logical(check_dates_only)
+    rlang::is_scalar_logical(check_dates_only),
+    is.list(traceability_vars)
   )
 
   # apply filtering condition
@@ -78,16 +102,20 @@ derive_last_dose <- function(dataset,
     dataset_ex <- filter(dataset_ex, !!filter_ex)
   }
 
+  # substitute dataset variables
   dose_start <- enquo(dose_start)
   dose_end <- enquo(dose_end)
   analysis_date <- enquo(analysis_date)
+  dataset_seq_var <- enquo(dataset_seq_var)
   output_var <- enquo(output_var)
+
+  # by_vars converted to string
   by_vars_str <- vapply(by_vars,
                         function(x) as_string(rlang::quo_get_expr(x)),
                         character(1),
                         USE.NAMES = F)
 
-  # check variables existence
+  # check variables existence - dataset
   assert_has_variables(
     dataset,
     c(by_vars_str,
@@ -96,6 +124,7 @@ derive_last_dose <- function(dataset,
     )
   )
 
+  # check variables existence - dataset_ex
   assert_has_variables(
     dataset_ex,
     c(by_vars_str,
@@ -118,16 +147,24 @@ derive_last_dose <- function(dataset,
     ))
   }
 
-  # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end)
+  # run traceability if requested
+  if (length(traceability_vars) != 0) {
+    trace_vars_str <- names(traceability_vars)
+    dataset_ex <- mutate(dataset_ex, !!!traceability_vars)
+  } else {
+    trace_vars_str <- character(0)
+  }
 
-  # calculate last dose date
+  # select only a subset of columns
+  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, trace_vars_str)
+
+  # calculate the last dose date
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
     dplyr::mutate_at(dplyr::vars(!!dose_end, !!analysis_date),
                      ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
-    group_by(!!!by_vars, .data$AESEQ) %>%
+    group_by(!!!by_vars, !!dataset_seq_var) %>%
     mutate(
       tmp_exendtc = impute_dtc(dtc = !!dose_end,
                                date_imputation = NULL,
@@ -136,10 +173,25 @@ derive_last_dose <- function(dataset,
       tmp_aestdtc = impute_dtc(dtc = !!analysis_date,
                                date_imputation = NULL,
                                time_imputation = "23:59:59") %>%
-        convert_dtc_to_dtm()) %>%
-    dplyr::summarise(!!output_var := compute_ldosedtm(exendtc = .data$tmp_exendtc,
-                                                      aestdtc = .data$tmp_aestdtc)) %>%
-    ungroup()
+        convert_dtc_to_dtm())
+
+  # if no traceability variables are required, simply calculate the last dose date
+  if (length(traceability_vars) == 0) {
+    res <- res %>%
+      dplyr::summarise(ldose_idx = compute_ldose_idx(exendtc = .data$tmp_exendtc,
+                                                     aestdtc = .data$tmp_aestdtc),
+                       !!output_var := .data$tmp_exendtc[.data$ldose_idx]) %>%
+      ungroup()
+  } else {
+    # calculate the last dose date and get the appropriate traceability variables
+    res <- res %>%
+      mutate(ldose_idx = compute_ldose_idx(exendtc = .data$tmp_exendtc,
+                                           aestdtc = .data$tmp_aestdtc),
+             !!output_var := .data$tmp_exendtc[.data$ldose_idx]) %>%
+      dplyr::mutate_at(trace_vars_str, list(~ .[.data$ldose_idx])) %>%
+      dplyr::distinct(!!output_var, !!!syms(trace_vars_str)) %>%
+      ungroup()
+  }
 
   # return either date or date-time variable
   if (!output_datetime) {
@@ -148,23 +200,26 @@ derive_last_dose <- function(dataset,
 
   # return dataset with additional column
   left_join(dataset,
-            dplyr::distinct(res, !!!by_vars, .data$AESEQ, !!output_var),
-            by = c(by_vars_str, "AESEQ"))
+            dplyr::distinct(res, !!!by_vars, !!dataset_seq_var, !!output_var,
+                            !!!syms(trace_vars_str)),
+            by = c(by_vars_str, as_string(rlang::quo_get_expr(dataset_seq_var))))
 }
 
-#' Helper function to calculate last dose
+
+#' Helper function to get the index of last dose date
 #'
 #' @param exendtc dose end date
 #' @param aestdtc analysis date
 #'
-#' @return date-time vector
-compute_ldosedtm <- function(exendtc, aestdtc) {
+#' @return index. The last dose date is then `exendtc[return_value]`
+compute_ldose_idx <- function(exendtc, aestdtc) {
   if (any(!is.na(exendtc) & !is.na(aestdtc)) && any(exendtc <= aestdtc)) {
-    max(exendtc[exendtc <= aestdtc])
+    which.max(exendtc[exendtc <= aestdtc])
   } else {
-    as.POSIXct(NA)
+    NA_integer_
   }
 }
+
 
 #' Helper function to convert date (or date-time) objects to characters of dtc format
 #' (-DTC type of variable)

@@ -6,7 +6,8 @@
 \usage{
 derive_last_dose(dataset, dataset_ex, filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID), dose_start, dose_end, analysis_date,
-  output_var, output_datetime = TRUE, check_dates_only = FALSE)
+  dataset_seq_var, output_var, output_datetime = TRUE,
+  check_dates_only = FALSE, traceability_vars = vars())
 }
 \arguments{
 \item{dataset}{Input AE dataset.}
@@ -25,6 +26,9 @@ Defaults to NULL.}
 
 \item{analysis_date}{The analysis date variable.}
 
+\item{dataset_seq_var}{The sequence variable
+(this together with \code{by_vars} creates the keys of \code{dataset}).}
+
 \item{output_var}{The output variable.}
 
 \item{output_datetime}{Logical. Should only date or date-time variable be returned?
@@ -34,6 +38,9 @@ Defaults to \code{TRUE} (i.e. date-time variable).}
 An assumption that start and end dates of treatment match is checked.
 By default (\code{FALSE}), the date as well as the time component is checked.
 If set to \code{TRUE}, then only the date component of those variables is checked.}
+
+\item{traceability_vars}{A named list returned by \code{vars} listing the traceability variables,
+e.g. \code{vars(DTHDOM = "DS", DTHSEQ = DSSEQ)}}
 }
 \value{
 AE dataset with additional column \code{output_var}.
@@ -66,9 +73,26 @@ derive_last_dose(
   dose_start = EXSTDTC,
   dose_end = EXENDTC,
   analysis_date = AESTDTC,
+  dataset_seq_var = AESEQ,
   output_var = LDOSEDTM,
   output_datetime = TRUE,
   check_dates_only = FALSE
+)
+
+# or with traceability variables
+derive_last_dose(
+  head(ae, 100),
+  head(ex_single, 100),
+  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
+    nchar(as.character(EXENDTC)) >= 10,
+  dose_start = EXSTDTC,
+  dose_end = EXENDTC,
+  analysis_date = AESTDTC,
+  dataset_seq_var = AESEQ,
+  output_var = LDOSEDTM,
+  output_datetime = TRUE,
+  check_dates_only = FALSE,
+  traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
 )
 
 }
