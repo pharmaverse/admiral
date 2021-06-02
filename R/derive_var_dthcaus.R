@@ -14,7 +14,9 @@
 #'
 #' @keywords adsl
 #'
-#' @author Shimeng Huang
+#' @author
+#' Shimeng Huang
+#' Samia Kabi
 #'
 #' @return The input dataset with `DTHCAUS` and `DTHDOM` added.
 #'
@@ -114,7 +116,7 @@ derive_var_dthcaus <- function(dataset, ...) {
     # add traceabilty param if required
     # inconsitent traceability lists issue a warning
     if (ii > 1) {
-      warn_if_inconsitent_list(
+      warn_if_inconsistent_list(
         base = sources[[ii - 1]]$traceabilty,
         compare = sources[[ii]]$traceabilty, i = ii
       )

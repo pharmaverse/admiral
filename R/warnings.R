@@ -124,7 +124,7 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 
 #' Are records unique?
 #'
-#' Checks if the records of a dateset are unique with respect to the specified
+#' Checks if the records of a dataset are unique with respect to the specified
 #' list of by variables and order. If the check fails, a warning is issued.
 #'
 #' @param dataset The input dataset to check
@@ -185,16 +185,16 @@ warn_has_unique_records <- function(dataset,
 #'
 #' @examples
 #' # no warning
-#' warn_if_inconsitent_list(
+#' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
 #'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
 #' )
 #' # warning
-#' warn_if_inconsitent_list(
+#' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
 #'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
 #' )
-warn_if_inconsitent_list <- function(base, compare, i = 2) {
+warn_if_inconsistent_list <- function(base, compare, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
       paste("The variables used for traceability in `dthcaus_source()` are not consistent,",
