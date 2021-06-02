@@ -173,6 +173,9 @@ warn_has_unique_records <- function(dataset,
 #'
 #' @param compare A named list
 #'
+#' @param list_name A string
+#' the name of the list
+#'
 #' @param i the index id to compare the 2 lists
 #'
 #' @author Samia Kabi
@@ -187,17 +190,19 @@ warn_has_unique_records <- function(dataset,
 #' # no warning
 #' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
-#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
 #' )
 #' # warning
 #' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
 #' )
-warn_if_inconsistent_list <- function(base, compare, i = 2) {
+warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
-      paste("The variables used for traceability in `dthcaus_source()` are not consistent,",
+      paste("The variables used for traceability in `", list_name, "` are not consistent,",
         "please check:",
         paste(
           "source ", i - 1, ", Variables are given as: ",

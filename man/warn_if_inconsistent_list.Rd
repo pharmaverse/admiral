@@ -4,12 +4,15 @@
 \alias{warn_if_inconsistent_list}
 \title{Warn if 2 list have not the same names or length}
 \usage{
-warn_if_inconsistent_list(base, compare, i = 2)
+warn_if_inconsistent_list(base, compare, list_name, i = 2)
 }
 \arguments{
 \item{base}{A named list}
 
 \item{compare}{A named list}
+
+\item{list_name}{A string
+the name of the list}
 
 \item{i}{the index id to compare the 2 lists}
 }
@@ -23,12 +26,14 @@ Checks if 2 list inputs have the same names and same number of elements, issue a
 # no warning
 warn_if_inconsistent_list(
   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
-  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+  list_name = "Test"
 )
 # warning
 warn_if_inconsistent_list(
   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
+  compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+  list_name = "Test"
 )
 }
 \author{

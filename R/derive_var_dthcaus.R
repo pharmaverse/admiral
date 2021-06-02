@@ -118,7 +118,9 @@ derive_var_dthcaus <- function(dataset, ...) {
     if (ii > 1) {
       warn_if_inconsistent_list(
         base = sources[[ii - 1]]$traceabilty,
-        compare = sources[[ii]]$traceabilty, i = ii
+        compare = sources[[ii]]$traceabilty,
+        list_name = "dthcaus_source()",
+        i = ii
       )
     }
     if (!is.null(sources[[ii]]$traceabilty)) {

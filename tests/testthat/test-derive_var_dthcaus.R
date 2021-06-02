@@ -8,7 +8,6 @@ test_that("error on a dthcaus_source object with invalid mode", {
     mode = "blah",
     dthcaus = AEDECOD
   )
-  # class(tmp) <- "dthcaus_source"
   expect_error(validate_dthcaus_source(tmp))
 })
 
