@@ -1,14 +1,13 @@
 context("test-derive_dthcaus")
 
 test_that("error on a dthcaus_source object with invalid mode", {
-  tmp <- dthcaus_source(
+  expect_error(dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
     date_var = AEDTHDTC,
     mode = "blah",
     dthcaus = AEDECOD
-  )
-  expect_error(validate_dthcaus_source(tmp))
+  ))
 })
 
 test_that("DTHCAUS is added from AE and DS", {
@@ -180,6 +179,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
+
 test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 input datasets, partial dates", { # nolint
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,

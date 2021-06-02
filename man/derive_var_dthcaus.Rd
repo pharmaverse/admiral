@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_dthcaus.R
 \name{derive_var_dthcaus}
 \alias{derive_var_dthcaus}
-\title{Derive Death Cause (and traceability variables)}
+\title{Derive Death Cause}
 \usage{
 derive_var_dthcaus(dataset, ...)
 }
@@ -12,13 +12,13 @@ derive_var_dthcaus(dataset, ...)
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 }
 \value{
-The input dataset with \code{DTHCAUS} and \code{DTHDOM} added.
+The input dataset with \code{DTHCAUS} variable added.
 }
 \description{
-Derives death cause (\code{DTHCAUS}) and add traceability variables if required.
+Derive death cause (\code{DTHCAUS}) and add traceability variables if required.
 }
 \details{
-This function derives \code{DTHCAUS} along with the user-defined tracebility
+This function derives \code{DTHCAUS} along with the user-defined traceability
 variables, if required. If a subject has death info from multiple sources,
 the one from the source with the earliest death date will be used. If dates are
 equivalent, the first source will be kept, so the user should provide the inputs in
@@ -40,7 +40,8 @@ ds <- tibble::tribble(
   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 )
-# Derive DTHCAUS only
+
+# Derive `DTHCAUS` only
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
@@ -59,7 +60,7 @@ src_ds <- dthcaus_source(
 
 derive_var_dthcaus(adsl, src_ae, src_ds)
 
-# Derive DTHCAUS and add traceability param
+# Derive `DTHCAUS` and add traceability variables
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
