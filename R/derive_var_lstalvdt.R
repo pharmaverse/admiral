@@ -52,19 +52,6 @@
 #'
 #'   \emph{Permitted Values:} \code{"first"}, \code{"last"} }
 #'
-#' @param mode Filter mode
-#'
-#'   The filter mode determines if the first or last observation of each by
-#'   group (with respect to the new variable) is selected.
-#'
-#'   Permitted Values: `"first"`, `"last"`
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Default: `exprs(USUBJID)`
-#'
-#'   Permitted Values: list of variables
-#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -113,17 +100,13 @@
 #'
 #' adsl_date <- list(dataset = adsl,
 #'                   var = expr(TRTEDT))
-#' derive_extreme_date_var(dm,
-#'                         new_var = LSTALVDT,
-#'                         sources = list(ae_start, ae_end, lb_date, adsl_date),
-#'                         mode = "last") %>%
+#' derive_var_lstalvdt(dm,
+#'                     sources = list(ae_start, ae_end, lb_date, adsl_date)) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
-derive_extreme_date_var <- function(dataset,
-                                    new_var,
-                                    sources,
-                                    by_vars = exprs(USUBJID),
-                                    mode) {
+derive_var_lstalvdt <- function(dataset,
+                                ...) {
+  sources <- list(...)
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     if (!is.null(sources[[i]]$filter)) {
@@ -133,33 +116,98 @@ derive_extreme_date_var <- function(dataset,
     else {
       add_data[[i]] <- sources[[i]]$dataset
     }
-    if (!is.null(sources[[i]]$order)) {
-      add_data[[i]] <- filter_extreme(add_data[[i]],
-                                      order = sources[[i]]$order,
-                                      by_vars = by_vars,
-                                      mode = sources[[i]]$mode)
-    }
-    source_var <- sources[[i]]$var
-    if (is.Date(add_data[[i]][[as_string(source_var)]])) {
+    add_data[[i]] <- filter_extreme(add_data[[i]],
+                                    order = sources[[i]]$date_var,
+                                    by_vars = exprs(USUBJID),
+                                    mode = "last",
+                                    check_type = "none")
+    date_var <- sources[[i]]$date_var
+    if (is.Date(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!by_vars,
-                                 !!enquo(new_var) := !!source_var)
+                                 USUBJID,
+                                 !!!sources[[i]]$traceability_vars,
+                                 LSTALVDT = !!date_var)
     }
-    else if (is.instant(add_data[[i]][[as_string(source_var)]])) {
+    else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!by_vars,
-                                 !!enquo(new_var) := date(!!source_var))
+                                 USUBJID,
+                                 !!!sources[[i]]$traceability_vars,
+                                 LSTALVDT = date(!!date_var))
     }
     else {
       add_data[[i]] <- transmute(add_data[[i]],
-                               !!!by_vars,
-                               !!enquo(new_var) := convert_dtc_to_dt(!!source_var))
+                               USUBJID,
+                               !!!sources[[i]]$traceability_vars,
+                               LSTALVDT = convert_dtc_to_dt(!!date_var))
     }
   }
-  bind_rows(add_data) %>%
-    filter_extreme(by_vars = by_vars,
-                   order = exprs(!!enquo(new_var)),
-                   mode = mode,
-                   check_type = "none") %>%
-    left_join(dataset, all_data, by = map_chr(by_vars, as_string))
+
+  all_data <- bind_rows(add_data) %>%
+    filter_extreme(by_vars = exprs(USUBJID),
+                   order = exprs(LSTALVDT),
+                   mode = "last",
+                   check_type = "none")
+
+  # remove label to avoid warning from left_join
+  attr(dataset$USUBJID, "label") <- NULL
+  left_join(dataset, all_data, by = c("USUBJID"))
+}
+
+#' Create an `lstalvdt_source` object
+#'
+#' @param dataset A data.frame containing a source dataset.
+#' @param filter An unquoted condition for filtering `dataset`.
+#' @param date_var An unquoted symbol to be used for sorting `dataset`.
+#' @param traceabilty_vars A named list returned by `vars()` defining the traceability variables, e.g.
+#'  `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")`.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @return An object of class "lstalvdt_source".
+lstalvdt_source <- function(dataset,
+                            filter = NULL,
+                            date_var,
+                            traceability_vars = NULL) {
+  if (is.null(filter)) {
+    filter_value <- NULL
+  }
+  else {
+    filter_value <- enquo(filter)
+  }
+  if (!(is.character(enexpr(date_var)) | is.symbol(enexpr(date_var)))) {
+    abort(paste0("Invalid value of date_var parameter:\n",
+                capture_output(print(enexpr(date_var))),"\n",
+                "The value has to be a symbol or a character.",
+                collapse = "\n"))
+  }
+  out <- list(
+    dataset = dataset,
+    filter = filter_value,
+    date_var = ensym(date_var),
+    traceability_vars = traceability_vars
+  )
+  class(out) <- c("lstalvdt_source", "list")
+  validate_lstalvdt_source(out)
+}
+
+#' Validate an object is indeed a `lstalvdt_source` object
+#'
+#' @param obj An object to be validated.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @return The original object.
+validate_lstalvdt_source <- function(obj) {
+  assert_that(inherits(obj, "lstalvdt_source"))
+  values <- unclass(obj)
+  assert_that(is.data.frame(values$dataset))
+  assert_that(is.symbol(values$date_var))
+  if (!is.null(values$traceability_vars)) {
+    assert_that(is_varval_list(values$traceability_vars))
+  }
+  obj
 }
