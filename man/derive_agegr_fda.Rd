@@ -27,7 +27,8 @@ Functions for deriving standardized age groups.
 }
 \details{
 \code{derive_agegr_fda} Derive age groups according to FDA
-(\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} -> Baseline Measure Information).
+(\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
+Baseline Measure Information).
 
 \code{derive_agegr_ema} Derive age groups according to EMA
 (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).

@@ -80,7 +80,8 @@ NULL
 #' @rdname derive_agegr_fda
 #' @export
 #' @details `derive_agegr_fda` Derive age groups according to FDA
-#' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} -> Baseline Measure Information).
+#' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
+#' Baseline Measure Information).
 #' @examples
 #' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 derive_agegr_fda <- function(dataset, age_var, new_var) {
