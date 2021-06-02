@@ -185,16 +185,16 @@ warn_has_unique_records <- function(dataset,
 #'
 #' @examples
 #' # no warning
-#' warn_if_inconsitent_list(
+#' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
 #'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
 #' )
 #' # warning
-#' warn_if_inconsitent_list(
+#' warn_if_inconsistent_list(
 #'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
 #'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ)
 #' )
-warn_if_inconsitent_list <- function(base, compare, i = 2) {
+warn_if_inconsistent_list <- function(base, compare, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
       paste("The variables used for traceability in `dthcaus_source()` are not consistent,",
