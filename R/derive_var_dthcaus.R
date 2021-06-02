@@ -1,16 +1,16 @@
-#' Derive Death Cause (and traceability variables)
+#' Derive Death Cause
 #'
-#' Derives death cause (`DTHCAUS`) and add traceability variables if required.
-#'
-#' @details This function derives `DTHCAUS` along with the user-defined tracebility
-#'  variables, if required. If a subject has death info from multiple sources,
-#'  the one from the source with the earliest death date will be used. If dates are
-#'  equivalent, the first source will be kept, so the user should provide the inputs in
-#'  the preferred order.
+#' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
 #' @param dataset Input dataset. `USUBJID` is an expected column.
-#'
 #' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
+#'
+#' @details
+#' This function derives `DTHCAUS` along with the user-defined traceability
+#' variables, if required. If a subject has death info from multiple sources,
+#' the one from the source with the earliest death date will be used. If dates are
+#' equivalent, the first source will be kept, so the user should provide the inputs in
+#' the preferred order.
 #'
 #' @keywords adsl
 #'
@@ -18,7 +18,7 @@
 #' Shimeng Huang
 #' Samia Kabi
 #'
-#' @return The input dataset with `DTHCAUS` and `DTHDOM` added.
+#' @return The input dataset with `DTHCAUS` variable added.
 #'
 #' @export
 #'
@@ -40,7 +40,8 @@
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
 #'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
 #' )
-#' # Derive DTHCAUS only
+#'
+#' # Derive `DTHCAUS` only
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
@@ -59,7 +60,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
 #'
-#' # Derive DTHCAUS and add traceability param
+#' # Derive `DTHCAUS` and add traceability variables
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
@@ -159,19 +160,26 @@ derive_var_dthcaus <- function(dataset, ...) {
 #' @param dataset A data.frame containing a source dataset.
 #' @param filter An expression used for filtering `dataset`.
 #' @param date_var A character vector to be used for sorting `dataset`.
-#' @param mode One of "first" or "last".
-#' @param dthcaus A variable name or a string --- if a variable name, e.g., `AEDECOD`,
+#' @param mode One of `"first"` or `"last"`.
+#' @param dthcaus A variable name or a string literal --- if a variable name, e.g., `AEDECOD`,
 #'   it is the variable in the source dataset to be used to assign values to
-#'   `DTHCAUS`; if a string, it is the fixed value to be assigned to `DTHCAUS`.
-#' @param traceabilty_vars A named list returned by `vars` listing the traceability
+#'   `DTHCAUS`; if a string literal, e.g. `"Adverse Event"`, it is the fixed value
+#'   to be assigned to `DTHCAUS`.
+#' @param traceabilty_vars A named list returned by [`vars()`] listing the traceability
 #'  variables, e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
 #'
 #' @author Shimeng Huang
 #'
+#' @seealso [`derive_var_dthcaus()`]
+#'
 #' @export
 #'
 #' @return An object of class "dthcaus_source".
-dthcaus_source <- function(dataset, filter, date_var, mode = "first", dthcaus,
+dthcaus_source <- function(dataset,
+                           filter,
+                           date_var,
+                           mode = "first",
+                           dthcaus,
                            traceabilty_vars = NULL) {
   out <- list(
     dataset = dataset,
@@ -191,8 +199,6 @@ dthcaus_source <- function(dataset, filter, date_var, mode = "first", dthcaus,
 #'
 #' @author Shimeng Huang
 #'
-#' @export
-#'
 #' @return The original object.
 validate_dthcaus_source <- function(x) {
   assert_that(inherits(x, "dthcaus_source"))
@@ -201,7 +207,7 @@ validate_dthcaus_source <- function(x) {
   assert_that(is_expr(values$filter))
   assert_that(is_expr(values$date))
   assert_that(values$mode %in% c("first", "last"))
-  assert_that(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
+  assert_that(quo_is_symbol(values$dthcaus) | is.character(quo_get_expr(values$dthcaus)))
   assert_that(is.list(values$traceabilty) | is.null(values$traceability))
   x
 }

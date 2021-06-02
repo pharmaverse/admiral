@@ -14,13 +14,14 @@ dthcaus_source(dataset, filter, date_var, mode = "first", dthcaus,
 
 \item{date_var}{A character vector to be used for sorting \code{dataset}.}
 
-\item{mode}{One of "first" or "last".}
+\item{mode}{One of \code{"first"} or \code{"last"}.}
 
-\item{dthcaus}{A variable name or a string --- if a variable name, e.g., \code{AEDECOD},
+\item{dthcaus}{A variable name or a string literal --- if a variable name, e.g., \code{AEDECOD},
 it is the variable in the source dataset to be used to assign values to
-\code{DTHCAUS}; if a string, it is the fixed value to be assigned to \code{DTHCAUS}.}
+\code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value
+to be assigned to \code{DTHCAUS}.}
 
-\item{traceabilty_vars}{A named list returned by \code{vars} listing the traceability
+\item{traceabilty_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability
 variables, e.g. \code{vars(DTHDOM = "DS", DTHSEQ = DSSEQ)}.}
 }
 \value{
@@ -28,6 +29,9 @@ An object of class "dthcaus_source".
 }
 \description{
 Create an \code{dthcaus_source} object
+}
+\seealso{
+\code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}
 }
 \author{
 Shimeng Huang
