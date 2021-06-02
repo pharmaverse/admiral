@@ -23,14 +23,15 @@ The message to be displayed if the check fails.}
 \code{TRUE} if the records are unique, \code{FALSE} otherwise
 }
 \description{
-Checks if the records of a dateset are unique with respect to the specified
+Checks if the records of a dataset are unique with respect to the specified
 list of by variables and order. If the check fails, a warning is issued.
 }
 \examples{
 data(ex)
 warn_has_unique_records(ex,
-                        by_vars = exprs(USUBJID) ,
-                        order = exprs(desc(EXENDTC)))
+  by_vars = exprs(USUBJID),
+  order = exprs(desc(EXENDTC))
+)
 }
 \author{
 Stefan Bundfuss

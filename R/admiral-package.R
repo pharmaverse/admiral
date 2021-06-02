@@ -1,7 +1,7 @@
 #' @keywords internal
 #' @importFrom dplyr anti_join arrange bind_rows case_when desc ends_with full_join filter group_by
 #'             if_else mutate n left_join pull rename row_number select slice starts_with
-#'             transmute ungroup
+#'             transmute ungroup vars
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_string enquo expr exprs inform quo_is_null sym syms warn
 #' @importFrom utils capture.output

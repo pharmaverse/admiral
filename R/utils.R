@@ -1,8 +1,11 @@
 #' @export
 rlang::expr
 
-#'@export
+#' @export
 rlang::exprs
+
+#' @export
+dplyr::vars
 
 #' Enumerate Multiple Strings
 #'
