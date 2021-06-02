@@ -46,5 +46,21 @@ backquote <- function(x) {
 squote <- function(x) {
   paste0("'", x, "'")
 }
-
-`%!in%` <- Negate(`%in%`)
+#' Negated Value Matching
+#'
+#' Returns a `logical` vector indicating if there is *no* match of the
+#' left operand in the right operand.
+#'
+#' @param x The values to be matched
+#' @param table The values to be matched against
+#'
+#' @rdname utils
+#' @name not_in
+#'
+#' @export
+#'
+#' @examples
+#' "a" %!in% c("b", "v", "k")
+`%!in%` <- function(x, table) {
+  !(x %in% table)
+}

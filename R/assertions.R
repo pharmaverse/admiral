@@ -303,7 +303,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^([0-9]{2})-([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "MID", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
   paste0(
@@ -337,7 +337,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #' assertthat::assert_that(is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
 }
 on_failure(is_valid_time_entry) <- function(call, env) {
   paste0(
