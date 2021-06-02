@@ -199,8 +199,6 @@ dthcaus_source <- function(dataset,
 #'
 #' @author Shimeng Huang
 #'
-#' @export
-#'
 #' @return The original object.
 validate_dthcaus_source <- function(x) {
   assert_that(inherits(x, "dthcaus_source"))
@@ -209,7 +207,7 @@ validate_dthcaus_source <- function(x) {
   assert_that(is_expr(values$filter))
   assert_that(is_expr(values$date))
   assert_that(values$mode %in% c("first", "last"))
-  assert_that(!is.symbol(values$dthcaus) | !is.character(values$dthcaus))
+  assert_that(quo_is_symbol(values$dthcaus) | is.character(quo_get_expr(values$dthcaus)))
   assert_that(is.list(values$traceabilty) | is.null(values$traceability))
   x
 }
