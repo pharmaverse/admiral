@@ -83,6 +83,9 @@ NULL
 #' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
 #' Baseline Measure Information).
 #' @examples
+#' data(dm)
+#' derive_agegr_fda(dm, AGE, AGEGR1)
+#'
 #' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 derive_agegr_fda <- function(dataset, age_var, new_var) {
   assert_that(is.data.frame(dataset))
@@ -92,16 +95,20 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 
   assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
 
-  mutate(
+  out <- mutate(
     dataset,
     !!new_var := cut(
       x = !!age_var,
-      breaks = c(-Inf, 19, 65, Inf),
-      labels = c(NA_character_, "19-64", ">=65"),
-      include.lowest = T,
-      right = F
+      breaks = c(19, 65, Inf),
+      labels = c("19-64", ">=65"),
+      include.lowest = TRUE,
+      right = FALSE
     )
   )
+  if (anyNA(dplyr::pull(out, !!new_var))) {
+    out <- mutate(out, !!new_var := addNA(!!new_var))
+  }
+  out
 }
 
 #' @rdname derive_agegr_fda
@@ -111,6 +118,9 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
+#' data(dm)
+#' derive_agegr_ema(dm, AGE, AGEGR1)
+#'
 #' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 #' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
@@ -125,27 +135,31 @@ derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
   assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
 
   if (adults) {
-    mutate(
+    out <- mutate(
       dataset,
       !!new_var := cut(
         x = !!age_var,
-        breaks = c(-Inf, 18, 65, 85, Inf),
-        labels = c(NA_character_, "18-64", "65-84", ">=85"),
-        include.lowest = T,
-        right = F
+        breaks = c(18, 65, 85, Inf),
+        labels = c("18-64", "65-84", ">=85"),
+        include.lowest = TRUE,
+        right = FALSE
       )
     )
   } else {
-    mutate(
+    out <- mutate(
       dataset,
       !!new_var := cut(
         x = !!age_var,
-        breaks = c(-Inf, 2, 12, 18, Inf),
+        breaks = c(-Inf, 2, 12, 18),
         labels = c("0-1 (Newborns / Infants / Toddlers)",
-                   "2-11 (Children)", "12-17 (Adolescents)", ">=18"),
-        include.lowest = T,
-        right = F
+                   "2-11 (Children)", "12-17 (Adolescents)"),
+        include.lowest = FALSE,
+        right = FALSE
       )
     )
   }
+  if (anyNA(dplyr::pull(out, !!new_var))) {
+    out <- mutate(out, !!new_var := addNA(!!new_var))
+  }
+  out
 }

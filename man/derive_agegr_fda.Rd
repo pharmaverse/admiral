@@ -34,7 +34,13 @@ Baseline Measure Information).
 (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 }
 \examples{
+data(dm)
+derive_agegr_fda(dm, AGE, AGEGR1)
+
 derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+data(dm)
+derive_agegr_ema(dm, AGE, AGEGR1)
+
 derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
 }
