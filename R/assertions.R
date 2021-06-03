@@ -486,7 +486,7 @@ on_failure(is_named_exprs) <- function(call, env) {
 }
 
 is_vars <- function(arg) {
-  inherits(arg, "quosures") && all(map_lgl(arg, rlang::quo_is_symbol))
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
 }
 on_failure(is_vars) <- function(call, env) {
   paste0(
