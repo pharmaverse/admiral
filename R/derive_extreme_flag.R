@@ -153,10 +153,17 @@ derive_extreme_flag <- function(dataset,
                                 mode,
                                 flag_filter = NULL,
                                 check_type = "warning") {
-  # check input parameters
+  assert_that(
+    is.data.frame(dataset),
+    is_vars(by_vars),
+    is_order_vars(order),
+    is.character(mode),
+    is.character(check_type)
+  )
+  assert_has_variables(dataset, vars2chr(by_vars))
   arg_match(mode, c("first", "last"))
   arg_match(check_type, c("none", "warning", "error"))
-  assert_has_variables(dataset, vars2chr(by_vars))
+
   flag_filter <- enquo(flag_filter)
 
   # select data to consider for flagging
