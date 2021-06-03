@@ -5,9 +5,6 @@ dplyr::vars
 dplyr::desc
 
 #' @export
-rlang::expr
-
-#' @export
 rlang::exprs
 
 #' @export
@@ -41,7 +38,7 @@ backquote <- function(x) {
   paste0("`", x, "`")
 }
 
-#' Wrap a String in SIngle Quotes
+#' Wrap a String in Single Quotes
 #'
 #' @param x A `character` vector
 #'

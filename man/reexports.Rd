@@ -5,7 +5,6 @@
 \alias{reexports}
 \alias{vars}
 \alias{desc}
-\alias{expr}
 \alias{exprs}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -16,6 +15,6 @@ below to see their documentation.
 \describe{
   \item{dplyr}{\code{\link[dplyr]{vars}}, \code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
 
-  \item{rlang}{\code{\link[rlang]{expr}}, \code{\link[rlang]{exprs}}}
+  \item{rlang}{\code{\link[rlang]{exprs}}}
 }}
 

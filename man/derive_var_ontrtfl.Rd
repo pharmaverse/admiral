@@ -102,7 +102,7 @@ derive_var_ontrtfl(
   date = ADTM,
   ref_start_date = TRTSDTM,
   ref_end_date = TRTEDTM,
-  filter_pre_timepoint = expr(TPT == "PRE")
+  filter_pre_timepoint = TPT == "PRE"
 )
 }
 \author{

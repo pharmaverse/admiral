@@ -50,7 +50,7 @@ derive_var_trtsdtm <- function(dataset,
 
   if (!quo_is_null(filter_ex)) {
     add <- dataset_ex %>%
-      filter(!!!filter_ex)
+      filter(!!filter_ex)
   } else {
     add <- dataset_ex
   }

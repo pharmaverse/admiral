@@ -114,7 +114,7 @@ test_that("`target` is set to 'Y' when `filter_pre_timepoint` is not 'PRE' and
     input,
     date = ADT,
     ref_start_date = TRTSDT,
-    filter_pre_timepoint = exprs(TPT == "PRE")
+    filter_pre_timepoint = TPT == "PRE"
   )
 
   expect_dfs_equal(

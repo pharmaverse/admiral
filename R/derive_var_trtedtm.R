@@ -49,7 +49,7 @@ derive_var_trtedtm <- function(dataset,
   filter_ex <- enquo(filter_ex)
 
   if (!quo_is_null(filter_ex)) {
-    add <- filter(dataset_ex, !!!filter_ex)
+    add <- filter(dataset_ex, !!filter_ex)
   } else {
     add <- dataset_ex
   }
