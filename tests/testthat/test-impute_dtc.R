@@ -115,3 +115,21 @@ test_that("impute to MID day/month if date is partial,Missing time part imputed 
     expected_output
   )
 })
+
+test_that("min_dates parameter works", {
+            expect_equal(impute_dtc("2020-12",
+                                    min_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
+                                                     lubridate::ymd_hms("2020-11-11T11:11:11")),
+                                    date_imputation = "first"),
+                         "2020-12-06T12:12:12"
+            )
+          })
+
+test_that("max_dates parameter works", {
+            expect_equal(impute_dtc("2020-12",
+                                    max_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
+                                                     lubridate::ymd_hms("2020-11-11T11:11:11")),
+                                    date_imputation = "last"),
+                         "2020-12-06T12:12:12"
+            )
+          })

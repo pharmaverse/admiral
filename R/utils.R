@@ -10,6 +10,9 @@ rlang::expr
 #' @export
 rlang::exprs
 
+#' @export
+dplyr::vars
+
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
