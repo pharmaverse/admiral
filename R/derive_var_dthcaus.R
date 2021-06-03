@@ -99,11 +99,8 @@ derive_var_dthcaus <- function(dataset, ...) {
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        # error when exprs converted in vars
-        # order = vars(!!sources[[ii]]$date),
-        # by_vars = vars(USUBJID),
-        order = exprs(!!sources[[ii]]$date),
-        by_vars = exprs(USUBJID),
+        order = vars(!!sources[[ii]]$date),
+        by_vars = vars(USUBJID),
         mode = sources[[ii]]$mode
       )
 
@@ -143,11 +140,8 @@ derive_var_dthcaus <- function(dataset, ...) {
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
     filter_extreme(
-      # error when exprs converted in vars
-      # order = vars(temp_date, temp_source_nr),
-      # by_vars = vars(USUBJID),
-      order = exprs(temp_date, temp_source_nr),
-      by_vars = exprs(USUBJID),
+      order = vars(temp_date, temp_source_nr),
+      by_vars = vars(USUBJID),
       mode = "first"
     ) %>%
     select(-starts_with("temp_"))
