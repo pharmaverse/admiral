@@ -329,7 +329,7 @@ convert_dtc_to_dt <- function(dtc) {
 convert_dtc_to_dtm <- function(dtc) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
-  
+
   # note T00:00:00 is not printed in dataframe
   case_when(
     nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),

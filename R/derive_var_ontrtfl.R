@@ -148,9 +148,8 @@ derive_var_ontrtfl <- function(dataset,
                    if_else(!is.na(!!ref_start_date) &
                               !is.na(!!date) & !!ref_start_date < !!date &
                               !is.na(!!ref_end_date) &
-                              !!date <= (!!ref_end_date + days(x = !!ref_end_window)), "Y", !!new_var))
+                              !!date <= (!!ref_end_date + days(x = !!ref_end_window)), "Y", !!new_var)) # nolint
    }
 
    dataset
-
 }

@@ -512,7 +512,7 @@ on_failure(is_order_vars) <- function(call, env) {
   paste0(
     backquote(deparse(call$arg)),
     " is not a valid input for `order_vars`.",
-    " Valid inputs are created using `vars()` and may only contain symbols or calls using `desc()`.\n\n",
+    " Valid inputs are created using `vars()` and may only contain symbols or calls involving `desc()`.\n\n", # nolint
     "  # Bad:\n",
     "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
     "  # Good:\n",

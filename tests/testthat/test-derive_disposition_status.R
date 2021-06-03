@@ -83,4 +83,3 @@ test_that("Derive EOTSTT using a study specific mapping", {
     keys = c("STUDYID", "USUBJID")
   )
 })
-
