@@ -1,0 +1,181 @@
+---
+title: "Creating a BDS Finding ADaM"
+author: "admiral team"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Creating ADVS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This article describes creating a BDS finding ADaM. Examples are currently 
+presented and tested in the context of ADVS.  However, the examples could be
+applied to other BDS Finding ADaMs such as ADEG, ADLB, etc.. where a single 
+result is captured in an SDTM Finding domain on a single date and/or time.
+
+<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified. </i>
+
+<b> <span style="color: red"> For Admiral functions, do we want to describe error checking that is done when a function is run? Will that be useful to the user? </span> </b>
+
+## Programming Workflow
+
+* [Read in data](#readdata)
+* [Derive/Impute numeric date/time and analysis day (ADT, ADTM, ADY)](#datetime)
+* [Derive Results (AVAL, AVALC, AVALU)](#aval)
+* [Assign PARAMCD, PARAMLBL, PARAMN](#paramcd)
+* [Deriving timing variables (e.g. APHASE, AVISIT, APERIOD)](#timing)
+* [Derive categorization variables (PARCAT, AVALCAT)](#cat)
+* [Choose analysis record within a timing period (e.g. ANL01FL)](#analysisrec)
+* [Timing flags (e.g. ONTRTFL)](#timingflag)
+* [Assign Reference Range Indicators (e.g. H, L, N)](#referencerange)
+* [Derive Baseline (ABLFL, BASE, CHG, PCHG, BASETYPE)](#baseline)
+* [Assign Treatment (TRTA, TRTP)](#treatment)
+* [Assign ASEQ](#aseq)
+* [Add labels and attributes](#attributes)
+* [Advanced topics:](#advanced)
+  * Create a new record based on an analysis flag
+  * Derive an average record
+  * Derive a record based on other records
+* [Example Script](#example)
+
+### Read in data {#readdata}
+
+To start, all dataframes needed for the creation of ADVS should be read into
+the environment.  This will be a company specific process.  Some of the 
+dataframes needed may be:
+
+  * VS, SUPPVS
+  * ADSL
+
+The SUPPVS domain can be joined to the VS domain using the function:
+`derive_supplemental_vars`.
+
+This function will transpose the supplemental SDTM domain (e.g. `SUPPVS`) and
+join the transposed supplemental domain to the parent domain (e.g. `VS`) by
+STUDYID, USUBJID using the IDVAR and IDVARVAL as an additional join variable.
+
+Example call:
+
+`vs_t <- derive_supplemental_vars(VS, SUPPVS)`
+
+<b> <span style="color: red"> NEED TO GET THIS FUNCTION WORKING AS IT WILL BE EXPECTED AND CRITICAL TO MANY USERS </span> </b>
+
+At this step, it may be useful to join ADSL to your VS domain as well:
+```{r eval=FALSE}
+suppvs_t_adsl <- vs_t %>% 
+  left_join(adsl, by = c("STUDYID", "USUBJID"))
+```
+
+### Derive/Impute numeric date/time and analysis day (ADT, ADTM, ADY) {#datetime}
+
+The function `derive_vars_dt()` can be used to derive ADT. This function allows 
+the user to impute the date as well.
+
+Example calls:
+
+`vs_dt <- derive_vars_dt(vs_t, new_vars_previx = "A", dtc = VSDTC)`
+
+If imputation is needed and the date is to be imputed to the first of the month, 
+the call would be:
+```{r eval=FALSE}
+vs_dt <- derive_vars_dt(vs_t, 
+                        new_vars_previx = "A", 
+                        dtc = VSDTC, 
+                        date_imputation = "FIRST")
+```
+
+Similarly, ADTM may be created using the function `derive_vars_dtm`. Imputation may be done on both the date and time components of ADTM.
+```{r eval=FALSE}
+vs_dtm <- derive_vars_dt(vs_t, 
+                         new_vars_previx = "A", 
+                         dtc = VSDTC, 
+                         date_imputation = "FIRST")
+```
+
+By default, the variable ADTF for `derive_vars_dt()` or ADTF and ATMF for 
+`derive_vars_dtm()` will be created and populated with the controlled
+terminology outlined in the CDISC IG for date imputations. 
+
+Once ADT is derived, the function `derive_var_ady` can be used to derive ADY.
+This example assumes both ADT and TRTSDT exist on the dataframe.
+
+`vs_ady <- derive_var_ady(vs_dt, reference_date = TRTSDT, date = ADT)`
+
+### Derive Results (AVAL, AVALC, AVALU) {#aval}
+
+The mapping of AVAL, AVALC, and AVALU is left to the ADaM programmer. An example
+mapping may be:
+```{r eval=FALSE}
+vs_aval <- mutate(vs_t, 
+                  AVAL = VSSTRESN,
+                  AVALC = VSSTRESC,
+                  AVALU = VSSTRESU)
+```
+
+### Assign PARAMCD, PARAMLBL, PARAMN {#paramcd}
+
+The admiral function `derive_param()` may be used to assign the PARAM and 
+PARAMCD for a test. To use this function, a lookup dataframe should be created 
+to join with the data.
+
+In the simplest case, a lookup based on an SDTM --TESTCD value is created. For
+example, in Vitals Signs, the lookup may be:
+
+VSTESTCD | PARAMCD | PARAM
+--------- | --------- | --------
+DIABP | DIABP | Diastolic Blood Pressure (mmHg)
+HEIGHT | HEIGHT | Height (cm)
+MAP | MAP | Mean Arterial Pressure
+PULSE | PULSE | Pulse Rate (beats/min)
+SYSBP | SYSBP | Systolic Blood Pressure (mmHg)
+WEIGHT | WEIGHT | Weight (kg)
+
+The `derive_param()` function can now be used to derive PARAM and PARAMCD for
+the ADVS ADaM:
+
+`vs_paramcd <- derive_param(vs_t, lookup, by_vars = c("VSTESTCD"))`
+
+The resulting dataframe contains the variables PARAMCD and PARAM from the 
+lookup.
+
+<b> <span style="color: red"> WE SHOULD ADD THE ABILITY TO DERIVE PARAMN, and PARAMLBL with this function </span> </b>
+
+### Deriving timing variables (e.g. APHASE, AVISIT, APERIOD) {#timing}
+
+<b> <span style="color: red"> WE SHOULD ADD A SIMPLE FUNCTION FOR THIS. I AM NOT
+SURE WHERE THE DISCUSSION ARE WITH THIS? </span> </b>
+
+### Choose analysis record within a timing period (e.g. ANL01FL) {#analysisrec}
+
+### Assign Reference Range Indicators (e.g. H, L, N) {#referencerange}
+
+### Derive Baseline (ABLFL, BASE, CHG, PCHG, BASETYPE) {#baseline}
+
+### Assign Treatment (TRTA, TRTP) {#treatment}
+
+### Assign ASEQ {#aseq}
+
+### Add labels and attributes {#attributes}
+<b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
+
+### Advanced topics: {#advanced}
+
+  * Create a new record based on an analysis flag
+  * Derive an average record
+  * Derive a record based on other records
+
+### Example Script {#example}
+
