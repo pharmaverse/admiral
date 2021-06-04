@@ -46,47 +46,40 @@
 #' library(dplyr)
 #' data("dm")
 #' data("ds")
+#'
 derive_disposition_reason <- function(dataset,
                                       dataset_ds,
-                                      #new_var_reason,
-                                      #status_var_reason,
                                       new_var,
-                                      add_detail_var = NULL,
-                                      #status_var_reason_spe = NULL,
+                                      status_var,
+                                      new_var_spe=NULL,
+                                      status_var_spe=NULL,
                                       format_new_vars = format_reason_default,
                                       filter_ds) {
+
+
   # Checks
+  warn_if_vars_exist(dataset, deparse(substitute(new_var)))
   assert_that(is.data.frame(dataset_ds))
-  #print("1")
-  #print(new_var)
-  #print("1.1")
-  #print(new_var$new_var)
-  #print("2")
-  #print(add_detail_var)
-  #print("2.1")
-  #print(add_detail_var$new_var)
-  #print(add_detail_var$source_var)
-
-
-  warn_if_vars_exist(dataset, as_name(new_var$new_var))
-
-  if (!is.null(add_detail_var)) {
-    warn_if_vars_exist(dataset, as_name(add_detail_var$new_var))
-    source_var <- c(as_name(new_var$source_var),as_name(add_detail_var$source_var))
-
+  if (!quo_is_null(enquo(new_var_spe))){
+    statusvar<-c(deparse(substitute(status_var)),deparse(substitute(status_var_spe)))
   }
   else {
-    source_var <- as_name(new_var$source_var)
+    statusvar<-deparse(substitute(statusvar))
   }
-  print("sopurce")
-  print(source_var)
-  assert_has_variables(dataset_ds, source_var)
+  assert_has_variables(dataset_ds, statusvar)
+  if (!quo_is_null(enquo(new_var_spe))){
+    print("Do i enter")
+    print(quo_is_null(enquo(new_var_spe)))
+    if (!quo_is_null(enquo(status_var_spe))){
+      warn(paste("`new_var_spe` is specified but `status_var_spe` is NULL."))
+    }
+  }
+  filter_ds <- enquo(filter_ds)
 
   # Process the disposition data
   ds_subset <- dataset_ds %>%
-    filter(!!enquo(filter_ds)) %>%
-    select(STUDYID, USUBJID, source_var)
-  print(head(ds_subset))
+    filter(!!filter_ds) %>%
+    select(STUDYID, USUBJID, !!enquo(status_var), !!enquo(status_var_spe))
 
   # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
   has_unique_records(
@@ -95,69 +88,35 @@ derive_disposition_reason <- function(dataset,
     message_type = "warning",
     message = "The filter used for DS results in several records per patient - please check"
   )
-  # Add the status variable, derive the reason...
-  dataset <- dataset %>%
-    left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
-    mutate(!!new_var$new_var := format_new_vars(!!new_var$source_var))
-  print(head(dataset))
-
-
-  # ...and add the details (sepcify) if required
-  print("check here")
-  print(is.null(add_detail_var))
-  if (!is.null(add_detail_var)) {
-    dataset<-  dataset %>%
-        mutate(!!add_detail_var$new_var := format_new_vars(!!new_var$source_var, !!add_detail_var$source_var))
+  # Add the status variable and derive the new dispo status in the input dataset
+  if (!is.null(new_var_spe)){
+    dataset %>%
+      left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
+      mutate(!!enquo(new_var) := format_new_vars(!!enquo(status_var))) #%>%
+    mutate(!!enquo(new_var_spe) := format_new_vars(!!enquo(status_var),!!enquo(status_var_spe))) %>%
+      select(-!!enquo(status_var),-!!enquo(status_var_spe) )
+  }
+  else{
+    dataset %>%
+      left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
+      mutate(!!enquo(new_var) := format_new_vars(!!enquo(status_var))) %>%
+    select(-!!enquo(status_var) )
   }
 
-  print(head(dataset))
-  dataset %>%
-    select(-source_var)
 }
+
 #' Default format for the disposition reason
 #'
 #' Define a function to map the disposition reason
 #'
-#' @param x the disposition variable used for the mapping of the main  reason (e.g. `DSDECOD`).
-#' @param y the disposition variable used for the mapping of the details  reason (e.g. `DSTERM`).
-format_reason_default <- function(x, y = NULL) {
-  if (is.null(y)) {
-    case_when(
-      x != "COMPLETED" & !is.na(x) ~ x,
-      TRUE ~ NA_character_
-    )
-  }
-  else {
-    case_when(
-      x != "COMPLETED" & !is.na(x) ~ y,
-      TRUE ~ NA_character_
-    )
-  }
-}
-
-reason_source <- function(source_var, new_var) {
-  out <- list(
-    source_var=enquo(source_var),
-    new_var = enquo(new_var)
+#' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
+#' @param x the disposition variable used for the mapping of the deatils is required (e.g. `DSTERM`).
+format_reason_default <- function(x, y=NULL) {
+  out<-if (is.null(y)) x else y
+  case_when(
+    x != "COMPLETED" & !is.na(x) ~ out,
+    TRUE ~ NA_character_
   )
-  class(out) <- c("reason_source", "list")
-  validate_reason_source(out)
 }
-
-validate_reason_source <- function(x) {
-  #print("heya")
-  #print(class(x))
-  #print(class(reason_source))
-  assert_that(inherits(x, "reason_source"))
-  values <- unclass(x)
-  assert_that(is_expr(values$source_var))
-  #print(values$source_var)
-  #print(is_expr(values$source_var))
-  assert_that(is_expr(values$new_var))
-  x
-}
-
-
-
 
 
