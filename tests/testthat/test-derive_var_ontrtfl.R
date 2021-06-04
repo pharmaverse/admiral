@@ -97,8 +97,8 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and
   )
 })
 
-test_that("`target` is set to `Y` when `filter_pre_timepoint` is not PRE and`date` = `ref_start_date`
-          and `ref_end_date` is not specified", {
+test_that("`target` is set to 'Y' when `filter_pre_timepoint` is not 'PRE' and
+          `date` = `ref_start_date` and `ref_end_date` is not specified", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~ADT,                  ~TRTSDT,               ~TPT,
     "TEST01", "PAT01",  as.Date("2020-01-01"), as.Date("2020-01-01"), "PRE",
@@ -114,7 +114,7 @@ test_that("`target` is set to `Y` when `filter_pre_timepoint` is not PRE and`dat
     input,
     date = ADT,
     ref_start_date = TRTSDT,
-    filter_pre_timepoint = exprs(TPT == "PRE")
+    filter_pre_timepoint = TPT == "PRE"
   )
 
   expect_dfs_equal(
@@ -135,7 +135,7 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and `date` <=
     "TEST01", "PAT05",  as.Date("2020-02-02"), as.Date("2020-01-01"), as.Date("2020-02-01")
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~ADT,                  ~TRTSDT,               ~TRTEDT,              ~ONTRTFL,
+    ~STUDYID, ~USUBJID, ~ADT,                  ~TRTSDT,               ~TRTEDT,              ~ONTRTFL, # nolint
     "TEST01", "PAT01",  as.Date("2019-12-13"), as.Date("2020-01-01"), as.Date("2020-02-01"), NA,
     "TEST01", "PAT02",  as.Date("2020-01-01"), as.Date("2020-01-01"), as.Date("2020-02-01"), "Y",
     "TEST01", "PAT03",  as.Date("2020-01-02"), as.Date("2020-01-01"), as.Date("2020-02-01"), "Y",
@@ -166,7 +166,7 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and `date` <=
     "TEST01", "PAT03",  as.Date("2020-02-10"), as.Date("2020-01-01"), as.Date("2020-02-01")
   )
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~ADT,                  ~TRTSDT,               ~TRTEDT,              ~ONTRTFL,
+    ~STUDYID, ~USUBJID, ~ADT,                  ~TRTSDT,               ~TRTEDT,              ~ONTRTFL, # nolint
     "TEST01", "PAT01",  as.Date("2020-02-01"), as.Date("2020-01-01"), as.Date("2020-02-01"), "Y",
     "TEST01", "PAT02",  as.Date("2020-02-05"), as.Date("2020-01-01"), as.Date("2020-02-01"), "Y",
     "TEST01", "PAT03",  as.Date("2020-02-10"), as.Date("2020-01-01"), as.Date("2020-02-01"), NA

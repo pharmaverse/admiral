@@ -175,8 +175,8 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 #' @examples
 #' data(ex)
 #' warn_has_unique_records(ex,
-#'   by_vars = exprs(USUBJID),
-#'   order = exprs(desc(EXENDTC))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
 #' )
 warn_has_unique_records <- function(dataset,
                                     by_vars = NULL,

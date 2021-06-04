@@ -78,6 +78,8 @@ Imputation partial date/time portion of a --DTC variable. based on user
 input.
 }
 \examples{
+library(lubridate)
+
 dates <- c(
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
@@ -138,8 +140,8 @@ impute_dtc(
 # minimum dates
 impute_dtc(
   "2020-12",
-  min_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
-                   lubridate::ymd_hms("2020-11-11T11:11:11")),
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
   date_imputation = "first"
 )
 
