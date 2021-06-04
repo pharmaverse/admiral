@@ -55,7 +55,7 @@ derive_disposition_dt(
   dataset_ds = ds,
   new_var = FRVDT,
   dtc = DSSTDTC,
-  filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
+  filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
 )
 }
 \author{

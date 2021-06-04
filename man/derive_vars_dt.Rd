@@ -81,6 +81,8 @@ The date can be imputed (see date_imputation parameter)
 and the date imputation flag ('--DTF') can be added.
 }
 \examples{
+library(lubridate)
+
 mhdt <- tibble::tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
@@ -140,8 +142,8 @@ derive_vars_dt(
 # is not before the treatment start date
 adae <- tibble::tribble(
   ~AESTDTC, ~TRTSDTM,
-  "2020-12", lubridate::ymd_hms("2020-12-06T12:12:12"),
-  "2020-11", lubridate::ymd_hms("2020-12-06T12:12:12")
+  "2020-12", ymd_hms("2020-12-06T12:12:12"),
+  "2020-11", ymd_hms("2020-12-06T12:12:12")
 )
 
 derive_vars_dt(

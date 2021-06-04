@@ -100,6 +100,8 @@ if it already exists in the input dataset. However, if --TMF already exists
 in the input dataset, a warning is issued and --TMF will be overwritten.
 }
 \examples{
+library(lubridate)
+
 mhdt <- tibble::tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
@@ -123,8 +125,8 @@ derive_vars_dtm(
 # after the death or data cut off date
 adae <- tibble::tribble(
   ~AEENDTC, ~DTHDT, ~DCUTDT,
-  "2020-12", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24"),
-  "2020-11", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24")
+  "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
+  "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
 )
 
 derive_vars_dtm(
@@ -133,7 +135,8 @@ derive_vars_dtm(
   new_vars_prefix = "AEN",
   date_imputation = "last",
   time_imputation = "last",
-  max_dates = list(DTHDT, DCUTDT))
+  max_dates = list(DTHDT, DCUTDT)
+)
 }
 \author{
 Samia Kabi

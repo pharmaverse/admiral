@@ -15,6 +15,7 @@ globalVariables(c(
   "ASTDT",
   "ASTDY",
   "BRTHDT",
+  "DTHCAUS",
   "EXDOSE",
   "EXENDTC",
   "EXSEQ",
@@ -38,5 +39,7 @@ globalVariables(c(
   "ex",
   "idtc__",
   "Source",
-  "temp_obs_nr"
+  "temp_obs_nr",
+  "temp_source_nr",
+  "temp_date"
 ))

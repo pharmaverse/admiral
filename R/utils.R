@@ -1,8 +1,14 @@
 #' @export
-rlang::expr
+dplyr::vars
+
+#' @export
+dplyr::desc
 
 #' @export
 rlang::exprs
+
+#' @export
+dplyr::vars
 
 #' Enumerate Multiple Strings
 #'
@@ -32,7 +38,7 @@ backquote <- function(x) {
   paste0("`", x, "`")
 }
 
-#' Wrap a String in SIngle Quotes
+#' Wrap a String in Single Quotes
 #'
 #' @param x A `character` vector
 #'
@@ -43,6 +49,7 @@ backquote <- function(x) {
 squote <- function(x) {
   paste0("'", x, "'")
 }
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
@@ -60,4 +67,16 @@ squote <- function(x) {
 #' "a" %!in% c("b", "v", "k")
 `%!in%` <- function(x, table) {
   !(x %in% table)
+}
+
+#' Turn a List of Quosures into a Character Vector
+#'
+#' @param quosures A `list` of `quosures` created using [`vars()`]
+#'
+#' @noRd
+#'
+#' @examples
+#' vars2chr(vars(USUBJID, AVAL))
+vars2chr <- function(quosures) {
+  map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }

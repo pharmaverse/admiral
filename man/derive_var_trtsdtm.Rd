@@ -4,8 +4,8 @@
 \alias{derive_var_trtsdtm}
 \title{Derive datetime of First Exposure to Treatment}
 \usage{
-derive_var_trtsdtm(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
-  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10))
+derive_var_trtsdtm(dataset, dataset_ex, filter_ex = (EXDOSE > 0 | (EXDOSE
+  == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -22,7 +22,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \code{exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))}
+Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
 
 Permitted Values: logical expression}
 }
@@ -38,11 +38,12 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("ex")
 data("dm")
 
-derive_var_trtsdtm(dm, dataset_ex = ex) \%>\%
+dm \%>\%
+  derive_var_trtsdtm(dataset_ex = ex) \%>\%
   select(USUBJID, TRTSDTM)
 }
 \author{

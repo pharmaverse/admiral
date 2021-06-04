@@ -21,7 +21,6 @@ a date object
 Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
 }
 \examples{
-
 convert_dtc_to_dt("2019-07-18")
 convert_dtc_to_dt("2019-07")
 }

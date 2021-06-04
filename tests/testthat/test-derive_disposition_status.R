@@ -41,7 +41,7 @@ test_that("Derive EOSSTT using default mapping", {
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
-    filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 
   expect_dfs_equal(
@@ -74,7 +74,7 @@ test_that("Derive EOTSTT using a study specific mapping", {
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eosstt,
-    filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 
   expect_dfs_equal(
@@ -83,4 +83,3 @@ test_that("Derive EOTSTT using a study specific mapping", {
     keys = c("STUDYID", "USUBJID")
   )
 })
-

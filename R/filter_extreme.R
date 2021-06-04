@@ -52,21 +52,24 @@
 #' library(dplyr, warn.conflict = FALSE)
 #' data("ex")
 #'
-#' # selecting first dose for each patient
-#' filter_extreme(ex,
-#'                order = exprs(EXSEQ),
-#'                by_vars = exprs(USUBJID),
-#'                mode = "first") %>%
+#' # Select first dose for each patient
+#' ex %>%
+#'   filter_extreme(
+#'     order = vars(EXSEQ),
+#'     by_vars = vars(USUBJID),
+#'     mode = "first"
+#'   ) %>%
 #'   select(USUBJID, EXSEQ)
 #'
-#' # selecting highest dose for each patient
-#' filter_extreme(ex,
-#'                order = exprs(EXDOSE),
-#'                by_vars = exprs(USUBJID),
-#'                mode = "last",
-#'                check_type = "none") %>%
+#' # Select highest dose for each patient
+#' ex %>%
+#'   filter_extreme(
+#'     order = vars(EXDOSE),
+#'     by_vars = vars(USUBJID),
+#'     mode = "last",
+#'     check_type = "none"
+#'   ) %>%
 #'   select(USUBJID, EXDOSE)
-
 filter_extreme <- function(dataset,
                            order,
                            by_vars = NULL,
@@ -77,7 +80,7 @@ filter_extreme <- function(dataset,
 
   # group and sort input dataset
   if (!is.null(by_vars)) {
-    assert_has_variables(dataset, map_chr(by_vars, as_string))
+    assert_has_variables(dataset, vars2chr(by_vars))
 
     data <- dataset %>%
       derive_obs_number(new_var = temp_obs_nr,
@@ -85,8 +88,7 @@ filter_extreme <- function(dataset,
                         by_vars = by_vars,
                         check_type = check_type) %>%
       group_by(!!!by_vars)
-  }
-  else {
+  } else {
     data <- dataset %>%
       derive_obs_number(new_var = temp_obs_nr,
                         order = order,
