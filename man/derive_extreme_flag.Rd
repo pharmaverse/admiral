@@ -4,8 +4,8 @@
 \alias{derive_extreme_flag}
 \title{Adds a variable flagging the first or last observation within each by group}
 \usage{
-derive_extreme_flag(dataset, new_var, by_vars, order, mode, flag_filter,
-  check_type = "warning")
+derive_extreme_flag(dataset, new_var, by_vars, order, mode,
+  flag_filter = NULL, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -70,83 +70,85 @@ the output dataset.
 library(dplyr, warn.conflicts = FALSE)
 data("vs")
 
-# flag last value for each patient, test, and visit, baseline observations are ignored
-derive_extreme_flag(vs,
-                    new_var = LASTFL,
-                    by_vars = rlang::exprs(USUBJID, VSTESTCD, VISIT),
-                    order = rlang::exprs(VSTPTNUM),
-                    mode = "last",
-                    flag_filter = rlang::expr(VISIT != "BASELINE")) \%>\%
+# Flag last value for each patient, test, and visit, baseline observations are ignored
+vs \%>\%
+  derive_extreme_flag(
+    new_var = LASTFL,
+    by_vars = vars(USUBJID, VSTESTCD, VISIT),
+    order = vars(VSTPTNUM),
+    mode = "last",
+    flag_filter = VISIT != "BASELINE"
+  ) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
 
 # Baseline (ABLFL) examples:
 
 input <- tibble::tribble(
-~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
-"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
-"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-"TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-"TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-"TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
+  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
+  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
 
-"TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-"TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
-"TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-"TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-"TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
+  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
+  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
+  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
+  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
+  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
 
-"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
-"TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
-"TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
-"TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
+  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
+  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
+  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
+  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
+  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
 
-"TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
-"TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-"TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
-"TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
-"TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
+  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
+  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
+  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
+  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
+  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
 )
 
 # Last observation
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = High
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(AVAL, ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(AVAL, ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = Lo
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(desc(AVAL), ADT),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(desc(AVAL), ADT),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE")
+  flag_filter = AVISIT == "BASELINE"
 )
 
 # Average observation
 derive_extreme_flag(
   input,
   new_var = ABLFL,
-  by_vars = exprs(USUBJID, PARAMCD),
-  order = exprs(ADT, desc(AVAL)),
+  by_vars = vars(USUBJID, PARAMCD),
+  order = vars(ADT, desc(AVAL)),
   mode = "last",
-  flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+  flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
 
 }

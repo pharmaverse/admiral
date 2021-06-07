@@ -35,7 +35,7 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   )
   actual_output <- derive_baseline(
     input,
-    by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -69,7 +69,7 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
   )
   actual_output <- derive_baseline(
     input,
-    by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -102,7 +102,7 @@ test_that("only the `target` variable is added to the input dataset", {
   )
   actual_output <- derive_baseline(
     input,
-    by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+    by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
@@ -129,7 +129,7 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
   expect_error(
     derive_baseline(
       input,
-      by_vars = c("USUBJID", "PARAMCD", "BASETYPE"),
+      by_vars = vars(USUBJID, PARAMCD, BASETYPE),
       source_var = AVALC,
       new_var = BASEC
     ),
@@ -147,7 +147,7 @@ test_that("a `BASEC` column of type `character` is added to the input dataset", 
     "TEST01", "PAT01",  "PARAM02", "HIGH",   "",     "LAST",
     "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",     "LAST",
   )
-  output <- derive_var_basec(input)
+  output <- derive_var_basec(input, by_vars = vars(USUBJID, PARAMCD, BASETYPE))
 
   expect_true("BASEC" %in% colnames(output))
   expect_true(is.character(output$BASEC))
@@ -164,7 +164,7 @@ test_that("a `BASE` column of type `numeric` is added to the input dataset", {
     "TEST01", "PAT01",  "PARAM02", 34.45,   "",     "LAST",
 
   )
-  output <- derive_var_base(input)
+  output <- derive_var_base(input, by_vars = vars(USUBJID, PARAMCD, BASETYPE))
 
   expect_true("BASE" %in% colnames(output))
   expect_true(is.numeric(output$BASE))

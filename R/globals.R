@@ -15,6 +15,7 @@ globalVariables(c(
   "ASTDT",
   "ASTDY",
   "BRTHDT",
+  "DTHCAUS",
   "EXDOSE",
   "EXENDTC",
   "EXSEQ",
@@ -23,6 +24,7 @@ globalVariables(c(
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",
+  "STUDYID",
   "TRTDURD",
   "TRTEDT",
   "TRTEDTM",
@@ -30,11 +32,14 @@ globalVariables(c(
   "TRTSDTM",
   "USUBJID",
   "Dataset",
+  "datedtc___",
   "Derivation",
   "Derivation / Comment",
   "desc",
   "ex",
   "idtc__",
   "Source",
-  "temp_obs_nr"
+  "temp_obs_nr",
+  "temp_source_nr",
+  "temp_date"
 ))

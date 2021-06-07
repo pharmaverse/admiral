@@ -24,9 +24,10 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF", {
     dtc = XXSTDTC
   )
 
-  expect_equal(
+  expect_dfs_equal(
     expected_output,
-    actual_output
+    actual_output,
+    "XXSTDTC"
   )
 })
 
