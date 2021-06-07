@@ -30,8 +30,8 @@ list of by variables and order. If the check fails, an error is issued.
 \examples{
 data(ex)
 assert_has_unique_records(ex,
-  by_vars = exprs(USUBJID),
-  order = exprs(desc(EXENDTC))
+  by_vars = vars(USUBJID),
+  order = vars(desc(EXENDTC))
 )
 }
 \author{

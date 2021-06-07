@@ -24,13 +24,12 @@ test_that("Derive RFICDT", {
     "TEST01", "PAT01", as.Date("2021-04-01"),
     "TEST01", "PAT02", as.Date("2021-04-02")
   )
-
   actual_output <- adsl %>%
     derive_disposition_dt(
       dataset_ds = ds,
       new_var = RFICDT,
       dtc = DSSTDTC,
-      filter = expr(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "INFORMED CONSENT OBTAINED"),
+      filter = DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "INFORMED CONSENT OBTAINED",
       date_imputation = NULL
     )
 
@@ -53,28 +52,29 @@ test_that("Derive RANDDT from the relevant ds.DSSTDTC", {
       dataset_ds = ds,
       new_var = RANDDT,
       dtc = DSSTDTC,
-      filter = expr(DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "RANDOMIZATION"),
+      filter = DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "RANDOMIZATION",
       date_imputation = NULL
     )
+
   expect_dfs_equal(
     expected_output,
     actual_output,
     keys = c("STUDYID", "USUBJID")
   )
 })
-test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with 1st day/month", {
+
+test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with 1st day/month", { # nolint
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DTHDT,
     "TEST01", "PAT01", as.Date("2022-02-01"),
     "TEST01", "PAT02", as.Date("2022-04-01")
   )
-
   actual_output <- adsl %>%
     derive_disposition_dt(
       dataset_ds = ds,
       new_var = DTHDT,
       dtc = DSSTDTC,
-      filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "DEATH"),
+      filter = DSCAT == "OTHER EVENT" & DSDECOD == "DEATH",
       date_imputation = "FIRST"
     )
 

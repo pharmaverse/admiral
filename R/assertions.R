@@ -100,8 +100,8 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' @examples
 #' data(ex)
 #' has_unique_records(ex,
-#'   by_vars = exprs(USUBJID),
-#'   order = exprs(desc(EXENDTC))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
 #' )
 has_unique_records <- function(dataset,
                                by_vars = NULL,
@@ -205,8 +205,8 @@ has_unique_records <- function(dataset,
 #' @examples
 #' data(ex)
 #' assert_has_unique_records(ex,
-#'   by_vars = exprs(USUBJID),
-#'   order = exprs(desc(EXENDTC))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
 #' )
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,
@@ -303,7 +303,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^([0-9]{2})-([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "MID", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
   paste0(
@@ -337,7 +337,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #' assertthat::assert_that(is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
 }
 on_failure(is_valid_time_entry) <- function(call, env) {
   paste0(
@@ -472,9 +472,10 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-
 is_named_exprs <- function(arg) {
-  is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
+  is.list(arg) &&
+    all(map_lgl(arg, is.language)) &&
+    all(names(arg) != "")
 }
 on_failure(is_named_exprs) <- function(call, env) {
   paste0(
@@ -548,4 +549,64 @@ is_value <- function(arg){
       FALSE
     }
   }
+}
+
+is_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
+}
+on_failure(is_vars) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a list of variables created using `vars()`"
+  )
+}
+
+is_order_vars <- function(arg) {
+  quo_is_desc_call <- function(quo) {
+    expr <- quo_get_expr(quo)
+    is_call(expr) &&
+      length(expr) == 2L &&
+      deparse(expr[[1L]]) == "desc" &&
+      is_symbol(expr[[2L]])
+  }
+
+  inherits(arg, "quosures") &&
+    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
+}
+on_failure(is_order_vars) <- function(call, env) {
+  paste0(
+    backquote(deparse(call$arg)),
+    " is not a valid input for `order_vars`.",
+    " Valid inputs are created using `vars()` and may only contain symbols or calls involving `desc()`.\n\n", # nolint
+    "  # Bad:\n",
+    "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
+    "  # Good:\n",
+    "  vars(AVAL, desc(ADT))"
+  )
+}
+
+is_unnamed_exprs <- function(arg) {
+  is.list(arg) &&
+    all(map_lgl(arg, is.language)) &&
+    all(names(arg) == "")
+}
+on_failure(is_unnamed_exprs) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a unnamed list of expressions created using `exprs()`"
+  )
+}
+
+is_expr <- function(arg) {
+  # Note: is.language allows both symbol and language
+  !is.list(arg) & is.language(arg)
+}
+on_failure(is_expr) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not an expression created using `expr()`"
+  )
 }

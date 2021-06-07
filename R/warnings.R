@@ -106,6 +106,31 @@ warn_if_invalid_dtc <- function(dtc) {
   }
 }
 
+warn_if_incomplete_dtc <- function(dtc, n) {
+  is_complete_dtc <- (nchar(dtc) >= n | is.na(dtc))
+  if (n == 10) {
+    dt_dtm <- "date"
+    funtext <- "convert_dtc_to_dt"
+  }
+  else if (n == 19) {
+    dt_dtm <- "datetime"
+    funtext <- "convert_dtc_to_dtm"
+  }
+  if (!all(is_complete_dtc)) {
+    incomplete_dtc <- dtc[!is_complete_dtc]
+    incomplete_dtc_row <- rownames(as.data.frame(dtc))[!is_complete_dtc]
+    tbl <- paste("Row", incomplete_dtc_row, ": --DTC = ", incomplete_dtc)
+    msg <- paste0(
+      "Dataset contains partial ", dt_dtm, " format. ",
+      "The function ", funtext, " expect a complete ", dt_dtm, ". ",
+      "Please use the function `impute_dtc()` to build a complete ", dt_dtm, "."
+    )
+    warn(msg)
+    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+  }
+}
+
+
 warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   missing_ref_ranges <- dataset %>%
     anti_join(meta_ref_ranges, by = by_var) %>%
@@ -124,7 +149,7 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 
 #' Are records unique?
 #'
-#' Checks if the records of a dateset are unique with respect to the specified
+#' Checks if the records of a dataset are unique with respect to the specified
 #' list of by variables and order. If the check fails, a warning is issued.
 #'
 #' @param dataset The input dataset to check
@@ -150,14 +175,70 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 #' @examples
 #' data(ex)
 #' warn_has_unique_records(ex,
-#'                         by_vars = exprs(USUBJID) ,
-#'                         order = exprs(desc(EXENDTC)))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
+#' )
 warn_has_unique_records <- function(dataset,
-                                      by_vars = NULL,
-                                      order = NULL,
-                                      message){
-  has_unique_records(dataset = dataset,
-                     by_vars = by_vars,
-                     order = order,
-                     message_type = "warning")
+                                    by_vars = NULL,
+                                    order = NULL,
+                                    message) {
+  has_unique_records(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    message_type = "warning"
+  )
+}
+
+#' Warn if 2 list have not the same names or length
+#'
+#' Checks if 2 list inputs have the same names and same number of elements, issue a warning otherwise.
+#'
+#' @param base A named list
+#'
+#' @param compare A named list
+#'
+#' @param list_name A string
+#' the name of the list
+#'
+#' @param i the index id to compare the 2 lists
+#'
+#' @author Samia Kabi
+#'
+#' @return a `warning` if the 2 lists have different names or length
+#'
+#' @keywords warning
+#'
+#' @export
+#'
+#' @examples
+#' # no warning
+#' warn_if_inconsistent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
+#' )
+#' # warning
+#' warn_if_inconsistent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
+#' )
+warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
+  if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
+    warn(
+      paste("The variables used for traceability in `", list_name, "` are not consistent,",
+        "please check:",
+        paste(
+          "source ", i - 1, ", Variables are given as: ",
+          paste(sort(names(base)), collapse = " ")
+        ),
+        paste(
+          "source ", i, ", Variables are given as: ",
+          paste(sort(names(compare)), collapse = " ")
+        ),
+        sep = "\n"
+      )
+    )
+  }
 }
