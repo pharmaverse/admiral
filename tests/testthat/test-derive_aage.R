@@ -8,7 +8,7 @@ test_that("duration and unit variable are added", {
   )
   expected_output <- mutate(input, AAGE = 20, AAGEU = "YEARS")
 
-  expect_equal(derive_aage(input), expected_output)
+  expect_dfs_equal(derive_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
 
 
@@ -22,7 +22,7 @@ test_that("derive_agegr_fda works as expected", {
                               exclude = NULL
                             ))
 
-  expect_equal(derive_agegr_fda(input, AGE, AGEGR_EXP), expected_output)
+  expect_dfs_equal(derive_agegr_fda(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
 
 })
 
@@ -36,7 +36,11 @@ test_that("derive_agegr_ema works as expected", {
                               exclude = NULL
                             ))
 
-  expect_equal(derive_agegr_fda(input, AGE, AGEGR_EXP), expected_output)
+  expect_dfs_equal(derive_agegr_fda(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
+
+})
+
+test_that("derive_agegr_ema - pediatric version - works as expected", {
 
   input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18))
   expected_output <- mutate(input,
@@ -49,6 +53,8 @@ test_that("derive_agegr_ema works as expected", {
                               exclude = NULL
                             ))
 
-  expect_equal(derive_agegr_ema(input, AGE, AGEGR_EXP, adults = FALSE), expected_output)
+  expect_dfs_equal(derive_agegr_ema(input, AGE, AGEGR_EXP, adults = FALSE),
+                   expected_output,
+                   keys = "AGE")
 
 })
