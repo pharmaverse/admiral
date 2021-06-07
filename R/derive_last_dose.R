@@ -30,7 +30,7 @@
 #' Firstly, the `dataset_ex` is filtered using `filter_ex`, if provided.
 #' This is useful for, for example, filtering for valid dose only.
 #' Secondly, the datasets `dataset` and `dataset_ex` are joined using `by_vars`
-#' and `AESEQ` variable.
+#' and `dataset_seq_var` variable.
 #' Thirdly, the last dose date is derived:
 #' the last dose date is the maximum date where `dose_end` is lower to or equal to
 #' `analysis_date`, subject to both date values are non-NA.
@@ -119,7 +119,7 @@ derive_last_dose <- function(dataset,
   assert_has_variables(
     dataset,
     c(by_vars_str,
-      "AESEQ",
+      as_string(rlang::quo_get_expr(dataset_seq_var)),
       as_string(rlang::quo_get_expr(analysis_date))
     )
   )

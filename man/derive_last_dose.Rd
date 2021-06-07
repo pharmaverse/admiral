@@ -57,7 +57,7 @@ The last dose date is derived as follows:
 Firstly, the \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
 This is useful for, for example, filtering for valid dose only.
 Secondly, the datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}
-and \code{AESEQ} variable.
+and \code{dataset_seq_var} variable.
 Thirdly, the last dose date is derived:
 the last dose date is the maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
