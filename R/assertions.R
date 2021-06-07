@@ -558,7 +558,7 @@ on_failure(is_expr) <- function(call, env) {
 #' @examples
 #' x <- list("x", "y")
 #' y <- list("y", "z")
-#' assert_that(are_records_same(x, y, "x", "y"))
+#' assertthat::assert_that(are_records_same(x, y, "x", "y"))
 are_records_same <- function(x, y, x_arg, y_arg) {
   stopifnot(is.vector(x), is.vector(y))
   length(x) == length(y)
