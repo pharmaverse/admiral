@@ -61,7 +61,7 @@ derive_disposition_status(
   dataset_ds = ds,
   new_var = EOSSTT,
   status_var = DSDECOD,
-  filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+  filter_ds = DSCAT == "DISPOSITION EVENT"
 )
 
 # Specific derivation: EOSSTT =
@@ -85,7 +85,7 @@ derive_disposition_status(
   new_var = EOSSTT,
   status_var = DSDECOD,
   format_new_var = format_eoxxstt1,
-  filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+  filter_ds = DSCAT == "DISPOSITION EVENT"
 )
 }
 \author{

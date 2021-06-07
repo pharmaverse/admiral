@@ -57,7 +57,7 @@
 #'   dataset_ds = ds,
 #'   new_var = EOSSTT,
 #'   status_var = DSDECOD,
-#'   filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+#'   filter_ds = DSCAT == "DISPOSITION EVENT"
 #' )
 #'
 #' # Specific derivation: EOSSTT =
@@ -81,7 +81,7 @@
 #'   new_var = EOSSTT,
 #'   status_var = DSDECOD,
 #'   format_new_var = format_eoxxstt1,
-#'   filter_ds = expr(DSCAT == "DISPOSITION EVENT")
+#'   filter_ds = DSCAT == "DISPOSITION EVENT"
 #' )
 derive_disposition_status <- function(dataset,
                                        dataset_ds,
@@ -93,6 +93,7 @@ derive_disposition_status <- function(dataset,
   warn_if_vars_exist(dataset, deparse(substitute(new_var)))
   assert_that(is.data.frame(dataset_ds))
   assert_has_variables(dataset_ds, deparse(substitute(status_var)))
+  filter_ds <- enquo(filter_ds)
 
   # Process the disposition data
   ds_subset <- dataset_ds %>%

@@ -96,7 +96,7 @@
 #'   date = ADTM,
 #'   ref_start_date = TRTSDTM,
 #'   ref_end_date = TRTEDTM,
-#'   filter_pre_timepoint = expr(TPT == "PRE")
+#'   filter_pre_timepoint = TPT == "PRE"
 #' )
 derive_var_ontrtfl <- function(dataset,
                                date,
@@ -104,53 +104,56 @@ derive_var_ontrtfl <- function(dataset,
                                ref_end_date = NULL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL) {
+  assert_that(
+    is.data.frame(dataset),
+    is.numeric(ref_end_window)
+  )
+  assert_has_variables(
+    dataset,
+    c(deparse(substitute(date)), deparse(substitute(ref_start_date)))
+  )
+  warn_if_vars_exist(dataset, "ONTRTFL")
 
-   new_var <- expr(ONTRTFL)
+  date <- enquo(date)
+  ref_start_date <- enquo(ref_start_date)
+  ref_end_date <- enquo(ref_end_date)
+  filter_pre_timepoint <- enquo(filter_pre_timepoint)
 
-   warn_if_vars_exist(
+  dataset <- mutate(
+    dataset,
+    ONTRTFL = case_when(
+      is.na(!!date) & !is.na(!!ref_start_date) ~ "Y",
+      !is.na(!!date) & !is.na(!!ref_start_date) & !!ref_start_date == !!date ~ "Y")
+    )
+
+  if (!quo_is_null(filter_pre_timepoint)) {
+    dataset <- mutate(
       dataset,
-      c(deparse(new_var))
-   )
+      ONTRTFL = if_else(!!filter_pre_timepoint, NA_character_, ONTRTFL)
+    )
+  }
 
-   assert_that(
-      is.data.frame(dataset),
-      is.numeric(ref_end_window)
-   )
-   assert_has_variables(dataset, c(deparse(substitute(date)),
-                                   deparse(substitute(ref_start_date))))
+  if (quo_is_null(ref_end_date)) {
+    # Scenario 1: No treatment end date is passed
+    dataset <- mutate(
+      dataset,
+      ONTRTFL = if_else(
+        !is.na(!!ref_start_date) & !is.na(!!date) & !!ref_start_date < !!date,
+        "Y",
+        ONTRTFL)
+      )
+  } else {
+    # Scenario 2: Treatment end date is passed, window added above
+    dataset <- mutate(
+      dataset,
+      ONTRTFL = if_else(
+        !is.na(!!ref_start_date) & !is.na(!!date) & !!ref_start_date < !!date &
+          !is.na(!!ref_end_date) & !!date <= (!!ref_end_date + days(!!ref_end_window)),
+        "Y",
+        ONTRTFL
+      )
+    )
+  }
 
-   date <- enquo(date)
-   ref_start_date <- enquo(ref_start_date)
-   ref_end_date <- enquo(ref_end_date)
-
-   dataset <- dataset %>%
-      mutate(!!new_var :=
-                case_when(is.na(!!date) & !is.na(!!ref_start_date) ~ "Y",
-                          !is.na(!!date) & !is.na(!!ref_start_date) &
-                             !!ref_start_date == !!date ~ "Y"))
-
-   if (!is.null(filter_pre_timepoint)) {
-      dataset <- dataset  %>%
-         mutate(!!new_var := if_else(!!!filter_pre_timepoint, NA_character_, !!new_var))
-   }
-
-   if (quo_is_null(ref_end_date)) {
-      #Scenario 1: No treatment end date is passed
-      dataset <- dataset %>%
-         mutate(!!new_var := if_else(!is.na(!!ref_start_date) &
-                                        !is.na(!!date) &
-                                        !!ref_start_date < !!date,
-                                     "Y", !!new_var))
-   } else {
-      #Scenario 2: Treatment end date is passed, window added above
-      dataset <- dataset %>%
-         mutate(!!new_var :=
-                   if_else(!is.na(!!ref_start_date) &
-                              !is.na(!!date) & !!ref_start_date < !!date &
-                              !is.na(!!ref_end_date) &
-                              !!date <= (!!ref_end_date + days(x = !!ref_end_window)), "Y", !!new_var))
-   }
-
-   dataset
-
+  dataset
 }

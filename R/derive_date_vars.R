@@ -72,6 +72,8 @@
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' dates <- c(
 #'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
@@ -132,8 +134,8 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
-#'                    lubridate::ymd_hms("2020-11-11T11:11:11")),
+#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+#'                    ymd_hms("2020-11-11T11:11:11")),
 #'   date_imputation = "first"
 #' )
 #'
@@ -291,7 +293,6 @@ impute_dtc <- function(
 #' @export
 #'
 #' @examples
-#'
 #' convert_dtc_to_dt("2019-07-18")
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
@@ -329,7 +330,7 @@ convert_dtc_to_dt <- function(dtc) {
 convert_dtc_to_dtm <- function(dtc) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
-  
+
   # note T00:00:00 is not printed in dataframe
   case_when(
     nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
@@ -446,6 +447,8 @@ compute_tmf <- function(dtc, dtm) {
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' mhdt <- tibble::tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
@@ -505,8 +508,8 @@ compute_tmf <- function(dtc, dtm) {
 #' # is not before the treatment start date
 #' adae <- tibble::tribble(
 #'   ~AESTDTC, ~TRTSDTM,
-#'   "2020-12", lubridate::ymd_hms("2020-12-06T12:12:12"),
-#'   "2020-11", lubridate::ymd_hms("2020-12-06T12:12:12")
+#'   "2020-12", ymd_hms("2020-12-06T12:12:12"),
+#'   "2020-11", ymd_hms("2020-12-06T12:12:12")
 #' )
 #'
 #' derive_vars_dt(
@@ -595,6 +598,8 @@ derive_vars_dt <- function(
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' mhdt <- tibble::tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
@@ -618,8 +623,8 @@ derive_vars_dt <- function(
 #' # after the death or data cut off date
 #' adae <- tibble::tribble(
 #'   ~AEENDTC, ~DTHDT, ~DCUTDT,
-#'   "2020-12", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24"),
-#'   "2020-11", lubridate::ymd("2020-12-06"), lubridate::ymd("2020-12-24")
+#'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
+#'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
 #' )
 #'
 #' derive_vars_dtm(
@@ -628,7 +633,8 @@ derive_vars_dt <- function(
 #'   new_vars_prefix = "AEN",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = list(DTHDT, DCUTDT))
+#'   max_dates = list(DTHDT, DCUTDT)
+#' )
 derive_vars_dtm <- function(
   dataset,
   new_vars_prefix,
