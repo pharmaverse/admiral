@@ -370,10 +370,7 @@ drop_values_from <- function(dataset, group_vars) {
 
   # If unique values > 1, should be dropped; else retain
   lgl_vars <- unique_count %>%
-    map_lgl(function(.x) {
-      res <- ifelse(.x > 1, FALSE, TRUE)
-      if (all(res)) TRUE else FALSE
-    }) %>%
+    map_lgl(~ all(!.x > 1)) %>%
     which() %>%
     names()
 
