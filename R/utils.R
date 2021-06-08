@@ -82,6 +82,16 @@ vars2chr <- function(quosures) {
 }
 
 #' @export
+print <- function(x, ...) {
+  UseMethod("print")
+}
+
+#' @export
+print.default <- function(x, ...) {
+  base::print(x, ...)
+}
+
+#' @export
 print.POSIXct <- function (x, tz = "", usetz = FALSE, max = NULL, ...) {
   if (is.null(max)) max <- getOption("max.print", 9999L)
 
