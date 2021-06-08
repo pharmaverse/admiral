@@ -6,50 +6,58 @@
 \usage{
 derive_disposition_reason(dataset, dataset_ds, new_var, reason_var,
   new_var_spe = NULL, reason_var_spe = NULL,
-  format_new_var = format_reason_default, filter_ds)
+  format_new_vars = format_reason_default, filter_ds)
 }
 \arguments{
 \item{dataset}{Input dataset.}
 
 \item{dataset_ds}{Dataset containing the disposition information (e.g.: \code{ds}).
 
-The variable specified in the \code{reason_var} parameter must be in \code{dataset_ds}.}
+It must contains
+\itemize{
+\item \code{STUDYID}, \code{USUBJID},
+\item The variable specified in the \code{reason_var}, (and \code{reason_var_spe} if required)
+\item The variables used in \code{filter_ds}.
+}}
 
 \item{new_var}{Name of the disposition reason variable.
 
-a variable name is expected (e.g. \code{DCSREAS}).}
+A variable name is expected (e.g. \code{DCSREAS}).}
 
 \item{reason_var}{The variable used to derive the disposition reason
 
-A character vector is expected (e.g. \code{DSDECOD}).}
+A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{new_var_spe}{Name of the disposition reason detail variable.
 
-a variable name is expected (e.g. \code{DCSREASP}).}
+A variable name is expected (e.g. \code{DCSREASP}).
+If \code{new_var_spe} is specified, it is expected that \code{reason_var_spe} is also specified,
+otherwise a warning is issued and}
 
 \item{reason_var_spe}{The variable used to derive the disposition reason detail
 
-A character vector is expected (e.g. \code{DSTERM}).}
+A variable name is expected (e.g. \code{DSTERM}).}
 
-\item{format_new_var}{The format used to derive the reason(s)
+\item{format_new_vars}{The function used to derive the reason(s)
 
 Default: format_reason_default defined as:
-format_reason_default<-function(x, y=NULL){
-case_when (
-x == "COMPLETED" ~ x,
-TRUE ~ NA_character
-)
+format_reason_default <- function(reason, reason_spe = NULL) {
+out <- if ( is.null(reason_spe) ) reason else reason_spe
+if_else ( reason != "COMPLETED" & !is.na(reason), out, NA_character_)
 }
-where x is the reason_var.}
+format_reason_default(DSDECOD) returns \code{DSDECOD} when \code{DSDECOD} is not 'COMPLETED' nor NA.
+format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' nor NA.}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
 Filter used to select the relevant disposition data.
+It is expected that the filter restricts \code{dataset_ds} such that there is at most
+one observation per patient. A warning is issued otherwise.
 
 Permitted Values: logical expression.}
 }
 \value{
-the input dataset with the disposition reason (\code{new_var}) added.
+the input dataset with the disposition reason(s) (\code{new_var and if required }new_var_spe`)  added.
 }
 \description{
 Derive a disposition reason from the the relevant records in the disposition domain.
@@ -57,11 +65,11 @@ Derive a disposition reason from the the relevant records in the disposition dom
 \details{
 This functions returns the main reason for discontinuation (e.g. \code{DCSREAS} or \code{DCTREAS}).
 The reason for discontinuation is derived based on \code{reason_var} (e.g. \code{DSDECOD}) and
-\code{format_new_var}.
+\code{format_new_vars}.
 If \code{new_var_spe} is not NULL, then the function will also returns the details associated
 with the reason for discontinuation (e.g. \code{DCSREASP}).
 The details associated with the reason for discontinuation are derived based on
-\code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_var}. see
+\code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
 }
 \examples{
 library(dplyr)
@@ -91,7 +99,7 @@ derive_disposition_reason(
   reason_var = DSDECOD,
   new_var_spe = DCSREASP,
   reason_var_spe = DSTERM,
-  format_new_var = format_dcsreas,
+  format_new_vars = format_dcsreas,
   filter_ds = DSCAT == "DISPOSITION EVENT"
 )
 }

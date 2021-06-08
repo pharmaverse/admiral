@@ -4,13 +4,20 @@
 \alias{format_reason_default}
 \title{Default format for the disposition reason}
 \usage{
-format_reason_default(x, y = NULL)
+format_reason_default(reason, reason_spe = NULL)
 }
 \arguments{
-\item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
+\item{reason}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 
-\item{y}{the disposition variable used for the mapping of the details if required (e.g. \code{DSTERM}).}
+\item{reason_spe}{the disposition variable used for the mapping of the details
+if required (e.g. \code{DSTERM}).}
 }
 \description{
 Define a function to map the disposition reason
+}
+\details{
+format_reason_default(DSDECOD) returns \code{DSDECOD} when \code{DSDECOD} != 'COMPLETED' nor NA.
+format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD} != 'COMPLETED' nor NA.
+e.g. DCSREAS =  format_reason_default(DSDECOD)
+e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
 }
