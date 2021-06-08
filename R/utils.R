@@ -85,6 +85,6 @@ as_iso_datetime <- function(x) {
   structure(x, class = union("iso_datetime", class(x)))
 }
 
-print.iso_datetime <- function(x) {
+print.iso_datetime <- function(x, ...) {
   print(format(x, "%Y-%m-%d %H:%M:%S"))
 }
