@@ -81,6 +81,15 @@ vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
 
+#' Print Values
+#'
+#' `print()` prints its argument and returns it invisibly (via [`invisible()`]).
+#' It is a generic function which means that new printing methods can be easily
+#' added for new classes.
+#'
+#' @param x An object to print
+#' @param ... Further arguments passed to or from other methods
+#'
 #' @export
 print <- function(x, ...) {
   UseMethod("print")
@@ -112,4 +121,3 @@ print.POSIXct <- function (x, tz = "", usetz = FALSE, max = NULL, ...) {
 
   invisible(x)
 }
-
