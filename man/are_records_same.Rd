@@ -24,5 +24,5 @@ Checks the length of derived records and new values of are equal
 \examples{
 x <- list("x", "y")
 y <- list("y", "z")
-assert_that(are_records_same(x, y, "x", "y"))
+assertthat::assert_that(are_records_same(x, y, "x", "y"))
 }
