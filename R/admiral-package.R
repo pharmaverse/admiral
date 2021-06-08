@@ -12,7 +12,7 @@
 #'             quo_is_symbol is_character eval_tidy
 #' @importFrom utils capture.output
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
-#'             flatten
+#'             flatten every
 #' @importFrom stringr str_c str_detect str_remove str_trim str_to_upper str_glue
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate ceiling_date days duration floor_date time_length %--%
