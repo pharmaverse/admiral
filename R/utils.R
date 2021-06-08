@@ -80,3 +80,11 @@ squote <- function(x) {
 vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
+
+as_iso_datetime <- function(x) {
+  structure(x, class = union("iso_datetime", class(x)))
+}
+
+print.iso_datetime <- function(x) {
+  print(format(x, "%Y-%m-%d %H:%M:%S"))
+}
