@@ -247,7 +247,9 @@ as_fun_list <- function(.funs, .env) {
       }
       .x <- as_inlined_function(.x, env = .env)
     } else if (is_character(rhs) || is_symbol(rhs)) {
-      fn <- get(rhs, .env, mode = "function")
+      # fn <- get(rhs, .env, mode = "function")
+      rhs <- as_string(rhs)
+      fn <- rlang::as_closure(rhs)
       .x <- structure(fn, stats = as_string(rhs))
     }
     .x
