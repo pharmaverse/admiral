@@ -81,10 +81,25 @@ vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
 
-as_iso_datetime <- function(x) {
-  structure(x, class = union("iso_datetime", class(x)))
+#' @export
+print.POSIXct <- function (x, tz = "", usetz = FALSE, max = NULL, ...) {
+  if (is.null(max)) max <- getOption("max.print", 9999L)
+
+  FORM <- if (missing(tz))
+    function(z) format(z, usetz = usetz, format = "%Y-%m-%d %H:%M:%S")
+  else
+    function(z) format(z, tz = tz, usetz = usetz, format = "%Y-%m-%d %H:%M:%S")
+
+  if (max < length(x)) {
+    print(FORM(x[seq_len(max)]), max = max + 1, ...)
+    cat(" [ reached 'max' / getOption(\"max.print\") -- omitted",
+        length(x) - max, "entries ]\n")
+  } else if (length(x)) {
+    print(FORM(x), max = max, ...)
+  } else {
+    cat(class(x)[1L], "of length 0\n")
+  }
+
+  invisible(x)
 }
 
-print.iso_datetime <- function(x, ...) {
-  print(format(x, "%Y-%m-%d %H:%M:%S"))
-}

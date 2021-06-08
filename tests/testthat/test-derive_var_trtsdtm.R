@@ -13,11 +13,11 @@ test_that("TRTSDTM variable is added", {
 
   expected_output <- mutate(
     adsl,
-    TRTSDTM = as_iso_datetime(c(
+    TRTSDTM = c(
       ymd_hms("2020-01-01T00:00:00"),
       ymd_hms("2020-01-02T00:00:00"),
       ymd_hms("2020-03-13T00:00:00")
-    ))
+    )
   )
 
   actual_output <- derive_var_trtsdtm(adsl, dataset_ex = ex)

@@ -333,8 +333,8 @@ convert_dtc_to_dtm <- function(dtc) {
 
   # note T00:00:00 is not printed in dataframe
   case_when(
-    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ as_iso_datetime(ymd_hms(dtc)),
-    TRUE ~ as_iso_datetime(ymd_hms(NA))
+    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
+    TRUE ~ ymd_hms(NA)
   )
 }
 #' Derive the date imputation flag
