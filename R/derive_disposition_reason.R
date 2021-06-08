@@ -30,8 +30,7 @@
 #' format_reason_default<-function(x, y=NULL){
 #' case_when (
 #'   x == "COMPLETED" ~ x,
-#'   x %!in% c("COMPLETED") & ! is.na(x)~"DISCONTINUED",
-#'   TRUE ~ "ONGOING"
+#'   TRUE ~ NA_character
 #' )
 #' }
 #' where x is the reason_var.
@@ -44,6 +43,16 @@
 #'
 #' @return the input dataset with the disposition reason (`new_var`) added.
 #'
+#' @details
+#' This functions returns the main reason for discontinuation (e.g. `DCSREAS` or `DCTREAS`).
+#' The reason for discontinuation is derived based on `reason_var` (e.g. `DSDECOD`) and
+#' `format_new_var`.
+#' If `new_var_spe` is not NULL, then the function will also returns the details associated
+#' with the reason for discontinuation (e.g. `DCSREASP`).
+#' The details associated with the reason for discontinuation are derived based on
+#' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_var`. see
+#'
+#' @seealso [`format_reason_default()`]
 #' @keywords adsl
 #'
 #' @author Samia Kabi
@@ -90,7 +99,6 @@ derive_disposition_reason <- function(dataset,
                                       format_new_var = format_reason_default,
                                       filter_ds) {
 
-
   # Checks
   warn_if_vars_exist(dataset, deparse(substitute(new_var)))
   assert_that(is.data.frame(dataset_ds))
@@ -111,12 +119,17 @@ derive_disposition_reason <- function(dataset,
       ))
     }
   }
+
+  new_var <- enquo(new_var)
+  reason_var <- enquo(reason_var)
+  new_var_spe <- enquo(new_var_spe)
+  reason_var_spe <- enquo(reason_var_spe)
   filter_ds <- enquo(filter_ds)
 
   # Process the disposition data
   ds_subset <- dataset_ds %>%
     filter(!!filter_ds) %>%
-    select(STUDYID, USUBJID, !!enquo(reason_var), !!enquo(reason_var_spe))
+    select(STUDYID, USUBJID, !!reason_var, !!reason_var_spe)
 
   # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
   has_unique_records(
@@ -126,21 +139,18 @@ derive_disposition_reason <- function(dataset,
     message = "The filter used for DS results in several records per patient - please check"
   )
   # Add the status variable and derive the new dispo reason(s) in the input dataset
-  if (!quo_is_null(enquo(new_var_spe))) {
+  if (!quo_is_null(new_var_spe)) {
     dataset %>%
       left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
-      mutate(!!enquo(new_var) := format_new_var(!!enquo(reason_var))) %>%
-      mutate(!!enquo(new_var_spe) := format_new_var(
-        !!enquo(reason_var),
-        !!enquo(reason_var_spe)
-      )) %>%
-      select(-!!enquo(reason_var), -!!enquo(reason_var_spe))
+      mutate(!!new_var := format_new_var(!!reason_var)) %>%
+      mutate(!!new_var_spe := format_new_var(!!reason_var, !!reason_var_spe)) %>%
+      select(-!!reason_var, -!!reason_var_spe)
   }
   else {
     dataset %>%
       left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
-      mutate(!!enquo(new_var) := format_new_var(!!enquo(reason_var))) %>%
-      select(-!!enquo(reason_var))
+      mutate(!!new_var := format_new_var(!!reason_var)) %>%
+      select(-!!reason_var)
   }
 }
 

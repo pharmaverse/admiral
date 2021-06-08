@@ -37,8 +37,7 @@ Default: format_reason_default defined as:
 format_reason_default<-function(x, y=NULL){
 case_when (
 x == "COMPLETED" ~ x,
-x %!in% c("COMPLETED") & ! is.na(x)~"DISCONTINUED",
-TRUE ~ "ONGOING"
+TRUE ~ NA_character
 )
 }
 where x is the reason_var.}
@@ -54,6 +53,15 @@ the input dataset with the disposition reason (\code{new_var}) added.
 }
 \description{
 Derive a disposition reason from the the relevant records in the disposition domain.
+}
+\details{
+This functions returns the main reason for discontinuation (e.g. \code{DCSREAS} or \code{DCTREAS}).
+The reason for discontinuation is derived based on \code{reason_var} (e.g. \code{DSDECOD}) and
+\code{format_new_var}.
+If \code{new_var_spe} is not NULL, then the function will also returns the details associated
+with the reason for discontinuation (e.g. \code{DCSREASP}).
+The details associated with the reason for discontinuation are derived based on
+\code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_var}. see
 }
 \examples{
 library(dplyr)
@@ -86,6 +94,9 @@ derive_disposition_reason(
   format_new_var = format_dcsreas,
   filter_ds = DSCAT == "DISPOSITION EVENT"
 )
+}
+\seealso{
+\code{\link[=format_reason_default]{format_reason_default()}}
 }
 \author{
 Samia Kabi
