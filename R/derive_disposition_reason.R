@@ -28,10 +28,11 @@
 #'
 #' Default: format_reason_default defined as:
 #' format_reason_default<-function(x, y=NULL){
-#' case_when (
-#'   x == "COMPLETED" ~ x,
-#'   TRUE ~ NA_character
-#' )
+#' out <- if (is.null(y)) x else y
+#' case_when(
+#'  x != "COMPLETED" & !is.na(x) ~ out,
+#'    TRUE ~ NA_character_
+#'    )
 #' }
 #' where x is the reason_var.
 #'
