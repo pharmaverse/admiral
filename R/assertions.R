@@ -565,6 +565,6 @@ are_records_same <- function(x, y, x_arg, y_arg) {
 }
 
 on_failure(are_records_same) <- function(call, env) {
-  str_glue("`{call$x_arg}` must have consistent values to the new derived \\
-           records of `{call$y_arg}`.")
+  str_glue("`{call$x_arg}` must have consistent length to the new derived records
+           of `{call$y_arg}` within `by_vars`.")
 }
