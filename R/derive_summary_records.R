@@ -239,31 +239,16 @@ as_inlined_function <- function(funs, env) {
 #' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
 #' as_fun_list(fm, caller_env())
 as_fun_list <- function(.funs, .env) {
-
-  if (is_formula(.funs)) {
-    .funs <- list(.funs)
-  }
-
-  if (!purrr::every(.funs, is_formula)) {
-    abort(
-      c("Problem with input `fns`, expecting a two sided formula.",
-        i = "LHS = an analysis variable and RHS = a function, or a function name.",
-        i = "e.g `fns = list(aval ~ mean)`.")
-    )
-  }
-
   funs <- map(.funs, function(.x) {
     rhs <- f_rhs(.x)
     if (is_call(rhs)) {
-      if (grepl("^list", deparse(rhs))) {
+      if (is_call(rhs, c("list", "vars"))) {
         abort("The LHS of `fns` must be a string or a function")
       }
       .x <- as_inlined_function(.x, env = .env)
     } else if (is_character(rhs) || is_symbol(rhs)) {
       fn <- get(rhs, .env, mode = "function")
       .x <- structure(fn, stats = as_string(rhs))
-    } else {
-      abort("Problem with handling RHS of `fns` argument.")
     }
     .x
   })
@@ -340,6 +325,18 @@ as_call_list <- function(funs, vars) {
 #'
 #' @noRd
 manip_fun <- function(dataset, fns, .env) {
+  if (is_formula(fns)) {
+    fns <- list(fns)
+  }
+
+  if (!every(fns, is_formula)) {
+    abort(
+      str_glue(
+        "Problem with input `fns`, expecting a two sided formula.
+        LHS = an analysis variable and RHS = a function, or a function name.
+        e.g `fns = list(aval ~ mean)`."))
+  }
+
   fn_vars <- get_fun_vars(fns, dataset)
   fn_list <- as_fun_list(fns, .env = .env)
   as_call_list(fn_list, fn_vars)
