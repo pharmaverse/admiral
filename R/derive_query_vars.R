@@ -38,8 +38,8 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     else return("")
   }, USE.NAMES = FALSE)
   new_cols_names <- unlist(new_cols_names)
-  # Note: in case something not matched? should this be checked in `queries`
-  new_cols_names <- new_cols_names[new_cols_names != ""]
+
+  # add in empty new columns in dataset
   dataset[new_cols_names] <- NA_character_
 
   # split by each level of query since the joining variable would be different
