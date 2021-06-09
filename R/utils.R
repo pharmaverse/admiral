@@ -1,11 +1,82 @@
-enumerate <- function(x) {
+#' @export
+dplyr::vars
+
+#' @export
+dplyr::desc
+
+#' @export
+rlang::exprs
+
+#' @export
+dplyr::vars
+
+#' Enumerate Multiple Strings
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' enumerate(letters[1:6])
+enumerate <- function(x, quote_fun = backquote) {
   paste(
-    paste0(backquote(x[-length(x)]), collapse = ", "),
+    paste0(quote_fun(x[-length(x)]), collapse = ", "),
     "and",
-    backquote(x[length(x)])
+    quote_fun(x[length(x)])
   )
 }
 
+#' Wrap a String in Backquotes
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' backquote("foo")
 backquote <- function(x) {
   paste0("`", x, "`")
+}
+
+#' Wrap a String in Single Quotes
+#'
+#' @param x A `character` vector
+#'
+#' @noRd
+#'
+#' @examples
+#' squote("foo")
+squote <- function(x) {
+  paste0("'", x, "'")
+}
+
+#' Negated Value Matching
+#'
+#' Returns a `logical` vector indicating if there is *no* match of the
+#' left operand in the right operand.
+#'
+#' @param x The values to be matched
+#' @param table The values to be matched against
+#'
+#' @rdname utils
+#' @name not_in
+#'
+#' @export
+#'
+#' @examples
+#' "a" %!in% c("b", "v", "k")
+`%!in%` <- function(x, table) {
+  !(x %in% table)
+}
+
+#' Turn a List of Quosures into a Character Vector
+#'
+#' @param quosures A `list` of `quosures` created using [`vars()`]
+#'
+#' @noRd
+#'
+#' @examples
+#' vars2chr(vars(USUBJID, AVAL))
+vars2chr <- function(quosures) {
+  map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }

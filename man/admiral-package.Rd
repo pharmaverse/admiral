@@ -16,7 +16,9 @@ More about what it does (maybe more than one line)
 
 Authors:
 \itemize{
+  \item Alice Ehmann \email{alice.x.ehmann@gsk.com}
   \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
+  \item Samia Kabi \email{samia.kabi@roche.com}
 }
 
 }

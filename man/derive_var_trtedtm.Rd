@@ -2,10 +2,10 @@
 % Please edit documentation in R/derive_var_trtedtm.R
 \name{derive_var_trtedtm}
 \alias{derive_var_trtedtm}
-\title{Derive datetime of Last Exposure to Treatment (TRTEDTM)}
+\title{Derive datetime of Last Exposure to Treatment}
 \usage{
-derive_var_trtedtm(dataset, dataset_ex, filter_ex = exprs((EXDOSE > 0 |
-  (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10))
+derive_var_trtedtm(dataset, dataset_ex, filter_ex = (EXDOSE > 0 | (EXDOSE
+  == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -22,7 +22,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \code{exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))}
+Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
 
 Permitted Values: logical expression}
 }
@@ -30,7 +30,7 @@ Permitted Values: logical expression}
 The input dataset with \code{TRTEDTM} variable added
 }
 \description{
-Derives datetime of Last Exposure to Treatment (TRTEDTM)
+Derives datetime of Last Exposure to Treatment (\code{TRTEDTM})
 }
 \details{
 For each group (with respect to the variables specified for the
@@ -38,16 +38,13 @@ For each group (with respect to the variables specified for the
 specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
-library(magrittr)
-
+library(dplyr, warn.conflicts = FALSE)
 data("ex")
 data("dm")
 
-derive_var_trtedtm(dm,
-                   dataset_ex = ex) \%>\%
+dm \%>\%
+  derive_var_trtedtm(dataset_ex = ex) \%>\%
   select(USUBJID, TRTEDTM)
-
 }
 \author{
 Stefan Bundfuss

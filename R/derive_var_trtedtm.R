@@ -1,6 +1,6 @@
-#' Derive datetime of Last Exposure to Treatment (TRTEDTM)
+#' Derive datetime of Last Exposure to Treatment
 #'
-#' Derives datetime of Last Exposure to Treatment (TRTEDTM)
+#' Derives datetime of Last Exposure to Treatment (`TRTEDTM`)
 #'
 #' @param dataset Input dataset
 #'
@@ -16,7 +16,7 @@
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
-#'   Default: `exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))`
+#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')`
 #'
 #'   Permitted Values: logical expression
 #'
@@ -33,26 +33,36 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' library(magrittr)
-#'
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("ex")
 #' data("dm")
 #'
-#' derive_var_trtedtm(dm,
-#'                    dataset_ex = ex) %>%
+#' dm %>%
+#'   derive_var_trtedtm(dataset_ex = ex) %>%
 #'   select(USUBJID, TRTEDTM)
-#'
+derive_var_trtedtm <- function(dataset,
+                               dataset_ex,
+                               filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10) { # nolint
 
-derive_var_trtedtm <- function(
-  dataset,
-  dataset_ex,
-  filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)) { # nolint
+  assert_has_variables(dataset, c("USUBJID"))
+  assert_has_variables(dataset_ex, c("USUBJID", "EXENDTC", "EXSEQ"))
+  filter_ex <- enquo(filter_ex)
 
-  derive_merged_vars(
-    dataset,
-    dataset_add = dataset_ex,
-    filter_add = filter_ex,
-    new_vars = exprs(TRTEDTM := convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = 'LAST'))),
-    filter_order = exprs(EXENDTC, EXSEQ))
+  if (!quo_is_null(filter_ex)) {
+    add <- filter(dataset_ex, !!filter_ex)
+  } else {
+    add <- dataset_ex
+  }
+  add <- add %>%
+    filter_extreme(
+      order = vars(EXENDTC, EXSEQ),
+      by_vars = vars(USUBJID),
+      mode = "last"
+    ) %>%
+    transmute(
+      USUBJID,
+      TRTEDTM = convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))
+    )
+
+  left_join(dataset, add, by = c("USUBJID"))
 }

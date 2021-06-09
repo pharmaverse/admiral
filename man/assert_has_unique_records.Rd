@@ -4,8 +4,8 @@
 \alias{assert_has_unique_records}
 \title{Are records unique?}
 \usage{
-assert_has_unique_records(dataset, by_vars, order, message,
-  message_type = "error")
+assert_has_unique_records(dataset, by_vars = NULL, order = NULL,
+  message)
 }
 \arguments{
 \item{dataset}{The input dataset to check}
@@ -19,24 +19,22 @@ order values are written as variables in the output.}
 
 \item{message}{Error message
 The message to be displayed if the check fails.}
-
-\item{message_type}{Message type
-If \code{'error'} is specified, an error is issued if the check fails. Otherwise
-an warning is issued.}
 }
 \value{
-\code{TRUE} if the argument is a date or date-time, \code{FALSE} otherwise
+\code{TRUE} if the records are unique, \code{FALSE} otherwise
 }
 \description{
-Checks if the reords of a dateset are unique with respect to the specified
-list of by variables and order.
+Checks if the records of a dateset are unique with respect to the specified
+list of by variables and order. If the check fails, an error is issued.
 }
 \examples{
 data(ex)
 assert_has_unique_records(ex,
-                          by_vars = rlang::exprs(USUBJID) ,
-                          order = rlang::exprs(desc(EXENDTC)))
+  by_vars = vars(USUBJID),
+  order = vars(desc(EXENDTC))
+)
 }
 \author{
 Stefan Bundfuss
 }
+\keyword{assertion}

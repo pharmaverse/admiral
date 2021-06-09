@@ -8,19 +8,28 @@ test_that("first observation for each group are selected", {
     1, 3, 9,
     2, 2, 42,
     3, 3, 14,
-    3, 3, 10)
+    3, 3, 10
+  )
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     2, 2, 42,
-    3, 3, 10)
+    3, 3, 10
+  )
 
-  expect_equal(filter_extreme(input,
-                              order = exprs(AVISITN, AVAL),
-                              by_vars = exprs(USUBJID),
-                              mode = 'first'),
-               expected_output)
+  actual_output <- filter_extreme(
+    input,
+    order = vars(AVISITN, AVAL),
+    by_vars = vars(USUBJID),
+    mode = "first"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "USUBJID"
+  )
 })
 
 test_that("first observation is selected without grouping", {
@@ -30,14 +39,23 @@ test_that("first observation is selected without grouping", {
     1, 3, 9,
     2, 2, 42,
     3, 3, 14,
-    3, 3, 10)
+    3, 3, 10
+  )
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
-    1, 1, 12)
+    1, 1, 12
+  )
 
-  expect_equal(filter_extreme(input,
-                              order = exprs(AVISITN, AVAL),
-                              mode = 'first'),
-               expected_output)
+  actual_output <- filter_extreme(
+    input,
+    order = vars(AVISITN, AVAL),
+    mode = "first"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "USUBJID"
+  )
 })

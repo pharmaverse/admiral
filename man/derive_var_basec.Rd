@@ -4,12 +4,12 @@
 \alias{derive_var_basec}
 \title{Derive BASEC}
 \usage{
-derive_var_basec(dataset, by_vars = c("USUBJID", "PARAMCD", "BASETYPE"))
+derive_var_basec(dataset, by_vars)
 }
 \arguments{
-\item{dataset}{\code{data.frame}}
+\item{dataset}{The input dataset}
 
-\item{by_vars}{\code{character} vector of columns uniquely identifying a set
+\item{by_vars}{Grouping variables uniquely identifying a set
 of records for which to calculate \code{BASE}}
 }
 \value{
@@ -21,16 +21,18 @@ Derive the \code{BASEC} variable in a BDS dataset
 }
 \examples{
 dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "N",
+  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
+  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
 )
-derive_var_basec(dataset)
+derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
 }
 \author{
 Thomas Neitmann
 }
+\keyword{bds}
+\keyword{derivation}

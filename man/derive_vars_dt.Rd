@@ -2,48 +2,87 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dt}
 \alias{derive_vars_dt}
-\title{Derive --DT (and --DTF)}
+\title{Derive/Impute a date from a date character vector}
 \usage{
 derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
-  flag_imputation = TRUE)
+  flag_imputation = TRUE, min_dates = NULL, max_dates = NULL)
 }
 \arguments{
-\item{dataset}{Input dataset
+\item{dataset}{Input dataset.
 
-The --DTC variable must be present.}
+The date character vector (dtc) must be present.}
 
-\item{new_vars_prefix}{Prefix used for the output variable(s)
+\item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g new_vars_prefix="AST"}
+a character is expected: e.g new_vars_prefix="AST".}
 
-\item{dtc}{The --DTC date used to derive/impute --DT
+\item{dtc}{The --DTC date to impute
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss
-if the year part is not recorded (missing date), no imputation is done}
+A character date is expected in a format like yyyy-mm-dd or
+yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+imputation is performed.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
 
-If NULL: no date imputation is perfomed and partial dates are returned as missing
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
+of June,
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+day/month.
 }
 
-Default is NULL}
+Default is \code{NULL}.}
 
-\item{flag_imputation}{Whether the --DTF variable must also be derived
+\item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 A logical value
 
 Default: TRUE}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
+}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the dtc date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.}
+}
+\value{
+the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
 }
 \description{
-Derive --DT based on --DTC. --DT is imputed based on user input
-Derive --DTF if needed based on --DTC and --DT
+Derive a date ('--DT') from a date character vector ('---DTC').
+The date can be imputed (see date_imputation parameter)
+and the date imputation flag ('--DTF') can be added.
 }
 \examples{
+library(lubridate)
+
 mhdt <- tibble::tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
@@ -57,7 +96,7 @@ mhdt <- tibble::tribble(
 
 # Create ASTDT and ASTDTF
 # no imputation for partial date
-mhdt1 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC
@@ -65,7 +104,7 @@ mhdt1 <- derive_vars_dt(
 
 # Create ASTDT and ASTDTF
 # Impute partial dates to first day/month
-mhdt2 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -73,7 +112,7 @@ mhdt2 <- derive_vars_dt(
 )
 
 # Impute partial dates to 4th of june
-mhdt2a <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
@@ -82,7 +121,7 @@ mhdt2a <- derive_vars_dt(
 
 # Create AENDT and AENDTF
 # Impute partial dates to last day/month
-mhdt3 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AEN",
   dtc = MHSTDTC,
@@ -91,14 +130,33 @@ mhdt3 <- derive_vars_dt(
 
 # Create BIRTHDT
 # Impute partial dates to 15th of June. No DTF
-mhdt4 <- derive_vars_dt(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
   date_imputation = "MID",
   flag_imputation = FALSE
 )
+
+# Impute AE start date to the first date and ensure that the imputed date
+# is not before the treatment start date
+adae <- tibble::tribble(
+  ~AESTDTC, ~TRTSDTM,
+  "2020-12", ymd_hms("2020-12-06T12:12:12"),
+  "2020-11", ymd_hms("2020-12-06T12:12:12")
+)
+
+derive_vars_dt(
+  adae,
+  dtc = AESTDTC,
+  new_vars_prefix = "AST",
+  date_imputation = "first",
+  min_dates = list(TRTSDTM)
+)
 }
 \author{
 Samia Kabi
 }
+\keyword{adam}
+\keyword{derivation}
+\keyword{timing}
