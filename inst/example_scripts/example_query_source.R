@@ -10,18 +10,20 @@ queries <- tibble::tribble(
   "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
   "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BIOPSY THYROID GLAND ABNORMAL",
   "SMQ03", "Immune-Mediated Hypothyroidism", "20000161", "NARROW", "AEDECOD", "BASEDOW'S DISEASE",
-  "CQ04", "Immune-Mediated Adrenal Insufficiency", "12150", "", "AEDECOD", "ADDISON'S DISEASE",
-  "SMQ05", "Immune-Mediated Pneumonitis", "20000042", "NARROW", "AEDECOD", "ALVEOLAR PROTEINOSIS"
+  "CQ04", "Immune-Mediated Adrenal Insufficiency", "12150", NA_character_, "AEDECOD", "ADDISON'S DISEASE",
+  "SMQ05", "Immune-Mediated Pneumonitis", "20000042", "NARROW", "AEDECOD", "ALVEOLAR PROTEINOSIS",
+  "CQ06", "Some query", "11111", NA_character_, "AELLT", "SOME TERM"
 )
 
 # save(queries, file = "data/queries.rda")
 
 adae <- tibble::tribble(
-  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD,
-  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal",
-  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease",
-  "03", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis"
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
+  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis", NA_character_,
+  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
 )
 
 # try below:
-derive_query_vars(adae, queries)
+derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
