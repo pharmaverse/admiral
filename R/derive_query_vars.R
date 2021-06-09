@@ -26,7 +26,6 @@ derive_query_vars <- function(dataset, queries) {
                        c("VAR_PREFIX", "QUERY_NAME", "QUERY_ID", "QUERY_SCOPE",
                          "TERM_LEVEL", "TERM_NAME"))
 
-
   # names of new columns
   new_cols_names <- sapply(queries$VAR_PREFIX, function(x) {
     if (grepl("SMQ", x) | grepl("SGD", x)) return(paste0(x, c("NAM", "CD", "SC")))
@@ -34,9 +33,11 @@ derive_query_vars <- function(dataset, queries) {
     else return("")
   }, USE.NAMES = FALSE)
   new_cols_names <- unlist(new_cols_names)
+  # Note: in case something not matched? should this be checked in `queries`
+  new_cols_names <- new_cols_names[new_cols_names != ""]
   dataset[new_cols_names] <- NA_character_
 
-  # split by each level of query since the joining variables are different
+  # split by each level of query since the joining variable would be different
   queries_list <- split(queries, queries$TERM_LEVEL)
   for (queries_one_level in queries_list) {
     term_level <- unique(queries_one_level$TERM_LEVEL) # the column name to be joined by in ADAE
