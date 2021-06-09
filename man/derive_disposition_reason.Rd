@@ -16,7 +16,7 @@ derive_disposition_reason(dataset, dataset_ds, new_var, reason_var,
 It must contains
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
-\item The variable specified in the \code{reason_var}, (and \code{reason_var_spe} if required)
+\item The variable(s) specified in the \code{reason_var} (and \code{reason_var_spe}, if required)
 \item The variables used in \code{filter_ds}.
 }}
 
@@ -32,13 +32,40 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 A variable name is expected (e.g. \code{DCSREASP}).
 If \code{new_var_spe} is specified, it is expected that \code{reason_var_spe} is also specified,
-otherwise a warning is issued and}
+otherwise an error is issued.
+
+Default: NULL}
 
 \item{reason_var_spe}{The variable used to derive the disposition reason detail
 
-A variable name is expected (e.g. \code{DSTERM}).}
+A variable name is expected (e.g. \code{DSTERM}).
+If \code{new_var_spe} is specified, it is expected that \code{reason_var_spe} is also specified,
+otherwise an error is issued.
+
+Default: NULL}
 
 \item{format_new_vars}{The function used to derive the reason(s)
+
+This function is used to derive the disposition reason(s) and must follow the below conventions
+\itemize{
+\item If only the main reason for discontinuation needs to be derived (i.e. \code{new_var_spe} is NULL),
+the function must have at least one character vector argument, e.g.
+\code{format_reason <- function(reason)}
+and \code{new_var} will be derived as \code{new_var = format_reason(reason_var)}
+Typically, the content of the function would return \code{reason_var} or \code{NA} depending on the
+value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)}).
+\code{DCSREAS = format_reason(DSDECOD)} returns DCSREAS = \code{DSDECOD} when \code{DSDECOD} is not 'COMPLETED'
+nor \code{NA}, \code{NA} otherwise.
+\item If both the main reason and the details needs to be derived (\code{new_var_spe} is specified)
+the function must have two character vectors argument, e.g.
+\code{format_reason2 <- function(reason, reason_spe)} and
+\code{new_var} will be derived as \code{new_var} = \code{format_reason(reason_var)},
+\code{new_var_spe} will be derived as \code{new_var_spe} = \code{format_reason(reason_var, reason_var_spe)},
+Typically, the content of the function would return \code{reason_var_spe} or \code{NA} depending on the
+\code{reason_var} value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe, NA_character_)}).
+\code{DCSREASP = format_reason(DSDECOD, DSTERM)} returns DCSREASP = \code{DSTERM} when \code{DSDECOD} is not
+'COMPLETED' nor NA.
+}
 
 Default: format_reason_default defined as:
 format_reason_default <- function(reason, reason_spe = NULL) {
@@ -50,14 +77,13 @@ format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
-Filter used to select the relevant disposition data.
-It is expected that the filter restricts \code{dataset_ds} such that there is at most
-one observation per patient. A warning is issued otherwise.
+one observation per patient. An error is issued otherwise.
 
 Permitted Values: logical expression.}
 }
 \value{
-the input dataset with the disposition reason(s) (\code{new_var and if required }new_var_spe`)  added.
+the input dataset with the disposition reason(s) (\code{new_var} and
+if required \code{new_var_spe}) added.
 }
 \description{
 Derive a disposition reason from the the relevant records in the disposition domain.

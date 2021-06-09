@@ -8,7 +8,7 @@
 #'
 #' It must contains
 #' - `STUDYID`, `USUBJID`,
-#' - The variable specified in the `reason_var`, (and `reason_var_spe` if required)
+#' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
 #'
 #' @param new_var Name of the disposition reason variable.
@@ -23,13 +23,41 @@
 #'
 #' A variable name is expected (e.g. `DCSREASP`).
 #' If `new_var_spe` is specified, it is expected that `reason_var_spe` is also specified,
-#' otherwise a warning is issued and
+#' otherwise an error is issued.
+#'
+#' Default: NULL
 #'
 #' @param reason_var_spe The variable used to derive the disposition reason detail
 #'
 #' A variable name is expected (e.g. `DSTERM`).
+#' If `new_var_spe` is specified, it is expected that `reason_var_spe` is also specified,
+#' otherwise an error is issued.
+#'
+#' Default: NULL
 #'
 #' @param format_new_vars The function used to derive the reason(s)
+#'
+#' This function is used to derive the disposition reason(s) and must follow the below conventions
+#'
+#' - If only the main reason for discontinuation needs to be derived (i.e. `new_var_spe` is NULL),
+#' the function must have at least one character vector argument, e.g.
+#' `format_reason <- function(reason)`
+#' and `new_var` will be derived as `new_var = format_reason(reason_var)`
+#' Typically, the content of the function would return `reason_var` or `NA` depending on the
+#' value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)`).
+#' `DCSREAS = format_reason(DSDECOD)` returns DCSREAS = `DSDECOD` when `DSDECOD` is not 'COMPLETED'
+#'  nor `NA`, `NA` otherwise.
+#'
+#' - If both the main reason and the details needs to be derived (`new_var_spe` is specified)
+#' the function must have two character vectors argument, e.g.
+#' `format_reason2 <- function(reason, reason_spe)` and
+#' `new_var` will be derived as `new_var` = `format_reason(reason_var)`,
+#' `new_var_spe` will be derived as `new_var_spe` = `format_reason(reason_var, reason_var_spe)`,
+#' Typically, the content of the function would return `reason_var_spe` or `NA` depending on the
+#' `reason_var` value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe,
+#' NA_character_)`).
+#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns DCSREASP = `DSTERM` when `DSDECOD` is not
+#' 'COMPLETED' nor NA.
 #'
 #' Default: format_reason_default defined as:
 #' format_reason_default <- function(reason, reason_spe = NULL) {
@@ -41,14 +69,14 @@
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-#'   Filter used to select the relevant disposition data.
-#'   It is expected that the filter restricts `dataset_ds` such that there is at most
-#'   one observation per patient. A warning is issued otherwise.
+# 'Filter used to select the relevant disposition data.
+# 'It is expected that the filter restricts `dataset_ds` such that there is at most
+#' one observation per patient. An error is issued otherwise.
 #'
-#'   Permitted Values: logical expression.
+#' Permitted Values: logical expression.
 #'
-#' @return the input dataset with the disposition reason(s) (`new_var and
-#' if required `new_var_spe`)  added.
+#' @return the input dataset with the disposition reason(s) (`new_var` and
+#' if required `new_var_spe`) added.
 #'
 #' @details
 #' This functions returns the main reason for discontinuation (e.g. `DCSREAS` or `DCTREAS`).
@@ -137,11 +165,11 @@ derive_disposition_reason <- function(dataset,
     filter(!!filter_ds) %>%
     select(STUDYID, USUBJID, !!reason_var, !!reason_var_spe)
 
-  # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
+  # Expect 1 record per subject in the subsetted DS - issue an error otherwise
   has_unique_records(
     dataset = ds_subset,
     by_vars = vars(STUDYID, USUBJID),
-    message_type = "warning",
+    message_type = "error",
     message = "The filter used for DS results in several records per patient - please check"
   )
   # Add the status variable and derive the new dispo reason(s) in the input dataset
