@@ -6,14 +6,12 @@
 #'
 #' @author Shimeng Huang
 #'
-#' @importFrom usethis use_template
-#'
 #' @export
 #'
 #' @examples
 #' use_ad_template("./ad_adsl.R", "adsl")
 use_ad_template <- function(save_path, dom_name = "adsl", open = interactive()) {
-  usethis::use_template(
+  use_template(
     template = paste0("ad_", tolower(dom_name), ".R"),
     save_as = save_path,
     package = "admiral",
