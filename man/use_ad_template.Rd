@@ -4,12 +4,13 @@
 \alias{use_ad_template}
 \title{A helper function to create a template script.}
 \usage{
-use_ad_template(save_path, dom_name = "adsl", open = interactive())
+use_ad_template(adam_name = "adsl", save_path = paste0("./", adam_name,
+  ".R"), open = interactive())
 }
 \arguments{
-\item{save_path}{Path to save the script.}
+\item{adam_name}{An ADaM domain name.}
 
-\item{dom_name}{An ADaM domain name.}
+\item{save_path}{Path to save the script.}
 
 \item{open}{Whether to open the script right away.}
 }

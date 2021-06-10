@@ -5,18 +5,23 @@
 # Input: dm, ex, ds
 #
 
+library(admiral)
 library(dplyr)
 library(lubridate)
-library(admiral)
-library(rice)
 
 # ---- Load source datasets ----
 
-dm <- rice_read("/PATH/TO/DM/ON/ENTIMICE")
-ex <- rice_read("/PATH/TO/EX/ON/ENTIMICE")
-ds <- rice_read("/PATH/TO/DS/ON/ENTIMICE")
+# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+#  as needed and assign to the variables below.
+
+dm <- NULL
+ex <- NULL
+ds <- NULL
 
 # ---- User defined functions ----
+
+# Here are some examples of how you can create your own functions that
+#  operates on vectors, which can be used in `mutate`.
 
 # Grouping
 format_agegr1 <- function(x) {
