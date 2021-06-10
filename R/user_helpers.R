@@ -35,7 +35,7 @@ use_ad_template <- function(adam_name = "adsl",
 #' @export
 #'
 #' @examples
-#' list_templates()
+#' list_all_templates()
 list_all_templates <- function() {
   all_tpl <- list.files(system.file("templates", package = "admiral"))
   cat(all_tpl, sep = "\n")

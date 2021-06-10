@@ -10,7 +10,7 @@ list_all_templates()
 List all templates provided by {admiral}.
 }
 \examples{
-list_templates()
+list_all_templates()
 }
 \author{
 Shimeng Huang
