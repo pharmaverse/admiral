@@ -43,15 +43,15 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
   # queries restructured
   queries_wide <- queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
-           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
-    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
-    mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM"),
+           VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                   "tmp_drop",
-                                  paste0(.data$VAR_PREFIX, "CD"))) %>%
-    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
-    mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+                                  paste0(.data$VAR_PREFIX, "CD")),
+           VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                   "tmp_drop2",
                                   paste0(.data$VAR_PREFIX, "SC"))) %>%
+    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
     spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE) %>%
     select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
