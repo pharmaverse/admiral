@@ -35,7 +35,7 @@ If \code{VAR_PREFIX} starts with "SMQ" or "SDG", then the corresponding
 "NAM" variable is derived.
 }
 \author{
-Shimeng Huang
+Ondrej Slama, Shimeng Huang
 }
 \keyword{adae}
 \keyword{adcm}

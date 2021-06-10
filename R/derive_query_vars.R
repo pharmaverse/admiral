@@ -21,7 +21,7 @@
 #'   a unique record in the `dataset`. e.g. for ADAE, this would be
 #'   `c("USUBJID", "ASTDTM", "AETERM", "AESEQ")`.
 #'
-#' @author Shimeng Huang
+#' @author Ondrej Slama, Shimeng Huang
 #'
 #' @keywords adae adcm
 #'
@@ -93,11 +93,6 @@ assert_valid_queries <- function(queries) {
     abort("Missing required column(s) in `queries`.")
   }
 
-  if (length(unique(queries$VAR_PREFIX)) != nrow(queries)) {
-    abort("`VAR_PREFIX` in `queries` cannot have duplicates.")
-  }
-
-  # TODO: not sure if this one needed?
   query_num <- substr(queries$VAR_PREFIX,
                       start = nchar(queries$VAR_PREFIX)-1,
                       stop = nchar(queries$VAR_PREFIX))
@@ -114,8 +109,7 @@ assert_valid_queries <- function(queries) {
     abort("`QUERY_NAME` in `queries` cannot be empty string or NA.")
   }
 
-  # TODO: allow only NA instead of empty strings?
-  if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", NA_character_))) {
+  if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
     abort("`QUERY_SCOPE` in `queries` can only be 'BROAD', 'NARROW' or `NA_character_`.")
   }
 
