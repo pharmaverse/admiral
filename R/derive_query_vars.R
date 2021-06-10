@@ -15,7 +15,7 @@
 #' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 #' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 #' - TERM_NAME, non NULL
-#'   This will be check by [validate_queries()].
+#'   This will be check by [assert_valid_queries()].
 #'
 #' @param dataset_keys A vector of column names that can be used to identify
 #'   a unique record in the `dataset`. e.g. for ADAE, this would be
@@ -32,51 +32,42 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
   assert_valid_queries(queries)
 
   # names of new columns
-  new_cols_names <- sapply(queries$VAR_PREFIX, function(x) {
+  new_cols_names <- lapply(queries$VAR_PREFIX, function(x) {
     if (grepl("SMQ", x) | grepl("SGD", x)) return(paste0(x, c("NAM", "CD", "SC")))
     else if (grepl("CQ", x)) return(paste0(x, "NAM"))
     else return("")
-  }, USE.NAMES = FALSE)
+  })
   new_cols_names <- unlist(new_cols_names)
 
-  # add in empty new columns in dataset
-  dataset[new_cols_names] <- NA_character_
+  # queries restructured
+  queries_wide <- queries %>%
+    mutate(TERM_NAME = toupper(.data$TERM_NAME),
+           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM"),
+           VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+                                  "tmp_drop",
+                                  paste0(.data$VAR_PREFIX, "CD")),
+           VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+                                  "tmp_drop2",
+                                  paste0(.data$VAR_PREFIX, "SC"))) %>%
+    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
+    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE) %>%
+    select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
+    mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
-  # split by each level of query since the joining variable would be different
-  queries_list <- split(queries, queries$TERM_LEVEL)
-  for (queries_one_level in queries_list) {
-    term_level <- unique(queries_one_level$TERM_LEVEL) # the column name to be joined by in ADAE
-    dataset_temp <- dataset %>%
-      select(dataset_keys, term_level)
+  # prepare input dataset for joining
+  joined <- dataset %>%
+    gather(key = "TERM_LEVEL", value = "TERM_NAME", -dataset_keys) %>%
+    drop_na(.data$TERM_NAME)
+  term_cols <- unique(joined$TERM_LEVEL)
 
-    # TODO: better way to match ignoring case and not use fuzzyjoin? see below in left_join too
-    dataset_temp[[paste0(term_level, "_temp")]] <- toupper(dataset_temp[[term_level]])
-    dataset_temp <- dataset_temp %>%
-      left_join(queries_one_level %>%
-                  mutate(TERM_NAME = toupper(TERM_NAME)),
-                by = setNames("TERM_NAME", paste0(term_level, "_temp"))) %>%
-      filter(!is.na(VAR_PREFIX)) # remove unmatched ones for this term_level
-    dataset_temp[new_cols_names] <- NA_character_
+  # join restructured queries to input dataset
+  joined <- joined %>%
+    mutate(TERM_NAME_UPPER = toupper(.data$TERM_NAME)) %>%
+    dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME"))
 
-    # go through each row and assign values to the correct columns
-    # TODO: better ways to do this?
-    for (ii in 1:nrow(dataset_temp)) {
-      var_prefix <- dataset_temp$VAR_PREFIX[ii]
-      dataset_temp[[paste0(var_prefix, "NAM")]][ii] <- dataset_temp$QUERY_NAME[ii]
-      if (grepl("SMQ", var_prefix) | grepl("SGD", var_prefix) ) {
-        dataset_temp[[paste0(var_prefix, "SC")]][ii] <- dataset_temp$QUERY_SCOPE[ii]
-        dataset_temp[[paste0(var_prefix, "CD")]][ii] <- dataset_temp$QUERY_ID[ii]
-      }
-    }
-
-    dataset_temp <- dataset_temp %>%
-      select(dataset_keys, new_cols_names, term_level)
-
-    dataset <- dataset %>%
-      anti_join(dataset_temp, by = dataset_keys) %>%
-      bind_rows(dataset_temp)
-  }
-  dataset
+  # join queries to input dataset
+  left_join(dataset, select(joined, dataset_keys, new_cols_names), by = dataset_keys)
 }
 
 #' Verify if a dataset has the required format as queries dataset.
@@ -88,9 +79,8 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 #' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 #' - TERM_NAME, non NULL
-#'   This will be check by [validate_queries()].
 #'
-#' @param A data.frame.
+#' @param queries data.frame.
 #'
 #' @author Shimeng Huang
 #'
