@@ -30,9 +30,10 @@ a unique record in the \code{dataset}. e.g. for ADAE, this would be
 Derive query variables.
 }
 \details{
-If \code{VAR_PREFIX} starts with "SMQ" or "SDG", then the corresponding
-"NAM", "CD", and "SC" variables are derived; if starts with "CQ", only
-"NAM" variable is derived.
+For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
+variable is created. For "SMQ" or "SGD", if \code{QUERY_ID} is not "" or NA,
+then the corresponding "CD" variable is created ; similarly, if \code{QUERY_SCOPE}
+is not "" or NA, then the corresponding "SC" variable is created.
 }
 \author{
 Ondrej Slama, Shimeng Huang

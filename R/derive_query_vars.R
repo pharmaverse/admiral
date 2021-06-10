@@ -1,8 +1,9 @@
 #' Derive query variables.
 #'
-#' @details If `VAR_PREFIX` starts with "SMQ" or "SDG", then the corresponding
-#'   "NAM", "CD", and "SC" variables are derived; if starts with "CQ", only
-#'   "NAM" variable is derived.
+#' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
+#'   variable is created. For "SMQ" or "SGD", if `QUERY_ID` is not "" or NA,
+#'   then the corresponding "CD" variable is created ; similarly, if `QUERY_SCOPE`
+#'   is not "" or NA, then the corresponding "SC" variable is created.
 #'
 #' @param dataset Input dataset.
 #'
@@ -29,29 +30,58 @@
 derive_query_vars <- function(dataset, queries, dataset_keys) {
 
   assert_has_variables(dataset, dataset_keys)
+  # TODO: pass in the name of the `queries` to the assert
   assert_valid_queries(queries)
 
+  # replace all "" by NA
+  queries <- queries %>%
+    dplyr::mutate_if(is.character, function(x) {ifelse(x == "", NA_character_, x)})
+    # mutate(across(where(is.character), ~na_if(., ""))) %>% # (not available for older dplyr)
+
   # names of new columns
-  new_cols_names <- lapply(queries$VAR_PREFIX, function(x) {
-    if (grepl("SMQ", x) | grepl("SGD", x)) return(paste0(x, c("NAM", "CD", "SC")))
-    else if (grepl("CQ", x)) return(paste0(x, "NAM"))
-    else return("")
-  })
-  new_cols_names <- unlist(new_cols_names)
+  # Note: currenlt as long as one of QUERY_ID in the group is not NA then
+  #   "CD" variable is created, same for QUERY_SCOPE
+  nam_names <- paste0(unique(queries$VAR_PREFIX), "NAM")
+  cd_names <- queries %>%
+    group_by(VAR_PREFIX) %>%
+    filter(!any(is.na(QUERY_ID)) & !grepl("^CQ", VAR_PREFIX)) %>%
+    ungroup() %>%
+    pull(VAR_PREFIX) %>%
+    unique()
+  cd_names <- paste0(cd_names, "CD")
+  sc_names <- queries %>%
+    group_by(VAR_PREFIX) %>%
+    filter(!any(is.na(QUERY_SCOPE)) & !grepl("^CQ", VAR_PREFIX)) %>%
+    ungroup() %>%
+    pull(VAR_PREFIX) %>%
+    unique()
+  sc_names <- paste0(sc_names, "SC")
+  new_cols_names <- c(nam_names, cd_names, sc_names)
 
   # queries restructured
   queries_wide <- queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
-           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM"),
-           VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
-                                  "tmp_drop",
-                                  paste0(.data$VAR_PREFIX, "CD")),
-           VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
-                                  "tmp_drop2",
-                                  paste0(.data$VAR_PREFIX, "SC"))) %>%
-    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
-    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
-    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE) %>%
+           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
+    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME)
+
+  if ("QUERY_ID" %in% names(queries)| !all(is.na(queries$QUERY_ID))) {
+    queries_wide <- queries_wide %>%
+      mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+                                    "tmp_drop",
+                                    paste0(.data$VAR_PREFIX, "CD"))) %>%
+      spread(.data$VAR_PREFIX_CD, .data$QUERY_ID)
+  }
+
+  if ("QUERY_SCOPE" %in% names(queries) | !all(is.na(queries$QUERY_SCOPE))) {
+    queries_wide <- queries_wide %>%
+      mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
+                                    "tmp_drop2",
+                                    paste0(.data$VAR_PREFIX, "SC"))) %>%
+      spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)
+  }
+
+  # not_all_na <- function(x) any(!is.na(x))
+  queries_wide <- queries_wide %>%
     select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
@@ -88,7 +118,8 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #'
 #' @return The function throws an error if any of the requirements not met.
 assert_valid_queries <- function(queries) {
-  if (any(c("VAR_PREFIX", "QUERY_NAME", "QUERY_ID", "QUERY_SCOPE",
+  if (any(c("VAR_PREFIX", "QUERY_NAME",
+            # "QUERY_ID", "QUERY_SCOPE", # Note: no need to require?
             "TERM_LEVEL", "TERM_NAME") %!in% names(queries))) {
     abort("Missing required column(s) in `queries`.")
   }
