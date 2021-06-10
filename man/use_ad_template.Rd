@@ -18,7 +18,7 @@ use_ad_template(adam_name = "adsl", save_path = paste0("./", adam_name,
 A helper function to create a template script.
 }
 \examples{
-\\donotrun{
+\dontrun{
 use_ad_template("./ad_adsl.R", "adsl")
 }
 }

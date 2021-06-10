@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' \donotrun{
+#' \dontrun{
 #' use_ad_template("./ad_adsl.R", "adsl")
 #' }
 use_ad_template <- function(adam_name = "adsl",
