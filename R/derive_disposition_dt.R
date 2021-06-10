@@ -85,7 +85,7 @@ derive_disposition_dt <- function(dataset,
   # Expect 1 record per subject - issue a warning otherwise
   has_unique_records(
     dataset = ds_subset,
-    by_vars = "USUBJID",
+    by_vars = vars(STUDYID, USUBJID),
     message_type = "error",
     message = "The filter used for DS results in several records per patient - please check"
   )
