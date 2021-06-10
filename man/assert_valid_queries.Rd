@@ -7,7 +7,7 @@
 assert_valid_queries(queries)
 }
 \arguments{
-\item{A}{data.frame.}
+\item{queries}{data.frame.}
 }
 \value{
 The function throws an error if any of the requirements not met.
@@ -24,7 +24,6 @@ Check if the dataset has the following columns
 \item QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 \item TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 \item TERM_NAME, non NULL
-This will be check by \code{\link[=validate_queries]{validate_queries()}}.
 }
 }
 \author{

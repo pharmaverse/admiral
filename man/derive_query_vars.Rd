@@ -19,7 +19,7 @@ The columns specified by \code{dataset_keys} are expected.}
 \item QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 \item TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 \item TERM_NAME, non NULL
-This will be check by \code{\link[=validate_queries]{validate_queries()}}.
+This will be check by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
 }}
 
 \item{dataset_keys}{A vector of column names that can be used to identify

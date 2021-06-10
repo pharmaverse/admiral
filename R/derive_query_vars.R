@@ -15,7 +15,7 @@
 #' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 #' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 #' - TERM_NAME, non NULL
-#'   This will be check by [validate_queries()].
+#'   This will be check by [assert_valid_queries()].
 #'
 #' @param dataset_keys A vector of column names that can be used to identify
 #'   a unique record in the `dataset`. e.g. for ADAE, this would be
@@ -43,18 +43,19 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 
   # queries restructured
   qrs_tmp <- queries %>%
-    mutate(TERM_NAME = toupper(TERM_NAME),
-           VAR_PREFIX_NAM = paste0(VAR_PREFIX, "NAM")) %>%
-    spread(VAR_PREFIX_NAM, QUERY_NAME) %>%
-    mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", VAR_PREFIX),
+    mutate(TERM_NAME = toupper(.data$TERM_NAME),
+           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
+    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                   "tmp_drop",
-                                  paste0(VAR_PREFIX, "CD"))) %>%
-    spread(VAR_PREFIX_CD, QUERY_ID) %>%
-    mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", VAR_PREFIX),
+                                  paste0(.data$VAR_PREFIX, "CD"))) %>%
+    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
+    mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                   "tmp_drop2",
-                                  paste0(VAR_PREFIX, "SC"))) %>%
-    spread(VAR_PREFIX_SC, QUERY_SCOPE) %>%
-    select(-dplyr::matches("^tmp_drop"), -VAR_PREFIX)
+                                  paste0(.data$VAR_PREFIX, "SC"))) %>%
+    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE) %>%
+    select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
+    mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
   # prepare input dataset for joining
   out <- dataset %>%
@@ -64,11 +65,10 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 
   # join restructured queries to input dataset
   out <- out %>%
-    mutate(TERM_NAME_UPPER = toupper(TERM_NAME)) %>%
-    dplyr::inner_join(mutate(qrs_tmp, TERM_NAME = toupper(TERM_NAME)),
-                      by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
-    spread(TERM_LEVEL, TERM_NAME) %>%
-    select(dataset_keys, term_cols, new_cols_names, -TERM_NAME_UPPER)
+    mutate(TERM_NAME_UPPER = toupper(.data$TERM_NAME)) %>%
+    dplyr::inner_join(qrs_tmp, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
+    spread(.data$TERM_LEVEL, .data$TERM_NAME) %>%
+    select(dataset_keys, term_cols, new_cols_names, -.data$TERM_NAME_UPPER)
 
   out
 }
@@ -82,9 +82,8 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
 #' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 #' - TERM_NAME, non NULL
-#'   This will be check by [validate_queries()].
 #'
-#' @param A data.frame.
+#' @param queries data.frame.
 #'
 #' @author Shimeng Huang
 #'

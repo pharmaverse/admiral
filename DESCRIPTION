@@ -24,7 +24,8 @@ Imports:
     purrr,
     readxl,
     rlang,
-    stringr
+    stringr, 
+    tidyr
 Suggests:
     devtools,
     diffdf,
