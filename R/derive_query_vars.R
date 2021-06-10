@@ -41,7 +41,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
   new_cols_names <- new_cols_names[new_cols_names != ""]
 
   # queries restructured
-  qrs_tmp <- queries %>%
+  queries_wide <- queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
     spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
@@ -57,19 +57,18 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
   # prepare input dataset for joining
-  out <- dataset %>%
+  joined <- dataset %>%
     gather(key = "TERM_LEVEL", value = "TERM_NAME", -dataset_keys) %>%
     drop_na(.data$TERM_NAME)
-  term_cols <- unique(out$TERM_LEVEL)
+  term_cols <- unique(joined$TERM_LEVEL)
 
   # join restructured queries to input dataset
-  out <- out %>%
+  joined <- joined %>%
     mutate(TERM_NAME_UPPER = toupper(.data$TERM_NAME)) %>%
-    dplyr::inner_join(qrs_tmp, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
-    spread(.data$TERM_LEVEL, .data$TERM_NAME) %>%
-    select(dataset_keys, term_cols, new_cols_names, -.data$TERM_NAME_UPPER)
+    dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME"))
 
-  out
+  # join queries to input dataset
+  left_join(dataset, select(joined, dataset_keys, new_cols_names), by = dataset_keys)
 }
 
 #' Verify if a dataset has the required format as queries dataset.
