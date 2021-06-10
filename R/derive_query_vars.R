@@ -46,24 +46,30 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     mutate(TERM_NAME = toupper(TERM_NAME),
            VAR_PREFIX_NAM = paste0(VAR_PREFIX, "NAM")) %>%
     spread(VAR_PREFIX_NAM, QUERY_NAME) %>%
-    mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", VAR_PREFIX), "tmp_drop", paste0(VAR_PREFIX, "CD"))) %>%
+    mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", VAR_PREFIX),
+                                  "tmp_drop",
+                                  paste0(VAR_PREFIX, "CD"))) %>%
     spread(VAR_PREFIX_CD, QUERY_ID) %>%
-    mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", VAR_PREFIX), "tmp_drop2", paste0(VAR_PREFIX, "SC"))) %>%
+    mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", VAR_PREFIX),
+                                  "tmp_drop2",
+                                  paste0(VAR_PREFIX, "SC"))) %>%
     spread(VAR_PREFIX_SC, QUERY_SCOPE) %>%
     select(-dplyr::matches("^tmp_drop"), -VAR_PREFIX)
 
-  # join restructured queries to input dataset
+  # prepare input dataset for joining
   out <- dataset %>%
     gather(key = "TERM_LEVEL", value = "TERM_NAME", -dataset_keys) %>%
     drop_na(.data$TERM_NAME)
   term_cols <- unique(out$TERM_LEVEL)
 
+  # join restructured queries to input dataset
   out <- out %>%
     mutate(TERM_NAME_UPPER = toupper(TERM_NAME)) %>%
-    left_join(mutate(qrs_tmp, TERM_NAME = toupper(TERM_NAME)),
-              by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
+    dplyr::inner_join(mutate(qrs_tmp, TERM_NAME = toupper(TERM_NAME)),
+                      by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
     spread(TERM_LEVEL, TERM_NAME) %>%
     select(dataset_keys, term_cols, new_cols_names, -TERM_NAME_UPPER)
+
   out
 }
 
