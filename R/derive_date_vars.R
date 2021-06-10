@@ -299,9 +299,10 @@ convert_dtc_to_dt <- function(dtc) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
 
-  case_when(
-    nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
-    TRUE ~ ymd(NA)
+  if_else(
+    nchar(dtc) >= 10 & is_valid_dtc(dtc),
+    ymd(substr(dtc, 1, 10)),
+    ymd(NA)
   )
 }
 
@@ -331,10 +332,10 @@ convert_dtc_to_dtm <- function(dtc) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
 
-  # note T00:00:00 is not printed in dataframe
-  case_when(
-    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
-    TRUE ~ ymd_hms(NA)
+  if_else(
+    nchar(dtc) == 19 & is_valid_dtc(dtc),
+    as_iso_dttm(ymd_hms(dtc)),
+    as_iso_dttm(ymd_hms(NA))
   )
 }
 #' Derive the date imputation flag
@@ -519,7 +520,6 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "first",
 #'   min_dates = list(TRTSDTM)
 #' )
-
 derive_vars_dt <- function(
   dataset,
   new_vars_prefix,
