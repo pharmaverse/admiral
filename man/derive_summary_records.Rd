@@ -68,55 +68,59 @@ will be set to \code{NA}.
 \examples{
 # Sample ADEG dataset ---
 adeg <- tibble::tribble(
-  ~USUBJID,   ~EGSEQ, ~EGREPNUM, ~PARAM,                 ~VISIT,      ~AVISIT,    ~EGDTC,                ~AVAL, ~TRTA,         ~SAFFL,
-  "XYZ-1001",      1,         1,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-24T07:50:16",  385,  "",            "Y",
-  "XYZ-1001",      2,         2,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-24T07:52:59",  399,  "",            "Y",
-  "XYZ-1001",      3,         3,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-24T07:56:07",  396,  "",            "Y",
-  "XYZ-1001",      4,         1,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-08T09:45:11",  384,  "Placebo",     "Y",
-  "XYZ-1001",      5,         2,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-08T09:48:07",  393,  "Placebo",     "Y",
-  "XYZ-1001",      6,         3,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-08T09:51:04",  388,  "Placebo",     "Y",
-  "XYZ-1001",      7,         1,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-22T10:45:03",  385,  "Placebo",     "Y",
-  "XYZ-1001",      8,         2,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-22T10:48:07",  394,  "Placebo",     "Y",
-  "XYZ-1001",      9,         3,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-22T10:51:05",  402,  "Placebo",     "Y",
-  "XYZ-1002",      1,         1,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-22T07:58:05",  399,  "",            "Y",
-  "XYZ-1002",      2,         2,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-22T07:58:05",  410,  "",            "Y",
-  "XYZ-1002",      3,         3,  "QTcF Interval (msec)", "SCREENING", "Baseline", "2016-02-22T08:01:06",  392,  "",            "Y",
-  "XYZ-1002",      4,         1,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-06T09:50:04",  401,  "Active 20mg", "Y",
-  "XYZ-1002",      5,         2,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-06T09:53:51",  407,  "Active 20mg", "Y",
-  "XYZ-1002",      6,         3,  "QTcF Interval (msec)", "VISIT 2",   "Visit 2",  "2016-03-06T09:56:21",  400,  "Active 20mg", "Y",
-  "XYZ-1002",      7,         1,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-24T10:50:07",  412,  "Active 20mg", "Y",
-  "XYZ-1002",      8,         2,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-24T10:53:08",  414,  "Active 20mg", "Y",
-  "XYZ-1002",      9,         3,  "QTcF Interval (msec)", "VISIT 3",   "Visit 3",  "2016-03-24T10:56:05",  402,  "Active 20mg", "Y",
+  ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
+  "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
+  "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
+  "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
+  "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45",  384, "Placebo",
+  "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
+  "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
+  "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45",  385, "Placebo",
+  "XYZ-1001",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
+  "XYZ-1001",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
+  "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
+  "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
+  "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
+  "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50",  401, "Active 20mg",
+  "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
+  "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
+  "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50",  412, "Active 20mg",
+  "XYZ-1002",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
+  "XYZ-1002",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
 )
 
 # Summarize the average of the triplicate ECG interval values (AVAL)
-derive_summary_records(adeg,
-                   by_vars = vars(USUBJID, PARAM, AVISIT),
-                   fns = list(AVAL ~ mean(., na.rm = TRUE)),
-                   set_values_to = vars(DTYPE = "AVERAGE"))
+derive_summary_records(
+  adeg,
+  by_vars = vars(USUBJID, PARAM, AVISIT),
+  fns = list(AVAL ~ mean(., na.rm = TRUE)),
+  set_values_to = vars(DTYPE = "AVERAGE")
+)
 
 # Sample ADVS dataset ---
 advs <- tibble::tribble(
-  ~STUDYID, ~USUBJID,      ~VSSEQ, ~PARAMCD, ~PARAM,    ~AVAL, ~VSSTRESU, ~VISITNUM, ~VISIT,      ~VSDTC,
-  "XYZ",    "XYZ-001-001",   1164, "WEIGHT",  "Weight",    99, "kg",              1, "Screening", "2018-03-19",
-  "XYZ",    "XYZ-001-001",   1165, "WEIGHT",  "Weight",   101, "kg",              2, "Run-In"   , "2018-03-26",
-  "XYZ",    "XYZ-001-001",   1166, "WEIGHT",  "Weight",   100, "kg",              3, "Baseline" , "2018-04-16",
-  "XYZ",    "XYZ-001-001",   1167, "WEIGHT",  "Weight",    94, "kg",              4, "Week 24"  , "2018-09-30",
-  "XYZ",    "XYZ-001-001",   1168, "WEIGHT",  "Weight",    92, "kg",              5, "Week 48"  , "2019-03-17",
-  "XYZ",    "XYZ-001-001",   1169, "WEIGHT",  "Weight",    95, "kg",              6, "Week 52"  , "2019-04-14",
+  ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
+  "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
+  "XYZ-001-001",  1165, "Weight",  101, "kg",      "Run-In"   , "2018-03-26",
+  "XYZ-001-001",  1166, "Weight",  100, "kg",      "Baseline" , "2018-04-16",
+  "XYZ-001-001",  1167, "Weight",   94, "kg",      "Week 24"  , "2018-09-30",
+  "XYZ-001-001",  1168, "Weight",   92, "kg",      "Week 48"  , "2019-03-17",
+  "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
 )
 
 # set new values to any variable, DTYPE = MAXIMUM refer to `MAX()` record and DTYPE = AVERAGE refer `MEAN()` record
 # `set_values_to` must be of same length as new records
-derive_summary_records(advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD),
+derive_summary_records(
+  advs,
+  by_vars = vars(USUBJID, PARAM),
   fns = list(AVAL ~ max, AVAL ~ mean),
   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 )
 
 # drop retained value of VSSTRESU in the derived record
-derive_summary_records(advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD),
+derive_summary_records(
+  advs,
+  by_vars = vars(USUBJID, PARAM),
   fns = list(AVAL ~ mean),
   set_values_to = vars(DTYPE = "MAXIMUM"),
   drop_values_from = vars(VSSTRESU)

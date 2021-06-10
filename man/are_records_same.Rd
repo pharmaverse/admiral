@@ -22,7 +22,9 @@ Logical value.
 Checks the length of derived records and new values of are equal
 }
 \examples{
+\dontrun{
 x <- list("x", "y")
 y <- list("y", "z")
 assertthat::assert_that(are_records_same(x, y, "x", "y"))
+}
 }
