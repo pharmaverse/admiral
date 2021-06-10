@@ -20,7 +20,7 @@ use_ad_template <- function(adam_name = "adsl",
     abort("Required package {usethis} is not installed.")
   }
 
-  use_template(
+  usethis::use_template(
     template = paste0("ad_", tolower(adam_name), ".R"),
     save_as = save_path,
     package = "admiral",

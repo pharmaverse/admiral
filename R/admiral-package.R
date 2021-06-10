@@ -11,5 +11,4 @@
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate ceiling_date days duration floor_date time_length %--%
 #'             ymd ymd_hms is.instant
-#' @importFrom usethis use_template
 "_PACKAGE"
