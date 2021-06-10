@@ -38,7 +38,6 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     else return("")
   })
   new_cols_names <- unlist(new_cols_names)
-  # Note: in case something not matched? should this be checked in `queries`
   new_cols_names <- new_cols_names[new_cols_names != ""]
 
   # queries restructured
