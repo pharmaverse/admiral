@@ -504,9 +504,9 @@ on_failure(is_named_exprs) <- function(call, env) {
 #' @examples
 #' assertthat::assert_that(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 is_varval_list <- function(arg) {
-  if (is.list(arg) && all(map_lgl(arg, is_quosure)) && all(names(arg) != "")) {
+  if (inherits(arg, "quosures") && all(names(arg) != "")) {
     expr_list <- map(arg, quo_get_expr)
-    all(map_lgl(expr_list, is_value))
+    all(map_lgl(expr_list, function(arg) is.symbol(arg) || is.character(arg) || is.na(arg)))
   }
   else {
     FALSE
@@ -516,40 +516,13 @@ on_failure(is_varval_list) <- function(call, env) {
   paste0(
     "Argument ",
     deparse(call$arg),
-    " = ",
-    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n"),
-    #str(call$arg)
-    #eval(call$arg, envir = env),
-    " is not a variable-value pairs list."
+    " is not a variable-value pairs list.\n",
+    "ℹ A named list of quosures is expected where the expression is a symbol, a character, or `NA`.\n",
+    "✖ The following was supplied:\n",
+    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
   )
 }
 
-#' Is Variable-value List?
-#'
-#' Checks if the argument is a symbol, a string, or NA.
-#'
-#' @param arg The argument to check
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the argument is a symbol, a string, or NA, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @export
-is_value <- function(arg){
-  if (is.symbol(arg) | typeof(arg) == "character") {
-    TRUE
-  }
-  else{
-    if (is.na(arg)) {
-      TRUE
-    }
-    else{
-      FALSE
-    }
-  }
-}
 
 is_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))

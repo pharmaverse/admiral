@@ -5,17 +5,22 @@
 \title{Create an \code{lstalvdt_source} object}
 \usage{
 lstalvdt_source(dataset, filter = NULL, date_var,
-  traceability_vars = NULL)
+  date_imputation = NULL, traceability_vars = NULL)
 }
 \arguments{
 \item{dataset}{A data.frame containing a source dataset.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
-\item{date_var}{An unquoted symbol to be used for sorting \code{dataset}.}
+\item{date_var}{A variable providing a date where the patient was known to be
+alive. A date, a datetime, or a character variable containing ISO 8601
+dates can be specified. An unquoted symbol is expected.}
 
-\item{traceabilty_vars}{A named list returned by \code{vars()} defining the traceability variables, e.g.
-\code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}.}
+\item{date_imputation}{A string defining the date imputation for \code{date_var}.
+See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
+
+\item{traceabilty_vars}{A named list returned by \code{vars()} defining the
+traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
 }
 \value{
 An object of class "lstalvdt_source".

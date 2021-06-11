@@ -2,87 +2,46 @@
 % Please edit documentation in R/derive_var_lstalvdt.R
 \name{derive_var_lstalvdt}
 \alias{derive_var_lstalvdt}
-\title{Merge the first or last date from more than one dataset}
+\title{Derive Last Known Alive Date}
 \usage{
 derive_var_lstalvdt(dataset, ...)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The \code{USUBJID} variable is expected.}
 
-\item{sources}{List of sources
-
-For each source the observations are selected as specified. The selected
-observations of all sources are collected in one dataset and then for each
-by group one observation (with respect to the \code{mode} parameter) is selected
-and the date is merged to the input dataset.
-
-Each element of the list must be a list with the following named elements.
-
-\itemize{ \item \emph{dataset:} Dataset to add
-
-The variables specified by the \code{by_vars} parameter, the \code{filter},
-and the \code{order} element are expected.
-
-\item \emph{filter:} Filter condition for dataset
-
-Only observations of the dataset which fulfill the specified condition are
-used for merging.
-
-\emph{Permitted Values:} logical expression
-
-\item \emph{var:} Variable to add
-
-The specified variable is compared with the variables from the other
-datasets. A date, a datetime, or a character variable containing ISO 8601
-dates can be specified.
-
-\emph{Permitted Values:} variable name (as symbol)
-
-\item \emph{order:} Sort order
-
-If the parameter is specified, the source dataset is ordered by the
-specified order and only the first or last observation (depending on the
-mode) in each by group is used for merging.
-
-\emph{Permitted Values:} list of variables or functions of variables
-
-\item \emph{mode:} mode
-
-If the \code{order} element is specified, the mode determines if the first
-or last observation of each by group is selected.
-
-\emph{Permitted Values:} \code{"first"}, \code{"last"} }}
+\item{...}{Source of known alive dates. A \code{lstalvdt_source()} object is
+expected.}
 }
 \value{
-The input dataset with the additional variable
+The input dataset with the \code{LSTALVDT} variable added.
 }
 \description{
-Merges the first or last date from more than one dataset. For each dataset
-the observations to merge can be selected by a condition and/or by selecting
-the first or last observation in each by group.
+Add the last known alive date (\code{LSTALVDT}) to the dataset.
 }
 \details{
 The following steps are performed to create the output dataset:
 
 \enumerate{ \item For each source dataset the observations as specified by
-the \code{filter} element are selected. If the \code{order} element is specified, for
-each by group the first or last element (depending on the \code{mode} element)
-with respect to the specified order is selected.
+the \code{filter} element are selected. Then for each patient the last
+oservation (with respect to \code{date_var}) is selected.
 
-\item The new variable is set to the variable specified by the \code{var}
-element. If the source variable is a datetime variable, only the datepart
-is copied. If the source variable is a character variable, it is converted
-to a date. If the date is imcomplete, it is set to NA.
+\item The \code{LSTALVDT} variable is set to the variable specified by the
+\code{date_var} element. If the date variable is a datetime variable, only
+the datepart is copied. If the source variable is a character variable, it
+is converted to a date. If the date is incomplete, it is imputed as
+specified by the \code{date_imputation} element.
+
+\item The variables specified by the \code{traceability_vars} element are
+added.
 
 \item The selected observations of all source datasets are combined into a
 single dataset.
 
-\item For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first or last observation (with respect to the new
-variable and the \code{mode} parameter) from the single dataset is selected and
-the new variable is merged to the input dataset. }
+\item For each patient the last observation (with respect to the \code{LSTALVDT}
+variable) from the single dataset is selected and the new variable is
+merged to the input dataset. }
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
@@ -92,25 +51,74 @@ data("dm")
 data("ae")
 data("lb")
 data("adsl")
-ae_start <- list(dataset = ae,
-                 var = expr(AESTDTC),
-                 filter = expr(str_length(AESTDTC) >= 10))
-ae_end <- list(dataset = ae,
-               vars = expr(AEENDTC),
-               filter = expr(str_length(AEENDTC) >= 10))
-lb_date <- list(dataset = lb,
-                var = expr(LBDTC),
-                filter = expr(str_length(LBDTC) >= 10))
+ae_start <- lstalvdt_source(dataset = ae,
+                            date_var = AESTDTC,
+                            date_imputation = "first")
+ae_end <- lstalvdt_source(dataset = ae,
+                          date_var = AEENDTC,
+                          date_imputation = "first")
+lb_date <- lstalvdt_source(dataset = lb,
+                           date_var = LBDTC,
+                           filter = str_length(LBDTC) >= 10)
+adsl_date <- lstalvdt_source(dataset = adsl,
+                             date_var = TRTEDT)
 
-adsl_date <- list(dataset = adsl,
-                  var = expr(TRTEDT))
 derive_var_lstalvdt(dm,
-                    sources = list(ae_start, ae_end, lb_date, adsl_date)) \%>\%
+                    ae_start,
+                    ae_end,
+                    lb_date,
+                    adsl_date) \%>\%
   select(USUBJID, LSTALVDT)
 
+# derive last alive date and traceability variables
+ae_start <- lstalvdt_source(
+  dataset = ae,
+  date_var = AESTDTC,
+  date_imputation = "first",
+  traceability_vars = vars(
+    LALVDOM = "AE",
+    LALVSEQ = AESEQ,
+    LALVVAR = "AESTDTC"
+  )
+)
+
+ae_end <- lstalvdt_source(
+  dataset = ae,
+  date_var = AEENDTC,
+  date_imputation = "first",
+  traceability_vars = vars(
+    LALVDOM = "AE",
+    LALVSEQ = AESEQ,
+    LALVVAR = "AEENDTC"
+  )
+)
+lb_date <- lstalvdt_source(
+  dataset = lb,
+  date_var = LBDTC,
+  filter = str_length(LBDTC) >= 10,
+  traceability_vars = vars(
+    LALVDOM = "LB",
+    LALVSEQ = LBSEQ,
+    LALVVAR = "LBDTC"
+  )
+)
+
+adsl_date <- lstalvdt_source(
+  dataset = adsl,
+  date_var = TRTEDT,
+  traceability_vars = vars(
+    LALVDOM = "ADSL",
+    LALVSEQ = NA_integer_,
+    LALVVAR = "TRTEDTM"
+  )
+)
+
+derive_var_lstalvdt(dm,
+                    ae_start, ae_end, lb_date, adsl_date) \%>\%
+  select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
+\keyword{adsl}
 \keyword{derivation}
