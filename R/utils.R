@@ -19,11 +19,15 @@ dplyr::vars
 #' @examples
 #' enumerate(letters[1:6])
 enumerate <- function(x, quote_fun = backquote) {
-  paste(
-    paste0(quote_fun(x[-length(x)]), collapse = ", "),
-    "and",
-    quote_fun(x[length(x)])
-  )
+  if (length(x) == 1L) {
+    quote_fun(x)
+  } else {
+    paste(
+      paste0(quote_fun(x[-length(x)]), collapse = ", "),
+      "and",
+      quote_fun(x[length(x)])
+    )
+  }
 }
 
 #' Wrap a String in Backquotes
