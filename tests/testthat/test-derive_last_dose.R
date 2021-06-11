@@ -81,6 +81,75 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
 
 })
 
+test_that(paste("derive_last_dose checks validity of start and end dose inputs",
+                "- time component (check_dates_only = FALSE)"), {
+
+  input_ex_wrong <- dplyr::bind_rows(
+    mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), as.POSIXct),
+    tibble::tribble(
+      ~STUDYID,   ~USUBJID,   ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+      "my_study", "subject4", as.POSIXct("2020-11-06 00:00:00"),
+      as.POSIXct("2020-11-06 00:00:01"), 1, 10, "treatment")
+  )
+
+  expect_error(
+    derive_last_dose(
+      input_ae,
+      input_ex_wrong,
+      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = vars(STUDYID, USUBJID),
+      dose_start = EXSTDTC,
+      dose_end = EXENDTC,
+      analysis_date = AESTDTC,
+      dataset_seq_var = AESEQ,
+      new_var = LDOSEDTM,
+      output_datetime = FALSE,
+      check_dates_only = FALSE,
+      traceability_vars = vars()
+    ),
+    regexp = "Not all values of EXSTDTC are equal to EXENDTC"
+  )
+
+})
+
+test_that(
+  paste("derive_last_dose checks validity of start and end dose inputs",
+        "- time component (check_dates_only = TRUE)"), {
+
+  input_ex_wrong <- dplyr::bind_rows(
+    mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), as.POSIXct),
+    tibble::tribble(
+      ~STUDYID,   ~USUBJID,   ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+      "my_study", "subject4", as.POSIXct("2020-11-06 00:00:00"),
+      as.POSIXct("2020-11-06 00:00:01"), 1, 10, "treatment")
+  )
+
+  expected_output <- expected_output <- mutate(
+    input_ae,
+    LDOSEDTM = as.Date(
+      c("2020-01-01", "2020-08-29", "2020-09-02", "NA", "2020-01-20", "NA", "NA")
+    )
+  )
+
+  res <- derive_last_dose(
+    input_ae,
+    input_ex_wrong,
+    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+    by_vars = vars(STUDYID, USUBJID),
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    new_var = LDOSEDTM,
+    output_datetime = FALSE,
+    check_dates_only = TRUE,
+    traceability_vars = vars()
+  )
+
+  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
+
+})
+
 test_that("derive_last_dose returns traceability vars", {
 
   expected_output <- mutate(
