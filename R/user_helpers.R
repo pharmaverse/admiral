@@ -39,10 +39,11 @@ use_ad_template <- function(adam_name = "adsl",
 #' @examples
 #' list_all_templates()
 list_all_templates <- function() {
-  all_tpl <- list.files(system.file("templates", package = "admiral"))
-  all_tpl <- str_remove(all_tpl, ".R$")
-  all_tpl <- str_remove(all_tpl, "^ad_")
-  all_tpl <- paste0("\U2022 ", toupper(all_tpl))
+  all_tpl <- list.files(system.file("templates", package = "admiral")) %>%
+    str_remove(., ".R$") %>%
+    str_remove(., "^ad_") %>%
+    toupper(.) %>%
+    paste0("\U2022 ", .)
   cat("Existing templates: \n")
   cat(all_tpl, sep = "\n")
 }
