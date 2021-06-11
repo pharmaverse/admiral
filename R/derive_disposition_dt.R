@@ -6,7 +6,10 @@
 #'
 #' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
 #'
-#' The variable specified in dtc parameter must be in dataset_ds
+#' It must contains
+#' - `STUDYID`, `USUBJID`,
+#' - The variable(s) specified in the `dtc`
+#' - The variables used in `filter_ds`.
 #'
 #' @param new_var Name of the disposition date variable
 #'
@@ -19,9 +22,11 @@
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-#'   Filter used to select the relevant disposition data.
+# 'Filter used to select the relevant disposition data.
+# 'It is expected that the filter restricts `dataset_ds` such that there is at most
+#' one observation per patient. An error is issued otherwise.
 #'
-#'   Permitted Values: logical expression
+#' Permitted Values: logical expression.
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
@@ -33,7 +38,7 @@
 #'
 #'   Default is NULL
 #'
-#' @return the input dataset with the disposition date (new_var) added
+#' @return the input dataset with the disposition date (`new_var`) added
 #'
 #' @keywords adsl timing
 #'
@@ -80,9 +85,9 @@ derive_disposition_dt <- function(dataset,
   # Expect 1 record per subject - issue a warning otherwise
   has_unique_records(
     dataset = ds_subset,
-    by_vars = "USUBJID",
-    message_type = "warning",
-    message = "the filter used for DS results in several records per patient - please check"
+    by_vars = vars(STUDYID, USUBJID),
+    message_type = "error",
+    message = "The filter used for DS results in several records per patient - please check"
   )
 
   # add the new dispo date to the input dataset

@@ -80,14 +80,15 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE")
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
+  # EOS date
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE")
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
 
   # EOS status
@@ -96,15 +97,24 @@ adsl <- dm %>%
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt,
-    filter = expr(DSCAT == "DISPOSITION EVENT")
+    filter = DSCAT == "DISPOSITION EVENT"
   ) %>%
 
+  # EOS reasons
+  derive_disposition_reason(
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    new_var_spe = DCSREASP,
+    reason_var_spe = DSTERM,
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+  ) %>%
   # Last retrieval date
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
+    filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
 
   # Death date - impute partial date to first day/month

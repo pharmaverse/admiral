@@ -6,7 +6,10 @@
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: ds).
 #'
-#' The variable specified in the status_var parameter must be in dataset_ds.
+#' It must contains
+#' - `STUDYID`, `USUBJID`,
+#' - The variable(s) specified in the `status_var`
+#' - The variables used in `filter_ds`.
 #'
 #' @param new_var Name of the disposition date variable.
 #'
@@ -26,15 +29,17 @@
 #'   TRUE ~ "ONGOING"
 #' )
 #' }
-#' where x is the status_var.
+#' where `x` is the `status_var.`
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-#'   Filter used to select the relevant disposition data.
+# 'Filter used to select the relevant disposition data.
+# 'It is expected that the filter restricts `dataset_ds` such that there is at most
+#' one observation per patient. An error is issued otherwise.
 #'
-#'   Permitted Values: logical expression.
+#' Permitted Values: logical expression.
 #'
-#' @return the input dataset with the disposition status (new_var) added.
+#' @return the input dataset with the disposition status (`new_var`) added.
 #'
 #' @keywords adsl
 #'
@@ -103,8 +108,8 @@ derive_disposition_status <- function(dataset,
   # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
   has_unique_records(
     dataset = ds_subset,
-    by_vars = "USUBJID",
-    message_type = "warning",
+    by_vars = vars(STUDYID, USUBJID),
+    message_type = "error",
     message = "The filter used for DS results in several records per patient - please check"
   )
   # Add the status variable and derive the new dispo status in the input dataset
