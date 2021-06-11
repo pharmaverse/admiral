@@ -12,7 +12,12 @@ derive_disposition_dt(dataset, dataset_ds, new_var, dtc, filter_ds,
 
 \item{dataset_ds}{Datasets containing the disposition information (e.g.: ds)
 
-The variable specified in dtc parameter must be in dataset_ds}
+It must contains
+\itemize{
+\item \code{STUDYID}, \code{USUBJID},
+\item The variable(s) specified in the \code{dtc}
+\item The variables used in \code{filter_ds}.
+}}
 
 \item{new_var}{Name of the disposition date variable
 
@@ -25,9 +30,9 @@ If the year part is not recorded (missing date), no imputation is performed.}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
-Filter used to select the relevant disposition data.
+one observation per patient. An error is issued otherwise.
 
-Permitted Values: logical expression}
+Permitted Values: logical expression.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
@@ -42,7 +47,7 @@ Otherwise, a character value is expected, either as a
 Default is NULL}
 }
 \value{
-the input dataset with the disposition date (new_var) added
+the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
 Derive a disposition status date from the the relevant records in the disposition domain.

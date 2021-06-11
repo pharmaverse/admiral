@@ -12,7 +12,12 @@ derive_disposition_status(dataset, dataset_ds, new_var, status_var,
 
 \item{dataset_ds}{Dataset containing the disposition information (e.g.: ds).
 
-The variable specified in the status_var parameter must be in dataset_ds.}
+It must contains
+\itemize{
+\item \code{STUDYID}, \code{USUBJID},
+\item The variable(s) specified in the \code{status_var}
+\item The variables used in \code{filter_ds}.
+}}
 
 \item{new_var}{Name of the disposition date variable.
 
@@ -32,16 +37,16 @@ x %in% c("COMPLETED")~"COMPLETED",
 TRUE ~ "ONGOING"
 )
 }
-where x is the status_var.}
+where \code{x} is the \code{status_var.}}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
-Filter used to select the relevant disposition data.
+one observation per patient. An error is issued otherwise.
 
 Permitted Values: logical expression.}
 }
 \value{
-the input dataset with the disposition status (new_var) added.
+the input dataset with the disposition status (\code{new_var}) added.
 }
 \description{
 Derive a disposition status from the the relevant records in the disposition domain.
