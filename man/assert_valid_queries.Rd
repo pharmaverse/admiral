@@ -4,10 +4,13 @@
 \alias{assert_valid_queries}
 \title{Verify if a dataset has the required format as queries dataset.}
 \usage{
-assert_valid_queries(queries)
+assert_valid_queries(queries,
+  queries_name = deparse(substitute(queries)))
 }
 \arguments{
-\item{queries}{data.frame.}
+\item{queries}{A data.frame.}
+
+\item{queries_name}{Name of the queries dataset, a string.}
 }
 \value{
 The function throws an error if any of the requirements not met.
@@ -19,9 +22,9 @@ Verify if a dataset has the required format as queries dataset.
 Check if the dataset has the following columns
 \itemize{
 \item VAR_PREFIX, e.g., SMQ01, CQ12
-\item QUERY_NAME, non NULL
-\item QUERY_ID, could be NULL
-\item QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
+\item QUERY_NAME, non NULL, must be unique per each VAR_PREFIX
+\item QUERY_ID, could be NULL, must be unique per each VAR_PREFIX
+\item QUERY_SCOPE, 'BROAD', 'NARROW', or NULL, must be unique per each VAR_PREFIX
 \item TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 \item TERM_NAME, non NULL
 }

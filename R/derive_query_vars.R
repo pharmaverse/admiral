@@ -30,8 +30,7 @@
 derive_query_vars <- function(dataset, queries, dataset_keys) {
 
   assert_has_variables(dataset, dataset_keys)
-  # TODO: pass in the name of the `queries` to the assert
-  assert_valid_queries(queries)
+  assert_valid_queries(queries, deparse(substitute(queries)))
 
   # replace all "" by NA
   queries <- queries %>%
@@ -44,14 +43,14 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
   nam_names <- paste0(unique(queries$VAR_PREFIX), "NAM")
   cd_names <- queries %>%
     group_by(VAR_PREFIX) %>%
-    filter(!any(is.na(QUERY_ID)) & !grepl("^CQ", VAR_PREFIX)) %>%
+    filter(!all(is.na(QUERY_ID)) & !grepl("^CQ", VAR_PREFIX)) %>%
     ungroup() %>%
     pull(VAR_PREFIX) %>%
     unique()
   cd_names <- if_non_len0(cd_names, paste0(cd_names, "CD"))
   sc_names <- queries %>%
     group_by(VAR_PREFIX) %>%
-    filter(!any(is.na(QUERY_SCOPE)) & !grepl("^CQ", VAR_PREFIX)) %>%
+    filter(!all(is.na(QUERY_SCOPE)) & !grepl("^CQ", VAR_PREFIX)) %>%
     ungroup() %>%
     pull(VAR_PREFIX) %>%
     unique()
@@ -64,7 +63,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
     spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME)
 
-  if ("QUERY_ID" %in% names(queries) & !all(is.na(queries$QUERY_ID))) {
+  if (any(!is.na(queries$QUERY_ID))) {
     queries_wide <- queries_wide %>%
       mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                     "tmp_drop",
@@ -72,7 +71,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
       spread(.data$VAR_PREFIX_CD, .data$QUERY_ID)
   }
 
-  if ("QUERY_SCOPE" %in% names(queries) & !all(is.na(queries$QUERY_SCOPE))) {
+  if (any(!is.na(queries$QUERY_SCOPE))) {
     queries_wide <- queries_wide %>%
       mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                     "tmp_drop2",
@@ -80,7 +79,6 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
       spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)
   }
 
-  # not_all_na <- function(x) any(!is.na(x))
   queries_wide <- queries_wide %>%
     select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
@@ -104,20 +102,23 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #'
 #' @details Check if the dataset has the following columns
 #' - VAR_PREFIX, e.g., SMQ01, CQ12
-#' - QUERY_NAME, non NULL
-#' - QUERY_ID, could be NULL
-#' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
+#' - QUERY_NAME, non NULL, must be unique per each VAR_PREFIX
+#' - QUERY_ID, could be NULL, must be unique per each VAR_PREFIX
+#' - QUERY_SCOPE, 'BROAD', 'NARROW', or NULL, must be unique per each VAR_PREFIX
 #' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
 #' - TERM_NAME, non NULL
 #'
-#' @param queries data.frame.
+#' @param queries A data.frame.
+#'
+#' @param queries_name Name of the queries dataset, a string.
 #'
 #' @author Shimeng Huang
 #'
 #' @export
 #'
 #' @return The function throws an error if any of the requirements not met.
-assert_valid_queries <- function(queries) {
+assert_valid_queries <- function(queries,
+                                 queries_name = deparse(substitute(queries))) {
   if (any(c("VAR_PREFIX", "QUERY_NAME",
             "QUERY_ID", "QUERY_SCOPE",
             "TERM_LEVEL", "TERM_NAME") %!in% names(queries))) {
@@ -146,6 +147,24 @@ assert_valid_queries <- function(queries) {
 
   if (any(queries$TERM_NAME == "") | any(is.na(queries$TERM_NAME))) {
     abort("`TERM_NAME` in `queries` cannot be empty string or NA.")
+  }
+
+  # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID, and QUERY_SCOPE
+  count_unique <- queries %>%
+    group_by(VAR_PREFIX) %>%
+    dplyr::summarise(n_qnam = length(unique(QUERY_NAME)),
+                     n_qid = length(unique(QUERY_ID)),
+                     n_qsc = length(unique(QUERY_SCOPE)))
+  for (ii in 1:nrow(count_unique)) {
+    if (count_unique[ii,]$n_qnam > 1) {
+      abort(paste0("QUERY_NAME of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+    }
+    if (count_unique[ii,]$n_qid > 1) {
+      abort(paste0("QUERY_ID of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+    }
+    if (count_unique[ii,]$n_qsc > 1) {
+      abort(paste0("QUERY_SCOPE of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+    }
   }
 }
 
