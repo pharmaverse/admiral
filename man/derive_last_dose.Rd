@@ -6,11 +6,11 @@
 \usage{
 derive_last_dose(dataset, dataset_ex, filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID), dose_start, dose_end, analysis_date,
-  dataset_seq_var, output_var, output_datetime = TRUE,
+  dataset_seq_var, new_var, output_datetime = TRUE,
   check_dates_only = FALSE, traceability_vars = vars())
 }
 \arguments{
-\item{dataset}{Input AE dataset.}
+\item{dataset}{Input dataset.}
 
 \item{dataset_ex}{Input EX dataset.}
 
@@ -29,7 +29,7 @@ Defaults to NULL.}
 \item{dataset_seq_var}{The sequence variable
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
 
-\item{output_var}{The output variable.}
+\item{new_var}{The output variable.}
 
 \item{output_datetime}{Logical. Should only date or date-time variable be returned?
 Defaults to \code{TRUE} (i.e. date-time variable).}
@@ -40,10 +40,15 @@ By default (\code{FALSE}), the date as well as the time component is checked.
 If set to \code{TRUE}, then only the date component of those variables is checked.}
 
 \item{traceability_vars}{A named list returned by \code{vars} listing the traceability variables,
-e.g. \code{vars(DTHDOM = "DS", DTHSEQ = DSSEQ)}}
+e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
+The left-hand side (names of the list elements) gives the names of the traceability variables
+in the returned dataset.
+The right-hand side (values of the list elements) gives the values of the traceability variables
+in the returned dataset.
+Those can be either strings or symbols referring to existing variables.}
 }
 \value{
-AE dataset with additional column \code{output_var}.
+Input dataset with additional column \code{new_var}.
 }
 \description{
 Derive last dose date(-time)
@@ -51,17 +56,27 @@ Derive last dose date(-time)
 \details{
 All date (date-time) variables can be characters in standard ISO format or
 of date / date-time class.
-For ISO format, see \code{\link{impute_dtc}}, parameter \code{dtc} for further details.
+For ISO format, see \code{\link{impute_dtc}} - parameter \code{dtc} for further details.
+Date-time imputations are done as follows:
+\itemize{
+\item \code{dose_end}: no date imputation, time imputation to \code{00:00:00} if time is missing.
+\item \code{analysis_date}: no date imputation, time imputation to \code{23:59:59} if time is missing.
+}
 
 The last dose date is derived as follows:
-Firstly, the \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
+\enumerate{
+\item The \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
 This is useful for, for example, filtering for valid dose only.
-Secondly, the datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}
-and \code{dataset_seq_var} variable.
-Thirdly, the last dose date is derived:
+\item The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
+\item The last dose date is derived:
 the last dose date is the maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
-Lastly, the last dose date is appended to the \code{dataset} and returned to the user.
+The last dose date is derived per \code{by_vars} and \code{dataset_seq_var}.
+\item The last dose date is appended to the \code{dataset} and returned to the user.
+}
+
+Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
+Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
 }
 \examples{
 data(ae); data(ex_single)
@@ -74,7 +89,7 @@ derive_last_dose(
   dose_end = EXENDTC,
   analysis_date = AESTDTC,
   dataset_seq_var = AESEQ,
-  output_var = LDOSEDTM,
+  new_var = LDOSEDTM,
   output_datetime = TRUE,
   check_dates_only = FALSE
 )
@@ -89,7 +104,7 @@ derive_last_dose(
   dose_end = EXENDTC,
   analysis_date = AESTDTC,
   dataset_seq_var = AESEQ,
-  output_var = LDOSEDTM,
+  new_var = LDOSEDTM,
   output_datetime = TRUE,
   check_dates_only = FALSE,
   traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")

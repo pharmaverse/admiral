@@ -4,15 +4,15 @@
 \alias{compute_ldose_idx}
 \title{Helper function to get the index of last dose date}
 \usage{
-compute_ldose_idx(exendtc, aestdtc)
+compute_ldose_idx(dose_end, analysis_date)
 }
 \arguments{
-\item{exendtc}{dose end date}
+\item{dose_end}{dose end date}
 
-\item{aestdtc}{analysis date}
+\item{analysis_date}{analysis date}
 }
 \value{
-index. The last dose date is then \code{exendtc[return_value]}
+index. The last dose date is then \code{dose_end[return_value]}
 }
 \description{
 Helper function to get the index of last dose date
