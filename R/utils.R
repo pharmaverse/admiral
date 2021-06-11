@@ -80,3 +80,19 @@ squote <- function(x) {
 vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
+
+#' Return y if x has length > 0
+#'
+#' @param x vector
+#' @param y vector
+#'
+#' @examples
+#' if_non_len0(character(0), "whatever")
+#' if_non_len0(character(1), "updated if length > 0")
+if_non_len0 <- function(x, y) {
+  if (length(x) != 0) {
+    y
+  } else {
+    x
+  }
+}
