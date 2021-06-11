@@ -1,6 +1,6 @@
-#' A helper function to create a template script.
+#' A helper function to create a template script
 #'
-#' @param adam_name An ADaM domain name.
+#' @param adam_name An ADaM dataset name.
 #'
 #' @param save_path Path to save the script.
 #'
@@ -30,7 +30,7 @@ use_ad_template <- function(adam_name = "adsl",
   )
 }
 
-#' List all templates provided by {admiral}.
+#' List all templates provided by {admiral}
 #'
 #' @author Shimeng Huang
 #'
@@ -40,5 +40,9 @@ use_ad_template <- function(adam_name = "adsl",
 #' list_all_templates()
 list_all_templates <- function() {
   all_tpl <- list.files(system.file("templates", package = "admiral"))
+  all_tpl <- str_remove(all_tpl, ".R$")
+  all_tpl <- str_remove(all_tpl, "^ad_")
+  all_tpl <- paste0("\U2022 ", toupper(all_tpl))
+  cat("Existing templates: \n")
   cat(all_tpl, sep = "\n")
 }

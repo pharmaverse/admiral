@@ -2,20 +2,20 @@
 % Please edit documentation in R/user_helpers.R
 \name{use_ad_template}
 \alias{use_ad_template}
-\title{A helper function to create a template script.}
+\title{A helper function to create a template script}
 \usage{
 use_ad_template(adam_name = "adsl", save_path = paste0("./", adam_name,
   ".R"), open = interactive())
 }
 \arguments{
-\item{adam_name}{An ADaM domain name.}
+\item{adam_name}{An ADaM dataset name.}
 
 \item{save_path}{Path to save the script.}
 
 \item{open}{Whether to open the script right away.}
 }
 \description{
-A helper function to create a template script.
+A helper function to create a template script
 }
 \examples{
 \dontrun{

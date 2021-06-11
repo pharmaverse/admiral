@@ -2,12 +2,12 @@
 % Please edit documentation in R/user_helpers.R
 \name{list_all_templates}
 \alias{list_all_templates}
-\title{List all templates provided by {admiral}.}
+\title{List all templates provided by {admiral}}
 \usage{
 list_all_templates()
 }
 \description{
-List all templates provided by {admiral}.
+List all templates provided by {admiral}
 }
 \examples{
 list_all_templates()
