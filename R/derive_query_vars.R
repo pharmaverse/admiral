@@ -48,14 +48,14 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     ungroup() %>%
     pull(VAR_PREFIX) %>%
     unique()
-  cd_names <- paste0(cd_names, "CD")
+  cd_names <- if_non_len0(cd_names, paste0(cd_names, "CD"))
   sc_names <- queries %>%
     group_by(VAR_PREFIX) %>%
     filter(!any(is.na(QUERY_SCOPE)) & !grepl("^CQ", VAR_PREFIX)) %>%
     ungroup() %>%
     pull(VAR_PREFIX) %>%
     unique()
-  sc_names <- paste0(sc_names, "SC")
+  sc_names <- if_non_len0(sc_names, paste0(sc_names, "SC"))
   new_cols_names <- c(nam_names, cd_names, sc_names)
 
   # queries restructured
@@ -64,7 +64,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
     spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME)
 
-  if ("QUERY_ID" %in% names(queries)| !all(is.na(queries$QUERY_ID))) {
+  if ("QUERY_ID" %in% names(queries) & !all(is.na(queries$QUERY_ID))) {
     queries_wide <- queries_wide %>%
       mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                     "tmp_drop",
@@ -72,7 +72,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
       spread(.data$VAR_PREFIX_CD, .data$QUERY_ID)
   }
 
-  if ("QUERY_SCOPE" %in% names(queries) | !all(is.na(queries$QUERY_SCOPE))) {
+  if ("QUERY_SCOPE" %in% names(queries) & !all(is.na(queries$QUERY_SCOPE))) {
     queries_wide <- queries_wide %>%
       mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
                                     "tmp_drop2",
@@ -119,7 +119,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #' @return The function throws an error if any of the requirements not met.
 assert_valid_queries <- function(queries) {
   if (any(c("VAR_PREFIX", "QUERY_NAME",
-            # "QUERY_ID", "QUERY_SCOPE", # Note: no need to require?
+            "QUERY_ID", "QUERY_SCOPE",
             "TERM_LEVEL", "TERM_NAME") %!in% names(queries))) {
     abort("Missing required column(s) in `queries`.")
   }
