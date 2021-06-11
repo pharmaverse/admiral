@@ -38,5 +38,6 @@ Suggests:
     roxygen2,
     spelling,
     styler,
-    tibble
+    tibble,
+    usethis
 VignetteBuilder: knitr
