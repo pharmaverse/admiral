@@ -81,12 +81,10 @@ warn_if_invalid_dtc <- function(dtc) {
   if (!all(is_valid_dtc)) {
     incorrect_dtc <- dtc[!is_valid_dtc]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid_dtc]
-    tbl <- paste("Row", incorrect_dtc_row, ": --DTC = ", incorrect_dtc)
-    msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
-    warn(msg)
-    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+    tbl <- paste("Row", incorrect_dtc_row, ": --DTC =", incorrect_dtc)
+    main_msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
 
-    msg3 <- paste0(
+    info <- paste0(
       "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
@@ -102,7 +100,7 @@ warn_if_invalid_dtc <- function(dtc) {
       "--12-15\n",
       "-----T07:15"
     )
-    warn(msg3)
+    warn(paste(main_msg, tbl, info, sep = "\n"))
   }
 }
 

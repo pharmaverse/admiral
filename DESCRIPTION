@@ -32,6 +32,7 @@ Suggests:
     pkgdown,
     testthat,
     knitr,
+    methods,
     miniUI,
     rmarkdown,
     roxygen2,
