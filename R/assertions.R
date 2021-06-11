@@ -544,3 +544,21 @@ on_failure(is_expr) <- function(call, env) {
     "` is not an expression created using `expr()`"
   )
 }
+
+#' Check whether an argument is a quosure with a symbol or not.
+#'
+#' @param x Test object
+#'
+#' @return TRUE or error.
+#'
+#' @export
+#'
+#' @examples
+#' assert_is_symbol(rlang::quo(x))
+assert_is_symbol <- function(x) {
+  if (quo_is_symbol(x)) {
+    return(TRUE)
+  } else {
+    abort(paste("Symbol is expected, but", deparse(substitute(x)), "is not a symbol."))
+  }
+}
