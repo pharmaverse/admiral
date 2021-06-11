@@ -41,5 +41,9 @@ globalVariables(c(
   "Source",
   "temp_obs_nr",
   "temp_source_nr",
-  "temp_date"
+  "temp_date",
+  "VAR_PREFIX",
+  "QUERY_NAME",
+  "QUERY_ID",
+  "QUERY_SCOPE"
 ))

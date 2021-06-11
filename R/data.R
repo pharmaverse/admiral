@@ -69,3 +69,10 @@
 #' Derived from the [dm] and [ds] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R})
 #'
 "adsl"
+
+#' Queries Dataset
+#'
+#' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+#'
+"queries"
+

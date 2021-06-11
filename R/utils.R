@@ -86,6 +86,8 @@ vars2chr <- function(quosures) {
 #' @param x vector
 #' @param y vector
 #'
+#' @noRd
+#'
 #' @examples
 #' if_non_len0(character(0), "whatever")
 #' if_non_len0(character(1), "updated if length > 0")
