@@ -26,6 +26,8 @@
 #'
 #' @keywords adae adcm
 #'
+#' @seealso [assert_valid_queries()]
+#'
 #' @export
 derive_query_vars <- function(dataset, queries, dataset_keys) {
 
@@ -122,31 +124,36 @@ assert_valid_queries <- function(queries,
   if (any(c("VAR_PREFIX", "QUERY_NAME",
             "QUERY_ID", "QUERY_SCOPE",
             "TERM_LEVEL", "TERM_NAME") %!in% names(queries))) {
-    abort("Missing required column(s) in `queries`.")
+    abort(paste0("Missing required column(s) in `", queries_name, "`."))
   }
 
   query_num <- substr(queries$VAR_PREFIX,
                       start = nchar(queries$VAR_PREFIX)-1,
                       stop = nchar(queries$VAR_PREFIX))
   if (anyNA(as.numeric(query_num))) {
-    abort("`VAR_PREFIX` in `queries` must end with 2-digit numbers.")
+    abort(paste0("`VAR_PREFIX` in `", queries_name,
+                 "` must end with 2-digit numbers."))
   }
 
   query_prefix <- unique(gsub('.{2}$', '', queries$VAR_PREFIX))
   if (any(query_prefix %!in% c("SMQ", "SDQ", "CQ"))) {
-    abort("`VAR_PREFIX` in `queries` must start with one of 'SMQ', 'SDQ', or 'CQ'.")
+    abort(paste0("`VAR_PREFIX` in `", queries_name,
+                 "` must start with one of 'SMQ', 'SDQ', or 'CQ'."))
   }
 
   if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
-    abort("`QUERY_NAME` in `queries` cannot be empty string or NA.")
+    abort(paste0("`QUERY_NAME` in `", queries_name,
+                 "` cannot be empty string or NA."))
   }
 
   if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
-    abort("`QUERY_SCOPE` in `queries` can only be 'BROAD', 'NARROW' or `NA_character_`.")
+    abort(paste0("`QUERY_SCOPE` in `", queries_name,
+                 "` can only be 'BROAD', 'NARROW' or `NA_character_`."))
   }
 
   if (any(queries$TERM_NAME == "") | any(is.na(queries$TERM_NAME))) {
-    abort("`TERM_NAME` in `queries` cannot be empty string or NA.")
+    abort(paste0("`TERM_NAME` in `", queries_name,
+                 "` cannot be empty string or NA."))
   }
 
   # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID, and QUERY_SCOPE
@@ -157,13 +164,16 @@ assert_valid_queries <- function(queries,
                      n_qsc = length(unique(QUERY_SCOPE)))
   for (ii in 1:nrow(count_unique)) {
     if (count_unique[ii,]$n_qnam > 1) {
-      abort(paste0("QUERY_NAME of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+      abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
+                   count_unique$VAR_PREFIX[ii], "' is not unique."))
     }
     if (count_unique[ii,]$n_qid > 1) {
-      abort(paste0("QUERY_ID of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+      abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
+                   count_unique$VAR_PREFIX[ii], "' is not unique."))
     }
     if (count_unique[ii,]$n_qsc > 1) {
-      abort(paste0("QUERY_SCOPE of ", count_unique$VAR_PREFIX[ii], " is not unique."))
+      abort(paste0("In `", queries_name, "`, `QUERY_SCOPE` of '",
+                   count_unique$VAR_PREFIX[ii], "' is not unique."))
     }
   }
 }

@@ -35,6 +35,9 @@ variable is created. For "SMQ" or "SGD", if \code{QUERY_ID} is not "" or NA,
 then the corresponding "CD" variable is created ; similarly, if \code{QUERY_SCOPE}
 is not "" or NA, then the corresponding "SC" variable is created.
 }
+\seealso{
+\code{\link[=assert_valid_queries]{assert_valid_queries()}}
+}
 \author{
 Ondrej Slama, Shimeng Huang
 }
