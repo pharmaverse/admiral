@@ -18,7 +18,7 @@ derive_last_dose(dataset, dataset_ex, filter_ex = NULL,
 For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
-\item{by_vars}{Variables to join by (type \code{vars}).}
+\item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
 
 \item{dose_start}{The dose start date variable.}
 

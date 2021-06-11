@@ -6,7 +6,7 @@
 #' @param filter_ex Filtering condition applied to EX dataset.
 #' For example, it can be used to filter for valid dose.
 #' Defaults to NULL.
-#' @param by_vars Variables to join by (type `vars`).
+#' @param by_vars Variables to join by (created by `dplyr::vars`).
 #' @param dose_start The dose start date variable.
 #' @param dose_end The dose end date variable.
 #' @param analysis_date The analysis date variable.
