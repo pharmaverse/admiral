@@ -225,18 +225,57 @@ warn_has_unique_records <- function(dataset,
 warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
-      paste("The variables used for traceability in `", list_name, "` are not consistent,",
-        "please check:",
+      paste0("The variables used for traceability in `", list_name,
+             "` are not consistent, please check:\n",
         paste(
-          "source ", i - 1, ", Variables are given as: ",
-          paste(sort(names(base)), collapse = " ")
+          "source", i - 1, ", Variables are given as:",
+          paste(sort(names(base)), collapse = " "), "\n"
         ),
         paste(
-          "source ", i, ", Variables are given as: ",
+          "source", i, ", Variables are given as:",
           paste(sort(names(compare)), collapse = " ")
-        ),
-        sep = "\n"
+        )
       )
     )
   }
+}
+
+#' Suppress Warnings
+#'
+#' Suppress certain warnings issued by an expression.
+#'
+#' @param expr Expression to be executed
+#'
+#' @param regexpr Regular expression matching warnings to suppress
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return return value of the expression
+#'
+#' @keywords warning
+#'
+#' @details All warnings which are issued by the expression and match the
+#'   regular expression are suppressed.
+#'
+#' @export
+#'
+#' @examples
+#'   \dontrun{
+#'   suppress_warning(
+#'     left_join(dataset,
+#'               all_data,
+#'               by = c("USUBJID")),
+#'     regexpr = "^Column `USUBJID` has different attributes on LHS and RHS of join$")
+#'   )
+#'   }
+
+suppress_warning <- function(expr, regexpr) {
+  withCallingHandlers(
+    expr,
+    warning = function(w) {
+      if (grepl(regexpr, w$message)) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
 }
