@@ -41,5 +41,6 @@ globalVariables(c(
   "Source",
   "temp_obs_nr",
   "temp_source_nr",
-  "temp_date"
+  "temp_date",
+  "."
 ))
