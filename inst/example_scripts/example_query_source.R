@@ -32,4 +32,4 @@ adae <- tibble::tribble(
 )
 
 # try below:
-derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
+derive_query_vars(adae, queries)

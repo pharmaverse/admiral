@@ -26,7 +26,7 @@ test_that("Derive CQ and SMQ variables with two term levels", {
     "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS", 7, "Alveolar proteinosis", NA_character_, NA_character_, NA_character_, NA_character_, NA_character_, NA_character_, "Immune-Mediated Pneumonitis", "NARROW"
   )
 
-  actual_output <- derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
+  actual_output <- derive_query_vars(adae, queries)
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })

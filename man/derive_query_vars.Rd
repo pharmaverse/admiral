@@ -4,7 +4,7 @@
 \alias{derive_query_vars}
 \title{Derive query variables.}
 \usage{
-derive_query_vars(dataset, queries, dataset_keys)
+derive_query_vars(dataset, queries)
 }
 \arguments{
 \item{dataset}{Input dataset.
@@ -21,10 +21,6 @@ The columns specified by \code{dataset_keys} are expected.}
 \item TERM_NAME, non NULL
 This will be check by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
 }}
-
-\item{dataset_keys}{A vector of column names that can be used to identify
-a unique record in the \code{dataset}. e.g. for ADAE, this would be
-\code{c("USUBJID", "ASTDTM", "AETERM", "AESEQ")}.}
 }
 \description{
 Derive query variables.
@@ -38,13 +34,16 @@ is not "" or NA, then the corresponding "SC" variable is created.
 \examples{
 data("queries")
 adae <- tibble::tribble(
- ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
- "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
- "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
- "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis", NA_character_,
- "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
- )
-derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
+  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+  3, "Alanine aminotransferase abnormal", NA_character_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+  5, "Basedow's disease", NA_character_,
+  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS",
+  1, "Alveolar proteinosis", NA_character_,
+  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+)
+derive_query_vars(adae, queries)
 }
 \seealso{
 \code{\link[=assert_valid_queries]{assert_valid_queries()}}

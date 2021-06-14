@@ -18,10 +18,6 @@
 #' - TERM_NAME, non NULL
 #'   This will be check by [assert_valid_queries()].
 #'
-#' @param dataset_keys A vector of column names that can be used to identify
-#'   a unique record in the `dataset`. e.g. for ADAE, this would be
-#'   `c("USUBJID", "ASTDTM", "AETERM", "AESEQ")`.
-#'
 #' @author Ondrej Slama, Shimeng Huang
 #'
 #' @keywords adae adcm
@@ -33,21 +29,24 @@
 #' @examples
 #' data("queries")
 #' adae <- tibble::tribble(
-#'  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
-#'  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
-#'  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
-#'  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis", NA_character_,
-#'  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
-#'  )
-#' derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
-derive_query_vars <- function(dataset, queries, dataset_keys) {
+#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+#'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+#'   3, "Alanine aminotransferase abnormal", NA_character_,
+#'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+#'   5, "Basedow's disease", NA_character_,
+#'   "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS",
+#'   1, "Alveolar proteinosis", NA_character_,
+#'   "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+#' )
+#' derive_query_vars(adae, queries)
+derive_query_vars <- function(dataset, queries) {
 
   assert_that(
     is.data.frame(dataset),
-    is.data.frame(queries),
-    is.character(dataset_keys)
+    is.data.frame(queries)
+    # is.character(dataset_keys)
   )
-  assert_has_variables(dataset, dataset_keys)
+  # assert_has_variables(dataset, dataset_keys)
   assert_valid_queries(queries, deparse(substitute(queries)))
 
   # replace all "" by NA
@@ -102,8 +101,9 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
   # prepare input dataset for joining
+  static_cols <- setdiff(names(dataset), unique(queries$TERM_LEVEL))
   joined <- dataset %>%
-    gather(key = "TERM_LEVEL", value = "TERM_NAME", -dataset_keys) %>%
+    gather(key = "TERM_LEVEL", value = "TERM_NAME", -static_cols) %>%
     drop_na(.data$TERM_NAME)
   term_cols <- unique(joined$TERM_LEVEL)
 
@@ -113,7 +113,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME"))
 
   # join queries to input dataset
-  left_join(dataset, select(joined, dataset_keys, new_cols_names), by = dataset_keys)
+  left_join(dataset, select(joined, static_cols, new_cols_names), by = static_cols)
 }
 
 #' Verify if a dataset has the required format as queries dataset.
