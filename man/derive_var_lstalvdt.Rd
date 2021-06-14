@@ -4,7 +4,7 @@
 \alias{derive_var_lstalvdt}
 \title{Derive Last Known Alive Date}
 \usage{
-derive_var_lstalvdt(dataset, ...)
+derive_var_lstalvdt(dataset, ..., subject_keys = vars(STUDYID, USUBJID))
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -13,6 +13,10 @@ The \code{USUBJID} variable is expected.}
 
 \item{...}{Source of known alive dates. A \code{lstalvdt_source()} object is
 expected.}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 The input dataset with the \code{LSTALVDT} variable added.
@@ -45,7 +49,6 @@ merged to the input dataset. }
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(rlang, warn.conflict = FALSE)
 library(stringr)
 data("dm")
 data("ae")

@@ -9,6 +9,10 @@
 #' @param ... Source of known alive dates. A `lstalvdt_source()` object is
 #'   expected.
 #'
+#' @param subject_keys Variables to uniquely identify a subject
+#'   A list of quosures where the expressions are symbols as returned by
+#'   `vars()` is expected.
+#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -41,7 +45,6 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
-#' library(rlang, warn.conflict = FALSE)
 #' library(stringr)
 #' data("dm")
 #' data("ae")
@@ -113,7 +116,8 @@
 #'                     ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 derive_var_lstalvdt <- function(dataset,
-                                ...) {
+                                ...,
+                                subject_keys = vars(STUDYID, USUBJID)) {
   sources <- list(...)
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -135,24 +139,24 @@ derive_var_lstalvdt <- function(dataset,
     date_var <- quo_get_expr(sources[[i]]$date_var)
     add_data[[i]] <- filter_extreme(add_data[[i]],
                                     order = vars(!!date_var),
-                                    by_vars = vars(USUBJID),
+                                    by_vars = subject_keys,
                                     mode = "last",
                                     check_type = "none")
     if (is.Date(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
-                                 USUBJID,
+                                 !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = !!date_var)
     }
     else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
-                                 USUBJID,
+                                 !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = date(!!date_var))
     }
     else {
       add_data[[i]] <- transmute(add_data[[i]],
-                                 USUBJID,
+                                 !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = convert_dtc_to_dt(
                                    impute_dtc(!!date_var,
@@ -162,8 +166,9 @@ derive_var_lstalvdt <- function(dataset,
   }
 
   all_data <- bind_rows(add_data) %>%
+    filter(!is.na(LSTALVDT)) %>%
     filter_extreme(
-      by_vars = vars(USUBJID),
+      by_vars = subject_keys,
       order = vars(LSTALVDT),
       mode = "last",
       check_type = "none"
@@ -171,8 +176,8 @@ derive_var_lstalvdt <- function(dataset,
 
   suppress_warning(left_join(dataset,
                              all_data,
-                             by = c("USUBJID")),
-                   regexpr = "^Column `USUBJID` has different attributes on LHS and RHS of join$")
+                             by = vars2chr(subject_keys)),
+                   regexpr = "^Column .+ has different attributes on LHS and RHS of join$")
 }
 
 #' Create an `lstalvdt_source` object
@@ -188,11 +193,13 @@ derive_var_lstalvdt <- function(dataset,
 #' @param date_imputation A string defining the date imputation for `date_var`.
 #'   See `date_imputation` parameter of `impute_dtc()` for valid values.
 #'
-#' @param traceabilty_vars A named list returned by `vars()` defining the
+#' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @keywords source_specifications
 #'
 #' @export
 #'
@@ -226,13 +233,13 @@ validate_lstalvdt_source <- function(obj) {
   assert_that(inherits(obj, "lstalvdt_source"))
   values <- unclass(obj)
   if (!is.data.frame(values$dataset)) {
-    stop("`dataset` must be a data frame.\n",
-         "✖ A ", typeof(values$dataset), " was supplied.")
+    abort(paste0("`dataset` must be a data frame.\n",
+                 "A ", typeof(values$dataset), " was supplied."))
   }
   assert_that(quo_is_null(values$filter) || is.language(quo_get_expr(values$filter)))
   if (!(quo_is_symbol(values$date_var))) {
-    stop("`date_var` must be a symbol.\n",
-         "✖ A ", typeof(quo_get_expr(values$date_var)), " was supplied.")
+    abort(paste0("`date_var` must be a symbol.\n",
+                 "A ", typeof(quo_get_expr(values$date_var)), " was supplied."))
   }
   date_imputation <- values$date_imputation
   if (!is.null(date_imputation)) {

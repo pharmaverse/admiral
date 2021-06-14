@@ -21,6 +21,7 @@ globalVariables(c(
   "EXSEQ",
   "EXSTDTC",
   "EXTRT",
+  "LSTALVDT",
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",

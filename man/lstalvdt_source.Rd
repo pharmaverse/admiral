@@ -19,7 +19,7 @@ dates can be specified. An unquoted symbol is expected.}
 \item{date_imputation}{A string defining the date imputation for \code{date_var}.
 See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 
-\item{traceabilty_vars}{A named list returned by \code{vars()} defining the
+\item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
 }
 \value{
@@ -31,3 +31,4 @@ Create an \code{lstalvdt_source} object
 \author{
 Stefan Bundfuss
 }
+\keyword{source_specifications}

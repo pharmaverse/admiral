@@ -502,7 +502,7 @@ on_failure(is_named_exprs) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' assertthat::assert_that(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#' assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
 is_varval_list <- function(arg) {
   if (inherits(arg, "quosures") && all(names(arg) != "")) {
     expr_list <- map(arg, quo_get_expr)
@@ -517,8 +517,9 @@ on_failure(is_varval_list) <- function(call, env) {
     "Argument ",
     deparse(call$arg),
     " is not a variable-value pairs list.\n",
-    "ℹ A named list of quosures is expected where the expression is a symbol, a character, or `NA`.\n",
-    "✖ The following was supplied:\n",
+    "A named list of quosures is expected where the expression is ",
+    "a symbol, a character, or `NA`.\n",
+    "The following was supplied:\n",
     paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
   )
 }

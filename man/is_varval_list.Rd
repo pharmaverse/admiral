@@ -18,7 +18,7 @@ variable-value pairs. The value can be a symbol, a string, or NA. More general
 expression are not allowed.
 }
 \examples{
-assertthat::assert_that(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
 }
 \author{
 Stefan Bundfuss
