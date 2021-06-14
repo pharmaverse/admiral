@@ -21,6 +21,7 @@ globalVariables(c(
   "EXSEQ",
   "EXSTDTC",
   "EXTRT",
+  "LSTALVDT",
   "ONTRTFL",
   "PARAMCD",
   "RANDDT",
@@ -46,4 +47,5 @@ globalVariables(c(
   "QUERY_NAME",
   "QUERY_ID",
   "QUERY_SCOPE"
+  "."
 ))
