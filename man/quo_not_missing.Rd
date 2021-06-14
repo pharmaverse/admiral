@@ -16,7 +16,7 @@ TRUE or error.
 Check whether an argument is a quosure with a symbol or not.
 }
 \examples{
-test_fun <- function(x) {x <- rlang::enquo(x); assert_that(quo_not_missing(x))}
+test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
 test_fun(my_variable) # works, returns TRUE
 \dontrun{
 test_fun() # throws error because argument x is missing and has no default

@@ -556,7 +556,7 @@ on_failure(is_expr) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' test_fun <- function(x) {x <- rlang::enquo(x); assert_that(quo_not_missing(x))}
+#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
 #' test_fun(my_variable) # works, returns TRUE
 #' \dontrun{
 #' test_fun() # throws error because argument x is missing and has no default
@@ -565,5 +565,5 @@ quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
 }
 on_failure(quo_not_missing) <- function(call, env) {
-  paste0("Argument `", deparse(call$arg), "` is missing, with no default")
+  paste0("Argument `", deparse(call$x), "` is missing, with no default")
 }
