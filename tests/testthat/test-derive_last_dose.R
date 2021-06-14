@@ -28,8 +28,8 @@ test_that("derive_last_dose works as expected", {
 
   expected_output <- mutate(
     input_ae,
-    LDOSEDTM = as.Date(
-      c("2020-01-01", "2020-08-29", "2020-09-02", "NA", "2020-01-20", "NA", "NA")
+    LDOSEDTM = as.POSIXct(
+      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"
     )
   )
 
@@ -43,7 +43,7 @@ test_that("derive_last_dose works as expected", {
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    output_datetime = FALSE,
+    output_datetime = TRUE,
     check_dates_only = FALSE,
     traceability_vars = vars()
   )
@@ -127,7 +127,7 @@ test_that(
   expected_output <- expected_output <- mutate(
     input_ae,
     LDOSEDTM = as.Date(
-      c("2020-01-01", "2020-08-29", "2020-09-02", "NA", "2020-01-20", "NA", "NA")
+      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)
     )
   )
 
@@ -158,7 +158,7 @@ test_that("derive_last_dose returns traceability vars", {
     LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
     LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA),
     LDOSEDTM = as.Date(
-      c("2020-01-01", "2020-08-29", "2020-09-02", "NA", "2020-01-20", "NA", "NA")
+      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)
     )
   )
 
