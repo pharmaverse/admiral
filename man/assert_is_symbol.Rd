@@ -18,3 +18,6 @@ Check whether an argument is a quosure with a symbol or not.
 \examples{
 assert_is_symbol(rlang::quo(x))
 }
+\author{
+Ondrej Slama
+}

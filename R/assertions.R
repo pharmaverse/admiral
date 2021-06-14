@@ -551,6 +551,8 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @return TRUE or error.
 #'
+#' @author Ondrej Slama
+#'
 #' @export
 #'
 #' @examples
