@@ -137,6 +137,8 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #' @return The function throws an error if any of the requirements not met.
 assert_valid_queries <- function(queries,
                                  queries_name = deparse(substitute(queries))) {
+
+  # check required columns
   is_missing <- c("VAR_PREFIX", "QUERY_NAME",
                   "QUERY_ID", "QUERY_SCOPE",
                   "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
@@ -155,30 +157,59 @@ assert_valid_queries <- function(queries,
     abort(err_msg)
   }
 
-  query_num <- substr(queries$VAR_PREFIX,
-                      start = nchar(queries$VAR_PREFIX)-1,
-                      stop = nchar(queries$VAR_PREFIX))
-  if (nchar(query_num) > 2| anyNA(as.numeric(query_num))) {
-    abort(paste0("`VAR_PREFIX` in `", queries_name,
-                 "` must end with 2-digit numbers."))
-  }
-
-  query_prefix <- unique(gsub('.{2}$', '', queries$VAR_PREFIX))
-  if (any(query_prefix %!in% c("SMQ", "SDQ", "CQ"))) {
+  # check illegal prefix category
+  bad_prefix <- !grepl("SMQ", queries$VAR_PREFIX) &
+    !grepl("SDQ", queries$VAR_PREFIX) &
+    !grepl("CQ", queries$VAR_PREFIX)
+  if (any(bad_prefix)) {
     abort(paste0("`VAR_PREFIX` in `", queries_name,
                  "` must start with one of 'SMQ', 'SDQ', or 'CQ'."))
+    if (length(bad_prefix) == 1L) {
+      err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
+                        "` must start with one of 'SMQ', 'SDQ', or 'CQ'. Problem with `", bad_prefix, "`.")
+    } else {
+      err_msg <- paste0(
+        "`VAR_PREFIX` in `", queries_name,
+        "` must start with one of 'SMQ', 'SDQ', or 'CQ'. Problem with ",
+        enumerate(bad_prefix),
+        ".")
+    }
+    abort(err_msg)
   }
 
+  # check illegal prefix number
+  query_num <- gsub("^SMQ", '', queries$VAR_PREFIX) %>%
+    gsub("^SDQ", '', .) %>%
+    gsub("^CQ", '', .)
+  is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
+  if (any(is_bad_num)) {
+    bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
+    if (length(bad_nums) == 1L) {
+      err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
+                        "` must end with 2-digit numbers. Issue with `", bad_nums, "`.")
+    } else {
+      err_msg <- paste0(
+        "`VAR_PREFIX` in `", queries_name,
+        "` must end with 2-digit numbers. Issue with ",
+        enumerate(bad_nums),
+        ".")
+    }
+    abort(err_msg)
+  }
+
+  # check illegal query name
   if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
     abort(paste0("`QUERY_NAME` in `", queries_name,
                  "` cannot be empty string or NA."))
   }
 
+  # check illegal query scope
   if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0("`QUERY_SCOPE` in `", queries_name,
                  "` can only be 'BROAD', 'NARROW' or `NA`."))
   }
 
+  # check illegal term name
   if (any(queries$TERM_NAME == "") | any(is.na(queries$TERM_NAME))) {
     abort(paste0("`TERM_NAME` in `", queries_name,
                  "` cannot be empty string or NA."))

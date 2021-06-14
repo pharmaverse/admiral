@@ -7,7 +7,7 @@
 
 queries <- tibble::tribble(
   ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~TERM_LEVEL, ~TERM_NAME,
-  "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
+  "ACQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
   "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE INCREASED",
   "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "AMMONIA ABNORMAL",
   "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BIOPSY THYROID GLAND ABNORMAL",
