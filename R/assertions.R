@@ -556,7 +556,7 @@ on_failure(is_expr) <- function(call, env) {
 #' @examples
 #' assert_is_symbol(rlang::quo(x))
 assert_is_symbol <- function(x) {
-  if (quo_is_symbol(x)) {
+  if (rlang::is_quosure(x) && quo_is_symbol(x)) {
     return(TRUE)
   } else {
     abort(paste("Symbol is expected, but", deparse(substitute(x)), "is not a symbol."))
