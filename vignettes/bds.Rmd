@@ -35,15 +35,16 @@ otherwise specified. </i>
 * [Read in data](#readdata)
 * [Derive/Impute numeric date/time and analysis day (ADT, ADTM, ADY)](#datetime)
 * [Derive Results (AVAL, AVALC, AVALU)](#aval)
-* [Assign PARAMCD, PARAMLBL, PARAMN](#paramcd)
-* [Deriving timing variables (e.g. APHASE, AVISIT, APERIOD)](#timing)
-* [Derive categorization variables (PARCAT, AVALCAT)](#cat)
+* [Assign PARAMCD, PARAM, PARAMN, PARCAT](#paramcd)
+* [Derive timing variables (e.g. APHASE, AVISIT, APERIOD)](#timing)
 * [Choose analysis record within a timing period (e.g. ANL01FL)](#analysisrec)
 * [Timing flags (e.g. ONTRTFL)](#timingflag)
-* [Assign Reference Range Indicators (e.g. H, L, N)](#referencerange)
-* [Derive Baseline (ABLFL, BASE, CHG, PCHG, BASETYPE)](#baseline)
+* [Assign Reference Range Indicator (ANRIND)](#referencerange)
+* [Derive Baseline (BASETYPE, ABLFL, BASE, BASEC)](#baseline)
+* [Derive Change from Baseline (CHG, PCHG)](#bchange)
 * [Assign Treatment (TRTA, TRTP)](#treatment)
 * [Assign ASEQ](#aseq)
+* [Derive categorization variables (AVALCAT)](#cat)
 * [Add labels and attributes](#attributes)
 * [Advanced topics:](#advanced)
   * Create a new record based on an analysis flag
@@ -92,7 +93,7 @@ If imputation is needed and the date is to be imputed to the first of the month,
 the call would be:
 ```{r eval=FALSE}
 vs_dt <- derive_vars_dt(vs_t, 
-                        new_vars_previx = "A", 
+                        new_vars_prefix = "A", 
                         dtc = VSDTC, 
                         date_imputation = "FIRST")
 ```
@@ -125,48 +126,243 @@ vs_aval <- mutate(vs_t,
                   AVALU = VSSTRESU)
 ```
 
-### Assign PARAMCD, PARAMLBL, PARAMN {#paramcd}
+### Assign PARAMCD, PARAM, PARAMN, PARCAT {#paramcd}
 
-The admiral function `derive_param()` may be used to assign the PARAM and 
-PARAMCD for a test. To use this function, a lookup dataframe should be created 
-to join with the data.
+To assign parameter level values such as PARAMCD, PARAM, PARAMN, PARCAT, etc., 
+a lookup can be created to join to the source data.
 
-In the simplest case, a lookup based on an SDTM --TESTCD value is created. For
-example, in Vitals Signs, the lookup may be:
+For example, when creating ADVS, a lookup based on the SDTM --TESTCD value may
+be created:
 
-VSTESTCD | PARAMCD | PARAM
---------- | --------- | --------
-DIABP | DIABP | Diastolic Blood Pressure (mmHg)
-HEIGHT | HEIGHT | Height (cm)
-MAP | MAP | Mean Arterial Pressure
-PULSE | PULSE | Pulse Rate (beats/min)
-SYSBP | SYSBP | Systolic Blood Pressure (mmHg)
-WEIGHT | WEIGHT | Weight (kg)
+VSTESTCD | PARAMCD | PARAM | PARAMN | PARCAT | PARCATN
+--------- | --------- | -------- | ------- | --------- | ----------
+HEIGHT | HEIGHT | Height (cm) | 1 | Subject Characteristic | 1
+WEIGHT | WEIGHT | Weight (kg) | 2 | Subject Characteristic | 1
+DIABP | DIABP | Diastolic Blood Pressure (mmHg) | 3 | Vital Sign | 2
+MAP | MAP | Mean Arterial Pressure | 4 | Vital Sign | 2
+PULSE | PULSE | Pulse Rate (beats/min) | 5 | Vital Sign | 2
+SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2
 
-The `derive_param()` function can now be used to derive PARAM and PARAMCD for
-the ADVS ADaM:
+This lookup may now be joined to the source data:
 
-`vs_paramcd <- derive_param(vs_t, lookup, by_vars = c("VSTESTCD"))`
+```{r eval=FALSE}
+vs_param <- vs_t %>% 
+  left_join(lookup, lookup, by = "VSTESTCD")
+````
 
-The resulting dataframe contains the variables PARAMCD and PARAM from the 
-lookup.
+### Derive timing variables (e.g. APHASE, AVISIT, APERIOD) {#timing}
 
-<b> <span style="color: red"> WE SHOULD ADD THE ABILITY TO DERIVE PARAMN, and PARAMLBL with this function </span> </b>
+Categorical timing variables are protocol and analysis dependent.  Below is a 
+simple example to calculate APHASE. 
 
-### Deriving timing variables (e.g. APHASE, AVISIT, APERIOD) {#timing}
-
-<b> <span style="color: red"> WE SHOULD ADD A SIMPLE FUNCTION FOR THIS. I AM NOT
-SURE WHERE THE DISCUSSION ARE WITH THIS? </span> </b>
+```{r eval=FALSE}
+vs_aphase <- suppvs_t_adsl %>% 
+  mutate(APHASE = case_when(is.na(ADT) ~ NA_character,
+                            ADT <= PH1EDT ~ "Screening",
+                            PH2SDT <= ADT <= PH2EDT ~ "Treatment",
+                            PH3SDT <= ADT <= PH3EDT ~ "Follow-up",
+                            TRUE ~ "UNASSIGNED"))
+```
 
 ### Choose analysis record within a timing period (e.g. ANL01FL) {#analysisrec}
 
-### Assign Reference Range Indicators (e.g. H, L, N) {#referencerange}
+In most finding ADaMs, an analysis flag is derived to identify the appropriate 
+observations to use for a particular analysis when a subject has multiple
+observations within a particular timing period.
 
-### Derive Baseline (ABLFL, BASE, CHG, PCHG, BASETYPE) {#baseline}
+For example, the mean, median, SD, etc.. are usually calculated for vital signs
+parameters at each analysis timepoint.  There are situations where a subject
+may have multiple collected values falling within one analysis timepoint. In 
+this situation, an analysis flag (e.g. ANLxxFL) may be used to choose the
+appropriate record for analysis.
+
+This flag may be derived using the Admiral function `derive_extreme_flag()`. 
+For this example, we will assume we would like to choose the latest and 
+highest value.
+
+```{r eval=FALSE}
+vs_anl01fl <- derive_extreme_flag(
+  vs_t,
+  new_var = ANL01FL,
+  byvars = rlang::exprs(USUBJID, PARAMCD, AVISIT),
+  order = rlang::exprs(ADT, AVAL),
+  mode = "last",
+  flag_filter = rlang::exprs(!is.na(AVISIT) & !is.na(AVAL)))
+
+```
+
+Another common example would be flagging the worst on-treatment value for a 
+subject.  For this example, we will assume we have 3 PARAMCD values (SYSBP,
+DIABP, and RESP).  We will also assume high is worst for SYSBP and DIABP
+and low is worst for RESP.
+
+```{r eval=FALSE}
+vs_worst_high <- derive_extreme_flag(
+  vs_t,
+  new_var = WORST_HIGH,
+  byvars = rlang::exprs(USUBJID, PARAMCD, AVISIT),
+  order = rlang::exprs(ADT, AVAL),
+  mode = "last",
+  flag_filter = rlang::exprs(!is.na(AVISIT) & !is.na(AVAL))) 
+
+vs_worst_low <- derive_extreme_flag(
+  vs_t,
+  new_var = WORST_LOW,
+  byvars = rlang::exprs(USUBJID, PARAMCD, AVISIT),
+  order = rlang::exprs(ADT, AVAL),
+  mode = "first",
+  flag_filter = rlang::exprs(!is.na(AVISIT) & !is.na(AVAL))) 
+
+vs_worst <- mutate(vs_worst_low,
+                   WORSTFL = ifelse(PARAMCD %in% c("SYSBP", "DIABP"), 
+                                    WORST_HIGH,
+                                    WORST_LOW))
+```
+
+An example of deriving ABLFL using the `derive_extreme_flag` function can be
+found [here.](#baseline)
+
+### Timing flags (e.g. ONTRTFL) {#timingflag}
+
+In some analysis, it may be necessary to flag an observation as on-treatment.
+The Admiral function `derive_var_ontrtfl()` can be used.
+
+For example, if on-treatment is defined as any observation between treatment
+start and treatment end, the flag may be derived as:
+
+```{r eval=FALSE}
+ontrtfl <- derive_var_ontrtfl(vs_t, 
+                              date = ADT, 
+                              ref_start_date = TRTSDT, 
+                              ref_end_date = TRTENDT)
+```
+
+This function returns the original dataframe with the column ONTRTFL added.
+Additionally, this function does have functionality to handle a window on the
+ref_end_date.  For example, if on-treatment is defined as between treatment 
+start and treatment end + 15 days, the call would be:
+
+```{r eval=FALSE}
+ontrtfl <- derive_var_ontrtfl(vs_t, 
+                              date = ADT, 
+                              ref_start_date = TRTSDT, 
+                              ref_end_date = TRTENDT,
+                              ref_end_window = 15)
+```
+
+Lastly, the function does allow you to filter out pre-treatment observations
+that occurred on the start date.  For example, if observations with VSTPT = PRE
+should not be considered on-treatment when the observation date falls between 
+the treatment start and end date, the user may specify this using the 
+filter_pre_timepoint paramter:
+
+```{r eval=FALSE}
+ontrtfl <- derive_var_ontrtfl(
+  vs_t,
+  date = ADT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT,
+  filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
+```
+
+### Assign Reference Range Indicator (ANRIND) {#referencerange}
+
+The Admiral function `derive_var_anrind()` may be used to derive the reference
+range indicator ANRIND.
+
+This function requires the reference range boundaries to exist on the dataframe 
+(ANRLO, ANRHI) and also accommodates the additional boundaries A1LO and A1HI.
+
+The function is called as:
+
+`vs_t <- derive_var_anrind()`
+
+
+### Derive Baseline (BASETYPE, ABLFL, BASE, BASEC) {#baseline}
+
+The BASETYPE should be derived using the function `derive_var_basetype()`.
+The parameter basetypes of this function requires a named list of expression 
+detailing how the BASETYPE should be assigned.  Note, if a record falls into
+multiple expressions within the basetypes expression, a row will be produced for 
+each BASETYPE.
+
+```{r eval=FALSE}
+basetype <- derive_var_basetype(
+  dataset = vs_t,
+  basetypes = rlang::expres("PHASE 1 BASELINE" = ADT <= APH1DT,
+                            "PHASE 2 BASELINE" = ADT >= APH2DT))
+```
+
+It is important to derive BASETYPE first so that it can be utilized in 
+subsequent derivations. This will be important if the dataframe contains
+multiple values for BASETYPE.
+
+Next, the analysis baseline flag (ABLFL) can be derived using the Admiral
+function `derive_extreme_flag`.  For example, if baseline is defined as the last 
+non-missing AVAL prior or on TRTSDT, the function call for ABLFL would be:
+
+```{r eval=FALSE}
+ablfl <- derive_extreme_flag(
+  vs_t,
+  new_var = ABLFL,
+  by_vars = rlang::exprs(STUDYID, USUBJID, BASETYPE, PARAMCD),
+  order = rlang::exprs(ADT),
+  mode = "last",
+  flag_filter = rlang::exprs(ADT <= TRTSDT & !is.na(AVAL)))
+```
+
+Note: Additional examples of the `derive_extreme_flag` function can be 
+found [above.](#analysisrec)
+
+Lastly, the BASE and BASEC columns can be derived using the Admiral function
+`derive_var_base()` and `derive_var_basec`.  Example calls are:
+
+`base <- derive_var_base(vs_t, by_vars = rlang::exprs(USUBJID, PARAMCD, BASETYPE))`
+
+`basec <- derive_var_basec(vs_t, by_vars = rlang::exprs(USUBJID, PARAMCD, BASETYPE))`
+
+
+### Derive Change from Baseline (CHG, PCHG) {#bchange}
+
+Change and percent change from baseline can be derived using the Admiral 
+functions `derive_var_chg` and `derive_var_pchg`.  These functions expect AVAL 
+and BASE to exist in the dataframe.  The CHG is simply AVAl - BASE and the
+PCHG is (AVAL - BASE) / absolute value (BASE) * 100.  Examples calls are:
+
+`chg <- derive_var_chg(vs_t)`
+
+`pchg <- derive_var_pchg(vs_t)`
 
 ### Assign Treatment (TRTA, TRTP) {#treatment}
 
+TRTA and TRTP must correlate to treatment TRTxxP and/or TRTxxA in ADSL. The 
+derivation of TRTA and TRTP for a record are protocol and analysis specific.  
+Admiral does not currently have functionality to assist with TRTA and TRTP 
+assignment.
+
+However, an example of a simple implmentation could be:
+
+```{r eval=FALSE}
+trta_trtp <- suppvs_t_adsl %>% 
+  mutate(TRTA = case_when(APHASE == "TREATMENT 1" ~ trt01a,
+                          APHASE == "TREATMENT 2" ~ trt02a),
+         TRTP = case_when(APHASE == "TREATMENT 1" ~ trt01p,
+                          APHASE == "TREATMENT 2" ~ trt02p))
+```
+
 ### Assign ASEQ {#aseq}
+
+The Admiral function `derive_obs_number()` can be used to derive ASEQ. An 
+example call is:
+
+```{r eval=FALSE}
+`aseq <- derive_obs_number(vs_t,
+                           new_var = ASEQ,
+                           by_vars = rlang::exprs(STUDYID, USUBJID),
+                           order = rlang::exprs::(PARAMCD, ADT, AVAL))
+```
+
+This will add an addition column to the dataframe called ASEQ.
 
 ### Add labels and attributes {#attributes}
 <b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
