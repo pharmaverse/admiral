@@ -29,8 +29,24 @@
 #' @seealso [assert_valid_queries()]
 #'
 #' @export
+#'
+#' @examples
+#' data("queries")
+#' adae <- tibble::tribble(
+#'  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+#'  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
+#'  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
+#'  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis", NA_character_,
+#'  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+#'  )
+#' derive_query_vars(adae, queries, c("USUBJID", "ASTDTM", "AETERM", "AESEQ"))
 derive_query_vars <- function(dataset, queries, dataset_keys) {
 
+  assert_that(
+    is.data.frame(dataset),
+    is.data.frame(queries),
+    is.character(dataset_keys)
+  )
   assert_has_variables(dataset, dataset_keys)
   assert_valid_queries(queries, deparse(substitute(queries)))
 
@@ -40,7 +56,7 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
     # mutate(across(where(is.character), ~na_if(., ""))) %>% # (not available for older dplyr)
 
   # names of new columns
-  # Note: currenlt as long as one of QUERY_ID in the group is not NA then
+  # Note: currently as long as one of QUERY_ID in the group is not NA then
   #   "CD" variable is created, same for QUERY_SCOPE
   nam_names <- paste0(unique(queries$VAR_PREFIX), "NAM")
   cd_names <- queries %>%
@@ -121,16 +137,28 @@ derive_query_vars <- function(dataset, queries, dataset_keys) {
 #' @return The function throws an error if any of the requirements not met.
 assert_valid_queries <- function(queries,
                                  queries_name = deparse(substitute(queries))) {
-  if (any(c("VAR_PREFIX", "QUERY_NAME",
-            "QUERY_ID", "QUERY_SCOPE",
-            "TERM_LEVEL", "TERM_NAME") %!in% names(queries))) {
-    abort(paste0("Missing required column(s) in `", queries_name, "`."))
+  is_missing <- c("VAR_PREFIX", "QUERY_NAME",
+                  "QUERY_ID", "QUERY_SCOPE",
+                  "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
+  if (any(is_missing)) {
+    missing_vars <- names(queries)[is_missing]
+    if (length(missing_vars) == 1L) {
+      err_msg <- paste0("Required variable in `", missing_vars,
+                        "` is missing in `", queries_name, "`.")
+    } else {
+      err_msg <- paste0(
+        "Required variables ",
+        enumerate(missing_vars),
+        " are missing in `", queries_name, "`."
+      )
+    }
+    abort(err_msg)
   }
 
   query_num <- substr(queries$VAR_PREFIX,
                       start = nchar(queries$VAR_PREFIX)-1,
                       stop = nchar(queries$VAR_PREFIX))
-  if (anyNA(as.numeric(query_num))) {
+  if (nchar(query_num) > 2| anyNA(as.numeric(query_num))) {
     abort(paste0("`VAR_PREFIX` in `", queries_name,
                  "` must end with 2-digit numbers."))
   }
@@ -148,7 +176,7 @@ assert_valid_queries <- function(queries,
 
   if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0("`QUERY_SCOPE` in `", queries_name,
-                 "` can only be 'BROAD', 'NARROW' or `NA_character_`."))
+                 "` can only be 'BROAD', 'NARROW' or `NA`."))
   }
 
   if (any(queries$TERM_NAME == "") | any(is.na(queries$TERM_NAME))) {
