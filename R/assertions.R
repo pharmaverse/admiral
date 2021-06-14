@@ -551,16 +551,19 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @return TRUE or error.
 #'
-#' @author Ondrej Slama
+#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @export
 #'
 #' @examples
-#' assert_is_symbol(rlang::quo(x))
-assert_is_symbol <- function(x) {
-  if (is_quosure(x) && quo_is_symbol(x)) {
-    return(TRUE)
-  } else {
-    abort(paste("Symbol is expected, but", deparse(substitute(x)), "is not a symbol."))
-  }
+#' test_fun <- function(x) {x <- rlang::enquo(x); assert_that(quo_not_missing(x))}
+#' test_fun(my_variable) # works, returns TRUE
+#' \dontrun{
+#' test_fun() # throws error because argument x is missing and has no default
+#' }
+quo_not_missing <- function(x) {
+  !rlang::quo_is_missing(x)
+}
+on_failure(quo_not_missing) <- function(call, env) {
+  paste0("Argument `", deparse(call$arg), "` is missing, with no default")
 }

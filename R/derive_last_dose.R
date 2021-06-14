@@ -107,13 +107,8 @@ derive_last_dose <- function(dataset,
     is_quosures(traceability_vars)
   )
 
-  # apply filtering condition
-  filter_ex <- enquo(filter_ex)
-  if (!is.null(quo_get_expr(filter_ex))) {
-    dataset_ex <- filter(dataset_ex, !!filter_ex)
-  }
-
   # substitute dataset variables
+  filter_ex <- enquo(filter_ex)
   dose_start <- enquo(dose_start)
   dose_end <- enquo(dose_end)
   analysis_date <- enquo(analysis_date)
@@ -122,11 +117,23 @@ derive_last_dose <- function(dataset,
 
   # check if variables are symbols
   assert_that(
-    assert_is_symbol(dose_start),
-    assert_is_symbol(dose_end),
-    assert_is_symbol(analysis_date),
-    assert_is_symbol(dataset_seq_var)
+    quo_not_missing(filter_ex),
+    quo_not_missing(dose_start),
+    quo_not_missing(dose_end),
+    quo_not_missing(analysis_date),
+    quo_not_missing(dataset_seq_var),
+    quo_is_call(filter_ex) | is.null(quo_get_expr(filter_ex)),
+    quo_is_symbol(dose_start),
+    quo_is_symbol(dose_end),
+    quo_is_symbol(analysis_date),
+    quo_is_symbol(dataset_seq_var)
   )
+
+
+  # apply filtering condition
+  if (!is.null(quo_get_expr(filter_ex))) {
+    dataset_ex <- filter(dataset_ex, !!filter_ex)
+  }
 
   # by_vars converted to string
   by_vars_str <- vars2chr(by_vars)
