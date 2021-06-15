@@ -485,6 +485,46 @@ on_failure(is_named_exprs) <- function(call, env) {
   )
 }
 
+#' Is Variable-value List?
+#'
+#' Checks if the argument is a list of quosures where the expressions are
+#' variable-value pairs. The value can be a symbol, a string, or NA. More general
+#' expression are not allowed.
+#'
+#' @param arg The argument to check
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return `TRUE` if the argument is a variable-value list, `FALSE` otherwise
+#'
+#' @keywords check
+#'
+#' @export
+#'
+#' @examples
+#' assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
+is_varval_list <- function(arg) {
+  if (inherits(arg, "quosures") && all(names(arg) != "")) {
+    expr_list <- map(arg, quo_get_expr)
+    all(map_lgl(expr_list, function(arg) is.symbol(arg) || is.character(arg) || is.na(arg)))
+  }
+  else {
+    FALSE
+  }
+}
+on_failure(is_varval_list) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " is not a variable-value pairs list.\n",
+    "A named list of quosures is expected where the expression is ",
+    "a symbol, a character, or `NA`.\n",
+    "The following was supplied:\n",
+    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
+  )
+}
+
+
 is_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
 }
