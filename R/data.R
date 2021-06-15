@@ -33,6 +33,14 @@
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/ex.xpt}
 "ex"
 
+#' Single Dose Exposure Dataset
+#'
+#' A derived dataset with single dose per date.
+#'
+#' @source
+#' Derived from the [ex] dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/derive_single_dose.R})
+"ex_single"
+
 #' Laboratory Measurements Dataset
 #'
 #' A SDTM LB dataset from the CDISC pilot project

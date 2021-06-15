@@ -298,11 +298,27 @@ variable name. The variable should be stated in the description.
 
 # Missing values
 
-Missing values (NAs) need to be explicitly shown.
+Missing values (`NA`s) need to be explicitly shown.
 
 Regarding character vectors converted from SAS files: SAS treats missing values as blank. 
-Those are imported into R as empty strings (“”) although in nature they are missing values (`NA`). 
-All empty strings that originate like this need to be converted to proper R missing values `NA.`
+Those are imported into R as empty strings (`""`) although in nature they are missing values (`NA`). 
+All empty strings that originate like this need to be converted to proper R missing values `NA`.
+
+# File Structuring
+
+Organizing function into files is more of an art than a science.
+Thus, there are no hard rules but just recommendations.
+First and foremost, there are two extremes that should be avoided:
+putting each function into its own file and putting all functions into a single file.
+Apart from that the following recommendations should be taken into consideration when deciding upon file structuring:
+
+- If a function is very long (together with its documentation), store it in a separate file
+- If some functions are documented together, put them into one file
+- If some functions have some sort of commonality or relevance with one another (like `dplyr::bind_rows()` and `dplyr::bind_cols()`), put them into one file
+- Store functions together with their helpers and methods
+- Have no more than 1000 lines in a single file, unless necessary (exceptions are, for example, classes with methods)
+
+It is the responsibility of both the author of a new function and reviewer to ensure that these recommendations are put into practice.
 
 
 # R Package Dependencies
