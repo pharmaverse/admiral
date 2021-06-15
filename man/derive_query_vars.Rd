@@ -34,14 +34,15 @@ is not "" or NA, then the corresponding "SC" variable is created.
 \examples{
 data("queries")
 adae <- tibble::tribble(
-  ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
-  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-  3, "Alanine aminotransferase abnormal", NA_character_,
-  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-  5, "Basedow's disease", NA_character_,
-  "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS",
-  1, "Alveolar proteinosis", NA_character_,
-  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+"01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+3, "Alanine aminotransferase abnormal", NA_character_,
+"02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+5, "Basedow's disease", NA_character_,
+"03", "2020-06-07 23:59:59", "SOME TERM",
+2, "Some query", "Some term",
+"05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+7, "Alveolar proteinosis", NA_character_
 )
 derive_query_vars(adae, queries)
 }

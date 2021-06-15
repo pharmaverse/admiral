@@ -7,9 +7,11 @@
 
 queries <- tibble::tribble(
   ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~TERM_LEVEL, ~TERM_NAME,
-  "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
-  "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "ALANINE AMINOTRANSFERASE INCREASED",
-  "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", "20000008", "NARROW", "AEDECOD", "AMMONIA ABNORMAL",
+  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "APPLICATION SITE ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "APPLICATION SITE PRURITUS",
+  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "LOCALIZED ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "GENERALIZED PRURITUS",
   "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BIOPSY THYROID GLAND ABNORMAL",
   "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BLOOD THYROID STIMULATING HORMONE ABNORMAL",
   "SMQ03", "Immune-Mediated Hypothyroidism", "20000161", "NARROW", "AEDECOD", "BASEDOW'S DISEASE",
@@ -25,10 +27,11 @@ queries <- tibble::tribble(
 
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
-  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
+  "01", "2020-06-02 23:59:59", "ERYTHEMA", 3, "Erythema", "Localized erythema",
   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
   "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS", 1, "Alveolar proteinosis", NA_character_,
-  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+  "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term",
+  "04", "2020-06-10 23:59:59", "APPLICATION SITE ERYTHEMA", 7, "APPLICATION SITE ERYTHEMA", "Application site erythema",
 )
 
 # try below:

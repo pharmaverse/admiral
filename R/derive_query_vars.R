@@ -29,14 +29,15 @@
 #' @examples
 #' data("queries")
 #' adae <- tibble::tribble(
-#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
-#'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-#'   3, "Alanine aminotransferase abnormal", NA_character_,
-#'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-#'   5, "Basedow's disease", NA_character_,
-#'   "02", "2020-06-05 23:59:59", "ALVEOLAR PROTEINOSIS",
-#'   1, "Alveolar proteinosis", NA_character_,
-#'   "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term"
+#' ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+#' "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+#' 3, "Alanine aminotransferase abnormal", NA_character_,
+#' "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+#' 5, "Basedow's disease", NA_character_,
+#' "03", "2020-06-07 23:59:59", "SOME TERM",
+#' 2, "Some query", "Some term",
+#' "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+#' 7, "Alveolar proteinosis", NA_character_
 #' )
 #' derive_query_vars(adae, queries)
 derive_query_vars <- function(dataset, queries) {
@@ -44,9 +45,7 @@ derive_query_vars <- function(dataset, queries) {
   assert_that(
     is.data.frame(dataset),
     is.data.frame(queries)
-    # is.character(dataset_keys)
   )
-  # assert_has_variables(dataset, dataset_keys)
   assert_valid_queries(queries, deparse(substitute(queries)))
 
   # replace all "" by NA
@@ -157,10 +156,13 @@ assert_valid_queries <- function(queries,
     abort(err_msg)
   }
 
+  # check duplicate rows
+  if (nrow(queries) != nrow(queries %>% dplyr::distinct())) {
+    abort("`", queries_name, "` should not have duplicate rows.")
+  }
+
   # check illegal prefix category
-  bad_prefix <- !grepl("SMQ", queries$VAR_PREFIX) &
-    !grepl("SDQ", queries$VAR_PREFIX) &
-    !grepl("CQ", queries$VAR_PREFIX)
+  bad_prefix <- !grepl("^(SMQ|CQ|CGG)", queries$VAR_PREFIX)
   if (any(bad_prefix)) {
     abort(paste0("`VAR_PREFIX` in `", queries_name,
                  "` must start with one of 'SMQ', 'SDQ', or 'CQ'."))
@@ -178,9 +180,7 @@ assert_valid_queries <- function(queries,
   }
 
   # check illegal prefix number
-  query_num <- gsub("^SMQ", '', queries$VAR_PREFIX) %>%
-    gsub("^SDQ", '', .) %>%
-    gsub("^CQ", '', .)
+  query_num <- gsub("^(SMQ|CQ|CGG)", "", queries$VAR_PREFIX)
   is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
   if (any(is_bad_num)) {
     bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
