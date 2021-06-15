@@ -147,6 +147,10 @@ This lookup may now be joined to the source data:
 advs_paramcd <-  left_join(advs_aval, param_lookup, lookup, by = "VSTESTCD")
 ````
 
+Please note, it may be necessary to include other variables in the join. For
+example, perhaps the `PARCAT` is based on `VSTESTCD` and `VSPOS`, it may be 
+necessary to expand this lookup or create a separate look up for `PARCAT`.
+
 ### Derive timing variables (e.g. APHASE, AVISIT, APERIOD) {#timing}
 
 Categorical timing variables are protocol and analysis dependent.  Below is a 
