@@ -49,18 +49,16 @@
 #' @export
 #'
 #' @examples
-#'
 #' library(dplyr)
-#' library(magrittr)
-#' library(rlang)
-#'
 #' data("vs")
 #'
 #' vs %>%
 #'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   filter(VSTESTCD %in% c("HEIGHT", "WEIGHT")) %>%
-#'   derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
-#'                     order = exprs(VISITNUM, VSTPTNUM))
+#'   derive_obs_number(
+#'     by_vars = vars(USUBJID, VSTESTCD),
+#'     order = vars(VISITNUM, VSTPTNUM)
+#'   )
 derive_obs_number <- function(dataset,
                               new_var = ASEQ,
                               order = NULL,
@@ -72,7 +70,7 @@ derive_obs_number <- function(dataset,
   if (!is.null(by_vars) | !is.null(order)) {
     # group and sort input dataset
     if (!is.null(by_vars)) {
-      assert_has_variables(data, map_chr(by_vars, as_string))
+      assert_has_variables(data, vars2chr(by_vars))
 
       data <- data %>%
         group_by(!!!by_vars) %>%

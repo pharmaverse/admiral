@@ -4,7 +4,7 @@
 \alias{derive_var_base}
 \title{Derive BASE}
 \usage{
-derive_var_base(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE))
+derive_var_base(dataset, by_vars)
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -29,7 +29,7 @@ dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", NA,    "N",
   "TEST01", "PAT01",  "PARAM02",  8.35, "N"
 )
-derive_var_base(dataset, by_vars = exprs(USUBJID, PARAMCD))
+derive_var_base(dataset, by_vars = vars(USUBJID, PARAMCD))
 }
 \author{
 Thomas Neitmann

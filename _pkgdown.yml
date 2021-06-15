@@ -38,6 +38,11 @@ reference:
   contents:
   - has_keyword('timing')
 
+- subtitle: Source Specifications
+  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
+  contents:
+  - has_keyword('source_specifications')
+
 - title: SDTM Datasets
 - contents:
   - ae
