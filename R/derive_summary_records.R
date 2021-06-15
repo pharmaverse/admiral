@@ -96,7 +96,9 @@
 #'   "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
 #' )
 #'
-#' # set new values to any variable, DTYPE = MAXIMUM refer to `MAX()` record and DTYPE = AVERAGE refer `MEAN()` record
+#' # Set new values to any variable. Here, DTYPE = MAXIMUM refer to `MAX()` record and
+#' # DTYPE = AVERAGE refer `MEAN()` record.
+#'
 #' # `set_values_to` must be of same length as new records
 #' derive_summary_records(
 #'   advs,
@@ -211,7 +213,7 @@ as_inlined_function <- function(funs, env) {
   body(fn) <- expr({
     # Transform the lambda body into a maskable quosure inheriting
     # from the execution environment
-    `_quo` <- quo(!!body(fn))
+    `_quo` <- rlang::quo(!!body(fn))
 
     # Evaluate the quosure in the mask
     rlang::eval_bare(`_quo`, base::parent.frame())

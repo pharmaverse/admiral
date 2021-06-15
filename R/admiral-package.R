@@ -18,3 +18,6 @@
 #' @importFrom lubridate ceiling_date date days duration floor_date is.Date is.instant time_length %--%
 #'             ymd ymd_hms
 "_PACKAGE"
+
+## quiets concerns of R CMD check re: the .'s that appear in pipelines
+utils::globalVariables(c("."))
