@@ -66,7 +66,7 @@ advs_map <- left_join(sysbp, diabp,
 advs_avg <- derive_summary_records(
   advs_map,
   by_vars = vars(STUDYID, USUBJID, VSTESTCD, VISITNUM, ADT),
-  fns = list(AVAL ~ mean),
+  fns = list(AVAL ~ mean, N ~ n),
   set_values_to = vars(DTYPE = "AVERAGE"))
 
 # Assign PARAMCD, PARAM, and PARAMN
@@ -180,8 +180,6 @@ advs_pchg <- derive_var_pchg(advs_chg)
 advs_trta_trtp <- mutate(advs_pchg,
                          TRTP = TRT01P,
                          TRTA = TRT01A)
-
-# Derive the Average AVAL per PARAMCD, AVISIT
 
 # Create End of Treatment Record
 advs_eot <-
