@@ -111,7 +111,7 @@ derive_baseline <- function(dataset, by_vars, source_var, new_var) {
     filter(ABLFL == "Y") %>%
     select(!!!by_vars, !!enquo(new_var) := !!enquo(source_var))
 
-  assert_has_only_one_baseline_record(base, vars2chr(by_vars))
+  assert_has_unique_records(base, by_vars, "Dataset contains multiple baseline records.")
 
   left_join(dataset, base, by = vars2chr(by_vars))
 }
