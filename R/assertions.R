@@ -584,3 +584,26 @@ on_failure(is_expr) <- function(call, env) {
     "` is not an expression created using `expr()`"
   )
 }
+
+#' Check whether an argument is not a quosure of a missing argument
+#'
+#' @param x Test object
+#'
+#' @return TRUE or error.
+#'
+#' @author Thomas Neitmann, Ondrej Slama
+#'
+#' @export
+#'
+#' @examples
+#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+#' test_fun(my_variable) # no missing argument -> returns TRUE
+#' \dontrun{
+#' test_fun() # missing argument -> throws error
+#' }
+quo_not_missing <- function(x) {
+  !rlang::quo_is_missing(x)
+}
+on_failure(quo_not_missing) <- function(call, env) {
+  paste0("Argument `", deparse(call$x), "` is missing, with no default")
+}
