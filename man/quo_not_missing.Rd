@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{quo_not_missing}
 \alias{quo_not_missing}
-\title{Check whether an argument is a quosure with a symbol or not.}
+\title{Check whether an argument is not a quosure of a missing argument}
 \usage{
 quo_not_missing(x)
 }
@@ -13,13 +13,13 @@ quo_not_missing(x)
 TRUE or error.
 }
 \description{
-Check whether an argument is a quosure with a symbol or not.
+Check whether an argument is not a quosure of a missing argument
 }
 \examples{
 test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
-test_fun(my_variable) # works, returns TRUE
+test_fun(my_variable) # no missing argument -> returns TRUE
 \dontrun{
-test_fun() # throws error because argument x is missing and has no default
+test_fun() # missing argument -> throws error
 }
 }
 \author{

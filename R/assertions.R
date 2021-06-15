@@ -585,7 +585,7 @@ on_failure(is_expr) <- function(call, env) {
   )
 }
 
-#' Check whether an argument is a quosure with a symbol or not.
+#' Check whether an argument is not a quosure of a missing argument
 #'
 #' @param x Test object
 #'
@@ -597,9 +597,9 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @examples
 #' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
-#' test_fun(my_variable) # works, returns TRUE
+#' test_fun(my_variable) # no missing argument -> returns TRUE
 #' \dontrun{
-#' test_fun() # throws error because argument x is missing and has no default
+#' test_fun() # missing argument -> throws error
 #' }
 quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
