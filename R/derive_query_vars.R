@@ -162,7 +162,7 @@ assert_valid_queries <- function(queries,
   }
 
   # check illegal prefix category
-  bad_prefix <- !grepl("^(SMQ|CQ|CGG)", queries$VAR_PREFIX)
+  bad_prefix <- !grepl("^(SMQ|CQ|SDQ)", queries$VAR_PREFIX)
   if (any(bad_prefix)) {
     abort(paste0("`VAR_PREFIX` in `", queries_name,
                  "` must start with one of 'SMQ', 'SDQ', or 'CQ'."))
@@ -180,7 +180,7 @@ assert_valid_queries <- function(queries,
   }
 
   # check illegal prefix number
-  query_num <- gsub("^(SMQ|CQ|CGG)", "", queries$VAR_PREFIX)
+  query_num <- gsub("^(SMQ|CQ|SDQ)", "", queries$VAR_PREFIX)
   is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
   if (any(is_bad_num)) {
     bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
