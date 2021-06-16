@@ -5,15 +5,24 @@
 # Input: dm, ex, ds
 #
 
+library(admiral)
 library(dplyr)
 library(lubridate)
-library(admiral)
 
-data("dm")
-data("ex")
-data("ds")
+# ---- Load source datasets ----
 
-# User defined functions
+# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+#  as needed and assign to the variables below.
+
+dm <- NULL
+ex <- NULL
+ds <- NULL
+
+# ---- User defined functions ----
+
+# Here are some examples of how you can create your own functions that
+#  operates on vectors, which can be used in `mutate`.
+
 # Grouping
 format_agegr1 <- function(x) {
   case_when(
@@ -57,6 +66,8 @@ format_eoxxstt <- function(x) {
   )
 }
 
+# ---- Derivations ----
+
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
   mutate(
@@ -80,15 +91,14 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
+    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE")
   ) %>%
 
-  # EOS date
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE")
   ) %>%
 
   # EOS status
@@ -97,24 +107,15 @@ adsl <- dm %>%
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter = expr(DSCAT == "DISPOSITION EVENT")
   ) %>%
 
-  # EOS reasons
-  derive_disposition_reason(
-    dataset_ds = ds,
-    new_var = DCSREAS,
-    reason_var = DSDECOD,
-    new_var_spe = DCSREASP,
-    reason_var_spe = DSTERM,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
-  ) %>%
   # Last retrieval date
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+    filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
   ) %>%
 
   # Death date - impute partial date to first day/month
@@ -152,4 +153,6 @@ adsl <- dm %>%
     DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_)
   )
 
-save(adsl, file = "data/adsl.rda", compress = TRUE)
+# ---- Save output ----
+
+save(adsl, file = "/PATH/TO/SAVE/ADSL", compress = TRUE)

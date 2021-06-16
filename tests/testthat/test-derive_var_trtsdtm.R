@@ -11,15 +11,20 @@ test_that("TRTSDTM variable is added", {
     3L, "2020-03-21", 2, 0, "ACTIVE"
   )
 
-  expected_output <- mutate(adsl, TRTSDTM = c(ymd_hms("2020-01-01T00:00:00"),
-                                              ymd_hms("2020-01-02T00:00:00"),
-                                              ymd_hms("2020-03-13T00:00:00")))
+  expected_output <- mutate(
+    adsl,
+    TRTSDTM = as_iso_dttm(c(
+      ymd_hms("2020-01-01T00:00:00"),
+      ymd_hms("2020-01-02T00:00:00"),
+      ymd_hms("2020-03-13T00:00:00")
+    ))
+  )
 
   actual_output <- derive_var_trtsdtm(adsl, dataset_ex = ex)
 
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("USUBJID")
+    keys = "USUBJID"
   )
 })

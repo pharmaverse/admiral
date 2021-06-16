@@ -81,12 +81,10 @@ warn_if_invalid_dtc <- function(dtc) {
   if (!all(is_valid_dtc)) {
     incorrect_dtc <- dtc[!is_valid_dtc]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid_dtc]
-    tbl <- paste("Row", incorrect_dtc_row, ": --DTC = ", incorrect_dtc)
-    msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
-    warn(msg)
-    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+    tbl <- paste("Row", incorrect_dtc_row, ": --DTC =", incorrect_dtc)
+    main_msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
 
-    msg3 <- paste0(
+    info <- paste0(
       "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
@@ -102,7 +100,7 @@ warn_if_invalid_dtc <- function(dtc) {
       "--12-15\n",
       "-----T07:15"
     )
-    warn(msg3)
+    warn(paste(main_msg, tbl, info, sep = "\n"))
   }
 }
 
@@ -227,18 +225,57 @@ warn_has_unique_records <- function(dataset,
 warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
-      paste("The variables used for traceability in `", list_name, "` are not consistent,",
-        "please check:",
+      paste0("The variables used for traceability in `", list_name,
+             "` are not consistent, please check:\n",
         paste(
-          "source ", i - 1, ", Variables are given as: ",
-          paste(sort(names(base)), collapse = " ")
+          "source", i - 1, ", Variables are given as:",
+          paste(sort(names(base)), collapse = " "), "\n"
         ),
         paste(
-          "source ", i, ", Variables are given as: ",
+          "source", i, ", Variables are given as:",
           paste(sort(names(compare)), collapse = " ")
-        ),
-        sep = "\n"
+        )
       )
     )
   }
+}
+
+#' Suppress Warnings
+#'
+#' Suppress certain warnings issued by an expression.
+#'
+#' @param expr Expression to be executed
+#'
+#' @param regexpr Regular expression matching warnings to suppress
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return return value of the expression
+#'
+#' @keywords warning
+#'
+#' @details All warnings which are issued by the expression and match the
+#'   regular expression are suppressed.
+#'
+#' @export
+#'
+#' @examples
+#'   \dontrun{
+#'   suppress_warning(
+#'     left_join(dataset,
+#'               all_data,
+#'               by = c("USUBJID")),
+#'     regexpr = "^Column `USUBJID` has different attributes on LHS and RHS of join$")
+#'   )
+#'   }
+
+suppress_warning <- function(expr, regexpr) {
+  withCallingHandlers(
+    expr,
+    warning = function(w) {
+      if (grepl(regexpr, w$message)) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
 }

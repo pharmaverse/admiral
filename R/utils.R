@@ -84,3 +84,18 @@ squote <- function(x) {
 vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
+
+#' Helper function to convert date (or date-time) objects to characters of dtc format
+#' (-DTC type of variable)
+#'
+#' @param dtm date or date-time
+#'
+#' @return character
+#'
+#' @examples
+#' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
+#' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
+convert_dtm_to_dtc <- function(dtm) {
+  stopifnot(lubridate::is.instant(dtm))
+  format(dtm, "%Y-%m-%dT%H:%M:%S")
+}
