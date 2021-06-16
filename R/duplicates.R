@@ -1,7 +1,7 @@
-.duplicates <- new.env(parent = emptyenv())
+.datasets <- new.env(parent = emptyenv())
 
 get_duplicates_dataset <- function() {
-  .duplicates$ds
+  .datasets$duplicates
 }
 
 extract_duplicate_records <- function(dataset, by_vars) {
@@ -33,7 +33,7 @@ assert_has_unique_records <- function(dataset,
 
   duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {
-    .duplicates$ds <- structure(
+    .datasets$duplicates <- structure(
       duplicate_records,
       class = union("duplicates", class(duplicate_records)),
       by_vars = vars2chr(by_vars)
