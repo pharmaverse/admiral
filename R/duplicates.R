@@ -4,8 +4,7 @@ get_duplicates_dataset <- function() {
   .duplicates$ds
 }
 
-get_duplicate_records <- function(dataset,
-                                  by_vars) {
+extract_duplicate_records <- function(dataset, by_vars) {
   assert_that(
     is.data.frame(dataset),
     is_vars(by_vars)
@@ -31,7 +30,7 @@ assert_has_unique_records <- function(dataset,
     is.character(msg)
   )
 
-  duplicate_records <- get_duplicate_records(dataset, by_vars)
+  duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {
     .duplicates$ds <- structure(
       duplicate_records,
