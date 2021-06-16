@@ -15,9 +15,8 @@
 #' @details
 #' For each element of `basetypes` the input dataset is subset based upon
 #' the provided expression and the `BASETYPE` variable is set to the name of the
-#' expression. Then, all subsets are stacked. Thus, the number of records in the
-#' output dataset is the sum of the number of records of each filtered subset of
-#' the input dataset
+#' expression. Then, all subsets are stacked. Records which do not match any
+#' condition are kept and `BASETYPE` is set to `NA`.
 #'
 #' @author Thomas Neitmann
 #'
