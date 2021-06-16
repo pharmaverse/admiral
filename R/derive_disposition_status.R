@@ -106,12 +106,12 @@ derive_disposition_status <- function(dataset,
     select(STUDYID, USUBJID, !!enquo(status_var))
 
   # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
-  has_unique_records(
-    dataset = ds_subset,
+  assert_has_unique_records(
+    ds_subset,
     by_vars = vars(STUDYID, USUBJID),
-    message_type = "error",
-    message = "The filter used for DS results in several records per patient - please check"
+    msg = "The filter used for DS results in multiple records per patient"
   )
+
   # Add the status variable and derive the new dispo status in the input dataset
   dataset %>%
     left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
