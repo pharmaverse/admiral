@@ -59,11 +59,13 @@ derive_var_basetype <- function(dataset, basetypes) {
     unique(map_chr(basetypes, all.vars))
   )
 
-  subsets <- map2(names(basetypes), basetypes, function(label, condition) {
+  records_with_basetype <- map2(names(basetypes), basetypes, function(label, condition) {
     dataset %>%
       filter(!!condition) %>%
       mutate(BASETYPE = label)
-  })
+  }) %>% bind_rows()
 
-  bind_rows(subsets)
+  records_without_basetype <- anti_join(dataset, records_with_basetype, by = colnames(dataset))
+
+  bind_rows(records_without_basetype, records_with_basetype)
 }
