@@ -1,31 +1,67 @@
 #' Impute partial date/time portion of a --DTC variable
 #'
-#' Imputation partial date/time portion of a --DTC variable.
-#' based on user input.
+#' Imputation partial date/time portion of a --DTC variable. based on user
+#' input.
 #'
 #' @param dtc The --DTC date to impute
 #'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   If the year part is not recorded (missing date), no imputation is performed.
+#'   A character date is expected in a format like yyyy-mm-dd or
+#'   yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+#'   imputation is performed.
 #'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
+#' @param date_imputation The value to impute the day/month when a datepart is
+#'   missing.
 #'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
+#'   If `NULL`: no date imputation is performed and partial dates are returned as
+#'   missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
+#'   - format with day and month specified as 'dd-mm': e.g. `"15-06"` for the 15th
+#'   of June,
+#'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
+#'   day/month.
 #'
-#'   Default is NULL.
+#'   Default is `NULL`.
 #'
-#' @param time_imputation The value to impute the time when a timepart is missing.
+#' @param time_imputation The value to impute the time when a timepart is
+#'   missing.
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-#'     the start of the day,
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
+#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. `"00:00:00"`
+#'   for the start of the day,
+#'   - or as a keyword: `"FIRST"`,`"LAST"` to impute to the start/end of a day.
 #'
-#'   Default is '00:00:00'.
+#'   Default is `"00:00:00"`.
+#'
+#' @param min_dates Minimum dates
+#'
+#' A list of dates is expected. It is ensured that the imputed date is not
+#' before any of the specified dates, e.g., that the imputed adverse event start
+#' date is not before the first treatment date. Only dates which are in the
+#' range of possible dates of the dtc value are considered. The possible dates
+#' are defined by the missing parts of the dtc date (see example below). This
+#' ensures that the non-missing parts of the dtc date are not changed. For
+#' example
+#'
+#' ```
+#' impute_dtc(
+#'   "2020-11",
+#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   date_imputation = "first"
+#' )
+#' ```
+#' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
+#' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
+#' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
+#' have changed the month although it is not missing (in the dtc date).
+#'
+#' @param max_dates Maximum dates
+#'
+#' A list of dates is expected. It is ensured that the imputed date is not after
+#' any of the specified dates, e.g., that the imputed date is not after the data
+#' cut off date. Only dates which are in the range of possible dates are
+#' considered.
 #'
 #' @author Samia Kabi
 #'
@@ -36,6 +72,8 @@
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' dates <- c(
 #'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
@@ -91,9 +129,22 @@
 #'   dtc = dates,
 #'   date_imputation = "MID"
 #' )
-impute_dtc <- function(dtc,
-                       date_imputation = NULL,
-                       time_imputation = "00:00:00") {
+#'
+#' # Impute a date and ensure that the imputed date is not before a list of
+#' # minimum dates
+#' impute_dtc(
+#'   "2020-12",
+#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   date_imputation = "first"
+#' )
+#'
+impute_dtc <- function(
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
+  min_dates = NULL,
+  max_dates = NULL) {
 
   # Issue a warning if incorrect  DTC is present
   warn_if_invalid_dtc(dtc)
@@ -104,6 +155,8 @@ impute_dtc <- function(dtc,
     assert_that(is_valid_date_entry(date_imputation))
 
     # Specific setup for FISRT/MID/LAST
+    # make keywords case-insensitive
+    date_imputation <- str_to_upper(date_imputation)
     if (date_imputation == "FIRST") {
       d <- "01"
       mo <- "01"
@@ -150,6 +203,8 @@ impute_dtc <- function(dtc,
 
   # impute time
   assert_that(is_valid_time_entry(time_imputation))
+  # make keywords case-insensitive
+  time_imputation <- str_to_upper(time_imputation)
   if (time_imputation == "FIRST") {
     imputed_time <- "00:00:00"
     sec <- ":00"
@@ -175,7 +230,47 @@ impute_dtc <- function(dtc,
     TRUE ~ imputed_time
   )
 
-  if_else(!is.na(imputed_date), paste0(imputed_date, "T", imputed_time), NA_character_)
+  imputed_dtc <- if_else(!is.na(imputed_date),
+                         paste0(imputed_date, "T", imputed_time),
+                         NA_character_)
+
+  # adjust imputed date to minimum and maximum dates
+  if (!is.null(min_dates) | !is.null(max_dates)) {
+    # determine range of possible dates
+    min_dtc <- impute_dtc(dtc,
+                          date_imputation = "first",
+                          time_imputation = "first")
+    max_dtc <- impute_dtc(dtc,
+                          date_imputation = "last",
+                          time_imputation = "last")
+  }
+  if (!is.null(min_dates)) {
+    # for each minimum date within the range ensure that the imputed date is not
+    # before it
+    for (min_date in min_dates) {
+      assert_that(is_date(min_date))
+      min_date_iso <- strftime(min_date,
+                               format = "%Y-%m-%dT%H:%M:%S",
+                               tz = "GMT")
+      imputed_dtc <- if_else(min_dtc <= min_date_iso & min_date_iso <= max_dtc,
+                             pmax(imputed_dtc, min_date_iso),
+                             imputed_dtc)
+    }
+  }
+  if (!is.null(max_dates)) {
+    # for each maximum date within the range ensure that the imputed date is not
+    # after it
+    for (max_date in max_dates) {
+      assert_that(is_date(max_date))
+      max_date_iso <- strftime(max_date,
+                               format = "%Y-%m-%dT%H:%M:%S",
+                               tz = "GMT")
+      imputed_dtc <- if_else(min_dtc <= max_date_iso & max_date_iso <= max_dtc,
+                             pmin(imputed_dtc, max_date_iso),
+                             imputed_dtc)
+    }
+  }
+  imputed_dtc
 }
 
 #' Convert a date character vector into a Date object.
@@ -198,18 +293,17 @@ impute_dtc <- function(dtc,
 #' @export
 #'
 #' @examples
-#'
 #' convert_dtc_to_dt("2019-07-18")
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc) {
-  # Check dtc is character
-  assert_that(is_character(dtc))
-  dt <- case_when(
-    nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ ymd(substr(dtc, 1, 10)),
-    TRUE ~ ymd(NA)
-  )
+  assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
-  dt
+
+  if_else(
+    nchar(dtc) >= 10 & is_valid_dtc(dtc),
+    ymd(substr(dtc, 1, 10)),
+    ymd(NA)
+  )
 }
 
 #' Convert a date character vector into a Date time object.
@@ -219,8 +313,7 @@ convert_dtc_to_dt <- function(dtc) {
 #' @param dtc The --DTC date to convert.
 #'
 #'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
-#'   A partial datetime will return a NA date and a warning will be issued:
-#'   'All formats failed to parse. No formats found.'.
+#'   A partial datetime will issue a warning.
 #'   Note: you can use impute_dtc function to build a complete datetime.
 #'
 #' @author Samia Kabi
@@ -236,15 +329,14 @@ convert_dtc_to_dt <- function(dtc) {
 #' convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc) {
-  # Check dtc is character
-  assert_that(is_character(dtc))
-  # note T00:00:00 is not printed in dataframe
-  dtm <- case_when(
-    nchar(dtc) == 19 & is_valid_dtc(dtc) ~ ymd_hms(dtc),
-    TRUE ~ ymd_hms(NA)
-  )
+  assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc)
-  dtm
+
+  if_else(
+    nchar(dtc) == 19 & is_valid_dtc(dtc),
+    as_iso_dttm(ymd_hms(dtc)),
+    as_iso_dttm(ymd_hms(NA))
+  )
 }
 #' Derive the date imputation flag
 #'
@@ -271,12 +363,10 @@ convert_dtc_to_dtm <- function(dtc) {
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
-  # Check dtc is character
-  assert_that(is_character(dtc))
-  # check dt is a date
-  assert_that(is_date(dt))
+  assert_that(is.character(dtc), is_date(dt))
+  warn_if_invalid_dtc(dtc)
 
-  dtf <- case_when(
+  case_when(
     (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
       is.na(dt) |
       !is_valid_dtc(dtc) ~ NA_character_,
@@ -285,8 +375,6 @@ compute_dtf <- function(dtc, dt) {
     !is.na(dt) & nchar(dtc) == 7 ~ "D",
     !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
   )
-  warn_if_invalid_dtc(dtc)
-  dtf
 }
 
 #' Derive the time imputation flag
@@ -315,12 +403,10 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
-  # Check dtc is character
-  assert_that(is_character(dtc))
-  # check dt is a date
-  assert_that(is_date(dtm))
+  assert_that(is.character(dtc), is_date(dtm))
+  warn_if_invalid_dtc(dtc)
 
-  tmf <- case_when(
+  case_when(
     (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
       is.na(dtm) |
       !is_valid_dtc(dtc) ~ NA_character_,
@@ -329,8 +415,6 @@ compute_tmf <- function(dtc, dtm) {
     (!is.na(dtm) & (nchar(dtc) == 10)) |
       (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
   )
-  warn_if_invalid_dtc(dtc)
-  tmf
 }
 
 #' Derive/Impute a date from a date character vector
@@ -347,26 +431,13 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The date character vector used to derive/impute the date.
-#'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   if the year part is not recorded (missing date), no imputation is done.
-#'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
-#'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-#'
-#'   Default is NULL.
-#'
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
+#'
+#' @inheritParams impute_dtc
 #'
 #' @return  the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
 #'
@@ -377,6 +448,8 @@ compute_tmf <- function(dtc, dtm) {
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' mhdt <- tibble::tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
@@ -431,11 +504,32 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "MID",
 #'   flag_imputation = FALSE
 #' )
-derive_vars_dt <- function(dataset,
-                           new_vars_prefix,
-                           dtc,
-                           date_imputation = NULL, # "02-01" or "LAST"
-                           flag_imputation = TRUE) {
+#'
+#' # Impute AE start date to the first date and ensure that the imputed date
+#' # is not before the treatment start date
+#' adae <- tibble::tribble(
+#'   ~AESTDTC, ~TRTSDTM,
+#'   "2020-12", ymd_hms("2020-12-06T12:12:12"),
+#'   "2020-11", ymd_hms("2020-12-06T12:12:12")
+#' )
+#'
+#' derive_vars_dt(
+#'   adae,
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AST",
+#'   date_imputation = "first",
+#'   min_dates = list(TRTSDTM)
+#' )
+derive_vars_dt <- function(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  # "02-01" or "LAST"
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL) {
+
   # Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))
 
@@ -448,7 +542,9 @@ derive_vars_dt <- function(dataset,
     mutate(
       idtc__ = impute_dtc(
         dtc = !!enquo(dtc),
-        date_imputation = date_imputation
+        date_imputation = date_imputation,
+        min_dates = !!enquo(min_dates),
+        max_dates = !!enquo(max_dates)
       ),
       !!sym(dt) := convert_dtc_to_dt(dtc = idtc__)
     ) %>%
@@ -479,36 +575,13 @@ derive_vars_dt <- function(dataset,
 #'
 #' a character is expected: e.g new_vars_prefix="AST".
 #'
-#' @param dtc The date character vector used to derive/impute the date.
-#'
-#'   A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-#'   if the year part is not recorded (missing date), no imputation is done.
-#'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
-#'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-#'
-#'   Default is NULL.
-#'
-#' @param time_imputation The value to impute the time when a timepart is missing.
-#'
-#'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-#'     the start of the day,
-#'   - or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
-#'
-#'   Default is '00:00:00'.
-#'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
 #' A logical value
 #'
 #' Default: TRUE
 #'
+#' @inheritParams impute_dtc
 #'
 #' @details
 #' The presence of a --DTF variable is checked and the variable is not derived
@@ -525,6 +598,8 @@ derive_vars_dt <- function(dataset,
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' mhdt <- tibble::tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
@@ -543,12 +618,34 @@ derive_vars_dt <- function(dataset,
 #'   date_imputation = "FIRST",
 #'   time_imputation = "FIRST"
 #' )
-derive_vars_dtm <- function(dataset,
-                            new_vars_prefix,
-                            dtc,
-                            date_imputation = NULL, # "02-01" or "LAST"
-                            time_imputation = "00:00:00", # or 'FIRST' 'LAST'
-                            flag_imputation = TRUE) {
+#'
+#' # Impute AE end date to the last date and ensure that the imputed date is not
+#' # after the death or data cut off date
+#' adae <- tibble::tribble(
+#'   ~AEENDTC, ~DTHDT, ~DCUTDT,
+#'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
+#'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
+#' )
+#'
+#' derive_vars_dtm(
+#'   adae,
+#'   dtc = AEENDTC,
+#'   new_vars_prefix = "AEN",
+#'   date_imputation = "last",
+#'   time_imputation = "last",
+#'   max_dates = list(DTHDT, DCUTDT)
+#' )
+derive_vars_dtm <- function(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  # "02-01" or "LAST"
+  time_imputation = "00:00:00",
+  # or 'FIRST' 'LAST'
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL) {
 
   # Check DTC is present in input dataset
   assert_has_variables(dataset, deparse(substitute(dtc)))
@@ -563,7 +660,9 @@ derive_vars_dtm <- function(dataset,
       idtc__ = impute_dtc(
         dtc = !!enquo(dtc),
         date_imputation = date_imputation,
-        time_imputation = time_imputation
+        time_imputation = time_imputation,
+        min_dates = !!enquo(min_dates),
+        max_dates = !!enquo(max_dates)
       ),
       !!sym(dtm) := convert_dtc_to_dtm(dtc = idtc__)
     ) %>%

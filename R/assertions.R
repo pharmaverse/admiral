@@ -100,8 +100,9 @@ assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
 #' @examples
 #' data(ex)
 #' has_unique_records(ex,
-#'                    by_vars = exprs(USUBJID) ,
-#'                    order = exprs(desc(EXENDTC)))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
+#' )
 has_unique_records <- function(dataset,
                                by_vars = NULL,
                                order = NULL,
@@ -150,9 +151,11 @@ has_unique_records <- function(dataset,
       # create message
       tbl <- capture.output(print(duplicates))
       if (missing(message)) {
-        message <- paste0("Dataset contains multiple records with respect to ",
-                          paste(all_vars_msg, collapse = ", "),
-                          ".")
+        message <- paste0(
+          "Dataset contains multiple records with respect to ",
+          paste(all_vars_msg, collapse = ", "),
+          "."
+        )
       }
       err_msg <- paste0(
         message,
@@ -169,7 +172,7 @@ has_unique_records <- function(dataset,
     }
     TRUE
   }
-  else{
+  else {
     FALSE
   }
 }
@@ -202,16 +205,19 @@ has_unique_records <- function(dataset,
 #' @examples
 #' data(ex)
 #' assert_has_unique_records(ex,
-#'                           by_vars = exprs(USUBJID) ,
-#'                           order = exprs(desc(EXENDTC)))
+#'   by_vars = vars(USUBJID),
+#'   order = vars(desc(EXENDTC))
+#' )
 assert_has_unique_records <- function(dataset,
                                       by_vars = NULL,
                                       order = NULL,
                                       message) {
-  has_unique_records(dataset = dataset,
-                     by_vars = by_vars,
-                     order = order,
-                     message_type = "error")
+  has_unique_records(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    message_type = "error"
+  )
 }
 
 #' Is Date/Date-time?
@@ -297,7 +303,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^([0-9]{2})-([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "MID", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
   paste0(
@@ -331,7 +337,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #' assertthat::assert_that(is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | arg %in% c("FIRST", "LAST")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
 }
 on_failure(is_valid_time_entry) <- function(call, env) {
   paste0(
@@ -466,37 +472,10 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-
-#' Is the object a character?
-#'
-#' Checks if a character vector was specified
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a character, `FALSE` otherwise
-#'
-#' @export
-#'
-#' @examples
-#' date <- "2020-02-03"
-#' assertthat::assert_that(is_character(date))
-is_character <- function(arg) {
-  is.character(arg)
-}
-on_failure(is_character) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a character."
-  )
-}
-
 is_named_exprs <- function(arg) {
-  is.list(arg) && all(map_lgl(arg, is.language)) && all(names(arg) != "")
+  is.list(arg) &&
+    all(map_lgl(arg, is.language)) &&
+    all(names(arg) != "")
 }
 on_failure(is_named_exprs) <- function(call, env) {
   paste0(
@@ -504,4 +483,152 @@ on_failure(is_named_exprs) <- function(call, env) {
     deparse(call$arg),
     "` is not a named list of expressions created using `exprs()`"
   )
+}
+
+#' Is Variable-value List?
+#'
+#' Checks if the argument is a list of quosures where the expressions are
+#' variable-value pairs. The value can be a symbol, a string, or NA. More general
+#' expression are not allowed.
+#'
+#' @param arg The argument to check
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return `TRUE` if the argument is a variable-value list, `FALSE` otherwise
+#'
+#' @keywords check
+#'
+#' @export
+#'
+#' @examples
+#' assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
+is_varval_list <- function(arg) {
+  if (inherits(arg, "quosures") && all(names(arg) != "")) {
+    expr_list <- map(arg, quo_get_expr)
+    all(map_lgl(expr_list, function(arg) is.symbol(arg) || is.character(arg) || is.na(arg)))
+  }
+  else {
+    FALSE
+  }
+}
+on_failure(is_varval_list) <- function(call, env) {
+  paste0(
+    "Argument ",
+    deparse(call$arg),
+    " is not a variable-value pairs list.\n",
+    "A named list of quosures is expected where the expression is ",
+    "a symbol, a character, or `NA`.\n",
+    "The following was supplied:\n",
+    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
+  )
+}
+
+
+is_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
+}
+on_failure(is_vars) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a list of variables created using `vars()`"
+  )
+}
+
+is_order_vars <- function(arg) {
+  quo_is_desc_call <- function(quo) {
+    expr <- quo_get_expr(quo)
+    is_call(expr) &&
+      length(expr) == 2L &&
+      deparse(expr[[1L]]) == "desc" &&
+      is_symbol(expr[[2L]])
+  }
+
+  inherits(arg, "quosures") &&
+    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
+}
+on_failure(is_order_vars) <- function(call, env) {
+  paste0(
+    backquote(deparse(call$arg)),
+    " is not a valid input for `order_vars`.",
+    " Valid inputs are created using `vars()` and may only contain symbols or calls involving `desc()`.\n\n", # nolint
+    "  # Bad:\n",
+    "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
+    "  # Good:\n",
+    "  vars(AVAL, desc(ADT))"
+  )
+}
+
+is_unnamed_exprs <- function(arg) {
+  is.list(arg) &&
+    all(map_lgl(arg, is.language)) &&
+    all(names(arg) == "")
+}
+on_failure(is_unnamed_exprs) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not a unnamed list of expressions created using `exprs()`"
+  )
+}
+
+is_expr <- function(arg) {
+  # Note: is.language allows both symbol and language
+  !is.list(arg) & is.language(arg)
+}
+on_failure(is_expr) <- function(call, env) {
+  paste0(
+    "Argument `",
+    deparse(call$arg),
+    "` is not an expression created using `expr()`"
+  )
+}
+
+#' Checks the length of derived records and new values of are equal
+#'
+#' @param x an R object
+#' @param y an R object to compare the length with `x`.
+#' @param x_arg Argument name of x.
+#' @param y_arg Argument name of y.
+#'
+#' @return Logical value.
+#'
+#' @examples
+#' \dontrun{
+#' x <- list("x", "y")
+#' y <- list("y", "z")
+#' assertthat::assert_that(are_records_same(x, y, "x", "y"))
+#' }
+are_records_same <- function(x, y, x_arg, y_arg) {
+  stopifnot(is.vector(x), is.vector(y))
+  length(x) == length(y)
+}
+
+on_failure(are_records_same) <- function(call, env) {
+  str_glue("`{call$x_arg}` must have consistent length to the new derived records
+           of `{call$y_arg}` within `by_vars`.")
+}
+
+#' Check whether an argument is not a quosure of a missing argument
+#'
+#' @param x Test object
+#'
+#' @return TRUE or error.
+#'
+#' @author Thomas Neitmann, Ondrej Slama
+#'
+#' @export
+#'
+#' @examples
+#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+#' test_fun(my_variable) # no missing argument -> returns TRUE
+#' \dontrun{
+#' test_fun() # missing argument -> throws error
+#' }
+quo_not_missing <- function(x) {
+  !rlang::quo_is_missing(x)
+}
+on_failure(quo_not_missing) <- function(call, env) {
+  paste0("Argument `", deparse(call$x), "` is missing, with no default")
 }
