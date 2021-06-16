@@ -18,7 +18,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 
   dataset %>%
     select(!!!by_vars, dplyr::everything()) %>%
-    filter(is_duplicate)
+    filter(is_duplicate) %>%
+    arrange(!!!by_vars)
 }
 
 assert_has_unique_records <- function(dataset,
