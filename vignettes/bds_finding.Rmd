@@ -34,19 +34,19 @@ results.  Is that something we want to do? </span> </b>
 ## Programming Workflow
 
 * [Read in data](#readdata)
-* [Derive/Impute numeric date/time and analysis day (ADT, ADTM, ADY)](#datetime)
-* [Derive Results (AVAL, AVALC, AVALU)](#aval)
-* [Assign PARAMCD, PARAM, PARAMN, PARCAT](#paramcd)
-* [Derive timing variables (e.g. APHASE, AVISIT, APERIOD)](#timing)
-* [Choose analysis record within a timing period (e.g. ANL01FL)](#analysisrec)
-* [Timing flags (e.g. ONTRTFL)](#timingflag)
-* [Assign Reference Range Indicator (ANRIND)](#referencerange)
-* [Derive Baseline (BASETYPE, ABLFL, BASE, BASEC)](#baseline)
-* [Derive Change from Baseline (CHG, PCHG)](#bchange)
-* [Assign Treatment (TRTA, TRTP)](#treatment)
-* [Assign ASEQ](#aseq)
+* [Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`)](#datetime)
+* [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
+* [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT`](#paramcd)
+* [Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
+* [Choose analysis record within a timing period (e.g. `ANL01FL`)](#analysisrec)
+* [Timing flags (e.g. `ONTRTFL`)](#timingflag)
+* [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
+* [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`)](#baseline)
+* [Derive Change from Baseline (`CHG`, `PCHG`)](#bchange)
+* [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
+* [Assign `ASEQ`](#aseq)
 * [Derive New Rows](#additional)
-* [Derive categorization variables (AVALCAT)](#cat)
+* [Derive categorization variables (`AVALCAT`)](#cat)
 * [Add labels and attributes](#attributes)
 * [Example Scripts](#example)
 
@@ -56,15 +56,15 @@ To start, all dataframes needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
 dataframes needed may be:
 
-  * VS, SUPPVS
-  * ADSL
+  * `VS`, `SUPPVS`
+  * `ADSL`
 
 The `SUPPVS` domain can be joined to the VS domain using the function:
 `derive_supplemental_vars`.
 
 This function will transpose the supplemental SDTM domain (e.g. `SUPPVS`) and
 join the transposed supplemental domain to the parent domain (e.g. `VS`) by
-STUDYID, USUBJID using the IDVAR and IDVARVAL as an additional join variable.
+`STUDYID`, `USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
 
 Example call:
 
@@ -77,7 +77,7 @@ At this step, it may be useful to join ADSL to your VS domain as well:
 advs_adsl <- left_join(vs_t, adsl, by = c("STUDYID", "USUBJID"))
 ```
 
-### Derive/Impute numeric date/time and analysis day (ADT, ADTM, ADY) {#datetime}
+### Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`) {#datetime}
 
 The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
 the user to impute the date as well.
@@ -124,7 +124,7 @@ advs_aval <- mutate(advs_ady,
                     AVALU = VSSTRESU)
 ```
 
-### Assign PARAMCD, PARAM, PARAMN, PARCAT {#paramcd}
+### Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT` {#paramcd}
 
 To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT`,
 etc., a lookup can be created to join to the source data.
@@ -151,7 +151,7 @@ Please note, it may be necessary to include other variables in the join. For
 example, perhaps the `PARCAT` is based on `VSTESTCD` and `VSPOS`, it may be 
 necessary to expand this lookup or create a separate look up for `PARCAT`.
 
-### Derive timing variables (e.g. APHASE, AVISIT, APERIOD) {#timing}
+### Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
 
 Categorical timing variables are protocol and analysis dependent.  Below is a 
 simple example to calculate `APHASE`. 
@@ -252,7 +252,7 @@ Lastly, the function does allow you to filter out pre-treatment observations
 that occurred on the start date.  For example, if observations with `VSTPT = PRE`
 should not be considered on-treatment when the observation date falls between 
 the treatment start and end date, the user may specify this using the 
-filter_pre_timepoint paramter:
+`filter_pre_timepoint` parameter:
 
 ```{r eval=FALSE}
 advs_ontrtfl <- derive_var_ontrtfl(
@@ -263,7 +263,7 @@ advs_ontrtfl <- derive_var_ontrtfl(
   filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
 ```
 
-### Assign Reference Range Indicator (ANRIND) {#referencerange}
+### Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
 The Admiral function `derive_var_anrind()` may be used to derive the reference
 range indicator `ANRIND`.
@@ -275,13 +275,13 @@ The function is called as:
 
 `advs_anrind <- derive_var_anrind(advs_ontrtfl)`
 
-### Derive Baseline (BASETYPE, ABLFL, BASE, BASEC) {#baseline}
+### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
 The parameter basetypes of this function requires a named list of expression 
 detailing how the BASETYPE should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
-each BASETYPE.
+each `BASETYPE`.
 
 ```{r eval=FALSE}
 advs_basetype <- derive_var_basetype(
@@ -326,7 +326,7 @@ advs_basec <- derive_var_basec(
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
 ```
 
-### Derive Change from Baseline (CHG, PCHG) {#bchange}
+### Derive Change from Baseline (`CHG`, `PCHG`) {#bchange}
 
 Change and percent change from baseline can be derived using the Admiral 
 functions `derive_var_chg` and `derive_var_pchg`.  These functions expect `AVAL` 
@@ -340,14 +340,14 @@ advs_pchg <- derive_var_pchg(advs_chg)
 
 ```
 
-### Assign Treatment (TRTA, TRTP) {#treatment}
+### Assign Treatment (`TRTA`, `TRTP`) {#treatment}
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL. The 
 derivation of `TRTA` and `TRTP` for a record are protocol and analysis specific.  
-Admiral does not currently have functionality to assist with TRTA and TRTP 
+Admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
 assignment.
 
-However, an example of a simple implmentation could be:
+However, an example of a simple implementation could be:
 
 ```{r eval=FALSE}
 advs_trta_trtp <- mutate(advs_pchg,
@@ -356,9 +356,9 @@ advs_trta_trtp <- mutate(advs_pchg,
 
 ```
 
-### Assign ASEQ {#aseq}
+### Assign `ASEQ` {#aseq}
 
-The Admiral function `derive_obs_number()` can be used to derive ASEQ. An 
+The Admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
 ```{r eval=FALSE}
@@ -370,7 +370,7 @@ advs_aseq <- derive_obs_number(
 
 ```
 
-This will add an addition column to the dataframe called ASEQ.
+This will add an addition column to the dataframe called `ASEQ`.
 
 ### Add labels and attributes {#attributes}
 <b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
@@ -389,9 +389,9 @@ ad_advs.R | Derive an Average Record (e.g. Triplicates) for each USUBJID, PARAMC
 ad_advs.R | Derive a new PARAMCD based on existing PARAMCDs (MAP, based on Systolic and Diastolic BP collected at a particular timepoint.)
 
 
-### Derive categorization variables (AVALCAT) {#cat}
+### Derive categorization variables (`AVALCAT`) {#cat}
 
-Admiral does not currently have a generic function to aid in assigning AVALCAT/
+Admiral does not currently have a generic function to aid in assigning `AVALCAT`/
 `AVALCAxN` values. Below is a simple example of how these values may be
 assigned:
 ```{r eval=FALSE}
