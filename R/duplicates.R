@@ -22,7 +22,9 @@ get_duplicate_records <- function(dataset,
     filter(is_duplicate)
 }
 
-assert_has_unique_records <- function(dataset, by_vars, msg) {
+assert_has_unique_records <- function(dataset,
+                                      by_vars,
+                                      msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars)))) {
   assert_that(
     is.data.frame(dataset),
     is_vars(by_vars),
