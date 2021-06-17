@@ -221,7 +221,7 @@ An example is given below:
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `reference_date` and the `date` #'parameter are
+#'   The columns specified by the `reference_date` and the `date` parameter are
 #'   expected.
 #'
 #' @param reference_date The start date column, e.g., date of first #'treatment
@@ -236,8 +236,8 @@ An example is given below:
 #'
 #'   The default is `ADT`
 #'
-#' @details The study day is derived as number of days from the start #'date
-#'   to the end date. If it is non-negative, one is added. I.e., the #'study day of the
+#' @details The study day is derived as number of days from the start date
+#'   to the end date. If it is non-negative, one is added. I.e., the study day of the
 #'   start date is 1.
 #'
 #' @author Stefan Bundfuss
