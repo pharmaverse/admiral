@@ -102,9 +102,9 @@ convert_dtm_to_dtc <- function(dtm) {
 
 extract_vars <- function(quosures) {
   vars <- lapply(quosures, function(q) {
-    quo_set_env(
-      quo(!!as.symbol(all.vars(q))),
-      quo_get_env(q)
+    rlang::quo_set_env(
+      rlang::quo(!!as.symbol(all.vars(q))),
+      rlang::quo_get_env(q)
     )
   })
   structure(vars, class = "quosures")
