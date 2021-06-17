@@ -11,8 +11,8 @@ signal_duplicate_records(dataset, by_vars,
 \arguments{
 \item{dataset}{A data frame}
 
-\item{by_vars}{A list of variables identifying group of records in which to
-look for duplicates}
+\item{by_vars}{A list of variables created using \code{vars()} identifying groups of
+records in which to look for duplicates}
 
 \item{msg}{The condition message}
 

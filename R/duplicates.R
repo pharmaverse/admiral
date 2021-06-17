@@ -34,8 +34,8 @@ get_duplicates_dataset <- function() {
 #' Extract Duplicate Records
 #'
 #' @param dataset A data frame
-#' @param by_vars A list of variables identifying group of records in which to
-#'   look for duplicates
+#' @param by_vars A list of variables created using `vars()` identifying groups of
+#'   records in which to look for duplicates
 #'
 #' @export
 #'
@@ -70,8 +70,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' Signal Duplicate Records
 #'
 #' @param dataset A data frame
-#' @param by_vars A list of variables identifying group of records in which to
-#'   look for duplicates
+#' @param by_vars A list of variables created using `vars()` identifying groups of
+#'   records in which to look for duplicates
 #' @param msg The condition message
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
 #'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
