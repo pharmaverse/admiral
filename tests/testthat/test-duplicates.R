@@ -14,6 +14,6 @@ test_that("multiplication works", {
 
   expect_equal(
     expected_ouput,
-    get_duplicate_records(input, vars(USUBJID))
+    extract_duplicate_records(input, vars(USUBJID))
   )
 })
