@@ -6,21 +6,21 @@
 # TERM_NAME, non NULL
 
 queries <- tibble::tribble(
-  ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~TERM_LEVEL, ~TERM_NAME,
-  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "APPLICATION SITE ERYTHEMA",
-  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "APPLICATION SITE PRURITUS",
-  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "ERYTHEMA",
-  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "LOCALIZED ERYTHEMA",
-  "CQ01", "Dermatologic events", NA_character_, NA_character_, "AELLT", "GENERALIZED PRURITUS",
-  "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BIOPSY THYROID GLAND ABNORMAL",
-  "SMQ02", "Immune-Mediated Hypothyroidism", "20000160", "BROAD", "AEDECOD", "BLOOD THYROID STIMULATING HORMONE ABNORMAL",
-  "SMQ03", "Immune-Mediated Hypothyroidism", "20000161", "NARROW", "AEDECOD", "BASEDOW'S DISEASE",
-  "SMQ03", "Immune-Mediated Hypothyroidism", "20000161", "NARROW", "AEDECOD", "EXOPHTHALMOS",
-  "CQ04", "Immune-Mediated Adrenal Insufficiency", "12150", NA_character_, "AEDECOD", "ADDISON'S DISEASE",
-  "CQ04", "Immune-Mediated Adrenal Insufficiency", "12150", NA_character_, "AEDECOD", "ADRENAL ATROPHY",
-  "SMQ05", "Immune-Mediated Pneumonitis", "20000042", "NARROW", "AEDECOD", "ALVEOLAR PROTEINOSIS",
-  "SMQ05", "Immune-Mediated Pneumonitis", "20000042", "NARROW", "AEDECOD", "ALVEOLITIS",
-  "CQ06", "Immune-Mediated Colitis", "10009888", NA_character_, "AELLT", "COLITIS"
+  ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
+  "CQ01", "Dermatologic events", NA_integer_, NA_character_, NA_integer_, "AELLT", "APPLICATION SITE ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_integer_, NA_character_, NA_integer_, "AELLT", "APPLICATION SITE PRURITUS",
+  "CQ01", "Dermatologic events", NA_integer_, NA_character_, NA_integer_, "AELLT", "ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_integer_, NA_character_, NA_integer_, "AELLT", "LOCALIZED ERYTHEMA",
+  "CQ01", "Dermatologic events", NA_integer_, NA_character_, NA_integer_, "AELLT", "GENERALIZED PRURITUS",
+  "SMQ02", "Immune-Mediated Hypothyroidism", 20000160, "BROAD", 1, "AEDECOD", "BIOPSY THYROID GLAND ABNORMAL",
+  "SMQ02", "Immune-Mediated Hypothyroidism", 20000160, "BROAD", 1, "AEDECOD", "BLOOD THYROID STIMULATING HORMONE ABNORMAL",
+  "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 2, "AEDECOD", "BASEDOW'S DISEASE",
+  "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 2, "AEDECOD", "EXOPHTHALMOS",
+  "CQ04", "Immune-Mediated Adrenal Insufficiency", 12150, NA_character_, NA_integer_, "AEDECOD", "ADDISON'S DISEASE",
+  "CQ04", "Immune-Mediated Adrenal Insufficiency", 12150, NA_character_, NA_integer_, "AEDECOD", "ADRENAL ATROPHY",
+  "SMQ05", "Immune-Mediated Pneumonitis", 20000042, "NARROW", 2, "AEDECOD", "ALVEOLAR PROTEINOSIS",
+  "SMQ05", "Immune-Mediated Pneumonitis", 20000042, "NARROW", 2, "AEDECOD", "ALVEOLITIS",
+  "CQ06", "Immune-Mediated Colitis", 10009888, NA_character_, NA_integer_, "AELLT", "COLITIS"
 )
 
 # save(queries, file = "data/queries.rda")

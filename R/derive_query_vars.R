@@ -1,9 +1,10 @@
 #' Derive query variables.
 #'
 #' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
-#'   variable is created. For "SMQ" or "SGD", if `QUERY_ID` is not "" or NA,
-#'   then the corresponding "CD" variable is created ; similarly, if `QUERY_SCOPE`
-#'   is not "" or NA, then the corresponding "SC" variable is created.
+#'   variable is created. For each unique `VAR_PREFIX`, if `QUERY_ID` is not ""
+#'   or NA, then the corresponding "CD" variable is created ; similarly, if
+#'   `QUERY_SCOPE`is not "" or NA, then the corresponding "SC" variable is
+#'   created.
 #'
 #' @param dataset Input dataset.
 #'
@@ -54,49 +55,36 @@ derive_query_vars <- function(dataset, queries) {
     # mutate(across(where(is.character), ~na_if(., ""))) %>% # (not available for older dplyr)
 
   # names of new columns
-  # Note: currently as long as one of QUERY_ID in the group is not NA then
-  #   "CD" variable is created, same for QUERY_SCOPE
-  nam_names <- paste0(unique(queries$VAR_PREFIX), "NAM")
-  cd_names <- queries %>%
+  new_col_names <- queries %>%
     group_by(VAR_PREFIX) %>%
-    filter(!all(is.na(QUERY_ID)) & !grepl("^CQ", VAR_PREFIX)) %>%
+    mutate(CD = ifelse(!all(is.na(QUERY_ID)),
+                       paste0(VAR_PREFIX, "CD"), NA_character_),
+           SC = ifelse(!all(is.na(QUERY_SCOPE)),
+                       paste0(VAR_PREFIX, "SC"), NA_character_),
+           SCN = ifelse(!all(is.na(QUERY_SCOPE_NUM)),
+                        paste0(VAR_PREFIX, "SCN"), NA_character_)) %>%
     ungroup() %>%
-    pull(VAR_PREFIX) %>%
+    select(CD, SC, SCN) %>%
+    gather() %>%
+    filter(!is.na(value)) %>%
+    pull(value) %>%
     unique()
-  cd_names <- if_non_len0(cd_names, paste0(cd_names, "CD"))
-  sc_names <- queries %>%
-    group_by(VAR_PREFIX) %>%
-    filter(!all(is.na(QUERY_SCOPE)) & !grepl("^CQ", VAR_PREFIX)) %>%
-    ungroup() %>%
-    pull(VAR_PREFIX) %>%
-    unique()
-  sc_names <- if_non_len0(sc_names, paste0(sc_names, "SC"))
-  new_cols_names <- c(nam_names, cd_names, sc_names)
+  new_cols_names <- c(paste0(unique(queries$VAR_PREFIX), "NAM"), new_col_names)
 
   # queries restructured
   queries_wide <- queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
-    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME)
-
-  if (any(!is.na(queries$QUERY_ID))) {
-    queries_wide <- queries_wide %>%
-      mutate(VAR_PREFIX_CD = ifelse(grepl("^CQ", .data$VAR_PREFIX),
-                                    "tmp_drop",
-                                    paste0(.data$VAR_PREFIX, "CD"))) %>%
-      spread(.data$VAR_PREFIX_CD, .data$QUERY_ID)
-  }
-
-  if (any(!is.na(queries$QUERY_SCOPE))) {
-    queries_wide <- queries_wide %>%
-      mutate(VAR_PREFIX_SC = ifelse(grepl("^CQ", .data$VAR_PREFIX),
-                                    "tmp_drop2",
-                                    paste0(.data$VAR_PREFIX, "SC"))) %>%
-      spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)
-  }
+    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    mutate(VAR_PREFIX_CD = paste0(.data$VAR_PREFIX, "CD")) %>%
+    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
+    mutate(VAR_PREFIX_SC = paste0(.data$VAR_PREFIX, "SC")) %>%
+    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)  %>%
+    mutate(VAR_PREFIX_SCN = paste0(.data$VAR_PREFIX, "SCN")) %>%
+    spread(.data$VAR_PREFIX_SCN, .data$QUERY_SCOPE_NUM)
 
   queries_wide <- queries_wide %>%
-    select(-dplyr::matches("^tmp_drop"), -.data$VAR_PREFIX) %>%
+    select(-VAR_PREFIX) %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME))
 
   # prepare input dataset for joining
@@ -139,7 +127,7 @@ assert_valid_queries <- function(queries,
 
   # check required columns
   is_missing <- c("VAR_PREFIX", "QUERY_NAME",
-                  "QUERY_ID", "QUERY_SCOPE",
+                  "QUERY_ID", "QUERY_SCOPE", "QUERY_SCOPE_NUM",
                   "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
   if (any(is_missing)) {
     missing_vars <- names(queries)[is_missing]
@@ -203,10 +191,33 @@ assert_valid_queries <- function(queries,
                  "` cannot be empty string or NA."))
   }
 
+  # check query id is numeric
+  if (class(queries$QUERY_ID) != "numeric") {
+    abort(paste0("`QUERY_ID` in `", queries_name,
+                 "` should be numeric."))
+  }
+
   # check illegal query scope
   if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0("`QUERY_SCOPE` in `", queries_name,
                  "` can only be 'BROAD', 'NARROW' or `NA`."))
+  }
+
+  # check illegal query scope number
+  is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
+  if (any(is_bad_scope_num)) {
+    bad_scope_nums <- unique(queries$QUERY_SCOPE_NUM[is_bad_scope_num])
+    if (length(bad_scope_nums) == 1L) {
+      err_msg <- paste0("`QUERY_SCOPE_NUM` in `", queries_name,
+                        "` must be one of 1, 2, or NA. Issue with `", bad_scope_nums, "`.")
+    } else {
+      err_msg <- paste0(
+        "`QUERY_SCOPE_NUM` in `", queries_name,
+        "` must be one of 1, 2, or NA. Issue with ",
+        enumerate(bad_scope_nums),
+        ".")
+    }
+    abort(err_msg)
   }
 
   # check illegal term name

@@ -47,5 +47,6 @@ globalVariables(c(
   "QUERY_NAME",
   "QUERY_ID",
   "QUERY_SCOPE",
+  "QUERY_SCOPE_NUM",
   "."
 ))

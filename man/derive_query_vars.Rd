@@ -27,9 +27,10 @@ Derive query variables.
 }
 \details{
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
-variable is created. For "SMQ" or "SGD", if \code{QUERY_ID} is not "" or NA,
-then the corresponding "CD" variable is created ; similarly, if \code{QUERY_SCOPE}
-is not "" or NA, then the corresponding "SC" variable is created.
+variable is created. For each unique \code{VAR_PREFIX}, if \code{QUERY_ID} is not ""
+or NA, then the corresponding "CD" variable is created ; similarly, if
+\code{QUERY_SCOPE}is not "" or NA, then the corresponding "SC" variable is
+created.
 }
 \examples{
 data("queries")
