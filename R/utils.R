@@ -99,3 +99,13 @@ convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
 }
+
+extract_vars <- function(quosures) {
+  vars <- lapply(quosures, function(q) {
+    quo_set_env(
+      quo(!!as.symbol(all.vars(q))),
+      quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures")
+}
