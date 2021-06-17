@@ -21,12 +21,13 @@ Verify if a dataset has the required format as queries dataset.
 \details{
 Check if the dataset has the following columns
 \itemize{
-\item VAR_PREFIX, e.g., SMQ01, CQ12
-\item QUERY_NAME, non NULL, must be unique per each VAR_PREFIX
-\item QUERY_ID, could be NULL, must be unique per each VAR_PREFIX
-\item QUERY_SCOPE, 'BROAD', 'NARROW', or NULL, must be unique per each VAR_PREFIX
-\item TERM_LEVEL, e.g., AEDECOD, AELLT, ...
-\item TERM_NAME, non NULL
+\item \code{VAR_PREFIX}, e.g., SMQ01, CQ12
+\item \code{QUERY_NAME}, non NULL, must be unique per each \code{VAR_PREFIX}
+\item \code{QUERY_ID}, could be NULL, must be unique per each \code{VAR_PREFIX}
+\item \code{QUERY_SCOPE}, 'BROAD', 'NARROW', or NULL
+\item \code{QUERY_SCOPE_NUM}, 1, 2, or NA
+\item \code{TERM_LEVEL}, e.g., AEDECOD, AELLT, ...
+\item \code{TERM_NAME}, non NULL
 }
 }
 \author{

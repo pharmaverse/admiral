@@ -12,15 +12,10 @@ derive_query_vars(dataset, queries)
 The columns specified by \code{dataset_keys} are expected.}
 
 \item{queries}{A data.frame containing the following required columns:
-\itemize{
-\item VAR_PREFIX, e.g., SMQ01, CQ12
-\item QUERY_NAME, non NULL
-\item QUERY_ID, could be NULL
-\item QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
-\item TERM_LEVEL, e.g., AEDECOD, AELLT, ...
-\item TERM_NAME, non NULL
-This will be check by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
-}}
+\code{VAR_PREFIX}, \code{QUERY_NAME}, \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM},
+\code{TERM_LEVEL}, and \code{TERM_NAME}.
+
+The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
 }
 \description{
 Derive query variables.

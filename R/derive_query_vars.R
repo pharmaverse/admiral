@@ -11,13 +11,10 @@
 #'   The columns specified by `dataset_keys` are expected.
 #'
 #' @param queries A data.frame containing the following required columns:
-#' - VAR_PREFIX, e.g., SMQ01, CQ12
-#' - QUERY_NAME, non NULL
-#' - QUERY_ID, could be NULL
-#' - QUERY_SCOPE, ‘BROAD’, ‘NARROW’, or NULL
-#' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
-#' - TERM_NAME, non NULL
-#'   This will be check by [assert_valid_queries()].
+#'   `VAR_PREFIX`, `QUERY_NAME`, `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`,
+#'   `TERM_LEVEL`, and `TERM_NAME`.
+#'
+#'   The content of the dataset will be verified by [assert_valid_queries()].
 #'
 #' @author Ondrej Slama, Shimeng Huang
 #'
@@ -106,12 +103,13 @@ derive_query_vars <- function(dataset, queries) {
 #' Verify if a dataset has the required format as queries dataset.
 #'
 #' @details Check if the dataset has the following columns
-#' - VAR_PREFIX, e.g., SMQ01, CQ12
-#' - QUERY_NAME, non NULL, must be unique per each VAR_PREFIX
-#' - QUERY_ID, could be NULL, must be unique per each VAR_PREFIX
-#' - QUERY_SCOPE, 'BROAD', 'NARROW', or NULL, must be unique per each VAR_PREFIX
-#' - TERM_LEVEL, e.g., AEDECOD, AELLT, ...
-#' - TERM_NAME, non NULL
+#' - `VAR_PREFIX`, e.g., SMQ01, CQ12
+#' - `QUERY_NAME`, non NULL, must be unique per each `VAR_PREFIX`
+#' - `QUERY_ID`, could be NULL, must be unique per each `VAR_PREFIX`
+#' - `QUERY_SCOPE`, 'BROAD', 'NARROW', or NULL
+#' - `QUERY_SCOPE_NUM`, 1, 2, or NA
+#' - `TERM_LEVEL`, e.g., AEDECOD, AELLT, ...
+#' - `TERM_NAME`, non NULL
 #'
 #' @param queries A data.frame.
 #'
@@ -150,17 +148,17 @@ assert_valid_queries <- function(queries,
   }
 
   # check illegal prefix category
-  bad_prefix <- !grepl("^(SMQ|CQ|SDQ)", queries$VAR_PREFIX)
+  bad_prefix <- nchar(sub("[^[:alpha:]]+", "", queries$VAR_PREFIX)) > 3
   if (any(bad_prefix)) {
     abort(paste0("`VAR_PREFIX` in `", queries_name,
-                 "` must start with one of 'SMQ', 'SDQ', or 'CQ'."))
+                 "` must start with 2-3 letters."))
     if (length(bad_prefix) == 1L) {
       err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
-                        "` must start with one of 'SMQ', 'SDQ', or 'CQ'. Problem with `", bad_prefix, "`.")
+                        "` must start with 2-3 letters.. Problem with `", bad_prefix, "`.")
     } else {
       err_msg <- paste0(
         "`VAR_PREFIX` in `", queries_name,
-        "` must start with one of 'SMQ', 'SDQ', or 'CQ'. Problem with ",
+        "` must start with 2-3 letters.. Problem with ",
         enumerate(bad_prefix),
         ".")
     }
@@ -168,7 +166,7 @@ assert_valid_queries <- function(queries,
   }
 
   # check illegal prefix number
-  query_num <- gsub("^(SMQ|CQ|SDQ)", "", queries$VAR_PREFIX)
+  query_num <- sub("[[:alpha:]]+", "", queries$VAR_PREFIX)
   is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
   if (any(is_bad_num)) {
     bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
@@ -230,8 +228,7 @@ assert_valid_queries <- function(queries,
   count_unique <- queries %>%
     group_by(VAR_PREFIX) %>%
     dplyr::summarise(n_qnam = length(unique(QUERY_NAME)),
-                     n_qid = length(unique(QUERY_ID)),
-                     n_qsc = length(unique(QUERY_SCOPE)))
+                     n_qid = length(unique(QUERY_ID)))
   for (ii in 1:nrow(count_unique)) {
     if (count_unique[ii,]$n_qnam > 1) {
       abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
@@ -239,10 +236,6 @@ assert_valid_queries <- function(queries,
     }
     if (count_unique[ii,]$n_qid > 1) {
       abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
-                   count_unique$VAR_PREFIX[ii], "' is not unique."))
-    }
-    if (count_unique[ii,]$n_qsc > 1) {
-      abort(paste0("In `", queries_name, "`, `QUERY_SCOPE` of '",
                    count_unique$VAR_PREFIX[ii], "' is not unique."))
     }
   }
