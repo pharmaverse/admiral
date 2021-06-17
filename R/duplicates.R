@@ -17,6 +17,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
   is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
 
   dataset %>%
+    ungroup() %>%
     select(!!!by_vars, dplyr::everything()) %>%
     filter(is_duplicate) %>%
     arrange(!!!by_vars)
