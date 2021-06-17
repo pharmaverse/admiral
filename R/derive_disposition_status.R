@@ -106,7 +106,7 @@ derive_disposition_status <- function(dataset,
     select(STUDYID, USUBJID, !!enquo(status_var))
 
   # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
-  assert_has_unique_records(
+  signal_duplicate_records(
     ds_subset,
     by_vars = vars(STUDYID, USUBJID),
     msg = "The filter used for DS results in multiple records per patient"

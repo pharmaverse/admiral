@@ -164,7 +164,7 @@ derive_disposition_reason <- function(dataset,
     select(STUDYID, USUBJID, !!reason_var, !!reason_var_spe)
 
   # Expect 1 record per subject in the subsetted DS - issue an error otherwise
-  assert_has_unique_records(
+  signal_duplicate_records(
     ds_subset,
     by_vars = vars(STUDYID, USUBJID),
     msg = "The filter used for DS results in multiple records per patient"

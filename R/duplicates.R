@@ -22,14 +22,18 @@ extract_duplicate_records <- function(dataset, by_vars) {
     arrange(!!!by_vars)
 }
 
-assert_has_unique_records <- function(dataset,
-                                      by_vars,
-                                      msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars)))) {
+signal_duplicate_records <- function(dataset,
+                                     by_vars,
+                                     msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))),
+                                     cnd_type = "error") {
   assert_that(
     is.data.frame(dataset),
     is_vars(by_vars),
-    is.character(msg)
+    rlang::is_scalar_character(msg),
+    rlang::is_scalar_character(cnd_type)
   )
+  cnd_funs <- list(message = inform, warning = warn, error = abort)
+  arg_match(cnd_type, names(cnd_funs))
 
   duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {
@@ -38,8 +42,8 @@ assert_has_unique_records <- function(dataset,
       class = union("duplicates", class(duplicate_records)),
       by_vars = vars2chr(by_vars)
     )
-    full_msg <- paste0(msg, "\nRun `get_duplicates_dataset()` to access the duplicate records.")
-    abort(full_msg)
+    full_msg <- paste0(msg, "\nRun `get_duplicates_dataset()` to access the duplicate records")
+    cnd_funs[[cnd_type]](full_msg)
   }
 }
 
