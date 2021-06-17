@@ -77,22 +77,22 @@ derive_obs_number <- function(dataset,
         arrange(!!!order, .by_group = TRUE)
 
       if (check_type != "none") {
-        has_unique_records(
+        signal_duplicate_records(
           data,
-          by_vars = by_vars,
-          order = order,
-          message_type = check_type
+          by_vars = c(by_vars, order),
+          cnd_type = check_type
         )
       }
-    }
-    else{
+    } else {
       data <- data %>%
         arrange(!!!order)
 
       if (check_type != "none") {
-        has_unique_records(data,
-                           order = order,
-                           message_type = check_type)
+        signal_duplicate_records(
+          data,
+          by_vars = order,
+          cnd_type = check_type
+        )
       }
     }
   }
