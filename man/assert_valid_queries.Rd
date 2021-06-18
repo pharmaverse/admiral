@@ -4,8 +4,7 @@
 \alias{assert_valid_queries}
 \title{Verify if a dataset has the required format as queries dataset.}
 \usage{
-assert_valid_queries(queries,
-  queries_name = deparse(substitute(queries)))
+assert_valid_queries(queries, queries_name)
 }
 \arguments{
 \item{queries}{A data.frame.}

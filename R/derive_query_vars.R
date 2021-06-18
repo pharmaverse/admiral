@@ -49,9 +49,14 @@ derive_query_vars <- function(dataset, queries) {
   # replace all "" by NA
   queries <- queries %>%
     dplyr::mutate_if(is.character, function(x) {ifelse(x == "", NA_character_, x)})
-    # mutate(across(where(is.character), ~na_if(., ""))) %>% # (not available for older dplyr)
 
   # names of new columns
+  if ("QUERY_ID" %!in% names(queries)) {
+    queries$QUERY_ID <- NA_integer_
+  }
+  if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
+    queries$QUERY_SCOPE_NUM <- NA_integer_
+  }
   new_col_names <- queries %>%
     group_by(VAR_PREFIX) %>%
     mutate(CD = ifelse(!all(is.na(QUERY_ID)),
@@ -120,12 +125,10 @@ derive_query_vars <- function(dataset, queries) {
 #' @export
 #'
 #' @return The function throws an error if any of the requirements not met.
-assert_valid_queries <- function(queries,
-                                 queries_name = deparse(substitute(queries))) {
+assert_valid_queries <- function(queries, queries_name) {
 
   # check required columns
-  is_missing <- c("VAR_PREFIX", "QUERY_NAME",
-                  "QUERY_ID", "QUERY_SCOPE", "QUERY_SCOPE_NUM",
+  is_missing <- c("VAR_PREFIX", "QUERY_NAME", "QUERY_SCOPE",
                   "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
   if (any(is_missing)) {
     missing_vars <- names(queries)[is_missing]
