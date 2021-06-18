@@ -86,13 +86,13 @@ I.e., all input like datasets, variable names, options, … must be provided to 
 * If the function needs to create temporary variables in an input dataset, these
 variables must start with `temp_` and must be removed from the output dataset
 (link to remove function).
-* If the input dataset includes variables starting with temp_, an error must be issued (link to check function).
+* If the input dataset includes variables starting with `temp_`, an error must be issued (link to check function).
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
 
 ## Function Names
 
-* Function names should start with a verb and use snake case, e.g. derive_baseline. 
+* Function names should start with a verb and use snake case, e.g. `derive_baseline()`. 
 
 | Function name prefix                         | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -214,6 +214,7 @@ Author is the owner of the function while the keywords are used to categorize th
 Please see section "Categorization of functions".
 
 An example is given below:
+
 ```{r, eval=F}
 #' Derive Analysis Study Day
 #'
