@@ -48,8 +48,8 @@ initialize <- function(dataset_name, metadata, source_datasets) {
   predecessors_supp <- predecessors %>%
     filter(grepl("^SUPP[A-Z]{2}\\.QVAL where SUPP[A-Z]{2}\\.QNAM is '[A-Z]{1}[A-Z|0-9]{1,7}'$", Derivation)) %>%
     pull(Derivation) %>%
-    stringr::str_extract("'[A-Z]{1}[A-Z|0-9]{1,7}'") %>%
-    stringr::str_remove_all("'")
+    str_extract("'[A-Z]{1}[A-Z|0-9]{1,7}'") %>%
+    str_remove_all("'")
 
   all_predecessors <- c(predecessors_parent, predecessors_supp)
   available_vars <- reduce(map(source_datasets, names), union)
