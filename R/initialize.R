@@ -38,7 +38,7 @@ initialize <- function(dataset_name, metadata, source_datasets) {
     filter(
       Dataset == dataset_name,
       Source == "Predecessor",
-      grepl("^[A-Z]{2,8}\\.[A-Z]{1,8}$", Derivation)
+      grepl("^[A-Z]{2,8}\\.[A-Z]{1}[A-Z|0-9]{1,7}$", Derivation)
     ) %>%
     pull(Derivation) %>%
     str_remove("^[A-Z]{2,8}\\.")
