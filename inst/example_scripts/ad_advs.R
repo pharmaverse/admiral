@@ -18,108 +18,98 @@ data("vs")
 data ("adsl")
 
 # Join ADSL
-advs_adsl <- left_join(vs,
-                       select(adsl, -DOMAIN),
-                       by = c("STUDYID", "USUBJID"))
+advs <- left_join(vs,
+                  select(adsl, -DOMAIN),
+                  by = c("STUDYID", "USUBJID"))
 
 # Calculate ADT
-advs_dt <- derive_vars_dt(advs_adsl,
-                          new_vars_prefix = "A",
-                          dtc = VSDTC,
-                          flag_imputation = FALSE)
+advs <- derive_vars_dt(advs,
+                       new_vars_prefix = "A",
+                       dtc = VSDTC,
+                       flag_imputation = FALSE)
 
 # Calculate ADY
-advs_ady <- derive_var_ady(advs_dt, reference_date = TRTSDT, date = ADT)
+advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
 
 # Calculate AVAL, AVALC, AVALU
-advs_aval <- mutate(advs_dy,
-                    AVAL = VSSTRESN,
-                    AVALC = VSSTRESC,
-                    AVALU = VSSTRESU)
+advs <- mutate(advs,
+               AVAL = VSSTRESN,
+               AVALC = VSSTRESC,
+               AVALU = VSSTRESU)
+
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
+  "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",  1,
+  "DIABP",   "DIABP",  "Diastolic Blood Pressure (mmHg)", 2,
+  "PULSE",   "PULSE",  "Pulse Rate (beats/min)",          3,
+  "WEIGHT",  "WEIGHT", "Weight (kg)",                     4,
+  "HEIGHT",  "HEIGHT", "Height (cm)",                     5,
+  "TEMP",    "TEMP",   "Temperature (C)",                 6,
+  "MAP",     "MAP",    "Mean Arterial Pressure (mmHg)",   7)
+
+advs <- left_join(advs, param_lookup, by = "VSTESTCD")
 
 # Derive MAP (Mean Arterial Pressure from Systolic and Diastolic Pressure)
 # This is an example of deriving a new record based on existing records.
 # Note: this PARAMCD is not derived in the CDISC pilot and is presented
 #       for demonstration purposes.
-sysbp <- filter(advs_aval, VSTESTCD == "SYSBP") %>%
-  select(-VSSEQ, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
+
+# For SYSBP, remove all variables which are different for the two parameters
+# and will not be applicable to the new derived MAP value.  The will be NA
+# on the new observaitions.
+sysbp <- filter(advs, VSTESTCD == "SYSBP") %>%
+  select(-VSSEQ, - VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
          -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC)
 
-diabp <- filter(advs_aval, VSTESTCD == "DIABP") %>%
+# Keep only variables required for the join and the analysis value. Other
+# variables which need to be retained for the new observations are taken from
+# the sysbp dataset.
+diabp <- filter(advs, VSTESTCD == "DIABP") %>%
   select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
   rename(DBPAVAL = AVAL)
 
-advs_map <- left_join(sysbp, diabp,
-                      by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC",
-                             "VSDTC", "VSTPT")) %>%
+advs <- left_join(sysbp, diabp,
+                  by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC",
+                         "VSTPT")) %>%
   mutate(AVAL = ((2 * DBPAVAL) + AVAL) / 3,
-         VSTESTCD = "MAP") %>%
+         PARAMCD = "MAP") %>%
   filter(!is.na(AVAL)) %>%
-  union_all(advs_aval) %>%
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
+  union_all(advs) %>%
   select(-DBPAVAL)
 
+# Derive Timing
+advs <- mutate(advs,
+               ATPTN = VSTPTNUM,
+               ATPT = VSTPT,
+               AVISIT = case_when(str_detect(VISIT, "SCREEN") |
+                                    str_detect(VISIT, "UNSCHED") |
+                                    str_detect(VISIT, "RETRIEVAL") |
+                                    str_detect(VISIT, "AMBUL") ~ NA_character_,
+                                    !is.na(VISIT) ~ str_to_title(VISIT),
+                                  TRUE ~ NA_character_),
+               AVISITN = case_when(VISIT == "BASELINE" ~ 0,
+                                   str_detect(VISIT, "WEEK") ~
+                                     as.numeric(str_sub(VISIT, start = 5)),
+                                   TRUE ~ NA_real_))
+
 # A summary records for each Visit. This could be applicable if triplicates
-# are collected and the average will be summmarized.
+# are collected and the average will be summarized.
 # This is an example of deriving a new summary record based on existing records.
 # Note: This is not derived in the CDISC pilot and is presented
-#       for demonstration purposes.
-advs_avg <- derive_summary_records(
-  advs_map,
-  by_vars = vars(STUDYID, USUBJID, VSTESTCD, VISITNUM, ADT),
-  fns = list(AVAL ~ mean, N ~ n),
+#       for demonstration purposes. Care should be taken to specify the
+#       by_vars appropriately taking into consideration unscheduled visits and
+#       the study's schedule of assessment.
+advs <- derive_summary_records(
+  advs,
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
+  fns = list(AVAL ~ mean),
   set_values_to = vars(DTYPE = "AVERAGE"))
 
-# Assign PARAMCD, PARAM, and PARAMN
-advs_paramcd <-
-  mutate(advs_avg,
-         PARAMCD = VSTESTCD,
-         PARAM = case_when(VSTESTCD %in% c("SYSBP", "DIABP") ~  str_c(VSTEST, "(mmHg)", sep = " "),
-                           VSTESTCD == "HEIGHT" ~ str_c(VSTEST, "(cm)", sep = " "),
-                           VSTESTCD == "WEIGHT" ~ str_c(VSTEST, "(kg)", sep = " "),
-                           VSTESTCD == "TEMP" ~ str_c(VSTEST, "(C)", sep = " "),
-                           VSTESTCD == "PULSE" ~ str_c(VSTEST, "(beats/min)", sep = " "),
-                           VSTESTCD == "MAP" ~ "Mean Arterial Pressure (mmHg)"),
-         PARAMN = case_when(VSTESTCD == "SYSBP" ~ 1,
-                            VSTESTCD == "DIABP" ~ 2,
-                            VSTESTCD == "PULSE" ~ 3,
-                            VSTESTCD == "WEIGHT" ~ 4,
-                            VSTESTCD == "HEIGHT" ~ 5,
-                            VSTESTCD == "TEMP" ~ 6,
-                            VSTESTCD == "MAP" ~ 7)) %>%
-  mutate(VSTESTCD = ifelse(VSTESTCD == "MAP", NA_character_, VSTESTCD))
-
-# Alternative Assignment example
-# param_lookup <- tibble::tribble(
-#   ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-#   "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",  1,
-#   "DIABP",   "DIABP",  "Diastolic Blood Pressure (mmHg)", 2,
-#   "PULSE",   "PULSE",  "Pulse Rate (beats/min)",          3,
-#   "WEIGHT",  "WEIGHT", "Weight (kg)",                     4,
-#   "HEIGHT",  "HEIGHT", "Height (cm)",                     5,
-#   "TEMP",    "TEMP",   "Temperature (C)",                 6,
-#   "MAP",     "MAP",    "Mean Arterial Pressure (mmHg)",   7)
-#
-# advs_paramcd_alt <- left_join(advs_aval, param_lookup, by = "VSTESTCD") %>%
-#   mutate(VSTESTCD = ifelse(VSTESTCD == "MAP", NA_character_, VSTESTCD))
-
-# Derive Timing
-advs_timing <- mutate(advs_paramcd,
-                      ATPTN = VSTPTNUM,
-                      ATPT = VSTPT,
-                      AVISIT = case_when(str_detect(VISIT, "SCREEN") |
-                                           str_detect(VISIT, "UNSCHED") |
-                                           str_detect(VISIT, "RETRIEVAL") |
-                                           str_detect(VISIT, "AMBUL") ~ NA_character_,
-                                         !is.na(VISIT) ~ str_to_title(VISIT),
-                                         TRUE ~ NA_character_),
-                      AVISITN = case_when(VISIT == "BASELINE" ~ 0,
-                                          str_detect(VISIT, "WEEK") ~
-                                            as.numeric(str_sub(VISIT, start = 5)),
-                                          TRUE ~ NA_real_))
-
-# ANL01FL: Choose non-missing results within an AVISIT
-advs_anl01fl <- derive_extreme_flag(
-  advs_timing,
+# ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
+advs <- derive_extreme_flag(
+  advs,
   new_var = ANL01FL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
   order = vars(ADT, AVAL),
@@ -128,10 +118,10 @@ advs_anl01fl <- derive_extreme_flag(
 
 # Calculate ONTRTFL
 # Note: ONTRTFL is not calculated in the CDISC pilot
-advs_ontrtfl <- derive_var_ontrtfl(advs_anl01fl,
-                                   date = ADT,
-                                   ref_start_date = TRTSDT,
-                                   ref_end_date = TRTEDT)
+advs <- derive_var_ontrtfl(advs,
+                           date = ADT,
+                           ref_start_date = TRTSDT,
+                           ref_end_date = TRTEDT)
 
 # Calculate ANRIND
 # Note: ANRIND along with ANRLO and ANRHI are not included in CDISC pilot
@@ -142,49 +132,48 @@ range_lookup <- tibble::tribble(
   "PULSE", 60, 100, 40, 110,
   "TEMP", 36.5, 37.5, 35, 38)
 
-advs_anrind <- left_join(advs_ontrtfl, range_lookup, by = "PARAMCD") %>%
+advs <- left_join(advs, range_lookup, by = "PARAMCD") %>%
   derive_var_anrind()
 
 # Calculate BASETYPE
-advs_basetype <- derive_var_basetype(
-  dataset = advs_anrind,
+advs <- derive_var_basetype(
+  dataset = advs,
   basetypes = exprs("AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
                     "AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
-                    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
-                    NA_character = is.na(ATPTN)))
+                    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817))
 
 # Calculate ABLFL
-advs_ablfl <- derive_extreme_flag(
-  advs_basetype,
+advs <- derive_extreme_flag(
+  advs,
   new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT),
   mode = "last",
-  flag_filter = (ANL01FL == "Y" & AVISIT == "Baseline"))
+  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
 
 # Calculate BASE & BASEC
-advs_base <- derive_var_base(
-  advs_ablfl,
+advs <- derive_var_base(
+  advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
 
-advs_basec <- derive_var_basec(
-  advs_base,
+advs <- derive_var_basec(
+  advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
 
 # Calculate CHG, PCHG
-advs_chg <- derive_var_chg(advs_basec)
+advs <- derive_var_chg(advs)
 
-advs_pchg <- derive_var_pchg(advs_chg)
+advs <- derive_var_pchg(advs)
 
 # Assign TRTA, TRTP
-advs_trta_trtp <- mutate(advs_pchg,
-                         TRTP = TRT01P,
-                         TRTA = TRT01A)
+advs <- mutate(advs,
+               TRTP = TRT01P,
+               TRTA = TRT01A)
 
 # Create End of Treatment Record
-advs_eot <-
+advs <-
   derive_extreme_flag(
-    advs_trta_trtp,
+    advs,
     new_var = EOTFL,
     by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = vars(ADT),
@@ -193,15 +182,16 @@ advs_eot <-
     filter(EOTFL == "Y") %>%
   mutate(AVISIT = "End of Treatment",
          AVISITN = 99) %>%
-  union_all(advs_trta_trtp) %>%
+  union_all(advs) %>%
   select(-EOTFL)
 
 # Calculate ASEQ
-advs_aseq <- derive_obs_number(
-  advs_eot,
+advs <- derive_obs_number(
+  advs,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
-  order = vars(PARAMCD, ADT, AVISITN, ATPTN))
+  order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
+  check_type = "warning")
 
 # Derive AVALCATs
 # Note: Derivation of AVALCAT is not represented in the CDISC Pilot. It is
@@ -211,14 +201,14 @@ avalcat_lookup <- tibble::tribble(
   "HEIGHT", 1, ">100 cm",
   "HEIGHT", 2, "<= 100 cm")
 
-advs_avalcat <- mutate(advs_aseq,
-                       AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
-                                            PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
+advs <- mutate(advs,
+               AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
+                                    PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
   left_join(avalcat_lookup, by = "PARAMCD")
 
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
-advs <- advs_avalcat
+advs <- advs
 
 save(advs, file = "data/advs.rda", compress = TRUE)

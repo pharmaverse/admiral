@@ -34,12 +34,12 @@ results.  Is that something we want to do? </span> </b>
 ## Programming Workflow
 
 * [Read in data](#readdata)
-* [Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`)](#datetime)
+* [Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
 * [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
 * [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT`](#paramcd)
 * [Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Choose analysis record within a timing period (e.g. `ANL01FL`)](#analysisrec)
-* [Timing flags (e.g. `ONTRTFL`)](#timingflag)
+* [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
 * [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`)](#baseline)
 * [Derive Change from Baseline (`CHG`, `PCHG`)](#bchange)
@@ -68,40 +68,40 @@ join the transposed supplemental domain to the parent domain (e.g. `VS`) by
 
 Example call:
 
-`vs_t <- derive_supplemental_vars(VS, SUPPVS)`
+`vs <- derive_supplemental_vars(vs, suppvs)`
 
 <b> <span style="color: red"> NEED TO GET THIS FUNCTION WORKING AS IT WILL BE EXPECTED AND CRITICAL TO MANY USERS </span> </b>
 
 At this step, it may be useful to join ADSL to your VS domain as well:
 ```{r eval=FALSE}
-advs_adsl <- left_join(vs_t, adsl, by = c("STUDYID", "USUBJID"))
+advs <- left_join(vs, adsl, by = c("STUDYID", "USUBJID"))
 ```
 
-### Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`) {#datetime}
+### Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
 
 The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
 the user to impute the date as well.
 
 Example calls:
 
-`advs_dt <- derive_vars_dt(advs_adsl, new_vars_previx = "A", dtc = VSDTC)`
+`advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)`
 
 If imputation is needed and the date is to be imputed to the first of the month, 
 the call would be:
 ```{r eval=FALSE}
-advs_dt <- derive_vars_dt(advs_adsl, 
-                          new_vars_prefix = "A", 
-                          dtc = VSDTC, 
-                          date_imputation = "FIRST")
+advs <- derive_vars_dt(advs_adsl, 
+                       new_vars_prefix = "A", 
+                       dtc = VSDTC, 
+                       date_imputation = "FIRST")
 ```
 
 Similarly, `ADTM` may be created using the function `derive_vars_dtm`. 
 Imputation may be done on both the date and time components of `ADTM`.
 ```{r eval=FALSE}
-advs_dt <- derive_vars_dt(advs_adsl, 
-                          new_vars_prefix = "A", 
-                          dtc = VSDTC, 
-                          date_imputation = "FIRST")
+advs <- derive_vars_dtm(advs_adsl, 
+                        new_vars_prefix = "A", 
+                        dtc = VSDTC, 
+                        date_imputation = "FIRST")
 ```
 
 By default, the variable `ADTF` for `derive_vars_dt()` or `ADTF` and `ATMF` for 
@@ -111,17 +111,17 @@ terminology outlined in the CDISC IG for date imputations.
 Once `ADT` is derived, the function `derive_var_ady` can be used to derive `ADY`.
 This example assumes both `ADT` and `TRTSDT` exist on the dataframe.
 
-`advs_ady <- derive_var_ady(advs_dt, reference_date = TRTSDT, date = ADT)`
+`advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)`
 
 ### Derive Results (AVAL, AVALC, AVALU) {#aval}
 
 The mapping of `AVAL`, `AVALC`, and `AVALU` is left to the ADaM programmer. An 
 example mapping may be:
 ```{r eval=FALSE}
-advs_aval <- mutate(advs_ady, 
-                    AVAL = VSSTRESN,
-                    AVALC = VSSTRESC,
-                    AVALU = VSSTRESU)
+advs <- mutate(advs, 
+               AVAL = VSSTRESN,
+               AVALC = VSSTRESC,
+               AVALU = VSSTRESU)
 ```
 
 ### Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT` {#paramcd}
@@ -144,7 +144,7 @@ SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2
 This lookup may now be joined to the source data:
 
 ```{r eval=FALSE}
-advs_paramcd <-  left_join(advs_aval, param_lookup, lookup, by = "VSTESTCD")
+advs <-  left_join(advs, param_lookup, lookup, by = "VSTESTCD")
 ````
 
 Please note, it may be necessary to include other variables in the join. For
@@ -157,7 +157,7 @@ Categorical timing variables are protocol and analysis dependent.  Below is a
 simple example to calculate `APHASE`. 
 
 ```{r eval=FALSE}
-advs_timing <- advs_paramcd %>% 
+advs <- advs %>% 
   mutate(APHASE = case_when(is.na(ADT) ~ NA_character,
                             ADT <= PH1EDT ~ "Screening",
                             PH2SDT <= ADT <= PH2EDT ~ "Treatment",
@@ -176,11 +176,11 @@ appropriate record for analysis.
 
 This flag may be derived using the Admiral function `derive_extreme_flag()`. 
 For this example, we will assume we would like to choose the latest and 
-highest value.
+highest value by `USUBJID`, `PARAMCD`, `AVISIT`, `ATPT`, and `DTYPE`.
 
 ```{r eval=FALSE}
-advs_anl01fl <- derive_extreme_flag(
-  advs_timing,
+advs <- derive_extreme_flag(
+  advs,
   new_var = ANL01FL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
   order = vars(ADT, AVAL),
@@ -189,38 +189,36 @@ advs_anl01fl <- derive_extreme_flag(
 
 ```
 
-Another common example would be flagging the worst on-treatment value for a 
-subject.  For this example, we will assume we have 3 `PARAMCD` values (SYSBP,
-DIABP, and RESP).  We will also assume high is worst for SYSBP and DIABP
-and low is worst for RESP.
+Another common example would be flagging the worst value for a subject,
+parameter, and visit. For this example, we will assume we have 3 `PARAMCD` 
+values (SYSBP, DIABP, and RESP).  We will also assume high is worst for SYSBP 
+and DIABP and low is worst for RESP.
 
 ```{r eval=FALSE}
-vs_worst_high <- derive_extreme_flag(
-  advs_timing,
+advs <- derive_extreme_flag(
+  advs,
   new_var = WORST_HIGH,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, AVAL),
   mode = "last",
   flag_filter = (!is.na(AVISIT) & !is.na(AVAL))) 
 
-vs_worst_low <- derive_extreme_flag(
-  advs_timing,
+advs <- derive_extreme_flag(
+  advs,
   new_var = WORST_LOW,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, AVAL),
   mode = "first",
   flag_filter = vars(!is.na(AVISIT) & !is.na(AVAL))) 
 
-vs_worst <- mutate(vs_worst_low,
-                   WORSTFL = ifelse(PARAMCD %in% c("SYSBP", "DIABP"), 
-                                    WORST_HIGH,
-                                    WORST_LOW))
+advs <- mutate(advs, WORSTFL = ifelse(PARAMCD %in% c("SYSBP", "DIABP"), 
+                                      WORST_HIGH, WORST_LOW))
 ```
 
 An example of deriving `ABLFL` using the `derive_extreme_flag` function can be
 found [here.](#baseline)
 
-### Timing flags (e.g. `ONTRTFL`) {#timingflag}
+### Timing Flag Variables (e.g. `ONTRTFL`) {#timingflag}
 
 In some analysis, it may be necessary to flag an observation as on-treatment.
 The Admiral function `derive_var_ontrtfl()` can be used.
@@ -229,10 +227,10 @@ For example, if on-treatment is defined as any observation between treatment
 start and treatment end, the flag may be derived as:
 
 ```{r eval=FALSE}
-ontrtfl <- derive_var_ontrtfl(advs_anl01fl, 
-                              date = ADT, 
-                              ref_start_date = TRTSDT, 
-                              ref_end_date = TRTENDT)
+advs <- derive_var_ontrtfl(advs, 
+                           date = ADT, 
+                           ref_start_date = TRTSDT, 
+                           ref_end_date = TRTENDT)
 ```
 
 This function returns the original dataframe with the column `ONTRTFL` added.
@@ -241,11 +239,11 @@ Additionally, this function does have functionality to handle a window on the
 start and treatment end + 15 days, the call would be:
 
 ```{r eval=FALSE}
-ontrtfl <- derive_var_ontrtfl(advs_anl01fl, 
-                              date = ADT, 
-                              ref_start_date = TRTSDT, 
-                              ref_end_date = TRTEDT,
-                              ref_end_window = 15)
+advs <- derive_var_ontrtfl(advs), 
+                           date = ADT, 
+                           ref_start_date = TRTSDT, 
+                           ref_end_date = TRTEDT,
+                           ref_end_window = 15)
 ```
 
 Lastly, the function does allow you to filter out pre-treatment observations
@@ -255,12 +253,12 @@ the treatment start and end date, the user may specify this using the
 `filter_pre_timepoint` parameter:
 
 ```{r eval=FALSE}
-advs_ontrtfl <- derive_var_ontrtfl(
-  advs_anl01fl,
+advs <- derive_var_ontrtfl(
+  advs,
   date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
-  filter_pre_timepoint = rlang::exprs(TPT == "PRE"))
+  filter_pre_timepoint = TPT == "PRE")
 ```
 
 ### Assign Reference Range Indicator (`ANRIND`) {#referencerange}
@@ -273,7 +271,7 @@ This function requires the reference range boundaries to exist on the dataframe
 
 The function is called as:
 
-`advs_anrind <- derive_var_anrind(advs_ontrtfl)`
+`advs <- derive_var_anrind(advs)`
 
 ### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`) {#baseline}
 
@@ -284,12 +282,11 @@ multiple expressions within the basetypes expression, a row will be produced for
 each `BASETYPE`.
 
 ```{r eval=FALSE}
-advs_basetype <- derive_var_basetype(
-  dataset = advs_anrind,
+advs <- derive_var_basetype(
+  dataset = advs,
   basetypes = exprs("AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
                     "AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
-                    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
-                    NA_character = is.na(ATPTN)))
+                    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817))
 ```
 
 It is important to derive `BASETYPE` first so that it can be utilized in 
@@ -301,13 +298,13 @@ function `derive_extreme_flag`.  For example, if baseline is defined as the last
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
 ```{r eval=FALSE}
-advs_ablflablfl <- derive_extreme_flag(
-  advs_basetype,
+advs <- derive_extreme_flag(
+  advs,
   new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT),
   mode = "last",
-  flag_filter = (ANL01FL == "Y" & AVISIT == "Baseline"))
+  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
 ```
 
 Note: Additional examples of the `derive_extreme_flag` function can be 
@@ -317,12 +314,12 @@ Lastly, the BASE and BASEC columns can be derived using the Admiral function
 `derive_var_base()` and `derive_var_basec`.  Example calls are:
 
 ```{r eval=FALSE}
-advs_base <- derive_var_base(
-  advs_ablfl,
+advs <- derive_var_base(
+  advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
 
-advs_basec <- derive_var_basec(
-  advs_base,
+advs <- derive_var_basec(
+  advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
 ```
 
@@ -334,9 +331,9 @@ and `BASE` to exist in the dataframe.  The `CHG` is simply `AVAl - BASE` and the
 `PCHG` is `(AVAL - BASE) / absolute value (BASE) * 100`.  Examples calls are:
 
 ```{r eval=FALSE}
-advs_chg <- derive_var_chg(advs_basec)
+advs <- derive_var_chg(advs)
 
-advs_pchg <- derive_var_pchg(advs_chg)
+advs <- derive_var_pchg(advs)
 
 ```
 
@@ -350,9 +347,8 @@ assignment.
 However, an example of a simple implementation could be:
 
 ```{r eval=FALSE}
-advs_trta_trtp <- mutate(advs_pchg,
-                         TRTP = TRT01P,
-                         TRTA = TRT01A)
+advs <- mutate(advs, TRTP = TRT01P,
+               TRTA = TRT01A)
 
 ```
 
@@ -362,11 +358,12 @@ The Admiral function `derive_obs_number()` can be used to derive `ASEQ`. An
 example call is:
 
 ```{r eval=FALSE}
-advs_aseq <- derive_obs_number(
-  advs_trta_trtp,
+advs <- derive_obs_number(
+  advs,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
-  order = vars(PARAMCD, ADT, AVISITN, ATPTN))
+  order = vars(PARAMCD, ADT, AVISITN, ATPTN),
+  check_type = "warning")
 
 ```
 
@@ -388,6 +385,55 @@ ad_advs.R | Create End of Treatment based on a subset of rows, for each USUBJID,
 ad_advs.R | Derive an Average Record (e.g. Triplicates) for each USUBJID, PARAMCD, and timepoint.
 ad_advs.R | Derive a new PARAMCD based on existing PARAMCDs (MAP, based on Systolic and Diastolic BP collected at a particular timepoint.)
 
+Example 1 (Creating a new record):
+
+```{r eval=FALSE}
+advs <-
+  derive_extreme_flag(
+    advs,
+    new_var = EOTFL,
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
+    order = vars(ADT),
+    mode = "last",
+    flag_filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")) %>%
+    filter(EOTFL == "Y") %>%
+  mutate(AVISIT = "End of Treatment",
+         AVISITN = 99) %>%
+  union_all(advs) %>%
+  select(-EOTFL)
+```
+
+Example 2 (Deriving a Summary record):
+
+```{r eval=FALSE}
+advs <- derive_summary_records(
+  advs,
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
+  fns = list(AVAL ~ mean),
+  set_values_to = vars(DTYPE = "AVERAGE"))
+```
+
+Example 3 (Derive a new PARAMCD):
+
+```{r eval=FALSE}
+sysbp <- filter(advs, VSTESTCD == "SYSBP") %>%
+  select(-VSSEQ, - VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
+         -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC)
+
+diabp <- filter(advs, VSTESTCD == "DIABP") %>%
+  select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
+  rename(DBPAVAL = AVAL)
+
+advs <- left_join(sysbp, diabp,
+                  by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC",
+                         "VSDTC", "VSTPT")) %>%
+  mutate(AVAL = ((2 * DBPAVAL) + AVAL) / 3,
+         PARAMCD = "MAP") %>%
+  filter(!is.na(AVAL)) %>%
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
+  union_all(advs) %>%
+  select(-DBPAVAL)
+```
 
 ### Derive categorization variables (`AVALCAT`) {#cat}
 
@@ -400,9 +446,9 @@ avalcat_lookup <- tibble::tribble(
   "HEIGHT", 1, ">100 cm",
   "HEIGHT", 2, "<= 100 cm")
 
-advs_avalcat <- mutate(advs_aseq,
-                       AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
-                                            PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
+advs <- mutate(advs,
+               AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
+                                    PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
   left_join(avalcat_lookup, by = "PARAMCD")
 ```
 
