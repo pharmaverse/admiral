@@ -1,18 +1,17 @@
 #' Derive query variables.
 #'
 #' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
-#'   variable is created. For each unique `VAR_PREFIX`, if `QUERY_ID` is not ""
-#'   or NA, then the corresponding "CD" variable is created ; similarly, if
-#'   `QUERY_SCOPE`is not "" or NA, then the corresponding "SC" variable is
-#'   created.
+#'   variable will be created. For each unique `VAR_PREFIX`, if `QUERY_ID` is
+#'   not "" or NA, then the corresponding "CD" variable is created; similarly,
+#'   if `QUERY_SCOPE` is not "" or NA, then the corresponding "SC" variable will
+#'   be created; if `QUERY_SCOPE_NUM` is not "" or NA, then the corresponding
+#'   "SCN" variable will be created.
 #'
 #' @param dataset Input dataset.
 #'
-#'   The columns specified by `dataset_keys` are expected.
-#'
-#' @param queries A data.frame containing the following required columns:
-#'   `VAR_PREFIX`, `QUERY_NAME`, `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`,
-#'   `TERM_LEVEL`, and `TERM_NAME`.
+#' @param queries A data.frame containing required columns `VAR_PREFIX`,
+#' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, and optional columns
+#' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
 #'
 #'   The content of the dataset will be verified by [assert_valid_queries()].
 #'
@@ -35,8 +34,7 @@
 #' "03", "2020-06-07 23:59:59", "SOME TERM",
 #' 2, "Some query", "Some term",
 #' "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-#' 7, "Alveolar proteinosis", NA_character_
-#' )
+#' 7, "Alveolar proteinosis", NA_character_)
 #' derive_query_vars(adae, queries)
 derive_query_vars <- function(dataset, queries) {
 
@@ -53,6 +51,9 @@ derive_query_vars <- function(dataset, queries) {
   # names of new columns
   if ("QUERY_ID" %!in% names(queries)) {
     queries$QUERY_ID <- NA_integer_
+  }
+  if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
+    queries$QUERY_SCOPE <- NA_integer_
   }
   if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
     queries$QUERY_SCOPE_NUM <- NA_integer_
@@ -128,7 +129,7 @@ derive_query_vars <- function(dataset, queries) {
 assert_valid_queries <- function(queries, queries_name) {
 
   # check required columns
-  is_missing <- c("VAR_PREFIX", "QUERY_NAME", "QUERY_SCOPE",
+  is_missing <- c("VAR_PREFIX", "QUERY_NAME",
                   "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
   if (any(is_missing)) {
     missing_vars <- names(queries)[is_missing]

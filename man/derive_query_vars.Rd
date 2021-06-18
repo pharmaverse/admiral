@@ -7,13 +7,11 @@
 derive_query_vars(dataset, queries)
 }
 \arguments{
-\item{dataset}{Input dataset.
+\item{dataset}{Input dataset.}
 
-The columns specified by \code{dataset_keys} are expected.}
-
-\item{queries}{A data.frame containing the following required columns:
-\code{VAR_PREFIX}, \code{QUERY_NAME}, \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM},
-\code{TERM_LEVEL}, and \code{TERM_NAME}.
+\item{queries}{A data.frame containing required columns \code{VAR_PREFIX},
+\code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, and optional columns
+\code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
 
 The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
 }
@@ -22,10 +20,11 @@ Derive query variables.
 }
 \details{
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
-variable is created. For each unique \code{VAR_PREFIX}, if \code{QUERY_ID} is not ""
-or NA, then the corresponding "CD" variable is created ; similarly, if
-\code{QUERY_SCOPE}is not "" or NA, then the corresponding "SC" variable is
-created.
+variable will be created. For each unique \code{VAR_PREFIX}, if \code{QUERY_ID} is
+not "" or NA, then the corresponding "CD" variable is created; similarly,
+if \code{QUERY_SCOPE} is not "" or NA, then the corresponding "SC" variable will
+be created; if \code{QUERY_SCOPE_NUM} is not "" or NA, then the corresponding
+"SCN" variable will be created.
 }
 \examples{
 data("queries")
@@ -38,8 +37,7 @@ adae <- tibble::tribble(
 "03", "2020-06-07 23:59:59", "SOME TERM",
 2, "Some query", "Some term",
 "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-7, "Alveolar proteinosis", NA_character_
-)
+7, "Alveolar proteinosis", NA_character_)
 derive_query_vars(adae, queries)
 }
 \seealso{
