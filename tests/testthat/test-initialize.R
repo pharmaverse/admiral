@@ -12,17 +12,18 @@ test_that("deriving predecessor variables from spec works", {
     "ADVS",   "VSTESTCD", "Predecessor", "ADSL.VSTESTCD",
     "ADVS",   "VSSTRESN", "Predecessor", "ADSL.VSSTRESN",
     "ADVS",   "VSSTRESU", "Predecessor", "ADSL.VSSTRESU",
+    "ADVS",   "VSSUPPV",  "Predecessor", "SUPPVS.QVAL where SUPPVS.QNAM is 'VSSUPPV'",
     "ADVS",   "PARAM",    "Assigned",    "See ADVS Parameters tab",
     "ADVS",   "AVAL",     "Derived",     "See ADVS Parameters tab",
     "ADVS",   "AVALU",    "Assigned",    "Set to Standard Units [VS.VSSTRESU]",
   )
   dap_m3 <- structure(list(ADVS = advs_spec), class = "DAP_M3")
   vs <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~DOMAIN, ~VSTESTCD, ~VSSTRESN, ~VSSTRESU,
-    "ABC-01", "P01",    "VS",    "HEIGHT",  182,       "cm",
-    "ABC-01", "P01",    "VS",    "WEIGHT",  84,        "kg",
-    "ABC-01", "P02",    "VS",    "HEIGHT",  174,       "cm",
-    "ABC-01", "P02",    "VS",    "WEIGHT",  89,        "kg",
+    ~STUDYID, ~USUBJID, ~DOMAIN, ~VSTESTCD, ~VSSTRESN, ~VSSTRESU, ~VSSUPPV,
+    "ABC-01", "P01",    "VS",    "HEIGHT",  182,       "cm",      "Y",
+    "ABC-01", "P01",    "VS",    "WEIGHT",  84,        "kg",      "Y",
+    "ABC-01", "P02",    "VS",    "HEIGHT",  174,       "cm",      "Y",
+    "ABC-01", "P02",    "VS",    "WEIGHT",  89,        "kg",      "Y"
   )
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~COUNTRY, ~AAGE, ~AAGEU,  ~AGEGR1, ~VAR,
@@ -31,7 +32,7 @@ test_that("deriving predecessor variables from spec works", {
   )
   advs <- vs %>%
     left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
-    select(STUDYID, USUBJID, COUNTRY, AAGE, AAGEU, AGEGR1, VSTESTCD, VSSTRESN, VSSTRESU)
+    select(STUDYID, USUBJID, COUNTRY, AAGE, AAGEU, AGEGR1, VSTESTCD, VSSTRESN, VSSTRESU, VSSUPPV)
 
   expect_dfs_equal(
     base = advs,
