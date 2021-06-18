@@ -1,0 +1,227 @@
+---
+title: "Creating ADSL ADaM"
+author: "admiral team"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Creating ADVS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This article describes creating an ADSL ADaM. Examples are currently 
+presented and tested using 'dm', 'ex' and 'ds' SDTM domains. However, the examples could be
+applied to other domains.
+
+<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified. </i>
+
+## Programming Workflow
+
+* [Read in data](#readdata)
+* [Derive Treatment variables (TRT01P, TRT01A)](#treatmentvar)
+* [Derive/Impute numeric treatment date/time and duration (TRTSDT, TRTEDT, TRTDURD)](#datetime)
+* [Derive Disposition Dates amd Status (EOSDT, EOSSTT, DCSREAS)](#disposition)
+* [Derive Death variables (DTH, DTHADY, LLDTHELD)](#death)
+* [Derive Groupings and Populations (AGEGR1, RACEGR1, REGION1)](#groupings)
+* [Derive Other Variables (DTH30FL, DTHA30FL, DTHB30FL)](#other)
+
+* [Advanced topics:](#advanced)
+  * 
+* [Example Script](#example)
+
+### Read in data {#readdata}
+
+To start, all dataframes needed for the creation of ADSL should be read into
+the environment.  This will be a company specific process.  Some of the 
+dataframes needed may be:
+
+  * dm, ex, ds
+
+The dm domain is used as the base of ADSL:
+```{r eval=FALSE}
+adsl <- dm
+```
+
+### Derive Treatment variables (TRT01P, TRT01A) {#treatmentvar}
+
+Treatment variables are then added using 
+```{r eval=FALSE}
+dm %>% 
+  mutate(TRT01P = ARMCD, TRT01A = ARMCD)
+```
+
+### Derive/Impute numeric treatment date/time and duration (TRTSDT, TRTEDT, TRTDURD) {#datetime}
+
+The functions `derive_var_trtsdtm()`, `derive_var_trtedtm()` can be used to derive treatment start and end datetimes using the `ex` domain.
+
+Example calls:
+
+`adsl <- dm %>% derive_var_trtsdtm(dataset_ex = ex)`
+
+The datatime variables returned can be converted to dates using the `date()` function.
+
+An example may be:
+```{r eval=FALSE}
+dm %>%
+  derive_var_trtsdtm(dataset_ex = ex) %>%
+  mutate(TRTSDT = date(TRTSDTM)) %>%
+  derive_var_trtedtm(dataset_ex = ex) %>%
+  mutate(TRTEDT = date(TRTEDTM))
+```
+
+
+The function `derive_var_trtdur()` can then be used to calculate the Treatment duration.
+
+This uses `TRTSDT` and `TRTEDT` so must be called after deriving these variables.
+
+
+### Derive Disposition Dates and Status (EOSDT, AVALC, AVALU) {#disposition}
+
+The function `derive_disposition_dt()` can be used to derive relevant disposition date. The relevant disposition date
+is set by adjusting the filter parameter. This function allows the user to impute the date as well.
+
+To derive the End of Study date, 
+the call would be:
+```{r eval=FALSE}
+dm %>% derive_disposition_dt(
+                             dataset_ds = ds,
+                             new_var = EOSDT,
+                             dtc = DSSTDTC,
+                             filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
+                             date_imputaton = NULL)
+```
+
+If imputation is needed and the date is to be imputed to the first of the month, then set `date_impuatation == "FIRST`.
+
+The function `derive_disposition_status()` can be used to dervie a disposition status at a specific timepoint.
+
+To derive the End of Study status, 
+the call would be:
+```{r eval=FALSE}
+dm %>% derive_disposition_status(
+                                 dataset_ds = ds,
+                                 new_var = EOSSTT,
+                                 status_var = DSDECOD,
+                                 format_new_var = format_eoxxstt,
+                                 filter = DSCAT == "DISPOSITION EVENT")
+```
+
+The function `format_eoxxstt()` is user defined and maps the DSDECOD to a suitable EOSSTT value.
+
+Example function:
+
+```{r eval=FALSE}
+format_eoxxstt <- function(x) {
+  case_when(
+            x %in% c("COMPLETED") ~ "COMPLETED",
+            !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ "DISCONTINUED",
+            x %in% c("SCREEN FAILURE") ~ NA_character_,
+            TRUE ~ "ONGOING")
+  }
+```
+
+
+The function `derive_disposition_reason()` can be used to derive a disposition reason at a specific timepoint.
+
+To derive the End of Study reason, 
+the call would be:
+```{r eval=FALSE}
+dm %>% derive_disposition_reason(
+                                 dataset_ds = ds,
+                                 new_var = DCSREAS,
+                                 reason_var = DSDECOD,
+                                 new_var_spe = DCSREASP,
+                                 reason_var_spe = DSTERM,
+                                 filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE")
+```
+
+### Derive Death variables (DTH, DTHADY, LLDTHELD) {#death}
+
+The function `derive_vars_dt()` can be used to derive DTH. This function allows 
+the user to impute the date as well.
+
+Example calls:
+
+`DTH_dt <- derive_vars_dt(dm, new_vars_previx = "DTH", dtc = DTHDTC)`
+
+If imputation is needed and the date is to be imputed to the first of the month, 
+the call would be:
+```{r eval=FALSE}
+dm %>% derive_vars_dt(
+                      new_vars_previx = "DTH", 
+                      dtc = DTHDTC, 
+                      date_imputation = "FIRST")
+```
+
+
+The function `derive_duration()` can be used to derive durations related to the death day.
+
+Example calls: 
+
+- Relative Day of Death
+```{r eval=FALSE}
+dm %>% derive_duration(new_var = DTHADY,
+                       start_date = TRTSDT,
+                       end_date = DTHDT)
+```
+
+- Elapsed Days from Last Dose to Death
+```{r eval=FALSE}
+dm %>%  derive_duration(
+                        new_var = LDDTHELD,
+                        start_date = TRTEDT,
+                        end_date = DTHDT,
+                        add_one = FALSE)
+```
+
+
+### Derive Groupings and Populations (AGEGR1, RACEGR1, REGION1) {#groupings}
+
+User defined functions are required to group categorical variables such as: AGE, RACE, REGION, etc.
+
+Example function:
+
+```{r eval=FALSE}
+format_agegr1 <- function(x) {
+  case_when(
+            !is.na(x) & x < 18 ~ "< 18",
+            x >= 18 & x < 65 ~ "18 - 65",
+            x >= 65 ~ ">= 65")
+}
+```
+
+This is added to the dataset as a new variable:
+
+```{r eval=FALSE}
+dm %>%  mutate(
+              AGEGR1 = format_agegr1(AGE))
+```
+
+
+### Derive Other Variables (DTH30FL, DTHA30FL, DTHB30FL) {#other}
+
+To derive other variables it is necessary to create conditions based on existing variables in the dataset.
+
+If Full Analysis Population Flag is required,
+the call would be:
+```{r eval=FALSE}
+dm %>% mutate(
+              FASFL = if_else(is.na(SCRFDT), "Y", "N"))
+```
+
+### Advanced topics: {#advanced}
+
+  * 
+### Example Script {#example}
