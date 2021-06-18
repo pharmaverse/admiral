@@ -17,12 +17,25 @@
 #' read_dap_m3("DAP_M3.xlsx")
 #' }
 read_dap_m3 <- function(file) {
-  assert_that(is.character(file), file.exists(file))
+  assert_that(rlang::is_scalar_character(file), is_xlsx_file(file))
 
-  all_sheets <- readxl::excel_sheets(file)
+  is_entimice_path <- grepl("^root/", file)
+  if (is_entimice_path) {
+    assert_that(is_installed("rice"))
+    bytes <- rice::rice_read(path, raw = TRUE)
+    path <- tempfile(fileext = ".xlsx")
+    # Using `c()` here is mandatory to strip off attributes from the raw
+    # vector. Not doing this will lead to an error when calling `writeBin()`.
+    writeBin(c(bytes), path)
+  } else {
+    assert_that(file.exists(file))
+    path <- file
+  }
+
+  all_sheets <- readxl::excel_sheets(path)
   sheets_to_read <- setdiff(all_sheets, c("Title", "Template Instructions"))
   read <- function(sheet) {
-    suppressMessages(readxl::read_excel(file, sheet, progress = FALSE))
+    suppressMessages(readxl::read_excel(path, sheet, progress = FALSE))
   }
   structure(
     map(sheets_to_read, read),

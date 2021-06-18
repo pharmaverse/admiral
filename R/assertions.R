@@ -632,3 +632,16 @@ quo_not_missing <- function(x) {
 on_failure(quo_not_missing) <- function(call, env) {
   paste0("Argument `", deparse(call$x), "` is missing, with no default")
 }
+
+is_installed <- rlang::is_installed
+on_failure(is_installed) <- function(call, env) {
+  pkg_name <- eval(call$pkg, env)
+  paste0("Required package {", pkg_name, "} is not installed")
+}
+
+is_xlsx_file <- function(path) {
+  tools::file_ext(path) == "xlsx"
+}
+on_failure(is_xlsx_file) <- function(call, env) {
+  paste0("'", eval(call$path, env), "' is not an .xlsx file")
+}
