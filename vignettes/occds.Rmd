@@ -1,0 +1,76 @@
+---
+title: "Creating a OCCDS ADaM"
+author: "admiral team"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Creating ADVS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This article describes creating a OCCDS ADaM. Examples are currently 
+presented and tested in the context of ADAE  However, the examples could be
+applied to other OCCDS ADaMs such as ADCM (?), ADMH, and ADDV, where ... (?).
+
+<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified. </i>
+
+<b> <span style="color: red"> None of the code chunks are executing/displaying
+results.  Is that something we want to do? </span> </b>
+
+## Programming Workflow
+
+* [Read in data](#readdata)
+* [Derive/Impute end and start analysis date/time and relative day](#datetime)
+* [Derive durations](#duration)
+* [Derive analysis phase and period](#phase)
+* [Derive toxicity](#toxicity)
+* [Derive treatement varaibles](#treatment)
+* [Derive flags](#flag)
+* [Derive query variables](#query)
+
+### Read in data {#readdata}
+
+To start, all dataframes needed for the creation of `ADAE` should be read into
+the environment.  This will be a company specific process.  Some of the 
+dataframes needed may be:
+
+  * `AE`, `SUPPAE`
+  * `SUPPDM`
+
+### Derive/Impute end and start analysis date/time and relative day {#datetime}
+
+The function `derive_vars_dtm()` can be used to derive `AEENDTC`. `AENDT` can 
+be created with a simple `mutate`, and `derive_var_aendy` can be used to create 
+`AENDY`.
+
+Example call:
+
+```{r}
+adae <- derive_vars_dtm(
+  adae,
+  dtc = AEENDTC,
+  new_vars_prefix = "AEN",
+  date_imputation = "last",
+  time_imputation = "last",
+  max_dates = list(DTHDT, DCUTDT)) %>%
+  muatate(AENDT = date(AENDTM)) %>%
+  derive_var_aendy(
+    reference_date = TRTSDT, 
+    date = AENDT
+  )
+```
+
+
