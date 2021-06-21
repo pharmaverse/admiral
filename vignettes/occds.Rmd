@@ -36,10 +36,14 @@ results.  Is that something we want to do? </span> </b>
 * [Derive/Impute end and start analysis date/time and relative day](#datetime)
 * [Derive durations](#duration)
 * [Derive analysis phase and period](#phase_period)
+* [Derive planned and actual treatment](#trtpa)
 * [Derive severity, causality, and toxicity grade](#severity)
-* [Derive treatement varaibles](#treatment)
+* [Derive treatement flags](#trtfag)
 * [Derive occurrence flags](#occflag)
 * [Derive query variables](#query)
+
+<b> <span style="color: red"> Do we want to include company specific derivations 
+such as treatment flags, dosage related variables, datacut, etc? </span> </b>
 
 ### Read in data {#readdata}
 
@@ -52,6 +56,8 @@ dataframes needed may be:
   * `ADSL`
   
 <b> <span style="color: red"> How to treat `SUPPAE` and `SUPPDM`? </span> </b>
+
+<b> <span style="color: red"> Split deriving predecessors into another section? </span> </b>
   
 The `initialize()` function can help create the starting point of the `ADAE` 
 dataset by adding all predecessor variables.
@@ -60,7 +66,7 @@ Example call:
 
 ```{r eval=FALSE}
 meta <- read_dap_m3("DAP_M3.xlsx")
-initialize("ADAE", meta, list(adsl, ae))
+adae <- initialize("ADAE", meta, list(adsl, ae))
 ```
 
 ### Derive/Impute end and start analysis date/time and relative day {#datetime}
@@ -73,7 +79,7 @@ The function `derive_vars_dtm()` can be used to derive `AENDTM` and
 `derive_var_aendy` and `derive_var_astdy` can be used to create 
 `AENDY` and `ASTDY` respectively.
 
-Example call:
+Example calls:
 
 ```{r eval=FALSE}
 adae <- adae %>% 
@@ -116,12 +122,60 @@ adae <- adae %>%
 
 
 
+### Derive planned and actual treatment {#trtpa}
+
+
+
 ### Derive severity, causality, and toxicity grade {#severity}
+
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply `mutate` as 
+they essentially come from the `AE` dataset.
+
+Example call:
+
+```{r eval=FALSE}
+adae <- adae %>%
+  mutate(ASEV = AESEV, 
+         AREL = AEREL, 
+         ATOXGR = AETOXGR)
+```
+
+### Derive treatement flags {#trtflag}
 
 
 
 ### Derive occurrence flags {#occflag}
 
+The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
+`AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
+Example call:
+
+```{r eval=FALSE}
+adae <- adae %>% 
+  derive_extreme_flag(
+  new_var = AOCCIFL,
+  by_vars = exprs(USUBJID),
+  order = exprs(ATOXGR, ASTDTM, AESEQ),
+  flag_filter = exprs(ANL01FL == ‘Y’)
+  )
+```
 
 ### Derive query variables {#query}
+
+The function `derive_query_vars()` can help derive the `SMQ` and `CQ` variables 
+given a standard query dataset. More details can be found in the documentation 
+of this function.
+
+<b> <span style="color: red"> Provide more detail about thee query dataset here or link to somewhere? </span> </b>
+
+Example call:
+
+```{r eval=FALSE}
+adae <- adae %>%
+  derive_query_vars(queries)
+```
+
+
+
+
