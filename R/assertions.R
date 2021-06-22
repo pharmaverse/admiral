@@ -160,6 +160,45 @@ assert_logical_scalar <- function(arg) {
   invisible(arg)
 }
 
+#' Is an Argument a Symbol?
+#'
+#' Checks if an argument is a symbol
+#'
+#' @param arg A function argument to be checked
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a symbol and returns the input
+#' invisibly otherwise. `arg` is expected to be a `quosure`.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' start_date <- rlang::quo(TRTSDT)
+#' end_date <- rlang::quo("TRTEDT")
+#'
+#' assert_symbol(start_date)
+#' tryCatch(
+#'   assert_symbol(end_date),
+#'   error = function(e) cat(e$message)
+#' )
+assert_symbol <- function(arg) {
+  if (quo_is_missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!quo_is_symbol(arg)) {
+    err_msg <- sprintf("`%s` must be a symbol", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Are There Multiple Baseline Records?
 #'
 #' Checks if a dataset contains multiple baseline records
