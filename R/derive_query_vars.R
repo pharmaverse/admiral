@@ -7,6 +7,12 @@
 #'   be created; if `QUERY_SCOPE_NUM` is not "" or NA, then the corresponding
 #'   "SCN" variable will be created.
 #'
+#'   For each record in `dataset`, the "NAM" variable takes the value of
+#'   `QUERY_NAME` if the value of `TERM_NAME` in `queries` matches the value
+#'   in the `TERM_LEVEL` column of `dataset`. The "CD", "SC", and "SCN"
+#'   variables are derived accordingly based on `QUERY_ID`, `QUERY_SCOPE`, and
+#'   `QUERY_SCOPE_NUM` respectively, whenever not missing.
+#'
 #' @param dataset Input dataset.
 #'
 #' @param queries A data.frame containing required columns `VAR_PREFIX`,
@@ -98,7 +104,7 @@ derive_query_vars <- function(dataset, queries) {
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>% select(static_cols) %>% distinct() %>% nrow() != nrow(dataset)
   if (no_key) {
-    dataset$temp_key <- 1:nrow(dataset)
+    dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
   }
   joined <- dataset %>%
@@ -260,4 +266,3 @@ assert_valid_queries <- function(queries, queries_name) {
     }
   }
 }
-

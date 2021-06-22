@@ -28,6 +28,12 @@ not "" or NA, then the corresponding "CD" variable is created; similarly,
 if \code{QUERY_SCOPE} is not "" or NA, then the corresponding "SC" variable will
 be created; if \code{QUERY_SCOPE_NUM} is not "" or NA, then the corresponding
 "SCN" variable will be created.
+
+For each record in \code{dataset}, the "NAM" variable takes the value of
+\code{QUERY_NAME} if the value of \code{TERM_NAME} in \code{queries} matches the value
+in the \code{TERM_LEVEL} column of \code{dataset}. The "CD", "SC", and "SCN"
+variables are derived accordingly based on \code{QUERY_ID}, \code{QUERY_SCOPE}, and
+\code{QUERY_SCOPE_NUM} respectively, whenever not missing.
 }
 \examples{
 data("queries")
