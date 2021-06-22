@@ -63,6 +63,65 @@ assert_data_frame <- function(arg, required_vars = NULL) {
   invisible(arg)
 }
 
+#' Is an Argument a Character Scalar (String)?
+#'
+#' Checks if an argument is a character scalar and (optionally) whether it matches
+#' one of the provided `values`.
+#'
+#' @param arg A function argument to be checked
+#' @param values A `character` vector of valid values for `arg`
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a character vector or if `arg`
+#' is a character vector but of length > 1 or if its value is not one of the `values`
+#' specified. Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' msg_type <- "message"
+#'
+#' assert_character_scalar(msg_type)
+#' tryCatch(
+#'   assert_character_scalar(msg_type, values = c("warning", "error")),
+#'   error = function(e) cat(e$message)
+#' )
+assert_character_scalar <- function(arg, values = NULL) {
+  if (!is.character(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a character scalar but is %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(arg))
+    )
+    abort(err_msg)
+  }
+
+  if (length(arg) != 1L) {
+    err_msg <- sprintf(
+      "`%s` must be a character scalar but is a character vector of length %d",
+      arg_name(substitute(arg)),
+      length(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (!is.null(values) && arg %!in% values) {
+    err_msg <- sprintf(
+      "`%s` must be one of %s but is '%s'",
+      arg_name(substitute(arg)),
+      enumerate(values, quote_fun = squote, conjunction = "or"),
+      arg
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Are There Multiple Baseline Records?
 #'
 #' Checks if a dataset contains multiple baseline records
