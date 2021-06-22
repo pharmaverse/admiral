@@ -77,7 +77,7 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
   )
 
   if (!is.null(domain)) {
-    supp <- filter(supp, .data$RDOMAIN == domain)
+    dataset_suppqual <- filter(dataset_suppqual, .data$RDOMAIN == domain)
   }
 
   assert_is_supp_domain(dataset, dataset_suppqual, .domain = domain)
@@ -100,7 +100,7 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
         rename(!! .x$IDVAR := "IDVARVAL") %>%
         # Convert IDVAR to match parent domain type
         modify_at(.x$IDVAR, function(x) {
-          if (is.numeric(dataset[[.x$IDVAR]])) as.numeric(x)
+          if (is.numeric(dataset[[.x$IDVAR]])) as.numeric(x) else x
         })
     } else {
       supp <- dataset_suppqual %>%
@@ -114,42 +114,38 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     supp
   })
 
+  supwarn_left_join <- compose(suppressWarnings, left_join)
+
   for (i in seq_along(pivoted)) {
     parent_nms <- names(dataset)
     supp_nms <- names(pivoted[[i]])
 
-    by_vars <- intersect(parent_nms, supp_nms)
-    new_var <- setdiff(supp_nms, parent_nms)
+    new_var <- supp_unique_list[[i]]$QNAM
+    by_vars <- intersect(parent_nms, setdiff(supp_nms, new_var))
 
     ## The following step helps parent dataset undistrubed:
     ##
     ## - Join with parent domain and retain only supp variables. This helps to
     ##   match observation and finally bind with original parent dataset
     join_var <- dataset %>%
-      select(by_vars) %>%
-      # Remove all attributes before joining, which helps to discard warnings of
-      # different attributes on LHS & RHS.
-      map_df(function(.x) {
-        attributes(.x) <- NULL
-        .x
-      }) %>%
-      left_join(pivoted[[i]], by = by_vars) %>%
-      select(!! sym(new_var))
+      supwarn_left_join(pivoted[[i]], by = by_vars) %>%
+      select(dplyr::matches(new_var))
 
     ## Sometimes QNAM might have more than one IDVAR. For example, in AE domain
     ## QNAM = 'XXXX' and IDVAR = c('AEID', 'AESEQ'). Join all values into single
     ## values using [dplyr::coalesce]
-    dup <- match(new_var, names(dataset), nomatch = 0L)
-
-    if (dup > 0L) {
-      values <- map(
-        list(dataset[[new_var]], unlist(join_var, use.names = FALSE)),
-        ~ na_if(., "")
-      ) %>%
-        reduce(coalesce) %>%
-        modify_if(is.character, ~ replace_na(., ""))
+    if (ncol(join_var) > 1L) {
+      values <- join_var %>%
+        map(~ na_if(., "")) %>%
+        reduce(coalesce)
 
       join_var <- tibble(!! new_var := values)
+    }
+
+    rep_var <- intersect(parent_nms, names(join_var))
+
+    if (length(rep_var) > 0L) {
+      dataset <- select(dataset, -!! sym(rep_var))
     }
 
     dataset <- bind_cols(dataset, join_var)
@@ -201,7 +197,7 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
     }
   }
 
-  if (!supp %in% parent) {
+  if (!parent %in% supp) {
     abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
   }
 }
