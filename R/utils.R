@@ -95,3 +95,14 @@ convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
 }
+
+arg_name <- function(expr) {
+  if (length(expr) == 1L && is.symbol(expr)) {
+    deparse(expr)
+  } else if (length(expr) == 2L && expr[[1L]] == quote(enquo) && is.symbol(expr[[2L]])) {
+    deparse(expr[[2L]])
+  } else {
+    abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
+  }
+}
+

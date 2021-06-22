@@ -1,14 +1,17 @@
-#' Does a Dataset Contain All Required Variables?
+#' Is an Argument a Data Frame?
 #'
-#' Checks if a dataset contains all required variables
+#' Checks if an argument is a data frame and (optionally) whether is contains
+#' a set of required variables
 #'
-#' @param dataset A `data.frame`
-#' @param required_vars A `character` vector of variable names
+#' @param arg A function argument to be checked
+#' @param required_vars A list of variables created using `vars()`
 #'
 #' @author Thomas Neitmann
 #'
-#' @return The function throws an error if any of the required variables are
-#' missing in the input dataset
+#' @return
+#' The function throws an error if `arg` is not a data frame or if `arg`
+#' is a data frame but misses any variable specified in `required_vars`. Otherwise,
+#' the input is returned invisibly.
 #'
 #' @export
 #'
@@ -16,25 +19,48 @@
 #'
 #' @examples
 #' data(dm)
-#' assert_has_variables(dm, "STUDYID")
-#' \dontrun{
-#' assert_has_variables(dm, "AVAL")
-#' }
-assert_has_variables <- function(dataset, required_vars) {
-  is_missing <- !required_vars %in% colnames(dataset)
-  if (any(is_missing)) {
-    missing_vars <- required_vars[is_missing]
-    if (length(missing_vars) == 1L) {
-      err_msg <- paste0("Required variable `", missing_vars, "` is missing.")
-    } else {
-      err_msg <- paste0(
-        "Required variables ",
-        enumerate(missing_vars),
-        " are missing."
-      )
-    }
+#'
+#' assert_data_frame(dm)
+#' no_df <- 1:10
+#' tryCatch(
+#'   assert_data_frame(no_df),
+#'   error = function(e) cat(e$message)
+#' )
+#'
+#' assert_data_frame(dm, required_vars = vars(USUBJID, COUNTRY))
+#' tryCatch(
+#'   assert_data_frame(dm, required_vars = vars(USUBJID, PARAM, AVAL)),
+#'   error = function(e) cat(e$message)
+#' )
+assert_data_frame <- function(arg, required_vars = NULL) {
+  if (!is.data.frame(arg)) {
+    err_msg <- sprintf(
+      "`%` must be a data.frame but is %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(arg))
+    )
     abort(err_msg)
   }
+
+  if (!is.null(required_vars)) {
+    required_vars <- vars2chr(required_vars)
+    is_missing <- !required_vars %in% colnames(arg)
+    if (any(is_missing)) {
+      missing_vars <- required_vars[is_missing]
+      if (length(missing_vars) == 1L) {
+        err_msg <- paste0("Required variable `", missing_vars, "` is missing")
+      } else {
+        err_msg <- paste0(
+          "Required variables ",
+          enumerate(missing_vars),
+          " are missing"
+        )
+      }
+      abort(err_msg)
+    }
+  }
+
+  invisible(arg)
 }
 
 #' Are There Multiple Baseline Records?
