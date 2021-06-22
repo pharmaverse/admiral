@@ -17,7 +17,9 @@
 #'
 #' @author Ondrej Slama, Shimeng Huang
 #'
-#' @keywords adae adcm
+#' @return The input dataset with query variables derived.
+#'
+#' @keywords adae adcm derivations
 #'
 #' @seealso [assert_valid_queries()]
 #'
@@ -46,17 +48,18 @@ derive_query_vars <- function(dataset, queries) {
 
   # replace all "" by NA
   queries <- queries %>%
-    dplyr::mutate_if(is.character, function(x) {ifelse(x == "", NA_character_, x)})
+    dplyr::mutate_if(is.character, function(x) {
+      ifelse(x == "", NA_character_, x)})
 
   # names of new columns
   if ("QUERY_ID" %!in% names(queries)) {
-    queries$QUERY_ID <- NA_integer_
+    queries$QUERY_ID <- NA_integer_ # nolint
+  }
+  if ("QUERY_SCOPE" %!in% names(queries)) {
+    queries$QUERY_SCOPE <- NA_integer_ # nolint
   }
   if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
-    queries$QUERY_SCOPE <- NA_integer_
-  }
-  if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
-    queries$QUERY_SCOPE_NUM <- NA_integer_
+    queries$QUERY_SCOPE_NUM <- NA_integer_ # nolint
   }
   new_col_names <- queries %>%
     group_by(VAR_PREFIX) %>%
@@ -72,7 +75,7 @@ derive_query_vars <- function(dataset, queries) {
     filter(!is.na(value)) %>%
     pull(value) %>%
     unique()
-  new_cols_names <- c(paste0(unique(queries$VAR_PREFIX), "NAM"), new_col_names)
+  new_col_names <- c(paste0(unique(queries$VAR_PREFIX), "NAM"), new_col_names)
 
   # queries restructured
   queries_wide <- queries %>%
@@ -92,10 +95,15 @@ derive_query_vars <- function(dataset, queries) {
 
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), unique(queries$TERM_LEVEL))
+  # if dataset does not have a unique key, create a temp one
+  no_key <- dataset %>% select(static_cols) %>% distinct() %>% nrow() != nrow(dataset)
+  if (no_key) {
+    dataset$temp_key <- 1:nrow(dataset)
+    static_cols <- c(static_cols, "temp_key")
+  }
   joined <- dataset %>%
     gather(key = "TERM_LEVEL", value = "TERM_NAME", -static_cols) %>%
     drop_na(.data$TERM_NAME)
-  term_cols <- unique(joined$TERM_LEVEL)
 
   # join restructured queries to input dataset
   joined <- joined %>%
@@ -103,7 +111,10 @@ derive_query_vars <- function(dataset, queries) {
     dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME"))
 
   # join queries to input dataset
-  left_join(dataset, select(joined, static_cols, new_cols_names), by = static_cols)
+  left_join(dataset, select(joined, static_cols, new_col_names),
+            by = static_cols) %>%
+    select(-starts_with("temp_")) %>%
+    distinct()
 }
 
 #' Verify if a dataset has the required format as queries dataset.
@@ -129,10 +140,10 @@ derive_query_vars <- function(dataset, queries) {
 assert_valid_queries <- function(queries, queries_name) {
 
   # check required columns
-  is_missing <- c("VAR_PREFIX", "QUERY_NAME",
-                  "TERM_LEVEL", "TERM_NAME") %!in% names(queries)
+  required_cols <-  c("VAR_PREFIX", "QUERY_NAME", "TERM_LEVEL", "TERM_NAME")
+  is_missing <- required_cols %!in% names(queries)
   if (any(is_missing)) {
-    missing_vars <- names(queries)[is_missing]
+    missing_vars <- required_cols[is_missing]
     if (length(missing_vars) == 1L) {
       err_msg <- paste0("Required variable in `", missing_vars,
                         "` is missing in `", queries_name, "`.")
@@ -194,32 +205,37 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check query id is numeric
-  if (class(queries$QUERY_ID) != "numeric") {
+  if ("QUERY_ID" %in% names(queries) & class(queries$QUERY_ID) != "numeric") {
     abort(paste0("`QUERY_ID` in `", queries_name,
                  "` should be numeric."))
   }
 
   # check illegal query scope
-  if (any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
-    abort(paste0("`QUERY_SCOPE` in `", queries_name,
-                 "` can only be 'BROAD', 'NARROW' or `NA`."))
+  if ("QUERY_SCOPE" %in% names(queries)) {
+    if (any(unique(queries$QUERY_SCOPE) %!in%
+            c("BROAD", "NARROW", "", NA_character_))) {
+      abort(paste0("`QUERY_SCOPE` in `", queries_name,
+                   "` can only be 'BROAD', 'NARROW' or `NA`."))
+    }
   }
 
   # check illegal query scope number
-  is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
-  if (any(is_bad_scope_num)) {
-    bad_scope_nums <- unique(queries$QUERY_SCOPE_NUM[is_bad_scope_num])
-    if (length(bad_scope_nums) == 1L) {
-      err_msg <- paste0("`QUERY_SCOPE_NUM` in `", queries_name,
-                        "` must be one of 1, 2, or NA. Issue with `", bad_scope_nums, "`.")
-    } else {
-      err_msg <- paste0(
-        "`QUERY_SCOPE_NUM` in `", queries_name,
-        "` must be one of 1, 2, or NA. Issue with ",
-        enumerate(bad_scope_nums),
-        ".")
+  if ("QUERY_SCOPE_NUM" %in% names(queries)) {
+    is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
+    if (any(is_bad_scope_num)) {
+      bad_scope_nums <- unique(queries$QUERY_SCOPE_NUM[is_bad_scope_num])
+      if (length(bad_scope_nums) == 1L) {
+        err_msg <- paste0("`QUERY_SCOPE_NUM` in `", queries_name,
+                          "` must be one of 1, 2, or NA. Issue with `", bad_scope_nums, "`.")
+      } else {
+        err_msg <- paste0(
+          "`QUERY_SCOPE_NUM` in `", queries_name,
+          "` must be one of 1, 2, or NA. Issue with ",
+          enumerate(bad_scope_nums),
+          ".")
+      }
+      abort(err_msg)
     }
-    abort(err_msg)
   }
 
   # check illegal term name
@@ -233,12 +249,12 @@ assert_valid_queries <- function(queries, queries_name) {
     group_by(VAR_PREFIX) %>%
     dplyr::summarise(n_qnam = length(unique(QUERY_NAME)),
                      n_qid = length(unique(QUERY_ID)))
-  for (ii in 1:nrow(count_unique)) {
-    if (count_unique[ii,]$n_qnam > 1) {
+  for (ii in seq_len(nrow(count_unique))) {
+    if (count_unique[ii, ]$n_qnam > 1) {
       abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
                    count_unique$VAR_PREFIX[ii], "' is not unique."))
     }
-    if (count_unique[ii,]$n_qid > 1) {
+    if (count_unique[ii, ]$n_qid > 1) {
       abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
                    count_unique$VAR_PREFIX[ii], "' is not unique."))
     }

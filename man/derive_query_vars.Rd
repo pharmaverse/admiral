@@ -15,6 +15,9 @@ derive_query_vars(dataset, queries)
 
 The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
 }
+\value{
+The input dataset with query variables derived.
+}
 \description{
 Derive query variables.
 }
@@ -48,3 +51,4 @@ Ondrej Slama, Shimeng Huang
 }
 \keyword{adae}
 \keyword{adcm}
+\keyword{derivations}
