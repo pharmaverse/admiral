@@ -46,3 +46,31 @@ test_that("Derive CQ and SMQ variables with two term levels", {
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
+
+test_that("Derive when dataset does not have a unique key when excluding `TERM_LEVEL` columns", {
+  query <- tribble(
+    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID,
+    "CQ42", "My Query", "AEDECOD", "PTSI", 1,
+    "CQ42", "My Query", "AELLT", "LLTSI", 1
+  )
+
+  my_ae <- tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
+    "1", 1, "PTSI", "other",
+    "1", 2, "something", "LLTSI",
+    "1", 2, "PTSI", "LLTSI",
+    "1", 2, "something", "other"
+  )
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM, ~CQ42CD,
+    "1", 1, "PTSI", "other", "My Query", 1,
+    "1", 2, "something", "LLTSI", "My Query", 1,
+    "1", 2, "PTSI", "LLTSI", "My Query", 1,
+    "1", 2, "something", "other", NA_character_, NA_integer_
+  )
+
+  actual_output <- derive_query_vars(my_ae, queries = query)
+
+  expect_equal(expected_output, actual_output)
+})
