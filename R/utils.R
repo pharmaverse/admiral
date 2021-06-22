@@ -18,10 +18,10 @@ dplyr::vars
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote) {
+enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   paste(
     paste0(quote_fun(x[-length(x)]), collapse = ", "),
-    "and",
+    conjunction,
     quote_fun(x[length(x)])
   )
 }
