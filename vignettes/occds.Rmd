@@ -167,7 +167,7 @@ The function `derive_query_vars()` can help derive the `SMQ` and `CQ` variables
 given a standard query dataset. More details can be found in the documentation 
 of this function.
 
-<b> <span style="color: red"> Provide more detail about thee query dataset here or link to somewhere? </span> </b>
+<b> <span style="color: red"> Provide more detail about the query dataset here or link to somewhere? </span> </b>
 
 Example call:
 
