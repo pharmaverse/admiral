@@ -122,6 +122,44 @@ assert_character_scalar <- function(arg, values = NULL) {
   invisible(arg)
 }
 
+#' Is an Argument a Logical Scalar (Boolean)?
+#'
+#' Checks if an argument is a logical scalar
+#'
+#' @param arg A function argument to be checked
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a `logical` vector or if `arg`
+#' is a `logical` vector but of length > 1. Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' imputation_flag <- FALSE
+#' add_one <- 1
+#'
+#' assert_logical_scalar(imputation_flag)
+#' tryCatch(
+#'   assert_logical_scalar(add_one),
+#'   error = function(e) cat(e$message)
+#' )
+assert_logical_scalar <- function(arg) {
+  if (!is.logical(arg) || length(arg) != 1L) {
+    err_msg <- sprintf(
+      "`%s` must be either `TRUE` or `FALSE` but is %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Are There Multiple Baseline Records?
 #'
 #' Checks if a dataset contains multiple baseline records
