@@ -37,15 +37,24 @@ initialize <- function(dataset_name, metadata, source_datasets) {
     mutate(Derivation = str_trim(Derivation)) %>%
     filter(
       Dataset == dataset_name,
-      Source == "Predecessor",
-      grepl("^[A-Z]{2,8}\\.[A-Z]{1,8}$", Derivation)
-    ) %>%
+      Source == "Predecessor"
+    )
+
+  predecessors_parent <- predecessors %>%
+    filter(grepl("^[A-Z]{2,8}\\.[A-Z]{1}[A-Z|0-9]{1,7}$", Derivation)) %>%
     pull(Derivation) %>%
     str_remove("^[A-Z]{2,8}\\.")
 
+  predecessors_supp <- predecessors %>%
+    filter(grepl("^SUPP[A-Z]{2}\\.QVAL where SUPP[A-Z]{2}\\.QNAM is '[A-Z]{1}[A-Z|0-9]{1,7}'$", Derivation)) %>%
+    pull(Derivation) %>%
+    str_extract("'[A-Z]{1}[A-Z|0-9]{1,7}'") %>%
+    str_remove_all("'")
+
+  all_predecessors <- c(predecessors_parent, predecessors_supp)
   available_vars <- reduce(map(source_datasets, names), union)
-  existing_predecessors <- predecessors[predecessors %in% available_vars]
-  missing_predecessors <- setdiff(predecessors, existing_predecessors)
+  existing_predecessors <- all_predecessors[all_predecessors %in% available_vars]
+  missing_predecessors <- setdiff(all_predecessors, existing_predecessors)
 
   if (length(missing_predecessors) >= 1L) {
     msg <- paste(
