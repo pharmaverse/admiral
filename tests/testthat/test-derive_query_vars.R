@@ -76,7 +76,7 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
 })
 
 test_that("Derive when an adverse event is in multiple baskets", {
-  query <- tribble(
+  query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1,
     "CQ42", "My Query 2", "AELLT", "LLTSI", 2

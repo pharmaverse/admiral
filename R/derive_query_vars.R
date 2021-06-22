@@ -116,8 +116,8 @@ derive_query_vars <- function(dataset, queries) {
     mutate(TERM_NAME_UPPER = toupper(.data$TERM_NAME)) %>%
     dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
     select(static_cols, new_col_names) %>%
-    group_by_at(static_cols) %>%
-    summarise_all(~first(na.omit(.)))
+    dplyr::group_by_at(static_cols) %>%
+    dplyr::summarise_all(~dplyr::first(na.omit(.)))
 
   # join queries to input dataset
   left_join(dataset, joined,
