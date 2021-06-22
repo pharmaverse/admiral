@@ -114,13 +114,15 @@ derive_query_vars <- function(dataset, queries) {
   # join restructured queries to input dataset
   joined <- joined %>%
     mutate(TERM_NAME_UPPER = toupper(.data$TERM_NAME)) %>%
-    dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME"))
+    dplyr::inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_UPPER" = "TERM_NAME")) %>%
+    select(static_cols, new_col_names) %>%
+    group_by_at(static_cols) %>%
+    summarise_all(~first(na.omit(.)))
 
   # join queries to input dataset
-  left_join(dataset, select(joined, static_cols, new_col_names),
+  left_join(dataset, joined,
             by = static_cols) %>%
-    select(-starts_with("temp_")) %>%
-    distinct()
+    select(-starts_with("temp_"))
 }
 
 #' Verify if a dataset has the required format as queries dataset.

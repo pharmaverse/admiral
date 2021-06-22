@@ -48,13 +48,13 @@ test_that("Derive CQ and SMQ variables with two term levels", {
 })
 
 test_that("Derive when dataset does not have a unique key when excluding `TERM_LEVEL` columns", {
-  query <- tribble(
+  query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", 1,
     "CQ42", "My Query", "AELLT", "LLTSI", 1
   )
 
-  my_ae <- tribble(
+  my_ae <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
     "1", 1, "PTSI", "other",
     "1", 2, "something", "LLTSI",
@@ -68,6 +68,34 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
     "1", 2, "something", "LLTSI", "My Query", 1,
     "1", 2, "PTSI", "LLTSI", "My Query", 1,
     "1", 2, "something", "other", NA_character_, NA_integer_
+  )
+
+  actual_output <- derive_query_vars(my_ae, queries = query)
+
+  expect_equal(expected_output, actual_output)
+})
+
+test_that("Derive when an adverse event is in multiple baskets", {
+  query <- tribble(
+    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID,
+    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1,
+    "CQ42", "My Query 2", "AELLT", "LLTSI", 2
+  )
+
+  my_ae <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
+    "1", 1, "PTSI", "other",
+    "1", 2, "something", "LLTSI",
+    "1", 2, "PTSI", "LLTSI",
+    "1", 2, "something", "other"
+  )
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
+    "1", 1, "PTSI", "other", "My Query 1", NA_integer_, 1, NA_integer_,
+    "1", 2, "something", "LLTSI", NA_character_, "My Query 2", NA_integer_, 2,
+    "1", 2, "PTSI", "LLTSI", "My Query 1", "My Query 2", 1, 2,
+    "1", 2, "something", "other", NA_character_, NA_character_, NA_integer_, NA_integer_
   )
 
   actual_output <- derive_query_vars(my_ae, queries = query)
