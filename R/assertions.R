@@ -52,13 +52,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
     if (any(is_missing)) {
       missing_vars <- required_vars[is_missing]
       if (length(missing_vars) == 1L) {
-        err_msg <- paste0("Required variable `", missing_vars, "` is missing")
+        err_msg <- sprintf("Required variable `%s` is missing", missing_vars)
       } else {
-        err_msg <- paste0(
-          "Required variables ",
-          enumerate(missing_vars),
-          " are missing"
-        )
+        err_msg <- sprintf("Required variables %s are missing", enumerate(missing_vars))
       }
       abort(err_msg)
     }
