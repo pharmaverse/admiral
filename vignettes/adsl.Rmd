@@ -197,6 +197,7 @@ adsl <- adsl %>%
     filter = DSCAT == "DISPOSITION EVENT"
   )
 ```
+This call would return the input dataset with the column `EOSSTT` added. 
 
 #### Disposition reason(s) {#disposition3}
 
@@ -292,6 +293,8 @@ adsl <- adsl %>%
     date_imputation = "FIRST"
   )
 ```
+
+### Derive Death variables (`DTHDT`, `DTHADY`, `LLDTHELD`, `DTHCAUS`) {#death}
 
 
 ### Cause of death {#death2}
