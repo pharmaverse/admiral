@@ -8,6 +8,9 @@ assert_logical_scalar(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
+
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a \code{logical} vector or if \code{arg}

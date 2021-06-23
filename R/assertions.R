@@ -5,6 +5,8 @@
 #'
 #' @param arg A function argument to be checked
 #' @param required_vars A list of variables created using `vars()`
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
@@ -70,6 +72,8 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
@@ -131,6 +135,8 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' Checks if an argument is a logical scalar
 #'
 #' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
@@ -173,6 +179,8 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' Checks if an argument is a symbol
 #'
 #' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'

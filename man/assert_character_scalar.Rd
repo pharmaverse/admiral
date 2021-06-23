@@ -10,6 +10,9 @@ assert_character_scalar(arg, values = NULL, optional = FALSE)
 \item{arg}{A function argument to be checked}
 
 \item{values}{A \code{character} vector of valid values for \code{arg}}
+
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a character vector or if \code{arg}
