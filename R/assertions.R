@@ -211,6 +211,45 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+#' Does a Dataset Contain All Required Variables?
+#'
+#' Checks if a dataset contains all required variables
+#'
+#' @param dataset A `data.frame`
+#' @param required_vars A `character` vector of variable names
+#'
+#' @author Thomas Neitmann
+#'
+#' @return The function throws an error if any of the required variables are
+#' missing in the input dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(dm)
+#' assert_has_variables(dm, "STUDYID")
+#' \dontrun{
+#' assert_has_variables(dm, "AVAL")
+#' }
+assert_has_variables <- function(dataset, required_vars) {
+  is_missing <- !required_vars %in% colnames(dataset)
+  if (any(is_missing)) {
+    missing_vars <- required_vars[is_missing]
+    if (length(missing_vars) == 1L) {
+      err_msg <- paste0("Required variable `", missing_vars, "` is missing.")
+    } else {
+      err_msg <- paste0(
+        "Required variables ",
+        enumerate(missing_vars),
+        " are missing."
+      )
+    }
+    abort(err_msg)
+  }
+}
+
 #' Are There Multiple Baseline Records?
 #'
 #' Checks if a dataset contains multiple baseline records
