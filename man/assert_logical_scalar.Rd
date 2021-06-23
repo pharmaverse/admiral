@@ -4,7 +4,7 @@
 \alias{assert_logical_scalar}
 \title{Is an Argument a Logical Scalar (Boolean)?}
 \usage{
-assert_logical_scalar(arg)
+assert_logical_scalar(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}

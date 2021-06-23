@@ -4,7 +4,7 @@
 \alias{assert_data_frame}
 \title{Is an Argument a Data Frame?}
 \usage{
-assert_data_frame(arg, required_vars = NULL)
+assert_data_frame(arg, required_vars = NULL, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}

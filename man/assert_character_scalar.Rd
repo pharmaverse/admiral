@@ -4,7 +4,7 @@
 \alias{assert_character_scalar}
 \title{Is an Argument a Character Scalar (String)?}
 \usage{
-assert_character_scalar(arg, values = NULL)
+assert_character_scalar(arg, values = NULL, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}

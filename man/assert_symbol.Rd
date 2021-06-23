@@ -4,7 +4,7 @@
 \alias{assert_symbol}
 \title{Is an Argument a Symbol?}
 \usage{
-assert_symbol(arg)
+assert_symbol(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
