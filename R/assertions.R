@@ -32,7 +32,11 @@
 #'   assert_data_frame(dm, required_vars = vars(USUBJID, PARAM, AVAL)),
 #'   error = function(e) cat(e$message)
 #' )
-assert_data_frame <- function(arg, required_vars = NULL) {
+assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(arg)
+  }
+
   if (!is.data.frame(arg)) {
     err_msg <- sprintf(
       "`%` must be a data.frame but is %s",
@@ -90,7 +94,11 @@ assert_data_frame <- function(arg, required_vars = NULL) {
 #'   assert_character_scalar(msg_type, values = c("warning", "error")),
 #'   error = function(e) cat(e$message)
 #' )
-assert_character_scalar <- function(arg, values = NULL) {
+assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(arg)
+  }
+
   if (!is.character(arg)) {
     err_msg <- sprintf(
       "`%s` must be a character scalar but is %s",
@@ -147,7 +155,11 @@ assert_character_scalar <- function(arg, values = NULL) {
 #'   assert_logical_scalar(add_one),
 #'   error = function(e) cat(e$message)
 #' )
-assert_logical_scalar <- function(arg) {
+assert_logical_scalar <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(arg)
+  }
+
   if (!is.logical(arg) || length(arg) != 1L) {
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
@@ -185,7 +197,11 @@ assert_logical_scalar <- function(arg) {
 #'   assert_symbol(end_date),
 #'   error = function(e) cat(e$message)
 #' )
-assert_symbol <- function(arg) {
+assert_symbol <- function(arg, optional = FALSE) {
+  if (optional && quo_is_null(arg)) {
+    return(arg)
+  }
+
   if (quo_is_missing(arg)) {
     err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
