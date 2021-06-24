@@ -213,9 +213,11 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check query id is numeric
-  if ("QUERY_ID" %in% names(queries) & class(queries$QUERY_ID) != "numeric") {
-    abort(paste0("`QUERY_ID` in `", queries_name,
-                 "` should be numeric."))
+  if ("QUERY_ID" %in% names(queries)) {
+    if (class(queries$QUERY_ID) != "numeric") {
+      abort(paste0("`QUERY_ID` in `", queries_name,
+                   "` should be numeric."))
+    }
   }
 
   # check illegal query scope
@@ -252,11 +254,13 @@ assert_valid_queries <- function(queries, queries_name) {
                  "` cannot be empty string or NA."))
   }
 
-  # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID, and QUERY_SCOPE
+  # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID if the columns exist
   count_unique <- queries %>%
     group_by(VAR_PREFIX) %>%
     dplyr::summarise(n_qnam = length(unique(QUERY_NAME)),
-                     n_qid = length(unique(QUERY_ID)))
+                     n_qid = ifelse("QUERY_ID" %in% names(queries),
+                                    length(unique(QUERY_ID)), 0)) %>%
+    ungroup()
   for (ii in seq_len(nrow(count_unique))) {
     if (count_unique[ii, ]$n_qnam > 1) {
       abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",

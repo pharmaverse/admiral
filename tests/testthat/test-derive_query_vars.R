@@ -102,3 +102,33 @@ test_that("Derive when an adverse event is in multiple baskets", {
 
   expect_equal(expected_output, actual_output)
 })
+
+
+test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE column", {
+
+  query <- tibble::tribble(
+    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME,
+    "CQ42", "My Query", "AEDECOD", "PTSI",
+    "CQ42", "My Query", "AELLT", "LLTSI"
+  )
+
+  my_ae <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
+    "1", 1, "PTSI", "other",
+    "1", 2, "something", "LLTSI",
+    "1", 2, "PTSI", "LLTSI",
+    "1", 2, "something", "other"
+  )
+
+  actual_output <- derive_query_vars(my_ae, queries = query)
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM,
+    "1", 1, "PTSI", "other", "My Query",
+    "1", 2, "something", "LLTSI", "My Query",
+    "1", 2, "PTSI", "LLTSI", "My Query",
+    "1", 2, "something", "other", NA_character_
+  )
+
+  expect_equal(expected_output, actual_output)
+})
