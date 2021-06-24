@@ -150,18 +150,17 @@ assert_valid_queries <- function(queries, queries_name) {
   # check required columns
   required_cols <-  c("VAR_PREFIX", "QUERY_NAME", "TERM_LEVEL", "TERM_NAME")
   is_missing <- required_cols %!in% names(queries)
-  if (any(is_missing)) {
-    missing_vars <- required_cols[is_missing]
-    if (length(missing_vars) == 1L) {
-      err_msg <- paste0("Required variable in `", missing_vars,
-                        "` is missing in `", queries_name, "`.")
-    } else {
-      err_msg <- paste0(
-        "Required variables ",
-        enumerate(missing_vars),
-        " are missing in `", queries_name, "`."
-      )
-    }
+  missing_vars <- required_cols[is_missing]
+  if (length(missing_vars) == 1L) {
+    err_msg <- paste0("Required variable in `", missing_vars,
+                      "` is missing in `", queries_name, "`.")
+    abort(err_msg)
+  } else if (length(missing_vars) > 1L) {
+    err_msg <- paste0(
+      "Required variables ",
+      enumerate(missing_vars),
+      " are missing in `", queries_name, "`."
+    )
     abort(err_msg)
   }
 
@@ -189,18 +188,17 @@ assert_valid_queries <- function(queries, queries_name) {
   # check illegal prefix number
   query_num <- sub("[[:alpha:]]+", "", queries$VAR_PREFIX)
   is_bad_num <- nchar(query_num) != 2 | is.na(as.numeric(query_num))
-  if (any(is_bad_num)) {
-    bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
-    if (length(bad_nums) == 1L) {
-      err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
-                        "` must end with 2-digit numbers. Issue with `", bad_nums, "`.")
-    } else {
-      err_msg <- paste0(
-        "`VAR_PREFIX` in `", queries_name,
-        "` must end with 2-digit numbers. Issue with ",
-        enumerate(bad_nums),
-        ".")
-    }
+  bad_nums <- unique(queries$VAR_PREFIX[is_bad_num])
+  if (length(bad_nums) == 1L) {
+    err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
+                      "` must end with 2-digit numbers. Issue with `", bad_nums, "`.")
+    abort(err_msg)
+  } else if (length(bad_nums) > 1L) {
+    err_msg <- paste0(
+      "`VAR_PREFIX` in `", queries_name,
+      "` must end with 2-digit numbers. Issue with ",
+      enumerate(bad_nums),
+      ".")
     abort(err_msg)
   }
 
@@ -226,18 +224,17 @@ assert_valid_queries <- function(queries, queries_name) {
   # check illegal query scope number
   if ("QUERY_SCOPE_NUM" %in% names(queries)) {
     is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
-    if (any(is_bad_scope_num)) {
-      bad_scope_nums <- unique(queries$QUERY_SCOPE_NUM[is_bad_scope_num])
-      if (length(bad_scope_nums) == 1L) {
-        err_msg <- paste0("`QUERY_SCOPE_NUM` in `", queries_name,
-                          "` must be one of 1, 2, or NA. Issue with `", bad_scope_nums, "`.")
-      } else {
-        err_msg <- paste0(
-          "`QUERY_SCOPE_NUM` in `", queries_name,
-          "` must be one of 1, 2, or NA. Issue with ",
-          enumerate(bad_scope_nums),
-          ".")
-      }
+    bad_scope_nums <- unique(queries$QUERY_SCOPE_NUM[is_bad_scope_num])
+    if (length(bad_scope_nums) == 1L) {
+      err_msg <- paste0("`QUERY_SCOPE_NUM` in `", queries_name,
+                        "` must be one of 1, 2, or NA. Issue with `", bad_scope_nums, "`.")
+      abort(err_msg)
+    } else if (length(bad_scope_nums) > 1L) {
+      err_msg <- paste0(
+        "`QUERY_SCOPE_NUM` in `", queries_name,
+        "` must be one of 1, 2, or NA. Issue with ",
+        enumerate(bad_scope_nums),
+        ".")
       abort(err_msg)
     }
   }
