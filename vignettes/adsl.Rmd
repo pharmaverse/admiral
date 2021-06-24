@@ -31,7 +31,7 @@ could be used.
 **Note:** *All examples assume CDISC SDTM and/or ADaM format as input unless 
 otherwise specified.*
 
-## Programming Workflow
+## Programming Flow
 
 * [Read in Data](#readdata)
 * [Derive Treatment Variables (TRT0xP, TRT0xA)](#treatmentvar)
@@ -319,7 +319,7 @@ collected in  the `DS` form, the cause of death would be set to the disposition 
 To achieve this, the `dthcaus_source()` objects must be specified and defined such as it fits the 
 study requirement. 
 
-**`dthcause_source()` specifications:**
+`dthcause_source()` specifications:
 
 - `dataset`: the dataset to search for death information,
 - `filter`: the condition to define death,
@@ -426,7 +426,7 @@ Similarly as for the cause of death (`DTHCAUS`), the last known alive date (`LST
 derived from multiples sources and the user must ensure the sources (`lstalvdt_source`) are 
 correctly defined.
 
-**`lstalvdt_source()` specifications:**
+`lstalvdt_source()` specifications:
 
 - `dataset`: the dataset to search for date information,
 - `filter`: the filter to apply on the datasets,
