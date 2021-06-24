@@ -172,19 +172,17 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal prefix category
   bad_prefix <- nchar(sub("[^[:alpha:]]+", "", queries$VAR_PREFIX)) > 3
-  if (any(bad_prefix)) {
-    abort(paste0("`VAR_PREFIX` in `", queries_name,
-                 "` must start with 2-3 letters."))
-    if (length(bad_prefix) == 1L) {
-      err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
-                        "` must start with 2-3 letters.. Problem with `", bad_prefix, "`.")
-    } else {
-      err_msg <- paste0(
-        "`VAR_PREFIX` in `", queries_name,
-        "` must start with 2-3 letters.. Problem with ",
-        enumerate(bad_prefix),
-        ".")
-    }
+  if (sum(bad_prefix) == 1L) {
+    err_msg <- paste0("`VAR_PREFIX` in `", queries_name,
+                      "` must start with 2-3 letters.. Problem with `", bad_prefix, "`.")
+    abort(err_msg)
+  }
+  else if (sum(bad_prefix) > 1L) {
+    err_msg <- paste0(
+      "`VAR_PREFIX` in `", queries_name,
+      "` must start with 2-3 letters.. Problem with ",
+      enumerate(bad_prefix),
+      ".")
     abort(err_msg)
   }
 
