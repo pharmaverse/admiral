@@ -211,20 +211,16 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check query id is numeric
-  if ("QUERY_ID" %in% names(queries)) {
-    if (class(queries$QUERY_ID) != "numeric") {
-      abort(paste0("`QUERY_ID` in `", queries_name,
-                   "` should be numeric."))
-    }
+  if ("QUERY_ID" %in% names(queries) && !is.numeric(queries$QUERY_ID)) {
+    abort(paste0("`QUERY_ID` in `", queries_name,
+                 "` should be numeric."))
   }
 
   # check illegal query scope
-  if ("QUERY_SCOPE" %in% names(queries)) {
-    if (any(unique(queries$QUERY_SCOPE) %!in%
-            c("BROAD", "NARROW", "", NA_character_))) {
-      abort(paste0("`QUERY_SCOPE` in `", queries_name,
-                   "` can only be 'BROAD', 'NARROW' or `NA`."))
-    }
+  if ("QUERY_SCOPE" %in% names(queries) &&
+      any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
+    abort(paste0("`QUERY_SCOPE` in `", queries_name,
+                 "` can only be 'BROAD', 'NARROW' or `NA`."))
   }
 
   # check illegal query scope number
