@@ -283,7 +283,7 @@ adsl <- adsl %>%
     new_vars_prefix = "DTH",
     dtc = DTHDTC
   )
-head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
+adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 ```
 
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
@@ -353,7 +353,7 @@ Once the sources are defined, the function `derive_var_dthcaus()` can be used to
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_dthcaus(src_ae, src_ds)
-head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
+adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 ```
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
@@ -380,10 +380,10 @@ src_ds <- dthcaus_source(
   traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
-  select(-DTHCAUS) %>% # remove it before calling again the function
+  select(-DTHCAUS) %>% # remove it before deriving it again
   derive_var_dthcaus(src_ae, src_ds)
 
-head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
+adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 ```
 
 #### Duration Relative to Death {#death3}
@@ -417,7 +417,7 @@ adsl <- adsl %>%
     add_one = FALSE
   )
 
-head(adsl %>% select(USUBJID, starts_with("DTH"), LDDTHELD) %>% filter(DTHFL == "Y"))
+adsl %>% select(USUBJID, starts_with("DTH"), LDDTHELD) %>% filter(DTHFL == "Y")
 ```
 
 ### Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
