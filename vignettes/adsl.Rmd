@@ -28,8 +28,8 @@ This article describes creating an ADSL ADaM. Examples are currently
 presented and tested using `dm`, `ex` , `ae`, `lb` and `ds` SDTM domains. However, other domains 
 could be used.
 
-<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
-otherwise specified. </i>
+**Note:** *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
 
 ## Programming Workflow
 
