@@ -54,12 +54,10 @@ otherwise specified.*
 ### Read in Data {#readdata}
 
 To start, all data frames needed for the creation of ADSL should be read into
-the environment.  This will be a company specific process.  Some of the 
-data frames needed may be:
+the environment. This will be a company specific process. Some of the 
+data frames needed may be `dm`, `ex`, `ds`, `ae`, and `lb`.
 
-  * `dm`, `ex`, `ds`, `ae`, `lb`.
-
-For example purpose, the CDISC SDTM datasets are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
 
 ```{r}
 data("dm")
@@ -70,7 +68,8 @@ data("lb")
 ```
 
 The `dm` domain is used as the basis for `ADSL`:
-```{r , eval=TRUE}
+
+```{r eval=TRUE}
 adsl <- dm
 head(adsl)
 ```
@@ -78,6 +77,7 @@ head(adsl)
 ### Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
 
 The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
+
 ```{r eval=TRUE}
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
@@ -89,14 +89,15 @@ The functions `derive_var_trtsdtm()`, `derive_var_trtedtm()` can be used to deri
 start and end date/times using the `ex` domain.
 
 Example calls:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
   derive_var_trtedtm(dataset_ex = ex)
 ```
 
-This call returns the original dataframe with the column `TRTSDTM` and `TRTEDTM` added.
-The datetime variables returned can be converted to dates using the `date()` function.
+This call returns the original data frame with the column `TRTSDTM` and `TRTEDTM` added.
+The datetime variables returned can be converted to dates using the `date()` function from the `{lubridate}` package.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
@@ -126,6 +127,7 @@ The function `derive_disposition_dt()` can be used to derive a disposition date.
 The relevant disposition date (`ds.DSSTDTC`) is selected by adjusting the filter parameter. 
 
 To derive the End of Study date (`EOSDT`), a call could be:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_disposition_dt(
@@ -149,6 +151,7 @@ timepoint. The relevant disposition variable (`ds.DSDECOD`) is selected by adjus
 parameter and used to derive `EOSSTT`.
 
 To derive the End of Study status (`EOSSTT`), a call could be:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_disposition_status(
@@ -159,17 +162,17 @@ adsl <- adsl %>%
   )
 head(adsl %>% select(USUBJID, starts_with("EOS")))
 ```
+
 This call would return the input dataset with the column `EOSSTT` added. 
 
 By default, the function will derive `EOSSTT` as 
 
-
-- `"COMPLETED" if DSDECOD == "COMPLETED"`
-- `"DISCONTINUED" if DSDECOD is not "COMPLETED" nor NA`
-- `"ONGOING" otherwise`.
+- `"COMPLETED"` if `DSDECOD == "COMPLETED"`
+- `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
+- `"ONGOING"` otherwise
 
 If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var =  new_mapping`) to map `DSDECOD` 
+the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
 to a suitable `EOSSTT` value.
 
 Example function `format_eosstt()`:
@@ -186,6 +189,7 @@ format_eosstt <- function(x) {
 ```
 
 The customized mapping function `format_eosstt()` can now be passed to the main function:
+
 ```{r eval=FALSE}
 
 adsl <- adsl %>%
@@ -197,12 +201,13 @@ adsl <- adsl %>%
     filter = DSCAT == "DISPOSITION EVENT"
   )
 ```
+
 This call would return the input dataset with the column `EOSSTT` added. 
 
 #### Disposition Reason(s) {#disposition3}
 
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
-additional details regarding subject’s discontinuation (e.g., description of "OTHER").
+additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
 The function `derive_disposition_reason()` can be used to derive a disposition reason (along with 
 the details, if  required) at a specific timepoint. 
@@ -210,6 +215,7 @@ The relevant disposition variable(s) (`ds.DSDECOD`, `ds.DSTERM`) are selected by
 filter parameter and used to derive the main reason (and details).
 
 To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would be:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_disposition_reason(
@@ -222,16 +228,17 @@ adsl <- adsl %>%
   )
 head(adsl %>% select(USUBJID, starts_with("EOS"), starts_with("DCSR")))
 ```
+
 This call would return the input dataset with the column `DCSREAS` and `DCSREASP` added. 
 
 By default, the function will map 
 
-- `DCSREAS` as `DSDECOD if DSDECOD is not "COMPLETED" nor NA`, `NA otherwise`,
-- `DCSREASP` as `DSTERM if DSDECOD is not "COMPLETED" nor NA`, `NA otherwise`,
+- `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
+- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
 
 
 If the default derivation must be changed, the user can create his/her own function and pass it to 
-the `format_new_var` argument of the function (`format_new_var =  new_mapping`) to map `DSDECOD` 
+the `format_new_var` argument of the function (`format_new_var = new_mapping`) to map `DSDECOD` 
 and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 
 Example function `format_dcsreas()`:
@@ -247,8 +254,8 @@ format_dcsreas <- function(dsdecod, dsterm = NULL) {
 ```
 
 The customized mapping function `format_dcsreas()` can now be passed to the main function:
-```{r eval=FALSE}
 
+```{r eval=FALSE}
 adsl <- adsl %>%
   derive_disposition_reason(
     dataset_ds = ds,
@@ -265,12 +272,12 @@ adsl <- adsl %>%
 
 #### Death Date {#death1}
 
-The function `derive_vars_dt()` can be used to derive `DTHDT.` This function allows 
+The function `derive_vars_dt()` can be used to derive `DTHDT`. This function allows 
 the user to impute the date as well.
 
 Example calls:
-```{r eval=TRUE}
 
+```{r eval=TRUE}
 adsl <- adsl %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
@@ -278,6 +285,7 @@ adsl <- adsl %>%
   )
 head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
 ```
+
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
 associated date imputation flag (`DTHDTF`) populated with the controlled terminology outlined in 
 the ADaM IG for date imputations. 
@@ -285,6 +293,7 @@ If the imputation flag is not required, the user must set the argument `flag_imp
 
 If imputation is needed and the date is to be imputed to the first day of the month/year 
 the call would be:
+
 ```{r eval=FALSE}
 adsl <- adsl %>%
   derive_vars_dt(
@@ -321,6 +330,7 @@ study requirement.
 sequence, variable)
 
 An example call to define the sources would be: 
+
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
   dataset = ae,
@@ -337,13 +347,14 @@ src_ds <- dthcaus_source(
   dthcaus = "Death in DS"
 )
 ```
+
 Once the sources are defined, the function `derive_var_dthcaus()` can be used to derive `DTHCAUS`:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_dthcaus(src_ae, src_ds)
 head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
 ```
-
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
 store the domain where the date of death is collected, and `DTHSEQ` would store the `xxSEQ` value of 
@@ -449,6 +460,7 @@ adsl_src <- lstalvdt_source(
 ```
 
 Once the sources are defined, the function `derive_var_lstalvdt()` can be used to derive `LSTALVDT`:
+
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_lstalvdt(ae_src1, ae_src2, lb_src, adsl_src)
@@ -496,7 +508,7 @@ head(adsl %>% select(USUBJID, TRTEDT, EOSDT, LSTALVDT, starts_with("LAL")))
 
 #### Grouping {#groupings1}
 
-Numeric and categorical variables (AGE, RACE, COUNTRY, etc.) may need to be grouped to perform the 
+Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform the 
 required analysis.
 admiral does not currently have functionality to assist with the grouping. Instead, the user can 
 create his/her own function to meet his/her study requirement.
@@ -504,7 +516,8 @@ create his/her own function to meet his/her study requirement.
 For example, if 
 
 - `AGEGR1` would categorize `AGE` in `< 18 `, `18-65`, `>= 65`, 
-- `REGION1` would categorize `COUNTRY` in `NA`, `RoW`, 
+- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`, 
+
 the user defined function(s) would be like:
 
 
@@ -537,6 +550,7 @@ adsl <- adsl %>%
   )
 head(adsl %>% select(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1))
 ```
+
 #### Population Flags  {#popflag}
 
 Since the populations flags are mainly company/study specific and that it can easily be derived
