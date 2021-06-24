@@ -16,10 +16,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
-library(admiral)
-library(lubridate)
-library(stringr)
 ```
 
 ## Introduction
@@ -60,6 +56,11 @@ data frames needed may be `dm`, `ex`, `ds`, `ae`, and `lb`.
 For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
 
 ```{r}
+library(dplyr)
+library(admiral)
+library(lubridate)
+library(stringr)
+
 data("dm")
 data("ds")
 data("ex")
@@ -578,6 +579,6 @@ The users can add specific code to cover their need for the analysis. </span> </
 ### Example Script {#example}
 ADaM | Sample Code
 ---- | --------------
-ADSL | [ad_adsl.R](/inst/example_scripts/ad_adsl.R)
+ADSL | [ad_adsl.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R)
 <b> <span style="color: red">link not working </span> </b>
 
