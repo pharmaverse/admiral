@@ -33,29 +33,29 @@ otherwise specified. </i>
 
 ## Programming Workflow
 
-* [Read in data](#readdata)
-* [Derive Treatment variables (TRT0xP, TRT0xA)](#treatmentvar)
-* [Derive/Impute numeric treatment date/time and duration (TRTSDT, TRTEDT, TRTDURD)](#trtdatetime)
-* [Derive Disposition variables](#disposition)
-  * [Disposition dates](#disposition1)
-  * [Disposition status](#disposition2)
-  * [Disposition reason(s)](#disposition3)
-* [Derive Death variables (DTH, DTHADY, LLDTHELD, DTHCAUS )](#death)
-  * [Death date](#death1)
-  * [Duration relative to death](#death2)
-  * [Cause of death](#death3)
-* [Derive last known date alive (LSTALVDT)](#lstalvdt)
+* [Read in Data](#readdata)
+* [Derive Treatment Variables (TRT0xP, TRT0xA)](#treatmentvar)
+* [Derive/Impute Numeric Treatment Date/Time and Duration (TRTSDT, TRTEDT, TRTDURD)](#trtdatetime)
+* [Derive Disposition Variables](#disposition)
+  * [Disposition Dates](#disposition1)
+  * [Disposition Status](#disposition2)
+  * [Disposition Reason(s)](#disposition3)
+* [Derive Death Variables (DTH, DTHADY, LLDTHELD, DTHCAUS )](#death)
+  * [Death Date](#death1)
+  * [Duration Relative to Death](#death2)
+  * [Cause of Death](#death3)
+* [Derive Last Known Date Alive (LSTALVDT)](#lstalvdt)
 * [Derive Groupings and Populations](#groupings)
   * [Grouping](#groupings1)
-  * [Population flags](#popfalg)
-  * [Other variables required for analysis](#other)
+  * [Population Flags](#popfalg)
+  * [Other Variables Required for Analysis](#other)
 * [Example Script](#example)
 
-### Read in data {#readdata}
+### Read in Data {#readdata}
 
-To start, all dataframes needed for the creation of ADSL should be read into
+To start, all data frames needed for the creation of ADSL should be read into
 the environment.  This will be a company specific process.  Some of the 
-dataframes needed may be:
+data frames needed may be:
 
   * `dm`, `ex`, `ds`, `ae`, `lb`.
 
@@ -75,7 +75,7 @@ adsl <- dm
 head(adsl)
 ```
 
-### Derive Treatment variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
+### Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
 
 The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
 ```{r eval=TRUE}
@@ -83,7 +83,7 @@ adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
 ```
 
-### Derive/Impute numeric treatment date/time and duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
+### Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
 
 The functions `derive_var_trtsdtm()`, `derive_var_trtedtm()` can be used to derive the treatment 
 start and end date/times using the `ex` domain.
@@ -118,9 +118,9 @@ head(adsl %>% select(USUBJID, starts_with("TRT"), -starts_with("TRT0")))
 ```
 
 
-### Derive Disposition variables {#disposition}
+### Derive Disposition Variables {#disposition}
 
-#### Disposition dates {#disposition1}
+#### Disposition Dates {#disposition1}
 
 The function `derive_disposition_dt()` can be used to derive a disposition date. 
 The relevant disposition date (`ds.DSSTDTC`) is selected by adjusting the filter parameter. 
@@ -142,7 +142,7 @@ This call would return the input dataset with the column `EOSDT` added.
 This function allows the user to impute partial dates as well. If imputation is needed and the date 
 is to be imputed to the first of the month, then set `date_imputation = "FIRST"`.
 
-#### Disposition status {#disposition2}
+#### Disposition Status {#disposition2}
 
 The function `derive_disposition_status()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`ds.DSDECOD`) is selected by adjusting the filter 
@@ -199,7 +199,7 @@ adsl <- adsl %>%
 ```
 This call would return the input dataset with the column `EOSSTT` added. 
 
-#### Disposition reason(s) {#disposition3}
+#### Disposition Reason(s) {#disposition3}
 
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of "OTHER").
@@ -261,9 +261,9 @@ adsl <- adsl %>%
   )
 ```
 
-### Derive Death variables (`DTHDT`, `DTHADY`, `LLDTHELD`, `DTHCAUS`) {#death}
+### Derive Death Variables (`DTHDT`, `DTHADY`, `LLDTHELD`, `DTHCAUS`) {#death}
 
-#### Death date {#death1}
+#### Death Date {#death1}
 
 The function `derive_vars_dt()` can be used to derive `DTHDT.` This function allows 
 the user to impute the date as well.
@@ -294,10 +294,10 @@ adsl <- adsl %>%
   )
 ```
 
-### Derive Death variables (`DTHDT`, `DTHADY`, `LLDTHELD`, `DTHCAUS`) {#death}
+### Derive Death Variables (`DTHDT`, `DTHADY`, `LLDTHELD`, `DTHCAUS`) {#death}
 
 
-### Cause of death {#death2}
+### Cause of Death {#death2}
 
 The cause of death `DTHCAUS` can be derived using the function `derive_var_dthcaus()`.
 
@@ -375,7 +375,7 @@ adsl <- adsl %>%
 head(adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y"))
 ```
 
-#### Duration relative to death {#death3}
+#### Duration Relative to Death {#death3}
 
 <b> <span style="color: red"> 
 This section is quite Roche specific if I am not wrong : do we want to keep this as example or 
@@ -409,7 +409,7 @@ adsl <- adsl %>%
 head(adsl %>% select(USUBJID, starts_with("DTH"), LDDTHELD) %>% filter(DTHFL == "Y"))
 ```
 
-### Derive the last date known alive (`LSTALVDT`) {#lstalvdt}
+### Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
 
 Similarly as for the cause of death (`DTHCAUS`), the last known alive date (`LSTALVDT`) can be
 derived from multiples sources and the user must ensure the sources (`lstalvdt_source`) are 
@@ -537,7 +537,7 @@ adsl <- adsl %>%
   )
 head(adsl %>% select(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1))
 ```
-#### Population flags  {#popflag}
+#### Population Flags  {#popflag}
 
 Since the populations flags are mainly company/study specific and that it can easily be derived
 using an `if_else()` statement, admiral did not implement a functionality to assist with 
@@ -558,7 +558,7 @@ head(adsl %>% select(USUBJID, TRTSDT, SAFFL))
 <b> <span style="color: red"> 
 The users can add specific code to cover their need for the analysis. </span> </b>
 
-### Add labels and attributes {#attributes}
+### Add Labels and Attributes {#attributes}
 <b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
 
 ### Example Script {#example}
