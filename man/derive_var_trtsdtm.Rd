@@ -4,8 +4,12 @@
 \alias{derive_var_trtsdtm}
 \title{Derive datetime of First Exposure to Treatment}
 \usage{
-derive_var_trtsdtm(dataset, dataset_ex, filter_ex = (EXDOSE > 0 | (EXDOSE
-  == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10)
+derive_var_trtsdtm(
+  dataset,
+  dataset_ex,
+  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &
+    nchar(EXSTDTC) >= 10
+)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -22,7 +26,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
+Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
 
 Permitted Values: logical expression}
 }

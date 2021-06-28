@@ -18,12 +18,16 @@ dplyr::vars
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
-  paste(
-    paste0(quote_fun(x[-length(x)]), collapse = ", "),
-    conjunction,
-    quote_fun(x[length(x)])
-  )
+enumerate <- function(x, quote_fun = backquote) {
+  if (length(x) == 1L) {
+    quote_fun(x)
+  } else {
+    paste(
+      paste0(quote_fun(x[-length(x)]), collapse = ", "),
+      conjunction,
+      quote_fun(x[length(x)])
+    )
+  }
 }
 
 #' Wrap a String in Backquotes
@@ -99,10 +103,35 @@ convert_dtm_to_dtc <- function(dtm) {
 arg_name <- function(expr) {
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
-  } else if (length(expr) == 2L && expr[[1L]] == quote(enquo) && is.symbol(expr[[2L]])) {
+  } else if (length(expr) == 2L &&
+             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+             is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
   } else {
     abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
   }
 }
 
+extract_vars <- function(quosures) {
+  vars <- lapply(quosures, function(q) {
+    rlang::quo_set_env(
+      rlang::quo(!!as.symbol(all.vars(q))),
+      rlang::quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures")
+}
+
+left_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
+  suppress_warning(
+    dplyr::left_join(x, y, by = by, copy = copy, suffix = suffix, ...),
+    "^Column `.+` has different attributes on LHS and RHS of join$"
+  )
+}
+
+inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
+  suppress_warning(
+    dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
+    "^Column `.+` has different attributes on LHS and RHS of join$"
+  )
+}

@@ -219,6 +219,56 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+
+#' Is an argument a filtering condition?
+#'
+#' @param arg Quosure - filtering condition.
+#' @param optional Logical - is the argument optional? Defaults to `FALSE`.
+#'
+#' @details Check if `arg` is a suitable filtering condition to be used in
+#' functions like `subset` or `dplyr::filter`.
+#'
+#' @return Performs necessary checks and returns `arg` if all pass.
+#' Otherwise throws an informative error.
+#'
+#' @export
+#' @keywords assertion
+#' @author Ondrej Slama
+#'
+#' @examples
+#' data(dm)
+#'
+#' # typical usage in a function as a parameter check
+#' my_fun <- function(dat, x) {
+#'   x <- assert_filter_cond(rlang::enquo(x))
+#'   dplyr::filter(dat, !!x)
+#' }
+#' my_fun(dm, AGE == 64)
+#'
+#' # direct interactive usage
+#' x <- rlang::quo(AGE == 64)
+#' dplyr::filter(dm, !!x)
+#'
+assert_filter_cond <- function(arg, optional = FALSE) {
+
+  stopifnot(
+    is_quosure(arg),
+    rlang::is_scalar_logical(optional)
+  )
+
+  provided <- quo_not_missing(arg)
+  if (!provided & !optional) {
+    err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (provided & !quo_is_call(arg)) {
+    err_msg <- sprintf("Argument `%s` is not a filtering condition", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+  invisible(arg)
+}
+
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
@@ -256,189 +306,6 @@ assert_has_variables <- function(dataset, required_vars) {
     }
     abort(err_msg)
   }
-}
-
-#' Are There Multiple Baseline Records?
-#'
-#' Checks if a dataset contains multiple baseline records
-#'
-#' @param dataset A `data.frame`
-#' @param by A `character` vector of variable names which uniquely identify a
-#' set of records that should only contain a single baseline record
-#'
-#' @author Thomas Neitmann
-#'
-#' @return The function throws an error if a subject has multiple baseline
-#' records
-#'
-#' @keywords assertion
-#'
-#' @export
-assert_has_only_one_baseline_record <- function(dataset, by) { # nolint
-  is_duplicate <- duplicated(select(dataset, !!!syms(by)))
-  if (any(is_duplicate)) {
-    duplicates <- dataset %>%
-      select(!!!syms(by)) %>%
-      filter(is_duplicate)
-    tbl <- capture.output(print(duplicates))
-    err_msg <- paste0(
-      "Dataset contains multiple baseline records.\n",
-      paste(tbl[-c(1, 3)], collapse = "\n")
-    )
-    abort(err_msg)
-  }
-}
-
-#' Are records unique?
-#'
-#' Checks if the records of a dateset are unique with respect to the specified
-#' list of by variables and order.
-#'
-#' @param dataset The input dataset to check
-#'
-#' @param by_vars List of by variables
-#'
-#' @param order Order of observation
-#'   If the parameter is specified, it is checked if the observations are unique
-#'   with respect to the by variables and the order. If the check fails, the
-#'   order values are written as variables in the output.
-#'
-#' @param message Error message
-#'   The message to be displayed if the check fails.
-#'
-#' @param message_type Message type
-#'   If `'error'` is specified, an error is issued if the check fails. Otherwise
-#'   an warning is issued.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the records are unique, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @export
-#'
-#' @examples
-#' data(ex)
-#' has_unique_records(ex,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(desc(EXENDTC))
-#' )
-has_unique_records <- function(dataset,
-                               by_vars = NULL,
-                               order = NULL,
-                               message = NULL,
-                               message_type = "error") {
-  arg_match(message_type, c("none", "warning", "error"))
-  # variables used for check
-  all_vars <- list()
-
-  # variables formatted for the message
-  all_vars_msg <- list()
-
-  # dataset to check (remove grouping)
-  data_ext <- ungroup(dataset)
-
-  if (!is.null(by_vars)) {
-    all_vars <- by_vars
-    all_vars_msg <- by_vars
-  }
-  if (!is.null(order)) {
-    # add order variables to the input dataset
-    order_vars <- order
-    names(order_vars) <- paste0("ordvar", seq_len(length(order_vars)))
-    data_ext <- data_ext %>%
-      mutate(!!!order_vars)
-
-    # add order variables to the variables for check
-    all_vars <- append(all_vars, syms(names(order_vars)))
-
-    # create list of variables for the message, order variables are displayed
-    # as ordvar<n> = <expression for order>, e.g., ordvar1 = desc(VISITNUM)
-    all_vars_msg <- append(all_vars_msg, paste(names(order_vars), "=", order_vars))
-  }
-
-  # select variables for check
-  data_by <- data_ext %>% select(!!!all_vars)
-
-  # check for duplicates
-  is_duplicate <- duplicated(data_by) | duplicated(data_by, fromLast = TRUE)
-  if (any(is_duplicate)) {
-    if (message_type != "none") {
-      # filter out duplicate observations of the input dataset
-      duplicates <- data_ext %>%
-        filter(is_duplicate)
-
-      # create message
-      tbl <- capture.output(print(duplicates))
-      if (missing(message)) {
-        message <- paste0(
-          "Dataset contains multiple records with respect to ",
-          paste(all_vars_msg, collapse = ", "),
-          "."
-        )
-      }
-      err_msg <- paste0(
-        message,
-        "\n",
-        paste(tbl[-c(1, 3)], collapse = "\n")
-      )
-
-      # issue message
-      if (message_type == "error") {
-        abort(err_msg)
-      } else {
-        warn(err_msg)
-      }
-    }
-    TRUE
-  }
-  else {
-    FALSE
-  }
-}
-
-#' Are records unique?
-#'
-#' Checks if the records of a dateset are unique with respect to the specified
-#' list of by variables and order. If the check fails, an error is issued.
-#'
-#' @param dataset The input dataset to check
-#'
-#' @param by_vars List of by variables
-#'
-#' @param order Order of observation
-#'   If the parameter is specified, it is checked if the observations are unique
-#'   with respect to the by variables and the order. If the check fails, the
-#'   order values are written as variables in the output.
-#'
-#' @param message Error message
-#'   The message to be displayed if the check fails.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the records are unique, `FALSE` otherwise
-#'
-#' @keywords assertion
-#'
-#' @export
-#'
-#' @examples
-#' data(ex)
-#' assert_has_unique_records(ex,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(desc(EXENDTC))
-#' )
-assert_has_unique_records <- function(dataset,
-                                      by_vars = NULL,
-                                      order = NULL,
-                                      message) {
-  has_unique_records(
-    dataset = dataset,
-    by_vars = by_vars,
-    order = order,
-    message_type = "error"
-  )
 }
 
 #' Is Date/Date-time?

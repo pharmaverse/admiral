@@ -4,8 +4,15 @@
 \alias{derive_vars_dt}
 \title{Derive/Impute a date from a date character vector}
 \usage{
-derive_vars_dt(dataset, new_vars_prefix, dtc, date_imputation = NULL,
-  flag_imputation = TRUE, min_dates = NULL, max_dates = NULL)
+derive_vars_dt(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL
+)
 }
 \arguments{
 \item{dataset}{Input dataset.

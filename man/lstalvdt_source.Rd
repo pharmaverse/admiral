@@ -4,8 +4,13 @@
 \alias{lstalvdt_source}
 \title{Create an \code{lstalvdt_source} object}
 \usage{
-lstalvdt_source(dataset, filter = NULL, date_var,
-  date_imputation = NULL, traceability_vars = NULL)
+lstalvdt_source(
+  dataset,
+  filter = NULL,
+  date_var,
+  date_imputation = NULL,
+  traceability_vars = NULL
+)
 }
 \arguments{
 \item{dataset}{A data.frame containing a source dataset.}
