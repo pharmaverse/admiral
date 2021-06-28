@@ -12,3 +12,30 @@ test_that("no error is thrown if a required variable exists", {
 
   expect_error(assert_has_variables(dm, "USUBJID"), NA)
 })
+
+test_that("assert_filter_cond works as expected", {
+
+  fc <- quo(AGE == 64)
+  expect_identical(
+    assert_filter_cond(fc),
+    fc
+  )
+
+  fc <- quo()
+  expect_error(
+    assert_filter_cond(x = fc),
+    "Argument fc is missing, with no default"
+  )
+
+  expect_identical(
+    assert_filter_cond(x = fc, optional = T),
+    fc
+  )
+
+  fc <- quo("string")
+  expect_error(
+    assert_filter_cond(x = fc),
+    "Argument fc is not a filtering condition"
+  )
+
+})
