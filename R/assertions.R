@@ -222,13 +222,13 @@ assert_symbol <- function(arg, optional = FALSE) {
 
 #' Is an argument a filtering condition?
 #'
-#' @param x Quosure - filtering condition.
+#' @param arg Quosure - filtering condition.
 #' @param optional Logical - is the argument optional? Defaults to `FALSE`.
 #'
-#' @details Check if `x` is a suitable filtering condition to be used in
+#' @details Check if `arg` is a suitable filtering condition to be used in
 #' functions like `subset` or `dplyr::filter`.
 #'
-#' @return Performs necessary checks and returns `x` if all pass.
+#' @return Performs necessary checks and returns `arg` if all pass.
 #' Otherwise throws an informative error.
 #'
 #' @export
@@ -249,24 +249,24 @@ assert_symbol <- function(arg, optional = FALSE) {
 #' x <- rlang::quo(AGE == 64)
 #' dplyr::filter(dm, !!x)
 #'
-assert_filter_cond <- function(x, optional = FALSE) {
+assert_filter_cond <- function(arg, optional = FALSE) {
 
   stopifnot(
-    is_quosure(x),
+    is_quosure(arg),
     rlang::is_scalar_logical(optional)
   )
 
-  provided <- quo_not_missing(x)
+  provided <- quo_not_missing(arg)
   if (!provided & !optional) {
-    err_msg <- sprintf("Argument %s is missing, with no default", arg_name(substitute(x)))
+    err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(x)) {
-    err_msg <- sprintf("Argument %s is not a filtering condition", arg_name(substitute(x)))
+  if (provided & !quo_is_call(arg)) {
+    err_msg <- sprintf("Argument `%s` is not a filtering condition", arg_name(substitute(arg)))
     abort(err_msg)
   }
-  x
+  invisible(arg)
 }
 
 #' Does a Dataset Contain All Required Variables?

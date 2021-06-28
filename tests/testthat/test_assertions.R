@@ -23,19 +23,19 @@ test_that("assert_filter_cond works as expected", {
 
   fc <- quo()
   expect_error(
-    assert_filter_cond(x = fc),
-    "Argument fc is missing, with no default"
+    assert_filter_cond(arg = fc),
+    "Argument `fc` is missing, with no default"
   )
 
   expect_identical(
-    assert_filter_cond(x = fc, optional = T),
+    assert_filter_cond(arg = fc, optional = T),
     fc
   )
 
   fc <- quo("string")
   expect_error(
-    assert_filter_cond(x = fc),
-    "Argument fc is not a filtering condition"
+    assert_filter_cond(arg = fc),
+    "Argument `fc` is not a filtering condition"
   )
 
 })

@@ -4,22 +4,22 @@
 \alias{assert_filter_cond}
 \title{Is an argument a filtering condition?}
 \usage{
-assert_filter_cond(x, optional = FALSE)
+assert_filter_cond(arg, optional = FALSE)
 }
 \arguments{
-\item{x}{Quosure - filtering condition.}
+\item{arg}{Quosure - filtering condition.}
 
 \item{optional}{Logical - is the argument optional? Defaults to \code{FALSE}.}
 }
 \value{
-Performs necessary checks and returns \code{x} if all pass.
+Performs necessary checks and returns \code{arg} if all pass.
 Otherwise throws an informative error.
 }
 \description{
 Is an argument a filtering condition?
 }
 \details{
-Check if \code{x} is a suitable filtering condition to be used in
+Check if \code{arg} is a suitable filtering condition to be used in
 functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
