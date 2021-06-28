@@ -2,7 +2,7 @@
 % Please edit documentation in R/warnings.R
 \name{suppress_warning}
 \alias{suppress_warning}
-\title{Suppress Warnings}
+\title{Suppress Specific Warnings}
 \usage{
 suppress_warning(expr, regexpr)
 }
@@ -12,26 +12,34 @@ suppress_warning(expr, regexpr)
 \item{regexpr}{Regular expression matching warnings to suppress}
 }
 \value{
-return value of the expression
+Return value of the expression
 }
 \description{
 Suppress certain warnings issued by an expression.
 }
 \details{
-All warnings which are issued by the expression and match the
-regular expression are suppressed.
+All warnings which are issued by the expression and match the regular expression
+are suppressed.
 }
 \examples{
-  \dontrun{
-  suppress_warning(
-    left_join(dataset,
-              all_data,
-              by = c("USUBJID")),
-    regexpr = "^Column `USUBJID` has different attributes on LHS and RHS of join$")
-  )
-  }
+library(dplyr, warn.conflicts = FALSE)
+data(adsl)
+data(vs)
+
+# Remove label
+attr(vs$USUBJID, "label") <- NULL
+
+left_join(adsl, vs, by = "USUBJID")
+
+suppress_warning(
+  left_join(dataset, all_data, by = "USUBJID"),
+  "^Column `USUBJID` has different attributes on LHS and RHS of join$"
+)
 }
 \author{
-Stefan Bundfuss
+\itemize{
+\item Thomas Neitmann
+\item Stefan Bundfuss
+}
 }
 \keyword{warning}

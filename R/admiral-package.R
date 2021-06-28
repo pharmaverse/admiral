@@ -1,6 +1,6 @@
 #' @keywords internal
 #' @importFrom dplyr anti_join arrange bind_rows case_when desc ends_with full_join filter group_by
-#'             if_else inner_join mutate mutate_at n left_join pull rename row_number select slice
+#'             if_else inner_join mutate mutate_at n pull rename row_number select slice
 #'             starts_with transmute ungroup vars n_distinct union bind_rows distinct
 #'             summarise_at summarise
 #' @importFrom magrittr %>%
