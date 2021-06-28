@@ -21,10 +21,9 @@ knitr::opts_chunk$set(
 
 ##### What does **generalized functions & facilitate** mean?
 
-Functions are usually not necessarily specific but parameter driven: 
-
-* e.g. the `derive_aage` has a parameterized start and end-date and a unit. 
-* Depending on the parameters results may vary as does the specification.
+* Functions are usually not necessarily specific but parameter driven: 
+    * e.g. the `derive_aage` has a parameterized start and end-date and a unit.
+    * Depending on the parameters results may vary as does the specification.
 
 ##### How does a user **know what a function does** exactly?
 
