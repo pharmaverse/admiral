@@ -19,11 +19,15 @@ dplyr::vars
 #' @examples
 #' enumerate(letters[1:6])
 enumerate <- function(x, quote_fun = backquote) {
-  paste(
-    paste0(quote_fun(x[-length(x)]), collapse = ", "),
-    "and",
-    quote_fun(x[length(x)])
-  )
+  if (length(x) == 1L) {
+    quote_fun(x)
+  } else {
+    paste(
+      paste0(quote_fun(x[-length(x)]), collapse = ", "),
+      "and",
+      quote_fun(x[length(x)])
+    )
+  }
 }
 
 #' Wrap a String in Backquotes
@@ -94,4 +98,14 @@ vars2chr <- function(quosures) {
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
+}
+
+extract_vars <- function(quosures) {
+  vars <- lapply(quosures, function(q) {
+    rlang::quo_set_env(
+      rlang::quo(!!as.symbol(all.vars(q))),
+      rlang::quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures")
 }

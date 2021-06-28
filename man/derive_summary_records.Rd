@@ -4,8 +4,13 @@
 \alias{derive_summary_records}
 \title{Add new record within by groups using aggregation functions}
 \usage{
-derive_summary_records(dataset, by_vars, fns, set_values_to = NULL,
-  drop_values_from = NULL)
+derive_summary_records(
+  dataset,
+  by_vars,
+  fns,
+  set_values_to = NULL,
+  drop_values_from = NULL
+)
 }
 \arguments{
 \item{dataset}{A data frame.}
@@ -20,7 +25,7 @@ or \code{sum} or any other user-defined aggregation function.
 For example,
 \itemize{
 \item When a summary function is same for one or more analysis variable, use
-\code{fns = list(vars(AVAL, CHG) ~ mean}).
+\verb{fns = list(vars(AVAL, CHG) ~ mean}).
 \item If different summary function is required for each analysis variable,
 use \code{fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))}.
 }

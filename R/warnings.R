@@ -145,49 +145,6 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   }
 }
 
-#' Are records unique?
-#'
-#' Checks if the records of a dataset are unique with respect to the specified
-#' list of by variables and order. If the check fails, a warning is issued.
-#'
-#' @param dataset The input dataset to check
-#'
-#' @param by_vars List of by variables
-#'
-#' @param order Order of observation
-#'   If the parameter is specified, it is checked if the observations are unique
-#'   with respect to the by variables and the order. If the check fails, the
-#'   order values are written as variables in the output.
-#'
-#' @param message Error message
-#'   The message to be displayed if the check fails.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the records are unique, `FALSE` otherwise
-#'
-#' @keywords warning
-#'
-#' @export
-#'
-#' @examples
-#' data(ex)
-#' warn_has_unique_records(ex,
-#'   by_vars = vars(USUBJID),
-#'   order = vars(desc(EXENDTC))
-#' )
-warn_has_unique_records <- function(dataset,
-                                    by_vars = NULL,
-                                    order = NULL,
-                                    message) {
-  has_unique_records(
-    dataset = dataset,
-    by_vars = by_vars,
-    order = order,
-    message_type = "warning"
-  )
-}
-
 #' Warn if 2 list have not the same names or length
 #'
 #' Checks if 2 list inputs have the same names and same number of elements, issue a warning otherwise.

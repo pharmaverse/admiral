@@ -4,8 +4,14 @@
 \alias{derive_disposition_status}
 \title{Derive a disposition status at a specific timepoint}
 \usage{
-derive_disposition_status(dataset, dataset_ds, new_var, status_var,
-  format_new_var = format_eoxxstt_default, filter_ds)
+derive_disposition_status(
+  dataset,
+  dataset_ds,
+  new_var,
+  status_var,
+  format_new_var = format_eoxxstt_default,
+  filter_ds
+)
 }
 \arguments{
 \item{dataset}{Input dataset.}
@@ -32,8 +38,8 @@ A character vector is expected (e.g. DSDECOD).}
 Default: format_eoxxstt_default defined as:
 format_eoxxstt_default<-function(x){
 case_when (
-x %in% c("COMPLETED")~"COMPLETED",
-!(x %in% c("COMPLETED")) & ! is.na(x)~"DISCONTINUED",
+x \%in\% c("COMPLETED")~"COMPLETED",
+!(x \%in\% c("COMPLETED")) & ! is.na(x)~"DISCONTINUED",
 TRUE ~ "ONGOING"
 )
 }

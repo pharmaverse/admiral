@@ -23,7 +23,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v1
         with:
-          r-version: 3.5
+          r-version: 3.6
 
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -46,7 +46,6 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          renv::install("rlang@0.4.0")
         shell: Rscript {0}
 
       - name: Install package
