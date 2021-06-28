@@ -745,6 +745,63 @@ on_failure(is_varval_list) <- function(call, env) {
   )
 }
 
+#' Is an Argument a valid list of variables created using `vars()`?
+#'
+#' Checks if an argument is a valid list of variables created using `vars()`
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Samia Kabi
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variables created using `vars()`
+#' and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' list_ok <- vars(USUBJID,PARAMCD)
+#' assert_vars(list_ok)
+#'
+#' list_invalid<-  exprs(USUBJID,PARAMCD)
+#' tryCatch(
+#'   assert_vars(list_invalid1),
+#'   error = function(e) cat(e$message)
+#' )
+#' list_invalid2<-  vars("USUBJID","PARAMCD", "VISIT")
+#' tryCatch(
+#'   assert_vars(list_invalid2),
+#'   error = function(e) cat(e$message)
+#' )
+
+assert_vars <- function(arg,  optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(arg)
+  }
+
+  if (!inherits(arg, "quosures")) {
+    err_msg <- sprintf("`%s` must be a a list of variables created using `vars()`",
+                       arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+  if (!all(map_lgl(arg, quo_is_symbol))) {
+    index <-!map_lgl(arg, quo_is_symbol)
+    expr_list <- map(arg, quo_text)
+    err_msg <- paste(
+      sprintf("`%s` must be a a list of unquoted variables (e.g. vars(USUBJID, VISIT))",
+              arg_name(substitute(arg))),
+      "but the following input(s) are not properly specified: ",
+      paste(expr_list[index], collapse =", ")
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
 
 is_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))

@@ -4,8 +4,14 @@
 \alias{dthcaus_source}
 \title{Create an \code{dthcaus_source} object}
 \usage{
-dthcaus_source(dataset, filter, date_var, mode = "first", dthcaus,
-  traceabilty_vars = NULL)
+dthcaus_source(
+  dataset,
+  filter,
+  date_var,
+  mode = "first",
+  dthcaus,
+  traceabilty_vars = NULL
+)
 }
 \arguments{
 \item{dataset}{A data.frame containing a source dataset.}

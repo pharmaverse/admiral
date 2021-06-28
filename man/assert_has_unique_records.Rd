@@ -4,8 +4,7 @@
 \alias{assert_has_unique_records}
 \title{Are records unique?}
 \usage{
-assert_has_unique_records(dataset, by_vars = NULL, order = NULL,
-  message)
+assert_has_unique_records(dataset, by_vars = NULL, order = NULL, message)
 }
 \arguments{
 \item{dataset}{The input dataset to check}

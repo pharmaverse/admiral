@@ -4,8 +4,13 @@
 \alias{has_unique_records}
 \title{Are records unique?}
 \usage{
-has_unique_records(dataset, by_vars = NULL, order = NULL,
-  message = NULL, message_type = "error")
+has_unique_records(
+  dataset,
+  by_vars = NULL,
+  order = NULL,
+  message = NULL,
+  message_type = "error"
+)
 }
 \arguments{
 \item{dataset}{The input dataset to check}

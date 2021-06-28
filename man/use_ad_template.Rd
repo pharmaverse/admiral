@@ -4,8 +4,11 @@
 \alias{use_ad_template}
 \title{A helper function to create a template script}
 \usage{
-use_ad_template(adam_name = "adsl", save_path = paste0("./", adam_name,
-  ".R"), open = interactive())
+use_ad_template(
+  adam_name = "adsl",
+  save_path = paste0("./", adam_name, ".R"),
+  open = interactive()
+)
 }
 \arguments{
 \item{adam_name}{An ADaM dataset name.}
