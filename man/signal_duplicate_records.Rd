@@ -4,9 +4,13 @@
 \alias{signal_duplicate_records}
 \title{Signal Duplicate Records}
 \usage{
-signal_duplicate_records(dataset, by_vars,
+signal_duplicate_records(
+  dataset,
+  by_vars,
   msg = paste("Dataset contains duplicate records with respect to",
-  enumerate(vars2chr(by_vars))), cnd_type = "error")
+    enumerate(vars2chr(by_vars))),
+  cnd_type = "error"
+)
 }
 \arguments{
 \item{dataset}{A data frame}
