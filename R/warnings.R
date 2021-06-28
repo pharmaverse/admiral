@@ -197,7 +197,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   }
 }
 
-#' Suppress Warnings
+#' Suppress Specific Warnings
 #'
 #' Suppress certain warnings issued by an expression.
 #'
@@ -205,27 +205,34 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @param regexpr Regular expression matching warnings to suppress
 #'
-#' @author Stefan Bundfuss
+#' @author
+#' - Thomas Neitmann
+#' - Stefan Bundfuss
 #'
-#' @return return value of the expression
+#' @return Return value of the expression
 #'
 #' @keywords warning
 #'
-#' @details All warnings which are issued by the expression and match the
-#'   regular expression are suppressed.
+#' @details
+#' All warnings which are issued by the expression and match the regular expression
+#' are suppressed.
 #'
 #' @export
 #'
 #' @examples
-#'   \dontrun{
-#'   suppress_warning(
-#'     left_join(dataset,
-#'               all_data,
-#'               by = c("USUBJID")),
-#'     regexpr = "^Column `USUBJID` has different attributes on LHS and RHS of join$")
-#'   )
-#'   }
-
+#' library(dplyr, warn.conflicts = FALSE)
+#' data(adsl)
+#' data(vs)
+#'
+#' # Remove label
+#' attr(vs$USUBJID, "label") <- NULL
+#'
+#' left_join(adsl, vs, by = "USUBJID")
+#'
+#' suppress_warning(
+#'   left_join(adsl, vs, by = "USUBJID"),
+#'   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
+#' )
 suppress_warning <- function(expr, regexpr) {
   withCallingHandlers(
     expr,

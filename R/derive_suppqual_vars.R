@@ -114,8 +114,6 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     supp
   })
 
-  supwarn_left_join <- compose(suppressWarnings, left_join)
-
   for (i in seq_along(pivoted)) {
     parent_nms <- names(dataset)
     supp_nms <- names(pivoted[[i]])
@@ -128,7 +126,7 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     ## - Join with parent domain and retain only supp variables. This helps to
     ##   match observation and finally bind with original parent dataset
     join_var <- dataset %>%
-      supwarn_left_join(pivoted[[i]], by = by_vars) %>%
+      left_join(pivoted[[i]], by = by_vars) %>%
       select(dplyr::matches(new_var))
 
     ## Sometimes QNAM might have more than one IDVAR. For example, in AE domain
