@@ -4,9 +4,16 @@
 \alias{derive_vars_dtm}
 \title{Derive/Impute a datetime from a date character vector}
 \usage{
-derive_vars_dtm(dataset, new_vars_prefix, dtc, date_imputation = NULL,
-  time_imputation = "00:00:00", flag_imputation = TRUE,
-  min_dates = NULL, max_dates = NULL)
+derive_vars_dtm(
+  dataset,
+  new_vars_prefix,
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
+  flag_imputation = TRUE,
+  min_dates = NULL,
+  max_dates = NULL
+)
 }
 \arguments{
 \item{dataset}{Input dataset

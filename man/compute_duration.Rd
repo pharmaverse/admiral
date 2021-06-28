@@ -4,9 +4,15 @@
 \alias{compute_duration}
 \title{Derive Duration}
 \usage{
-compute_duration(start_date, end_date, in_unit = "days",
-  out_unit = "days", floor_in = TRUE, add_one = TRUE,
-  trunc_out = FALSE)
+compute_duration(
+  start_date,
+  end_date,
+  in_unit = "days",
+  out_unit = "days",
+  floor_in = TRUE,
+  add_one = TRUE,
+  trunc_out = FALSE
+)
 }
 \arguments{
 \item{start_date}{The start date
