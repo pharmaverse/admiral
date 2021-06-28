@@ -32,7 +32,7 @@ attr(vs$USUBJID, "label") <- NULL
 left_join(adsl, vs, by = "USUBJID")
 
 suppress_warning(
-  left_join(dataset, all_data, by = "USUBJID"),
+  left_join(adsl, vs, by = "USUBJID"),
   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
 )
 }
