@@ -13,12 +13,14 @@ dplyr::vars
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
+#' @param quote_fun Quoting function, defaults to `backquote`.
+#' @param conjunction Character to be used in the message, defaults to "and".
 #'
 #' @noRd
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote) {
+enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
     quote_fun(x)
   } else {
