@@ -4,8 +4,13 @@
 \alias{impute_dtc}
 \title{Impute partial date/time portion of a --DTC variable}
 \usage{
-impute_dtc(dtc, date_imputation = NULL, time_imputation = "00:00:00",
-  min_dates = NULL, max_dates = NULL)
+impute_dtc(
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
+  min_dates = NULL,
+  max_dates = NULL
+)
 }
 \arguments{
 \item{dtc}{The --DTC date to impute

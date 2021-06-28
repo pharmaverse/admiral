@@ -18,12 +18,16 @@ dplyr::vars
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
-  paste(
-    paste0(quote_fun(x[-length(x)]), collapse = ", "),
-    conjunction,
-    quote_fun(x[length(x)])
-  )
+enumerate <- function(x, quote_fun = backquote) {
+  if (length(x) == 1L) {
+    quote_fun(x)
+  } else {
+    paste(
+      paste0(quote_fun(x[-length(x)]), collapse = ", "),
+      conjunction,
+      quote_fun(x[length(x)])
+    )
+  }
 }
 
 #' Wrap a String in Backquotes
@@ -106,3 +110,12 @@ arg_name <- function(expr) {
   }
 }
 
+extract_vars <- function(quosures) {
+  vars <- lapply(quosures, function(q) {
+    rlang::quo_set_env(
+      rlang::quo(!!as.symbol(all.vars(q))),
+      rlang::quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures")
+}
