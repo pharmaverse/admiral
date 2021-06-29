@@ -44,7 +44,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 
   if (!is.data.frame(arg)) {
     err_msg <- sprintf(
-      "`%` must be a data.frame but is %s",
+      "`%s` must be a data.frame but is %s",
       arg_name(substitute(arg)),
       friendly_type(type_of(arg))
     )
