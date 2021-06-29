@@ -296,13 +296,16 @@ assert_symbol <- function(arg, optional = FALSE) {
   }
 
   if (!quo_is_symbol(arg)) {
-    err_msg <- sprintf("`%s` must be a symbol", arg_name(substitute(arg)))
+    err_msg <- sprintf(
+      "`%s` must be a symbol but is %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(quo_get_expr(arg)))
+    )
     abort(err_msg)
   }
 
   invisible(arg)
 }
-
 
 #' Is an argument a filtering condition?
 #'
@@ -345,7 +348,11 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   }
 
   if (provided & !quo_is_call(arg)) {
-    err_msg <- sprintf("Argument `%s` is not a filtering condition", arg_name(substitute(arg)))
+    err_msg <- sprintf(
+      "`%s` is not a filter condition but %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(quo_get_expr(arg)))
+    )
     abort(err_msg)
   }
 
