@@ -130,6 +130,49 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
   invisible(arg)
 }
 
+#' Is an Argument a Character Vector?
+#'
+#' Checks if an argument is a character vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a character vector. Otherwise,
+#' the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' assert_character_vector(letters)
+#'
+#' numbers <- 1:10
+#' tryCatch(
+#'   assert_character_vector(numbers),
+#'   error = function(e) cat(e$message)
+#' )
+assert_character_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.character(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a character vector but is %s",
+      arg_name(substitute(arg)),
+      friendly_type(type_of(arg))
+    )
+    abort(err_msg)
+  }
+}
+
 #' Is an Argument a Logical Scalar (Boolean)?
 #'
 #' Checks if an argument is a logical scalar

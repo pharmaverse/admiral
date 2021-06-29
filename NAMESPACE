@@ -2,6 +2,7 @@
 
 export("%!in%")
 export(assert_character_scalar)
+export(assert_character_vector)
 export(assert_data_frame)
 export(assert_filter_cond)
 export(assert_has_variables)
