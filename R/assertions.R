@@ -36,7 +36,7 @@
 #' )
 assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
   if (optional && is.null(arg)) {
-    return(arg)
+    return(invisible(arg))
   }
 
   if (!is.data.frame(arg)) {
@@ -96,7 +96,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #' )
 assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
   if (optional && is.null(arg)) {
-    return(arg)
+    return(invisible(arg))
   }
 
   if (!is.character(arg)) {
@@ -159,7 +159,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' )
 assert_logical_scalar <- function(arg, optional = FALSE) {
   if (optional && is.null(arg)) {
-    return(arg)
+    return(invisible(arg))
   }
 
   if (!is.logical(arg) || length(arg) != 1L) {
@@ -203,7 +203,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' )
 assert_symbol <- function(arg, optional = FALSE) {
   if (optional && quo_is_null(arg)) {
-    return(arg)
+    return(invisible(arg))
   }
 
   if (quo_is_missing(arg)) {
@@ -304,7 +304,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' )
 assert_vars <- function(arg, optional = FALSE) {
   if (optional && is.null(arg)) {
-    return(arg)
+    return(invisible(arg))
   }
 
   if (!inherits(arg, "quosures")) {
