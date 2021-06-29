@@ -389,10 +389,6 @@ adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 
 #### Duration Relative to Death {#death3}
 
-<b> <span style="color: red"> 
-This section is quite Roche specific if I am not wrong : do we want to keep this as example or 
-should i remove it? </span> </b>
-
 The function `derive_duration()` can be used to derive duration relative to death like the Relative 
 Day of Death (`DTHADY`) or the numbers of days from last dose to death (`LDDTHELD)`.
 
@@ -573,10 +569,10 @@ head(adsl %>% select(USUBJID, TRTSDT, SAFFL))
 The users can add specific code to cover their need for the analysis.
 
 ### Add Labels and Attributes {#attributes}
-<b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
+admiral does not **currently** support metadata integration, but the team is working on it!
 
 ### Example Script {#example}
 ADaM | Sample Code
 ---- | --------------
-ADSL | [ad_adsl.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R)
+ADSL | [ad_adsl.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R){target="_blank"} 
 

@@ -4,8 +4,7 @@
 \alias{filter_extreme}
 \title{Filter out the first or last observation for each group}
 \usage{
-filter_extreme(dataset, order, by_vars = NULL, mode,
-  check_type = "warning")
+filter_extreme(dataset, order, by_vars = NULL, mode, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
