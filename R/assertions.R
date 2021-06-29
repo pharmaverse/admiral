@@ -135,14 +135,12 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' Checks if an argument is a logical scalar
 #'
 #' @param arg A function argument to be checked
-#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
-#' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
 #' @return
-#' The function throws an error if `arg` is not a `logical` vector or if `arg`
-#' is a `logical` vector but of length > 1. Otherwise, the input is returned invisibly.
+#' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
+#' the input is returned invisibly.
 #'
 #' @export
 #'
@@ -157,16 +155,13 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #'   assert_logical_scalar(add_one),
 #'   error = function(e) cat(e$message)
 #' )
-assert_logical_scalar <- function(arg, optional = FALSE) {
-  if (optional && is.null(arg)) {
-    return(invisible(arg))
-  }
-
-  if (!is.logical(arg) || length(arg) != 1L) {
+assert_logical_scalar <- function(arg) {
+  if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
+    is <- if (length(arg) > 1L) friendly_type(type_of(arg)) else backquote(arg)
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      is
     )
     abort(err_msg)
   }

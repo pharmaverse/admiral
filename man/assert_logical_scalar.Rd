@@ -4,17 +4,14 @@
 \alias{assert_logical_scalar}
 \title{Is an Argument a Logical Scalar (Boolean)?}
 \usage{
-assert_logical_scalar(arg, optional = FALSE)
+assert_logical_scalar(arg)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
-
-\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
-is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is not a \code{logical} vector or if \code{arg}
-is a \code{logical} vector but of length > 1. Otherwise, the input is returned invisibly.
+The function throws an error if \code{arg} is neither \code{TRUE} or \code{FALSE}. Otherwise,
+the input is returned invisibly.
 }
 \description{
 Checks if an argument is a logical scalar
