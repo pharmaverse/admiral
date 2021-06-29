@@ -4,8 +4,14 @@
 \alias{derive_var_ontrtfl}
 \title{Derive On-Treatment Flag Variable}
 \usage{
-derive_var_ontrtfl(dataset, date, ref_start_date, ref_end_date = NULL,
-  ref_end_window = 0, filter_pre_timepoint = NULL)
+derive_var_ontrtfl(
+  dataset,
+  date,
+  ref_start_date,
+  ref_end_date = NULL,
+  ref_end_window = 0,
+  filter_pre_timepoint = NULL
+)
 }
 \arguments{
 \item{dataset}{\code{data.frame}.}

@@ -4,8 +4,15 @@
 \alias{derive_extreme_flag}
 \title{Adds a variable flagging the first or last observation within each by group}
 \usage{
-derive_extreme_flag(dataset, new_var, by_vars, order, mode,
-  flag_filter = NULL, check_type = "warning")
+derive_extreme_flag(
+  dataset,
+  new_var,
+  by_vars,
+  order,
+  mode,
+  flag_filter = NULL,
+  check_type = "warning"
+)
 }
 \arguments{
 \item{dataset}{Input dataset
