@@ -17,13 +17,25 @@ the input is returned invisibly.
 Checks if an argument is a logical scalar
 }
 \examples{
-imputation_flag <- FALSE
-add_one <- 1
+example_fun <- function(flag) {
+  assert_logical_scalar(flag)
+}
 
-assert_logical_scalar(imputation_flag)
+example_fun(FALSE)
+
 tryCatch(
-  assert_logical_scalar(add_one),
-  error = function(e) cat(e$message)
+  example_fun(NA),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun(c(TRUE, FALSE, FALSE)),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun(1:10),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{

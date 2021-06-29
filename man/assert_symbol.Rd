@@ -20,13 +20,25 @@ invisibly otherwise. \code{arg} is expected to be a \code{quosure}.
 Checks if an argument is a symbol
 }
 \examples{
-start_date <- rlang::quo(TRTSDT)
-end_date <- rlang::quo("TRTEDT")
+example_fun <- function(var) {
+  assert_symbol(rlang::enquo(var))
+}
 
-assert_symbol(start_date)
+example_fun(TRTSDT)
+
 tryCatch(
-  assert_symbol(end_date),
-  error = function(e) cat(e$message)
+  example_fun(),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun("USUBJID"),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun(toupper(PARAMCD)),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{

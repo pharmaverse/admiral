@@ -26,16 +26,17 @@ functions like \code{subset} or \code{dplyr::filter}.
 data(dm)
 
 # typical usage in a function as a parameter check
-my_fun <- function(dat, x) {
+example_fun <- function(dat, x) {
   x <- assert_filter_cond(rlang::enquo(x))
   dplyr::filter(dat, !!x)
 }
-my_fun(dm, AGE == 64)
 
-# direct interactive usage
-x <- rlang::quo(AGE == 64)
-dplyr::filter(dm, !!x)
+example_fun(dm, AGE == 64)
 
+tryCatch(
+  example_fun(dm, USUBJID),
+  error = function(e) cat(e$message, "\n")
+)
 }
 \author{
 Ondrej Slama

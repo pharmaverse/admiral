@@ -20,12 +20,15 @@ the input is returned invisibly.
 Checks if an argument is a character vector
 }
 \examples{
-assert_character_vector(letters)
+example_fun <- function(chr) {
+  assert_character_vector(chr)
+}
 
-numbers <- 1:10
+example_fun(letters)
+
 tryCatch(
-  assert_character_vector(numbers),
-  error = function(e) cat(e$message)
+  example_fun(1:10),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{

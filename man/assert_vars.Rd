@@ -20,19 +20,25 @@ and returns the input invisibly otherwise.
 Checks if an argument is a valid list of variables created using \code{vars()}
 }
 \examples{
-list_ok <- vars(USUBJID, PARAMCD)
-assert_vars(list_ok)
+example_fun <- function(by_vars) {
+  assert_vars(by_vars)
+}
 
-list_invalid <- exprs(USUBJID, PARAMCD)
+example_fun(vars(USUBJID, PARAMCD))
+
 tryCatch(
-  assert_vars(list_invalid),
-  error = function(e) cat(e$message)
+  example_fun(exprs(USUBJID, PARAMCD)),
+  error = function(e) cat(e$message, "\n")
 )
 
-list_invalid2 <- vars("USUBJID", "PARAMCD", "VISIT")
 tryCatch(
-  assert_vars(list_invalid2),
-  error = function(e) cat(e$message)
+  example_fun(c("USUBJID", "PARAMCD", "VISIT")),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{

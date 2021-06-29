@@ -26,17 +26,20 @@ a set of required variables
 \examples{
 data(dm)
 
-assert_data_frame(dm)
-no_df <- 1:10
+example_fun <- function(dataset) {
+  assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+}
+
+example_fun(dm)
+
 tryCatch(
-  assert_data_frame(no_df),
-  error = function(e) cat(e$message)
+  example_fun(dplyr::select(dm, -STUDYID)),
+  error = function(e) cat(e$message, "\n")
 )
 
-assert_data_frame(dm, required_vars = vars(USUBJID, COUNTRY))
 tryCatch(
-  assert_data_frame(dm, required_vars = vars(USUBJID, PARAM, AVAL)),
-  error = function(e) cat(e$message)
+  example_fun("Not a dataset"),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{

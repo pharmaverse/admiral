@@ -22,17 +22,20 @@
 #' @examples
 #' data(dm)
 #'
-#' assert_data_frame(dm)
-#' no_df <- 1:10
+#' example_fun <- function(dataset) {
+#'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+#' }
+#'
+#' example_fun(dm)
+#'
 #' tryCatch(
-#'   assert_data_frame(no_df),
-#'   error = function(e) cat(e$message)
+#'   example_fun(dplyr::select(dm, -STUDYID)),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 #'
-#' assert_data_frame(dm, required_vars = vars(USUBJID, COUNTRY))
 #' tryCatch(
-#'   assert_data_frame(dm, required_vars = vars(USUBJID, PARAM, AVAL)),
-#'   error = function(e) cat(e$message)
+#'   example_fun("Not a dataset"),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
@@ -90,12 +93,20 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' msg_type <- "message"
+#' example_fun <- function(msg_type) {
+#'   assert_character_scalar(msg_type, values = c("warning", "error"))
+#' }
 #'
-#' assert_character_scalar(msg_type)
+#' example_fun("warning")
+#'
 #' tryCatch(
-#'   assert_character_scalar(msg_type, values = c("warning", "error")),
-#'   error = function(e) cat(e$message)
+#'   example_fun("message"),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(TRUE),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
   assert_character_vector(values, optional = TRUE)
@@ -155,12 +166,15 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' assert_character_vector(letters)
+#' example_fun <- function(chr) {
+#'   assert_character_vector(chr)
+#' }
 #'
-#' numbers <- 1:10
+#' example_fun(letters)
+#'
 #' tryCatch(
-#'   assert_character_vector(numbers),
-#'   error = function(e) cat(e$message)
+#'   example_fun(1:10),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_character_vector <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
@@ -196,13 +210,25 @@ assert_character_vector <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' imputation_flag <- FALSE
-#' add_one <- 1
+#' example_fun <- function(flag) {
+#'   assert_logical_scalar(flag)
+#' }
 #'
-#' assert_logical_scalar(imputation_flag)
+#' example_fun(FALSE)
+#'
 #' tryCatch(
-#'   assert_logical_scalar(add_one),
-#'   error = function(e) cat(e$message)
+#'   example_fun(NA),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(c(TRUE, FALSE, FALSE)),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(1:10),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_logical_scalar <- function(arg) {
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
@@ -237,13 +263,25 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
-#' start_date <- rlang::quo(TRTSDT)
-#' end_date <- rlang::quo("TRTEDT")
+#' example_fun <- function(var) {
+#'   assert_symbol(rlang::enquo(var))
+#' }
 #'
-#' assert_symbol(start_date)
+#' example_fun(TRTSDT)
+#'
 #' tryCatch(
-#'   assert_symbol(end_date),
-#'   error = function(e) cat(e$message)
+#'   example_fun(),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun("USUBJID"),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(toupper(PARAMCD)),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_symbol <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
@@ -285,16 +323,17 @@ assert_symbol <- function(arg, optional = FALSE) {
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
-#' my_fun <- function(dat, x) {
+#' example_fun <- function(dat, x) {
 #'   x <- assert_filter_cond(rlang::enquo(x))
 #'   dplyr::filter(dat, !!x)
 #' }
-#' my_fun(dm, AGE == 64)
 #'
-#' # direct interactive usage
-#' x <- rlang::quo(AGE == 64)
-#' dplyr::filter(dm, !!x)
+#' example_fun(dm, AGE == 64)
 #'
+#' tryCatch(
+#'   example_fun(dm, USUBJID),
+#'   error = function(e) cat(e$message, "\n")
+#' )
 assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
@@ -332,19 +371,25 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' list_ok <- vars(USUBJID, PARAMCD)
-#' assert_vars(list_ok)
+#' example_fun <- function(by_vars) {
+#'   assert_vars(by_vars)
+#' }
 #'
-#' list_invalid <- exprs(USUBJID, PARAMCD)
+#' example_fun(vars(USUBJID, PARAMCD))
+#'
 #' tryCatch(
-#'   assert_vars(list_invalid),
-#'   error = function(e) cat(e$message)
+#'   example_fun(exprs(USUBJID, PARAMCD)),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 #'
-#' list_invalid2 <- vars("USUBJID", "PARAMCD", "VISIT")
 #' tryCatch(
-#'   assert_vars(list_invalid2),
-#'   error = function(e) cat(e$message)
+#'   example_fun(c("USUBJID", "PARAMCD", "VISIT")),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))),
+#'   error = function(e) cat(e$message, "\n")
 #' )
 assert_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)

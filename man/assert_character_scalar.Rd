@@ -24,12 +24,20 @@ Checks if an argument is a character scalar and (optionally) whether it matches
 one of the provided \code{values}.
 }
 \examples{
-msg_type <- "message"
+example_fun <- function(msg_type) {
+  assert_character_scalar(msg_type, values = c("warning", "error"))
+}
 
-assert_character_scalar(msg_type)
+example_fun("warning")
+
 tryCatch(
-  assert_character_scalar(msg_type, values = c("warning", "error")),
-  error = function(e) cat(e$message)
+  example_fun("message"),
+  error = function(e) cat(e$message, "\n")
+)
+
+tryCatch(
+  example_fun(TRUE),
+  error = function(e) cat(e$message, "\n")
 )
 }
 \author{
