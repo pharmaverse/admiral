@@ -35,6 +35,9 @@
 #'   error = function(e) cat(e$message)
 #' )
 assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+  assert_vars(required_vars, optional = TRUE)
+  assert_logical_scalar(optional)
+
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
@@ -95,6 +98,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #'   error = function(e) cat(e$message)
 #' )
 assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
+  assert_character_vector(values, optional = TRUE)
+  assert_logical_scalar(optional)
+
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
@@ -240,6 +246,8 @@ assert_logical_scalar <- function(arg) {
 #'   error = function(e) cat(e$message)
 #' )
 assert_symbol <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
   if (optional && quo_is_null(arg)) {
     return(invisible(arg))
   }
@@ -288,11 +296,8 @@ assert_symbol <- function(arg, optional = FALSE) {
 #' dplyr::filter(dm, !!x)
 #'
 assert_filter_cond <- function(arg, optional = FALSE) {
-
-  stopifnot(
-    is_quosure(arg),
-    rlang::is_scalar_logical(optional)
-  )
+  stopifnot(is_quosure(arg))
+  assert_logical_scalar(optional)
 
   provided <- quo_not_missing(arg)
   if (!provided & !optional) {
@@ -304,6 +309,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     err_msg <- sprintf("Argument `%s` is not a filtering condition", arg_name(substitute(arg)))
     abort(err_msg)
   }
+
   invisible(arg)
 }
 
@@ -341,6 +347,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'   error = function(e) cat(e$message)
 #' )
 assert_vars <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
