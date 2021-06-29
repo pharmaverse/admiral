@@ -25,7 +25,7 @@ assert_vars(list_ok)
 
 list_invalid <- exprs(USUBJID, PARAMCD)
 tryCatch(
-  assert_vars(list_invalid1),
+  assert_vars(list_invalid),
   error = function(e) cat(e$message)
 )
 
