@@ -15,7 +15,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
-Depends: R (>= 2.10)
+Depends: R (>= 3.5)
 Imports:
     assertthat,
     dplyr,
@@ -24,7 +24,8 @@ Imports:
     purrr,
     readxl,
     rlang,
-    stringr
+    stringr,
+    tidyr
 Suggests:
     devtools,
     diffdf,

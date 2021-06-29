@@ -174,10 +174,7 @@ derive_var_lstalvdt <- function(dataset,
       check_type = "none"
     )
 
-  suppress_warning(left_join(dataset,
-                             all_data,
-                             by = vars2chr(subject_keys)),
-                   regexpr = "^Column .+ has different attributes on LHS and RHS of join$")
+  left_join(dataset, all_data, by = vars2chr(subject_keys))
 }
 
 #' Create an `lstalvdt_source` object

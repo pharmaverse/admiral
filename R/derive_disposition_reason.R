@@ -145,8 +145,7 @@ derive_disposition_reason <- function(dataset,
   if (!quo_is_null(new_var_spe)) {
     if (!quo_is_null(reason_var_spe)) {
       statusvar <- c(quo_text(reason_var), quo_text(reason_var_spe))
-    }
-    else {
+    } else {
       err_msg <- paste(
         "`new_var_spe` is specified as ", quo_text(new_var_spe),
         "but `reason_var_spe` is NULL.",
@@ -154,8 +153,7 @@ derive_disposition_reason <- function(dataset,
       )
       abort(err_msg)
     }
-  }
-  else {
+  } else {
     statusvar <- quo_text(reason_var)
   }
   assert_has_variables(dataset_ds, statusvar)
@@ -166,12 +164,12 @@ derive_disposition_reason <- function(dataset,
     select(STUDYID, USUBJID, !!reason_var, !!reason_var_spe)
 
   # Expect 1 record per subject in the subsetted DS - issue an error otherwise
-  has_unique_records(
-    dataset = ds_subset,
+  signal_duplicate_records(
+    ds_subset,
     by_vars = vars(STUDYID, USUBJID),
-    message_type = "error",
-    message = "The filter used for DS results in several records per patient - please check"
+    msg = "The filter used for DS results in multiple records per patient"
   )
+
   # Add the status variable and derive the new dispo reason(s) in the input dataset
   if (!quo_is_null(new_var_spe)) {
     dataset %>%
@@ -179,8 +177,7 @@ derive_disposition_reason <- function(dataset,
       mutate(!!new_var := format_new_vars(!!reason_var)) %>%
       mutate(!!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)) %>%
       select(-statusvar)
-  }
-  else {
+  } else {
     dataset %>%
       left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
       mutate(!!new_var := format_new_vars(!!reason_var)) %>%
