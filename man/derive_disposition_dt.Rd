@@ -4,8 +4,14 @@
 \alias{derive_disposition_dt}
 \title{Derive a disposition date}
 \usage{
-derive_disposition_dt(dataset, dataset_ds, new_var, dtc, filter_ds,
-  date_imputation = NULL)
+derive_disposition_dt(
+  dataset,
+  dataset_ds,
+  new_var,
+  dtc,
+  filter_ds,
+  date_imputation = NULL
+)
 }
 \arguments{
 \item{dataset}{Input dataset}
