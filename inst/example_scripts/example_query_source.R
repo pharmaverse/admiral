@@ -37,6 +37,8 @@ queries <- tibble::tribble(
   2, "AEDECOD", "ALVEOLITIS",
   "CQ06", "Immune-Mediated Colitis", 10009888, NA_character_,
   NA_integer_, "AELLT", "COLITIS"
+) %>% dplyr::mutate(
+  TERM_ID = as.integer(as.factor(.data$TERM_NAME))
 )
 
 adae <- tibble::tribble(

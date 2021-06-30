@@ -29,6 +29,10 @@ Check if the dataset has the following columns
 \item \code{TERM_NAME}, non NULL
 }
 }
+\examples{
+data("queries")
+assert_valid_queries(queries, "queries")
+}
 \author{
-Shimeng Huang
+Shimeng Huang, Ondrej Slama
 }
