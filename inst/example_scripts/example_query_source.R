@@ -39,8 +39,6 @@ queries <- tibble::tribble(
   NA_integer_, "AELLT", "COLITIS"
 )
 
-# save(queries, file = "data/queries.rda")
-
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
   "01", "2020-06-02 23:59:59", "ERYTHEMA", 3,

@@ -145,7 +145,7 @@ derive_query_vars <- function(dataset, queries) {
 #' @export
 #'
 #' @return The function throws an error if any of the requirements not met.
-assert_valid_queries <- function(queries, queries_name) {
+assert_valid_queries <- function(queries, queries_name) { #nolint
 
   # check required columns
   required_cols <-  c("VAR_PREFIX", "QUERY_NAME", "TERM_LEVEL", "TERM_NAME")
@@ -252,14 +252,19 @@ assert_valid_queries <- function(queries, queries_name) {
                      n_qid = ifelse("QUERY_ID" %in% names(queries),
                                     length(unique(QUERY_ID)), 0)) %>%
     ungroup()
-  for (ii in seq_len(nrow(count_unique))) {
-    if (count_unique[ii, ]$n_qnam > 1) {
-      abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
-                   count_unique$VAR_PREFIX[ii], "' is not unique."))
-    }
-    if (count_unique[ii, ]$n_qid > 1) {
-      abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
-                   count_unique$VAR_PREFIX[ii], "' is not unique."))
-    }
+
+  if (any(count_unique$n_qnam > 1)) {
+    idx <- which(count_unique$n_qnam > 1)
+    abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
+                 paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
+          "' is not unique."))
   }
+
+  if (any(count_unique$n_qid > 1)) {
+    idx <- which(count_unique$n_qid > 1)
+    abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
+                 paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
+                 "' is not unique."))
+  }
+
 }
