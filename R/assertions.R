@@ -404,13 +404,13 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 assert_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  err_msg <- sprintf(
-    "`%s` must be a a list of variables created using `vars()`",
+  default_err_msg <- sprintf(
+    "`%s` must be a a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
     arg_name(substitute(arg))
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
-    abort(err_msg)
+    abort(default_err_msg)
   }
 
   if (optional && is.null(arg)) {
@@ -418,16 +418,15 @@ assert_vars <- function(arg, optional = FALSE) {
   }
 
   if (!inherits(arg, "quosures")) {
-    abort(err_msg)
+    abort(default_err_msg)
   }
 
   is_symbol <- map_lgl(arg, quo_is_symbol)
   if (!all(is_symbol)) {
     expr_list <- map_chr(arg, quo_text)
-    err_msg <- paste(
-      backquote(arg_name(substitute(arg))),
-      "must be a a list of unquoted variables (e.g. `vars(USUBJID, VISIT)`)",
-      "but the following input(s) are not:",
+    err_msg <- paste0(
+      default_err_msg,
+      ", but the following elements are not: ",
       enumerate(expr_list[!is_symbol])
     )
     abort(err_msg)
