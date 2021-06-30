@@ -404,15 +404,20 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 assert_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
+  err_msg <- sprintf(
+    "`%s` must be a a list of variables created using `vars()`",
+    arg_name(substitute(arg))
+  )
+
+  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
+    abort(err_msg)
+  }
+
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
   if (!inherits(arg, "quosures")) {
-    err_msg <- sprintf(
-      "`%s` must be a a list of variables created using `vars()`",
-      arg_name(substitute(arg))
-    )
     abort(err_msg)
   }
 
