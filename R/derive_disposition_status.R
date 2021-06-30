@@ -13,33 +13,32 @@
 #'
 #' @param new_var Name of the disposition date variable.
 #'
-#' a variable name is expected (e.g. EOSSTT).
+#' A variable name is expected (e.g. `EOSSTT`).
 #'
 #' @param status_var The variable used to derive the disposition status.
 #'
-#'   A character vector is expected (e.g. DSDECOD).
+#'   A variable name is expected (e.g. `DSDECOD`).
 #'
 #' @param format_new_var The format used to derive the status.
 #'
 #' Default: format_eoxxstt_default defined as:
-#' format_eoxxstt_default<-function(x){
-#' case_when (
-#'   x %in% c("COMPLETED")~"COMPLETED",
-#'   !(x %in% c("COMPLETED")) & ! is.na(x)~"DISCONTINUED",
-#'   TRUE ~ "ONGOING"
-#' )
+#' format_eoxxstt_default <- function(x) {
+#'   case_when(
+#'     x %in% c("COMPLETED") ~ "COMPLETED",
+#'     !(x %in% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
+#'     TRUE ~ "ONGOING"
+#'   )
 #' }
 #' where `x` is the `status_var.`
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-# 'Filter used to select the relevant disposition data.
 # 'It is expected that the filter restricts `dataset_ds` such that there is at most
 #' one observation per patient. An error is issued otherwise.
 #'
 #' Permitted Values: logical expression.
 #'
-#' @return the input dataset with the disposition status (`new_var`) added.
+#' @return The input dataset with the disposition status (`new_var`) added.
 #'
 #' @keywords adsl
 #'

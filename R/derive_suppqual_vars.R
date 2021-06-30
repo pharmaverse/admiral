@@ -166,10 +166,11 @@ assert_supp_idvar <- function(x) {
   dup <- duplicated(x$QNAM)
   if (any(dup)) {
     message(
-      paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = \\
-                 '{x$QNAM[dup]}'."),
-        collapse = "\n") )
+    msg <- paste0(
+      str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
+      collapse = "\n")
+    )
+    inform(msg)
   }
 }
 

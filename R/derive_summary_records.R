@@ -213,7 +213,7 @@ as_inlined_function <- function(funs, env) {
   body(fn) <- expr({
     # Transform the lambda body into a maskable quosure inheriting
     # from the execution environment
-    `_quo` <- rlang::quo(!!body(fn))
+    `_quo` <- rlang::quo(!!body(fn)) # nolint
 
     # Evaluate the quosure in the mask
     rlang::eval_bare(`_quo`, base::parent.frame())
@@ -253,7 +253,6 @@ as_fun_list <- function(.funs, .env) {
       }
       .x <- as_inlined_function(.x, env = .env)
     } else if (is_character(rhs) || is_symbol(rhs)) {
-      # fn <- get(rhs, .env, mode = "function")
       rhs <- as_string(rhs)
       fn <- rlang::as_closure(rhs)
       .x <- structure(fn, stats = as_string(rhs))
