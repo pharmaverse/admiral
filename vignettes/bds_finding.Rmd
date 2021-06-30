@@ -42,7 +42,7 @@ otherwise specified. </i>
 * [Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
-* [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`)](#baseline)
+* [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`)](#baseline)
 * [Derive Change from Baseline (`CHG`, `PCHG`)](#bchange)
 * [Derive Analysis Flags (e.g. `ANL01FL`)](#analysisrec)
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
@@ -316,7 +316,7 @@ advs <- derive_var_anrind(advs)
 head(select(advs, USUBJID, PARAMCD, AVAL, ANRLO, ANRHI, A1LO, A1HI, ANRIND))
 ```
 
-### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`) {#baseline}
+### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
 The parameter basetypes of this function requires a named list of expression 
