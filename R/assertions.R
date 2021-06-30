@@ -248,7 +248,7 @@ assert_logical_scalar <- function(arg) {
 #'
 #' Checks if an argument is a symbol
 #'
-#' @param arg A function argument to be checked
+#' @param arg A function argument to be checked. Must be a `quosure`. See examples.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -256,31 +256,34 @@ assert_logical_scalar <- function(arg) {
 #'
 #' @return
 #' The function throws an error if `arg` is not a symbol and returns the input
-#' invisibly otherwise. `arg` is expected to be a `quosure`.
+#' invisibly otherwise.
 #'
 #' @export
 #'
 #' @keywords assertion
 #'
 #' @examples
-#' example_fun <- function(var) {
-#'   assert_symbol(rlang::enquo(var))
+#' data(dm)
+#'
+#' example_fun <- function(dat, var) {
+#'   var <- assert_symbol(rlang::enquo(var))
+#'   dplyr::select(dat, !!var)
 #' }
 #'
-#' example_fun(TRTSDT)
+#' example_fun(dm, USUBJID)
 #'
 #' tryCatch(
-#'   example_fun(),
+#'   example_fun(dm),
 #'   error = function(e) cat(e$message, "\n")
 #' )
 #'
 #' tryCatch(
-#'   example_fun("USUBJID"),
+#'   example_fun(dm, "USUBJID"),
 #'   error = function(e) cat(e$message, "\n")
 #' )
 #'
 #' tryCatch(
-#'   example_fun(toupper(PARAMCD)),
+#'   example_fun(dm, toupper(PARAMCD)),
 #'   error = function(e) cat(e$message, "\n")
 #' )
 assert_symbol <- function(arg, optional = FALSE) {

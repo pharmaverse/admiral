@@ -20,24 +20,27 @@ invisibly otherwise. \code{arg} is expected to be a \code{quosure}.
 Checks if an argument is a symbol
 }
 \examples{
-example_fun <- function(var) {
-  assert_symbol(rlang::enquo(var))
+data(dm)
+
+example_fun <- function(dat, var) {
+  var <- assert_symbol(rlang::enquo(var))
+  dplyr::select(dat, !!var)
 }
 
-example_fun(TRTSDT)
+example_fun(dm, USUBJID)
 
 tryCatch(
-  example_fun(),
+  example_fun(dm),
   error = function(e) cat(e$message, "\n")
 )
 
 tryCatch(
-  example_fun("USUBJID"),
+  example_fun(dm, "USUBJID"),
   error = function(e) cat(e$message, "\n")
 )
 
 tryCatch(
-  example_fun(toupper(PARAMCD)),
+  example_fun(dm, toupper(PARAMCD)),
   error = function(e) cat(e$message, "\n")
 )
 }
