@@ -2,15 +2,23 @@
 
 ## New Features
 
+### General
+
+- SDTM `SUPP--` dataset can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
+
+- In case a derivation detects duplicate records after applying a `filter`, the dataset of duplicate records is made available to users by running `get_duplicates_dataset()` (#202)
+
+- `derive_vars_dt()` and `derive_vars_dtm()` gain a `min_dates` and `max_dates` parameter which can be used to ensure that the imputed date(time) is not before the `min_dates` nor after the `max_dates`, e.g. avoid that `AENDT` is after the data cut date or `ASTDT` is before the first treatment date (#158)
+
+- `use_ad_template()` can be used to open a template script for an ADaM dataset; all available templates can be displayed using `list_all_templates()` (#110)
+
+### ADSL
+
 - Last Study Alive Date can be derived using `derive_var_lstalvdt()` (#94)
 
 - Death Cause can be derived using `derive_var_dthcaus()` (#93)
 
-- Summary records for BDS datasets, e.g. with `DTYPE == "AVERAGE"`, can be derived using `derive_summary_records()` (#177)
-
 - EMA and FDA defined age groupings can be derived using `derive_agegr_ema()` and `derive_agegr_fda()`, respectively
-
-- SDTM `SUPP--` dataset can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
 
 - Disposition Status can be derived using `derive_disposition_status()` (#92)
 
@@ -20,12 +28,9 @@
 
 - Last Dose can be derived using `derive_last_dose()`
 
-- In case a derivation detects duplicate records after applying a `filter`, the dataset of duplicate records is made available to users by running `get_duplicates_dataset()` (#202)
+### BDS
 
-- `derive_vars_dt()` and `derive_vars_dtm()` gain a `min_dates` and `max_dates` parameter which can be used to ensure that the imputed date(time) is not before the `min_dates` nor after the `max_dates`, e.g. avoid that `AENDT` is after the data cut date or `ASTDT` is before the first treatment date (#158)
-
-- `use_ad_template()` can be used to open a template script for an ADaM dataset; all available templates can be displayed using `list_all_templates()` (#110)
-
+- Summary records for BDS datasets, e.g. with `DTYPE == "AVERAGE"`, can be derived using `derive_summary_records()` (#177)
 
 ## Breaking Changes
 
