@@ -70,3 +70,10 @@
 - Join warnings like "Column `USUBJID` has different attributes on LHS and RHS of join when using left_join()" are no longer displayed (#271)
 
 - For datetimes with time imputed to "00:00:00" the time part is now displayed (#206)
+
+
+## Documentation
+
+- [Frequently Asked Questions](../articles/faq.html)
+
+- [Creating ADSL](../articles/adsl.html)
