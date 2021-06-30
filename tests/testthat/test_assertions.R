@@ -35,7 +35,7 @@ test_that("assert_filter_cond works as expected", {
   fc <- quo("string")
   expect_error(
     assert_filter_cond(arg = fc),
-    "Argument `fc` is not a filtering condition"
+    "`fc` is not a filter condition but a string"
   )
 
 })
