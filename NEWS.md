@@ -2,9 +2,9 @@
 
 ## New Features
 
-- The Last Study Alive Date can be derived using `derive_var_lstalvdt()` (#94)
+- Last Study Alive Date can be derived using `derive_var_lstalvdt()` (#94)
 
-- The Death Cause can be derived using `derive_var_dthcaus()` (#93)
+- Death Cause can be derived using `derive_var_dthcaus()` (#93)
 
 - Summary records for BDS datasets, e.g. with `DTYPE == "AVERAGE"`, can be derived using `derive_summary_records()` (#177)
 
@@ -24,14 +24,14 @@
 
 - `derive_vars_dt()` and `derive_vars_dtm()` gain a `min_dates` and `max_dates` parameter which can be used to ensure that the imputed date(time) is not before the `min_dates` nor after the `max_dates`, e.g. avoid that `AENDT` is after the data cut date or `ASTDT` is before the first treatment date (#158)
 
-- `use_ad_template()` can be used to open a template script to create a certain ADaM dataset; all available templated can be listed using `list_all_templates()` (#110)
+- `use_ad_template()` can be used to open a template script for an ADaM dataset; all available templates can be displayed using `list_all_templates()` (#110)
 
 
 ## Breaking Changes
 
 - `derive_merged_vars()` has been removed from {admiral} in favor of smaller special purpose functions, e.g. `derive_disposition_status()` (#167)
 
-- Function arguments no longer accept expressions created with `expr()` or `exprs()` as inputs; instead filter expressions can be passed "as is"" and multiple variables have to be wrapped inside `vars()` (#187)
+- Function arguments no longer accept expressions created with `expr()` or `exprs()` as inputs; instead filter expressions can be passed "as is" and multiple variables have to be wrapped inside `vars()` (#187)
 
   **Old:**
 
@@ -65,7 +65,7 @@
 
 ## Bug Fixes
 
-- `derive_var_basetype()` no longer drops records which do not match any condition defined in the `basetype`  argument (#226)
+- `derive_var_basetype()` no longer drops records which do not match any condition defined in the `basetype` argument (#226)
 
 - Join warnings like "Column `USUBJID` has different attributes on LHS and RHS of join when using left_join()" are no longer displayed (#271)
 
