@@ -107,7 +107,7 @@ derive_var_ontrtfl <- function(dataset,
   date <- assert_symbol(enquo(date))
   ref_start_date <- assert_symbol(enquo(ref_start_date))
   ref_end_date <- assert_symbol(enquo(ref_end_date), optional = TRUE)
-  ref_end_window <- assert_integer(ref_end_window, "non-negative")
+  ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
   assert_data_frame(
     dataset,
