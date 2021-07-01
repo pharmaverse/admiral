@@ -19,11 +19,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-##### What does **generalized functions & facilitate** mean?
+##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
 * Functions are usually not necessarily specific but parameter driven: 
     * e.g. the `derive_aage` has a parameterized start and end-date and a unit.
     * Depending on the parameters results may vary as does the specification.
+    * Functions serve as a toolbox so the user can create their ADaM according to the requirements.
 
 ##### How does a user **know what a function does** exactly?
 
@@ -43,13 +44,13 @@ knitr::opts_chunk$set(
 
 * All functions  are reviewed and tested to ensure that  they  work as described in the documentation. 
 * Test  cases for each function  will  be part of the R package.
-* The  testing the  admiral team will do for each functions does **not to replace the QC and validation  process at each company**.
+* The  testing the  admiral team will do for each functions does **not replace the QC and validation process at each company**.
 * Users can add to the  tests or provide additional feedback.
 
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
 * No. The functions  are documented  via programming  headers, the define.xml  is the responsibility  of the end user.
-* Functions  are usually  generalized  and not specific. (see [What does **generalized functions & facilitate** mean?])
+* Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?])
 
 ##### Will admiral provide ADaM IG **CDISC compliant** datasets?
 
@@ -60,7 +61,7 @@ knitr::opts_chunk$set(
 * ADaM  IG is a standard framework without a specific No of datasets or variables, so it cannot be used as a specific baseline to answer that question.
 * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
 * The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).
-* For standard ADaM datasets (ADAE, ADCM ...) we can provide an estimated coverage.
+* For standard ADaM datasets (ADAE, ADCM ...) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation
 
 ##### Will there be a user/**contribution** guide?
 
