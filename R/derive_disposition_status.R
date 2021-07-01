@@ -89,16 +89,19 @@
 #'   filter_ds = DSCAT == "DISPOSITION EVENT"
 #' )
 derive_disposition_status <- function(dataset,
-                                       dataset_ds,
-                                       new_var,
-                                       status_var,
-                                       format_new_var = format_eoxxstt_default,
-                                       filter_ds) {
-  # Checks
-  warn_if_vars_exist(dataset, deparse(substitute(new_var)))
-  assert_that(is.data.frame(dataset_ds))
-  assert_has_variables(dataset_ds, deparse(substitute(status_var)))
-  filter_ds <- enquo(filter_ds)
+                                      dataset_ds,
+                                      new_var,
+                                      status_var,
+                                      format_new_var = format_eoxxstt_default,
+                                      filter_ds) {
+
+  new_var <- assert_symbol(enquo(new_var))
+  status_var <- assert_symbol(enquo(status_var))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  assert_that(is.function(format_new_var))
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_ds, vars(!!quo_get_expr(status_var)))
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Process the disposition data
   ds_subset <- dataset_ds %>%

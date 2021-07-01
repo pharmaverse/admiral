@@ -7,14 +7,14 @@
 assert_symbol(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{A function argument to be checked}
+\item{arg}{A function argument to be checked. Must be a \code{quosure}. See examples.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a symbol and returns the input
-invisibly otherwise. \code{arg} is expected to be a \code{quosure}.
+invisibly otherwise.
 }
 \description{
 Checks if an argument is a symbol

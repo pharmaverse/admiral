@@ -49,12 +49,18 @@ derive_aage <- function(dataset,
                         start_date = BRTHDT,
                         end_date = RANDDT,
                         unit = "years") {
+
+  assert_data_frame(dataset)
+  start_date <- assert_symbol(enquo(start_date))
+  end_date <- assert_symbol(enquo(end_date))
+  assert_character_scalar(unit)
+
   derive_duration(
     dataset,
     new_var = AAGE,
     new_var_unit = AAGEU,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date),
+    start_date = !!start_date,
+    end_date = !!end_date,
     out_unit = unit,
     add_one = FALSE,
     trunc_out = TRUE
@@ -88,12 +94,10 @@ NULL
 #'
 #' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 derive_agegr_fda <- function(dataset, age_var, new_var) {
-  assert_that(is.data.frame(dataset))
 
-  age_var <- enquo(age_var)
-  new_var <- enquo(new_var)
-
-  assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
+  age_var <- assert_symbol(enquo(age_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(dataset, required_vars = quos(!!quo_get_expr(age_var)))
 
   out <- mutate(
     dataset,
@@ -124,15 +128,11 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
 #' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
-  assert_that(
-    is.data.frame(dataset),
-    rlang::is_scalar_logical(adults)
-  )
 
-  age_var <- enquo(age_var)
-  new_var <- enquo(new_var)
-
-  assert_has_variables(dataset, as_string(rlang::quo_get_expr(age_var)))
+  age_var <- assert_symbol(enquo(age_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(dataset, required_vars = quos(!!quo_get_expr(age_var)))
+  assert_logical_scalar(adults)
 
   if (adults) {
     out <- mutate(
