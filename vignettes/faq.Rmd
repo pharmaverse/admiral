@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-##### What does **generalized functions & facilitate** mean?
+##### Admiral states it has **generalized functions to facilitate ADaMs**, what does that mean?
 
 * Functions are usually not necessarily specific but parameter driven: 
     * e.g. the `derive_aage` has a parameterized start and end-date and a unit.
@@ -49,18 +49,19 @@ knitr::opts_chunk$set(
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
 * No. The functions  are documented  via programming  headers, the define.xml  is the responsibility  of the end user.
-* Functions  are usually  generalized  and not specific. (see [What does **generalized functions & facilitate** mean?])
+* Functions  are usually  generalized  and not specific. (see [Admiral states it has **generalized functions to facilitate ADaMs**, what does that mean?])
 
 ##### Will admiral provide ADaM IG **CDISC compliant** datasets?
 
 * Although admiral follows CDISC standards it does not claim that the dataset resulting from calling admiral functions is ADaM compliant. This has to be ensured by the user.
 
-##### How much of the **ADaM IG is covered  by admiral? Proposal**:
+##### How much of the **ADaM IG is covered  by admiral? **:
 
-* ADaM  IG is a standard framework without a specific No of datasets or variables, so it cannot be used as a specific baseline to answer that question.
-* We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
-* The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).
-* For standard ADaM datasets (ADAE, ADCM ...) we can provide an estimated coverage.
+* ADaM  IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.
+* * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
+* The guidance will also highlight the gaps to be filled by the user (e.g. timing variables, visit windows).
+* For heavily standardized ADaM datasets (ADAE, ADCM ...) we can provide an estimated coverage based on testing and user feedback 
+* The ADaM IG implementations might vary from company to company, so numbers are estimates
 
 ##### Will there be a user/**contribution** guide?
 
