@@ -104,20 +104,15 @@ derive_var_ontrtfl <- function(dataset,
                                ref_end_date = NULL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL) {
-  assert_that(
-    is.data.frame(dataset),
-    is.numeric(ref_end_window)
-  )
-  assert_has_variables(
+  date <- assert_symbol(enquo(date))
+  ref_start_date <- assert_symbol(enquo(ref_start_date))
+  ref_end_date <- assert_symbol(enquo(ref_end_date), optional = TRUE)
+  ref_end_window <- assert_integer(ref_end_window, "non-negative")
+  filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
+  assert_data_frame(
     dataset,
-    c(deparse(substitute(date)), deparse(substitute(ref_start_date)))
+    required_vars = quo_c(date, ref_start_date, ref_end_date)
   )
-  warn_if_vars_exist(dataset, "ONTRTFL")
-
-  date <- enquo(date)
-  ref_start_date <- enquo(ref_start_date)
-  ref_end_date <- enquo(ref_end_date)
-  filter_pre_timepoint <- enquo(filter_pre_timepoint)
 
   dataset <- mutate(
     dataset,

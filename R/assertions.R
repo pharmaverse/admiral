@@ -344,6 +344,10 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
 
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
   provided <- quo_not_missing(arg)
   if (!provided & !optional) {
     err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
