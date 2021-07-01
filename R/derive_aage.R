@@ -50,10 +50,13 @@ derive_aage <- function(dataset,
                         end_date = RANDDT,
                         unit = "years") {
 
-  assert_data_frame(dataset)
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
-  assert_character_scalar(unit)
+  assert_data_frame(dataset, required_vars = quo_c(start_date, end_date))
+  assert_character_scalar(
+    unit,
+    values = c("years", "months", "days", "hours", "minutes", "seconds")
+  )
 
   derive_duration(
     dataset,
@@ -97,7 +100,7 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quos(!!quo_get_expr(age_var)))
+  assert_data_frame(dataset, required_vars = quo_c(age_var))
 
   out <- mutate(
     dataset,
@@ -131,7 +134,7 @@ derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quos(!!quo_get_expr(age_var)))
+  assert_data_frame(dataset, required_vars = quo_c(age_var))
   assert_logical_scalar(adults)
 
   if (adults) {

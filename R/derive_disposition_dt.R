@@ -68,7 +68,7 @@ derive_disposition_dt <- function(dataset,
   filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_character_scalar(date_imputation, optional = TRUE)
   assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, vars(!!quo_get_expr(dtc)))
+  assert_data_frame(dataset_ds, quo_c(dtc))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Process the disposition data

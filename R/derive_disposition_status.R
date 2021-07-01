@@ -100,7 +100,7 @@ derive_disposition_status <- function(dataset,
   filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_that(is.function(format_new_var))
   assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, vars(!!quo_get_expr(status_var)))
+  assert_data_frame(dataset_ds, quo_c(status_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Process the disposition data
