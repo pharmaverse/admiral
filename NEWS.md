@@ -14,10 +14,6 @@
 
 ### ADSL
 
-- Last Study Alive Date can be derived using `derive_var_lstalvdt()` (#94)
-
-- Death Cause can be derived using `derive_var_dthcaus()` (#93)
-
 - EMA and FDA defined age groupings can be derived using `derive_agegr_ema()` and `derive_agegr_fda()`, respectively
 
 - Disposition Status can be derived using `derive_disposition_status()` (#92)
@@ -26,11 +22,17 @@
 
 - Disposition Dates can be derived using `derive_disposition_dt()` (#91)
 
-- Last Dose can be derived using `derive_last_dose()`
+- Date Last Known Alive can be derived using `derive_var_lstalvdt()` (#94)
+
+- Cause of Death can be derived using `derive_var_dthcaus()` (#93)
 
 ### BDS
 
 - Summary records for BDS datasets, e.g. with `DTYPE == "AVERAGE"`, can be derived using `derive_summary_records()` (#177)
+
+### OCCDS
+
+- Last Dose can be derived using `derive_last_dose()`
 
 ## Breaking Changes
 
