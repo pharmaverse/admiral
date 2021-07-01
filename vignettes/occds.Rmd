@@ -7,8 +7,10 @@ output:
     toc: false
 vignette: >
   %\VignetteIndexEntry{Creating ADAE}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -64,9 +66,12 @@ dataset by adding all predecessor variables.
 
 Example call:
 
-```{r eval=FALSE}
-meta <- read_dap_m3("DAP_M3.xlsx")
-adae <- initialize("ADAE", meta, list(adsl, ae))
+```{r, eval=FALSE}
+adae <- full_join(
+    mutate(adsl, DOMAIN = NULL),
+    mutate(ae, DOMAIN = NULL), 
+    by = c("STUDYID", "USUBJID")
+  ) 
 ```
 
 ### Derive/Impute end and start analysis date/time and relative day {#datetime}
@@ -75,8 +80,8 @@ This part includes variables `AENDTM`, `AENDT`, `AENDY`, `ASTDTM`, `ASTDT`, and
 `ASTDY`. 
 The function `derive_vars_dtm()` can be used to derive `AENDTM` and 
 `ASTDTM` where `ASTDTM` could be company-specific. 
-`AENDT` and `ASTADT` can be created with a simple `mutate`, and 
-`derive_var_aendy` and `derive_var_astdy` can be used to create 
+`AENDT` and `ASTADT` can be created with a simple `dplyr::mutate`, and 
+`derive_var_aendy()` and `derive_var_astdy()` can be used to create 
 `AENDY` and `ASTDY` respectively.
 
 Example calls:
@@ -90,7 +95,7 @@ adae <- adae %>%
     time_imputation = "last",
     max_dates = list(DTHDT, DCUTDT)
   ) %>% # AENDTM derived
-  muatate(AENDT = date(AENDTM)) %>% # AENDT derived
+  mutate(AENDT = date(AENDTM)) %>% # AENDT derived
   derive_var_aendy(
     reference_date = TRTSDT, 
     date = AENDT
@@ -126,9 +131,12 @@ adae <- adae %>%
 
 
 
+### Derive date/date-time of last dose  {#last_dose}
+
+
 ### Derive severity, causality, and toxicity grade {#severity}
 
-The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply `mutate` as 
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply `dplyr::mutate` as 
 they essentially come from the `AE` dataset.
 
 Example call:
@@ -154,10 +162,10 @@ Example call:
 ```{r eval=FALSE}
 adae <- adae %>% 
   derive_extreme_flag(
-  new_var = AOCCIFL,
-  by_vars = exprs(USUBJID),
-  order = exprs(ATOXGR, ASTDTM, AESEQ),
-  flag_filter = exprs(ANL01FL == ‘Y’)
+    new_var = AOCCIFL,
+    by_vars = exprs(USUBJID),
+    order = exprs(ATOXGR, ASTDTM, AESEQ),
+    flag_filter = exprs(ANL01FL == ‘Y’)
   )
 ```
 
