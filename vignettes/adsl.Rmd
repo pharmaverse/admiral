@@ -43,7 +43,7 @@ otherwise specified.*
 * [Derive Last Known Date Alive (`LSTALVDT`)](#lstalvdt)
 * [Derive Groupings and Populations](#groupings)
   * [Grouping (e.g. `AGEGR1`)](#groupings_ex)
-  * [Population Flags (e.g. `SAFFL`)](#popfalg)
+  * [Population Flags (e.g. `SAFFL`)](#popflag)
   * [Other Variables Required for Analysis](#other)
 * [Example Script](#example)
 
