@@ -4,9 +4,9 @@
 
 ### General
 
-- SDTM `SUPP--` dataset can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
+- SDTM `SUPP--` datasets can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
 
-- In case a derivation detects duplicate records after applying a `filter`, the dataset of duplicate records is made available to users by running `get_duplicates_dataset()` (#202)
+- In case a derivation detects duplicate records after applying a `filter`, the dataset of duplicate records is made available to users via `get_duplicates_dataset()` (#202)
 
 - `derive_vars_dt()` and `derive_vars_dtm()` gain a `min_dates` and `max_dates` parameter which can be used to ensure that the imputed date(time) is not before the `min_dates` nor after the `max_dates`, e.g. avoid that `AENDT` is after the data cut date or `ASTDT` is before the first treatment date (#158)
 
@@ -32,7 +32,7 @@
 
 ### OCCDS
 
-- Last Dose can be derived using `derive_last_dose()`
+- Last Dose Date(time) can be derived using `derive_last_dose()`
 
 ## Breaking Changes
 
