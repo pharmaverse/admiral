@@ -447,6 +447,7 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
     "none" = quote(TRUE)
   )
   assert_character_scalar(subset, values = names(subsets))
+  assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
     return(invisible(arg))
@@ -463,6 +464,24 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   }
 
   invisible(as.integer(arg))
+}
+
+assert_named_exprs <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) != "")) {
+    err_msg <- sprintf(
+      "`%s` is not a named list of expressions created using `exprs()`",
+      arg_name(substitute(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
 }
 
 #' Does a Dataset Contain All Required Variables?
@@ -753,19 +772,6 @@ on_failure(is_valid_month) <- function(call, env) {
     " is not a valid month.\n",
     "Values for month must be between 1-12. ",
     "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
-  )
-}
-
-is_named_exprs <- function(arg) {
-  is.list(arg) &&
-    all(map_lgl(arg, is.language)) &&
-    all(names(arg) != "")
-}
-on_failure(is_named_exprs) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a named list of expressions created using `exprs()`"
   )
 }
 
