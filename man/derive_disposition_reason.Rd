@@ -4,9 +4,16 @@
 \alias{derive_disposition_reason}
 \title{Derive a disposition reason at a specific timepoint}
 \usage{
-derive_disposition_reason(dataset, dataset_ds, new_var, reason_var,
-  new_var_spe = NULL, reason_var_spe = NULL,
-  format_new_vars = format_reason_default, filter_ds)
+derive_disposition_reason(
+  dataset,
+  dataset_ds,
+  new_var,
+  reason_var,
+  new_var_spe = NULL,
+  reason_var_spe = NULL,
+  format_new_vars = format_reason_default,
+  filter_ds
+)
 }
 \arguments{
 \item{dataset}{Input dataset.}
@@ -50,7 +57,7 @@ This function is used to derive the disposition reason(s) and must follow the be
 \itemize{
 \item If only the main reason for discontinuation needs to be derived (i.e. \code{new_var_spe} is NULL),
 the function must have at least one character vector argument, e.g.
-\code{format_reason <- function(reason)}
+\verb{format_reason <- function(reason)}
 and \code{new_var} will be derived as \code{new_var = format_reason(reason_var)}
 Typically, the content of the function would return \code{reason_var} or \code{NA} depending on the
 value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)}).
@@ -58,7 +65,7 @@ value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_c
 nor \code{NA}, \code{NA} otherwise.
 \item If both the main reason and the details needs to be derived (\code{new_var_spe} is specified)
 the function must have two character vectors argument, e.g.
-\code{format_reason2 <- function(reason, reason_spe)} and
+\verb{format_reason2 <- function(reason, reason_spe)} and
 \code{new_var} will be derived as \code{new_var} = \code{format_reason(reason_var)},
 \code{new_var_spe} will be derived as \code{new_var_spe} = \code{format_reason(reason_var, reason_var_spe)},
 Typically, the content of the function would return \code{reason_var_spe} or \code{NA} depending on the

@@ -4,10 +4,20 @@
 \alias{derive_last_dose}
 \title{Derive last dose date(-time)}
 \usage{
-derive_last_dose(dataset, dataset_ex, filter_ex = NULL,
-  by_vars = vars(STUDYID, USUBJID), dose_start, dose_end, analysis_date,
-  dataset_seq_var, new_var, output_datetime = TRUE,
-  check_dates_only = FALSE, traceability_vars = vars())
+derive_last_dose(
+  dataset,
+  dataset_ex,
+  filter_ex = NULL,
+  by_vars = vars(STUDYID, USUBJID),
+  dose_start,
+  dose_end,
+  analysis_date,
+  dataset_seq_var,
+  new_var,
+  output_datetime = TRUE,
+  check_dates_only = FALSE,
+  traceability_vars = vars()
+)
 }
 \arguments{
 \item{dataset}{Input dataset.}

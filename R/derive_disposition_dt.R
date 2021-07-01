@@ -83,11 +83,10 @@ derive_disposition_dt <- function(dataset,
     select(STUDYID, USUBJID, !!enquo(new_var) := !!sym(newvar))
 
   # Expect 1 record per subject - issue a warning otherwise
-  has_unique_records(
-    dataset = ds_subset,
+  signal_duplicate_records(
+    ds_subset,
     by_vars = vars(STUDYID, USUBJID),
-    message_type = "error",
-    message = "The filter used for DS results in several records per patient - please check"
+    msg = "The filter used for DS results in multiple records per patient"
   )
 
   # add the new dispo date to the input dataset

@@ -4,8 +4,7 @@
 \alias{derive_aage}
 \title{Derive Analysis Age}
 \usage{
-derive_aage(dataset, start_date = BRTHDT, end_date = RANDDT,
-  unit = "years")
+derive_aage(dataset, start_date = BRTHDT, end_date = RANDDT, unit = "years")
 }
 \arguments{
 \item{dataset}{Input dataset
