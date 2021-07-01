@@ -102,16 +102,18 @@ derive_var_basec <- function(dataset, by_vars) {
 #' )
 derive_baseline <- function(dataset, by_vars, source_var, new_var) {
 
-  assert_vars(by_vars)
-  assert_data_frame(dataset, by_vars)
+  by_vars <- assert_vars(by_vars)
   source_var <- assert_symbol(enquo(source_var))
   new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, source_var, quo(ABLFL))
+  )
   warn_if_vars_exist(dataset, quo_text(new_var))
-  assert_has_variables(dataset, c(quo_text(source_var), "ABLFL"))
 
   base <- dataset %>%
     filter(ABLFL == "Y") %>%
-    select(!!!by_vars, !!enquo(new_var) := !!enquo(source_var))
+    select(!!!by_vars, !!new_var := !!source_var)
 
   signal_duplicate_records(base, by_vars, "Dataset contains multiple baseline records.")
 
