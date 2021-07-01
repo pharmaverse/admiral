@@ -439,6 +439,32 @@ assert_vars <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
+  subsets <- list(
+    "positive" = quote(arg > 0L),
+    "non-negative" = quote(arg >= 0L),
+    "negative" = quote(arg < 0L),
+    "none" = quote(TRUE)
+  )
+  assert_character_scalar(subset, values = names(subsets))
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!rlang::is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
+    err_msg <- sprintf(
+      "`%s` must be a %s integer scalar but is %s",
+      arg_name(substitute(arg)),
+      if (subset == "none") "\b\ban" else subset,
+      if (length(arg) == 1L) backquote(arg) else friendly_type(typeof(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(as.integer(arg))
+}
+
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
