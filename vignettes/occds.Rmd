@@ -67,9 +67,9 @@ dataset by adding all predecessor variables.
 Example call:
 
 ```{r, eval=FALSE}
-adae <- full_join(
-    mutate(adsl, DOMAIN = NULL),
+adae <- left_join(
     mutate(ae, DOMAIN = NULL), 
+    mutate(adsl, DOMAIN = NULL),
     by = c("STUDYID", "USUBJID")
   ) 
 ```
