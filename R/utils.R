@@ -13,18 +13,20 @@ dplyr::vars
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
+#' @param quote_fun Quoting function, defaults to `backquote`.
+#' @param conjunction Character to be used in the message, defaults to "and".
 #'
 #' @noRd
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote) {
+enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
     quote_fun(x)
   } else {
     paste(
       paste0(quote_fun(x[-length(x)]), collapse = ", "),
-      "and",
+      conjunction,
       quote_fun(x[length(x)])
     )
   }
@@ -98,6 +100,18 @@ vars2chr <- function(quosures) {
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
+}
+
+arg_name <- function(expr) {
+  if (length(expr) == 1L && is.symbol(expr)) {
+    deparse(expr)
+  } else if (length(expr) == 2L &&
+             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+             is.symbol(expr[[2L]])) {
+    deparse(expr[[2L]])
+  } else {
+    abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
+  }
 }
 
 extract_vars <- function(quosures) {
