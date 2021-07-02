@@ -355,7 +355,7 @@ detailing how the BASETYPE should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
 
-```{r eval=TRUE}
+```{r eval=TRUE, warning=FALSE}
 advs <- derive_var_basetype(
   dataset = advs,
   basetypes = exprs(
