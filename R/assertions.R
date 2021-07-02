@@ -439,6 +439,70 @@ assert_vars <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+#' Is an Argument a valid list of order variables created using `vars()`?
+#'
+#' Checks if an argument is a valid list of order variables created using `vars()`
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variables or `desc()`
+#' calls created using `vars()` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(by_vars) {
+#'   assert_order_vars(by_vars)
+#' }
+#'
+#' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
+#'
+#' tryCatch(
+#'   example_fun(exprs(USUBJID, PARAMCD)),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(c("USUBJID", "PARAMCD", "VISIT")),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+assert_order_vars <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  default_err_msg <- sprintf(
+    "`%s` must be a a list of unquoted variable names or desc() calls, e.g. `vars(USUBJID, desc(VISITNUM))`",
+    arg_name(substitute(arg))
+  )
+
+  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
+    abort(default_err_msg)
+  }
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, "quosures")) {
+    abort(default_err_msg)
+  }
+
+  assert_that(is_order_vars(arg))
+
+  invisible(arg)
+}
+
 assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   subsets <- list(
     "positive" = quote(arg > 0L),

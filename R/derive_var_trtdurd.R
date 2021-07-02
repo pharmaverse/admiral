@@ -42,10 +42,14 @@
 derive_var_trtdurd <- function(dataset,
                                start_date = TRTSDT,
                                end_date = TRTEDT) {
+  start_date <- assert_symbol(enquo(start_date))
+  end_date <- assert_symbol(enquo(end_date))
+  assert_data_frame(dataset, vars(!!start_date, !!end_date))
+
   derive_duration(
     dataset,
     new_var = TRTDURD,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date)
+    start_date = !!start_date,
+    end_date = !!end_date
   )
 }
