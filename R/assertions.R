@@ -473,7 +473,7 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) != "")) {
+  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` is not a named list of expressions created using `exprs()`",
       arg_name(substitute(arg))
