@@ -43,7 +43,7 @@ otherwise specified.*
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive New Rows](#additional)
-* [Derive Categorization Variables (`AVALCAT`)](#cat)
+* [Derive Categorization Variables (`AVALCATx`)](#cat)
 * [Example Scripts](#example)
 
 ### Read in Data {#readdata}
@@ -160,7 +160,7 @@ advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
 head(select(advs, USUBJID, TRTSDT, ADT, ADY))
 ```
 
-### Derive Results (AVAL, AVALC, AVALU) {#aval}
+### Derive Results (`AVAL`, `AVALC`, `AVALU`) {#aval}
 
 The mapping of `AVAL`, `AVALC`, and `AVALU` is left to the ADaM programmer. An 
 example mapping may be:
@@ -264,7 +264,7 @@ count(advs, VSTPTNUM, VSTPT, ATPTN, ATPT)
 ### Timing Flag Variables (e.g. `ONTRTFL`) {#timingflag}
 
 In some analyses, it may be necessary to flag an observation as on-treatment.
-The Admiral function `derive_var_ontrtfl()` can be used.
+The admiral function `derive_var_ontrtfl()` can be used.
 
 For example, if on-treatment is defined as any observation between treatment
 start and treatment end, the flag may be derived as:
@@ -321,7 +321,7 @@ advs <- derive_var_ontrtfl(
 
 ### Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
-The Admiral function `derive_var_anrind()` may be used to derive the reference
+The admiral function `derive_var_anrind()` may be used to derive the reference
 range indicator `ANRIND`.
 
 This function requires the reference range boundaries to exist on the data frame 
@@ -372,7 +372,7 @@ It is important to derive `BASETYPE` first so that it can be utilized in
 subsequent derivations. This will be important if the data frame contains
 multiple values for `BASETYPE`.
 
-Next, the analysis baseline flag (`ABLFL`) can be derived using the Admiral
+Next, the analysis baseline flag (`ABLFL`) can be derived using the admiral
 function `derive_extreme_flag()`.  For example, if baseline is defined as the last 
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
@@ -419,7 +419,7 @@ head(select(advs, USUBJID, BASETYPE, PARAMCD, ABLFL, BASE, BASEC, ANRIND, BNRIND
 
 ### Derive Change from Baseline (`CHG`, `PCHG`) {#bchange}
 
-Change and percent change from baseline can be derived using the Admiral 
+Change and percent change from baseline can be derived using the admiral 
 functions `derive_var_chg()` and `derive_var_pchg()`.  These functions expect `AVAL` 
 and `BASE` to exist in the data frame.  The `CHG` is simply `AVAl - BASE` and the
 `PCHG` is `(AVAL - BASE) / absolute value (BASE) * 100`.  Examples calls are:
@@ -441,7 +441,7 @@ observations within a particular timing period.
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
 appropriate record for analysis.
 
-This flag may be derived using the Admiral function `derive_extreme_flag()`. 
+This flag may be derived using the admiral function `derive_extreme_flag()`. 
 For this example, we will assume we would like to choose the latest and 
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
@@ -497,7 +497,7 @@ head(select(advs, USUBJID, PARAMCD, AVISIT, AVAL, ADT, ATPTN, WORSTFL))
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL. The 
 derivation of `TRTA` and `TRTP` for a record are protocol and analysis specific.  
-Admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
+admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
 assignment.
 
 However, an example of a simple implementation could be:
@@ -512,7 +512,7 @@ head(select(advs, USUBJID, TRT01P, TRT01A, TRTP, TRTA))
 
 ### Assign `ASEQ` {#aseq}
 
-The Admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
+The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
 ```{r eval=TRUE}
@@ -614,9 +614,9 @@ advs %>%
   head()
 ```
 
-### Derive Categorization Variables (`AVALCAT`) {#cat}
+### Derive Categorization Variables (`AVALCATx`) {#cat}
 
-Admiral does not currently have a generic function to aid in assigning `AVALCAT`/
+Admiral does not currently have a generic function to aid in assigning `AVALCATx`/
 `AVALCAxN` values. Below is a simple example of how these values may be
 assigned:
 
