@@ -34,15 +34,15 @@
 #' @examples
 #' data("queries")
 #' adae <- tibble::tribble(
-#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
+#'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
 #'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-#'     3, "Alanine aminotransferase abnormal", NA_character_,
+#'     3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
 #'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-#'     5, "Basedow's disease", NA_character_,
+#'     5, "Basedow's disease", NA_character_, 1L,
 #'   "03", "2020-06-07 23:59:59", "SOME TERM",
-#'     2, "Some query", "Some term",
+#'     2, "Some query", "Some term", NA_integer_,
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-#'     7, "Alveolar proteinosis", NA_character_
+#'     7, "Alveolar proteinosis", NA_character_,  NA_integer_
 #' )
 #' derive_query_vars(adae, queries)
 derive_query_vars <- function(dataset, queries) {
@@ -152,12 +152,15 @@ derive_query_vars <- function(dataset, queries) {
 #'
 #' @details Check if the dataset has the following columns
 #' - `VAR_PREFIX`, e.g., SMQ01, CQ12
-#' - `QUERY_NAME`, non NULL, must be unique per each `VAR_PREFIX`
-#' - `QUERY_ID`, could be NULL, must be unique per each `VAR_PREFIX`
-#' - `QUERY_SCOPE`, 'BROAD', 'NARROW', or NULL
+#' - `QUERY_NAME`, non NA, must be unique per each `VAR_PREFIX`
+#' - `QUERY_ID`, could be NA, must be unique per each `VAR_PREFIX`
+#' - `QUERY_SCOPE`, 'BROAD', 'NARROW', or NA
 #' - `QUERY_SCOPE_NUM`, 1, 2, or NA
-#' - `TERM_LEVEL`, e.g., AEDECOD, AELLT, ...
-#' - `TERM_NAME`, non NULL
+#' - `TERM_LEVEL`, e.g., AEDECOD, AELLT, AELLTCD, ...
+#' - `TERM_NAME`, character, could be NA only at those observations
+#' where `TERM_ID` is non-NA
+#' - `TERM_ID`, integer, could be NA only at those observations
+#' where `TERM_NAME` is non-NA
 #'
 #' @param queries A data.frame.
 #'
@@ -175,8 +178,10 @@ derive_query_vars <- function(dataset, queries) {
 assert_valid_queries <- function(queries, queries_name) {
 
   # check required columns
-  assert_has_variables(queries,
-                       c("VAR_PREFIX", "QUERY_NAME", "TERM_LEVEL", "TERM_NAME", "TERM_ID"))
+  assert_has_variables(
+    queries,
+    c("VAR_PREFIX", "QUERY_NAME", "TERM_LEVEL", "TERM_NAME", "TERM_ID")
+  )
 
   # check duplicate rows
   signal_duplicate_records(queries, by_vars = quos(!!!syms(colnames(queries))))
@@ -243,9 +248,11 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
   # check illegal term name
-  if (any(queries$TERM_NAME == "") | any(is.na(queries$TERM_NAME))) {
-    abort(paste0("`TERM_NAME` in `", queries_name,
-                 "` cannot be empty string or NA."))
+  if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
+      any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
+    abort(paste0("Either `TERM_NAME` or `TERM_ID` need to be specified ",
+                 " in `", queries_name, "`. ",
+                 "They both cannot be NA or empty."))
   }
 
   # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID if the columns exist

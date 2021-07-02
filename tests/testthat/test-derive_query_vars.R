@@ -140,7 +140,7 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
-    "CQ42", "My Query 2", "AELLTCD", "other", 2, 1
+    "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
 
   my_ae <- tibble::tribble(
