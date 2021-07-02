@@ -30,11 +30,11 @@ otherwise specified.*
 
 ## Programming Workflow
 
-* [Read in data](#readdata)
-* [Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
+* [Read in Data](#readdata)
+* [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
 * [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
 * [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCATy`](#paramcd)
-* [Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
+* [Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
 * [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`)](#baseline)
@@ -43,10 +43,10 @@ otherwise specified.*
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive New Rows](#additional)
-* [Derive categorization variables (`AVALCAT`)](#cat)
+* [Derive Categorization Variables (`AVALCAT`)](#cat)
 * [Example Scripts](#example)
 
-### Read in data {#readdata}
+### Read in Data {#readdata}
 
 To start, all data frames needed for the creation of ADVS should be read into
 the environment.  This will be a company specific process.  Some of the 
@@ -88,7 +88,7 @@ advs <- left_join(vs, adsl, by = c("STUDYID", "USUBJID"))
 head(advs)
 ```
 
-### Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
+### Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
 
 The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
 the user to impute the date as well.
@@ -224,7 +224,7 @@ Please note, it may be necessary to include other variables in the join. For
 example, perhaps the `PARCAT1` is based on `VSTESTCD` and `VSPOS`, it may be 
 necessary to expand this lookup or create a separate look up for `PARCAT1`.
 
-### Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
+### Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
 
 Categorical timing variables are protocol and analysis dependent.  Below is a 
 simple example to calculate `APHASE`. 
@@ -614,7 +614,7 @@ advs %>%
   head()
 ```
 
-### Derive categorization variables (`AVALCAT`) {#cat}
+### Derive Categorization Variables (`AVALCAT`) {#cat}
 
 Admiral does not currently have a generic function to aid in assigning `AVALCAT`/
 `AVALCAxN` values. Below is a simple example of how these values may be
