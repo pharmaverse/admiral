@@ -23,14 +23,12 @@ knitr::opts_chunk$set(
 ## Introduction
 
 This article describes creating a OCCDS ADaM. Examples are currently 
-presented and tested in the context of ADAE  However, the examples could be
-applied to other OCCDS ADaMs such as ADCM (?), ADMH, and ADDV, where ... (?).
+presented and tested in the context of ADAE.
+However, the examples could be applied to other OCCDS ADaMs such as 
+ADCM (?), ADMH, and ADDV, where ... (?).
 
-<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
-otherwise specified. </i>
-
-<b> <span style="color: red"> None of the code chunks are executing/displaying
-results.  Is that something we want to do? </span> </b>
+**Note:** 
+*All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.*
 
 ## Programming Workflow
 
@@ -44,10 +42,16 @@ results.  Is that something we want to do? </span> </b>
 * [Derive occurrence flags](#occflag)
 * [Derive query variables](#query)
 
-<b> <span style="color: red"> Do we want to include company specific derivations 
-such as treatment flags, dosage related variables, datacut, etc? </span> </b>
-
 ### Read in data {#readdata}
+
+Let's start by attaching packages:
+
+```{r}
+library(dplyr)
+library(lubridate)
+library(admiral)
+```
+
 
 To start, all dataframes needed for the creation of `ADAE` should be read into
 the environment. This will be a company specific process. Some of the 
@@ -57,22 +61,26 @@ dataframes needed may be:
   * `SUPPDM`
   * `ADSL`
   
-<b> <span style="color: red"> How to treat `SUPPAE` and `SUPPDM`? </span> </b>
+To Derive Supplemental Qualifiers, `derive_suppqual_vars` can be used. 
 
-<b> <span style="color: red"> Split deriving predecessors into another section? </span> </b>
-  
-The `initialize()` function can help create the starting point of the `ADAE` 
-dataset by adding all predecessor variables.
-
-Example call:
-
-```{r, eval=FALSE}
-adae <- left_join(
-    mutate(ae, DOMAIN = NULL), 
-    mutate(adsl, DOMAIN = NULL),
-    by = c("STUDYID", "USUBJID")
-  ) 
+```{r eval=FALSE}
+ae <- derive_suppqual_vars(ae, suppae)
 ```
+
+Now start creating ADAE by joining the required datasets together. 
+
+```{r}
+data(ae)
+data(adsl)
+
+adae <- left_join(
+  mutate(ae, DOMAIN = NULL), 
+  mutate(adsl, DOMAIN = NULL),
+  by = c("STUDYID", "USUBJID")
+) 
+```
+
+
 
 ### Derive/Impute end and start analysis date/time and relative day {#datetime}
 
@@ -84,33 +92,53 @@ The function `derive_vars_dtm()` can be used to derive `AENDTM` and
 `derive_var_aendy()` and `derive_var_astdy()` can be used to create 
 `AENDY` and `ASTDY` respectively.
 
-Example calls:
-
-```{r eval=FALSE}
+```{r}
 adae <- adae %>% 
+  mutate(
+    DTHDTC = convert_dtc_to_dt(DTHDTC),  # convert character to date
+    RFPENDTC = convert_dtc_to_dt(RFPENDTC), 
+    RFSTDTC = convert_dtc_to_dt(RFSTDTC)
+  ) %>% 
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = list(DTHDT, DCUTDT)
-  ) %>% # AENDTM derived
-  mutate(AENDT = date(AENDTM)) %>% # AENDT derived
+    max_dates = list(DTHDTC, RFPENDTC)
+  ) %>% 
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    date_imputation = "first",
+    time_imputation = "first",
+    min_dates = list(RFSTDTC)
+  ) %>% 
+  mutate(
+    AENDT = date(AENDTM), 
+    ASTDT = date(ASTDTM)
+  ) %>%
   derive_var_aendy(
     reference_date = TRTSDT, 
     date = AENDT
-  ) # AENDY derived
+  ) %>% 
+  derive_var_astdy(
+    reference_date = TRTSDT, 
+    date = ASTDT
+  )
 ```
+
 
 ### Derive durations {#duration}
 
 The function `derive_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
 
-Example call:
-
-```{r eval=FALSE}
+```{r}
 adae <- adae %>%
+  mutate(
+    AESTDTC = convert_dtc_to_dt(AESTDTC), 
+    AEENDTC = convert_dtc_to_dt(AEENDTC)
+  ) %>% 
   derive_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
@@ -125,13 +153,38 @@ adae <- adae %>%
 
 ### Derive analysis phase and period {#phase_period}
 
+*These functionalities are in progress.*
 
 
 ### Derive planned and actual treatment {#trtpa}
 
+*These functionalities are in progress.*
 
 
 ### Derive date/date-time of last dose  {#last_dose}
+
+The function `derive_last_dose()` can be used to derive the last dose date. 
+Additionally, this function can also provide the traceability variables 
+(e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
+
+
+```{r}
+data(ex_single)
+adae <- adae %>% 
+  derive_last_dose(
+    ex_single,
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
+      nchar(as.character(EXENDTC)) >= 10,
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    new_var = LDOSEDTM,
+    output_datetime = TRUE,
+    check_dates_only = FALSE
+  )
+```
+
 
 
 ### Derive severity, causality, and toxicity grade {#severity}
@@ -139,16 +192,25 @@ adae <- adae %>%
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply `dplyr::mutate` as 
 they essentially come from the `AE` dataset.
 
-Example call:
-
-```{r eval=FALSE}
+```{r}
 adae <- adae %>%
-  mutate(ASEV = AESEV, 
-         AREL = AEREL, 
-         ATOXGR = AETOXGR)
+  mutate(
+    ASEV = AESEV, 
+    AREL = AEREL
+  )
 ```
 
-### Derive treatement flags {#trtflag}
+### Derive treatment emergent flags {#trtflag}
+
+To derive treatment emergent flags `TRTEMFL`, one can use simple `dplyr::mutate`. 
+In the example below, we use 30 days in the flag derivation. 
+
+```{r}
+adae <- adae %>% 
+  mutate(
+    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", "")
+  )
+```
 
 
 
@@ -157,33 +219,38 @@ adae <- adae %>%
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
-Example call:
-
-```{r eval=FALSE}
+```{r}
 adae <- adae %>% 
   derive_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = exprs(USUBJID),
-    order = exprs(ATOXGR, ASTDTM, AESEQ),
-    flag_filter = exprs(ANL01FL == ‘Y’)
+    by_vars = vars(USUBJID),
+    order = vars(ASTDTM, AESEQ),
+    flag_filter = TRTEMFL == "Y", 
+    mode = "last"
   )
 ```
 
-### Derive query variables {#query}
+Similarly, `ASEV` can also be used to derive the occurrence flags. 
+In this case, the variable need to be firstly recoded into a numeric one:
 
-The function `derive_query_vars()` can help derive the `SMQ` and `CQ` variables 
-given a standard query dataset. More details can be found in the documentation 
-of this function.
-
-<b> <span style="color: red"> Provide more detail about the query dataset here or link to somewhere? </span> </b>
-
-Example call:
-
-```{r eval=FALSE}
-adae <- adae %>%
-  derive_query_vars(queries)
+```{r, eval=F}
+adae %>% 
+  mutate(
+    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE")))
+  ) %>% 
+  derive_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = vars(USUBJID),
+    order = vars(ASTDTM, ASEVN, AESEQ),
+    flag_filter = NULL, 
+    mode = "last"
+  )
 ```
 
+
+### Derive query variables {#query}
+
+*These functionalities are in progress.*
 
 
 
