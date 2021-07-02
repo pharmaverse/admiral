@@ -54,7 +54,7 @@
 #'   dataset_ds = ds,
 #'   new_var = FRVDT,
 #'   dtc = DSSTDTC,
-#'   filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+#'   filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
 #' )
 derive_disposition_dt <- function(dataset,
                                   dataset_ds,
@@ -62,11 +62,14 @@ derive_disposition_dt <- function(dataset,
                                   dtc,
                                   filter_ds,
                                   date_imputation = NULL) {
-  # Checks
-  warn_if_vars_exist(dataset, deparse(substitute(new_var)))
-  assert_that(is.data.frame(dataset_ds))
-  assert_has_variables(dataset_ds, deparse(substitute(dtc)))
-  filter_ds <- enquo(filter_ds)
+
+  new_var <- assert_symbol(enquo(new_var))
+  dtc <- assert_symbol(enquo(dtc))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  assert_character_scalar(date_imputation, optional = TRUE)
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_ds, quo_c(dtc))
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Process the disposition data
   prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))

@@ -101,6 +101,7 @@ derive_var_basec <- function(dataset, by_vars) {
 #'   new_var = BASEC
 #' )
 derive_baseline <- function(dataset, by_vars, source_var, new_var) {
+
   by_vars <- assert_vars(by_vars)
   source_var <- assert_symbol(enquo(source_var))
   new_var <- assert_symbol(enquo(new_var))
@@ -108,6 +109,7 @@ derive_baseline <- function(dataset, by_vars, source_var, new_var) {
     dataset,
     required_vars = quo_c(by_vars, source_var, quo(ABLFL))
   )
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   base <- dataset %>%
     filter(ABLFL == "Y") %>%
