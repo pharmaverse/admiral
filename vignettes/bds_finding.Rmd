@@ -60,6 +60,7 @@ library(admiral)
 library(lubridate)
 library(stringr)
 library(tibble)
+
 data("adsl")
 data("vs")
 ```
@@ -83,6 +84,7 @@ At this step, it may be useful to join ADSL to your VS domain as well:
 
 ```{r eval=TRUE}
 advs <- left_join(vs, adsl, by = c("STUDYID", "USUBJID"))
+
 head(advs)
 ```
 
@@ -95,6 +97,7 @@ Example calls:
 
 ```{r eval=TRUE}
 advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
+
 head(select(advs, USUBJID, VSDTC, ADT, ADTF))
 ```
 
@@ -103,6 +106,7 @@ the call would be:
 
 ```{r eval=TRUE, include=FALSE}
 advs_old <- advs
+
 advs <- advs %>% 
   mutate(
     VSDTC = if_else(
@@ -121,6 +125,7 @@ advs <- derive_vars_dt(
   dtc = VSDTC, 
   date_imputation = "FIRST"
 )
+
 head(select(filter(advs, USUBJID == "01-716-1024"), USUBJID, VISIT, VSDTC, ADT, ADTF))
 ```
 
@@ -151,6 +156,7 @@ This example assumes both `ADT` and `TRTSDT` exist on the data frame.
 
 ```{r eval=TRUE}
 advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
+
 head(select(advs, USUBJID, TRTSDT, ADT, ADY))
 ```
 
@@ -166,6 +172,7 @@ advs <- mutate(
   AVALC = VSSTRESC,
   AVALU = VSSTRESU
 )
+
 head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, AVAL, AVALC, AVALU))
 ```
 
@@ -201,12 +208,15 @@ param_lookup <- tribble(
   "TEMP", "TEMP", "Temperature (C)", 7, "Vital Sign", 2
 )
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+
 head(param_lookup)
 ```
 
 ```{r eval=TRUE}
 advs <-  left_join(advs, param_lookup, by = "VSTESTCD")
+
 count(advs, VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N)
+
 head(select(advs, USUBJID, VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N))
 ```
 
@@ -243,8 +253,11 @@ advs <- advs %>%
     ATPT = VSTPT,
     ATPTN = VSTPTNUM
   )
+
 head(select(advs, USUBJID, ADT, RFSTDTC, RFENDTC, APHASE))
+
 count(advs, VISITNUM, VISIT, AVISITN, AVISIT)
+
 count(advs, VSTPTNUM, VSTPT, ATPTN, ATPT)
 ```
 
@@ -263,6 +276,7 @@ advs <- derive_var_ontrtfl(
   ref_start_date = TRTSDT, 
   ref_end_date = TRTEDT
 )
+
 head(select(advs, USUBJID, PARAMCD, ADT, TRTSDT, TRTEDT, ONTRTFL))
 ```
 
@@ -321,6 +335,7 @@ range_lookup <- tibble::tribble(
   "PULSE", 60, 100, 40, 110,
   "TEMP", 36.5, 37.5, 35, 38
 )
+
 advs <- left_join(advs, range_lookup, by = "PARAMCD")
 ```
 
@@ -328,6 +343,7 @@ The function is called as:
 
 ```{r eval=TRUE}
 advs <- derive_var_anrind(advs)
+
 head(select(advs, USUBJID, PARAMCD, AVAL, ANRLO, ANRHI, A1LO, A1HI, ANRIND))
 ```
 
@@ -348,6 +364,7 @@ advs <- derive_var_basetype(
     "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817
   )
 )
+
 count(advs, ATPT, ATPTN, BASETYPE)
 ```
 
@@ -368,6 +385,7 @@ advs <- derive_extreme_flag(
   mode = "last",
   flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
 )
+
 head(select(advs, USUBJID, BASETYPE, PARAMCD, ADT, TRTSDT, ATPTN, TRTSDT, ABLFL))
 ```
 
@@ -383,16 +401,19 @@ advs <- derive_var_base(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
 )
+
 advs <- derive_var_basec(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
 )
+
 advs <- derive_baseline(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
   source_var = ANRIND, 
   new_var = BNRIND
 )
+
 head(select(advs, USUBJID, BASETYPE, PARAMCD, ABLFL, BASE, BASEC, ANRIND, BNRIND))
 ```
 
@@ -405,7 +426,9 @@ and `BASE` to exist in the data frame.  The `CHG` is simply `AVAl - BASE` and th
 
 ```{r eval=TRUE}
 advs <- derive_var_chg(advs)
+
 advs <- derive_var_pchg(advs)
+
 head(select(advs, USUBJID, BASE, AVAL, CHG, PCHG))
 ```
 
@@ -431,6 +454,7 @@ advs <- derive_extreme_flag(
   mode = "last",
   flag_filter = !is.na(AVISITN)
 )
+
 head(select(advs, USUBJID, PARAMCD, AVISIT, ATPTN, ADT, AVAL, ANL01FL))
 ```
 
@@ -448,6 +472,7 @@ advs <- derive_extreme_flag(
   mode = "last",
   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
 ) 
+
 advs <- derive_extreme_flag(
   advs,
   new_var = WORST_LOW,
@@ -456,6 +481,7 @@ advs <- derive_extreme_flag(
   mode = "first",
   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
 )
+
 advs <- mutate(
   advs, 
   WORSTFL = case_when(
@@ -463,6 +489,7 @@ advs <- mutate(
     PARAMCD == "RESP" ~ WORST_LOW
   )
 )
+
 head(select(advs, USUBJID, PARAMCD, AVISIT, AVAL, ADT, ATPTN, WORSTFL))
 ```
 
@@ -477,7 +504,9 @@ However, an example of a simple implementation could be:
 
 ```{r eval=TRUE}
 advs <- mutate(advs, TRTP = TRT01P, TRTA = TRT01A)
+
 count(advs, TRTP, TRTA, TRT01P, TRT01A)
+
 head(select(advs, USUBJID, TRT01P, TRT01A, TRTP, TRTA))
 ```
 
@@ -494,6 +523,7 @@ advs <- derive_obs_number(
   order = vars(PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT),
   check_type = "warning"
 )
+
 head(select(advs, USUBJID, PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ))
 ```
 
@@ -528,6 +558,7 @@ advs <- advs %>%
   ) %>%
   union_all(advs) %>%
   select(-EOTFL)
+
 advs %>% 
   select(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, ANL01FL) %>% 
   filter(ANL01FL == "Y") %>% 
@@ -544,6 +575,7 @@ advs <- derive_summary_records(
   fns = list(AVAL ~ mean),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
+
 head(select(advs, USUBJID, PARAMCD, VISITNUM, ADT, AVAL, DTYPE))
 ```
 
@@ -556,10 +588,12 @@ sysbp <- advs %>%
     -VSSEQ, -VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
     -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC
   )
+
 diabp <- advs %>%
   filter(VSTESTCD == "DIABP") %>%
   select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
   rename(DBPAVAL = AVAL)
+
 advs <- sysbp %>%
   left_join(
     diabp,
@@ -573,6 +607,7 @@ advs <- sysbp %>%
   left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
   union_all(advs) %>%
   select(-DBPAVAL)
+
 advs %>% 
   filter(PARAMCD %in% c("SYSBP", "DIABP", "MAP")) %>% 
   arrange(USUBJID, PARAMCD, VISITNUM, VSDTC, VSTPT, AVAL) %>% 
@@ -591,6 +626,7 @@ avalcat_lookup <- tibble::tribble(
   "HEIGHT", 1, ">100 cm",
   "HEIGHT", 2, "<= 100 cm"
 )
+
 advs <- advs %>% 
   mutate(
     AVALCA1N = case_when(
@@ -599,6 +635,7 @@ advs <- advs %>%
     )
   ) %>%
   left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N"))
+
 advs %>% 
   select(USUBJID, PARAMCD, AVAL, AVALCA1N, AVALCAT1) %>% 
   filter(PARAMCD == "HEIGHT") %>% 
