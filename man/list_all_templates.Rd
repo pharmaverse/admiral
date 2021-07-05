@@ -15,3 +15,4 @@ list_all_templates()
 \author{
 Shimeng Huang
 }
+\keyword{user_utility}

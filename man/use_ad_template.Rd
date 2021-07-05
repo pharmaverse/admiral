@@ -22,9 +22,12 @@ A helper function to create a template script
 }
 \examples{
 \dontrun{
-use_ad_template("./ad_adsl.R", "adsl")
+use_ad_template(
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R")
 }
 }
 \author{
 Shimeng Huang
 }
+\keyword{user_utility}
