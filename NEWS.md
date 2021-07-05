@@ -4,6 +4,8 @@
 
 ### General
 
+- Function argument checks have been completly re-written to provide clearer error messages to users (#263, #288)
+
 - SDTM `SUPP--` datasets can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
 
 - In case a derivation detects duplicate records after applying a `filter`, the dataset of duplicate records is made available to users via `get_duplicates_dataset()` (#202)
