@@ -8,6 +8,7 @@ derive_summary_records(
   dataset,
   by_vars,
   fns,
+  filter_rows = NULL,
   set_values_to = NULL,
   drop_values_from = NULL
 )
@@ -38,6 +39,19 @@ In general,
 
 In the formula representation e.g., \code{CHG ~ sum(., na.rm = TRUE)}, a \code{.}
 serves as the data to be summarized which refers to the variable \code{CHG}.}
+
+\item{filter_rows}{Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+\code{by_vars} as this will help when an aggregating, lagging, or ranking
+function is involved.
+
+For example,
+\itemize{
+\item \code{filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all AVAL
+values greater than mean of AVAL with in \code{by_vars}.
+\item \code{filter_rows = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
+than 2.
+}}
 
 \item{set_values_to}{A list of variable name-value pairs. Use this argument
 if you need to change the values of any newly derived records. Always new
@@ -133,5 +147,32 @@ derive_summary_records(
   drop_values_from = vars(VSSTRESU)
 )
 
+# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+adeg <- tibble::tribble(
+  ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
+  "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
+  "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
+  "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
+  "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
+  "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
+  "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
+  "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
+  "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
+  "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
+  "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
+  "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
+  "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
+  "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
+  "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
+)
+
+# Summarize the average of AVAL for AVISIT records greater than 2
+derive_summary_records(
+  adeg,
+  by_vars = vars(USUBJID, PARAM, AVISIT),
+  fns = list(AVAL ~ mean(., na.rm = TRUE)),
+  filter_rows = dplyr::n() > 2,
+  set_values_to = vars(DTYPE = "AVERAGE")
+)
 }
 \concept{row summary}
