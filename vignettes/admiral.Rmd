@@ -41,17 +41,7 @@ adsl <- dm %>%
   mutate(TRTSDT = date(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
   mutate(TRTEDT = date(TRTEDTM)) %>%
-  derive_var_trtdurd() %>%
-
-  # derive study completion/discontinuation variables
-  derive_merged_vars(
-    dataset_add = ds,
-    filter_add = exprs(DSCAT == "DISPOSITION EVENT"),
-    new_vars = exprs(
-      EOSDT = convert_dtc_to_dt(impute_dtc(DSSTDTC, date_imputation = "FIRST")),
-      EOSSTT = if_else(DSDECOD == "COMPLETED", "COMPLETED", "DISCONTINUED"),
-      DCSREAS = if_else(DSDECOD != "COMPLETED", DSDECOD, "")
-    ))
+  derive_var_trtdurd()
 ```
 
 # Derivations
@@ -78,6 +68,11 @@ variable names are reserved for temporary variable used within the derivation
 and are removed from the output dataset. If the input dataset contains such
 variables, an error is issued.
 
+It is expected all variable names are uppercase in the input dataset and new
+variables will be returned in uppercase. It is expected all `SUPPxx.QNAM` 
+values are uppercase to conform with this convention when using the 
+`derive_suppqual_vars` to adhere to the uppercase requirement.
+
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
 be preserved.
@@ -92,22 +87,19 @@ example above.
 # Parameters
 
 For parameters which expect variable names or expressions of variable names
-symbols or expressions must be specified rather than strings. The `expr()` and
-the `exprs()` function of the `rlang` package can be used to quote expressions
-where necessary.
+symbols or expressions must be specified rather than strings.
 
 - For parameters which expects a single variable name the name can be specified
-without quotes and quotation. For example ``new_var = TEMPBL``
+without quotes and quotation, e.g. `new_var = TEMPBL`
 
 - For parameters which expects one or more variable names a list of symbols is
-expected. E.g., ``by_vars = exprs(PARAMCD, AVISIT)``
+expected, e.g. `by_vars = vars(PARAMCD, AVISIT)` 
 
 - For parameters which expects a single expression the expression needs to be
-quoted. For examples ``filter = expr(PARAMCD == ‘TEMP’)``
+passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 
 - For parameters which expects one or more expressions a list of expressions is
-expected. E.g., ``order = exprs(AVISIT, worst_severity(AESEV))`` or ``new_vars=
-exprs(TEMPBL = AVAL, TEMPBLU = AVALU)``.
+expected, e.g. `order = desc(AVISIT, desc(AESEV))`
 
 # Validation
 

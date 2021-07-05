@@ -8,19 +8,24 @@ test_that("first observation for each group is flagged", {
     1, 3, 9,
     2, 2, 42,
     3, 3, 14,
-    3, 3, 10)
+    3, 3, 10
+  )
 
-  expected_output <- input %>% mutate(firstfl := c("Y", NA, "Y", "Y", NA))
+  expected_output <- input %>% mutate(firstfl = c("Y", NA, "Y", "Y", NA))
 
-  actual_output <- derive_extreme_flag(input,
-                                       new_var = firstfl,
-                                       order = exprs(AVISITN, desc(AVAL)),
-                                       by_vars = exprs(USUBJID),
-                                       mode = "first")
+  actual_output <- derive_extreme_flag(
+    input,
+    new_var = firstfl,
+    order = vars(AVISITN, desc(AVAL)),
+    by_vars = vars(USUBJID),
+    mode = "first"
+  )
 
-  expect_dfs_equal(base = expected_output,
-                   compare = actual_output,
-                   keys = c("USUBJID", "AVISITN", "AVAL"))
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID", "AVISITN", "AVAL")
+  )
 })
 
 test_that("last observation for each group is flagged, flag_filter works", {
@@ -30,19 +35,25 @@ test_that("last observation for each group is flagged, flag_filter works", {
     1, 3, 9,
     2, 2, 42,
     3, 3, 14,
-    3, 3, 10)
+    3, 3, 10
+  )
 
-  expected_output <- input %>% mutate(lastfl := c(NA, "Y", NA, NA, "Y"))
+  expected_output <- input %>% mutate(lastfl = c(NA, "Y", NA, NA, "Y"))
 
-  actual_output <- derive_extreme_flag(input,
-                                       new_var = lastfl,
-                                       order = exprs(AVISITN, desc(AVAL)),
-                                       by_vars = exprs(USUBJID),
-                                       mode = "last",
-                                       flag_filter = expr(USUBJID != 2))
-  expect_dfs_equal(base = expected_output,
-                   compare = actual_output,
-                   keys = c("USUBJID", "AVISITN", "AVAL"))
+  actual_output <- derive_extreme_flag(
+    input,
+    new_var = lastfl,
+    order = vars(AVISITN, desc(AVAL)),
+    by_vars = vars(USUBJID),
+    mode = "last",
+    flag_filter = USUBJID != 2
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID", "AVISITN", "AVAL")
+  )
 })
 
 test_that("ABLFL = Y using last observation within a subset", {
@@ -103,10 +114,10 @@ test_that("ABLFL = Y using last observation within a subset", {
   actual_output <- derive_extreme_flag(
     input,
     new_var = ABLFL,
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(ADT),
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(ADT),
     mode = "last",
-    flag_filter = expr(AVISIT == "BASELINE")
+    flag_filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -174,10 +185,10 @@ test_that("ABLFL = Y worst observation = HI within a subset", {
   actual_output <- derive_extreme_flag(
     input,
     new_var = ABLFL,
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(AVAL, ADT),
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(AVAL, ADT),
     mode = "last",
-    flag_filter = expr(AVISIT == "BASELINE")
+    flag_filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -245,10 +256,10 @@ test_that("ABLFL = Y worst observation = LO within a subset", {
   actual_output <- derive_extreme_flag(
     input,
     new_var = ABLFL,
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(desc(AVAL), ADT),
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(desc(AVAL), ADT),
     mode = "last",
-    flag_filter = expr(AVISIT == "BASELINE")
+    flag_filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -316,10 +327,10 @@ test_that("ABLFL = Y average records within a subset", {
   actual_output <- derive_extreme_flag(
     input,
     new_var = ABLFL,
-    by_vars = exprs(USUBJID, PARAMCD),
-    order = exprs(ADT, desc(AVAL)),
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(ADT, desc(AVAL)),
     mode = "last",
-    flag_filter = expr(AVISIT == "BASELINE" & DTYPE == "AVERAGE")
+    flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
   )
 
   expect_dfs_equal(
@@ -388,10 +399,10 @@ test_that("ABLFL = Y using last observation within a subset and multiple baselin
   actual_output <- derive_extreme_flag(
     input,
     new_var = ABLFL,
-    by_vars = exprs(USUBJID, PARAMCD, AVISIT),
-    order = exprs(ADT),
+    by_vars = vars(USUBJID, PARAMCD, AVISIT),
+    order = vars(ADT),
     mode = "last",
-    flag_filter = expr(AVISIT %in% c("BASELINE", "WEEK 1"))
+    flag_filter = AVISIT %in% c("BASELINE", "WEEK 1")
   )
 
   expect_dfs_equal(

@@ -4,45 +4,87 @@
 \alias{impute_dtc}
 \title{Impute partial date/time portion of a --DTC variable}
 \usage{
-impute_dtc(dtc, date_imputation = NULL, time_imputation = "00:00:00")
+impute_dtc(
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
+  min_dates = NULL,
+  max_dates = NULL
+)
 }
 \arguments{
 \item{dtc}{The --DTC date to impute
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-If the year part is not recorded (missing date), no imputation is performed.}
+A character date is expected in a format like yyyy-mm-dd or
+yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+imputation is performed.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing.
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
 
-If NULL: no date imputation is performed and partial dates are returned as missing.
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
+\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
+of June,
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+day/month.
 }
 
-Default is NULL.}
+Default is \code{NULL}.}
 
-\item{time_imputation}{The value to impute the time when a timepart is missing.
+\item{time_imputation}{The value to impute the time when a timepart is
+missing.
 
 A character value is expected, either as a
 \itemize{
-\item format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day,
-\item or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.
+\item format with hour, min and sec specified as 'hh:mm:ss': e.g. \code{"00:00:00"}
+for the start of the day,
+\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
 }
 
-Default is '00:00:00'.}
+Default is \code{"00:00:00"}.}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
+}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the dtc date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.}
 }
 \value{
 a character vector
 }
 \description{
-Imputation partial date/time portion of a --DTC variable.
-based on user input.
+Imputation partial date/time portion of a --DTC variable. based on user
+input.
 }
 \examples{
+library(lubridate)
+
 dates <- c(
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
@@ -98,6 +140,16 @@ impute_dtc(
   dtc = dates,
   date_imputation = "MID"
 )
+
+# Impute a date and ensure that the imputed date is not before a list of
+# minimum dates
+impute_dtc(
+  "2020-12",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
+
 }
 \author{
 Samia Kabi

@@ -81,12 +81,10 @@ warn_if_invalid_dtc <- function(dtc) {
   if (!all(is_valid_dtc)) {
     incorrect_dtc <- dtc[!is_valid_dtc]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid_dtc]
-    tbl <- paste("Row", incorrect_dtc_row, ": --DTC = ", incorrect_dtc)
-    msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
-    warn(msg)
-    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+    tbl <- paste("Row", incorrect_dtc_row, ": --DTC =", incorrect_dtc)
+    main_msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
 
-    msg3 <- paste0(
+    info <- paste0(
       "The following ISO representations are handled: \n",
       "2003-12-15T13:15:17.123\n",
       "2003-12-15T13:15:17\n",
@@ -102,9 +100,34 @@ warn_if_invalid_dtc <- function(dtc) {
       "--12-15\n",
       "-----T07:15"
     )
-    warn(msg3)
+    warn(paste(main_msg, tbl, info, sep = "\n"))
   }
 }
+
+warn_if_incomplete_dtc <- function(dtc, n) {
+  is_complete_dtc <- (nchar(dtc) >= n | is.na(dtc))
+  if (n == 10) {
+    dt_dtm <- "date"
+    funtext <- "convert_dtc_to_dt"
+  }
+  else if (n == 19) {
+    dt_dtm <- "datetime"
+    funtext <- "convert_dtc_to_dtm"
+  }
+  if (!all(is_complete_dtc)) {
+    incomplete_dtc <- dtc[!is_complete_dtc]
+    incomplete_dtc_row <- rownames(as.data.frame(dtc))[!is_complete_dtc]
+    tbl <- paste("Row", incomplete_dtc_row, ": --DTC = ", incomplete_dtc)
+    msg <- paste0(
+      "Dataset contains partial ", dt_dtm, " format. ",
+      "The function ", funtext, " expect a complete ", dt_dtm, ". ",
+      "Please use the function `impute_dtc()` to build a complete ", dt_dtm, "."
+    )
+    warn(msg)
+    warn(paste(capture.output(print(tbl)), collapse = "\n"))
+  }
+}
+
 
 warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   missing_ref_ranges <- dataset %>%
@@ -122,42 +145,102 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   }
 }
 
-#' Are records unique?
+#' Warn If Two Lists are Inconsistent
 #'
-#' Checks if the records of a dateset are unique with respect to the specified
-#' list of by variables and order. If the check fails, a warning is issued.
+#' Checks if two list inputs have the same names and same number of elements and
+#' issues a warning otherwise.
 #'
-#' @param dataset The input dataset to check
+#' @param base A named list
 #'
-#' @param by_vars List of by variables
+#' @param compare A named list
 #'
-#' @param order Order of observation
-#'   If the parameter is specified, it is checked if the observations are unique
-#'   with respect to the by variables and the order. If the check fails, the
-#'   order values are written as variables in the output.
+#' @param list_name A string
+#' the name of the list
 #'
-#' @param message Error message
-#'   The message to be displayed if the check fails.
+#' @param i the index id to compare the 2 lists
 #'
-#' @author Stefan Bundfuss
+#' @author Samia Kabi
 #'
-#' @return `TRUE` if the records are unique, `FALSE` otherwise
+#' @return a `warning` if the 2 lists have different names or length
 #'
 #' @keywords warning
 #'
 #' @export
 #'
 #' @examples
-#' data(ex)
-#' warn_has_unique_records(ex,
-#'                         by_vars = exprs(USUBJID) ,
-#'                         order = exprs(desc(EXENDTC)))
-warn_has_unique_records <- function(dataset,
-                                      by_vars = NULL,
-                                      order = NULL,
-                                      message){
-  has_unique_records(dataset = dataset,
-                     by_vars = by_vars,
-                     order = order,
-                     message_type = "warning")
+#' # no warning
+#' warn_if_inconsistent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
+#' )
+#' # warning
+#' warn_if_inconsistent_list(
+#'   base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+#'   compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+#'   list_name = "Test"
+#' )
+warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
+  if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
+    warn(
+      paste0("The variables used for traceability in `", list_name,
+             "` are not consistent, please check:\n",
+        paste(
+          "source", i - 1, ", Variables are given as:",
+          paste(sort(names(base)), collapse = " "), "\n"
+        ),
+        paste(
+          "source", i, ", Variables are given as:",
+          paste(sort(names(compare)), collapse = " ")
+        )
+      )
+    )
+  }
+}
+
+#' Suppress Specific Warnings
+#'
+#' Suppress certain warnings issued by an expression.
+#'
+#' @param expr Expression to be executed
+#'
+#' @param regexpr Regular expression matching warnings to suppress
+#'
+#' @author
+#' - Thomas Neitmann
+#' - Stefan Bundfuss
+#'
+#' @return Return value of the expression
+#'
+#' @keywords warning
+#'
+#' @details
+#' All warnings which are issued by the expression and match the regular expression
+#' are suppressed.
+#'
+#' @export
+#'
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' data(adsl)
+#' data(vs)
+#'
+#' # Remove label
+#' attr(vs$USUBJID, "label") <- NULL
+#'
+#' left_join(adsl, vs, by = "USUBJID")
+#'
+#' suppress_warning(
+#'   left_join(adsl, vs, by = "USUBJID"),
+#'   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
+#' )
+suppress_warning <- function(expr, regexpr) {
+  withCallingHandlers(
+    expr,
+    warning = function(w) {
+      if (grepl(regexpr, w$message)) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
 }

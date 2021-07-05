@@ -4,8 +4,13 @@
 \alias{derive_obs_number}
 \title{Adds a variable numbering the observations within by group}
 \usage{
-derive_obs_number(dataset, new_var = ASEQ, order = NULL,
-  by_vars = NULL, check_type = "none")
+derive_obs_number(
+  dataset,
+  new_var = ASEQ,
+  order = NULL,
+  by_vars = NULL,
+  check_type = "none"
+)
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -54,18 +59,16 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
-
 library(dplyr)
-library(magrittr)
-library(rlang)
-
 data("vs")
 
 vs \%>\%
   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   filter(VSTESTCD \%in\% c("HEIGHT", "WEIGHT")) \%>\%
-  derive_obs_number(by_vars = exprs(USUBJID, VSTESTCD),
-                    order = exprs(VISITNUM, VSTPTNUM))
+  derive_obs_number(
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(VISITNUM, VSTPTNUM)
+  )
 }
 \author{
 Stefan Bundfuss

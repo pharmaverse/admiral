@@ -16,7 +16,7 @@
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
-#'   Default: `exprs(EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO'))`
+#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')`
 #'
 #'   Permitted Values: logical expression
 #'
@@ -33,22 +33,36 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("ex")
 #' data("dm")
 #'
-#' derive_var_trtedtm(dm, dataset_ex = ex) %>%
+#' dm %>%
+#'   derive_var_trtedtm(dataset_ex = ex) %>%
 #'   select(USUBJID, TRTEDTM)
 derive_var_trtedtm <- function(dataset,
                                dataset_ex,
-                               filter_ex = exprs((EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10)) { # nolint
+                               filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10) { # nolint
 
-  derive_merged_vars(
-    dataset,
-    dataset_add = dataset_ex,
-    filter_add = filter_ex,
-    new_vars = exprs(TRTEDTM := convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))),
-    filter_order = exprs(EXENDTC, EXSEQ),
-    filter_mode = "last"
-  )
+  assert_data_frame(dataset, vars(USUBJID))
+  assert_data_frame(dataset_ex, vars(USUBJID, EXENDTC, EXSEQ))
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+
+  if (!quo_is_null(filter_ex)) {
+    add <- filter(dataset_ex, !!filter_ex)
+  } else {
+    add <- dataset_ex
+  }
+  add <- add %>%
+    filter_extreme(
+      order = vars(EXENDTC, EXSEQ),
+      by_vars = vars(USUBJID),
+      mode = "last"
+    ) %>%
+    transmute(
+      USUBJID,
+      TRTEDTM = convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))
+    )
+
+  left_join(dataset, add, by = c("USUBJID"))
 }
