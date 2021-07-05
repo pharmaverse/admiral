@@ -19,6 +19,9 @@ Authors:
   \item Alice Ehmann \email{alice.x.ehmann@gsk.com}
   \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
   \item Samia Kabi \email{samia.kabi@roche.com}
+  \item Vignesh Thanikachalam
+  \item Ondrej Slama
+  \item Shimeng Huang
 }
 
 }
