@@ -44,9 +44,9 @@ derive_var_trtedtm <- function(dataset,
                                dataset_ex,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10) { # nolint
 
-  assert_has_variables(dataset, c("USUBJID"))
-  assert_has_variables(dataset_ex, c("USUBJID", "EXENDTC", "EXSEQ"))
-  filter_ex <- enquo(filter_ex)
+  assert_data_frame(dataset, vars(USUBJID))
+  assert_data_frame(dataset_ex, vars(USUBJID, EXENDTC, EXSEQ))
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
   if (!quo_is_null(filter_ex)) {
     add <- filter(dataset_ex, !!filter_ex)

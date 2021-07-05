@@ -344,6 +344,10 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
 
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
   provided <- quo_not_missing(arg)
   if (!provided & !optional) {
     err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
@@ -428,6 +432,115 @@ assert_vars <- function(arg, optional = FALSE) {
       default_err_msg,
       ", but the following elements are not: ",
       enumerate(expr_list[!is_symbol])
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a valid list of order variables created using `vars()`?
+#'
+#' Checks if an argument is a valid list of order variables created using `vars()`
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variables or `desc()`
+#' calls created using `vars()` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(by_vars) {
+#'   assert_order_vars(by_vars)
+#' }
+#'
+#' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
+#'
+#' tryCatch(
+#'   example_fun(exprs(USUBJID, PARAMCD)),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(c("USUBJID", "PARAMCD", "VISIT")),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+assert_order_vars <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  default_err_msg <- sprintf(
+    "`%s` must be a a list of unquoted variable names or desc() calls, e.g. `vars(USUBJID, desc(VISITNUM))`",
+    arg_name(substitute(arg))
+  )
+
+  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
+    abort(default_err_msg)
+  }
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, "quosures")) {
+    abort(default_err_msg)
+  }
+
+  assert_that(is_order_vars(arg))
+
+  invisible(arg)
+}
+
+assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
+  subsets <- list(
+    "positive" = quote(arg > 0L),
+    "non-negative" = quote(arg >= 0L),
+    "negative" = quote(arg < 0L),
+    "none" = quote(TRUE)
+  )
+  assert_character_scalar(subset, values = names(subsets))
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!rlang::is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
+    err_msg <- sprintf(
+      "`%s` must be a %s integer scalar but is %s",
+      arg_name(substitute(arg)),
+      if (subset == "none") "\b\ban" else subset,
+      if (length(arg) == 1L) backquote(arg) else friendly_type(typeof(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(as.integer(arg))
+}
+
+assert_named_exprs <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+    err_msg <- sprintf(
+      "`%s` is not a named list of expressions created using `exprs()`",
+      arg_name(substitute(arg))
     )
     abort(err_msg)
   }
@@ -723,19 +836,6 @@ on_failure(is_valid_month) <- function(call, env) {
     " is not a valid month.\n",
     "Values for month must be between 1-12. ",
     "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
-  )
-}
-
-is_named_exprs <- function(arg) {
-  is.list(arg) &&
-    all(map_lgl(arg, is.language)) &&
-    all(names(arg) != "")
-}
-on_failure(is_named_exprs) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a named list of expressions created using `exprs()`"
   )
 }
 

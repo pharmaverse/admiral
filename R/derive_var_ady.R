@@ -39,10 +39,14 @@
 #'
 #' derive_var_ady(data)
 derive_var_ady <- function(dataset, reference_date = TRTSDT, date = ADT) {
+  reference_date <- assert_symbol(enquo(reference_date))
+  date <- assert_symbol(enquo(date))
+  assert_data_frame(dataset, vars(!!reference_date, !!date))
+
   derive_duration(
     dataset,
     new_var = ADY,
-    start_date = !!enquo(reference_date),
-    end_date = !!enquo(date)
+    start_date = !!reference_date,
+    end_date = !!date
   )
 }
