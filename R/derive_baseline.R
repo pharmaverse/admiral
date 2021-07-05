@@ -26,8 +26,8 @@
 #'   "TEST01", "PAT01",  "PARAM02", NA,    "N",
 #'   "TEST01", "PAT01",  "PARAM02",  8.35, "N"
 #' )
-#' derive_var_base(dataset, by_vars = exprs(USUBJID, PARAMCD))
-derive_var_base <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)) {
+#' derive_var_base(dataset, by_vars = vars(USUBJID, PARAMCD))
+derive_var_base <- function(dataset, by_vars) {
   derive_baseline(dataset, by_vars = by_vars, source_var = AVAL, new_var = BASE)
 }
 
@@ -57,8 +57,8 @@ derive_var_base <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)
 #'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
 #'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
 #' )
-#' derive_var_basec(dataset, by_vars = exprs(USUBJID, PARAMCD))
-derive_var_basec <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE)) {
+#' derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
+derive_var_basec <- function(dataset, by_vars) {
   derive_baseline(dataset, by_vars = by_vars, source_var = AVALC, new_var = BASEC)
 }
 
@@ -96,22 +96,26 @@ derive_var_basec <- function(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE
 #' )
 #' derive_baseline(
 #'   dataset,
-#'   by_vars = exprs(USUBJID, PARAMCD, BASETYPE),
+#'   by_vars = vars(USUBJID, PARAMCD, BASETYPE),
 #'   source_var = AVALC,
 #'   new_var = BASEC
 #' )
 derive_baseline <- function(dataset, by_vars, source_var, new_var) {
-  warn_if_vars_exist(dataset, deparse(substitute(target)))
-  assert_has_variables(
+
+  by_vars <- assert_vars(by_vars)
+  source_var <- assert_symbol(enquo(source_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(
     dataset,
-    c(map_chr(by_vars, as_string), deparse(substitute(source_var)), "ABLFL")
+    required_vars = quo_c(by_vars, source_var, quo(ABLFL))
   )
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   base <- dataset %>%
     filter(ABLFL == "Y") %>%
-    select(!!!by_vars, !!enquo(new_var) := !!enquo(source_var))
+    select(!!!by_vars, !!new_var := !!source_var)
 
-  assert_has_only_one_baseline_record(base, by_vars)
+  signal_duplicate_records(base, by_vars, "Dataset contains multiple baseline records.")
 
-  left_join(dataset, base, by = map_chr(by_vars, as_string))
+  left_join(dataset, base, by = vars2chr(by_vars))
 }

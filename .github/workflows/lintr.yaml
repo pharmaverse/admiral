@@ -3,10 +3,12 @@ on:
     branches:
       - main
       - master
+      - devel
   pull_request:
     branches:
       - main
       - master
+      - devel
 
 name: lint
 
@@ -20,7 +22,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v1
         with:
-          r-version: 3.5
+          r-version: 3.6
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')

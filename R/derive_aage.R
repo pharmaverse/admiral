@@ -49,14 +49,120 @@ derive_aage <- function(dataset,
                         start_date = BRTHDT,
                         end_date = RANDDT,
                         unit = "years") {
+
+  start_date <- assert_symbol(enquo(start_date))
+  end_date <- assert_symbol(enquo(end_date))
+  assert_data_frame(dataset, required_vars = quo_c(start_date, end_date))
+  assert_character_scalar(
+    unit,
+    values = c("years", "months", "days", "hours", "minutes", "seconds")
+  )
+
   derive_duration(
     dataset,
     new_var = AAGE,
     new_var_unit = AAGEU,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date),
+    start_date = !!start_date,
+    end_date = !!end_date,
     out_unit = unit,
     add_one = FALSE,
     trunc_out = TRUE
   )
+}
+
+
+#' Derive age groups
+#'
+#' Functions for deriving standardized age groups.
+#'
+#' @param dataset Input dataset.
+#' @param age_var AGE variable.
+#' @param new_var New variable to be created.
+#'
+#' @return `dataset` with new column `new_var` of class factor.
+#'
+#' @author Ondrej Slama
+#'
+#' @name derive_agegr_fda
+NULL
+
+#' @rdname derive_agegr_fda
+#' @export
+#' @details `derive_agegr_fda` Derive age groups according to FDA
+#' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
+#' Baseline Measure Information).
+#' @examples
+#' data(dm)
+#' derive_agegr_fda(dm, AGE, AGEGR1)
+#'
+#' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+derive_agegr_fda <- function(dataset, age_var, new_var) {
+
+  age_var <- assert_symbol(enquo(age_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(dataset, required_vars = quo_c(age_var))
+
+  out <- mutate(
+    dataset,
+    !!new_var := cut(
+      x = !!age_var,
+      breaks = c(19, 65, Inf),
+      labels = c("19-64", ">=65"),
+      include.lowest = TRUE,
+      right = FALSE
+    )
+  )
+  if (anyNA(dplyr::pull(out, !!new_var))) {
+    out <- mutate(out, !!new_var := addNA(!!new_var))
+  }
+  out
+}
+
+#' @rdname derive_agegr_fda
+#' @export
+#' @param adults Logical, should the age group be valid for adults studies or pediatric studies?
+#' Defaults to `TRUE` (adult studies).
+#' @details `derive_agegr_ema` Derive age groups according to EMA
+#' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
+#' @examples
+#' data(dm)
+#' derive_agegr_ema(dm, AGE, AGEGR1)
+#'
+#' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+#' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
+derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
+
+  age_var <- assert_symbol(enquo(age_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_data_frame(dataset, required_vars = quo_c(age_var))
+  assert_logical_scalar(adults)
+
+  if (adults) {
+    out <- mutate(
+      dataset,
+      !!new_var := cut(
+        x = !!age_var,
+        breaks = c(18, 65, 85, Inf),
+        labels = c("18-64", "65-84", ">=85"),
+        include.lowest = TRUE,
+        right = FALSE
+      )
+    )
+  } else {
+    out <- mutate(
+      dataset,
+      !!new_var := cut(
+        x = !!age_var,
+        breaks = c(-Inf, 2, 12, 18),
+        labels = c("0-1 (Newborns / Infants / Toddlers)",
+                   "2-11 (Children)", "12-17 (Adolescents)"),
+        include.lowest = FALSE,
+        right = FALSE
+      )
+    )
+  }
+  if (anyNA(dplyr::pull(out, !!new_var))) {
+    out <- mutate(out, !!new_var := addNA(!!new_var))
+  }
+  out
 }

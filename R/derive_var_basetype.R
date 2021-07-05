@@ -15,9 +15,8 @@
 #' @details
 #' For each element of `basetypes` the input dataset is subset based upon
 #' the provided expression and the `BASETYPE` variable is set to the name of the
-#' expression. Then, all subsets are stacked. Thus, the number of records in the
-#' output dataset is the sum of the number of records of each filtered subset of
-#' the input dataset
+#' expression. Then, all subsets are stacked. Records which do not match any
+#' condition are kept and `BASETYPE` is set to `NA`.
 #'
 #' @author Thomas Neitmann
 #'
@@ -50,20 +49,17 @@
 #'   )
 #' )
 derive_var_basetype <- function(dataset, basetypes) {
-  assert_that(
-    is.data.frame(dataset),
-    is_named_exprs(basetypes)
-  )
-  assert_has_variables(
-    dataset,
-    unique(map_chr(basetypes, all.vars))
-  )
+  assert_data_frame(dataset)
+  assert_named_exprs(basetypes)
 
-  subsets <- map2(names(basetypes), basetypes, function(label, condition) {
+  records_with_basetype <- map2(names(basetypes), basetypes, function(label, condition) {
     dataset %>%
       filter(!!condition) %>%
       mutate(BASETYPE = label)
-  })
+  }) %>%
+    bind_rows()
 
-  bind_rows(subsets)
+  records_without_basetype <- anti_join(dataset, records_with_basetype, by = colnames(dataset))
+
+  bind_rows(records_without_basetype, records_with_basetype)
 }

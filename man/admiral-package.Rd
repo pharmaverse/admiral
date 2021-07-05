@@ -6,10 +6,9 @@
 \alias{admiral-package}
 \title{admiral: ADaM in R Asset Library}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+A toolbox for programming ADaM datasets in R.
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
@@ -19,6 +18,9 @@ Authors:
   \item Alice Ehmann \email{alice.x.ehmann@gsk.com}
   \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
   \item Samia Kabi \email{samia.kabi@roche.com}
+  \item Vignesh Thanikachalam
+  \item Ondrej Slama
+  \item Shimeng Huang
 }
 
 }

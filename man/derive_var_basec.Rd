@@ -4,7 +4,7 @@
 \alias{derive_var_basec}
 \title{Derive BASEC}
 \usage{
-derive_var_basec(dataset, by_vars = exprs(USUBJID, PARAMCD, BASETYPE))
+derive_var_basec(dataset, by_vars)
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -29,7 +29,7 @@ dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
 )
-derive_var_basec(dataset, by_vars = exprs(USUBJID, PARAMCD))
+derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
 }
 \author{
 Thomas Neitmann
