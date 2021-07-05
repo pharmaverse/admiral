@@ -16,13 +16,13 @@
 #'   records. Providing the names of variables in [vars()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #' @param fns List of formulas specifying variable to use for aggregations.
-#'   This can include base functions like `mean`, `min`, `max`, `median`, `sd`,
-#'   or `sum` or any other user-defined aggregation function.
+#'   This can include base functions like `mean()`, `min()`, `max()`, `median()`,
+#'    `sd()`, or `sum()` or any other user-defined aggregation function.
 #'   For example,
 #'
 #'   + When a summary function is same for one or more analysis variable, use
 #'   `fns = list(vars(AVAL, CHG) ~ mean`).
-#'   + If different summary function is required for each analysis variable,
+#'   + If a different summary function is required for each analysis variable,
 #'   use `fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))`.
 #'
 #'   In general,
@@ -47,14 +47,13 @@
 #' @param drop_values_from Providing the names of variables in [vars()]
 #'   will drop values and set as missing.
 #'
-#' @family row summary
+#' @author Vignesh Thanikachalam
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
 #' @export
 #'
 #' @examples
-#' # Sample ADEG dataset ---
 #' adeg <- tibble::tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
 #'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -85,7 +84,6 @@
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
-#' # Sample ADVS dataset ---
 #' advs <- tibble::tribble(
 #'   ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
 #'   "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
@@ -96,10 +94,9 @@
 #'   "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
 #' )
 #'
-#' # Set new values to any variable. Here, DTYPE = MAXIMUM refer to `MAX()` record and
-#' # DTYPE = AVERAGE refer `MEAN()` record.
-#'
-#' # `set_values_to` must be of same length as new records
+#' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
+#' # and `DTYPE = AVERAGE` refers to `mean()` records.
+#' # `set_values_to` must be of the same length as `fns`
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -107,7 +104,7 @@
 #'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 #' )
 #'
-#' # drop retained value of VSSTRESU in the derived record
+#' # Drop retained value of VSSTRESU in the derived record
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -115,7 +112,6 @@
 #'   set_values_to = vars(DTYPE = "MAXIMUM"),
 #'   drop_values_from = vars(VSSTRESU)
 #' )
-#'
 derive_summary_records <- function(dataset,
                                    by_vars,
                                    fns,
@@ -210,7 +206,7 @@ as_inlined_function <- function(funs, env) {
   body(fn) <- expr({
     # Transform the lambda body into a maskable quosure inheriting
     # from the execution environment
-    `_quo` <- rlang::quo(!!body(fn))
+    `_quo` <- rlang::quo(!!body(fn)) # nolint
 
     # Evaluate the quosure in the mask
     rlang::eval_bare(`_quo`, base::parent.frame())
@@ -250,7 +246,6 @@ as_fun_list <- function(.funs, .env) {
       }
       .x <- as_inlined_function(.x, env = .env)
     } else if (is_character(rhs) || is_symbol(rhs)) {
-      # fn <- get(rhs, .env, mode = "function")
       rhs <- as_string(rhs)
       fn <- rlang::as_closure(rhs)
       .x <- structure(fn, stats = as_string(rhs))

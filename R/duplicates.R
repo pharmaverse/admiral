@@ -89,7 +89,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
 signal_duplicate_records <- function(dataset,
                                      by_vars,
-                                     msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))),
+                                     msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))), # nolint
                                      cnd_type = "error") {
   assert_that(
     is.data.frame(dataset),

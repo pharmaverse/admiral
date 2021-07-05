@@ -7,8 +7,8 @@
 #' as SUPPDM, SUPPAE, and SUPPEX. When a `dataset_suppqual` is a single SUPPQUAL
 #' dataset, specify two character`domain` value.
 #'
-#' `derive_suppqual_vars` expects USUBJID, RDOMAIN, IDVAR, IDVARVAL, QNAM,
-#'  QLABEL, and QVAL variables to exist in SUPPQUAL data set.
+#' `derive_suppqual_vars()` expects `USUBJID`, `RDOMAIN`, `IDVAR`, `IDVARVAL`,
+#'  `QNAM`, `QLABEL`, and `QVAL` variables to exist in `dataset_suppqual`.
 #'
 #' @param dataset A SDTM domain data set.
 #' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
@@ -17,49 +17,43 @@
 #'
 #' @return A data frame with SUPPQUAL variables appended to parent data set.
 #'
-#' @family suppqual
+#' @author Vignesh Thanikachalam
 #'
 #' @export
 #'
 #' @examples
-#' ## The following example includes selected variables from the ae.xpt and
-#' ## suppae.xpt datasets for a rash whose locations are the face, neck, and chest.
-#'
-#' # Sample AE data set ----
+#' ## The following example includes selected variables from AE and SUPPAE
+#' ## datasets for a rash whose locations are the face, neck, and chest.
 #' ae <- tibble::tribble(
-#'   ~STUDYID  , ~DOMAIN, ~USUBJID  , ~AESEQ, ~AETERM , ~AELOC    ,
-#'   "1234-005", "AE"   , "XYZ-1001",      1, "RASH"  , "MULTIPLE",
-#'   "1234-005", "AE"   , "XYZ-1002",      1, "NAUSEA", ""        ,
+#'   ~STUDYID,   ~DOMAIN, ~USUBJID,   ~AESEQ, ~AETERM,  ~AELOC,
+#'   "1234-005", "AE",    "XYZ-1001",      1, "RASH",  "MULTIPLE",
+#'   "1234-005", "AE",    "XYZ-1002",      1, "NAUSEA", "",
 #' )
 #'
-#' # Sample Supplemental Qualifiers for AE (SUPPAE) ----
 #' suppae <- tibble::tribble(
-#'   ~STUDYID  ,  ~RDOMAIN, ~USUBJID  , ~IDVAR , ~IDVARVAL, ~QNAM    , ~QLABEL    , ~QVAL  ,
-#'   "1234-005", "AE"     , "XYZ-1001", "AESEQ", "1"      , "AELOC1", "Location 1", "FACE" ,
-#'   "1234-005", "AE"     , "XYZ-1001", "AESEQ", "1"      , "AELOC2", "Location 2", "NECK" ,
-#'   "1234-005", "AE"     , "XYZ-1001", "AESEQ", "1"      , "AELOC3", "Location 3", "CHEST",
+#'   ~STUDYID,   ~RDOMAIN, ~USUBJID,    ~IDVAR,  ~IDVARVAL, ~QNAM,     ~QLABEL,     ~QVAL,
+#'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC1", "Location 1", "FACE",
+#'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC2", "Location 2", "NECK",
+#'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC3", "Location 3", "CHEST",
 #' )
 #'
 #' derive_suppqual_vars(ae, suppae)
 #'
 #' ## The following example included subjects with multiple/other specific race.
-#'
-#' # Sample DM data set ----
 #' dm <- tibble::tribble(
-#'   ~"STUDYID", ~"DOMAIN",	~"USUBJID",	~"RACE"    ,
-#'    "ABC"	   ,  "DM"	  ,  "001"	  ,  "OTHER"   ,
-#'    "ABC"	   ,  "DM"	  ,  "002"	  ,  "MULTIPLE",
-#'    "ABC"	   ,  "DM"	  ,  "003"	  ,  ""        ,
-#'    "ABC"	   ,  "DM"	  ,  "004"	  ,  "ASIAN"   ,
+#'   ~STUDYID, ~DOMAIN,	~USUBJID,	~RACE,
+#'   "ABC",    "DM",    "001",    "OTHER",
+#'   "ABC",    "DM",    "002",    "MULTIPLE",
+#'   "ABC",    "DM",    "003",    NA,
+#'   "ABC",    "DM",    "004",    "ASIAN"
 #' )
 #'
-#' # Sample Supplemental Qualifiers for DM (SUPPDM) ----
 #' suppdm <- tibble::tribble(
-#' ~"STUDYID",~"RDOMAIN",~"USUBJID",~"IDVAR",~"IDVARVAL",~"QNAM"   ,~"QLABEL"     ,~"QVAL",
-#'  "ABC"	   , "DM"     ,	"001"    ,  ""    ,  ""       , "RACEOTH", "Race, Other", "BRAZILIAN",
-#'  "ABC"	   , "DM"     ,	"002"    ,  ""    ,  ""       , "RACE1"  , "Race 1"     , "AMERICAN" ,
-#'  "ABC"	   , "DM"     ,	"002"    ,  ""    ,  ""       , "RACE2"  , "Race 2"     , "OTHER"    ,
-#'  "ABC"	   , "DM"     ,	"002"    ,  ""    ,  ""       , "RACEOTH", "Race, Other", "ABORIGINE",
+#' ~STUDYID, ~RDOMAIN, ~USUBJID, ~IDVAR, ~IDVARVAL, ~QNAM,     ~QLABEL,       ~QVAL,
+#'  "ABC",   "DM",   	"001",     "",     "",        "RACEOTH", "Race, Other", "BRAZILIAN",
+#'  "ABC",   "DM",	  "002",     "",     "",        "RACE1"  , "Race 1",      "AMERICAN",
+#'  "ABC",   "DM",	  "002",     "",     "",        "RACE2"  , "Race 2",      "OTHER",
+#'  "ABC",   "DM",	  "002",     "",     "",        "RACEOTH", "Race, Other", "ABORIGINE"
 #' )
 #'
 #' derive_suppqual_vars(dm, suppdm)
@@ -161,10 +155,11 @@ assert_supp_idvar <- function(x) {
   dup <- duplicated(x$QNAM)
   if (any(dup)) {
     message(
-      paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = \\
-                 '{x$QNAM[dup]}'."),
-        collapse = "\n") )
+    msg <- paste0(
+      str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
+      collapse = "\n")
+    )
+    inform(msg)
   }
 }
 

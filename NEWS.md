@@ -1,8 +1,10 @@
-# admiral (development version)
+# admiral (0.2.0)
 
 ## New Features
 
 ### General
+
+- Function argument checks have been completely re-written to provide clearer error messages to users (#263, #288)
 
 - SDTM `SUPP--` datasets can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
 
@@ -84,3 +86,7 @@
 - [Frequently Asked Questions](../articles/faq.html)
 
 - [Creating ADSL](../articles/adsl.html)
+
+- [Creating a BDS Finding ADaM](../articles/bds_finding.html)
+
+- [Creating an OCCDS ADaM](../articles/occds.html)

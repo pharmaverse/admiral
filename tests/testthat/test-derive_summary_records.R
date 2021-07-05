@@ -122,14 +122,18 @@ test_that("Errors", {
     derive_summary_records(
       input,
       by_vars = "x",
-      fns = list(z ~ mean)))
+      fns = list(z ~ mean)
+    )
+  )
 
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
       fns = list(z ~ mean),
-      drop_values_from = "z"))
+      drop_values_from = "z"
+    )
+  )
 
   # Is by_vars and drop_values_from exits in input dataset?
   expect_error(
@@ -137,21 +141,27 @@ test_that("Errors", {
       input,
       by_vars = vars(a),
       fns = list(z ~ mean),
-      drop_values_from = vars(b)))
+      drop_values_from = vars(b)
+    )
+  )
 
   # Can't have multiple function for a single analysis variable
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z ~ list(mean, sum))))
+      fns = list(z ~ list(mean, sum))
+    )
+  )
 
   # check function must be a formula
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z = mean)))
+      fns = list(z = mean)
+    )
+  )
 
   # Is `set_values_to` is a quosures?
   expect_error(
@@ -159,7 +169,9 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ mean),
-      set_values_to = list(d = "a")))
+      set_values_to = list(d = "a")
+    )
+  )
 
   # Is length of `set_values_to` equal to derived records within a `by_vars`?
   expect_error(
@@ -167,7 +179,9 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ mean, z ~ sum),
-      set_values_to = vars(d = "a")))
+      set_values_to = vars(d = "a")
+    )
+  )
 
   # Problem with handling RHS of `fns` argument
   expect_error(
@@ -175,7 +189,7 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ vars(mean, sum)),
-      set_values_to = vars(d = "a")))
-
+      set_values_to = vars(d = "a")
+    )
+  )
 })
-

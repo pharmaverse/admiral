@@ -71,7 +71,7 @@ squote <- function(x) {
 #'
 #' @examples
 #' "a" %!in% c("b", "v", "k")
-`%!in%` <- function(x, table) {
+`%!in%` <- function(x, table) { # nolint
   !(x %in% table)
 }
 

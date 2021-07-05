@@ -56,7 +56,8 @@ derive_var_basetype <- function(dataset, basetypes) {
     dataset %>%
       filter(!!condition) %>%
       mutate(BASETYPE = label)
-  }) %>% bind_rows()
+  }) %>%
+    bind_rows()
 
   records_without_basetype <- anti_join(dataset, records_with_basetype, by = colnames(dataset))
 

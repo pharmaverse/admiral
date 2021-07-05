@@ -29,20 +29,11 @@ example_fun <- function(dat, var) {
 
 example_fun(dm, USUBJID)
 
-tryCatch(
-  example_fun(dm),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm))
 
-tryCatch(
-  example_fun(dm, "USUBJID"),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm, "USUBJID"))
 
-tryCatch(
-  example_fun(dm, toupper(PARAMCD)),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm, toupper(PARAMCD)))
 }
 \author{
 Thomas Neitmann
