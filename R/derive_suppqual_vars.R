@@ -64,17 +64,12 @@
 #'
 #' derive_suppqual_vars(dm, suppdm)
 derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
-
-  assert_that(
-    is.data.frame(dataset),
-    is.data.frame(dataset_suppqual),
-    is.null(domain) | is.character(domain)
-  )
-
-  assert_has_variables(
+  assert_data_frame(dataset)
+  assert_data_frame(
     dataset_suppqual,
-    c("USUBJID", "RDOMAIN", "IDVAR", "IDVARVAL", "QNAM", "QLABEL", "QVAL")
+    required_vars = vars(USUBJID, RDOMAIN, IDVAR, IDVARVAL, QNAM, QLABEL, QVAL)
   )
+  assert_character_scalar(domain, optional = TRUE)
 
   if (!is.null(domain)) {
     dataset_suppqual <- filter(dataset_suppqual, .data$RDOMAIN == domain)

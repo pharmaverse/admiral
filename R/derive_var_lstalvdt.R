@@ -118,7 +118,12 @@
 derive_var_lstalvdt <- function(dataset,
                                 ...,
                                 subject_keys = vars(STUDYID, USUBJID)) {
+  assert_data_frame(dataset)
+  assert_vars(subject_keys)
+
   sources <- list(...)
+  walk(sources, validate_lstalvdt_source)
+
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     if (i > 1) {
@@ -132,8 +137,7 @@ derive_var_lstalvdt <- function(dataset,
     if (!quo_is_null(sources[[i]]$filter)) {
       add_data[[i]] <- sources[[i]]$dataset %>%
         filter(!!(sources[[i]]$filter))
-    }
-    else {
+    } else {
       add_data[[i]] <- sources[[i]]$dataset
     }
     date_var <- quo_get_expr(sources[[i]]$date_var)
@@ -147,14 +151,12 @@ derive_var_lstalvdt <- function(dataset,
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = !!date_var)
-    }
-    else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
+    } else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = date(!!date_var))
-    }
-    else {
+    } else {
       add_data[[i]] <- transmute(add_data[[i]],
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
@@ -165,7 +167,8 @@ derive_var_lstalvdt <- function(dataset,
     }
   }
 
-  all_data <- bind_rows(add_data) %>%
+  all_data <- add_data %>%
+    bind_rows() %>%
     filter(!is.na(LSTALVDT)) %>%
     filter_extreme(
       by_vars = subject_keys,

@@ -121,16 +121,12 @@ derive_summary_records <- function(dataset,
                                    fns,
                                    set_values_to = NULL,
                                    drop_values_from = NULL) {
-
-  # Is quosure?
-  assert_that(is_vars(by_vars))
-  if (!is.null(drop_values_from)) assert_that(is_vars(drop_values_from))
+  assert_vars(by_vars)
+  assert_vars(drop_values_from, optional = TRUE)
+  assert_data_frame(dataset, required_vars = quo_c(by_vars, drop_values_from))
 
   by_vars <- vars2chr(by_vars)
   drop_values_from <- vars2chr(drop_values_from)
-
-  # Assert variable names from input dataset
-  assert_has_variables(dataset, c(by_vars, drop_values_from))
 
   # Manipulate functions as direct call for each analysis variable
   # Returns: A list of function call with attributes "variable" and "stats"
@@ -141,10 +137,10 @@ derive_summary_records <- function(dataset,
 
   # Get variable values that are constant across the grouped records,
   # that do not change
-  keep_vars <- setdiff(names(dataset),
-                       union(
-                         drop_values_from(dataset, by_vars),
-                         drop_values_from))
+  keep_vars <- setdiff(
+    names(dataset),
+    union(drop_values_from(dataset, by_vars), drop_values_from)
+  )
   # For mutate input
   set_values <- NULL
 
@@ -161,7 +157,8 @@ derive_summary_records <- function(dataset,
 
     # Check new values and derived records have same length
     assert_that(
-      are_records_same(set_values, funs, x_arg = "set_values_to", y_arg = "fns"))
+      are_records_same(set_values, funs, x_arg = "set_values_to", y_arg = "fns")
+    )
   }
 
   # Summaries the analysis value and bind to the original dataset

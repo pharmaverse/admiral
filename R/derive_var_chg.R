@@ -26,7 +26,7 @@
 #' )
 #' derive_var_chg(advs)
 derive_var_chg <- function(dataset) {
-  assert_has_variables(dataset, c("AVAL", "BASE"))
+  assert_data_frame(dataset, required_vars = vars(AVAL, BASE))
 
   dataset %>%
     mutate(CHG = AVAL - BASE)

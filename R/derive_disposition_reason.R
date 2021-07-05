@@ -133,15 +133,18 @@ derive_disposition_reason <- function(dataset,
                                       reason_var_spe = NULL,
                                       format_new_vars = format_reason_default,
                                       filter_ds) {
-  new_var <- enquo(new_var)
-  reason_var <- enquo(reason_var)
-  new_var_spe <- enquo(new_var_spe)
-  reason_var_spe <- enquo(reason_var_spe)
-  filter_ds <- enquo(filter_ds)
 
-  # Checks
+  new_var <- assert_symbol(enquo(new_var))
+  reason_var <- assert_symbol(enquo(reason_var))
+  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
+  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
+  assert_that(is.function(format_new_vars))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_ds)
   warn_if_vars_exist(dataset, quo_text(new_var))
-  assert_that(is.data.frame(dataset_ds))
+
+  # Additional checks
   if (!quo_is_null(new_var_spe)) {
     if (!quo_is_null(reason_var_spe)) {
       statusvar <- c(quo_text(reason_var), quo_text(reason_var_spe))

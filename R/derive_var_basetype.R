@@ -49,14 +49,8 @@
 #'   )
 #' )
 derive_var_basetype <- function(dataset, basetypes) {
-  assert_that(
-    is.data.frame(dataset),
-    is_named_exprs(basetypes)
-  )
-  assert_has_variables(
-    dataset,
-    unique(map_chr(basetypes, all.vars))
-  )
+  assert_data_frame(dataset)
+  assert_named_exprs(basetypes)
 
   records_with_basetype <- map2(names(basetypes), basetypes, function(label, condition) {
     dataset %>%

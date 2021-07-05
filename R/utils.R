@@ -13,18 +13,20 @@ dplyr::vars
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
+#' @param quote_fun Quoting function, defaults to `backquote`.
+#' @param conjunction Character to be used in the message, defaults to "and".
 #'
 #' @noRd
 #'
 #' @examples
 #' enumerate(letters[1:6])
-enumerate <- function(x, quote_fun = backquote) {
+enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
     quote_fun(x)
   } else {
     paste(
       paste0(quote_fun(x[-length(x)]), collapse = ", "),
-      "and",
+      conjunction,
       quote_fun(x[length(x)])
     )
   }
@@ -100,6 +102,18 @@ convert_dtm_to_dtc <- function(dtm) {
   format(dtm, "%Y-%m-%dT%H:%M:%S")
 }
 
+arg_name <- function(expr) {
+  if (length(expr) == 1L && is.symbol(expr)) {
+    deparse(expr)
+  } else if (length(expr) == 2L &&
+             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+             is.symbol(expr[[2L]])) {
+    deparse(expr[[2L]])
+  } else {
+    abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
+  }
+}
+
 extract_vars <- function(quosures) {
   vars <- lapply(quosures, function(q) {
     rlang::quo_set_env(
@@ -122,4 +136,11 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
     dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
     "^Column `.+` has different attributes on LHS and RHS of join$"
   )
+}
+
+quo_c <- function(...) {
+  inputs <- unlist(list(...), recursive = TRUE)
+  stopifnot(all(map_lgl(inputs, is_quosure)))
+  is_null <- map_lgl(inputs, quo_is_null)
+  rlang::as_quosures(inputs[!is_null])
 }
