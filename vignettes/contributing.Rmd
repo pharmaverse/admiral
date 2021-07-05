@@ -193,11 +193,9 @@ here only a warning should be displayed and the function should continue executi
 Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in `R/assertions.R`. 
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
-For function parameters that can only take a fixed set of values as arguments, 
-the validity of the user-provided value should be checked using `rlang::arg_match()`. 
-As an example, if a function has a parameter named unit that can be either "days", "months" or "years" 
-the following line of code should be added to the function body:
-`arg_match(unit, c("days", "months", "years"))`.
+For the most common types of input parameters like a single variable, a list of
+variables, a dataset, ... functions for checking are available (see
+[assertions](../reference/index.html#section-assertions)).
 
 Parameter which expect keywords should handle them case-insensitive, e.g., both
 `date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
