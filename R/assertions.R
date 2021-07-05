@@ -503,6 +503,48 @@ assert_order_vars <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+#' Is an Argument an Integer Scalar?
+#'
+#' Checks if an argument is an integer scalar
+#'
+#' @param arg A function argument to be checked
+#' @param subset A subset of integers that `arg` should be part of. Should be one
+#'   of `"none"` (the default), `"positive"`, `"non-negative"` or `"negative"`.
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not an integer belonging to the
+#' specified `subset`.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num1, num2) {
+#'   assert_integer_scalar(num1, subset = "positive")
+#'   assert_integer_scalar(num2, subset = "negative")
+#' }
+#'
+#' example_fun(1, -9)
+#'
+#' tryCatch(
+#'   example_fun(1.5, -9),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun(2, 0),
+#'   error = function(e) cat(e$message, "\n")
+#' )
+#'
+#' tryCatch(
+#'   example_fun("2", 0),
+#'   error = function(e) cat(e$message, "\n")
+#' )
 assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   subsets <- list(
     "positive" = quote(arg > 0L),
