@@ -22,117 +22,162 @@ knitr::opts_chunk$set(
 
 This article describes creating a BDS finding ADaM. Examples are currently 
 presented and tested in the context of ADVS.  However, the examples could be
-applied to other BDS Finding ADaMs such as ADEG, ADLB, etc.. where a single 
+applied to other BDS Finding ADaMs such as ADEG, ADLB, etc. where a single 
 result is captured in an SDTM Finding domain on a single date and/or time.
 
-<b>Note:  </b> </font><i> All examples assume CDISC SDTM and/or ADaM format as input unless 
-otherwise specified. </i>
-
-<b> <span style="color: red"> None of the code chunks are executing/displaying
-results.  Is that something we want to do? </span> </b>
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
 
 ## Programming Workflow
 
-* [Read in data](#readdata)
-* [Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
+* [Read in Data](#readdata)
+* [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
 * [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
-* [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT`](#paramcd)
-* [Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
-* [Choose analysis record within a timing period (e.g. `ANL01FL`)](#analysisrec)
+* [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCATy`](#paramcd)
+* [Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
-* [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`)](#baseline)
+* [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`)](#baseline)
 * [Derive Change from Baseline (`CHG`, `PCHG`)](#bchange)
+* [Derive Analysis Flags (e.g. `ANL01FL`)](#analysisrec)
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive New Rows](#additional)
-* [Derive categorization variables (`AVALCAT`)](#cat)
-* [Add labels and attributes](#attributes)
+* [Derive Categorization Variables (`AVALCATx`)](#cat)
 * [Example Scripts](#example)
 
-### Read in data {#readdata}
+### Read in Data {#readdata}
 
-To start, all dataframes needed for the creation of `ADVS` should be read into
+To start, all data frames needed for the creation of ADVS should be read into
 the environment.  This will be a company specific process.  Some of the 
-dataframes needed may be:
+data frames needed may be `vs`, `suppvs`, and `adsl`.
 
-  * `VS`, `SUPPVS`
-  * `ADSL`
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
 
-The `SUPPVS` domain can be joined to the VS domain using the function:
-`derive_supplemental_vars`.
+```{r message=FALSE}
+library(dplyr)
+library(admiral)
+library(lubridate)
+library(stringr)
+library(tibble)
+data("adsl")
+data("vs")
+```
 
-This function will transpose the supplemental SDTM domain (e.g. `SUPPVS`) and
-join the transposed supplemental domain to the parent domain (e.g. `VS`) by
-`STUDYID`, `USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
+The `suppvs` domain can be joined to the `vs` domain using the function `derive_suppqual_vars()`.
+
+This function will transpose the supplemental SDTM domain (e.g. `suppvs`) and
+join the transposed data to the parent domain (e.g. `vs`) by `STUDYID`, 
+`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
 
 Example call:
 
-`vs <- derive_supplemental_vars(vs, suppvs)`
-
-<b> <span style="color: red"> NEED TO GET THIS FUNCTION WORKING AS IT WILL BE EXPECTED AND CRITICAL TO MANY USERS </span> </b>
-
-At this step, it may be useful to join ADSL to your VS domain as well:
 ```{r eval=FALSE}
-advs <- left_join(vs, adsl, by = c("STUDYID", "USUBJID"))
+vs <- derive_suppqual_vars(vs, suppvs)
 ```
 
-### Derive/Impute numeric date/time and analysis day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
+Please note, the CDISC pilot did not include a `suppvs` dataset and therefore this
+join is not demonstrated.
+
+At this step, it may be useful to join ADSL to your VS domain as well:
+
+```{r eval=TRUE}
+advs <- left_join(vs, adsl, by = c("STUDYID", "USUBJID"))
+head(advs)
+```
+
+### Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
 
 The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
 the user to impute the date as well.
 
 Example calls:
 
-`advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)`
+```{r eval=TRUE}
+advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
+head(select(advs, USUBJID, VSDTC, ADT, ADTF))
+```
 
 If imputation is needed and the date is to be imputed to the first of the month, 
 the call would be:
-```{r eval=FALSE}
-advs <- derive_vars_dt(advs_adsl, 
-                       new_vars_prefix = "A", 
-                       dtc = VSDTC, 
-                       date_imputation = "FIRST")
+
+```{r eval=TRUE, include=FALSE}
+advs_old <- advs
+advs <- advs %>% 
+  mutate(
+    VSDTC = if_else(
+      USUBJID == "01-716-1024" & VISIT == "SCREENING 1",
+      "2012-07",
+      VSDTC
+    )
+  ) %>% 
+  select(-ADT, -ADTF)
 ```
 
-Similarly, `ADTM` may be created using the function `derive_vars_dtm`. 
+```{r eval=TRUE}
+advs <- derive_vars_dt(
+  advs, 
+  new_vars_prefix = "A", 
+  dtc = VSDTC, 
+  date_imputation = "FIRST"
+)
+head(select(filter(advs, USUBJID == "01-716-1024"), USUBJID, VISIT, VSDTC, ADT, ADTF))
+```
+
+```{r eval=TRUE, echo=FALSE}
+advs <- advs_old
+```
+
+Similarly, `ADTM` may be created using the function `derive_vars_dtm()`. 
 Imputation may be done on both the date and time components of `ADTM`.
+
 ```{r eval=FALSE}
-advs <- derive_vars_dtm(advs_adsl, 
-                        new_vars_prefix = "A", 
-                        dtc = VSDTC, 
-                        date_imputation = "FIRST")
+# CDISC Pilot data does not contain times and the output of the derivation
+# ADTM is not presented.
+advs <- derive_vars_dtm(
+  advs, 
+  new_vars_prefix = "A", 
+  dtc = VSDTC, 
+  date_imputation = "FIRST"
+)
 ```
 
 By default, the variable `ADTF` for `derive_vars_dt()` or `ADTF` and `ATMF` for 
 `derive_vars_dtm()` will be created and populated with the controlled
-terminology outlined in the CDISC IG for date imputations. 
+terminology outlined in the ADaM IG for date imputations. 
 
-Once `ADT` is derived, the function `derive_var_ady` can be used to derive `ADY`.
-This example assumes both `ADT` and `TRTSDT` exist on the dataframe.
+Once `ADT` is derived, the function `derive_var_ady()` can be used to derive `ADY`.
+This example assumes both `ADT` and `TRTSDT` exist on the data frame.
 
-`advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)`
+```{r eval=TRUE}
+advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
+head(select(advs, USUBJID, TRTSDT, ADT, ADY))
+```
 
-### Derive Results (AVAL, AVALC, AVALU) {#aval}
+### Derive Results (`AVAL`, `AVALC`, `AVALU`) {#aval}
 
 The mapping of `AVAL`, `AVALC`, and `AVALU` is left to the ADaM programmer. An 
 example mapping may be:
-```{r eval=FALSE}
-advs <- mutate(advs, 
-               AVAL = VSSTRESN,
-               AVALC = VSSTRESC,
-               AVALU = VSSTRESU)
+
+```{r eval=TRUE}
+advs <- mutate(
+  advs, 
+  AVAL = VSSTRESN,
+  AVALC = VSSTRESC,
+  AVALU = VSSTRESU
+)
+head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, AVAL, AVALC, AVALU))
 ```
 
-### Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT` {#paramcd}
+### Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1` {#paramcd}
 
-To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT`,
+To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`,
 etc., a lookup can be created to join to the source data.
 
-For example, when creating `ADVS`, a lookup based on the SDTM `--TESTCD` value 
+For example, when creating `advs`, a lookup based on the SDTM `--TESTCD` value 
 may be created:
 
-VSTESTCD | PARAMCD | PARAM | PARAMN | PARCAT | PARCATN
+VSTESTCD | PARAMCD | PARAM | PARAMN | PARCAT1 | PARCAT1N
 --------- | --------- | -------- | ------- | --------- | ----------
 HEIGHT | HEIGHT | Height (cm) | 1 | Subject Characteristic | 1
 WEIGHT | WEIGHT | Weight (kg) | 2 | Subject Characteristic | 1
@@ -140,140 +185,153 @@ DIABP | DIABP | Diastolic Blood Pressure (mmHg) | 3 | Vital Sign | 2
 MAP | MAP | Mean Arterial Pressure | 4 | Vital Sign | 2
 PULSE | PULSE | Pulse Rate (beats/min) | 5 | Vital Sign | 2
 SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2
+TEMP | TEMP | Temperature (C) | 7 | Vital Sign | 2
 
 This lookup may now be joined to the source data:
 
-```{r eval=FALSE}
-advs <-  left_join(advs, param_lookup, lookup, by = "VSTESTCD")
-````
+```{r eval=TRUE, include=FALSE}
+param_lookup <- tribble(
+  ~VSTESTCD, ~PARAMCD, ~PARAM, ~PARAMN, ~PARCAT1, ~PARCAT1N,
+  "HEIGHT", "HEIGHT", "Height (cm)", 1, "Subject Characteristic", 1,
+  "WEIGHT", "WEIGHT", "Weight (kg)", 2, "Subject Characteristic", 1,
+  "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 3, "Vital Sign", 2,
+  "MAP", "MAP", "Mean Arterial Pressure", 4, "Vital Sign", 2,
+  "PULSE", "PULSE", "Pulse Rate (beats/min)", 5, "Vital Sign", 2,
+  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 6, "Vital Sign",2,
+  "TEMP", "TEMP", "Temperature (C)", 7, "Vital Sign", 2
+)
+attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+head(param_lookup)
+```
+
+```{r eval=TRUE}
+advs <-  left_join(advs, param_lookup, by = "VSTESTCD")
+count(advs, VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N)
+head(select(advs, USUBJID, VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N))
+```
 
 Please note, it may be necessary to include other variables in the join. For
-example, perhaps the `PARCAT` is based on `VSTESTCD` and `VSPOS`, it may be 
-necessary to expand this lookup or create a separate look up for `PARCAT`.
+example, perhaps the `PARCAT1` is based on `VSTESTCD` and `VSPOS`, it may be 
+necessary to expand this lookup or create a separate look up for `PARCAT1`.
 
-### Derive timing variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
+### Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
 
 Categorical timing variables are protocol and analysis dependent.  Below is a 
 simple example to calculate `APHASE`. 
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- advs %>% 
-  mutate(APHASE = case_when(is.na(ADT) ~ NA_character,
-                            ADT <= PH1EDT ~ "Screening",
-                            PH2SDT <= ADT <= PH2EDT ~ "Treatment",
-                            PH3SDT <= ADT <= PH3EDT ~ "Follow-up",
-                            TRUE ~ "UNASSIGNED"))
+  mutate(
+    APHASE = case_when(
+      is.na(ADT) ~ NA_character_,
+      ADT < RFSTDTC ~ "Screening",
+      RFSTDTC <= ADT | ADT <= RFENDTC ~ "Treatment",
+      RFENDTC < ADT ~ "Follow-up",
+      TRUE ~ "UNASSIGNED"
+    ),
+    AVISIT = case_when(
+      str_detect(VISIT, "SCREEN") ~ NA_character_,
+      str_detect(VISIT, "UNSCHED") ~ NA_character_,
+      str_detect(VISIT, "RETRIEVAL") ~ NA_character_,
+      str_detect(VISIT, "AMBUL") ~ NA_character_,
+      !is.na(VISIT) ~ str_to_title(VISIT)
+    ),
+    AVISITN = as.numeric(case_when(
+      VISIT == "BASELINE" ~ "0",
+      str_detect(VISIT, "WEEK") ~ str_trim(str_replace(VISIT, "WEEK", ""))
+    )),
+    ATPT = VSTPT,
+    ATPTN = VSTPTNUM
+  )
+head(select(advs, USUBJID, ADT, RFSTDTC, RFENDTC, APHASE))
+count(advs, VISITNUM, VISIT, AVISITN, AVISIT)
+count(advs, VSTPTNUM, VSTPT, ATPTN, ATPT)
 ```
-
-### Choose analysis record within a timing period (e.g. `ANL01FL`) {#analysisrec}
-
-In most finding ADaMs, an analysis flag is derived to identify the appropriate 
-observations to use for a particular analysis when a subject has multiple
-observations within a particular timing period.
-
-In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
-appropriate record for analysis.
-
-This flag may be derived using the Admiral function `derive_extreme_flag()`. 
-For this example, we will assume we would like to choose the latest and 
-highest value by `USUBJID`, `PARAMCD`, `AVISIT`, `ATPT`, and `DTYPE`.
-
-```{r eval=FALSE}
-advs <- derive_extreme_flag(
-  advs,
-  new_var = ANL01FL,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-  order = vars(ADT, AVAL),
-  mode = "last",
-  flag_filter = (!is.na(AVISITN)))
-
-```
-
-Another common example would be flagging the worst value for a subject,
-parameter, and visit. For this example, we will assume we have 3 `PARAMCD` 
-values (SYSBP, DIABP, and RESP).  We will also assume high is worst for SYSBP 
-and DIABP and low is worst for RESP.
-
-```{r eval=FALSE}
-advs <- derive_extreme_flag(
-  advs,
-  new_var = WORST_HIGH,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT, AVAL),
-  mode = "last",
-  flag_filter = (!is.na(AVISIT) & !is.na(AVAL))) 
-
-advs <- derive_extreme_flag(
-  advs,
-  new_var = WORST_LOW,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT, AVAL),
-  mode = "first",
-  flag_filter = vars(!is.na(AVISIT) & !is.na(AVAL))) 
-
-advs <- mutate(advs, WORSTFL = ifelse(PARAMCD %in% c("SYSBP", "DIABP"), 
-                                      WORST_HIGH, WORST_LOW))
-```
-
-An example of deriving `ABLFL` using the `derive_extreme_flag` function can be
-found [here.](#baseline)
 
 ### Timing Flag Variables (e.g. `ONTRTFL`) {#timingflag}
 
-In some analysis, it may be necessary to flag an observation as on-treatment.
-The Admiral function `derive_var_ontrtfl()` can be used.
+In some analyses, it may be necessary to flag an observation as on-treatment.
+The admiral function `derive_var_ontrtfl()` can be used.
 
 For example, if on-treatment is defined as any observation between treatment
 start and treatment end, the flag may be derived as:
 
-```{r eval=FALSE}
-advs <- derive_var_ontrtfl(advs, 
-                           date = ADT, 
-                           ref_start_date = TRTSDT, 
-                           ref_end_date = TRTENDT)
+```{r eval=TRUE}
+advs <- derive_var_ontrtfl(
+  advs, 
+  date = ADT, 
+  ref_start_date = TRTSDT, 
+  ref_end_date = TRTEDT
+)
+head(select(advs, USUBJID, PARAMCD, ADT, TRTSDT, TRTEDT, ONTRTFL))
 ```
 
-This function returns the original dataframe with the column `ONTRTFL` added.
+This function returns the original data frame with the column `ONTRTFL` added.
 Additionally, this function does have functionality to handle a window on the
 `ref_end_date`.  For example, if on-treatment is defined as between treatment 
-start and treatment end + 15 days, the call would be:
+start and treatment end plus 60 days, the call would be:
 
-```{r eval=FALSE}
-advs <- derive_var_ontrtfl(advs), 
-                           date = ADT, 
-                           ref_start_date = TRTSDT, 
-                           ref_end_date = TRTEDT,
-                           ref_end_window = 15)
+```{r include=FALSE}
+advs <- select(advs, -ONTRTFL)
+```
+
+```{r eval=TRUE}
+advs <- derive_var_ontrtfl(
+  advs, 
+  date = ADT, 
+  ref_start_date = TRTSDT, 
+  ref_end_date = TRTEDT,
+  ref_end_window = 60
+)
 ```
 
 Lastly, the function does allow you to filter out pre-treatment observations
-that occurred on the start date.  For example, if observations with `VSTPT = PRE`
+that occurred on the start date.  For example, if observations with `VSTPT == PRE`
 should not be considered on-treatment when the observation date falls between 
 the treatment start and end date, the user may specify this using the 
 `filter_pre_timepoint` parameter:
 
-```{r eval=FALSE}
+```{r include=FALSE}
+advs <- select(advs, -ONTRTFL)
+```
+
+```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs,
   date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
-  filter_pre_timepoint = TPT == "PRE")
+  filter_pre_timepoint = ATPT == "AFTER LYING DOWN FOR 5 MINUTES"
+)
 ```
 
 ### Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
-The Admiral function `derive_var_anrind()` may be used to derive the reference
+The admiral function `derive_var_anrind()` may be used to derive the reference
 range indicator `ANRIND`.
 
-This function requires the reference range boundaries to exist on the dataframe 
+This function requires the reference range boundaries to exist on the data frame 
 (`ANRLO`, `ANRHI`) and also accommodates the additional boundaries `A1LO` and `A1HI`.
+
+```{r include=FALSE}
+range_lookup <- tibble::tribble(
+  ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
+  "SYSBP", 90, 130, 70, 140,
+  "DIABP", 60, 80, 40, 90,
+  "PULSE", 60, 100, 40, 110,
+  "TEMP", 36.5, 37.5, 35, 38
+)
+advs <- left_join(advs, range_lookup, by = "PARAMCD")
+```
 
 The function is called as:
 
-`advs <- derive_var_anrind(advs)`
+```{r eval=TRUE}
+advs <- derive_var_anrind(advs)
+head(select(advs, USUBJID, PARAMCD, AVAL, ANRLO, ANRHI, A1LO, A1HI, ANRIND))
+```
 
-### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`) {#baseline}
+### Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
 The parameter basetypes of this function requires a named list of expression 
@@ -281,102 +339,169 @@ detailing how the BASETYPE should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
 
-```{r eval=FALSE}
+```{r eval=TRUE, warning=FALSE}
 advs <- derive_var_basetype(
   dataset = advs,
-  basetypes = exprs("AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
-                    "AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
-                    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817))
+  basetypes = exprs(
+    "AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
+    "AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
+    "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817
+  )
+)
+count(advs, ATPT, ATPTN, BASETYPE)
 ```
 
 It is important to derive `BASETYPE` first so that it can be utilized in 
-subsequent derivations. This will be important if the dataframe contains
+subsequent derivations. This will be important if the data frame contains
 multiple values for `BASETYPE`.
 
-Next, the analysis baseline flag (`ABLFL`) can be derived using the Admiral
-function `derive_extreme_flag`.  For example, if baseline is defined as the last 
+Next, the analysis baseline flag (`ABLFL`) can be derived using the admiral
+function `derive_extreme_flag()`.  For example, if baseline is defined as the last 
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- derive_extreme_flag(
   advs,
   new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-  order = vars(ADT),
+  order = vars(ADT, ATPTN, VISITNUM),
   mode = "last",
-  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
+  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
+)
+head(select(advs, USUBJID, BASETYPE, PARAMCD, ADT, TRTSDT, ATPTN, TRTSDT, ABLFL))
 ```
 
-Note: Additional examples of the `derive_extreme_flag` function can be 
+Note: Additional examples of the `derive_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
-Lastly, the BASE and BASEC columns can be derived using the Admiral function
-`derive_var_base()` and `derive_var_basec`.  Example calls are:
+Lastly, the `BASE` and `BASEC` columns can be derived using the admiral function
+`derive_var_base()` and `derive_var_basec()`.  In addition, `BNRIND` can be derived
+using the low-level function `derive_baseline()`.  Example calls are:
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- derive_var_base(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
-
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+)
 advs <- derive_var_basec(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE))
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+)
+advs <- derive_baseline(
+  advs,
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  source_var = ANRIND, 
+  new_var = BNRIND
+)
+head(select(advs, USUBJID, BASETYPE, PARAMCD, ABLFL, BASE, BASEC, ANRIND, BNRIND))
 ```
 
 ### Derive Change from Baseline (`CHG`, `PCHG`) {#bchange}
 
-Change and percent change from baseline can be derived using the Admiral 
-functions `derive_var_chg` and `derive_var_pchg`.  These functions expect `AVAL` 
-and `BASE` to exist in the dataframe.  The `CHG` is simply `AVAl - BASE` and the
+Change and percent change from baseline can be derived using the admiral 
+functions `derive_var_chg()` and `derive_var_pchg()`.  These functions expect `AVAL` 
+and `BASE` to exist in the data frame.  The `CHG` is simply `AVAl - BASE` and the
 `PCHG` is `(AVAL - BASE) / absolute value (BASE) * 100`.  Examples calls are:
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- derive_var_chg(advs)
-
 advs <- derive_var_pchg(advs)
+head(select(advs, USUBJID, BASE, AVAL, CHG, PCHG))
+```
 
+### Derive Analysis Flags (e.g. `ANL01FL`) {#analysisrec}
+
+In most finding ADaMs, an analysis flag is derived to identify the appropriate 
+observation(s) to use for a particular analysis when a subject has multiple
+observations within a particular timing period.
+
+In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
+appropriate record for analysis.
+
+This flag may be derived using the admiral function `derive_extreme_flag()`. 
+For this example, we will assume we would like to choose the latest and 
+highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
+
+```{r eval=TRUE}
+advs <- derive_extreme_flag(
+  advs,
+  new_var = ANL01FL,
+  by_vars = vars(USUBJID, PARAMCD, AVISIT),
+  order = vars(ADT, ATPTN, AVAL),
+  mode = "last",
+  flag_filter = !is.na(AVISITN)
+)
+head(select(advs, USUBJID, PARAMCD, AVISIT, ATPTN, ADT, AVAL, ANL01FL))
+```
+
+Another common example would be flagging the worst value for a subject,
+parameter, and visit. For this example, we will assume we have 3 `PARAMCD` 
+values (SYSBP, DIABP, and RESP).  We will also assume high is worst for SYSBP 
+and DIABP and low is worst for RESP.
+
+```{r eval=TRUE}
+advs <- derive_extreme_flag(
+  advs,
+  new_var = WORST_HIGH,
+  by_vars = vars(USUBJID, PARAMCD, AVISIT),
+  order = vars(AVAL, ADT, ATPTN),
+  mode = "last",
+  flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+) 
+advs <- derive_extreme_flag(
+  advs,
+  new_var = WORST_LOW,
+  by_vars = vars(USUBJID, PARAMCD, AVISIT),
+  order = vars(AVAL, ADT, ATPTN),
+  mode = "first",
+  flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+)
+advs <- mutate(
+  advs, 
+  WORSTFL = case_when(
+    PARAMCD %in% c("SYSBP", "DIABP") ~ WORST_HIGH,
+    PARAMCD == "RESP" ~ WORST_LOW
+  )
+)
+head(select(advs, USUBJID, PARAMCD, AVISIT, AVAL, ADT, ATPTN, WORSTFL))
 ```
 
 ### Assign Treatment (`TRTA`, `TRTP`) {#treatment}
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL. The 
 derivation of `TRTA` and `TRTP` for a record are protocol and analysis specific.  
-Admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
+admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
 assignment.
 
 However, an example of a simple implementation could be:
 
-```{r eval=FALSE}
-advs <- mutate(advs, TRTP = TRT01P,
-               TRTA = TRT01A)
-
+```{r eval=TRUE}
+advs <- mutate(advs, TRTP = TRT01P, TRTA = TRT01A)
+count(advs, TRTP, TRTA, TRT01P, TRT01A)
+head(select(advs, USUBJID, TRT01P, TRT01A, TRTP, TRTA))
 ```
 
 ### Assign `ASEQ` {#aseq}
 
-The Admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
+The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- derive_obs_number(
   advs,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
-  order = vars(PARAMCD, ADT, AVISITN, ATPTN),
-  check_type = "warning")
-
+  order = vars(PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT),
+  check_type = "warning"
+)
+head(select(advs, USUBJID, PARAMCD, ADT, AVISITN, ATPTN, VISIT, ADT, ASEQ))
 ```
-
-This will add an addition column to the dataframe called `ASEQ`.
-
-### Add labels and attributes {#attributes}
-<b> <span style="color: red"> Metacore?? Move into section "Read in data" </span> </b>
 
 ### Derive New Rows {#additional}
 
-When deriving new rows for a dataframe, it is essential the programmer takes 
+When deriving new rows for a data frame, it is essential the programmer takes 
 time to insert this derivation in the correct location of the code. The location
-will vary depending on what previous computatons should be retained on the new 
+will vary depending on what previous computations should be retained on the new 
 record and what computations must be done with the new records.
 
 Sample Code | Description 
@@ -387,76 +512,101 @@ ad_advs.R | Derive a new PARAMCD based on existing PARAMCDs (MAP, based on Systo
 
 Example 1 (Creating a new record):
 
-```{r eval=FALSE}
-advs <-
+```{r eval=TRUE}
+advs <- advs %>%
   derive_extreme_flag(
-    advs,
     new_var = EOTFL,
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
-    order = vars(ADT),
+    by_vars = vars(STUDYID, USUBJID, PARAMCD),
+    order = vars(ADT, AVISITN, ATPTN, AVAL),
     mode = "last",
-    flag_filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")) %>%
-    filter(EOTFL == "Y") %>%
-  mutate(AVISIT = "End of Treatment",
-         AVISITN = 99) %>%
+    flag_filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y")
+  ) %>%
+  filter(EOTFL == "Y") %>%
+  mutate(
+    AVISIT = "End of Treatment",
+    AVISITN = 99
+  ) %>%
   union_all(advs) %>%
   select(-EOTFL)
+advs %>% 
+  select(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, ANL01FL) %>% 
+  filter(ANL01FL == "Y") %>% 
+  arrange(USUBJID, PARAMCD, ADT, AVISITN, ATPTN) %>% 
+  head(n = 10)
 ```
 
 Example 2 (Deriving a Summary record):
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 advs <- derive_summary_records(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
   fns = list(AVAL ~ mean),
-  set_values_to = vars(DTYPE = "AVERAGE"))
+  set_values_to = vars(DTYPE = "AVERAGE")
+)
+head(select(advs, USUBJID, PARAMCD, VISITNUM, ADT, AVAL, DTYPE))
 ```
 
 Example 3 (Derive a new PARAMCD):
 
-```{r eval=FALSE}
-sysbp <- filter(advs, VSTESTCD == "SYSBP") %>%
-  select(-VSSEQ, - VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
-         -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC)
-
-diabp <- filter(advs, VSTESTCD == "DIABP") %>%
+```{r eval=TRUE}
+sysbp <- advs %>%
+  filter(VSTESTCD == "SYSBP") %>%
+  select(
+    -VSSEQ, -VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
+    -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC
+  )
+diabp <- advs %>%
+  filter(VSTESTCD == "DIABP") %>%
   select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
   rename(DBPAVAL = AVAL)
-
-advs <- left_join(sysbp, diabp,
-                  by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC",
-                         "VSDTC", "VSTPT")) %>%
-  mutate(AVAL = ((2 * DBPAVAL) + AVAL) / 3,
-         PARAMCD = "MAP") %>%
+advs <- sysbp %>%
+  left_join(
+    diabp,
+    by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC", "VSDTC", "VSTPT")
+  ) %>%
+  mutate(
+    AVAL = (2 * DBPAVAL + AVAL) / 3,
+    PARAMCD = "MAP"
+  ) %>%
   filter(!is.na(AVAL)) %>%
   left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
   union_all(advs) %>%
   select(-DBPAVAL)
+advs %>% 
+  filter(PARAMCD %in% c("SYSBP", "DIABP", "MAP")) %>% 
+  arrange(USUBJID, PARAMCD, VISITNUM, VSDTC, VSTPT, AVAL) %>% 
+  head()
 ```
 
-### Derive categorization variables (`AVALCAT`) {#cat}
+### Derive Categorization Variables (`AVALCATx`) {#cat}
 
-Admiral does not currently have a generic function to aid in assigning `AVALCAT`/
+Admiral does not currently have a generic function to aid in assigning `AVALCATx`/
 `AVALCAxN` values. Below is a simple example of how these values may be
 assigned:
-```{r eval=FALSE}
+
+```{r eval=TRUE}
 avalcat_lookup <- tibble::tribble(
   ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
   "HEIGHT", 1, ">100 cm",
-  "HEIGHT", 2, "<= 100 cm")
-
-advs <- mutate(advs,
-               AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
-                                    PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
-  left_join(avalcat_lookup, by = "PARAMCD")
+  "HEIGHT", 2, "<= 100 cm"
+)
+advs <- advs %>% 
+  mutate(
+    AVALCA1N = case_when(
+      PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
+      PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2
+    )
+  ) %>%
+  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N"))
+advs %>% 
+  select(USUBJID, PARAMCD, AVAL, AVALCA1N, AVALCAT1) %>% 
+  filter(PARAMCD == "HEIGHT") %>% 
+  head()
 ```
 
 ### Example Scripts {#example}
 
 ADaM | Sample Code 
 ---- | --------------
-ADVS | [ad_advs.R](/inst/example_scripts/ad_advs.R) 
-
-<b> <span style="color: red"> I tried to get this to link to inst/example_scripts
-but could not get it to work.  Is it possible? </span> </b>
+ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R){target="_blank"}

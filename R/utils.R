@@ -137,3 +137,10 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
     "^Column `.+` has different attributes on LHS and RHS of join$"
   )
 }
+
+quo_c <- function(...) {
+  inputs <- unlist(list(...), recursive = TRUE)
+  stopifnot(all(map_lgl(inputs, is_quosure)))
+  is_null <- map_lgl(inputs, quo_is_null)
+  rlang::as_quosures(inputs[!is_null])
+}

@@ -16,7 +16,7 @@ derive_last_dose(
   new_var,
   output_datetime = TRUE,
   check_dates_only = FALSE,
-  traceability_vars = vars()
+  traceability_vars = NULL
 )
 }
 \arguments{
