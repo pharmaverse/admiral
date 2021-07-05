@@ -8,7 +8,7 @@ Authors@R: c(
     person("Stefan", "Bundfuss", email = "stefan.bundfuss@roche.com", role = "aut"),
     person("Samia", "Kabi", email = "samia.kabi@roche.com", role = "aut"),
     person("Vignesh", "Thanikachalam", role = "aut"),
-    person("Ondrej", "Slama", role = "aut"),
+    person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
     person("Shimeng", "Huang", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
