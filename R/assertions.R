@@ -28,15 +28,9 @@
 #'
 #' example_fun(dm)
 #'
-#' tryCatch(
-#'   example_fun(dplyr::select(dm, -STUDYID)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(dplyr::select(dm, -STUDYID)))
 #'
-#' tryCatch(
-#'   example_fun("Not a dataset"),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
   assert_logical_scalar(optional)
@@ -99,15 +93,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #'
 #' example_fun("warning")
 #'
-#' tryCatch(
-#'   example_fun("message"),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun("message"))
 #'
-#' tryCatch(
-#'   example_fun(TRUE),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(TRUE))
 assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
   assert_character_vector(values, optional = TRUE)
   assert_logical_scalar(optional)
@@ -172,10 +160,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' example_fun(letters)
 #'
-#' tryCatch(
-#'   example_fun(1:10),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(1:10))
 assert_character_vector <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -216,20 +201,11 @@ assert_character_vector <- function(arg, optional = FALSE) {
 #'
 #' example_fun(FALSE)
 #'
-#' tryCatch(
-#'   example_fun(NA),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(NA))
 #'
-#' tryCatch(
-#'   example_fun(c(TRUE, FALSE, FALSE)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(c(TRUE, FALSE, FALSE)))
 #'
-#' tryCatch(
-#'   example_fun(1:10),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(1:10))
 assert_logical_scalar <- function(arg) {
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
     is <- if (length(arg) > 1L) friendly_type(type_of(arg)) else backquote(arg)
@@ -272,20 +248,11 @@ assert_logical_scalar <- function(arg) {
 #'
 #' example_fun(dm, USUBJID)
 #'
-#' tryCatch(
-#'   example_fun(dm),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(dm))
 #'
-#' tryCatch(
-#'   example_fun(dm, "USUBJID"),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(dm, "USUBJID"))
 #'
-#' tryCatch(
-#'   example_fun(dm, toupper(PARAMCD)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(dm, toupper(PARAMCD)))
 assert_symbol <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -336,10 +303,7 @@ assert_symbol <- function(arg, optional = FALSE) {
 #'
 #' example_fun(dm, AGE == 64)
 #'
-#' tryCatch(
-#'   example_fun(dm, USUBJID),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(dm, USUBJID))
 assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
@@ -391,20 +355,11 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' tryCatch(
-#'   example_fun(exprs(USUBJID, PARAMCD)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
-#' tryCatch(
-#'   example_fun(c("USUBJID", "PARAMCD", "VISIT")),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
-#' tryCatch(
-#'   example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
 assert_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -464,20 +419,11 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' tryCatch(
-#'   example_fun(exprs(USUBJID, PARAMCD)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
 #'
-#' tryCatch(
-#'   example_fun(c("USUBJID", "PARAMCD", "VISIT")),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
-#' tryCatch(
-#'   example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)),
-#'   error = function(e) cat(e$message, "\n")
-#' )
+#' try(example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -503,6 +449,39 @@ assert_order_vars <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+#' Is an Argument an Integer Scalar?
+#'
+#' Checks if an argument is an integer scalar
+#'
+#' @param arg A function argument to be checked
+#' @param subset A subset of integers that `arg` should be part of. Should be one
+#'   of `"none"` (the default), `"positive"`, `"non-negative"` or `"negative"`.
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not an integer belonging to the
+#' specified `subset`.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num1, num2) {
+#'   assert_integer_scalar(num1, subset = "positive")
+#'   assert_integer_scalar(num2, subset = "negative")
+#' }
+#'
+#' example_fun(1, -9)
+#'
+#' try(example_fun(1.5, -9))
+#'
+#' try(example_fun(2, 0))
+#'
+#' try(example_fun("2", 0))
 assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   subsets <- list(
     "positive" = quote(arg > 0L),

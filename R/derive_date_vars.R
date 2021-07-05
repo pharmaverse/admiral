@@ -139,13 +139,11 @@
 #'   date_imputation = "first"
 #' )
 #'
-impute_dtc <- function(
-  dtc,
-  date_imputation = NULL,
-  time_imputation = "00:00:00",
-  min_dates = NULL,
-  max_dates = NULL) {
-
+impute_dtc <- function(dtc,
+                       date_imputation = NULL,
+                       time_imputation = "00:00:00",
+                       min_dates = NULL,
+                       max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
   warn_if_invalid_dtc(dtc)
 
@@ -520,15 +518,14 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "first",
 #'   min_dates = list(TRTSDTM)
 #' )
-derive_vars_dt <- function(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  # "02-01" or "LAST"
-  flag_imputation = TRUE,
-  min_dates = NULL,
-  max_dates = NULL) {
+derive_vars_dt <- function(dataset,
+                           new_vars_prefix,
+                           dtc,
+                           date_imputation = NULL,
+                           # "02-01" or "LAST"
+                           flag_imputation = TRUE,
+                           min_dates = NULL,
+                           max_dates = NULL) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -638,17 +635,16 @@ derive_vars_dt <- function(
 #'   time_imputation = "last",
 #'   max_dates = list(DTHDT, DCUTDT)
 #' )
-derive_vars_dtm <- function(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  # "02-01" or "LAST"
-  time_imputation = "00:00:00",
-  # or 'FIRST' 'LAST'
-  flag_imputation = TRUE,
-  min_dates = NULL,
-  max_dates = NULL) {
+derive_vars_dtm <- function(dataset,
+                            new_vars_prefix,
+                            dtc,
+                            date_imputation = NULL,
+                            # "02-01" or "LAST"
+                            time_imputation = "00:00:00",
+                            # or 'FIRST' 'LAST'
+                            flag_imputation = TRUE,
+                            min_dates = NULL,
+                            max_dates = NULL) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)

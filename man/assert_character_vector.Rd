@@ -26,10 +26,7 @@ example_fun <- function(chr) {
 
 example_fun(letters)
 
-tryCatch(
-  example_fun(1:10),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(1:10))
 }
 \author{
 Thomas Neitmann

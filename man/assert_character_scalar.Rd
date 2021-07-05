@@ -30,15 +30,9 @@ example_fun <- function(msg_type) {
 
 example_fun("warning")
 
-tryCatch(
-  example_fun("message"),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun("message"))
 
-tryCatch(
-  example_fun(TRUE),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(TRUE))
 }
 \author{
 Thomas Neitmann
