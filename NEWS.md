@@ -86,3 +86,5 @@
 - [Frequently Asked Questions](../articles/faq.html)
 
 - [Creating ADSL](../articles/adsl.html)
+
+- [Creating a BDS Finding ADaM](../articles/bds_finding.html)
