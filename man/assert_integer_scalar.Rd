@@ -30,20 +30,11 @@ example_fun <- function(num1, num2) {
 
 example_fun(1, -9)
 
-tryCatch(
-  example_fun(1.5, -9),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(1.5, -9))
 
-tryCatch(
-  example_fun(2, 0),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(2, 0))
 
-tryCatch(
-  example_fun("2", 0),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun("2", 0))
 }
 \author{
 Thomas Neitmann

@@ -32,15 +32,9 @@ example_fun <- function(dataset) {
 
 example_fun(dm)
 
-tryCatch(
-  example_fun(dplyr::select(dm, -STUDYID)),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dplyr::select(dm, -STUDYID)))
 
-tryCatch(
-  example_fun("Not a dataset"),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun("Not a dataset"))
 }
 \author{
 Thomas Neitmann

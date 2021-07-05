@@ -33,10 +33,7 @@ example_fun <- function(dat, x) {
 
 example_fun(dm, AGE == 64)
 
-tryCatch(
-  example_fun(dm, USUBJID),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm, USUBJID))
 }
 \author{
 Ondrej Slama
