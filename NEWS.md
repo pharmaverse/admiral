@@ -4,7 +4,7 @@
 
 ### General
 
-- Function argument checks have been completly re-written to provide clearer error messages to users (#263, #288)
+- Function argument checks have been completely re-written to provide clearer error messages to users (#263, #288)
 
 - SDTM `SUPP--` datasets can be merged onto their parent domain using `derive_suppqual_vars()` (#145)
 
