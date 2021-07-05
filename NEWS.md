@@ -88,3 +88,5 @@
 - [Creating ADSL](../articles/adsl.html)
 
 - [Creating a BDS Finding ADaM](../articles/bds_finding.html)
+
+- [Creating an OCCDS ADaM](../articles/occds.html)

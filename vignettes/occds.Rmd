@@ -1,5 +1,5 @@
 ---
-title: "Creating a OCCDS ADaM"
+title: "Creating an OCCDS ADaM"
 author: "admiral team"
 date: "`r Sys.Date()`"
 output: 
