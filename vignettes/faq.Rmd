@@ -56,7 +56,7 @@ knitr::opts_chunk$set(
 
 * Although admiral follows CDISC standards it does not claim that the dataset resulting from calling admiral functions is ADaM compliant. This has to be ensured by the user.
 
-##### How much of the **ADaM IG is covered  by admiral? Proposal**:
+##### How much of the **ADaM IG is covered  by admiral?**
 
 * ADaM  IG is a standard framework without a specific No of datasets or variables, so it cannot be used as a specific baseline to answer that question.
 * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
