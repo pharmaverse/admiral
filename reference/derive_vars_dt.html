@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,14 +45,12 @@
 
 
 
-<meta property="og:title" content="Derive/Impute a date from a date character vector — derive_vars_dt" />
 
+<meta property="og:title" content="Derive/Impute a date from a date character vector — derive_vars_dt" />
 <meta property="og:description" content="Derive a date ('--DT') from a date character vector ('---DTC').
 The date can be imputed (see date_imputation parameter)
 and the date imputation flag ('--DTF') can be added." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -82,7 +82,7 @@ and the date imputation flag ('--DTF') can be added." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -108,12 +108,26 @@ and the date imputation flag ('--DTF') can be added." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -140,16 +154,21 @@ and the date imputation flag ('--DTF') can be added." />
     </div>
 
     <div class="ref-description">
-    
     <p>Derive a date ('--DT') from a date character vector ('---DTC').
 The date can be imputed (see date_imputation parameter)
 and the date imputation flag ('--DTF') can be added.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_vars_dt</span>(<span class='no'>dataset</span>, <span class='no'>new_vars_prefix</span>, <span class='no'>dtc</span>, <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>derive_vars_dt</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>new_vars_prefix</span>,
+  <span class='no'>dtc</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -165,20 +184,25 @@ and the date imputation flag ('--DTF') can be added.</p>
     </tr>
     <tr>
       <th>dtc</th>
-      <td><p>The date character vector used to derive/impute the date.</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-if the year part is not recorded (missing date), no imputation is done.</p></td>
+      <td><p>The --DTC date to impute</p>
+<p>A character date is expected in a format like yyyy-mm-dd or
+yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+imputation is performed.</p></td>
     </tr>
     <tr>
       <th>date_imputation</th>
-      <td><p>The value to impute the day/month when a datepart is missing.</p>
-<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
+      <td><p>The value to impute the day/month when a datepart is
+missing.</p>
+<p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
+missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. <code>"15-06"</code> for the 15th
+of June,</p></li>
+<li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
+day/month.</p></li>
 </ul>
 
-<p>Default is NULL.</p></td>
+<p>Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>flag_imputation</th>
@@ -186,15 +210,45 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
 <p>A logical value</p>
 <p>Default: TRUE</p></td>
     </tr>
+    <tr>
+      <th>min_dates</th>
+      <td><p>Minimum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example</p><pre><span class='fu'><a href='impute_dtc.html'>impute_dtc</a></span>(
+  <span class='st'>"2020-11"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>ymd_hms</span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+                   <span class='fu'>ymd_hms</span>(<span class='st'>"2020-11-11T11:11:11"</span>)),
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)</pre>
+
+<p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
+range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
+<code>"2020-12-06T12:12:12"</code> is ignored. Returning <code>"2020-12-06T12:12:12"</code> would
+have changed the month although it is not missing (in the dtc date).</p></td>
+    </tr>
+    <tr>
+      <th>max_dates</th>
+      <td><p>Maximum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.</p></td>
+    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mhdt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)
+
+<span class='no'>mhdt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>MHSTDTC</span>,
   <span class='st'>"2019-07-18T15:25:40"</span>,
   <span class='st'>"2019-07-18T15:25"</span>,
@@ -212,15 +266,15 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 3
-#&gt;   MHSTDTC             ASTDT      ASTDTF
-#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
-#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
-#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
-#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
-#&gt; 4 2019-02             NA         &lt;NA&gt;  
-#&gt; 5 2019                NA         &lt;NA&gt;  
-#&gt; 6 2019---07           NA         &lt;NA&gt;  
-#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
+#&gt;   MHSTDTC               ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;                 &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18 &lt;NA&gt;  
+#&gt; 2 "2019-07-18T15:25"    2019-07-18 &lt;NA&gt;  
+#&gt; 3 "2019-07-18"          2019-07-18 &lt;NA&gt;  
+#&gt; 4 "2019-02"             NA         &lt;NA&gt;  
+#&gt; 5 "2019"                NA         &lt;NA&gt;  
+#&gt; 6 "2019---07"           NA         &lt;NA&gt;  
+#&gt; 7 ""                    NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create ASTDT and ASTDTF</span>
 <span class='co'># Impute partial dates to first day/month</span>
 <span class='fu'>derive_vars_dt</span>(
@@ -229,15 +283,15 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"FIRST"</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 3
-#&gt;   MHSTDTC             ASTDT      ASTDTF
-#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
-#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
-#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
-#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
-#&gt; 4 2019-02             2019-02-01 D     
-#&gt; 5 2019                2019-01-01 M     
-#&gt; 6 2019---07           2019-01-01 M     
-#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
+#&gt;   MHSTDTC               ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;                 &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18 &lt;NA&gt;  
+#&gt; 2 "2019-07-18T15:25"    2019-07-18 &lt;NA&gt;  
+#&gt; 3 "2019-07-18"          2019-07-18 &lt;NA&gt;  
+#&gt; 4 "2019-02"             2019-02-01 D     
+#&gt; 5 "2019"                2019-01-01 M     
+#&gt; 6 "2019---07"           2019-01-01 M     
+#&gt; 7 ""                    NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Impute partial dates to 4th of june</span>
 <span class='fu'>derive_vars_dt</span>(
   <span class='no'>mhdt</span>,
@@ -245,15 +299,15 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"04-06"</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 3
-#&gt;   MHSTDTC             ASTDT      ASTDTF
-#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
-#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
-#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
-#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
-#&gt; 4 2019-02             2019-02-04 D     
-#&gt; 5 2019                2019-06-04 M     
-#&gt; 6 2019---07           2019-06-04 M     
-#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
+#&gt;   MHSTDTC               ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;                 &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18 &lt;NA&gt;  
+#&gt; 2 "2019-07-18T15:25"    2019-07-18 &lt;NA&gt;  
+#&gt; 3 "2019-07-18"          2019-07-18 &lt;NA&gt;  
+#&gt; 4 "2019-02"             2019-02-04 D     
+#&gt; 5 "2019"                2019-06-04 M     
+#&gt; 6 "2019---07"           2019-06-04 M     
+#&gt; 7 ""                    NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create AENDT and AENDTF</span>
 <span class='co'># Impute partial dates to last day/month</span>
 <span class='fu'>derive_vars_dt</span>(
@@ -262,15 +316,15 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>MHSTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"LAST"</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 3
-#&gt;   MHSTDTC             AENDT      AENDTF
-#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; 
-#&gt; 1 2019-07-18T15:25:40 2019-07-18 &lt;NA&gt;  
-#&gt; 2 2019-07-18T15:25    2019-07-18 &lt;NA&gt;  
-#&gt; 3 2019-07-18          2019-07-18 &lt;NA&gt;  
-#&gt; 4 2019-02             2019-02-28 D     
-#&gt; 5 2019                2019-12-31 M     
-#&gt; 6 2019---07           2019-12-31 M     
-#&gt; 7 ""                  NA         &lt;NA&gt;  </div><div class='input'>
+#&gt;   MHSTDTC               AENDT      AENDTF
+#&gt;   &lt;chr&gt;                 &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18 &lt;NA&gt;  
+#&gt; 2 "2019-07-18T15:25"    2019-07-18 &lt;NA&gt;  
+#&gt; 3 "2019-07-18"          2019-07-18 &lt;NA&gt;  
+#&gt; 4 "2019-02"             2019-02-28 D     
+#&gt; 5 "2019"                2019-12-31 M     
+#&gt; 6 "2019---07"           2019-12-31 M     
+#&gt; 7 ""                    NA         &lt;NA&gt;  </div><div class='input'>
 <span class='co'># Create BIRTHDT</span>
 <span class='co'># Impute partial dates to 15th of June. No DTF</span>
 <span class='fu'>derive_vars_dt</span>(
@@ -280,15 +334,34 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"MID"</span>,
   <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 2
-#&gt;   MHSTDTC             BIRTHDT   
-#&gt;   &lt;chr&gt;               &lt;date&gt;    
-#&gt; 1 2019-07-18T15:25:40 2019-07-18
-#&gt; 2 2019-07-18T15:25    2019-07-18
-#&gt; 3 2019-07-18          2019-07-18
-#&gt; 4 2019-02             2019-02-15
-#&gt; 5 2019                2019-06-15
-#&gt; 6 2019---07           2019-06-15
-#&gt; 7 ""                  NA        </div></pre>
+#&gt;   MHSTDTC               BIRTHDT   
+#&gt;   &lt;chr&gt;                 &lt;date&gt;    
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18
+#&gt; 2 "2019-07-18T15:25"    2019-07-18
+#&gt; 3 "2019-07-18"          2019-07-18
+#&gt; 4 "2019-02"             2019-02-15
+#&gt; 5 "2019"                2019-06-15
+#&gt; 6 "2019---07"           2019-06-15
+#&gt; 7 ""                    NA        </div><div class='input'>
+<span class='co'># Impute AE start date to the first date and ensure that the imputed date</span>
+<span class='co'># is not before the treatment start date</span>
+<span class='no'>adae</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>AESTDTC</span>, ~<span class='no'>TRTSDTM</span>,
+  <span class='st'>"2020-12"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+  <span class='st'>"2020-11"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>)
+)
+
+<span class='fu'>derive_vars_dt</span>(
+  <span class='no'>adae</span>,
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
+  <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTSDTM</span>)
+)</div><div class='output co'>#&gt; # A tibble: 2 x 4
+#&gt;   AESTDTC TRTSDTM             ASTDT      ASTDTF
+#&gt;   &lt;chr&gt;   &lt;dttm&gt;              &lt;date&gt;     &lt;chr&gt; 
+#&gt; 1 2020-12 2020-12-06 12:12:12 2020-12-06 D     
+#&gt; 2 2020-11 2020-12-06 12:12:12 2020-11-01 D     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -300,7 +373,7 @@ if the year part is not recorded (missing date), no imputation is done.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

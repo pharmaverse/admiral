@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,12 +45,10 @@
 
 
 
+
 <meta property="og:title" content="Adds a variable flagging the first or last observation within each by group — derive_extreme_flag" />
-
 <meta property="og:description" content="Adds a variable flagging the first or last observation within each by group" />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,12 +106,26 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -138,14 +152,19 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Adds a variable flagging the first or last observation within each by group</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_extreme_flag</span>(<span class='no'>dataset</span>, <span class='no'>new_var</span>, <span class='no'>by_vars</span>, <span class='no'>order</span>, <span class='no'>mode</span>, <span class='no'>flag_filter</span>,
-  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>derive_extreme_flag</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>new_var</span>,
+  <span class='no'>by_vars</span>,
+  <span class='no'>order</span>,
+  <span class='no'>mode</span>,
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -197,30 +216,30 @@ by variables and the order.</p>
 <p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The input dataset with the new flag variable added</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For each group (with respect to the variables specified for the
 <code>by_vars</code> parameter) the first or last observation (with respect to the
 order specified for the <code>order</code> parameter and the flag mode) is included in
 the output dataset.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
 
-<span class='co'># flag last value for each patient, test, and visit, baseline observations are ignored</span>
-<span class='fu'>derive_extreme_flag</span>(<span class='no'>vs</span>,
-                    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
-                    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>),
-                    <span class='kw'>order</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>VSTPTNUM</span>),
-                    <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-                    <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>)) <span class='kw'>%&gt;%</span>
+<span class='co'># Flag last value for each patient, test, and visit, baseline observations are ignored</span>
+<span class='no'>vs</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_extreme_flag</span>(
+    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
+    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>),
+    <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>VSTPTNUM</span>),
+    <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
+    <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>
+  ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>, <span class='no'>VSTPTNUM</span>, <span class='no'>VSSTRESN</span>, <span class='no'>LASTFL</span>)</div><div class='output co'>#&gt; # A tibble: 29,643 x 6
 #&gt;    USUBJID     VSTESTCD VISIT               VSTPTNUM VSSTRESN LASTFL
@@ -239,40 +258,40 @@ the output dataset.</p>
 <span class='co'># Baseline (ABLFL) examples:</span>
 
 <span class='no'>input</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVISIT</span>,    ~<span class='no'>ADT</span>,                 ~<span class='no'>AVAL</span>, ~<span class='no'>DTYPE</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
+  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVISIT</span>,    ~<span class='no'>ADT</span>,                 ~<span class='no'>AVAL</span>, ~<span class='no'>DTYPE</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
 
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM01"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='st'>"AVERAGE"</span>,
 
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='st'>"AVERAGE"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 2"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>,
 
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='fl'>NA</span>,
-<span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"SCREENING"</span>,<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-25"</span>), <span class='fl'>14.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-23"</span>), <span class='fl'>15.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"WEEK 1"</span>,   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-27"</span>), <span class='fl'>10.0</span>, <span class='fl'>NA</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT02"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2021-04-30"</span>), <span class='fl'>12.0</span>, <span class='fl'>NA</span>
 )
 
 <span class='co'># Last observation</span>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
-  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>ADT</span>),
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -300,10 +319,10 @@ the output dataset.</p>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
-  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>AVAL</span>, <span class='no'>ADT</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>AVAL</span>, <span class='no'>ADT</span>),
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -331,10 +350,10 @@ the output dataset.</p>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
-  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>), <span class='no'>ADT</span>),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>), <span class='no'>ADT</span>),
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>)
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -362,10 +381,10 @@ the output dataset.</p>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
   <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
-  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>ADT</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>)),
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>ADT</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>)),
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>)
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -401,7 +420,7 @@ the output dataset.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

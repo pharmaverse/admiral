@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,13 +45,11 @@
 
 
 
-<meta property="og:title" content="Derive Duration — compute_duration" />
 
+<meta property="og:title" content="Derive Duration — compute_duration" />
 <meta property="og:description" content="Derives duration between two dates, e.g., duration of adverse events,
 relative day, age, ..." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -81,7 +81,7 @@ relative day, age, ..." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -107,12 +107,26 @@ relative day, age, ..." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -139,16 +153,20 @@ relative day, age, ..." />
     </div>
 
     <div class="ref-description">
-    
     <p>Derives duration between two dates, e.g., duration of adverse events,
 relative day, age, ...</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>compute_duration</span>(<span class='no'>start_date</span>, <span class='no'>end_date</span>, <span class='kw'>in_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>,
-  <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>, <span class='kw'>floor_in</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>compute_duration</span>(
+  <span class='no'>start_date</span>,
+  <span class='no'>end_date</span>,
+  <span class='kw'>in_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>,
+  <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>"days"</span>,
+  <span class='kw'>floor_in</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -201,17 +219,15 @@ integer part is returned.</p>
 <p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The duration between the two date in the specified unit</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The duration is derived as time from start to end date in the
 specified output unit. If the end date is before the start date, the duration
 is negative.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># derive duration in days (integer), i.e., relative day</span>
@@ -245,7 +261,7 @@ is negative.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

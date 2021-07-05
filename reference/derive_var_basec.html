@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,12 +45,10 @@
 
 
 
+
 <meta property="og:title" content="Derive BASEC — derive_var_basec" />
-
 <meta property="og:description" content="Derive the BASEC variable in a BDS dataset" />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,12 +106,26 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -138,13 +152,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Derive the <code>BASEC</code> variable in a BDS dataset</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>, <span class='no'>BASETYPE</span>))</pre>
-    
+    <pre class="usage"><span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='no'>by_vars</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -158,12 +170,11 @@
 of records for which to calculate <code>BASE</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A new <code>data.frame</code> containing all records and variables of the input
 dataset plus the <code>BASEC</code> variable</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
@@ -175,7 +186,7 @@ dataset plus the <code>BASEC</code> variable</p>
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"HIGH"</span>,   <span class='st'>"N"</span>,
   <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='st'>"MEDIUM"</span>, <span class='st'>"N"</span>
 )
-<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>exprs</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 6
+<span class='fu'>derive_var_basec</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 6
 #&gt;   STUDYID USUBJID PARAMCD AVALC  ABLFL BASEC
 #&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
 #&gt; 1 TEST01  PAT01   PARAM01 LOW    Y     LOW  
@@ -195,7 +206,7 @@ dataset plus the <code>BASEC</code> variable</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

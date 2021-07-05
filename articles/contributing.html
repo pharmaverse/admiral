@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -64,9 +64,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
     </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -92,7 +107,7 @@
       <h1 data-toc-skip>Contributing to admiral</h1>
                         <h4 class="author">admiral team</h4>
             
-            <h4 class="date">2021-05-06</h4>
+            <h4 class="date">2021-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/contributing.Rmd"><code>vignettes/contributing.Rmd</code></a></small>
       <div class="hidden name"><code>contributing.Rmd</code></div>
@@ -119,7 +134,7 @@
 <li>Each function that is used to derive a or multiple variable(s) requires to be unit tested.</li>
 <li>Functions do have a naming convention.</li>
 <li>Double coding is not used as a QC method (only if absolutely necessary)</li>
-<li>ADaMs are created  including readable code and submission ready.</li>
+<li>ADaMs are created including readable code and submission ready.</li>
 </ul>
 </div>
 <div id="categorization-of-functions" class="section level1">
@@ -194,6 +209,8 @@
 <div id="functions-in-r" class="section level1">
 <h1 class="hasAnchor">
 <a href="#functions-in-r" class="anchor"></a>Functions in R</h1>
+<p>Functions in admiral must follow the modular approach, i.e., functions which add variables should add only a single variable except if other variables are closely related to the derived variable and can not be derived without it. For example <code>AAGE</code> (analysis age) and <code>AAGEU</code> (analysis age units) should be derived by the same function because it does not make sense to derive <code>AAGEU</code> without <code>AAGE</code>.</p>
+<p>Variables like <code>BASE</code> (baseline value) and <code>BNRIND</code> (baseline reference range indicator) must be derived by two separate function calls as it is reasonable to derive only one of them.</p>
 <div id="input-output-and-side-effects" class="section level2">
 <h2 class="hasAnchor">
 <a href="#input-output-and-side-effects" class="anchor"></a>Input, Output, and Side-effects</h2>
@@ -202,8 +219,8 @@
 <li>It is expected that the input datasets are not grouped. If not, the function must issue an error.</li>
 <li>If a function requires grouping, the function must provide the by_vars parameter.</li>
 <li>The output dataset must be ungrouped.</li>
-<li>If the function needs to create temporary variables in an input dataset, these variables must start with temp_ and must be removed from the output dataset (link to remove function).</li>
-<li>If the input dataset includes variables starting with temp_, an error must be issued (link to check function).</li>
+<li>If the function needs to create temporary variables in an input dataset, these variables must start with <code>temp_</code> and must be removed from the output dataset (link to remove function).</li>
+<li>If the input dataset includes variables starting with <code>temp_</code>, an error must be issued (link to check function).</li>
 <li>The function must not have any side-effects like creating or modifying global objects, printing, writing files, …</li>
 </ul>
 </div>
@@ -211,7 +228,7 @@
 <h2 class="hasAnchor">
 <a href="#function-names" class="anchor"></a>Function Names</h2>
 <ul>
-<li>Function names should start with a verb and use snake case, e.g. derive_baseline.</li>
+<li>Function names should start with a verb and use snake case, e.g. <code><a href="../reference/derive_baseline.html">derive_baseline()</a></code>.</li>
 </ul>
 <table class="table">
 <colgroup>
@@ -254,16 +271,28 @@
 <div id="function-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#function-parameters" class="anchor"></a>Function Parameters</h2>
-<p>The default value of optional parameters should be NULL (or some other valid value, but never missing).</p>
-<p>Names of variables inside a dataset should be passed as symbols rather than strings, i.e. <code>AVAL</code> rather than <code>"AVAL"</code>.</p>
+<p>The default value of optional parameters should be <code>NULL</code>.</p>
+<p>Names of variables inside a dataset should be passed as symbols rather than strings, i.e. <code>AVAL</code> rather than <code>"AVAL"</code>. If a parameter accepts one or more variables as input, the variables should be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>.</p>
 <p>For example:</p>
 <ul>
 <li><code>new_var = TEMPBL</code></li>
-<li><code>by_vars = exprs(PARAMCD, AVISIT)</code></li>
-<li><code>filter = exprs(PARAMCD == ‘TEMP’)</code></li>
-<li><code>order = exprs(AVISIT, worst(AESEV))</code></li>
-<li><code>new_vars = exprs(TEMPBL := AVAL, TEMPBLU := AVALU)</code></li>
+<li><code>by_vars = vars(PARAMCD, AVISIT)</code></li>
+<li><code>filter = PARAMCD == "TEMP"</code></li>
+<li><code>order = vars(AVISIT, desc(AESEV))</code></li>
 </ul>
+<p>Parameter must not accept expressions for assigning the value of the new variable. Instead separate parameters need to be provided for defining the value. For example if a function derives a variable which may be imputed, the following is <strong>not acceptable</strong>.</p>
+<pre><code>    ...
+    new_var = vars(mydtm = convert_dtc_to_dtm(impute_dtc(cmstdtc,
+                                                         date_imputation = "last",
+                                                         time_imputation = "last"))),
+    ...</code></pre>
+<p>Separate parameters for the imputation must be provided, e.g.:</p>
+<pre><code>    ...
+    new_var = mydtm,
+    source_var = cmstdtc,
+    date_imputation = "last",
+    time_imputation = "last",
+    ...</code></pre>
 <p>Each function parameter needs to be tested with <code>assert_</code> type of function.</p>
 <p>Each expression needs to be tested for the following: * whether it is an expression (or a list of expressions, depending on the function) * whether it is a valid expression (i.e. whether it evaluates without error) There is a utility function for that.</p>
 </div>
@@ -321,11 +350,13 @@
 </tr>
 <tr class="odd">
 <td><code>filter</code></td>
-<td>Expression to filter a dataset, e.g., exprs(PARAMCD == ‘TEMP’)</td>
+<td>Expression to filter a dataset, e.g., <code>PARAMCD == "TEMP"</code>
+</td>
 </tr>
 <tr class="even">
 <td><code>order</code></td>
-<td>List of expression for sorting a dataset, e.g., exprs(PARAMCD, AVISITN, desc(AVAL))</td>
+<td>List of expressions for sorting a dataset, e.g., <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars(PARAMCD, AVISITN, desc(AVAL))</a></code>
+</td>
 </tr>
 </tbody>
 </table>
@@ -340,7 +371,8 @@
 <a href="#input-checking" class="anchor"></a>Input Checking</h2>
 <p>In line with the <a href="https://en.wikipedia.org/wiki/Fail-fast">fail-fast</a> design principle function inputs should be checked for validity and if there’s an invalid input the function should stop immediately with an error. An exception is the case where a variable to-be-added by a function already exists in the input dataset: here only a warning should be displayed and the function should continue executing.</p>
 <p>Inputs should be checked either using <code>asserthat::assert_that()</code> or custom assertion functions defined in <code>R/assertions.R</code>. These custom assertion functions should either return an error in case of an invalid input or return nothing.</p>
-<p>For function parameters that can only take a fixed set of values as arguments, the validity of the user-provided value should be checked using <code><a href="https://rlang.r-lib.org/reference/arg_match.html">rlang::arg_match()</a></code>. As an example, if a function has a parameter named unit that can be either “days”, “months” or “years” the following line of code should be added to the function body: <code>arg_match(unit, c("days", "months", "years"))</code>.</p>
+<p>For the most common types of input parameters like a single variable, a list of variables, a dataset, … functions for checking are available (see <a href="../reference/index.html#section-assertions">assertions</a>).</p>
+<p>Parameter which expect keywords should handle them case-insensitive, e.g., both <code>date_imputation = "FIRST"</code> and <code>date_imputation = "first"</code> should be accepted.</p>
 </div>
 <div id="function-header" class="section level2">
 <h2 class="hasAnchor">
@@ -349,13 +381,13 @@
 <p>In addition to the roxygen2 parameters <code>@author</code> and <code>@keywords</code> are added in addition.</p>
 <p>Author is the owner of the function while the keywords are used to categorize the function. Please see section “Categorization of functions”.</p>
 <p>An example is given below:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r">#' Derive Analysis Study Day
+<div class="sourceCode" id="cb3"><html><body><pre class="r">#' Derive Analysis Study Day
 #'
 #' Adds the analysis study day (`ADY`) to the dataset, i.e., study day #' of analysis date.
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `reference_date` and the `date` #'parameter are
+#'   The columns specified by the `reference_date` and the `date` parameter are
 #'   expected.
 #'
 #' @param reference_date The start date column, e.g., date of first #'treatment
@@ -370,8 +402,8 @@
 #'
 #'   The default is `ADT`
 #'
-#' @details The study day is derived as number of days from the start #'date
-#'   to the end date. If it is non-negative, one is added. I.e., the #'study day of the
+#' @details The study day is derived as number of days from the start date
+#'   to the end date. If it is non-negative, one is added. I.e., the study day of the
 #'   start date is 1.
 #'
 #' @author Stefan Bundfuss
@@ -399,6 +431,13 @@
 <li>
 <code>@examples</code>: A fully-self contained example of how to use the function. Self-contained means that if this code is executed in a new R session it will run without errors. That requires any packages need to be loaded with <code>library()</code> and any datasets needed either to be created directly inside the example code or loaded using <code><a href="https://rdrr.io/r/utils/data.html">data()</a></code>.</li>
 </ul>
+<p>Copying descriptions should be avoided as it makes the documentation hard to maintain. For example if the same parameter with the same description is used by more than one function, the parameter should be described for one function and the other functions should use <code>@inheritParams &lt;function name where the parameter is described&gt;</code>.</p>
+<p>Please note that if <code>@inheritParams func_first</code> is used in the header of the <code>func_second()</code> function, those parameter descriptions of <code>func_first()</code> are included in the documentation of <code>func_second()</code> for which</p>
+<ul>
+<li>the parameter is offered by <code>func_second()</code> and</li>
+<li>no <code>@param</code> tag for the parameter is included in the header of <code>func_second()</code>.</li>
+</ul>
+<p>The order of the <code>@param</code> tags should be the same as in the function definition. The <code>@inheritParams</code> tags should be after the <code>@param</code>. This does not affect the order of the parameter description in the rendered documentation but makes it easier to maintain the headers.</p>
 <p>Variable names, expressions, functions, and any other code must be enclosed which backticks. This will render it as code.</p>
 <p>For functions which derive a specific CDISC variable (i.e., those starting with <code>derive_var_</code>). The title must state the label of the variable without the variable name. The variable should be stated in the description.</p>
 </div>
@@ -406,8 +445,21 @@
 <div id="missing-values" class="section level1">
 <h1 class="hasAnchor">
 <a href="#missing-values" class="anchor"></a>Missing values</h1>
-<p>Missing values (NAs) need to be explicitly shown.</p>
-<p>Regarding character vectors converted from SAS files: SAS treats missing values as blank. Those are imported into R as empty strings (“”) although in nature they are missing values (<code>NA</code>). All empty strings that originate like this need to be converted to proper R missing values <code>NA.</code></p>
+<p>Missing values (<code>NA</code>s) need to be explicitly shown.</p>
+<p>Regarding character vectors converted from SAS files: SAS treats missing values as blank. Those are imported into R as empty strings (<code>""</code>) although in nature they are missing values (<code>NA</code>). All empty strings that originate like this need to be converted to proper R missing values <code>NA</code>.</p>
+</div>
+<div id="file-structuring" class="section level1">
+<h1 class="hasAnchor">
+<a href="#file-structuring" class="anchor"></a>File Structuring</h1>
+<p>Organizing function into files is more of an art than a science. Thus, there are no hard rules but just recommendations. First and foremost, there are two extremes that should be avoided: putting each function into its own file and putting all functions into a single file. Apart from that the following recommendations should be taken into consideration when deciding upon file structuring:</p>
+<ul>
+<li>If a function is very long (together with its documentation), store it in a separate file</li>
+<li>If some functions are documented together, put them into one file</li>
+<li>If some functions have some sort of commonality or relevance with one another (like <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_rows()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_cols()</a></code>), put them into one file</li>
+<li>Store functions together with their helpers and methods</li>
+<li>Have no more than 1000 lines in a single file, unless necessary (exceptions are, for example, classes with methods)</li>
+</ul>
+<p>It is the responsibility of both the author of a new function and reviewer to ensure that these recommendations are put into practice.</p>
 </div>
 <div id="r-package-dependencies" class="section level1">
 <h1 class="hasAnchor">
@@ -500,12 +552,12 @@
 <li># calculates the sum of scores divided by the non missing numbers of scores to calculate the average score</li>
 </ul>
 <p>Code within function that creates a specific variable should have a starting comment and an ending comment. E.g.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># calculate X</span>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># calculate X</span>
 <span class="co"># describe how the code works in meaningful plain english</span>
  <span class="st">"&lt;code&gt;"</span>
 <span class="co"># end of X</span></pre></body></html></div>
 <p>If meaningful, comments can cover multiple variables within a piece of code</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># creates X, Y, Z</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># creates X, Y, Z</span>
 <span class="co"># describe how the code works in meaningful plain english</span>
  <span class="st">"&lt;code&gt;"</span>
 <span class="co"># end of X, Y, Z</span></pre></body></html></div>
@@ -515,6 +567,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
 </div>
@@ -524,7 +577,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

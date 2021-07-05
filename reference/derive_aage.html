@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,12 +45,10 @@
 
 
 
+
 <meta property="og:title" content="Derive Analysis Age — derive_aage" />
-
 <meta property="og:description" content="Derives analysis age (AAGE) and analysis age unit (AAGEU)" />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,12 +106,26 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -138,14 +152,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Derives analysis age (<code>AAGE</code>) and analysis age unit (<code>AAGEU</code>)</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_aage</span>(<span class='no'>dataset</span>, <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>BRTHDT</span>, <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>RANDDT</span>,
-  <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>derive_aage</span>(<span class='no'>dataset</span>, <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>BRTHDT</span>, <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>RANDDT</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -175,20 +186,17 @@ expected.</p></td>
 <p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The input dataset with <code>AAGE</code> and <code>AAGEU</code> added</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The age is derived as the integer part of the duration from start to
 end date in the specified unit.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='derive_duration.html'>derive_duration()</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
@@ -211,7 +219,7 @@ end date in the specified unit.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

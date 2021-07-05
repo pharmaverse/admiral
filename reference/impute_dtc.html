@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,13 +45,11 @@
 
 
 
+
 <meta property="og:title" content="Impute partial date/time portion of a --DTC variable — impute_dtc" />
-
-<meta property="og:description" content="Imputation partial date/time portion of a --DTC variable.
-based on user input." />
-
+<meta property="og:description" content="Imputation partial date/time portion of a --DTC variable. based on user
+input." />
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -81,7 +81,7 @@ based on user input." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -107,12 +107,26 @@ based on user input." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -139,54 +153,94 @@ based on user input." />
     </div>
 
     <div class="ref-description">
-    
-    <p>Imputation partial date/time portion of a --DTC variable.
-based on user input.</p>
-    
+    <p>Imputation partial date/time portion of a --DTC variable. based on user
+input.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>impute_dtc</span>(<span class='no'>dtc</span>, <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"00:00:00"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>impute_dtc</span>(
+  <span class='no'>dtc</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"00:00:00"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dtc</th>
       <td><p>The --DTC date to impute</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-If the year part is not recorded (missing date), no imputation is performed.</p></td>
+<p>A character date is expected in a format like yyyy-mm-dd or
+yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+imputation is performed.</p></td>
     </tr>
     <tr>
       <th>date_imputation</th>
-      <td><p>The value to impute the day/month when a datepart is missing.</p>
-<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
+      <td><p>The value to impute the day/month when a datepart is
+missing.</p>
+<p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
+missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. <code>"15-06"</code> for the 15th
+of June,</p></li>
+<li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
+day/month.</p></li>
 </ul>
 
-<p>Default is NULL.</p></td>
+<p>Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>time_imputation</th>
-      <td><p>The value to impute the time when a timepart is missing.</p>
+      <td><p>The value to impute the time when a timepart is
+missing.</p>
 <p>A character value is expected, either as a</p><ul>
-<li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day,</p></li>
-<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.</p></li>
+<li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. <code>"00:00:00"</code>
+for the start of the day,</p></li>
+<li><p>or as a keyword: <code>"FIRST"</code>,<code>"LAST"</code> to impute to the start/end of a day.</p></li>
 </ul>
 
-<p>Default is '00:00:00'.</p></td>
+<p>Default is <code>"00:00:00"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>min_dates</th>
+      <td><p>Minimum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example</p><pre><span class='fu'>impute_dtc</span>(
+  <span class='st'>"2020-11"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>ymd_hms</span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+                   <span class='fu'>ymd_hms</span>(<span class='st'>"2020-11-11T11:11:11"</span>)),
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)</pre>
+
+<p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
+range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
+<code>"2020-12-06T12:12:12"</code> is ignored. Returning <code>"2020-12-06T12:12:12"</code> would
+have changed the month although it is not missing (in the dtc date).</p></td>
+    </tr>
+    <tr>
+      <th>max_dates</th>
+      <td><p>Maximum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a character vector</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)
+
+<span class='no'>dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
   <span class='st'>"2019-07-18T15:25:40"</span>,
   <span class='st'>"2019-07-18T15:25"</span>,
   <span class='st'>"2019-07-18T15"</span>,
@@ -248,7 +302,16 @@ the start of the day,</p></li>
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"MID"</span>
 )</div><div class='output co'>#&gt; [1] "2019-07-18T15:25:40" "2019-07-18T15:25:00" "2019-07-18T15:00:00"
 #&gt; [4] "2019-07-18T00:00:00" "2019-02-15T00:00:00" "2019-06-15T00:00:00"
-#&gt; [7] "2019-06-15T00:00:00" "2019-06-15T00:00:00" NA                   </div></pre>
+#&gt; [7] "2019-06-15T00:00:00" "2019-06-15T00:00:00" NA                   </div><div class='input'>
+<span class='co'># Impute a date and ensure that the imputed date is not before a list of</span>
+<span class='co'># minimum dates</span>
+<span class='fu'>impute_dtc</span>(
+  <span class='st'>"2020-12"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+                   <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-11-11T11:11:11"</span>)),
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)</div><div class='output co'>#&gt; [1] "2020-12-06T12:12:12"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -260,7 +323,7 @@ the start of the day,</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

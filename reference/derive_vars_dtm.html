@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,14 +45,12 @@
 
 
 
-<meta property="og:title" content="Derive/Impute a datetime from a date character vector — derive_vars_dtm" />
 
+<meta property="og:title" content="Derive/Impute a datetime from a date character vector — derive_vars_dtm" />
 <meta property="og:description" content="Derive a datetime object ('--DTM') from a date character vector ('---DTC').
 The date and time can be imputed (see date_imputation/time_imputation parameters)
 and the date/time imputation flag ('--DTF', '--TMF') can be added." />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -82,7 +82,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -108,12 +108,26 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -140,16 +154,22 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
     </div>
 
     <div class="ref-description">
-    
     <p>Derive a datetime object ('--DTM') from a date character vector ('---DTC').
 The date and time can be imputed (see date_imputation/time_imputation parameters)
 and the date/time imputation flag ('--DTF', '--TMF') can be added.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_vars_dtm</span>(<span class='no'>dataset</span>, <span class='no'>new_vars_prefix</span>, <span class='no'>dtc</span>, <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"00:00:00"</span>, <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>derive_vars_dtm</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>new_vars_prefix</span>,
+  <span class='no'>dtc</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"00:00:00"</span>,
+  <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -165,31 +185,37 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added.</p>
     </tr>
     <tr>
       <th>dtc</th>
-      <td><p>The date character vector used to derive/impute the date.</p>
-<p>A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-if the year part is not recorded (missing date), no imputation is done.</p></td>
+      <td><p>The --DTC date to impute</p>
+<p>A character date is expected in a format like yyyy-mm-dd or
+yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+imputation is performed.</p></td>
     </tr>
     <tr>
       <th>date_imputation</th>
-      <td><p>The value to impute the day/month when a datepart is missing.</p>
-<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
+      <td><p>The value to impute the day/month when a datepart is
+missing.</p>
+<p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
+missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June,</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
+<li><p>format with day and month specified as 'dd-mm': e.g. <code>"15-06"</code> for the 15th
+of June,</p></li>
+<li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
+day/month.</p></li>
 </ul>
 
-<p>Default is NULL.</p></td>
+<p>Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>time_imputation</th>
-      <td><p>The value to impute the time when a timepart is missing.</p>
+      <td><p>The value to impute the time when a timepart is
+missing.</p>
 <p>A character value is expected, either as a</p><ul>
-<li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. '00:00:00' for
-the start of the day,</p></li>
-<li><p>or as a keyword: 'FIRST','LAST' to impute to the start/end of a day.</p></li>
+<li><p>format with hour, min and sec specified as 'hh:mm:ss': e.g. <code>"00:00:00"</code>
+for the start of the day,</p></li>
+<li><p>or as a keyword: <code>"FIRST"</code>,<code>"LAST"</code> to impute to the start/end of a day.</p></li>
 </ul>
 
-<p>Default is '00:00:00'.</p></td>
+<p>Default is <code>"00:00:00"</code>.</p></td>
     </tr>
     <tr>
       <th>flag_imputation</th>
@@ -197,22 +223,51 @@ the start of the day,</p></li>
 <p>A logical value</p>
 <p>Default: TRUE</p></td>
     </tr>
+    <tr>
+      <th>min_dates</th>
+      <td><p>Minimum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example</p><pre><span class='fu'><a href='impute_dtc.html'>impute_dtc</a></span>(
+  <span class='st'>"2020-11"</span>,
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>ymd_hms</span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+                   <span class='fu'>ymd_hms</span>(<span class='st'>"2020-11-11T11:11:11"</span>)),
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)</pre>
+
+<p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
+range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
+<code>"2020-12-06T12:12:12"</code> is ignored. Returning <code>"2020-12-06T12:12:12"</code> would
+have changed the month although it is not missing (in the dtc date).</p></td>
+    </tr>
+    <tr>
+      <th>max_dates</th>
+      <td><p>Maximum dates</p>
+<p>A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.</p></td>
+    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>the input dataset with the datetime '--DTM' (and the date/time imputation
 flag '--DTF', '--TMF') added.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The presence of a --DTF variable is checked and the variable is not derived
 if it already exists in the input dataset. However, if --TMF already exists
 in the input dataset, a warning is issued and --TMF will be overwritten.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mhdt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)
+
+<span class='no'>mhdt</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>MHSTDTC</span>,
   <span class='st'>"2019-07-18T15:25:40"</span>,
   <span class='st'>"2019-07-18T15:25"</span>,
@@ -230,15 +285,35 @@ in the input dataset, a warning is issued and --TMF will be overwritten.</p>
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"FIRST"</span>,
   <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"FIRST"</span>
 )</div><div class='output co'>#&gt; # A tibble: 7 x 4
-#&gt;   MHSTDTC             ASTDTM              ASTDTF ASTTMF
-#&gt;   &lt;chr&gt;               &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; 
-#&gt; 1 2019-07-18T15:25:40 2019-07-18 15:25:40 &lt;NA&gt;   &lt;NA&gt;  
-#&gt; 2 2019-07-18T15:25    2019-07-18 15:25:00 &lt;NA&gt;   S     
-#&gt; 3 2019-07-18          2019-07-18 00:00:00 &lt;NA&gt;   H     
-#&gt; 4 2019-02             2019-02-01 00:00:00 D      H     
-#&gt; 5 2019                2019-01-01 00:00:00 M      H     
-#&gt; 6 2019---07           2019-01-01 00:00:00 M      H     
-#&gt; 7 ""                  NA                  &lt;NA&gt;   &lt;NA&gt;  </div></pre>
+#&gt;   MHSTDTC               ASTDTM              ASTDTF ASTTMF
+#&gt;   &lt;chr&gt;                 &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; 
+#&gt; 1 "2019-07-18T15:25:40" 2019-07-18 15:25:40 &lt;NA&gt;   &lt;NA&gt;  
+#&gt; 2 "2019-07-18T15:25"    2019-07-18 15:25:00 &lt;NA&gt;   S     
+#&gt; 3 "2019-07-18"          2019-07-18 00:00:00 &lt;NA&gt;   H     
+#&gt; 4 "2019-02"             2019-02-01 00:00:00 D      H     
+#&gt; 5 "2019"                2019-01-01 00:00:00 M      H     
+#&gt; 6 "2019---07"           2019-01-01 00:00:00 M      H     
+#&gt; 7 ""                    NA                  &lt;NA&gt;   &lt;NA&gt;  </div><div class='input'>
+<span class='co'># Impute AE end date to the last date and ensure that the imputed date is not</span>
+<span class='co'># after the death or data cut off date</span>
+<span class='no'>adae</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>AEENDTC</span>, ~<span class='no'>DTHDT</span>, ~<span class='no'>DCUTDT</span>,
+  <span class='st'>"2020-12"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-06"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-24"</span>),
+  <span class='st'>"2020-11"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-06"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-24"</span>)
+)
+
+<span class='fu'>derive_vars_dtm</span>(
+  <span class='no'>adae</span>,
+  <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
+  <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AEN"</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
+  <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
+  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>DTHDT</span>, <span class='no'>DCUTDT</span>)
+)</div><div class='output co'>#&gt; # A tibble: 2 x 6
+#&gt;   AEENDTC DTHDT      DCUTDT     AENDTM              AENDTF AENTMF
+#&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; 
+#&gt; 1 2020-12 2020-12-06 2020-12-24 2020-12-06 00:00:00 D      H     
+#&gt; 2 2020-11 2020-12-06 2020-12-24 2020-11-30 23:59:59 D      H     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -250,7 +325,7 @@ in the input dataset, a warning is issued and --TMF will be overwritten.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

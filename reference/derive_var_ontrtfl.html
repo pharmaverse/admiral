@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -43,13 +45,11 @@
 
 
 
-<meta property="og:title" content="Derive On-Treatment Flag Variable — derive_var_ontrtfl" />
 
+<meta property="og:title" content="Derive On-Treatment Flag Variable — derive_var_ontrtfl" />
 <meta property="og:description" content="Derive on-treatment flag (ONTRTFL) in an ADaM dataset with a single
 assessment date" />
-
 <meta property="og:image" content="/logo.png" />
-
 
 
 
@@ -81,7 +81,7 @@ assessment date" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -107,12 +107,26 @@ assessment date" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
+    </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Roche-GSK/admiral/">
@@ -139,15 +153,19 @@ assessment date" />
     </div>
 
     <div class="ref-description">
-    
     <p>Derive on-treatment flag (<code>ONTRTFL</code>) in an ADaM dataset with a single
 assessment date</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_ontrtfl</span>(<span class='no'>dataset</span>, <span class='no'>date</span>, <span class='no'>ref_start_date</span>, <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>derive_var_ontrtfl</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>date</span>,
+  <span class='no'>ref_start_date</span>,
+  <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -190,12 +208,11 @@ to denote when the on-treatment flag should be set to null.
 Optional; default = NULL</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The input dataset with an additional column named
 <code>ONTRTFL</code> with a value of <code>"Y"</code> or <code>NA</code></p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>On-Treatment is calculated by determining whether the assessment date or
@@ -214,7 +231,6 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 </ol>
 
 <p>Any date imputations needed should be done prior to calling this function.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflict</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -264,22 +280,12 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>,
   <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDTM</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDTM</span>,
-  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/quotation.html'>expr</a></span>(<span class='no'>TPT</span> <span class='kw'>==</span> <span class='st'>"PRE"</span>)
-)</div><div class='output co'>#&gt; <span class='warning'>Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0.</span>
-#&gt; <span class='warning'>Please use `!!` instead.</span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>  # Bad:</span>
-#&gt; <span class='warning'>  dplyr::select(data, !!!enquo(x))</span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>  # Good:</span>
-#&gt; <span class='warning'>  dplyr::select(data, !!enquo(x))    # Unquote single quosure</span>
-#&gt; <span class='warning'>  dplyr::select(data, !!!enquos(x))  # Splice list of quosures</span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>This warning is displayed once per session.</span></div><div class='output co'>#&gt; # A tibble: 3 x 6
+  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='no'>TPT</span> <span class='kw'>==</span> <span class='st'>"PRE"</span>
+)</div><div class='output co'>#&gt; # A tibble: 3 x 6
 #&gt;   USUBJID ADTM       TRTSDTM             TRTEDTM             TPT   ONTRTFL
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt; &lt;chr&gt;  
 #&gt; 1 P01     NA         2020-01-01 12:00:00 2020-03-01 12:00:00 ""    Y      
-#&gt; 2 P02     2020-01-01 2020-01-01 12:00:00 2020-03-01 12:00:00 PRE   &lt;NA&gt;   
+#&gt; 2 P02     2020-01-01 2020-01-01 12:00:00 2020-03-01 12:00:00 "PRE" &lt;NA&gt;   
 #&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 ""    &lt;NA&gt;   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -292,7 +298,7 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">

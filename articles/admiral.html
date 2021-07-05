@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -64,9 +64,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/adsl.html">Creating ADSL</a>
+    </li>
+    <li>
+      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    </li>
+    <li>
       <a href="../articles/contributing.html">Contributing to admiral</a>
     </li>
+    <li>
+      <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -92,7 +107,7 @@
       <h1 data-toc-skip>Get Started</h1>
                         <h4 class="author">Stefan Bundfuss</h4>
             
-            <h4 class="date">2021-05-06</h4>
+            <h4 class="date">2021-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/admiral.Rmd"><code>vignettes/admiral.Rmd</code></a></small>
       <div class="hidden name"><code>admiral.Rmd</code></div>
@@ -121,17 +136,7 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">TRTSDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">TRTSDTM</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_var_trtedtm.html">derive_var_trtedtm</a></span>(<span class="kw">dataset_ex</span> <span class="kw">=</span> <span class="no">ex</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">TRTEDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">TRTEDTM</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/derive_var_trtdurd.html">derive_var_trtdurd</a></span>() <span class="kw">%&gt;%</span>
-
-  <span class="co"># derive study completion/discontinuation variables</span>
-  <span class="fu"><a href="../reference/derive_merged_vars.html">derive_merged_vars</a></span>(
-    <span class="kw">dataset_add</span> <span class="kw">=</span> <span class="no">ds</span>,
-    <span class="kw">filter_add</span> <span class="kw">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/quotation.html">exprs</a></span>(<span class="no">DSCAT</span> <span class="kw">==</span> <span class="st">"DISPOSITION EVENT"</span>),
-    <span class="kw">new_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/quotation.html">exprs</a></span>(
-      <span class="kw">EOSDT</span> <span class="kw">=</span> <span class="fu"><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt</a></span>(<span class="fu"><a href="../reference/impute_dtc.html">impute_dtc</a></span>(<span class="no">DSSTDTC</span>, <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"FIRST"</span>)),
-      <span class="kw">EOSSTT</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="no">DSDECOD</span> <span class="kw">==</span> <span class="st">"COMPLETED"</span>, <span class="st">"COMPLETED"</span>, <span class="st">"DISCONTINUED"</span>),
-      <span class="kw">DCSREAS</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="no">DSDECOD</span> <span class="kw">!=</span> <span class="st">"COMPLETED"</span>, <span class="no">DSDECOD</span>, <span class="st">""</span>)
-    ))</pre></body></html></div>
+  <span class="fu"><a href="../reference/derive_var_trtdurd.html">derive_var_trtdurd</a></span>()</pre></body></html></div>
 </div>
 <div id="derivations" class="section level1">
 <h1 class="hasAnchor">
@@ -144,6 +149,7 @@
 <a href="#input-and-output" class="anchor"></a>Input and Output</h2>
 <p>It is expected that the input dataset is not grouped. Otherwise an error is issued.</p>
 <p>The input dataset should not include variables starting with <code>temp_</code>. These variable names are reserved for temporary variable used within the derivation and are removed from the output dataset. If the input dataset contains such variables, an error is issued.</p>
+<p>It is expected all variable names are uppercase in the input dataset and new variables will be returned in uppercase. It is expected all <code>SUPPxx.QNAM</code> values are uppercase to conform with this convention when using the <code>derive_suppqual_vars</code> to adhere to the uppercase requirement.</p>
 <p>The output dataset is ungrouped. The observations are not ordered in a dedicated way. In particular, the order of the observations of the input dataset may not be preserved.</p>
 </div>
 </div>
@@ -155,12 +161,12 @@
 <div id="parameters" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameters" class="anchor"></a>Parameters</h1>
-<p>For parameters which expect variable names or expressions of variable names symbols or expressions must be specified rather than strings. The <code><a href="https://rlang.r-lib.org/reference/quotation.html">expr()</a></code> and the <code><a href="https://rlang.r-lib.org/reference/quotation.html">exprs()</a></code> function of the <code>rlang</code> package can be used to quote expressions where necessary.</p>
+<p>For parameters which expect variable names or expressions of variable names symbols or expressions must be specified rather than strings.</p>
 <ul>
-<li><p>For parameters which expects a single variable name the name can be specified without quotes and quotation. For example <code>new_var = TEMPBL</code></p></li>
-<li><p>For parameters which expects one or more variable names a list of symbols is expected. E.g., <code>by_vars = exprs(PARAMCD, AVISIT)</code></p></li>
-<li><p>For parameters which expects a single expression the expression needs to be quoted. For examples <code>filter = expr(PARAMCD == ‘TEMP’)</code></p></li>
-<li><p>For parameters which expects one or more expressions a list of expressions is expected. E.g., <code>order = exprs(AVISIT, worst_severity(AESEV))</code> or <code>new_vars= exprs(TEMPBL = AVAL, TEMPBLU = AVALU)</code>.</p></li>
+<li><p>For parameters which expects a single variable name the name can be specified without quotes and quotation, e.g. <code>new_var = TEMPBL</code></p></li>
+<li><p>For parameters which expects one or more variable names a list of symbols is expected, e.g. <code>by_vars = vars(PARAMCD, AVISIT)</code></p></li>
+<li><p>For parameters which expects a single expression the expression needs to be passed “as is”, e.g. <code>filter = PARAMCD == "TEMP"</code></p></li>
+<li><p>For parameters which expects one or more expressions a list of expressions is expected, e.g. <code>order = desc(AVISIT, desc(AESEV))</code></p></li>
 </ul>
 </div>
 <div id="validation" class="section level1">
@@ -184,6 +190,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
 </div>
@@ -193,7 +200,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
 </div>
 
 <div class="pkgdown">
