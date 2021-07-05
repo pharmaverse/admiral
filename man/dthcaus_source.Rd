@@ -42,3 +42,4 @@ Create an \code{dthcaus_source} object
 \author{
 Shimeng Huang
 }
+\keyword{source_specifications}

@@ -165,6 +165,8 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'
 #' @author Shimeng Huang
 #'
+#' @keywords source_specifications
+#'
 #' @seealso [`derive_var_dthcaus()`]
 #'
 #' @export
