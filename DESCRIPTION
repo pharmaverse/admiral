@@ -11,8 +11,7 @@ Authors@R: c(
     person("Ondrej", "Slama", role = "aut"),
     person("Shimeng", "Huang", role = "aut")
     )
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true

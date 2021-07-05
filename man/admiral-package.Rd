@@ -8,8 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+A toolbox for programming ADaM datasets in R.
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
