@@ -22,10 +22,10 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This article describes creating a OCCDS ADaM. Examples are currently 
+This article describes creating an OCCDS ADaM. Examples are currently 
 presented and tested in the context of ADAE.
 However, the examples could be applied to other OCCDS ADaMs such as 
-ADCM (?), ADMH, and ADDV, where ... (?).
+ADCM, ADMH, ADDV, ....
 
 **Note:** 
 *All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.*
@@ -53,21 +53,21 @@ library(admiral)
 ```
 
 
-To start, all dataframes needed for the creation of `ADAE` should be read into
-the environment. This will be a company specific process. Some of the 
-dataframes needed may be:
+To start, all data frames needed for the creation of `ADAE` should be read into
+the environment. This will be a company specific process. Some of the data
+frames needed may be:
 
   * `AE`, `SUPPAE`
   * `SUPPDM`
   * `ADSL`
   
-To Derive Supplemental Qualifiers, `derive_suppqual_vars` can be used. 
+To derive Supplemental Qualifiers, `derive_suppqual_vars()` can be used. 
 
 ```{r eval=FALSE}
 ae <- derive_suppqual_vars(ae, suppae)
 ```
 
-Now start creating ADAE by joining the required datasets together. 
+Now start creating ADAE by joining the required data sets together. 
 
 ```{r}
 data(ae)
@@ -84,34 +84,27 @@ adae <- left_join(
 
 ### Derive/Impute end and start analysis date/time and relative day {#datetime}
 
-This part includes variables `AENDTM`, `AENDT`, `AENDY`, `ASTDTM`, `ASTDT`, and 
-`ASTDY`. 
-The function `derive_vars_dtm()` can be used to derive `AENDTM` and 
-`ASTDTM` where `ASTDTM` could be company-specific. 
-`AENDT` and `ASTADT` can be created with a simple `dplyr::mutate`, and 
-`derive_var_aendy()` and `derive_var_astdy()` can be used to create 
-`AENDY` and `ASTDY` respectively.
+This part includes variables `AENDTM`, `AENDT`, `AENDY`, `ASTDTM`, `ASTDT`, and
+`ASTDY`. The function `derive_vars_dtm()` can be used to derive `AENDTM` and
+`ASTDTM` where `ASTDTM` could be company-specific. `AENDT` and `ASTADT` can be
+created with a simple `dplyr::mutate()`, and `derive_var_aendy()` and
+`derive_var_astdy()` can be used to create `AENDY` and `ASTDY` respectively.
 
 ```{r}
 adae <- adae %>% 
-  mutate(
-    DTHDTC = convert_dtc_to_dt(DTHDTC),  # convert character to date
-    RFPENDTC = convert_dtc_to_dt(RFPENDTC), 
-    RFSTDTC = convert_dtc_to_dt(RFSTDTC)
-  ) %>% 
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = list(DTHDTC, RFPENDTC)
+    max_dates = list(DTHDT, EOSDT)
   ) %>% 
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = list(RFSTDTC)
+    min_dates = list(TRTSDT)
   ) %>% 
   mutate(
     AENDT = date(AENDTM), 
@@ -135,15 +128,11 @@ The function `derive_duration()` can be used to create the variables
 
 ```{r}
 adae <- adae %>%
-  mutate(
-    AESTDTC = convert_dtc_to_dt(AESTDTC), 
-    AEENDTC = convert_dtc_to_dt(AEENDTC)
-  ) %>% 
   derive_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
-    start_date = AESTDTC,
-    end_date = AEENDTC,
+    start_date = ASTDT,
+    end_date = AENDT,
     in_unit = "days",
     out_unit = "days",
     add_one = TRUE,
@@ -177,7 +166,7 @@ adae <- adae %>%
       nchar(as.character(EXENDTC)) >= 10,
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
-    analysis_date = AESTDTC,
+    analysis_date = ASTDT,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
     output_datetime = TRUE,
@@ -186,11 +175,10 @@ adae <- adae %>%
 ```
 
 
-
 ### Derive severity, causality, and toxicity grade {#severity}
 
-The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply `dplyr::mutate` as 
-they essentially come from the `AE` dataset.
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
+`dplyr::mutate()` if no imputation is required.
 
 ```{r}
 adae <- adae %>%
@@ -202,8 +190,8 @@ adae <- adae %>%
 
 ### Derive treatment emergent flags {#trtflag}
 
-To derive treatment emergent flags `TRTEMFL`, one can use simple `dplyr::mutate`. 
-In the example below, we use 30 days in the flag derivation. 
+To derive the treatment emergent flag `TRTEMFL`, one can use simple
+`dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
 
 ```{r}
 adae <- adae %>% 
@@ -219,30 +207,32 @@ adae <- adae %>%
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
-```{r}
+If grades were collected, the following can be used.
+```{r, eval=F}
 adae <- adae %>% 
   derive_extreme_flag(
     new_var = AOCCIFL,
     by_vars = vars(USUBJID),
-    order = vars(ASTDTM, AESEQ),
+    order = vars(ASTDTM, ATOXGR, AESEQ),
     flag_filter = TRTEMFL == "Y", 
     mode = "last"
   )
 ```
 
-Similarly, `ASEV` can also be used to derive the occurrence flags. 
-In this case, the variable need to be firstly recoded into a numeric one:
+Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
+collected. In this case, the variable may need to be firstly recoded into a
+numeric one:
 
 ```{r, eval=F}
 adae %>% 
   mutate(
-    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE")))
+    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
   derive_extreme_flag(
     new_var = AOCCIFL,
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, ASEVN, AESEQ),
-    flag_filter = NULL, 
+    flag_filter = TRTEMFL == "Y", 
     mode = "last"
   )
 ```
