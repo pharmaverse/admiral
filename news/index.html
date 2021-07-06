@@ -108,6 +108,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -115,9 +118,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -149,6 +149,101 @@
       <small>Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="admiral-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#admiral-020" class="anchor"></a>admiral 0.2.0</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h2>
+<div id="general" class="section level3">
+<h3 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h3>
+<ul>
+<li><p>Function argument checks have been completely re-written to provide clearer error messages to users (<a href='https://github.com/Roche-GSK/admiral/issues/263'>#263</a>, <a href='https://github.com/Roche-GSK/admiral/issues/288'>#288</a>)</p></li>
+<li><p>SDTM <code>SUPP--</code> datasets can be merged onto their parent domain using <code><a href="../reference/derive_suppqual_vars.html">derive_suppqual_vars()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/145'>#145</a>)</p></li>
+<li><p>In case a derivation detects duplicate records after applying a <code>filter</code>, the dataset of duplicate records is made available to users via <code><a href="../reference/get_duplicates_dataset.html">get_duplicates_dataset()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/202'>#202</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> gain a <code>min_dates</code> and <code>max_dates</code> parameter which can be used to ensure that the imputed date(time) is not before the <code>min_dates</code> nor after the <code>max_dates</code>, e.g. avoid that <code>AENDT</code> is after the data cut date or <code>ASTDT</code> is before the first treatment date (<a href='https://github.com/Roche-GSK/admiral/issues/158'>#158</a>)</p></li>
+<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> can be used to open a template script for an ADaM dataset; all available templates can be displayed using <code><a href="../reference/list_all_templates.html">list_all_templates()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/110'>#110</a>)</p></li>
+</ul>
+</div>
+<div id="adsl" class="section level3">
+<h3 class="hasAnchor">
+<a href="#adsl" class="anchor"></a>ADSL</h3>
+<ul>
+<li><p>EMA and FDA defined age groupings can be derived using <code><a href="../reference/derive_agegr_fda.html">derive_agegr_ema()</a></code> and <code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code>, respectively</p></li>
+<li><p>Disposition Status can be derived using <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/92'>#92</a>)</p></li>
+<li><p>Disposition Reason can be derived using <code><a href="../reference/derive_disposition_reason.html">derive_disposition_reason()</a></code></p></li>
+<li><p>Disposition Dates can be derived using <code><a href="../reference/derive_disposition_dt.html">derive_disposition_dt()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/91'>#91</a>)</p></li>
+<li><p>Date Last Known Alive can be derived using <code><a href="../reference/derive_var_lstalvdt.html">derive_var_lstalvdt()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/94'>#94</a>)</p></li>
+<li><p>Cause of Death can be derived using <code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/93'>#93</a>)</p></li>
+</ul>
+</div>
+<div id="bds" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bds" class="anchor"></a>BDS</h3>
+<ul>
+<li>Summary records for BDS datasets, e.g. with <code>DTYPE == "AVERAGE"</code>, can be derived using <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/177'>#177</a>)</li>
+</ul>
+</div>
+<div id="occds" class="section level3">
+<h3 class="hasAnchor">
+<a href="#occds" class="anchor"></a>OCCDS</h3>
+<ul>
+<li>Last Dose Date(time) can be derived using <code><a href="../reference/derive_last_dose.html">derive_last_dose()</a></code>
+</li>
+</ul>
+</div>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<ul>
+<li><p><code>derive_merged_vars()</code> has been removed from {admiral} in favor of smaller special purpose functions, e.g. <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/167'>#167</a>)</p></li>
+<li>
+<p>Function arguments no longer accept expressions created with <code>expr()</code> or <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/187'>#187</a>)</p>
+<p><strong>Old:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
+  <span class="no">vs</span>,
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">LASTFL</span>,
+  <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs</a></span>(<span class="no">USUBJID</span>, <span class="no">VSTESTCD</span>, <span class="no">VISIT</span>),
+  <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs</a></span>(<span class="no">VSTPTNUM</span>),
+  <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
+  <span class="kw">flag_filter</span> <span class="kw">=</span> <span class="fu">expr</span>(<span class="no">VISIT</span> <span class="kw">!=</span> <span class="st">"BASELINE"</span>)
+)</pre></div>
+<p><strong>New:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
+  <span class="no">vs</span>,
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">LASTFL</span>,
+  <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">VSTESTCD</span>, <span class="no">VISIT</span>),
+  <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">VSTPTNUM</span>),
+  <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
+  <span class="kw">flag_filter</span> <span class="kw">=</span> <span class="no">VISIT</span> <span class="kw">!=</span> <span class="st">"BASELINE"</span>
+)</pre></div>
+</li>
+<li><p><code>read_dap_m3()</code> and <code>initialize()</code> have been migrated to {admiral.roche} (<a href='https://github.com/Roche-GSK/admiral/issues/272'>#272</a>)</p></li>
+<li><p>The <code>start_date</code> and <code>end_date</code> parameters of <code><a href="../reference/derive_var_ady.html">derive_var_ady()</a></code>, <code><a href="../reference/derive_var_aendy.html">derive_var_aendy()</a></code> and <code><a href="../reference/derive_var_astdy.html">derive_var_astdy()</a></code> have been renamed to <code>reference_date</code> and <code>date</code>, respectively (<a href='https://github.com/Roche-GSK/admiral/issues/121'>#121</a>)</p></li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li><p><code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> no longer drops records which do not match any condition defined in the <code>basetype</code> argument (<a href='https://github.com/Roche-GSK/admiral/issues/226'>#226</a>)</p></li>
+<li><p>Join warnings like “Column <code>USUBJID</code> has different attributes on LHS and RHS of join when using left_join()” are no longer displayed (<a href='https://github.com/Roche-GSK/admiral/issues/271'>#271</a>)</p></li>
+<li><p>For datetimes with time imputed to “00:00:00” the time part is now displayed (<a href='https://github.com/Roche-GSK/admiral/issues/206'>#206</a>)</p></li>
+</ul>
+</div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<ul>
+<li><p><a href="../articles/faq.html">Frequently Asked Questions</a></p></li>
+<li><p><a href="../articles/adsl.html">Creating ADSL</a></p></li>
+<li><p><a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a></p></li>
+<li><p><a href="../articles/occds.html">Creating an OCCDS ADaM</a></p></li>
+</ul>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

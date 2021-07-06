@@ -109,6 +109,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -116,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -204,29 +204,31 @@ merged to the input dataset.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflict</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>stringr</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ae"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"lb"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"adsl"</span>)
-<span class='no'>ae_start</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
-                            <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
-                            <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
-<span class='no'>ae_end</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
-                          <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
-                          <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>)
-<span class='no'>lb_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>lb</span>,
-                           <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>LBDTC</span>,
-                           <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_length.html'>str_length</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>)
-<span class='no'>adsl_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>adsl</span>,
-                             <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>)
 
-<span class='fu'>derive_var_lstalvdt</span>(<span class='no'>dm</span>,
-                    <span class='no'>ae_start</span>,
-                    <span class='no'>ae_end</span>,
-                    <span class='no'>lb_date</span>,
-                    <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>ae_start</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
+  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)
+<span class='no'>ae_end</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
+  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
+)
+<span class='no'>lb_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
+  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>lb</span>,
+  <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>LBDTC</span>,
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>
+)
+<span class='no'>adsl_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>adsl</span>, <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>)
+
+<span class='no'>dm</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_var_lstalvdt</span>(<span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>LSTALVDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
 #&gt;    USUBJID     LSTALVDT  
 #&gt;    &lt;chr&gt;       &lt;date&gt;    
@@ -266,7 +268,7 @@ merged to the input dataset.</p></li>
 <span class='no'>lb_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
   <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>lb</span>,
   <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='no'>LBDTC</span>,
-  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_length.html'>str_length</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
     <span class='kw'>LALVDOM</span> <span class='kw'>=</span> <span class='st'>"LB"</span>,
     <span class='kw'>LALVSEQ</span> <span class='kw'>=</span> <span class='no'>LBSEQ</span>,
@@ -284,8 +286,8 @@ merged to the input dataset.</p></li>
   )
 )
 
-<span class='fu'>derive_var_lstalvdt</span>(<span class='no'>dm</span>,
-                    <span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>dm</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_var_lstalvdt</span>(<span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>LSTALVDT</span>, <span class='no'>LALVDOM</span>, <span class='no'>LALVSEQ</span>, <span class='no'>LALVVAR</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 5
 #&gt;    USUBJID     LSTALVDT   LALVDOM LALVSEQ LALVVAR
 #&gt;    &lt;chr&gt;       &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  

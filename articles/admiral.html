@@ -67,6 +67,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -74,9 +77,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -107,7 +107,7 @@
       <h1 data-toc-skip>Get Started</h1>
                         <h4 class="author">Stefan Bundfuss</h4>
             
-            <h4 class="date">2021-07-05</h4>
+            <h4 class="date">2021-07-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/admiral.Rmd"><code>vignettes/admiral.Rmd</code></a></small>
       <div class="hidden name"><code>admiral.Rmd</code></div>
@@ -174,6 +174,25 @@
 <a href="#validation" class="anchor"></a>Validation</h1>
 <p>All functions are reviewed and tested to ensure that they work as described in the documentation. They are <strong>not validated</strong> yet.</p>
 <p>Although admiral follows CDISC standards it does not claim that the dataset resulting from calling admiral functions is ADaM compliant. This has to be ensured by the user.</p>
+</div>
+<div id="starting-a-script" class="section level1">
+<h1 class="hasAnchor">
+<a href="#starting-a-script" class="anchor"></a>Starting a Script</h1>
+<p>For the ADaM data structures an overview of the flow and example function calls for the most common steps are provided by the following vignettes:</p>
+<ul>
+<li><a href="adsl.html">Creating ADSL</a></li>
+<li><a href="occds.html">Creating an OCCDS ADaM</a></li>
+<li><a href="bds_finding.html">Creating a BDS Finding ADaM</a></li>
+</ul>
+<p>admiral also provides template R scripts as a starting point. They can be created by calling <code><a href="../reference/use_ad_template.html">use_ad_template()</a></code>, e.g.,</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/use_ad_template.html">use_ad_template</a></span>(
+  <span class="kw">adam_name</span> <span class="kw">=</span> <span class="st">"adsl"</span>,
+  <span class="kw">save_path</span> <span class="kw">=</span> <span class="st">"./ad_adsl.R"</span>)</pre></body></html></div>
+<p>A list of all available templates can be obtained by <code><a href="../reference/list_all_templates.html">list_all_templates()</a></code>:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/list_all_templates.html">list_all_templates</a></span>()
+<span class="co">#&gt; Existing templates: </span>
+<span class="co">#&gt; • ADSL</span>
+<span class="co">#&gt; • ADVS</span></pre></body></html></div>
 </div>
 <div id="support" class="section level1">
 <h1 class="hasAnchor">

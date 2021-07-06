@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive a disposition status at a specific timepoint — derive_disposition_status • admiral</title>
+<title>Derive a Disposition Status at a Specific Timepoint — derive_disposition_status • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Derive a disposition status at a specific timepoint — derive_disposition_status" />
+<meta property="og:title" content="Derive a Disposition Status at a Specific Timepoint — derive_disposition_status" />
 <meta property="og:description" content="Derive a disposition status from the the relevant records in the disposition domain." />
 <meta property="og:image" content="/logo.png" />
 
@@ -109,6 +109,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -116,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -146,7 +146,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive a disposition status at a specific timepoint</h1>
+    <h1>Derive a Disposition Status at a Specific Timepoint</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_disposition_status.R'><code>R/derive_disposition_status.R</code></a></small>
     <div class="hidden name"><code>derive_disposition_status.Rd</code></div>
     </div>
@@ -216,7 +216,7 @@ where <code>x</code> is the <code>status_var.</code></p></td>
     <p>The input dataset with the disposition status (<code>new_var</code>) added.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ds"</span>)
 
@@ -258,7 +258,7 @@ where <code>x</code> is the <code>status_var.</code></p></td>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
     <span class='no'>x</span> <span class='kw'>==</span> <span class='st'>"COMPLETED"</span> ~ <span class='st'>"COMPLETED"</span>,
     <span class='no'>x</span> <span class='kw'>==</span> <span class='st'>"ADVERSE EVENT"</span> ~ <span class='st'>"DISCONTINUED DUE TO AE"</span>,
-    <span class='no'>x</span> <span class='kw'>%!in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ADVERSE EVENT"</span>, <span class='st'>"COMPLETED"</span>) <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>) ~ <span class='st'>"DISCONTINUED NOT DUE TO AE"</span>,
+    !(<span class='no'>x</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ADVERSE EVENT"</span>, <span class='st'>"COMPLETED"</span>)) <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>) ~ <span class='st'>"DISCONTINUED NOT DUE TO AE"</span>,
     <span class='fl'>TRUE</span> ~ <span class='st'>"ONGOING"</span>
   )
 }

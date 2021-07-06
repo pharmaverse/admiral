@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive a disposition reason at a specific timepoint — derive_disposition_reason • admiral</title>
+<title>Derive a Disposition Reason at a Specific Timepoint — derive_disposition_reason • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Derive a disposition reason at a specific timepoint — derive_disposition_reason" />
+<meta property="og:title" content="Derive a Disposition Reason at a Specific Timepoint — derive_disposition_reason" />
 <meta property="og:description" content="Derive a disposition reason from the the relevant records in the disposition domain." />
 <meta property="og:image" content="/logo.png" />
 
@@ -109,6 +109,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -116,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -146,7 +146,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive a disposition reason at a specific timepoint</h1>
+    <h1>Derive a Disposition Reason at a Specific Timepoint</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_disposition_reason.R'><code>R/derive_disposition_reason.R</code></a></small>
     <div class="hidden name"><code>derive_disposition_reason.Rd</code></div>
     </div>
@@ -265,12 +265,8 @@ The details associated with the reason for discontinuation are derived based on
     <div class='dont-index'><p><code><a href='format_reason_default.html'>format_reason_default()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ds"</span>)
 
 <span class='co'># Derive DCSREAS using the default format</span>
@@ -300,7 +296,7 @@ The details associated with the reason for discontinuation are derived based on
 <span class='no'>format_dcsreas</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>) {
   <span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>y</span>)) <span class='no'>x</span> <span class='kw'>else</span> <span class='no'>y</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
-    <span class='no'>x</span> <span class='kw'>%!in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"COMPLETED"</span>, <span class='st'>"SCREEN FAILURE"</span>) <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>) ~ <span class='no'>out</span>,
+    !(<span class='no'>x</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"COMPLETED"</span>, <span class='st'>"SCREEN FAILURE"</span>)) <span class='kw'>&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>) ~ <span class='no'>out</span>,
     <span class='fl'>TRUE</span> ~ <span class='fl'>NA_character_</span>
   )
 }

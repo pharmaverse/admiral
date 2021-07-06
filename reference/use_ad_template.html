@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A helper function to create a template script — use_ad_template • admiral</title>
+<title>Open a ADaM Template Script — use_ad_template • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="A helper function to create a template script — use_ad_template" />
-<meta property="og:description" content="A helper function to create a template script" />
+<meta property="og:title" content="Open a ADaM Template Script — use_ad_template" />
+<meta property="og:description" content="Open a ADaM Template Script" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -109,6 +109,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -116,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -146,13 +146,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A helper function to create a template script</h1>
+    <h1>Open a ADaM Template Script</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/user_helpers.R'><code>R/user_helpers.R</code></a></small>
     <div class="hidden name"><code>use_ad_template.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A helper function to create a template script</p>
+    <p>Open a ADaM Template Script</p>
     </div>
 
     <pre class="usage"><span class='fu'>use_ad_template</span>(
@@ -181,7 +181,9 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>use_ad_template</span>(<span class='st'>"./ad_adsl.R"</span>, <span class='st'>"adsl"</span>)
+<span class='fu'>use_ad_template</span>(
+  <span class='kw'>adam_name</span> <span class='kw'>=</span> <span class='st'>"adsl"</span>,
+  <span class='kw'>save_path</span> <span class='kw'>=</span> <span class='st'>"./ad_adsl.R"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

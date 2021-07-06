@@ -109,6 +109,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -116,9 +119,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -171,12 +171,16 @@ if required (e.g. <code>DSTERM</code>).</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>character</code> vector</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>format_reason_default(DSDECOD) returns <code>DSDECOD</code> when <code>DSDECOD</code> != 'COMPLETED' nor NA.
-format_reason_default(DSDECOD, DSTERM) returns <code>DSTERM</code> when <code>DSDECOD</code> != 'COMPLETED' nor NA.
-e.g. DCSREAS =  format_reason_default(DSDECOD)
-e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)</p>
+    <p><code>format_reason_default(DSDECOD)</code> returns <code>DSDECOD</code> when <code>DSDECOD</code> is not 'COMPLETED' or <code>NA</code>.
+<code>format_reason_default(DSDECOD, DSTERM)</code> returns <code>DSTERM</code> when <code>DSDECOD</code> is not 'COMPLETED' or <code>NA</code>.
+For example:
+<code>DCSREAS = format_reason_default(DSDECOD)</code>
+<code>DCSREASP = format_reason_default(DSDECOD, DSTERM)</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

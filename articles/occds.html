@@ -67,6 +67,9 @@
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -74,9 +77,6 @@
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -107,7 +107,7 @@
       <h1 data-toc-skip>Creating an OCCDS ADaM</h1>
                         <h4 class="author">admiral team</h4>
             
-            <h4 class="date">2021-07-05</h4>
+            <h4 class="date">2021-07-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/occds.Rmd"><code>vignettes/occds.Rmd</code></a></small>
       <div class="hidden name"><code>occds.Rmd</code></div>
@@ -119,26 +119,27 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This article describes creating an OCCDS ADaM. Examples are currently presented and tested in the context of ADAE. However, the examples could be applied to other OCCDS ADaMs such as ADCM, ADMH, ADDV, ….</p>
+<p>This article describes creating an OCCDS ADaM. Examples are currently presented and tested in the context of ADAE. However, the examples could be applied to other OCCDS ADaMs such as ADCM, ADMH, ADDV, etc.</p>
 <p><strong>Note:</strong> <em>All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.</em></p>
 </div>
 <div id="programming-workflow" class="section level2">
 <h2 class="hasAnchor">
 <a href="#programming-workflow" class="anchor"></a>Programming Workflow</h2>
 <ul>
-<li><a href="#readdata">Read in data</a></li>
-<li><a href="#datetime">Derive/Impute end and start analysis date/time and relative day</a></li>
-<li><a href="#duration">Derive durations</a></li>
-<li><a href="#phase_period">Derive analysis phase and period</a></li>
-<li><a href="#trtpa">Derive planned and actual treatment</a></li>
-<li><a href="#severity">Derive severity, causality, and toxicity grade</a></li>
-<li><a href="#trtfag">Derive treatement flags</a></li>
-<li><a href="#occflag">Derive occurrence flags</a></li>
-<li><a href="#query">Derive query variables</a></li>
+<li><a href="#readdata">Read in Data</a></li>
+<li><a href="#datetime">Derive/Impute End and Start Analysis Date/time and Relative Day</a></li>
+<li><a href="#duration">Derive Durations</a></li>
+<li><a href="#phase_period">Derive Analysis Phase and Period</a></li>
+<li><a href="#trtpa">Derive Planned and Actual Treatment</a></li>
+<li><a href="#last_dose">Derive Date/Date-time of Last Dose</a></li>
+<li><a href="#severity">Derive Severity, Causality, and Toxicity Grade</a></li>
+<li><a href="#trtfag">Derive Treatement Emergent Flag</a></li>
+<li><a href="#occflag">Derive Occurrence Flags</a></li>
+<li><a href="#query">Derive Query Variables</a></li>
 </ul>
 <div id="readdata" class="section level3">
 <h3 class="hasAnchor">
-<a href="#readdata" class="anchor"></a>Read in data</h3>
+<a href="#readdata" class="anchor"></a>Read in Data</h3>
 <p>Let’s start by attaching packages:</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 <span class="co">#&gt; </span>
@@ -178,7 +179,7 @@
 </div>
 <div id="datetime" class="section level3">
 <h3 class="hasAnchor">
-<a href="#datetime" class="anchor"></a>Derive/Impute end and start analysis date/time and relative day</h3>
+<a href="#datetime" class="anchor"></a>Derive/Impute End and Start Analysis Date/time and Relative Day</h3>
 <p>This part includes variables <code>AENDTM</code>, <code>AENDT</code>, <code>AENDY</code>, <code>ASTDTM</code>, <code>ASTDT</code>, and <code>ASTDY</code>. The function <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> can be used to derive <code>AENDTM</code> and <code>ASTDTM</code> where <code>ASTDTM</code> could be company-specific. <code>AENDT</code> and <code>ASTADT</code> can be created with a simple <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>, and <code><a href="../reference/derive_var_aendy.html">derive_var_aendy()</a></code> and <code><a href="../reference/derive_var_astdy.html">derive_var_astdy()</a></code> can be used to create <code>AENDY</code> and <code>ASTDY</code> respectively.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
@@ -210,7 +211,7 @@
 </div>
 <div id="duration" class="section level3">
 <h3 class="hasAnchor">
-<a href="#duration" class="anchor"></a>Derive durations</h3>
+<a href="#duration" class="anchor"></a>Derive Durations</h3>
 <p>The function <code><a href="../reference/derive_duration.html">derive_duration()</a></code> can be used to create the variables <code>ADURN</code> and <code>ADURU</code>.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_duration.html">derive_duration</a></span>(
@@ -226,17 +227,17 @@
 </div>
 <div id="phase_period" class="section level3">
 <h3 class="hasAnchor">
-<a href="#phase_period" class="anchor"></a>Derive analysis phase and period</h3>
+<a href="#phase_period" class="anchor"></a>Derive Analysis Phase and Period</h3>
 <p><em>These functionalities are in progress.</em></p>
 </div>
 <div id="trtpa" class="section level3">
 <h3 class="hasAnchor">
-<a href="#trtpa" class="anchor"></a>Derive planned and actual treatment</h3>
+<a href="#trtpa" class="anchor"></a>Derive Planned and Actual Treatment</h3>
 <p><em>These functionalities are in progress.</em></p>
 </div>
 <div id="last_dose" class="section level3">
 <h3 class="hasAnchor">
-<a href="#last_dose" class="anchor"></a>Derive date/date-time of last dose</h3>
+<a href="#last_dose" class="anchor"></a>Derive Date/Date-time of Last Dose</h3>
 <p>The function <code><a href="../reference/derive_last_dose.html">derive_last_dose()</a></code> can be used to derive the last dose date. Additionally, this function can also provide the traceability variables (e.g. <code>LDOSEDOM</code>, <code>LDOSESEQ</code>) using the <code>traceability_vars</code> argument.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">ex_single</span>)
 <span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
@@ -255,7 +256,7 @@
 </div>
 <div id="severity" class="section level3">
 <h3 class="hasAnchor">
-<a href="#severity" class="anchor"></a>Derive severity, causality, and toxicity grade</h3>
+<a href="#severity" class="anchor"></a>Derive Severity, Causality, and Toxicity Grade</h3>
 <p>The variables <code>ASEV</code>, <code>AREL</code>, and <code>ATOXGR</code> can be added by simply <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code> if no imputation is required.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -265,7 +266,7 @@
 </div>
 <div id="trtflag" class="section level3">
 <h3 class="hasAnchor">
-<a href="#trtflag" class="anchor"></a>Derive treatment emergent flags</h3>
+<a href="#trtflag" class="anchor"></a>Derive Treatment Emergent Flag</h3>
 <p>To derive the treatment emergent flag <code>TRTEMFL</code>, one can use simple <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>. In the example below, we use 30 days in the flag derivation.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -274,7 +275,7 @@
 </div>
 <div id="occflag" class="section level3">
 <h3 class="hasAnchor">
-<a href="#occflag" class="anchor"></a>Derive occurrence flags</h3>
+<a href="#occflag" class="anchor"></a>Derive Occurrence Flags</h3>
 <p>The function <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code> can help derive variables such as <code>AOCCIFL</code>, <code>AOCCPIFL</code>, <code>AOCCSIFL</code>, <code>AOCXIFL</code>, <code>AOCXPIFL</code>, and <code>AOCXSIFL</code>.</p>
 <p>If grades were collected, the following can be used.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
@@ -285,7 +286,7 @@
     <span class="kw">flag_filter</span> <span class="kw">=</span> <span class="no">TRTEMFL</span> <span class="kw">==</span> <span class="st">"Y"</span>,
     <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>
   )</pre></body></html></div>
-<p>Similarly, <code>ASEV</code> can also be used to derive the occurrence flags if severity is collected. In this case, the variable may need to be firstly recoded into a numeric one:</p>
+<p>Similarly, <code>ASEV</code> can also be used to derive the occurrence flags if severity is collected. In this case, the variable may need to be firstly recorded into a numeric one:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
     <span class="kw">ASEVN</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">ASEV</span>, <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"MILD"</span>, <span class="st">"MODERATE"</span>, <span class="st">"SEVERE"</span>, <span class="st">"DEATH THREATENING"</span>)))
@@ -300,7 +301,7 @@
 </div>
 <div id="query" class="section level3">
 <h3 class="hasAnchor">
-<a href="#query" class="anchor"></a>Derive query variables</h3>
+<a href="#query" class="anchor"></a>Derive Query Variables</h3>
 <p><em>These functionalities are in progress.</em></p>
 </div>
 </div>

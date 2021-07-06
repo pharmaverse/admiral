@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add new record within by groups using aggregation functions — derive_summary_records • admiral</title>
+<title>Add New Records Within By Groups Using Aggregation Functions — derive_summary_records • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Add new record within by groups using aggregation functions — derive_summary_records" />
+<meta property="og:title" content="Add New Records Within By Groups Using Aggregation Functions — derive_summary_records" />
 <meta property="og:description" content="It is not uncommon to have an analysis need whereby one needs to derive an
 analysis value (AVAL) from multiple records. The ADaM basic dataset
 structure variable DTYPE is available to indicate when a new derived
@@ -112,6 +112,9 @@ records has been added to a dataset." />
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
+      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    </li>
+    <li>
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
@@ -119,9 +122,6 @@ records has been added to a dataset." />
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
     </li>
   </ul>
 </li>
@@ -149,7 +149,7 @@ records has been added to a dataset." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add new record within by groups using aggregation functions</h1>
+    <h1>Add New Records Within By Groups Using Aggregation Functions</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_summary_records.R'><code>R/derive_summary_records.R</code></a></small>
     <div class="hidden name"><code>derive_summary_records.Rd</code></div>
     </div>
@@ -165,6 +165,7 @@ records has been added to a dataset.</p>
   <span class='no'>dataset</span>,
   <span class='no'>by_vars</span>,
   <span class='no'>fns</span>,
+  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>drop_values_from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
@@ -201,6 +202,19 @@ use <code>fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))</code>.</p></li>
 
 <p>In the formula representation e.g., <code>CHG ~ sum(., na.rm = TRUE)</code>, a <code>.</code>
 serves as the data to be summarized which refers to the variable <code>CHG</code>.</p></td>
+    </tr>
+    <tr>
+      <th>filter_rows</th>
+      <td><p>Filter condition as logical expression to apply during
+summary calculation. By default, filtering expressions are computed within
+<code>by_vars</code> as this will help when an aggregating, lagging, or ranking
+function is involved.</p>
+<p>For example,</p><ul>
+<li><p><code>filter_rows = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all AVAL
+values greater than mean of AVAL with in <code>by_vars</code>.</p></li>
+<li><p><code>filter_rows = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
+than 2.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>set_values_to</th>
@@ -321,7 +335,52 @@ will be set to <code>NA</code>.</p>
 #&gt; 4 XYZ-001-001  1167 Weight  94   kg       Week 24   2018-09-30 &lt;NA&gt;   
 #&gt; 5 XYZ-001-001  1168 Weight  92   kg       Week 48   2019-03-17 &lt;NA&gt;   
 #&gt; 6 XYZ-001-001  1169 Weight  95   kg       Week 52   2019-04-14 &lt;NA&gt;   
-#&gt; 7 XYZ-001-001    NA Weight  96.8 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       MAXIMUM</div></pre>
+#&gt; 7 XYZ-001-001    NA Weight  96.8 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       MAXIMUM</div><div class='input'>
+<span class='co'># Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---</span>
+<span class='no'>adeg</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>EGSEQ</span>, ~<span class='no'>PARAM</span>,             ~<span class='no'>AVISIT</span>,    ~<span class='no'>EGDTC</span>,            ~<span class='no'>AVAL</span>, ~<span class='no'>TRTA</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:50"</span>,  <span class='fl'>385</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:52"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:56"</span>,  <span class='fl'>396</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:48"</span>,  <span class='fl'>393</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:51"</span>,  <span class='fl'>388</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:48"</span>,  <span class='fl'>394</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:51"</span>,  <span class='fl'>402</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>410</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T08:01"</span>,  <span class='fl'>392</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:53"</span>,  <span class='fl'>407</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:56"</span>,  <span class='fl'>400</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:53"</span>,  <span class='fl'>414</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:56"</span>,  <span class='fl'>402</span>, <span class='st'>"Active 20mg"</span>,
+)
+
+<span class='co'># Summarize the average of AVAL for AVISIT records greater than 2</span>
+<span class='fu'>derive_summary_records</span>(
+  <span class='no'>adeg</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>, <span class='no'>AVISIT</span>),
+  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>AVAL</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)),
+  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/n.html'>n</a></span>() <span class='kw'>&gt;</span> <span class='fl'>2</span>,
+  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"AVERAGE"</span>)
+)</div><div class='output co'>#&gt; # A tibble: 16 x 8
+#&gt;    USUBJID  EGSEQ PARAM          AVISIT   EGDTC          AVAL TRTA        DTYPE 
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt; 
+#&gt;  1 XYZ-1001     1 QTcF Int. (ms… Baseline 2016-02-24T0…  385  ""          &lt;NA&gt;  
+#&gt;  2 XYZ-1001     2 QTcF Int. (ms… Baseline 2016-02-24T0…  399  ""          &lt;NA&gt;  
+#&gt;  3 XYZ-1001     3 QTcF Int. (ms… Baseline 2016-02-24T0…  396  ""          &lt;NA&gt;  
+#&gt;  4 XYZ-1001    NA QTcF Int. (ms… Baseline &lt;NA&gt;           393. ""          AVERA…
+#&gt;  5 XYZ-1001     4 QTcF Int. (ms… Visit 2  2016-03-08T0…  393  "Placebo"   &lt;NA&gt;  
+#&gt;  6 XYZ-1001     5 QTcF Int. (ms… Visit 2  2016-03-08T0…  388  "Placebo"   &lt;NA&gt;  
+#&gt;  7 XYZ-1001     6 QTcF Int. (ms… Visit 3  2016-03-22T1…  394  "Placebo"   &lt;NA&gt;  
+#&gt;  8 XYZ-1001     7 QTcF Int. (ms… Visit 3  2016-03-22T1…  402  "Placebo"   &lt;NA&gt;  
+#&gt;  9 XYZ-1002     1 QTcF Int. (ms… Baseline 2016-02-22T0…  399  ""          &lt;NA&gt;  
+#&gt; 10 XYZ-1002     2 QTcF Int. (ms… Baseline 2016-02-22T0…  410  ""          &lt;NA&gt;  
+#&gt; 11 XYZ-1002     3 QTcF Int. (ms… Baseline 2016-02-22T0…  392  ""          &lt;NA&gt;  
+#&gt; 12 XYZ-1002    NA QTcF Int. (ms… Baseline &lt;NA&gt;           400. ""          AVERA…
+#&gt; 13 XYZ-1002     4 QTcF Int. (ms… Visit 2  2016-03-06T0…  407  "Active 20… &lt;NA&gt;  
+#&gt; 14 XYZ-1002     5 QTcF Int. (ms… Visit 2  2016-03-06T0…  400  "Active 20… &lt;NA&gt;  
+#&gt; 15 XYZ-1002     6 QTcF Int. (ms… Visit 3  2016-03-24T1…  414  "Active 20… &lt;NA&gt;  
+#&gt; 16 XYZ-1002     7 QTcF Int. (ms… Visit 3  2016-03-24T1…  402  "Active 20… &lt;NA&gt;  </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
