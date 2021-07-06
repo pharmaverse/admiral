@@ -196,6 +196,8 @@ dthcaus_source <- function(dataset,
 #'
 #' @author Shimeng Huang
 #'
+#' @noRd
+#'
 #' @return The original object.
 validate_dthcaus_source <- function(x) {
   assert_that(inherits(x, "dthcaus_source"))

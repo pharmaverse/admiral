@@ -74,7 +74,7 @@
 #'   case_when(
 #'     x == "COMPLETED" ~ "COMPLETED",
 #'     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-#'     x %!in% c("ADVERSE EVENT", "COMPLETED") & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+#'     !(x %in% c("ADVERSE EVENT", "COMPLETED")) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
@@ -126,6 +126,10 @@ derive_disposition_status <- function(dataset,
 #' Define a function to map the disposition status.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
+#'
+#' @author Samia Kabi
+#' @export
+#' @keywords user_utility
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",

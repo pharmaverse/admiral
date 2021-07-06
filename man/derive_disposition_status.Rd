@@ -85,7 +85,7 @@ format_eoxxstt1 <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-    x \%!in\% c("ADVERSE EVENT", "COMPLETED") & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+    !(x \%in\% c("ADVERSE EVENT", "COMPLETED")) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }

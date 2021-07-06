@@ -21,3 +21,7 @@ format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD}
 e.g. DCSREAS =  format_reason_default(DSDECOD)
 e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
 }
+\author{
+Samia Kabi
+}
+\keyword{user_utility}

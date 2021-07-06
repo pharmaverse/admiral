@@ -111,7 +111,7 @@
 #' format_dcsreas <- function(x, y = NULL) {
 #'   out <- if (is.null(y)) x else y
 #'   case_when(
-#'     x %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
+#'     !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
 #'     TRUE ~ NA_character_
 #'   )
 #' }
@@ -195,12 +195,16 @@ derive_disposition_reason <- function(dataset,
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
 #' if required (e.g. `DSTERM`).
+#'
 #' @details
 #' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` != 'COMPLETED' nor NA.
 #' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` != 'COMPLETED' nor NA.
 #' e.g. DCSREAS =  format_reason_default(DSDECOD)
 #' e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
-
+#'
+#' @author Samia Kabi
+#' @export
+#' @keywords user_utility
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)

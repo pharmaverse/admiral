@@ -226,6 +226,8 @@ lstalvdt_source <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @noRd
+#'
 #' @export
 #'
 #' @return The original object.

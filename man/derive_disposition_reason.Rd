@@ -121,7 +121,7 @@ derive_disposition_reason(
 format_dcsreas <- function(x, y = NULL) {
   out <- if (is.null(y)) x else y
   case_when(
-    x \%!in\% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
+    !(x \%in\% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
     TRUE ~ NA_character_
   )
 }
