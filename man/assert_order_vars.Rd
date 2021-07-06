@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_order_vars}
 \alias{assert_order_vars}
-\title{Is an Argument a valid list of order variables created using \code{vars()}?}
+\title{Is an Argument a List of Order Variables?}
 \usage{
 assert_order_vars(arg, optional = FALSE)
 }

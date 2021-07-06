@@ -1,4 +1,4 @@
-#' Join supplementary qualifier variables into the parent domain of SDTM
+#' Join Supplementary Qualifier Variables into the Parent SDTM Domain
 #'
 #' The SDTM does not allow any new variables beside ones assigned to each SDTM
 #' domain. So, Supplemental Qualifier is introduced to supplement each SDTM

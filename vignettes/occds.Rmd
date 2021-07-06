@@ -25,24 +25,25 @@ knitr::opts_chunk$set(
 This article describes creating an OCCDS ADaM. Examples are currently 
 presented and tested in the context of ADAE.
 However, the examples could be applied to other OCCDS ADaMs such as 
-ADCM, ADMH, ADDV, ....
+ADCM, ADMH, ADDV, etc.
 
 **Note:** 
 *All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.*
 
 ## Programming Workflow
 
-* [Read in data](#readdata)
-* [Derive/Impute end and start analysis date/time and relative day](#datetime)
-* [Derive durations](#duration)
-* [Derive analysis phase and period](#phase_period)
-* [Derive planned and actual treatment](#trtpa)
-* [Derive severity, causality, and toxicity grade](#severity)
-* [Derive treatement flags](#trtfag)
-* [Derive occurrence flags](#occflag)
-* [Derive query variables](#query)
+* [Read in Data](#readdata)
+* [Derive/Impute End and Start Analysis Date/time and Relative Day](#datetime)
+* [Derive Durations](#duration)
+* [Derive Analysis Phase and Period](#phase_period)
+* [Derive Planned and Actual Treatment](#trtpa)
+* [Derive Date/Date-time of Last Dose](#last_dose)
+* [Derive Severity, Causality, and Toxicity Grade](#severity)
+* [Derive Treatement Emergent Flag](#trtfag)
+* [Derive Occurrence Flags](#occflag)
+* [Derive Query Variables](#query)
 
-### Read in data {#readdata}
+### Read in Data {#readdata}
 
 Let's start by attaching packages:
 
@@ -82,7 +83,7 @@ adae <- left_join(
 
 
 
-### Derive/Impute end and start analysis date/time and relative day {#datetime}
+### Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part includes variables `AENDTM`, `AENDT`, `AENDY`, `ASTDTM`, `ASTDT`, and
 `ASTDY`. The function `derive_vars_dtm()` can be used to derive `AENDTM` and
@@ -121,7 +122,7 @@ adae <- adae %>%
 ```
 
 
-### Derive durations {#duration}
+### Derive Durations {#duration}
 
 The function `derive_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
@@ -140,17 +141,17 @@ adae <- adae %>%
   )
 ```
 
-### Derive analysis phase and period {#phase_period}
+### Derive Analysis Phase and Period {#phase_period}
 
 *These functionalities are in progress.*
 
 
-### Derive planned and actual treatment {#trtpa}
+### Derive Planned and Actual Treatment {#trtpa}
 
 *These functionalities are in progress.*
 
 
-### Derive date/date-time of last dose  {#last_dose}
+### Derive Date/Date-time of Last Dose {#last_dose}
 
 The function `derive_last_dose()` can be used to derive the last dose date. 
 Additionally, this function can also provide the traceability variables 
@@ -175,7 +176,7 @@ adae <- adae %>%
 ```
 
 
-### Derive severity, causality, and toxicity grade {#severity}
+### Derive Severity, Causality, and Toxicity Grade {#severity}
 
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
 `dplyr::mutate()` if no imputation is required.
@@ -188,7 +189,7 @@ adae <- adae %>%
   )
 ```
 
-### Derive treatment emergent flags {#trtflag}
+### Derive Treatment Emergent Flag {#trtflag}
 
 To derive the treatment emergent flag `TRTEMFL`, one can use simple
 `dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
@@ -202,13 +203,14 @@ adae <- adae %>%
 
 
 
-### Derive occurrence flags {#occflag}
+### Derive Occurrence Flags {#occflag}
 
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
 If grades were collected, the following can be used.
-```{r, eval=F}
+
+```{r, eval=FALSE}
 adae <- adae %>% 
   derive_extreme_flag(
     new_var = AOCCIFL,
@@ -220,10 +222,10 @@ adae <- adae %>%
 ```
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
-collected. In this case, the variable may need to be firstly recoded into a
+collected. In this case, the variable may need to be firstly recorded into a
 numeric one:
 
-```{r, eval=F}
+```{r, eval=FALSE}
 adae %>% 
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
@@ -238,9 +240,6 @@ adae %>%
 ```
 
 
-### Derive query variables {#query}
+### Derive Query Variables {#query}
 
 *These functionalities are in progress.*
-
-
-

@@ -3,7 +3,7 @@
 \name{derive_agegr_fda}
 \alias{derive_agegr_fda}
 \alias{derive_agegr_ema}
-\title{Derive age groups}
+\title{Derive Age Groups}
 \usage{
 derive_agegr_fda(dataset, age_var, new_var)
 

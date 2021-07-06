@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_reason.R
 \name{derive_disposition_reason}
 \alias{derive_disposition_reason}
-\title{Derive a disposition reason at a specific timepoint}
+\title{Derive a Disposition Reason at a Specific Timepoint}
 \usage{
 derive_disposition_reason(
   dataset,

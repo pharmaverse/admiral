@@ -1,4 +1,4 @@
-#' Derive a disposition status at a specific timepoint
+#' Derive a Disposition Status at a Specific Timepoint
 #'
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_last_dose.R
 \name{derive_last_dose}
 \alias{derive_last_dose}
-\title{Derive last dose date(-time)}
+\title{Derive Last Dose Date(-time)}
 \usage{
 derive_last_dose(
   dataset,
@@ -61,7 +61,7 @@ Those can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Derive last dose date(-time)
+Derive Last Dose Date(-time)
 }
 \details{
 All date (date-time) variables can be characters in standard ISO format or

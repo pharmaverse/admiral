@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_filter_cond}
 \alias{assert_filter_cond}
-\title{Is an argument a filtering condition?}
+\title{Is an Argument a Filter Condition?}
 \usage{
 assert_filter_cond(arg, optional = FALSE)
 }
@@ -16,7 +16,7 @@ Performs necessary checks and returns \code{arg} if all pass.
 Otherwise throws an informative error.
 }
 \description{
-Is an argument a filtering condition?
+Is an Argument a Filter Condition?
 }
 \details{
 Check if \code{arg} is a suitable filtering condition to be used in

@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_extreme.R
 \name{filter_extreme}
 \alias{filter_extreme}
-\title{Filter out the first or last observation for each group}
+\title{Filter the First or Last Observation for Each By Group}
 \usage{
 filter_extreme(dataset, order, by_vars = NULL, mode, check_type = "warning")
 }
@@ -44,7 +44,7 @@ Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 A dataset containing the first or last observation of each by group
 }
 \description{
-Filters out the first or last observation for each group.
+Filters the first or last observation for each by group.
 }
 \details{
 For each group (with respect to the variables specified for the

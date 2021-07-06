@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_valid_date_entry}
 \alias{is_valid_date_entry}
-\title{Check validity of the date imputation input}
+\title{Check Validity of the Date Imputation Input}
 \usage{
 is_valid_date_entry(arg)
 }

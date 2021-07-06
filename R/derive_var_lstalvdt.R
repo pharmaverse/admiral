@@ -44,29 +44,31 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflict = FALSE)
-#' library(stringr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ae")
 #' data("lb")
 #' data("adsl")
-#' ae_start <- lstalvdt_source(dataset = ae,
-#'                             date_var = AESTDTC,
-#'                             date_imputation = "first")
-#' ae_end <- lstalvdt_source(dataset = ae,
-#'                           date_var = AEENDTC,
-#'                           date_imputation = "first")
-#' lb_date <- lstalvdt_source(dataset = lb,
-#'                            date_var = LBDTC,
-#'                            filter = str_length(LBDTC) >= 10)
-#' adsl_date <- lstalvdt_source(dataset = adsl,
-#'                              date_var = TRTEDT)
 #'
-#' derive_var_lstalvdt(dm,
-#'                     ae_start,
-#'                     ae_end,
-#'                     lb_date,
-#'                     adsl_date) %>%
+#' ae_start <- lstalvdt_source(
+#'   dataset = ae,
+#'   date_var = AESTDTC,
+#'   date_imputation = "first"
+#' )
+#' ae_end <- lstalvdt_source(
+#'   dataset = ae,
+#'   date_var = AEENDTC,
+#'   date_imputation = "first"
+#' )
+#' lb_date <- lstalvdt_source(
+#'   dataset = lb,
+#'   date_var = LBDTC,
+#'   filter = nchar(LBDTC) >= 10
+#' )
+#' adsl_date <- lstalvdt_source(dataset = adsl, date_var = TRTEDT)
+#'
+#' dm %>%
+#'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
 #' # derive last alive date and traceability variables
@@ -94,7 +96,7 @@
 #' lb_date <- lstalvdt_source(
 #'   dataset = lb,
 #'   date_var = LBDTC,
-#'   filter = str_length(LBDTC) >= 10,
+#'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -112,8 +114,8 @@
 #'   )
 #' )
 #'
-#' derive_var_lstalvdt(dm,
-#'                     ae_start, ae_end, lb_date, adsl_date) %>%
+#' dm %>%
+#'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 derive_var_lstalvdt <- function(dataset,
                                 ...,

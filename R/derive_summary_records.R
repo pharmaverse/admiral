@@ -1,4 +1,4 @@
-#' Add new record within by groups using aggregation functions
+#' Add New Records Within By Groups Using Aggregation Functions
 #'
 #' @description
 #' It is not uncommon to have an analysis need whereby one needs to derive an

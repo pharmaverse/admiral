@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_summary_records.R
 \name{derive_summary_records}
 \alias{derive_summary_records}
-\title{Add new record within by groups using aggregation functions}
+\title{Add New Records Within By Groups Using Aggregation Functions}
 \usage{
 derive_summary_records(
   dataset,

@@ -1,4 +1,4 @@
-#' A helper function to create a template script
+#' Open a ADaM Template Script
 #'
 #' @param adam_name An ADaM dataset name.
 #'
@@ -34,7 +34,7 @@ use_ad_template <- function(adam_name = "adsl",
   )
 }
 
-#' List all templates provided by {admiral}
+#' List All Available ADaM Templates
 #'
 #' @author Shimeng Huang
 #'
