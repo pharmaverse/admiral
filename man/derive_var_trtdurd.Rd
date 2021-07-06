@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_trtdurd.R
 \name{derive_var_trtdurd}
 \alias{derive_var_trtdurd}
-\title{Derive Total Treatment Duration (days)}
+\title{Derive Total Treatment Duration (Days)}
 \usage{
 derive_var_trtdurd(dataset, start_date = TRTSDT, end_date = TRTEDT)
 }

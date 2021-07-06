@@ -1,4 +1,4 @@
-#' Derive BASETYPE variable
+#' Derive BASETYPE Variable
 #'
 #' Adds the `BASETYPE` variable to a dataset and duplicates records based upon
 #' the provided conditions

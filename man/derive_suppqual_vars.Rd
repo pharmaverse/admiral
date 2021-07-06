@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_suppqual_vars.R
 \name{derive_suppqual_vars}
 \alias{derive_suppqual_vars}
-\title{Join supplementary qualifier variables into the parent domain of SDTM}
+\title{Join Supplementary Qualifier Variables into the Parent SDTM Domain}
 \usage{
 derive_suppqual_vars(dataset, dataset_suppqual, domain = NULL)
 }

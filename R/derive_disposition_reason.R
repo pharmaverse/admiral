@@ -1,4 +1,4 @@
-#' Derive a disposition reason at a specific timepoint
+#' Derive a Disposition Reason at a Specific Timepoint
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dtm}
 \alias{derive_vars_dtm}
-\title{Derive/Impute a datetime from a date character vector}
+\title{Derive/Impute a Datetime from a Date Character Vector}
 \usage{
 derive_vars_dtm(
   dataset,

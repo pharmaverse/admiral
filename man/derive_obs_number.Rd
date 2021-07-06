@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_obs_number.R
 \name{derive_obs_number}
 \alias{derive_obs_number}
-\title{Adds a variable numbering the observations within by group}
+\title{Adds a Variable Numbering the Observations Within Each By Group}
 \usage{
 derive_obs_number(
   dataset,
@@ -50,7 +50,7 @@ A dataset containing all observations and variables of the input
 dataset and additionally the variable specified by the \code{new_var} parameter.
 }
 \description{
-Adds a variable numbering the observations within by group
+Adds a variable numbering the observations within each by group
 }
 \details{
 For each group (with respect to the variables specified for the

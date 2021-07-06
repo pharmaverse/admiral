@@ -1,4 +1,4 @@
-#' Derive Total Treatment Duration (days)
+#' Derive Total Treatment Duration (Days)
 #'
 #' Derives total treatment duration (days) (`TRTDURD`)
 #'

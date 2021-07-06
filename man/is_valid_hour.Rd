@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_valid_hour}
 \alias{is_valid_hour}
-\title{Check validity of the hour portion in the time input}
+\title{Check Validity of the Hour Portion in the Time Input}
 \usage{
 is_valid_hour(arg)
 }

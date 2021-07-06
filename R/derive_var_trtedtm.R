@@ -1,6 +1,6 @@
-#' Derive datetime of Last Exposure to Treatment
+#' Derive Datetime of Last Exposure to Treatment
 #'
-#' Derives datetime of Last Exposure to Treatment (`TRTEDTM`)
+#' Derives datetime of last exposure to treatment (`TRTEDTM`)
 #'
 #' @param dataset Input dataset
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_dt.R
 \name{derive_disposition_dt}
 \alias{derive_disposition_dt}
-\title{Derive a disposition date}
+\title{Derive a Disposition Date}
 \usage{
 derive_disposition_dt(
   dataset,

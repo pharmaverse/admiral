@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{impute_dtc}
 \alias{impute_dtc}
-\title{Impute partial date/time portion of a --DTC variable}
+\title{Impute Partial Date(-time) Portion of a --DTC Variable}
 \usage{
 impute_dtc(
   dtc,

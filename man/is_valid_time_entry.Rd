@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_valid_time_entry}
 \alias{is_valid_time_entry}
-\title{Check validity of the time imputation input}
+\title{Check Validity of the Time Imputation Input}
 \usage{
 is_valid_time_entry(arg)
 }

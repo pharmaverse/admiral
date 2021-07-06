@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_status.R
 \name{derive_disposition_status}
 \alias{derive_disposition_status}
-\title{Derive a disposition status at a specific timepoint}
+\title{Derive a Disposition Status at a Specific Timepoint}
 \usage{
 derive_disposition_status(
   dataset,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/user_helpers.R
 \name{use_ad_template}
 \alias{use_ad_template}
-\title{A helper function to create a template script}
+\title{Open a ADaM Template Script}
 \usage{
 use_ad_template(
   adam_name = "adsl",
@@ -18,7 +18,7 @@ use_ad_template(
 \item{open}{Whether to open the script right away.}
 }
 \description{
-A helper function to create a template script
+Open a ADaM Template Script
 }
 \examples{
 \dontrun{

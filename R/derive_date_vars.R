@@ -1,4 +1,4 @@
-#' Impute partial date/time portion of a --DTC variable
+#' Impute Partial Date(-time) Portion of a --DTC Variable
 #'
 #' Imputation partial date/time portion of a --DTC variable. based on user
 #' input.
@@ -271,7 +271,7 @@ impute_dtc <- function(dtc,
   imputed_dtc
 }
 
-#' Convert a date character vector into a Date object.
+#' Convert a Date Character Vector into a Date Object
 #'
 #' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
 #'
@@ -304,7 +304,7 @@ convert_dtc_to_dt <- function(dtc) {
   )
 }
 
-#' Convert a date character vector into a Date time object.
+#' Convert a Date Character Vector into a Datetime Object
 #'
 #' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DTM').
 #'
@@ -336,7 +336,8 @@ convert_dtc_to_dtm <- function(dtc) {
     as_iso_dttm(ymd_hms(NA))
   )
 }
-#' Derive the date imputation flag
+
+#' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag ('--DTF') comparing a date character vector
 #' ('--DTC') with a Date vector ('--DT').
@@ -375,7 +376,7 @@ compute_dtf <- function(dtc, dt) {
   )
 }
 
-#' Derive the time imputation flag
+#' Derive the Time Imputation Flag
 #'
 #' Derive the time imputation flag ('--TMF') comparing a date character vector
 #' ('--DTC') with a Datetime vector ('--DTM').
@@ -415,7 +416,7 @@ compute_tmf <- function(dtc, dtm) {
   )
 }
 
-#' Derive/Impute a date from a date character vector
+#' Derive/Impute a Date from a Date Character Vector
 #'
 #' Derive a date ('--DT') from a date character vector ('---DTC').
 #' The date can be imputed (see date_imputation parameter)
@@ -561,7 +562,7 @@ derive_vars_dt <- function(dataset,
   dataset
 }
 
-#' Derive/Impute a datetime from a date character vector
+#' Derive/Impute a Datetime from a Date Character Vector
 #'
 #' Derive a datetime object ('--DTM') from a date character vector ('---DTC').
 #' The date and time can be imputed (see date_imputation/time_imputation parameters)
