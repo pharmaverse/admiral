@@ -133,7 +133,10 @@ derive_disposition_status <- function(dataset,
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
-#' @return A `character` vector
+#' @return A `character` vector derived based on the values given in `x`:
+#'  "COMPLETED" if `x` == "COMPLETED",
+#'  "DISCONTINUED" if `x` is not "COMPLETED" or NA,
+#'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
 #' @export
