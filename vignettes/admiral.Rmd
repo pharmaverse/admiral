@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(admiral)
 ```
 
 # Main Idea
@@ -130,7 +131,6 @@ use_ad_template(
 
 A list of all available templates can be obtained by `list_all_templates()`:
 ```{r}
-library(admiral)
 list_all_templates()
 ```
 
