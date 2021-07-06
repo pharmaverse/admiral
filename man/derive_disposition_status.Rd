@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_status.R
 \name{derive_disposition_status}
 \alias{derive_disposition_status}
-\title{Derive a disposition status at a specific timepoint}
+\title{Derive a Disposition Status at a Specific Timepoint}
 \usage{
 derive_disposition_status(
   dataset,
@@ -27,19 +27,19 @@ It must contains
 
 \item{new_var}{Name of the disposition date variable.
 
-a variable name is expected (e.g. EOSSTT).}
+A variable name is expected (e.g. \code{EOSSTT}).}
 
 \item{status_var}{The variable used to derive the disposition status.
 
-A character vector is expected (e.g. DSDECOD).}
+A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
 Default: format_eoxxstt_default defined as:
-format_eoxxstt_default<-function(x){
-case_when (
-x \%in\% c("COMPLETED")~"COMPLETED",
-!(x \%in\% c("COMPLETED")) & ! is.na(x)~"DISCONTINUED",
+format_eoxxstt_default <- function(x) {
+case_when(
+x \%in\% c("COMPLETED") ~ "COMPLETED",
+!(x \%in\% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
 TRUE ~ "ONGOING"
 )
 }
@@ -52,7 +52,7 @@ one observation per patient. An error is issued otherwise.
 Permitted Values: logical expression.}
 }
 \value{
-the input dataset with the disposition status (\code{new_var}) added.
+The input dataset with the disposition status (\code{new_var}) added.
 }
 \description{
 Derive a disposition status from the the relevant records in the disposition domain.

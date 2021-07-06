@@ -2,7 +2,7 @@
 % Please edit documentation in R/warnings.R
 \name{warn_if_inconsistent_list}
 \alias{warn_if_inconsistent_list}
-\title{Warn if 2 list have not the same names or length}
+\title{Warn If Two Lists are Inconsistent}
 \usage{
 warn_if_inconsistent_list(base, compare, list_name, i = 2)
 }
@@ -20,7 +20,8 @@ the name of the list}
 a \code{warning} if the 2 lists have different names or length
 }
 \description{
-Checks if 2 list inputs have the same names and same number of elements, issue a warning otherwise.
+Checks if two list inputs have the same names and same number of elements and
+issues a warning otherwise.
 }
 \examples{
 # no warning

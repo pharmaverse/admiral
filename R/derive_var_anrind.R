@@ -42,14 +42,13 @@
 #'   derive_var_anrind() %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 derive_var_anrind <- function(dataset) {
-  assert_that(is.data.frame(dataset))
-  assert_has_variables(dataset, c("ANRLO", "ANRHI"))
+  assert_data_frame(dataset, required_vars = vars(ANRLO, ANRHI))
 
   # Temporarily add these variables to the dataset if they are not included
   has_a1lo <- "A1LO" %in% colnames(dataset)
   has_a1hi <- "A1HI" %in% colnames(dataset)
-  if (!has_a1lo) dataset$A1LO <- NA_character_
-  if (!has_a1hi) dataset$A1HI <- NA_character_
+  if (!has_a1lo) dataset[["A1LO"]] <- NA_character_
+  if (!has_a1hi) dataset[["A1HI"]] <- NA_character_
 
   result <- dataset %>%
     mutate(
@@ -66,8 +65,8 @@ derive_var_anrind <- function(dataset) {
     )
 
   # Remove the variables if they have been added above
-  if (!has_a1lo) result$A1LO <- NULL
-  if (!has_a1hi) result$A1HI <- NULL
+  if (!has_a1lo) result[["A1LO"]] <- NULL
+  if (!has_a1hi) result[["A1HI"]] <- NULL
 
   result
 }

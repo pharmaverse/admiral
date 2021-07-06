@@ -1,4 +1,4 @@
-#' Adds a variable flagging the first or last observation within each by group
+#' Adds a Variable Flagging the First or Last Observation Within Each By Group
 #'
 #' Adds a variable flagging the first or last observation within each by group
 #'
@@ -153,18 +153,14 @@ derive_extreme_flag <- function(dataset,
                                 mode,
                                 flag_filter = NULL,
                                 check_type = "warning") {
-  assert_that(
-    is.data.frame(dataset),
-    is_vars(by_vars),
-    is_order_vars(order),
-    is.character(mode),
-    is.character(check_type)
-  )
-  assert_has_variables(dataset, vars2chr(by_vars))
-  arg_match(mode, c("first", "last"))
-  arg_match(check_type, c("none", "warning", "error"))
-
-  flag_filter <- enquo(flag_filter)
+  # checking and quoting
+  new_var <- assert_symbol(enquo(new_var))
+  assert_vars(by_vars)
+  assert_order_vars(order)
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
+  assert_character_scalar(mode, values = c("first", "last"))
+  flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+  assert_character_scalar(check_type, values = c("none", "warning", "error"))
 
   # select data to consider for flagging
   if (!quo_is_null(flag_filter)) {
@@ -184,11 +180,11 @@ derive_extreme_flag <- function(dataset,
 
   if (mode == "first") {
     data <- data %>%
-      mutate(!!enquo(new_var) := if_else(temp_obs_nr == 1, "Y", NA_character_))
+      mutate(!!new_var := if_else(temp_obs_nr == 1, "Y", NA_character_))
   } else {
     data <- data %>%
       group_by(!!!by_vars) %>%
-      mutate(!!enquo(new_var) := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
+      mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
   }
 

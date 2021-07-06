@@ -44,29 +44,31 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflict = FALSE)
-#' library(stringr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ae")
 #' data("lb")
 #' data("adsl")
-#' ae_start <- lstalvdt_source(dataset = ae,
-#'                             date_var = AESTDTC,
-#'                             date_imputation = "first")
-#' ae_end <- lstalvdt_source(dataset = ae,
-#'                           date_var = AEENDTC,
-#'                           date_imputation = "first")
-#' lb_date <- lstalvdt_source(dataset = lb,
-#'                            date_var = LBDTC,
-#'                            filter = str_length(LBDTC) >= 10)
-#' adsl_date <- lstalvdt_source(dataset = adsl,
-#'                              date_var = TRTEDT)
 #'
-#' derive_var_lstalvdt(dm,
-#'                     ae_start,
-#'                     ae_end,
-#'                     lb_date,
-#'                     adsl_date) %>%
+#' ae_start <- lstalvdt_source(
+#'   dataset = ae,
+#'   date_var = AESTDTC,
+#'   date_imputation = "first"
+#' )
+#' ae_end <- lstalvdt_source(
+#'   dataset = ae,
+#'   date_var = AEENDTC,
+#'   date_imputation = "first"
+#' )
+#' lb_date <- lstalvdt_source(
+#'   dataset = lb,
+#'   date_var = LBDTC,
+#'   filter = nchar(LBDTC) >= 10
+#' )
+#' adsl_date <- lstalvdt_source(dataset = adsl, date_var = TRTEDT)
+#'
+#' dm %>%
+#'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
 #' # derive last alive date and traceability variables
@@ -94,7 +96,7 @@
 #' lb_date <- lstalvdt_source(
 #'   dataset = lb,
 #'   date_var = LBDTC,
-#'   filter = str_length(LBDTC) >= 10,
+#'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -112,13 +114,18 @@
 #'   )
 #' )
 #'
-#' derive_var_lstalvdt(dm,
-#'                     ae_start, ae_end, lb_date, adsl_date) %>%
+#' dm %>%
+#'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 derive_var_lstalvdt <- function(dataset,
                                 ...,
                                 subject_keys = vars(STUDYID, USUBJID)) {
+  assert_data_frame(dataset)
+  assert_vars(subject_keys)
+
   sources <- list(...)
+  walk(sources, validate_lstalvdt_source)
+
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     if (i > 1) {
@@ -132,8 +139,7 @@ derive_var_lstalvdt <- function(dataset,
     if (!quo_is_null(sources[[i]]$filter)) {
       add_data[[i]] <- sources[[i]]$dataset %>%
         filter(!!(sources[[i]]$filter))
-    }
-    else {
+    } else {
       add_data[[i]] <- sources[[i]]$dataset
     }
     date_var <- quo_get_expr(sources[[i]]$date_var)
@@ -147,14 +153,12 @@ derive_var_lstalvdt <- function(dataset,
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = !!date_var)
-    }
-    else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
+    } else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
       add_data[[i]] <- transmute(add_data[[i]],
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = date(!!date_var))
-    }
-    else {
+    } else {
       add_data[[i]] <- transmute(add_data[[i]],
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
@@ -165,7 +169,8 @@ derive_var_lstalvdt <- function(dataset,
     }
   }
 
-  all_data <- bind_rows(add_data) %>%
+  all_data <- add_data %>%
+    bind_rows() %>%
     filter(!is.na(LSTALVDT)) %>%
     filter_extreme(
       by_vars = subject_keys,

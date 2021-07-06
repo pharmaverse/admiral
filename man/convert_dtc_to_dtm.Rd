@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{convert_dtc_to_dtm}
 \alias{convert_dtc_to_dtm}
-\title{Convert a date character vector into a Date time object.}
+\title{Convert a Date Character Vector into a Datetime Object}
 \usage{
 convert_dtc_to_dtm(dtc)
 }

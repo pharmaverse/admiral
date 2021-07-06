@@ -23,20 +23,11 @@ example_fun <- function(flag) {
 
 example_fun(FALSE)
 
-tryCatch(
-  example_fun(NA),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(NA))
 
-tryCatch(
-  example_fun(c(TRUE, FALSE, FALSE)),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(c(TRUE, FALSE, FALSE)))
 
-tryCatch(
-  example_fun(1:10),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(1:10))
 }
 \author{
 Thomas Neitmann

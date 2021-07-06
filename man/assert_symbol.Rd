@@ -7,14 +7,14 @@
 assert_symbol(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{A function argument to be checked}
+\item{arg}{A function argument to be checked. Must be a \code{quosure}. See examples.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a symbol and returns the input
-invisibly otherwise. \code{arg} is expected to be a \code{quosure}.
+invisibly otherwise.
 }
 \description{
 Checks if an argument is a symbol
@@ -29,20 +29,11 @@ example_fun <- function(dat, var) {
 
 example_fun(dm, USUBJID)
 
-tryCatch(
-  example_fun(dm),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm))
 
-tryCatch(
-  example_fun(dm, "USUBJID"),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm, "USUBJID"))
 
-tryCatch(
-  example_fun(dm, toupper(PARAMCD)),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(dm, toupper(PARAMCD)))
 }
 \author{
 Thomas Neitmann

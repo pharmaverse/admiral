@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_vars}
 \alias{assert_vars}
-\title{Is an Argument a valid list of variables created using \code{vars()}?}
+\title{Is an Argument a List of Variables?}
 \usage{
 assert_vars(arg, optional = FALSE)
 }
@@ -26,20 +26,11 @@ example_fun <- function(by_vars) {
 
 example_fun(vars(USUBJID, PARAMCD))
 
-tryCatch(
-  example_fun(exprs(USUBJID, PARAMCD)),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(exprs(USUBJID, PARAMCD)))
 
-tryCatch(
-  example_fun(c("USUBJID", "PARAMCD", "VISIT")),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 
-tryCatch(
-  example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))),
-  error = function(e) cat(e$message, "\n")
-)
+try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
 }
 \author{
 Samia Kabi

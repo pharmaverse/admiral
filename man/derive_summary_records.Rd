@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_summary_records.R
 \name{derive_summary_records}
 \alias{derive_summary_records}
-\title{Add new record within by groups using aggregation functions}
+\title{Add New Records Within By Groups Using Aggregation Functions}
 \usage{
 derive_summary_records(
   dataset,
@@ -21,13 +21,13 @@ records. Providing the names of variables in \code{\link[=vars]{vars()}} will cr
 groupwise summary and generate summary records for the specified groups.}
 
 \item{fns}{List of formulas specifying variable to use for aggregations.
-This can include base functions like \code{mean}, \code{min}, \code{max}, \code{median}, \code{sd},
-or \code{sum} or any other user-defined aggregation function.
+This can include base functions like \code{mean()}, \code{min()}, \code{max()}, \code{median()},
+\code{sd()}, or \code{sum()} or any other user-defined aggregation function.
 For example,
 \itemize{
 \item When a summary function is same for one or more analysis variable, use
 \verb{fns = list(vars(AVAL, CHG) ~ mean}).
-\item If different summary function is required for each analysis variable,
+\item If a different summary function is required for each analysis variable,
 use \code{fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))}.
 }
 
@@ -85,7 +85,6 @@ retain those common values in the newly derived records. Otherwise new value
 will be set to \code{NA}.
 }
 \examples{
-# Sample ADEG dataset ---
 adeg <- tibble::tribble(
   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -116,7 +115,6 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
-# Sample ADVS dataset ---
 advs <- tibble::tribble(
   ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
   "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
@@ -127,10 +125,9 @@ advs <- tibble::tribble(
   "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
 )
 
-# Set new values to any variable. Here, DTYPE = MAXIMUM refer to `MAX()` record and
-# DTYPE = AVERAGE refer `MEAN()` record.
-
-# `set_values_to` must be of same length as new records
+# Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
+# and `DTYPE = AVERAGE` refers to `mean()` records.
+# `set_values_to` must be of the same length as `fns`
 derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
@@ -138,7 +135,7 @@ derive_summary_records(
   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 )
 
-# drop retained value of VSSTRESU in the derived record
+# Drop retained value of VSSTRESU in the derived record
 derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
@@ -175,4 +172,6 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
-\concept{row summary}
+\author{
+Vignesh Thanikachalam
+}

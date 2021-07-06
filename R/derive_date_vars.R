@@ -1,4 +1,4 @@
-#' Impute partial date/time portion of a --DTC variable
+#' Impute Partial Date(-time) Portion of a --DTC Variable
 #'
 #' Imputation partial date/time portion of a --DTC variable. based on user
 #' input.
@@ -139,13 +139,11 @@
 #'   date_imputation = "first"
 #' )
 #'
-impute_dtc <- function(
-  dtc,
-  date_imputation = NULL,
-  time_imputation = "00:00:00",
-  min_dates = NULL,
-  max_dates = NULL) {
-
+impute_dtc <- function(dtc,
+                       date_imputation = NULL,
+                       time_imputation = "00:00:00",
+                       min_dates = NULL,
+                       max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
   warn_if_invalid_dtc(dtc)
 
@@ -273,7 +271,7 @@ impute_dtc <- function(
   imputed_dtc
 }
 
-#' Convert a date character vector into a Date object.
+#' Convert a Date Character Vector into a Date Object
 #'
 #' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
 #'
@@ -306,7 +304,7 @@ convert_dtc_to_dt <- function(dtc) {
   )
 }
 
-#' Convert a date character vector into a Date time object.
+#' Convert a Date Character Vector into a Datetime Object
 #'
 #' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DTM').
 #'
@@ -338,7 +336,8 @@ convert_dtc_to_dtm <- function(dtc) {
     as_iso_dttm(ymd_hms(NA))
   )
 }
-#' Derive the date imputation flag
+
+#' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag ('--DTF') comparing a date character vector
 #' ('--DTC') with a Date vector ('--DT').
@@ -377,7 +376,7 @@ compute_dtf <- function(dtc, dt) {
   )
 }
 
-#' Derive the time imputation flag
+#' Derive the Time Imputation Flag
 #'
 #' Derive the time imputation flag ('--TMF') comparing a date character vector
 #' ('--DTC') with a Datetime vector ('--DTM').
@@ -417,7 +416,7 @@ compute_tmf <- function(dtc, dtm) {
   )
 }
 
-#' Derive/Impute a date from a date character vector
+#' Derive/Impute a Date from a Date Character Vector
 #'
 #' Derive a date ('--DT') from a date character vector ('---DTC').
 #' The date can be imputed (see date_imputation parameter)
@@ -520,18 +519,20 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "first",
 #'   min_dates = list(TRTSDTM)
 #' )
-derive_vars_dt <- function(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  # "02-01" or "LAST"
-  flag_imputation = TRUE,
-  min_dates = NULL,
-  max_dates = NULL) {
+derive_vars_dt <- function(dataset,
+                           new_vars_prefix,
+                           dtc,
+                           date_imputation = NULL,
+                           # "02-01" or "LAST"
+                           flag_imputation = TRUE,
+                           min_dates = NULL,
+                           max_dates = NULL) {
 
-  # Check DTC is present in input dataset
-  assert_has_variables(dataset, deparse(substitute(dtc)))
+  # check and quote parameters
+  assert_character_scalar(new_vars_prefix)
+  dtc <- assert_symbol(enquo(dtc))
+  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  assert_logical_scalar(flag_imputation)
 
   # output varname
   dt <- paste0(new_vars_prefix, "DT")
@@ -541,7 +542,7 @@ derive_vars_dt <- function(
   dataset <- dataset %>%
     mutate(
       idtc__ = impute_dtc(
-        dtc = !!enquo(dtc),
+        dtc = !!dtc,
         date_imputation = date_imputation,
         min_dates = !!enquo(min_dates),
         max_dates = !!enquo(max_dates)
@@ -555,13 +556,13 @@ derive_vars_dt <- function(
     dtf <- paste0(new_vars_prefix, "DTF")
     warn_if_vars_exist(dataset, dtf)
     dataset <- dataset %>%
-      mutate(!!sym(dtf) := compute_dtf(dtc = !!enquo(dtc), dt = !!sym(dt)))
+      mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = !!sym(dt)))
   }
 
   dataset
 }
 
-#' Derive/Impute a datetime from a date character vector
+#' Derive/Impute a Datetime from a Date Character Vector
 #'
 #' Derive a datetime object ('--DTM') from a date character vector ('---DTC').
 #' The date and time can be imputed (see date_imputation/time_imputation parameters)
@@ -635,20 +636,22 @@ derive_vars_dt <- function(
 #'   time_imputation = "last",
 #'   max_dates = list(DTHDT, DCUTDT)
 #' )
-derive_vars_dtm <- function(
-  dataset,
-  new_vars_prefix,
-  dtc,
-  date_imputation = NULL,
-  # "02-01" or "LAST"
-  time_imputation = "00:00:00",
-  # or 'FIRST' 'LAST'
-  flag_imputation = TRUE,
-  min_dates = NULL,
-  max_dates = NULL) {
+derive_vars_dtm <- function(dataset,
+                            new_vars_prefix,
+                            dtc,
+                            date_imputation = NULL,
+                            # "02-01" or "LAST"
+                            time_imputation = "00:00:00",
+                            # or 'FIRST' 'LAST'
+                            flag_imputation = TRUE,
+                            min_dates = NULL,
+                            max_dates = NULL) {
 
-  # Check DTC is present in input dataset
-  assert_has_variables(dataset, deparse(substitute(dtc)))
+  # check and quote parameters
+  assert_character_scalar(new_vars_prefix)
+  dtc <- assert_symbol(enquo(dtc))
+  assert_data_frame(dataset, required_vars = vars(!!dtc))
+  assert_logical_scalar(flag_imputation)
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
@@ -658,7 +661,7 @@ derive_vars_dtm <- function(
   dataset <- dataset %>%
     mutate(
       idtc__ = impute_dtc(
-        dtc = !!enquo(dtc),
+        dtc = !!dtc,
         date_imputation = date_imputation,
         time_imputation = time_imputation,
         min_dates = !!enquo(min_dates),
@@ -676,7 +679,7 @@ derive_vars_dtm <- function(
     dtf_exist <- dtf %in% colnames(dataset)
     if (!dtf_exist) {
       dataset <- dataset %>%
-        mutate(!!sym(dtf) := compute_dtf(dtc = !!enquo(dtc), dt = !!sym(dtm)))
+        mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = !!sym(dtm)))
     } else {
       msg <- sprintf(
         "The %s variable is already present in the input dataset and will not be re-derived.",
@@ -687,7 +690,7 @@ derive_vars_dtm <- function(
     # add --TMF variable
     warn_if_vars_exist(dataset, tmf)
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!enquo(dtc), dtm = !!sym(dtm)))
+      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm)))
   }
 
   dataset

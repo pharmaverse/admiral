@@ -71,7 +71,7 @@ squote <- function(x) {
 #'
 #' @examples
 #' "a" %!in% c("b", "v", "k")
-`%!in%` <- function(x, table) {
+`%!in%` <- function(x, table) { # nolint
   !(x %in% table)
 }
 
@@ -136,4 +136,11 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
     dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
     "^Column `.+` has different attributes on LHS and RHS of join$"
   )
+}
+
+quo_c <- function(...) {
+  inputs <- unlist(list(...), recursive = TRUE)
+  stopifnot(all(map_lgl(inputs, is_quosure)))
+  is_null <- map_lgl(inputs, quo_is_null)
+  rlang::as_quosures(inputs[!is_null])
 }

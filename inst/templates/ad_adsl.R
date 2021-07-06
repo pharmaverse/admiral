@@ -91,14 +91,14 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE")
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
   derive_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE")
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
 
   # EOS status
@@ -107,7 +107,7 @@ adsl <- dm %>%
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt,
-    filter = expr(DSCAT == "DISPOSITION EVENT")
+    filter = DSCAT == "DISPOSITION EVENT"
   ) %>%
 
   # Last retrieval date
@@ -115,7 +115,7 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
-    filter = expr(DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT")
+    filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
 
   # Death date - impute partial date to first day/month

@@ -81,6 +81,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
 derive_var_dthcaus <- function(dataset, ...) {
+  assert_data_frame(dataset)
   sources <- list(...)
   walk(sources, validate_dthcaus_source)
 
@@ -163,6 +164,8 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'  variables, e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
 #'
 #' @author Shimeng Huang
+#'
+#' @keywords source_specifications
 #'
 #' @seealso [`derive_var_dthcaus()`]
 #'
