@@ -197,9 +197,9 @@ derive_summary_records <- function(dataset,
     )
   }
 
-  filter_rows <- enquo(filter_rows)
+  filter_rows <- assert_filter_cond(enquo(filter_rows))
 
-  if (!is.null(quo_get_expr(filter_rows))) {
+  if (!quo_is_null(filter_rows)) {
     subset_ds <- dataset %>%
       group_by(!!! syms(by_vars)) %>%
       filter(!! filter_rows)

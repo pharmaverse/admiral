@@ -114,6 +114,7 @@ test_that("check `set_values_to` mapping", {
 
 test_that("Filter record within `by_vars`", {
   input <- tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
+
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
@@ -122,10 +123,14 @@ test_that("Filter record within `by_vars`", {
     set_values_to = vars(d = "MEAN"),
     drop_values_from = vars(z)
   )
-  expected_output <- tibble(x = c(rep(1, 2), rep(2, 4)),
-                            y = c(9:13, 12),
-                            z = c(1, 1, 2, 1, 1, NA),
-                            d = c(rep(NA, 5), "MEAN"))
+
+  expected_output <- tibble(
+    x = c(rep(1, 2), rep(2, 4)),
+    y = c(9:13, 12),
+    z = c(1, 1, 2, 1, 1, NA),
+    d = c(rep(NA, 5), "MEAN")
+  )
+
   expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 
   actual_output <- derive_summary_records(
@@ -137,10 +142,13 @@ test_that("Filter record within `by_vars`", {
     drop_values_from = vars(z)
   )
 
-  expected_output <- tibble(x = c(rep(1, 3), rep(2, 4)),
-                            y = c(9:10, 9.5, 11:13, 12.5),
-                            z = c(1, 1, NA, 2, 1, 1, NA),
-                            d = c(rep(NA, 2), "MEAN", rep(NA, 3), "MEAN"))
+  expected_output <- tibble(
+    x = c(rep(1, 3), rep(2, 4)),
+    y = c(9:10, 9.5, 11:13, 12.5),
+    z = c(1, 1, NA, 2, 1, 1, NA),
+    d = c(rep(NA, 2), "MEAN", rep(NA, 3), "MEAN")
+  )
+
   expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
