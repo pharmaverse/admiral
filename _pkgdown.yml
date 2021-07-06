@@ -80,6 +80,7 @@ articles:
 - title: All vignettes
   navbar: ~
   contents:
+  - admiral
   - adsl
   - occds
   - bds_finding
