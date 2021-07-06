@@ -127,9 +127,11 @@ derive_disposition_status <- function(dataset,
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
+#' @return A `character` vector
+#'
 #' @author Samia Kabi
 #' @export
-#' @keywords user_utility
+#' @keywords user_utility adsl computation
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",

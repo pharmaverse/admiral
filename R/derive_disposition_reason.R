@@ -197,14 +197,17 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` != 'COMPLETED' nor NA.
-#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` != 'COMPLETED' nor NA.
-#' e.g. DCSREAS =  format_reason_default(DSDECOD)
-#' e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' `format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' For example:
+#' `DCSREAS = format_reason_default(DSDECOD)`
+#' `DCSREASP = format_reason_default(DSDECOD, DSTERM)`
+#'
+#' @return A `character` vector
 #'
 #' @author Samia Kabi
 #' @export
-#' @keywords user_utility
+#' @keywords user_utility adsl computation
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
