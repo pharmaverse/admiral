@@ -59,7 +59,7 @@ order specified for the \code{order} parameter and the mode specified for the
 \code{mode} parameter) is included in the output dataset.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("vs")
 
 vs \%>\%

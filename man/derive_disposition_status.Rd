@@ -58,7 +58,7 @@ The input dataset with the disposition status (\code{new_var}) added.
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 

@@ -105,7 +105,7 @@ The details associated with the reason for discontinuation are derived based on
 \code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 

@@ -31,7 +31,7 @@ is less than or equal \code{A1HI}
 }
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data(vs)
 ref_ranges <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
