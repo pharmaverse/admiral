@@ -75,6 +75,9 @@ reference:
 - subtitle: Warnings
 - contents:
   - has_keyword("warning")
+- subtitle: Various
+- contents:
+  - has_keyword("dev_utility")
 
 articles:
 - title: All vignettes

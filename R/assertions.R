@@ -926,6 +926,8 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @return Logical value.
 #'
+#' @noRd
+#'
 #' @examples
 #' \dontrun{
 #' x <- list("x", "y")
@@ -950,7 +952,7 @@ on_failure(are_records_same) <- function(call, env) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}

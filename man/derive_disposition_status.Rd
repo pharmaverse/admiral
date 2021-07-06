@@ -58,7 +58,7 @@ The input dataset with the disposition status (\code{new_var}) added.
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 
@@ -85,7 +85,7 @@ format_eoxxstt1 <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-    x \%!in\% c("ADVERSE EVENT", "COMPLETED") & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+    !(x \%in\% c("ADVERSE EVENT", "COMPLETED")) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }

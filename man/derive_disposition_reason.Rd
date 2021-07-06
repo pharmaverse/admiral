@@ -105,7 +105,7 @@ The details associated with the reason for discontinuation are derived based on
 \code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 
@@ -121,7 +121,7 @@ derive_disposition_reason(
 format_dcsreas <- function(x, y = NULL) {
   out <- if (is.null(y)) x else y
   case_when(
-    x \%!in\% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
+    !(x \%in\% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
     TRUE ~ NA_character_
   )
 }

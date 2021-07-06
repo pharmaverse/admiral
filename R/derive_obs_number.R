@@ -49,7 +49,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #'
 #' vs %>%

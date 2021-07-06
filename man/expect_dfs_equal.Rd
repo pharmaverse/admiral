@@ -30,4 +30,5 @@ testthat::test_that("a missing row is detected", {
 \author{
 Thomas Neitmann
 }
-\keyword{test_helper}
+\keyword{dev_utility}
+\keyword{test_helper,}

@@ -198,6 +198,8 @@ derive_last_dose <- function(dataset,
 #' @param dose_end dose end date
 #' @param analysis_date analysis date
 #'
+#' @noRd
+#'
 #' @return index. The last dose date is then `dose_end[return_value]`
 compute_ldose_idx <- function(dose_end, analysis_date) {
   if (any(!is.na(dose_end) & !is.na(analysis_date)) && any(dose_end <= analysis_date)) {
