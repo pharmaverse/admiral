@@ -228,8 +228,6 @@ lstalvdt_source <- function(dataset,
 #'
 #' @noRd
 #'
-#' @export
-#'
 #' @return The original object.
 validate_lstalvdt_source <- function(obj) {
   assert_that(inherits(obj, "lstalvdt_source"))
