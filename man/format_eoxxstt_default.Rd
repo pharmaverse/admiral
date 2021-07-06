@@ -9,10 +9,15 @@ format_eoxxstt_default(x)
 \arguments{
 \item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 }
+\value{
+A \code{character} vector
+}
 \description{
 Define a function to map the disposition status.
 }
 \author{
 Samia Kabi
 }
+\keyword{adsl}
+\keyword{computation}
 \keyword{user_utility}

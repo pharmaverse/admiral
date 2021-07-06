@@ -39,6 +39,12 @@
 #' Permitted Values: logical expression.
 #'
 #' @return The input dataset with the disposition status (`new_var`) added.
+#' `new_var` is derived based on the values given in `status_var` and according to the format
+#'  defined by `format_new_var` (e.g. when the default format is used, the function will derive
+#'  `new_var` as:
+#'  "COMPLETED" if `status_var` == "COMPLETED",
+#'  "DISCONTINUED" if `status_var` is not "COMPLETED" or NA,
+#'  "ONGOING" otherwise).
 #'
 #' @keywords adsl
 #'
@@ -127,9 +133,11 @@ derive_disposition_status <- function(dataset,
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
+#' @return A `character` vector
+#'
 #' @author Samia Kabi
 #' @export
-#' @keywords user_utility
+#' @keywords user_utility adsl computation
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
