@@ -59,6 +59,10 @@ reference:
 - contents:
   - adsl
 
+- title: User Utilities
+- contents:
+  - has_keyword("user_utility")
+
 - title: Developer Utilities
 - subtitle: Assertions
 - contents:
@@ -69,3 +73,13 @@ reference:
 - subtitle: Warnings
 - contents:
   - has_keyword("warning")
+
+articles:
+- title: All vignettes
+  navbar: ~
+  contents:
+  - adsl
+  - occds
+  - bds_finding
+  - contributing
+  - faq
