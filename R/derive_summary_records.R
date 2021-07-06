@@ -197,7 +197,7 @@ derive_summary_records <- function(dataset,
     )
   }
 
-  filter_rows <- assert_filter_cond(enquo(filter_rows))
+  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
 
   if (!quo_is_null(filter_rows)) {
     subset_ds <- dataset %>%
