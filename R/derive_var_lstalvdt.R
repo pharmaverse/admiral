@@ -96,7 +96,7 @@
 #' lb_date <- lstalvdt_source(
 #'   dataset = lb,
 #'   date_var = LBDTC,
-#'   filter = str_length(LBDTC) >= 10,
+#'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
