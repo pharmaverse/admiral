@@ -7,6 +7,8 @@ repo:
     source: https://github.com/Roche-GSK/admiral/blob/master/
     issue: https://github.com/Roche-GSK/admiral/issues/
     user: https://github.com/
+news:
+  cran_dates: false
 reference:
 - title: Derivations
   desc: Derivations add one ore more variables or parameters to the input
@@ -59,6 +61,10 @@ reference:
 - contents:
   - adsl
 
+- title: User Utilities
+- contents:
+  - has_keyword("user_utility")
+
 - title: Developer Utilities
 - subtitle: Assertions
 - contents:
@@ -69,3 +75,17 @@ reference:
 - subtitle: Warnings
 - contents:
   - has_keyword("warning")
+- subtitle: Various
+- contents:
+  - has_keyword("dev_utility")
+
+articles:
+- title: All vignettes
+  navbar: ~
+  contents:
+  - admiral
+  - adsl
+  - occds
+  - bds_finding
+  - contributing
+  - faq

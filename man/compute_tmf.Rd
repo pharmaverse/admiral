@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{compute_tmf}
 \alias{compute_tmf}
-\title{Derive the time imputation flag}
+\title{Derive the Time Imputation Flag}
 \usage{
 compute_tmf(dtc, dtm)
 }

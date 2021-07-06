@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{compute_dtf}
 \alias{compute_dtf}
-\title{Derive the date imputation flag}
+\title{Derive the Date Imputation Flag}
 \usage{
 compute_dtf(dtc, dt)
 }

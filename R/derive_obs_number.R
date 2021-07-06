@@ -1,6 +1,6 @@
-#' Adds a variable numbering the observations within by group
+#' Adds a Variable Numbering the Observations Within Each By Group
 #'
-#' Adds a variable numbering the observations within by group
+#' Adds a variable numbering the observations within each by group
 #'
 #' @param dataset Input dataset
 #'
@@ -49,7 +49,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #'
 #' vs %>%

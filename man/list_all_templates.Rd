@@ -2,12 +2,12 @@
 % Please edit documentation in R/user_helpers.R
 \name{list_all_templates}
 \alias{list_all_templates}
-\title{List all templates provided by {admiral}}
+\title{List All Available ADaM Templates}
 \usage{
 list_all_templates()
 }
 \description{
-List all templates provided by {admiral}
+List All Available ADaM Templates
 }
 \examples{
 list_all_templates()
@@ -15,3 +15,4 @@ list_all_templates()
 \author{
 Shimeng Huang
 }
+\keyword{user_utility}

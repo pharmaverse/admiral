@@ -19,7 +19,7 @@ Authors:
   \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
   \item Samia Kabi \email{samia.kabi@roche.com}
   \item Vignesh Thanikachalam
-  \item Ondrej Slama
+  \item Ondrej Slama \email{ondrej.slama@roche.com}
   \item Shimeng Huang
 }
 

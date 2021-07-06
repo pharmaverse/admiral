@@ -277,7 +277,7 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
-#' Is an argument a filtering condition?
+#' Is an Argument a Filter Condition?
 #'
 #' @param arg Quosure - filtering condition.
 #' @param optional Logical - is the argument optional? Defaults to `FALSE`.
@@ -330,7 +330,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
-#' Is an Argument a valid list of variables created using `vars()`?
+#' Is an Argument a List of Variables?
 #'
 #' Checks if an argument is a valid list of variables created using `vars()`
 #'
@@ -394,7 +394,7 @@ assert_vars <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
-#' Is an Argument a valid list of order variables created using `vars()`?
+#' Is an Argument a List of Order Variables?
 #'
 #' Checks if an argument is a valid list of order variables created using `vars()`
 #'
@@ -629,7 +629,7 @@ on_failure(is_timeunit) <- function(call, env) {
   )
 }
 
-#' Check validity of the date imputation input
+#' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
 #' or as a keyword: "FISRT", "MID", "LAST"
@@ -663,7 +663,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
   )
 }
 
-#' Check validity of the time imputation input
+#' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
 #' or as a keyword: "FISRT", "LAST"
@@ -697,7 +697,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
   )
 }
 
-#' Check validity of the minute/second portion in the time input
+#' Check Validity of the Minute/Second Portion of the Time Input
 #'
 #' Minutes and seconds are expected to range from 0 to 59
 #'
@@ -727,7 +727,7 @@ on_failure(is_valid_sec_min) <- function(call, env) {
   )
 }
 
-#' Check validity of the hour portion in the time input
+#' Check Validity of the Hour Portion in the Time Input
 #'
 #' Hours are expected to range from 0 to 23
 #'
@@ -757,7 +757,7 @@ on_failure(is_valid_hour) <- function(call, env) {
   )
 }
 
-#' Check validity of the day portion in the date input
+#' Check Validity of the Day Portion in the Date Input
 #'
 #' Days are expected to range from 1 to 31
 #'
@@ -787,7 +787,7 @@ on_failure(is_valid_day) <- function(call, env) {
   )
 }
 
-#' Check validity of the month portion in the date input
+#' Check Validity of the Month Portion in the Date Input
 #'
 #' Days are expected to range from 1 to 12
 #'
@@ -818,7 +818,7 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-#' Is Variable-value List?
+#' Is Variable-Value List?
 #'
 #' Checks if the argument is a list of quosures where the expressions are
 #' variable-value pairs. The value can be a symbol, a string, or NA. More general
@@ -926,6 +926,8 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @return Logical value.
 #'
+#' @noRd
+#'
 #' @examples
 #' \dontrun{
 #' x <- list("x", "y")
@@ -950,7 +952,7 @@ on_failure(are_records_same) <- function(call, env) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}

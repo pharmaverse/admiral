@@ -1,5 +1,4 @@
-
-#' Derive last dose date(-time)
+#' Derive Last Dose Date(-time)
 #'
 #' @param dataset Input dataset.
 #' @param dataset_ex Input EX dataset.
@@ -198,6 +197,8 @@ derive_last_dose <- function(dataset,
 #'
 #' @param dose_end dose end date
 #' @param analysis_date analysis date
+#'
+#' @noRd
 #'
 #' @return index. The last dose date is then `dose_end[return_value]`
 compute_ldose_idx <- function(dose_end, analysis_date) {

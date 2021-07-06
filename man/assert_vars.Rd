@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_vars}
 \alias{assert_vars}
-\title{Is an Argument a valid list of variables created using \code{vars()}?}
+\title{Is an Argument a List of Variables?}
 \usage{
 assert_vars(arg, optional = FALSE)
 }

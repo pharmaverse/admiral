@@ -71,7 +71,7 @@ derive_aage <- function(dataset,
 }
 
 
-#' Derive age groups
+#' Derive Age Groups
 #'
 #' Functions for deriving standardized age groups.
 #'

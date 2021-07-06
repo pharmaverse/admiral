@@ -1,4 +1,4 @@
-#' Derive BASE
+#' Derive BASE Variable
 #'
 #' Derive the `BASE` variable in a BDS dataset
 #'
@@ -31,7 +31,7 @@ derive_var_base <- function(dataset, by_vars) {
   derive_baseline(dataset, by_vars = by_vars, source_var = AVAL, new_var = BASE)
 }
 
-#' Derive BASEC
+#' Derive BASEC Variable
 #'
 #' Derive the `BASEC` variable in a BDS dataset
 #'

@@ -1,6 +1,6 @@
-#' Derive datetime of First Exposure to Treatment
+#' Derive Datetime of First Exposure to Treatment
 #'
-#' Derives datetime of First Exposure to Treatment (`TRTSDTM`)
+#' Derives datetime of first exposure to treatment (`TRTSDTM`)
 #'
 #' @param dataset Input dataset
 #'

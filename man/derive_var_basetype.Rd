@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_basetype.R
 \name{derive_var_basetype}
 \alias{derive_var_basetype}
-\title{Derive BASETYPE variable}
+\title{Derive BASETYPE Variable}
 \usage{
 derive_var_basetype(dataset, basetypes)
 }

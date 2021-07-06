@@ -1,4 +1,4 @@
-#' Adds a variable flagging the first or last observation within each by group
+#' Adds a Variable Flagging the First or Last Observation Within Each By Group
 #'
 #' Adds a variable flagging the first or last observation within each by group
 #'

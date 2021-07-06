@@ -64,10 +64,7 @@ squote <- function(x) {
 #' @param x The values to be matched
 #' @param table The values to be matched against
 #'
-#' @rdname utils
-#' @name not_in
-#'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' "a" %!in% c("b", "v", "k")
@@ -93,6 +90,8 @@ vars2chr <- function(quosures) {
 #' @param dtm date or date-time
 #'
 #' @return character
+#'
+#' @noRd
 #'
 #' @examples
 #' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))

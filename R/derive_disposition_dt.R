@@ -1,4 +1,4 @@
-#' Derive a disposition date
+#' Derive a Disposition Date
 #'
 #' Derive a disposition status date from the the relevant records in the disposition domain.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_trtedtm.R
 \name{derive_var_trtedtm}
 \alias{derive_var_trtedtm}
-\title{Derive datetime of Last Exposure to Treatment}
+\title{Derive Datetime of Last Exposure to Treatment}
 \usage{
 derive_var_trtedtm(
   dataset,
@@ -34,7 +34,7 @@ Permitted Values: logical expression}
 The input dataset with \code{TRTEDTM} variable added
 }
 \description{
-Derives datetime of Last Exposure to Treatment (\code{TRTEDTM})
+Derives datetime of last exposure to treatment (\code{TRTEDTM})
 }
 \details{
 For each group (with respect to the variables specified for the
