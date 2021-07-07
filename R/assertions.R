@@ -41,9 +41,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 
   if (!is.data.frame(arg)) {
     err_msg <- sprintf(
-      "`%s` must be a data.frame but is %s",
+      "`%s` must be a data frame but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -108,7 +108,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a character scalar but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -172,7 +172,7 @@ assert_character_vector <- function(arg, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a character vector but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -208,11 +208,10 @@ assert_character_vector <- function(arg, optional = FALSE) {
 #' try(example_fun(1:10))
 assert_logical_scalar <- function(arg) {
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
-    is <- if (length(arg) > 1L) friendly_type(type_of(arg)) else backquote(arg)
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
       arg_name(substitute(arg)),
-      is
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -269,7 +268,7 @@ assert_symbol <- function(arg, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a symbol but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(quo_get_expr(arg)))
+      what_is_it(quo_get_expr(arg))
     )
     abort(err_msg)
   }
@@ -320,9 +319,9 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 
   if (provided & !quo_is_call(arg)) {
     err_msg <- sprintf(
-      "`%s` is not a filter condition but %s",
+      "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(quo_get_expr(arg)))
+      what_is_it(quo_get_expr(arg))
     )
     abort(err_msg)
   }
@@ -498,10 +497,10 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 
   if (!rlang::is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
     err_msg <- sprintf(
-      "`%s` must be a %s integer scalar but is %s",
+      "`%s` must be %s integer scalar but is %s",
       arg_name(substitute(arg)),
-      if (subset == "none") "\b\ban" else subset,
-      if (length(arg) == 1L) backquote(arg) else friendly_type(typeof(arg))
+      if (subset == "none") "an" else paste("a", subset),
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -518,8 +517,9 @@ assert_named_exprs <- function(arg, optional = FALSE) {
 
   if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
     err_msg <- sprintf(
-      "`%s` is not a named list of expressions created using `exprs()`",
-      arg_name(substitute(arg))
+      "`%s` must be a named list of expressions created using `exprs()` but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
     )
     abort(err_msg)
   }

@@ -143,3 +143,27 @@ quo_c <- function(...) {
   is_null <- map_lgl(inputs, quo_is_null)
   rlang::as_quosures(inputs[!is_null])
 }
+
+what_is_it <- function(x) {
+  if (is.null(x)) {
+    "`NULL`"
+  } else if (is.factor(x)){
+    "a factor"
+  } else if (is.symbol(x)) {
+    "a symbol"
+  } else if (isS4(x)) {
+    sprintf("a S4 object of class '%s'", class(x)[1L])
+  } else if (is.atomic(x) && length(x) == 1L) {
+    if (is.character(x)) {
+      paste0("`\"", x, "\"`")
+    } else {
+      paste0("`", x, "`")
+    }
+  } else if (is.atomic(x) || class(x)[1L] == "list") {
+    rlang::friendly_type(typeof(x))
+  } else if (is.data.frame(x)) {
+    "a data frame"
+  } else {
+    sprintf("an object of class '%s'", class(x)[1L])
+  }
+}
