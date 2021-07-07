@@ -8,15 +8,18 @@
 #'   "SCN" variable will be created.
 #'
 #'   For each record in `dataset`, the "NAM" variable takes the value of
-#'   `QUERY_NAME` if the value of `TERM_NAME` in `queries` matches the value
-#'   in the `TERM_LEVEL` column of `dataset`. The "CD", "SC", and "SCN"
-#'   variables are derived accordingly based on `QUERY_ID`, `QUERY_SCOPE`, and
-#'   `QUERY_SCOPE_NUM` respectively, whenever not missing.
+#'   `QUERY_NAME` if the value of `TERM_NAME` or `TERM_ID` in `queries` matches
+#'   the value of the respective TERM_LEVEL in `dataset`.
+#'   Note that `TERM_NAME` in `queries` dataset may be NA only when `TERM_ID`
+#'   is non-NA and vice versa.
+#'   The "CD", "SC", and "SCN" variables are derived accordingly based on
+#'   `QUERY_ID`, `QUERY_SCOPE`, and `QUERY_SCOPE_NUM` respectively,
+#'   whenever not missing.
 #'
 #' @param dataset Input dataset.
 #'
 #' @param queries A data.frame containing required columns `VAR_PREFIX`,
-#' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, and optional columns
+#' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns
 #' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
 #'
 #'   The content of the dataset will be verified by [assert_valid_queries()].
@@ -47,11 +50,9 @@
 #' derive_query_vars(adae, queries)
 derive_query_vars <- function(dataset, queries) {
 
-  assert_that(
-    is.data.frame(dataset),
-    is.data.frame(queries)
-  )
+  assert_data_frame(queries)
   assert_valid_queries(queries, deparse(substitute(queries)))
+  assert_data_frame(dataset, vars(!!!syms(unique(queries$TERM_LEVEL))))
 
   # replace all "" by NA
   queries <- queries %>%

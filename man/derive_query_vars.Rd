@@ -10,7 +10,7 @@ derive_query_vars(dataset, queries)
 \item{dataset}{Input dataset.}
 
 \item{queries}{A data.frame containing required columns \code{VAR_PREFIX},
-\code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, and optional columns
+\code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}, and optional columns
 \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
 
 The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
@@ -30,10 +30,13 @@ be created; if \code{QUERY_SCOPE_NUM} is not "" or NA, then the corresponding
 "SCN" variable will be created.
 
 For each record in \code{dataset}, the "NAM" variable takes the value of
-\code{QUERY_NAME} if the value of \code{TERM_NAME} in \code{queries} matches the value
-in the \code{TERM_LEVEL} column of \code{dataset}. The "CD", "SC", and "SCN"
-variables are derived accordingly based on \code{QUERY_ID}, \code{QUERY_SCOPE}, and
-\code{QUERY_SCOPE_NUM} respectively, whenever not missing.
+\code{QUERY_NAME} if the value of \code{TERM_NAME} or \code{TERM_ID} in \code{queries} matches
+the value of the respective TERM_LEVEL in \code{dataset}.
+Note that \code{TERM_NAME} in \code{queries} dataset may be NA only when \code{TERM_ID}
+is non-NA and vice versa.
+The "CD", "SC", and "SCN" variables are derived accordingly based on
+\code{QUERY_ID}, \code{QUERY_SCOPE}, and \code{QUERY_SCOPE_NUM} respectively,
+whenever not missing.
 }
 \examples{
 data("queries")
