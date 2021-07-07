@@ -51,5 +51,14 @@ globalVariables(c(
   "temp_obs_nr",
   "temp_source_nr",
   "temp_date",
-  "."
+  "VAR_PREFIX",
+  "QUERY_NAME",
+  "QUERY_ID",
+  "QUERY_SCOPE",
+  "QUERY_SCOPE_NUM",
+  ".",
+  "CD",
+  "SC",
+  "SCN",
+  "value"
 ))

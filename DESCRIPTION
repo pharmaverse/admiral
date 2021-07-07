@@ -27,7 +27,8 @@ Imports:
     readxl,
     rlang,
     stringr,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests:
     devtools,
     diffdf,
