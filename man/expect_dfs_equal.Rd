@@ -2,7 +2,7 @@
 % Please edit documentation in R/test_helpers.R
 \name{expect_dfs_equal}
 \alias{expect_dfs_equal}
-\title{Expectation: Are Two Datasets Equal}
+\title{Expectation: Are Two Datasets Equal?}
 \usage{
 expect_dfs_equal(base, compare, keys, ...)
 }
@@ -30,4 +30,5 @@ testthat::test_that("a missing row is detected", {
 \author{
 Thomas Neitmann
 }
-\keyword{test_helper}
+\keyword{dev_utility}
+\keyword{test_helper,}

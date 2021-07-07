@@ -64,14 +64,11 @@ squote <- function(x) {
 #' @param x The values to be matched
 #' @param table The values to be matched against
 #'
-#' @rdname utils
-#' @name not_in
-#'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' "a" %!in% c("b", "v", "k")
-`%!in%` <- function(x, table) {
+`%!in%` <- function(x, table) { # nolint
   !(x %in% table)
 }
 
@@ -93,6 +90,8 @@ vars2chr <- function(quosures) {
 #' @param dtm date or date-time
 #'
 #' @return character
+#'
+#' @noRd
 #'
 #' @examples
 #' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
@@ -136,4 +135,11 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
     dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
     "^Column `.+` has different attributes on LHS and RHS of join$"
   )
+}
+
+quo_c <- function(...) {
+  inputs <- unlist(list(...), recursive = TRUE)
+  stopifnot(all(map_lgl(inputs, is_quosure)))
+  is_null <- map_lgl(inputs, quo_is_null)
+  rlang::as_quosures(inputs[!is_null])
 }

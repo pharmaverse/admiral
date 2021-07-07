@@ -81,6 +81,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
 derive_var_dthcaus <- function(dataset, ...) {
+  assert_data_frame(dataset)
   sources <- list(...)
   walk(sources, validate_dthcaus_source)
 
@@ -164,6 +165,8 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'
 #' @author Shimeng Huang
 #'
+#' @keywords source_specifications
+#'
 #' @seealso [`derive_var_dthcaus()`]
 #'
 #' @export
@@ -192,6 +195,8 @@ dthcaus_source <- function(dataset,
 #' @param x An object to be validated.
 #'
 #' @author Shimeng Huang
+#'
+#' @noRd
 #'
 #' @return The original object.
 validate_dthcaus_source <- function(x) {

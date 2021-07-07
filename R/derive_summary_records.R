@@ -1,4 +1,4 @@
-#' Add new record within by groups using aggregation functions
+#' Add New Records Within By Groups Using Aggregation Functions
 #'
 #' @description
 #' It is not uncommon to have an analysis need whereby one needs to derive an
@@ -16,13 +16,13 @@
 #'   records. Providing the names of variables in [vars()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #' @param fns List of formulas specifying variable to use for aggregations.
-#'   This can include base functions like `mean`, `min`, `max`, `median`, `sd`,
-#'   or `sum` or any other user-defined aggregation function.
+#'   This can include base functions like `mean()`, `min()`, `max()`, `median()`,
+#'    `sd()`, or `sum()` or any other user-defined aggregation function.
 #'   For example,
 #'
 #'   + When a summary function is same for one or more analysis variable, use
 #'   `fns = list(vars(AVAL, CHG) ~ mean`).
-#'   + If different summary function is required for each analysis variable,
+#'   + If a different summary function is required for each analysis variable,
 #'   use `fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))`.
 #'
 #'   In general,
@@ -32,6 +32,17 @@
 #'
 #'   In the formula representation e.g., `CHG ~ sum(., na.rm = TRUE)`, a `.`
 #'   serves as the data to be summarized which refers to the variable `CHG`.
+#' @param filter_rows Filter condition as logical expression to apply during
+#'   summary calculation. By default, filtering expressions are computed within
+#'   `by_vars` as this will help when an aggregating, lagging, or ranking
+#'   function is involved.
+#'
+#'   For example,
+#'
+#'   + `filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all AVAL
+#'   values greater than mean of AVAL with in `by_vars`.
+#'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   than 2.
 #' @param set_values_to A list of variable name-value pairs. Use this argument
 #'   if you need to change the values of any newly derived records. Always new
 #'   values in `set_values_to` should be equal to the length of analysis
@@ -47,14 +58,13 @@
 #' @param drop_values_from Providing the names of variables in [vars()]
 #'   will drop values and set as missing.
 #'
-#' @family row summary
+#' @author Vignesh Thanikachalam
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
 #' @export
 #'
 #' @examples
-#' # Sample ADEG dataset ---
 #' adeg <- tibble::tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
 #'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -85,7 +95,6 @@
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
-#' # Sample ADVS dataset ---
 #' advs <- tibble::tribble(
 #'   ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
 #'   "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
@@ -96,10 +105,9 @@
 #'   "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
 #' )
 #'
-#' # Set new values to any variable. Here, DTYPE = MAXIMUM refer to `MAX()` record and
-#' # DTYPE = AVERAGE refer `MEAN()` record.
-#'
-#' # `set_values_to` must be of same length as new records
+#' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
+#' # and `DTYPE = AVERAGE` refers to `mean()` records.
+#' # `set_values_to` must be of the same length as `fns`
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -107,7 +115,7 @@
 #'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 #' )
 #'
-#' # drop retained value of VSSTRESU in the derived record
+#' # Drop retained value of VSSTRESU in the derived record
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -116,21 +124,45 @@
 #'   drop_values_from = vars(VSSTRESU)
 #' )
 #'
+#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+#' adeg <- tibble::tribble(
+#'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
+#'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
+#'   "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
+#'   "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
+#'   "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
+#'   "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
+#'   "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
+#'   "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
+#'   "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
+#'   "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
+#'   "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
+#'   "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
+#'   "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
+#'   "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
+#'   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
+#')
+#'
+#' # Summarize the average of AVAL for AVISIT records greater than 2
+#' derive_summary_records(
+#'   adeg,
+#'   by_vars = vars(USUBJID, PARAM, AVISIT),
+#'   fns = list(AVAL ~ mean(., na.rm = TRUE)),
+#'   filter_rows = dplyr::n() > 2,
+#'   set_values_to = vars(DTYPE = "AVERAGE")
+#' )
 derive_summary_records <- function(dataset,
                                    by_vars,
                                    fns,
+                                   filter_rows = NULL,
                                    set_values_to = NULL,
                                    drop_values_from = NULL) {
-
-  # Is quosure?
-  assert_that(is_vars(by_vars))
-  if (!is.null(drop_values_from)) assert_that(is_vars(drop_values_from))
+  assert_vars(by_vars)
+  assert_vars(drop_values_from, optional = TRUE)
+  assert_data_frame(dataset, required_vars = quo_c(by_vars, drop_values_from))
 
   by_vars <- vars2chr(by_vars)
   drop_values_from <- vars2chr(drop_values_from)
-
-  # Assert variable names from input dataset
-  assert_has_variables(dataset, c(by_vars, drop_values_from))
 
   # Manipulate functions as direct call for each analysis variable
   # Returns: A list of function call with attributes "variable" and "stats"
@@ -141,10 +173,10 @@ derive_summary_records <- function(dataset,
 
   # Get variable values that are constant across the grouped records,
   # that do not change
-  keep_vars <- setdiff(names(dataset),
-                       union(
-                         drop_values_from(dataset, by_vars),
-                         drop_values_from))
+  keep_vars <- setdiff(
+    names(dataset),
+    union(drop_values_from(dataset, by_vars), drop_values_from)
+  )
   # For mutate input
   set_values <- NULL
 
@@ -161,7 +193,18 @@ derive_summary_records <- function(dataset,
 
     # Check new values and derived records have same length
     assert_that(
-      are_records_same(set_values, funs, x_arg = "set_values_to", y_arg = "fns"))
+      are_records_same(set_values, funs, x_arg = "set_values_to", y_arg = "fns")
+    )
+  }
+
+  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
+
+  if (!quo_is_null(filter_rows)) {
+    subset_ds <- dataset %>%
+      group_by(!!! syms(by_vars)) %>%
+      filter(!! filter_rows)
+  } else {
+    subset_ds <- dataset
   }
 
   # Summaries the analysis value and bind to the original dataset
@@ -171,11 +214,11 @@ derive_summary_records <- function(dataset,
       function(.x) {
         # Get unique values by grouping variable and do a left join with
         # summarised data
-        dataset %>%
+        subset_ds %>%
           distinct(!!! syms(by_vars), .keep_all = TRUE) %>%
           select(!!! syms(keep_vars)) %>%
           left_join(
-            dataset %>%
+            subset_ds %>%
               group_by(!!! syms(by_vars)) %>%
               summarise(!!! funs[.x]) %>%
               mutate(!!! set_values[[.x]]),
@@ -213,7 +256,7 @@ as_inlined_function <- function(funs, env) {
   body(fn) <- expr({
     # Transform the lambda body into a maskable quosure inheriting
     # from the execution environment
-    `_quo` <- rlang::quo(!!body(fn))
+    `_quo` <- rlang::quo(!!body(fn)) # nolint
 
     # Evaluate the quosure in the mask
     rlang::eval_bare(`_quo`, base::parent.frame())
@@ -253,7 +296,6 @@ as_fun_list <- function(.funs, .env) {
       }
       .x <- as_inlined_function(.x, env = .env)
     } else if (is_character(rhs) || is_symbol(rhs)) {
-      # fn <- get(rhs, .env, mode = "function")
       rhs <- as_string(rhs)
       fn <- rlang::as_closure(rhs)
       .x <- structure(fn, stats = as_string(rhs))

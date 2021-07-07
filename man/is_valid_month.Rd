@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_valid_month}
 \alias{is_valid_month}
-\title{Check validity of the month portion in the date input}
+\title{Check Validity of the Month Portion in the Date Input}
 \usage{
 is_valid_month(arg)
 }

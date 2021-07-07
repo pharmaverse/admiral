@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_varval_list}
 \alias{is_varval_list}
-\title{Is Variable-value List?}
+\title{Is Variable-Value List?}
 \usage{
 is_varval_list(arg)
 }

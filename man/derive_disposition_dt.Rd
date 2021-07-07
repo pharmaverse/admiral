@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_dt.R
 \name{derive_disposition_dt}
 \alias{derive_disposition_dt}
-\title{Derive a disposition date}
+\title{Derive a Disposition Date}
 \usage{
 derive_disposition_dt(
   dataset,
@@ -66,7 +66,7 @@ derive_disposition_dt(
   dataset_ds = ds,
   new_var = FRVDT,
   dtc = DSSTDTC,
-  filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+  filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
 )
 }
 \author{

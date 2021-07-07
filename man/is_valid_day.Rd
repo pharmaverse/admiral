@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{is_valid_day}
 \alias{is_valid_day}
-\title{Check validity of the day portion in the date input}
+\title{Check Validity of the Day Portion in the Date Input}
 \usage{
 is_valid_day(arg)
 }

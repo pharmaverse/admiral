@@ -1,4 +1,4 @@
-#' Derive a disposition reason at a specific timepoint
+#' Derive a Disposition Reason at a Specific Timepoint
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
@@ -95,7 +95,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")
 #'
@@ -111,7 +111,7 @@
 #' format_dcsreas <- function(x, y = NULL) {
 #'   out <- if (is.null(y)) x else y
 #'   case_when(
-#'     x %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
+#'     !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
 #'     TRUE ~ NA_character_
 #'   )
 #' }
@@ -133,15 +133,18 @@ derive_disposition_reason <- function(dataset,
                                       reason_var_spe = NULL,
                                       format_new_vars = format_reason_default,
                                       filter_ds) {
-  new_var <- enquo(new_var)
-  reason_var <- enquo(reason_var)
-  new_var_spe <- enquo(new_var_spe)
-  reason_var_spe <- enquo(reason_var_spe)
-  filter_ds <- enquo(filter_ds)
 
-  # Checks
+  new_var <- assert_symbol(enquo(new_var))
+  reason_var <- assert_symbol(enquo(reason_var))
+  new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
+  reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
+  assert_that(is.function(format_new_vars))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
+  assert_data_frame(dataset)
+  assert_data_frame(dataset_ds)
   warn_if_vars_exist(dataset, quo_text(new_var))
-  assert_that(is.data.frame(dataset_ds))
+
+  # Additional checks
   if (!quo_is_null(new_var_spe)) {
     if (!quo_is_null(reason_var_spe)) {
       statusvar <- c(quo_text(reason_var), quo_text(reason_var_spe))
@@ -192,12 +195,19 @@ derive_disposition_reason <- function(dataset,
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
 #' if required (e.g. `DSTERM`).
+#'
 #' @details
-#' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` != 'COMPLETED' nor NA.
-#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` != 'COMPLETED' nor NA.
-#' e.g. DCSREAS =  format_reason_default(DSDECOD)
-#' e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
-
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' `format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' For example:
+#' `DCSREAS = format_reason_default(DSDECOD)`
+#' `DCSREASP = format_reason_default(DSDECOD, DSTERM)`
+#'
+#' @return A `character` vector
+#'
+#' @author Samia Kabi
+#' @export
+#' @keywords user_utility adsl computation
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)

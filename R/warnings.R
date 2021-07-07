@@ -145,9 +145,10 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
   }
 }
 
-#' Warn if 2 list have not the same names or length
+#' Warn If Two Lists are Inconsistent
 #'
-#' Checks if 2 list inputs have the same names and same number of elements, issue a warning otherwise.
+#' Checks if two list inputs have the same names and same number of elements and
+#' issues a warning otherwise.
 #'
 #' @param base A named list
 #'

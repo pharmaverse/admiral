@@ -33,3 +33,4 @@ get_duplicates_dataset()
 \author{
 Thomas Neitmann
 }
+\keyword{user_utility}

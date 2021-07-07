@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_baseline.R
 \name{derive_var_base}
 \alias{derive_var_base}
-\title{Derive BASE}
+\title{Derive BASE Variable}
 \usage{
 derive_var_base(dataset, by_vars)
 }

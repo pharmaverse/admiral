@@ -18,6 +18,8 @@
 #' has been thrown, the dataset of the first error can no longer be accessed (unless
 #' it has been saved in a variable).
 #'
+#' @keywords user_utility
+#'
 #' @examples
 #' data(adsl)
 #'
@@ -38,7 +40,7 @@ get_duplicates_dataset <- function() {
 #'   records in which to look for duplicates
 #'
 #' @export
-#'
+#' @keywords dev_utility
 #' @author Thomas Neitmann
 #'
 #' @examples
@@ -77,7 +79,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
 #'
 #' @export
-#'
+#' @keywords dev_utility
 #' @author Thomas Neitmann
 #'
 #' @examples
@@ -89,7 +91,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
 signal_duplicate_records <- function(dataset,
                                      by_vars,
-                                     msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))),
+                                     msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))), # nolint
                                      cnd_type = "error") {
   assert_that(
     is.data.frame(dataset),

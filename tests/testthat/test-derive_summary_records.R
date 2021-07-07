@@ -53,7 +53,7 @@ test_that("`fns` accepts single forumula without wrapping into list", {
   expected_output <- tibble(x = rep(1:2, each = 3),
                y = c(9:10, 9.5, 11:12, 11.5),
                z = c(101:102, NA, 103:104, NA))
-  expect_equal(actual_output, expected_output, kesy = c("x", "y", "z"))
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
 test_that("`fns` as inlined", {
@@ -66,7 +66,7 @@ test_that("`fns` as inlined", {
   expected_output <- tibble(x = rep(1:2, each = 3),
                y = c(9:10, 9.5, 11:12, 11.5),
                z = c(101:102, NA, 103:104, NA))
-  expect_equal(actual_output, expected_output, kesy = c("x", "y", "z"))
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
 test_that("set new value to a derived record", {
@@ -80,7 +80,7 @@ test_that("set new value to a derived record", {
   expected_output <- tibble(x = rep(1:2, each = 3),
                y = c(9:10, 9.5, 11:12, 11.5),
                z = c(NA, NA, "MEAN", NA, NA, "MEAN"))
-  expect_equal(actual_output, expected_output, kesy = c("x", "y", "z"))
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
 test_that("drop a value from derived record", {
@@ -96,7 +96,7 @@ test_that("drop a value from derived record", {
                y = c(9:10, 9.5, 11:12, 11.5),
                z = c(1, 1, NA, 1, 1, NA),
                d = c(NA, NA, "MEAN", NA, NA, "MEAN"))
-  expect_equal(actual_output, expected_output, kesy = c("x", "y", "z"))
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
 test_that("check `set_values_to` mapping", {
@@ -112,6 +112,46 @@ test_that("check `set_values_to` mapping", {
   expect_equal(actual_output$d, tf)
 })
 
+test_that("Filter record within `by_vars`", {
+  input <- tibble(x = c(rep(1:2, each = 2), 2), y = 9:13, z = c(1, 1, 2, 1, 1))
+
+  actual_output <- derive_summary_records(
+    input,
+    by_vars = vars(x),
+    fns = list(y ~ mean),
+    filter = n() > 2,
+    set_values_to = vars(d = "MEAN"),
+    drop_values_from = vars(z)
+  )
+
+  expected_output <- tibble(
+    x = c(rep(1, 2), rep(2, 4)),
+    y = c(9:13, 12),
+    z = c(1, 1, 2, 1, 1, NA),
+    d = c(rep(NA, 5), "MEAN")
+  )
+
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
+
+  actual_output <- derive_summary_records(
+    input,
+    by_vars = vars(x),
+    fns = list(y ~ mean),
+    filter = z == 1,
+    set_values_to = vars(d = "MEAN"),
+    drop_values_from = vars(z)
+  )
+
+  expected_output <- tibble(
+    x = c(rep(1, 3), rep(2, 4)),
+    y = c(9:10, 9.5, 11:13, 12.5),
+    z = c(1, 1, NA, 2, 1, 1, NA),
+    d = c(rep(NA, 2), "MEAN", rep(NA, 3), "MEAN")
+  )
+
+  expect_equal(actual_output, expected_output, keys = c("x", "y", "z"))
+})
+
 # Errors ---
 
 test_that("Errors", {
@@ -122,14 +162,18 @@ test_that("Errors", {
     derive_summary_records(
       input,
       by_vars = "x",
-      fns = list(z ~ mean)))
+      fns = list(z ~ mean)
+    )
+  )
 
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
       fns = list(z ~ mean),
-      drop_values_from = "z"))
+      drop_values_from = "z"
+    )
+  )
 
   # Is by_vars and drop_values_from exits in input dataset?
   expect_error(
@@ -137,21 +181,27 @@ test_that("Errors", {
       input,
       by_vars = vars(a),
       fns = list(z ~ mean),
-      drop_values_from = vars(b)))
+      drop_values_from = vars(b)
+    )
+  )
 
   # Can't have multiple function for a single analysis variable
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z ~ list(mean, sum))))
+      fns = list(z ~ list(mean, sum))
+    )
+  )
 
   # check function must be a formula
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z = mean)))
+      fns = list(z = mean)
+    )
+  )
 
   # Is `set_values_to` is a quosures?
   expect_error(
@@ -159,7 +209,9 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ mean),
-      set_values_to = list(d = "a")))
+      set_values_to = list(d = "a")
+    )
+  )
 
   # Is length of `set_values_to` equal to derived records within a `by_vars`?
   expect_error(
@@ -167,7 +219,9 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ mean, z ~ sum),
-      set_values_to = vars(d = "a")))
+      set_values_to = vars(d = "a")
+    )
+  )
 
   # Problem with handling RHS of `fns` argument
   expect_error(
@@ -175,7 +229,7 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       fns = list(z ~ vars(mean, sum)),
-      set_values_to = vars(d = "a")))
-
+      set_values_to = vars(d = "a")
+    )
+  )
 })
-

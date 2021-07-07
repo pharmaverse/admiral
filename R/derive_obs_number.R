@@ -1,6 +1,6 @@
-#' Adds a variable numbering the observations within by group
+#' Adds a Variable Numbering the Observations Within Each By Group
 #'
-#' Adds a variable numbering the observations within by group
+#' Adds a variable numbering the observations within each by group
 #'
 #' @param dataset Input dataset
 #'
@@ -49,7 +49,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #'
 #' vs %>%
@@ -64,7 +64,23 @@ derive_obs_number <- function(dataset,
                               order = NULL,
                               by_vars = NULL,
                               check_type = "none") {
-  arg_match(check_type, c("none", "warning", "error"))
+  # checks and quoting
+  new_var <- assert_symbol(enquo(new_var))
+  assert_vars(by_vars, optional = TRUE)
+  assert_order_vars(order, optional = TRUE)
+  if (!is.null(by_vars)) {
+    required_vars <- by_vars
+  }
+  else {
+    required_vars <- NULL
+  }
+  if (!is.null(order)) {
+    required_vars <- vars(!!!required_vars, !!!extract_vars(order))
+  }
+  assert_data_frame(dataset, required_vars = required_vars)
+  assert_character_scalar(check_type, values = c("none", "warning", "error"))
+
+  # derivation
   data <- dataset
 
   if (!is.null(by_vars) | !is.null(order)) {

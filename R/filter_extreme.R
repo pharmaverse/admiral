@@ -1,6 +1,6 @@
-#' Filter out the first or last observation for each group
+#' Filter the First or Last Observation for Each By Group
 #'
-#' Filters out the first or last observation for each group.
+#' Filters the first or last observation for each by group.
 #'
 #' @param dataset Input dataset
 #'

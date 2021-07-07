@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_extreme_flag.R
 \name{derive_extreme_flag}
 \alias{derive_extreme_flag}
-\title{Adds a variable flagging the first or last observation within each by group}
+\title{Adds a Variable Flagging the First or Last Observation Within Each By Group}
 \usage{
 derive_extreme_flag(
   dataset,
