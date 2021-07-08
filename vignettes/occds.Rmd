@@ -121,6 +121,7 @@ adae <- adae %>%
   )
 ```
 
+See also [Date and Time Imputation](imputation.html).
 
 ### Derive Durations {#duration}
 
