@@ -1,4 +1,4 @@
-#' Open a ADaM Template Script
+#' Open an ADaM Template Script
 #'
 #' @param adam_name An ADaM dataset name.
 #'
@@ -23,6 +23,14 @@ use_ad_template <- function(adam_name = "adsl",
     abort("Required package {usethis} is not installed.")
   }
 
+  if (!toupper(adam_name) %in% list_all_templates()) {
+    err_msg <- paste0(
+      sprintf("No template for '%s' available.\n", toupper(adam_name)),
+      "ℹ Run `list_all_templates()` to get a list of all available ADaM templates."
+    )
+    abort(err_msg)
+  }
+
   usethis::use_template(
     template = paste0("ad_", tolower(adam_name), ".R"),
     save_as = save_path,
@@ -42,11 +50,14 @@ use_ad_template <- function(adam_name = "adsl",
 #' @examples
 #' list_all_templates()
 list_all_templates <- function() {
-  all_tpl <- list.files(system.file("templates", package = "admiral")) %>%
+  list.files(system.file("templates", package = "admiral")) %>%
     str_remove(., ".R$") %>%
     str_remove(., "^ad_") %>%
     toupper(.) %>%
-    paste0("\U2022 ", .)
-  cat("Existing templates: \n")
-  cat(all_tpl, sep = "\n")
+    structure(class = c("adam_templates", "character"))
+}
+
+print.adam_templates <- function(x, ...) {
+  cat("Existing templates:\n")
+  cat(paste0("\U2022 ", x), sep = "\n")
 }
