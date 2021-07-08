@@ -252,7 +252,8 @@ impute_dtc <- function(dtc,
                                tz = "GMT")
       imputed_dtc <- if_else(min_dtc <= min_date_iso & min_date_iso <= max_dtc,
                              pmax(imputed_dtc, min_date_iso),
-                             imputed_dtc)
+                             imputed_dtc,
+                             missing = imputed_dtc)
     }
   }
   if (!is.null(max_dates)) {
@@ -265,7 +266,8 @@ impute_dtc <- function(dtc,
                                tz = "GMT")
       imputed_dtc <- if_else(min_dtc <= max_date_iso & max_date_iso <= max_dtc,
                              pmin(imputed_dtc, max_date_iso),
-                             imputed_dtc)
+                             imputed_dtc,
+                             missing = imputed_dtc)
     }
   }
   imputed_dtc
