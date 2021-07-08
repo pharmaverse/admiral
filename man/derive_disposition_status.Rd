@@ -53,6 +53,12 @@ Permitted Values: logical expression.}
 }
 \value{
 The input dataset with the disposition status (\code{new_var}) added.
+\code{new_var} is derived based on the values given in \code{status_var} and according to the format
+defined by \code{format_new_var} (e.g. when the default format is used, the function will derive
+\code{new_var} as:
+"COMPLETED" if \code{status_var} == "COMPLETED",
+"DISCONTINUED" if \code{status_var} is not "COMPLETED" or NA,
+"ONGOING" otherwise).
 }
 \description{
 Derive a disposition status from the the relevant records in the disposition domain.
