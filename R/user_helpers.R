@@ -13,16 +13,13 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' use_ad_template(
-#'   adam_name = "adsl",
-#'   save_path = "./ad_adsl.R")
+#' if (interactive()) {
+#'   use_ad_template("adsl")
 #' }
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
                             open = interactive()) {
-
-  if (!requireNamespace("usethis", quiet = TRUE)) {
+  if (!requireNamespace("usethis", quietly = TRUE)) {
     abort("Required package {usethis} is not installed.")
   }
 

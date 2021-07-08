@@ -21,10 +21,8 @@ use_ad_template(
 Open a ADaM Template Script
 }
 \examples{
-\dontrun{
-use_ad_template(
-  adam_name = "adsl",
-  save_path = "./ad_adsl.R")
+if (interactive()) {
+  use_ad_template("adsl")
 }
 }
 \author{
