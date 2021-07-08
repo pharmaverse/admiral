@@ -10,7 +10,10 @@ format_eoxxstt_default(x)
 \item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 }
 \value{
-A \code{character} vector
+A \code{character} vector derived based on the values given in \code{x}:
+"COMPLETED" if \code{x} == "COMPLETED",
+"DISCONTINUED" if \code{x} is not "COMPLETED" or NA,
+"ONGOING" otherwise.
 }
 \description{
 Define a function to map the disposition status.
