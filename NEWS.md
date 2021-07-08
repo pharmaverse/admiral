@@ -1,6 +1,6 @@
 # admiral 0.2.1
 
-- Fixed a bug in `use_ad_template()` that prevented the function to be usable (#326)
+- Fixed a critical bug in `use_ad_template()` that prevented the function from being usable at all (#326)
 
 # admiral 0.2.0
 
