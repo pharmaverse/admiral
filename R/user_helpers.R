@@ -28,7 +28,7 @@ use_ad_template <- function(adam_name = "adsl",
   if (!toupper(adam_name) %in% list_all_templates()) {
     err_msg <- paste0(
       sprintf("No template for '%s' available.\n", toupper(adam_name)),
-      "ℹ Run `list_all_templates()` to get a list of all available ADaM templates."
+      "\u2139 Run `list_all_templates()` to get a list of all available ADaM templates."
     )
     abort(err_msg)
   }
