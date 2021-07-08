@@ -19,6 +19,10 @@
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
                             open = interactive()) {
+  assert_character_scalar(adam_name)
+  assert_character_scalar(save_path)
+  assert_logical_scalar(open)
+
   if (!requireNamespace("usethis", quietly = TRUE)) {
     abort("Required package {usethis} is not installed.")
   }
