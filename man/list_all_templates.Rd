@@ -13,6 +13,6 @@ List All Available ADaM Templates
 list_all_templates()
 }
 \author{
-Shimeng Huang
+Shimeng Huang, Thomas Neitmann
 }
 \keyword{user_utility}
