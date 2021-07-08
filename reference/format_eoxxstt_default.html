@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -168,7 +168,10 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>character</code> vector</p>
+    <p>A <code>character</code> vector derived based on the values given in <code>x</code>:
+"COMPLETED" if <code>x</code> == "COMPLETED",
+"DISCONTINUED" if <code>x</code> is not "COMPLETED" or NA,
+"ONGOING" otherwise.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
