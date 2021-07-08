@@ -55,9 +55,9 @@ use_ad_template <- function(adam_name = "adsl",
 #' list_all_templates()
 list_all_templates <- function() {
   list.files(system.file("templates", package = "admiral")) %>%
-    str_remove(., ".R$") %>%
-    str_remove(., "^ad_") %>%
-    toupper(.) %>%
+    str_remove(".R$") %>%
+    str_remove("^ad_") %>%
+    toupper() %>%
     structure(class = c("adam_templates", "character"))
 }
 
