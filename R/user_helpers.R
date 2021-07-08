@@ -1,12 +1,10 @@
 #' Open an ADaM Template Script
 #'
 #' @param adam_name An ADaM dataset name.
-#'
 #' @param save_path Path to save the script.
-#'
 #' @param open Whether to open the script right away.
 #'
-#' @author Shimeng Huang
+#' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @keywords user_utility
 #'
@@ -45,7 +43,7 @@ use_ad_template <- function(adam_name = "adsl",
 
 #' List All Available ADaM Templates
 #'
-#' @author Shimeng Huang
+#' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @keywords user_utility
 #'
