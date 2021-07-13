@@ -588,11 +588,20 @@ is_date <- function(arg) {
   is.instant(arg)
 }
 on_failure(is_date) <- function(call, env) {
+  evld <- eval(call$arg, envir = env)
+  len <- length(evld)
+  msg <- if (len == 0) {
+    deparse(evld)
+  } else if (len == 1) {
+    evld
+  } else {
+    paste0("c(", paste(head(evld, 5), collapse = ", "), `if`(len > 5, ", ..."), ")")
+  }
   paste0(
     "Argument ",
     deparse(call$arg),
     " = ",
-    eval(call$arg, envir = env),
+    msg,
     " is not a lubridate date."
   )
 }

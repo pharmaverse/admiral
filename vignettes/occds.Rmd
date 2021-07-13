@@ -1,7 +1,5 @@
 ---
 title: "Creating an OCCDS ADaM"
-author: "admiral team"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: false

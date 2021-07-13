@@ -80,8 +80,8 @@ reference:
   - has_keyword("dev_utility")
 
 articles:
-- title: All vignettes
-  navbar: ~
+- title: User Guides
+  navbar: User Guides
   contents:
   - admiral
   - adsl
@@ -90,3 +90,8 @@ articles:
   - imputation
   - contributing
   - faq
+
+- title: Developer Guides
+  navbar: Developer Guides
+  contents:
+  - contributing
