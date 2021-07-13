@@ -79,8 +79,8 @@ adae <- ae %>%
   # derive last dose date/time
   derive_last_dose(
     ex,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-      nchar(as.character(EXENDTC)) >= 10,
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = ASTDT,
