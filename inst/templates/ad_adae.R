@@ -25,7 +25,7 @@ ex <- NULL
 # start by joining input datasets
 adae <- left_join(
   mutate(ae, DOMAIN = NULL),
-  mutate(adsl, DOMAIN = NULL),
+  adsl,
   by = c("STUDYID", "USUBJID")
 ) %>%
 

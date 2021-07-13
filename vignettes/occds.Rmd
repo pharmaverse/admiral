@@ -76,7 +76,7 @@ data(adsl)
 
 adae <- left_join(
   mutate(ae, DOMAIN = NULL), 
-  mutate(adsl, DOMAIN = NULL),
+  adsl,
   by = c("STUDYID", "USUBJID")
 ) 
 ```

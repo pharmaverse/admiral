@@ -71,7 +71,8 @@ data("lb")
 The `dm` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
-adsl <- dm
+adsl <- dm %>% 
+  mutate(DOMAIN = NULL)
 head(adsl)
 ```
 
