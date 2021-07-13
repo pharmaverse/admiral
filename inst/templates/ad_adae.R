@@ -108,10 +108,7 @@ adae <- ae %>%
     order = vars(ASTDTM, AESEQ),
     flag_filter = TRTEMFL == "Y",
     mode = "last"
-  ) %>%
-
-  # final updates
-  mutate(DOMAIN = NULL)
+  )
 
 
 

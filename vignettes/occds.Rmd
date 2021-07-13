@@ -74,11 +74,7 @@ Now start creating ADAE by joining the required data sets together.
 data(ae)
 data(adsl)
 
-adae <- left_join(
-  mutate(ae, DOMAIN = NULL), 
-  adsl,
-  by = c("STUDYID", "USUBJID")
-) 
+adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
 ```
 
 
