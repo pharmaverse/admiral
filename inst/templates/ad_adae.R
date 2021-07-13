@@ -17,17 +17,16 @@ library(lubridate)
 ae <- NULL
 adsl <- NULL
 suppae <- NULL
-suppdm <- NULL
 ex <- NULL
 
 # ---- Derivations ----
 
-# start by joining input datasets
-adae <- left_join(
-  mutate(ae, DOMAIN = NULL),
-  adsl,
-  by = c("STUDYID", "USUBJID")
-) %>%
+adae <- ae %>%
+  # join supplementary qualifier variables
+  derive_suppqual_vars(suppae) %>%
+
+  # join adsl to ae
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
 
   # derive analysis start time
   derive_vars_dtm(
@@ -109,7 +108,10 @@ adae <- left_join(
     order = vars(ASTDTM, AESEQ),
     flag_filter = TRTEMFL == "Y",
     mode = "last"
-  )
+  ) %>%
+
+  # final updates
+  mutate(DOMAIN = NULL)
 
 
 
