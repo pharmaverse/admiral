@@ -29,15 +29,6 @@ adae <- left_join(
   by = c("STUDYID", "USUBJID")
 ) %>%
 
-  # derive analysis end time
-  derive_vars_dtm(
-    dtc = AEENDTC,
-    new_vars_prefix = "AEN",
-    date_imputation = "last",
-    time_imputation = "last",
-    max_dates = list(DTHDT, EOSDT)
-  ) %>%
-
   # derive analysis start time
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -47,22 +38,31 @@ adae <- left_join(
     min_dates = list(TRTSDT)
   ) %>%
 
-  # derive analysis end/start date
-  mutate(
-    AENDT = date(AENDTM),
-    ASTDT = date(ASTDTM)
+  # derive analysis end time
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    date_imputation = "last",
+    time_imputation = "last",
+    max_dates = list(DTHDT, EOSDT)
   ) %>%
 
-  # derive analysis end relative day
-  derive_var_aendy(
-    reference_date = TRTSDT,
-    date = AENDT
+  # derive analysis end/start date
+  mutate(
+    ASTDT = date(ASTDTM),
+    AENDT = date(AENDTM)
   ) %>%
 
   # derive analysis start relative day
   derive_var_astdy(
     reference_date = TRTSDT,
     date = ASTDT
+  ) %>%
+
+  # derive analysis end relative day
+  derive_var_aendy(
+    reference_date = TRTSDT,
+    date = AENDT
   ) %>%
 
   # derive analysis duration (value and unit)
@@ -116,4 +116,4 @@ adae <- left_join(
 
 # ---- Save output ----
 
-saveRDS(adae, file = "/PATH/TO/SAVE/ADAE.rds", compress = TRUE)
+saveRDS(adae, file = "./ADAE.rds", compress = TRUE)
