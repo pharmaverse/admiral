@@ -429,7 +429,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
   default_err_msg <- paste(
     backquote(arg_name(substitute(arg))),
     "must be a a list of unquoted variable names or `desc()` calls,",
-    "e.g. `vars(USUBJID, desc(VISITNUM))`",
+    "e.g. `vars(USUBJID, desc(VISITNUM))`"
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
