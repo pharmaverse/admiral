@@ -147,7 +147,7 @@ quo_c <- function(...) {
 what_is_it <- function(x) {
   if (is.null(x)) {
     "`NULL`"
-  } else if (is.factor(x)){
+  } else if (is.factor(x)) {
     "a factor"
   } else if (is.symbol(x)) {
     "a symbol"

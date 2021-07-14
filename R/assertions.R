@@ -426,9 +426,10 @@ assert_vars <- function(arg, optional = FALSE) {
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  default_err_msg <- sprintf(
-    "`%s` must be a a list of unquoted variable names or desc() calls, e.g. `vars(USUBJID, desc(VISITNUM))`",
-    arg_name(substitute(arg))
+  default_err_msg <- paste(
+    backquote(arg_name(substitute(arg))),
+    "must be a a list of unquoted variable names or `desc()` calls,",
+    "e.g. `vars(USUBJID, desc(VISITNUM))`",
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
@@ -495,7 +496,7 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!rlang::is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
+  if (!is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
     err_msg <- sprintf(
       "`%s` must be %s integer scalar but is %s",
       arg_name(substitute(arg)),
