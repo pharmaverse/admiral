@@ -197,11 +197,15 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' or `NA`.
-#' `format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
+#' 'COMPLETED' or `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
+#' `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#'
 #' For example:
-#' `DCSREAS = format_reason_default(DSDECOD)`
-#' `DCSREASP = format_reason_default(DSDECOD, DSTERM)`
+#' ```
+#' DCSREAS = format_reason_default(DSDECOD)
+#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
+#' ```
 #'
 #' @return A `character` vector
 #'

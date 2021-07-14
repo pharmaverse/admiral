@@ -102,7 +102,7 @@ test_that("Partial date imputed to the mid day/month", {
   actual_output1 <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "15-06"
+    date_imputation = "06-15"
   )
 
   expect_equal(
@@ -156,7 +156,7 @@ test_that("Partial date imputed to the mid day/month", {
   actual_output1 <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "15-06"
+    date_imputation = "06-15"
   )
 
   expect_equal(
@@ -187,8 +187,9 @@ test_that("Partial date imputed to the last day/month, no DTF", {
     flag_imputation = FALSE
   )
 
-  expect_equal(
-    expected_output,
-    actual_output
+  expect_dfs_equal(
+    base = expected_output,
+    comp = actual_output,
+    keys = "XXSTDTC"
   )
 })

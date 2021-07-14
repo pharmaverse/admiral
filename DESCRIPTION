@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
@@ -27,7 +27,8 @@ Imports:
     readxl,
     rlang,
     stringr,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests:
     devtools,
     diffdf,
