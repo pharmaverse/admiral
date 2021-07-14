@@ -163,9 +163,9 @@ derive_var_lstalvdt <- function(dataset,
                                  !!!subject_keys,
                                  !!!sources[[i]]$traceability_vars,
                                  LSTALVDT = convert_dtc_to_dt(
-                                   impute_dtc(!!date_var,
-                                              date_imputation = sources[[i]]$date_imputation)
-                                 ))
+                                   !!date_var,
+                                   date_imputation = sources[[i]]$date_imputation)
+                                 )
     }
   }
 

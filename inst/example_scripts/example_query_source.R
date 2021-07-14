@@ -6,7 +6,8 @@
 # TERM_NAME, non NULL
 
 queries <- tibble::tribble(
-  ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
+  ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE,
+  ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,
   NA_integer_, "AELLT", "APPLICATION SITE ERYTHEMA", NA_integer_,
   "CQ01", "Dermatologic events", NA_integer_, NA_character_,
