@@ -72,32 +72,21 @@ Now start creating ADAE by joining the required data sets together.
 data(ae)
 data(adsl)
 
-adae <- left_join(
-  mutate(ae, DOMAIN = NULL), 
-  mutate(adsl, DOMAIN = NULL),
-  by = c("STUDYID", "USUBJID")
-) 
+adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
 ```
 
 
 
 ### Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
-This part includes variables `AENDTM`, `AENDT`, `AENDY`, `ASTDTM`, `ASTDT`, and
-`ASTDY`. The function `derive_vars_dtm()` can be used to derive `AENDTM` and
-`ASTDTM` where `ASTDTM` could be company-specific. `AENDT` and `ASTADT` can be
-created with a simple `dplyr::mutate()`, and `derive_var_aendy()` and
-`derive_var_astdy()` can be used to create `AENDY` and `ASTDY` respectively.
+This part includes variables `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
+The function `derive_vars_dtm()` can be used to derive `ASTDTM` and `AENDTM` 
+where `ASTDTM` could be company-specific. 
+`ASTADT` and `AENDT` can be created with a simple `dplyr::mutate()`. 
+`derive_var_astdy()` and `derive_var_aendy()` can be used to create `ASTDY` and `AENDY`, respectively.
 
 ```{r}
 adae <- adae %>% 
-  derive_vars_dtm(
-    dtc = AEENDTC,
-    new_vars_prefix = "AEN",
-    date_imputation = "last",
-    time_imputation = "last",
-    max_dates = list(DTHDT, EOSDT)
-  ) %>% 
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
@@ -105,17 +94,24 @@ adae <- adae %>%
     time_imputation = "first",
     min_dates = list(TRTSDT)
   ) %>% 
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    date_imputation = "last",
+    time_imputation = "last",
+    max_dates = list(DTHDT, EOSDT)
+  ) %>% 
   mutate(
-    AENDT = date(AENDTM), 
-    ASTDT = date(ASTDTM)
-  ) %>%
-  derive_var_aendy(
-    reference_date = TRTSDT, 
-    date = AENDT
+    ASTDT = date(ASTDTM),
+    AENDT = date(AENDTM) 
   ) %>% 
   derive_var_astdy(
     reference_date = TRTSDT, 
     date = ASTDT
+  ) %>%
+  derive_var_aendy(
+    reference_date = TRTSDT, 
+    date = AENDT
   )
 ```
 
@@ -162,8 +158,8 @@ data(ex_single)
 adae <- adae %>% 
   derive_last_dose(
     ex_single,
-    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-      nchar(as.character(EXENDTC)) >= 10,
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = ASTDT,
