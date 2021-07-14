@@ -1,7 +1,5 @@
 ---
 title: "Date and Time Imputation"
-author: "Stefan Bundfuss"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Date and Time Imputation}
@@ -51,7 +49,7 @@ Sometimes this does not work as it would result in invalid dates, e.g.,
 ```{r}
 impute_dtc(
   "2019-02",
-  date_imputation = "31-02",
+  date_imputation = "02-31",
   time_imputation = "00:00:00"
   )
 ```
@@ -164,9 +162,8 @@ derive_vars_dt(
 ## Impute Time without Imputing Date
 
 If the time should be imputed but not the date, the `date_imputation` parameter
-should be set to `NULL`. This results in `NA` if the date is partial. Although
-no date is imputed the date imputation flag is created. It can be removed by
-calling `select()`.
+should be set to `NULL`. This results in `NA` if the date is partial. As
+no date is imputed the date imputation flag is not created.
 ```{r}
 tribble(~ AESTDTC,
         "2019-08-09T12:34:56",
@@ -178,8 +175,7 @@ tribble(~ AESTDTC,
     new_vars_prefix = "AST",
     date_imputation = NULL,
     time_imputation = "first"
-  ) %>%
-  select(-ASTDTF)
+  )
 ```
 
 ## Avoid Imputed Dates Before a Particular Date
@@ -239,11 +235,9 @@ derive_vars_dtm(
 )
 ```
 ## Imputation Without Creating a New Variable
-If imputation is required without creating a new variable the `impute_dtc()` and
-the `convert_dtc_to_dt()` function can be called to obtain a vector of imputed
-dates. The `impute_dtc()` function returns a complete ISO-8601 date (or `NA`)
-and the `convert_dtc_to_dt()` function converts a _complete_ ISO-8601 into a
-date. It can be used for example in conditions:
+If imputation is required without creating a new variable the
+`convert_dtc_to_dt()` function can be called to obtain a vector of imputed
+dates. It can be used for example in conditions:
 ```{r}
 mh <- tribble(
   ~MHSTDTC, ~TRTSDT,
@@ -252,24 +246,17 @@ mh <- tribble(
   "2019-05", ymd("2019-04-15"),
   "2019-06-21", ymd("2019-04-15")
 )
-filter(
-  mh,
-  convert_dtc_to_dt(
-    impute_dtc(
-      dtc = MHSTDTC,
-      date_imputation = "first"
-      )
-    ) < TRTSDT
-  )
+filter(mh,
+       convert_dtc_to_dt(dtc = MHSTDTC,
+                         date_imputation = "first") < TRTSDT)
 ```
 
 ## Using More Than One Imputation Rule for a Variable
 Using different imputation rules depending on the observation can be done by
 creating the variables with `mutate()`. First the imputed datetime variable is
-created calling `if_else()`, `convert_dtc_to_dtm()`, and `impute_dtc()`. Then
-the time imputation flag is created calling `compute_tmf()`. Here no date
-imputation flag is created because no date imputation is performed
-(`date_imputation = NULL`).
+created calling `if_else()` and `convert_dtc_to_dtm()`. Then the time imputation
+flag is created calling `compute_tmf()`. Here no date imputation flag is created
+because no date imputation is performed (`date_imputation = NULL`).
 ```{r}
 vs <- tribble(
   ~VSDTC, ~VSTPT,
@@ -283,20 +270,14 @@ mutate(
   ADTM = if_else(
     VSTPT == "PRE-DOSE",
     convert_dtc_to_dtm(
-      impute_dtc(
-        dtc = VSDTC,
-        date_imputation = NULL,
-        time_imputation = "first"
-        )
-      ),
+      dtc = VSDTC,
+      date_imputation = NULL,
+      time_imputation = "first"),
     convert_dtc_to_dtm(
-      impute_dtc(
-        dtc = VSDTC,
-        date_imputation = NULL,
-        time_imputation = "last"
-        )
-      )
-    ),
+      dtc = VSDTC,
+      date_imputation = NULL,
+      time_imputation = "last")
+  ),
   ADTMF = compute_tmf(
     dtc = VSDTC,
     dtm = ADTM

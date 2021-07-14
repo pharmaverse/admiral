@@ -15,7 +15,7 @@ library(admiral)
 # Read in Data
 # The CDISC Pilot Data contains no SUPPVS data
 data("vs")
-data ("adsl")
+data("adsl")
 
 # Join ADSL
 advs <- left_join(vs,

@@ -657,7 +657,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("01-02"))
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
-  pattern <- "^([0-9]{2})-([0-9]{2})$"
+  pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
@@ -667,7 +667,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
     " = ",
     eval(call$arg, envir = env),
     " is not a valid date entry.\n",
-    "date_imputation should be specified as 'dd-mm' (e.g. '01-01') or ",
+    "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
     "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
   )
 }

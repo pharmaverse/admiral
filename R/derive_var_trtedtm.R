@@ -61,7 +61,9 @@ derive_var_trtedtm <- function(dataset,
     ) %>%
     transmute(
       USUBJID,
-      TRTEDTM = convert_dtc_to_dtm(impute_dtc(EXENDTC, time_imputation = "LAST"))
+      TRTEDTM = convert_dtc_to_dtm(EXENDTC,
+                                   date_imputation = "last",
+                                   time_imputation = "last")
     )
 
   left_join(dataset, add, by = c("USUBJID"))

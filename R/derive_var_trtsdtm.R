@@ -60,7 +60,9 @@ derive_var_trtsdtm <- function(dataset,
         by_vars = vars(USUBJID),
         mode = "first"
       ) %>%
-      transmute(USUBJID, TRTSDTM = convert_dtc_to_dtm(impute_dtc(EXSTDTC)))
+      transmute(USUBJID, TRTSDTM = convert_dtc_to_dtm(EXSTDTC,
+                                                      date_imputation = "first",
+                                                      time_imputation = "first"))
 
   left_join(dataset, add, by = c("USUBJID"))
 }
