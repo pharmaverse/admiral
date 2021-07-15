@@ -247,7 +247,7 @@ Example function `format_dcsreas()`:
 format_dcsreas <- function(dsdecod, dsterm = NULL) {
   out <- if (is.null(dsterm)) dsdecod else dsterm
   case_when(
-    dsdecod %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
+    dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
     TRUE ~ NA_character_
   )
 }
