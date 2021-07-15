@@ -60,13 +60,13 @@ derive_query_vars <- function(dataset, queries) {
       ifelse(x == "", NA_character_, x)})
 
   # names of new columns
-  if ("QUERY_ID" %!in% names(queries)) {
+  if ("QUERY_ID" %notin% names(queries)) {
     queries$QUERY_ID <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE" %!in% names(queries)) {
+  if ("QUERY_SCOPE" %notin% names(queries)) {
     queries$QUERY_SCOPE <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
+  if ("QUERY_SCOPE_NUM" %notin% names(queries)) {
     queries$QUERY_SCOPE_NUM <- NA_integer_ # nolint
   }
   new_col_names <- queries %>%
@@ -228,14 +228,14 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal query scope
   if ("QUERY_SCOPE" %in% names(queries) &&
-      any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
+      any(unique(queries$QUERY_SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0("`QUERY_SCOPE` in `", queries_name,
                  "` can only be 'BROAD', 'NARROW' or `NA`."))
   }
 
   # check illegal query scope number
   if ("QUERY_SCOPE_NUM" %in% names(queries)) {
-    is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
+    is_bad_scope_num <- queries$QUERY_SCOPE_NUM %notin% c(1, 2, NA_integer_)
     if (any(is_bad_scope_num)) {
       abort(
         paste0(

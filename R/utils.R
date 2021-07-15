@@ -1,25 +1,21 @@
-#' @export
-dplyr::vars
-
-#' @export
-dplyr::desc
-
-#' @export
-rlang::exprs
-
-#' @export
-dplyr::vars
-
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
 #' @param quote_fun Quoting function, defaults to `backquote`.
 #' @param conjunction Character to be used in the message, defaults to "and".
 #'
-#' @noRd
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
 #'
 #' @examples
-#' enumerate(letters[1:6])
+#' admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
+#' admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
+#' admiral:::enumerate(
+#'   c("date", "time", "both"),
+#'   quote_fun = admiral:::squote,
+#'   conjunction = "or"
+#' )
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
     quote_fun(x)
@@ -36,10 +32,12 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @param x A `character` vector
 #'
-#' @noRd
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
 #'
 #' @examples
-#' backquote("foo")
+#' admiral:::backquote("USUBJID")
 backquote <- function(x) {
   paste0("`", x, "`")
 }
@@ -48,10 +46,12 @@ backquote <- function(x) {
 #'
 #' @param x A `character` vector
 #'
-#' @noRd
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
 #'
 #' @examples
-#' squote("foo")
+#' admiral:::squote("foo")
 squote <- function(x) {
   paste0("'", x, "'")
 }
@@ -64,11 +64,14 @@ squote <- function(x) {
 #' @param x The values to be matched
 #' @param table The values to be matched against
 #'
-#' @noRd
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
 #'
 #' @examples
-#' "a" %!in% c("b", "v", "k")
-`%!in%` <- function(x, table) { # nolint
+#' `%notin%` <- admiral:::`%notin%`
+#' "a" %notin% c("b", "v", "k")
+`%notin%` <- function(x, table) { # nolint
   !(x %in% table)
 }
 
@@ -76,10 +79,12 @@ squote <- function(x) {
 #'
 #' @param quosures A `list` of `quosures` created using [`vars()`]
 #'
-#' @noRd
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
 #'
 #' @examples
-#' vars2chr(vars(USUBJID, AVAL))
+#' admiral:::vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   map_chr(quosures, ~as_string(quo_get_expr(.x)))
 }
@@ -91,7 +96,9 @@ vars2chr <- function(quosures) {
 #'
 #' @return character
 #'
-#' @noRd
+#' @author Ondrej Slama
+#'
+#' @keywords dev_utility
 #'
 #' @examples
 #' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
@@ -101,6 +108,18 @@ convert_dtm_to_dtc <- function(dtm) {
   format(dtm, "%Y-%m-%dT%H:%M:%S")
 }
 
+#' Extract Argument Name from an Expression
+#'
+#' @param expr An expression created inside a function using `substitute()`
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' test_fun <- function(something) {
+#'   admiral:::arg_name(substitute(something))
+#' }
 arg_name <- function(expr) {
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
@@ -113,6 +132,16 @@ arg_name <- function(expr) {
   }
 }
 
+#' Extract All Symbols from a List of Quosures
+#'
+#' @param quosures A list of quosures, e.g. created using `vars()`
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(quosures) {
   vars <- lapply(quosures, function(q) {
     rlang::quo_set_env(
@@ -123,30 +152,62 @@ extract_vars <- function(quosures) {
   structure(vars, class = "quosures")
 }
 
-left_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
-  suppress_warning(
-    dplyr::left_join(x, y, by = by, copy = copy, suffix = suffix, ...),
-    "^Column `.+` has different attributes on LHS and RHS of join$"
-  )
-}
-
-inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
-  suppress_warning(
-    dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
-    "^Column `.+` has different attributes on LHS and RHS of join$"
-  )
-}
-
-anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
-  suppress_warning(
-    dplyr::anti_join(x, y, by = by, copy = copy, ...),
-    "^Column `.+` has different attributes on LHS and RHS of join$"
-  )
-}
-
+#' Concatenate One or More Quosure(s)
+#'
+#' @param ... One or more objects of class `quosure` or `quosures`
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::quo_c(rlang::quo(USUBJID))
+#' admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
+#' admiral:::quo_c(vars(USUBJID, ADTM))
+#' admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
   is_null <- map_lgl(inputs, quo_is_null)
   rlang::as_quosures(inputs[!is_null])
+}
+
+#' What Kind of Object is This?
+#'
+#' Returns a string describing what kind of object the input is.
+#'
+#' @param x Any R object
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::what_is_it(mtcars)
+#' admiral:::what_is_it(NA)
+#' admiral:::what_is_it(TRUE)
+#' admiral:::what_is_it(lm(hp ~ mpg, data = mtcars))
+#' admiral:::what_is_it(letters)
+what_is_it <- function(x) {
+  if (is.null(x)) {
+    "`NULL`"
+  } else if (is.factor(x)) {
+    "a factor"
+  } else if (is.symbol(x)) {
+    "a symbol"
+  } else if (isS4(x)) {
+    sprintf("a S4 object of class '%s'", class(x)[1L])
+  } else if (is.atomic(x) && length(x) == 1L) {
+    if (is.character(x)) {
+      paste0("`\"", x, "\"`")
+    } else {
+      paste0("`", x, "`")
+    }
+  } else if (is.atomic(x) || class(x)[1L] == "list") {
+    rlang::friendly_type(typeof(x))
+  } else if (is.data.frame(x)) {
+    "a data frame"
+  } else {
+    sprintf("an object of class '%s'", class(x)[1L])
+  }
 }
