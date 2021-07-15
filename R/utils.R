@@ -137,6 +137,13 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
   )
 }
 
+anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
+  suppress_warning(
+    dplyr::anti_join(x, y, by = by, copy = copy, ...),
+    "^Column `.+` has different attributes on LHS and RHS of join$"
+  )
+}
+
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
