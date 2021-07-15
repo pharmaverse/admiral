@@ -23,6 +23,11 @@ derive_derived_param <- function(dataset,
     select(!!!by_vars, PARAMCD, AVAL) %>%
     filter(PARAMCD %in% parameters)
 
+  signal_duplicate_records(
+    data,
+    by_vars = vars(!!!by_vars, PARAMCD)
+  )
+
   # horizontalize data, AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
   hori_data <- data %>%
     spread(key = PARAMCD,
@@ -31,8 +36,10 @@ derive_derived_param <- function(dataset,
   names(hori_data) <- map_chr(names(hori_data), str_replace, "PARAMCD.", "AVAL.")
 
   # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
-  hori_data %>%
+  hori_data <- hori_data %>%
     mutate(AVAL = !!enquo(analysis_value),
            !!!set_values_to) %>%
     select(-starts_with("AVAL."))
+
+  bind_rows(dataset, hori_data)
 }
