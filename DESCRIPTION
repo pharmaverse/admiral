@@ -43,5 +43,6 @@ Suggests:
     spelling,
     styler,
     tibble,
-    usethis
+    usethis,
+    covr
 VignetteBuilder: knitr
