@@ -69,9 +69,9 @@ squote <- function(x) {
 #' @keywords dev_utility
 #'
 #' @examples
-#' `%!in%` <- admiral:::`%!in%`
+#' `%notin%` <- admiral:::`%notin%`
 #' "a" %!in% c("b", "v", "k")
-`%!in%` <- function(x, table) { # nolint
+`%notin%` <- function(x, table) { # nolint
   !(x %in% table)
 }
 
