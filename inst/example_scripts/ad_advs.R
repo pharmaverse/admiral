@@ -19,7 +19,7 @@ data("adsl")
 
 # Join ADSL
 advs <- left_join(vs,
-                  select(adsl, -DOMAIN),
+                  adsl,
                   by = c("STUDYID", "USUBJID"))
 
 # Calculate ADT
