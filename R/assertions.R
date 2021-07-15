@@ -122,7 +122,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (!is.null(values) && arg %!in% values) {
+  if (!is.null(values) && arg %notin% values) {
     err_msg <- sprintf(
       "`%s` must be one of %s but is '%s'",
       arg_name(substitute(arg)),

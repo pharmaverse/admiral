@@ -70,7 +70,7 @@ squote <- function(x) {
 #'
 #' @examples
 #' `%notin%` <- admiral:::`%notin%`
-#' "a" %!in% c("b", "v", "k")
+#' "a" %notin% c("b", "v", "k")
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
 }
