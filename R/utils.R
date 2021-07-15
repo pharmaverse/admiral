@@ -1,15 +1,3 @@
-#' @export
-dplyr::vars
-
-#' @export
-dplyr::desc
-
-#' @export
-rlang::exprs
-
-#' @export
-dplyr::vars
-
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
