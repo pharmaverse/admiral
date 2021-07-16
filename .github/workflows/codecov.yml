@@ -55,4 +55,4 @@ jobs:
       - name: Upload codecov report
         run: |
           covr::codecov()
-        shel: Rscript {0}
+        shell: Rscript {0}
