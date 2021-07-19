@@ -13,19 +13,24 @@ derive_derived_param <- function(dataset,
   assert_character_vector(parameters)
 
   # select observations and variables required for new observations
-  if (!quo_is_null(filter)) {
-    data <- dataset %>% filter(!!filter)
-  }
-  else {
-    data <- dataset
-  }
-  data <- data %>%
-    select(!!!by_vars, PARAMCD, AVAL) %>%
+  data <- dataset %>%
+    filter_if(filter) %>%
     filter(PARAMCD %in% parameters)
+
+  keep_vars <- get_constant_vars(data, by_vars = by_vars)
+  data <- data %>%
+    select(c(vars2chr(keep_vars),
+             "PARAMCD",
+             "AVAL"))
 
   signal_duplicate_records(
     data,
-    by_vars = vars(!!!by_vars, PARAMCD)
+    by_vars = vars(!!!by_vars, PARAMCD),
+    msg = paste("The filtered input dataset contains duplicate records with respect to",
+                enumerate(c(vars2chr(by_vars), "PARAMCD")),
+                "\nPlease ensure that the variables specified for `by_vars` and `PARAMCD`",
+                "are a unique key of the input data set restricted by the condition",
+                "specified for `filter` and to the parameters specified for `parameters`.")
   )
 
   # horizontalize data, AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
