@@ -48,12 +48,8 @@ derive_var_trtedtm <- function(dataset,
   assert_data_frame(dataset_ex, vars(USUBJID, EXENDTC, EXSEQ))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
-  if (!quo_is_null(filter_ex)) {
-    add <- filter(dataset_ex, !!filter_ex)
-  } else {
-    add <- dataset_ex
-  }
-  add <- add %>%
+  add <- dataset_ex %>%
+    filter_if(filter_ex) %>%
     filter_extreme(
       order = vars(EXENDTC, EXSEQ),
       by_vars = vars(USUBJID),
@@ -61,9 +57,7 @@ derive_var_trtedtm <- function(dataset,
     ) %>%
     transmute(
       USUBJID,
-      TRTEDTM = convert_dtc_to_dtm(EXENDTC,
-                                   date_imputation = "last",
-                                   time_imputation = "last")
+      TRTEDTM = convert_dtc_to_dtm(EXENDTC, date_imputation = "last", time_imputation = "last")
     )
 
   left_join(dataset, add, by = c("USUBJID"))

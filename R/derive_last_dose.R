@@ -110,11 +110,6 @@ derive_last_dose <- function(dataset,
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
 
-  # apply filtering condition
-  if (!quo_is_null(filter_ex)) {
-    dataset_ex <- filter(dataset_ex, !!filter_ex)
-  }
-
   # by_vars converted to string
   by_vars_str <- vars2chr(by_vars)
 
@@ -142,7 +137,9 @@ derive_last_dose <- function(dataset,
   }
 
   # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, trace_vars_str)
+  dataset_ex <- dataset_ex %>%
+    filter_if(filter_ex) %>%
+    select(!!!by_vars, !!dose_end, trace_vars_str)
 
   # calculate the last dose date
   res <- dataset %>%
