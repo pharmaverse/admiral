@@ -211,3 +211,29 @@ what_is_it <- function(x) {
     sprintf("an object of class '%s'", class(x)[1L])
   }
 }
+
+#' Optional Filter
+#'
+#' Filters the input dataset if the provided expression is not `NULL`
+#'
+#' @param dataset Input dataset
+#' @param filter A filter condition. Must be a quosure.
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' data(vs)
+#' admiral:::filter_if(vs, rlang::quo(NULL))
+#' admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+filter_if <- function(dataset, filter) {
+  assert_data_frame(dataset)
+  assert_filter_cond(filter, optional = TRUE)
+
+  if (quo_is_null(filter)) {
+    dataset
+  } else {
+    filter(dataset, !!filter)
+  }
+}
