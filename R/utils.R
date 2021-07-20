@@ -134,22 +134,43 @@ arg_name <- function(expr) {
 
 #' Extract All Symbols from a List of Quosures
 #'
-#' @param quosures A list of quosures, e.g. created using `vars()`
+#' @param x An `R` object
+#' @param side One of `"lhs"` (the default) or `"rhs"`
+#' @param ... Not used
 #'
 #' @author Thomas Neitmann
-#'
+#' @export
 #' @keywords dev_utility
 #'
 #' @examples
-#' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
-extract_vars <- function(quosures) {
-  vars <- lapply(quosures, function(q) {
-    rlang::quo_set_env(
-      rlang::quo(!!as.symbol(all.vars(q))),
-      rlang::quo_get_env(q)
-    )
-  })
-  structure(vars, class = "quosures")
+#' extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
+extract_vars <- function(x, ...) {
+  UseMethod("extract_vars")
+}
+
+#' @describeIn extract_vars
+#' @export
+extract_vars.list <- function(x, ...) {
+  do.call(quo_c, map(x, extract_vars, ...))
+}
+
+#' @describeIn extract_vars
+#' @export
+extract_vars.quosure <- function(x, ...) {
+  env <- quo_get_env(x)
+  symbols <- syms(all.vars(quo_get_expr(x)))
+  map(symbols, ~quo_set_env(quo(!!.x), env))
+}
+
+#' @describeIn extract_vars
+#' @export
+extract_vars.formula <- function(x, side = "lhs", ...) {
+  funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
+  assert_character_scalar(side, values = names(funs))
+  quo_set_env(
+    quo(!!funs[[side]](x)),
+    env = attr(x, ".Environment")
+  )
 }
 
 #' Concatenate One or More Quosure(s)
