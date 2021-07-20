@@ -160,6 +160,7 @@ derive_summary_records <- function(dataset,
   assert_vars(by_vars)
   assert_vars(drop_values_from, optional = TRUE)
   assert_data_frame(dataset, required_vars = quo_c(by_vars, drop_values_from))
+  assert_list_of_formulas(fns)
 
   by_vars <- vars2chr(by_vars)
   drop_values_from <- vars2chr(drop_values_from)
