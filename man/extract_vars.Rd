@@ -2,9 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{extract_vars}
 \alias{extract_vars}
+\alias{extract_vars.list}
+\alias{extract_vars.quosure}
+\alias{extract_vars.formula}
 \title{Extract All Symbols from a List of Quosures}
 \usage{
 extract_vars(x, ...)
+
+\method{extract_vars}{list}(x, ...)
+
+\method{extract_vars}{quosure}(x, ...)
+
+\method{extract_vars}{formula}(x, side = "lhs", ...)
 }
 \arguments{
 \item{x}{An \code{R} object}

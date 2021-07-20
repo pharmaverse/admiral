@@ -148,13 +148,13 @@ extract_vars <- function(x, ...) {
   UseMethod("extract_vars")
 }
 
-#' @describeIn extract_vars
+#' @rdname extract_vars
 #' @export
 extract_vars.list <- function(x, ...) {
   do.call(quo_c, map(x, extract_vars, ...))
 }
 
-#' @describeIn extract_vars
+#' @rdname extract_vars
 #' @export
 extract_vars.quosure <- function(x, ...) {
   env <- quo_get_env(x)
@@ -162,7 +162,7 @@ extract_vars.quosure <- function(x, ...) {
   map(symbols, ~quo_set_env(quo(!!.x), env))
 }
 
-#' @describeIn extract_vars
+#' @rdname extract_vars
 #' @export
 extract_vars.formula <- function(x, side = "lhs", ...) {
   funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
