@@ -167,7 +167,7 @@ derive_summary_records <- function(dataset,
 
   # Manipulate functions as direct call for each analysis variable
   # Returns: A list of function call with attributes "variable" and "stats"
-  funs <- manip_fun(dataset, fns, .env = caller_env())
+  funs <- manip_fun(fns, .env = caller_env())
 
   # Get input analysis variable
   summarise_vars <- map_chr(funs, attr, "variable")
@@ -275,7 +275,7 @@ as_inlined_function <- function(funs, env) {
 #'
 #' @param .funs A two sided formula as a list (e.g. `list(A ~ mean)`).
 #'
-#'  + LHS refer to the one or more variable to use for summarizing.
+#'  + LHS refer to the one variable to use for summarizing.
 #'  + RHS refer to a **single** summary function.
 #' @param .env The environment in which to evaluate the expression.
 #'
@@ -289,7 +289,7 @@ as_inlined_function <- function(funs, env) {
 #' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
 #' as_fun_list(fm, caller_env())
 as_fun_list <- function(.funs, .env) {
-  funs <- map(.funs, function(.x) {
+  map(.funs, function(.x) {
     rhs <- f_rhs(.x)
     if (is_call(rhs)) {
       if (is_call(rhs, c("list", "vars"))) {
@@ -303,8 +303,6 @@ as_fun_list <- function(.funs, .env) {
     }
     .x
   })
-
-  funs
 }
 
 #' Utility to extract a variable from an object of class formula
@@ -321,16 +319,8 @@ as_fun_list <- function(.funs, .env) {
 #' @examples
 #' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
 #' get_fun_vars(fm, mtcars)
-get_fun_vars <- function(f, dataset) {
-  x <- map_if(f, is_quosure, quo_squash)
-  lhs <- map_if(x, is_bare_formula, f_lhs)
-  lhs <- map(lhs, function(.x) {
-    if (is_symbol(.x)) as_string(.x)
-    else eval_bare(.x, caller_env())
-  })
-  lhs <- map_if(lhs, is_quosures, vars2chr)
-  walk(lhs, ~assert_has_variables(dataset, .))
-  lhs
+get_fun_vars <- function(f) {
+  map(f, ~as_string(f_lhs(.x)))
 }
 
 #' Reconstruct a call object from its components using [rlang::call2()]
@@ -375,20 +365,8 @@ as_call_list <- function(funs, vars) {
 #' @return An anonymous function with call.
 #'
 #' @noRd
-manip_fun <- function(dataset, fns, .env) {
-  if (is_formula(fns)) {
-    fns <- list(fns)
-  }
-
-  if (!every(fns, is_formula)) {
-    abort(
-      str_glue(
-        "Problem with input `fns`, expecting a two sided formula.
-        LHS = an analysis variable and RHS = a function, or a function name.
-        e.g `fns = list(aval ~ mean)`."))
-  }
-
-  fn_vars <- get_fun_vars(fns, dataset)
+manip_fun <- function(fns, .env) {
+  fn_vars <- get_fun_vars(fns)
   fn_list <- as_fun_list(fns, .env = .env)
   as_call_list(fn_list, fn_vars)
 }

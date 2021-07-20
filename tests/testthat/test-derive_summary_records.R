@@ -32,39 +32,6 @@ test_that("unique records within `by_vars` are retained, not set to <NA>", {
   expect_equal(output$z, c("a", "b", NA, "c", "d", NA))
 })
 
-
-test_that("LHS of `fns` accepts multiple variable", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
-  actual_output <- derive_summary_records(
-    input,
-    by_vars = vars(x),
-    fns = list(vars(y, z) ~ mean)
-  )
-  expected_output <- tibble(
-    x = rep(1:2, each = 4),
-    y = c(9:10, 9.5, NA, 11:12, 11.5, NA),
-    z = c(101:102, NA, 101.5, 103:104, NA, 103.5)
-  )
-
-  expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
-})
-
-test_that("`fns` accepts single forumula without wrapping into list", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
-  actual_output <- derive_summary_records(
-    input,
-    by_vars = vars(x),
-    fns = y ~ mean
-  )
-  expected_output <- tibble(
-    x = rep(1:2, each = 3),
-    y = c(9:10, 9.5, 11:12, 11.5),
-    z = c(101:102, NA, 103:104, NA)
-  )
-
-  expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
-})
-
 test_that("`fns` as inlined", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
