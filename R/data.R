@@ -55,6 +55,20 @@
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/mh.xpt}
 "mh"
 
+#' Questionnaire Dataset
+#'
+#' A SDTM QS dataset from the CDISC pilot project
+#'
+#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/qs.xpt}
+"qs"
+
+#' Supplemental Adverse Events Dataset
+#'
+#' A SDTM SUPPAE dataset from the CDISC pilot project
+#'
+#' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/ts.xpt}
+"suppae"
+
 #' Trial Design Dataset
 #'
 #' A SDTM TS dataset from the CDISC pilot project
