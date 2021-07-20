@@ -43,12 +43,15 @@ ADCM, ADMH, ADDV, etc.
 
 ### Read in Data {#readdata}
 
-Let's start by attaching packages:
+Let's start by attaching packages and loading some example datasets:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(lubridate)
 library(admiral)
+
+data(ae)
+data(adsl)
 ```
 
 
@@ -62,16 +65,15 @@ frames needed may be:
   
 To derive Supplemental Qualifiers, `derive_suppqual_vars()` can be used. 
 
-```{r eval=FALSE}
+```{r}
 ae <- derive_suppqual_vars(ae, suppae)
+head(suppae)
+head(select(ae, USUBJID, AEDECOD, AETRTEM))
 ```
 
 Now start creating ADAE by joining the required data sets together. 
 
 ```{r}
-data(ae)
-data(adsl)
-
 adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
 ```
 
