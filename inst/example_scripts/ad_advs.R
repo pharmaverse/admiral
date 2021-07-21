@@ -46,38 +46,38 @@ param_lookup <- tibble::tribble(
   "WEIGHT",  "WEIGHT", "Weight (kg)",                     4,
   "HEIGHT",  "HEIGHT", "Height (cm)",                     5,
   "TEMP",    "TEMP",   "Temperature (C)",                 6,
-  "MAP",     "MAP",    "Mean Arterial Pressure (mmHg)",   7)
+  NA,        "MAP",    "Mean Arterial Pressure (mmHg)",   7,
+  NA,        "BMI",    "Body Mass Index (kg/m^2)",        8)
 
-advs <- left_join(advs, param_lookup, by = "VSTESTCD")
+advs <- left_join(advs, select(param_lookup, VSTESTCD, PARAMCD), by = "VSTESTCD")
 
 # Derive MAP (Mean Arterial Pressure from Systolic and Diastolic Pressure)
 # This is an example of deriving a new record based on existing records.
 # Note: this PARAMCD is not derived in the CDISC pilot and is presented
 #       for demonstration purposes.
+advs <- derive_derived_param(
+  advs,
+  parameters = c("SYSBP", "DIABP"),
+  by_vars = vars(USUBJID, VISITNUM, VSDTC, VSTPT),
+  analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+  set_values_to = vars(PARAMCD = "MAP")
+)
 
-# For SYSBP, remove all variables which are different for the two parameters
-# and will not be applicable to the new derived MAP value.  The will be NA
-# on the new observaitions.
-sysbp <- filter(advs, VSTESTCD == "SYSBP") %>%
-  select(-VSSEQ, - VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
-         -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC)
+# Derive BMI
+advs <- derive_derived_param(
+  advs,
+  parameters = c("WEIGHT"),
+  by_vars = vars(USUBJID, VISITNUM, VSDTC, VSTPT),
+  constant_parameters = c("HEIGHT"),
+  constant_by_vars = vars(USUBJID),
+  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT/100)^2,
+  set_values_to = vars(PARAMCD = "BMI",
+                       AVALU = "kg/m2")
+)
 
-# Keep only variables required for the join and the analysis value. Other
-# variables which need to be retained for the new observations are taken from
-# the sysbp dataset.
-diabp <- filter(advs, VSTESTCD == "DIABP") %>%
-  select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
-  rename(DBPAVAL = AVAL)
-
-advs <- left_join(sysbp, diabp,
-                  by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC",
-                         "VSTPT")) %>%
-  mutate(AVAL = ((2 * DBPAVAL) + AVAL) / 3,
-         PARAMCD = "MAP") %>%
-  filter(!is.na(AVAL)) %>%
-  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
-  union_all(advs) %>%
-  select(-DBPAVAL)
+# Assign PARAM and PARAMN
+advs <- advs %>%
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD")
 
 # Derive Timing
 advs <- mutate(advs,
@@ -147,7 +147,7 @@ advs <- derive_extreme_flag(
   advs,
   new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-  order = vars(ADT),
+  order = vars(ADT, VISITNUM),
   mode = "last",
   flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
 
@@ -204,7 +204,7 @@ avalcat_lookup <- tibble::tribble(
 advs <- mutate(advs,
                AVALCA1N = case_when(PARAMCD == "HEIGHT" & AVAL > 100 ~ 1,
                                     PARAMCD == "HEIGHT" & AVAL <= 100 ~ 2)) %>%
-  left_join(avalcat_lookup, by = "PARAMCD")
+  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N"))
 
 
 # Final Steps, Select final variables and Add labels
