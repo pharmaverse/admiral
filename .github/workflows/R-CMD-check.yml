@@ -93,7 +93,7 @@ jobs:
         run: |
           if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
           devtools::install()
-        shell: Rscript {0}
+        shell: Rscript --no-init-file {0}
 
       - name: Check
         env:
