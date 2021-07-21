@@ -93,7 +93,7 @@ jobs:
         run: |
           options(repos = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
           if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-          devtools::install()
+          devtools::install(dependencies = TRUE)
         shell: Rscript --no-init-file {0}
 
       - name: Check
