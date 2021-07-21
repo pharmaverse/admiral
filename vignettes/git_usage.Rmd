@@ -21,9 +21,9 @@ admiral Git Hub: https://github.com/Roche-GSK/admiral.git
 
 # Branches
 
--	The `master` branch contains the latest **released** version and should not be used for development.
--	The `devel` branch contains the latest development version of the package.
--	‘Feature’ branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.
+●	The `master` branch contains the latest **released** version and should not be used for development.  
+●	The `devel` branch contains the latest development version of the package.  
+●	‘Feature’ branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  
 
 # Working with feature branches
 
@@ -35,21 +35,21 @@ The name of the branch must be prefixed with the issue number and be meaningful:
 e.g. Issue # 94 Program function to derive `LSTALVDT`, the Branch name would be: `94_lstalvdt`.
 
 ### Create a new feature branch (from devel) 
--	Checkout the devel branch:   
+●	Checkout the devel branch:   
 `git checkout devel`  
--	Pull the latest changes from GitHub:   
+●	Pull the latest changes from GitHub:   
 `git pull`  
--	Create a new branch off the’ devel branch and switch to it:   
+●	Create a new branch off the’ devel branch and switch to it:   
 `git checkout -b <new_branch_name>`
 
 **Using code from unmerged branches**  
--	Checkout the unmerged branch you want to use:  
+●	Checkout the unmerged branch you want to use:  
 `git checkout <unmerged_branch>`  
--	Pull the latest committed changes from the unmerged branch:  
+●	Pull the latest committed changes from the unmerged branch:  
 `git pull`  
--	Check out your feature branch:  
+●	Check out your feature branch:  
 `git checkout <my_branch>`  
--	Merge the unmerged branch to <my_branch>:   
+●	Merge the unmerged branch to <my_branch>:   
 `git merge <unmerged_branch>`
 
 **Commit**  
@@ -60,7 +60,7 @@ When committing, prefix the message with the issue number and add a meaningful m
 Once all changes are committed, push the new branch to GitHub:  
 `git push -u origin <new_branch_name>`  
   
-In GitHub, under “Pull request”, the user has to ‘Compare and pull request’. The branch to merge with must be the ‘devel’ branch (base = devel) and the compare branch is the new branch to merge. All committed changes are then available for review.
+In GitHub, under “Pull request”, the user has to ‘Compare and pull request’. The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge. All committed changes are then available for review.
 
 ### Reviewing/closing an issue
 
