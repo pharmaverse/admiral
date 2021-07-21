@@ -25,8 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: windows-latest, r: '3.6'}
-          # - {os: macOS-latest, r: '3.6'}
+          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04, r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
@@ -36,7 +35,7 @@ jobs:
 
     steps:
       - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
+        if: startsWith(runner.os, 'Linux') && matrix.config.r == '3.6'
         with:
           path: ~/.local/share/renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
@@ -44,7 +43,7 @@ jobs:
             ${{ runner.os }}-renv-
 
       - uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
+        if: startsWith(runner.os, 'macOS') && matrix.config.r == '3.6'
         with:
           path: ~/Library/Application Support/renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
@@ -52,7 +51,7 @@ jobs:
             ${{ runner.os }}-renv-
 
       - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows')
+        if: startsWith(runner.os, 'Windows') && matrix.config.r == '3.6'
         with:
           path: ~\AppData\Local\renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
@@ -83,9 +82,17 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
+        if: matrix.config.r == '3.6'
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
+        shell: Rscript {0}
+
+      - name: Install dependencies
+        if: matrix.config.r == 'release'
+        run: |
+          if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+          devtools::install()
         shell: Rscript {0}
 
       - name: Check
