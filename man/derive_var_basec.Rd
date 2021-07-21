@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_baseline.R
 \name{derive_var_basec}
 \alias{derive_var_basec}
-\title{Derive BASEC}
+\title{Derive BASEC Variable}
 \usage{
 derive_var_basec(dataset, by_vars)
 }

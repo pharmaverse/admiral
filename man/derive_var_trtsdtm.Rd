@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_trtsdtm.R
 \name{derive_var_trtsdtm}
 \alias{derive_var_trtsdtm}
-\title{Derive datetime of First Exposure to Treatment}
+\title{Derive Datetime of First Exposure to Treatment}
 \usage{
 derive_var_trtsdtm(
   dataset,
@@ -34,7 +34,7 @@ Permitted Values: logical expression}
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-Derives datetime of First Exposure to Treatment (\code{TRTSDTM})
+Derives datetime of first exposure to treatment (\code{TRTSDTM})
 }
 \details{
 For each group (with respect to the variables specified for the

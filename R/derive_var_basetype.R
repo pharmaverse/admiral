@@ -1,4 +1,4 @@
-#' Derive BASETYPE variable
+#' Derive BASETYPE Variable
 #'
 #' Adds the `BASETYPE` variable to a dataset and duplicates records based upon
 #' the provided conditions
@@ -49,20 +49,15 @@
 #'   )
 #' )
 derive_var_basetype <- function(dataset, basetypes) {
-  assert_that(
-    is.data.frame(dataset),
-    is_named_exprs(basetypes)
-  )
-  assert_has_variables(
-    dataset,
-    unique(map_chr(basetypes, all.vars))
-  )
+  assert_data_frame(dataset)
+  assert_named_exprs(basetypes)
 
   records_with_basetype <- map2(names(basetypes), basetypes, function(label, condition) {
     dataset %>%
       filter(!!condition) %>%
       mutate(BASETYPE = label)
-  }) %>% bind_rows()
+  }) %>%
+    bind_rows()
 
   records_without_basetype <- anti_join(dataset, records_with_basetype, by = colnames(dataset))
 

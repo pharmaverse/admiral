@@ -1,25 +1,36 @@
-#' A helper function to create a template script
+#' Open an ADaM Template Script
 #'
 #' @param adam_name An ADaM dataset name.
-#'
 #' @param save_path Path to save the script.
-#'
 #' @param open Whether to open the script right away.
 #'
-#' @author Shimeng Huang
+#' @author Shimeng Huang, Thomas Neitmann
+#'
+#' @keywords user_utility
 #'
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' use_ad_template("./ad_adsl.R", "adsl")
+#' if (interactive()) {
+#'   use_ad_template("adsl")
 #' }
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
                             open = interactive()) {
+  assert_character_scalar(adam_name)
+  assert_character_scalar(save_path)
+  assert_logical_scalar(open)
 
-  if (!requireNamespace("usethis", quiet = TRUE)) {
+  if (!requireNamespace("usethis", quietly = TRUE)) {
     abort("Required package {usethis} is not installed.")
+  }
+
+  if (!toupper(adam_name) %in% list_all_templates()) {
+    err_msg <- paste0(
+      sprintf("No template for '%s' available.\n", toupper(adam_name)),
+      "\u2139 Run `list_all_templates()` to get a list of all available ADaM templates."
+    )
+    abort(err_msg)
   }
 
   usethis::use_template(
@@ -30,20 +41,25 @@ use_ad_template <- function(adam_name = "adsl",
   )
 }
 
-#' List all templates provided by {admiral}
+#' List All Available ADaM Templates
 #'
-#' @author Shimeng Huang
+#' @author Shimeng Huang, Thomas Neitmann
+#'
+#' @keywords user_utility
 #'
 #' @export
 #'
 #' @examples
 #' list_all_templates()
 list_all_templates <- function() {
-  all_tpl <- list.files(system.file("templates", package = "admiral")) %>%
-    str_remove(., ".R$") %>%
-    str_remove(., "^ad_") %>%
-    toupper(.) %>%
-    paste0("\U2022 ", .)
-  cat("Existing templates: \n")
-  cat(all_tpl, sep = "\n")
+  list.files(system.file("templates", package = "admiral")) %>%
+    str_remove(".R$") %>%
+    str_remove("^ad_") %>%
+    toupper() %>%
+    structure(class = c("adam_templates", "character"))
+}
+
+print.adam_templates <- function(x, ...) {
+  cat("Existing templates:\n")
+  cat(paste0("\U2022 ", x), sep = "\n")
 }

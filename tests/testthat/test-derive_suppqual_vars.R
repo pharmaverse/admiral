@@ -81,7 +81,7 @@ test_that("Multiple IDVARs, differing types", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("USUBJID","NIDVAR","CIDVAR")
+    keys = c("USUBJID", "NIDVAR", "CIDVAR")
   )
 })
 
@@ -118,7 +118,7 @@ test_that("Multiple Records for each IDVAR", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("USUBJID","NIDVAR","CIDVAR")
+    keys = c("USUBJID", "NIDVAR", "CIDVAR")
   )
 })
 
@@ -152,7 +152,7 @@ test_that("Test domain paramter", {
   actual_output <- derive_suppqual_vars(
     input,
     input_supp,
-    domain="DM"
+    domain = "DM"
   )
 
   expect_dfs_equal(

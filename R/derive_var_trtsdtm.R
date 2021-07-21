@@ -1,6 +1,6 @@
-#' Derive datetime of First Exposure to Treatment
+#' Derive Datetime of First Exposure to Treatment
 #'
-#' Derives datetime of First Exposure to Treatment (`TRTSDTM`)
+#' Derives datetime of first exposure to treatment (`TRTSDTM`)
 #'
 #' @param dataset Input dataset
 #'
@@ -44,23 +44,21 @@ derive_var_trtsdtm <- function(dataset,
                                dataset_ex,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10) { # nolint
 
-  assert_has_variables(dataset, c("USUBJID"))
-  assert_has_variables(dataset_ex, c("USUBJID", "EXSTDTC", "EXSEQ"))
-  filter_ex <- enquo(filter_ex)
+  assert_data_frame(dataset, vars(USUBJID))
+  assert_data_frame(dataset_ex, vars(USUBJID, EXSTDTC, EXSEQ))
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
-  if (!quo_is_null(filter_ex)) {
-    add <- dataset_ex %>%
-      filter(!!filter_ex)
-  } else {
-    add <- dataset_ex
-  }
-  add <- add %>%
-      filter_extreme(
-        order = vars(EXSTDTC, EXSEQ),
-        by_vars = vars(USUBJID),
-        mode = "first"
-      ) %>%
-      transmute(USUBJID, TRTSDTM = convert_dtc_to_dtm(impute_dtc(EXSTDTC)))
+  add <- dataset_ex %>%
+    filter_if(filter_ex) %>%
+    filter_extreme(
+      order = vars(EXSTDTC, EXSEQ),
+      by_vars = vars(USUBJID),
+      mode = "first"
+    ) %>%
+    transmute(
+      USUBJID,
+      TRTSDTM = convert_dtc_to_dtm(EXSTDTC, date_imputation = "first", time_imputation = "first")
+    )
 
   left_join(dataset, add, by = c("USUBJID"))
 }

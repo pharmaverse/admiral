@@ -26,3 +26,4 @@ extract_duplicate_records(adsl, vars(USUBJID))
 \author{
 Thomas Neitmann
 }
+\keyword{dev_utility}

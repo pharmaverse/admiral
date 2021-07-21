@@ -1,3 +1,533 @@
+#' Is an Argument a Data Frame?
+#'
+#' Checks if an argument is a data frame and (optionally) whether is contains
+#' a set of required variables
+#'
+#' @param arg A function argument to be checked
+#' @param required_vars A list of variables created using `vars()`
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a data frame or if `arg`
+#' is a data frame but misses any variable specified in `required_vars`. Otherwise,
+#' the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(dm)
+#'
+#' example_fun <- function(dataset) {
+#'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+#' }
+#'
+#' example_fun(dm)
+#'
+#' try(example_fun(dplyr::select(dm, -STUDYID)))
+#'
+#' try(example_fun("Not a dataset"))
+assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+  assert_vars(required_vars, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.data.frame(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a data frame but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (!is.null(required_vars)) {
+    required_vars <- vars2chr(required_vars)
+    is_missing <- !required_vars %in% colnames(arg)
+    if (any(is_missing)) {
+      missing_vars <- required_vars[is_missing]
+      if (length(missing_vars) == 1L) {
+        err_msg <- sprintf("Required variable `%s` is missing", missing_vars)
+      } else {
+        err_msg <- sprintf("Required variables %s are missing", enumerate(missing_vars))
+      }
+      abort(err_msg)
+    }
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a Character Scalar (String)?
+#'
+#' Checks if an argument is a character scalar and (optionally) whether it matches
+#' one of the provided `values`.
+#'
+#' @param arg A function argument to be checked
+#' @param values A `character` vector of valid values for `arg`
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a character vector or if `arg`
+#' is a character vector but of length > 1 or if its value is not one of the `values`
+#' specified. Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(msg_type) {
+#'   assert_character_scalar(msg_type, values = c("warning", "error"))
+#' }
+#'
+#' example_fun("warning")
+#'
+#' try(example_fun("message"))
+#'
+#' try(example_fun(TRUE))
+assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
+  assert_character_vector(values, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.character(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a character scalar but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (length(arg) != 1L) {
+    err_msg <- sprintf(
+      "`%s` must be a character scalar but is a character vector of length %d",
+      arg_name(substitute(arg)),
+      length(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (!is.null(values) && arg %notin% values) {
+    err_msg <- sprintf(
+      "`%s` must be one of %s but is '%s'",
+      arg_name(substitute(arg)),
+      enumerate(values, quote_fun = squote, conjunction = "or"),
+      arg
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a Character Vector?
+#'
+#' Checks if an argument is a character vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a character vector. Otherwise,
+#' the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(chr) {
+#'   assert_character_vector(chr)
+#' }
+#'
+#' example_fun(letters)
+#'
+#' try(example_fun(1:10))
+assert_character_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.character(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a character vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
+
+#' Is an Argument a Logical Scalar (Boolean)?
+#'
+#' Checks if an argument is a logical scalar
+#'
+#' @param arg A function argument to be checked
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
+#' the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(flag) {
+#'   assert_logical_scalar(flag)
+#' }
+#'
+#' example_fun(FALSE)
+#'
+#' try(example_fun(NA))
+#'
+#' try(example_fun(c(TRUE, FALSE, FALSE)))
+#'
+#' try(example_fun(1:10))
+assert_logical_scalar <- function(arg) {
+  if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be either `TRUE` or `FALSE` but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a Symbol?
+#'
+#' Checks if an argument is a symbol
+#'
+#' @param arg A function argument to be checked. Must be a `quosure`. See examples.
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a symbol and returns the input
+#' invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(dm)
+#'
+#' example_fun <- function(dat, var) {
+#'   var <- assert_symbol(rlang::enquo(var))
+#'   dplyr::select(dat, !!var)
+#' }
+#'
+#' example_fun(dm, USUBJID)
+#'
+#' try(example_fun(dm))
+#'
+#' try(example_fun(dm, "USUBJID"))
+#'
+#' try(example_fun(dm, toupper(PARAMCD)))
+assert_symbol <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (quo_is_missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!quo_is_symbol(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a symbol but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(quo_get_expr(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a Filter Condition?
+#'
+#' @param arg Quosure - filtering condition.
+#' @param optional Logical - is the argument optional? Defaults to `FALSE`.
+#'
+#' @details Check if `arg` is a suitable filtering condition to be used in
+#' functions like `subset` or `dplyr::filter`.
+#'
+#' @return Performs necessary checks and returns `arg` if all pass.
+#' Otherwise throws an informative error.
+#'
+#' @export
+#' @keywords assertion
+#' @author Ondrej Slama
+#'
+#' @examples
+#' data(dm)
+#'
+#' # typical usage in a function as a parameter check
+#' example_fun <- function(dat, x) {
+#'   x <- assert_filter_cond(rlang::enquo(x))
+#'   dplyr::filter(dat, !!x)
+#' }
+#'
+#' example_fun(dm, AGE == 64)
+#'
+#' try(example_fun(dm, USUBJID))
+assert_filter_cond <- function(arg, optional = FALSE) {
+  stopifnot(is_quosure(arg))
+  assert_logical_scalar(optional)
+
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
+  provided <- quo_not_missing(arg)
+  if (!provided & !optional) {
+    err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (provided & !quo_is_call(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a filter condition but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(quo_get_expr(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a List of Variables?
+#'
+#' Checks if an argument is a valid list of variables created using `vars()`
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Samia Kabi
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variables created using `vars()`
+#' and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(by_vars) {
+#'   assert_vars(by_vars)
+#' }
+#'
+#' example_fun(vars(USUBJID, PARAMCD))
+#'
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#'
+#' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
+#'
+#' try(example_fun(vars(USUBJID, toupper(PARAMCD), desc(AVAL))))
+assert_vars <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  default_err_msg <- sprintf(
+    "`%s` must be a a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
+    arg_name(substitute(arg))
+  )
+
+  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
+    abort(default_err_msg)
+  }
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, "quosures")) {
+    abort(default_err_msg)
+  }
+
+  is_symbol <- map_lgl(arg, quo_is_symbol)
+  if (!all(is_symbol)) {
+    expr_list <- map_chr(arg, quo_text)
+    err_msg <- paste0(
+      default_err_msg,
+      ", but the following elements are not: ",
+      enumerate(expr_list[!is_symbol])
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a List of Order Variables?
+#'
+#' Checks if an argument is a valid list of order variables created using `vars()`
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variables or `desc()`
+#' calls created using `vars()` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(by_vars) {
+#'   assert_order_vars(by_vars)
+#' }
+#'
+#' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
+#'
+#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#'
+#' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
+#'
+#' try(example_fun(vars(USUBJID, toupper(PARAMCD), -AVAL)))
+assert_order_vars <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  default_err_msg <- paste(
+    backquote(arg_name(substitute(arg))),
+    "must be a a list of unquoted variable names or `desc()` calls,",
+    "e.g. `vars(USUBJID, desc(VISITNUM))`"
+  )
+
+  if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
+    abort(default_err_msg)
+  }
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, "quosures")) {
+    abort(default_err_msg)
+  }
+
+  assert_that(is_order_vars(arg))
+
+  invisible(arg)
+}
+
+#' Is an Argument an Integer Scalar?
+#'
+#' Checks if an argument is an integer scalar
+#'
+#' @param arg A function argument to be checked
+#' @param subset A subset of integers that `arg` should be part of. Should be one
+#'   of `"none"` (the default), `"positive"`, `"non-negative"` or `"negative"`.
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not an integer belonging to the
+#' specified `subset`.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num1, num2) {
+#'   assert_integer_scalar(num1, subset = "positive")
+#'   assert_integer_scalar(num2, subset = "negative")
+#' }
+#'
+#' example_fun(1, -9)
+#'
+#' try(example_fun(1.5, -9))
+#'
+#' try(example_fun(2, 0))
+#'
+#' try(example_fun("2", 0))
+assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
+  subsets <- list(
+    "positive" = quote(arg > 0L),
+    "non-negative" = quote(arg >= 0L),
+    "negative" = quote(arg < 0L),
+    "none" = quote(TRUE)
+  )
+  assert_character_scalar(subset, values = names(subsets))
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
+    err_msg <- sprintf(
+      "`%s` must be %s integer scalar but is %s",
+      arg_name(substitute(arg)),
+      if (subset == "none") "an" else paste("a", subset),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(as.integer(arg))
+}
+
+assert_named_exprs <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+    err_msg <- sprintf(
+      "`%s` must be a named list of expressions created using `exprs()` but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
@@ -59,11 +589,20 @@ is_date <- function(arg) {
   is.instant(arg)
 }
 on_failure(is_date) <- function(call, env) {
+  evld <- eval(call$arg, envir = env)
+  len <- length(evld)
+  msg <- if (len == 0) {
+    deparse(evld)
+  } else if (len == 1) {
+    evld
+  } else {
+    paste0("c(", paste(head(evld, 5), collapse = ", "), `if`(len > 5, ", ..."), ")")
+  }
   paste0(
     "Argument ",
     deparse(call$arg),
     " = ",
-    eval(call$arg, envir = env),
+    msg,
     " is not a lubridate date."
   )
 }
@@ -100,7 +639,7 @@ on_failure(is_timeunit) <- function(call, env) {
   )
 }
 
-#' Check validity of the date imputation input
+#' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
 #' or as a keyword: "FISRT", "MID", "LAST"
@@ -119,7 +658,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("01-02"))
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
-  pattern <- "^([0-9]{2})-([0-9]{2})$"
+  pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
@@ -129,12 +668,12 @@ on_failure(is_valid_date_entry) <- function(call, env) {
     " = ",
     eval(call$arg, envir = env),
     " is not a valid date entry.\n",
-    "date_imputation should be specified as 'dd-mm' (e.g. '01-01') or ",
+    "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
     "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
   )
 }
 
-#' Check validity of the time imputation input
+#' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
 #' or as a keyword: "FISRT", "LAST"
@@ -168,7 +707,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
   )
 }
 
-#' Check validity of the minute/second portion in the time input
+#' Check Validity of the Minute/Second Portion of the Time Input
 #'
 #' Minutes and seconds are expected to range from 0 to 59
 #'
@@ -198,7 +737,7 @@ on_failure(is_valid_sec_min) <- function(call, env) {
   )
 }
 
-#' Check validity of the hour portion in the time input
+#' Check Validity of the Hour Portion in the Time Input
 #'
 #' Hours are expected to range from 0 to 23
 #'
@@ -228,7 +767,7 @@ on_failure(is_valid_hour) <- function(call, env) {
   )
 }
 
-#' Check validity of the day portion in the date input
+#' Check Validity of the Day Portion in the Date Input
 #'
 #' Days are expected to range from 1 to 31
 #'
@@ -258,7 +797,7 @@ on_failure(is_valid_day) <- function(call, env) {
   )
 }
 
-#' Check validity of the month portion in the date input
+#' Check Validity of the Month Portion in the Date Input
 #'
 #' Days are expected to range from 1 to 12
 #'
@@ -289,20 +828,7 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-is_named_exprs <- function(arg) {
-  is.list(arg) &&
-    all(map_lgl(arg, is.language)) &&
-    all(names(arg) != "")
-}
-on_failure(is_named_exprs) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a named list of expressions created using `exprs()`"
-  )
-}
-
-#' Is Variable-value List?
+#' Is Variable-Value List?
 #'
 #' Checks if the argument is a list of quosures where the expressions are
 #' variable-value pairs. The value can be a symbol, a string, or NA. More general
@@ -340,7 +866,6 @@ on_failure(is_varval_list) <- function(call, env) {
     paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
   )
 }
-
 
 is_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
@@ -411,6 +936,8 @@ on_failure(is_expr) <- function(call, env) {
 #'
 #' @return Logical value.
 #'
+#' @noRd
+#'
 #' @examples
 #' \dontrun{
 #' x <- list("x", "y")
@@ -435,7 +962,7 @@ on_failure(are_records_same) <- function(call, env) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}

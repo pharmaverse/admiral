@@ -12,12 +12,24 @@ format_reason_default(reason, reason_spe = NULL)
 \item{reason_spe}{the disposition variable used for the mapping of the details
 if required (e.g. \code{DSTERM}).}
 }
+\value{
+A \code{character} vector
+}
 \description{
 Define a function to map the disposition reason
 }
 \details{
-format_reason_default(DSDECOD) returns \code{DSDECOD} when \code{DSDECOD} != 'COMPLETED' nor NA.
-format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD} != 'COMPLETED' nor NA.
-e.g. DCSREAS =  format_reason_default(DSDECOD)
-e.g. DCSREASP =  format_reason_default(DSDECOD, DSTERM)
+\code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not
+'COMPLETED' or \code{NA}. \code{format_reason_default(DSDECOD, DSTERM)} returns
+\code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' or \code{NA}.
+
+For example:\preformatted{DCSREAS = format_reason_default(DSDECOD)
+DCSREASP = format_reason_default(DSDECOD, DSTERM)
 }
+}
+\author{
+Samia Kabi
+}
+\keyword{adsl}
+\keyword{computation}
+\keyword{user_utility}

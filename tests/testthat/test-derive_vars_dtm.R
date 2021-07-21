@@ -13,14 +13,14 @@ date <- tibble::tribble(
 
 test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
-    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02", ymd_hms(NA), NA_character_, NA_character_,
-    "2019", ymd_hms(NA), NA_character_, NA_character_,
-    "2019---07", ymd_hms(NA), NA_character_, NA_character_
+    ~XXSTDTC, ~ASTDTM, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),  NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-02", ymd_hms(NA), NA_character_,
+    "2019", ymd_hms(NA), NA_character_,
+    "2019---07", ymd_hms(NA), NA_character_
   )
 
   actual_output <- derive_vars_dtm(date,
@@ -120,7 +120,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     dtc = XXSTDTC,
     date_imputation = "LAST",
     time_imputation = "LAST",
-    flag_imputation = FALSE
+    flag_imputation = "none"
   )
 
   expect_equal(
@@ -149,7 +149,7 @@ test_that("Partial date imputed to the mid day/month", {
   actual_output1 <- derive_vars_dtm(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "15-06"
+    date_imputation = "06-15"
   )
 
   expect_equal(

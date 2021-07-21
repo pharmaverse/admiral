@@ -1,4 +1,4 @@
-#' Expectation: Are Two Datasets Equal
+#' Expectation: Are Two Datasets Equal?
 #'
 #' Uses [diffdf::diffdf()] to compares 2 datasets for any differences
 #'
@@ -9,7 +9,7 @@
 #' @param ... Additional arguments passed onto [diffdf::diffdf()]
 #'
 #' @author Thomas Neitmann
-#' @keywords test_helper
+#' @keywords test_helper, dev_utility
 #' @export
 #'
 #' @examples

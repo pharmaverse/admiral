@@ -21,3 +21,7 @@ Helper function to convert date (or date-time) objects to characters of dtc form
 admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
 admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
 }
+\author{
+Ondrej Slama
+}
+\keyword{dev_utility}

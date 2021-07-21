@@ -1,5 +1,4 @@
-
-#' Derive last dose date(-time)
+#' Derive Last Dose Date(-time)
 #'
 #' @param dataset Input dataset.
 #' @param dataset_ex Input EX dataset.
@@ -58,8 +57,8 @@
 #' derive_last_dose(
 #'   head(ae, 100),
 #'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'     nchar(EXENDTC) >= 10,
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
@@ -73,8 +72,8 @@
 #' derive_last_dose(
 #'   head(ae, 100),
 #'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'     nchar(EXENDTC) >= 10,
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
@@ -96,69 +95,23 @@ derive_last_dose <- function(dataset,
                              new_var,
                              output_datetime = TRUE,
                              check_dates_only = FALSE,
-                             traceability_vars = vars()) {
+                             traceability_vars = NULL) {
 
-  assert_that(
-    !dplyr::is_grouped_df(dataset),
-    !dplyr::is_grouped_df(dataset_ex),
-    is_quosures(by_vars),
-    rlang::is_scalar_logical(output_datetime),
-    rlang::is_scalar_logical(check_dates_only),
-    is_quosures(traceability_vars)
-  )
-
-  # substitute dataset variables
-  filter_ex <- enquo(filter_ex)
-  dose_start <- enquo(dose_start)
-  dose_end <- enquo(dose_end)
-  analysis_date <- enquo(analysis_date)
-  dataset_seq_var <- enquo(dataset_seq_var)
-  new_var <- enquo(new_var)
-
-  # check if variables are symbols
-  assert_that(
-    quo_not_missing(filter_ex),
-    quo_not_missing(dose_start),
-    quo_not_missing(dose_end),
-    quo_not_missing(analysis_date),
-    quo_not_missing(dataset_seq_var),
-    quo_is_call(filter_ex) | is.null(quo_get_expr(filter_ex)),
-    quo_is_symbol(dose_start),
-    quo_is_symbol(dose_end),
-    quo_is_symbol(analysis_date),
-    quo_is_symbol(dataset_seq_var)
-  )
-
-
-  # apply filtering condition
-  if (!is.null(quo_get_expr(filter_ex))) {
-    dataset_ex <- filter(dataset_ex, !!filter_ex)
-  }
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  by_vars <- assert_vars(by_vars)
+  dose_start <- assert_symbol(enquo(dose_start))
+  dose_end <- assert_symbol(enquo(dose_end))
+  analysis_date <- assert_symbol(enquo(analysis_date))
+  dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
+  new_var <- assert_symbol(enquo(new_var))
+  assert_logical_scalar(output_datetime)
+  assert_logical_scalar(check_dates_only)
+  stopifnot(is_quosures(traceability_vars) | is.null(traceability_vars))
+  assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
+  assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
 
   # by_vars converted to string
   by_vars_str <- vars2chr(by_vars)
-
-  # check variables existence - dataset
-  assert_has_variables(
-    dataset,
-    c(by_vars_str,
-      as_string(quo_get_expr(analysis_date)),
-      as_string(quo_get_expr(dataset_seq_var))
-    )
-  )
-
-  # check variables existence - dataset_ex
-  assert_has_variables(
-    dataset_ex,
-    c(by_vars_str,
-      as_string(quo_get_expr(dose_start)),
-      as_string(quo_get_expr(dose_end)))
-  )
-
-  # check variables existence - new_var
-  if (as_string(quo_get_expr(new_var)) == "") {
-    stop("Argument 'new_var' must be specified.")
-  }
 
   # assumption for last dose derivation: start and end dates (datetimes) need to match
   if (check_dates_only) {
@@ -176,7 +129,7 @@ derive_last_dose <- function(dataset,
   }
 
   # run traceability if requested
-  if (length(traceability_vars) != 0) {
+  if (!is.null(traceability_vars)) {
     trace_vars_str <- names(traceability_vars)
     dataset_ex <- mutate(dataset_ex, !!!traceability_vars)
   } else {
@@ -184,7 +137,9 @@ derive_last_dose <- function(dataset,
   }
 
   # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, trace_vars_str)
+  dataset_ex <- dataset_ex %>%
+    filter_if(filter_ex) %>%
+    select(!!!by_vars, !!dose_end, trace_vars_str)
 
   # calculate the last dose date
   res <- dataset %>%
@@ -194,17 +149,19 @@ derive_last_dose <- function(dataset,
               ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
     group_by(!!!by_vars, !!dataset_seq_var) %>%
     mutate(
-      tmp_dose_end_date = impute_dtc(dtc = !!dose_end,
-                                     date_imputation = NULL,
-                                     time_imputation = "00:00:00") %>%
-        convert_dtc_to_dtm(),
-      tmp_analysis_date = impute_dtc(dtc = !!analysis_date,
-                                     date_imputation = NULL,
-                                     time_imputation = "23:59:59") %>%
-        convert_dtc_to_dtm())
+      tmp_dose_end_date = convert_dtc_to_dtm(
+        dtc = !!dose_end,
+        date_imputation = NULL,
+        time_imputation = "00:00:00"
+      ),
+      tmp_analysis_date = convert_dtc_to_dtm(
+        dtc = !!analysis_date,
+        date_imputation = NULL,
+        time_imputation = "23:59:59"
+      ))
 
   # if no traceability variables are required, simply calculate the last dose date
-  if (length(traceability_vars) == 0) {
+  if (is.null(traceability_vars)) {
     res <- res %>%
       summarise(ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
                                               analysis_date = .data$tmp_analysis_date),
@@ -239,6 +196,8 @@ derive_last_dose <- function(dataset,
 #'
 #' @param dose_end dose end date
 #' @param analysis_date analysis date
+#'
+#' @noRd
 #'
 #' @return index. The last dose date is then `dose_end[return_value]`
 compute_ldose_idx <- function(dose_end, analysis_date) {

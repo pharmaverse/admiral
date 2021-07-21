@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_date_vars.R
 \name{derive_vars_dtm}
 \alias{derive_vars_dtm}
-\title{Derive/Impute a datetime from a date character vector}
+\title{Derive/Impute a Datetime from a Date Character Vector}
 \usage{
 derive_vars_dtm(
   dataset,
@@ -10,7 +10,7 @@ derive_vars_dtm(
   dtc,
   date_imputation = NULL,
   time_imputation = "00:00:00",
-  flag_imputation = TRUE,
+  flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL
 )

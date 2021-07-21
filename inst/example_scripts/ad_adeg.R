@@ -18,7 +18,7 @@ library(readxl)
 # The CDISC Pilot Data contains no EG data
 data("eg")
 data("adsl")
-data("vs")
+
 # test adsl
 adsl <- adsl %>% filter(., as.character(USUBJID) %in% c("01-701-1015", "01-701-1028"))
 
@@ -50,10 +50,45 @@ param_lookup <- tibble::tribble(
 #  "CDISCPILOT01", "01-701-1028", "EG", 4, "RR",     "RR Duration",        842,        "842",      "msec",      "2013-07-19T15:25:40", "AFTER STANDING FOR 1 MINUTE",    2,     "BASELINE", 0
 # )
 
-eg <- read_excel("data/eg.xlsx")
+data ("vs")
+data("ex")
+data("adsl")
+eg<- vs %>%
+  filter(VSTESTCD %in% c("PULSE", "DIABP", "SYSBP", "WEIGHT")) %>%
+  set_names(~ str_to_upper(.) %>% str_replace_all("VS", "EG")) %>%
+  mutate(
+    EGTESTCD= case_when (
+      EGTESTCD =="PULSE" ~ "HR",
+      EGTESTCD =="SYSBP" ~ "RR",
+      EGTESTCD =="DIABP" ~ "QT",
+      EGTESTCD =="WEIGHT" ~ "ECGINT",
+      TRUE ~ NA_character_),
+    EGTEST= case_when (
+      EGTESTCD =="HR" ~ "Heart Rate",
+      EGTESTCD =="RR" ~ "RR Duration",
+      EGTESTCD =="QT" ~ "QT Duration",
+      EGTESTCD =="ECGINT" ~ "ECG Interpretation",
+      TRUE ~ NA_character_),
+    EGORRES = case_when (
+      EGTESTCD== "RR" ~ as.character(EGSTRESN*4),
+      EGTESTCD =="QT" ~ as.character(EGSTRESN*6),
+      EGTESTCD =="ECGINT" & EGSTRESN > 85 ~ "ABNORMAL",
+      EGTESTCD =="ECGINT" ~ "NORMAL",
+      TRUE ~ EGORRES),
+    temp = if_else(EGTESTCD =="ECGINT", NA_character_,EGORRES  ),
+    EGSTRESN = as.numeric(temp)  ,
+    EGSTRESC = EGORRES,
+    EGSTRESU = case_when (
+      EGTESTCD %in% c("RR","QT")  ~ "msec",
+      EGTESTCD !="ECGINT"  ~ EGSTRESU,
+      TRUE ~ NA_character_)
+  )%>%
+  select(-EGPOS)
+
 
 # Join ADSL
-adeg <- select(adsl, -DOMAIN) %>%
+adeg <- adsl%>%
+  select(STUDYID, USUBJID, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT)%>%
   left_join(eg,
     by = c("STUDYID", "USUBJID")
   ) %>%
@@ -81,20 +116,20 @@ adeg <- select(adsl, -DOMAIN) %>%
   mutate(
   ATPTN = EGTPTNUM,
   ATPT = EGTPT,
+  #test= as.numeric(str_sub(VISIT, start = 5)),
+  test3=str_detect(VISIT, "WEEK"),
+  test2=str_sub(VISIT, start = 5),
   AVISIT = case_when(
-    str_detect(VISIT, "SCREEN") |
-      str_detect(VISIT, "UNSCHED") |
-      str_detect(VISIT, "RETRIEVAL") |
-      str_detect(VISIT, "AMBUL") ~ NA_character_,
-    !is.na(VISIT) ~ str_to_title(VISIT),
+    #str_detect(VISIT, "SCREEN") |str_detect(VISIT, "UNSCHED") |
+    #str_detect(VISIT, "RETRIEVAL") |str_detect(VISIT, "AMBUL") ~ NA_character_,
+    !is.na(VISIT) & ! str_detect(VISIT, "UNSCHED") ~ str_to_title(VISIT),
     TRUE ~ NA_character_
-  ),
-  AVISITN = case_when(
-    VISIT == "BASELINE" ~ 0,
-    str_detect(VISIT, "WEEK") ~
-    as.numeric(str_sub(VISIT, start = 5)),
-    TRUE ~ NA_real_
-  )
+  )#,
+  #AVISITN = case_when(
+  #  VISIT == "BASELINE" ~ 0,
+  #  str_detect(VISIT, "WEEK") ~ as.numeric(str_sub(VISIT, start = 5)),
+  #  TRUE ~ NA_real_
+  #)
 ) %>%
 
 # A summary records for each Visit. This could be applicable if triplicates

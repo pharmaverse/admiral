@@ -1,7 +1,5 @@
 ---
 title: "Get Started"
-author: "Stefan Bundfuss"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Get Started}
@@ -14,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(admiral)
 ```
 
 # Main Idea
@@ -109,6 +108,29 @@ the documentation. They are **not validated** yet.
 Although admiral follows CDISC standards it does not claim that the dataset
 resulting from calling admiral functions is ADaM compliant. This has to be
 ensured by the user.
+
+# Starting a Script
+
+For the ADaM data structures an overview of the flow and example function calls
+for the most common steps are provided by the following vignettes:
+
+- [Creating ADSL](adsl.html)
+- [Creating an OCCDS ADaM](occds.html)
+- [Creating a BDS Finding ADaM](bds_finding.html)
+
+admiral also provides template R scripts as a starting point. They can be
+created by calling `use_ad_template()`, e.g.,
+
+```r
+use_ad_template(
+  adam_name = "adsl",
+  save_path = "./ad_adsl.R")
+```
+
+A list of all available templates can be obtained by `list_all_templates()`:
+```{r}
+list_all_templates()
+```
 
 # Support
 
