@@ -41,9 +41,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 
   if (!is.data.frame(arg)) {
     err_msg <- sprintf(
-      "`%s` must be a data.frame but is %s",
+      "`%s` must be a data frame but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -108,7 +108,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a character scalar but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -122,7 +122,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (!is.null(values) && arg %!in% values) {
+  if (!is.null(values) && arg %notin% values) {
     err_msg <- sprintf(
       "`%s` must be one of %s but is '%s'",
       arg_name(substitute(arg)),
@@ -172,7 +172,7 @@ assert_character_vector <- function(arg, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a character vector but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(arg))
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -208,11 +208,10 @@ assert_character_vector <- function(arg, optional = FALSE) {
 #' try(example_fun(1:10))
 assert_logical_scalar <- function(arg) {
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
-    is <- if (length(arg) > 1L) friendly_type(type_of(arg)) else backquote(arg)
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
       arg_name(substitute(arg)),
-      is
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -269,7 +268,7 @@ assert_symbol <- function(arg, optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be a symbol but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(quo_get_expr(arg)))
+      what_is_it(quo_get_expr(arg))
     )
     abort(err_msg)
   }
@@ -320,9 +319,9 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 
   if (provided & !quo_is_call(arg)) {
     err_msg <- sprintf(
-      "`%s` is not a filter condition but %s",
+      "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
-      friendly_type(type_of(quo_get_expr(arg)))
+      what_is_it(quo_get_expr(arg))
     )
     abort(err_msg)
   }
@@ -427,9 +426,10 @@ assert_vars <- function(arg, optional = FALSE) {
 assert_order_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
-  default_err_msg <- sprintf(
-    "`%s` must be a a list of unquoted variable names or desc() calls, e.g. `vars(USUBJID, desc(VISITNUM))`",
-    arg_name(substitute(arg))
+  default_err_msg <- paste(
+    backquote(arg_name(substitute(arg))),
+    "must be a a list of unquoted variable names or `desc()` calls,",
+    "e.g. `vars(USUBJID, desc(VISITNUM))`"
   )
 
   if (isTRUE(tryCatch(force(arg), error = function(e) TRUE))) {
@@ -496,12 +496,12 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!rlang::is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
+  if (!is_integerish(arg) || length(arg) != 1L || !is.finite(arg) || !eval(subsets[[subset]])) {
     err_msg <- sprintf(
-      "`%s` must be a %s integer scalar but is %s",
+      "`%s` must be %s integer scalar but is %s",
       arg_name(substitute(arg)),
-      if (subset == "none") "\b\ban" else subset,
-      if (length(arg) == 1L) backquote(arg) else friendly_type(typeof(arg))
+      if (subset == "none") "an" else paste("a", subset),
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -518,8 +518,9 @@ assert_named_exprs <- function(arg, optional = FALSE) {
 
   if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
     err_msg <- sprintf(
-      "`%s` is not a named list of expressions created using `exprs()`",
-      arg_name(substitute(arg))
+      "`%s` must be a named list of expressions created using `exprs()` but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
     )
     abort(err_msg)
   }
@@ -588,11 +589,20 @@ is_date <- function(arg) {
   is.instant(arg)
 }
 on_failure(is_date) <- function(call, env) {
+  evld <- eval(call$arg, envir = env)
+  len <- length(evld)
+  msg <- if (len == 0) {
+    deparse(evld)
+  } else if (len == 1) {
+    evld
+  } else {
+    paste0("c(", paste(head(evld, 5), collapse = ", "), `if`(len > 5, ", ..."), ")")
+  }
   paste0(
     "Argument ",
     deparse(call$arg),
     " = ",
-    eval(call$arg, envir = env),
+    msg,
     " is not a lubridate date."
   )
 }
@@ -648,7 +658,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' assertthat::assert_that(is_valid_date_entry("01-02"))
 #' assertthat::assert_that(is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
-  pattern <- "^([0-9]{2})-([0-9]{2})$"
+  pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
@@ -658,7 +668,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
     " = ",
     eval(call$arg, envir = env),
     " is not a valid date entry.\n",
-    "date_imputation should be specified as 'dd-mm' (e.g. '01-01') or ",
+    "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
     "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
   )
 }

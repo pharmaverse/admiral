@@ -136,36 +136,39 @@ derive_var_lstalvdt <- function(dataset,
         i = i
       )
     }
-    if (!quo_is_null(sources[[i]]$filter)) {
-      add_data[[i]] <- sources[[i]]$dataset %>%
-        filter(!!(sources[[i]]$filter))
-    } else {
-      add_data[[i]] <- sources[[i]]$dataset
-    }
     date_var <- quo_get_expr(sources[[i]]$date_var)
-    add_data[[i]] <- filter_extreme(add_data[[i]],
-                                    order = vars(!!date_var),
-                                    by_vars = subject_keys,
-                                    mode = "last",
-                                    check_type = "none")
+    add_data[[i]] <- sources[[i]]$dataset %>%
+      filter_if(sources[[i]]$filter) %>%
+      filter_extreme(
+        order = vars(!!date_var),
+        by_vars = subject_keys,
+        mode = "last",
+        check_type = "none"
+      )
     if (is.Date(add_data[[i]][[as_string(date_var)]])) {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = !!date_var)
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = !!date_var
+      )
     } else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = date(!!date_var))
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = date(!!date_var)
+      )
     } else {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = convert_dtc_to_dt(
-                                   impute_dtc(!!date_var,
-                                              date_imputation = sources[[i]]$date_imputation)
-                                 ))
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = convert_dtc_to_dt(
+          !!date_var,
+          date_imputation = sources[[i]]$date_imputation
+        )
+      )
     }
   }
 

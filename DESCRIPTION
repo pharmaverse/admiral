@@ -27,7 +27,8 @@ Imports:
     readxl,
     rlang,
     stringr,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests:
     devtools,
     diffdf,
@@ -42,5 +43,6 @@ Suggests:
     spelling,
     styler,
     tibble,
-    usethis
+    usethis,
+    covr
 VignetteBuilder: knitr

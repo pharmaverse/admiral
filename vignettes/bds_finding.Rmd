@@ -1,7 +1,5 @@
 ---
 title: "Creating a BDS Finding ADaM"
-author: "admiral team"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: false
@@ -151,6 +149,8 @@ By default, the variable `ADTF` for `derive_vars_dt()` or `ADTF` and `ATMF` for
 `derive_vars_dtm()` will be created and populated with the controlled
 terminology outlined in the ADaM IG for date imputations. 
 
+See also [Date and Time Imputation](imputation.html).
+
 Once `ADT` is derived, the function `derive_var_ady()` can be used to derive `ADY`.
 This example assumes both `ADT` and `TRTSDT` exist on the data frame.
 
@@ -235,7 +235,7 @@ advs <- advs %>%
     APHASE = case_when(
       is.na(ADT) ~ NA_character_,
       ADT < RFSTDTC ~ "Screening",
-      RFSTDTC <= ADT | ADT <= RFENDTC ~ "Treatment",
+      RFSTDTC <= ADT & ADT <= RFENDTC ~ "Treatment",
       RFENDTC < ADT ~ "Follow-up",
       TRUE ~ "UNASSIGNED"
     ),
@@ -355,7 +355,7 @@ detailing how the BASETYPE should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
 
-```{r eval=TRUE, warning=FALSE}
+```{r eval=TRUE}
 advs <- derive_var_basetype(
   dataset = advs,
   basetypes = exprs(

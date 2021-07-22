@@ -10,7 +10,7 @@ derive_vars_dtm(
   dtc,
   date_imputation = NULL,
   time_imputation = "00:00:00",
-  flag_imputation = TRUE,
+  flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL
 )

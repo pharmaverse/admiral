@@ -36,7 +36,9 @@ ex_single <- dates %>%
   mutate(EXSTDY = ifelse(EXSTDTC == min(EXSTDTC), 1, as.numeric(EXSTDTC - min(EXSTDTC)) + 1),
          EXENDY = EXSTDY) %>%
   ungroup() %>%
-  mutate(seq_dates = NULL)
+  mutate(seq_dates = NULL,
+         EXENDTC = as.character(EXENDTC),
+         EXSTDTC = as.character(EXSTDTC))
 
 attr(ex_single$EXSEQ, "label") <- attr(ex$EXSEQ, "label")
 attr(ex_single$EXSTDTC, "label") <- attr(ex$EXSTDTC, "label")

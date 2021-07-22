@@ -57,8 +57,8 @@
 #' derive_last_dose(
 #'   head(ae, 100),
 #'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'     nchar(EXENDTC) >= 10,
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
@@ -72,8 +72,8 @@
 #' derive_last_dose(
 #'   head(ae, 100),
 #'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
+#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'     nchar(EXENDTC) >= 10,
 #'   dose_start = EXSTDTC,
 #'   dose_end = EXENDTC,
 #'   analysis_date = AESTDTC,
@@ -110,11 +110,6 @@ derive_last_dose <- function(dataset,
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
 
-  # apply filtering condition
-  if (!quo_is_null(filter_ex)) {
-    dataset_ex <- filter(dataset_ex, !!filter_ex)
-  }
-
   # by_vars converted to string
   by_vars_str <- vars2chr(by_vars)
 
@@ -142,7 +137,9 @@ derive_last_dose <- function(dataset,
   }
 
   # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, trace_vars_str)
+  dataset_ex <- dataset_ex %>%
+    filter_if(filter_ex) %>%
+    select(!!!by_vars, !!dose_end, trace_vars_str)
 
   # calculate the last dose date
   res <- dataset %>%
@@ -152,14 +149,16 @@ derive_last_dose <- function(dataset,
               ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
     group_by(!!!by_vars, !!dataset_seq_var) %>%
     mutate(
-      tmp_dose_end_date = impute_dtc(dtc = !!dose_end,
-                                     date_imputation = NULL,
-                                     time_imputation = "00:00:00") %>%
-        convert_dtc_to_dtm(),
-      tmp_analysis_date = impute_dtc(dtc = !!analysis_date,
-                                     date_imputation = NULL,
-                                     time_imputation = "23:59:59") %>%
-        convert_dtc_to_dtm())
+      tmp_dose_end_date = convert_dtc_to_dtm(
+        dtc = !!dose_end,
+        date_imputation = NULL,
+        time_imputation = "00:00:00"
+      ),
+      tmp_analysis_date = convert_dtc_to_dtm(
+        dtc = !!analysis_date,
+        date_imputation = NULL,
+        time_imputation = "23:59:59"
+      ))
 
   # if no traceability variables are required, simply calculate the last dose date
   if (is.null(traceability_vars)) {

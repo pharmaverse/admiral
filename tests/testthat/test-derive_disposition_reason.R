@@ -56,7 +56,7 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
   format_dctreas <- function(x, y = NULL) {
     out <- if (is.null(y)) x else y
     case_when(
-      x %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
+      x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
       TRUE ~ NA_character_
     )
   }
