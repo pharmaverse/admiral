@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: false
 vignette: >
-  %\VignetteIndexEntry{Creating ADVS}
+  %\VignetteIndexEntry{Creating a BDS Finding ADaM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
