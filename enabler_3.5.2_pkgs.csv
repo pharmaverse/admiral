@@ -1,0 +1,669 @@
+"Package","LibPath","Version","Priority","Depends","Imports","LinkingTo","Suggests","Enhances","License","License_is_FOSS","License_restricts_use","OS_type","MD5sum","NeedsCompilation","Built"
+"rice","/opt/mango/R/3.5.2/lib/R/library_sec","1.0.31",NA,NA,"httr, getPass, haven, memoise, tibble, assertthat, yaml, tools",NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"abind","/opt/mango/R/3.5.2/lib/R/library","1.4-5",NA,"R (>= 1.5.0)","methods, utils",NA,NA,NA,"LGPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"acepack","/opt/mango/R/3.5.2/lib/R/library","1.4.1",NA,NA,NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"AnnotationDbi","/opt/mango/R/3.5.2/lib/R/library","1.44.0",NA,"R (>= 2.7.0), methods, utils, stats4, BiocGenerics (>=
+0.23.1), Biobase (>= 1.17.0), IRanges","DBI, RSQLite, S4Vectors (>= 0.9.25)",NA,"hgu95av2.db, GO.db, org.Sc.sgd.db, org.At.tair.db, KEGG.db,
+RUnit, TxDb.Hsapiens.UCSC.hg19.knownGene, hom.Hs.inp.db,
+org.Hs.eg.db, reactome.db, AnnotationForge, graph,
+EnsDb.Hsapiens.v75, BiocStyle, knitr",NA,"Artistic-2.0",NA,NA,NA,NA,"no","3.5.2"
+"assertr","/opt/mango/R/3.5.2/lib/R/library","2.5",NA,NA,"dplyr (>= 0.7.0), MASS, lazyeval, stats, utils, rlang (>=
+0.1.2)",NA,"knitr, testthat, magrittr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"assertthat","/opt/mango/R/3.5.2/lib/R/library","0.2.0",NA,NA,"tools",NA,"testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"backports","/opt/mango/R/3.5.2/lib/R/library","1.1.3",NA,"R (>= 3.0.0)","utils",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"base","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,"methods",NA,"Part of R 3.5.2",NA,NA,NA,NA,NA,"3.5.2"
+"base64enc","/opt/mango/R/3.5.2/lib/R/library","0.1-3",NA,"R (>= 2.9.0)",NA,NA,NA,"png","GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"bayesplot","/opt/mango/R/3.5.2/lib/R/library","1.6.0",NA,"R (>= 3.1.0)","dplyr (>= 0.7.1), ggplot2 (>= 2.2.1), reshape2, stats, utils,
+rlang, ggridges",NA,"arm, gridExtra (>= 2.2.1), knitr (>= 1.16), loo (>= 2.0.0),
+rmarkdown (>= 1.0.0), rstan (>= 2.17.1), rstanarm (>= 2.17.4),
+rstantools (>= 1.5.0), scales, shinystan (>= 2.3.0), testthat
+(>= 2.0.0), vdiffr",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"BBmisc","/opt/mango/R/3.5.2/lib/R/library","1.11",NA,NA,"utils, methods, stats, checkmate (>= 1.8.0)",NA,"testthat, microbenchmark, codetools",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"beeswarm","/opt/mango/R/3.5.2/lib/R/library","0.2.3",NA,NA,"stats, graphics, grDevices, utils",NA,NA,NA,"Artistic-2.0",NA,NA,NA,NA,"no","3.5.2"
+"BH","/opt/mango/R/3.5.2/lib/R/library","1.69.0-1",NA,NA,NA,NA,NA,NA,"BSL-1.0",NA,NA,NA,NA,"no","3.5.2"
+"bibtex","/opt/mango/R/3.5.2/lib/R/library","0.4.2",NA,"R (>= 3.0.2)","stringr, utils",NA,"testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"bindr","/opt/mango/R/3.5.2/lib/R/library","0.1.1",NA,NA,NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"bindrcpp","/opt/mango/R/3.5.2/lib/R/library","0.2.2",NA,NA,"bindr (>= 0.1.1), Rcpp (>= 0.12.16)","plogr, Rcpp","testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"binr","/opt/mango/R/3.5.2/lib/R/library","1.1",NA,"R (>= 2.15),",NA,NA,NA,NA,"Apache License (== 2.0)",NA,NA,NA,NA,"no","3.5.2"
+"Biobase","/opt/mango/R/3.5.2/lib/R/library","2.42.0",NA,"R (>= 2.10), BiocGenerics (>= 0.27.1), utils","methods",NA,"tools, tkWidgets, ALL, RUnit, golubEsets",NA,"Artistic-2.0",NA,NA,NA,NA,"yes","3.5.2"
+"BiocGenerics","/opt/mango/R/3.5.2/lib/R/library","0.28.0",NA,"methods, utils, graphics, stats, parallel","methods, utils, graphics, stats, parallel",NA,"Biobase, S4Vectors, IRanges, GenomicRanges, Rsamtools,
+AnnotationDbi, oligoClasses, oligo, affyPLM, flowClust, affy,
+DESeq2, MSnbase, annotate, RUnit",NA,"Artistic-2.0",NA,NA,NA,NA,"no","3.5.2"
+"BiocInstaller","/opt/mango/R/3.5.2/lib/R/library","1.32.1",NA,"R (>= 3.5.0), R (< 3.6.0)",NA,NA,"remotes, RUnit, BiocGenerics",NA,"Artistic-2.0",NA,NA,NA,NA,"no","3.5.2"
+"bit","/opt/mango/R/3.5.2/lib/R/library","1.1-14",NA,"R (>= 2.9.2)",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"bit64","/opt/mango/R/3.5.2/lib/R/library","0.9-7",NA,"R (>= 3.0.1), bit (>= 1.1-12), utils, methods, stats",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"bitops","/opt/mango/R/3.5.2/lib/R/library","1.0-6",NA,NA,NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"blob","/opt/mango/R/3.5.2/lib/R/library","1.1.1",NA,NA,"methods, prettyunits",NA,"covr, pillar (>= 1.2.1), testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"bookdown","/opt/mango/R/3.5.2/lib/R/library","0.9",NA,NA,"htmltools (>= 0.3.6), knitr (>= 1.16), rmarkdown (>= 1.9),
+xfun (>= 0.2), tinytex, yaml (>= 2.1.14)",NA,"htmlwidgets, rstudioapi, miniUI, rsconnect (>= 0.4.3), servr
+(>= 0.3), shiny, testit (>= 0.5), tufte, webshot",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"bookdownplus","/opt/mango/R/3.5.2/lib/R/library","1.5.4",NA,"R (>= 3.1.0)","bookdown (>= 0.3.17)",NA,"",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"boot","/opt/mango/R/3.5.2/lib/R/library","1.3-20","recommended","R (>= 3.0.0), graphics, stats",NA,NA,"MASS, survival",NA,"Unlimited",NA,NA,NA,NA,"no","3.5.2"
+"bpp","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"mvtnorm, R (>= 2.10)",NA,NA,"knitr, rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"brew","/opt/mango/R/3.5.2/lib/R/library","1.0-6",NA,NA,NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,NA,"3.5.2"
+"bridgesampling","/opt/mango/R/3.5.2/lib/R/library","0.6-0",NA,"R (>= 3.0.0)","mvtnorm, Matrix, Brobdingnag, stringr, coda, parallel, scales,
+utils, methods",NA,"testthat, Rcpp, RcppEigen, R2jags, rjags, runjags, knitr,
+rmarkdown, R.rsp, BayesFactor, rstan, rstanarm, nimble,
+MCMCpack",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"brms","/opt/mango/R/3.5.2/lib/R/library","2.7.0",NA,"R (>= 3.2.0), Rcpp (>= 0.12.0), ggplot2 (>= 2.0.0), methods","rstan (>= 2.17.2), loo (>= 2.0.0), Matrix (>= 1.1.1), mgcv (>=
+1.8-13), rstantools (>= 1.3.0), bayesplot (>= 1.5.0), shinystan
+(>= 2.4.0), bridgesampling (>= 0.3-0), matrixStats, nleqslv,
+nlme, coda, abind, stats, utils, parallel, grDevices, backports",NA,"testthat (>= 0.9.1), RWiener, future, mice, spdep, mnormt,
+lme4, MCMCglmm, ape, arm, statmod, digest, R.rsp, knitr,
+rmarkdown",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"Brobdingnag","/opt/mango/R/3.5.2/lib/R/library","1.2-6",NA,"R (>= 2.13.0), methods",NA,NA,NA,NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"broom","/opt/mango/R/3.5.2/lib/R/library","0.5.1",NA,"R (>= 3.1)","backports, dplyr, generics (>= 0.0.2), methods, nlme, purrr,
+reshape2, stringr, tibble, tidyr",NA,"AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot, brms,
+btergm, car, caret, coda, covr, e1071, emmeans, ergm, gam (>=
+1.15), gamlss, gamlss.data, gamlss.dist, geepack, ggplot2,
+glmnet, gmm, Hmisc, irlba, joineRML, Kendall, knitr, ks,
+Lahman, lavaan, lfe, lme4, lmodel2, lmtest, lsmeans, maps,
+maptools, MASS, Matrix, mclust, mgcv, muhaz, multcomp, network,
+nnet, orcutt (>= 2.2), ordinal, plm, plyr, poLCA, psych,
+quantreg, rgeos, rmarkdown, robust, rsample, rstan, rstanarm,
+sp, speedglm, statnet.common, survey, survival, testthat,
+tseries, xergm, zoo",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"Cairo","/opt/mango/R/3.5.2/lib/R/library","1.5-9",NA,"R (>= 2.4.0)","grDevices, graphics",NA,"png","FastRWeb","GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"callr","/opt/mango/R/3.5.2/lib/R/library","3.1.1",NA,NA,"processx (>= 3.2.1), R6, utils",NA,"cliapp, covr, crayon, pingr, ps, testthat, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"car","/opt/mango/R/3.5.2/lib/R/library","3.0-2",NA,"R (>= 3.2.0), carData (>= 3.0-0)","abind, MASS, mgcv, nnet, pbkrtest (>= 0.4-4), quantreg,
+grDevices, utils, stats, graphics, maptools, rio, lme4, nlme",NA,"alr4, boot, coxme, leaps, lmtest, Matrix, MatrixModels, rgl
+(>= 0.93.960), sandwich, SparseM, survival, survey",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"carData","/opt/mango/R/3.5.2/lib/R/library","3.0-2",NA,"R (>= 3.0)",NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"caret","/opt/mango/R/3.5.2/lib/R/library","6.0-81",NA,"R (>= 2.10), lattice (>= 0.20), ggplot2","foreach, methods, plyr, ModelMetrics (>= 1.1.0), nlme,
+reshape2, stats, stats4, utils, grDevices, recipes (>= 0.1.4),
+withr (>= 2.0.0)",NA,"BradleyTerry2, e1071, earth (>= 2.2-3), fastICA, gam (>=
+1.15), ipred, kernlab, knitr, klaR, MASS, ellipse, mda, mgcv,
+mlbench, MLmetrics, nnet, party (>= 0.9-99992), pls, pROC,
+proxy, randomForest, RANN, spls, subselect, pamr, superpc,
+Cubist, testthat (>= 0.9.1), rpart, dplyr",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"caTools","/opt/mango/R/3.5.2/lib/R/library","1.17.1.1",NA,"R (>= 2.2.0)","bitops",NA,"MASS, rpart",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"cellranger","/opt/mango/R/3.5.2/lib/R/library","1.1.0",NA,"R (>= 3.0.0)","rematch, tibble",NA,"covr, testthat (>= 1.0.0), knitr, rmarkdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"checkmate","/opt/mango/R/3.5.2/lib/R/library","1.9.0",NA,"R (>= 3.0.0)","backports (>= 1.1.0), utils",NA,"R6, bit, fastmatch, data.table (>= 1.9.8), devtools, ggplot2,
+knitr, magrittr, microbenchmark, rmarkdown, testthat (>=
+0.11.0), tibble",NA,"BSD_3_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"chron","/opt/mango/R/3.5.2/lib/R/library","2.3-53",NA,"R (>= 2.12.0)","graphics, stats",NA,"scales, ggplot2","zoo","GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"circlize","/opt/mango/R/3.5.2/lib/R/library","0.4.5",NA,"R (>= 3.0.0), graphics","GlobalOptions (>= 0.1.0), shape, grDevices, utils, stats,
+colorspace, methods, grid",NA,"knitr, dendextend (>= 1.0.1), ComplexHeatmap (>= 1.13.2),
+gridBase, png",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"class","/opt/mango/R/3.5.2/lib/R/library","7.3-14","recommended","R (>= 3.0.0), stats, utils","MASS",NA,NA,NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"cli","/opt/mango/R/3.5.2/lib/R/library","1.0.1",NA,"R (>= 2.10)","assertthat, crayon (>= 1.3.4), methods, utils",NA,"covr, fansi, mockery, testthat, webshot, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"clipr","/opt/mango/R/3.5.2/lib/R/library","0.5.0",NA,NA,"utils",NA,"covr, rstudioapi (>= 0.5), testthat (>= 2.0.0)",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"clisymbols","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,NA,NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"cluster","/opt/mango/R/3.5.2/lib/R/library","2.0.7-1","recommended","R (>= 3.2.0)","graphics, grDevices, stats, utils",NA,"MASS, Matrix",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"cmprsk","/opt/mango/R/3.5.2/lib/R/library","2.2-7",NA,"R (>= 2.15.0), survival",NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"coda","/opt/mango/R/3.5.2/lib/R/library","0.19-2",NA,"R (>= 2.14.0)","lattice",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"codetools","/opt/mango/R/3.5.2/lib/R/library","0.2-15","recommended","R (>= 2.1)",NA,NA,NA,NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"colorspace","/opt/mango/R/3.5.2/lib/R/library","1.3-2",NA,"R (>= 2.13.0), methods","graphics, grDevices",NA,"datasets, stats, utils, KernSmooth, MASS, kernlab, mvtnorm,
+vcd, dichromat, tcltk, shiny, shinyjs",NA,"BSD_3_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"colourpicker","/opt/mango/R/3.5.2/lib/R/library","1.0",NA,"R (>= 3.1.0)","ggplot2, htmltools, htmlwidgets (>= 0.7), jsonlite, miniUI (>=
+0.1.1), shiny (>= 0.11.1), shinyjs, utils",NA,"knitr (>= 1.7), rmarkdown, rstudioapi (>= 0.5)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"commonmark","/opt/mango/R/3.5.2/lib/R/library","1.7",NA,NA,NA,NA,"curl, testthat, xml2",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"compiler","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,NA,NA,"Part of R 3.5.2",NA,NA,NA,NA,NA,"3.5.2"
+"ComplexHeatmap","/opt/mango/R/3.5.2/lib/R/library","1.20.0",NA,"R (>= 3.1.2), methods, grid, graphics, stats, grDevices","circlize (>= 0.4.1), GetoptLong, colorspace, RColorBrewer,
+GlobalOptions (>= 0.1.0)",NA,"testthat (>= 0.3), knitr, markdown, cluster, MASS, pvclust,
+dendsort, HilbertCurve, Cairo, png, jpeg, tiff, fastcluster,
+dendextend (>= 1.0.1)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"cowplot","/opt/mango/R/3.5.2/lib/R/library","0.9.4",NA,"R (>= 3.3.0), ggplot2 (>= 2.1.0),","grid (>= 3.0.0), gtable (>= 0.1.2), plyr (>= 1.8.2),
+grDevices, methods, scales, utils",NA,"covr, gridGraphics, knitr, rmarkdown, magick, maps, dplyr,
+tidyr, testthat, vdiffr, viridis",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"coxphf","/opt/mango/R/3.5.2/lib/R/library","1.13",NA,"R (>= 3.0.2)","survival",NA,NA,NA,"GPL",NA,NA,NA,NA,"yes","3.5.2"
+"coxphw","/opt/mango/R/3.5.2/lib/R/library","4.0.1",NA,"R (>= 3.0.2), survival",NA,NA,"knitr, rmarkdown",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"crayon","/opt/mango/R/3.5.2/lib/R/library","1.3.4",NA,NA,"grDevices, methods, utils",NA,"mockery, rstudioapi, testthat, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"crmPack","/opt/mango/R/3.5.2/lib/R/library","0.2.9",NA,"R (>= 3.0.0), ggplot2 (>= 2.0.0), graphics","methods, grid, gridExtra, GenSA, mvtnorm, parallel, rjags,
+utils, tools, MASS",NA,"ggmcmc, knitr, Rcpp, RcppArmadillo",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"crosstalk","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,NA,"htmltools (>= 0.3.5), jsonlite, lazyeval, R6, shiny (>= 0.11),
+ggplot2",NA,NA,NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"curl","/opt/mango/R/3.5.2/lib/R/library","3.3",NA,"R (>= 3.0.0)",NA,NA,"spelling, testthat (>= 1.0.0), knitr, jsonlite, rmarkdown,
+magrittr, httpuv (>= 1.4.4), webutils",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"data.table","/opt/mango/R/3.5.2/lib/R/library","1.11.8",NA,"R (>= 3.1.0)","methods",NA,"bit64, curl, R.utils, knitr, xts, nanotime, zoo",NA,"MPL-2.0 | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"datasets","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,NA,NA,"Part of R 3.5.2",NA,NA,NA,NA,NA,"3.5.2"
+"DBI","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"R (>= 3.0.0), methods",NA,NA,"blob, covr, hms, knitr, magrittr, rprojroot, rmarkdown,
+RSQLite (>= 1.1-2), testthat, xml2",NA,"LGPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"dbplyr","/opt/mango/R/3.5.2/lib/R/library","1.3.0",NA,"R (>= 3.1)","assertthat (>= 0.2.0), DBI (>= 1.0.0), dplyr (>= 0.7.5), glue
+(>= 1.2.0), methods, purrr (>= 0.2.5), R6 (>= 2.2.2), rlang (>=
+0.2.0), tibble (>= 1.4.2), tidyselect (>= 0.2.4), utils",NA,"bit64, covr, knitr, Lahman, nycflights13, RMariaDB (>=
+1.0.2), rmarkdown, RMySQL (>= 0.10.11), RPostgreSQL (>= 0.4.1),
+RSQLite (>= 2.1.0), testthat (>= 2.0.0), withr (>= 2.1.2)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"debugme","/opt/mango/R/3.5.2/lib/R/library","1.1.0",NA,NA,"crayon, grDevices",NA,"covr, mockery, R6, testthat, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"dendextend","/opt/mango/R/3.5.2/lib/R/library","1.9.0",NA,"R (>= 3.0.0)","utils, stats, datasets, magrittr (>= 1.0.1), ggplot2, fpc,
+whisker, viridis",NA,"knitr, rmarkdown, testthat, seriation, colorspace, plyr, ape,
+profdpm, microbenchmark, gplots, heatmaply, d3heatmap,
+dynamicTreeCut, pvclust, corrplot, DendSer, MASS, cluster,
+circlize (>= 0.2.5), covr","ggdendro, dendroextras, Hmisc, data.table, rpart","GPL-2 | GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"DEoptimR","/opt/mango/R/3.5.2/lib/R/library","1.0-8",NA,NA,"stats",NA,NA,"robustbase","GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"desc","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,"R (>= 3.1.0)","assertthat, utils, R6, crayon, rprojroot",NA,"covr, testthat, whoami, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"deSolve","/opt/mango/R/3.5.2/lib/R/library","1.21",NA,"R (>= 2.15.0)","methods, graphics, grDevices, stats",NA,"scatterplot3d",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"devtools","/opt/mango/R/3.5.2/lib/R/library","2.0.1",NA,"R (>= 3.0.2)","callr, cli, digest, git2r (>= 0.23.0), httr (>= 0.4),
+jsonlite, memoise (>= 1.0.0), pkgbuild (>= 1.0.2), pkgload (>=
+1.0.1), rcmdcheck (>= 1.3.0), remotes (>= 2.0.0), rstudioapi
+(>= 0.6.0.9000), sessioninfo, stats, tools, usethis (>= 1.4.0),
+utils, withr",NA,"BiocInstaller, BiocManager, bitops, covr (>= 3.2.0), crayon,
+curl (>= 0.9), evaluate, foghorn (>= 1.0.1), gmailr (> 0.7.0),
+knitr, lintr (>= 0.2.1), mockery, pingr, MASS, pkgdown, Rcpp
+(>= 0.10.0), rhub, rmarkdown, roxygen2 (>= 6.1.0), rversions,
+spelling (>= 1.1), testthat (>= 1.0.2), whisker",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"diffdf","/opt/mango/R/3.5.2/lib/R/library","1.0.2",NA,"R (>= 3.1.2)","tibble",NA,"testthat, lubridate, knitr, rmarkdown, purrr, dplyr, stringi,
+stringr, devtools, covr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"digest","/opt/mango/R/3.5.2/lib/R/library","0.6.18",NA,"R (>= 3.1.0)",NA,NA,"knitr, rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"diptest","/opt/mango/R/3.5.2/lib/R/library","0.75-7",NA,NA,NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"dlm","/opt/mango/R/3.5.2/lib/R/library","1.1-5",NA,NA,"stats, utils, methods, grDevices, graphics",NA,"MASS",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"doBy","/opt/mango/R/3.5.2/lib/R/library","4.6-2",NA,"R (>= 3.2.0), methods","MASS, Matrix, dplyr, plyr, magrittr",NA,"pbkrtest (>= 0.4-6), ggplot2, multcomp, geepack, lme4,
+survival, knitr",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"doParallel","/opt/mango/R/3.5.2/lib/R/library","1.0.14",NA,"R (>= 2.14.0), foreach(>= 1.2.0), iterators(>= 1.0.0),
+parallel, utils",NA,NA,"caret, mlbench, rpart, RUnit","compiler","GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"doRNG","/opt/mango/R/3.5.2/lib/R/library","1.7.1",NA,"R (>= 3.0.0), foreach, rngtools (>= 1.3)","stats, utils, iterators, pkgmaker (>= 0.20)",NA,"doParallel, doMPI, doRedis, rbenchmark, devtools, knitr,
+bibtex, testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"DoseFinding","/opt/mango/R/3.5.2/lib/R/library","0.9-16",NA,"lattice, mvtnorm, R (>= 2.15.0)",NA,NA,"numDeriv, Rsolnp, quadprog, parallel, multcomp",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"dplyr","/opt/mango/R/3.5.2/lib/R/library","0.7.8",NA,"R (>= 3.1.2)","assertthat (>= 0.2.0), bindrcpp (>= 0.2.0.9000), glue (>=
+1.1.1), magrittr (>= 1.5), methods, pkgconfig (>= 2.0.1), R6
+(>= 2.2.2), Rcpp (>= 0.12.19), rlang (>= 0.3.0), tibble (>=
+1.4.2), tidyselect (>= 0.2.3), utils","BH (>= 1.58.0-1), bindrcpp (>= 0.2.0.9000), plogr (>=
+0.1.10), Rcpp (>= 0.12.15)","bit64 (>= 0.9.7), callr, covr (>= 3.0.1), DBI (>= 0.7.14),
+dbplyr (>= 1.2.0), dtplyr (>= 0.0.2), ggplot2 (>= 2.2.1), hms
+(>= 0.4.1), knitr (>= 1.19), Lahman (>= 3.0-1), lubridate,
+MASS, mgcv (>= 1.8.23), microbenchmark (>= 1.4.4), nycflights13
+(>= 0.2.2), rmarkdown (>= 1.8), RMySQL (>= 0.10.13),
+RPostgreSQL (>= 0.6.2), RSQLite (>= 2.0), testthat (>= 2.0.0),
+withr (>= 2.1.1)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"DT","/opt/mango/R/3.5.2/lib/R/library","0.5",NA,NA,"htmltools (>= 0.3.6), htmlwidgets (>= 1.3), magrittr,
+crosstalk, promises",NA,"jsonlite (>= 0.9.16), knitr (>= 1.8), rmarkdown, shiny (>=
+0.12.1)",NA,"GPL-3 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"dygraphs","/opt/mango/R/3.5.2/lib/R/library","1.1.1.6",NA,"R (>= 3.0)","magrittr, htmlwidgets (>= 0.6), htmltools (>= 0.3.5), zoo (>=
+1.7-10), xts (>= 0.9-7)",NA,"testthat","rmarkdown (>= 0.3.3), shiny (>= 0.10.2.1)","MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"e1071","/opt/mango/R/3.5.2/lib/R/library","1.7-0",NA,NA,"graphics, grDevices, class, stats, methods, utils",NA,"cluster, mlbench, nnet, randomForest, rpart, SparseM, xtable,
+Matrix, MASS",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"emmeans","/opt/mango/R/3.5.2/lib/R/library","1.3.1",NA,"R (>= 3.2)","estimability (>= 1.3), graphics, methods, stats, utils, plyr,
+mvtnorm, xtable (>= 1.8-2)",NA,"bayesplot, biglm, brms, car, coda (>= 0.17), ggplot2,
+lattice, mediation, multcomp, multcompView, nlme, ordinal,
+pbkrtest (>= 0.4-1), lme4, lmerTest (>= 2.0.32), MASS, rsm,
+knitr, rmarkdown, testthat","CARBayes, coxme, gee, geepack, glmmADMB, MCMCglmm, MCMCpack,
+nnet, pscl, rstanarm, survival","GPL-2 | GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"estimability","/opt/mango/R/3.5.2/lib/R/library","1.3",NA,"stats",NA,NA,NA,NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"etm","/opt/mango/R/3.5.2/lib/R/library","1.0.4",NA,"R (>= 3.0.0)","survival, lattice, data.table, Rcpp (>= 0.11.4)","Rcpp, RcppArmadillo","ggplot2, kmi, geepack",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"evaluate","/opt/mango/R/3.5.2/lib/R/library","0.12",NA,"R (>= 3.0.2)","methods",NA,"testthat, lattice, ggplot2",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"fansi","/opt/mango/R/3.5.2/lib/R/library","0.4.0",NA,"R (>= 3.1.0)",NA,NA,"unitizer, knitr, rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"fastmatch","/opt/mango/R/3.5.2/lib/R/library","1.1-0",NA,NA,NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"fitdistrplus","/opt/mango/R/3.5.2/lib/R/library","1.0-11",NA,"R (>= 3.2.0), MASS, grDevices, survival, methods, npsurv","stats",NA,"actuar, rgenoud, mc2d, gamlss.dist, knitr, knitcitations,
+ggplot2, GeneralizedHyperbolic",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"flexdashboard","/opt/mango/R/3.5.2/lib/R/library","0.5.1.1",NA,"R (>= 3.0.2)","tools, jsonlite, htmltools, knitr (>= 1.13), htmlwidgets (>=
+0.6), rmarkdown (>= 1.0), shiny (>= 0.13)",NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"flexmix","/opt/mango/R/3.5.2/lib/R/library","2.3-14",NA,"R (>= 2.15.0), lattice","graphics, grid, grDevices, methods, modeltools (>= 0.2-16),
+nnet, stats, stats4",NA,"actuar, codetools, diptest, ellipse, gclus, glmnet, lme4 (>=
+1.0), MASS, mgcv (>= 1.8-0), mlbench, mlogit, multcomp,
+mvtnorm, SuppDists, survival",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"flexsurv","/opt/mango/R/3.5.2/lib/R/library","1.1",NA,"survival, R (>= 2.15.0)","mstate (>= 0.2.10), muhaz, mvtnorm, deSolve, quadprog, Rcpp
+(>= 0.11.5)","Rcpp","eha,numDeriv,testthat,msm,ActuDistns,knitr,TH.data,colorspace",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"flextable","/opt/mango/R/3.5.2/lib/R/library","0.4.6",NA,NA,"stats, utils, grDevices, officer (>= 0.2.0), rmarkdown,
+knitr, htmltools, R6, stringr, xml2, gdtools (>= 0.1.6)",NA,"testthat, xtable",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"forcats","/opt/mango/R/3.5.2/lib/R/library","0.3.0",NA,"R (>= 3.1)","magrittr, rlang, tibble",NA,"covr, ggplot2, testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"foreach","/opt/mango/R/3.5.2/lib/R/library","1.4.4",NA,"R (>= 2.5.0)","codetools, utils, iterators",NA,"randomForest","compiler, doMC, RUnit, doParallel","Apache License (== 2.0)",NA,NA,NA,NA,"no","3.5.2"
+"foreign","/opt/mango/R/3.5.2/lib/R/library","0.8-71","recommended","R (>= 3.0.0)","methods, utils, stats",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"forestplot","/opt/mango/R/3.5.2/lib/R/library","1.7.2",NA,"grid, magrittr, checkmate",NA,NA,"testthat, abind, knitr, rmarkdown",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"Formula","/opt/mango/R/3.5.2/lib/R/library","1.2-3",NA,"R (>= 2.0.0), stats",NA,NA,NA,NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"fpc","/opt/mango/R/3.5.2/lib/R/library","2.1-11.1",NA,"R (>= 2.0)","MASS, cluster, mclust, flexmix, prabclus, class, diptest,
+mvtnorm, robustbase, kernlab, trimcluster, grDevices, graphics,
+methods, stats, utils",NA,"tclust, pdfCluster",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"frailtypack","/opt/mango/R/3.5.2/lib/R/library","3.0.2.1",NA,"R (>= 2.10), survival, boot, MASS, survC1, doBy","statmod, nlme",NA,"knitr, rmarkdown, testthat",NA,"GPL (>= 2.0)",NA,NA,NA,NA,"yes","3.5.2"
+"fs","/opt/mango/R/3.5.2/lib/R/library","1.2.6",NA,"R (>= 3.1)","methods, Rcpp","Rcpp","testthat, covr, pillar (>= 1.0.0), crayon, withr",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"gam","/opt/mango/R/3.5.2/lib/R/library","1.16",NA,"stats, splines, foreach",NA,NA,"akima",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"gdata","/opt/mango/R/3.5.2/lib/R/library","2.18.0",NA,"R (>= 2.3.0)","gtools, stats, methods, utils",NA,"RUnit",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"gdtools","/opt/mango/R/3.5.2/lib/R/library","0.1.7",NA,NA,"Rcpp (>= 0.12.12), withr","Rcpp","htmltools, testthat, fontquiver (>= 0.2.0), curl",NA,"GPL-3 | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"generics","/opt/mango/R/3.5.2/lib/R/library","0.0.2",NA,"R (>= 3.1)","methods",NA,"covr, pkgload, testthat, tibble",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"GenSA","/opt/mango/R/3.5.2/lib/R/library","1.1.7",NA,"R (>= 2.12.0)",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"geosphere","/opt/mango/R/3.5.2/lib/R/library","1.5-7",NA,"R (>= 3.0.0)","sp",NA,"methods, raster",NA,"GPL (>= 3)",NA,NA,NA,NA,"yes","3.5.2"
+"GetoptLong","/opt/mango/R/3.5.2/lib/R/library","0.1.7",NA,"R (>= 3.0.0)","rjson, GlobalOptions (>= 0.1.0), methods",NA,"testthat (>= 1.0.0), knitr, markdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"getPass","/opt/mango/R/3.5.2/lib/R/library","0.2-2",NA,"R (>= 3.0.0)","utils, rstudioapi (>= 0.5)",NA,"argon2",NA,"BSD 2-clause License + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"GGally","/opt/mango/R/3.5.2/lib/R/library","1.4.0",NA,"R (>= 3.1), ggplot2 (> 2.2.0)","grDevices, grid, gtable (>= 0.2.0), plyr (>= 1.8.3), progress,
+RColorBrewer, reshape (>= 0.8.5), utils, rlang",NA,"broom (>= 0.4.0), chemometrics, geosphere (>= 1.5-1), igraph
+(>= 1.0.1), intergraph (>= 2.0-2), maps (>= 3.1.0), mapproj,
+network (>= 1.12.0), scagnostics, scales (>= 0.4.0), sna (>=
+2.3-2), survival, packagedocs (>= 0.4.0), rmarkdown, roxygen2,
+testthat, crosstalk",NA,"GPL (>= 2.0)",NA,NA,NA,NA,"no","3.5.2"
+"ggbeeswarm","/opt/mango/R/3.5.2/lib/R/library","0.6.0",NA,"R (>= 3.0.0), ggplot2 (>= 2.0)","beeswarm, vipor",NA,"gridExtra",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"ggfortify","/opt/mango/R/3.5.2/lib/R/library","0.4.5",NA,"methods, ggplot2 (>= 2.0.0)","dplyr (>= 0.3), tidyr, gridExtra, grid, scales, stringr,
+tibble",NA,"testthat, cluster, changepoint, dlm, fGarch, forecast,
+ggrepel, glmnet, grDevices, KFAS, knitr, lintr, mapdata, MASS,
+MSwM, nlme, raster, ROCR, sp, stats, strucchange, survival,
+timeSeries, tseries, utils, vars, xts, zoo, lfda",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"ggmap","/opt/mango/R/3.5.2/lib/R/library","2.6.1",NA,"R (>= 2.14.0), ggplot2 (>= 2.0.0)","proto, RgoogleMaps, png, plyr, reshape2, rjson, mapproj, jpeg,
+geosphere, digest, scales",NA,"MASS, stringr, hexbin, dplyr",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"ggplot2","/opt/mango/R/3.5.2/lib/R/library","3.1.0",NA,"R (>= 3.1)","digest, grid, gtable (>= 0.1.1), lazyeval, MASS, mgcv, plyr
+(>= 1.7.1), reshape2, rlang (>= 0.2.1), scales (>= 0.5.0),
+stats, tibble, viridisLite, withr (>= 2.0.0)",NA,"covr, dplyr, ggplot2movies, hexbin, Hmisc, lattice, mapproj,
+maps, maptools, multcomp, munsell, nlme, testthat (>= 0.11.0),
+vdiffr, quantreg, knitr, rgeos, rpart, rmarkdown, sf (>=
+0.3-4), svglite (>= 1.2.0.9001)","sp","GPL-2 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"ggridges","/opt/mango/R/3.5.2/lib/R/library","0.5.1",NA,"R (>= 3.2)","ggplot2 (>= 2.2.0), grid (>= 3.0.0), plyr (>= 1.8.0), scales
+(>= 0.4.1), withr (>= 2.1.1)",NA,"covr, dplyr, gridExtra, ggplot2movies, DAAG, forcats, knitr,
+rmarkdown, testthat, vdiffr, viridis",NA,"GPL-2 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"ggthemes","/opt/mango/R/3.5.2/lib/R/library","4.0.1",NA,"R (>= 3.0.0)","ggplot2 (>= 3.0.0), graphics, grid, methods, purrr, scales,
+stringr, tibble",NA,"dplyr, covr, extrafont, glue, knitr, lattice, lintr, maps,
+mapproj, pander, rlang, rmarkdown, spelling, testthat, tidyr,
+vdiffr, withr",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"gh","/opt/mango/R/3.5.2/lib/R/library","1.0.1",NA,NA,"ini, jsonlite, httr",NA,"covr, pingr, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"git2r","/opt/mango/R/3.5.2/lib/R/library","0.24.0",NA,"R (>= 3.1)","graphics, utils",NA,"getPass",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"glmnet","/opt/mango/R/3.5.2/lib/R/library","2.0-16",NA,"Matrix (>= 1.0-6), utils, foreach","methods",NA,"survival, knitr, lars",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"GlobalOptions","/opt/mango/R/3.5.2/lib/R/library","0.1.0",NA,"R (>= 3.3.0), methods","utils",NA,"testthat (>= 1.0.0), knitr, markdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"glue","/opt/mango/R/3.5.2/lib/R/library","1.3.0",NA,"R (>= 3.1)","methods",NA,"testthat, covr, magrittr, crayon, knitr, rmarkdown, DBI,
+RSQLite, R.utils, forcats, microbenchmark, rprintf, stringr,
+ggplot2, dplyr, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"googlesheets","/opt/mango/R/3.5.2/lib/R/library","0.3.0",NA,"R (>= 3.2.0)","cellranger (>= 1.0.0), dplyr (>= 0.4.2), httr (>= 1.1.0),
+jsonlite, purrr, readr (>= 0.2.2), stats, stringr, tibble,
+tidyr, utils, xml2 (>= 1.0.0)",NA,"covr, ggplot2, knitr, rmarkdown, rprojroot, testthat (>=
+1.0.0)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"gower","/opt/mango/R/3.5.2/lib/R/library","0.1.2",NA,NA,NA,NA,"testthat, knitr, rmarkdown",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"gplots","/opt/mango/R/3.5.2/lib/R/library","3.0.1",NA,"R (>= 3.0)","gtools, gdata, stats, caTools, KernSmooth",NA,"grid, MASS",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"graphics","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"grDevices",NA,NA,NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"grDevices","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,"KernSmooth",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"grid","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"grDevices, utils",NA,"lattice",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"gridBase","/opt/mango/R/3.5.2/lib/R/library","0.4-7",NA,"R (>= 2.3.0)","graphics, grid",NA,"lattice",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"gridExtra","/opt/mango/R/3.5.2/lib/R/library","2.3",NA,NA,"gtable, grid, grDevices, graphics, utils",NA,"ggplot2, egg, lattice, knitr, testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"gsDesign","/opt/mango/R/3.5.2/lib/R/library","3.0-1",NA,"R (>= 3.0.0), xtable, ggplot2","plyr, methods",NA,"knitr, scales",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"gsubfn","/opt/mango/R/3.5.2/lib/R/library","0.7",NA,"proto",NA,NA,"boot, chron, grid, lattice, quantreg, svUnit, tcltk, zoo",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"gtable","/opt/mango/R/3.5.2/lib/R/library","0.2.0",NA,"R (>= 2.14)","grid",NA,"testthat, covr",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"gtools","/opt/mango/R/3.5.2/lib/R/library","3.8.1",NA,"methods, stats, utils",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"haven","/opt/mango/R/3.5.2/lib/R/library","2.0.0",NA,"R (>= 3.1)","forcats (>= 0.2.0), hms, Rcpp (>= 0.11.4), readr (>= 0.1.0),
+tibble","Rcpp","covr, fs, knitr, rmarkdown, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"hexbin","/opt/mango/R/3.5.2/lib/R/library","1.27.2",NA,"R (>= 2.0.1), methods","lattice, grid, graphics, grDevices, stats, utils",NA,"marray, affy, Biobase, limma",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"highr","/opt/mango/R/3.5.2/lib/R/library","0.7",NA,"R (>= 3.0.2)",NA,NA,"knitr, testit",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"Hmisc","/opt/mango/R/3.5.2/lib/R/library","4.1-1",NA,"lattice, survival (>= 2.40-1), Formula, ggplot2 (>= 2.2)","methods, latticeExtra, cluster, rpart, nnet, acepack, foreign,
+gtable, grid, gridExtra, data.table, htmlTable (>= 1.11.0),
+viridis, htmltools, base64enc",NA,"chron, rms, mice, tables, knitr, ff, ffbase, plotly (>=
+4.5.6)",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"hms","/opt/mango/R/3.5.2/lib/R/library","0.4.2",NA,NA,"methods, pkgconfig, rlang",NA,"crayon, lubridate, pillar (>= 1.1.0), testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"htmlTable","/opt/mango/R/3.5.2/lib/R/library","1.13.1",NA,NA,"stringr, knitr (>= 1.6), magrittr (>= 1.5), methods,
+checkmate, htmlwidgets, htmltools, rstudioapi (>= 0.6)",NA,"testthat, XML, xtable, ztable, Hmisc, reshape, rmarkdown,
+pander, chron, lubridate, tibble, tidyr (>= 0.7.2), dplyr (>=
+0.7.4)",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"htmltools","/opt/mango/R/3.5.2/lib/R/library","0.3.6",NA,"R (>= 2.14.1)","utils, digest, Rcpp","Rcpp","markdown, testthat","knitr","GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"htmlwidgets","/opt/mango/R/3.5.2/lib/R/library","1.3",NA,NA,"grDevices, htmltools (>= 0.3), jsonlite (>= 0.9.16), yaml",NA,"knitr (>= 1.8)","shiny (>= 1.1)","MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"httpuv","/opt/mango/R/3.5.2/lib/R/library","1.4.5.1",NA,"R (>= 2.15.1), methods","Rcpp (>= 0.11.0), utils, promises, later (>= 0.7.3)","Rcpp, BH, later","testthat, callr",NA,"GPL (>= 2) | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"httr","/opt/mango/R/3.5.2/lib/R/library","1.4.0",NA,"R (>= 3.1)","curl (>= 0.9.1), jsonlite, mime, openssl (>= 0.8), R6",NA,"covr, httpuv, jpeg, knitr, png, readr, rmarkdown, testthat
+(>= 0.8.0), xml2",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"igraph","/opt/mango/R/3.5.2/lib/R/library","1.2.2",NA,"methods","graphics, grDevices, magrittr, Matrix, pkgconfig (>= 2.0.0),
+stats, utils",NA,"ape, digest, graph, igraphdata, rgl, scales, stats4, tcltk,
+testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"ini","/opt/mango/R/3.5.2/lib/R/library","0.3.1",NA,NA,NA,NA,"testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"inline","/opt/mango/R/3.5.2/lib/R/library","0.3.15",NA,"R (>= 2.4.0)","methods",NA,"Rcpp (>= 0.11.0)",NA,"LGPL",NA,NA,NA,NA,"no","3.5.2"
+"ipred","/opt/mango/R/3.5.2/lib/R/library","0.9-8",NA,"R (>= 2.10)","rpart (>= 3.1-8), MASS, survival, nnet, class, prodlim",NA,"mvtnorm, mlbench, TH.data",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"IRanges","/opt/mango/R/3.5.2/lib/R/library","2.16.0",NA,"R (>= 3.1.0), methods, utils, stats, BiocGenerics (>= 0.25.3),
+S4Vectors (>= 0.19.11)","stats4","S4Vectors","XVector, GenomicRanges, Rsamtools, GenomicAlignments,
+GenomicFeatures, BSgenome.Celegans.UCSC.ce2, pasillaBamSubset,
+RUnit, BiocStyle",NA,"Artistic-2.0",NA,NA,NA,NA,"yes","3.5.2"
+"iterators","/opt/mango/R/3.5.2/lib/R/library","1.0.10",NA,"R (>= 2.5.0), utils",NA,NA,"RUnit, foreach",NA,"Apache License (== 2.0)",NA,NA,NA,NA,"no","3.5.2"
+"jagsUI","/opt/mango/R/3.5.2/lib/R/library","1.5.0",NA,"R (>= 2.14.0), lattice","rjags (>= 3-13), coda (>= 0.13), parallel, stats, grDevices,
+graphics, utils",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"JM","/opt/mango/R/3.5.2/lib/R/library","1.4-8",NA,"R (>= 3.0.0), MASS, nlme, splines, survival",NA,NA,NA,"xtable","GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"JMbayes","/opt/mango/R/3.5.2/lib/R/library","0.8-71",NA,"nlme, survival, doParallel, rstan","MASS, foreach, jagsUI, Rcpp, xtable, shiny, splines, Hmisc","Rcpp, RcppArmadillo",NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"jomo","/opt/mango/R/3.5.2/lib/R/library","2.6-5",NA,NA,"stats, lme4, survival, MASS, ordinal",NA,"mitml",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"jpeg","/opt/mango/R/3.5.2/lib/R/library","0.1-8",NA,"R (>= 2.9.0)",NA,NA,NA,NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"jsonlite","/opt/mango/R/3.5.2/lib/R/library","1.6",NA,"methods",NA,NA,"httr, curl, plyr, testthat, knitr, rmarkdown, R.rsp, sp",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"kableExtra","/opt/mango/R/3.5.2/lib/R/library","0.9.0",NA,"R (>= 3.1.0)","knitr (>= 1.16), magrittr, stringr (>= 1.0), xml2 (>= 1.1.1),
+rvest, rmarkdown (>= 1.6.0), readr, scales, viridisLite, stats,
+grDevices, htmltools, rstudioapi",NA,"testthat, magick, formattable, dplyr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"kernlab","/opt/mango/R/3.5.2/lib/R/library","0.9-27",NA,"R (>= 2.10)","methods, stats, grDevices, graphics",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"KernSmooth","/opt/mango/R/3.5.2/lib/R/library","2.23-15","recommended","R (>= 2.5.0), stats",NA,NA,"MASS",NA,"Unlimited",NA,NA,NA,NA,"yes","3.5.2"
+"knitr","/opt/mango/R/3.5.2/lib/R/library","1.21",NA,"R (>= 3.1.0)","evaluate (>= 0.10), highr, markdown, stringr (>= 0.6), yaml
+(>= 2.1.19), methods, xfun, tools",NA,"formatR, testit, digest, rgl (>= 0.95.1201), codetools,
+rmarkdown, htmlwidgets (>= 0.7), webshot, tikzDevice (>= 0.10),
+tinytex, reticulate (>= 1.4), JuliaCall (>= 0.11.1), png, jpeg,
+gifski, xml2 (>= 1.2.0), httr, DBI (>= 0.4-1), showtext,
+tibble, styler",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"labeling","/opt/mango/R/3.5.2/lib/R/library","0.3",NA,NA,NA,NA,NA,NA,"MIT + file LICENSE | Unlimited",NA,NA,NA,NA,"no","3.5.2"
+"later","/opt/mango/R/3.5.2/lib/R/library","0.7.5",NA,NA,"Rcpp (>= 0.12.9), rlang","Rcpp, BH","knitr, rmarkdown, testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"lattice","/opt/mango/R/3.5.2/lib/R/library","0.20-38","recommended","R (>= 3.0.0)","grid, grDevices, graphics, stats, utils",NA,"KernSmooth, MASS, latticeExtra","chron","GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"latticeExtra","/opt/mango/R/3.5.2/lib/R/library","0.6-28",NA,"R (>= 2.10.0), lattice, RColorBrewer","grid, stats, utils, grDevices",NA,"maps, mapproj, deldir, tripack, zoo, MASS, quantreg, mgcv",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"lava","/opt/mango/R/3.5.2/lib/R/library","1.6.4",NA,"R (>= 3.0)","grDevices, graphics, methods, numDeriv, stats, survival,
+SQUAREM, utils",NA,"KernSmooth, Matrix, Rgraphviz, ascii, data.table, ellipse,
+fields, foreach, geepack, gof (>= 0.9), graph, igraph (>= 0.6),
+lava.tobit (>= 0.4.7), lme4, mets (>= 1.1), nlme, optimx,
+polycor, quantreg, rgl, testthat (>= 0.11), visNetwork, zoo",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"lazyeval","/opt/mango/R/3.5.2/lib/R/library","0.2.1",NA,"R (>= 3.1.0)",NA,NA,"knitr, rmarkdown (>= 0.2.65), testthat, covr",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"lme4","/opt/mango/R/3.5.2/lib/R/library","1.1-19",NA,"R (>= 3.2.0), Matrix (>= 1.2-1), methods, stats","graphics, grid, splines, utils, parallel, MASS, lattice, nlme
+(>= 3.1-123), minqa (>= 1.1.15), nloptr (>= 1.0.4)","Rcpp (>= 0.10.5), RcppEigen","knitr, boot, PKPDmodels, MEMSS, testthat (>= 0.8.1), ggplot2,
+mlmRev, optimx (>= 2013.8.6), gamm4, pbkrtest, HSAUR2,
+numDeriv, car, dfoptim",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"loo","/opt/mango/R/3.5.2/lib/R/library","2.0.0",NA,"R (>= 3.1.2)","graphics, matrixStats (>= 0.52), parallel, stats",NA,"bayesplot (>= 1.5.0), knitr, rmarkdown, rstan, rstanarm,
+rstantools, testthat",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"lsei","/opt/mango/R/3.5.2/lib/R/library","1.2-0",NA,NA,NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"lubridate","/opt/mango/R/3.5.2/lib/R/library","1.7.4",NA,"methods, R (>= 3.0.0)","stringr, Rcpp (>= 0.12.13),","Rcpp,","testthat, knitr, covr","chron, fts, timeSeries, timeDate, tis, tseries, xts, zoo","GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"magrittr","/opt/mango/R/3.5.2/lib/R/library","1.5",NA,NA,NA,NA,"testthat, knitr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"mailR","/opt/mango/R/3.5.2/lib/R/library","0.4.1",NA,NA,"rJava, stringr, R.utils",NA,NA,NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"mangoTraining","/opt/mango/R/3.5.2/lib/R/library","1.0-7",NA,"R (>= 2.10.0)",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"mapproj","/opt/mango/R/3.5.2/lib/R/library","1.2.6",NA,"R (>= 3.0.0), maps (>= 2.3-0)","stats, graphics",NA,NA,NA,"Lucent Public License",NA,NA,NA,NA,"yes","3.5.2"
+"maps","/opt/mango/R/3.5.2/lib/R/library","3.3.0",NA,"R (>= 3.0.0)","graphics, utils",NA,"mapproj (>= 1.2-0), mapdata (>= 2.3.0), sp, maptools,
+rnaturalearth",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"maptools","/opt/mango/R/3.5.2/lib/R/library","0.9-4",NA,"R (>= 2.10), sp (>= 1.0-11)","foreign (>= 0.8), methods, grid, lattice, stats, utils,
+grDevices",NA,"rgeos (>= 0.1-8), spatstat (>= 1.50), PBSmapping, maps,
+RColorBrewer, raster, polyclip, spatstat.utils","gpclib, RArcInfo","GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"markdown","/opt/mango/R/3.5.2/lib/R/library","0.9",NA,"R (>= 2.11.1)","utils, mime (>= 0.3)",NA,"knitr, RCurl",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"MASS","/opt/mango/R/3.5.2/lib/R/library","7.3-51.1","recommended","R (>= 3.1.0), grDevices, graphics, stats, utils","methods",NA,"lattice, nlme, nnet, survival",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"Matching","/opt/mango/R/3.5.2/lib/R/library","4.9-3",NA,"R (>= 2.6.0), MASS (>= 7.2-1), graphics, grDevices, stats",NA,NA,"parallel, rgenoud (>= 2.12), rbounds",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"Matrix","/opt/mango/R/3.5.2/lib/R/library","1.2-15","recommended","R (>= 3.2.0)","methods, graphics, grid, stats, utils, lattice",NA,"expm, MASS","MatrixModels, graph, SparseM, sfsmisc","GPL (>= 2) | file LICENCE",NA,NA,NA,NA,"yes","3.5.2"
+"MatrixModels","/opt/mango/R/3.5.2/lib/R/library","0.4-1",NA,"R (>= 3.0.1)","stats, methods, Matrix (>= 1.1-5)",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"matrixStats","/opt/mango/R/3.5.2/lib/R/library","0.54.0",NA,"R (>= 2.12.0)",NA,NA,"base64enc, ggplot2, knitr, microbenchmark, R.devices, R.rsp",NA,"Artistic-2.0",NA,NA,NA,NA,"yes","3.5.2"
+"mclust","/opt/mango/R/3.5.2/lib/R/library","5.4.2",NA,"R (>= 3.0)","stats, utils, graphics, grDevices",NA,"knitr (>= 1.12), rmarkdown (>= 0.9), mix (>= 1.0), geometry
+(>= 0.3-6), MASS",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"mcmc","/opt/mango/R/3.5.2/lib/R/library","0.9-5",NA,"R (>= 3.0.2)","stats, compiler",NA,"xtable, Iso",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"MCMCpack","/opt/mango/R/3.5.2/lib/R/library","1.4-4",NA,"R (>= 2.10.0), coda (>= 0.11-3), MASS, stats","graphics, grDevices, lattice, methods, utils, mcmc, quantreg",NA,NA,NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"Mediana","/opt/mango/R/3.5.2/lib/R/library","1.0.7",NA,NA,"doParallel, doRNG, foreach, MASS, mvtnorm, stats, survival,
+utils",NA,"flextable, knitr, officer, rmarkdown, pander",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"memoise","/opt/mango/R/3.5.2/lib/R/library","1.1.0",NA,NA,"digest (>= 0.6.3)",NA,"testthat, aws.s3, httr, covr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"metafor","/opt/mango/R/3.5.2/lib/R/library","2.0-0",NA,"R (>= 3.2.0), methods, Matrix","stats, utils, graphics, grDevices, nlme",NA,"lme4, numDeriv, minqa, nloptr, dfoptim, ucminf, CompQuadForm,
+mvtnorm, Formula, R.rsp, testthat, BiasedUrn, survival, Epi,
+multcomp, gsl, boot, MASS",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"methods","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"utils, stats",NA,"codetools",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"mgcv","/opt/mango/R/3.5.2/lib/R/library","1.8-26","recommended","R (>= 2.14.0), nlme (>= 3.1-64)","methods, stats, graphics, Matrix",NA,"splines, parallel, survival, MASS",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"mice","/opt/mango/R/3.5.2/lib/R/library","3.3.0",NA,"methods, R (>= 2.10.0), lattice","broom, dplyr, grDevices, graphics, MASS, mitml, nnet,
+parallel, Rcpp, rlang, rpart, splines, stats, survival, utils","Rcpp","AGD, CALIBERrfimpute, DPpackage, gamlss, lme4, mitools, nlme,
+pan, randomForest, Zelig, BSDA, knitr, rmarkdown, testthat,
+HSAUR3, micemd, miceadds, tidyr",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"mime","/opt/mango/R/3.5.2/lib/R/library","0.6",NA,NA,"tools",NA,NA,NA,"GPL",NA,NA,NA,NA,"yes","3.5.2"
+"miniUI","/opt/mango/R/3.5.2/lib/R/library","0.1.1.1",NA,NA,"shiny (>= 0.13), htmltools (>= 0.3), utils",NA,NA,NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"minqa","/opt/mango/R/3.5.2/lib/R/library","1.2.4",NA,NA,"Rcpp (>= 0.9.10)","Rcpp",NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"mitml","/opt/mango/R/3.5.2/lib/R/library","0.3-7",NA,NA,"pan, jomo, haven, grDevices, graphics, stats, utils",NA,"mice, miceadds, Amelia, lme4, nlme, geepack, survival, knitr,
+rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"mlr","/opt/mango/R/3.5.2/lib/R/library","2.13",NA,"R (>= 3.0.2), ParamHelpers (>= 1.10)","BBmisc (>= 1.11), backports (>= 1.1.0), ggplot2, stats,
+stringi, checkmate (>= 1.8.2), data.table, methods, parallelMap
+(>= 1.3), survival, utils, XML",NA,"ada, adabag, bartMachine, batchtools, brnn, bst, C50, care,
+caret (>= 6.0-57), class, clue, cluster, clusterSim (>=
+0.44-5), clValid, cmaes, cowplot, CoxBoost, crs, Cubist,
+deepnet, DiceKriging, DiscriMiner, e1071, earth, elasticnet,
+emoa, evtree, extraTrees, fda.usc, FDboost, flare, FNN, fpc,
+frbs, FSelector, gbm, GenSA, glmnet, hrbrthemes, h2o (>=
+3.6.0.8), GPfit, Hmisc, irace (>= 2.0), kernlab, kknn, klaR,
+knitr, laGP, LiblineaR, lintr (>= 1.0.0.9001), MASS, mboost,
+mco, mda, mlbench, mldr, mlrMBO, mmpf, modeltools, mRMRe, nnet,
+nodeHarvest (>= 0.7-3), neuralnet, numDeriv, pamr, party,
+penalized (>= 0.9-47), pls, PMCMR (>= 4.1), purrr,
+randomForest, randomForestSRC (>= 2.7.0), ranger (>= 0.8.0),
+refund, rex, rFerns, rknn, rmarkdown, ROCR, rotationForest,
+rpart, RRF, rgenoud, rrlda, rsm, RSNNS, RWeka, sda, sf, smoof,
+sparseLDA, stepPlr, survAUC, svglite, SwarmSVM, testthat, tgp,
+TH.data, wavelets, xgboost (>= 0.6-2)",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"mnormt","/opt/mango/R/3.5.2/lib/R/library","1.5-5",NA,"R (>= 2.2.0)",NA,NA,NA,NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"ModelMetrics","/opt/mango/R/3.5.2/lib/R/library","1.2.2",NA,"R (>= 3.2.2)","Rcpp, data.table","Rcpp","testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"modelr","/opt/mango/R/3.5.2/lib/R/library","0.1.2",NA,"R (>= 3.1)","broom, dplyr, magrittr, purrr (>= 0.2.2), tibble, tidyr (>=
+0.8.0), rlang (>= 0.2.0)",NA,"compiler, covr, ggplot2, testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"modeltools","/opt/mango/R/3.5.2/lib/R/library","0.2-22",NA,"stats, stats4","methods",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"mschart","/opt/mango/R/3.5.2/lib/R/library","0.2.3",NA,"R (>= 2.10)","stats, data.table, officer (>= 0.2.0), R6, cellranger,
+writexl, grDevices, xml2 (>= 1.1.0), htmltools",NA,"knitr, rmarkdown,magrittr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"mstate","/opt/mango/R/3.5.2/lib/R/library","0.2.11",NA,"survival (>= 2.40)","RColorBrewer",NA,"cmprsk",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"MSToolkit","/opt/mango/R/3.5.2/lib/R/library","3.2.4",NA,"R (>= 2.14.0), MASS, methods",NA,NA,"RUnit, parallel,
+testthat, digest","RNMImport","GPL",NA,NA,NA,NA,NA,"3.5.2"
+"muhaz","/opt/mango/R/3.5.2/lib/R/library","1.2.6",NA,"R(>= 2.3)","survival",NA,NA,NA,"GPL",NA,NA,NA,NA,"yes","3.5.2"
+"munsell","/opt/mango/R/3.5.2/lib/R/library","0.5.0",NA,NA,"colorspace, methods",NA,"ggplot2, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"mvna","/opt/mango/R/3.5.2/lib/R/library","2.0.1",NA,NA,"lattice",NA,NA,NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"mvtnorm","/opt/mango/R/3.5.2/lib/R/library","1.0-8",NA,"R (>= 1.9.0)","stats, methods",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"nleqslv","/opt/mango/R/3.5.2/lib/R/library","3.3.2",NA,NA,NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"nlme","/opt/mango/R/3.5.2/lib/R/library","3.1-137","recommended","R (>= 3.4.0)","graphics, stats, utils, lattice",NA,"Hmisc, MASS",NA,"GPL (>= 2) | file LICENCE",NA,NA,NA,NA,"yes","3.5.2"
+"nloptr","/opt/mango/R/3.5.2/lib/R/library","1.2.1",NA,NA,NA,NA,"testthat (>= 0.8.1), knitr, rmarkdown, inline (>= 0.3.14)",NA,"LGPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"nnet","/opt/mango/R/3.5.2/lib/R/library","7.3-12","recommended","R (>= 2.14.0), stats, utils",NA,NA,"MASS",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"npsurv","/opt/mango/R/3.5.2/lib/R/library","0.4-0",NA,"lsei","methods",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"numDeriv","/opt/mango/R/3.5.2/lib/R/library","2016.8-1",NA,"R (>= 2.11.1)",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"officer","/opt/mango/R/3.5.2/lib/R/library","0.3.2",NA,NA,"Rcpp (>= 0.12.12), R6, grDevices, base64enc, zip,
+digest, uuid, utils, stats, magrittr, htmltools, xml2 (>= 1.1.0)","Rcpp","testthat, devEMF, knitr,tibble,ggplot2, rmarkdown",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"openssl","/opt/mango/R/3.5.2/lib/R/library","1.1",NA,NA,NA,NA,"testthat, digest, knitr, rmarkdown, jsonlite, jose",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"openxlsx","/opt/mango/R/3.5.2/lib/R/library","4.1.0",NA,"R (>= 3.3.0)","methods, Rcpp, grDevices, stats, utils, zip","Rcpp","knitr, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"ordinal","/opt/mango/R/3.5.2/lib/R/library","2018.8-25",NA,"R (>= 2.13.0), stats, methods","ucminf, MASS, Matrix, numDeriv",NA,"lme4, nnet, xtable, testthat (>= 0.8), tools",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"packrat","/opt/mango/R/3.5.2/lib/R/library","0.5.0",NA,"R (>= 3.0.0)","tools, utils",NA,"testthat (>= 0.7), devtools, httr, knitr, rmarkdown",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"pan","/opt/mango/R/3.5.2/lib/R/library","1.6",NA,NA,NA,NA,"mitools, lme4",NA,"GPL-3",NA,"no",NA,NA,"yes","3.5.2"
+"pander","/opt/mango/R/3.5.2/lib/R/library","0.6.3",NA,"R (>= 2.15.0)","grDevices, graphics, methods, utils, stats, digest, tools,
+Rcpp","Rcpp","grid, lattice, ggplot2 (>= 0.9.2), sylly, sylly.en,
+futile.logger, survival, microbenchmark, zoo, nlme, descr,
+MASS, knitr, rmarkdown, tables, reshape, memisc, Epi,
+randomForest, tseries, gtable, rms, forecast, data.table",NA,"AGPL-3 | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"parallel","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"tools, compiler",NA,"methods","snow, nws, Rmpi","Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"parallelMap","/opt/mango/R/3.5.2/lib/R/library","1.3",NA,"R (>= 3.0.0)","BBmisc (>= 1.8), checkmate (>= 1.5.1), parallel",NA,"testthat, Rmpi, BatchJobs (>= 1.5)",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"ParamHelpers","/opt/mango/R/3.5.2/lib/R/library","1.11",NA,NA,"backports, BBmisc (>= 1.10), checkmate (>= 1.8.2), fastmatch,
+methods",NA,"akima, eaf, emoa, GGally, ggplot2, gridExtra, grid, irace (>=
+2.1), lhs, plyr, reshape2, testthat",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"parsedate","/opt/mango/R/3.5.2/lib/R/library","1.1.3",NA,"methods",NA,NA,"covr, testthat",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"pbkrtest","/opt/mango/R/3.5.2/lib/R/library","0.4-7",NA,"R (>= 3.2.3), lme4 (>= 1.1.10)","Matrix (>= 1.2.3), parallel, MASS, methods",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"penalized","/opt/mango/R/3.5.2/lib/R/library","0.9-51",NA,"R (>= 2.10.0), survival, methods","Rcpp","Rcpp, RcppArmadillo","globaltest",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"pheatmap","/opt/mango/R/3.5.2/lib/R/library","1.0.12",NA,"R (>= 2.0)","grid, RColorBrewer, scales, gtable, stats, grDevices, graphics",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"pillar","/opt/mango/R/3.5.2/lib/R/library","1.3.1",NA,NA,"cli (>= 1.0.0), crayon (>= 1.3.4), fansi (>= 0.4.0), methods,
+rlang (>= 0.3.0.1), utf8 (>= 1.1.3)",NA,"knitr (>= 1.19), lubridate (>= 1.7.4), testthat (>= 2.0.0),
+withr (>= 2.1.2)",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"pingr","/opt/mango/R/3.5.2/lib/R/library","1.1.2",NA,NA,NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"PK","/opt/mango/R/3.5.2/lib/R/library","1.3-4",NA,"R (>= 2.2.1), utils",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"pkgbuild","/opt/mango/R/3.5.2/lib/R/library","1.0.2",NA,"R (>= 3.1)","callr (>= 2.0.0), cli, crayon, desc, prettyunits, R6,
+rprojroot, withr (>= 2.1.2)",NA,"Rcpp, testthat, covr",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"pkgconfig","/opt/mango/R/3.5.2/lib/R/library","2.0.2",NA,NA,"utils",NA,"covr, testthat, disposables (>= 1.0.3)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"pkgload","/opt/mango/R/3.5.2/lib/R/library","1.0.2",NA,NA,"desc, methods, pkgbuild, rlang, rprojroot, rstudioapi, utils,
+withr",NA,"bitops, covr, Rcpp, testthat",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"pkgmaker","/opt/mango/R/3.5.2/lib/R/library","0.27",NA,"R (>= 3.0.0), methods, stats, registry","tools, grDevices, utils, graphics, codetools, digest, stringi,
+magrittr, stringr, xtable, withr, bibtex (>= 0.4)",NA,"devtools (>= 0.8), roxygen2, RUnit, testthat, knitr,
+rmarkdown, yaml, Biobase",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"PKPDmodels","/opt/mango/R/3.5.2/lib/R/library","0.3.2",NA,"R(>= 2.13.0)","compiler",NA,"lattice",NA,"GPL (>= 2)",NA,NA,NA,NA,NA,"3.5.2"
+"plogr","/opt/mango/R/3.5.2/lib/R/library","0.2.0",NA,NA,NA,NA,"Rcpp",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"plotly","/opt/mango/R/3.5.2/lib/R/library","4.8.0",NA,"R (>= 3.2.0), ggplot2 (>= 3.0.0)","tools, scales, httr, jsonlite, magrittr, digest, viridisLite,
+base64enc, htmltools, htmlwidgets (>= 1.2), tidyr, hexbin,
+RColorBrewer, dplyr, tibble, lazyeval (>= 0.2.0), rlang,
+crosstalk, purrr, data.table, promises",NA,"MASS, maps, ggthemes, GGally, testthat, knitr, devtools,
+shiny (>= 1.1.0), curl, rmarkdown, Rserve, RSclient, Cairo,
+broom, webshot, listviewer, dendextend, sf, maptools, rgeos,
+png, IRdisplay, processx, plotlyGeoAssets, forcats",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"plyr","/opt/mango/R/3.5.2/lib/R/library","1.8.4",NA,"R (>= 3.1.0)","Rcpp (>= 0.11.0)","Rcpp","abind, testthat, tcltk, foreach, doParallel, itertools,
+iterators, covr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"png","/opt/mango/R/3.5.2/lib/R/library","0.1-7",NA,"R (>= 2.9.0)",NA,NA,NA,NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"prabclus","/opt/mango/R/3.5.2/lib/R/library","2.2-6",NA,"R (>= 2.10), MASS, mclust",NA,NA,"spdep, maptools, foreign, mvtnorm",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"praise","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,NA,NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"prettyunits","/opt/mango/R/3.5.2/lib/R/library","1.0.2",NA,NA,"magrittr, assertthat, methods",NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"pROC","/opt/mango/R/3.5.2/lib/R/library","1.13.0",NA,"R (>= 2.14)","plyr, utils, methods, Rcpp (>= 0.11.1), ggplot2,","Rcpp","microbenchmark, tcltk, MASS, logcondens, doParallel,
+testthat, vdiffr",NA,"GPL (>= 3)",NA,NA,NA,NA,"yes","3.5.2"
+"processx","/opt/mango/R/3.5.2/lib/R/library","3.2.1",NA,NA,"ps, R6, utils",NA,"callr, covr, crayon, debugme, parallel, testthat, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"prodlim","/opt/mango/R/3.5.2/lib/R/library","2018.04.18",NA,"R (>= 2.9.0)","Rcpp (>= 0.11.5), stats, graphics, survival, KernSmooth, lava","Rcpp",NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"progress","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,NA,"hms, prettyunits, R6, crayon",NA,"Rcpp, testthat, withr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"promises","/opt/mango/R/3.5.2/lib/R/library","1.0.1",NA,NA,"R6, Rcpp, later, rlang, stats, magrittr","later, Rcpp","testthat, future, knitr, rmarkdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"proto","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,NA,NA,NA,"testthat, covr",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"ps","/opt/mango/R/3.5.2/lib/R/library","1.3.0",NA,"R (>= 3.1)","utils",NA,"callr, covr, curl, pingr, processx (>= 3.1.0), R6, rlang,
+testthat, tibble",NA,"BSD_3_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"psych","/opt/mango/R/3.5.2/lib/R/library","1.8.10",NA,"R (>= 2.10)","mnormt, parallel, stats, graphics, grDevices, methods, foreign, lattice, nlme",NA,"GPArotation, lavaan, sem, lme4,Rcsdp, graph, Rgraphviz",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"purrr","/opt/mango/R/3.5.2/lib/R/library","0.2.5",NA,"R (>= 3.1)","magrittr (>= 1.5), rlang (>= 0.1), tibble",NA,"covr, dplyr (>= 0.7.5), knitr, rmarkdown, testthat",NA,"GPL-3 | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"quadprog","/opt/mango/R/3.5.2/lib/R/library","1.5-5",NA,"R (>= 2.15.0)",NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"quantreg","/opt/mango/R/3.5.2/lib/R/library","5.38",NA,"R (>= 2.6), stats, SparseM","methods, graphics, Matrix, MatrixModels",NA,"tripack, akima, MASS, survival, rgl, logspline, nor1mix,
+Formula, zoo",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"R.methodsS3","/opt/mango/R/3.5.2/lib/R/library","1.7.1",NA,"R (>= 2.13.0)","utils",NA,NA,NA,"LGPL (>= 2.1)",NA,NA,NA,NA,"no","3.5.2"
+"R.oo","/opt/mango/R/3.5.2/lib/R/library","1.22.0",NA,"R (>= 2.13.0), R.methodsS3 (>= 1.7.1)","methods, utils",NA,"tools",NA,"LGPL (>= 2.1)",NA,NA,NA,NA,"no","3.5.2"
+"R.utils","/opt/mango/R/3.5.2/lib/R/library","2.7.0",NA,"R (>= 2.14.0), R.oo (>= 1.21.0)","methods, utils, tools, R.methodsS3 (>= 1.7.1)",NA,"digest (>= 0.6.10)",NA,"LGPL (>= 2.1)",NA,NA,NA,NA,"no","3.5.2"
+"R6","/opt/mango/R/3.5.2/lib/R/library","2.3.0",NA,"R (>= 3.0)",NA,NA,"knitr, microbenchmark, pryr, testthat, ggplot2, scales",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"random.cdisc.data","/opt/mango/R/3.5.2/lib/R/library","0.3.3",NA,"R (>= 3.5.0),","dplyr, magrittr, rlang, utils.nest (>= 0.2.2), tibble, yaml",NA,"testthat (>= 0.2)",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"randomForest","/opt/mango/R/3.5.2/lib/R/library","4.6-14",NA,"R (>= 3.2.2), stats",NA,NA,"RColorBrewer, MASS",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"randomForestSRC","/opt/mango/R/3.5.2/lib/R/library","2.8.0",NA,"R (>= 3.1.0),","parallel",NA,"glmnet, survival, pec, prodlim, mlbench, akima, caret",NA,"GPL (>= 3)",NA,NA,NA,NA,"yes","3.5.2"
+"rcmdcheck","/opt/mango/R/3.5.2/lib/R/library","1.3.2",NA,NA,"callr (>= 2.0.0), cli, crayon, desc (>= 1.2.0), digest,
+pkgbuild, prettyunits, R6, rprojroot, sessioninfo (>= 1.1.1),
+utils, withr, xopen",NA,"covr, knitr, mockery, rmarkdown, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"RColorBrewer","/opt/mango/R/3.5.2/lib/R/library","1.1-2",NA,"R (>= 2.0.0)",NA,NA,NA,NA,"Apache License 2.0",NA,NA,NA,NA,"no","3.5.2"
+"Rcpp","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"R (>= 3.0.0)","methods, utils",NA,"RUnit, inline, rbenchmark, knitr, rmarkdown, pinp, pkgKitten
+(>= 0.1.2)",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"RcppArmadillo","/opt/mango/R/3.5.2/lib/R/library","0.9.200.5.0",NA,"R (>= 3.3.0)","Rcpp (>= 0.11.0), stats, utils, methods","Rcpp","RUnit, Matrix, pkgKitten, reticulate, rmarkdown, knitr, pinp,
+slam",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"RcppEigen","/opt/mango/R/3.5.2/lib/R/library","0.3.3.5.0",NA,"R (>= 2.15.1)","Matrix (>= 1.1-0), Rcpp (>= 0.11.0), stats, utils","Rcpp","inline, RUnit, pkgKitten, microbenchmark",NA,"GPL (>= 2) | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"RcppRoll","/opt/mango/R/3.5.2/lib/R/library","0.3.0",NA,"R (>= 2.15.1)","Rcpp","Rcpp","zoo, testthat",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"RCurl","/opt/mango/R/3.5.2/lib/R/library","1.95-4.11",NA,"R (>= 3.0.0), methods, bitops",NA,NA,"Rcompression, XML",NA,"BSD",NA,NA,NA,NA,"yes","3.5.2"
+"readr","/opt/mango/R/3.5.2/lib/R/library","1.3.1",NA,"R (>= 3.1)","Rcpp (>= 0.12.0.5), tibble, hms (>= 0.4.1), R6, clipr, crayon,
+methods","Rcpp, BH","curl, testthat, knitr, rmarkdown, stringi, covr, spelling",NA,"GPL (>= 2) | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"readxl","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,NA,"cellranger, progress, Rcpp (>= 0.12.18), tibble (>= 1.3.1),
+utils","progress, Rcpp","covr, knitr, rmarkdown, rprojroot (>= 1.1), testthat",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"recipes","/opt/mango/R/3.5.2/lib/R/library","0.1.4",NA,"R (>= 3.1), dplyr","generics, gower, ipred, lubridate, magrittr, Matrix, purrr (>=
+0.2.3), RcppRoll, rlang (>= 0.3.0.1), stats, tibble, tidyr,
+tidyselect (>= 0.1.1), timeDate, utils, withr",NA,"covr, ddalpha, dimRed (>= 0.2.2), fastICA, ggplot2, igraph,
+kernlab, knitr, NMF, pls, RANN, rmarkdown, rpart, rsample,
+RSpectra, testthat",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"registry","/opt/mango/R/3.5.2/lib/R/library","0.5",NA,"R (>= 2.6.0)","utils",NA,NA,NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"rematch","/opt/mango/R/3.5.2/lib/R/library","1.0.1",NA,NA,NA,NA,"covr, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"remotes","/opt/mango/R/3.5.2/lib/R/library","2.0.2",NA,"R (>= 3.0.0)","methods, utils",NA,"curl, covr, git2r (>= 0.23.0), knitr, mockery, pkgbuild (>=
+1.0.1), pingr, rmarkdown, testthat, withr",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"ReporteRs","/opt/mango/R/3.5.2/lib/R/library","0.8.10",NA,"R (>= 3.0), ReporteRsjars (>= 0.0.2)","grDevices, rJava, utils, rvg (>= 0.1.2), xml2, gdtools, png,
+R.utils, knitr, shiny, htmltools",NA,"ggplot2, jpeg, bmp, testthat, magrittr, rmarkdown",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"ReporteRsjars","/opt/mango/R/3.5.2/lib/R/library","0.0.4",NA,"R (>= 3.0)","rJava",NA,NA,NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"reshape","/opt/mango/R/3.5.2/lib/R/library","0.8.8",NA,"R (>= 2.6.1)","plyr",NA,NA,NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"reshape2","/opt/mango/R/3.5.2/lib/R/library","1.4.3",NA,"R (>= 3.1)","plyr (>= 1.8.1), Rcpp, stringr","Rcpp","covr, lattice, testthat (>= 0.8.0)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"RgoogleMaps","/opt/mango/R/3.5.2/lib/R/library","1.4.3",NA,"R (>= 2.10)","graphics, stats, utils, grDevices, methods, png",NA,"PBSmapping, maptools, sp, loa, RColorBrewer, leaflet",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"rio","/opt/mango/R/3.5.2/lib/R/library","0.5.16",NA,"R (>= 2.15.0)","tools, stats, utils, foreign, haven (>= 1.1.0), curl (>= 0.6),
+data.table (>= 1.9.8), readxl (>= 0.1.1), openxlsx, tibble",NA,"datasets, bit64, testthat, knitr, magrittr, clipr, csvy,
+feather, fst, hexView, jsonlite, readODS (>= 1.6.4), readr,
+rmatio, xml2 (>= 1.2.0), yaml",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"rjags","/opt/mango/R/3.5.2/lib/R/library","4-8",NA,"R (>= 2.14.0), coda (>= 0.13)",NA,NA,"tcltk",NA,"GPL (== 2)",NA,NA,NA,NA,"yes","3.5.2"
+"rJava","/opt/mango/R/3.5.2/lib/R/library","0.9-10",NA,"R (>= 2.5.0), methods",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"rjson","/opt/mango/R/3.5.2/lib/R/library","0.2.20",NA,"R (>= 3.1.0)",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"rlang","/opt/mango/R/3.5.2/lib/R/library","0.3.1",NA,"R (>= 3.1.0)",NA,NA,"crayon, magrittr, methods, pillar, testthat (>= 2.0.0), covr",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"rmarkdown","/opt/mango/R/3.5.2/lib/R/library","1.11",NA,"R (>= 3.0)","tools, utils, knitr (>= 1.18), yaml (>= 2.1.19), htmltools (>=
+0.3.5), evaluate (>= 0.8), base64enc, jsonlite, mime, tinytex
+(>= 0.3), methods, stringr (>= 1.2.0)",NA,"shiny (>= 0.11), tufte, testthat, digest, dygraphs, tibble,
+callr (>= 2.0.0)",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"rmdshower","/opt/mango/R/3.5.2/lib/R/library","2.1.1",NA,"R (>= 3.0)","rmarkdown (>= 0.3.3)",NA,"knitr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"rngtools","/opt/mango/R/3.5.2/lib/R/library","1.3.1",NA,"R (>= 3.0.0), methods, pkgmaker (>= 0.20)","stringr, digest, utils, stats, parallel",NA,"RUnit, testthat",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"RNMGraphics","/opt/mango/R/3.5.2/lib/R/library","4.0-7",NA,"grid, lattice, methods, RNMImport (>= 0.2.2)",NA,NA,"RUnit",NA,"Clear BSD + file LICENSE",NA,NA,NA,NA,NA,"3.5.2"
+"RNMImport","/opt/mango/R/3.5.2/lib/R/library","4.0-32",NA,"R (>= 2.8.0), utils, stats, methods, tools",NA,NA,"RUnit (>= 0.4.22)",NA,"Clear BSD + file LICENSE",NA,NA,NA,NA,NA,"3.5.2"
+"robustbase","/opt/mango/R/3.5.2/lib/R/library","0.93-3",NA,"R (>= 3.1.0)","stats, graphics, utils, methods, DEoptimR",NA,"grid, MASS, lattice, boot, cluster, Matrix, robust,
+fit.models, MPV, xtable, ggplot2, GGally, RColorBrewer,
+reshape2, sfsmisc, catdata, doParallel, foreach, skewt",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"ROCR","/opt/mango/R/3.5.2/lib/R/library","1.0-7",NA,"gplots, methods",NA,NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"roxygen2","/opt/mango/R/3.5.2/lib/R/library","6.1.1",NA,"R (>= 3.1)","brew, commonmark, desc (>= 1.2.0), digest, methods, pkgload
+(>= 1.0.2), purrr, R6 (>= 2.1.2), Rcpp (>= 0.11.0), stringi,
+stringr (>= 1.0.0), utils, xml2","Rcpp","covr, devtools, knitr, rmarkdown, testthat (>= 0.8.0)",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"rpact","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"R (>= 3.3.0)","methods, stats, utils, graphics",NA,"parallel, ggplot2 (>= 2.2.0), testthat (>= 2.0.0)",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"rpart","/opt/mango/R/3.5.2/lib/R/library","4.1-13","recommended","R (>= 2.15.0), graphics, stats, grDevices",NA,NA,"survival",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"rprojroot","/opt/mango/R/3.5.2/lib/R/library","1.3-2",NA,"R (>= 3.0.0)","backports",NA,"testthat, mockr, knitr, withr, rmarkdown",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"rsconnect","/opt/mango/R/3.5.2/lib/R/library","0.8.13",NA,"R (>= 3.0.0)","openssl, RCurl, jsonlite, packrat (>= 0.4.8-1), yaml (>=
+2.1.5), rstudioapi (>= 0.5)",NA,"knitr, testthat, rmarkdown (>= 1.1), plumber (>= 0.3.2),
+reticulate, shiny, sourcetools, xtable",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"RSQLite","/opt/mango/R/3.5.2/lib/R/library","2.1.1",NA,"R (>= 3.1.0)","bit64, blob (>= 1.1.1), DBI (>= 1.0.0), memoise, methods,
+pkgconfig, Rcpp (>= 0.12.7)","BH, plogr (>= 0.2.0), Rcpp","DBItest, knitr, rmarkdown, testthat",NA,"LGPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"rstan","/opt/mango/R/3.5.2/lib/R/library","2.18.2",NA,"R (>= 3.4.0), ggplot2 (>= 2.0.0), StanHeaders (>= 2.18.0)","methods, stats4, inline, gridExtra (>= 2.0.0), Rcpp (>=
+0.12.0), loo (>= 2.0.0), pkgbuild","Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0), BH (>= 1.66),
+StanHeaders (>= 2.18.0)","RUnit, RcppEigen (>= 0.3.3.3.0), BH (>= 1.66), parallel,
+KernSmooth, shinystan (>= 2.3.0), bayesplot (>= 1.5.0),
+rmarkdown, rstantools, rstudioapi, Matrix, knitr (>= 1.15.1)",NA,"GPL (>= 3)",NA,NA,NA,NA,"yes","3.5.2"
+"rstanarm","/opt/mango/R/3.5.2/lib/R/library","2.18.2",NA,"R (>= 3.4.0), Rcpp (>= 0.12.0), methods","bayesplot (>= 1.5.0), ggplot2 (>= 2.2.1), lme4 (>= 1.1-8), loo
+(>= 2.0.0), Matrix (>= 1.2-13), nlme (>= 3.1-124), rstan (>=
+2.18.1), rstantools (>= 1.4.0), shinystan (>= 2.3.0), stats,
+survival (>= 2.40.1), utils","StanHeaders (>= 2.18.0), rstan (>= 2.18.1), BH (>= 1.66.0),
+Rcpp (>= 0.12.0), RcppEigen (>= 0.3.3.3.0)","betareg, data.table (>= 1.10.0), digest, gridExtra, HSAUR3,
+knitr (>= 1.15.1), MASS, mgcv (>= 1.8-13), rmarkdown, roxygen2,
+testthat (>= 1.0.2)",NA,"GPL (>= 3)",NA,NA,NA,NA,"yes","3.5.2"
+"rstantools","/opt/mango/R/3.5.2/lib/R/library","1.5.1",NA,NA,"stats, utils",NA,"bayesplot (>= 1.5.0), rstan (>= 2.17.2), rstanarm (>=
+2.17.4), shinystan (>= 2.4.0), loo (>= 2.0.0), testthat, covr,
+knitr, devtools, roxygen2 (>= 6.0.1), rmarkdown, rstudioapi,
+usethis (>= 1.3.0)",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"rstudioapi","/opt/mango/R/3.5.2/lib/R/library","0.9.0",NA,NA,NA,NA,"testthat, knitr, rmarkdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"rtables","/opt/mango/R/3.5.2/lib/R/library","0.1.5",NA,"","stats, methods, htmltools, purrr, rlang",NA,"dplyr, testthat (>= 2.0), knitr",NA,"Apache License 2.0 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"rvest","/opt/mango/R/3.5.2/lib/R/library","0.3.2",NA,"R (>= 3.0.1), xml2","httr (>= 0.5), selectr, magrittr",NA,"testthat, knitr, png, stringi (>= 0.3.1), rmarkdown, covr",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"rvg","/opt/mango/R/3.5.2/lib/R/library","0.1.9",NA,"R (>= 3.0)","grDevices, Rcpp (>= 0.12.12), officer (>= 0.2.0), gdtools (>=
+0.1.6), xml2 (>= 1.0.0)","Rcpp, gdtools","htmltools, testthat, covr, grid",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"S4Vectors","/opt/mango/R/3.5.2/lib/R/library","0.20.1",NA,"R (>= 3.3.0), methods, utils, stats, stats4, BiocGenerics (>=
+0.23.3)",NA,NA,"IRanges, GenomicRanges, SummarizedExperiment, Matrix,
+DelayedArray, ShortRead, graph, data.table, RUnit, BiocStyle",NA,"Artistic-2.0",NA,NA,NA,NA,"yes","3.5.2"
+"SASxport","/opt/mango/R/3.5.2/lib/R/library","1.6.0",NA,"R (>= 3.3.0)","Hmisc, utils, stringi",NA,"chron",NA,"GPL-2",NA,NA,NA,NA,"yes","3.5.2"
+"scales","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"R (>= 3.1)","labeling, munsell (>= 0.5), R6, RColorBrewer, Rcpp,
+viridisLite","Rcpp","dichromat, bit64, covr, hms, testthat (>= 2.0)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"selectr","/opt/mango/R/3.5.2/lib/R/library","0.4-1",NA,"R (>= 3.0)","methods, stringr, R6",NA,"testthat, XML, xml2",NA,"BSD_3_clause + file LICENCE",NA,NA,NA,NA,"no","3.5.2"
+"sessioninfo","/opt/mango/R/3.5.2/lib/R/library","1.1.1",NA,NA,"cli, tools, utils, withr",NA,"callr, covr, mockery, testthat",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"sfsmisc","/opt/mango/R/3.5.2/lib/R/library","1.1-3",NA,"R (>= 3.2.0)","grDevices, methods, utils, stats",NA,"datasets, tcltk, cluster, lattice, MASS, Matrix, nlme, lokern","mgcv, rpart, nor1mix, polycor, sm, tikzDevice","GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"shape","/opt/mango/R/3.5.2/lib/R/library","1.4.4",NA,"R (>= 2.01)","stats, graphics, grDevices",NA,NA,NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"shiny","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,"R (>= 3.0.2), methods","utils, grDevices, httpuv (>= 1.4.4), mime (>= 0.3), jsonlite
+(>= 0.9.16), xtable, digest, htmltools (>= 0.3.5), R6 (>= 2.0),
+sourcetools, later (>= 0.7.2), promises (>= 1.0.1), tools,
+crayon, rlang",NA,"datasets, Cairo (>= 1.5-5), testthat, knitr (>= 1.6),
+markdown, rmarkdown, ggplot2, magrittr",NA,"GPL-3 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"shinydashboard","/opt/mango/R/3.5.2/lib/R/library","0.7.1",NA,"R (>= 3.0)","utils, shiny (>= 1.0.0), htmltools (>= 0.2.6), promises",NA,NA,NA,"GPL (>= 2) | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"shinyjs","/opt/mango/R/3.5.2/lib/R/library","1.0",NA,"R (>= 3.1.0)","digest (>= 0.6.8), htmltools (>= 0.2.9), jsonlite, shiny (>=
+1.0.0)",NA,"knitr (>= 1.7), rmarkdown, shinyAce, testthat (>= 0.9.1), V8
+(>= 0.6)",NA,"AGPL-3",NA,NA,NA,NA,"no","3.5.2"
+"shinystan","/opt/mango/R/3.5.2/lib/R/library","2.5.0",NA,"R (>= 3.1.0), shiny (>= 1.0.3)","bayesplot (>= 1.5.0), colourpicker, DT (>= 0.2), dygraphs (>=
+1.1.1.2), ggplot2 (>= 2.1.1), gridExtra, gtools, markdown (>=
+0.7.4), methods, reshape2, rsconnect (>= 0.4.2), rstan (>=
+2.17.1), stats, shinyjs (>= 0.6.0), shinythemes (>= 1.0.1),
+threejs (>= 0.2.1), utils, xtable, xts (>= 0.9-7)",NA,"coda, knitr (>= 1.9), rmarkdown (>= 0.8.1), rstanarm (>=
+2.17.4), testthat",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"shinytest","/opt/mango/R/3.5.2/lib/R/library","1.3.0",NA,NA,"assertthat, digest, crayon, debugme, parsedate, pingr, callr
+(>= 2.0.3), R6, rematch, httr, shiny (>= 1.0.4), testthat (>=
+1.0.0), utils, webdriver (>= 1.0.5), htmlwidgets, jsonlite,
+withr, httpuv",NA,"rmarkdown, flexdashboard",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"shinythemes","/opt/mango/R/3.5.2/lib/R/library","1.1.2",NA,"R (>= 3.0.0)","shiny (>= 0.11)",NA,NA,NA,"GPL-3 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"showimage","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,NA,"png, tools",NA,"covr, testthat",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"sourcetools","/opt/mango/R/3.5.2/lib/R/library","0.1.7",NA,"R (>= 3.0.2)",NA,NA,"testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"sp","/opt/mango/R/3.5.2/lib/R/library","1.3-1",NA,"R (>= 3.0.0), methods","utils, stats, graphics, grDevices, lattice, grid",NA,"RColorBrewer, rgdal (>= 0.8-7), rgeos (>= 0.3-13), gstat,
+maptools, deldir",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"SparseM","/opt/mango/R/3.5.2/lib/R/library","1.77",NA,"R (>= 2.15), methods","graphics, stats, utils",NA,NA,NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"spatial","/opt/mango/R/3.5.2/lib/R/library","7.3-11","recommended","R (>= 3.0.0), graphics, stats, utils",NA,NA,"MASS",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"splines","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"graphics, stats",NA,"Matrix, methods",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"splines2","/opt/mango/R/3.5.2/lib/R/library","0.2.8",NA,"R (>= 3.2.3)","splines, stats",NA,"knitr, rmarkdown, testthat",NA,"GPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"sqldf","/opt/mango/R/3.5.2/lib/R/library","0.4-11",NA,"R (>= 3.1.0), gsubfn (>= 0.6), proto, RSQLite","DBI, chron",NA,"RH2, RMySQL, RPostgreSQL, svUnit, tcltk, MASS",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"SQUAREM","/opt/mango/R/3.5.2/lib/R/library","2017.10-1",NA,"R (>= 3.0)",NA,NA,"setRNG",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"StanHeaders","/opt/mango/R/3.5.2/lib/R/library","2.18.0-1",NA,"R (>= 3.4.0)",NA,NA,"Rcpp, RcppEigen, BH, knitr (>= 1.15.1), rmarkdown",NA,"BSD_3_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"stargazer","/opt/mango/R/3.5.2/lib/R/library","5.2.2",NA,NA,"stats, utils",NA,NA,"AER, betareg, brglm, censReg, dynlm, eha, erer, ergm, fGarch,
+gee, glmx, gmm, lfe, lme4, lmtest, MASS, mclogit, mgcv, mlogit,
+mnlogit, nlme, nnet, ordinal, plm, pscl, quantreg, rms,
+relevent, robustbase, sampleSelection, spdep, survey, survival,
+Zelig","GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"statmod","/opt/mango/R/3.5.2/lib/R/library","1.4.30",NA,"R (>= 1.6.1)","stats, graphics",NA,"MASS, tweedie",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"stats","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"utils, grDevices, graphics",NA,"MASS, Matrix, SuppDists, methods, stats4",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"stats4","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"graphics, methods, stats",NA,NA,NA,"Part of R 3.5.2",NA,NA,NA,NA,NA,"3.5.2"
+"stringi","/opt/mango/R/3.5.2/lib/R/library","1.2.4",NA,"R (>= 2.14)","tools, utils, stats",NA,NA,NA,"file LICENSE","yes",NA,NA,NA,"yes","3.5.2"
+"stringr","/opt/mango/R/3.5.2/lib/R/library","1.3.1",NA,"R (>= 3.1)","glue (>= 1.2.0), magrittr, stringi (>= 1.1.7)",NA,"covr, htmltools, htmlwidgets, knitr, rmarkdown, testthat",NA,"GPL-2 | file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"survC1","/opt/mango/R/3.5.2/lib/R/library","1.0-2",NA,"survival",NA,NA,NA,NA,"GPL-2",NA,NA,NA,NA,NA,"3.5.2"
+"survival","/opt/mango/R/3.5.2/lib/R/library","2.43-3","recommended","R (>= 2.13.0)","graphics, Matrix, methods, splines, stats, utils",NA,NA,NA,"LGPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"svglite","/opt/mango/R/3.5.2/lib/R/library","1.2.1",NA,"R (>= 3.0.0)","Rcpp, gdtools (>= 0.1.6)","Rcpp, gdtools, BH","htmltools, testthat, xml2 (>= 1.0.0), covr, fontquiver (>=
+0.2.0), knitr, rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"tables","/opt/mango/R/3.5.2/lib/R/library","0.8.7",NA,"R (>= 2.12.0), Hmisc","stats, utils, knitr",NA,"magrittr, kableExtra (>= 0.9.0)",NA,"GPL-2",NA,NA,NA,NA,"no","3.5.2"
+"tcltk","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,"utils",NA,NA,NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"tern","/opt/mango/R/3.5.2/lib/R/library","0.6.6",NA,"R (>= 3.3), ggplot2, grid, rtables (>= 0.1.5), survival","dplyr, grDevices, gridExtra, magrittr, methods, purrr, rlang,
+scales, stats, utils, utils.nest (>= 0.2.2), forcats, nlme,
+emmeans, viridisLite, car",NA,"lattice, knitr, random.cdisc.data (>= 0.3.2), rmarkdown,
+testthat (>= 2.0), tibble, tidyr",NA,"file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"testthat","/opt/mango/R/3.5.2/lib/R/library","2.0.1",NA,"R (>= 3.1)","cli, crayon, digest, magrittr, methods, praise, R6 (>= 2.2.0),
+rlang, withr (>= 2.0.0)",NA,"covr, devtools, knitr, rmarkdown, usethis, xml2",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"threejs","/opt/mango/R/3.5.2/lib/R/library","0.3.1",NA,"R (>= 3.0.0), igraph (>= 1.0.0)","htmlwidgets (>= 0.3.2), base64enc, crosstalk, methods, stats",NA,"maps","knitr, shiny","MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"tibble","/opt/mango/R/3.5.2/lib/R/library","2.0.0",NA,"R (>= 3.1.0)","cli (>= 1.0.1), crayon (>= 1.3.4), fansi (>= 0.4.0), methods,
+pillar (>= 1.3.1), pkgconfig (>= 2.0.2), rlang (>= 0.3.0.1),
+utils",NA,"bench (>= 1.0.1), covr (>= 3.2.1), dplyr (>= 0.7.8),
+htmltools (>= 0.3.6), import (>= 1.1.0), knitr (>= 1.21), mockr
+(>= 0.1), nycflights13 (>= 1.0.0), rmarkdown (>= 1.11),
+testthat (>= 2.0.1), withr (>= 2.1.2)",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"tidyr","/opt/mango/R/3.5.2/lib/R/library","0.8.2",NA,"R (>= 3.1)","dplyr (>= 0.7.0), glue, magrittr, purrr, Rcpp, rlang, stringi,
+tibble, tidyselect (>= 0.2.5)","Rcpp","covr, gapminder, knitr, rmarkdown, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"tidyselect","/opt/mango/R/3.5.2/lib/R/library","0.2.5",NA,"R (>= 3.1)","glue (>= 1.3.0), purrr, rlang (>= 0.2.2), Rcpp (>= 0.12.0)","Rcpp (>= 0.12.0),","covr, dplyr, testthat",NA,"GPL-3",NA,NA,NA,NA,"yes","3.5.2"
+"timeDate","/opt/mango/R/3.5.2/lib/R/library","3043.102",NA,"R (>= 2.15.1), graphics, utils, stats, methods",NA,NA,"date, RUnit",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"tinytex","/opt/mango/R/3.5.2/lib/R/library","0.9",NA,NA,"xfun (>= 0.3)",NA,"testit, rstudioapi",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"tools","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,"codetools, methods, xml2, curl",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"trimcluster","/opt/mango/R/3.5.2/lib/R/library","0.1-2.1",NA,"R (>= 1.9.0)",NA,NA,"fpc",NA,"GPL",NA,NA,NA,NA,"no","3.5.2"
+"ucminf","/opt/mango/R/3.5.2/lib/R/library","1.1-4",NA,NA,NA,NA,"numDeriv",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"usethis","/opt/mango/R/3.5.2/lib/R/library","1.4.0",NA,"R (>= 3.1)","clipr (>= 0.3.0), clisymbols, crayon, curl (>= 2.7), desc, fs
+(>= 1.2.0), gh, git2r (>= 0.23), glue, rlang, rprojroot (>=
+1.2), rstudioapi, utils, whisker",NA,"covr, knitr, magick, rmarkdown, roxygen2, spelling (>= 1.2),
+styler (>= 1.0.2), testthat (>= 2.0.0), withr",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"utf8","/opt/mango/R/3.5.2/lib/R/library","1.1.4",NA,"R (>= 2.10)",NA,NA,"knitr, rmarkdown, testthat",NA,"Apache License (== 2.0) | file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"utils","/opt/mango/R/3.5.2/lib/R/library","3.5.2","base",NA,NA,NA,"methods, xml2, commonmark",NA,"Part of R 3.5.2",NA,NA,NA,NA,"yes","3.5.2"
+"utils.nest","/opt/mango/R/3.5.2/lib/R/library","0.2.3",NA,"R (>= 3.3)","glue, methods, utils",NA,"testthat (>= 2.0)",NA,"file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"uuid","/opt/mango/R/3.5.2/lib/R/library","0.1-2",NA,"R (>= 2.9.0)",NA,NA,NA,NA,"MIT + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"vipor","/opt/mango/R/3.5.2/lib/R/library","0.4.5",NA,"R (>= 3.0.0)","stats, graphics",NA,"testthat, beeswarm, lattice, ggplot2, beanplot, vioplot,
+ggbeeswarm,",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"viridis","/opt/mango/R/3.5.2/lib/R/library","0.5.1",NA,"R (>= 2.10), viridisLite (>= 0.3.0)","stats, ggplot2 (>= 1.0.1), gridExtra",NA,"hexbin (>= 1.27.0), scales, MASS, knitr, dichromat,
+colorspace, rasterVis, httr, mapproj, vdiffr, svglite (>=
+1.2.0), testthat, covr, rmarkdown, rgdal",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"viridisLite","/opt/mango/R/3.5.2/lib/R/library","0.3.0",NA,"R (>= 2.10)",NA,NA,"hexbin (>= 1.27.0), ggplot2 (>= 1.0.1), testthat, covr",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"vrwatch","/opt/mango/R/3.5.2/lib/R/library","1.0.1",NA,NA,NA,NA,NA,NA,"file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"webdriver","/opt/mango/R/3.5.2/lib/R/library","1.0.5",NA,NA,"callr (>= 2.0.0), base64enc, curl (>= 2.0), debugme, httr,
+jsonlite, R6, showimage, utils, withr",NA,"covr, pingr, rprojroot, servr, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"whisker","/opt/mango/R/3.5.2/lib/R/library","0.3-2",NA,NA,NA,NA,"markdown",NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"withr","/opt/mango/R/3.5.2/lib/R/library","2.1.2",NA,"R (>= 3.0.2)","stats, graphics, grDevices",NA,"testthat, covr, lattice, DBI, RSQLite, methods, knitr,
+rmarkdown",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"writexl","/opt/mango/R/3.5.2/lib/R/library","1.1",NA,NA,NA,NA,"spelling, readxl, nycflights13, testthat, bit64",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"xfun","/opt/mango/R/3.5.2/lib/R/library","0.4",NA,NA,"tools",NA,"testit, parallel, rstudioapi, tinytex, mime, markdown, knitr,
+htmltools, base64enc, rmarkdown",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"xlsx","/opt/mango/R/3.5.2/lib/R/library","0.6.1",NA,NA,"rJava, xlsxjars, grDevices, utils",NA,NA,NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"xlsxjars","/opt/mango/R/3.5.2/lib/R/library","0.6.1",NA,"rJava",NA,NA,NA,NA,"GPL-3",NA,NA,NA,NA,"no","3.5.2"
+"XML","/opt/mango/R/3.5.2/lib/R/library","3.98-1.16",NA,"R (>= 2.13.0), methods, utils",NA,NA,"bitops, RCurl",NA,"BSD_2_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"xml2","/opt/mango/R/3.5.2/lib/R/library","1.2.0",NA,"R (>= 3.1.0)","Rcpp","Rcpp (>= 0.12.12)","testthat, curl, covr, knitr, rmarkdown, magrittr, httr",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"xopen","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,"R (>= 3.1)","processx",NA,"ps, testthat",NA,"MIT + file LICENSE",NA,NA,NA,NA,"no","3.5.2"
+"xpose4","/opt/mango/R/3.5.2/lib/R/library","4.6.1",NA,"R (>= 2.2.0), lattice","Hmisc, survival, dplyr, methods, lazyeval, gam, splines, grid,
+readr",NA,"testthat",NA,"LGPL (>= 3)",NA,NA,NA,NA,"no","3.5.2"
+"xtable","/opt/mango/R/3.5.2/lib/R/library","1.8-3",NA,"R (>= 2.10.0)","stats, utils",NA,"knitr, spdep, splm, sphet, plm, zoo, survival",NA,"GPL (>= 2)",NA,NA,NA,NA,"no","3.5.2"
+"xts","/opt/mango/R/3.5.2/lib/R/library","0.11-2",NA,"zoo (>= 1.7-12)","methods","zoo","timeSeries, timeDate, tseries, chron, fts, tis, RUnit",NA,"GPL (>= 2)",NA,NA,NA,NA,"yes","3.5.2"
+"yaml","/opt/mango/R/3.5.2/lib/R/library","2.2.0",NA,NA,NA,NA,"RUnit",NA,"BSD_3_clause + file LICENSE",NA,NA,NA,NA,"yes","3.5.2"
+"zip","/opt/mango/R/3.5.2/lib/R/library","1.0.0",NA,NA,NA,NA,"covr, testthat, withr",NA,"CC0",NA,NA,NA,NA,"yes","3.5.2"
+"zoo","/opt/mango/R/3.5.2/lib/R/library","1.8-4",NA,"R (>= 3.1.0), stats","utils, graphics, grDevices, lattice (>= 0.20-27)",NA,"coda, chron, DAAG, fts, ggplot2, mondate, scales,
+strucchange, timeDate, timeSeries, tis, tseries, xts",NA,"GPL-2 | GPL-3",NA,NA,NA,NA,"yes","3.5.2"

@@ -25,8 +25,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-20.04, r: 'release'}
+          - {os: ubuntu-20.04, r: '3.5'}
           - {os: ubuntu-20.04, r: '3.6'}
+          - {os: ubuntu-20.04, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -80,6 +81,15 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install dependencies
+        if: matrix.config.r == '3.5'
+        run: |
+          pkgs <- read.csv("enabler_3.5.2_pkgs.csv")
+          for (i in 1:nrow(pkgs)) {
+            try(remotes::install_version(pkgs$Package[i], pkgs$Version[i], dependencies = FALSE))
+          }
+        shell: Rscript {0}
 
       - name: Install dependencies
         if: matrix.config.r == '3.6'
