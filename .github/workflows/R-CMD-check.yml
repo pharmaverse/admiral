@@ -36,6 +36,13 @@ jobs:
 
     steps:
       - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux') && matrix.config.r == '3.5'
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles("enabler_3.5.2_pkgs.csv" }}-1-
+          restore-keys: ${{ runner.os }}-1-
+
+      - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux') && matrix.config.r == '3.6'
         with:
           path: ~/.local/share/renv
