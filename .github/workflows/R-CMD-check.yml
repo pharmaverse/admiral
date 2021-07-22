@@ -85,9 +85,10 @@ jobs:
       - name: Install dependencies
         if: matrix.config.r == '3.5'
         run: |
-          pkgs <- read.csv("enabler_3.5.2_pkgs.csv")
+          all_pkgs <- read.csv("enabler_3.5.2_pkgs.csv")
+          pkgs2install <- all_pkgs[!all_pkgs$Priority %in% c("base", "recommended"), ]
           for (i in 1:nrow(pkgs)) {
-            try(remotes::install_version(pkgs$Package[i], pkgs$Version[i], dependencies = FALSE))
+            try(remotes::install_version(pkgs2install$Package[i], pkgs2install$Version[i], dependencies = FALSE))
           }
         shell: Rscript {0}
 
