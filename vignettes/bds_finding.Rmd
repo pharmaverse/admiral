@@ -597,7 +597,7 @@ diabp <- advs %>%
 advs <- sysbp %>%
   left_join(
     diabp,
-    by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC", "VSDTC", "VSTPT")
+    by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC", "VSTPT")
   ) %>%
   mutate(
     AVAL = (2 * DBPAVAL + AVAL) / 3,
