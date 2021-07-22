@@ -87,7 +87,7 @@ jobs:
         run: |
           pkgs <- read.csv("enabler_3.5.2_pkgs.csv", stringsAsFactors = FALSE)
           for (i in 1:nrow(pkgs)) {
-            remotes::install_version(pkgs$Package[i], pkgs$Version[i], dependencies = FALSE)
+            remotes::install_version(pkgs$Package[i], pkgs$Version[i], upgrade = "never")
           }
         shell: Rscript {0}
 
