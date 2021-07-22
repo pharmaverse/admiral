@@ -25,14 +25,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-20.04, r: '3.5'}
-          - {os: ubuntu-20.04, r: '3.6'}
+          - {os: ubuntu-20.04, r: '3.5', repos: 'https://cran.microsoft.com/snapshot/2018-12-20/'}
+          - {os: ubuntu-20.04, r: '3.6', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
           - {os: ubuntu-20.04, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_REPOS: ${{ matrix.config.repos }}
 
     steps:
       - uses: actions/cache@v2
@@ -90,15 +91,6 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
-        if: matrix.config.r == '3.5'
-        run: |
-          pkgs <- read.csv("enabler_3.5.2_pkgs.csv", stringsAsFactors = FALSE)
-          for (i in 1:nrow(pkgs)) {
-            remotes::install_version(pkgs$Package[i], pkgs$Version[i], upgrade = "never")
-          }
-        shell: Rscript {0}
-
-      - name: Install dependencies
         if: matrix.config.r == '3.6'
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
@@ -106,9 +98,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Install dependencies
-        if: matrix.config.r == 'release'
+        if: matrix.config.r == '3.5' || matrix.config.r == 'release'
         run: |
-          options(repos = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
+          options(repos = Sys.getenv("R_REPOS"))
           if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
           devtools::install(dependencies = TRUE)
         shell: Rscript {0}
