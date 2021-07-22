@@ -1,5 +1,8 @@
 as_iso_dttm <- function(x, ...) {
-  structure(x, class = union("iso_dttm", class(x)))
+  args <- attributes(x)
+  args$.Data <- x
+  args$class <- union("iso_dttm", class(x))
+  do.call(structure, args)
 }
 
 as.POSIXct.iso_dttm <- function(x, ...) {
