@@ -26,8 +26,8 @@ jobs:
       matrix:
         config:
           - {os: ubuntu-20.04, r: '3.5', repos: 'https://cran.microsoft.com/snapshot/2018-12-20/'}
-          - {os: ubuntu-20.04, r: '3.6', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
-          - {os: ubuntu-20.04, r: 'release'}
+          - {os: ubuntu-20.04, r: '3.6'}
+          - {os: ubuntu-20.04, r: 'release', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
