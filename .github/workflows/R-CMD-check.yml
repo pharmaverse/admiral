@@ -31,7 +31,6 @@ jobs:
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_REPOS: ${{ matrix.config.repos }}
 
@@ -58,20 +57,6 @@ jobs:
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}
 
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS') && matrix.config.r == '3.6'
-        with:
-          path: ~/Library/Application Support/renv
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: ${{ runner.os }}-renv-
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows') && matrix.config.r == '3.6'
-        with:
-          path: ~\AppData\Local\renv
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: ${{ runner.os }}-renv-
-
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -80,7 +65,6 @@ jobs:
         shell: Rscript {0}
 
       - name: Install system dependencies
-        if: runner.os == 'Linux'
         run: |
           while read -r cmd
           do
