@@ -138,7 +138,7 @@ derive_query_vars <- function(dataset, queries) {
   # join restructured queries to input dataset
   joined <- joined %>%
     inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_ID")) %>%
-    select(all_of(c(static_cols, new_col_names))) %>%
+    select(!!!syms(c(static_cols, new_col_names))) %>%
     dplyr::group_by_at(static_cols) %>%
     dplyr::summarise_all(~dplyr::first(na.omit(.))) %>%
     ungroup()
