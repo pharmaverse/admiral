@@ -46,9 +46,9 @@ jobs:
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux') && (matrix.config.r == '3.5' || matrix.config.r == 'release')
-         with:
-           path: ${{ env.R_LIBS_USER }}
-           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'macOS') && matrix.config.r == '3.6'
