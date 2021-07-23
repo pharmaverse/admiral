@@ -196,3 +196,104 @@ derive_extreme_flag <- function(dataset,
   # remove temporary variable
   data %>% select(-temp_obs_nr)
 }
+
+
+#'
+#' @examples
+#' derive_worstfl(
+#'   advs,
+#'   new_var = WORSTFL,
+#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#'   order = vars(AVAL, ADT, ATPTN),
+#'   worst_high = list(WORST_HIGH = c("SYSBP", "DIABP")),
+#'   worst_low = list(WORST_LOW = "RESP"),
+#'   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+#' )
+#'
+derive_worstfl <- function(dataset,
+                           new_var,
+                           by_vars,
+                           order,
+                           worst_high,
+                           worst_low,
+                           flag_filter = NULL,
+                           check_type = "warning") {
+  new_var <- assert_symbol(enquo(new_var))
+  assert_vars(by_vars)
+  assert_order_vars(order)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(vars(!!!by_vars, !!!extract_vars(order)), quo(PARAMCD))
+  )
+  assert_named_list(worst_high, min_len = 1, max_len = 1)
+  assert_named_list(worst_low, min_len = 1, max_len = 1)
+  assert_that(
+    all(map_lgl(worst_high, is.character)),
+    all(map_lgl(worst_low, is.character))
+  )
+  # flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+
+  if (length(intersect(worst_high, worst_low)) > 0) {
+    err_msg <- paste(
+      "The following parameters are both assigned to `worst_high` and `worst_low` flags:",
+      paste0(intersect(worst_high, worst_low), collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  new_var_low <- sym(names(worst_low))
+  new_var_high <- sym(names(worst_high))
+
+# browser()
+  bind_rows(
+    derive_extreme_flag(
+      dataset = dataset,#filter(dataset, .data$PARAMCD %in% worst_low[[1]]),
+      new_var = new_var_low,
+      by_vars = by_vars,
+      order = order,
+      mode = "first",
+      flag_filter = flag_filter,
+      check_type = check_type
+    ),
+    derive_extreme_flag(
+      dataset = dataset,#filter(dataset, .data$PARAMCD %in% worst_high[[1]]),
+      new_var = new_var_high,
+      by_vars = by_vars,
+      order = order,
+      mode = "last",
+      flag_filter = flag_filter,
+      check_type = check_type
+    ),
+    filter(dataset, !.data$PARAMCD %in% c(worst_low[[1]], worst_high[[1]]))
+  ) %>% mutate(
+    !!new_var := case_when(
+      .data$PARAMCD %in% worst_high[[1]] ~ !!new_var_high,
+      .data$PARAMCD %in% worst_low[[1]] ~ !!new_var_low,
+      TRUE ~ NA_character_
+    )
+  )
+}
+
+###
+# res <- advs %>%
+#   derive_extreme_flag(
+#     new_var = WORST_HIGH,
+#     by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#     order = vars(AVAL, ADT, ATPTN),
+#     mode = "last",
+#     flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+#   ) %>%
+#   derive_extreme_flag(
+#     new_var = WORST_LOW,
+#     by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#     order = vars(AVAL, ADT, ATPTN),
+#     mode = "first",
+#     flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+#   ) %>%
+#   mutate(
+#     WORSTFL = case_when(
+#       PARAMCD %in% c("SYSBP", "DIABP") ~ WORST_HIGH,
+#       PARAMCD == "RESP" ~ WORST_LOW
+#     )
+#   )
+###
