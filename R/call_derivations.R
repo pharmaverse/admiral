@@ -2,7 +2,10 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
   assert_data_frame(dataset)
   # assert_function(derivation)
   # assert_named_list(variable_params)
-  fixed_params <- list(...)
+  fixed_params <- eval(substitute(alist(...)))
+
+  # assert_consistent_lists(variable_params)
+  # assert_has_params(derivation, c(names(variable_params[[1L]], names(fixed_params))))
 
   for (i in seq_along(variable_params)) {
     args <- c(quote(dataset), variable_params[[i]], fixed_params)
