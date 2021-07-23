@@ -158,6 +158,9 @@ derive_derived_param <- function(dataset,
 
   # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
   hori_data <- hori_data %>%
+    # keep only observations where all analysis values are available
+    filter(!!!parse_exprs(map_chr(c(parameters, constant_parameters),
+                                  ~str_c("!is.na(AVAL.", .x, ")")))) %>%
     mutate(AVAL = !!enquo(analysis_value),
            !!!set_values_to) %>%
     select(-starts_with("AVAL."))
