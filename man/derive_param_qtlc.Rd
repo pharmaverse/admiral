@@ -6,16 +6,26 @@
 \usage{
 derive_param_qtlc(
   dataset,
+  filter = NULL,
   new_param = "QTLCR",
   qt_code = "QT",
   rr_code = "RR",
-  by_vars
+  by_vars,
+  drop_values_from = vars(ends_with("RESU"))
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{filter}{Filter condition
+
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
+
+\emph{Permitted Values:} a condition}
 
 \item{new_param}{Parameter code to add
 

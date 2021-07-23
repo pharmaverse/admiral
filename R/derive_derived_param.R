@@ -83,7 +83,7 @@
 #'       AVISIT %in% c("Baseline", "Week 2")
 #'   ) %>%
 #'   derive_derived_param(
-#'     advss,
+#'     advs,
 #'     filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
 #'     parameters = c("SYSBP", "DIABP"),
 #'     by_vars = vars(USUBJID, AVISIT),
@@ -103,7 +103,8 @@ derive_derived_param <- function(dataset,
                                  constant_parameters = NULL,
                                  constant_by_vars = NULL,
                                  analysis_value,
-                                 set_values_to
+                                 set_values_to,
+                                 drop_values_from = NULL
 ) {
   # checking and quoting
   assert_vars(by_vars)
@@ -121,7 +122,14 @@ derive_derived_param <- function(dataset,
   data_parameters <- data_filtered %>%
     filter(PARAMCD %in% parameters)
 
-  keep_vars <- get_constant_vars(data_parameters, by_vars = by_vars)
+  if (nrow(data_parameters) == 0L) {
+    warn(paste0("The input dataset does not contain any observations fullfiling the filter condition (",
+                expr_label(filter), ") for the parameter codes (PARAMCD) ", enumerate(parameters)))
+    return(dataset)
+  }
+  keep_vars <- get_constant_vars(data_parameters,
+                                 by_vars = by_vars,
+                                 ignore_vars = drop_values_from)
   data_parameters <- data_parameters %>%
     select(!!!keep_vars, PARAMCD, AVAL)
 

@@ -4,12 +4,27 @@
 \alias{derive_param_rr}
 \title{Adds a parameter for derived RR}
 \usage{
-derive_param_rr(dataset, new_param = "RRR", hr_code = "HR", by_vars)
+derive_param_rr(
+  dataset,
+  filter = NULL,
+  new_param = "RRR",
+  hr_code = "HR",
+  by_vars,
+  drop_values_from = vars(EGSEQ, starts_with("EGTEST"), contains("RES"))
+)
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{filter}{Filter condition
+
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
+
+\emph{Permitted Values:} a condition}
 
 \item{new_param}{Parameter code to add
 

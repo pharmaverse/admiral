@@ -12,7 +12,8 @@ derive_derived_param(
   constant_parameters = NULL,
   constant_by_vars = NULL,
   analysis_value,
-  set_values_to
+  set_values_to,
+  drop_values_from = NULL
 )
 }
 \arguments{
@@ -96,7 +97,7 @@ advs \%>\%
       AVISIT \%in\% c("Baseline", "Week 2")
   ) \%>\%
   derive_derived_param(
-    advss,
+    advs,
     filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
     parameters = c("SYSBP", "DIABP"),
     by_vars = vars(USUBJID, AVISIT),
