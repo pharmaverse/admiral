@@ -53,12 +53,12 @@ test_that("Multiple IDVARs, differing types", {
 
   input_supp <- tibble::tribble(
     ~USUBJID, ~RDOMAIN, ~IDVAR, ~IDVARVAL, ~QNAM, ~QLABEL, ~QVAL,
-    1, "LB", "NIDVAR", 1, "TEST1", "Test QNAM1", "Response 1.1",
-    1, "LB", "NIDVAR", 2, "TEST1", "Test QNAM1", "Response 1.2",
+    1, "LB", "NIDVAR", "1", "TEST1", "Test QNAM1", "Response 1.1",
+    1, "LB", "NIDVAR", "2", "TEST1", "Test QNAM1", "Response 1.2",
     1, "LB", "CIDVAR", "B", "TEST2", "Test QNAM2", "Response 2B",
-    2, "LB", "NIDVAR", 1, "TEST1", "Test QNAM1", "Response 1.1",
-    3, "LB", "NIDVAR", 1, "TEST1", "Test QNAM1", "Response 1.1",
-    3, "LB", "NIDVAR", 2, "TEST1", "Test QNAM1", "Response 2.2"
+    2, "LB", "NIDVAR", "1", "TEST1", "Test QNAM1", "Response 1.1",
+    3, "LB", "NIDVAR", "1", "TEST1", "Test QNAM1", "Response 1.1",
+    3, "LB", "NIDVAR", "2", "TEST1", "Test QNAM1", "Response 2.2"
   )
 
   expected_output <- tibble::tribble(
