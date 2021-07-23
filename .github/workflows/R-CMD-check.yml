@@ -49,30 +49,28 @@ jobs:
         with:
           path: ~/.local/share/renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-
+          restore-keys: ${{ runner.os }}-renv-
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux') && (matrix.config.r == '3.5' || matrix.config.r == 'release')
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
+          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'macOS') && matrix.config.r == '3.6'
         with:
           path: ~/Library/Application Support/renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-
+          restore-keys: ${{ runner.os }}-renv-
 
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Windows') && matrix.config.r == '3.6'
         with:
           path: ~\AppData\Local\renv
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-
+          restore-keys: ${{ runner.os }}-renv-
 
       - name: Query dependencies
         run: |
