@@ -107,7 +107,7 @@ input <- tibble::tribble(
   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
 )
 
-derive_worstfl(
+derive_var_worstfl(
   input,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT),
@@ -118,7 +118,7 @@ derive_worstfl(
 
 \dontrun{
 # example with ADVS
-derive_worstfl(
+derive_var_worstfl(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT, ATPTN),

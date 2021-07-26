@@ -257,7 +257,7 @@ derive_extreme_flag <- function(dataset,
 #'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
 #' )
 #'
-#' derive_worstfl(
+#' derive_var_worstfl(
 #'   input,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT),
@@ -268,7 +268,7 @@ derive_extreme_flag <- function(dataset,
 #'
 #'\dontrun{
 #' # example with ADVS
-#' derive_worstfl(
+#' derive_var_worstfl(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT, ATPTN),
@@ -335,7 +335,7 @@ derive_var_worstfl <- function(dataset,
     filter(dataset, !.data$PARAMCD %in% c(worst_low, worst_high))
   ) %>%
     mutate(
-      WORSTFL := case_when(
+      !!sym("WORSTFL") := case_when(
         .data$PARAMCD %in% worst_low ~ !!new_var_low,
         .data$PARAMCD %in% worst_high ~ !!new_var_high,
         TRUE ~ NA_character_
