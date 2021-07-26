@@ -1,3 +1,4 @@
+data(ae)
 data(vs)
 
 test_that("call_derivation works", {
@@ -27,9 +28,9 @@ test_that("call_derivation works", {
     dataset = input,
     derivation = derive_summary_records,
     variable_params = list(
-      list(fns = list(VSSTRESN ~ mean(., na.rm = TRUE)), set_values_to = vars(DTYPE = "AVERAGE")),
-      list(fns = list(VSSTRESN ~ max(., na.rm = TRUE)), set_values_to = vars(DTYPE = "MAXIMUM")),
-      list(fns = list(VSSTRESN ~ min(., na.rm = TRUE)), set_values_to = vars(DTYPE = "MINIMUM"))
+      params(fns = list(VSSTRESN ~ mean(., na.rm = TRUE)), set_values_to = vars(DTYPE = "AVERAGE")),
+      params(fns = list(VSSTRESN ~ max(., na.rm = TRUE)), set_values_to = vars(DTYPE = "MAXIMUM")),
+      params(fns = list(VSSTRESN ~ min(., na.rm = TRUE)), set_values_to = vars(DTYPE = "MINIMUM"))
     ),
     by_vars = vars(USUBJID, VSTESTCD),
     filter_rows = expr(dplyr::n() >= 2L)
