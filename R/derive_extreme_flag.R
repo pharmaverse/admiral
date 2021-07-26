@@ -197,42 +197,114 @@ derive_extreme_flag <- function(dataset,
   data %>% select(-temp_obs_nr)
 }
 
-
+#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#'
+#' @inheritParams derive_extreme_flag
+#' @param param_var Variable with the parameter values for which the maximal / minimal
+#' value is calculated.
+#' @param worst_high Character with `param_var` values specifying the parameters
+#' referring to "high".
+#' @param worst_low Character with `param_var` values specifying the parameters
+#' referring to "low".
+#'
+#' @details For each group with respect to the variables specified for the `by_vars` parameter,
+#' the maximal / minimal observation
+#' (with respect to the order specified for the `order` parameter),
+#' is labelled in the `new_var` column as `"Y"`
+#' if its `param_var` is in `worst_high` / `worst_low`,
+#' otherwise it is assigned `NA`.
+#'
+#' @author Ondrej Slama
+#'
+#' @return The input dataset with the new flag variable added.
+#'
+#' @keywords derivation adam
+#'
+#' @export
 #'
 #' @examples
+#'
+#' input <- tibble::tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+#' )
+#'
+#' derive_worstfl(
+#'   input,
+#'   new_var = WORSTFL,
+#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#'   order = vars(AVAL, ADT),
+#'   param_var = PARAMCD,
+#'   worst_high = c("PARAM01", "PARAM03"),
+#'   worst_low = "PARAM02"
+#' )
+#'
+#'\dontrun{
+#' # example with ADVS
 #' derive_worstfl(
 #'   advs,
 #'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT, ATPTN),
-#'   worst_high = list(WORST_HIGH = c("SYSBP", "DIABP")),
-#'   worst_low = list(WORST_LOW = "RESP"),
+#'   param_var = PARAMCD,
+#'   worst_high = c("SYSBP", "DIABP"),
+#'   worst_low = "RESP",
 #'   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
 #' )
+#'}
 #'
 derive_worstfl <- function(dataset,
                            new_var,
                            by_vars,
                            order,
+                           param_var,
                            worst_high,
                            worst_low,
                            flag_filter = NULL,
                            check_type = "warning") {
+
+  # perform argument checks
   new_var <- assert_symbol(enquo(new_var))
+  param_var <- assert_symbol(enquo(param_var))
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(vars(!!!by_vars, !!!extract_vars(order)), quo(PARAMCD))
+    required_vars = quo_c(by_vars, extract_vars(order), param_var)
   )
-  assert_named_list(worst_high, min_len = 1, max_len = 1)
-  assert_named_list(worst_low, min_len = 1, max_len = 1)
-  assert_that(
-    all(map_lgl(worst_high, is.character)),
-    all(map_lgl(worst_low, is.character))
-  )
-  # flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+  assert_character_vector(worst_high)
+  assert_character_vector(worst_low)
+  flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
 
+  # additional check for worstflag
   if (length(intersect(worst_high, worst_low)) > 0) {
     err_msg <- paste(
       "The following parameters are both assigned to `worst_high` and `worst_low` flags:",
@@ -241,59 +313,39 @@ derive_worstfl <- function(dataset,
     abort(err_msg)
   }
 
-  new_var_low <- sym(names(worst_low))
-  new_var_high <- sym(names(worst_high))
+  new_var_low <- sym("TMP_WORST_LOW")
+  new_var_high <- sym("TMP_WORST_HIGH")
 
-# browser()
+  # derive worstflag
   bind_rows(
     derive_extreme_flag(
-      dataset = dataset,#filter(dataset, .data$PARAMCD %in% worst_low[[1]]),
-      new_var = new_var_low,
+      dataset = filter(dataset, .data$PARAMCD %in% worst_low),
+      new_var = !!new_var_low,
       by_vars = by_vars,
       order = order,
       mode = "first",
-      flag_filter = flag_filter,
+      flag_filter = !!flag_filter,
       check_type = check_type
     ),
     derive_extreme_flag(
-      dataset = dataset,#filter(dataset, .data$PARAMCD %in% worst_high[[1]]),
-      new_var = new_var_high,
+      dataset = filter(dataset, .data$PARAMCD %in% worst_high),
+      new_var = !!new_var_high,
       by_vars = by_vars,
       order = order,
       mode = "last",
-      flag_filter = flag_filter,
+      flag_filter = !!flag_filter,
       check_type = check_type
     ),
-    filter(dataset, !.data$PARAMCD %in% c(worst_low[[1]], worst_high[[1]]))
-  ) %>% mutate(
-    !!new_var := case_when(
-      .data$PARAMCD %in% worst_high[[1]] ~ !!new_var_high,
-      .data$PARAMCD %in% worst_low[[1]] ~ !!new_var_low,
-      TRUE ~ NA_character_
-    )
-  )
+    filter(dataset, !.data$PARAMCD %in% c(worst_low, worst_high))
+  ) %>%
+    mutate(
+      !!new_var := case_when(
+        .data$PARAMCD %in% worst_low ~ !!new_var_low,
+        .data$PARAMCD %in% worst_high ~ !!new_var_high,
+        TRUE ~ NA_character_
+      ),
+      !!new_var_low := NULL,
+      !!new_var_high := NULL
+    ) %>%
+    arrange(!!!by_vars)
 }
-
-###
-# res <- advs %>%
-#   derive_extreme_flag(
-#     new_var = WORST_HIGH,
-#     by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#     order = vars(AVAL, ADT, ATPTN),
-#     mode = "last",
-#     flag_filter = !is.na(AVISIT) & !is.na(AVAL)
-#   ) %>%
-#   derive_extreme_flag(
-#     new_var = WORST_LOW,
-#     by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#     order = vars(AVAL, ADT, ATPTN),
-#     mode = "first",
-#     flag_filter = !is.na(AVISIT) & !is.na(AVAL)
-#   ) %>%
-#   mutate(
-#     WORSTFL = case_when(
-#       PARAMCD %in% c("SYSBP", "DIABP") ~ WORST_HIGH,
-#       PARAMCD == "RESP" ~ WORST_LOW
-#     )
-#   )
-###
