@@ -50,14 +50,19 @@ derive_param_qtcb <- function(dataset,
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset,
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+
+  assert_unit(dataset, param = qt_code, unit = "msec")
+  assert_unit(dataset, param = rr_code, unit = "msec")
 
   derive_derived_param(dataset,
                        filter = !!filter,
                        parameters = c(qt_code, rr_code),
                        by_vars = by_vars,
                        analysis_value = !!sym(paste0("AVAL.", qt_code)) / sqrt(!!sym(paste0("AVAL.", rr_code))/1000),
-                       set_values_to = vars(PARAMCD = !!new_param),
+                       set_values_to = vars(PARAMCD = !!new_param,
+                                            AVALU = "msec"),
                        drop_values_from = drop_values_from
                        )
 }
@@ -113,15 +118,21 @@ derive_param_qtcf <- function(dataset,
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars)
+  filter <- assert_filter_cond(enquo(filter),
+                               optional = TRUE)
+  assert_data_frame(dataset,
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+
+  assert_unit(dataset, param = qt_code, unit = "msec")
+  assert_unit(dataset, param = rr_code, unit = "msec")
 
   derive_derived_param(dataset,
                        filter = !!filter,
                        parameters = c(qt_code, rr_code),
                        by_vars = by_vars,
                        analysis_value = !!sym(paste0("AVAL.", qt_code)) / (!!sym(paste0("AVAL.", rr_code))/1000)^(1/3),
-                       set_values_to = vars(PARAMCD = !!new_param),
+                       set_values_to = vars(PARAMCD = !!new_param,
+                                            AVALU = "msec"),
                        drop_values_from = drop_values_from
   )
 }
@@ -177,14 +188,19 @@ derive_param_qtlc <- function(dataset,
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset,
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+
+  assert_unit(dataset, param = qt_code, unit = "msec")
+  assert_unit(dataset, param = rr_code, unit = "msec")
 
   derive_derived_param(dataset,
                        filter = !!filter,
                        parameters = c(qt_code, rr_code),
                        by_vars = by_vars,
                        analysis_value = 1000*(!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154*(1 - !!sym(paste0("AVAL.", rr_code))/1000)),
-                       set_values_to = vars(PARAMCD = !!new_param),
+                       set_values_to = vars(PARAMCD = !!new_param,
+                                            AVALU = "msec"),
                        drop_values_from = drop_values_from
   )
 }
@@ -231,7 +247,10 @@ derive_param_rr <- function(dataset,
   assert_character_scalar(hr_code)
   assert_vars(by_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset,
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+
+  assert_unit(dataset, param = hr_code, unit = "beats/min")
 
   derive_derived_param(dataset,
                        filter = !!filter,

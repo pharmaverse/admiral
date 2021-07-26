@@ -108,12 +108,18 @@ derive_derived_param <- function(dataset,
 ) {
   # checking and quoting
   assert_vars(by_vars)
-  assert_vars(constant_by_vars, optional = TRUE)
+  assert_vars(constant_by_vars,
+              optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, AVAL))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_character_vector(parameters)
-  assert_character_vector(constant_parameters, optional = TRUE)
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  filter <- assert_filter_cond(enquo(filter),
+                               optional = TRUE)
+  params_available <- unique(dataset$PARAMCD)
+  assert_character_vector(parameters,
+                          values = params_available)
+  assert_character_vector(constant_parameters,
+                          values = params_available,
+                          optional = TRUE)
 
   # select observations and variables required for new observations
   data_filtered <- dataset %>%
