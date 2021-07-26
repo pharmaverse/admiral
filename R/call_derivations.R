@@ -9,7 +9,8 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
 
   for (i in seq_along(variable_params)) {
     args <- c(quote(dataset), variable_params[[i]], fixed_params)
-    dataset <- do.call(derivation, args)
+    call <- as.call(c(substitute(derivation), args))
+    dataset <- eval(call)
   }
   dataset
 }
