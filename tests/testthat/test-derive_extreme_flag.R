@@ -451,9 +451,8 @@ test_that("Derive worst flag works correctly", {
                        "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", "Y", "Y",
                        "Y", NA, NA))
 
-  actual_output <- derive_worstfl(
+  actual_output <- derive_var_worstfl(
     input,
-    new_var = WORSTFL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(AVAL, ADT),
     param_var = PARAMCD,
@@ -505,9 +504,8 @@ test_that("Derive worst flag works correctly with no worst_high option", {
                        "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", NA, NA,
                        NA, NA, NA))
 
-  actual_output <- derive_worstfl(
+  actual_output <- derive_var_worstfl(
     input,
-    new_var = WORSTFL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(AVAL, ADT),
     param_var = PARAMCD,

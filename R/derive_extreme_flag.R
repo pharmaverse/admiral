@@ -210,7 +210,7 @@ derive_extreme_flag <- function(dataset,
 #' @details For each group with respect to the variables specified for the `by_vars` parameter,
 #' the maximal / minimal observation
 #' (with respect to the order specified for the `order` parameter),
-#' is labelled in the `new_var` column as `"Y"`
+#' is labelled in the `WORSTFL` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
 #' otherwise it is assigned `NA`.
 #'
@@ -259,7 +259,6 @@ derive_extreme_flag <- function(dataset,
 #'
 #' derive_worstfl(
 #'   input,
-#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT),
 #'   param_var = PARAMCD,
@@ -271,7 +270,6 @@ derive_extreme_flag <- function(dataset,
 #' # example with ADVS
 #' derive_worstfl(
 #'   advs,
-#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT, ATPTN),
 #'   param_var = PARAMCD,
@@ -281,18 +279,16 @@ derive_extreme_flag <- function(dataset,
 #' )
 #'}
 #'
-derive_worstfl <- function(dataset,
-                           new_var,
-                           by_vars,
-                           order,
-                           param_var,
-                           worst_high,
-                           worst_low,
-                           flag_filter = NULL,
-                           check_type = "warning") {
+derive_var_worstfl <- function(dataset,
+                               by_vars,
+                               order,
+                               param_var,
+                               worst_high,
+                               worst_low,
+                               flag_filter = NULL,
+                               check_type = "warning") {
 
   # perform argument checks
-  new_var <- assert_symbol(enquo(new_var))
   param_var <- assert_symbol(enquo(param_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -339,7 +335,7 @@ derive_worstfl <- function(dataset,
     filter(dataset, !.data$PARAMCD %in% c(worst_low, worst_high))
   ) %>%
     mutate(
-      !!new_var := case_when(
+      WORSTFL := case_when(
         .data$PARAMCD %in% worst_low ~ !!new_var_low,
         .data$PARAMCD %in% worst_high ~ !!new_var_high,
         TRUE ~ NA_character_
