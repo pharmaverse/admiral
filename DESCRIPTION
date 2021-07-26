@@ -24,11 +24,9 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    readxl,
     rlang,
     stringr,
-    tidyr,
-    tidyselect
+    tidyr
 Suggests:
     devtools,
     diffdf,
