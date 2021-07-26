@@ -48,8 +48,8 @@ test_that("call_derivation works", {
       new_vars_prefix = "AST",
       dtc = AESTDTC,
       date_imputation = "first",
-      min_dates = TRTSDT,
-      max_dates = TRTEDT
+      min_dates = list(TRTSDT),
+      max_dates = list(TRTEDT)
     ) %>%
     derive_vars_dt(
       new_vars_prefix = "AEN",
