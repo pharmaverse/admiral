@@ -113,7 +113,7 @@ map <- left_join(sysbp, diabp,
   select(-DBPAVAL) %>%
   filter(!is.na(AVAL)) %>%
 # Add  PARAM
-left_join(param_lookup, by = "PARAMCD")
+  left_join(param_lookup, by = "PARAMCD")
 
 # add MAP to the original datasets
 advs <- advs0 %>%
