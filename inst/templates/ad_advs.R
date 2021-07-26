@@ -111,13 +111,13 @@ map <- left_join(sysbp, diabp,
     PARAMCD = "MAP"
   ) %>%
   select(-DBPAVAL) %>%
-  filter(!is.na(AVAL))
+  filter(!is.na(AVAL)) %>%
 # Add  PARAM
-left_join(param_lookup, by = "PARAMCD")
+  left_join(param_lookup, by = "PARAMCD")
 
 # add MAP to the original datasets
 advs <- advs0 %>%
-  full_join(map) %>%
+  union_all(map) %>%
   # Derive Timing
   mutate(
     ATPTN = VSTPTNUM,
