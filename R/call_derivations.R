@@ -17,7 +17,8 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
 
 params <- function(...) {
   args <- eval(substitute(alist(...)))
-  if (any(names(args) == "")) {
+  params <- names(args)
+  if (is.null(params) || any(params == "")) {
     abort("All arguments must be named")
   }
   args
