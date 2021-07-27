@@ -567,6 +567,70 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+assert_s3_class <- function(arg, class, optional = TRUE) {
+  assert_character_scalar(class)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, class)) {
+    err_msg <- sprintf(
+      "`%s` must be an object of class '%s' but is %s",
+      arg_name(substitute(arg)),
+      class,
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+assert_list_of <- function(arg, kind, optional = TRUE) {
+  assert_character_scalar(kind)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  assert_s3_class(arg, "list")
+
+  is_kind <- map_lgl(arg, inherits, kind)
+  if (!all(is_kind)) {
+    err_msg <- sprintf(
+      "Each element of `%s` must be an object of class '%s' but the following elements are not: %s",
+      arg_name(substitute(arg)),
+      kind,
+      enumerate(which(!is_kind), quote_fun = identity)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+assert_function_param <- function(arg, params) {
+  assert_character_scalar(arg)
+  assert_character_vector(params)
+  fun <- match.fun(arg)
+
+  is_param <- params %in% names(formals(fun))
+  if (!all(is_param)) {
+    txt <- if (sum(!is_param) == 1L) {
+      "%s is not a parameter of `%s()`"
+    } else {
+      "%s are not parameters of `%s()`"
+    }
+    err_msg <- sprintf(txt, enumerate(params[!is_param]), arg)
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Is Date/Date-time?
 #'
 #' Checks if a date or date-time vector was specified

@@ -56,7 +56,7 @@ test_that("call_derivation works", {
       dtc = AEENDTC,
       date_imputation = "last",
       min_dates = list(TRTSDT),
-      max_date = list(TRTEDT)
+      max_dates = list(TRTEDT)
     )
 
   actual_output <- call_derivation(
@@ -67,7 +67,7 @@ test_that("call_derivation works", {
       params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
     ),
     min_dates = list(TRTSDT),
-    max_date = list(TRTEDT)
+    max_dates = list(TRTEDT)
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))
