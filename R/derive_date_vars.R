@@ -146,6 +146,7 @@ impute_dtc <- function(dtc,
                        min_dates = NULL,
                        max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
+  n_chr <- nchar(dtc)
   is_valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc)
 
@@ -179,24 +180,24 @@ impute_dtc <- function(dtc,
     }
 
     imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
+      n_chr >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
-      nchar(dtc) == 9 & is_valid_dtc ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
-      nchar(dtc) == 7 & is_valid_dtc ~ paste0(dtc, "-", d),
-      nchar(dtc) == 4 & is_valid_dtc ~ paste0(dtc, "-", mo, "-", d),
+      n_chr == 9 & is_valid_dtc ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      n_chr == 7 & is_valid_dtc ~ paste0(dtc, "-", d),
+      n_chr == 4 & is_valid_dtc ~ paste0(dtc, "-", mo, "-", d),
       TRUE ~ NA_character_
     )
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
+        nchar(imputed_date) > 0 & n_chr < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
         TRUE ~ imputed_date
       )
     }
   } else {
     # no imputation
     imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
+      n_chr >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
       TRUE ~ NA_character_
     )
   }
@@ -226,16 +227,16 @@ impute_dtc <- function(dtc,
     }
 
     imputed_time <- case_when(
-      nchar(dtc) >= 19 ~ substr(dtc, 12, 19),
-      nchar(dtc) == 16 ~ paste0(substr(dtc, 12, 16), sec),
-      nchar(dtc) == 13 ~ paste0(substr(dtc, 12, 13), min, sec),
-      nchar(dtc) == 10 ~ paste0(h, min, sec),
+      n_chr >= 19 ~ substr(dtc, 12, 19),
+      n_chr == 16 ~ paste0(substr(dtc, 12, 16), sec),
+      n_chr == 13 ~ paste0(substr(dtc, 12, 13), min, sec),
+      n_chr == 10 ~ paste0(h, min, sec),
       TRUE ~ imputed_time
     )
   } else {
     # no imputation
     imputed_time <- if_else(
-      nchar(dtc) >= 19 & is_valid_dtc(dtc),
+      n_chr >= 19 & is_valid_dtc,
       substr(dtc, 12, 19),
       NA_character_
     )
