@@ -33,26 +33,19 @@ warn_if_vars_exist <- function(dataset, vars) {
 }
 
 is_valid_dtc <- function(arg) {
-  pattern0 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$"
-  pattern1 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$"
-  pattern2 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$"
-  pattern3 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$"
-  pattern4 <- "^(\\d{4})-(\\d{2})-(\\d{2})$"
-  pattern5 <- "^(\\d{4})-(\\d{2})$"
-  pattern6 <- "^(\\d{4})$"
-  pattern7 <- "^(\\d{4})---(\\d{2})$"
+  pattern <- paste(
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
+     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})$",
+    "^(\\d{4})-(\\d{2})$",
+    "^(\\d{4})$",
+    "^(\\d{4})---(\\d{2})$",
+    sep = "|"
+  )
 
-
-  grepl(pattern0, arg) |
-    grepl(pattern1, arg) |
-    grepl(pattern2, arg) |
-    grepl(pattern3, arg) |
-    grepl(pattern4, arg) |
-    grepl(pattern5, arg) |
-    grepl(pattern6, arg) |
-    grepl(pattern7, arg) |
-    arg == "" |
-    is.na(arg)
+  grepl(pattern, arg) | arg == "" | is.na(arg)
 }
 
 #' Warn If a vector contains unknown datetime format
