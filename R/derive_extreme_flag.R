@@ -210,7 +210,7 @@ derive_extreme_flag <- function(dataset,
 #' @details For each group with respect to the variables specified for the `by_vars` parameter,
 #' the maximal / minimal observation
 #' (with respect to the order specified for the `order` parameter),
-#' is labelled in the `WORSTFL` column as `"Y"`
+#' is labelled in the `new_var` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
 #' otherwise it is assigned `NA`.
 #'
@@ -257,8 +257,9 @@ derive_extreme_flag <- function(dataset,
 #'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
 #' )
 #'
-#' derive_var_worstfl(
+#' derive_worst_flag(
 #'   input,
+#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT),
 #'   param_var = PARAMCD,
@@ -268,8 +269,9 @@ derive_extreme_flag <- function(dataset,
 #'
 #'\dontrun{
 #' # example with ADVS
-#' derive_var_worstfl(
+#' derive_worst_flag(
 #'   advs,
+#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT, ATPTN),
 #'   param_var = PARAMCD,
@@ -279,16 +281,18 @@ derive_extreme_flag <- function(dataset,
 #' )
 #'}
 #'
-derive_var_worstfl <- function(dataset,
-                               by_vars,
-                               order,
-                               param_var,
-                               worst_high,
-                               worst_low,
-                               flag_filter = NULL,
-                               check_type = "warning") {
+derive_worst_flag <- function(dataset,
+                              new_var,
+                              by_vars,
+                              order,
+                              param_var,
+                              worst_high,
+                              worst_low,
+                              flag_filter = NULL,
+                              check_type = "warning") {
 
   # perform argument checks
+  new_var <- assert_symbol(enquo(new_var))
   param_var <- assert_symbol(enquo(param_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -309,14 +313,11 @@ derive_var_worstfl <- function(dataset,
     abort(err_msg)
   }
 
-  new_var_low <- sym("TMP_WORST_LOW")
-  new_var_high <- sym("TMP_WORST_HIGH")
-
-  # derive worstflag
+  # derive worst-flag
   bind_rows(
     derive_extreme_flag(
       dataset = filter(dataset, .data$PARAMCD %in% worst_low),
-      new_var = !!new_var_low,
+      new_var = !!new_var,
       by_vars = by_vars,
       order = order,
       mode = "first",
@@ -325,7 +326,7 @@ derive_var_worstfl <- function(dataset,
     ),
     derive_extreme_flag(
       dataset = filter(dataset, .data$PARAMCD %in% worst_high),
-      new_var = !!new_var_high,
+      new_var = !!new_var,
       by_vars = by_vars,
       order = order,
       mode = "last",
@@ -333,15 +334,5 @@ derive_var_worstfl <- function(dataset,
       check_type = check_type
     ),
     filter(dataset, !.data$PARAMCD %in% c(worst_low, worst_high))
-  ) %>%
-    mutate(
-      !!sym("WORSTFL") := case_when(
-        .data$PARAMCD %in% worst_low ~ !!new_var_low,
-        .data$PARAMCD %in% worst_high ~ !!new_var_high,
-        TRUE ~ NA_character_
-      ),
-      !!new_var_low := NULL,
-      !!new_var_high := NULL
-    ) %>%
-    arrange(!!!by_vars)
+  )
 }
