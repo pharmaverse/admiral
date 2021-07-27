@@ -204,6 +204,14 @@ test_that("assert_valid_queries checks VAR_PREFIX values", {
 
   expect_error(
     assert_valid_queries(
+      mutate(query, QUERY_ID = as.character(QUERY_ID)),
+      "test"
+    ),
+    regexp = "`QUERY_ID` in `test` should be numeric."
+  )
+
+  expect_error(
+    assert_valid_queries(
       mutate(query, QUERY_SCOPE = letters[1:2]),
       "test"
     ),
