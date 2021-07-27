@@ -54,6 +54,7 @@ is_valid_dtc <- function(arg) {
 #' "2003-12-15T-:15:18", "2003-12-15T13:-:19","--12-15","-----T07:15"
 #'
 #' @param dtc a character vector containing the dates
+#' @param is_valid a logical vector indicating whether elements in `dtc` are valid
 #'
 #' @author Samia Kabi
 #'
@@ -68,7 +69,7 @@ is_valid_dtc <- function(arg) {
 #'
 #' ## Issues a warning
 #' warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
-warn_if_invalid_dtc <- function(dtc, is_valid) {
+warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
   if (!all(is_valid)) {
     incorrect_dtc <- dtc[!is_valid]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid]
