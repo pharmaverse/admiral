@@ -145,7 +145,8 @@ impute_dtc <- function(dtc,
                        min_dates = NULL,
                        max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
-  warn_if_invalid_dtc(dtc)
+  is_valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc)
 
   # date imputation
   if (!is.null(date_imputation)) {
@@ -177,11 +178,11 @@ impute_dtc <- function(dtc,
     }
 
     imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
+      nchar(dtc) >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
-      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
-      nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
-      nchar(dtc) == 4 & is_valid_dtc(dtc) ~ paste0(dtc, "-", mo, "-", d),
+      nchar(dtc) == 9 & is_valid_dtc ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      nchar(dtc) == 7 & is_valid_dtc ~ paste0(dtc, "-", d),
+      nchar(dtc) == 4 & is_valid_dtc ~ paste0(dtc, "-", mo, "-", d),
       TRUE ~ NA_character_
     )
 
@@ -194,7 +195,7 @@ impute_dtc <- function(dtc,
   } else {
     # no imputation
     imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
+      nchar(dtc) >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
       TRUE ~ NA_character_
     )
   }
@@ -312,13 +313,16 @@ convert_dtc_to_dt <- function(dtc,
                               min_dates = NULL,
                               max_dates = NULL) {
   assert_that(is.character(dtc))
-  warn_if_invalid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
-  imputed_dtc <- impute_dtc(dtc = dtc,
-                            date_imputation = date_imputation,
-                            time_imputation = "first",
-                            min_dates = min_dates,
-                            max_dates = max_dates)
+  imputed_dtc <- impute_dtc(
+    dtc = dtc,
+    date_imputation = date_imputation,
+    time_imputation = "first",
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
   if_else(
     is.na(imputed_dtc),
     ymd(NA),
@@ -356,7 +360,7 @@ convert_dtc_to_dtm <- function(dtc,
                                min_dates = NULL,
                                max_dates = NULL) {
   assert_that(is.character(dtc))
-  warn_if_invalid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
   as_iso_dttm(ymd_hms(
     impute_dtc(
@@ -395,16 +399,18 @@ convert_dtc_to_dtm <- function(dtc,
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
   assert_that(is.character(dtc), is_date(dt))
-  warn_if_invalid_dtc(dtc)
+
+  is_na <- is.na(dt)
+  n_chr <- nchar(dtc)
+  is_valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc)
 
   case_when(
-    (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
-      is.na(dt) |
-      !is_valid_dtc(dtc) ~ NA_character_,
-    !is.na(dt) & nchar(dtc) < 4 ~ "Y",
-    !is.na(dt) & nchar(dtc) == 4 ~ "M",
-    !is.na(dt) & nchar(dtc) == 7 ~ "D",
-    !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
+    (!is_na & n_chr >= 10 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
+    !is_na & n_chr < 4 ~ "Y",
+    !is_na & n_chr == 4 ~ "M",
+    !is_na & n_chr == 7 ~ "D",
+    !is_na & n_chr == 9 ~ "M" # dates like "2019---07"
   )
 }
 
@@ -435,16 +441,17 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   assert_that(is.character(dtc), is_date(dtm))
-  warn_if_invalid_dtc(dtc)
+
+  is_na <- is.na(dtm)
+  n_chr <- nchar(dtc)
+  is_valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc)
 
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
-      is.na(dtm) |
-      !is_valid_dtc(dtc) ~ NA_character_,
-    !is.na(dtm) & nchar(dtc) == 16 ~ "S",
-    !is.na(dtm) & nchar(dtc) == 13 ~ "M",
-    (!is.na(dtm) & (nchar(dtc) == 10)) |
-      (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
+    (!is_na & n_chr >= 19 & is_valid_dtc) | is_na | !is_valid_dtc(dtc) ~ NA_character_,
+    !is_na & n_chr == 16 ~ "S",
+    !is_na & n_chr == 13 ~ "M",
+    (!is_na & n_chr == 10) | (n_chr > 0 & n_chr < 10) ~ "H"
   )
 }
 
