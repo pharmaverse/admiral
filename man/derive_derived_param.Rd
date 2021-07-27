@@ -9,8 +9,11 @@ derive_derived_param(
   filter = NULL,
   parameters,
   by_vars,
+  constant_parameters = NULL,
+  constant_by_vars = NULL,
   analysis_value,
-  set_values_to
+  set_values_to,
+  drop_values_from = NULL
 )
 }
 \arguments{
@@ -47,7 +50,7 @@ dataset.
 
 \item{analysis_value}{Definition of the analysis value
 
-A formula defining the analysis value (\code{AVAL}) of the new parameter is
+An expression defining the analysis value (\code{AVAL}) of the new parameter is
 expected. The analysis values of the parameters specified by \code{parameters}
 can be accessed using \verb{AVAL.<parameter code>}, e.g., \code{AVAL.SYSBP}.
 
@@ -66,10 +69,10 @@ The input dataset with the new parameter added
 }
 \description{
 Adds a parameter computed from the analysis value of other parameters. It is
-expected that the analysis value of the new parameter is defined by a formula
-using the analysis values of other parameters. For example mean arterial
-pressure (MAP) can be derived from systolic (SYSBP) and diastolic blood
-pressure (DIABP) with the formula \deqn{MAP = (SYSBP + 2 DIABP) / 3}
+expected that the analysis value of the new parameter is defined by an
+expression using the analysis values of other parameters. For example mean
+arterial pressure (MAP) can be derived from systolic (SYSBP) and diastolic
+blood pressure (DIABP) with the formula \deqn{MAP = (SYSBP + 2 DIABP) / 3}
 }
 \details{
 For each group (with respect to the variables specified for the
@@ -85,28 +88,26 @@ set to \code{NA}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(magrittr)
 data("advs")
-advss <- advs \%>\%
+advs \%>\%
   select(USUBJID, PARAMCD, PARAM, AVAL, VSTESTCD, ANL01FL, DTYPE, AVISIT, AVISITN) \%>\%
   filter(
     USUBJID \%in\% c("01-701-1015", "01-701-1363") &
       PARAMCD \%in\% c("SYSBP", "DIABP") &
       AVISIT \%in\% c("Baseline", "Week 2")
-  )
-
-derive_derived_param(
-  advss,
-  filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
-  parameters = c("SYSBP", "DIABP"),
-  by_vars = vars(USUBJID, AVISIT),
-  analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-  set_values_to = vars(
-    PARAMCD = "MAP",
-    PARAM = "Mean arterial pressure (mmHg)",
-    DTYPE = NA
-  )
-) \%>\%
+  ) \%>\%
+  derive_derived_param(
+    advs,
+    filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
+    parameters = c("SYSBP", "DIABP"),
+    by_vars = vars(USUBJID, AVISIT),
+    analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+    set_values_to = vars(
+      PARAMCD = "MAP",
+      PARAM = "Mean arterial pressure (mmHg)",
+      DTYPE = NA
+    )
+  ) \%>\%
   filter(DTYPE == "AVERAGE" | PARAMCD == "MAP")
 }
 \author{

@@ -94,7 +94,7 @@ test_that("Derive when an adverse event is in multiple baskets", {
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
-    "1", 1, "PTSI", "other", "My Query 1", NA_integer_, 1, NA_integer_,
+    "1", 1, "PTSI", "other", "My Query 1", NA_character_, 1, NA_integer_,
     "1", 2, "something", "LLTSI", NA_character_, "My Query 2", NA_integer_, 2,
     "1", 2, "PTSI", "LLTSI", "My Query 1", "My Query 2", 1, 2,
     "1", 2, "something", "other", NA_character_, NA_character_, NA_integer_, NA_integer_

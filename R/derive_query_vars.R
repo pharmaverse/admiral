@@ -125,9 +125,8 @@ derive_query_vars <- function(dataset, queries) {
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), unique(queries$TERM_LEVEL))
   # if dataset does not have a unique key, create a temp one
-  no_key <- dataset %>% select(all_of(static_cols)) %>% distinct
-  no_key <- nrow(no_key) != nrow(dataset)
-  if (no_key) {
+  no_key <- dataset %>% select(!!!syms(static_cols)) %>% distinct()
+  if (nrow(no_key) != nrow(dataset)) {
     dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
   }
@@ -139,7 +138,7 @@ derive_query_vars <- function(dataset, queries) {
   # join restructured queries to input dataset
   joined <- joined %>%
     inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_ID")) %>%
-    select(all_of(c(static_cols, new_col_names))) %>%
+    select(!!!syms(c(static_cols, new_col_names))) %>%
     dplyr::group_by_at(static_cols) %>%
     dplyr::summarise_all(~dplyr::first(na.omit(.))) %>%
     ungroup()

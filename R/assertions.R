@@ -161,7 +161,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' example_fun(letters)
 #'
 #' try(example_fun(1:10))
-assert_character_vector <- function(arg, optional = FALSE) {
+assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -175,6 +175,18 @@ assert_character_vector <- function(arg, optional = FALSE) {
       what_is_it(arg)
     )
     abort(err_msg)
+  }
+
+  assert_character_vector(values, optional = TRUE)
+  if (!is.null(values)) {
+    mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
+    if (length(mismatches) > 0) {
+      abort(paste0("`", arg_name(substitute(arg)),
+                   "` contains invalid values:\n",
+                   enumerate(mismatches), "\n",
+                   "Valid values:\n",
+                   enumerate(values)))
+    }
   }
 }
 
@@ -564,6 +576,42 @@ assert_has_variables <- function(dataset, required_vars) {
       )
     }
     abort(err_msg)
+  }
+}
+
+#' Asserts That a Parameter is Provided in the Expected Unit
+#'
+#' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
+#' unit. The unit is expected in the `AVALU` variable.
+#'
+#' @param dataset A `data.frame`
+#' @param param
+#'   Parameter code of the parameter to check
+#' @param unit
+#'   Expected unit
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if `AVALU` differs from the unit for any
+#'   observation of the parameter in the input dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(vs)
+#' assert_unit(vs, param = "WEIGHT", unit = "kg")
+#' \dontrun{
+#' assert_unit(vs, param = "WEIGHT", unit = "g")
+#' }
+assert_unit <- function(dataset, param, unit) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD, AVALU))
+  units <- unique(filter(dataset, PARAMCD == param)$AVALU)
+  if (length(units) != 1 || units != unit) {
+    abort(paste0("It is expected that ", param, " is measured in ", unit, ".\n",
+                 "In the input dataset it is measured in ",
+                 enumerate(units), "."))
   }
 }
 

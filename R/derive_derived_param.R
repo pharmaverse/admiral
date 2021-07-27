@@ -83,7 +83,7 @@
 #'       AVISIT %in% c("Baseline", "Week 2")
 #'   ) %>%
 #'   derive_derived_param(
-#'     advss,
+#'     advs,
 #'     filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
 #'     parameters = c("SYSBP", "DIABP"),
 #'     by_vars = vars(USUBJID, AVISIT),
@@ -103,16 +103,23 @@ derive_derived_param <- function(dataset,
                                  constant_parameters = NULL,
                                  constant_by_vars = NULL,
                                  analysis_value,
-                                 set_values_to
+                                 set_values_to,
+                                 drop_values_from = NULL
 ) {
   # checking and quoting
   assert_vars(by_vars)
-  assert_vars(constant_by_vars, optional = TRUE)
+  assert_vars(constant_by_vars,
+              optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, AVAL))
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_character_vector(parameters)
-  assert_character_vector(constant_parameters, optional = TRUE)
+                    required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  filter <- assert_filter_cond(enquo(filter),
+                               optional = TRUE)
+  params_available <- unique(dataset$PARAMCD)
+  assert_character_vector(parameters,
+                          values = params_available)
+  assert_character_vector(constant_parameters,
+                          values = params_available,
+                          optional = TRUE)
 
   # select observations and variables required for new observations
   data_filtered <- dataset %>%
@@ -121,7 +128,14 @@ derive_derived_param <- function(dataset,
   data_parameters <- data_filtered %>%
     filter(PARAMCD %in% parameters)
 
-  keep_vars <- get_constant_vars(data_parameters, by_vars = by_vars)
+  if (nrow(data_parameters) == 0L) {
+    warn(paste0("The input dataset does not contain any observations fullfiling the filter condition (",
+                expr_label(filter), ") for the parameter codes (PARAMCD) ", enumerate(parameters)))
+    return(dataset)
+  }
+  keep_vars <- get_constant_vars(data_parameters,
+                                 by_vars = by_vars,
+                                 ignore_vars = drop_values_from)
   data_parameters <- data_parameters %>%
     select(!!!keep_vars, PARAMCD, AVAL)
 
@@ -158,6 +172,9 @@ derive_derived_param <- function(dataset,
 
   # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
   hori_data <- hori_data %>%
+    # keep only observations where all analysis values are available
+    filter(!!!parse_exprs(map_chr(c(parameters, constant_parameters),
+                                  ~str_c("!is.na(AVAL.", .x, ")")))) %>%
     mutate(AVAL = !!enquo(analysis_value),
            !!!set_values_to) %>%
     select(-starts_with("AVAL."))
