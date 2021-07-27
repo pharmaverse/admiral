@@ -59,5 +59,16 @@ jobs:
         run: R CMD INSTALL .
 
       - name: Lint
-        run: lintr::lint_package()
+        run: |
+          lints <- lintr::lint_package()
+          if (length(lints) >= 1L) {
+            stop("lintr detected issues!")
+          }
         shell: Rscript {0}
+
+      - name: Upload lint results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-lintr-results
+          path: lintr
