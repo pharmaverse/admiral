@@ -600,11 +600,15 @@ assert_list_of <- function(arg, kind, optional = TRUE) {
 
   is_kind <- map_lgl(arg, inherits, kind)
   if (!all(is_kind)) {
+    info_msg <- paste(
+      sprintf("\u2716 Element %s is %s", which(!is_kind), map_chr(arg[!is_kind], what_is_it)),
+      collapse = "\n"
+    )
     err_msg <- sprintf(
-      "Each element of `%s` must be an object of class '%s' but the following elements are not: %s",
+      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
       arg_name(substitute(arg)),
       kind,
-      enumerate(which(!is_kind), quote_fun = identity)
+      info_msg
     )
     abort(err_msg)
   }
