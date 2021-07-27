@@ -449,7 +449,7 @@ compute_tmf <- function(dtc, dtm) {
   warn_if_invalid_dtc(dtc, is_valid_dtc)
 
   case_when(
-    (!is_na & n_chr >= 19 & is_valid_dtc) | is_na | !is_valid_dtc(dtc) ~ NA_character_,
+    (!is_na & n_chr >= 19 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
     !is_na & n_chr == 16 ~ "S",
     !is_na & n_chr == 13 ~ "M",
     (!is_na & n_chr == 10) | (n_chr > 0 & n_chr < 10) ~ "H"
