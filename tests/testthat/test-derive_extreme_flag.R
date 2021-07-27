@@ -457,6 +457,7 @@ test_that("Derive worst flag works correctly", {
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(AVAL, ADT),
     param_var = PARAMCD,
+    analysis_var = AVAL,
     worst_high = c("PARAM01", "PARAM03"),
     worst_low = "PARAM02"
   )
@@ -511,6 +512,7 @@ test_that("Derive worst flag works correctly with no worst_high option", {
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(AVAL, ADT),
     param_var = PARAMCD,
+    analysis_var = AVAL,
     worst_high = character(0),
     worst_low = "PARAM02"
   )

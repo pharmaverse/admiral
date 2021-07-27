@@ -202,14 +202,16 @@ derive_extreme_flag <- function(dataset,
 #' @inheritParams derive_extreme_flag
 #' @param param_var Variable with the parameter values for which the maximal / minimal
 #' value is calculated.
+#' @param analysis_var Variable with the measurement values for which the maximal / minimal
+#' value is calculated.
 #' @param worst_high Character with `param_var` values specifying the parameters
 #' referring to "high".
 #' @param worst_low Character with `param_var` values specifying the parameters
 #' referring to "low".
 #'
 #' @details For each group with respect to the variables specified for the `by_vars` parameter,
-#' the maximal / minimal observation
-#' (with respect to the order specified for the `order` parameter),
+#' the maximal / minimal observation of `analysis_var`
+#' (with respect to the additional order specified by and `order` parameters),
 #' is labelled in the `new_var` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
 #' otherwise it is assigned `NA`.
@@ -263,6 +265,7 @@ derive_extreme_flag <- function(dataset,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT),
 #'   param_var = PARAMCD,
+#'   analysis_var = AVAL,
 #'   worst_high = c("PARAM01", "PARAM03"),
 #'   worst_low = "PARAM02"
 #' )
@@ -275,6 +278,7 @@ derive_extreme_flag <- function(dataset,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(AVAL, ADT, ATPTN),
 #'   param_var = PARAMCD,
+#'   analysis_var = AVAL,
 #'   worst_high = c("SYSBP", "DIABP"),
 #'   worst_low = "RESP",
 #'   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
@@ -286,6 +290,7 @@ derive_worst_flag <- function(dataset,
                               by_vars,
                               order,
                               param_var,
+                              analysis_var,
                               worst_high,
                               worst_low,
                               flag_filter = NULL,
@@ -294,6 +299,7 @@ derive_worst_flag <- function(dataset,
   # perform argument checks
   new_var <- assert_symbol(enquo(new_var))
   param_var <- assert_symbol(enquo(param_var))
+  analysis_var <- assert_symbol(enquo(analysis_var))
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(
@@ -319,7 +325,7 @@ derive_worst_flag <- function(dataset,
       dataset = filter(dataset, .data$PARAMCD %in% worst_low),
       new_var = !!new_var,
       by_vars = by_vars,
-      order = order,
+      order = quo_c(analysis_var, order),
       mode = "first",
       flag_filter = !!flag_filter,
       check_type = check_type
@@ -328,7 +334,7 @@ derive_worst_flag <- function(dataset,
       dataset = filter(dataset, .data$PARAMCD %in% worst_high),
       new_var = !!new_var,
       by_vars = by_vars,
-      order = order,
+      order = quo_c(analysis_var, order),
       mode = "last",
       flag_filter = !!flag_filter,
       check_type = check_type

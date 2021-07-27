@@ -10,6 +10,7 @@ derive_worst_flag(
   by_vars,
   order,
   param_var,
+  analysis_var,
   worst_high,
   worst_low,
   flag_filter = NULL,
@@ -40,6 +41,9 @@ order.
 Permitted Values: list of variables or functions of variables}
 
 \item{param_var}{Variable with the parameter values for which the maximal / minimal
+value is calculated.}
+
+\item{analysis_var}{Variable with the measurement values for which the maximal / minimal
 value is calculated.}
 
 \item{worst_high}{Character with \code{param_var} values specifying the parameters
@@ -74,8 +78,8 @@ Adds a Variable Flagging the maximal / minimal value within a group of observati
 }
 \details{
 For each group with respect to the variables specified for the \code{by_vars} parameter,
-the maximal / minimal observation
-(with respect to the order specified for the \code{order} parameter),
+the maximal / minimal observation of \code{analysis_var}
+(with respect to the additional order specified by and \code{order} parameters),
 is labelled in the \code{new_var} column as \code{"Y"}
 if its \code{param_var} is in \code{worst_high} / \code{worst_low},
 otherwise it is assigned \code{NA}.
@@ -121,6 +125,7 @@ derive_worst_flag(
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT),
   param_var = PARAMCD,
+  analysis_var = AVAL,
   worst_high = c("PARAM01", "PARAM03"),
   worst_low = "PARAM02"
 )
@@ -133,6 +138,7 @@ derive_worst_flag(
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT, ATPTN),
   param_var = PARAMCD,
+  analysis_var = AVAL,
   worst_high = c("SYSBP", "DIABP"),
   worst_low = "RESP",
   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
