@@ -134,11 +134,12 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   min_dates = list(
+#'     ymd_hms("2020-12-06T12:12:12"),
+#'     ymd_hms("2020-11-11T11:11:11")
+#'   ),
 #'   date_imputation = "first"
 #' )
-#'
 impute_dtc <- function(dtc,
                        date_imputation = NULL,
                        time_imputation = "00:00:00",
@@ -231,40 +232,39 @@ impute_dtc <- function(dtc,
       nchar(dtc) == 10 ~ paste0(h, min, sec),
       TRUE ~ imputed_time
     )
-  }
-  else{
+  } else {
     # no imputation
-    imputed_time <- if_else(nchar(dtc) >= 19 & is_valid_dtc(dtc),
-                            substr(dtc, 12, 19),
-                            NA_character_)
+    imputed_time <- if_else(
+      nchar(dtc) >= 19 & is_valid_dtc(dtc),
+      substr(dtc, 12, 19),
+      NA_character_
+    )
   }
 
-  imputed_dtc <- if_else(!is.na(imputed_date) & !is.na(imputed_time),
-                         paste0(imputed_date, "T", imputed_time),
-                         NA_character_)
+  imputed_dtc <- if_else(
+    !is.na(imputed_date) & !is.na(imputed_time),
+    paste0(imputed_date, "T", imputed_time),
+    NA_character_
+  )
 
   # adjust imputed date to minimum and maximum dates
   if (!is.null(min_dates) | !is.null(max_dates)) {
     # determine range of possible dates
-    min_dtc <- impute_dtc(dtc,
-                          date_imputation = "first",
-                          time_imputation = "first")
-    max_dtc <- impute_dtc(dtc,
-                          date_imputation = "last",
-                          time_imputation = "last")
+    min_dtc <- impute_dtc(dtc, date_imputation = "first", time_imputation = "first")
+    max_dtc <- impute_dtc(dtc, date_imputation = "last", time_imputation = "last")
   }
   if (!is.null(min_dates)) {
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
       assert_that(is_date(min_date))
-      min_date_iso <- strftime(min_date,
-                               format = "%Y-%m-%dT%H:%M:%S",
-                               tz = "GMT")
-      imputed_dtc <- if_else(min_dtc <= min_date_iso & min_date_iso <= max_dtc,
-                             pmax(imputed_dtc, min_date_iso),
-                             imputed_dtc,
-                             missing = imputed_dtc)
+      min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "GMT")
+      imputed_dtc <- if_else(
+        min_dtc <= min_date_iso & min_date_iso <= max_dtc,
+        pmax(imputed_dtc, min_date_iso),
+        imputed_dtc,
+        missing = imputed_dtc
+      )
     }
   }
   if (!is.null(max_dates)) {
@@ -272,13 +272,13 @@ impute_dtc <- function(dtc,
     # after it
     for (max_date in max_dates) {
       assert_that(is_date(max_date))
-      max_date_iso <- strftime(max_date,
-                               format = "%Y-%m-%dT%H:%M:%S",
-                               tz = "GMT")
-      imputed_dtc <- if_else(min_dtc <= max_date_iso & max_date_iso <= max_dtc,
-                             pmin(imputed_dtc, max_date_iso),
-                             imputed_dtc,
-                             missing = imputed_dtc)
+      max_date_iso <- strftime(max_date, format = "%Y-%m-%dT%H:%M:%S", tz = "GMT")
+      imputed_dtc <- if_else(
+        min_dtc <= max_date_iso & max_date_iso <= max_dtc,
+        pmin(imputed_dtc, max_date_iso),
+        imputed_dtc,
+        missing = imputed_dtc
+      )
     }
   }
   imputed_dtc
@@ -688,8 +688,10 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
-  assert_character_scalar(flag_imputation,
-                          values = c("auto", "both", "date", "time", "none"))
+  assert_character_scalar(
+    flag_imputation,
+    values = c("auto", "both", "date", "time", "none")
+  )
 
   dtm <- paste0(new_vars_prefix, "DTM")
 
