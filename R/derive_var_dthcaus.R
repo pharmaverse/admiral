@@ -90,7 +90,7 @@ derive_var_dthcaus <- function(dataset, ...) {
   # process each source
   add_data <- vector("list", length(sources))
   for (ii in seq_along(sources)) {
-    if (!is.null(sources[[ii]]$filter)) {
+    if (!quo_is_null(sources[[ii]]$filter)) {
       add_data[[ii]] <- sources[[ii]]$dataset %>%
         filter(!!sources[[ii]]$filter)
     } else {
