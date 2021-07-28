@@ -237,3 +237,7 @@ filter_if <- function(dataset, filter) {
     filter(dataset, !!filter)
   }
 }
+
+`%or%` <- function(lhs, rhs) {
+  tryCatch(lhs, error = function(e) rhs)
+}

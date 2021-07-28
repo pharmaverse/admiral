@@ -509,6 +509,55 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+assert_s3_class <- function(arg, class, optional = TRUE) {
+  assert_character_scalar(class)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, class)) {
+    err_msg <- sprintf(
+      "`%s` must be an object of class '%s' but is %s",
+      arg_name(substitute(arg)),
+      class,
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+assert_list_of <- function(arg, kind, optional = TRUE) {
+  assert_character_scalar(kind)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  assert_s3_class(arg, "list")
+
+  is_kind <- map_lgl(arg, inherits, kind)
+  if (!all(is_kind)) {
+    info_msg <- paste(
+      sprintf("\u2716 Element %s is %s", which(!is_kind), map_chr(arg[!is_kind], what_is_it)),
+      collapse = "\n"
+    )
+    err_msg <- sprintf(
+      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
+      arg_name(substitute(arg)),
+      kind,
+      info_msg
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 assert_named_exprs <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -828,43 +877,53 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-#' Is Variable-Value List?
+#' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of quosures where the expressions are
-#' variable-value pairs. The value can be a symbol, a string, or NA. More general
+#' variable-value pairs. The value can be a symbol, a string, or `NA`. More general
 #' expression are not allowed.
 #'
-#' @param arg The argument to check
+#' @param arg The argument to checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown.
 #'
-#' @author Stefan Bundfuss
+#' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @return `TRUE` if the argument is a variable-value list, `FALSE` otherwise
-#'
-#' @keywords check
+#' @keywords assertion
 #'
 #' @export
 #'
 #' @examples
-#' assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
-is_varval_list <- function(arg) {
-  if (inherits(arg, "quosures") && all(names(arg) != "")) {
-    expr_list <- map(arg, quo_get_expr)
-    all(map_lgl(expr_list, function(arg) is.symbol(arg) || is.character(arg) || is.na(arg)))
+#' assert_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#'
+#' try(assert_varval_list(vars("AE", DTSEQ = AESEQ)))
+assert_varval_list <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
   }
-  else {
-    FALSE
-  }
-}
-on_failure(is_varval_list) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " is not a variable-value pairs list.\n",
-    "A named list of quosures is expected where the expression is ",
-    "a symbol, a character, or `NA`.\n",
-    "The following was supplied:\n",
-    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
+
+  err_msg <- sprintf(
+    paste0(
+      "`%s` must be a named list of quosures where each element is a symbol, ",
+      "character scalar or `NA` but it is %s\n",
+      "\u2139 To create a list of quosures use `vars()`"
+    ),
+    arg_name(substitute(arg)),
+    what_is_it(arg)
   )
+
+  if (!is_quosures(arg) || is.null(names(arg)) || any(names(arg) == "")) {
+    abort(err_msg)
+  } else {
+    expr_list <- map(arg, quo_get_expr)
+    if (!all(map_lgl(expr_list, ~is.symbol(.x) || is.character(.x) || is.na(.x)))) {
+      abort(err_msg)
+    }
+  }
+
+  invisible(arg)
 }
 
 is_vars <- function(arg) {

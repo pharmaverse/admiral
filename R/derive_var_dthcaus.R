@@ -83,7 +83,7 @@
 derive_var_dthcaus <- function(dataset, ...) {
   assert_data_frame(dataset)
   sources <- list(...)
-  walk(sources, validate_dthcaus_source)
+  assert_list_of(sources, "dthcaus_source")
 
   warn_if_vars_exist(dataset, "DTHCAUS")
 
@@ -179,34 +179,13 @@ dthcaus_source <- function(dataset,
                            dthcaus,
                            traceabilty_vars = NULL) {
   out <- list(
-    dataset = dataset,
-    filter = enquo(filter),
-    date = enquo(date_var),
-    mode = mode,
-    dthcaus = enquo(dthcaus),
-    traceabilty = traceabilty_vars
+    dataset = assert_data_frame(dataset),
+    filter = assert_filter_cond(enquo(filter)),
+    date = assert_symbol(enquo(date_var)),
+    mode = assert_character_scalar(mode, values = c("first", "last")),
+    dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
+    traceabilty = assert_varval_list(traceabilty_vars, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "list")
-  validate_dthcaus_source(out)
-}
-
-#' Validate an object is indeed a `dthcaus_source` object
-#'
-#' @param x An object to be validated.
-#'
-#' @author Shimeng Huang
-#'
-#' @noRd
-#'
-#' @return The original object.
-validate_dthcaus_source <- function(x) {
-  assert_that(inherits(x, "dthcaus_source"))
-  values <- unclass(x)
-  assert_that(is.data.frame(values$dataset))
-  assert_that(is_expr(values$filter))
-  assert_that(is_expr(values$date))
-  assert_that(values$mode %in% c("first", "last"))
-  assert_that(quo_is_symbol(values$dthcaus) | is.character(quo_get_expr(values$dthcaus)))
-  assert_that(is.list(values$traceabilty) | is.null(values$traceability))
-  x
+  out
 }

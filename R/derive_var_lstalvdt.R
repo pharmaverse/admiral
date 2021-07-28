@@ -124,7 +124,7 @@ derive_var_lstalvdt <- function(dataset,
   assert_vars(subject_keys)
 
   sources <- list(...)
-  walk(sources, validate_lstalvdt_source)
+  assert_list_of(sources, "lstalvdt_source")
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -215,44 +215,12 @@ lstalvdt_source <- function(dataset,
                             date_imputation = NULL,
                             traceability_vars = NULL) {
   out <- list(
-    dataset = dataset,
-    filter = enquo(filter),
-    date_var = enquo(date_var),
-    date_imputation = date_imputation,
-    traceability_vars = traceability_vars
+    dataset = assert_data_frame(dataset),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
+    date_var = assert_symbol(enquo(date_var)),
+    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
+    traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("lstalvdt_source", "list")
-  validate_lstalvdt_source(out)
-}
-
-#' Validate an object is indeed a `lstalvdt_source` object
-#'
-#' @param obj An object to be validated.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @noRd
-#'
-#' @return The original object.
-validate_lstalvdt_source <- function(obj) {
-  assert_that(inherits(obj, "lstalvdt_source"))
-  values <- unclass(obj)
-  if (!is.data.frame(values$dataset)) {
-    abort(paste0("`dataset` must be a data frame.\n",
-                 "A ", typeof(values$dataset), " was supplied."))
-  }
-  assert_that(quo_is_null(values$filter) || is.language(quo_get_expr(values$filter)))
-  if (!(quo_is_symbol(values$date_var))) {
-    abort(paste0("`date_var` must be a symbol.\n",
-                 "A ", typeof(quo_get_expr(values$date_var)), " was supplied."))
-  }
-  date_imputation <- values$date_imputation
-  if (!is.null(date_imputation)) {
-    assert_that(is_valid_date_entry(date_imputation))
-  }
-  if (!is.null(values$traceability_vars)) {
-    traceability_vars <- values$traceability_vars
-    assert_that(is_varval_list(traceability_vars))
-  }
-  obj
+  out
 }
