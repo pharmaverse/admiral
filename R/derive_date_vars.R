@@ -147,8 +147,8 @@ impute_dtc <- function(dtc,
                        max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
   n_chr <- nchar(dtc)
-  is_valid_dtc <- is_valid_dtc(dtc)
-  warn_if_invalid_dtc(dtc, is_valid_dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   # date imputation
   if (!is.null(date_imputation)) {
@@ -180,7 +180,7 @@ impute_dtc <- function(dtc,
     }
 
     imputed_date <- case_when(
-      !is_valid_dtc ~ NA_character_,
+      !valid_dtc ~ NA_character_,
       n_chr >= 10 ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
       n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
@@ -196,7 +196,7 @@ impute_dtc <- function(dtc,
     }
   } else {
     # no imputation
-    imputed_date <- if_else(n_chr >= 10 & is_valid_dtc, substr(dtc, 1, 10), NA_character_)
+    imputed_date <- if_else(n_chr >= 10 & valid_dtc, substr(dtc, 1, 10), NA_character_)
   }
 
   if (!is.null(time_imputation)) {
@@ -230,7 +230,7 @@ impute_dtc <- function(dtc,
     )
   } else {
     # no imputation
-    imputed_time <- if_else(n_chr >= 19 & is_valid_dtc, substr(dtc, 12, 19), NA_character_)
+    imputed_time <- if_else(n_chr >= 19 & valid_dtc, substr(dtc, 12, 19), NA_character_)
   }
 
   imputed_dtc <- if_else(
@@ -394,11 +394,11 @@ compute_dtf <- function(dtc, dt) {
 
   is_na <- is.na(dt)
   n_chr <- nchar(dtc)
-  is_valid_dtc <- is_valid_dtc(dtc)
-  warn_if_invalid_dtc(dtc, is_valid_dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   case_when(
-    (!is_na & n_chr >= 10 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
+    (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
     n_chr < 4 ~ "Y",
     n_chr == 4 ~ "M",
     n_chr == 7 ~ "D",
@@ -436,11 +436,11 @@ compute_tmf <- function(dtc, dtm) {
 
   is_na <- is.na(dtm)
   n_chr <- nchar(dtc)
-  is_valid_dtc <- is_valid_dtc(dtc)
-  warn_if_invalid_dtc(dtc, is_valid_dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   case_when(
-    (!is_na & n_chr >= 19 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
+    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
     n_chr == 16 ~ "S",
     n_chr == 13 ~ "M",
     n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
