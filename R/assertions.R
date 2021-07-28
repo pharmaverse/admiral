@@ -509,6 +509,33 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+#' Is an Argument an Object of a Specific S3 Class?
+#'
+#' Checks if an argument is an object inheriting from the S3 class specified.
+#' @param arg A function argument to be checked
+#' @param class The S3 class to check for
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is an object which does *not* inherit from `class`
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(obj) {
+#'   assert_s3_class(obj, "factor")
+#' }
+#'
+#' example_fun(as.factor(letters))
+#'
+#' try(example_fun(letters))
+#'
+#' try(example_fun(1:10))
 assert_s3_class <- function(arg, class, optional = TRUE) {
   assert_character_scalar(class)
   assert_logical_scalar(optional)
@@ -530,8 +557,37 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
   invisible(arg)
 }
 
-assert_list_of <- function(arg, kind, optional = TRUE) {
-  assert_character_scalar(kind)
+#' Is an Argument a List of Objects of a Specific S3 Class?
+#'
+#' Checks if an argument is a `list` of objects inheriting from the S3 class specified.
+#'
+#' @param arg A function argument to be checked
+#' @param class The S3 class to check for
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a list or if `arg` is a list but its
+#' elements are not objects inheriting from `class`
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(list) {
+#'   assert_list_of(list, "data.frame")
+#' }
+#'
+#' example_fun(list(mtcars, iris))
+#'
+#' try(example_fun(list(letters, 1:10)))
+#'
+#' try(example_fun(c(TRUE, FALSE)))
+assert_list_of <- function(arg, class, optional = TRUE) {
+  assert_character_scalar(class)
   assert_logical_scalar(optional)
 
   if (is.null(arg) && optional) {
@@ -540,16 +596,16 @@ assert_list_of <- function(arg, kind, optional = TRUE) {
 
   assert_s3_class(arg, "list")
 
-  is_kind <- map_lgl(arg, inherits, kind)
-  if (!all(is_kind)) {
+  is_class <- map_lgl(arg, inherits, class)
+  if (!all(is_class)) {
     info_msg <- paste(
-      sprintf("\u2716 Element %s is %s", which(!is_kind), map_chr(arg[!is_kind], what_is_it)),
+      sprintf("\u2716 Element %s is %s", which(!is_class), map_chr(arg[!is_class], what_is_it)),
       collapse = "\n"
     )
     err_msg <- sprintf(
       "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
       arg_name(substitute(arg)),
-      kind,
+      class,
       info_msg
     )
     abort(err_msg)
