@@ -180,12 +180,12 @@ impute_dtc <- function(dtc,
     }
 
     imputed_date <- case_when(
-      n_chr >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
+      !is_valid_dtc ~ NA_character_,
+      n_chr >= 10 ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
-      n_chr == 9 & is_valid_dtc ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
-      n_chr == 7 & is_valid_dtc ~ paste0(dtc, "-", d),
-      n_chr == 4 & is_valid_dtc ~ paste0(dtc, "-", mo, "-", d),
-      TRUE ~ NA_character_
+      n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      n_chr == 7 ~ paste0(dtc, "-", d),
+      n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
     )
 
     if (date_imputation == "LAST") {
@@ -196,10 +196,7 @@ impute_dtc <- function(dtc,
     }
   } else {
     # no imputation
-    imputed_date <- case_when(
-      n_chr >= 10 & is_valid_dtc ~ substr(dtc, 1, 10),
-      TRUE ~ NA_character_
-    )
+    imputed_date <- if_else(n_chr >= 10 & is_valid_dtc, substr(dtc, 1, 10), NA_character_)
   }
 
   if (!is.null(time_imputation)) {
@@ -219,10 +216,8 @@ impute_dtc <- function(dtc,
       h <- "23"
     } else {
       imputed_time <- time_imputation
-      sec <-
-        paste0(":", paste0(substr(dtc, 18, 19), substr(time_imputation, 7, 8)))
-      min <-
-        paste0(":", paste0(substr(dtc, 15, 16), substr(time_imputation, 4, 5)))
+      sec <- paste0(":", paste0(substr(dtc, 18, 19), substr(time_imputation, 7, 8)))
+      min <- paste0(":", paste0(substr(dtc, 15, 16), substr(time_imputation, 4, 5)))
       h <- paste0(substr(dtc, 12, 13), substr(time_imputation, 1, 2))
     }
 
@@ -235,11 +230,7 @@ impute_dtc <- function(dtc,
     )
   } else {
     # no imputation
-    imputed_time <- if_else(
-      n_chr >= 19 & is_valid_dtc,
-      substr(dtc, 12, 19),
-      NA_character_
-    )
+    imputed_time <- if_else(n_chr >= 19 & is_valid_dtc, substr(dtc, 12, 19), NA_character_)
   }
 
   imputed_dtc <- if_else(
@@ -408,10 +399,10 @@ compute_dtf <- function(dtc, dt) {
 
   case_when(
     (!is_na & n_chr >= 10 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
-    !is_na & n_chr < 4 ~ "Y",
-    !is_na & n_chr == 4 ~ "M",
-    !is_na & n_chr == 7 ~ "D",
-    !is_na & n_chr == 9 ~ "M" # dates like "2019---07"
+    n_chr < 4 ~ "Y",
+    n_chr == 4 ~ "M",
+    n_chr == 7 ~ "D",
+    n_chr == 9 ~ "M" # dates like "2019---07"
   )
 }
 
@@ -450,9 +441,9 @@ compute_tmf <- function(dtc, dtm) {
 
   case_when(
     (!is_na & n_chr >= 19 & is_valid_dtc) | is_na | !is_valid_dtc ~ NA_character_,
-    !is_na & n_chr == 16 ~ "S",
-    !is_na & n_chr == 13 ~ "M",
-    (!is_na & n_chr == 10) | (n_chr > 0 & n_chr < 10) ~ "H"
+    n_chr == 16 ~ "S",
+    n_chr == 13 ~ "M",
+    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
   )
 }
 
