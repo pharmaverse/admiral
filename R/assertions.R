@@ -48,6 +48,14 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
+  if (dplyr::is_grouped_df(arg)) {
+    err_msg <- sprintf(
+      "`%s` is a grouped data frame, please `ungroup` it first",
+      arg_name(substitute(arg))
+    )
+    abort(err_msg)
+  }
+
   if (!is.null(required_vars)) {
     required_vars <- vars2chr(required_vars)
     is_missing <- !required_vars %in% colnames(arg)

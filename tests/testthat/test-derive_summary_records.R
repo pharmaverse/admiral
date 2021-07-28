@@ -4,7 +4,6 @@ library(dplyr)
 test_that("creates a new record for each group and new data frame retains grouping", {
   # group --> 4
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
-  input <- input %>% group_by(x)
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
@@ -101,7 +100,6 @@ test_that("drop a value from derived record", {
 
 test_that("check `set_values_to` mapping", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
-  input <- input %>% group_by(x, y)
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
