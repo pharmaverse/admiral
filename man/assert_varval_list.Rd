@@ -7,13 +7,13 @@
 assert_varval_list(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{The argument to checked}
+\item{arg}{A function argument to be checked}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}
 }
 \description{
-Checks if the argument is a list of quosures where the expressions are
+Checks if the argument is a list of \code{quosures} where the expressions are
 variable-value pairs. The value can be a symbol, a string, or \code{NA}. More general
 expression are not allowed.
 }

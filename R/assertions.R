@@ -879,11 +879,11 @@ on_failure(is_valid_month) <- function(call, env) {
 
 #' Is an Argument a Variable-Value List?
 #'
-#' Checks if the argument is a list of quosures where the expressions are
+#' Checks if the argument is a list of `quosures` where the expressions are
 #' variable-value pairs. The value can be a symbol, a string, or `NA`. More general
 #' expression are not allowed.
 #'
-#' @param arg The argument to checked
+#' @param arg A function argument to be checked
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
