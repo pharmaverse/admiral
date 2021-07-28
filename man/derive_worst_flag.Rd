@@ -79,7 +79,7 @@ Adds a Variable Flagging the maximal / minimal value within a group of observati
 \details{
 For each group with respect to the variables specified for the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-(with respect to the additional order specified by and \code{order} parameters),
+(with respect to the additional order specified by the \code{order} parameter),
 is labelled in the \code{new_var} column as \code{"Y"}
 if its \code{param_var} is in \code{worst_high} / \code{worst_low},
 otherwise it is assigned \code{NA}.
@@ -123,7 +123,7 @@ derive_worst_flag(
   input,
   new_var = WORSTFL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(AVAL, ADT),
+  order = vars(ADT),
   param_var = PARAMCD,
   analysis_var = AVAL,
   worst_high = c("PARAM01", "PARAM03"),
@@ -136,7 +136,7 @@ derive_worst_flag(
   advs,
   new_var = WORSTFL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(AVAL, ADT, ATPTN),
+  order = vars(ADT, ATPTN),
   param_var = PARAMCD,
   analysis_var = AVAL,
   worst_high = c("SYSBP", "DIABP"),
