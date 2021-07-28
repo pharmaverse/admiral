@@ -8,6 +8,10 @@
 #'   The variables specified by the `by_vars` and the `unit_var` parameter,
 #'   `PARAMCD`, and `AVAL` are expected.
 #'
+#'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
+#'   the input dataset after restricting it by the filter condition (`filter`
+#'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
+#'
 #' @param new_param Parameter code to add
 #'
 #'   For the new observations `PARAMCD` is set to the specified value.
@@ -62,10 +66,10 @@
 #' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 #' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
-#' adeg %>%
-#'   derive_param_qtcb(
-#'     by_vars = vars(USUBJID, VISIT),
-#'     set_values_to = vars(PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"))
+#' derive_param_qtcb(
+#'   adeg,
+#'   by_vars = vars(USUBJID, VISIT),
+#'   set_values_to = vars(PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"))
 derive_param_qtcb <- function(dataset,
                               filter = NULL,
                               new_param = "QTCBR",
@@ -93,7 +97,7 @@ derive_param_qtcb <- function(dataset,
                 param = rr_code,
                 unit = "msec",
                 unit_var = !!unit_var)
-    set_unit_var = vars(!!unit_var := "msec")
+    set_unit_var <- vars(!!unit_var := "msec")
   }
   else {
     set_unit_var <- NULL
@@ -117,9 +121,9 @@ derive_param_qtcb <- function(dataset,
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
 #'
-#' @inheritParams derive_derived_param
-#'
 #' @inheritParams derive_param_qtcb
+#'
+#' @inheritParams derive_derived_param
 #'
 #' @author Stefan Bundfuss
 #'
@@ -142,8 +146,8 @@ derive_param_qtcb <- function(dataset,
 #' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 #' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
-#' adeg %>%
 #' derive_param_qtcf(
+#'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"))
 derive_param_qtcf <- function(dataset,
@@ -174,7 +178,7 @@ derive_param_qtcf <- function(dataset,
                 param = rr_code,
                 unit = "msec",
                 unit_var = !!unit_var)
-    set_unit_var = vars(!!unit_var := "msec")
+    set_unit_var <- vars(!!unit_var := "msec")
   }
   else {
     set_unit_var <- NULL
@@ -225,8 +229,8 @@ derive_param_qtcf <- function(dataset,
 #' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 #' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
-#' adeg %>%
 #' derive_param_qtlc(
+#'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"))
 derive_param_qtlc <- function(dataset,
@@ -256,7 +260,7 @@ derive_param_qtlc <- function(dataset,
                 param = rr_code,
                 unit = "msec",
                 unit_var = !!unit_var)
-    set_unit_var = vars(!!unit_var := "msec")
+    set_unit_var <- vars(!!unit_var := "msec")
   }
   else {
     set_unit_var <- NULL
@@ -266,7 +270,8 @@ derive_param_qtlc <- function(dataset,
                        filter = !!filter,
                        parameters = c(qt_code, rr_code),
                        by_vars = by_vars,
-                       analysis_value = 1000*(!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154*(1 - !!sym(paste0("AVAL.", rr_code))/1000)),
+                       analysis_value = 1000 * (!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154 *
+                                                  (1 - !!sym(paste0("AVAL.", rr_code)) / 1000)),
                        set_values_to = vars(PARAMCD = !!new_param,
                                             !!!set_unit_var,
                                             !!!set_values_to),
@@ -274,6 +279,15 @@ derive_param_qtlc <- function(dataset,
   )
 }
 #' Adds a parameter for derived RR
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and `AVAL`
+#'   are expected.
+#'
+#'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
+#'   the input dataset after restricting it by the filter condition (`filter`
+#'   parameter) and to the parameters specified by `hr_code`.
 #'
 #' @param hr_code HR parameter code
 #'
@@ -307,8 +321,8 @@ derive_param_qtlc <- function(dataset,
 #' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 #' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
-#' adeg %>%
 #' derive_param_rr(
+#'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAM = "RR Duration Rederived (msec)"))
 derive_param_rr <- function(dataset,
@@ -332,7 +346,7 @@ derive_param_rr <- function(dataset,
                 param = hr_code,
                 unit = "beats/min",
                 unit_var = !!unit_var)
-    set_unit_var = vars(!!unit_var := "msec")
+    set_unit_var <- vars(!!unit_var := "msec")
   }
   else {
     set_unit_var <- NULL
@@ -342,7 +356,7 @@ derive_param_rr <- function(dataset,
                        filter = !!filter,
                        parameters = c(hr_code),
                        by_vars = by_vars,
-                       analysis_value = 60000/!!sym(paste0("AVAL.", hr_code)),
+                       analysis_value = 60000 / !!sym(paste0("AVAL.", hr_code)),
                        set_values_to = vars(PARAMCD = !!new_param,
                                             !!!set_unit_var,
                                             !!!set_values_to),

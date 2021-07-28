@@ -96,8 +96,8 @@ adeg <- tibble::tribble(
 "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 )
-adeg \%>\%
 derive_param_qtlc(
+  adeg,
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"))
 }

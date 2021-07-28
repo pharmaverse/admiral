@@ -11,11 +11,13 @@ assert_unit(dataset, param, unit_var, unit)
 
 \item{param}{Parameter code of the parameter to check}
 
+\item{unit_var}{Variable providing the unit}
+
 \item{unit}{Expected unit}
 }
 \value{
-The function throws an error if \code{AVALU} differs from the unit for any
-observation of the parameter in the input dataset
+The function throws an error if the unit variable differs from the
+unit for any observation of the parameter in the input dataset
 }
 \description{
 Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected
@@ -23,9 +25,9 @@ unit. The unit is expected in the \code{AVALU} variable.
 }
 \examples{
 data(advs)
-assert_unit(advs, param = "WEIGHT", unit = "kg")
+assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
 \dontrun{
-assert_unit(advs, param = "WEIGHT", unit = "g")
+assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
 }
 }
 \author{

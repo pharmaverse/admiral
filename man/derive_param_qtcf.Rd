@@ -19,12 +19,12 @@ derive_param_qtcf(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and \code{AVAL}
-are expected.
+The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
+\code{PARAMCD}, and \code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{parameters}.}
+parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.}
 
 \item{filter}{Filter condition
 
@@ -56,10 +56,7 @@ Permitted Values: character value}
 
 \item{by_vars}{Grouping variables
 
-For each group defined by \code{by_vars} an observation is added to the output
-dataset.
-
-\emph{Permitted Values:} list of variables}
+Permitted Values: list of variables}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
@@ -96,8 +93,8 @@ adeg <- tibble::tribble(
 "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 )
-adeg \%>\%
 derive_param_qtcf(
+  adeg,
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"))
 }

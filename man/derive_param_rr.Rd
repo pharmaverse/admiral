@@ -23,7 +23,7 @@ are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{parameters}.}
+parameter) and to the parameters specified by \code{hr_code}.}
 
 \item{filter}{Filter condition
 
@@ -87,8 +87,8 @@ adeg <- tibble::tribble(
 "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
 "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 )
-adeg \%>\%
 derive_param_rr(
+  adeg,
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAM = "RR Duration Rederived (msec)"))
 }

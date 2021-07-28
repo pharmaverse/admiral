@@ -4,7 +4,8 @@
 #' expected that the analysis value of the new parameter is defined by an
 #' expression using the analysis values of other parameters. For example mean
 #' arterial pressure (MAP) can be derived from systolic (SYSBP) and diastolic
-#' blood pressure (DIABP) with the formula \deqn{MAP = (SYSBP + 2 DIABP) / 3}
+#' blood pressure (DIABP) with the formula
+#' \deqn{MAP = \frac{SYSBP + 2 DIABP}{3}}{MAP = (SYSBP + 2 DIABP) / 3}
 #'
 #' @param dataset Input dataset
 #'
@@ -26,7 +27,8 @@
 #' @param parameters Required parameter codes
 #'
 #'   It is expected that all parameter codes (`PARAMCD`) which are required to
-#'   derive the new parameter are specified.
+#'   derive the new parameter are specified for this parameter or the
+#'   `constant_parameters` parameter.
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values
 #'
@@ -34,6 +36,24 @@
 #'
 #'   For each group defined by `by_vars` an observation is added to the output
 #'   dataset.
+#'
+#'   *Permitted Values:* list of variables
+#'
+#' @param constant_parameters Required constant parameter codes
+#'
+#'   It is expected that all parameter codes (`PARAMCD`) which are required to
+#'   derive the new parameter are specified for this parameter or the
+#'   `parameters` parameter.
+#'
+#'   *Permitted Values:* A character vector of `PARAMCD` values
+#'
+#' @param constant_by_vars By variables for constant parameters
+#'
+#'   The constant parameters are merged to the other parameters using the
+#'   specified variables. This is useful if some parameters were measured only
+#'   once. For example if BMI should be derived and height is measured only once
+#'   while weight is measured at each visit. Height could be specified for the
+#'   constant parameters.
 #'
 #'   *Permitted Values:* list of variables
 #'
@@ -73,29 +93,57 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("advs")
-#' advs %>%
-#'   select(USUBJID, PARAMCD, PARAM, AVAL, VSTESTCD, ANL01FL, DTYPE, AVISIT, AVISITN) %>%
-#'   filter(
-#'     USUBJID %in% c("01-701-1015", "01-701-1363") &
-#'       PARAMCD %in% c("SYSBP", "DIABP") &
-#'       AVISIT %in% c("Baseline", "Week 2")
-#'   ) %>%
-#'   derive_derived_param(
-#'     advs,
-#'     filter = ANL01FL == "Y" & DTYPE == "AVERAGE",
-#'     parameters = c("SYSBP", "DIABP"),
-#'     by_vars = vars(USUBJID, AVISIT),
-#'     analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
-#'     set_values_to = vars(
-#'       PARAMCD = "MAP",
-#'       PARAM = "Mean arterial pressure (mmHg)",
-#'       DTYPE = NA
-#'     )
-#'   ) %>%
-#'   filter(DTYPE == "AVERAGE" | PARAMCD == "MAP")
-
+#' # derive MAP
+#' advs <- tibble::tribble(
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
+#' )
+#'
+#' derive_derived_param(
+#'   advs,
+#'   parameters = c("SYSBP", "DIABP"),
+#'   by_vars = vars(USUBJID, VISIT),
+#'   analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'   set_values_to = vars(
+#'     PARAMCD = "MAP",
+#'     PARAM = "Mean arterial pressure (mmHg)",
+#'     AVALU = "mmHg"
+#'   )
+#' )
+#'
+#' # derive BMI where height is measured only once
+#' advs <- tibble::tribble(
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+#' )
+#'
+#' derive_derived_param(
+#'   advs,
+#'   parameters = c("WEIGHT"),
+#'   by_vars = vars(USUBJID, VISIT),
+#'   constant_parameters = c("HEIGHT"),
+#'   constant_by_vars = vars(USUBJID),
+#'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100) ^ 2,
+#'   set_values_to = vars(
+#'     PARAMCD = "BMI",
+#'     PARAM = "Body Mass Index (kg/m2)",
+#'     AVALU = "kg/m2"
+#'   )
+#' )
 derive_derived_param <- function(dataset,
                                  filter = NULL,
                                  parameters,
@@ -129,10 +177,33 @@ derive_derived_param <- function(dataset,
     filter(PARAMCD %in% parameters)
 
   if (nrow(data_parameters) == 0L) {
-    warn(paste0("The input dataset does not contain any observations fullfiling the filter condition (",
-                expr_label(filter), ") for the parameter codes (PARAMCD) ", enumerate(parameters)))
+    warn(
+      paste0(
+        "The input dataset does not contain any observations fullfiling the filter condition (",
+        expr_label(filter),
+        ") for the parameter codes (PARAMCD) ",
+        enumerate(parameters),
+        "\nNo new observations were added."
+      )
+    )
     return(dataset)
   }
+
+  params_available <- unique(data_filtered$PARAMCD)
+  params_missing <- setdiff(c(parameters, constant_parameters), params_available)
+  if (length(params_missing) > 0) {
+    warn(
+      paste0(
+        "The input dataset does not contain any observations fullfiling the filter condition (",
+        expr_label(filter),
+        ") for the parameter codes (PARAMCD) ",
+        enumerate(params_missing),
+        "\nNo new observations were added."
+      )
+    )
+    return(dataset)
+  }
+
   keep_vars <- get_constant_vars(data_parameters,
                                  by_vars = by_vars,
                                  ignore_vars = drop_values_from)
