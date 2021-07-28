@@ -894,9 +894,12 @@ on_failure(is_valid_month) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' assert_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#' example_fun <- function(vars) {
+#'   assert_varval_list(vars)
+#' }
+#' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
-#' try(assert_varval_list(vars("AE", DTSEQ = AESEQ)))
+#' try(example_fun(vars("AE", DTSEQ = AESEQ)))
 assert_varval_list <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 

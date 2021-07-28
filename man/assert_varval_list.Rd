@@ -18,9 +18,12 @@ variable-value pairs. The value can be a symbol, a string, or \code{NA}. More ge
 expression are not allowed.
 }
 \examples{
-assert_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+example_fun <- function(vars) {
+  assert_varval_list(vars)
+}
+example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 
-try(assert_varval_list(vars("AE", DTSEQ = AESEQ)))
+try(example_fun(vars("AE", DTSEQ = AESEQ)))
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann
