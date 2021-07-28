@@ -158,15 +158,9 @@ impute_dtc <- function(dtc,
     # Specific setup for FISRT/MID/LAST
     # make keywords case-insensitive
     date_imputation <- str_to_upper(date_imputation)
-    if (date_imputation == "FIRST") {
-      d <- "01"
-      mo <- "01"
-    } else if (date_imputation == "MID") {
-      d <- "15"
-      mo <- "06"
-    } else if (date_imputation == "LAST") {
-      d <- "01"
-      mo <- "12"
+    if (date_imputation %in% c("FIRST", "MID", "LAST")) {
+      d <- list(FIRST = "01", MID = "15", LAST = "01")[[date_imputation]]
+      mo <- list(FIRST = "01", MID = "06", LAST = "12")[[date_imputation]]
     } else {
       # otherwise, use time_imputation input
       day__ <- as.integer(sub(".*-", "", date_imputation))
