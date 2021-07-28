@@ -214,11 +214,14 @@ lstalvdt_source <- function(dataset,
                             date_var,
                             date_imputation = NULL,
                             traceability_vars = NULL) {
+  if (!is.null(date_imputation)) {
+    assert_that(is_valid_date_entry(date_imputation))
+  }
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date_var = assert_symbol(enquo(date_var)),
-    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
+    date_imputation = date_imputation,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("lstalvdt_source", "list")
