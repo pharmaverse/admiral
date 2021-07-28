@@ -335,7 +335,7 @@ derive_worst_flag <- function(dataset,
       new_var = !!new_var,
       by_vars = by_vars,
       order = quo_c(analysis_var, order),
-      mode = "last",
+      mode = "first",
       flag_filter = !!flag_filter,
       check_type = check_type
     ),
