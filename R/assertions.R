@@ -973,7 +973,7 @@ assert_varval_list <- function(arg, optional = FALSE) {
     what_is_it(arg)
   )
 
-  if (!is_quosures(arg) || is.null(names(arg)) || any(names(arg) == "")) {
+  if (!is_quosures(arg) || !is_named(arg)) {
     abort(err_msg)
   } else {
     expr_list <- map(arg, quo_get_expr)
