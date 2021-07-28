@@ -70,7 +70,7 @@ advs <- derive_derived_param(
   by_vars = vars(USUBJID, VISITNUM, VSDTC, VSTPT),
   constant_parameters = c("HEIGHT"),
   constant_by_vars = vars(USUBJID),
-  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT/100)^2,
+  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
   set_values_to = vars(PARAMCD = "BMI",
                        AVALU = "kg/m2")
 )

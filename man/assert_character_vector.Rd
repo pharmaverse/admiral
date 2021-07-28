@@ -4,7 +4,7 @@
 \alias{assert_character_vector}
 \title{Is an Argument a Character Vector?}
 \usage{
-assert_character_vector(arg, optional = FALSE)
+assert_character_vector(arg, values = NULL, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}

@@ -600,18 +600,30 @@ assert_has_variables <- function(dataset, required_vars) {
 #' @keywords assertion
 #'
 #' @examples
-#' data(vs)
-#' assert_unit(vs, param = "WEIGHT", unit = "kg")
+#' data(advs)
+#' assert_unit(advs, param = "WEIGHT", unit = "kg")
 #' \dontrun{
-#' assert_unit(vs, param = "WEIGHT", unit = "g")
+#' assert_unit(advs, param = "WEIGHT", unit = "g")
 #' }
-assert_unit <- function(dataset, param, unit) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD, AVALU))
-  units <- unique(filter(dataset, PARAMCD == param)$AVALU)
+assert_unit <- function(dataset, param, unit_var, unit) {
+  unit_var <- assert_symbol(enquo(unit_var))
+  assert_data_frame(dataset, required_vars = vars(PARAMCD, !!unit_var))
+  units <-
+    unique(filter(dataset, PARAMCD == param &
+                    !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
   if (length(units) != 1 || units != unit) {
-    abort(paste0("It is expected that ", param, " is measured in ", unit, ".\n",
-                 "In the input dataset it is measured in ",
-                 enumerate(units), "."))
+    abort(
+      paste0(
+        "It is expected that ",
+        param,
+        " is measured in ",
+        unit,
+        ".\n",
+        "In the input dataset it is measured in ",
+        enumerate(units),
+        "."
+      )
+    )
   }
 }
 
