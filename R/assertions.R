@@ -50,7 +50,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 
   if (dplyr::is_grouped_df(arg)) {
     err_msg <- sprintf(
-      "`%s` is a grouped data frame, please `ungroup` it first",
+      "`%s` is a grouped data frame, please `ungroup()` it first",
       arg_name(substitute(arg))
     )
     abort(err_msg)
