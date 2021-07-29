@@ -80,6 +80,10 @@ code for the new parameter.
 The input dataset with the new parameter added
 }
 \description{
+Adds a record for corrected QT using Sagie's formula for each by group (e.g.,
+subject and visit) where the source parameters are available.
+}
+\details{
 The analysis value of the new parameter is derived as
 \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{1000(QT/1000 + 0.154(1 - RR/1000))}
 }

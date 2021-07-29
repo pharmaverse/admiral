@@ -20,9 +20,9 @@ Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.
 }
 \examples{
 data(advs)
-assert_param_does_not exist(advs, param = "WEIGHT")
-\dontrun{
 assert_param_does_not_exist(advs, param = "BSA")
+\dontrun{
+assert_param_does_not_exist(advs, param = "WEIGHT")
 }
 }
 \author{

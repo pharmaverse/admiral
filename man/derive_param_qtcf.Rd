@@ -77,6 +77,10 @@ code for the new parameter.
 The input dataset with the new parameter added
 }
 \description{
+Adds a record for corrected QT using Fridericia's formula for each by group
+(e.g., subject and visit) where the source parameters are available.
+}
+\details{
 The analysis value of the new parameter is derived as
 \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
 }

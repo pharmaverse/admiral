@@ -650,9 +650,9 @@ assert_unit <- function(dataset, param, unit_var, unit) {
 #'
 #' @examples
 #' data(advs)
-#' assert_param_does_not exist(advs, param = "WEIGHT")
-#' \dontrun{
 #' assert_param_does_not_exist(advs, param = "BSA")
+#' \dontrun{
+#' assert_param_does_not_exist(advs, param = "WEIGHT")
 #' }
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))

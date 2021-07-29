@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_adeg_params.R
 \name{derive_param_qtcb}
 \alias{derive_param_qtcb}
-\title{Adds a parameter for corrected QT using Bazett's formula}
+\title{Adds a Parameter for Corrected QT Using Bazett's Formula}
 \usage{
 derive_param_qtcb(
   dataset,
@@ -77,6 +77,10 @@ code for the new parameter.
 The input dataset with the new parameter added
 }
 \description{
+Adds a record for corrected QT using Bazett's formula for each by group
+(e.g., subject and visit) where the source parameters are available.
+}
+\details{
 The analysis value of the new parameter is derived as
 \deqn{\frac{QT}{\sqrt{\frac{RR}{1000}}}}{QT/\sqrt(RR/1000)}
 }

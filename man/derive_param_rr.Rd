@@ -72,7 +72,8 @@ code for the new parameter.
 The input dataset with the new parameter added
 }
 \description{
-Adds a parameter for derived RR
+Adds a record for derived RR based on heart rate for each by group (e.g.,
+subject and visit) where the source parameters are available.
 }
 \examples{
 adeg <- tibble::tribble(

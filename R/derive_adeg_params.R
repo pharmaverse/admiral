@@ -1,4 +1,7 @@
-#' Adds a parameter for corrected QT using Bazett's formula
+#' Adds a Parameter for Corrected QT Using Bazett's Formula
+#'
+#' Adds a record for corrected QT using Bazett's formula for each by group
+#' (e.g., subject and visit) where the source parameters are available.
 #'
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{QT}{\sqrt{\frac{RR}{1000}}}}{QT/\sqrt(RR/1000)}
@@ -119,6 +122,9 @@ derive_param_qtcb <- function(dataset,
 
 #' Adds a parameter for corrected QT using Fridericia's formula
 #'
+#' Adds a record for corrected QT using Fridericia's formula for each by group
+#' (e.g., subject and visit) where the source parameters are available.
+#'
 #' The analysis value of the new parameter is derived as
 #' \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
 #'
@@ -203,6 +209,9 @@ derive_param_qtcf <- function(dataset,
 }
 #' Adds a parameter for corrected QT using Sagie's formula
 #'
+#' Adds a record for corrected QT using Sagie's formula for each by group (e.g.,
+#' subject and visit) where the source parameters are available.
+#'
 #' The analysis value of the new parameter is derived as
 #' \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{1000(QT/1000 + 0.154(1 - RR/1000))}
 #'
@@ -282,6 +291,9 @@ derive_param_qtlc <- function(dataset,
   )
 }
 #' Adds a parameter for derived RR
+#'
+#' Adds a record for derived RR based on heart rate for each by group (e.g.,
+#' subject and visit) where the source parameters are available.
 #'
 #' @param dataset Input dataset
 #'
