@@ -21,7 +21,7 @@ unit for any observation of the parameter in the input dataset
 }
 \description{
 Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected
-unit. The unit is expected in the \code{AVALU} variable.
+unit.
 }
 \examples{
 data(advs)

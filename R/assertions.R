@@ -583,7 +583,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' Asserts That a Parameter is Provided in the Expected Unit
 #'
 #' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
-#' unit. The unit is expected in the `AVALU` variable.
+#' unit.
 #'
 #' @param dataset A `data.frame`
 #' @param param
@@ -630,6 +630,45 @@ assert_unit <- function(dataset, param, unit_var, unit) {
     )
   }
 }
+
+#' Asserts That a Parameter Does not Exist in the Dataset
+#'
+#' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
+#'
+#' @param dataset A `data.frame`
+#' @param param
+#'   Parameter code to check
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if the parameter exists in the input
+#'   dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(advs)
+#' assert_param_does_not exist(advs, param = "WEIGHT")
+#' \dontrun{
+#' assert_param_does_not_exist(advs, param = "BSA")
+#' }
+assert_param_does_not_exist <- function(dataset, param) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  if (param %in% unique(dataset$PARAMCD)) {
+    abort(
+      paste0(
+        "The parameter code ",
+        param,
+        " does already exist in `",
+        arg_name(substitute(dataset)),
+        "`."
+      )
+    )
+  }
+}
+
 
 #' Is Date/Date-time?
 #'
