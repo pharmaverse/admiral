@@ -5,14 +5,11 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the by_vars are expected
+#'   The columns specified by the source_vars are expected
 #'
-#' @param dataset Input dataset2
-#'   ADSL with treatment start date is expected
+#' @param source_vars Variables used to assign ATIREL
 #'
-#' @param by_var The start date
-#'
-#'   STUDYID and USUBJID to merge adsl to adcm are expected.
+#'   The variables TRTSDTM,ASTDTM,AENDTM,ASTTMF are expected
 #'
 #' @param new_var Name of variable to create
 #'
@@ -59,47 +56,30 @@
 #'                          "2017-04-29 14:00:00"))
 #' ASTTMF <-  c("","","","M","")
 #'
-#' adsl <-data.frame(STUDYID,USUBJID,TRTSDTM)
-#' adcm <-data.frame(STUDYID,USUBJID,ASTDTM,AENDTM,ASTTMF)
+#' adcm <-data.frame(STUDYID,USUBJID,TRTSDTM,ASTDTM,AENDTM,ASTTMF)
 #'
-#' derive_var_atirel(dataset=adcm,
-#'                   dataset_adsl=adsl,
-#'                   by_vars = vars(STUDYID,USUBJID)
+#' derive_var_atirel(dataset = adcm,
+#'                   source_vars = vars(STUDYID,USUBJID,TRTSDTM,ASTDTM,AENDTM,ASTTMF),
 #'                   new_var = ATIREL)
 #'
 #'
 
 #function to derive ATIREL
 derive_var_atirel <- function(dataset,
-                              dataset_adsl,
-                              by_vars,
+                              source_vars,
                               new_var){
-  # #checks
-  assert_data_frame(dataset,vars(STUDYID, USUBJID, ASTDTM,AENDTM,ASTTMF))
-  assert_data_frame(dataset_adsl, vars(STUDYID,USUBJID,TRTSDTM))
-  by_vars <- assert_vars(by_vars)
+  #checks
+  dataout <- deparse(substitute(dataset))
+  assert_data_frame(dataset, required_vars = source_vars)
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
-  #source_vars <- assert_symbol(enquo(source_vars))
 
   #merge to adsl and logic to create ATIREL
-  dataset_adsl <- dataset_adsl %>% select(STUDYID,USUBJID,TRTSDTM)
-  dataset <-  dataset %>% dplyr::left_join(dataset_adsl, by=vars2chr(by_vars))%>%
-    mutate(!!new_var :=ifelse(is.na(TRTSDTM),NA_character_,
-                          ifelse( ASTDTM >= TRTSDTM,"CONCOMITANT",
-                                  ifelse(!is.na(AENDTM) & AENDTM<TRTSDTM ,"PRIOR",
-                                         ifelse(date(ASTDTM) == date(TRTSDTM) & toupper(ASTTMF) %in% c("H","M"), "CONCOMITANT",
-                                                "PRIOR_CONCOMITANT"))))
-          )
+  dataset <-  dataset %>% mutate(!!new_var := case_when(is.na(TRTSDTM) ~ NA_character_,
+                                                        ASTDTM >= TRTSDTM ~ "CONCOMITANT",
+                                                        !is.na(AENDTM) & AENDTM<TRTSDTM  ~ "PRIOR",
+                                                        date(ASTDTM) == date(TRTSDTM) & toupper(ASTTMF) %in% c("H","M") ~ "CONCOMITANT",
+                                                        TRUE ~ "PRIOR_CONCOMITANT")
+  )
+  assign(x=dataout, value=dataset, envir=.GlobalEnv)
 }
-
-
-
-
-
-
-
-
-
-
-
