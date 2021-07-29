@@ -134,18 +134,21 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   min_dates = list(
+#'     ymd_hms("2020-12-06T12:12:12"),
+#'     ymd_hms("2020-11-11T11:11:11")
+#'   ),
 #'   date_imputation = "first"
 #' )
-#'
 impute_dtc <- function(dtc,
                        date_imputation = NULL,
                        time_imputation = "00:00:00",
                        min_dates = NULL,
                        max_dates = NULL) {
   # Issue a warning if incorrect  DTC is present
-  warn_if_invalid_dtc(dtc)
+  n_chr <- nchar(dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   # date imputation
   if (!is.null(date_imputation)) {
@@ -155,15 +158,9 @@ impute_dtc <- function(dtc,
     # Specific setup for FISRT/MID/LAST
     # make keywords case-insensitive
     date_imputation <- str_to_upper(date_imputation)
-    if (date_imputation == "FIRST") {
-      d <- "01"
-      mo <- "01"
-    } else if (date_imputation == "MID") {
-      d <- "15"
-      mo <- "06"
-    } else if (date_imputation == "LAST") {
-      d <- "01"
-      mo <- "12"
+    if (date_imputation %in% c("FIRST", "MID", "LAST")) {
+      d <- list(FIRST = "01", MID = "15", LAST = "01")[[date_imputation]]
+      mo <- list(FIRST = "01", MID = "06", LAST = "12")[[date_imputation]]
     } else {
       # otherwise, use time_imputation input
       day__ <- as.integer(sub(".*-", "", date_imputation))
@@ -177,26 +174,23 @@ impute_dtc <- function(dtc,
     }
 
     imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
+      !valid_dtc ~ NA_character_,
+      n_chr >= 10 ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
-      nchar(dtc) == 9 & is_valid_dtc(dtc) ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
-      nchar(dtc) == 7 & is_valid_dtc(dtc) ~ paste0(dtc, "-", d),
-      nchar(dtc) == 4 & is_valid_dtc(dtc) ~ paste0(dtc, "-", mo, "-", d),
-      TRUE ~ NA_character_
+      n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      n_chr == 7 ~ paste0(dtc, "-", d),
+      n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
     )
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & nchar(dtc) < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
+        nchar(imputed_date) > 0 & n_chr < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
         TRUE ~ imputed_date
       )
     }
   } else {
     # no imputation
-    imputed_date <- case_when(
-      nchar(dtc) >= 10 & is_valid_dtc(dtc) ~ substr(dtc, 1, 10),
-      TRUE ~ NA_character_
-    )
+    imputed_date <- if_else(n_chr >= 10 & valid_dtc, substr(dtc, 1, 10), NA_character_)
   }
 
   if (!is.null(time_imputation)) {
@@ -216,54 +210,47 @@ impute_dtc <- function(dtc,
       h <- "23"
     } else {
       imputed_time <- time_imputation
-      sec <-
-        paste0(":", paste0(substr(dtc, 18, 19), substr(time_imputation, 7, 8)))
-      min <-
-        paste0(":", paste0(substr(dtc, 15, 16), substr(time_imputation, 4, 5)))
+      sec <- paste0(":", paste0(substr(dtc, 18, 19), substr(time_imputation, 7, 8)))
+      min <- paste0(":", paste0(substr(dtc, 15, 16), substr(time_imputation, 4, 5)))
       h <- paste0(substr(dtc, 12, 13), substr(time_imputation, 1, 2))
     }
 
     imputed_time <- case_when(
-      nchar(dtc) >= 19 ~ substr(dtc, 12, 19),
-      nchar(dtc) == 16 ~ paste0(substr(dtc, 12, 16), sec),
-      nchar(dtc) == 13 ~ paste0(substr(dtc, 12, 13), min, sec),
-      nchar(dtc) == 10 ~ paste0(h, min, sec),
+      n_chr >= 19 ~ substr(dtc, 12, 19),
+      n_chr == 16 ~ paste0(substr(dtc, 12, 16), sec),
+      n_chr == 13 ~ paste0(substr(dtc, 12, 13), min, sec),
+      n_chr == 10 ~ paste0(h, min, sec),
       TRUE ~ imputed_time
     )
-  }
-  else{
+  } else {
     # no imputation
-    imputed_time <- if_else(nchar(dtc) >= 19 & is_valid_dtc(dtc),
-                            substr(dtc, 12, 19),
-                            NA_character_)
+    imputed_time <- if_else(n_chr >= 19 & valid_dtc, substr(dtc, 12, 19), NA_character_)
   }
 
-  imputed_dtc <- if_else(!is.na(imputed_date) & !is.na(imputed_time),
-                         paste0(imputed_date, "T", imputed_time),
-                         NA_character_)
+  imputed_dtc <- if_else(
+    !is.na(imputed_date) & !is.na(imputed_time),
+    paste0(imputed_date, "T", imputed_time),
+    NA_character_
+  )
 
   # adjust imputed date to minimum and maximum dates
   if (!is.null(min_dates) | !is.null(max_dates)) {
     # determine range of possible dates
-    min_dtc <- impute_dtc(dtc,
-                          date_imputation = "first",
-                          time_imputation = "first")
-    max_dtc <- impute_dtc(dtc,
-                          date_imputation = "last",
-                          time_imputation = "last")
+    min_dtc <- impute_dtc(dtc, date_imputation = "first", time_imputation = "first")
+    max_dtc <- impute_dtc(dtc, date_imputation = "last", time_imputation = "last")
   }
   if (!is.null(min_dates)) {
     # for each minimum date within the range ensure that the imputed date is not
     # before it
     for (min_date in min_dates) {
       assert_that(is_date(min_date))
-      min_date_iso <- strftime(min_date,
-                               format = "%Y-%m-%dT%H:%M:%S",
-                               tz = "GMT")
-      imputed_dtc <- if_else(min_dtc <= min_date_iso & min_date_iso <= max_dtc,
-                             pmax(imputed_dtc, min_date_iso),
-                             imputed_dtc,
-                             missing = imputed_dtc)
+      min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+      imputed_dtc <- if_else(
+        min_dtc <= min_date_iso & min_date_iso <= max_dtc,
+        pmax(imputed_dtc, min_date_iso),
+        imputed_dtc,
+        missing = imputed_dtc
+      )
     }
   }
   if (!is.null(max_dates)) {
@@ -271,13 +258,13 @@ impute_dtc <- function(dtc,
     # after it
     for (max_date in max_dates) {
       assert_that(is_date(max_date))
-      max_date_iso <- strftime(max_date,
-                               format = "%Y-%m-%dT%H:%M:%S",
-                               tz = "GMT")
-      imputed_dtc <- if_else(min_dtc <= max_date_iso & max_date_iso <= max_dtc,
-                             pmin(imputed_dtc, max_date_iso),
-                             imputed_dtc,
-                             missing = imputed_dtc)
+      max_date_iso <- strftime(max_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+      imputed_dtc <- if_else(
+        min_dtc <= max_date_iso & max_date_iso <= max_dtc,
+        pmin(imputed_dtc, max_date_iso),
+        imputed_dtc,
+        missing = imputed_dtc
+      )
     }
   }
   imputed_dtc
@@ -312,13 +299,16 @@ convert_dtc_to_dt <- function(dtc,
                               min_dates = NULL,
                               max_dates = NULL) {
   assert_that(is.character(dtc))
-  warn_if_invalid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
-  imputed_dtc <- impute_dtc(dtc = dtc,
-                            date_imputation = date_imputation,
-                            time_imputation = "first",
-                            min_dates = min_dates,
-                            max_dates = max_dates)
+  imputed_dtc <- impute_dtc(
+    dtc = dtc,
+    date_imputation = date_imputation,
+    time_imputation = "first",
+    min_dates = min_dates,
+    max_dates = max_dates
+  )
+
   if_else(
     is.na(imputed_dtc),
     ymd(NA),
@@ -356,7 +346,7 @@ convert_dtc_to_dtm <- function(dtc,
                                min_dates = NULL,
                                max_dates = NULL) {
   assert_that(is.character(dtc))
-  warn_if_invalid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
   as_iso_dttm(ymd_hms(
     impute_dtc(
@@ -395,16 +385,18 @@ convert_dtc_to_dtm <- function(dtc,
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
   assert_that(is.character(dtc), is_date(dt))
-  warn_if_invalid_dtc(dtc)
+
+  is_na <- is.na(dt)
+  n_chr <- nchar(dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   case_when(
-    (!is.na(dt) & nchar(dtc) >= 10 & is_valid_dtc(dtc)) |
-      is.na(dt) |
-      !is_valid_dtc(dtc) ~ NA_character_,
-    !is.na(dt) & nchar(dtc) < 4 ~ "Y",
-    !is.na(dt) & nchar(dtc) == 4 ~ "M",
-    !is.na(dt) & nchar(dtc) == 7 ~ "D",
-    !is.na(dt) & nchar(dtc) == 9 ~ "M" # dates like "2019---07"
+    (!is_na & n_chr >= 10 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+    n_chr < 4 ~ "Y",
+    n_chr == 4 ~ "M",
+    n_chr == 7 ~ "D",
+    n_chr == 9 ~ "M" # dates like "2019---07"
   )
 }
 
@@ -435,16 +427,17 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 compute_tmf <- function(dtc, dtm) {
   assert_that(is.character(dtc), is_date(dtm))
-  warn_if_invalid_dtc(dtc)
+
+  is_na <- is.na(dtm)
+  n_chr <- nchar(dtc)
+  valid_dtc <- is_valid_dtc(dtc)
+  warn_if_invalid_dtc(dtc, valid_dtc)
 
   case_when(
-    (!is.na(dtm) & nchar(dtc) >= 19 & is_valid_dtc(dtc)) |
-      is.na(dtm) |
-      !is_valid_dtc(dtc) ~ NA_character_,
-    !is.na(dtm) & nchar(dtc) == 16 ~ "S",
-    !is.na(dtm) & nchar(dtc) == 13 ~ "M",
-    (!is.na(dtm) & (nchar(dtc) == 10)) |
-      (nchar(dtc) > 0 & nchar(dtc) < 10) ~ "H"
+    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+    n_chr == 16 ~ "S",
+    n_chr == 13 ~ "M",
+    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
   )
 }
 
@@ -681,8 +674,10 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(new_vars_prefix)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
-  assert_character_scalar(flag_imputation,
-                          values = c("auto", "both", "date", "time", "none"))
+  assert_character_scalar(
+    flag_imputation,
+    values = c("auto", "both", "date", "time", "none")
+  )
 
   dtm <- paste0(new_vars_prefix, "DTM")
 

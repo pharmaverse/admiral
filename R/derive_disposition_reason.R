@@ -152,7 +152,7 @@ derive_disposition_reason <- function(dataset,
       err_msg <- paste(
         "`new_var_spe` is specified as ", quo_text(new_var_spe),
         "but `reason_var_spe` is NULL.",
-        "Please specifiy `reason_var_spe` together with `new_var_spe`."
+        "Please specify `reason_var_spe` together with `new_var_spe`."
       )
       abort(err_msg)
     }
