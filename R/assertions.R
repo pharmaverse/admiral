@@ -140,14 +140,15 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' Checks if an argument is a character vector
 #'
 #' @param arg A function argument to be checked
+#' @param values A `character` vector of valid values for `arg`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
-#' @return
-#' The function throws an error if `arg` is not a character vector. Otherwise,
-#' the input is returned invisibly.
+#' @return The function throws an error if `arg` is not a character vector or if
+#' any element is not included in the list of valid values. Otherwise, the input
+#' is returned invisibly.
 #'
 #' @export
 #'
@@ -590,28 +591,43 @@ assert_has_variables <- function(dataset, required_vars) {
 #' @param unit
 #'   Expected unit
 #'
+#' @param unit_var
+#'   Variable providing the unit
+#'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if `AVALU` differs from the unit for any
-#'   observation of the parameter in the input dataset
+#' @return The function throws an error if the unit variable differs from the
+#'   unit for any observation of the parameter in the input dataset
 #'
 #' @export
 #'
 #' @keywords assertion
 #'
 #' @examples
-#' data(vs)
-#' assert_unit(vs, param = "WEIGHT", unit = "kg")
+#' data(advs)
+#' assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
 #' \dontrun{
-#' assert_unit(vs, param = "WEIGHT", unit = "g")
+#' assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
 #' }
-assert_unit <- function(dataset, param, unit) {
-  assert_data_frame(dataset, required_vars = vars(PARAMCD, AVALU))
-  units <- unique(filter(dataset, PARAMCD == param)$AVALU)
+assert_unit <- function(dataset, param, unit_var, unit) {
+  unit_var <- assert_symbol(enquo(unit_var))
+  assert_data_frame(dataset, required_vars = vars(PARAMCD, !!unit_var))
+  units <-
+    unique(filter(dataset, PARAMCD == param &
+                    !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
   if (length(units) != 1 || units != unit) {
-    abort(paste0("It is expected that ", param, " is measured in ", unit, ".\n",
-                 "In the input dataset it is measured in ",
-                 enumerate(units), "."))
+    abort(
+      paste0(
+        "It is expected that ",
+        param,
+        " is measured in ",
+        unit,
+        ".\n",
+        "In the input dataset it is measured in ",
+        enumerate(units),
+        "."
+      )
+    )
   }
 }
 

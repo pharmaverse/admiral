@@ -285,7 +285,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 
   # determine variables which are constant within each by group
   constant_vars <- unique_count %>%
-    map_lgl( ~ all(.x == 1)) %>%
+    map_lgl(~ all(.x == 1)) %>%
     which() %>%
     names() %>%
     syms()

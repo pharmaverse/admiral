@@ -4,17 +4,20 @@
 \alias{assert_character_vector}
 \title{Is an Argument a Character Vector?}
 \usage{
-assert_character_vector(arg, optional = FALSE)
+assert_character_vector(arg, values = NULL, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
+
+\item{values}{A \code{character} vector of valid values for \code{arg}}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is not a character vector. Otherwise,
-the input is returned invisibly.
+The function throws an error if \code{arg} is not a character vector or if
+any element is not included in the list of valid values. Otherwise, the input
+is returned invisibly.
 }
 \description{
 Checks if an argument is a character vector

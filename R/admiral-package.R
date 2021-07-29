@@ -20,5 +20,5 @@
 #' @importFrom lubridate ceiling_date date days duration floor_date is.Date is.instant
 #'             time_length %--% ymd ymd_hms
 #' @importFrom tidyr spread gather drop_na
-#' @importFrom tidyselect all_of contains vars_select
+#' @importFrom tidyselect contains vars_select
 "_PACKAGE"
