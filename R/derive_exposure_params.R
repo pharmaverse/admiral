@@ -8,7 +8,8 @@ derive_exposure_params <- function(dataset,
                                    drop_values_from = NULL
 ) {
 
-  assert_data_frame(dataset,required_vars = !!!by_vars,  PARAMCD, AVAL, AVALC,  ASTDTM, AENDTM )
+  assert_data_frame(dataset,
+                    required_vars = quo_c(by_vars, vars( PARAMCD, AVAL, AVALC,  ASTDTM, AENDTM)))
   assert_character_scalar(new_param)
   assert_character_scalar(input_param)
   #HOW to do this?
@@ -27,8 +28,8 @@ derive_exposure_params <- function(dataset,
   #Assert drop_values from
 
   #TO DO
-  #add this when avaialble
-  #assert_paramcd_does_not_exist(dataset, set_values_to$PARAMCD)
+  #add this when available
+  #assert_paramcd_does_not_exist(dataset, new_param)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_param,
                           values = params_available)
@@ -46,7 +47,24 @@ derive_exposure_params <- function(dataset,
     ) %>%
     filter(PARAMCD___ == new_param) %>%
     mutate(PARAMCD = PARAMCD___) %>%
-    select(-ends_with("___"))
+    #TO UPDATE
+    # not sure why the derive_summary_records() fns render a AVAL.x and AVAL.y...
+    # when i compute summary for TPDOSE
+    #If i remove the summary for TPDOSE it works fine...
+    # AVAL.x retain the value of the input param, AVAL.y has the correct result
+    select(-ends_with("___"), -ends_with(".x")) #%>%
+    mutate(
+      AVAL = coalesce(!!!select(
+        ., starts_with("AVAL"),
+        -ends_with("C"),
+        -ends_with("C.y")
+      )),
+      AVALC = coalesce(!!!select(., starts_with("AVAL") &
+                                   (ends_with("C") |  ends_with("C.y"))))
+    ) %>%
+    select(-ends_with(".y"))
+
+  print(add_data %>% select(USUBJID, PARAMCD, starts_with("AVA")))
 
 
   # add the dates for the derived parameters

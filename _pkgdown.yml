@@ -33,6 +33,10 @@ reference:
   desc: Functions specific for ADSL
   contents:
   - has_keyword('adsl')
+- subtitle: ADEG
+  desc: Functions specific for ADEG
+  contents:
+  - has_keyword('adeg')
 
 - title: Other Keywords
 - subtitle: Timing

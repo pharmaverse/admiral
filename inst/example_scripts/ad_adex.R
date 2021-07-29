@@ -127,29 +127,28 @@ adex1_1 <- bind_rows(
 
   # Part 3
   # Derive summary parameters
-  adex <- adex1_1 %>%
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
       params(new_param = "TDOSE", input_param = "DOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
       params(new_param = "TPDOSE", input_param = "PLDOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "TDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
-      params(new_param = "AVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
-      params(
-        new_param = "TADJ", input_param = "ADJ",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-      ),
-      params(
-        new_param = "TADJAE", input_param = "ADJAE",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-      )
+     params(new_param = "TDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
+     params(new_param = "AVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
+     params(
+       new_param = "TADJ", input_param = "ADJ",
+       fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+     ),
+     params(
+       new_param = "TADJAE", input_param = "ADJAE",
+       fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+     )
     ),
     by_vars = vars(USUBJID),
-    set_values_to = vars(PARCAT1 = "OVEARLL"),
-    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU),
+    set_values_to = vars(PARCAT1 = "OVERALL"),
+    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
   ) %>%
 
-  # add W2-W21 exposure
+  # add W2-W24 exposure
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
@@ -168,7 +167,7 @@ adex1_1 <- bind_rows(
     ),
     filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
     by_vars = vars(USUBJID),
-    set_values_to = vars(PARCAT1 = "OVEARLL"),
+    set_values_to = vars(PARCAT1 = "WEEK 2-24"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
   )
 
