@@ -24,7 +24,6 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    readxl,
     rlang,
     stringr,
     tidyr,
@@ -43,5 +42,6 @@ Suggests:
     spelling,
     styler,
     tibble,
-    usethis
+    usethis,
+    covr
 VignetteBuilder: knitr

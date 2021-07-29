@@ -60,13 +60,13 @@ derive_query_vars <- function(dataset, queries) {
       ifelse(x == "", NA_character_, x)})
 
   # names of new columns
-  if ("QUERY_ID" %!in% names(queries)) {
+  if ("QUERY_ID" %notin% names(queries)) {
     queries$QUERY_ID <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE" %!in% names(queries)) {
+  if ("QUERY_SCOPE" %notin% names(queries)) {
     queries$QUERY_SCOPE <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE_NUM" %!in% names(queries)) {
+  if ("QUERY_SCOPE_NUM" %notin% names(queries)) {
     queries$QUERY_SCOPE_NUM <- NA_integer_ # nolint
   }
   new_col_names <- queries %>%
@@ -111,7 +111,7 @@ derive_query_vars <- function(dataset, queries) {
   if (any(is.na(queries_wide$TERM_NAME_ID))) {
     idx <- is.na(queries_wide$TERM_NAME_ID)
     dat_incorrect_type <- dataset[queries_wide$TERM_LEVEL[idx]]
-    msg <- paste(
+    msg <- paste0(
       paste0(
         colnames(dat_incorrect_type),
         " is of type ",
@@ -125,9 +125,8 @@ derive_query_vars <- function(dataset, queries) {
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), unique(queries$TERM_LEVEL))
   # if dataset does not have a unique key, create a temp one
-  no_key <- dataset %>% select(all_of(static_cols)) %>% distinct
-  no_key <- nrow(no_key) != nrow(dataset)
-  if (no_key) {
+  no_key <- dataset %>% select(!!!syms(static_cols)) %>% distinct()
+  if (nrow(no_key) != nrow(dataset)) {
     dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
   }
@@ -139,7 +138,7 @@ derive_query_vars <- function(dataset, queries) {
   # join restructured queries to input dataset
   joined <- joined %>%
     inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_ID")) %>%
-    select(all_of(c(static_cols, new_col_names))) %>%
+    select(!!!syms(c(static_cols, new_col_names))) %>%
     dplyr::group_by_at(static_cols) %>%
     dplyr::summarise_all(~dplyr::first(na.omit(.))) %>%
     ungroup()
@@ -188,13 +187,13 @@ assert_valid_queries <- function(queries, queries_name) {
   signal_duplicate_records(queries, by_vars = quos(!!!syms(colnames(queries))))
 
   # check illegal prefix category
-  is_bad_prefix <- nchar(sub("[^[:alpha:]]+", "", queries$VAR_PREFIX)) > 3
-  if (any(is_bad_prefix)) {
+  is_good_prefix <- grepl("^[a-zA-Z]{2,3}", queries$VAR_PREFIX)
+  if (!all(is_good_prefix)) {
     abort(
       paste0(
         "`VAR_PREFIX` in `", queries_name,
         "` must start with 2-3 letters.. Problem with ",
-        enumerate(unique(queries$VAR_PREFIX[is_bad_prefix])),
+        enumerate(unique(queries$VAR_PREFIX[!is_good_prefix])),
         "."
       )
     )
@@ -228,14 +227,14 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal query scope
   if ("QUERY_SCOPE" %in% names(queries) &&
-      any(unique(queries$QUERY_SCOPE) %!in% c("BROAD", "NARROW", "", NA_character_))) {
+      any(unique(queries$QUERY_SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
     abort(paste0("`QUERY_SCOPE` in `", queries_name,
                  "` can only be 'BROAD', 'NARROW' or `NA`."))
   }
 
   # check illegal query scope number
   if ("QUERY_SCOPE_NUM" %in% names(queries)) {
-    is_bad_scope_num <- queries$QUERY_SCOPE_NUM %!in% c(1, 2, NA_integer_)
+    is_bad_scope_num <- queries$QUERY_SCOPE_NUM %notin% c(1, 2, NA_integer_)
     if (any(is_bad_scope_num)) {
       abort(
         paste0(
@@ -251,7 +250,7 @@ assert_valid_queries <- function(queries, queries_name) {
   # check illegal term name
   if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
       any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
-    abort(paste0("Either `TERM_NAME` or `TERM_ID` need to be specified ",
+    abort(paste0("Either `TERM_NAME` or `TERM_ID` need to be specified",
                  " in `", queries_name, "`. ",
                  "They both cannot be NA or empty."))
   }

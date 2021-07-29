@@ -152,7 +152,7 @@ derive_disposition_reason <- function(dataset,
       err_msg <- paste(
         "`new_var_spe` is specified as ", quo_text(new_var_spe),
         "but `reason_var_spe` is NULL.",
-        "Please specifiy `reason_var_spe` together with `new_var_spe`."
+        "Please specify `reason_var_spe` together with `new_var_spe`."
       )
       abort(err_msg)
     }
@@ -197,11 +197,15 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' or `NA`.
-#' `format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
+#' 'COMPLETED' or `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
+#' `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#'
 #' For example:
-#' `DCSREAS = format_reason_default(DSDECOD)`
-#' `DCSREASP = format_reason_default(DSDECOD, DSTERM)`
+#' ```
+#' DCSREAS = format_reason_default(DSDECOD)
+#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
+#' ```
 #'
 #' @return A `character` vector
 #'
