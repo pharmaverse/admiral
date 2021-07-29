@@ -7,19 +7,9 @@
 
 library(dplyr)
 library(lubridate)
-library(rlang)
-library(styler)
-library(roxygen2)
-library(devtools)
-library(diffdf)
-library(assertthat)
-library(testthat)
 library(stringr)
-library(styler)
-library(purrr)
-# library(haven)
 library(admiral)
-devtools::load_all()
+
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
@@ -90,23 +80,24 @@ format_avalcat1 <- function(param, aval) {
   )
 }
 
+
 # ---- Derivations ----
 
 # Part 1
 # Join ADSL with ex and derive required dates, variables
 adex0 <- adsl %>%
-  select(STUDYID, USUBJID, TRTSDT) %>%
+  select(STUDYID, USUBJID, starts_with("TRT")) %>%
   right_join(ex, by = c("STUDYID", "USUBJID")) %>%
   # Calculate ASTDTM, AENDTM
-  derive_vars_dtm(
-    new_vars_prefix = "AST",
-    dtc = EXSTDTC,
-    flag_imputation = FALSE
-  ) %>%
-  derive_vars_dtm(
-    new_vars_prefix = "AEN",
-    dtc = EXENDTC,
-    flag_imputation = FALSE
+  call_derivation(
+    derivation = derive_vars_dtm,
+    variable_params = list(
+      params(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+      params(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+    ),
+    flag_imputation = "none",
+    min_dates = list(TRTSDT),
+    max_dates = list(TRTEDT)
   ) %>%
   # Calculate ASTDY, AENDY
   derive_var_astdy(reference_date = TRTSDT, date = ASTDTM) %>%
@@ -130,94 +121,101 @@ adex1_1 <- bind_rows(
   adex0 %>% mutate(PARAMCD = "ADJ", AVALC = if_else(!is.na(EXADJ), "Y", NA_character_)),
   adex0 %>% mutate(PARAMCD = "ADJAE", AVALC = if_else(EXADJ == "ADVERSE EVENT", "Y", NA_character_))
 ) %>%
-  mutate(PARCAT1 = "INDIVIDUAL")
+  mutate(PARCAT1 = "INDIVIDUAL") %>%
 
-# Part 3 - summary parameters
-
-# 3.1 - Define exposure parameters specification
-# Overall
-# Total dose and total duration
-tdose <- exposure_var_spec(
-  new_parameter = "TDOSE",
-  input_parameter = "DOSE",
-  fns = list(AVAL ~ sum(., na.rm = TRUE))
-)
-# Total duration
-tdurd <- exposure_var_spec(
-  new_parameter = "TDURD",
-  input_parameter = "DURD",
-  fns = list(AVAL ~ sum(., na.rm = TRUE))
-)
-# Average overall dose
-adose <- exposure_var_spec(
-  new_parameter = "ADOSE",
-  input_parameter = "DOSE",
-  fns = list(AVAL ~ mean(., na.rm = TRUE))
-)
-# Any Dose adjustment?
-tadj <- exposure_var_spec(
-  new_parameter = "TADJ",
-  input_parameter = "ADJ",
-  fns = list(AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_))
-)
-# Any Dose adjustment due to AE?
-tadjae <- exposure_var_spec(
-  new_parameter = "TADJAE",
-  input_parameter = "ADJAE",
-  fns = list(AVALC ~ if_else(sum(!is.na(. == "ADVERSE EVENT")) > 0, "Y", NA_character_))
-)
-
-# W2-24 expousre
-pdose <- exposure_var_spec(
-  new_parameter = "PDOSE",
-  input_parameter = "DOSE",
-  fns = list(AVAL ~ sum(., na.rm = TRUE))
-)
-pdurd <- exposure_var_spec(
-  new_parameter = "PDURD",
-  input_parameter = "DURD",
-  fns = list(AVAL ~ sum(., na.rm = TRUE))
-)
-padose <- exposure_var_spec(
-  new_parameter = "PADOSE",
-  input_parameter = "DOSE",
-  fns = list(AVAL ~ mean(., na.rm = TRUE))
-)
-padj <- exposure_var_spec(
-  new_parameter = "PADJ",
-  input_parameter = "ADJ",
-  fns = list(AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_))
-)
-padjae <- exposure_var_spec(
-  new_parameter = "PADJAE",
-  input_parameter = "ADJAE",
-  fns = list(AVALC ~ if_else(sum(!is.na(. == "ADVERSE EVENT")) > 0, "Y", NA_character_))
-)
-# 3.2 Derive summary parameters
-adex <- adex1_1 %>%
-  # add overall exposure
-  derive_exposure_parameters(
-    filter_rows = NULL,
-    by_vars = vars(USUBJID, EXTRT),
-    set_values_to = vars(PARCAT1 = "OVERALL"),
+  # Derive summary parameters
+  # Option 1
+  adex() <- adex1_1 %>%
+  call_derivation(
+    derivation = derive_exposure_params,
+    variable_params = list(
+      params(
+        new_param = "TDOSE", input_param = "DOSE",
+        fns = list(AVAL ~ sum(., na.rm = TRUE))
+      ),
+      params(
+        new_param = "TDURD", input_param = "DURD",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        new_param = "AVDOSE", input_param = "DOSE",
+        fns = AVAL ~ mean(., na.rm = TRUE)
+      ),
+      params(
+        new_param = "TADJ", input_param = "ADJ",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      ),
+      params(
+        new_param = "TADJ", input_param = "ADJAE",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      )
+    ),
+    by_vars = vars(USUBJID),
+    set_values_to = vars(PARCAT1 = "OVEARLL"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU),
-    tdose , tdurd, adose, tadj, tadjae
   ) %>%
-  # add W2-24 exposure
-  derive_exposure_parameters(
+
+  # add W2-W21 exposure
+  call_derivation(
+    derivation = derive_exposure_params,
+    variable_params = list(
+      params(
+        new_param = "TDOSE", input_param = "DOSE",
+        fns = list(AVAL ~ sum(., na.rm = TRUE))
+      ),
+      params(
+        new_param = "TDURD", input_param = "DURD",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        new_param = "AVDOSE", input_param = "DOSE",
+        fns = AVAL ~ mean(., na.rm = TRUE)
+      ),
+      params(
+        new_param = "TADJ", input_param = "ADJ",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      ),
+      params(
+        new_param = "TADJ", input_param = "ADJAE",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      )
+    ),
     filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = vars(USUBJID, EXTRT),
-    set_values_to = vars(PARCAT1 = "W2-24"),
-    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU),
-    sum_w2_24, avg_w2_24, adj_w2_24, adjae_w2_24
+    by_vars = vars(USUBJID),
+    set_values_to = vars(PARCAT1 = "OVEARLL"),
+    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
   )
-
-
-# Part 4
-# Dose intensity goes there
-# ...
-
-
+# Option2
+exposure_param <- list(
+  params(new_param = "TDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
+  params(new_param = "TDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
+  params(new_param = "AVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
+  params(
+    new_param = "TADJ", input_param = "ADJ",
+    fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+  ),
+  params(
+    new_param = "TADJ", input_param = "ADJAE",
+    fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+  )
+)
+adex <- adex1_1 %>%
+  call_derivation(
+    derivation = derive_exposure_params,
+    variable_params = exposure_param,
+    by_vars = vars(STUDYID,USUBJID),
+    filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
+    set_values_to = vars(PARCAT1 = "OVEARLL"),
+    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU),
+  ) %>%
+  call_derivation(
+    derivation = derive_exposure_params,
+    variable_params = exposure_list,
+    filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
+    by_vars = vars(STUDYID,USUBJID),
+    set_values_to = vars(PARCAT1 = "WEEK2-24"),
+    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
+  )
 # Part 5 Set 1:1 mapping and exposure parameters together
 # Derive/Assign the last required variables
 
