@@ -7,10 +7,11 @@ derive_exposure_params <- function(dataset,
                                    set_values_to = NULL,
                                    drop_values_from = NULL
 ) {
-  req_var<-vars(!!!by_vars,  PARAMCD, AVAL, AVALC,  ASTDTM, AENDTM)
-  assert_data_frame(dataset,required_vars = req_var )
+
+  assert_data_frame(dataset,required_vars = !!!by_vars,  PARAMCD, AVAL, AVALC,  ASTDTM, AENDTM )
   assert_character_scalar(new_param)
   assert_character_scalar(input_param)
+  #HOW to do this?
   #assert_fns???
   assert_vars(drop_values_from, optional = TRUE)
   by_vars <- assert_vars(by_vars)
@@ -22,6 +23,11 @@ derive_exposure_params <- function(dataset,
                              not {friendly_type(typeof(set_values_to))}.")
     )
   }
+  #TO DO
+  #Assert drop_values from
+
+  #TO DO
+  #add this when avaialble
   #assert_paramcd_does_not_exist(dataset, set_values_to$PARAMCD)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_param,

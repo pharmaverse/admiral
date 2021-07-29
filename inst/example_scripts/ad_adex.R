@@ -57,11 +57,13 @@ param_lookup <- tibble::tribble(
   "TADJAE", "Dose adjusted during study due to AE", 14,
   "PDURD", "Overall duration in W2-W24 (days)", 19,
   "PDOSE", "Total dose administered in W2-W24", 20,
-  "PADOSE", "Average dose administered in W2-W24", 21,
-  "PNDOSMIS", "Total number of missed doses in W2-W24", 22,
-  "PADJ", "Dose adjusted during W2-W24", 23,
-  "PADJAE", "Dose adjusted  in W2-W24 due to AE", 24,
-  "TDOSINT", "Overall dose intensity", 90
+  "PPDOSE", "Total planned dose in W2-W24", 21,
+  "PADOSE", "Average dose administered in W2-W24", 22,
+  "PNDOSMIS", "Total number of missed doses in W2-W24", 23,
+  "PADJ", "Dose adjusted during W2-W24", 24,
+  "PADJAE", "Dose adjusted  in W2-W24 due to AE", 25,
+  "TDOSINT", "Overall dose intensity", 90,
+  "PDOSINT", "Overall dose intensity", 91
 )
 
 
@@ -123,30 +125,22 @@ adex1_1 <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL") %>%
 
+  # Part 3
   # Derive summary parameters
-  # Option 1
-  adex() <- adex1_1 %>%
+  adex <- adex1_1 %>%
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
-      params(
-        new_param = "TDOSE", input_param = "DOSE",
-        fns = list(AVAL ~ sum(., na.rm = TRUE))
-      ),
-      params(
-        new_param = "TDURD", input_param = "DURD",
-        fns = AVAL ~ sum(., na.rm = TRUE)
-      ),
-      params(
-        new_param = "AVDOSE", input_param = "DOSE",
-        fns = AVAL ~ mean(., na.rm = TRUE)
-      ),
+      params(new_param = "TDOSE", input_param = "DOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "TPDOSE", input_param = "PLDOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "TDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
+      params(new_param = "AVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
       params(
         new_param = "TADJ", input_param = "ADJ",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       ),
       params(
-        new_param = "TADJ", input_param = "ADJAE",
+        new_param = "TADJAE", input_param = "ADJAE",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       )
     ),
@@ -159,24 +153,16 @@ adex1_1 <- bind_rows(
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
+      params(new_param = "PDOSE", input_param = "DOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "PPDOSE", input_param = "PLDOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "PDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
+      params(new_param = "PAVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
       params(
-        new_param = "TDOSE", input_param = "DOSE",
-        fns = list(AVAL ~ sum(., na.rm = TRUE))
-      ),
-      params(
-        new_param = "TDURD", input_param = "DURD",
-        fns = AVAL ~ sum(., na.rm = TRUE)
-      ),
-      params(
-        new_param = "AVDOSE", input_param = "DOSE",
-        fns = AVAL ~ mean(., na.rm = TRUE)
-      ),
-      params(
-        new_param = "TADJ", input_param = "ADJ",
+        new_param = "PADJ", input_param = "ADJ",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       ),
       params(
-        new_param = "TADJ", input_param = "ADJAE",
+        new_param = "PADJAE", input_param = "ADJAE",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       )
     ),
@@ -185,41 +171,23 @@ adex1_1 <- bind_rows(
     set_values_to = vars(PARCAT1 = "OVEARLL"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
   )
-# Option2
-exposure_param <- list(
-  params(new_param = "TDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
-  params(new_param = "TDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
-  params(new_param = "AVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
-  params(
-    new_param = "TADJ", input_param = "ADJ",
-    fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-  ),
-  params(
-    new_param = "TADJ", input_param = "ADJAE",
-    fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-  )
-)
-adex <- adex1_1 %>%
+
+  #Overall Dose intensity and W2-24 dose intensity
   call_derivation(
-    derivation = derive_exposure_params,
-    variable_params = exposure_param,
+    derivation = derive_param_doseint,
+    variable_params = list(
+      params(new_param = "TDOSINT",tadm_code="TDOSE" ,tpadm_code="TPDOSE",
+             filter = NULL,
+             set_values_to = vars(PARCAT1 = "OVERALL")),
+      params(new_param = "PDOSINT",tadm_code="PDOSE" ,tpadm_code="PPDOSE",
+             filter = VISIT %in% c("WEEK 2", "WEEK 24"),
+             set_values_to = vars(PARCAT1 = "WEEK2-24"))
+    ),
     by_vars = vars(STUDYID,USUBJID),
-    filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
-    set_values_to = vars(PARCAT1 = "OVEARLL"),
-    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU),
-  ) %>%
-  call_derivation(
-    derivation = derive_exposure_params,
-    variable_params = exposure_list,
-    filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = vars(STUDYID,USUBJID),
-    set_values_to = vars(PARCAT1 = "WEEK2-24"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
-  )
+  )%>%
 # Part 5 Set 1:1 mapping and exposure parameters together
 # Derive/Assign the last required variables
-
-adex <- adex %>%
   # Add PARAMN and PARAM
   left_join(param_lookup, by = "PARAMCD") %>%
   # Derive AVALCATx
@@ -240,4 +208,4 @@ adex <- adex %>%
 
 # ---- Save output ----
 
-save(adex, file = "/PATH/TO/SAVE/ADex", compress = TRUE)
+saveRDS(adex, file = "/PATH/TO/SAVE/ADex", compress = TRUE)
