@@ -200,21 +200,32 @@ derive_extreme_flag <- function(dataset,
 #' Adds a Variable Flagging the maximal / minimal value within a group of observations
 #'
 #' @inheritParams derive_extreme_flag
+#' @param dataset Input dataset.
+#' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
+#' @param new_var Variable to add to the `dataset`.
+#' It is set `"Y"` for the maximal / minimal observation of each group,
+#' see Details section for more information.
+#' @param order Sort order.
+#' Used to determine maximal / minimal observation if they are not unique,
+#' see Details section for more information.
 #' @param param_var Variable with the parameter values for which the maximal / minimal
 #' value is calculated.
 #' @param analysis_var Variable with the measurement values for which the maximal / minimal
 #' value is calculated.
 #' @param worst_high Character with `param_var` values specifying the parameters
 #' referring to "high".
+#' Use `character(0)` if not required.
 #' @param worst_low Character with `param_var` values specifying the parameters
 #' referring to "low".
+#' Use `character(0)` if not required.
 #'
-#' @details For each group with respect to the variables specified for the `by_vars` parameter,
+#' @details For each group with respect to the variables specified by the `by_vars` parameter,
 #' the maximal / minimal observation of `analysis_var`
-#' (with respect to the additional order specified by the `order` parameter),
 #' is labelled in the `new_var` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
 #' otherwise it is assigned `NA`.
+#' If there is more than one such maximal / minimal observation,
+#' the first one with respect to the order specified by the `order` parameter is flagged.
 #'
 #' @author Ondrej Slama
 #'
@@ -263,7 +274,7 @@ derive_extreme_flag <- function(dataset,
 #'   input,
 #'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#'   order = vars(ADT),
+#'   order = vars(desc(ADT)),
 #'   param_var = PARAMCD,
 #'   analysis_var = AVAL,
 #'   worst_high = c("PARAM01", "PARAM03"),
@@ -304,17 +315,42 @@ derive_worst_flag <- function(dataset,
   assert_order_vars(order)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), param_var)
+    required_vars = quo_c(by_vars, extract_vars(order), param_var, analysis_var)
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
   flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
 
-  # additional check for worstflag
+  # additional checks for worstflag - parameters overlap
   if (length(intersect(worst_high, worst_low)) > 0) {
     err_msg <- paste(
-      "The following parameters are both assigned to `worst_high` and `worst_low` flags:",
+      "The following parameter(-s) are both assigned to `worst_high` and `worst_low` flags:",
       paste0(intersect(worst_high, worst_low), collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  # additional checks for worstflag - parameters not available
+  param_var_str <- as_string(quo_get_expr(param_var))
+  if (length(worst_high) > 0 &&
+      !all(worst_high %in% dataset[[param_var_str]])) {
+    err_msg <- paste0(
+      "The following parameter(-s) in `worst_high` are not available in column ",
+      param_var_str,
+      ": ",
+      paste0(worst_high[!worst_high %in% dataset[[param_var_str]]], collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  # additional checks for worstflag - parameters not available
+  if (length(worst_low) > 0 &&
+      !all(worst_low %in% dataset[[param_var_str]])) {
+    err_msg <- paste0(
+      "The following parameter(-s) in `worst_low` are not available in column ",
+      param_var_str,
+      ": ",
+      paste0(worst_low[!worst_low %in% dataset[[param_var_str]]], collapse = ", ")
     )
     abort(err_msg)
   }
@@ -322,7 +358,7 @@ derive_worst_flag <- function(dataset,
   # derive worst-flag
   bind_rows(
     derive_extreme_flag(
-      dataset = filter(dataset, .data$PARAMCD %in% worst_low),
+      dataset = filter(dataset, !!param_var %in% worst_low),
       new_var = !!new_var,
       by_vars = by_vars,
       order = quo_c(analysis_var, order),
@@ -331,7 +367,7 @@ derive_worst_flag <- function(dataset,
       check_type = check_type
     ),
     derive_extreme_flag(
-      dataset = filter(dataset, .data$PARAMCD %in% worst_high),
+      dataset = filter(dataset, !!param_var %in% worst_high),
       new_var = !!new_var,
       by_vars = by_vars,
       order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
@@ -339,6 +375,6 @@ derive_worst_flag <- function(dataset,
       flag_filter = !!flag_filter,
       check_type = check_type
     ),
-    filter(dataset, !.data$PARAMCD %in% c(worst_low, worst_high))
+    filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
   )
 }

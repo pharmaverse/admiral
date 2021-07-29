@@ -18,27 +18,20 @@ derive_worst_flag(
 )
 }
 \arguments{
-\item{dataset}{Input dataset
+\item{dataset}{Input dataset.
+Variables specified by \code{by_vars}, \code{order}, \code{param_var}, and \code{analysis_var} are expected.}
 
-The variables specified by the \code{by_vars} parameter are expected.}
-
-\item{new_var}{Variable to add
-
-The specified variable is added to the output dataset. It is set to \code{"Y"}
-for the first or last observation (depending on the mode) of each by group.
-
-Permitted Values: list of name-value pairs}
+\item{new_var}{Variable to add to the \code{dataset}.
+It is set \code{"Y"} for the maximal / minimal observation of each group,
+see Details section for more information.}
 
 \item{by_vars}{Grouping variables
 
 Permitted Values: list of variables}
 
-\item{order}{Sort order
-
-The first or last observation is determined with respect to the specified
-order.
-
-Permitted Values: list of variables or functions of variables}
+\item{order}{Sort order.
+Used to determine maximal / minimal observation if they are not unique,
+see Details section for more information.}
 
 \item{param_var}{Variable with the parameter values for which the maximal / minimal
 value is calculated.}
@@ -47,10 +40,12 @@ value is calculated.}
 value is calculated.}
 
 \item{worst_high}{Character with \code{param_var} values specifying the parameters
-referring to "high".}
+referring to "high".
+Use \code{character(0)} if not required.}
 
 \item{worst_low}{Character with \code{param_var} values specifying the parameters
-referring to "low".}
+referring to "low".
+Use \code{character(0)} if not required.}
 
 \item{flag_filter}{Filter for flag data
 
@@ -77,12 +72,13 @@ The input dataset with the new flag variable added.
 Adds a Variable Flagging the maximal / minimal value within a group of observations
 }
 \details{
-For each group with respect to the variables specified for the \code{by_vars} parameter,
+For each group with respect to the variables specified by the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-(with respect to the additional order specified by the \code{order} parameter),
 is labelled in the \code{new_var} column as \code{"Y"}
 if its \code{param_var} is in \code{worst_high} / \code{worst_low},
 otherwise it is assigned \code{NA}.
+If there is more than one such maximal / minimal observation,
+the first one with respect to the order specified by the \code{order} parameter is flagged.
 }
 \examples{
 
@@ -123,7 +119,7 @@ derive_worst_flag(
   input,
   new_var = WORSTFL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT),
+  order = vars(desc(ADT)),
   param_var = PARAMCD,
   analysis_var = AVAL,
   worst_high = c("PARAM01", "PARAM03"),
