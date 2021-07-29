@@ -4,10 +4,12 @@
 \alias{warn_if_invalid_dtc}
 \title{Warn If a vector contains unknown datetime format}
 \usage{
-warn_if_invalid_dtc(dtc)
+warn_if_invalid_dtc(dtc, is_valid)
 }
 \arguments{
 \item{dtc}{a character vector containing the dates}
+
+\item{is_valid}{a logical vector indicating whether elements in \code{dtc} are valid}
 }
 \description{
 Warn if the vector contains unknown datetime format such as

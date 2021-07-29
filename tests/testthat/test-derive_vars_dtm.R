@@ -174,3 +174,32 @@ test_that("Partial date imputed to the mid day/month", {
     actual_output1
   )
 })
+
+test_that("No re-derivation is done if --DTF variable already exists", {
+
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dttm(ASTDTM)) %>%
+    select(XXSTDTC, ASTDTF, everything())
+
+  actual_output <- expect_message(
+    derive_vars_dtm(
+      mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "M", "M")),
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      date_imputation = "FIRST"
+    ),
+    regexp = "^The .* variable is already present in the input dataset and will not be re-derived."
+  )
+
+  expect_equal(expected_output, actual_output)
+
+})

@@ -287,3 +287,60 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
+
+test_that("DTHCAUS is added from AE and DS if filter is not specified", {
+  # test based on covr report - the case for unspecified filter has not been tested
+
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID,
+    "TEST01", "PAT01",
+    "TEST01", "PAT02",
+    "TEST01", "PAT03"
+  )
+
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
+  )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+    "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
+    "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT01", 3, "ADVERSE EVENT", "ADVERSE EVENT", "2021-12-01",
+    "TEST01", "PAT01", 4, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+    "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
+    "TEST01", "PAT03", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
+    "TEST01", "PAT03", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT03", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01"
+  )
+
+  src_ae <- dthcaus_source(
+    dataset = ae,
+    filter = AEOUT == "FATAL",
+    date_var = AEDTHDTC,
+    mode = "first",
+    dthcaus = AEDECOD
+  )
+
+  src_ds <- dthcaus_source(
+    dataset = ds,
+    filter = NULL,
+    date_var = DSSTDTC,
+    mode = "first",
+    dthcaus = DSTERM
+  )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHCAUS,
+    "TEST01", "PAT01", "INFORMED CONSENT OBTAINED",
+    "TEST01", "PAT02", "INFORMED CONSENT OBTAINED",
+    "TEST01", "PAT03", "INFORMED CONSENT OBTAINED"
+  )
+
+  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+
+  expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+})
