@@ -91,6 +91,7 @@ derive_param_qtcb <- function(dataset,
   assert_data_frame(dataset,
                     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
   assert_param_does_not_exist(dataset, new_param)
+  assert_varval_list(set_values_to, optional = TRUE)
 
   if (!quo_is_null(unit_var)) {
     assert_unit(dataset,
@@ -176,6 +177,7 @@ derive_param_qtcf <- function(dataset,
   assert_data_frame(dataset,
                     required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
   assert_param_does_not_exist(dataset, new_param)
+  assert_varval_list(set_values_to, optional = TRUE)
 
   if (!quo_is_null(unit_var)) {
     assert_unit(dataset,
@@ -213,7 +215,8 @@ derive_param_qtcf <- function(dataset,
 #' subject and visit) where the source parameters are available.
 #'
 #' The analysis value of the new parameter is derived as
-#' \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{1000(QT/1000 + 0.154(1 - RR/1000))}
+#' \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
+#' 1000(QT/1000 + 0.154(1 - RR/1000))}
 #'
 #' @inheritParams derive_derived_param
 #'
@@ -262,6 +265,7 @@ derive_param_qtlc <- function(dataset,
   assert_data_frame(dataset,
                     required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
   assert_param_does_not_exist(dataset, new_param)
+  assert_varval_list(set_values_to, optional = TRUE)
 
   if (!quo_is_null(unit_var)) {
     assert_unit(dataset,
@@ -356,6 +360,7 @@ derive_param_rr <- function(dataset,
   assert_data_frame(dataset,
                     required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
   assert_param_does_not_exist(dataset, new_param)
+  assert_varval_list(set_values_to, optional = TRUE)
 
   if (!quo_is_null(unit_var)) {
     assert_unit(dataset,

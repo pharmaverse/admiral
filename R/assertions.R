@@ -1047,8 +1047,8 @@ on_failure(is_valid_month) <- function(call, env) {
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of `quosures` where the expressions are
-#' variable-value pairs. The value can be a symbol, a string, or `NA`. More general
-#' expression are not allowed.
+#' variable-value pairs. The value can be a symbol, a string, a numeric, or
+#' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
@@ -1077,7 +1077,7 @@ assert_varval_list <- function(arg, optional = FALSE) {
   err_msg <- sprintf(
     paste0(
       "`%s` must be a named list of quosures where each element is a symbol, ",
-      "character scalar or `NA` but it is %s\n",
+      "character scalar, numeric scalar, or `NA` but it is %s\n",
       "\u2139 To create a list of quosures use `vars()`"
     ),
     arg_name(substitute(arg)),
@@ -1088,8 +1088,28 @@ assert_varval_list <- function(arg, optional = FALSE) {
     abort(err_msg)
   } else {
     expr_list <- map(arg, quo_get_expr)
-    if (!all(map_lgl(expr_list, ~is.symbol(.x) || is.character(.x) || is.na(.x)))) {
-      abort(err_msg)
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) || is.atomic(.x) && is.na(.x)
+    )]
+    if (length(invalids) > 0) {
+      abort(
+        paste(
+          "The elements of the list",
+          arg_name(substitute(arg)),
+          "must be a symbol, a character scalar, a numeric, or `NA`.\n",
+          paste(
+            names(invalids),
+            "=",
+            map_chr(invalids, expr_label),
+            "is of type",
+            map_chr(invalids, typeof),
+            collapse = "\n"
+          )
+        )
+      )
     }
   }
 

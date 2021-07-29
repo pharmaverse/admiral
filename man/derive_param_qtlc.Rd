@@ -85,7 +85,8 @@ subject and visit) where the source parameters are available.
 }
 \details{
 The analysis value of the new parameter is derived as
-\deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{1000(QT/1000 + 0.154(1 - RR/1000))}
+\deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
+1000(QT/1000 + 0.154(1 - RR/1000))}
 }
 \examples{
 adeg <- tibble::tribble(
