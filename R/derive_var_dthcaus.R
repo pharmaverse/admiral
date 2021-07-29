@@ -180,7 +180,7 @@ dthcaus_source <- function(dataset,
                            traceabilty_vars = NULL) {
   out <- list(
     dataset = assert_data_frame(dataset),
-    filter = assert_filter_cond(enquo(filter)),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date_var)),
     mode = assert_character_scalar(mode, values = c("first", "last")),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
