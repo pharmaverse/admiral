@@ -55,11 +55,12 @@ advs <- left_join(advs, select(param_lookup, VSTESTCD, PARAMCD), by = "VSTESTCD"
 # This is an example of deriving a new record based on existing records.
 # Note: this PARAMCD is not derived in the CDISC pilot and is presented
 #       for demonstration purposes.
-advs <- derive_derived_param(
+advs <- derive_param_map(
   advs,
-  parameters = c("SYSBP", "DIABP"),
+  diabp_code = "DIABP",
+  sysbp_code = "SYSBP",
+  new_param = MAP,
   by_vars = vars(USUBJID, VISITNUM, VSDTC, VSTPT),
-  analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
   set_values_to = vars(PARAMCD = "MAP")
 )
 
