@@ -4,15 +4,15 @@
 \alias{assert_list_of}
 \title{Is an Argument a List of Objects of a Specific S3 Class?}
 \usage{
-assert_list_of(arg, class, optional = TRUE)
+assert_list_of(arg, kind, optional = TRUE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
-\item{class}{The S3 class to check for}
-
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
+
+\item{class}{The S3 class to check for}
 }
 \value{
 The function throws an error if \code{arg} is not a list or if \code{arg} is a list but its

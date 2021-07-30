@@ -14,8 +14,8 @@ is \code{NULL} then an error is thrown.}
 }
 \description{
 Checks if the argument is a list of \code{quosures} where the expressions are
-variable-value pairs. The value can be a symbol, a string, or \code{NA}. More general
-expression are not allowed.
+variable-value pairs. The value can be a symbol, a string, a numeric, or
+\code{NA}. More general expression are not allowed.
 }
 \examples{
 example_fun <- function(vars) {
