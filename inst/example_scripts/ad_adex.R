@@ -80,7 +80,6 @@ format_avalcat1 <- function(param, aval) {
   )
 }
 
-
 # ---- Derivations ----
 
 # Part 1
@@ -112,6 +111,7 @@ adex0 <- adsl %>%
   mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
 
 # Part 2
+
 
 # 1:1 mapping
 adex <- bind_rows(
