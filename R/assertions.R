@@ -680,55 +680,6 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
-assert_s3_class <- function(arg, class, optional = TRUE) {
-  assert_character_scalar(class)
-  assert_logical_scalar(optional)
-
-  if (is.null(arg) && optional) {
-    return(invisible(arg))
-  }
-
-  if (!inherits(arg, class)) {
-    err_msg <- sprintf(
-      "`%s` must be an object of class '%s' but is %s",
-      arg_name(substitute(arg)),
-      class,
-      what_is_it(arg)
-    )
-    abort(err_msg)
-  }
-
-  invisible(arg)
-}
-
-assert_list_of <- function(arg, kind, optional = TRUE) {
-  assert_character_scalar(kind)
-  assert_logical_scalar(optional)
-
-  if (is.null(arg) && optional) {
-    return(invisible(arg))
-  }
-
-  assert_s3_class(arg, "list")
-
-  is_kind <- map_lgl(arg, inherits, kind)
-  if (!all(is_kind)) {
-    info_msg <- paste(
-      sprintf("\u2716 Element %s is %s", which(!is_kind), map_chr(arg[!is_kind], what_is_it)),
-      collapse = "\n"
-    )
-    err_msg <- sprintf(
-      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
-      arg_name(substitute(arg)),
-      kind,
-      info_msg
-    )
-    abort(err_msg)
-  }
-
-  invisible(arg)
-}
-
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)
