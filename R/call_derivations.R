@@ -70,7 +70,7 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
   for (i in seq_along(variable_params)) {
     args <- c(quote(dataset), variable_params[[i]], fixed_params)
     call <- as.call(c(substitute(derivation), args))
-    dataset <- eval(call)
+    dataset <- eval(call, envir = list(dataset = dataset), enclos = parent.frame())
   }
 
   dataset
