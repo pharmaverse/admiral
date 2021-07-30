@@ -10,13 +10,20 @@ derive_param_rr(
   new_param = "RRR",
   hr_code = "HR",
   by_vars,
-  drop_values_from = vars(EGSEQ, starts_with("EGTEST"), contains("RES"))
+  unit_var = NULL,
+  set_values_to = NULL,
+  drop_values_from = vars(starts_with("EGTEST"), contains("RES"))
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and \code{AVAL}
+are expected.
+
+The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
+the input dataset after restricting it by the filter condition (\code{filter}
+parameter) and to the parameters specified by \code{hr_code}.}
 
 \item{filter}{Filter condition
 
@@ -41,13 +48,50 @@ Permitted Values: character value}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
+
+\item{unit_var}{Variable providing the unit of the parameter
+
+The variable is used to check the units of the input parameters and it is
+set to \code{"msec"} for the new parameter.
+
+Permitted Values: A variable of the input dataset}
+
+\item{set_values_to}{Variables to be set
+
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
+
+\emph{Permitted Values:} List of variable-value pairs}
 }
 \value{
-The input dataset with the new flag variable added
+The input dataset with the new parameter added
 }
 \description{
-Adds a parameter for derived RR
+Adds a record for derived RR based on heart rate for each by group (e.g.,
+subject and visit) where the source parameters are available.
+}
+\examples{
+adeg <- tibble::tribble(
+~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+"01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
+"01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
+"01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
+"01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
+"01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
+"01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
+"01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
+"01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
+"01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+)
+derive_param_rr(
+  adeg,
+  by_vars = vars(USUBJID, VISIT),
+  set_values_to = vars(PARAM = "RR Duration Rederived (msec)"))
 }
 \author{
 Stefan Bundfuss

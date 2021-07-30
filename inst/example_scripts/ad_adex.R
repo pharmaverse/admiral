@@ -1,6 +1,6 @@
 # Name: ADEX
 #
-# Label: Vital Signs Analysis Dataset
+# Label: Exposure Analysis Dataset
 #
 # Input: adsl, ex
 #
@@ -35,7 +35,7 @@ ex <- ex %>%
     )
   ) %>%
   # add SUPPEX.EXPLDOS to test for dose intensity
-  mutate(EXPLDOS = 54)
+  mutate(EXPLDOS = if_else(EXTRT == "PLACEBO", 0, 54))
 
 
 # ---- Lookup tables ----
@@ -44,26 +44,24 @@ ex <- ex %>%
 param_lookup <- tibble::tribble(
   ~PARAMCD, ~PARAM, ~PARAMN,
   "DURD", "Study drug duration during constant dosing interval (days)", 1,
-  "DOSE", "Dose administered during constant dosing interval", 2,
-  "PLDOSE", "Planned dose during constant dosing interval", 3,
+  "DOSE", "Dose administered during constant dosing interval (mg)", 2,
+  "PLDOSE", "Planned dose during constant dosing interval (mg)", 3,
   "ADJ", "Dose adjusted during constant dosing interval", 4,
   "ADJAE", "Dose adjusted  due to AE during constant dosing interval", 5,
   "TDURD", "Overall duration (days)", 8,
-  "TDOSE", "Total dose administered", 9,
-  "ADOSE", "Average dose administered", 10,
-  "TPDOSE", "Total planned dose", 11,
-  "TNDOSMIS", "Total number of missed doses", 12,
+  "TDOSE", "Total dose administered (mg)", 9,
+  "ADOSE", "Average dose administered (mg)", 10,
+  "TPDOSE", "Total planned dose (mg)", 11,
   "TADJ", "Dose adjusted during study", 13,
   "TADJAE", "Dose adjusted during study due to AE", 14,
   "PDURD", "Overall duration in W2-W24 (days)", 19,
-  "PDOSE", "Total dose administered in W2-W24", 20,
-  "PPDOSE", "Total planned dose in W2-W24", 21,
-  "PADOSE", "Average dose administered in W2-W24", 22,
-  "PNDOSMIS", "Total number of missed doses in W2-W24", 23,
+  "PDOSE", "Total dose administered in W2-W2 (mg)4", 20,
+  "PPDOSE", "Total planned dose in W2-W24 (mg)", 21,
+  "PADOSE", "Average dose administered in W2-W24 (mg)", 22,
   "PADJ", "Dose adjusted during W2-W24", 24,
   "PADJAE", "Dose adjusted  in W2-W24 due to AE", 25,
-  "TDOSINT", "Overall dose intensity", 90,
-  "PDOSINT", "Overall dose intensity", 91
+  "TDOSINT", "Overall dose intensity (%)", 90,
+  "PDOSINT", "W2-24 dose intensity (%)", 91
 )
 
 
@@ -114,9 +112,9 @@ adex0 <- adsl %>%
   mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
 
 # Part 2
+
 # 1:1 mapping
-# will be appended once the derived param are available
-adex1_1 <- bind_rows(
+adex <- bind_rows(
   adex0 %>% mutate(PARAMCD = "DURD", AVAL = EXDUR),
   adex0 %>% mutate(PARAMCD = "DOSE", AVAL = EXDOSE),
   adex0 %>% mutate(PARAMCD = "PLDOSE", AVAL = EXPLDOS),
@@ -127,35 +125,37 @@ adex1_1 <- bind_rows(
 
   # Part 3
   # Derive summary parameters
+
+  # Overall exposure
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
-      params(new_param = "TDOSE", input_param = "DOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "TPDOSE", input_param = "PLDOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
-     params(new_param = "TDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
-     params(new_param = "AVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
-     params(
-       new_param = "TADJ", input_param = "ADJ",
-       fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-     ),
-     params(
-       new_param = "TADJAE", input_param = "ADJAE",
-       fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
-     )
+      params(new_param = "TDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "TPDOSE", input_param = "PLDOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "TDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
+      params(new_param = "AVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
+      params(
+        new_param = "TADJ", input_param = "ADJ",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      ),
+      params(
+        new_param = "TADJAE", input_param = "ADJAE",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      )
     ),
     by_vars = vars(USUBJID),
     set_values_to = vars(PARCAT1 = "OVERALL"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
   ) %>%
 
-  # add W2-W24 exposure
+  # W2-W24 exposure
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
-      params(new_param = "PDOSE", input_param = "DOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "PPDOSE", input_param = "PLDOSE",fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "PDURD", input_param = "DURD",fns = AVAL ~ sum(., na.rm = TRUE)),
-      params(new_param = "PAVDOSE", input_param = "DOSE",fns = AVAL ~ mean(., na.rm = TRUE)),
+      params(new_param = "PDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "PPDOSE", input_param = "PLDOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
+      params(new_param = "PDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
+      params(new_param = "PAVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
       params(
         new_param = "PADJ", input_param = "ADJ",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
@@ -169,28 +169,27 @@ adex1_1 <- bind_rows(
     by_vars = vars(USUBJID),
     set_values_to = vars(PARCAT1 = "WEEK 2-24"),
     drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
-  )
+  ) %>%
 
-#Overall Dose intensity and W2-24 dose intensity
-call_derivation(
-  derivation = derive_param_doseint,
-  variable_params = list(
-    params(new_param = "TDOSINT",tadm_code="TDOSE" ,tpadm_code="TPDOSE",
-           filter = NULL,
-           set_values_to = vars(PARCAT1 = "OVERALL")),
-    params(new_param = "PDOSINT",tadm_code="PDOSE" ,tpadm_code="PPDOSE",
-           filter = VISIT %in% c("WEEK 2", "WEEK 24"),
-           set_values_to = vars(PARCAT1 = "WEEK2-24"))
-  ),
-  by_vars = vars(STUDYID,USUBJID),
-  drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
-)%>%
-  # Part 5 Set 1:1 mapping and exposure parameters together
+  # Overall Dose intensity and W2-24 dose intensity
+  call_derivation(
+    derivation = derive_param_doseint,
+    variable_params = list(
+      params(new_param = "TDOSINT", tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
+      params(new_param = "PDOSINT", tadm_code = "PDOSE", tpadm_code = "PPDOSE")
+    ),
+    by_vars = vars(STUDYID, USUBJID, PARCAT1)
+  ) %>%
+
+
+  # Part 4
   # Derive/Assign the last required variables
-  # Add PARAMN and PARAM
+  # Add PARAMN and PARAM, AVALU
   left_join(param_lookup, by = "PARAMCD") %>%
+
   # Derive AVALCATx
   mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
+
   # Calculate ASEQ
   derive_obs_number(
     new_var = ASEQ,
@@ -207,4 +206,4 @@ call_derivation(
 
 # ---- Save output ----
 
-saveRDS(adex, file = "/PATH/TO/SAVE/ADex", compress = TRUE)
+saveRDS(adex, file = "/PATH/TO/SAVE/adex", compress = TRUE)

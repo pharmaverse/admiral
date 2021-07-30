@@ -147,7 +147,6 @@ derive_last_dose <- function(dataset,
     inner_join(dataset_ex, by = by_vars_str) %>%
     mutate_at(vars(!!dose_end, !!analysis_date),
               ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
-    group_by(!!!by_vars, !!dataset_seq_var) %>%
     mutate(
       tmp_dose_end_date = convert_dtc_to_dtm(
         dtc = !!dose_end,
@@ -158,21 +157,29 @@ derive_last_dose <- function(dataset,
         dtc = !!analysis_date,
         date_imputation = NULL,
         time_imputation = "23:59:59"
-      ))
+      )
+    ) %>%
+    group_by(!!!by_vars, !!dataset_seq_var)
 
   # if no traceability variables are required, simply calculate the last dose date
   if (is.null(traceability_vars)) {
     res <- res %>%
-      summarise(ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
-                                              analysis_date = .data$tmp_analysis_date),
-                !!new_var := .data$tmp_dose_end_date[.data$ldose_idx]) %>%
+      summarise(
+        ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
+                                      analysis_date = .data$tmp_analysis_date),
+        !!new_var := as.POSIXct(as.character(.data$tmp_dose_end_date[.data$ldose_idx]),
+                                tz = lubridate::tz(.data$tmp_dose_end_date))
+      ) %>%
       ungroup()
   } else {
     # calculate the last dose date and get the appropriate traceability variables
     res <- res %>%
-      mutate(ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
-                                           analysis_date = .data$tmp_analysis_date),
-             !!new_var := .data$tmp_dose_end_date[.data$ldose_idx]) %>%
+      mutate(
+        ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
+                                      analysis_date = .data$tmp_analysis_date),
+        !!new_var := as.POSIXct(as.character(.data$tmp_dose_end_date[.data$ldose_idx]),
+                                tz = lubridate::tz(.data$tmp_dose_end_date))
+      ) %>%
       mutate_at(trace_vars_str, list(~ .[.data$ldose_idx])) %>%
       distinct(!!new_var, !!!syms(trace_vars_str)) %>%
       ungroup()

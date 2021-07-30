@@ -85,3 +85,22 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
     keys = c("STUDYID", "USUBJID")
   )
 })
+
+test_that("derive_disposition_reason checks new_var_spe and reason_var_spe", {
+
+  expect_error(
+    derive_disposition_reason(
+      dataset = dm,
+      dataset_ds = ds,
+      new_var = DCSREAS,
+      new_var_spe = DCTREASP,
+      reason_var = DSDECOD,
+      filter_ds = DSCAT == "DISPOSITION EVENT"
+    ),
+    regexp = paste(
+      "^`new_var_spe` is specified as  .* but `reason_var_spe` is NULL.",
+      "Please specify `reason_var_spe` together with `new_var_spe`."
+    )
+  )
+
+})
