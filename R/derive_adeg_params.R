@@ -175,7 +175,7 @@ derive_param_qtcf <- function(dataset,
   filter <- assert_filter_cond(enquo(filter),
                                optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
   assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
 
@@ -263,7 +263,7 @@ derive_param_qtlc <- function(dataset,
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
   assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
 
@@ -358,7 +358,7 @@ derive_param_rr <- function(dataset,
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
+                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
   assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
 
