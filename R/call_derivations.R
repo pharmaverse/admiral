@@ -93,8 +93,10 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
 #' )
 params <- function(...) {
   args <- eval(substitute(alist(...)))
-  params <- names(args)
-  if (is.null(params) || any(params == "")) {
+  if (length(args) == 0L) {
+    abort("At least one argument must be provided")
+  }
+  if (!is_named(args)) {
     abort("All arguments passed to `params()` must be named")
   }
   structure(args, class = c("params", "list"))
