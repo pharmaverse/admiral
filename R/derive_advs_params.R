@@ -79,7 +79,7 @@ derive_param_bsa <- function(dataset,
                              weight_code = "WEIGHT",
                              by_vars,
                              unit_var = NULL,
-                             set_values_to = NULL,
+                             set_values_to = vars(PARAM = "Body Surface Area", AVALU = "m^2"),
                              drop_values_from = vars(ends_with("U"))) {
   assert_character_scalar(new_param)
   assert_character_scalar(height_code)
