@@ -21,6 +21,12 @@
 #'
 #'   Permitted Values: character value
 #'
+#' @param method Derivation method to use
+#'
+#'   The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
+#'
+#'   Permitted Values: character value
+#'
 #' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -75,6 +81,7 @@
 derive_param_bsa <- function(dataset,
                              filter = NULL,
                              new_param = "BSA",
+                             method = "Mosteller",
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              by_vars,
@@ -106,13 +113,20 @@ derive_param_bsa <- function(dataset,
   else {
     set_unit_var <- NULL
   }
+
+  if (method == "Mosteller") {
+    bsa_formula = expr(sqrt(!!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", weight_code)) / 3600))
+  }
+  else if (method == "Haycock") {
+    bsa_formula = expr(0.024265 * !!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", weight_code)))
+  }
+
   derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(height_code, weight_code),
     by_vars = by_vars,
-    analysis_value = sqrt(!!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", weight_code)) /
-                                                              3600),
+    analysis_value = !!bsa_formula,
     set_values_to = vars(PARAMCD = !!new_param,
                          !!!set_unit_var,
                          !!!set_values_to),
