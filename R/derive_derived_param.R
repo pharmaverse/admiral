@@ -199,7 +199,7 @@ derive_derived_param <- function(dataset,
   }
 
   data_parameters <- data_parameters %>%
-    select(PARAMCD, AVAL)
+    select(!!!by_vars, PARAMCD, AVAL)
 
   signal_duplicate_records(
     data_parameters,
