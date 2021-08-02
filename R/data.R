@@ -106,6 +106,15 @@
 #'
 "adsl"
 
+#' Vital Signs Analysis Dataset
+#'
+#' An example vital signs analysis dataset
+#'
+#' @source
+#' Derived from the [adsl] and [vs] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R})
+#'
+"advs"
+
 #' Queries Dataset
 #'
 #' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
