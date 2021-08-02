@@ -6,14 +6,13 @@
 \usage{
 derive_derived_param(
   dataset,
-  filter = NULL,
-  parameters,
   by_vars,
-  constant_parameters = NULL,
-  constant_by_vars = NULL,
+  parameters,
   analysis_value,
   set_values_to,
-  drop_values_from = NULL
+  filter = NULL,
+  constant_by_vars = NULL,
+  constant_parameters = NULL
 )
 }
 \arguments{
@@ -26,13 +25,12 @@ The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.}
 
-\item{filter}{Filter condition
+\item{by_vars}{Grouping variables
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
 
-\emph{Permitted Values:} a condition}
+\emph{Permitted Values:} list of variables}
 
 \item{parameters}{Required parameter codes
 
@@ -41,31 +39,6 @@ derive the new parameter are specified for this parameter or the
 \code{constant_parameters} parameter.
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
-
-\item{by_vars}{Grouping variables
-
-For each group defined by \code{by_vars} an observation is added to the output
-dataset.
-
-\emph{Permitted Values:} list of variables}
-
-\item{constant_parameters}{Required constant parameter codes
-
-It is expected that all parameter codes (\code{PARAMCD}) which are required to
-derive the new parameter are specified for this parameter or the
-\code{parameters} parameter.
-
-\emph{Permitted Values:} A character vector of \code{PARAMCD} values}
-
-\item{constant_by_vars}{By variables for constant parameters
-
-The constant parameters are merged to the other parameters using the
-specified variables. This is useful if some parameters were measured only
-once. For example if BMI should be derived and height is measured only once
-while weight is measured at each visit. Height could be specified for the
-constant parameters.
-
-\emph{Permitted Values:} list of variables}
 
 \item{analysis_value}{Definition of the analysis value
 
@@ -82,6 +55,32 @@ observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
+
+\item{filter}{Filter condition
+
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
+
+\emph{Permitted Values:} a condition}
+
+\item{constant_by_vars}{By variables for constant parameters
+
+The constant parameters are merged to the other parameters using the
+specified variables. This is useful if some parameters were measured only
+once. For example if BMI should be derived and height is measured only once
+while weight is measured at each visit. Height could be specified for the
+constant parameters.
+
+\emph{Permitted Values:} list of variables}
+
+\item{constant_parameters}{Required constant parameter codes
+
+It is expected that all parameter codes (\code{PARAMCD}) which are required to
+derive the new parameter are specified for this parameter or the
+\code{parameters} parameter.
+
+\emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
 \value{
 The input dataset with the new parameter added
@@ -103,21 +102,20 @@ code specified for \code{parameters}.
 For the new observations \code{AVAL} is set to the value specified by
 \code{analysis_value} and the variables specified for \code{set_values_to} are set to
 the provided values. The values of the other variables of the input dataset
-are retained if they are constant within each by group. Otherwise they are
-set to \code{NA}.
+are set to \code{NA}.
 }
 \examples{
 # derive MAP
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
 )
 
 derive_derived_param(
@@ -134,15 +132,15 @@ derive_derived_param(
 
 # derive BMI where height is measured only once
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
-  "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
+  "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 )
 
 derive_derived_param(
@@ -151,7 +149,7 @@ derive_derived_param(
   by_vars = vars(USUBJID, VISIT),
   constant_parameters = c("HEIGHT"),
   constant_by_vars = vars(USUBJID),
-  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100) ^ 2,
+  analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
   set_values_to = vars(
     PARAMCD = "BMI",
     PARAM = "Body Mass Index (kg/m2)",

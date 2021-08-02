@@ -81,8 +81,7 @@
 #'   For the new observations `AVAL` is set to the value specified by
 #'   `analysis_value` and the variables specified for `set_values_to` are set to
 #'   the provided values. The values of the other variables of the input dataset
-#'   are retained if they are constant within each by group. Otherwise they are
-#'   set to `NA`.
+#'   are set to `NA`.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -95,15 +94,15 @@
 #' @examples
 #' # derive MAP
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
 #' )
 #'
 #' derive_derived_param(
@@ -120,15 +119,15 @@
 #'
 #' # derive BMI where height is measured only once
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 #' )
 #'
 #' derive_derived_param(
@@ -137,7 +136,7 @@
 #'   by_vars = vars(USUBJID, VISIT),
 #'   constant_parameters = c("HEIGHT"),
 #'   constant_by_vars = vars(USUBJID),
-#'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100) ^ 2,
+#'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
 #'   set_values_to = vars(
 #'     PARAMCD = "BMI",
 #'     PARAM = "Body Mass Index (kg/m2)",
@@ -199,13 +198,8 @@ derive_derived_param <- function(dataset,
     return(dataset)
   }
 
-  keep_vars <- get_constant_vars(
-    data_parameters,
-    by_vars = by_vars,
-    ignore_vars = drop_values_from
-  )
   data_parameters <- data_parameters %>%
-    select(!!!keep_vars, PARAMCD, AVAL)
+    select(PARAMCD, AVAL)
 
   signal_duplicate_records(
     data_parameters,
