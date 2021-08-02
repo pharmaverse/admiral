@@ -120,12 +120,12 @@ advs <- tibble::tribble(
 
 derive_derived_param(
   advs,
-  parameters = c("SYSBP", "DIABP"),
   by_vars = vars(USUBJID, VISIT),
+  parameters = c("SYSBP", "DIABP"),
   analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
   set_values_to = vars(
     PARAMCD = "MAP",
-    PARAM = "Mean arterial pressure (mmHg)",
+    PARAM = "Mean Arterial Pressure (mmHg)",
     AVALU = "mmHg"
   )
 )
@@ -145,16 +145,16 @@ advs <- tibble::tribble(
 
 derive_derived_param(
   advs,
-  parameters = c("WEIGHT"),
   by_vars = vars(USUBJID, VISIT),
-  constant_parameters = c("HEIGHT"),
-  constant_by_vars = vars(USUBJID),
+  parameters = "WEIGHT",
   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
   set_values_to = vars(
     PARAMCD = "BMI",
-    PARAM = "Body Mass Index (kg/m2)",
-    AVALU = "kg/m2"
-  )
+    PARAM = "Body Mass Index (kg/m^2)",
+    AVALU = "kg/m^2"
+  ),
+  constant_parameters = c("HEIGHT"),
+  constant_by_vars = vars(USUBJID)
 )
 }
 \author{
