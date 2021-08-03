@@ -15,23 +15,6 @@ test_that("creates a new record for each group and new data frame retains groupi
   expect_equal(group_vars(actual_output), group_vars(input))
 })
 
-test_that("unique records within `by_vars` are retained, not set to <NA>", {
-  input <- tibble(
-    x = rep(1:2, each = 2),
-    y = rep_len("a", 4),
-    z = letters[1:4],
-    a = sample(1:100, 4)
-  )
-  output <- derive_summary_records(
-    input,
-    by_vars = vars(x),
-    fns = list(a ~ sum)
-  )
-
-  expect_equal(output$y, rep_len("a", 6))
-  expect_equal(output$z, c("a", "b", NA, "c", "d", NA))
-})
-
 test_that("`fns` as inlined", {
   input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = 101:104)
   actual_output <- derive_summary_records(
@@ -65,25 +48,6 @@ test_that("set new value to a derived record", {
   expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
 })
 
-test_that("drop a value from derived record", {
-  input <- tibble(x = rep(1:2, each = 2), y = 9:12, z = rep_len(1, 4))
-  actual_output <- derive_summary_records(
-    input,
-    by_vars = vars(x),
-    fns = list(y ~ mean),
-    set_values_to = vars(d = "MEAN"),
-    drop_values_from = vars(z)
-  )
-  expected_output <- tibble(
-    x = rep(1:2, each = 3),
-    y = c(9:10, 9.5, 11:12, 11.5),
-    z = c(1, 1, NA, 1, 1, NA),
-    d = c(NA, NA, "MEAN", NA, NA, "MEAN")
-  )
-
-  expect_dfs_equal(actual_output, expected_output, keys = c("x", "y", "z"))
-})
-
 test_that("check `set_values_to` mapping", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
   input <- input %>% group_by(x, y)
@@ -106,8 +70,7 @@ test_that("Filter record within `by_vars`", {
     by_vars = vars(x),
     fns = list(y ~ mean),
     filter = n() > 2,
-    set_values_to = vars(d = "MEAN"),
-    drop_values_from = vars(z)
+    set_values_to = vars(d = "MEAN")
   )
   expected_output <- tibble(
     x = c(rep(1, 2), rep(2, 4)),
