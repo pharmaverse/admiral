@@ -6,12 +6,12 @@
 \usage{
 derive_param_rr(
   dataset,
-  filter = NULL,
+  by_vars,
   new_param = "RRR",
   hr_code = "HR",
-  by_vars,
+  set_values_to = NULL,
   unit_var = NULL,
-  set_values_to = NULL
+  filter = NULL
 )
 }
 \arguments{
@@ -24,13 +24,12 @@ The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{hr_code}.}
 
-\item{filter}{Filter condition
+\item{by_vars}{Grouping variables
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
 
-\emph{Permitted Values:} a condition}
+\emph{Permitted Values:} list of variables}
 
 \item{new_param}{Parameter code to add
 
@@ -45,12 +44,13 @@ as the heart rate assessments.
 
 Permitted Values: character value}
 
-\item{by_vars}{Grouping variables
+\item{set_values_to}{Variables to be set
 
-For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
 
-\emph{Permitted Values:} list of variables}
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
@@ -59,13 +59,13 @@ set to \code{"msec"} for the new parameter.
 
 Permitted Values: A variable of the input dataset}
 
-\item{set_values_to}{Variables to be set
+\item{filter}{Filter condition
 
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values:} a condition}
 }
 \value{
 The input dataset with the new parameter added

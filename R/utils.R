@@ -256,8 +256,6 @@ filter_if <- function(dataset, filter) {
 #'
 #' @return Variable vector.
 #'
-#' @export
-#'
 #' @examples
 #'
 #' data(vs)
@@ -266,7 +264,7 @@ filter_if <- function(dataset, filter) {
 #' get_constant_vars(
 #'   vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
-#'   ignore_vars = vars(DOMAIN, starts_with("VS"))
+#'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
 #' )
 get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
