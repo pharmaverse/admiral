@@ -259,9 +259,9 @@ filter_if <- function(dataset, filter) {
 #' @examples
 #'
 #' data(vs)
-#' get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
+#' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
-#' get_constant_vars(
+#' admiral:::get_constant_vars(
 #'   vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
 #'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
