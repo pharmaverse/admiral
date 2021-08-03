@@ -2,31 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{extract_vars}
 \alias{extract_vars}
-\alias{extract_vars.list}
-\alias{extract_vars.quosure}
-\alias{extract_vars.formula}
 \title{Extract All Symbols from a List of Quosures}
 \usage{
-extract_vars(x, ...)
-
-\method{extract_vars}{list}(x, ...)
-
-\method{extract_vars}{quosure}(x, ...)
-
-\method{extract_vars}{formula}(x, side = "lhs", ...)
+extract_vars(x, side)
 }
 \arguments{
 \item{x}{An \code{R} object}
 
-\item{...}{Not used}
-
 \item{side}{One of \code{"lhs"} (the default) or \code{"rhs"}}
+
+\item{...}{Not used}
 }
 \description{
 Extract All Symbols from a List of Quosures
 }
 \examples{
-extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
+admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 }
 \author{
 Thomas Neitmann
