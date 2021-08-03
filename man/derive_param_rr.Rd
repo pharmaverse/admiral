@@ -83,7 +83,10 @@ adeg <- tibble::tribble(
 derive_param_rr(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)")
+  set_values_to = vars(
+    PARAMCD = "RRR",
+    PARAM = "RR Duration Rederived (msec)"
+  )
 )
 }
 \author{

@@ -66,7 +66,10 @@
 #' derive_param_qtcb(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "QTCBR", PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(
+#'     PARAMCD = "QTCBR",
+#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+#'   )
 #' )
 derive_param_qtcb <- function(dataset,
                               by_vars,
@@ -151,7 +154,10 @@ derive_param_qtcb <- function(dataset,
 #' derive_param_qtcf(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "QTCFR", PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(
+#'     PARAMCD = "QTCFR",
+#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"
+#'   )
 #' )
 derive_param_qtcf <- function(dataset,
                               by_vars,
@@ -236,7 +242,10 @@ derive_param_qtcf <- function(dataset,
 #' derive_param_qtlc(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "QTLCR", PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(
+#'     PARAMCD = "QTLCR",
+#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"
+#'   )
 #' )
 derive_param_qtlc <- function(dataset,
                               by_vars,
@@ -334,7 +343,10 @@ derive_param_qtlc <- function(dataset,
 #' derive_param_rr(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)")
+#'   set_values_to = vars(
+#'     PARAMCD = "RRR",
+#'     PARAM = "RR Duration Rederived (msec)"
+#'   )
 #' )
 derive_param_rr <- function(dataset,
                             by_vars,

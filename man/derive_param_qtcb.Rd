@@ -92,7 +92,10 @@ adeg <- tibble::tribble(
 derive_param_qtcb(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAMCD = "QTCBR", PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)")
+  set_values_to = vars(
+    PARAMCD = "QTCBR",
+    PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+  )
 )
 }
 \author{
