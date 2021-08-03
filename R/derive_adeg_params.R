@@ -15,12 +15,6 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
 #'
-#' @param new_param Parameter code to add
-#'
-#'   For the new observations `PARAMCD` is set to the specified value.
-#'
-#'   Permitted Values: character value
-#'
 #' @param qt_code QT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -58,66 +52,69 @@
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#' ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-#' "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
-#' "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
-#' "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
-#' "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
-#' "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
-#' "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
-#' "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
-#' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
-#' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+#'   "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
+#'   "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
+#'   "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
+#'   "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
+#'   "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
 #' derive_param_qtcb(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"))
+#'   set_values_to = vars(
+#'     PARAMCD = "QTCBR",
+#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+#'   )
+#' )
 derive_param_qtcb <- function(dataset,
-                              filter = NULL,
-                              new_param = "QTCBR",
+                              by_vars,
+                              set_values_to = vars(PARAMCD = "QTCBR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("U"))) {
-  assert_character_scalar(new_param)
+                              filter = NULL) {
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_param_does_not_exist(dataset, new_param)
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
+  )
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    assert_unit(dataset,
-                param = qt_code,
-                unit = "msec",
-                unit_var = !!unit_var)
-    assert_unit(dataset,
-                param = rr_code,
-                unit = "msec",
-                unit_var = !!unit_var)
+    assert_unit(
+      dataset,
+      param = qt_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
+    assert_unit(
+      dataset,
+      param = rr_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
     set_unit_var <- vars(!!unit_var := "msec")
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
+
   derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", qt_code)) / sqrt(!!sym(paste0("AVAL.", rr_code)) /
-                                                              1000),
-    set_values_to = vars(PARAMCD = !!new_param,
-                         !!!set_unit_var,
-                         !!!set_values_to),
-    drop_values_from = drop_values_from
+    analysis_value = !!sym(paste0("AVAL.", qt_code)) / sqrt(!!sym(paste0("AVAL.", rr_code)) / 1000),
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 
@@ -143,54 +140,59 @@ derive_param_qtcb <- function(dataset,
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#' ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-#' "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
-#' "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
-#' "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
-#' "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
-#' "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
-#' "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
-#' "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
-#' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
-#' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+#'   "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
+#'   "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
+#'   "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
+#'   "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
+#'   "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
 #' derive_param_qtcf(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"))
+#'   set_values_to = vars(
+#'     PARAMCD = "QTCFR",
+#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"
+#'   )
+#' )
 derive_param_qtcf <- function(dataset,
-                              filter = NULL,
-                              new_param = "QTCFR",
+                              by_vars,
+                              set_values_to = vars(PARAMCD = "QTCFR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("RESU"))) {
-  assert_character_scalar(new_param)
+                              filter = NULL) {
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  filter <- assert_filter_cond(enquo(filter),
-                               optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
-  assert_param_does_not_exist(dataset, new_param)
-  assert_varval_list(set_values_to, optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
+  )
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    assert_unit(dataset,
-                param = qt_code,
-                unit = "msec",
-                unit_var = !!unit_var)
-    assert_unit(dataset,
-                param = rr_code,
-                unit = "msec",
-                unit_var = !!unit_var)
+    assert_unit(
+      dataset,
+      param = qt_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
+    assert_unit(
+      dataset,
+      param = rr_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
     set_unit_var <- vars(!!unit_var := "msec")
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
 
@@ -199,14 +201,8 @@ derive_param_qtcf <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", qt_code)) / (!!sym(paste0("AVAL.", rr_code)) /
-                                                          1000) ^ (1 / 3),
-    set_values_to = vars(
-      PARAMCD = !!new_param,
-      !!!set_unit_var,
-      !!!set_values_to
-    ),
-    drop_values_from = drop_values_from
+    analysis_value = !!sym(paste0("AVAL.", qt_code)) / (!!sym(paste0("AVAL.", rr_code)) / 1000)^(1 / 3),
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 #' Adds a parameter for corrected QT using Sagie's formula
@@ -232,66 +228,70 @@ derive_param_qtcf <- function(dataset,
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#' ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-#' "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
-#' "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
-#' "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
-#' "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
-#' "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
-#' "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
-#' "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
-#' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
-#' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+#'   "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
+#'   "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
+#'   "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
+#'   "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
+#'   "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 #' )
 #' derive_param_qtlc(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"))
+#'   set_values_to = vars(
+#'     PARAMCD = "QTLCR",
+#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"
+#'   )
+#' )
 derive_param_qtlc <- function(dataset,
-                              filter = NULL,
-                              new_param = "QTLCR",
+                              by_vars,
+                              set_values_to = vars(PARAMCD = "QTLCR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("RESU"))) {
-  assert_character_scalar(new_param)
+                              filter = NULL) {
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
-  assert_param_does_not_exist(dataset, new_param)
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
+  )
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    assert_unit(dataset,
-                param = qt_code,
-                unit = "msec",
-                unit_var = !!unit_var)
-    assert_unit(dataset,
-                param = rr_code,
-                unit = "msec",
-                unit_var = !!unit_var)
+    assert_unit(
+      dataset,
+      param = qt_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
+    assert_unit(
+      dataset,
+      param = rr_code,
+      unit = "msec",
+      unit_var = !!unit_var
+    )
     set_unit_var <- vars(!!unit_var := "msec")
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
 
-  derive_derived_param(dataset,
-                       filter = !!filter,
-                       parameters = c(qt_code, rr_code),
-                       by_vars = by_vars,
-                       analysis_value = 1000 * (!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154 *
-                                                  (1 - !!sym(paste0("AVAL.", rr_code)) / 1000)),
-                       set_values_to = vars(PARAMCD = !!new_param,
-                                            !!!set_unit_var,
-                                            !!!set_values_to),
-                       drop_values_from = drop_values_from
+  derive_derived_param(
+    dataset,
+    filter = !!filter,
+    parameters = c(qt_code, rr_code),
+    by_vars = by_vars,
+    analysis_value = 1000 * (!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154 *
+      (1 - !!sym(paste0("AVAL.", rr_code)) / 1000)),
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 #' Adds a parameter for derived RR
@@ -329,58 +329,60 @@ derive_param_qtlc <- function(dataset,
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#' ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-#' "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
-#' "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
-#' "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
-#' "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
-#' "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
-#' "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
-#' "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
-#' "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
-#' "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+#'   "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2",
 #' )
 #' derive_param_rr(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "RR Duration Rederived (msec)"))
+#'   set_values_to = vars(
+#'     PARAMCD = "RRR",
+#'     PARAM = "RR Duration Rederived (msec)"
+#'   )
+#' )
 derive_param_rr <- function(dataset,
-                            filter = NULL,
-                            new_param = "RRR",
-                            hr_code = "HR",
                             by_vars,
+                            set_values_to = vars(PARAMCD = "RRR"),
+                            hr_code = "HR",
                             unit_var = NULL,
-                            set_values_to = NULL,
-                            drop_values_from = vars(starts_with("EGTEST"), contains("RES"))) {
-  assert_character_scalar(new_param)
+                            filter = NULL) {
   assert_character_scalar(hr_code)
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL, AVALU))
-  assert_param_does_not_exist(dataset, new_param)
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
+  )
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    assert_unit(dataset,
-                param = hr_code,
-                unit = "beats/min",
-                unit_var = !!unit_var)
+    assert_unit(
+      dataset,
+      param = hr_code,
+      unit = "beats/min",
+      unit_var = !!unit_var
+    )
     set_unit_var <- vars(!!unit_var := "msec")
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
 
-  derive_derived_param(dataset,
-                       filter = !!filter,
-                       parameters = c(hr_code),
-                       by_vars = by_vars,
-                       analysis_value = 60000 / !!sym(paste0("AVAL.", hr_code)),
-                       set_values_to = vars(PARAMCD = !!new_param,
-                                            !!!set_unit_var,
-                                            !!!set_values_to),
-                       drop_values_from = drop_values_from
+  derive_derived_param(
+    dataset,
+    filter = !!filter,
+    parameters = c(hr_code),
+    by_vars = by_vars,
+    analysis_value = 60000 / !!sym(paste0("AVAL.", hr_code)),
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }

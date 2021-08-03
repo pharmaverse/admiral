@@ -32,3 +32,33 @@ test_that("new observations are derived correctly", {
                    expected_output,
                    keys = c("USUBJID", "PARAMCD", "VISIT"))
 })
+
+test_that("new observations are derived correctly without unit", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~VISIT,
+    "01-701-1015", "HR",     "Heart Rate",  70.14, "BASELINE",
+    "01-701-1015", "QT",     "QT Duration", 370,   "WEEK 2",
+    "01-701-1015", "HR",     "Heart Rate",  62.66, "WEEK 1",
+    "01-701-1015", "RR",     "RR Duration", 710,   "WEEK 2",
+    "01-701-1028", "HR",     "Heart Rate",  85.45, "BASELINE",
+    "01-701-1028", "QT",     "QT Duration", 480,   "WEEK 2",
+    "01-701-1028", "QT",     "QT Duration", 350,   "WEEK 3",
+    "01-701-1028", "HR",     "Heart Rate",  56.54, "WEEK 3",
+    "01-701-1028", "RR",     "RR Duration", 842,   "WEEK 2",
+  )
+
+  new_obs <-
+    inner_join(input %>% filter(PARAMCD == "QT") %>% select(USUBJID, VISIT, AVAL),
+               input %>% filter(PARAMCD == "RR") %>% select(USUBJID, VISIT, AVAL),
+               by = c("USUBJID", "VISIT"),
+               suffix = c(".QT", ".RR")) %>%
+    mutate(AVAL = AVAL.QT / sqrt(AVAL.RR / 1000),
+           PARAMCD = "QTCBR") %>%
+    select(-AVAL.QT, -AVAL.RR)
+  expected_output <- bind_rows(input, new_obs)
+
+  expect_dfs_equal(derive_param_qtcb(input,
+                                     by_vars = vars(USUBJID, VISIT)),
+                   expected_output,
+                   keys = c("USUBJID", "PARAMCD", "VISIT"))
+})

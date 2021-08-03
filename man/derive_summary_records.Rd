@@ -9,8 +9,7 @@ derive_summary_records(
   by_vars,
   fns,
   filter_rows = NULL,
-  set_values_to = NULL,
-  drop_values_from = NULL
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -66,9 +65,6 @@ retaining.
 \code{set_values_to = vars(AVISITN = c(9998, 9999))} would change \code{AVISITN} to
 \code{9998} for \code{AVAL} and \code{AVISITN} to \code{9999} for \code{CHG}.
 }}
-
-\item{drop_values_from}{Providing the names of variables in \code{\link[=vars]{vars()}}
-will drop values and set as missing.}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -133,15 +129,6 @@ derive_summary_records(
   by_vars = vars(USUBJID, PARAM),
   fns = list(AVAL ~ max, AVAL ~ mean),
   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
-)
-
-# Drop retained value of VSSTRESU in the derived record
-derive_summary_records(
-  advs,
-  by_vars = vars(USUBJID, PARAM),
-  fns = list(AVAL ~ mean),
-  set_values_to = vars(DTYPE = "MAXIMUM"),
-  drop_values_from = vars(VSSTRESU)
 )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---

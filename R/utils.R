@@ -134,7 +134,8 @@ arg_name <- function(expr) {
 
 #' Extract All Symbols from a List of Quosures
 #'
-#' @param quosures A list of quosures, e.g. created using `vars()`
+#' @param x An `R` object
+#' @param side One of `"lhs"` (the default) or `"rhs"`
 #'
 #' @author Thomas Neitmann
 #'
@@ -142,14 +143,23 @@ arg_name <- function(expr) {
 #'
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
-extract_vars <- function(quosures) {
-  vars <- lapply(quosures, function(q) {
-    rlang::quo_set_env(
-      rlang::quo(!!as.symbol(all.vars(q))),
-      rlang::quo_get_env(q)
+extract_vars <- function(x, side = "lhs") {
+  if (is.list(x)) {
+    do.call(quo_c, map(x, extract_vars, side))
+  } else if (is_quosure(x)) {
+    env <- quo_get_env(x)
+    symbols <- syms(all.vars(quo_get_expr(x)))
+    map(symbols, ~quo_set_env(quo(!!.x), env))
+  } else  if (is_formula(x)) {
+    funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
+    assert_character_scalar(side, values = names(funs))
+    quo_set_env(
+      quo(!!funs[[side]](x)),
+      env = attr(x, ".Environment")
     )
-  })
-  structure(vars, class = "quosures")
+  } else {
+    abort()
+  }
 }
 
 #' Concatenate One or More Quosure(s)
@@ -256,17 +266,15 @@ filter_if <- function(dataset, filter) {
 #'
 #' @return Variable vector.
 #'
-#' @export
-#'
 #' @examples
 #'
 #' data(vs)
-#' get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
+#' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
-#' get_constant_vars(
+#' admiral:::get_constant_vars(
 #'   vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
-#'   ignore_vars = vars(DOMAIN, starts_with("VS"))
+#'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
 #' )
 get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
