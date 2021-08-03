@@ -11,7 +11,7 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `parameters`.
 #'
-#' @param filter_rows Filter condition
+#' @param filter Filter condition
 #'
 #'   The specified condition is applied to the input dataset before deriving the
 #'   new parameter, i.e., only observations fulfilling the condition are taken
@@ -87,7 +87,7 @@ derive_exposure_params <- function(dataset,
                                    new_param,
                                    input_param,
                                    fns,
-                                   filter_rows = NULL,
+                                   filter = NULL,
                                    set_values_to = NULL,
                                    drop_values_from = NULL) {
   assert_data_frame(dataset,
@@ -96,7 +96,7 @@ derive_exposure_params <- function(dataset,
   by_vars <- assert_vars(by_vars)
   assert_character_scalar(new_param)
   assert_character_scalar(input_param)
-  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_vars(drop_values_from, optional = TRUE)
   assert_varval_list(set_values_to, optional = TRUE)
   assert_param_does_not_exist(dataset, new_param)
@@ -104,7 +104,7 @@ derive_exposure_params <- function(dataset,
   assert_character_vector(input_param, values = params_available)
 
   subset_ds <- dataset %>%
-    filter_if(filter_rows)
+    filter_if(filter)
 
   add_data <- subset_ds %>%
     filter(PARAMCD == input_param) %>%
