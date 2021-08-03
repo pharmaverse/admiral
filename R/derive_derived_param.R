@@ -81,8 +81,7 @@
 #'   For the new observations `AVAL` is set to the value specified by
 #'   `analysis_value` and the variables specified for `set_values_to` are set to
 #'   the provided values. The values of the other variables of the input dataset
-#'   are retained if they are constant within each by group. Otherwise they are
-#'   set to `NA`.
+#'   are set to `NA`.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -95,79 +94,70 @@
 #' @examples
 #' # derive MAP
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
 #' )
 #'
 #' derive_derived_param(
 #'   advs,
-#'   parameters = c("SYSBP", "DIABP"),
 #'   by_vars = vars(USUBJID, VISIT),
+#'   parameters = c("SYSBP", "DIABP"),
 #'   analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
 #'   set_values_to = vars(
 #'     PARAMCD = "MAP",
-#'     PARAM = "Mean arterial pressure (mmHg)",
+#'     PARAM = "Mean Arterial Pressure (mmHg)",
 #'     AVALU = "mmHg"
 #'   )
 #' )
 #'
 #' # derive BMI where height is measured only once
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 #' )
 #'
 #' derive_derived_param(
 #'   advs,
-#'   parameters = c("WEIGHT"),
 #'   by_vars = vars(USUBJID, VISIT),
-#'   constant_parameters = c("HEIGHT"),
-#'   constant_by_vars = vars(USUBJID),
-#'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100) ^ 2,
+#'   parameters = "WEIGHT",
+#'   analysis_value = AVAL.WEIGHT / (AVAL.HEIGHT / 100)^2,
 #'   set_values_to = vars(
 #'     PARAMCD = "BMI",
-#'     PARAM = "Body Mass Index (kg/m2)",
-#'     AVALU = "kg/m2"
-#'   )
+#'     PARAM = "Body Mass Index (kg/m^2)",
+#'     AVALU = "kg/m^2"
+#'   ),
+#'   constant_parameters = c("HEIGHT"),
+#'   constant_by_vars = vars(USUBJID)
 #' )
 derive_derived_param <- function(dataset,
-                                 filter = NULL,
-                                 parameters,
                                  by_vars,
-                                 constant_parameters = NULL,
-                                 constant_by_vars = NULL,
+                                 parameters,
                                  analysis_value,
                                  set_values_to,
-                                 drop_values_from = NULL
-) {
-  # checking and quoting
+                                 filter = NULL,
+                                 constant_by_vars = NULL,
+                                 constant_parameters = NULL) {
   assert_vars(by_vars)
-  assert_vars(constant_by_vars,
-              optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL))
-  filter <- assert_filter_cond(enquo(filter),
-                               optional = TRUE)
+  assert_vars(constant_by_vars, optional = TRUE)
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   params_available <- unique(dataset$PARAMCD)
-  assert_character_vector(parameters,
-                          values = params_available)
-  assert_character_vector(constant_parameters,
-                          values = params_available,
-                          optional = TRUE)
+  assert_character_vector(parameters, values = params_available)
+  assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
   assert_varval_list(set_values_to)
   if (!is.null(set_values_to$PARAMCD)) {
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -208,27 +198,24 @@ derive_derived_param <- function(dataset,
     return(dataset)
   }
 
-  keep_vars <- get_constant_vars(data_parameters,
-                                 by_vars = by_vars,
-                                 ignore_vars = drop_values_from)
   data_parameters <- data_parameters %>%
-    select(!!!keep_vars, PARAMCD, AVAL)
+    select(!!!by_vars, PARAMCD, AVAL)
 
   signal_duplicate_records(
     data_parameters,
     by_vars = vars(!!!by_vars, PARAMCD),
-    msg = paste("The filtered input dataset contains duplicate records with respect to",
-                enumerate(c(vars2chr(by_vars), "PARAMCD")),
-                "\nPlease ensure that the variables specified for `by_vars` and `PARAMCD`",
-                "are a unique key of the input data set restricted by the condition",
-                "specified for `filter` and to the parameters specified for `parameters`.")
+    msg = paste(
+      "The filtered input dataset contains duplicate records with respect to",
+      enumerate(c(vars2chr(by_vars), "PARAMCD")),
+      "\nPlease ensure that the variables specified for `by_vars` and `PARAMCD`",
+      "are a unique key of the input data set restricted by the condition",
+      "specified for `filter` and to the parameters specified for `parameters`."
+    )
   )
 
   # horizontalize data, AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
   hori_data <- data_parameters %>%
-    spread(key = PARAMCD,
-           value = AVAL,
-           sep = ".")
+    spread(key = PARAMCD, value = AVAL, sep = ".")
   names(hori_data) <- map_chr(names(hori_data), str_replace, "PARAMCD.", "AVAL.")
 
   if (!is.null(constant_parameters)) {
@@ -237,9 +224,7 @@ derive_derived_param <- function(dataset,
       select(!!!vars(!!!constant_by_vars, PARAMCD, AVAL))
 
     hori_const_data <- data_const_parameters %>%
-      spread(key = PARAMCD,
-             value = AVAL,
-             sep = ".")
+      spread(key = PARAMCD, value = AVAL, sep = ".")
     names(hori_const_data) <- map_chr(names(hori_const_data), str_replace, "PARAMCD.", "AVAL.")
 
     hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
@@ -248,10 +233,11 @@ derive_derived_param <- function(dataset,
   # add analysis value (AVAL) and parameter variables, e.g., PARAMCD
   hori_data <- hori_data %>%
     # keep only observations where all analysis values are available
-    filter(!!!parse_exprs(map_chr(c(parameters, constant_parameters),
-                                  ~str_c("!is.na(AVAL.", .x, ")")))) %>%
-    mutate(AVAL = !!enquo(analysis_value),
-           !!!set_values_to) %>%
+    filter(!!!parse_exprs(map_chr(
+      c(parameters, constant_parameters),
+      ~ str_c("!is.na(AVAL.", .x, ")")
+    ))) %>%
+    mutate(AVAL = !!enquo(analysis_value), !!!set_values_to) %>%
     select(-starts_with("AVAL."))
 
   bind_rows(dataset, hori_data)
