@@ -148,14 +148,15 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' Checks if an argument is a character vector
 #'
 #' @param arg A function argument to be checked
+#' @param values A `character` vector of valid values for `arg`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
-#' @return
-#' The function throws an error if `arg` is not a character vector. Otherwise,
-#' the input is returned invisibly.
+#' @return The function throws an error if `arg` is not a character vector or if
+#' any element is not included in the list of valid values. Otherwise, the input
+#' is returned invisibly.
 #'
 #' @export
 #'
@@ -169,7 +170,7 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
 #' example_fun(letters)
 #'
 #' try(example_fun(1:10))
-assert_character_vector <- function(arg, optional = FALSE) {
+assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -183,6 +184,18 @@ assert_character_vector <- function(arg, optional = FALSE) {
       what_is_it(arg)
     )
     abort(err_msg)
+  }
+
+  assert_character_vector(values, optional = TRUE)
+  if (!is.null(values)) {
+    mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
+    if (length(mismatches) > 0) {
+      abort(paste0("`", arg_name(substitute(arg)),
+                   "` contains invalid values:\n",
+                   enumerate(mismatches), "\n",
+                   "Valid values:\n",
+                   enumerate(values)))
+    }
   }
 }
 
@@ -699,6 +712,95 @@ assert_function_param <- function(arg, params) {
   invisible(arg)
 }
 
+#' Asserts That a Parameter is Provided in the Expected Unit
+#'
+#' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
+#' unit.
+#'
+#' @param dataset A `data.frame`
+#' @param param
+#'   Parameter code of the parameter to check
+#' @param unit
+#'   Expected unit
+#'
+#' @param unit_var
+#'   Variable providing the unit
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if the unit variable differs from the
+#'   unit for any observation of the parameter in the input dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(advs)
+#' assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
+#' \dontrun{
+#' assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
+#' }
+assert_unit <- function(dataset, param, unit_var, unit) {
+  unit_var <- assert_symbol(enquo(unit_var))
+  assert_data_frame(dataset, required_vars = vars(PARAMCD, !!unit_var))
+  units <-
+    unique(filter(dataset, PARAMCD == param &
+                    !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
+  if (length(units) != 1 || units != unit) {
+    abort(
+      paste0(
+        "It is expected that ",
+        param,
+        " is measured in ",
+        unit,
+        ".\n",
+        "In the input dataset it is measured in ",
+        enumerate(units),
+        "."
+      )
+    )
+  }
+}
+
+#' Asserts That a Parameter Does not Exist in the Dataset
+#'
+#' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
+#'
+#' @param dataset A `data.frame`
+#' @param param
+#'   Parameter code to check
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if the parameter exists in the input
+#'   dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(advs)
+#' assert_param_does_not_exist(advs, param = "BSA")
+#' \dontrun{
+#' assert_param_does_not_exist(advs, param = "WEIGHT")
+#' }
+assert_param_does_not_exist <- function(dataset, param) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  if (param %in% unique(dataset$PARAMCD)) {
+    abort(
+      paste0(
+        "The parameter code ",
+        param,
+        " does already exist in `",
+        arg_name(substitute(dataset)),
+        "`."
+      )
+    )
+  }
+}
+
 #' Is Date/Date-time?
 #'
 #' Checks if a date or date-time vector was specified
@@ -963,8 +1065,8 @@ on_failure(is_valid_month) <- function(call, env) {
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of `quosures` where the expressions are
-#' variable-value pairs. The value can be a symbol, a string, or `NA`. More general
-#' expression are not allowed.
+#' variable-value pairs. The value can be a symbol, a string, a numeric, or
+#' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
@@ -993,7 +1095,7 @@ assert_varval_list <- function(arg, optional = FALSE) {
   err_msg <- sprintf(
     paste0(
       "`%s` must be a named list of quosures where each element is a symbol, ",
-      "character scalar or `NA` but it is %s\n",
+      "character scalar, numeric scalar, or `NA` but it is %s\n",
       "\u2139 To create a list of quosures use `vars()`"
     ),
     arg_name(substitute(arg)),
@@ -1004,8 +1106,28 @@ assert_varval_list <- function(arg, optional = FALSE) {
     abort(err_msg)
   } else {
     expr_list <- map(arg, quo_get_expr)
-    if (!all(map_lgl(expr_list, ~is.symbol(.x) || is.character(.x) || is.na(.x)))) {
-      abort(err_msg)
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) || is.atomic(.x) && is.na(.x)
+    )]
+    if (length(invalids) > 0) {
+      abort(
+        paste(
+          "The elements of the list",
+          arg_name(substitute(arg)),
+          "must be a symbol, a character scalar, a numeric, or `NA`.\n",
+          paste(
+            names(invalids),
+            "=",
+            map_chr(invalids, expr_label),
+            "is of type",
+            map_chr(invalids, typeof),
+            collapse = "\n"
+          )
+        )
+      )
     }
   }
 
