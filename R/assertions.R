@@ -654,6 +654,25 @@ assert_named_exprs <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+assert_list_of_formulas <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.list(arg) || !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) || !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+    err_msg <- paste(
+      backquote(arg_name(substitute(arg))),
+      "must be a list of formulas where each formula's left-hand side is a single",
+      "variable name and each right-hand side is a function, e.g. `list(AVAL ~ mean)`"
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Does a Dataset Contain All Required Variables?
 #'
 #' Checks if a dataset contains all required variables
