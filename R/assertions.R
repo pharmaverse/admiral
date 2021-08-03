@@ -1051,6 +1051,7 @@ on_failure(is_valid_month) <- function(call, env) {
 #' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
+#' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
