@@ -113,15 +113,6 @@
 #'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 #' )
 #'
-#' # Drop retained value of VSSTRESU in the derived record
-#' derive_summary_records(
-#'   advs,
-#'   by_vars = vars(USUBJID, PARAM),
-#'   fns = list(AVAL ~ mean),
-#'   set_values_to = vars(DTYPE = "MAXIMUM"),
-#'   drop_values_from = vars(VSSTRESU)
-#' )
-#'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
 #' adeg <- tibble::tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
