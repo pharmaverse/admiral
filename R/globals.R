@@ -13,6 +13,7 @@ globalVariables(c(
   "ASTDY",
   "AVAL",
   "AVALC",
+  "AVALU",
   "BASE",
   "BASEC",
   "BASETYPE",

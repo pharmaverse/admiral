@@ -1,6 +1,7 @@
 context("test-derive_query_vars")
 
 test_that("Derive CQ and SMQ variables with two term levels", {
+
   queries <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
@@ -94,7 +95,7 @@ test_that("Derive when an adverse event is in multiple baskets", {
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
-    "1", 1, "PTSI", "other", "My Query 1", NA_integer_, 1, NA_integer_,
+    "1", 1, "PTSI", "other", "My Query 1", NA_character_, 1, NA_integer_,
     "1", 2, "something", "LLTSI", NA_character_, "My Query 2", NA_integer_, 2,
     "1", 2, "PTSI", "LLTSI", "My Query 1", "My Query 2", 1, 2,
     "1", 2, "something", "other", NA_character_, NA_character_, NA_integer_, NA_integer_
@@ -160,4 +161,100 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
   )
 
   expect_equal(expected_output, actual_output)
+
+  expect_error(
+    derive_query_vars(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
+    regexp = ".* is of type logical, numeric or character is required"
+  )
+
+})
+
+
+test_that("assert_valid_queries checks VAR_PREFIX values", {
+
+  query <- tibble::tribble(
+    ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
+    "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
+    "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, VAR_PREFIX = c("30", "55")),
+      "test"
+    ),
+    regexp = "`VAR_PREFIX` in `test` must start with 2-3 letters.. Problem with `30` and `55`."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, VAR_PREFIX = c("AA", "BB")),
+      "test"
+    ),
+    regexp = "`VAR_PREFIX` in `test` must end with 2-digit numbers. Issue with `AA` and `BB`."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, QUERY_NAME = c("", "A")),
+      "test"
+    ),
+    regexp = "`QUERY_NAME` in `test` cannot be empty string or NA."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, QUERY_ID = as.character(QUERY_ID)),
+      "test"
+    ),
+    regexp = "`QUERY_ID` in `test` should be numeric."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, QUERY_SCOPE = letters[1:2]),
+      "test"
+    ),
+    regexp = "`QUERY_SCOPE` in `test` can only be 'BROAD', 'NARROW' or `NA`."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, QUERY_SCOPE_NUM = 10:11),
+      "test"
+    ),
+    regexp = "`QUERY_SCOPE_NUM` in `test` must be one of 1, 2, or NA. Issue with `10` and `11`."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, TERM_NAME = c(NA, NA)),
+      "test"
+    ),
+    regexp = paste(
+      "Either `TERM_NAME` or `TERM_ID` need to be specified in `test`.",
+      "They both cannot be NA or empty."
+    )
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(query, VAR_PREFIX = c("CQ40", "CQ40")),
+      "test"
+    ),
+    regexp = "In `test`, `QUERY_NAME` of 'CQ40' is not unique."
+  )
+
+  expect_error(
+    assert_valid_queries(
+      mutate(
+        query,
+        VAR_PREFIX = c("CQ40", "CQ40"),
+        QUERY_NAME = c("My Query 1", "My Query 1")
+      ),
+      "test"
+    ),
+    regexp = "In `test`, `QUERY_ID` of 'CQ40' is not unique."
+  )
+
 })

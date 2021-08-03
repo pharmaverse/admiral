@@ -4,7 +4,6 @@ library(dplyr)
 test_that("creates a new record for each group and new data frame retains grouping", {
   # group --> 4
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
-  input <- input %>% group_by(x)
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
@@ -50,13 +49,12 @@ test_that("set new value to a derived record", {
 
 test_that("check `set_values_to` mapping", {
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
-  input <- input %>% group_by(x, y)
-  actual_output <- derive_summary_records(
-    input,
-    by_vars = vars(x, y),
-    fns = list(z ~ mean, z ~ sum),
-    set_values_to = vars(d = c("MEAN", "SUM"))
-  )
+  actual_output <- input %>%
+    derive_summary_records(
+      by_vars = vars(x, y),
+      fns = list(z ~ mean, z ~ sum),
+      set_values_to = vars(d = c("MEAN", "SUM"))
+    )
   tf <- rep(c(rep_len(NA, 4), "MEAN", "SUM"), 4)
 
   expect_equal(actual_output$d, tf)
@@ -86,8 +84,7 @@ test_that("Filter record within `by_vars`", {
     by_vars = vars(x),
     fns = list(y ~ mean),
     filter = z == 1,
-    set_values_to = vars(d = "MEAN"),
-    drop_values_from = vars(z)
+    set_values_to = vars(d = "MEAN")
   )
   expected_output <- tibble(
     x = c(rep(1, 3), rep(2, 4)),

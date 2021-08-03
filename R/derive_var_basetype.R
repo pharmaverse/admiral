@@ -59,7 +59,8 @@ derive_var_basetype <- function(dataset, basetypes) {
   }) %>%
     bind_rows()
 
-  records_without_basetype <- anti_join(dataset, records_with_basetype, by = colnames(dataset))
+  complementary_condition <- Reduce(function(x, y) bquote(.(x) | .(y)), basetypes)
+  records_without_basetype <- filter(dataset, !(!!complementary_condition))
 
   bind_rows(records_without_basetype, records_with_basetype)
 }

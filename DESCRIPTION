@@ -24,7 +24,6 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    readxl,
     rlang,
     stringr,
     tidyr,

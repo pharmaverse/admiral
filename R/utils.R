@@ -258,3 +258,11 @@ filter_if <- function(dataset, filter) {
     filter(dataset, !!filter)
   }
 }
+
+`%or%` <- function(lhs, rhs) {
+  tryCatch(lhs, error = function(e) rhs)
+}
+
+is_named <- function(x) {
+  !is.null(names(x)) && all(names(x) != "")
+}
