@@ -144,7 +144,7 @@ arg_name <- function(expr) {
 #'
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
-extract_vars <- function(x, side) {
+extract_vars <- function(x, side = "lhs") {
   if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
