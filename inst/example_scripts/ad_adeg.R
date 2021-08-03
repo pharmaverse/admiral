@@ -17,7 +17,7 @@ devtools::load_all()
 # Read in Data
 data("adsl")
 # The CDISC Pilot Data contains no EG data
-### Fake EG
+### Fake EG from VS
 data("eg")
 
 # Assign PARAMCD, PARAM, and PARAMN
@@ -75,8 +75,7 @@ adeg <- adsl %>%
     filter = EGSTAT != "NOT DONE",
     new_param = "RRR",
     hr_code = "HR",
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    drop_values_from = vars(EGSEQ, EGBLFL, ends_with("RESU"))
+    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM)
   ) %>%
   derive_param_qtcb(
     filter = EGSTAT != "NOT DONE",
