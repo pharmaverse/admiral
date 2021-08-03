@@ -12,8 +12,7 @@ derive_param_qtlc(
   rr_code = "RR",
   by_vars,
   unit_var = NULL,
-  set_values_to = NULL,
-  drop_values_from = vars(ends_with("RESU"))
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -104,7 +103,8 @@ adeg <- tibble::tribble(
 derive_param_qtlc(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"))
+  set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)")
+)
 }
 \author{
 Stefan Bundfuss

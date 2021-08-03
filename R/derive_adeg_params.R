@@ -81,8 +81,7 @@ derive_param_qtcb <- function(dataset,
                               rr_code = "RR",
                               by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("U"))) {
+                              set_values_to = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -124,8 +123,7 @@ derive_param_qtcb <- function(dataset,
       PARAMCD = !!new_param,
       !!!set_unit_var,
       !!!set_values_to
-    ),
-    drop_values_from = drop_values_from
+    )
   )
 }
 
@@ -174,8 +172,7 @@ derive_param_qtcf <- function(dataset,
                               rr_code = "RR",
                               by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("RESU"))) {
+                              set_values_to = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -217,8 +214,7 @@ derive_param_qtcf <- function(dataset,
       PARAMCD = !!new_param,
       !!!set_unit_var,
       !!!set_values_to
-    ),
-    drop_values_from = drop_values_from
+    )
   )
 }
 #' Adds a parameter for corrected QT using Sagie's formula
@@ -267,8 +263,7 @@ derive_param_qtlc <- function(dataset,
                               rr_code = "RR",
                               by_vars,
                               unit_var = NULL,
-                              set_values_to = NULL,
-                              drop_values_from = vars(ends_with("RESU"))) {
+                              set_values_to = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -311,8 +306,7 @@ derive_param_qtlc <- function(dataset,
       PARAMCD = !!new_param,
       !!!set_unit_var,
       !!!set_values_to
-    ),
-    drop_values_from = drop_values_from
+    )
   )
 }
 #' Adds a parameter for derived RR
@@ -372,8 +366,7 @@ derive_param_rr <- function(dataset,
                             hr_code = "HR",
                             by_vars,
                             unit_var = NULL,
-                            set_values_to = NULL,
-                            drop_values_from = vars(starts_with("EGTEST"), contains("RES"))) {
+                            set_values_to = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(hr_code)
   assert_vars(by_vars)
@@ -408,7 +401,6 @@ derive_param_rr <- function(dataset,
       PARAMCD = !!new_param,
       !!!set_unit_var,
       !!!set_values_to
-    ),
-    drop_values_from = drop_values_from
+    )
   )
 }

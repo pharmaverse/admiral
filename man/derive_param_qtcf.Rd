@@ -12,8 +12,7 @@ derive_param_qtcf(
   rr_code = "RR",
   by_vars,
   unit_var = NULL,
-  set_values_to = NULL,
-  drop_values_from = vars(ends_with("RESU"))
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -100,7 +99,8 @@ adeg <- tibble::tribble(
 derive_param_qtcf(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"))
+  set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
+)
 }
 \author{
 Stefan Bundfuss
