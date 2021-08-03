@@ -7,9 +7,8 @@
 derive_param_rr(
   dataset,
   by_vars,
-  new_param = "RRR",
+  set_values_to = vars(PARAMCD = "RRR"),
   hr_code = "HR",
-  set_values_to = NULL,
   unit_var = NULL,
   filter = NULL
 )
@@ -31,19 +30,6 @@ dataset.
 
 \emph{Permitted Values:} list of variables}
 
-\item{new_param}{Parameter code to add
-
-For the new observations \code{PARAMCD} is set to the specified value.
-
-Permitted Values: character value}
-
-\item{hr_code}{HR parameter code
-
-The observations where \code{PARAMCD} equals the specified value are considered
-as the heart rate assessments.
-
-Permitted Values: character value}
-
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -51,6 +37,13 @@ observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
+
+\item{hr_code}{HR parameter code
+
+The observations where \code{PARAMCD} equals the specified value are considered
+as the heart rate assessments.
+
+Permitted Values: character value}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
@@ -90,7 +83,7 @@ adeg <- tibble::tribble(
 derive_param_rr(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAM = "RR Duration Rederived (msec)")
+  set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)")
 )
 }
 \author{

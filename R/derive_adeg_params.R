@@ -15,12 +15,6 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
 #'
-#' @param new_param Parameter code to add
-#'
-#'   For the new observations `PARAMCD` is set to the specified value.
-#'
-#'   Permitted Values: character value
-#'
 #' @param qt_code QT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -72,17 +66,15 @@
 #' derive_param_qtcb(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(PARAMCD = "QTCBR", PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtcb <- function(dataset,
                               by_vars,
-                              new_param = "QTCBR",
+                              set_values_to = vars(PARAMCD = "QTCBR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              set_values_to = NULL,
                               unit_var = NULL,
                               filter = NULL) {
-  assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
@@ -92,8 +84,8 @@ derive_param_qtcb <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     assert_unit(
@@ -119,11 +111,7 @@ derive_param_qtcb <- function(dataset,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
     analysis_value = !!sym(paste0("AVAL.", qt_code)) / sqrt(!!sym(paste0("AVAL.", rr_code)) / 1000),
-    set_values_to = vars(
-      PARAMCD = !!new_param,
-      !!!set_unit_var,
-      !!!set_values_to
-    )
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 
@@ -163,17 +151,15 @@ derive_param_qtcb <- function(dataset,
 #' derive_param_qtcf(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(PARAMCD = "QTCFR", PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtcf <- function(dataset,
                               by_vars,
-                              new_param = "QTCFR",
+                              set_values_to = vars(PARAMCD = "QTCFR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              set_values_to = NULL,
                               unit_var = NULL,
                               filter = NULL) {
-  assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
@@ -183,8 +169,8 @@ derive_param_qtcf <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     assert_unit(
@@ -210,11 +196,7 @@ derive_param_qtcf <- function(dataset,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
     analysis_value = !!sym(paste0("AVAL.", qt_code)) / (!!sym(paste0("AVAL.", rr_code)) / 1000)^(1 / 3),
-    set_values_to = vars(
-      PARAMCD = !!new_param,
-      !!!set_unit_var,
-      !!!set_values_to
-    )
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 #' Adds a parameter for corrected QT using Sagie's formula
@@ -254,17 +236,15 @@ derive_param_qtcf <- function(dataset,
 #' derive_param_qtlc(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)")
+#'   set_values_to = vars(PARAMCD = "QTLCR", PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtlc <- function(dataset,
                               by_vars,
-                              new_param = "QTLCR",
+                              set_values_to = vars(PARAMCD = "QTLCR"),
                               qt_code = "QT",
                               rr_code = "RR",
-                              set_values_to = NULL,
                               unit_var = NULL,
                               filter = NULL) {
-  assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   assert_vars(by_vars)
@@ -274,8 +254,8 @@ derive_param_qtlc <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     assert_unit(
@@ -302,11 +282,7 @@ derive_param_qtlc <- function(dataset,
     by_vars = by_vars,
     analysis_value = 1000 * (!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154 *
       (1 - !!sym(paste0("AVAL.", rr_code)) / 1000)),
-    set_values_to = vars(
-      PARAMCD = !!new_param,
-      !!!set_unit_var,
-      !!!set_values_to
-    )
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 #' Adds a parameter for derived RR
@@ -358,16 +334,14 @@ derive_param_qtlc <- function(dataset,
 #' derive_param_rr(
 #'   adeg,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "RR Duration Rederived (msec)")
+#'   set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)")
 #' )
 derive_param_rr <- function(dataset,
                             by_vars,
-                            new_param = "RRR",
+                            set_values_to = vars(PARAMCD = "RRR"),
                             hr_code = "HR",
-                            set_values_to = NULL,
                             unit_var = NULL,
                             filter = NULL) {
-  assert_character_scalar(new_param)
   assert_character_scalar(hr_code)
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
@@ -376,8 +350,8 @@ derive_param_rr <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     assert_unit(
@@ -397,10 +371,6 @@ derive_param_rr <- function(dataset,
     parameters = c(hr_code),
     by_vars = by_vars,
     analysis_value = 60000 / !!sym(paste0("AVAL.", hr_code)),
-    set_values_to = vars(
-      PARAMCD = !!new_param,
-      !!!set_unit_var,
-      !!!set_values_to
-    )
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }

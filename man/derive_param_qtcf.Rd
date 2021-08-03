@@ -7,10 +7,9 @@
 derive_param_qtcf(
   dataset,
   by_vars,
-  new_param = "QTCFR",
+  set_values_to = vars(PARAMCD = "QTCFR"),
   qt_code = "QT",
   rr_code = "RR",
-  set_values_to = NULL,
   unit_var = NULL,
   filter = NULL
 )
@@ -29,11 +28,13 @@ parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 
 Permitted Values: list of variables}
 
-\item{new_param}{Parameter code to add
+\item{set_values_to}{Variables to be set
 
-For the new observations \code{PARAMCD} is set to the specified value.
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
 
-Permitted Values: character value}
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{qt_code}{QT parameter code
 
@@ -48,14 +49,6 @@ The observations where \code{PARAMCD} equals the specified value are considered
 as the RR interval assessments. It is expected that RR is measured in msec.
 
 Permitted Values: character value}
-
-\item{set_values_to}{Variables to be set
-
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
-
-\emph{Permitted Values:} List of variable-value pairs}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
@@ -99,7 +92,7 @@ adeg <- tibble::tribble(
 derive_param_qtcf(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
+  set_values_to = vars(PARAMCD = "QTCFR", PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
 )
 }
 \author{
