@@ -75,13 +75,13 @@
 #'   set_values_to = vars(PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtcb <- function(dataset,
-                              filter = NULL,
+                              by_vars,
                               new_param = "QTCBR",
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
+                              set_values_to = NULL,
                               unit_var = NULL,
-                              set_values_to = NULL) {
+                              filter = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -166,13 +166,13 @@ derive_param_qtcb <- function(dataset,
 #'   set_values_to = vars(PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtcf <- function(dataset,
-                              filter = NULL,
+                              by_vars,
                               new_param = "QTCFR",
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
+                              set_values_to = NULL,
                               unit_var = NULL,
-                              set_values_to = NULL) {
+                              filter = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -257,13 +257,13 @@ derive_param_qtcf <- function(dataset,
 #'   set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)")
 #' )
 derive_param_qtlc <- function(dataset,
-                              filter = NULL,
+                              by_vars,
                               new_param = "QTLCR",
                               qt_code = "QT",
                               rr_code = "RR",
-                              by_vars,
+                              set_values_to = NULL,
                               unit_var = NULL,
-                              set_values_to = NULL) {
+                              filter = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
@@ -361,12 +361,12 @@ derive_param_qtlc <- function(dataset,
 #'   set_values_to = vars(PARAM = "RR Duration Rederived (msec)")
 #' )
 derive_param_rr <- function(dataset,
-                            filter = NULL,
+                            by_vars,
                             new_param = "RRR",
                             hr_code = "HR",
-                            by_vars,
+                            set_values_to = NULL,
                             unit_var = NULL,
-                            set_values_to = NULL) {
+                            filter = NULL) {
   assert_character_scalar(new_param)
   assert_character_scalar(hr_code)
   assert_vars(by_vars)
