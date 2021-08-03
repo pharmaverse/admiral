@@ -48,6 +48,14 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
+  if (dplyr::is_grouped_df(arg)) {
+    err_msg <- sprintf(
+      "`%s` is a grouped data frame, please `ungroup()` it first",
+      arg_name(substitute(arg))
+    )
+    abort(err_msg)
+  }
+
   if (!is.null(required_vars)) {
     required_vars <- vars2chr(required_vars)
     is_missing <- !required_vars %in% colnames(arg)
@@ -522,6 +530,111 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+#' Is an Argument an Object of a Specific S3 Class?
+#'
+#' Checks if an argument is an object inheriting from the S3 class specified.
+#' @param arg A function argument to be checked
+#' @param class The S3 class to check for
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is an object which does *not* inherit from `class`
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(obj) {
+#'   assert_s3_class(obj, "factor")
+#' }
+#'
+#' example_fun(as.factor(letters))
+#'
+#' try(example_fun(letters))
+#'
+#' try(example_fun(1:10))
+assert_s3_class <- function(arg, class, optional = TRUE) {
+  assert_character_scalar(class)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  if (!inherits(arg, class)) {
+    err_msg <- sprintf(
+      "`%s` must be an object of class '%s' but is %s",
+      arg_name(substitute(arg)),
+      class,
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+#' Is an Argument a List of Objects of a Specific S3 Class?
+#'
+#' Checks if an argument is a `list` of objects inheriting from the S3 class specified.
+#'
+#' @param arg A function argument to be checked
+#' @param class The S3 class to check for
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#'   is `NULL` then an error is thrown
+#'
+#' @author Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a list or if `arg` is a list but its
+#' elements are not objects inheriting from `class`
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(list) {
+#'   assert_list_of(list, "data.frame")
+#' }
+#'
+#' example_fun(list(mtcars, iris))
+#'
+#' try(example_fun(list(letters, 1:10)))
+#'
+#' try(example_fun(c(TRUE, FALSE)))
+assert_list_of <- function(arg, class, optional = TRUE) {
+  assert_character_scalar(class)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  assert_s3_class(arg, "list")
+
+  is_class <- map_lgl(arg, inherits, class)
+  if (!all(is_class)) {
+    info_msg <- paste(
+      sprintf("\u2716 Element %s is %s", which(!is_class), map_chr(arg[!is_class], what_is_it)),
+      collapse = "\n"
+    )
+    err_msg <- sprintf(
+      "Each element of `%s` must be an object of class '%s' but the following are not:\n%s",
+      arg_name(substitute(arg)),
+      class,
+      info_msg
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 assert_named_exprs <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -583,7 +696,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' Asserts That a Parameter is Provided in the Expected Unit
 #'
 #' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
-#' unit. The unit is expected in the `AVALU` variable.
+#' unit.
 #'
 #' @param dataset A `data.frame`
 #' @param param
@@ -630,6 +743,45 @@ assert_unit <- function(dataset, param, unit_var, unit) {
     )
   }
 }
+
+#' Asserts That a Parameter Does not Exist in the Dataset
+#'
+#' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
+#'
+#' @param dataset A `data.frame`
+#' @param param
+#'   Parameter code to check
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if the parameter exists in the input
+#'   dataset
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' data(advs)
+#' assert_param_does_not_exist(advs, param = "BSA")
+#' \dontrun{
+#' assert_param_does_not_exist(advs, param = "WEIGHT")
+#' }
+assert_param_does_not_exist <- function(dataset, param) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  if (param %in% unique(dataset$PARAMCD)) {
+    abort(
+      paste0(
+        "The parameter code ",
+        param,
+        " does already exist in `",
+        arg_name(substitute(dataset)),
+        "`."
+      )
+    )
+  }
+}
+
 
 #' Is Date/Date-time?
 #'
@@ -892,43 +1044,76 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-#' Is Variable-Value List?
+#' Is an Argument a Variable-Value List?
 #'
-#' Checks if the argument is a list of quosures where the expressions are
-#' variable-value pairs. The value can be a symbol, a string, or NA. More general
-#' expression are not allowed.
+#' Checks if the argument is a list of `quosures` where the expressions are
+#' variable-value pairs. The value can be a symbol, a string, a numeric, or
+#' `NA`. More general expression are not allowed.
 #'
-#' @param arg The argument to check
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown.
 #'
-#' @author Stefan Bundfuss
+#' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @return `TRUE` if the argument is a variable-value list, `FALSE` otherwise
-#'
-#' @keywords check
+#' @keywords assertion
 #'
 #' @export
 #'
 #' @examples
-#' assertthat::assert_that(is_varval_list(vars(DTHDOM = "AE", DTHSEQ = AESEQ)))
-is_varval_list <- function(arg) {
-  if (inherits(arg, "quosures") && all(names(arg) != "")) {
-    expr_list <- map(arg, quo_get_expr)
-    all(map_lgl(expr_list, function(arg) is.symbol(arg) || is.character(arg) || is.na(arg)))
+#' example_fun <- function(vars) {
+#'   assert_varval_list(vars)
+#' }
+#' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
+#'
+#' try(example_fun(vars("AE", DTSEQ = AESEQ)))
+assert_varval_list <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
   }
-  else {
-    FALSE
-  }
-}
-on_failure(is_varval_list) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " is not a variable-value pairs list.\n",
-    "A named list of quosures is expected where the expression is ",
-    "a symbol, a character, or `NA`.\n",
-    "The following was supplied:\n",
-    paste(capture.output(print(eval(call$arg, envir = env))), collapse = "\n")
+
+  err_msg <- sprintf(
+    paste0(
+      "`%s` must be a named list of quosures where each element is a symbol, ",
+      "character scalar, numeric scalar, or `NA` but it is %s\n",
+      "\u2139 To create a list of quosures use `vars()`"
+    ),
+    arg_name(substitute(arg)),
+    what_is_it(arg)
   )
+
+  if (!is_quosures(arg) || !is_named(arg)) {
+    abort(err_msg)
+  } else {
+    expr_list <- map(arg, quo_get_expr)
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) || is.atomic(.x) && is.na(.x)
+    )]
+    if (length(invalids) > 0) {
+      abort(
+        paste(
+          "The elements of the list",
+          arg_name(substitute(arg)),
+          "must be a symbol, a character scalar, a numeric, or `NA`.\n",
+          paste(
+            names(invalids),
+            "=",
+            map_chr(invalids, expr_label),
+            "is of type",
+            map_chr(invalids, typeof),
+            collapse = "\n"
+          )
+        )
+      )
+    }
+  }
+
+  invisible(arg)
 }
 
 is_vars <- function(arg) {
