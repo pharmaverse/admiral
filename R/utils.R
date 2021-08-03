@@ -136,7 +136,6 @@ arg_name <- function(expr) {
 #'
 #' @param x An `R` object
 #' @param side One of `"lhs"` (the default) or `"rhs"`
-#' @param ... Not used
 #'
 #' @author Thomas Neitmann
 #'
