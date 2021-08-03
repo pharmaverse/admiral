@@ -55,8 +55,6 @@
 #'   + Multiple analysis variables in `fns = list(vars(AVAL, CHG) ~ mean)` and
 #'   `set_values_to = vars(AVISITN = c(9998, 9999))` would change `AVISITN` to
 #'   `9998` for `AVAL` and `AVISITN` to `9999` for `CHG`.
-#' @param drop_values_from Providing the names of variables in [vars()]
-#'   will drop values and set as missing.
 #'
 #' @author Vignesh Thanikachalam
 #'
@@ -155,18 +153,16 @@ derive_summary_records <- function(dataset,
                                    by_vars,
                                    fns,
                                    filter_rows = NULL,
-                                   set_values_to = NULL,
-                                   drop_values_from = NULL) {
+                                   set_values_to = NULL) {
   assert_vars(by_vars)
-  assert_vars(drop_values_from, optional = TRUE)
   assert_list_of_formulas(fns)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, drop_values_from, extract_vars(fns))
+    required_vars = quo_c(by_vars, extract_vars(fns))
   )
+  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
 
   by_vars <- vars2chr(by_vars)
-  drop_values_from <- vars2chr(drop_values_from)
 
   # Manipulate functions as direct call for each analysis variable
   # Returns: A list of function call with attributes "variable" and "stats"
@@ -175,12 +171,6 @@ derive_summary_records <- function(dataset,
   # Get input analysis variable
   summarise_vars <- map_chr(funs, attr, "variable")
 
-  # Get variable values that are constant across the grouped records,
-  # that do not change
-  keep_vars <- setdiff(
-    names(dataset),
-    union(drop_values_from(dataset, by_vars), drop_values_from)
-  )
   # For mutate input
   set_values <- NULL
 
@@ -201,7 +191,7 @@ derive_summary_records <- function(dataset,
     )
   }
 
-  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
+
 
   if (!quo_is_null(filter_rows)) {
     subset_ds <- dataset %>%
@@ -219,8 +209,7 @@ derive_summary_records <- function(dataset,
         # Get unique values by grouping variable and do a left join with
         # summarised data
         subset_ds %>%
-          distinct(!!! syms(by_vars), .keep_all = TRUE) %>%
-          select(!!! syms(keep_vars)) %>%
+          distinct(!!! syms(by_vars)) %>%
           left_join(
             subset_ds %>%
               group_by(!!! syms(by_vars)) %>%
@@ -230,8 +219,7 @@ derive_summary_records <- function(dataset,
           )
       }
     )) %>%
-    bind_rows(dataset, .) %>%
-    arrange(!!! syms(by_vars))
+    bind_rows(dataset, .)
 
   summary_data
 }
@@ -372,36 +360,4 @@ manip_fun <- function(fns, .env) {
   fn_vars <- get_fun_vars(fns)
   fn_list <- as_fun_list(fns, .env = .env)
   as_call_list(fn_list, fn_vars)
-}
-
-#' Utility to find variable that have constant values across grouped variables
-#'
-#' `drop_values_from` help [derive_summary_records] to find all variable values that
-#' are constant across the original records, that do not change.
-#'
-#' @param dataset A data frame.
-#' @param group_vars Variables to group across records.
-#'
-#' @family row summary
-#'
-#' @return Variable vector.
-#'
-#' @noRd
-drop_values_from <- function(dataset, group_vars) {
-  non_group_vars <- setdiff(names(dataset), group_vars)
-
-  # Get unique values within each group by variables
-  unique_count <- dataset %>%
-    group_by(!!! syms(group_vars)) %>%
-    summarise_at(vars(!! non_group_vars), n_distinct) %>%
-    ungroup() %>%
-    select(!!! syms(non_group_vars))
-
-  # If unique values > 1, should be dropped; else retain
-  lgl_vars <- unique_count %>%
-    map_lgl(~ all(!.x > 1)) %>%
-    which() %>%
-    names()
-
-  setdiff(non_group_vars, lgl_vars)
 }
