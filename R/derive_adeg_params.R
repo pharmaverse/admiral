@@ -84,7 +84,7 @@ derive_param_qtcb <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
@@ -169,7 +169,7 @@ derive_param_qtcf <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
@@ -254,7 +254,7 @@ derive_param_qtlc <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
@@ -350,7 +350,7 @@ derive_param_rr <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
   )
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {

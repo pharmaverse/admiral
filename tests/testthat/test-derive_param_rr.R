@@ -18,18 +18,24 @@ test_that("new observations are derived correctly", {
   new_obs <- input %>%
     filter(PARAMCD == "HR") %>%
     select(USUBJID, VISIT, AVAL) %>%
-    mutate(AVAL = 60000 / AVAL,
-           PARAMCD = "RRR",
-           PARAM = "RR Duration Rederived (msec)",
-           AVALU = "msec")
+    mutate(
+      AVAL = 60000 / AVAL,
+      PARAMCD = "RRR",
+      PARAM = "RR Duration Rederived (msec)",
+      AVALU = "msec"
+    )
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(derive_param_rr(input,
-                                   by_vars = vars(USUBJID, VISIT),
-                                   unit_var = AVALU,
-                                   set_values_to = vars(PARAM = "RR Duration Rederived (msec)")),
-                   expected_output,
-                   keys = c("USUBJID", "PARAMCD", "VISIT"))
+  expect_dfs_equal(
+    derive_param_rr(
+      input,
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)"),
+      unit_var = AVALU
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
 })
 
 test_that("new observations are derived correctly without unit", {
@@ -44,14 +50,20 @@ test_that("new observations are derived correctly without unit", {
   new_obs <- input %>%
     filter(PARAMCD == "HR") %>%
     select(USUBJID, VISIT, AVAL) %>%
-    mutate(AVAL = 60000 / AVAL,
-           PARAMCD = "RRR",
-           PARAM = "RR Duration Rederived (msec)")
+    mutate(
+      AVAL = 60000 / AVAL,
+      PARAMCD = "RRR",
+      PARAM = "RR Duration Rederived (msec)"
+    )
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(derive_param_rr(input,
-                                   by_vars = vars(USUBJID, VISIT),
-                                   set_values_to = vars(PARAM = "RR Duration Rederived (msec)")),
-                   expected_output,
-                   keys = c("USUBJID", "PARAMCD", "VISIT"))
+  expect_dfs_equal(
+    derive_param_rr(
+      input,
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = vars(PARAMCD = "RRR", PARAM = "RR Duration Rederived (msec)")
+    ),
+    expected_output,
+    keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
 })
