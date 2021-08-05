@@ -115,14 +115,25 @@ derive_param_bsa <- function(dataset,
   }
 
   if (method == "Mosteller") {
-    bsa_formula = expr(sqrt(!!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", weight_code)) / 3600))
+    bsa_formula = expr(sqrt(!!sym(paste0("AVAL.", height_code)) *
+                              !!sym(paste0("AVAL.", weight_code)) / 3600))
   }
   else if (method == "DuBois-DuBois") {
     # Note: the DuBois & DuBois formula expects the value of height in meters; we need to convert from cm.
-    bsa_formula = expr(0.20247 * (!!sym(paste0("AVAL.", height_code)) /100) ^ 0.725 * (!!sym(paste0("AVAL.", weight_code))) ^ 0.425)
+    bsa_formula = expr(0.20247 * (!!sym(paste0("AVAL.", height_code)) /100) ^ 0.725 *
+                                   (!!sym(paste0("AVAL.", weight_code))) ^ 0.425)
   }
   else if (method == "Haycock") {
-    bsa_formula = expr(0.024265 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3964 * (!!sym(paste0("AVAL.", weight_code))) ^ 0.5378)
+    bsa_formula = expr(0.024265 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3964 *
+                                    (!!sym(paste0("AVAL.", weight_code))) ^ 0.5378)
+  }
+  else if (method == "Gehan-George") {
+    bsa_formula = expr(0.0235 * (!!sym(paste0("AVAL.", height_code))) ^ 0.42246 *
+                                  (!!sym(paste0("AVAL.", weight_code))) ^ 0.51456)
+  }
+  else if (method == "Boyd") {
+    bsa_formula = expr(0.0003207 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3 *
+                                     (1000 * !!sym(paste0("AVAL.", weight_code))) ^ (0.7285 - (0.0188 * log10(1000 * !!sym(paste0("AVAL.", weight_code))))))
   }
 
   derive_derived_param(
