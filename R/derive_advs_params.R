@@ -15,12 +15,6 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `HEIGHT` and `WEIGHT`.
 #'
-#' @param new_param Parameter code to add
-#'
-#'   For the new observations `PARAMCD` is set to the specified value.
-#'
-#'   Permitted Values: character value
-#'
 #' @param method Derivation method to use
 #'
 #'   The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
@@ -79,25 +73,26 @@
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAM = "Body Surface Area"))
 derive_param_bsa <- function(dataset,
-                             filter = NULL,
-                             new_param = "BSA",
+                             by_vars,
+                             set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
                              method = "Mosteller",
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
-                             by_vars,
                              unit_var = NULL,
-                             set_values_to = vars(PARAM = "Body Surface Area", AVALU = "m^2"),
-                             drop_values_from = vars(ends_with("U"))) {
-  assert_character_scalar(new_param)
+                             filter = NULL) {
+
+  #assert_character_scalar(set_values_to)
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
+  assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
+                                             "Gehan-George", "Boyd"))
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
                     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var))
-  assert_param_does_not_exist(dataset, new_param)
-  assert_varval_list(set_values_to, optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     assert_unit(dataset,
@@ -143,9 +138,6 @@ derive_param_bsa <- function(dataset,
     parameters = c(height_code, weight_code),
     by_vars = by_vars,
     analysis_value = !!bsa_formula,
-    set_values_to = vars(PARAMCD = !!new_param,
-                         !!!set_unit_var,
-                         !!!set_values_to),
-    drop_values_from = drop_values_from
+    set_values_to = vars(!!!set_values_to)
   )
 }
