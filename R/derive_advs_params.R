@@ -85,7 +85,8 @@ derive_param_bsa <- function(dataset,
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
   assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
-                                             "Gehan-George", "Boyd"))
+                                             "Gehan-George", "Boyd", "Fujimoto",
+                                             "Takahira"))
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
@@ -130,6 +131,14 @@ derive_param_bsa <- function(dataset,
     # Note: the Boyd formula expects the value of weight in grams; we need to convert from kg.
     bsa_formula <- expr(0.0003207 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3 *
                                      (1000 * !!sym(paste0("AVAL.", weight_code))) ^ (0.7285 - (0.0188 * log10(1000 * !!sym(paste0("AVAL.", weight_code))))))
+  }
+  else if (method == "Fujimoto") {
+    bsa_formula <- expr(0.008883 * (!!sym(paste0("AVAL.", height_code))) ^ 0.663 *
+                          (!!sym(paste0("AVAL.", weight_code))) ^ 0.444)
+  }
+  else if (method == "Takahira") {
+    bsa_formula <- expr(0.007241 * (!!sym(paste0("AVAL.", height_code))) ^ 0.725 *
+                          (!!sym(paste0("AVAL.", weight_code))) ^ 0.425)
   }
 
   derive_derived_param(
