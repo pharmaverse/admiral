@@ -6,14 +6,12 @@
 \usage{
 derive_param_qtlc(
   dataset,
-  filter = NULL,
-  new_param = "QTLCR",
+  by_vars,
+  set_values_to = vars(PARAMCD = "QTLCR"),
   qt_code = "QT",
   rr_code = "RR",
-  by_vars,
   unit_var = NULL,
-  set_values_to = NULL,
-  drop_values_from = vars(ends_with("RESU"))
+  filter = NULL
 )
 }
 \arguments{
@@ -26,19 +24,20 @@ The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.}
 
-\item{filter}{Filter condition
+\item{by_vars}{Grouping variables
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
 
-\emph{Permitted Values:} a condition}
+\emph{Permitted Values:} list of variables}
 
-\item{new_param}{Parameter code to add
+\item{set_values_to}{Variables to be set
 
-For the new observations \code{PARAMCD} is set to the specified value.
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
 
-Permitted Values: character value}
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{qt_code}{QT parameter code
 
@@ -54,13 +53,6 @@ as the RR interval assessments. It is expected that RR is measured in msec.
 
 Permitted Values: character value}
 
-\item{by_vars}{Grouping variables
-
-For each group defined by \code{by_vars} an observation is added to the output
-dataset.
-
-\emph{Permitted Values:} list of variables}
-
 \item{unit_var}{Variable providing the unit of the parameter
 
 The variable is used to check the units of the input parameters and it is
@@ -68,13 +60,13 @@ set to \code{"msec"} for the new parameter.
 
 Permitted Values: A variable of the input dataset}
 
-\item{set_values_to}{Variables to be set
+\item{filter}{Filter condition
 
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values:} a condition}
 }
 \value{
 The input dataset with the new parameter added
@@ -90,21 +82,25 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 adeg <- tibble::tribble(
-~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-"01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
-"01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
-"01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
-"01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
-"01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
-"01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
-"01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
-"01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
-"01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
+  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
+  "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",
+  "01-701-1015", "HR",     "Heart Rate",  62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR",     "RR Duration", 710,   "msec",      "WEEK 2",
+  "01-701-1028", "HR",     "Heart Rate",  85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT",     "QT Duration", 480,   "msec",      "WEEK 2",
+  "01-701-1028", "QT",     "QT Duration", 350,   "msec",      "WEEK 3",
+  "01-701-1028", "HR",     "Heart Rate",  56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR",     "RR Duration", 842,   "msec",      "WEEK 2",
 )
 derive_param_qtlc(
   adeg,
   by_vars = vars(USUBJID, VISIT),
-  set_values_to = vars(PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"))
+  set_values_to = vars(
+    PARAMCD = "QTLCR",
+    PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"
+  )
+)
 }
 \author{
 Stefan Bundfuss
