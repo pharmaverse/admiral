@@ -81,7 +81,6 @@ derive_param_bsa <- function(dataset,
                              unit_var = NULL,
                              filter = NULL) {
 
-  #assert_character_scalar(set_values_to)
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
   assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
