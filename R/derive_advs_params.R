@@ -71,7 +71,7 @@
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   set_values_to = vars(PARAM = "Body Surface Area"))
+#'   method = "Mosteller")
 derive_param_bsa <- function(dataset,
                              by_vars,
                              set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
@@ -81,16 +81,17 @@ derive_param_bsa <- function(dataset,
                              unit_var = NULL,
                              filter = NULL) {
 
-  assert_character_scalar(height_code)
-  assert_character_scalar(weight_code)
+  assert_data_frame(dataset,
+                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var))
+  assert_vars(by_vars)
   assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
                                              "Gehan-George", "Boyd", "Fujimoto",
                                              "Takahira"))
-  assert_vars(by_vars)
+  assert_character_scalar(height_code)
+  assert_character_scalar(weight_code)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var))
+
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
