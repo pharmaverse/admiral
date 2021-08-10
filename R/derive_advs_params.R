@@ -1,6 +1,6 @@
-#' Adds a parameter for BSA (Body Surface Area) using the Mosteller formula
+#' Adds a parameter for BSA (Body Surface Area) using the specified method
 #'
-#' Adds a record for BSA (Body Surface Area) using the Mosteller formula for each by group
+#' Adds a record for BSA (Body Surface Area) using the specified method for each by group
 #' (e.g., subject and visit) where the source parameters are available.
 #'
 #' The analysis value of the new parameter is derived:
