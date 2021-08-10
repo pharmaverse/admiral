@@ -33,7 +33,7 @@ Suggests:
     diffdf,
     lintr,
     pkgdown,
-    testthat,
+    testthat (>= 2.1.0),
     knitr,
     methods,
     miniUI,
