@@ -74,7 +74,8 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
   assert_function_param(deparse(substitute(derivation)), all_params)
 
   for (i in seq_along(variable_params)) {
-    args <- c(quote(dataset), variable_params[[i]], fixed_params)
+    fixed_params_ <- fixed_params[names(fixed_params) %notin% names(variable_params[[i]])]
+    args <- c(quote(dataset), variable_params[[i]], fixed_params_)
     call <- as.call(c(substitute(derivation), args))
     dataset <- eval(call, envir = list(dataset = dataset), enclos = parent.frame())
   }
