@@ -712,6 +712,25 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+assert_function_param <- function(arg, params) {
+  assert_character_scalar(arg)
+  assert_character_vector(params)
+  fun <- match.fun(arg)
+
+  is_param <- params %in% names(formals(fun))
+  if (!all(is_param)) {
+    txt <- if (sum(!is_param) == 1L) {
+      "%s is not a parameter of `%s()`"
+    } else {
+      "%s are not parameters of `%s()`"
+    }
+    err_msg <- sprintf(txt, enumerate(params[!is_param]), arg)
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Asserts That a Parameter is Provided in the Expected Unit
 #'
 #' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
@@ -800,7 +819,6 @@ assert_param_does_not_exist <- function(dataset, param) {
     )
   }
 }
-
 
 #' Is Date/Date-time?
 #'
