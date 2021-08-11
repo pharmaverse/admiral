@@ -113,9 +113,40 @@ derive_param_qtcb <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", qt_code)) / sqrt(!!sym(paste0("AVAL.", rr_code)) / 1000),
+    analysis_value = compute_qtcb(qt = !!sym(paste0("AVAL.", qt_code)),
+                                  rr = !!sym(paste0("AVAL.", rr_code))),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
+}
+
+#' Compute Corrected QT Using Bazett's Formula
+#'
+#' Computes corrected QT using Bazett's formula.
+#'
+#' @param qt QT interval
+#'
+#'   A numeric vector is expected. It is expected that QT is measured in msec.
+#'
+#' @param rr RR interval
+#'
+#'   A numeric vector is expected. It is expected that RR is measured in msec.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return QT interval in msec:
+#' \deqn{\frac{QT}{\sqrt{\frac{RR}{1000}}}}{QT/\sqrt(RR/1000)}
+#'
+#' @keywords computation adeg
+#'
+#' @export
+#'
+#' @examples
+#' compute_qtcb(qt = 350,
+#'              rr = 56.54)
+compute_qtcb <- function(qt, rr) {
+  assert_numeric_vector(qt)
+  assert_numeric_vector(rr)
+  qt / sqrt(rr / 1000)
 }
 
 #' Adds a parameter for corrected QT using Fridericia's formula
@@ -201,10 +232,35 @@ derive_param_qtcf <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", qt_code)) / (!!sym(paste0("AVAL.", rr_code)) / 1000)^(1 / 3),
+    analysis_value = compute_qtcf(qt = !!sym(paste0("AVAL.", qt_code)),
+                                  rr = !!sym(paste0("AVAL.", rr_code))),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
+#' Compute Corrected QT Using Fridericia's Formula
+#'
+#' Computes corrected QT using Fridericia's formula.
+#'
+#' @inheritParams compute_qtcb
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return QT interval in msec:
+#' \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
+#'
+#' @keywords computation adeg
+#'
+#' @export
+#'
+#' @examples
+#' compute_qtcf(qt = 350,
+#'              rr = 56.54)
+compute_qtcf <- function(qt, rr) {
+  assert_numeric_vector(qt)
+  assert_numeric_vector(rr)
+  qt / (rr / 1000)^ (1 / 3)
+}
+
 #' Adds a parameter for corrected QT using Sagie's formula
 #'
 #' Adds a record for corrected QT using Sagie's formula for each by group (e.g.,
@@ -289,15 +345,44 @@ derive_param_qtlc <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = 1000 * (!!sym(paste0("AVAL.", qt_code)) / 1000 + 0.154 *
-      (1 - !!sym(paste0("AVAL.", rr_code)) / 1000)),
+    analysis_value = compute_qtlc(qt = !!sym(paste0("AVAL.", qt_code)),
+                                  rr = !!sym(paste0("AVAL.", rr_code))),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
+
+#' Compute Corrected QT Using Sagie's Formula
+#'
+#' Computes corrected QT using Sagie's formula.
+#'
+#' @inheritParams compute_qtcb
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return QT interval in msec:
+#' \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
+#' 1000(QT/1000 + 0.154(1 - RR/1000))}
+#'
+#' @keywords computation adeg
+#'
+#' @export
+#'
+#' @examples
+#' compute_qtlc(qt = 350,
+#'              rr = 56.54)
+compute_qtlc <- function(qt, rr) {
+  assert_numeric_vector(qt)
+  assert_numeric_vector(rr)
+  1000 * (qt / 1000 + 0.154 * (1 - rr / 1000))
+}
+
 #' Adds a parameter for derived RR
 #'
 #' Adds a record for derived RR based on heart rate for each by group (e.g.,
 #' subject and visit) where the source parameters are available.
+#'
+#' The analysis value of the new parameter is derived as
+#' \deqn{\frac{60000}{HR}}{60000 / HR}
 #'
 #' @param dataset Input dataset
 #'
@@ -382,7 +467,32 @@ derive_param_rr <- function(dataset,
     filter = !!filter,
     parameters = c(hr_code),
     by_vars = by_vars,
-    analysis_value = 60000 / !!sym(paste0("AVAL.", hr_code)),
+    analysis_value = compute_rr(!!sym(paste0("AVAL.", hr_code))),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
+}
+
+#' Compute RR Interval From Heart Rate
+#'
+#' Computes RR interval from heart rate.
+#'
+#' @param hr Heart rate
+#'
+#'   A numeric vector is expected. It is expected that heart rate is measured in
+#'   beats/min.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return RR interval in msec:
+#' \deqn{\frac{60000}{HR}}{60000 / HR}
+#'
+#' @keywords computation adeg
+#'
+#' @export
+#'
+#' @examples
+#' compute_rr(hr = 70.14)
+compute_rr <- function(hr) {
+  assert_numeric_vector(hr)
+  60000 / hr
 }
