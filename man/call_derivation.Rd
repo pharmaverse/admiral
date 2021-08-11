@@ -67,3 +67,4 @@ params
 \author{
 Thomas Neitmann, Stefan Bundfuss
 }
+\keyword{user_utility}

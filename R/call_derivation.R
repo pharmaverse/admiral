@@ -15,7 +15,10 @@
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
+#' @keywords user_utility
+#'
 #' @export
+#'
 #' @seealso params
 #'
 #' @examples
@@ -83,7 +86,11 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
 #' @param ... One or more named arguments
 #'
 #' @author Thomas Neitmann
+#'
 #' @return An object of class `params`
+#'
+#' @keywords source_specifications
+#'
 #' @export
 #'
 #' @examples
