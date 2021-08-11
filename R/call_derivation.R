@@ -29,7 +29,8 @@
 #' data(adsl)
 #'
 #' adae <- ae[sample(1:nrow(ae), 1000), ] %>%
-#'   left_join(adsl, by = "USUBJID")
+#'   left_join(adsl, by = "USUBJID") %>%
+#'   select(USUBJID, AESTDTC, AEENDTC, TRTSDT, TRTEDT)
 #'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
 #' ## one can add multiple variables in one go
