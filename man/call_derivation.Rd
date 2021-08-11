@@ -14,7 +14,9 @@ call_derivation(dataset, derivation, variable_params, ...)
 \item{variable_params}{A \code{list} of arguments that are different across iterations.
 Each set of arguments must be created using \code{\link[=params]{params()}}.}
 
-\item{...}{Any number of \emph{named} arguments that are fixed across iterations}
+\item{...}{Any number of \emph{named} arguments that are fixed across iterations.
+If a parameter if specified both inside \code{variable_params} and \code{...} then
+the value in \code{variable_params} overwrites the one in \code{...}}
 }
 \value{
 The input dataset with additional records/variables added depending on
