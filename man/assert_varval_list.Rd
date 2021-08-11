@@ -4,10 +4,12 @@
 \alias{assert_varval_list}
 \title{Is an Argument a Variable-Value List?}
 \usage{
-assert_varval_list(arg, optional = FALSE)
+assert_varval_list(arg, required_elements = NULL, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
+
+\item{required_elements}{A \code{character} vector of names that must be present in \code{arg}}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}

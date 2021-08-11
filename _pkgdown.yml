@@ -37,10 +37,6 @@ reference:
   desc: Functions specific for ADEG
   contents:
   - has_keyword('adeg')
-- subtitle: ADVS
-  desc: Functions specific for ADVS
-  contents:
-  - has_keyword('advs')
 
 - title: Other Keywords
 - subtitle: Timing
