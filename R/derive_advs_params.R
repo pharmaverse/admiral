@@ -100,19 +100,19 @@
 #' )
 #'
 #' derive_param_map(advs,
-#'   hr_code = "PULSE",
 #'   by_vars = vars(USUBJID, VISIT),
+#'   hr_code = "PULSE",
 #'   unit_var = AVALU,
 #'   set_values_to = vars(PARAMCD = "MAP",
 #'                        PARAM = "Mean Arterial Pressure (mmHg)"))
 derive_param_map <- function(dataset,
-                             filter = NULL,
+                             by_vars,
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
-                             by_vars,
+                             set_values_to = NULL,
                              unit_var = NULL,
-                             set_values_to = NULL) {
+                             filter = NULL) {
   assert_character_scalar(sysbp_code)
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
@@ -121,13 +121,9 @@ derive_param_map <- function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
                     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_varval_list(set_values_to, optional = TRUE)
-  if ("PARAMCD" %in% names(set_values_to)) {
-    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
-  }
-  else {
-    abort("`PARAMCD` is not defined by set_values_to.")
-  }
+  assert_varval_list(set_values_to,
+                     required_elements = "PARAMCD")
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
     unit <-

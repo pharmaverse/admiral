@@ -126,8 +126,9 @@ test_that("an error is issued if PARAMCD is not set", {
     derive_param_map(
       input,
       unit_var = AVALU,
-      by_vars = vars(USUBJID, VISIT)
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = vars(PARAM = "Mean Arterial Pressure")
     ),
-    "`PARAMCD` is not defined by set_values_to."
+    "The following required elements are missing in `set_values_to`: 'PARAMCD'"
   )
 })
