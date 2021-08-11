@@ -109,5 +109,13 @@ params <- function(...) {
   if (!is_named(args)) {
     abort("All arguments passed to `params()` must be named")
   }
+  duplicate_params <- get_duplicates(names(args))
+  if (length(duplicate_params) >= 1L) {
+    err_msg <- sprintf(
+      "The following parameters have been specified more than once: %s",
+      enumerate(duplicate_params)
+    )
+    abort(err_msg)
+  }
   structure(args, class = c("params", "list"))
 }

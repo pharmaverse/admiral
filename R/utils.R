@@ -245,3 +245,7 @@ filter_if <- function(dataset, filter) {
 is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
+
+get_duplicates <- function(x) {
+  unique(x[duplicated(x)])
+}
