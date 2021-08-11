@@ -6,13 +6,13 @@
 \usage{
 derive_param_map(
   dataset,
-  filter = NULL,
+  by_vars,
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
-  by_vars,
+  set_values_to = NULL,
   unit_var = NULL,
-  set_values_to = NULL
+  filter = NULL
 )
 }
 \arguments{
@@ -26,13 +26,9 @@ the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{sysbp_code}, \code{diabp_code}
 and \code{hr_code}.}
 
-\item{filter}{Filter condition
+\item{by_vars}{Grouping variables
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
-
-\emph{Permitted Values:} a condition}
+Permitted Values: list of variables}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
@@ -55,9 +51,13 @@ as the heart rate assessments.
 
 Permitted Values: character value}
 
-\item{by_vars}{Grouping variables
+\item{set_values_to}{Variables to be set
 
-Permitted Values: list of variables}
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
+
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
@@ -66,13 +66,13 @@ systolic blood pressure.
 
 Permitted Values: A variable of the input dataset}
 
-\item{set_values_to}{Variables to be set
+\item{filter}{Filter condition
 
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
 
-\emph{Permitted Values:} List of variable-value pairs}
+\emph{Permitted Values:} a condition}
 }
 \value{
 The input dataset with the new parameter added
@@ -127,8 +127,8 @@ advs <- tibble::tribble(
 )
 
 derive_param_map(advs,
-  hr_code = "PULSE",
   by_vars = vars(USUBJID, VISIT),
+  hr_code = "PULSE",
   unit_var = AVALU,
   set_values_to = vars(PARAMCD = "MAP",
                        PARAM = "Mean Arterial Pressure (mmHg)"))

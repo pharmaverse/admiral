@@ -20,6 +20,10 @@
 #'   parameter) and to the parameters specified by `sysbp_code`, `diabp_code`
 #'   and `hr_code`.
 #'
+#' @param by_vars Grouping variables
+#'
+#'   Permitted Values: list of variables
+#'
 #' @param sysbp_code Systolic blood pressure parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -40,10 +44,6 @@
 #'   as the heart rate assessments.
 #'
 #'   Permitted Values: character value
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
 #'
 #' @param unit_var Variable providing the unit of the parameter
 #'
