@@ -34,7 +34,20 @@ data(adsl)
 adae <- ae[sample(1:nrow(ae), 1000), ] \%>\%
   left_join(adsl, by = "USUBJID")
 
-## Call the same derivation twice in a row
+## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
+## one can add multiple variables in one go
+call_derivation(
+  dataset = adae,
+  derivation = derive_vars_dt,
+  variable_params = list(
+    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+  ),
+  min_dates = list(TRTSDT),
+  max_dates = list(TRTEDT)
+)
+
+## The above call using `call_derivation()` is equivalent to the following
 adae \%>\%
   derive_vars_dt(
     new_vars_prefix = "AST",
@@ -50,18 +63,6 @@ adae \%>\%
     min_dates = list(TRTSDT),
     max_dates = list(TRTEDT)
   )
-
-## Call the same derivation in one go
-call_derivation(
-  dataset = adae,
-  derivation = derive_vars_dt,
-  variable_params = list(
-    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
-    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
-  ),
-  min_dates = list(TRTSDT),
-  max_dates = list(TRTEDT)
-)
 }
 \seealso{
 params
