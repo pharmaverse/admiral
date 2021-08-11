@@ -27,7 +27,8 @@ test_that("new observations for MAP based on DIABP and SYSBP are derived correct
     derive_param_map(
       input,
       unit_var = AVALU,
-      by_vars = vars(USUBJID, VISIT)
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = vars(PARAMCD = "MAP")
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
@@ -59,7 +60,8 @@ test_that("new observations for MAP based on DIABP and SYSBP are derived correct
   expect_dfs_equal(
     derive_param_map(
       input,
-      by_vars = vars(USUBJID, VISIT)
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = vars(PARAMCD = "MAP")
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
@@ -69,14 +71,14 @@ test_that("new observations for MAP based on DIABP and SYSBP are derived correct
 test_that("new observations for MAP based on DIABP, SYSBP, and HR are derived correctly", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-    "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
-    "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "beats/min", "WEEK 2",
+    "01-701-1015", "PULSE",  "Pulse (beats/min)",                59,   "beats/min", "BASELINE",
+    "01-701-1015", "PULSE",  "Pulse (beats/min)",                61,   "beats/min", "WEEK 2",
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg",      "BASELINE",
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg",      "WEEK 2",
     "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg",      "BASELINE",
     "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg",      "WEEK 2",
-    "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "beats/min", "BASELINE",
-    "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "beats/min", "WEEK 2",
+    "01-701-1028", "PULSE",  "Pulse (beats/min)",                62,   "beats/min", "BASELINE",
+    "01-701-1028", "PULSE",  "Pulse (beats/min)",                77,   "beats/min", "WEEK 2",
     "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg",      "BASELINE",
     "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg",      "WEEK 2",
     "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg",      "BASELINE",
@@ -99,9 +101,33 @@ test_that("new observations for MAP based on DIABP, SYSBP, and HR are derived co
       input,
       hr_code = "PULSE",
       unit_var = AVALU,
-      by_vars = vars(USUBJID, VISIT)
+      by_vars = vars(USUBJID, VISIT),
+      set_values_to = (vars(PARAMCD = "MAP"))
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
+  )
+})
+
+test_that("an error is issued if PARAMCD is not set", {
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
+    "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
+    "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
+    "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
+    "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
+  )
+
+  expect_error(
+    derive_param_map(
+      input,
+      unit_var = AVALU,
+      by_vars = vars(USUBJID, VISIT)
+    ),
+    "`PARAMCD` is not defined by set_values_to."
   )
 })

@@ -530,6 +530,49 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+#' Is an Argument a Numeric Vector?
+#'
+#' Checks if an argument is a numeric vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if `arg` is not a numeric vector.
+#'   Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num) {
+#'   assert_numeric_vector(num)
+#' }
+#'
+#' example_fun(1:10)
+#'
+#' try(example_fun(letters))
+assert_numeric_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.numeric(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a numeric vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
+
+
 #' Is an Argument an Object of a Specific S3 Class?
 #'
 #' Checks if an argument is an object inheriting from the S3 class specified.

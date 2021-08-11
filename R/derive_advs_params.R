@@ -20,12 +20,6 @@
 #'   parameter) and to the parameters specified by `sysbp_code`, `diabp_code`
 #'   and `hr_code`.
 #'
-#' @param new_param Parameter code to add
-#'
-#'   For the new observations `PARAMCD` is set to the specified value.
-#'
-#'   Permitted Values: character value
-#'
 #' @param sysbp_code Systolic blood pressure parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -85,7 +79,8 @@
 #' derive_param_map(advs,
 #'                  by_vars = vars(USUBJID, VISIT),
 #'                  unit_var = AVALU,
-#'                  set_values_to = vars(PARAM = "Mean Arterial Pressure (mmHg)"))
+#'                  set_values_to = vars(PARAMCD = "MAP",
+#'                                       PARAM = "Mean Arterial Pressure (mmHg)"))
 #'
 #' # Derive MAP based on diastolic and systolic blood pressure and heart rate
 #' advs <- tibble::tribble(
@@ -108,19 +103,16 @@
 #'   hr_code = "PULSE",
 #'   by_vars = vars(USUBJID, VISIT),
 #'   unit_var = AVALU,
-#'   set_values_to = vars(PARAM = "Mean Arterial Pressure (mmHg)"))
-
+#'   set_values_to = vars(PARAMCD = "MAP",
+#'                        PARAM = "Mean Arterial Pressure (mmHg)"))
 derive_param_map <- function(dataset,
                              filter = NULL,
-                             new_param = "MAP",
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
                              by_vars,
                              unit_var = NULL,
-                             set_values_to = NULL,
-                             drop_values_from = NULL) {
-  assert_character_scalar(new_param)
+                             set_values_to = NULL) {
   assert_character_scalar(sysbp_code)
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
@@ -129,13 +121,20 @@ derive_param_map <- function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
                     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_param_does_not_exist(dataset, new_param)
   assert_varval_list(set_values_to, optional = TRUE)
+  if ("PARAMCD" %in% names(set_values_to)) {
+    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  }
+  else {
+    abort("`PARAMCD` is not defined by set_values_to.")
+  }
 
   if (!quo_is_null(unit_var)) {
     unit <-
-      unique(filter(dataset, PARAMCD == sysbp_code &
-                      !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
+      dataset %>%
+      filter(PARAMCD == sysbp_code & !is.na(!!unit_var)) %>%
+      pull(!!unit_var) %>%
+      unique
     set_unit_var <- vars(!!unit_var := unit)
   }
   else {
@@ -143,13 +142,14 @@ derive_param_map <- function(dataset,
   }
   if (is.null(hr_code)) {
     analysis_value <-
-      expr((2 * !!sym(paste0("AVAL.", diabp_code)) +!!sym(paste0("AVAL.", sysbp_code))) / 3)
+      expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
+                       sysbp = !!sym(paste0("AVAL.", sysbp_code))))
   }
   else {
     analysis_value <-
-      expr(!!sym(paste0("AVAL.", diabp_code)) +
-             0.01 * exp(4.14 - 40.74 / !!sym(paste0("AVAL.", hr_code))) *
-             (!!sym(paste0("AVAL.", sysbp_code)) - !!sym(paste0("AVAL.", diabp_code))))
+      expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
+                       sysbp = !!sym(paste0("AVAL.", sysbp_code)),
+                       hr = !!sym(paste0("AVAL.", hr_code))))
   }
   derive_derived_param(
     dataset,
@@ -157,9 +157,58 @@ derive_param_map <- function(dataset,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
     analysis_value = !!analysis_value,
-    set_values_to = vars(PARAMCD = !!new_param,
-                         !!!set_unit_var,
-                         !!!set_values_to),
-    drop_values_from = drop_values_from
+    set_values_to = vars(!!!set_unit_var,
+                         !!!set_values_to)
   )
+}
+
+#' Compute Mean Arterial Pressure (MAP)
+#'
+#' Computes mean arterial pressure (MAP) based on diastolic and systolic blood
+#' pressure. Optionally heart rate can be used as well.
+#'
+#' @param diabp Diastolic blood pressure
+#'
+#'   A numeric vector is expected.
+#'
+#' @param sysbp Systolic blood pressure
+#'
+#'   A numeric vector is expected.
+#'
+#' @param hr Heart rate
+#'
+#'   A numeric vector or `NULL` is expected.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return
+#' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
+#' if it is based on diastolic and systolic blood pressure and
+#' \deqn{DIABP + 0.01 e^{4.14 - \frac{40.74}{HR}} (SYSBP - DIABP)}{
+#' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
+#' if it is based on diastolic, systolic blood pressure, and heart rate.
+#'
+#' @keywords computation advs
+#'
+#' @export
+#'
+#' @examples
+#' # Compute MAP based on diastolic and systolic blood pressure
+#' compute_map(diabp = 51,
+#'             sysbp = 121)
+#'
+#' # Compute MAP based on diastolic and systolic blood pressure and heart rate
+#' compute_map(diabp = 51,
+#'             sysbp = 121,
+#'             hr = 59)
+compute_map <- function(diabp, sysbp, hr = NULL) {
+  assert_numeric_vector(diabp)
+  assert_numeric_vector(sysbp)
+  assert_numeric_vector(hr, optional = TRUE)
+  if (is.null(hr)) {
+    (2 * diabp + sysbp) / 3
+  }
+  else {
+    diabp + 0.01 * exp(4.14 - 40.74 / hr) * (sysbp - diabp)
+  }
 }

@@ -7,14 +7,12 @@
 derive_param_map(
   dataset,
   filter = NULL,
-  new_param = "MAP",
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
   by_vars,
   unit_var = NULL,
-  set_values_to = NULL,
-  drop_values_from = NULL
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -35,12 +33,6 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
-
-\item{new_param}{Parameter code to add
-
-For the new observations \code{PARAMCD} is set to the specified value.
-
-Permitted Values: character value}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
@@ -114,7 +106,8 @@ advs <- tibble::tribble(
 derive_param_map(advs,
                  by_vars = vars(USUBJID, VISIT),
                  unit_var = AVALU,
-                 set_values_to = vars(PARAM = "Mean Arterial Pressure (mmHg)"))
+                 set_values_to = vars(PARAMCD = "MAP",
+                                      PARAM = "Mean Arterial Pressure (mmHg)"))
 
 # Derive MAP based on diastolic and systolic blood pressure and heart rate
 advs <- tibble::tribble(
@@ -137,7 +130,8 @@ derive_param_map(advs,
   hr_code = "PULSE",
   by_vars = vars(USUBJID, VISIT),
   unit_var = AVALU,
-  set_values_to = vars(PARAM = "Mean Arterial Pressure (mmHg)"))
+  set_values_to = vars(PARAMCD = "MAP",
+                       PARAM = "Mean Arterial Pressure (mmHg)"))
 }
 \author{
 Stefan Bundfuss
