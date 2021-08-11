@@ -63,6 +63,9 @@ call_derivation <- function(dataset, derivation, variable_params, ...) {
   assert_list_of(variable_params, "params")
 
   fixed_params <- eval(substitute(alist(...)))
+  if (length(fixed_params) == 0L) {
+    abort("At least one argument must be set inside `...`")
+  }
   if (!is_named(fixed_params)) {
     abort("All arguments inside `...` must be named")
   }
