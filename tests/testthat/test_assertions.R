@@ -14,7 +14,6 @@ test_that("no error is thrown if a required variable exists", {
 })
 
 test_that("assert_filter_cond works as expected", {
-
   fc <- quo(AGE == 64)
   expect_identical(
     assert_filter_cond(fc),
@@ -28,14 +27,13 @@ test_that("assert_filter_cond works as expected", {
   )
 
   expect_identical(
-    assert_filter_cond(arg = fc, optional = T),
+    assert_filter_cond(arg = fc, optional = TRUE),
     fc
   )
 
   fc <- quo("string")
   expect_error(
     assert_filter_cond(arg = fc),
-    "`fc` is not a filter condition but a string"
+    "`fc` must be a filter condition but is `\"string\"`"
   )
-
 })

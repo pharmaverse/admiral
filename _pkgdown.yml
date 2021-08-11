@@ -33,6 +33,10 @@ reference:
   desc: Functions specific for ADSL
   contents:
   - has_keyword('adsl')
+- subtitle: ADEG
+  desc: Functions specific for ADEG
+  contents:
+  - has_keyword('adeg')
 
 - title: Other Keywords
 - subtitle: Timing
@@ -80,12 +84,17 @@ reference:
   - has_keyword("dev_utility")
 
 articles:
-- title: All vignettes
-  navbar: ~
+- title: User Guides
+  navbar: User Guides
   contents:
   - admiral
   - adsl
   - occds
   - bds_finding
-  - contributing
+  - imputation
   - faq
+
+- title: Developer Guides
+  navbar: Developer Guides
+  contents:
+  - contributing

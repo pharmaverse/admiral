@@ -19,11 +19,13 @@ A \code{character} vector
 Define a function to map the disposition reason
 }
 \details{
-\code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not 'COMPLETED' or \code{NA}.
-\code{format_reason_default(DSDECOD, DSTERM)} returns \code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' or \code{NA}.
-For example:
-\code{DCSREAS = format_reason_default(DSDECOD)}
-\code{DCSREASP = format_reason_default(DSDECOD, DSTERM)}
+\code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not
+'COMPLETED' or \code{NA}. \code{format_reason_default(DSDECOD, DSTERM)} returns
+\code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' or \code{NA}.
+
+For example:\preformatted{DCSREAS = format_reason_default(DSDECOD)
+DCSREASP = format_reason_default(DSDECOD, DSTERM)
+}
 }
 \author{
 Samia Kabi
