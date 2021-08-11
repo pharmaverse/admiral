@@ -26,11 +26,7 @@ param_lookup <- tibble::tribble(
   "EGINTP", "EGINTP", "ECG Interpretation", 1,
   "HR", "HR", "Heart Rate (beats/min)", 2,
   "RR", "RR", "RR Duration (msec)", 3,
-  NA_character_, "RRR", "RR Duration derived (msec)", 4,
   "QT", "QT", "QT Duration (msec)", 10,
-  NA_character_, "QTCB", "QTcB Duration (msec)", 11,
-  NA_character_, "QTCF", "QTcF Duration (msec)", 12,
-  NA_character_, "QTLC", "QTlc Duration (msec)", 13,
 )
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI,
@@ -38,9 +34,10 @@ range_lookup <- tibble::tribble(
   "HR", 40, 100,
   "RR", 600, 1500,
   "QT", 350, 450,
-  "QTCB", 350, 450,
-  "QTCF", 350, 450,
-  "QTLC", 350, 450,
+  "RRR", 600, 1500,
+  "QTCBR", 350, 450,
+  "QTCFR", 350, 450,
+  "QTLCR", 350, 450,
 )
 
 # Start
@@ -68,42 +65,44 @@ adeg <- adsl %>%
   ) %>%
 
   # Add PARAMCD to be able to use derive_param_rr...
-  left_join(select(param_lookup, EGTESTCD, PARAMCD), by = "EGTESTCD") %>%
+  left_join(param_lookup, by = "EGTESTCD") %>%
 
   # Add required derived Parameters: QTcf, QTcB, RRd
   derive_param_rr(
-    filter = EGSTAT != "NOT DONE",
-    new_param = "RRR",
+    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    set_values_to = vars(PARAMCD = "RRR",
+                         PARAM = "RR Duration Rederived (msec)",
+                         PARAMN = 4),
     hr_code = "HR",
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM)
+    filter = EGSTAT != "NOT DONE"
   ) %>%
   derive_param_qtcb(
-    filter = EGSTAT != "NOT DONE",
-    new_param = "QTCB",
+    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    set_values_to = vars(PARAMCD = "QTCBR",
+                         PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
+                         PARAMN = 11),
     qt_code = "QT",
     rr_code = "RR",
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    drop_values_from = vars(EGSEQ, EGBLFL, ends_with("RESU"))
+    filter = EGSTAT != "NOT DONE"
   ) %>%
   derive_param_qtcf(
-    filter = EGSTAT != "NOT DONE",
-    new_param = "QTCF",
+    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    set_values_to = vars(PARAMCD = "QTCFR",
+                         PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
+                         PARAMN = 12),
     qt_code = "QT",
     rr_code = "RR",
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    drop_values_from = vars(EGSEQ, EGBLFL, ends_with("RESU"))
+    filter = EGSTAT != "NOT DONE"
   ) %>%
   derive_param_qtlc(
-    filter = EGSTAT != "NOT DONE",
-    new_param = "QTLC",
+    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    set_values_to = vars(PARAMCD = "QTLCR",
+                         PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
+                         PARAMN = 13),
     qt_code = "QT",
     rr_code = "RR",
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    drop_values_from = vars(EGSEQ, EGBLFL, ends_with("RESU"))
+    filter = EGSTAT != "NOT DONE"
   ) %>%
-
-  # add PARAM/PARAMN
-  left_join(select(param_lookup, -EGTESTCD), by = "PARAMCD") %>%
 
   # Derive Timing, Assign BASETYPE, TRTA/P
   mutate(
@@ -134,8 +133,7 @@ adeg <- adsl %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, VISIT, ADT),
     fns = list(AVAL ~ mean(., na.rm = TRUE)),
     filter_rows = (dplyr::n() >= 2 & PARAMCD != "EGINTP"),
-    set_values_to = vars(DTYPE = "AVERAGE"),
-    drop_values_from = vars(EGBLFL, EGORRESU, EGSTRESU)
+    set_values_to = vars(DTYPE = "AVERAGE")
   ) %>%
 
   # Calculate ABLFL, BASE & BASEC, CHG, PCHG
@@ -146,7 +144,7 @@ adeg <- adsl %>%
     mode = "last",
     flag_filter = ((!is.na(AVAL) | !is.na(AVALC)) &
       ADT <= TRTSDT &
-      (DTYPE == "AVERAGE" | PARAMCD == "EGINTP"))
+      (DTYPE != "AVERAGE" | PARAMCD != "EGINTP"))
   ) %>%
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
