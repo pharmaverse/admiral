@@ -8,7 +8,7 @@
 #' @param variable_params A `list` of arguments that are different across iterations.
 #'   Each set of arguments must be created using [`params()`].
 #' @param ... Any number of *named* arguments that are fixed across iterations.
-#'   If a parameter if specified both inside `variable_params` and `...` then
+#'   If a parameter is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
 #' @author Thomas Neitmann, Stefan Bundfuss
