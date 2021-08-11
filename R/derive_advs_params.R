@@ -81,15 +81,15 @@ derive_param_bsa <- function(dataset,
                              unit_var = NULL,
                              filter = NULL) {
 
+  assert_vars(by_vars)
+  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   assert_data_frame(dataset,
                     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var))
-  assert_vars(by_vars)
   assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
                                              "Gehan-George", "Boyd", "Fujimoto",
                                              "Takahira"))
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
@@ -105,41 +105,13 @@ derive_param_bsa <- function(dataset,
                 unit = "kg",
                 unit_var = !!unit_var)
     set_unit_var <- vars(!!unit_var := "m^2")
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
 
-  if (method == "Mosteller") {
-    bsa_formula <- expr(sqrt(!!sym(paste0("AVAL.", height_code)) *
-                              !!sym(paste0("AVAL.", weight_code)) / 3600))
-  }
-  else if (method == "DuBois-DuBois") {
-    # Note: the DuBois & DuBois formula expects the value of height in meters; we need to convert from cm.
-    bsa_formula <- expr(0.20247 * (!!sym(paste0("AVAL.", height_code)) /100) ^ 0.725 *
-                                   (!!sym(paste0("AVAL.", weight_code))) ^ 0.425)
-  }
-  else if (method == "Haycock") {
-    bsa_formula <- expr(0.024265 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3964 *
-                                    (!!sym(paste0("AVAL.", weight_code))) ^ 0.5378)
-  }
-  else if (method == "Gehan-George") {
-    bsa_formula <- expr(0.0235 * (!!sym(paste0("AVAL.", height_code))) ^ 0.42246 *
-                                  (!!sym(paste0("AVAL.", weight_code))) ^ 0.51456)
-  }
-  else if (method == "Boyd") {
-    # Note: the Boyd formula expects the value of weight in grams; we need to convert from kg.
-    bsa_formula <- expr(0.0003207 * (!!sym(paste0("AVAL.", height_code))) ^ 0.3 *
-                                     (1000 * !!sym(paste0("AVAL.", weight_code))) ^ (0.7285 - (0.0188 * log10(1000 * !!sym(paste0("AVAL.", weight_code))))))
-  }
-  else if (method == "Fujimoto") {
-    bsa_formula <- expr(0.008883 * (!!sym(paste0("AVAL.", height_code))) ^ 0.663 *
-                          (!!sym(paste0("AVAL.", weight_code))) ^ 0.444)
-  }
-  else if (method == "Takahira") {
-    bsa_formula <- expr(0.007241 * (!!sym(paste0("AVAL.", height_code))) ^ 0.725 *
-                          (!!sym(paste0("AVAL.", weight_code))) ^ 0.425)
-  }
+  bsa_formula <- expr(compute_bsa(height = !!sym(paste0("AVAL.", height_code)),
+                                  weight = !!sym(paste0("AVAL.", weight_code)),
+                                  method = method))
 
   derive_derived_param(
     dataset,
