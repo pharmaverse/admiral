@@ -9,7 +9,9 @@ Authors@R: c(
     person("Samia", "Kabi", email = "samia.kabi@roche.com", role = "aut"),
     person("Vignesh", "Thanikachalam", role = "aut"),
     person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
-    person("Shimeng", "Huang", role = "aut")
+    person("Shimeng", "Huang", role = "aut"),
+    person("Robin", "Koeger", role = "aut"),
+    person("Gordon", "Miller", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
