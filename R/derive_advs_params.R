@@ -211,14 +211,11 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 
 #' Adds a parameter for BSA (Body Surface Area) using the specified method
 #'
-#' Adds a record for BSA (Body Surface Area) using the specified derivation method
-#' for each by group (e.g., subject and visit) where the source parameters are available.
+#' Adds a record for BSA (Body Surface Area) using the specified method for each by group
+#' (e.g., subject and visit) where the source parameters are available.
 #'
 #' The analysis value of the new parameter is derived:
 #' \deqn{\sqrt{HEIGHT * WEIGHT/3600}}
-#'
-#' The analysis value of the new parameter is derived, depending on the method, as:
-#' Mosteller: \deqn{\frac{sqrt(height * weight / 3600)}
 #'
 #' @param dataset Input dataset
 #'
@@ -229,21 +226,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `HEIGHT` and `WEIGHT`.
 #'
-#' @param method Derivation method to use:
+#' @param method Derivation method to use
 #'
-#'   Mosteller: sqrt(height(cm) * weight(kg)) / 3600
-#'
-#'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
-#'
-#'   Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
-#'
-#'   Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
-#'
-#'   Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
-#'
-#'   Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
-#'
-#'   Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
+#'   The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
 #'
 #'   Permitted Values: character value
 #'
@@ -351,37 +336,31 @@ derive_param_bsa <- function(dataset,
 
 #' Derive BSA (Body Surface Area)
 #'
-#' Derives BSA from HEIGHT and WEIGHT making use of the specified derivation method
+#' Derives BSA from HEIGHT and WEIGHT making use of the specified derivation formula
 #'
-#' @param height HEIGHT value
+#' @param height_code HEIGHT parameter code
 #'
-#'   It is expected that HEIGHT is in cm.
-#'
-#'   Permitted Values: numeric vector
-#'
-#' @param weight WEIGHT value
-#'
-#'   It is expected that WEIGHT is in kg.
-#'
-#'   Permitted Values: numeric vector
-#'
-#' @param method Derivation method to use:
-#'
-#'   Mosteller: sqrt(height(cm) * weight(kg)) / 3600
-#'
-#'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
-#'
-#'   Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
-#'
-#'   Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
-#'
-#'   Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
-#'
-#'   Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
-#'
-#'   Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
+#'   The observations where `PARAMCD` equals the specified value are considered
+#'   as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
 #'
 #'   Permitted Values: character value
+#'
+#' @param weight_code WEIGHT parameter code
+#'
+#'   The observations where `PARAMCD` equals the specified value are considered
+#'   as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
+#'
+#'   Permitted Values: character value
+#'
+#' @param method Derivation method to use
+#'
+#'   The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
+#'
+#'   Permitted Values: character value
+#'
+#' @details The BSA (Body Surface Area) is derived with the specified formula:
+#'          "Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd",
+#'          ""Fujimoto" or "Takahira".
 #'
 #' @author Eric Simms
 #'
@@ -400,9 +379,15 @@ derive_param_bsa <- function(dataset,
 #'
 #' # derive BSA by the DuBois & DuBois method
 #' compute_bsa(
-#'   height = c(170, 185),
-#'   weight = c(75, 90),
+#'   height = 170,
+#'   weight = 75,
 #'   method = "DuBois-DuBois")
+#'
+# # derive BSA by the Boyd method
+# compute_bsa(
+#   height = c(170, 185),
+#   weight = c(75, 90),
+#   method = "Boyd")
 
 compute_bsa <- function(height = height,
                         weight = weight,
