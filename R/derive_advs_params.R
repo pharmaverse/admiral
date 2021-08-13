@@ -420,7 +420,6 @@ compute_bsa <- function(height = height,
     bsa <- 0.007241 * height ^ 0.725 * weight ^ 0.425
   }
 
-  bsa <- round(bsa, 2)
   bsa
 }
 
