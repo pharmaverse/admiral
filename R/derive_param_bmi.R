@@ -65,7 +65,7 @@
 #'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 #' )
 #'
-#' derive_param_bmi(
+#' derive_param_bmi (
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   weight_code = "WEIGHT",
@@ -75,7 +75,7 @@
 #'     PARAM = "Body Mass Index (kg/m^2)",
 #'     AVALU = "kg/m^2"
 #'   )
-#' )
+#'  )
 #'
 
 
