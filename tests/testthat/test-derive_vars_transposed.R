@@ -12,7 +12,7 @@ dataset_merge <- tibble::tribble(
   "P03",    "T02",   9
 )
 
-test_that("multiplication works", {
+test_that("the merge datasrt is transposed and merged correctly", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01, ~T02,
     "P01",     3,    31,   5,
@@ -31,7 +31,7 @@ test_that("multiplication works", {
 })
 
 
-test_that("multiplication works", {
+test_that("filtering the merge dataset works", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01,
     "P01",     3,    31,
@@ -50,7 +50,7 @@ test_that("multiplication works", {
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-test_that("multiplication works", {
+test_that("ATC variables are merged properly", {
   cm <- tibble::tribble(
           ~USUBJID, ~CMSEQ, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
     "BP40257-1001",     1L,     "14", "1192056",       "PARACETAMOL",
