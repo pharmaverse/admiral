@@ -33,5 +33,6 @@ derive_vars_atc <- function(dataset,
       value_var = FAORRES,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
     ) %>%
+    select(-starts_with("FA")) %>%
     rename_at(vars(starts_with("CMATC")), ~str_remove(.x, "^CM"))
 }
