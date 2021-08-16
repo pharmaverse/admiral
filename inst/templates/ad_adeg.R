@@ -10,14 +10,12 @@
 library(dplyr)
 library(lubridate)
 library(stringr)
-#library(admiral)
-
-devtools::load_all()
+library(admiral)
 
 # Read in Data
 data("adsl")
 # The CDISC Pilot Data contains no EG data
-### Fake EG from VS
+### Fake EG for demonstration
 data("eg")
 
 # Assign PARAMCD, PARAM, and PARAMN
@@ -200,4 +198,4 @@ adeg <- adsl %>%
   )
 
 
-# save(adeg, file = "data/adeg.rda", compress = TRUE)
+saveRDS(adeg, file = "./ADEG.rds", compress = TRUE)

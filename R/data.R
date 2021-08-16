@@ -120,3 +120,10 @@
 #' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
 #'
 "queries"
+
+#' Electrocardiogram Dataset
+#'
+#' An example of standard SDTM EG dataset to be used in deriving ADEG dataset
+#'
+"eg"
+
