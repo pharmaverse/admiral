@@ -61,12 +61,15 @@ reference:
   - ex
   - lb
   - mh
+  - qs
+  - starts_with("supp")
   - ts
   - vs
 
 - title: ADaM Datasets
 - contents:
   - adsl
+  - advs
 
 - title: User Utilities
 - contents:
@@ -101,3 +104,4 @@ articles:
   navbar: Developer Guides
   contents:
   - contributing
+  - git_usage
