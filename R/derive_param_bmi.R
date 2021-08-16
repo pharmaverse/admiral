@@ -15,17 +15,17 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `weight_code` and `height_code`.
 #'
-#' @param weight_code Weight parameter code
+#' @param weight_code WEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the QT interval assessments. It is expected that QT is measured in msec.
+#'   as the WEIGHT. It is expected that WEIGHT is measured in kg
 #'
 #'   Permitted Values: character value
 #'
-#' @param height_code Height parameter code
+#' @param height_code HEIGHT parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the RR interval assessments. It is expected that RR is measured in msec.
+#'   as the HEIGHT. It is expected that HEIGHT is measured in cm
 #'
 #'   Permitted Values: character value
 #'
@@ -93,7 +93,7 @@ derive_param_bmi <-  function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var)
+    required_vars = quo_c(by_vars, vars(PARAMCD,AVAL,AVALU), unit_var)
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -108,7 +108,7 @@ derive_param_bmi <-  function(dataset,
     assert_unit(
       dataset,
       param = height_code,
-      unit = "m",
+      unit = "cm",
       unit_var = !!unit_var
     )
     set_unit_var <- vars(!!unit_var := "kg/m^2")
@@ -121,7 +121,7 @@ derive_param_bmi <-  function(dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", weight_code)) / !!sym(paste0("AVAL.", height_code)) ^2,
+    analysis_value = !!sym(paste0("AVAL.", weight_code)) / ((!!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", height_code))) / 10000),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
