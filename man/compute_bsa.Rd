@@ -44,17 +44,19 @@ The BSA (Body Surface Area) in m^2.
 Derives BSA from HEIGHT and WEIGHT making use of the specified derivation method
 }
 \examples{
-# derive BSA by the Mosteller method
+# Derive BSA by the Mosteller method
 compute_bsa(
   height = 170,
   weight = 75,
-  method = "Mosteller")
+  method = "Mosteller"
+)
 
-# derive BSA by the DuBois & DuBois method
+# Derive BSA by the DuBois & DuBois method
 compute_bsa(
   height = c(170, 185),
   weight = c(75, 90),
-  method = "DuBois-DuBois")
+  method = "DuBois-DuBois"
+)
 }
 \author{
 Eric Simms

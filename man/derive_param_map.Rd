@@ -103,11 +103,15 @@ advs <- tibble::tribble(
   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
 )
 
-derive_param_map(advs,
-                 by_vars = vars(USUBJID, VISIT),
-                 unit_var = AVALU,
-                 set_values_to = vars(PARAMCD = "MAP",
-                                      PARAM = "Mean Arterial Pressure (mmHg)"))
+derive_param_map(
+  advs,
+  by_vars = vars(USUBJID, VISIT),
+  unit_var = AVALU,
+  set_values_to = vars(
+    PARAMCD = "MAP",
+    PARAM = "Mean Arterial Pressure (mmHg)"
+  )
+)
 
 # Derive MAP based on diastolic and systolic blood pressure and heart rate
 advs <- tibble::tribble(
@@ -126,12 +130,16 @@ advs <- tibble::tribble(
   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg",      "WEEK 2"
 )
 
-derive_param_map(advs,
+derive_param_map(
+  advs,
   by_vars = vars(USUBJID, VISIT),
   hr_code = "PULSE",
   unit_var = AVALU,
-  set_values_to = vars(PARAMCD = "MAP",
-                       PARAM = "Mean Arterial Pressure (mmHg)"))
+  set_values_to = vars(
+    PARAMCD = "MAP",
+    PARAM = "Mean Arterial Pressure (mmHg)"
+  )
+)
 }
 \author{
 Stefan Bundfuss
