@@ -124,7 +124,7 @@ derive_var_lstalvdt <- function(dataset,
   assert_vars(subject_keys)
 
   sources <- list(...)
-  walk(sources, validate_lstalvdt_source)
+  assert_list_of(sources, "lstalvdt_source")
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -136,36 +136,39 @@ derive_var_lstalvdt <- function(dataset,
         i = i
       )
     }
-    if (!quo_is_null(sources[[i]]$filter)) {
-      add_data[[i]] <- sources[[i]]$dataset %>%
-        filter(!!(sources[[i]]$filter))
-    } else {
-      add_data[[i]] <- sources[[i]]$dataset
-    }
     date_var <- quo_get_expr(sources[[i]]$date_var)
-    add_data[[i]] <- filter_extreme(add_data[[i]],
-                                    order = vars(!!date_var),
-                                    by_vars = subject_keys,
-                                    mode = "last",
-                                    check_type = "none")
+    add_data[[i]] <- sources[[i]]$dataset %>%
+      filter_if(sources[[i]]$filter) %>%
+      filter_extreme(
+        order = vars(!!date_var),
+        by_vars = subject_keys,
+        mode = "last",
+        check_type = "none"
+      )
     if (is.Date(add_data[[i]][[as_string(date_var)]])) {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = !!date_var)
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = !!date_var
+      )
     } else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = date(!!date_var))
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = date(!!date_var)
+      )
     } else {
-      add_data[[i]] <- transmute(add_data[[i]],
-                                 !!!subject_keys,
-                                 !!!sources[[i]]$traceability_vars,
-                                 LSTALVDT = convert_dtc_to_dt(
-                                   impute_dtc(!!date_var,
-                                              date_imputation = sources[[i]]$date_imputation)
-                                 ))
+      add_data[[i]] <- transmute(
+        add_data[[i]],
+        !!!subject_keys,
+        !!!sources[[i]]$traceability_vars,
+        LSTALVDT = convert_dtc_to_dt(
+          !!date_var,
+          date_imputation = sources[[i]]$date_imputation
+        )
+      )
     }
   }
 
@@ -211,45 +214,16 @@ lstalvdt_source <- function(dataset,
                             date_var,
                             date_imputation = NULL,
                             traceability_vars = NULL) {
-  out <- list(
-    dataset = dataset,
-    filter = enquo(filter),
-    date_var = enquo(date_var),
-    date_imputation = date_imputation,
-    traceability_vars = traceability_vars
-  )
-  class(out) <- c("lstalvdt_source", "list")
-  validate_lstalvdt_source(out)
-}
-
-#' Validate an object is indeed a `lstalvdt_source` object
-#'
-#' @param obj An object to be validated.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @noRd
-#'
-#' @return The original object.
-validate_lstalvdt_source <- function(obj) {
-  assert_that(inherits(obj, "lstalvdt_source"))
-  values <- unclass(obj)
-  if (!is.data.frame(values$dataset)) {
-    abort(paste0("`dataset` must be a data frame.\n",
-                 "A ", typeof(values$dataset), " was supplied."))
-  }
-  assert_that(quo_is_null(values$filter) || is.language(quo_get_expr(values$filter)))
-  if (!(quo_is_symbol(values$date_var))) {
-    abort(paste0("`date_var` must be a symbol.\n",
-                 "A ", typeof(quo_get_expr(values$date_var)), " was supplied."))
-  }
-  date_imputation <- values$date_imputation
   if (!is.null(date_imputation)) {
     assert_that(is_valid_date_entry(date_imputation))
   }
-  if (!is.null(values$traceability_vars)) {
-    traceability_vars <- values$traceability_vars
-    assert_that(is_varval_list(traceability_vars))
-  }
-  obj
+  out <- list(
+    dataset = assert_data_frame(dataset),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
+    date_var = assert_symbol(enquo(date_var)),
+    date_imputation = date_imputation,
+    traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
+  )
+  class(out) <- c("lstalvdt_source", "list")
+  out
 }

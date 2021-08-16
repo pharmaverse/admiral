@@ -45,7 +45,35 @@ test_that("derive_last_dose works as expected", {
     new_var = LDOSEDTM,
     output_datetime = TRUE,
     check_dates_only = FALSE,
-    traceability_vars = vars()
+    traceability_vars = NULL
+  )
+
+  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
+
+})
+
+test_that("derive_last_dose works as expected with dates only", {
+
+  expected_output <- mutate(
+    input_ae,
+    LDOSEDTM = as.Date(
+      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)
+    )
+  )
+
+  res <- derive_last_dose(
+    input_ae,
+    input_ex,
+    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+    by_vars = vars(STUDYID, USUBJID),
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    new_var = LDOSEDTM,
+    output_datetime = FALSE,
+    check_dates_only = FALSE,
+    traceability_vars = NULL
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
@@ -74,7 +102,7 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
       new_var = LDOSEDTM,
       output_datetime = FALSE,
       check_dates_only = FALSE,
-      traceability_vars = vars()
+      traceability_vars = NULL
     ),
     regexp = "Not all values of EXSTDTC are equal to EXENDTC"
   )
@@ -105,7 +133,7 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
       new_var = LDOSEDTM,
       output_datetime = FALSE,
       check_dates_only = FALSE,
-      traceability_vars = vars()
+      traceability_vars = NULL
     ),
     regexp = "Not all values of EXSTDTC are equal to EXENDTC"
   )
@@ -143,7 +171,7 @@ test_that(
     new_var = LDOSEDTM,
     output_datetime = FALSE,
     check_dates_only = TRUE,
-    traceability_vars = vars()
+    traceability_vars = NULL
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
