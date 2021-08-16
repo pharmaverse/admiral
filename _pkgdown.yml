@@ -1,6 +1,9 @@
 template:
   params:
     bootswatch: flatly
+    docsearch:
+      api_key: 2d4895759f79e89d6eb1c3b990bca6d8
+      index_name: roche-gsk
 repo:
   url:
     home: https://github.com/Roche-GSK/admiral/
