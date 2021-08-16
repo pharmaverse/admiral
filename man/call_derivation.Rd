@@ -14,7 +14,9 @@ call_derivation(dataset, derivation, variable_params, ...)
 \item{variable_params}{A \code{list} of arguments that are different across iterations.
 Each set of arguments must be created using \code{\link[=params]{params()}}.}
 
-\item{...}{Any number of \emph{named} arguments that are fixed across iterations}
+\item{...}{Any number of \emph{named} arguments that are fixed across iterations.
+If a parameter is specified both inside \code{variable_params} and \code{...} then
+the value in \code{variable_params} overwrites the one in \code{...}}
 }
 \value{
 The input dataset with additional records/variables added depending on
@@ -29,11 +31,25 @@ library(dplyr, warn.conflicts = FALSE)
 data(ae)
 data(adsl)
 
-input <- ae[sample(1:nrow(ae), 1000), ] \%>\%
-  left_join(adsl, by = "USUBJID")
+adae <- ae[sample(1:nrow(ae), 1000), ] \%>\%
+  left_join(adsl, by = "USUBJID") \%>\%
+  select(USUBJID, AESTDTC, AEENDTC, TRTSDT, TRTEDT)
 
-## Call the same derivation twice in a row
-expected_output <- input \%>\%
+## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
+## one can add multiple variables in one go
+call_derivation(
+  dataset = adae,
+  derivation = derive_vars_dt,
+  variable_params = list(
+    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+  ),
+  min_dates = list(TRTSDT),
+  max_dates = list(TRTEDT)
+)
+
+## The above call using `call_derivation()` is equivalent to the following
+adae \%>\%
   derive_vars_dt(
     new_vars_prefix = "AST",
     dtc = AESTDTC,
@@ -48,18 +64,6 @@ expected_output <- input \%>\%
     min_dates = list(TRTSDT),
     max_dates = list(TRTEDT)
   )
-
-## Call the same derivation in one go
-actual_output <- call_derivation(
-  dataset = input,
-  derivation = derive_vars_dt,
-  variable_params = list(
-    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
-    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
-  ),
-  min_dates = list(TRTSDT),
-  max_dates = list(TRTEDT)
-)
 }
 \seealso{
 params
@@ -67,3 +71,4 @@ params
 \author{
 Thomas Neitmann, Stefan Bundfuss
 }
+\keyword{user_utility}

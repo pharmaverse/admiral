@@ -4,10 +4,12 @@
 \alias{extract_vars}
 \title{Extract All Symbols from a List of Quosures}
 \usage{
-extract_vars(quosures)
+extract_vars(x, side = "lhs")
 }
 \arguments{
-\item{quosures}{A list of quosures, e.g. created using \code{vars()}}
+\item{x}{An \code{R} object}
+
+\item{side}{One of \code{"lhs"} (the default) or \code{"rhs"}}
 }
 \description{
 Extract All Symbols from a List of Quosures

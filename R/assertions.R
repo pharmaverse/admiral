@@ -530,6 +530,49 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+#' Is an Argument a Numeric Vector?
+#'
+#' Checks if an argument is a numeric vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if `arg` is not a numeric vector.
+#'   Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num) {
+#'   assert_numeric_vector(num)
+#' }
+#'
+#' example_fun(1:10)
+#'
+#' try(example_fun(letters))
+assert_numeric_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.numeric(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a numeric vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
+
+
 #' Is an Argument an Object of a Specific S3 Class?
 #'
 #' Checks if an argument is an object inheriting from the S3 class specified.
@@ -647,6 +690,25 @@ assert_named_exprs <- function(arg, optional = FALSE) {
       "`%s` must be a named list of expressions created using `exprs()` but is %s",
       arg_name(substitute(arg)),
       what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+assert_list_of_formulas <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.list(arg) || !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) || !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+    err_msg <- paste(
+      backquote(arg_name(substitute(arg))),
+      "must be a list of formulas where each formula's left-hand side is a single",
+      "variable name and each right-hand side is a function, e.g. `list(AVAL ~ mean)`"
     )
     abort(err_msg)
   }
@@ -1069,6 +1131,7 @@ on_failure(is_valid_month) <- function(call, env) {
 #' `NA`. More general expression are not allowed.
 #'
 #' @param arg A function argument to be checked
+#' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
@@ -1085,50 +1148,62 @@ on_failure(is_valid_month) <- function(call, env) {
 #' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
 #' try(example_fun(vars("AE", DTSEQ = AESEQ)))
-assert_varval_list <- function(arg, optional = FALSE) {
+assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) {
   assert_logical_scalar(optional)
+  assert_character_vector(required_elements, optional = TRUE)
 
   if (optional && is.null(arg)) {
     return(invisible(arg))
   }
 
-  err_msg <- sprintf(
-    paste0(
-      "`%s` must be a named list of quosures where each element is a symbol, ",
-      "character scalar, numeric scalar, or `NA` but it is %s\n",
-      "\u2139 To create a list of quosures use `vars()`"
-    ),
-    arg_name(substitute(arg)),
-    what_is_it(arg)
-  )
-
   if (!is_quosures(arg) || !is_named(arg)) {
+    err_msg <- sprintf(
+      paste0(
+        "`%s` must be a named list of quosures where each element is a symbol, ",
+        "character scalar, numeric scalar, or `NA` but it is %s\n",
+        "\u2139 To create a list of quosures use `vars()`"
+      ),
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
     abort(err_msg)
-  } else {
-    expr_list <- map(arg, quo_get_expr)
-    invalids <- expr_list[!map_lgl(
-      expr_list,
-      ~ is.symbol(.x) ||
-        is.character(.x) ||
-        is.numeric(.x) || is.atomic(.x) && is.na(.x)
-    )]
-    if (length(invalids) > 0) {
-      abort(
+  }
+
+  if (!is.null(required_elements)) {
+    missing_elements <- setdiff(required_elements, names(arg))
+    if (length(missing_elements) >= 1L) {
+      err_msg <- sprintf(
+        "The following required elements are missing in `%s`: %s",
+        arg_name(substitute(arg)),
+        enumerate(missing_elements, quote_fun = squote)
+      )
+      abort(err_msg)
+    }
+  }
+
+  expr_list <- map(arg, quo_get_expr)
+  invalids <- expr_list[!map_lgl(
+    expr_list,
+    ~ is.symbol(.x) ||
+      is.character(.x) ||
+      is.numeric(.x) || is.atomic(.x) && is.na(.x)
+  )]
+  if (length(invalids) > 0) {
+    abort(
+      paste(
+        "The elements of the list",
+        arg_name(substitute(arg)),
+        "must be a symbol, a character scalar, a numeric, or `NA`.\n",
         paste(
-          "The elements of the list",
-          arg_name(substitute(arg)),
-          "must be a symbol, a character scalar, a numeric, or `NA`.\n",
-          paste(
-            names(invalids),
-            "=",
-            map_chr(invalids, expr_label),
-            "is of type",
-            map_chr(invalids, typeof),
-            collapse = "\n"
-          )
+          names(invalids),
+          "=",
+          map_chr(invalids, expr_label),
+          "is of type",
+          map_chr(invalids, typeof),
+          collapse = "\n"
         )
       )
-    }
+    )
   }
 
   invisible(arg)
