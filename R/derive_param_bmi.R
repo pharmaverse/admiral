@@ -4,7 +4,7 @@
 #' (e.g., subject and visit) where the source parameters are available.
 #'
 #' The analysis value of the new parameter is derived as
-#' \deqn{BMI = {WEIGHT / (HEIGHT)^2}
+#' \deqn{BMI = { WEIGHT / (HEIGHT)^2 }
 #'
 #' @param dataset Input dataset
 #'
@@ -65,7 +65,7 @@
 #'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 #' )
 #'
-#' derive_advs_bmi(
+#' derive_param_bmi(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   weight_code = "WEIGHT",
