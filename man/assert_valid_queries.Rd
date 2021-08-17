@@ -39,3 +39,4 @@ assert_valid_queries(queries, "queries")
 \author{
 Shimeng Huang, Ondrej Slama
 }
+\keyword{assertion}
