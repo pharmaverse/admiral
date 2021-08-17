@@ -95,6 +95,7 @@ derive_param_qtcb(
   set_values_to = vars(
     PARAMCD = "QTCBR",
     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+    AVALU = "msec"
   )
 )
 }
