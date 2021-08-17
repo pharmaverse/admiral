@@ -90,6 +90,7 @@ DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 if it is based on diastolic, systolic blood pressure, and heart rate.
 }
 \examples{
+library(dplyr, warn.conflicts = TRUE)
 advs <- tibble::tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",

@@ -63,6 +63,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = TRUE)
 #' advs <- tibble::tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
 #'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
