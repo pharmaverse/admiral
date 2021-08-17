@@ -516,8 +516,6 @@ compute_bsa <- function(height = height,
 #'   )
 #'  )
 #'
-
-
 derive_param_bmi <-  function(dataset,
                               by_vars,
                               set_values_to = vars(PARAMCD = "BMI"),
@@ -592,11 +590,8 @@ derive_param_bmi <-  function(dataset,
 #'
 #' @examples
 #' # derive BMI
-#' compute_bmi(
-#'   height = 170,
-#'   weight = 75)
+#' compute_bmi(height = 170,weight = 75)
 #'
-
 
 compute_bmi <- function(height = height,
                         weight = weight
@@ -606,7 +601,5 @@ compute_bmi <- function(height = height,
   assert_numeric_vector(weight)
 
   # Derivation
-    bmi <-  weight / ( (height * height) / 10000)
-
-  bmi
+    weight / ( (height * height) / 10000)
 }
