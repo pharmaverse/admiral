@@ -68,7 +68,7 @@
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(
 #'     PARAMCD = "QTCBR",
-#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
 #'     AVALU = "msec"
 #'   )
 #' )
