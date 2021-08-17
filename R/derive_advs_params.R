@@ -86,7 +86,7 @@
 #'     unit_var = AVALU,
 #'     set_values_to = vars(
 #'       PARAMCD = "MAP",
-#'       ARAM = "Mean Arterial Pressure (mmHg)"
+#'       PARAM = "Mean Arterial Pressure (mmHg)"
 #'     )
 #'   ) %>%
 #'   filter(PARAMCD != "PULSE")
