@@ -599,7 +599,6 @@ compute_bmi <- function(height = height,
   # Checks
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
-
   # Derivation
     weight / ( (height * height) / 10000)
 }
