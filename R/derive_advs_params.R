@@ -437,6 +437,7 @@ compute_bsa <- function(height = height,
 
   bsa
 }
+
 #' Adds a Parameter for BMI
 #'
 #' Adds a record for BMI/Body Mass Index using Weight and Height each by group
@@ -553,7 +554,7 @@ derive_param_bmi <-  function(dataset,
     set_unit_var <- NULL
   }
 
-  derive_derived_param(
+    derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
