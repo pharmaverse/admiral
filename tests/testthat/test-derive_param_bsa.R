@@ -168,21 +168,21 @@ test_that("an error is issued if an invalid method is specified", {
   )
 })
 
-input <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD,     ~PARAM,        ~AVAL, ~AVALU,  ~VISIT,
-  "01-701-1015", "HEIGHT",     "Height (cm)", 170,   "cm",   "BASELINE",
-  "01-701-1015", "WEIGHT",     "Weight (kg)",  75,   "kg",   "BASELINE",
-  "01-701-1015", "WEIGHT",     "Weight (kg)",  78,   "kg",   "MONTH 1",
-  "01-701-1015", "HEIGHT",     "Height (cm)", 170,   "cm",   "MONTH 2",
-  "01-701-1015", "WEIGHT",     "Weight (kg)",  80,   "kg",   "MONTH 2",
-  "01-701-1028", "HEIGHT",     "Height (cm)", 185,   "cm",   "BASELINE",
-  "01-701-1028", "WEIGHT",     "Weight (kg)",  90,   "kg",   "BASELINE",
-  "01-701-1028", "WEIGHT",     "Weight (kg)",  88,   "kg",   "MONTH 1",
-  "01-701-1028", "HEIGHT",     "Height (cm)", 185,   "cm",   "MONTH 2",
-  "01-701-1028", "WEIGHT",     "Weight (kg)",  85,   "kg",   "MONTH 2",
-)
-
 test_that("new observations are derived correctly whenever HEIGHT and WEIGHT are available regardless of visit", {
+
+  input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD,     ~PARAM,        ~AVAL, ~AVALU,  ~VISIT,
+    "01-701-1015", "HEIGHT",     "Height (cm)", 170,   "cm",   "BASELINE",
+    "01-701-1015", "WEIGHT",     "Weight (kg)",  75,   "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT",     "Weight (kg)",  78,   "kg",   "MONTH 1",
+    "01-701-1015", "HEIGHT",     "Height (cm)", 170,   "cm",   "MONTH 2",
+    "01-701-1015", "WEIGHT",     "Weight (kg)",  80,   "kg",   "MONTH 2",
+    "01-701-1028", "HEIGHT",     "Height (cm)", 185,   "cm",   "BASELINE",
+    "01-701-1028", "WEIGHT",     "Weight (kg)",  90,   "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT",     "Weight (kg)",  88,   "kg",   "MONTH 1",
+    "01-701-1028", "HEIGHT",     "Height (cm)", 185,   "cm",   "MONTH 2",
+    "01-701-1028", "WEIGHT",     "Weight (kg)",  85,   "kg",   "MONTH 2",
+  )
 
   new_obs <-
     inner_join(input %>% filter(PARAMCD == "HEIGHT") %>% select(USUBJID, VISIT, AVAL, AVALU),
