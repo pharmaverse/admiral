@@ -39,8 +39,6 @@ knitr::opts_chunk$set(
   * Imagine if ADaMs are build in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
 
 
-Open source with ever expanding packages to benefit from without license costs; 
-
 
 ##### Why did we use **R as a programming language**?
 
