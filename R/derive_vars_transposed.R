@@ -1,3 +1,73 @@
+#' Derive Variables by Transposing and Merging a Second Dataset
+#'
+#' Adds variables from a vertical dataset after transposing it into a wide one.
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` parameter are required
+#'
+#' @param dataset_merge Dataset to transpose and merge
+#'
+#'   The variables specified by the `by_vars`, `key_var` and `value_var` parameters
+#'   are expected
+#'
+#' @param by_vars Keys used to merge `dataset_facm` with `dataset`
+#'
+#' @param key_var The variable of `dataset_merge` that containing the names of the transposed variables
+#'
+#' @param value_var The variable of `dataset_merge` containing the values of the transposed variables
+#'
+#' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
+#'
+#' @author Thomas Neitmann
+#'
+#' @return The input dataset with transposed variables from `dataset_merge` added
+#'
+#' @keywords derivation bds
+#'
+#' @export
+#'
+#' @examples
+#' cm <- tibble::tribble(
+#'         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
+#'   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
+#'   "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",
+#'   "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE"
+#' )
+#' facm <- tibble::tribble(
+#'         ~USUBJID, ~FAGRPID,  ~FAREFID,   ~FATESTCD, ~FASTRESC,
+#'   "BP40257-1001",      "1", "1192056",  "CMATC1CD",       "N",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC2CD",     "N02",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC3CD",    "N02B",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC4CD",   "N02BE",
+#'
+#'   "BP40257-1001",      "1", "2007001",  "CMATC1CD",       "D",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC2CD",     "D10",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC3CD",    "D10A",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC4CD",   "D10AA",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC1CD",       "D",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC2CD",     "D07",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC3CD",    "D07A",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC4CD",   "D07AA",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC1CD",       "H",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC2CD",     "H02",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC3CD",    "H02A",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC4CD",   "H02AB",
+#'
+#'   "BP40257-1002",      "1", "2791596",  "CMATC1CD",       "C",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC2CD",     "C03",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC3CD",    "C03D",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC4CD",   "C03DA"
+#' )
+#'
+#' cm %>%
+#'   derive_vars_transposed(
+#'     facm,
+#'     by_vars = vars(USUBJID, CMREFID = FAREFID),
+#'     key_var = FATESTCD,
+#'     value_var = FASTRESC
+#'   ) %>%
+#'   select(USUBJID, CMDECOD, starts_with("CMATC"))
 derive_vars_transposed <- function(dataset,
                                    dataset_merge,
                                    by_vars,
@@ -18,6 +88,65 @@ derive_vars_transposed <- function(dataset,
   left_join(dataset, dataset_transposed, by = vars2chr(by_vars))
 }
 
+#' Derive ATC Class Variables
+#'
+#' Add Anatomical Therapeutic Chemical class variables from `FACM` to `ADCM`
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` parameter are required
+#'
+#' @param dataset_facm FACM dataset
+#'
+#'   The variables specified by the `by_vars` parameter, `FAGRPID`, `FATESTCD` and
+#'   `FASTRESC` are required
+#'
+#' @param by_vars Keys used to merge `dataset_facm` with `dataset`
+#'
+#'   *Permitted Values:* list of variables
+#'
+#' @author Thomas Neitmann
+#'
+#' @return The input dataset with ATC variables added
+#'
+#' @keywords derivation bds
+#'
+#' @export
+#'
+#' @examples
+#' cm <- tibble::tribble(
+#'         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
+#'   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
+#'   "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",
+#'   "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE"
+#' )
+#' facm <- tibble::tribble(
+#'         ~USUBJID, ~FAGRPID,  ~FAREFID,   ~FATESTCD, ~FASTRESC,
+#'   "BP40257-1001",      "1", "1192056",  "CMATC1CD",       "N",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC2CD",     "N02",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC3CD",    "N02B",
+#'   "BP40257-1001",      "1", "1192056",  "CMATC4CD",   "N02BE",
+#'
+#'   "BP40257-1001",      "1", "2007001",  "CMATC1CD",       "D",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC2CD",     "D10",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC3CD",    "D10A",
+#'   "BP40257-1001",      "1", "2007001",  "CMATC4CD",   "D10AA",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC1CD",       "D",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC2CD",     "D07",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC3CD",    "D07A",
+#'   "BP40257-1001",      "2", "2007001",  "CMATC4CD",   "D07AA",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC1CD",       "H",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC2CD",     "H02",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC3CD",    "H02A",
+#'   "BP40257-1001",      "3", "2007001",  "CMATC4CD",   "H02AB",
+#'
+#'   "BP40257-1002",      "1", "2791596",  "CMATC1CD",       "C",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC2CD",     "C03",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC3CD",    "C03D",
+#'   "BP40257-1002",      "1", "2791596",  "CMATC4CD",   "C03DA"
+#' )
+#'
+#' derive_vars_atc(cm, facm)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = vars(USUBJID, CMREFID = FAREFID)) {
