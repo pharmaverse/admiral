@@ -23,14 +23,14 @@ derive_vars_atc <- function(dataset,
                             by_vars = vars(USUBJID, CMREFID = FAREFID)) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_facm, required_vars = vars(!!!by_vars, FAGRPID, FATESTCD, FAORRES))
+  assert_data_frame(dataset_facm, required_vars = vars(!!!by_vars, FAGRPID, FATESTCD, FASTRESC))
 
   dataset %>%
     derive_vars_transposed(
-      select(dataset_facm, !!!unname(by_vars), FAGRPID, FATESTCD, FAORRES),
+      select(dataset_facm, !!!unname(by_vars), FAGRPID, FATESTCD, FASTRESC),
       by_vars = by_vars,
       key_var = FATESTCD,
-      value_var = FAORRES,
+      value_var = FASTRESC,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
     ) %>%
     select(-starts_with("FA")) %>%
