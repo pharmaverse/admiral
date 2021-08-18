@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ##### **What is admiral**?
 
-* Think of admiral as a toolbox of modular blocks (toolbox of R functions) →
+* Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations  →
   * each block has a stand alone purpose (each function provides a specific functionality)
   * Data Scientists can create their own blocks (create own R functions)
 
