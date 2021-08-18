@@ -1,5 +1,5 @@
 ---
-title: "Contributing to admiral"
+title: "programming strategy"
 output: 
   rmarkdown::html_vignette:
     toc: true
