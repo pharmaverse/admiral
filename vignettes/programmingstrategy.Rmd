@@ -1,10 +1,10 @@
 ---
-title: "programming strategy"
+title: Programming Strategy"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{programming strategy}
+  %\VignetteIndexEntry{Programming Strategy}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
