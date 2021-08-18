@@ -103,5 +103,5 @@ articles:
 - title: Developer Guides
   navbar: Developer Guides
   contents:
-  - contributing
+  - programmingstrategy
   - git_usage
