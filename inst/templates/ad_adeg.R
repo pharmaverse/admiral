@@ -42,7 +42,9 @@ range_lookup <- tibble::tribble(
 
 # Join ADSL & EG
 adeg <- adsl %>%
+
   select(STUDYID, USUBJID, starts_with("TRT")) %>%
+
   left_join(eg,
     by = c("STUDYID", "USUBJID")
   ) %>%
@@ -53,6 +55,7 @@ adeg <- adsl %>%
     dtc = EGDTC,
     flag_imputation = "time"
   ) %>%
+
   derive_var_ady(reference_date = TRTSDT, date = ADTM) %>%
 
   # Calculate AVAL, AVALC, AVALU
@@ -70,33 +73,40 @@ adeg <- adsl %>%
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
     set_values_to = vars(PARAMCD = "RRR",
                          PARAM = "RR Duration Rederived (msec)",
-                         PARAMN = 4),
+                         PARAMN = 4
+                         ),
     hr_code = "HR",
     filter = EGSTAT != "NOT DONE"
   ) %>%
+
   derive_param_qtcb(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
     set_values_to = vars(PARAMCD = "QTCBR",
                          PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
-                         PARAMN = 11),
+                         PARAMN = 11
+                         ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
   ) %>%
+
   derive_param_qtcf(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
     set_values_to = vars(PARAMCD = "QTCFR",
                          PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
-                         PARAMN = 12),
+                         PARAMN = 12
+                         ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
   ) %>%
+
   derive_param_qtlc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
     set_values_to = vars(PARAMCD = "QTLCR",
                          PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
-                         PARAMN = 13),
+                         PARAMN = 13
+                         ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
@@ -108,8 +118,7 @@ adeg <- adsl %>%
     ATPTN = EGTPTNUM,
     ATPT = EGTPT,
     AVISIT = case_when(
-      str_detect(VISIT, "SCREEN") | str_detect(VISIT, "UNSCHED") |
-        str_detect(VISIT, "RETRIEVAL") | str_detect(VISIT, "AMBUL") ~ NA_character_,
+      str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
@@ -144,13 +153,17 @@ adeg <- adsl %>%
       ADT <= TRTSDT &
       (DTYPE != "AVERAGE" | PARAMCD != "EGINTP"))
   ) %>%
+
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
   ) %>%
+
   derive_var_basec(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
   ) %>%
+
   derive_var_chg() %>%
+
   derive_var_pchg() %>%
 
   # Calculate ONTRTFL: from trt start up to 30 days after trt ends.
@@ -172,6 +185,7 @@ adeg <- adsl %>%
 
   # Calculate ANRIND
   left_join(range_lookup, by = "PARAMCD") %>%
+
   derive_var_anrind() %>%
 
   #Derive AVALCTx, CHGCATx
