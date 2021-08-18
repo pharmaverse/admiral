@@ -29,14 +29,14 @@ knitr::opts_chunk$set(
 ##### **Why** did we decide to start **admiral**?
 
   * Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets? 
-  * Build ADaMs vial collaboration and co-creation
+  * Build ADaMs via collaboration and co-creation
   * Early engagement with other like-minded companies moving towards R could lead to our solution being shared open source as a framework for contribution across-industry
   * Building ADaMs like a modular building blocks, here everyone can contribute and each module has a clear input and output to enable re-usable solutions 
   * Users can “slot in” their own modules to address specific company/TA/Molecule/Study requirements
   * TA specific requirements can be open sourced again and transformed into a common ADaM approach for such analysis
   * the long-term gain of a consistent way of producing ADaM and a wider community of across-industry developers contributing to grow the codebase to cover the infinite array of possibilities
   * Contributors: An option to make a name for yourself in the Pharma open-source community & an avenue to collaborate with other like-minded people across the industry
-  * Imagine if ADaMs are build in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
+  * Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
 
 
 
