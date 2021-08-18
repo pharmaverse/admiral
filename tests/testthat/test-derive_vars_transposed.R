@@ -52,42 +52,48 @@ test_that("filtering the merge dataset works", {
 
 test_that("ATC variables are merged properly", {
   cm <- tibble::tribble(
-          ~USUBJID, ~CMSEQ, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
-    "BP40257-1001",     1L,     "14", "1192056",       "PARACETAMOL",
-    "BP40257-1001",     2L,      "9", "1192057",       "PARACETAMOL",
-    "BP40257-1002",     1L,     "19", "2791596",    "SPIRONOLACTONE",
-    "BP40257-1002",     2L,     "12", "1265064", "ENOXAPARIN SODIUM"
+          ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
+    "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
+    "BP40257-1001",     "18", "2007001",       "SOLUMEDROL",
+    "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE"
   )
   facm <- tibble::tribble(
-          ~USUBJID, ~FAGRPID,  ~FAREFID, ~FATESTCD,                            ~FAORRES,
-    "BP40257-1001",      "1", "1192056",  "CMATC1",                    "NERVOUS SYSTEM",
-    "BP40257-1001",      "1", "1192056",  "CMATC2",                        "ANALGESICS",
-    "BP40257-1001",      "1", "1192056",  "CMATC3", "OTHER ANALGESICS AND ANTIPYRETICS",
-    "BP40257-1001",      "1", "1192056",  "CMATC4",                          "ANILIDES",
-    "BP40257-1001",      "1", "1192057",  "CMATC1",                    "NERVOUS SYSTEM",
-    "BP40257-1001",      "1", "1192057",  "CMATC2",                        "ANALGESICS",
-    "BP40257-1001",      "1", "1192057",  "CMATC3", "OTHER ANALGESICS AND ANTIPYRETICS",
-    "BP40257-1001",      "1", "1192057",  "CMATC4",                          "ANILIDES",
-    "BP40257-1002",      "1", "1265064",  "CMATC1",    "BLOOD AND BLOOD FORMING ORGANS",
-    "BP40257-1002",      "1", "1265064",  "CMATC2",             "ANTITHROMBOTIC AGENTS",
-    "BP40257-1002",      "1", "1265064",  "CMATC3",             "ANTITHROMBOTIC AGENTS",
-    "BP40257-1002",      "1", "1265064",  "CMATC4",                     "HEPARIN GROUP",
-    "BP40257-1002",      "1", "2791596",  "CMATC1",             "CARDIOVASCULAR SYSTEM",
-    "BP40257-1002",      "1", "2791596",  "CMATC2",                         "DIURETICS",
-    "BP40257-1002",      "1", "2791596",  "CMATC3",          "POTASSIUM-SPARING AGENTS",
-    "BP40257-1002",      "1", "2791596",  "CMATC4",           "ALDOSTERONE ANTAGONISTS"
+          ~USUBJID, ~FAGRPID,  ~FAREFID,   ~FATESTCD, ~FAORRES,
+    "BP40257-1001",      "1", "1192056",  "CMATC1CD",      "N",
+    "BP40257-1001",      "1", "1192056",  "CMATC2CD",    "N02",
+    "BP40257-1001",      "1", "1192056",  "CMATC3CD",   "N02B",
+    "BP40257-1001",      "1", "1192056",  "CMATC4CD",  "N02BE",
+
+    "BP40257-1001",      "1", "2007001",  "CMATC1CD",      "D",
+    "BP40257-1001",      "1", "2007001",  "CMATC2CD",    "D10",
+    "BP40257-1001",      "1", "2007001",  "CMATC3CD",   "D10A",
+    "BP40257-1001",      "1", "2007001",  "CMATC4CD",  "D10AA",
+    "BP40257-1001",      "2", "2007001",  "CMATC1CD",      "D",
+    "BP40257-1001",      "2", "2007001",  "CMATC2CD",    "D07",
+    "BP40257-1001",      "2", "2007001",  "CMATC3CD",   "D07A",
+    "BP40257-1001",      "2", "2007001",  "CMATC4CD",  "D07AA",
+    "BP40257-1001",      "3", "2007001",  "CMATC1CD",      "H",
+    "BP40257-1001",      "3", "2007001",  "CMATC2CD",    "H02",
+    "BP40257-1001",      "3", "2007001",  "CMATC3CD",   "H02A",
+    "BP40257-1001",      "3", "2007001",  "CMATC4CD",  "H02AB",
+
+    "BP40257-1002",      "1", "2791596",  "CMATC1CD",      "C",
+    "BP40257-1002",      "1", "2791596",  "CMATC2CD",    "C03",
+    "BP40257-1002",      "1", "2791596",  "CMATC3CD",   "C03D",
+    "BP40257-1002",      "1", "2791596",  "CMATC4CD",  "C03DA"
   )
   # nolint start
   expected_output <- tibble::tribble(
-          ~USUBJID, ~CMSEQ, ~CMGRPID,  ~CMREFID,            ~CMDECOD,                                ~ATC1,                      ~ATC2,                               ~ATC3,                     ~ATC4,
-    "BP40257-1001",     1L,     "14", "1192056",       "PARACETAMOL",                     "NERVOUS SYSTEM",               "ANALGESICS", "OTHER ANALGESICS AND ANTIPYRETICS", "ANILIDES",
-    "BP40257-1001",     2L,      "9", "1192057",       "PARACETAMOL",                     "NERVOUS SYSTEM",               "ANALGESICS", "OTHER ANALGESICS AND ANTIPYRETICS", "ANILIDES",
-    "BP40257-1002",     1L,     "19", "2791596",    "SPIRONOLACTONE",              "CARDIOVASCULAR SYSTEM",                "DIURETICS",          "POTASSIUM-SPARING AGENTS", "ALDOSTERONE ANTAGONISTS",
-    "BP40257-1002",     2L,     "12", "1265064", "ENOXAPARIN SODIUM",     "BLOOD AND BLOOD FORMING ORGANS",    "ANTITHROMBOTIC AGENTS",             "ANTITHROMBOTIC AGENTS", "HEPARIN GROUP"
+          ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD, ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+    "BP40257-1001",     "14", "1192056",       "PARACETAMOL",     "N",   "N02",  "N02B", "N02BE",
+    "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",     "D",   "D07",  "D07A", "D07AA",
+    "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",     "D",   "D10",  "D10A", "D10AA",
+    "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",     "H",   "H02",  "H02A", "H02AB",
+    "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE",     "C",   "C03",  "C03D", "C03DA"
   )
   # nolint end
   actual_output <- derive_vars_atc(cm, facm)
 
-  expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMSEQ"))
+  expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMDECOD", "ATC4CD"))
 })
 
