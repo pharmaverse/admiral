@@ -12,7 +12,7 @@ dataset_merge <- tibble::tribble(
   "P03",    "T02",   9
 )
 
-test_that("the merge datasrt is transposed and merged correctly", {
+test_that("the merge dataset is transposed and merged correctly", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~VAR1, ~T01, ~T02,
     "P01",     3,    31,   5,
