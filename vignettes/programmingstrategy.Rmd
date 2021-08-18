@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Contributing to admiral}
+  %\VignetteIndexEntry{programming strategy}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -356,8 +356,7 @@ If a unit test fails, it must provide a helpful error message, e.g., if the outp
 
 # Readable Code for ADaM
 
-General Guidance explaining the why and the definition of readable code:
-[General Readable Code Guidance](https://drive.google.com/file/d/107VOGN9lvKZfjBmz13fuiOYWpNoOVtgK/view).
+each function should be considered as readable code by default
 
 
 ## Basic Rules
