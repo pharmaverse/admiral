@@ -41,12 +41,10 @@ range_lookup <- tibble::tribble(
 # Start
 
 # Join ADSL & EG
-adeg <- adsl %>%
+adeg <- eg %>%
 
-  select(STUDYID, USUBJID, starts_with("TRT")) %>%
-
-  left_join(eg,
-    by = c("STUDYID", "USUBJID")
+  left_join(select(adsl, STUDYID, USUBJID, starts_with("TRT")),
+            by = c("STUDYID", "USUBJID")
   ) %>%
 
   # Calculate ADT, ADY
