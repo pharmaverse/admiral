@@ -530,6 +530,49 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
   invisible(as.integer(arg))
 }
 
+#' Is an Argument a Numeric Vector?
+#'
+#' Checks if an argument is a numeric vector
+#'
+#' @param arg A function argument to be checked
+#' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
+#' is `NULL` then an error is thrown
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error if `arg` is not a numeric vector.
+#'   Otherwise, the input is returned invisibly.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(num) {
+#'   assert_numeric_vector(num)
+#' }
+#'
+#' example_fun(1:10)
+#'
+#' try(example_fun(letters))
+assert_numeric_vector <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (!is.numeric(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a numeric vector but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+}
+
+
 #' Is an Argument an Object of a Specific S3 Class?
 #'
 #' Checks if an argument is an object inheriting from the S3 class specified.
@@ -712,6 +755,25 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+assert_function_param <- function(arg, params) {
+  assert_character_scalar(arg)
+  assert_character_vector(params)
+  fun <- match.fun(arg)
+
+  is_param <- params %in% names(formals(fun))
+  if (!all(is_param)) {
+    txt <- if (sum(!is_param) == 1L) {
+      "%s is not a parameter of `%s()`"
+    } else {
+      "%s are not parameters of `%s()`"
+    }
+    err_msg <- sprintf(txt, enumerate(params[!is_param]), arg)
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Asserts That a Parameter is Provided in the Expected Unit
 #'
 #' Checks if a parameter (`PARAMCD`) in a dataset is provided in the expected
@@ -800,7 +862,6 @@ assert_param_does_not_exist <- function(dataset, param) {
     )
   }
 }
-
 
 #' Is Date/Date-time?
 #'

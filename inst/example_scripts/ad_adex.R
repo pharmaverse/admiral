@@ -13,14 +13,13 @@ library(admiral)
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
-# adsl <- NULL
-# ex <- NULL
-
+# The CDISC pilot datasets are used for demonstration purpose.
 data("adsl")
 data("ex")
 
-# The CDISC pilot data does not contain EXADJ,
-# add a fake one to test for Dose adjustment flag
+# The CDISC pilot data does not contain EXADJ,nor a SUPPVS dataset
+# add a fake EXADJ to test for Dose adjustment flag
+# add SUPPEX.EXPLDOS to test for dose intensity
 ex <- ex %>%
   mutate(
     EXADJ = case_when(
@@ -81,13 +80,15 @@ format_avalcat1 <- function(param, aval) {
 }
 
 # ---- Derivations ----
+adsl0 <- adsl %>%
+  select(STUDYID, USUBJID, starts_with("TRT"))
 
 # Part 1
 # Join ADSL with ex and derive required dates, variables
-adex0 <- adsl %>%
-  select(STUDYID, USUBJID, starts_with("TRT")) %>%
-  right_join(ex, by = c("STUDYID", "USUBJID")) %>%
-  # Calculate ASTDTM, AENDTM
+adex0 <- ex %>%
+  left_join(adsl0, by = c("STUDYID", "USUBJID")) %>%
+
+  # Calculate ASTDTM, AENDTM using derive_vars_dtm
   call_derivation(
     derivation = derive_vars_dtm,
     variable_params = list(
@@ -98,9 +99,11 @@ adex0 <- adsl %>%
     min_dates = list(TRTSDT),
     max_dates = list(TRTEDT)
   ) %>%
+
   # Calculate ASTDY, AENDY
   derive_var_astdy(reference_date = TRTSDT, date = ASTDTM) %>%
   derive_var_aendy(reference_date = TRTSDT, date = AENDTM) %>%
+
   # add EXDUR, the duration of trt for each record
   derive_duration(
     new_var = EXDUR,
@@ -111,9 +114,8 @@ adex0 <- adsl %>%
   mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
 
 # Part 2
-
-
 # 1:1 mapping
+
 adex <- bind_rows(
   adex0 %>% mutate(PARAMCD = "DURD", AVAL = EXDUR),
   adex0 %>% mutate(PARAMCD = "DOSE", AVAL = EXDOSE),
@@ -130,45 +132,77 @@ adex <- bind_rows(
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
-      params(new_param = "TDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "TPDOSE", input_param = "PLDOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "TDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
-      params(new_param = "AVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
       params(
-        new_param = "TADJ", input_param = "ADJ",
+        set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
+        input_param = "DOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
+        input_param = "PLDOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
+        input_param = "DURD",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL"),
+        input_param = "DOSE",
+        fns = AVAL ~ mean(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
+        input_param = "ADJ",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       ),
       params(
-        new_param = "TADJAE", input_param = "ADJAE",
+        set_values_to = vars(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
+        input_param = "ADJAE",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       )
     ),
-    by_vars = vars(USUBJID),
-    set_values_to = vars(PARCAT1 = "OVERALL"),
-    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
+    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
   ) %>%
 
   # W2-W24 exposure
   call_derivation(
     derivation = derive_exposure_params,
     variable_params = list(
-      params(new_param = "PDOSE", input_param = "DOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "PPDOSE", input_param = "PLDOSE", fns = list(AVAL ~ sum(., na.rm = TRUE))),
-      params(new_param = "PDURD", input_param = "DURD", fns = AVAL ~ sum(., na.rm = TRUE)),
-      params(new_param = "PAVDOSE", input_param = "DOSE", fns = AVAL ~ mean(., na.rm = TRUE)),
       params(
-        new_param = "PADJ", input_param = "ADJ",
+        set_values_to = vars(PARAMCD = "PDOSE", PARCAT1 = "WEEK 2-24"),
+        input_param = "DOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "PPDOSE", PARCAT1 = "WEEK 2-24"),
+        input_param = "PLDOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "PDURD", PARCAT1 = "WEEK 2-24"),
+        input_param = "DURD",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "PAVDOSE", PARCAT1 = "WEEK 2-24"),
+        input_param = "DOSE",
+        fns = AVAL ~ mean(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "PADJ", PARCAT1 = "WEEK 2-24"),
+        input_param = "ADJ",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       ),
       params(
-        new_param = "PADJAE", input_param = "ADJAE",
+        set_values_to = vars(PARAMCD = "PADJAE", PARCAT1 = "WEEK 2-24"),
+        input_param = "ADJAE",
         fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
       )
     ),
-    filter_rows = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = vars(USUBJID),
-    set_values_to = vars(PARCAT1 = "WEEK 2-24"),
-    drop_values_from = vars(EXPLDOS, EXDOSU, EXDOSFRM, EXDOSFRQ, EXROUTE, EXDURU)
+    filter = VISIT %in% c("WEEK 2", "WEEK 24"),
+    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
   ) %>%
 
   # Overall Dose intensity and W2-24 dose intensity
@@ -178,7 +212,7 @@ adex <- bind_rows(
       params(new_param = "TDOSINT", tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
       params(new_param = "PDOSINT", tadm_code = "PDOSE", tpadm_code = "PPDOSE")
     ),
-    by_vars = vars(STUDYID, USUBJID, PARCAT1)
+    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT, PARCAT1)
   ) %>%
 
 
@@ -199,11 +233,10 @@ adex <- bind_rows(
   )
 
 
-
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
 
 # ---- Save output ----
 
-saveRDS(adex, file = "/PATH/TO/SAVE/adex", compress = TRUE)
+saveRDS(adex, file = "./ADEX.rds", compress = TRUE)

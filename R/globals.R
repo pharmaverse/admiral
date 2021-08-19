@@ -61,5 +61,9 @@ globalVariables(c(
   "CD",
   "SC",
   "SCN",
-  "value"
+  "value",
+  "ASTDTM",
+  "ASTDTM___",
+  "AENDTM",
+  "AENDTM___"
 ))

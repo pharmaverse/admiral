@@ -168,6 +168,8 @@ derive_query_vars <- function(dataset, queries) {
 #'
 #' @author Shimeng Huang, Ondrej Slama
 #'
+#' @keywords assertion
+#'
 #' @export
 #'
 #' @return The function throws an error if any of the requirements not met.
