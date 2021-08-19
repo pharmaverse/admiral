@@ -1,6 +1,6 @@
-#' Adds a Parameter Computed from the Aggregated Analysis Value of another Parameter
+#' Adds a Record Computed from the Aggregated Analysis Value of another Parameter
 #'
-#' Adds a parameter computed from the aggregated analysis value of another parameter.
+#' Adds a record computed from the aggregated analysis value of another parameter.
 #'
 #' @param dataset Input dataset
 #'
@@ -18,12 +18,6 @@
 #'   into account.
 #'
 #'   *Permitted Values:* a condition
-#'
-#' @param new_param Required parameter code
-#'
-#'   For the new observations `PARAMCD` is set to the specified value.
-#'
-#' *Permitted Values:* A character value
 #'
 #' @param input_param Required parameter code
 #'
@@ -56,50 +50,79 @@
 #' @param set_values_to Variables to be set
 #'
 #'   The specified variables are set to the specified values for the new
-#'   observations. For example `vars(PARCAT1 = "OVERALL")` defines the parameter category
-#'   for the new parameter.
+#'   observations (e.g. `vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")`).
 #'
 #'   *Permitted Values:* List of variable-value pairs
 #'
-#' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) an observation is added to the output dataset if the
-#'   filtered input dataset contains exactly one observation for the parameter
-#'   code specified for `input_param`.
-#'
-#'   For the new observations, `AVAL` is set to the value specified by
-#'   `fns` and the variables specified for `set_values_to` are set to
-#'   the provided values. The values of the other variables of the input dataset
-#'   are retained if they are constant within each by group. Otherwise they are
-#'   set to `NA`.
-#'
 #' @author Samia Kabi
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with a new record added
 #'
 #' @keywords derivation bds
 #'
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(lubridate)
+#' library(stringr)
+#' adex <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
+#'   "01-701-1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "01-701-1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "01-701-1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "01-701-1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "01-701-1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "01-701-1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "01-701-1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
+#'   "01-701-1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "01-701-1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "01-701-1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
+#' ) %>%
+#'   mutate(ASTDTM = ymd_hms(paste(ASTDT, "00:00:00")), AENDTM = ymd_hms(paste(AENDT, "00:00:00")))
 #'
+#'   # Cumulative dose
+#'   adex %>%
+#'   derive_exposure_params(
+#'     by_vars = vars(USUBJID),
+#'     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
+#'     input_param = "DOSE",
+#'     fns = AVAL ~ sum(., na.rm = TRUE)
+#'   ) %>%
+#'   # average dose in w2-24
+#'   derive_exposure_params(
+#'     by_vars = vars(USUBJID),
+#'     filter = VISIT %in% c("WEEK2", "WEEK 24"),
+#'     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
+#'     input_param = "DOSE",
+#'     fns = AVAL ~ mean(., na.rm = TRUE)
+#'   ) %>%
+#'   # Any dose adjustement?
+#'   derive_exposure_params(
+#'     by_vars = vars(USUBJID),
+#'     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
+#'     input_param = "ADJ",
+#'     fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+#'   )
+
+
+
 derive_exposure_params <- function(dataset,
                                    by_vars,
-                                   new_param,
                                    input_param,
                                    fns,
                                    filter = NULL,
-                                   set_values_to = NULL,
-                                   drop_values_from = NULL) {
+                                   set_values_to = NULL) {
+  by_vars <- assert_vars(by_vars)
   assert_data_frame(dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALC, ASTDTM, AENDTM))
   )
-  by_vars <- assert_vars(by_vars)
-  assert_character_scalar(new_param)
   assert_character_scalar(input_param)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_vars(drop_values_from, optional = TRUE)
-  assert_varval_list(set_values_to, optional = TRUE)
-  assert_param_does_not_exist(dataset, new_param)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(input_param, values = params_available)
 
@@ -110,28 +133,10 @@ derive_exposure_params <- function(dataset,
     filter(PARAMCD == input_param) %>%
     derive_summary_records(
       by_vars = by_vars,
-      fns = fns,
-      set_values_to = vars(PARAMCD___ = !!new_param),
-      drop_values_from = drop_values_from
+      fns = list(fns),
+      set_values_to = set_values_to
     ) %>%
-    filter(PARAMCD___ == new_param) %>%
-    mutate(PARAMCD = PARAMCD___) %>%
-    # TO UPDATE
-    # not sure why the derive_summary_records() fns render a AVAL.x and AVAL.y...
-    # when i compute summary for TPDOSE
-    # If i remove the summary for TPDOSE it works fine...
-    # AVAL.x retain the value of the input param, AVAL.y has the correct result
-    select(-ends_with("___"), -ends_with(".x")) %>%
-    mutate(
-      AVAL = coalesce(!!!select(
-        ., starts_with("AVAL"),
-        -ends_with("C"),
-        -ends_with("C.y")
-      )),
-      AVALC = coalesce(!!!select(., starts_with("AVAL") &
-        (ends_with("C") | ends_with("C.y"))))
-    ) %>%
-    select(-ends_with(".y"))
+    filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
 
   # add the dates for the derived parameters
   by_vars <- vars2chr(by_vars)

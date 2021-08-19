@@ -19,8 +19,8 @@ test_that("derive_agegr_fda works as expected", {
   expected_output <- mutate(
     input,
     AGEGR_EXP = factor(
-      c(NA, NA, "19-64", "19-64", "19-64", ">=65", ">=65"),
-      levels = c("19-64", ">=65", NA_character_),
+      c("<=18", "<=18", "19-64", "19-64", "19-64", ">=65", ">=65"),
+      levels = c("<=18", "19-64", ">=65"),
       exclude = NULL
     )
   )
