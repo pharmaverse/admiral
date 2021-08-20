@@ -154,10 +154,10 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
   actual_output <- derive_query_vars(my_ae, queries = query)
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
-    "1", 1, "PTSI", "other", NA, "My Query 1", NA, 1, NA,
-    "1", 2, "PTSI", "LLTSI", NA, "My Query 1", NA, 1, NA,
-    "1", 3, NA, NA, 1, NA, "My Query 2", NA, 2
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
+    "1", 1, "PTSI", "other", NA, "My Query 1", 1, NA, NA,
+    "1", 2, "PTSI", "LLTSI", NA, "My Query 1", 1, NA, NA,
+    "1", 3, NA, NA, 1, NA, NA, "My Query 2", 2
   )
 
   expect_equal(expected_output, actual_output)
