@@ -66,7 +66,7 @@ derive_var_atirel <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
-  # merge to adsl and logic to create ATIREL
+  #logic to create ATIREL
   dataset <- dataset %>%
     mutate(!!new_var :=
       case_when(
