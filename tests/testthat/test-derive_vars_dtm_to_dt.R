@@ -32,7 +32,8 @@ test_that("Convert a complete -- DTM into a date object", {
                    source_vars = vars(TRTSDTM,ASTDTM,AENDTM))
   expect_dfs_equal(
     expected_output,
-    actual_output
-  ),
-  keys = c("STUDYID","USUBJID","TRTSDTM")
+    actual_output,
+    keys = c("STUDYID","USUBJID","TRTSDTM")
+  )
+
 })
