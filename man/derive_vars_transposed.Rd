@@ -38,6 +38,8 @@ The input dataset with transposed variables from \code{dataset_merge} added
 Adds variables from a vertical dataset after transposing it into a wide one.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 cm <- tibble::tribble(
         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",

@@ -28,6 +28,8 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' cm <- tibble::tribble(
 #'         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
 #'   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
