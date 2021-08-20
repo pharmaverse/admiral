@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_exposure_params.R
 \name{derive_exposure_params}
 \alias{derive_exposure_params}
-\title{Adds a Record Computed from the Aggregated Analysis Value of another Parameter}
+\title{Add a Record Computed from the Aggregated Analysis Value of another Parameter}
 \usage{
 derive_exposure_params(
   dataset,
@@ -68,10 +68,11 @@ observations (e.g. \code{vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")}).
 \emph{Permitted Values:} List of variable-value pairs}
 }
 \value{
-The input dataset with a new record added
+The input dataset with a new record added. ASTDT(M) and AENDT(M) are computed as the
+minimum/maximum dates by \code{by_vars}
 }
 \description{
-Adds a record computed from the aggregated analysis value of another parameter.
+Add a record computed from the aggregated analysis value of another parameter.
 }
 \examples{
 library(dplyr)
