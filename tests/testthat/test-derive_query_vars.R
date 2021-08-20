@@ -3,46 +3,30 @@ context("test-derive_query_vars")
 test_that("Derive CQ and SMQ variables with two term levels", {
 
   queries <- tibble::tribble(
-    ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
-    "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
-    "SMQ05", "Immune-Mediated Pneumonitis", NA_integer_, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
-    "CQ06", "Some query", 11111, NA_character_, NA_integer_, "AELLT", "SOME TERM"
+    ~VAR_PREFIX,                                              ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL,                          ~TERM_NAME,
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)",  20000008,     "NARROW",                1,   "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)",  20000008,     "NARROW",                1,   "AEDECOD",                 "AMMONIA ABNORMALL",
+    "SMQ03",                              "Immune-Mediated Hypothyroidism",  20000161,     "NARROW",                1,   "AEDECOD",                 "BASEDOW'S DISEASE",
+    "SMQ05",                                 "Immune-Mediated Pneumonitis",        NA,     "NARROW",                1,   "AEDECOD",              "ALVEOLAR PROTEINOSIS",
+    "CQ06",                                                  "Some query",     11111,           NA,               NA,     "AELLT",                         "SOME TERM"
   ) %>% dplyr::mutate(
     TERM_ID = as.integer(as.factor(.data$TERM_NAME))
   )
 
   adae <- tibble::tribble(
-    ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT,
-    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
-    "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
-    "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term",
-    "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS", 7, "Alveolar proteinosis", NA_character_
+    ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,
+    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,
+    "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA,
+    "03", "2020-06-07 23:59:59",                         "SOME TERM",      2,                        "Some query", "Some term",
+    "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~CQ01NAM, ~CQ01CD, ~CQ01SC, ~CQ01SCN, ~SMQ03NAM, ~SMQ03CD, ~SMQ03SC, ~SMQ03SCN, ~SMQ05NAM, ~SMQ05SC, ~SMQ05SCN, ~CQ06NAM, ~CQ06CD,
-    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL", 3, "Alanine aminotransferase abnormal", NA_character_,
-    "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, # CQ01
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # SMQ03
-    NA_character_, NA_character_, NA_integer_, # SMQ05
-    NA_character_, NA_integer_, # CQ06
-    "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE", 5, "Basedow's disease", NA_character_,
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # CQ01
-    "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, # SMQ03
-    NA_character_, NA_character_, NA_integer_, # SMQ05
-    NA_character_, NA_integer_, # CQ06
-    "03", "2020-06-07 23:59:59", "SOME TERM", 2, "Some query", "Some term",
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # CQ01
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # SMQ03
-    NA_character_, NA_character_, NA_integer_, # CQ06
-    "Some query", 11111,
-    "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS", 7, "Alveolar proteinosis", NA_character_,
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # CQ01
-    NA_character_, NA_integer_, NA_character_, NA_integer_, # SMQ03
-    "Immune-Mediated Pneumonitis", "NARROW", 1, # SMQ05
-    NA_character_, NA_integer_ # CQ06
+    ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,                        ~SMQ03NAM, ~SMQ03CD, ~SMQ03SC, ~SMQ03SCN,                     ~SMQ05NAM, ~SMQ05SC, ~SMQ05SCN,                                                      ~CQ01NAM,  ~CQ01CD,  ~CQ01SC, ~CQ01SCN,     ~CQ06NAM, ~CQ06CD,
+    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,                               NA,       NA,       NA,        NA,                            NA,       NA,        NA, "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",        1,           NA,      NA,
+    "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA, "Immune-Mediated Hypothyroidism", 20000161, "NARROW",         1,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA,           NA,      NA,
+    "03", "2020-06-07 23:59:59",                         "SOME TERM",      2,                        "Some query", "Some term",                               NA,       NA,       NA,        NA,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA, "Some query",   11111,
+    "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA,                               NA,       NA,       NA,        NA, "Immune-Mediated Pneumonitis", "NARROW",         1,                                                            NA,       NA,       NA,       NA,           NA,      NA
   )
 
   actual_output <- derive_query_vars(adae, queries)
@@ -94,11 +78,11 @@ test_that("Derive when an adverse event is in multiple baskets", {
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
-    "1", 1, "PTSI", "other", "My Query 1", NA_character_, 1, NA_integer_,
-    "1", 2, "something", "LLTSI", NA_character_, "My Query 2", NA_integer_, 2,
-    "1", 2, "PTSI", "LLTSI", "My Query 1", "My Query 2", 1, 2,
-    "1", 2, "something", "other", NA_character_, NA_character_, NA_integer_, NA_integer_
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
+    "1", 1, "PTSI", "other", "My Query 1", 1, NA_character_, NA_integer_,
+    "1", 2, "something", "LLTSI", NA_character_, NA_integer_, "My Query 2", 2,
+    "1", 2, "PTSI", "LLTSI", "My Query 1", 1, "My Query 2", 2,
+    "1", 2, "something", "other", NA_character_, NA_integer_, NA_character_, NA_integer_
   )
 
   actual_output <- derive_query_vars(my_ae, queries = query)
@@ -154,10 +138,10 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
   actual_output <- derive_query_vars(my_ae, queries = query)
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ42NAM, ~CQ40CD, ~CQ42CD,
-    "1", 1, "PTSI", "other", NA, "My Query 1", NA, 1, NA,
-    "1", 2, "PTSI", "LLTSI", NA, "My Query 1", NA, 1, NA,
-    "1", 3, NA, NA, 1, NA, "My Query 2", NA, 2
+    ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
+    "1", 1, "PTSI", "other", NA, "My Query 1", 1, NA, NA,
+    "1", 2, "PTSI", "LLTSI", NA, "My Query 1", 1, NA, NA,
+    "1", 3, NA, NA, 1, NA, NA, "My Query 2", 2
   )
 
   expect_equal(expected_output, actual_output)
