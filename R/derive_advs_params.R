@@ -218,7 +218,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' \deqn{\sqrt{HEIGHT * WEIGHT/3600}}
 #'
 #' The analysis value of the new parameter is derived, depending on the method, as:
-#' Mosteller: \deqn{\frac{sqrt(height * weight / 3600)}
+#' Mosteller: \deqn{\frac{sqrt(height * weight / 3600)}}
 #'
 #' @param dataset Input dataset
 #'
