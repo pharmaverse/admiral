@@ -21,8 +21,6 @@ Authors:
   \item Vignesh Thanikachalam
   \item Ondrej Slama \email{ondrej.slama@roche.com}
   \item Shimeng Huang
-  \item Robin Koeger
-  \item Gordon Miller
 }
 
 }
