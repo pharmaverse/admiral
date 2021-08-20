@@ -1,4 +1,4 @@
-context("test-convert_dtm_to_dt")
+context("test-derive_vars_dt")
 
 adcm <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
@@ -28,9 +28,9 @@ test_that("Convert a complete -- DTM into a date object", {
                      ASTDT = lubridate::as_date(ASTDT),
                      AENDT = lubridate::as_date(AENDT))
 
-  actual_output <- convert_dtm_to_dt(dataset = adcm,
-                                     source_vars = vars(TRTSDTM,ASTDTM,AENDTM))
-  expect_equal(
+  actual_output <- derive_vars_dtm_to_dt(dataset = adcm,
+                   source_vars = vars(TRTSDTM,ASTDTM,AENDTM))
+  expect_dfs_equal(
     expected_output,
     actual_output
   )

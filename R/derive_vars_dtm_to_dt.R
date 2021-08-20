@@ -1,4 +1,4 @@
-#' Convert datetime variables to date variables
+#' Derive date variables from datetime variables
 #'
 #' This function creates a date as output from a datetime variable
 #'
@@ -39,15 +39,16 @@
 #'   AENDTM = lubridate::as_datetime(AENDTM)
 #' )
 #'
-#'convert_dtm_to_dt(dataset=adcm,
+#'derive_vars_dtm_to_dt(dataset=adcm,
 #'                  source_vars=vars(TRTSDTM,ASTDTM,AENDTM))
 
-convert_dtm_to_dt <- function(dataset,
+derive_vars_dtm_to_dt <- function(dataset,
                               source_vars) {
-  assert_data_frame(dataset, quo_c(source_vars))
+  assert_data_frame(dataset, source_vars)
 
-  dataset <- dataset %>% dplyr::mutate_at(.vars = source_vars,
-                                          .funs = list(new = ~ lubridate::date(.))) %>%
+  dataset %>%
+    dplyr::mutate_at(.vars = source_vars,
+                    .funs = list(new = ~ lubridate::date(.))) %>%
     dplyr::rename_at(.vars = vars(ends_with("new")),
                      .funs = ~ stringr::str_remove(., "M_new"))
 }
