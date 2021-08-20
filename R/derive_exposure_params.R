@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 #' Add a Record Computed from the Aggregated Analysis Value of another Parameter
 #'
 #' Add a record computed from the aggregated analysis value of another parameter.
+=======
+#' Adds a Record Computed from the Aggregated Analysis Value of another Parameter
+#'
+#' Adds a record computed from the aggregated analysis value of another parameter.
+>>>>>>> 0351ab1c9888868fef63718e0ce34c8ec7ef7a5d
 #'
 #' @param dataset Input dataset
 #'
