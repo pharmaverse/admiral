@@ -54,7 +54,6 @@
 #' )
 #'
 #'
-#'
 # function to derive ATIREL
 derive_var_atirel <- function(dataset,
                               flag_var,
