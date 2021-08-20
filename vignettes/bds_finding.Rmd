@@ -30,8 +30,9 @@ otherwise specified.*
 
 * [Read in Data](#readdata)
 * [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
-* [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
 * [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCATy`](#paramcd)
+* [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
+* [Derive Additional Parameters (e.g. `BMI` or `MAP` for ADVS)](#derive_param)
 * [Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
@@ -160,22 +161,6 @@ advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
 head(select(advs, USUBJID, TRTSDT, ADT, ADY))
 ```
 
-### Derive Results (`AVAL`, `AVALC`, `AVALU`) {#aval}
-
-The mapping of `AVAL`, `AVALC`, and `AVALU` is left to the ADaM programmer. An 
-example mapping may be:
-
-```{r eval=TRUE}
-advs <- mutate(
-  advs, 
-  AVAL = VSSTRESN,
-  AVALC = VSSTRESC,
-  AVALU = VSSTRESU
-)
-
-head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, AVAL, AVALC, AVALU))
-```
-
 ### Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1` {#paramcd}
 
 To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`,
@@ -202,10 +187,11 @@ param_lookup <- tribble(
   "HEIGHT", "HEIGHT", "Height (cm)", 1, "Subject Characteristic", 1,
   "WEIGHT", "WEIGHT", "Weight (kg)", 2, "Subject Characteristic", 1,
   "DIABP", "DIABP", "Diastolic Blood Pressure (mmHg)", 3, "Vital Sign", 2,
-  "MAP", "MAP", "Mean Arterial Pressure", 4, "Vital Sign", 2,
-  "PULSE", "PULSE", "Pulse Rate (beats/min)", 5, "Vital Sign", 2,
-  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 6, "Vital Sign",2,
-  "TEMP", "TEMP", "Temperature (C)", 7, "Vital Sign", 2
+  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 4, "Vital Sign", 2,
+  "BSA", "BSA", "Body Surface Area (m^2)", 5, "Vital Sign", 2,
+  "PULSE", "PULSE", "Pulse Rate (beats/min)", 6, "Vital Sign", 2,
+  "SYSBP", "SYSBP", "Systolic Blood Pressure (mmHg)", 7, "Vital Sign",2,
+  "TEMP", "TEMP", "Temperature (C)", 8, "Vital Sign", 2
 )
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 
@@ -221,8 +207,89 @@ head(select(advs, USUBJID, VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N))
 ```
 
 Please note, it may be necessary to include other variables in the join. For
-example, perhaps the `PARCAT1` is based on `VSTESTCD` and `VSPOS`, it may be 
-necessary to expand this lookup or create a separate look up for `PARCAT1`.
+example, perhaps the `PARAMCD` is based on `VSTESTCD` and `VSPOS`, it may be 
+necessary to expand this lookup or create a separate look up for `PARAMCD`.
+
+### Derive Results (`AVAL`, `AVALC`, `AVALU`) {#aval}
+
+The mapping of `AVAL`, `AVALC`, and `AVALU` is left to the ADaM programmer. An 
+example mapping may be:
+
+```{r eval=TRUE}
+advs <- mutate(
+  advs, 
+  AVAL = VSSTRESN,
+  AVALC = VSSTRESC,
+  AVALU = VSSTRESU
+)
+
+head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, VSTPT, AVAL, AVALC, AVALU))
+```
+### Derive Additional Parameters (e.g. `BSA` or `MAP` for ADVS)] {#derive_param}
+
+Optionally derive new parameters creating PARAMCD, PARAM, AVAL (and any other
+variables). Below is an example of creating MAP for ADVS, see also Example 3 in
+section below [Derive New Rows](#additional) for alternative way of creating
+new PARAMCDs
+
+```{r eval=TRUE}
+advs_old <- advs
+
+advs <- derive_param_map(
+  advs_old,
+  unit_var = NULL,
+  by_vars = vars(USUBJID, VISIT, ADT, VSTPTNUM),
+  set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
+  )
+ 
+head(select(filter(advs, PARAMCD == "MAP"), USUBJID, VISIT, VSTPTNUM, PARAMCD, AVAL, AVALU))
+```
+
+Likewise, function call below, to create ADVS PARAMCD of 'BSA',
+see also Example 3 in section below ### Derive New Rows {#additional} 
+for alternative way of creating new PARAMCDs
+
+```{r eval=TRUE}
+advs <- derive_param_bsa(
+  advs,
+  unit_var = NULL,
+  by_vars = vars(USUBJID, VISIT, ADT),
+  set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2")
+  )
+ 
+head(select(filter(advs, PARAMCD == "BSA"), USUBJID, VISIT, PARAMCD, AVAL, AVALU))
+```
+
+You can either create PARAM, PARCAT1, etc in function calls above in the 
+SET_VALUES_TO parameter or derive from look-up table described earlier.
+
+``` {r eval=TRUE}
+advs <- select(filter(advs, PARAMCD %in% c("MAP", "BSA")), 
+               -PARAM, -PARAMN, -PARCAT1, -PARCAT1N) %>% 
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
+  union_all(filter(advs, !(PARAMCD %in% c("MAP", "BSA"))))
+
+head(select(filter(advs, PARAMCD %in% c("BSA", "MAP") & USUBJID == "01-701-1015"
+                   & VISIT == "SCREENING 1"),
+            PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N))
+```
+
+Similarly, if running ADEG, the PARAMCDs of 'QTCBF' 'QTCBS' and 'QTCL' can be
+created with function call. See example below for PARAMCD = `QTCF'.
+
+```{r eval=FALSE}
+adeg <- derive_param_qtcf(
+  adeg,
+  unit_var = NULL,
+  by_vars = vars(USUBJID, VISIT, ADT),
+  set_values_to = vars(PARAMCD = "QTCFR", AVALU = 'msec')
+  )
+ 
+```
+
+```{r eval=TRUE, echo=FALSE}
+advs <- advs_old
+```
 
 ### Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
 
