@@ -37,9 +37,21 @@ code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
 
-\item{method}{Derivation method to use
+\item{method}{Derivation method to use:
 
-The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
+Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+
+DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+
+Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
+
+Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
+
+Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
+
+Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
+
+Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 
 Permitted Values: character value}
 
@@ -76,12 +88,11 @@ into account.
 The input dataset with the new parameter added
 }
 \description{
-Adds a record for BSA (Body Surface Area) using the specified method for each by group
-(e.g., subject and visit) where the source parameters are available.
+Adds a record for BSA (Body Surface Area) using the specified derivation method
+for each by group (e.g., subject and visit) where the source parameters are available.
 }
 \details{
-The analysis value of the new parameter is derived:
-\deqn{\sqrt{HEIGHT * WEIGHT/3600}}
+
 }
 \examples{
 advs <- tibble::tribble(

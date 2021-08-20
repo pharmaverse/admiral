@@ -7,23 +7,33 @@
 compute_bsa(height = height, weight = weight, method = "Mosteller")
 }
 \arguments{
-\item{method}{Derivation method to use
+\item{height}{HEIGHT value
 
-The derivation method, e.g. Mosteller will use sqrt(height(cm) * weight(kg)) / 3600
+It is expected that HEIGHT is in cm.
 
-Permitted Values: character value}
+Permitted Values: numeric vector}
 
-\item{height_code}{HEIGHT parameter code
+\item{weight}{WEIGHT value
 
-The observations where \code{PARAMCD} equals the specified value are considered
-as the HEIGHT assessments. It is expected that HEIGHT is measured in cm.
+It is expected that WEIGHT is in kg.
 
-Permitted Values: character value}
+Permitted Values: numeric vector}
 
-\item{weight_code}{WEIGHT parameter code
+\item{method}{Derivation method to use:
 
-The observations where \code{PARAMCD} equals the specified value are considered
-as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
+Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+
+DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+
+Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
+
+Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
+
+Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
+
+Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
+
+Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
 
 Permitted Values: character value}
 }
@@ -31,12 +41,7 @@ Permitted Values: character value}
 The BSA (Body Surface Area) in m^2.
 }
 \description{
-Derives BSA from HEIGHT and WEIGHT making use of the specified derivation formula
-}
-\details{
-The BSA (Body Surface Area) is derived with the specified formula:
-"Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd",
-""Fujimoto" or "Takahira".
+Derives BSA from HEIGHT and WEIGHT making use of the specified derivation method
 }
 \examples{
 # derive BSA by the Mosteller method
@@ -47,10 +52,9 @@ compute_bsa(
 
 # derive BSA by the DuBois & DuBois method
 compute_bsa(
-  height = 170,
-  weight = 75,
+  height = c(170, 185),
+  weight = c(75, 90),
   method = "DuBois-DuBois")
-
 }
 \author{
 Eric Simms
