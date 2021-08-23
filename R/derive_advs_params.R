@@ -214,12 +214,6 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' Adds a record for BSA (Body Surface Area) using the specified derivation method
 #' for each by group (e.g., subject and visit) where the source parameters are available.
 #'
-#' The analysis value of the new parameter is derived:
-#' \deqn{\sqrt{HEIGHT * WEIGHT/3600}}
-#'
-#' The analysis value of the new parameter is derived, depending on the method, as:
-#' Mosteller: \deqn{\frac{sqrt(height * weight / 3600)}
-#'
 #' @param dataset Input dataset
 #'
 #'   The variables specified by the `by_vars` and the `unit_var` parameter,
@@ -284,20 +278,21 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#' ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
-#' "01-701-1015", "HEIGHT",     "Height (cm)", 170, "cm", "BASELINE",
-#' "01-701-1015", "WEIGHT",     "Weight (kg)",  75, "kg", "BASELINE",
-#' "01-701-1015", "WEIGHT",     "Weight (kg)",  78, "kg", "MONTH 1",
-#' "01-701-1015", "WEIGHT",     "Weight (kg)",  80, "kg", "MONTH 2",
-#' "01-701-1028", "HEIGHT",     "Height (cm)", 185, "cm", "BASELINE",
-#' "01-701-1028", "WEIGHT",     "Weight (kg)",  90, "kg", "BASELINE",
-#' "01-701-1028", "WEIGHT",     "Weight (kg)",  88, "kg", "MONTH 1",
-#' "01-701-1028", "WEIGHT",     "Weight (kg)",  85, "kg", "MONTH 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 170,   "cm",   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "kg",   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "kg",   "MONTH 1",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "kg",   "MONTH 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 185,   "cm",   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "kg",   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
 #' )
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   method = "Mosteller")
+#'   method = "Mosteller"
+#' )
 derive_param_bsa <- function(dataset,
                              by_vars,
                              set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
