@@ -63,26 +63,7 @@
 #' @export
 #'
 #' @examples
-#' # Derive MAP based on diastolic and systolic blood pressure
-#' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
-#' )
-#'
-#' derive_param_map(advs,
-#'                  by_vars = vars(USUBJID, VISIT),
-#'                  unit_var = AVALU,
-#'                  set_values_to = vars(PARAMCD = "MAP",
-#'                                       PARAM = "Mean Arterial Pressure (mmHg)"))
-#'
-#' # Derive MAP based on diastolic and systolic blood pressure and heart rate
+#' library(dplyr, warn.conflicts = TRUE)
 #' advs <- tibble::tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
 #'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
@@ -99,12 +80,29 @@
 #'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg",      "WEEK 2"
 #' )
 #'
-#' derive_param_map(advs,
+#' # Derive MAP based on diastolic and systolic blood pressure
+#' advs %>%
+#'   derive_param_map(
+#'     by_vars = vars(USUBJID, VISIT),
+#'     unit_var = AVALU,
+#'     set_values_to = vars(
+#'       PARAMCD = "MAP",
+#'       PARAM = "Mean Arterial Pressure (mmHg)"
+#'     )
+#'   ) %>%
+#'   filter(PARAMCD != "PULSE")
+#'
+#' # Derive MAP based on diastolic and systolic blood pressure and heart rate
+#' derive_param_map(
+#'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   hr_code = "PULSE",
 #'   unit_var = AVALU,
-#'   set_values_to = vars(PARAMCD = "MAP",
-#'                        PARAM = "Mean Arterial Pressure (mmHg)"))
+#'   set_values_to = vars(
+#'     PARAMCD = "MAP",
+#'     PARAM = "Mean Arterial Pressure (mmHg)"
+#'   )
+#' )
 derive_param_map <- function(dataset,
                              by_vars,
                              sysbp_code = "SYSBP",

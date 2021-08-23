@@ -102,6 +102,7 @@ advs <- tibble::tribble(
   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "kg",   "BASELINE",
   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
+
 )
 derive_param_bsa(
   advs,
