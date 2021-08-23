@@ -71,19 +71,23 @@ derive_query_vars <- function(dataset, queries) {
   }
   new_col_names <- queries %>%
     group_by(VAR_PREFIX) %>%
-    mutate(CD = ifelse(!all(is.na(QUERY_ID)),
+    mutate(NAM = paste0(VAR_PREFIX, "NAM"),
+           CD = ifelse(!all(is.na(QUERY_ID)),
                        paste0(VAR_PREFIX, "CD"), NA_character_),
            SC = ifelse(!all(is.na(QUERY_SCOPE)),
                        paste0(VAR_PREFIX, "SC"), NA_character_),
            SCN = ifelse(!all(is.na(QUERY_SCOPE_NUM)),
                         paste0(VAR_PREFIX, "SCN"), NA_character_)) %>%
     ungroup() %>%
-    select(CD, SC, SCN) %>%
+    select(NAM, CD, SC, SCN) %>%
+    distinct() %>%
     gather() %>%
     filter(!is.na(value)) %>%
-    pull(value) %>%
-    unique()
-  new_col_names <- c(paste0(unique(queries$VAR_PREFIX), "NAM"), new_col_names)
+    mutate(order1 = stringr::str_extract(value, "^[a-zA-Z]{2,3}"),
+           order2 = stringr::str_extract(value, "\\d{2}"),
+           order3 = as.integer(factor(key, levels = c("NAM", "CD", "SC", "SCN")))) %>%
+    arrange(desc(order1), order2, order3) %>%
+    pull(value)
 
   # queries restructured
   queries_wide <- queries %>%
@@ -167,6 +171,8 @@ derive_query_vars <- function(dataset, queries) {
 #' @param queries_name Name of the queries dataset, a string.
 #'
 #' @author Shimeng Huang, Ondrej Slama
+#'
+#' @keywords assertion
 #'
 #' @export
 #'
