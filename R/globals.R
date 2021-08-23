@@ -58,8 +58,13 @@ globalVariables(c(
   "QUERY_SCOPE",
   "QUERY_SCOPE_NUM",
   ".",
+  "NAM",
   "CD",
   "SC",
   "SCN",
-  "value"
+  "value",
+  "key",
+  "order1",
+  "order2",
+  "order3"
 ))
