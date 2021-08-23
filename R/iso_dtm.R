@@ -1,5 +1,5 @@
 as_iso_dtm <- function(x, time_zone = Sys.timezone()) {
-  dtm <- ymd_hms(x, tz = time_zone)
+  dtm <- forc_tz(ymd_hms(x, tz = time_zone), tzone="UTC")
   class(dtm) <- union("iso_dtm", class(dtm))
   dtm
 }

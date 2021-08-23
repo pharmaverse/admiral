@@ -244,7 +244,7 @@ impute_dtc <- function(dtc,
     # before it
     for (min_date in min_dates) {
       assert_that(is_date(min_date))
-      min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = Sys.timezone())
+      min_date_iso <- strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
         min_dtc <= min_date_iso & min_date_iso <= max_dtc,
         pmax(imputed_dtc, min_date_iso),
@@ -258,7 +258,7 @@ impute_dtc <- function(dtc,
     # after it
     for (max_date in max_dates) {
       assert_that(is_date(max_date))
-      max_date_iso <- strftime(max_date, format = "%Y-%m-%dT%H:%M:%S", tz = Sys.timezone())
+      max_date_iso <- strftime(max_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
       imputed_dtc <- if_else(
         min_dtc <= max_date_iso & max_date_iso <= max_dtc,
         pmin(imputed_dtc, max_date_iso),
