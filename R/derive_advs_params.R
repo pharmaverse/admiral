@@ -3,13 +3,6 @@
 #' Adds a record for mean arterial pressure (MAP) for each by group
 #' (e.g., subject and visit) where the source parameters are available.
 #'
-#' The analysis value of the new parameter is derived as
-#' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
-#' if it is based on diastolic and systolic blood pressure and
-#' \deqn{DIABP + 0.01 e^{4.14 - \frac{40.74}{HR}} (SYSBP - DIABP)}{
-#' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
-#' if it is based on diastolic, systolic blood pressure, and heart rate.
-#'
 #' @param dataset Input dataset
 #'
 #'   The variables specified by the `by_vars` and the `unit_var` parameter,
@@ -53,6 +46,14 @@
 #'   Permitted Values: A variable of the input dataset
 #'
 #' @inheritParams derive_derived_param
+#'
+#' @details
+#' The analysis value of the new parameter is derived as
+#' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
+#' if it is based on diastolic and systolic blood pressure and
+#' \deqn{DIABP + 0.01 e^{4.14 - \frac{40.74}{HR}} (SYSBP - DIABP)}{
+#' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
+#' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -117,42 +118,38 @@ derive_param_map <- function(dataset,
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_varval_list(set_values_to,
-                     required_elements = "PARAMCD")
+  assert_data_frame(dataset, required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    unit <-
-      dataset %>%
+    unit <- dataset %>%
       filter(PARAMCD == sysbp_code & !is.na(!!unit_var)) %>%
       pull(!!unit_var) %>%
-      unique
+      unique()
     set_unit_var <- vars(!!unit_var := unit)
-  }
-  else {
+  } else {
     set_unit_var <- NULL
   }
+
   if (is.null(hr_code)) {
     analysis_value <-
       expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
                        sysbp = !!sym(paste0("AVAL.", sysbp_code))))
-  }
-  else {
+  } else {
     analysis_value <-
       expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
                        sysbp = !!sym(paste0("AVAL.", sysbp_code)),
                        hr = !!sym(paste0("AVAL.", hr_code))))
   }
+
   derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
     analysis_value = !!analysis_value,
-    set_values_to = vars(!!!set_unit_var,
-                         !!!set_values_to)
+    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
 
@@ -175,7 +172,7 @@ derive_param_map <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return
+#' @details
 #' \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
 #' if it is based on diastolic and systolic blood pressure and
 #' \deqn{DIABP + 0.01 e^{4.14 - \frac{40.74}{HR}} (SYSBP - DIABP)}{
@@ -188,21 +185,18 @@ derive_param_map <- function(dataset,
 #'
 #' @examples
 #' # Compute MAP based on diastolic and systolic blood pressure
-#' compute_map(diabp = 51,
-#'             sysbp = 121)
+#' compute_map(diabp = 51, sysbp = 121)
 #'
 #' # Compute MAP based on diastolic and systolic blood pressure and heart rate
-#' compute_map(diabp = 51,
-#'             sysbp = 121,
-#'             hr = 59)
+#' compute_map(diabp = 51, sysbp = 121, hr = 59)
 compute_map <- function(diabp, sysbp, hr = NULL) {
   assert_numeric_vector(diabp)
   assert_numeric_vector(sysbp)
   assert_numeric_vector(hr, optional = TRUE)
+
   if (is.null(hr)) {
     (2 * diabp + sysbp) / 3
-  }
-  else {
+  } else {
     diabp + 0.01 * exp(4.14 - 40.74 / hr) * (sysbp - diabp)
   }
 }
@@ -223,19 +217,19 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @param method Derivation method to use:
 #'
-#'   Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+#'   Mosteller: `sqrt(height(cm) * weight(kg)) / 3600`
 #'
-#'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+#'   DuBois-DuBois: `0.20247 * (height/100) ^ 0.725 * weight ^ 0.425`
 #'
-#'   Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
+#'   Haycock: `0.024265 * height ^ 0.3964 * weight ^ 0.5378`
 #'
-#'   Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
+#'   Gehan-George: `0.0235 * height ^ 0.42246 * weight ^ 0.51456`
 #'
-#'   Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
+#'   Boyd: `0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))`
 #'
-#'   Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
+#'   Fujimoto: `0.008883 * height ^ 0.663 * weight ^ 0.444`
 #'
-#'   Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
+#'   Takahira: `0.007241 * height ^ 0.725 * weight ^ 0.425`
 #'
 #'   Permitted Values: character value
 #'
@@ -302,11 +296,14 @@ derive_param_bsa <- function(dataset,
 
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  assert_data_frame(dataset,
-                    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var))
-  assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
-                                             "Gehan-George", "Boyd", "Fujimoto",
-                                             "Takahira"))
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var)
+  )
+  assert_character_scalar(
+    method,
+    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+  )
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
@@ -385,35 +382,36 @@ derive_param_bsa <- function(dataset,
 #' @export
 #'
 #' @examples
-#' # derive BSA by the Mosteller method
+#' # Derive BSA by the Mosteller method
 #' compute_bsa(
 #'   height = 170,
 #'   weight = 75,
-#'   method = "Mosteller")
+#'   method = "Mosteller"
+#' )
 #'
-#' # derive BSA by the DuBois & DuBois method
+#' # Derive BSA by the DuBois & DuBois method
 #' compute_bsa(
 #'   height = c(170, 185),
 #'   weight = c(75, 90),
-#'   method = "DuBois-DuBois")
-
+#'   method = "DuBois-DuBois"
+#' )
 compute_bsa <- function(height = height,
                         weight = weight,
-                        method = "Mosteller"
-) {
-  # Checks
+                        method = "Mosteller") {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
-  assert_character_scalar(method, values = c("Mosteller", "DuBois-DuBois", "Haycock",
-                                             "Gehan-George", "Boyd", "Fujimoto",
-                                             "Takahira"))
+  assert_character_scalar(
+    method,
+    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+  )
 
   # Derivation
   if (method == "Mosteller") {
     bsa <- sqrt(height * weight / 3600)
   } else if (method == "DuBois-DuBois") {
-    # Note: the DuBois & DuBois formula expects the value of height in meters; we need to convert from cm.
-    bsa <- 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
+    # The DuBois & DuBois formula expects the value of height in meters
+    # We need to convert from cm
+    bsa <- 0.20247 * (height / 100) ^ 0.725 * weight ^ 0.425
   } else if (method == "Haycock") {
     bsa <- 0.024265 * height ^ 0.3964 * weight ^ 0.5378
   } else if (method == "Gehan-George") {
