@@ -554,12 +554,13 @@ derive_param_bmi <-  function(dataset,
     set_unit_var <- NULL
   }
 
-    derive_derived_param(
+  derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
     by_vars = by_vars,
-    analysis_value = !!sym(paste0("AVAL.", weight_code)) / ((!!sym(paste0("AVAL.", height_code)) * !!sym(paste0("AVAL.", height_code))) / 10000),
+    analysis_value = compute_bmi(height = !!sym(paste0("AVAL.", height_code)),
+                                 weight = !!sym(paste0("AVAL.", weight_code))),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
