@@ -1,4 +1,4 @@
-as_iso_dtm <- function(x, time_zone = "UTC") {
+as_iso_dtm <- function(x, time_zone = Sys.timezone()) {
   dtm <- ymd_hms(x, tz = time_zone)
   class(dtm) <- union("iso_dtm", class(dtm))
   dtm
