@@ -68,7 +68,8 @@
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(
 #'     PARAMCD = "QTCBR",
-#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)"
+#'     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
+#'     AVALU = "msec"
 #'   )
 #' )
 derive_param_qtcb <- function(dataset,
@@ -113,8 +114,10 @@ derive_param_qtcb <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = compute_qtcb(qt = !!sym(paste0("AVAL.", qt_code)),
-                                  rr = !!sym(paste0("AVAL.", rr_code))),
+    analysis_value = compute_qtcb(
+      qt = !!sym(paste0("AVAL.", qt_code)),
+      rr = !!sym(paste0("AVAL.", rr_code))
+    ),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
@@ -141,8 +144,7 @@ derive_param_qtcb <- function(dataset,
 #' @export
 #'
 #' @examples
-#' compute_qtcb(qt = 350,
-#'              rr = 56.54)
+#' compute_qtcb(qt = 350, rr = 56.54)
 compute_qtcb <- function(qt, rr) {
   assert_numeric_vector(qt)
   assert_numeric_vector(rr)
@@ -187,7 +189,8 @@ compute_qtcb <- function(qt, rr) {
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(
 #'     PARAMCD = "QTCFR",
-#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"
+#'     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
+#'     AVALU = "msec"
 #'   )
 #' )
 derive_param_qtcf <- function(dataset,
@@ -232,8 +235,10 @@ derive_param_qtcf <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = compute_qtcf(qt = !!sym(paste0("AVAL.", qt_code)),
-                                  rr = !!sym(paste0("AVAL.", rr_code))),
+    analysis_value = compute_qtcf(
+      qt = !!sym(paste0("AVAL.", qt_code)),
+      rr = !!sym(paste0("AVAL.", rr_code))
+    ),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
@@ -253,8 +258,7 @@ derive_param_qtcf <- function(dataset,
 #' @export
 #'
 #' @examples
-#' compute_qtcf(qt = 350,
-#'              rr = 56.54)
+#' compute_qtcf(qt = 350, rr = 56.54)
 compute_qtcf <- function(qt, rr) {
   assert_numeric_vector(qt)
   assert_numeric_vector(rr)
@@ -300,7 +304,8 @@ compute_qtcf <- function(qt, rr) {
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(
 #'     PARAMCD = "QTLCR",
-#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"
+#'     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
+#'     AVALU = "msec"
 #'   )
 #' )
 derive_param_qtlc <- function(dataset,
@@ -345,8 +350,10 @@ derive_param_qtlc <- function(dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = compute_qtlc(qt = !!sym(paste0("AVAL.", qt_code)),
-                                  rr = !!sym(paste0("AVAL.", rr_code))),
+    analysis_value = compute_qtlc(
+      qt = !!sym(paste0("AVAL.", qt_code)),
+      rr = !!sym(paste0("AVAL.", rr_code))
+    ),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
@@ -368,8 +375,7 @@ derive_param_qtlc <- function(dataset,
 #' @export
 #'
 #' @examples
-#' compute_qtlc(qt = 350,
-#'              rr = 56.54)
+#' compute_qtlc(qt = 350, rr = 56.54)
 compute_qtlc <- function(qt, rr) {
   assert_numeric_vector(qt)
   assert_numeric_vector(rr)
@@ -430,7 +436,8 @@ compute_qtlc <- function(qt, rr) {
 #'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(
 #'     PARAMCD = "RRR",
-#'     PARAM = "RR Duration Rederived (msec)"
+#'     PARAM = "RR Duration Rederived (msec)",
+#'     AVALU = "msec"
 #'   )
 #' )
 derive_param_rr <- function(dataset,
