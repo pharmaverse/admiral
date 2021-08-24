@@ -196,3 +196,185 @@ derive_extreme_flag <- function(dataset,
   # remove temporary variable
   data %>% select(-temp_obs_nr)
 }
+
+#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#'
+#' @inheritParams derive_extreme_flag
+#' @param dataset Input dataset.
+#' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
+#' @param new_var Variable to add to the `dataset`.
+#' It is set `"Y"` for the maximal / minimal observation of each group,
+#' see Details section for more information.
+#' @param order Sort order.
+#' Used to determine maximal / minimal observation if they are not unique,
+#' see Details section for more information.
+#' @param param_var Variable with the parameter values for which the maximal / minimal
+#' value is calculated.
+#' @param analysis_var Variable with the measurement values for which the maximal / minimal
+#' value is calculated.
+#' @param worst_high Character with `param_var` values specifying the parameters
+#' referring to "high".
+#' Use `character(0)` if not required.
+#' @param worst_low Character with `param_var` values specifying the parameters
+#' referring to "low".
+#' Use `character(0)` if not required.
+#'
+#' @details For each group with respect to the variables specified by the `by_vars` parameter,
+#' the maximal / minimal observation of `analysis_var`
+#' is labelled in the `new_var` column as `"Y"`
+#' if its `param_var` is in `worst_high` / `worst_low`,
+#' otherwise it is assigned `NA`.
+#' If there is more than one such maximal / minimal observation,
+#' the first one with respect to the order specified by the `order` parameter is flagged.
+#'
+#' @author Ondrej Slama
+#'
+#' @return The input dataset with the new flag variable added.
+#'
+#' @keywords derivation adam
+#'
+#' @export
+#'
+#' @examples
+#'
+#' input <- tibble::tribble(
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+#'
+#'   "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+#' )
+#'
+#' derive_worst_flag(
+#'   input,
+#'   new_var = WORSTFL,
+#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#'   order = vars(desc(ADT)),
+#'   param_var = PARAMCD,
+#'   analysis_var = AVAL,
+#'   worst_high = c("PARAM01", "PARAM03"),
+#'   worst_low = "PARAM02"
+#' )
+#'
+#'\dontrun{
+#' # example with ADVS
+#' derive_worst_flag(
+#'   advs,
+#'   new_var = WORSTFL,
+#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#'   order = vars(ADT, ATPTN),
+#'   param_var = PARAMCD,
+#'   analysis_var = AVAL,
+#'   worst_high = c("SYSBP", "DIABP"),
+#'   worst_low = "RESP",
+#'   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+#' )
+#'}
+#'
+derive_worst_flag <- function(dataset,
+                              new_var,
+                              by_vars,
+                              order,
+                              param_var,
+                              analysis_var,
+                              worst_high,
+                              worst_low,
+                              flag_filter = NULL,
+                              check_type = "warning") {
+
+  # perform argument checks
+  new_var <- assert_symbol(enquo(new_var))
+  param_var <- assert_symbol(enquo(param_var))
+  analysis_var <- assert_symbol(enquo(analysis_var))
+  assert_vars(by_vars)
+  assert_order_vars(order)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, extract_vars(order), param_var, analysis_var)
+  )
+  assert_character_vector(worst_high)
+  assert_character_vector(worst_low)
+  flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+
+  # additional checks for worstflag - parameters overlap
+  if (length(intersect(worst_high, worst_low)) > 0) {
+    err_msg <- paste(
+      "The following parameter(-s) are both assigned to `worst_high` and `worst_low` flags:",
+      paste0(intersect(worst_high, worst_low), collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  # additional checks for worstflag - parameters not available
+  param_var_str <- as_string(quo_get_expr(param_var))
+  if (length(worst_high) > 0 &&
+      !all(worst_high %in% dataset[[param_var_str]])) {
+    err_msg <- paste0(
+      "The following parameter(-s) in `worst_high` are not available in column ",
+      param_var_str,
+      ": ",
+      paste0(worst_high[!worst_high %in% dataset[[param_var_str]]], collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  # additional checks for worstflag - parameters not available
+  if (length(worst_low) > 0 &&
+      !all(worst_low %in% dataset[[param_var_str]])) {
+    err_msg <- paste0(
+      "The following parameter(-s) in `worst_low` are not available in column ",
+      param_var_str,
+      ": ",
+      paste0(worst_low[!worst_low %in% dataset[[param_var_str]]], collapse = ", ")
+    )
+    abort(err_msg)
+  }
+
+  # derive worst-flag
+  bind_rows(
+    derive_extreme_flag(
+      dataset = filter(dataset, !!param_var %in% worst_low),
+      new_var = !!new_var,
+      by_vars = by_vars,
+      order = quo_c(analysis_var, order),
+      mode = "first",
+      flag_filter = !!flag_filter,
+      check_type = check_type
+    ),
+    derive_extreme_flag(
+      dataset = filter(dataset, !!param_var %in% worst_high),
+      new_var = !!new_var,
+      by_vars = by_vars,
+      order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
+      mode = "first",
+      flag_filter = !!flag_filter,
+      check_type = check_type
+    ),
+    filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+  )
+}

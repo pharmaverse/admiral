@@ -1,5 +1,9 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/master/graph/badge.svg)](https://codecov.io/gh/Roche-GSK/admiral?branch=master)
+<!-- badges: end -->
+
 ADaM in R Asset Library
 
 ### Purpose

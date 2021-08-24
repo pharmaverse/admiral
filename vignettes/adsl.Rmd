@@ -1,7 +1,5 @@
 ---
 title: "Creating ADSL"
-author: "admiral team"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: false
@@ -55,7 +53,7 @@ data frames needed may be `dm`, `ex`, `ds`, `ae`, and `lb`.
 
 For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(admiral)
 library(lubridate)
@@ -71,7 +69,8 @@ data("lb")
 The `dm` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
-adsl <- dm
+adsl <- dm %>% 
+  mutate(DOMAIN = NULL)
 head(adsl)
 ```
 
@@ -109,8 +108,8 @@ adsl <- adsl %>%
 ```
 
 
-Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdur()` can be used to
-calculate the Treatment duration (`TRTDURD`).
+Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
+can be used to calculate the Treatment duration (`TRTDURD`).
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
@@ -248,7 +247,7 @@ Example function `format_dcsreas()`:
 format_dcsreas <- function(dsdecod, dsterm = NULL) {
   out <- if (is.null(dsterm)) dsdecod else dsterm
   case_when(
-    dsdecod %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
+    dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
     TRUE ~ NA_character_
   )
 }
@@ -303,6 +302,8 @@ adsl <- adsl %>%
     date_imputation = "FIRST"
   )
 ```
+
+See also [Date and Time Imputation](imputation.html).
 
 ### Cause of Death  (`DTHCAUS`) {#death_cause}
 
