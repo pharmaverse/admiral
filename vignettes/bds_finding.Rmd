@@ -225,12 +225,10 @@ advs <- mutate(
 
 head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, VSTPT, AVAL, AVALC, AVALU))
 ```
-### Derive Additional Parameters (e.g. `BSA` or `MAP` for ADVS)] {#derive_param}
+### Derive Additional Parameters (e.g. `BSA` or `MAP` for `ADVS`)] {#derive_param}
 
-Optionally derive new parameters creating PARAMCD, PARAM, AVAL (and any other
-variables). Below is an example of creating MAP for ADVS, see also Example 3 in
-section below [Derive New Rows](#additional) for alternative way of creating
-new PARAMCDs
+Optionally derive new parameters creating `PARAMCD`, `PARAM`, `AVAL` (and any 
+other variables). Below is an example of creating `Mean Arterial Pressure` for `advs`, see also Example 3 in section below [Derive New Rows](#additional) for alternative way of creating new parameters.
 
 ```{r eval=TRUE}
 advs_old <- advs
@@ -240,14 +238,13 @@ advs <- derive_param_map(
   unit_var = NULL,
   by_vars = vars(USUBJID, VISIT, ADT, VSTPTNUM),
   set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
-  )
+)
  
 head(select(filter(advs, PARAMCD == "MAP"), USUBJID, VISIT, VSTPTNUM, PARAMCD, AVAL, AVALU))
 ```
 
-Likewise, function call below, to create ADVS PARAMCD of 'BSA',
-see also Example 3 in section below ### Derive New Rows {#additional} 
-for alternative way of creating new PARAMCDs
+Likewise, function call below, to create parameter `Body Surface Area' for 
+'advs' domain.
 
 ```{r eval=TRUE}
 advs <- derive_param_bsa(
@@ -260,8 +257,8 @@ advs <- derive_param_bsa(
 head(select(filter(advs, PARAMCD == "BSA"), USUBJID, VISIT, PARAMCD, AVAL, AVALU))
 ```
 
-You can either create PARAM, PARCAT1, etc in function calls above in the 
-SET_VALUES_TO parameter or derive from look-up table described earlier.
+You can either create `PARAM`, `PARCAT1`, etc in function calls above in the 
+`set_values_to` parameter or derive from look-up table described earlier.
 
 ``` {r eval=TRUE}
 advs <- select(filter(advs, PARAMCD %in% c("MAP", "BSA")), 
@@ -269,13 +266,16 @@ advs <- select(filter(advs, PARAMCD %in% c("MAP", "BSA")),
   left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
   union_all(filter(advs, !(PARAMCD %in% c("MAP", "BSA"))))
 
-head(select(filter(advs, PARAMCD %in% c("BSA", "MAP") & USUBJID == "01-701-1015"
-                   & VISIT == "SCREENING 1"),
-            PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N))
+advs %>%
+  filter(PARAMCD %in% c("BSA", "MAP") & USUBJID == "01-701-1015" & 
+           VISIT == "SCREENING 1") %>%
+  select(PARAMCD, PARAM, PARAMN, PARCAT1, PARCAT1N) %>%
+  head()
+
 ```
 
-Similarly, if running ADEG, the PARAMCDs of 'QTCBF' 'QTCBS' and 'QTCL' can be
-created with function call. See example below for PARAMCD = `QTCF'.
+Similarly, for 'adeg' domain, the parameters 'QTCBF' 'QTCBS' and 'QTCL' can be
+created with a function call. See example below for `PARAMCD` = `QTCF'.
 
 ```{r eval=FALSE}
 adeg <- derive_param_qtcf(
