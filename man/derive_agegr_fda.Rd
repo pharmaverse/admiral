@@ -39,14 +39,14 @@ library(dplyr, warn.conflicts = FALSE)
 data(dm)
 
 dm \%>\%
-  derive_agegr_fda(dm, AGE, AGEGR1) \%>\%
+  derive_agegr_fda(AGE, AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
 data.frame(AGE = 1:100) \%>\%
   derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
 
 dm \%>\%
-  derive_agegr_ema(dm, AGE, AGEGR1) \%>\%
+  derive_agegr_ema(AGE, AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
 data.frame(AGE = 1:100) \%>\%
