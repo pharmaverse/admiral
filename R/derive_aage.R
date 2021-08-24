@@ -102,6 +102,7 @@ NULL
 #'
 #' data.frame(AGE = 1:100) %>%
 #'   derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
+#'
 derive_agegr_fda <- function(dataset, age_var, new_var) {
 
   age_var <- assert_symbol(enquo(age_var))
@@ -131,6 +132,9 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
+#' data(dm)
 #'
 #' dm %>%
 #'   derive_agegr_ema(AGE, AGEGR1) %>%

@@ -45,6 +45,10 @@ dm \%>\%
 data.frame(AGE = 1:100) \%>\%
   derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
 
+library(dplyr, warn.conflicts = FALSE)
+
+data(dm)
+
 dm \%>\%
   derive_agegr_ema(AGE, AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
