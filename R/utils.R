@@ -308,3 +308,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
+
+get_duplicates <- function(x) {
+  unique(x[duplicated(x)])
+}
