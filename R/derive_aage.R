@@ -92,13 +92,15 @@ NULL
 #' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
 #' Baseline Measure Information).
 #' @examples
+#' library(magrittr)
 #' data(dm)
 #'
-#' derive_agegr_fda(dm, AGE, AGEGR1) %>%
-#' select(SUBJID, AGE, AGEGR1)
+#' dm %>%
+#'   derive_agegr_fda(dm, AGE, AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
 #'
 #' derive_agegr_fda(data.frame(AGE = 1:100), age_var = AGE, new_var = AGEGR1) %>%
-#' select(AGE, AGEGR1)
+#'   select(AGE, AGEGR1)
 derive_agegr_fda <- function(dataset, age_var, new_var) {
 
   age_var <- assert_symbol(enquo(age_var))
@@ -129,8 +131,9 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
 #'
-#' derive_agegr_ema(dm, AGE, AGEGR1) %>%
-#' select(SUBJID, AGE, AGEGR1)
+#' dm %>%
+#'   derive_agegr_ema(dm, AGE, AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
 #'
 #' derive_agegr_ema(data.frame(AGE = 1:100), age_var = AGE, new_var = AGEGR1)
 #'
