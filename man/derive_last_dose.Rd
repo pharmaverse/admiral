@@ -102,7 +102,8 @@ derive_last_dose(
   new_var = LDOSEDTM,
   output_datetime = TRUE,
   check_dates_only = FALSE
-)
+) \%>\%
+select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 
 # or with traceability variables
 derive_last_dose(
@@ -118,7 +119,8 @@ derive_last_dose(
   output_datetime = TRUE,
   check_dates_only = FALSE,
   traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
-)
+) \%>\%
+select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 }
 \author{

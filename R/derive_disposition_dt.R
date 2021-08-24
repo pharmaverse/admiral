@@ -55,7 +55,8 @@
 #'   new_var = FRVDT,
 #'   dtc = DSSTDTC,
 #'   filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
-#' )
+#' ) %>%
+#' select(STUDYID, USUBJID, FRVDT)
 derive_disposition_dt <- function(dataset,
                                   dataset_ds,
                                   new_var,

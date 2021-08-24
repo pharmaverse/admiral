@@ -116,7 +116,9 @@ derive_disposition_reason(
   new_var = DCSREAS,
   reason_var = DSDECOD,
   filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+) \%>\%
+select(STUDYID, USUBJID, DCSREAS)
+
 # Derive DCSREAS and DCSREASP using a study-specific format
 format_dcsreas <- function(x, y = NULL) {
   out <- if (is.null(y)) x else y
@@ -134,7 +136,8 @@ derive_disposition_reason(
   reason_var_spe = DSTERM,
   format_new_vars = format_dcsreas,
   filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+) \%>\%
+select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 }
 \seealso{
 \code{\link[=format_reason_default]{format_reason_default()}}

@@ -68,7 +68,8 @@
 #'   new_var = EOSSTT,
 #'   status_var = DSDECOD,
 #'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' )
+#' ) %>%
+#' select(STUDYID, USUBJID, EOSSTT)
 #'
 #' # Specific derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
@@ -92,7 +93,8 @@
 #'   status_var = DSDECOD,
 #'   format_new_var = format_eoxxstt1,
 #'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' )
+#' ) %>%
+#' select(STUDYID, USUBJID, EOSSTT)
 derive_disposition_status <- function(dataset,
                                       dataset_ds,
                                       new_var,
