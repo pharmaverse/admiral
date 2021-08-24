@@ -44,12 +44,12 @@
 #'
 #'   Permitted Values:
 
-#'   NULL: Default, No record is returned is either the planned (`tpadm_code`) or
-#'   administered (`tadm_code`) are `NA`.  If the planned dose (`tpadm_code`) is
-#'   0, `Inf` is returned. If the administered dose (`tadm_code`) is 0 and
-#'   the planned dose (`tpadm_code`) is > 0, 0 is returned. A record must exist
-#'   for both `tadm_code` and `tpadm_code` for the the dose intensity calculation
-#'   to be done.
+#'   NULL: Default, No record is returned if either the planned (`tpadm_code`) or
+#'   administered (`tadm_code`) `AVAL` are `NA`.  If the planned dose
+#'   (`tpadm_code`) is 0, `Inf` is returned. If the administered dose
+#'   (`tadm_code`) is 0 and the planned dose (`tpadm_code`) is > 0, 0 is
+#'   returned. A record must exist for both `tadm_code` and `tpadm_code` for the
+#'   dose intensity calculation to be done.
 #'
 #'   `Y`: Returns 100 when the planned dose (`tpadm_code`) is 0 and the
 #'   administered dose (`tadm_code`) is > 0. Returns 0 when the planned dose
@@ -66,20 +66,36 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' adex <- tibble::tribble(
 #` ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
 #` "P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
 #` "P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
 #` "P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
-#` "P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88
+#` "P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
+#` "P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
+#` "P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
+#` "P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
+#` "P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
 #` )
 #`
-#` derive_param_doseint(adex,
-#'                      by_vars=vars(USUBJID, VISIT),
-#'                      set_values_to = vars(PARAMCD = "TNDOSINT",
-#'                                           PARAM = "Dose Intensity (%)"),
-#`                      tadm_code = "TNDOSE",
-#`                      tpadm_code = "TSNDOSE")
+#` adex %>%
+#'   derive_param_doseint(adex,
+#'                        by_vars=vars(USUBJID, VISIT),
+#'                        set_values_to = vars(PARAMCD = "TNDOSINT",
+#'                                             PARAM = "Dose Intensity (%)"),
+#`                        tadm_code = "TNDOSE",
+#`                        tpadm_code = "TSNDOSE")
+#'
+#` adex %>%
+#'   derive_param_doseint(adex,
+#'                        by_vars=vars(USUBJID, VISIT),
+#'                        set_values_to = vars(PARAMCD = "TDOSINT2",
+#'                                             PARAM = "Dose Intensity with Zero Flag(%)"),
+#`                        tadm_code = "TNDOSE",
+#`                        tpadm_code = "TSNDOSE",
+#'                        zero_doses = "Y")
 
 derive_param_doseint <- function(dataset,
                                  by_vars,
@@ -109,35 +125,19 @@ derive_param_doseint <- function(dataset,
                          by_vars = by_vars,
                          analysis_value = (!!sym(paste0("AVAL.", tadm_code)) / !!sym(paste0("AVAL.", tpadm_code))*100),
                          set_values_to = vars(!!!set_values_to,
-                                              tmp_planned_dose_flag = "Y",
                                               tmp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
-                                              temp_admin_dose = !!sym(paste0("AVAL.", tadm_code)))
+                                              tmp_admin_dose = !!sym(paste0("AVAL.", tadm_code)))
                        )
 
 
   # handle 0 doses planned if needed
   if (!quo_is_null(enquo(zero_doses))) {
-    data_filtered_planned <- dataset %>%
-      filter_if(filter) %>%
-      filter(AVAL == 0 & PARAMCD == !!tpadm_code) %>%
-      rename(tmp_planned_dose = AVAL) %>%
-      select(!!!by_vars, tmp_planned_dose)
-
-    data_filtered_admin <- dataset %>%
-      filter_if(filter) %>%
-      filter(PARAMCD == !!tadm_code) %>%
-      rename(tmp_adm_dose = AVAL) %>%
-      select(!!!by_vars, tmp_adm_dose)
-
-    dataset <- left_join(dataset, data_filtered_planned, by = vars2chr(by_vars)) %>%
-      left_join(data_filtered_admin, by = vars2chr(by_vars)) %>%
-      mutate(AVAL = case_when((tmp_planned_dose_flag == "Y") &
-                                (tmp_planned_dose == 0) &
-                                (tmp_adm_dose > 0) ~ 100,
-                              (tmp_planned_dose_flag == "Y") &
-                                (tmp_planned_dose == 0) &
-                                (tmp_adm_dose == 0) ~ 0,
-                              TRUE ~ AVAL))
+    dataset <- mutate(dataset,
+                      AVAL = case_when((tmp_planned_dose == 0) &
+                                         (tmp_admin_dose > 0) ~ 100,
+                                       (tmp_planned_dose == 0) &
+                                         (tmp_admin_dose == 0) ~ 0,
+                                       TRUE ~ AVAL))
   }
 
 
