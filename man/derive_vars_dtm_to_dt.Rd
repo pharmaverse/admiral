@@ -7,9 +7,9 @@
 derive_vars_dtm_to_dt(dataset, source_vars)
 }
 \arguments{
-\item{`dataset`}{Input dataset}
+\item{dataset}{Input dataset}
 
-\item{`source_vars`}{A list of datetime variables from which dates are to be extracted}
+\item{source_vars}{A list of datetime variables from which dates are to be extracted}
 }
 \value{
 A data frame containing all observations and variables of the input
@@ -38,9 +38,6 @@ adcm <- tibble::tribble(
   )
 
 derive_vars_dtm_to_dt(adcm, vars(TRTSDTM, ASTDTM, AENDTM))
-}
-\seealso{
-
 }
 \author{
 Teckla Akinyi

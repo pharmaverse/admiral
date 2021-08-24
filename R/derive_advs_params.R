@@ -133,14 +133,20 @@ derive_param_map <- function(dataset,
   }
 
   if (is.null(hr_code)) {
-    analysis_value <-
-      expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
-                       sysbp = !!sym(paste0("AVAL.", sysbp_code))))
+    analysis_value <- expr(
+      compute_map(
+        diabp = !!sym(paste0("AVAL.", diabp_code)),
+        sysbp = !!sym(paste0("AVAL.", sysbp_code))
+      )
+    )
   } else {
-    analysis_value <-
-      expr(compute_map(diabp = !!sym(paste0("AVAL.", diabp_code)),
-                       sysbp = !!sym(paste0("AVAL.", sysbp_code)),
-                       hr = !!sym(paste0("AVAL.", hr_code))))
+    analysis_value <- expr(
+      compute_map(
+        diabp = !!sym(paste0("AVAL.", diabp_code)),
+        sysbp = !!sym(paste0("AVAL.", sysbp_code)),
+        hr = !!sym(paste0("AVAL.", hr_code))
+      )
+    )
   }
 
   derive_derived_param(
@@ -315,26 +321,34 @@ derive_param_bsa <- function(dataset,
   assert_character_scalar(weight_code)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
-    assert_unit(dataset,
-                param = height_code,
-                unit = "cm",
-                unit_var = !!unit_var)
-    assert_unit(dataset,
-                param = weight_code,
-                unit = "kg",
-                unit_var = !!unit_var)
+    assert_unit(
+      dataset,
+      param = height_code,
+      unit = "cm",
+      unit_var = !!unit_var
+    )
+    assert_unit(
+      dataset,
+      param = weight_code,
+      unit = "kg",
+      unit_var = !!unit_var
+    )
     set_unit_var <- vars(!!unit_var := "m^2")
   } else {
     set_unit_var <- NULL
   }
 
-  bsa_formula <- expr(compute_bsa(height = !!sym(paste0("AVAL.", height_code)),
-                                  weight = !!sym(paste0("AVAL.", weight_code)),
-                                  method = method))
+  bsa_formula <- expr(
+    compute_bsa(
+      height = !!sym(paste0("AVAL.", height_code)),
+      weight = !!sym(paste0("AVAL.", weight_code)),
+      method = method
+    )
+  )
 
   derive_derived_param(
     dataset,
@@ -346,9 +360,9 @@ derive_param_bsa <- function(dataset,
   )
 }
 
-#' Derive BSA (Body Surface Area)
+#' Compute Body Surface Area (BSA)
 #'
-#' Derives BSA from HEIGHT and WEIGHT making use of the specified derivation method
+#' Computes BSA from height and weight making use of the specified derivation method
 #'
 #' @param height HEIGHT value
 #'
@@ -412,7 +426,6 @@ compute_bsa <- function(height = height,
     values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
   )
 
-  # Derivation
   if (method == "Mosteller") {
     bsa <- sqrt(height * weight / 3600)
   } else if (method == "DuBois-DuBois") {
@@ -424,7 +437,8 @@ compute_bsa <- function(height = height,
   } else if (method == "Gehan-George") {
     bsa <- 0.0235 * height ^ 0.42246 * weight ^ 0.51456
   } else if (method == "Boyd") {
-    # Note: the Boyd formula expects the value of weight in grams; we need to convert from kg.
+    # The Boyd formula expects the value of weight in grams
+    # we need to convert from kg
     bsa <- 0.0003207 * (height ^ 0.3) *
       (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
   } else if (method == "Fujimoto") {
@@ -440,9 +454,6 @@ compute_bsa <- function(height = height,
 #'
 #' Adds a record for BMI/Body Mass Index using Weight and Height each by group
 #' (e.g., subject and visit) where the source parameters are available.
-#'
-#' The analysis value of the new parameter is derived as
-#' \deqn{BMI = { WEIGHT / (HEIGHT)^2 }
 #'
 #' @param dataset Input dataset
 #'
@@ -480,6 +491,10 @@ compute_bsa <- function(height = height,
 #'
 #' @inheritParams derive_derived_param
 #'
+#' @details
+#' The analysis value of the new parameter is derived as
+#' \deqn{BMI = \frac{WEIGHT}{HEIGHT^2}}
+#'
 #' @author Pavan Kumar
 #'
 #' @return The input dataset with the new parameter added
@@ -490,26 +505,25 @@ compute_bsa <- function(height = height,
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4, "kg", "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1, "kg", "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163, "cm", "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5, "kg", "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3, "kg", "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~AVISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "kg",   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "kg",   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "kg",   "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "kg",   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "kg",   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "kg",   "WEEK 2"
 #' )
 #'
 #' derive_param_bmi (
 #'   advs,
-#'   by_vars = vars(USUBJID, VISIT),
+#'   by_vars = vars(USUBJID, AVISIT),
 #'   weight_code = "WEIGHT",
 #'   height_code = "HEIGHT",
 #'   set_values_to = vars(
 #'     PARAMCD = "BMI",
-#'     PARAM = "Body Mass Index (kg/m^2)",
-#'     AVALU = "kg/m^2"
+#'     PARAM = "Body Mass Index (kg/m^2)"
 #'   )
 #'  )
 derive_param_bmi <-  function(dataset,
@@ -528,7 +542,7 @@ derive_param_bmi <-  function(dataset,
     dataset,
     required_vars = quo_c(by_vars, vars(PARAMCD,AVAL,AVALU), unit_var)
   )
-  assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   if (!quo_is_null(unit_var)) {
@@ -563,9 +577,9 @@ derive_param_bmi <-  function(dataset,
 }
 
 
-#' Derive BMI (Body Mass Index)
+#' Compute Body Mass Index (BMI)
 #'
-#' Derives BMI from HEIGHT and WEIGHT making use of the specified derivation method
+#' Computes BMI from height and weight
 #'
 #' @param height HEIGHT value
 #'
@@ -593,5 +607,5 @@ compute_bmi <- function(height, weight) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
 
-  weight / ((height * height) / 10000)
+  weight / (height * height / 10000)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_advs_params.R
 \name{compute_bmi}
 \alias{compute_bmi}
-\title{Derive BMI (Body Mass Index)}
+\title{Compute Body Mass Index (BMI)}
 \usage{
 compute_bmi(height, weight)
 }
@@ -23,7 +23,7 @@ Permitted Values: numeric vector}
 The BMI (Body Mass Index Area) in kg/m^2.
 }
 \description{
-Derives BMI from HEIGHT and WEIGHT making use of the specified derivation method
+Computes BMI from height and weight
 }
 \examples{
 compute_bmi(height = 170, weight = 75)

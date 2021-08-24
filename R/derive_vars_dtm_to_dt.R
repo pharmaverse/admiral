@@ -2,9 +2,9 @@
 #'
 #' This function creates a date as output from a datetime variable
 #'
-#' @param `dataset` Input dataset
+#' @param dataset Input dataset
 #'
-#' @param `source_vars` A list of datetime variables from which dates are to be extracted
+#' @param source_vars A list of datetime variables from which dates are to be extracted
 #'
 #' @author Teckla Akinyi
 #'
@@ -15,8 +15,6 @@
 #' @keywords ADaM Timing Date
 #'
 #' @export
-#'
-#' @seealso
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

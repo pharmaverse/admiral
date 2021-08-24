@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_advs_params.R
 \name{compute_bsa}
 \alias{compute_bsa}
-\title{Derive BSA (Body Surface Area)}
+\title{Compute Body Surface Area (BSA)}
 \usage{
 compute_bsa(height = height, weight = weight, method = "Mosteller")
 }
@@ -41,7 +41,7 @@ Permitted Values: character value}
 The BSA (Body Surface Area) in m^2.
 }
 \description{
-Derives BSA from HEIGHT and WEIGHT making use of the specified derivation method
+Computes BSA from height and weight making use of the specified derivation method
 }
 \examples{
 # Derive BSA by the Mosteller method
