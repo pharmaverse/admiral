@@ -34,20 +34,26 @@ Baseline Measure Information).
 (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 data(dm)
 
-derive_agegr_fda(dm, AGE, AGEGR1) \%>\%
-select(SUBJID, AGE, AGEGR1)
+dm \%>\%
+  derive_agegr_fda(dm, AGE, AGEGR1) \%>\%
+  select(SUBJID, AGE, AGEGR1)
 
-derive_agegr_fda(data.frame(AGE = 1:100), age_var = AGE, new_var = AGEGR1) \%>\%
-select(AGE, AGEGR1)
+data.frame(AGE = 1:100) \%>\%
+  derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
 
-derive_agegr_ema(dm, AGE, AGEGR1) \%>\%
-select(SUBJID, AGE, AGEGR1)
+dm \%>\%
+  derive_agegr_ema(dm, AGE, AGEGR1) \%>\%
+  select(SUBJID, AGE, AGEGR1)
 
-derive_agegr_ema(data.frame(AGE = 1:100), age_var = AGE, new_var = AGEGR1)
+data.frame(AGE = 1:100) \%>\%
+  derive_agegr_ema(age_var = AGE, new_var = AGEGR1)
 
-derive_agegr_ema(data.frame(AGE = 1:20), age_var = AGE, new_var = AGEGR1, adults = FALSE)
+data.frame(AGE = 1:20) \%>\%
+  derive_agegr_ema(age_var = AGE, new_var = AGEGR1, adults = FALSE)
 }
 \author{
 Ondrej Slama
