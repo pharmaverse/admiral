@@ -89,38 +89,43 @@ Furthermore, the following assumption is checked: start and end dates (datetimes
 Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
 }
 \examples{
-data(ae); data(ex_single)
-derive_last_dose(
-  head(ae, 100),
-  head(ex_single, 100),
-  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-    nchar(EXENDTC) >= 10,
-  dose_start = EXSTDTC,
-  dose_end = EXENDTC,
-  analysis_date = AESTDTC,
-  dataset_seq_var = AESEQ,
-  new_var = LDOSEDTM,
-  output_datetime = TRUE,
-  check_dates_only = FALSE
-) \%>\%
-select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
+library(dplyr)
+data(ae)
+data(ex_single)
+
+ae \%>\%
+  head(100) \%>\%
+  derive_last_dose(
+    head(ex_single, 100),
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    new_var = LDOSEDTM,
+    output_datetime = TRUE,
+    check_dates_only = FALSE
+  ) \%>\%
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 
 # or with traceability variables
-derive_last_dose(
-  head(ae, 100),
-  head(ex_single, 100),
-  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-    nchar(EXENDTC) >= 10,
-  dose_start = EXSTDTC,
-  dose_end = EXENDTC,
-  analysis_date = AESTDTC,
-  dataset_seq_var = AESEQ,
-  new_var = LDOSEDTM,
-  output_datetime = TRUE,
-  check_dates_only = FALSE,
-  traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
-) \%>\%
-select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+ae \%>\%
+  head(100) \%>\%
+  derive_last_dose(
+    head(ex_single, 100),
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    new_var = LDOSEDTM,
+    output_datetime = TRUE,
+    check_dates_only = FALSE,
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+  ) \%>\%
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 }
 \author{

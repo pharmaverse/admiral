@@ -95,19 +95,19 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("dm")
 #' data("ds")
 #'
 #' # Derive DCSREAS using the default format
-#' derive_disposition_reason(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = DCSREAS,
-#'   reason_var = DSDECOD,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' ) %>%
-#' select(STUDYID, USUBJID, DCSREAS)
+#' dm %>%
+#'   derive_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS)
 #'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
@@ -117,17 +117,17 @@
 #'     TRUE ~ NA_character_
 #'   )
 #' }
-#' derive_disposition_reason(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = DCSREAS,
-#'   reason_var = DSDECOD,
-#'   new_var_spe = DCSREASP,
-#'   reason_var_spe = DSTERM,
-#'   format_new_vars = format_dcsreas,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' ) %>%
-#' select(STUDYID, USUBJID, DCSREAS, DCSREASP)
+#' dm %>%
+#'   derive_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     new_var_spe = DCSREASP,
+#'     reason_var_spe = DSTERM,
+#'     format_new_vars = format_dcsreas,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_disposition_reason <- function(dataset,
                                       dataset_ds,
                                       new_var,

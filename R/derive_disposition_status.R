@@ -53,7 +53,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' data("dm")
 #' data("ds")
 #'
@@ -62,14 +62,14 @@
 #' #- DISCONTINUED when status_var != COMPLETED
 #' #- ONGOING otherwise
 #'
-#' derive_disposition_status(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = EOSSTT,
-#'   status_var = DSDECOD,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' ) %>%
-#' select(STUDYID, USUBJID, EOSSTT)
+#' dm %>%
+#'   derive_disposition_status(
+#'     dataset_ds = ds,
+#'     new_var = EOSSTT,
+#'     status_var = DSDECOD,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, EOSSTT)
 #'
 #' # Specific derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
@@ -86,15 +86,15 @@
 #'   )
 #' }
 #'
-#' derive_disposition_status(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = EOSSTT,
-#'   status_var = DSDECOD,
-#'   format_new_var = format_eoxxstt1,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' ) %>%
-#' select(STUDYID, USUBJID, EOSSTT)
+#' dm %>%
+#'   derive_disposition_status(
+#'     dataset_ds = ds,
+#'     new_var = EOSSTT,
+#'     status_var = DSDECOD,
+#'     format_new_var = format_eoxxstt1,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, EOSSTT)
 derive_disposition_status <- function(dataset,
                                       dataset_ds,
                                       new_var,
