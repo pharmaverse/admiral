@@ -7,8 +7,8 @@
 derive_param_bsa(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
   method = "Mosteller",
+  set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
   unit_var = NULL,
@@ -29,6 +29,24 @@ parameter) and to the parameters specified by \code{HEIGHT} and \code{WEIGHT}.}
 
 Permitted Values: list of variables}
 
+\item{method}{Derivation method to use:
+
+Mosteller: \code{sqrt(height(cm) * weight(kg)) / 3600}
+
+DuBois-DuBois: \code{0.20247 * (height/100) ^ 0.725 * weight ^ 0.425}
+
+Haycock: \code{0.024265 * height ^ 0.3964 * weight ^ 0.5378}
+
+Gehan-George: \code{0.0235 * height ^ 0.42246 * weight ^ 0.51456}
+
+Boyd: \code{0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))}
+
+Fujimoto: \code{0.008883 * height ^ 0.663 * weight ^ 0.444}
+
+Takahira: \code{0.007241 * height ^ 0.725 * weight ^ 0.425}
+
+Permitted Values: character value}
+
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
@@ -36,24 +54,6 @@ observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
 code for the new parameter.
 
 \emph{Permitted Values:} List of variable-value pairs}
-
-\item{method}{Derivation method to use:
-
-Mosteller: sqrt(height(cm) * weight(kg)) / 3600
-
-DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
-
-Haycock: 0.024265 * height ^ 0.3964 * weight ^ 0.5378
-
-Gehan-George: 0.0235 * height ^ 0.42246 * weight ^ 0.51456
-
-Boyd: 0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
-
-Fujimoto: 0.008883 * height ^ 0.663 * weight ^ 0.444
-
-Takahira: 0.007241 * height ^ 0.725 * weight ^ 0.425
-
-Permitted Values: character value}
 
 \item{height_code}{HEIGHT parameter code
 
@@ -102,12 +102,18 @@ advs <- tibble::tribble(
   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "kg",   "BASELINE",
   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
-
 )
+
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
   method = "Mosteller"
+)
+
+derive_param_bsa(
+  advs,
+  by_vars = vars(USUBJID, VISIT),
+  method = "Fujimoto"
 )
 }
 \author{
