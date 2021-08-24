@@ -1,5 +1,5 @@
 ---
-title: Programming Strategy
+title: "Programming Strategy"
 output: 
   rmarkdown::html_vignette:
     toc: true
