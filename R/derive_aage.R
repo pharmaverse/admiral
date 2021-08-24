@@ -128,7 +128,6 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
-#' data(dm)
 #'
 #' derive_agegr_ema(dm, AGE, AGEGR1) %>%
 #' select(SUBJID, AGE, AGEGR1)
