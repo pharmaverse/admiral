@@ -53,7 +53,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")
 #'

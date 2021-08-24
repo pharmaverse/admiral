@@ -89,7 +89,7 @@ Furthermore, the following assumption is checked: start and end dates (datetimes
 Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data(ae)
 data(ex_single)
 

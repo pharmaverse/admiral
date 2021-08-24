@@ -64,7 +64,7 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 Derive a disposition status from the the relevant records in the disposition domain.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 

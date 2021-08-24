@@ -59,7 +59,7 @@ the input dataset with the disposition date (\code{new_var}) added
 Derive a disposition status date from the the relevant records in the disposition domain.
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
 dm \%>\%
