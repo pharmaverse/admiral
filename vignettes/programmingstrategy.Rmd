@@ -356,7 +356,7 @@ If a unit test fails, it must provide a helpful error message, e.g., if the outp
 
 # Readable Code for ADaM
 
-each function should be considered as readable code by default
+Each function should be considered as readable code by default.
 
 
 ## Basic Rules
