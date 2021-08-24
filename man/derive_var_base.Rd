@@ -21,13 +21,13 @@ Derive the \code{BASE} variable in a BDS dataset
 }
 \examples{
 dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-  "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-  "TEST01", "PAT01",  "PARAM01",  9.7,  "N",
-  "TEST01", "PAT01",  "PARAM01", 15.01, "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35, "Y",
-  "TEST01", "PAT01",  "PARAM02", NA,    "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35, "N"
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVISIT,    ~ABLFL,
+  "TEST01", "PAT01",  "PARAM01", 10.12, "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM01",  9.7,  "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM01", 15.01, "Day 14",   "N",
+  "TEST01", "PAT01",  "PARAM02",  8.35, "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM02", NA,    "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM02",  8.35, "Day 14",   "N"
 )
 derive_var_base(dataset, by_vars = vars(USUBJID, PARAMCD))
 }

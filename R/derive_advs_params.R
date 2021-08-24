@@ -280,15 +280,22 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
 #'   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
 #' )
+#'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   method = "Mosteller"
 #' )
+#'
+#' derive_param_bsa(
+#'   advs,
+#'   by_vars = vars(USUBJID, VISIT),
+#'   method = "Fujimoto"
+#' )
 derive_param_bsa <- function(dataset,
                              by_vars,
-                             set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
                              method = "Mosteller",
+                             set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              unit_var = NULL,
@@ -482,8 +489,6 @@ compute_bsa <- function(height = height,
 #' @export
 #'
 #' @examples
-#'
-#' # derive BMI where height is measured only once
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
@@ -507,7 +512,6 @@ compute_bsa <- function(height = height,
 #'     AVALU = "kg/m^2"
 #'   )
 #'  )
-#'
 derive_param_bmi <-  function(dataset,
                               by_vars,
                               set_values_to = vars(PARAMCD = "BMI"),
@@ -550,8 +554,10 @@ derive_param_bmi <-  function(dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
     by_vars = by_vars,
-    analysis_value = compute_bmi(height = !!sym(paste0("AVAL.", height_code)),
-                                 weight = !!sym(paste0("AVAL.", weight_code))),
+    analysis_value = compute_bmi(
+      height = !!sym(paste0("AVAL.", height_code)),
+      weight = !!sym(paste0("AVAL.", weight_code))
+    ),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
 }
@@ -582,16 +588,10 @@ derive_param_bmi <-  function(dataset,
 #' @export
 #'
 #' @examples
-#' # derive BMI
-#' compute_bmi(height = 170,weight = 75)
-#'
-
-compute_bmi <- function(height = height,
-                        weight = weight
-) {
-  # Checks
+#' compute_bmi(height = 170, weight = 75)
+compute_bmi <- function(height, weight) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
-  # Derivation
-    weight / ( (height * height) / 10000)
+
+  weight / ((height * height) / 10000)
 }
