@@ -108,7 +108,10 @@ derive_param_doseint <- function(dataset,
                          parameters = c(tadm_code, tpadm_code),
                          by_vars = by_vars,
                          analysis_value = (!!sym(paste0("AVAL.", tadm_code)) / !!sym(paste0("AVAL.", tpadm_code))*100),
-                         set_values_to = vars(!!!set_values_to, tmp_planned_dose_flag = "Y")
+                         set_values_to = vars(!!!set_values_to,
+                                              tmp_planned_dose_flag = "Y",
+                                              tmp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
+                                              temp_admin_dose = !!sym(paste0("AVAL.", tadm_code)))
                        )
 
 
