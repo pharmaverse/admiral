@@ -21,8 +21,7 @@ test_that("new observations are derived correctly with Mosteller method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = sqrt(AVAL.HEIGHT * AVAL.WEIGHT / 3600),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -42,8 +41,7 @@ new_obs <-
              suffix = c(".HEIGHT", ".WEIGHT")) %>%
   mutate(AVAL = 0.20247 * (AVAL.HEIGHT/100) ^ 0.725 * AVAL.WEIGHT ^ 0.425,
          PARAMCD = "BSA",
-         PARAM = "Body Surface Area",
-         AVALU = "m^2") %>%
+         AVALU = NA) %>%
   select(-AVAL.HEIGHT, -AVAL.WEIGHT)
 expected_output <- bind_rows(input, new_obs)
 
@@ -63,8 +61,7 @@ test_that("new observations are derived correctly with Haycock method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = 0.024265 * AVAL.HEIGHT ^ 0.3964 * AVAL.WEIGHT ^ 0.5378,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -84,8 +81,7 @@ test_that("new observations are derived correctly with Gehan & George method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = 0.0235 * AVAL.HEIGHT ^ 0.42246 * AVAL.WEIGHT ^ 0.51456,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -106,8 +102,7 @@ test_that("new observations are derived correctly with Boyd method", {
     mutate(AVAL = 0.0003207 * (AVAL.HEIGHT ^ 0.3) *
              (1000 * AVAL.WEIGHT) ^ (0.7285 - (0.0188 * log10(1000 * AVAL.WEIGHT))),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -127,8 +122,7 @@ test_that("new observations are derived correctly with Fujimoto method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL =  0.008883 * AVAL.HEIGHT ^ 0.663 * AVAL.WEIGHT ^ 0.444,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -148,8 +142,7 @@ test_that("new observations are derived correctly with Takahira method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL =  0.007241 * AVAL.HEIGHT ^ 0.725 * AVAL.WEIGHT ^ 0.425,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
@@ -191,8 +184,7 @@ test_that("new observations are derived correctly whenever HEIGHT and WEIGHT are
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = sqrt(AVAL.HEIGHT * AVAL.WEIGHT / 3600),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
