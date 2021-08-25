@@ -300,13 +300,12 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' )
 derive_param_bsa <- function(dataset,
                              by_vars,
-                             method = "Mosteller",
+                             method,
                              set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              unit_var = NULL,
                              filter = NULL) {
-
   assert_vars(by_vars)
   unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
   assert_data_frame(
@@ -418,7 +417,7 @@ derive_param_bsa <- function(dataset,
 #' )
 compute_bsa <- function(height = height,
                         weight = weight,
-                        method = "Mosteller") {
+                        method) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
   assert_character_scalar(

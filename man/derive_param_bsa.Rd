@@ -7,7 +7,7 @@
 derive_param_bsa(
   dataset,
   by_vars,
-  method = "Mosteller",
+  method,
   set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
