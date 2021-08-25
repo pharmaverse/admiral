@@ -704,7 +704,9 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) || !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) ||
+      !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
     err_msg <- paste(
       backquote(arg_name(substitute(arg))),
       "must be a list of formulas where each formula's left-hand side is a single",

@@ -1,7 +1,7 @@
 context("test-derive_query_vars")
 
 test_that("Derive CQ and SMQ variables with two term levels", {
-
+  # nolint start
   queries <- tibble::tribble(
     ~VAR_PREFIX,                                              ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL,                          ~TERM_NAME,
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)",  20000008,     "NARROW",                1,   "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
@@ -28,6 +28,7 @@ test_that("Derive CQ and SMQ variables with two term levels", {
     "03", "2020-06-07 23:59:59",                         "SOME TERM",      2,                        "Some query", "Some term",                               NA,       NA,       NA,        NA,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA, "Some query",   11111,
     "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA,                               NA,       NA,       NA,        NA, "Immune-Mediated Pneumonitis", "NARROW",         1,                                                            NA,       NA,       NA,       NA,           NA,      NA
   )
+  # nolint end
 
   actual_output <- derive_query_vars(adae, queries)
 

@@ -75,5 +75,3 @@ test_that("arg_name works", {
   expect_equal(arg_name(call("enquo", sym("a"))), "a")
   expect_error(arg_name("a"), "Could not extract argument name from")
 })
-
-

@@ -315,7 +315,10 @@ derive_param_bsa <- function(dataset,
   )
   assert_character_scalar(
     method,
-    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+    values = c(
+      "Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George",
+      "Boyd", "Fujimoto", "Takahira"
+    )
   )
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
@@ -423,7 +426,10 @@ compute_bsa <- function(height = height,
   assert_numeric_vector(weight)
   assert_character_scalar(
     method,
-    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+    values = c(
+      "Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George",
+      "Boyd", "Fujimoto", "Takahira"
+    )
   )
 
   if (method == "Mosteller") {
@@ -540,7 +546,7 @@ derive_param_bmi <-  function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD,AVAL,AVALU), unit_var)
+    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var)
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))

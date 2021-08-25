@@ -74,7 +74,10 @@ warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
     incorrect_dtc <- dtc[!is_valid]
     incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid]
     tbl <- paste("Row", incorrect_dtc_row, ": --DTC =", incorrect_dtc)
-    main_msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
+    main_msg <- paste(
+      "Dataset contains incorrect datetime format:",
+      "--DTC may be incorrectly imputed on row(s)"
+    )
 
     info <- paste0(
       "The following ISO representations are handled: \n",

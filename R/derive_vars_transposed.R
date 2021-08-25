@@ -13,9 +13,11 @@
 #'
 #' @param by_vars Keys used to merge `dataset_facm` with `dataset`
 #'
-#' @param key_var The variable of `dataset_merge` that containing the names of the transposed variables
+#' @param key_var The variable of `dataset_merge` containing the names of the
+#'   transposed variables
 #'
-#' @param value_var The variable of `dataset_merge` containing the values of the transposed variables
+#' @param value_var The variable of `dataset_merge` containing the values of the
+#'   transposed variables
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
