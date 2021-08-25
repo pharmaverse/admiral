@@ -109,7 +109,7 @@ derive_param_map <- function(dataset,
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
-                             set_values_to = NULL,
+                             set_values_to = vars(PARAMCD = "MAP"),
                              unit_var = NULL,
                              filter = NULL) {
   assert_character_scalar(sysbp_code)
@@ -301,7 +301,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 derive_param_bsa <- function(dataset,
                              by_vars,
                              method,
-                             set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
+                             set_values_to = vars(PARAMCD = "BSA"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
                              unit_var = NULL,

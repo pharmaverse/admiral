@@ -10,7 +10,7 @@ derive_param_map(
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
-  set_values_to = NULL,
+  set_values_to = vars(PARAMCD = "MAP"),
   unit_var = NULL,
   filter = NULL
 )
