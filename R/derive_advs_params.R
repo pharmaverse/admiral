@@ -127,6 +127,14 @@ derive_param_map <- function(dataset,
       filter(PARAMCD == sysbp_code & !is.na(!!unit_var)) %>%
       pull(!!unit_var) %>%
       unique()
+    if (length(unit) > 1L) {
+      err_msg <- sprintf(
+        "There were more than one unique unit for `PARAMCD == '%s'`: %s",
+        sysbp_code,
+        enumerate(unit, quote_fun = squote)
+      )
+      abort(err_msg)
+    }
     set_unit_var <- vars(!!unit_var := unit)
   } else {
     set_unit_var <- NULL
