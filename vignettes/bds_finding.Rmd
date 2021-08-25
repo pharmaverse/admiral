@@ -230,13 +230,10 @@ head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, VSTPT, AVAL, AVALC, AVA
 Optionally derive new parameters creating `PARAMCD`, `PARAM`, `AVAL` (and any 
 other variables). Below is an example of creating `Mean Arterial Pressure` for `advs`, see also Example 3 in section below [Derive New Rows](#additional) for alternative way of creating new parameters.
 
-```{r eval=TRUE, echo=FALSE}
-advs_old <- advs
-```
 
 ```{r eval=TRUE}
 advs <- derive_param_map(
-  advs_old,
+  advs,
   unit_var = NULL,
   by_vars = vars(USUBJID, VISIT, ADT, VSTPTNUM),
   set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
@@ -290,7 +287,7 @@ adeg <- derive_param_qtcf(
 ```
 
 ```{r eval=TRUE, echo=FALSE}
-advs <- advs_old
+advs <- filter(advs, !(PARAMCD %in% c("MAP", "BSA")))
 ```
 
 ### Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`) {#timing}
