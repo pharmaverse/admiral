@@ -137,20 +137,15 @@ derive_param_qtc <- function(dataset,
     )
   }
 
-  funs <- list(
-    Bazett = compute_qtcb,
-    Fridericia = compute_qtcf,
-    Sagie = compute_qtlc
-  )
-
   derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
     by_vars = by_vars,
-    analysis_value = funs[[method]](
+    analysis_value = compute_qtc(
       qt = !!sym(paste0("AVAL.", qt_code)),
-      rr = !!sym(paste0("AVAL.", rr_code))
+      rr = !!sym(paste0("AVAL.", rr_code)),
+      method = method
     ),
     set_values_to = vars(!!!set_unit_var, !!!set_values_to)
   )
@@ -176,9 +171,9 @@ default_qtc_paramcd <- function(method) {
   vars(PARAMCD = !!paramcd[[method]])
 }
 
-#' Compute Corrected QT Using Bazett's Formula
+#' Compute Corrected QT
 #'
-#' Computes corrected QT using Bazett's formula.
+#' Computes corrected QT using Bazett's, Fridericia's or Sagie's formula.
 #'
 #' @param qt QT interval
 #'
@@ -188,57 +183,20 @@ default_qtc_paramcd <- function(method) {
 #'
 #'   A numeric vector is expected. It is expected that RR is measured in msec.
 #'
-#' @author Stefan Bundfuss
-#'
-#' @return QT interval in msec:
-#' \deqn{\frac{QT}{\sqrt{\frac{RR}{1000}}}}{QT/\sqrt(RR/1000)}
-#'
-#' @keywords computation adeg
-#'
-#' @export
-#'
-#' @examples
-#' compute_qtcb(qt = 350, rr = 56.54)
-compute_qtcb <- function(qt, rr) {
-  assert_numeric_vector(qt)
-  assert_numeric_vector(rr)
-  qt / sqrt(rr / 1000)
-}
-
-
-#' Compute Corrected QT Using Fridericia's Formula
-#'
-#' Computes corrected QT using Fridericia's formula.
-#'
-#' @inheritParams compute_qtcb
+#' @inheritParams derive_param_qtc
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return QT interval in msec:
-#' \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
+#' @return QT interval in msec
 #'
-#' @keywords computation adeg
+#' @details
+#' Depending on the chosen `method` one of the following formulae is used.
 #'
-#' @export
+#' *Bazett*: \deqn{\frac{QT}{\sqrt{\frac{RR}{1000}}}}{QT/\sqrt(RR/1000)}
 #'
-#' @examples
-#' compute_qtcf(qt = 350, rr = 56.54)
-compute_qtcf <- function(qt, rr) {
-  assert_numeric_vector(qt)
-  assert_numeric_vector(rr)
-  qt / (rr / 1000)^ (1 / 3)
-}
-
-#' Compute Corrected QT Using Sagie's Formula
+#' *Fridericia*: \deqn{\frac{QT}{\sqrt[3]{\frac{RR}{1000}}}}{QT/(RR/1000)^(1/3)}
 #'
-#' Computes corrected QT using Sagie's formula.
-#'
-#' @inheritParams compute_qtcb
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return QT interval in msec:
-#' \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
+#' *Sagie*: \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
 #' 1000(QT/1000 + 0.154(1 - RR/1000))}
 #'
 #' @keywords computation adeg
@@ -246,11 +204,22 @@ compute_qtcf <- function(qt, rr) {
 #' @export
 #'
 #' @examples
-#' compute_qtlc(qt = 350, rr = 56.54)
-compute_qtlc <- function(qt, rr) {
+#' compute_qtc(qt = 350, rr = 56.54, method = "Bazett")
+#'
+#' compute_qtc(qt = 350, rr = 56.54, method = "Fridericia")
+#'
+#' compute_qtc(qt = 350, rr = 56.54, method = "Sagie")
+compute_qtc <- function(qt, rr, method) {
   assert_numeric_vector(qt)
   assert_numeric_vector(rr)
-  1000 * (qt / 1000 + 0.154 * (1 - rr / 1000))
+  assert_character_scalar(method, values = c("Bazett", "Fridericia", "Sagie"))
+
+  formulae <- alist(
+    Bazett = qt / sqrt(rr / 1000),
+    Fridericia = qt / (rr / 1000) ^ (1 / 3),
+    Sagie = 1000 * (qt / 1000 + 0.154 * (1 - rr / 1000))
+  )
+  eval(formulae[[method]])
 }
 
 #' Adds a parameter for derived RR
