@@ -12,7 +12,8 @@ Authors@R: c(
     person("Shimeng", "Huang", role = "aut"),
     person("Robin", "Koeger", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
-    person("Teckla","Akinyi",role="aut")
+    person("Teckla", "Akinyi", role="aut")
+    person("Eric", "Simms", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
