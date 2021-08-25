@@ -147,7 +147,7 @@ derive_param_qtc <- function(dataset,
       rr = !!sym(paste0("AVAL.", rr_code)),
       method = method
     ),
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
@@ -312,7 +312,7 @@ derive_param_rr <- function(dataset,
     parameters = c(hr_code),
     by_vars = by_vars,
     analysis_value = compute_rr(!!sym(paste0("AVAL.", hr_code))),
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 

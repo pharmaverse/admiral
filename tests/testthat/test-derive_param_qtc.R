@@ -22,14 +22,14 @@ test_that("new observations are derived correctly", {
 
   expect_identical(
     output_bazett %>% filter(PARAMCD == "QTCBR") %>% pull(AVAL),
-    compute_qtcb(c(370, 480), c(710, 842))
+    compute_qtc(c(370, 480), c(710, 842), method = "Bazett")
   )
   expect_identical(
     output_fridericia %>% filter(PARAMCD == "QTCFR") %>% pull(AVAL),
-    compute_qtcf(c(370, 480), c(710, 842))
+    compute_qtc(c(370, 480), c(710, 842), method = "Fridericia")
   )
   expect_identical(
     output_sagie %>% filter(PARAMCD == "QTLCR") %>% pull(AVAL),
-    compute_qtlc(c(370, 480), c(710, 842))
+    compute_qtc(c(370, 480), c(710, 842), method = "Sagie")
   )
 })
