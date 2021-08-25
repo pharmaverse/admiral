@@ -230,9 +230,11 @@ head(select(advs, USUBJID, VSSTRESN, VSSTRESC, VSSTRESU, VSTPT, AVAL, AVALC, AVA
 Optionally derive new parameters creating `PARAMCD`, `PARAM`, `AVAL` (and any 
 other variables). Below is an example of creating `Mean Arterial Pressure` for `advs`, see also Example 3 in section below [Derive New Rows](#additional) for alternative way of creating new parameters.
 
-```{r eval=TRUE}
+```{r eval=TRUE, echo=FALSE}
 advs_old <- advs
+```
 
+```{r eval=TRUE}
 advs <- derive_param_map(
   advs_old,
   unit_var = NULL,
