@@ -167,6 +167,10 @@ derive_param_qtc <- function(dataset,
 #'
 #' @author Thomas Neitmann
 #'
+#' @export
+#'
+#' @keywords user_utility
+#'
 #' @examples
 #' default_qtc_paramcd("Sagie")
 default_qtc_paramcd <- function(method) {
