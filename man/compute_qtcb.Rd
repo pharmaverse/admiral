@@ -23,8 +23,7 @@ QT interval in msec:
 Computes corrected QT using Bazett's formula.
 }
 \examples{
-compute_qtcb(qt = 350,
-             rr = 56.54)
+compute_qtcb(qt = 350, rr = 56.54)
 }
 \author{
 Stefan Bundfuss

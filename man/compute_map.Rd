@@ -19,26 +19,23 @@ A numeric vector is expected.}
 
 A numeric vector or \code{NULL} is expected.}
 }
-\value{
+\description{
+Computes mean arterial pressure (MAP) based on diastolic and systolic blood
+pressure. Optionally heart rate can be used as well.
+}
+\details{
 \deqn{\frac{2DIABP + SYSBP}{3}}{(2DIABP + SYSBP) / 3}
 if it is based on diastolic and systolic blood pressure and
 \deqn{DIABP + 0.01 e^{4.14 - \frac{40.74}{HR}} (SYSBP - DIABP)}{
 DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 if it is based on diastolic, systolic blood pressure, and heart rate.
 }
-\description{
-Computes mean arterial pressure (MAP) based on diastolic and systolic blood
-pressure. Optionally heart rate can be used as well.
-}
 \examples{
 # Compute MAP based on diastolic and systolic blood pressure
-compute_map(diabp = 51,
-            sysbp = 121)
+compute_map(diabp = 51, sysbp = 121)
 
 # Compute MAP based on diastolic and systolic blood pressure and heart rate
-compute_map(diabp = 51,
-            sysbp = 121,
-            hr = 59)
+compute_map(diabp = 51, sysbp = 121, hr = 59)
 }
 \author{
 Stefan Bundfuss
