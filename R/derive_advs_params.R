@@ -135,9 +135,6 @@ derive_param_map <- function(dataset,
       )
       abort(err_msg)
     }
-    set_unit_var <- vars(!!unit_var := unit)
-  } else {
-    set_unit_var <- NULL
   }
 
   if (is.null(hr_code)) {
@@ -163,7 +160,7 @@ derive_param_map <- function(dataset,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
     analysis_value = !!analysis_value,
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
@@ -344,9 +341,6 @@ derive_param_bsa <- function(dataset,
       unit = "kg",
       unit_var = !!unit_var
     )
-    set_unit_var <- vars(!!unit_var := "m^2")
-  } else {
-    set_unit_var <- NULL
   }
 
   bsa_formula <- expr(
@@ -363,7 +357,7 @@ derive_param_bsa <- function(dataset,
     parameters = c(height_code, weight_code),
     by_vars = by_vars,
     analysis_value = !!bsa_formula,
-    set_values_to = vars(!!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
@@ -565,9 +559,6 @@ derive_param_bmi <-  function(dataset,
       unit = "cm",
       unit_var = !!unit_var
     )
-    set_unit_var <- vars(!!unit_var := "kg/m^2")
-  } else {
-    set_unit_var <- NULL
   }
 
   derive_derived_param(
@@ -579,7 +570,7 @@ derive_param_bmi <-  function(dataset,
       height = !!sym(paste0("AVAL.", height_code)),
       weight = !!sym(paste0("AVAL.", weight_code))
     ),
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
