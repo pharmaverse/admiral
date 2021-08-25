@@ -105,7 +105,6 @@
 #'
 #' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 #' # and `DTYPE = AVERAGE` refers to `mean()` records.
-#' # `set_values_to` must be of the same length as `fns`
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -113,7 +112,7 @@
 #'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 #' )
 #'
-#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 #' adeg <- tibble::tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
 #'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -132,7 +131,8 @@
 #'   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
 #')
 #'
-#' # Summarize the average of AVAL for AVISIT records greater than 2
+#' # Compute the average of AVAL only if there are more than 2 records within the
+#' # by group
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
