@@ -135,9 +135,6 @@ derive_param_qtc <- function(dataset,
       unit = "msec",
       unit_var = !!unit_var
     )
-    set_unit_var <- vars(!!unit_var := "msec")
-  } else {
-    set_unit_var <- NULL
   }
 
   funs <- list(
@@ -338,9 +335,6 @@ derive_param_rr <- function(dataset,
       unit = "beats/min",
       unit_var = !!unit_var
     )
-    set_unit_var <- vars(!!unit_var := "msec")
-  } else {
-    set_unit_var <- NULL
   }
 
   derive_derived_param(
