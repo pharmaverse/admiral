@@ -47,8 +47,7 @@ Permitted Values: character value}
 
 \item{unit_var}{Variable providing the unit of the parameter
 
-The variable is used to check the units of the input parameters and it is
-set to \code{"msec"} for the new parameter.
+The variable is used to check the units of the input parameters.
 
 Permitted Values: A variable of the input dataset}
 

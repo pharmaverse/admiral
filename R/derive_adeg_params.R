@@ -38,14 +38,13 @@
 #'
 #' @param unit_var Variable providing the unit of the parameter
 #'
-#'   The variable is used to check the units of the input parameters and it is
-#'   set to `"msec"` for the new parameter.
+#'   The variable is used to check the units of the input parameters.
 #'
 #'   Permitted Values: A variable of the input dataset
 #'
 #' @inheritParams derive_derived_param
 #'
-#' @seealso compute_qtcb compute_qtcf compute_qtlc
+#' @seealso compute_qtc
 #'
 #' @author Stefan Bundfuss
 #'

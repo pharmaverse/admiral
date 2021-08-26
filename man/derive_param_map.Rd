@@ -61,9 +61,6 @@ code for the new parameter.
 
 \item{unit_var}{Variable providing the unit of the parameter
 
-For the new parameter the variable is set to the value of the variable for
-systolic blood pressure.
-
 Permitted Values: A variable of the input dataset}
 
 \item{filter}{Filter condition

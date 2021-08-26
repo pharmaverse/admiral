@@ -40,9 +40,6 @@
 #'
 #' @param unit_var Variable providing the unit of the parameter
 #'
-#'   For the new parameter the variable is set to the value of the variable for
-#'   systolic blood pressure.
-#'
 #'   Permitted Values: A variable of the input dataset
 #'
 #' @inheritParams derive_derived_param
@@ -485,8 +482,7 @@ compute_bsa <- function(height = height,
 #'
 #' @param unit_var Variable providing the unit of the parameter
 #'
-#'   The variable is used to check the units of the input parameters and it is
-#'   set to `"kg/m^2"` for the new parameter.
+#'   The variable is used to check the units of the input parameters.
 #'
 #'   Permitted Values: A variable of the input dataset
 #'
