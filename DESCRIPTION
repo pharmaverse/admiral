@@ -13,7 +13,8 @@ Authors@R: c(
     person("Robin", "Koeger", role = "aut"),
     person("Gordon", "Miller", role = "aut"),
     person("Teckla", "Akinyi", role = "aut"),
-    person("Eric", "Simms", role = "aut")
+    person("Eric", "Simms", role = "aut"),
+    person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
