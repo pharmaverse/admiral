@@ -7,18 +7,18 @@
 derive_param_doseint(
   dataset,
   by_vars,
-  set_values_to = vars(PARAMCD = "TNDOSINT", PARAM = "Dose Intensity (\%)"),
+  set_values_to = vars(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
-  zero_doses = NULL,
+  zero_doses = "Inf",
   filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -59,15 +59,16 @@ If some instances, the planned dose (\code{tpadm_code}) or administered dose
 (\code{adm_code}) will be \code{NA} or 0.  The following options may be applied for cases
 where the planned dose (\code{tpadm_code}) and/or (\code{tadm_code}) are 0.
 
-Permitted Values:
-NULL: Default, No record is returned if either the planned (\code{tpadm_code}) or
-administered (\code{tadm_code}) \code{AVAL} are \code{NA}.  If the planned dose
+Permitted Values: \code{Inf}, \code{100}
+
+\code{Inf}: Default, No record is returned if either the planned (\code{tpadm_code})
+or administered (\code{tadm_code}) \code{AVAL} are \code{NA}.  If the planned dose
 (\code{tpadm_code}) is 0, \code{Inf} is returned. If the administered dose
 (\code{tadm_code}) is 0 and the planned dose (\code{tpadm_code}) is > 0, 0 is
 returned. A record must exist for both \code{tadm_code} and \code{tpadm_code} for the
 dose intensity calculation to be done.
 
-\code{Y}: Returns 100 when the planned dose (\code{tpadm_code}) is 0 and the
+\code{100}: Returns 100 when the planned dose (\code{tpadm_code}) is 0 and the
 administered dose (\code{tadm_code}) is > 0. Returns 0 when the planned dose
 (\code{tpadm_code}) is 0 and the administered dose (\code{tadm_code}) is 0.}
 
@@ -81,6 +82,25 @@ into account.
 }
 \value{
 The input dataset with the new parameter rows added
+
+No record is returned if either the planned (\code{tpadm_code}) or administered
+(\code{tadm_code}) \code{AVAL} are \code{NA}.  No record is returned is a record does not
+exist for both \code{tadm_code} and \code{tpadm_code} for the specified \code{by_var}.
+If \code{zero_doses} = \code{Inf}:
+\enumerate{
+\item If the planned dose (\code{tpadm_code}) is 0 and administered dose
+(\code{tadm_code}) is 0, \code{NaN} is returned.
+\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+(\code{tadm_code}) is > 0, \code{Inf} is returned.
+}
+
+If \code{zero_doses} = \code{100} :
+\enumerate{
+\item If the planned dose (\code{tpadm_code}) is 0 and administered dose
+(\code{tadm_code}) is 0, 0 is returned.
+\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+(\code{tadm_code}) is > 0, 100 is returned.
+}
 }
 \description{
 Adds a record for the dose intensity for each by group
@@ -94,15 +114,23 @@ Total Dose / Planned Dose * 100
 library(dplyr, warn.conflicts = FALSE)
 
 adex <- tibble::tribble(
-  derive_param_doseint(adex,
-                       by_vars=vars(USUBJID, VISIT),
-                       set_values_to = vars(PARAMCD = "TNDOSINT",
-                                            PARAM = "Dose Intensity (\%)"),
+~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
+"P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
+"P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
+"P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
+"P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
+"P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
+"P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
+"P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
+"P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
+)
 
-  derive_param_doseint(adex,
-                       by_vars=vars(USUBJID, VISIT),
-                       set_values_to = vars(PARAMCD = "TDOSINT2",
-                                            PARAM = "Dose Intensity with Zero Flag(\%)"),
+adex \%>\%
+  derive_param_doseint(by_vars=vars(USUBJID, VISIT),
+                       set_values_to = vars(PARAMCD = "TNDOSINT"),
+
+  derive_param_doseint(by_vars=vars(USUBJID, VISIT),
+                       set_values_to = vars(PARAMCD = "TDOSINT2"),
                        zero_doses = "Y")
 }
 \author{
