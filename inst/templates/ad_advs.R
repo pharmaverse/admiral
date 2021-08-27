@@ -27,7 +27,9 @@ param_lookup <- tibble::tribble(
   "WEIGHT", "WEIGHT", "Weight (kg)", 4,
   "HEIGHT", "HEIGHT", "Height (cm)", 5,
   "TEMP", "TEMP", "Temperature (C)", 6,
-  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 7
+  "MAP", "MAP", "Mean Arterial Pressure (mmHg)", 7,
+  "BMI", "BMI", "Body Mass Index(kg/m^2)", 8,
+  "BSA", "BSA", "Body Surface Area(m^2)", 9
 )
 # Assign ANRLO/HI, A1LO/HI
 range_lookup <- tibble::tribble(
@@ -57,10 +59,11 @@ format_avalcat1n <- function(param, aval) {
 
 # ---- Derivations ----
 
-# Join ADSL with VS
-advs0 <- adsl %>%
+# Join with ADSL immediately to pick up TRTSDT only (for ADY derivation)
+# Join with ADSL again after derived parameters
+advs_init <- vs %>%
   left_join(
-    vs %>% select(-DOMAIN),
+    adsl %>% select(STUDYID, USUBJID, TRTSDT),
     by = c("STUDYID", "USUBJID")
   ) %>%
   # Calculate ADT
@@ -71,53 +74,45 @@ advs0 <- adsl %>%
   ) %>%
   # Calculate ADY
   derive_var_ady(reference_date = TRTSDT, date = ADT) %>%
+  # Add PARAMCD and PARAM
+  left_join(param_lookup, by = "VSTESTCD") %>%
   # Calculate AVAL, AVALC, AVALU
   mutate(
     AVAL = VSSTRESN,
     AVALC = VSSTRESC,
     AVALU = VSSTRESU
-  ) %>%
-  # Add PARAMCD and PARAM
-  left_join(param_lookup, by = "VSTESTCD")
-
-# Derive a new a new record based on existing records.
-# Derive MAP (Mean Arterial Pressure from Systolic and Diastolic Pressure)
-# Note: this PARAMCD is not derived in the CDISC pilot and is presented
-#       for demonstration purposes.
-
-# For SYSBP, remove all variables which are different for the two parameters
-# and will not be applicable to the new derived MAP value.  The will be NA
-# on the new observations.
-sysbp <- advs0 %>%
-  filter(VSTESTCD == "SYSBP") %>%
-  select(
-    -VSSEQ, -VSTESTCD, -VSTEST, -VSORRES, -VSORRESU, -VSSTRESC, -VSSTRESN,
-    -VSSTRESU, -VSLOC, -VSBLFL, -VSSTAT, -AVALC
   )
 
-# Keep only variables required for the join and the analysis value. Other
-# variables which need to be retained for the new observations are taken from
-# the sysbp dataset.
-diabp <- advs0 %>%
-  filter(VSTESTCD == "DIABP") %>%
-  select(STUDYID, USUBJID, VISITNUM, VSDTC, VSTPT, AVAL) %>%
-  rename(DBPAVAL = AVAL)
-
-map <- left_join(sysbp, diabp,
-  by = c("STUDYID", "USUBJID", "VISITNUM", "VSDTC", "VSTPT")
-) %>%
-  mutate(
-    AVAL = ((2 * DBPAVAL) + AVAL) / 3,
-    PARAMCD = "MAP"
+# Derive new parameters based on existing records.
+advs_param <- advs_init %>%
+  # Derive Mean Arterial Pressure
+  derive_param_map(
+    unit_var = NULL,
+    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
   ) %>%
-  select(-DBPAVAL) %>%
-  filter(!is.na(AVAL)) %>%
-# Add  PARAM
-  left_join(param_lookup, by = "PARAMCD")
+  # Derive Body Surface Area
+  derive_param_bsa(
+    unit_var = NULL,
+    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2")
+  ) %>%
+  # Derive Body Surface Area
+  derive_param_bmi(
+    unit_var = NULL,
+    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2")
+  ) %>%
+  # Add parameter details for derived parameters
+  select(filter(PARAMCD %in% c("MAP", "BSA")),
+         -PARAM, -PARAMN) %>%
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
+  union_all(advs_init,filter(!(PARAMCD %in% c("MAP", "BSA"))))
 
-# add MAP to the original datasets
-advs <- advs0 %>%
-  union_all(map) %>%
+# join ADSL vars and get visit info
+advs_visit <- advs_param %>%
+  select(-DOMAIN, -TRTSDT)
+  left_join(adsl,by = c("STUDYID", "USUBJID")) %>%
   # Derive Timing
   mutate(
     ATPTN = VSTPTNUM,
@@ -143,8 +138,10 @@ advs <- advs0 %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
     fns = list(AVAL ~ mean),
     set_values_to = vars(DTYPE = "AVERAGE")
-  ) %>%
+  )
 
+# Derive flag derivations
+advs_flags <- advs_visit %>%
   # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
   derive_extreme_flag(
     new_var = ANL01FL,
@@ -165,7 +162,10 @@ advs <- advs0 %>%
   # Calculate ANRIND
   # Note: ANRIND along with ANRLO and ANRHI are not included in CDISC pilot
   left_join(range_lookup, by = "PARAMCD") %>%
-  derive_var_anrind() %>%
+  derive_var_anrind()
+
+# Derive baseline derivations
+advs_base <- advs_flags %>%
   # Calculate BASETYPE
   derive_var_basetype(
     basetypes = exprs(
@@ -193,8 +193,10 @@ advs <- advs0 %>%
 
   # Calculate CHG, PCHG
   derive_var_chg() %>%
-  derive_var_pchg() %>%
+  derive_var_pchg()
 
+# Get treatment information
+advs_trt <- advs_base %>%
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
@@ -215,8 +217,10 @@ advs <- advs0 %>%
     AVISITN = 99
   ) %>%
   # union_all(advs) %>%
-  select(-EOTFL) %>%
+  select(-EOTFL)
 
+# Get ASEQ and AVALCATx
+advs_final <- advs_trt %>%
   # Calculate ASEQ
   derive_obs_number(
     new_var = ASEQ,
