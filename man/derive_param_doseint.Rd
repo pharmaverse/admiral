@@ -112,6 +112,7 @@ Total Dose / Planned Dose * 100
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
 
 adex <- tibble::tribble(
 ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
