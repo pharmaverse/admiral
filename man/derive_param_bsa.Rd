@@ -18,8 +18,8 @@ derive_param_bsa(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -109,13 +109,15 @@ advs <- tibble::tribble(
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
-  method = "Mosteller"
+  method = "Mosteller",
+  get_unit_expr = AVALU
 )
 
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
-  method = "Fujimoto"
+  method = "Fujimoto",
+  get_unit_expr = extract_unit(PARAM)
 )
 }
 \author{

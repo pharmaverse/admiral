@@ -18,8 +18,8 @@ derive_param_map(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -92,7 +92,8 @@ DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 if it is based on diastolic, systolic blood pressure, and heart rate.
 }
 \examples{
-library(dplyr, warn.conflicts = TRUE)
+library(dplyr, warn.conflicts = FALSE)
+
 advs <- tibble::tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
@@ -113,11 +114,11 @@ advs <- tibble::tribble(
 advs \%>\%
   derive_param_map(
     by_vars = vars(USUBJID, VISIT),
-    unit_var = AVALU,
     set_values_to = vars(
       PARAMCD = "MAP",
       PARAM = "Mean Arterial Pressure (mmHg)"
-    )
+    ),
+    get_unit_expr = AVALU
   ) \%>\%
   filter(PARAMCD != "PULSE")
 
@@ -126,11 +127,11 @@ derive_param_map(
   advs,
   by_vars = vars(USUBJID, VISIT),
   hr_code = "PULSE",
-  unit_var = AVALU,
   set_values_to = vars(
     PARAMCD = "MAP",
     PARAM = "Mean Arterial Pressure (mmHg)"
-  )
+  ),
+  get_unit_expr = extract_unit(PARAM)
 )
 }
 \author{

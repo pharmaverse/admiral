@@ -10,15 +10,15 @@ derive_param_bmi(
   set_values_to = vars(PARAMCD = "BMI"),
   weight_code = "WEIGHT",
   height_code = "HEIGHT",
-  get_unit_expr = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}

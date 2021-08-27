@@ -5,8 +5,8 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -55,7 +55,8 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = TRUE)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' advs <- tibble::tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
 #'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
@@ -76,11 +77,11 @@
 #' advs %>%
 #'   derive_param_map(
 #'     by_vars = vars(USUBJID, VISIT),
-#'     unit_var = AVALU,
 #'     set_values_to = vars(
 #'       PARAMCD = "MAP",
 #'       PARAM = "Mean Arterial Pressure (mmHg)"
-#'     )
+#'     ),
+#'     get_unit_expr = AVALU
 #'   ) %>%
 #'   filter(PARAMCD != "PULSE")
 #'
@@ -89,11 +90,11 @@
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   hr_code = "PULSE",
-#'   unit_var = AVALU,
 #'   set_values_to = vars(
 #'     PARAMCD = "MAP",
 #'     PARAM = "Mean Arterial Pressure (mmHg)"
-#'   )
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_map <- function(dataset,
                              by_vars,
@@ -200,8 +201,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -267,13 +268,15 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   method = "Mosteller"
+#'   method = "Mosteller",
+#'   get_unit_expr = AVALU
 #' )
 #'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   method = "Fujimoto"
+#'   method = "Fujimoto",
+#'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_bsa <- function(dataset,
                              by_vars,
@@ -424,8 +427,8 @@ compute_bsa <- function(height = height,
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -490,7 +493,7 @@ derive_param_bmi <-  function(dataset,
                               set_values_to = vars(PARAMCD = "BMI"),
                               weight_code = "WEIGHT",
                               height_code = "HEIGHT",
-                              get_unit_expr = NULL,
+                              get_unit_expr,
                               filter = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
