@@ -804,13 +804,9 @@ assert_function_param <- function(arg, params) {
 #' unit.
 #'
 #' @param dataset A `data.frame`
-#' @param param
-#'   Parameter code of the parameter to check
-#' @param unit
-#'   Expected unit
-#'
-#' @param unit_var
-#'   Variable providing the unit
+#' @param param Parameter code of the parameter to check
+#' @param required_unit Expected unit
+#' @param get_unit_expr Expression used to provide the unit of `param`
 #'
 #' @author Stefan Bundfuss
 #'
@@ -823,9 +819,9 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' data(advs)
-#' assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
 #' }
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))

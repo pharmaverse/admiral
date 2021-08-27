@@ -55,6 +55,12 @@ as the RR interval assessments. It is expected that RR is measured in msec.
 
 Permitted Values: character value}
 
+\item{get_unit_expr}{An expression providing the unit of the parameter
+
+The result is used to check the units of the input parameters.
+
+Permitted Values: A variable of the input dataset or a function call}
+
 \item{filter}{Filter condition
 
 The specified condition is applied to the input dataset before deriving the
@@ -62,12 +68,6 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
-
-\item{unit_var}{Variable providing the unit of the parameter
-
-The variable is used to check the units of the input parameters.
-
-Permitted Values: A variable of the input dataset}
 }
 \value{
 The input dataset with the new parameter added
@@ -99,7 +99,8 @@ derive_param_qtc(
     PARAMCD = "QTCBR",
     PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
     AVALU = "msec"
-  )
+  ),
+  get_unit_expr = AVALU
 )
 
 derive_param_qtc(
@@ -110,7 +111,8 @@ derive_param_qtc(
     PARAMCD = "QTCFR",
     PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
     AVALU = "msec"
-  )
+  ),
+  get_unit_expr = extract_unit(PARAM)
 )
 
 derive_param_qtc(
@@ -121,7 +123,8 @@ derive_param_qtc(
     PARAMCD = "QTLCR",
     PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
     AVALU = "msec"
-  )
+  ),
+  get_unit_expr = extract_unit(PARAM)
 )
 }
 \seealso{

@@ -13,10 +13,6 @@
 #'   parameter) and to the parameters specified by `sysbp_code`, `diabp_code`
 #'   and `hr_code`.
 #'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
 #' @param sysbp_code Systolic blood pressure parameter code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
@@ -38,11 +34,9 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The analysis value of the new parameter is derived as
@@ -245,18 +239,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   The variable is used to check the units of the input parameters and it is
-#'   set to `"m^2"` for the new parameter.
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @author Eric Simms
 #'
@@ -460,17 +445,9 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   The variable is used to check the units of the input parameters.
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The analysis value of the new parameter is derived as
@@ -505,7 +482,8 @@ compute_bsa <- function(height = height,
 #'   set_values_to = vars(
 #'     PARAMCD = "BMI",
 #'     PARAM = "Body Mass Index (kg/m^2)"
-#'   )
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
 #'  )
 derive_param_bmi <-  function(dataset,
                               by_vars,
@@ -526,13 +504,13 @@ derive_param_bmi <-  function(dataset,
   assert_unit(
     dataset,
     param = weight_code,
-    unit = "kg",
+    required_unit = "kg",
     get_unit_expr = !!get_unit_expr
   )
   assert_unit(
     dataset,
     param = height_code,
-    unit = "cm",
+    required_unit = "cm",
     get_unit_expr = !!get_unit_expr
   )
 

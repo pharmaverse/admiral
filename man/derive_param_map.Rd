@@ -7,11 +7,11 @@
 derive_param_map(
   dataset,
   by_vars,
+  set_values_to = vars(PARAMCD = "MAP"),
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
-  set_values_to = vars(PARAMCD = "MAP"),
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
@@ -28,7 +28,18 @@ and \code{hr_code}.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
+
+\item{set_values_to}{Variables to be set
+
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
+
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
@@ -51,17 +62,11 @@ as the heart rate assessments.
 
 Permitted Values: character value}
 
-\item{set_values_to}{Variables to be set
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+The result is used to check the units of the input parameters.
 
-\emph{Permitted Values:} List of variable-value pairs}
-
-\item{unit_var}{Variable providing the unit of the parameter
-
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 

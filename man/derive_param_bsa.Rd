@@ -11,7 +11,7 @@ derive_param_bsa(
   set_values_to = vars(PARAMCD = "BSA"),
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
@@ -27,7 +27,10 @@ parameter) and to the parameters specified by \code{HEIGHT} and \code{WEIGHT}.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
 
 \item{method}{Derivation method to use:
 
@@ -69,12 +72,11 @@ as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 
 Permitted Values: character value}
 
-\item{unit_var}{Variable providing the unit of the parameter
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The variable is used to check the units of the input parameters and it is
-set to \code{"m^2"} for the new parameter.
+The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 

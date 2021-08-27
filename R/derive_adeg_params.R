@@ -36,11 +36,11 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @param unit_var Variable providing the unit of the parameter
+#' @param get_unit_expr An expression providing the unit of the parameter
 #'
-#'   The variable is used to check the units of the input parameters.
+#'   The result is used to check the units of the input parameters.
 #'
-#'   Permitted Values: A variable of the input dataset
+#'   Permitted Values: A variable of the input dataset or a function call
 #'
 #' @inheritParams derive_derived_param
 #'
