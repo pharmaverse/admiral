@@ -21,13 +21,13 @@ Derive the \code{BASEC} variable in a BDS dataset
 }
 \examples{
 dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "N",
-  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
-  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Day 14",   "N",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "Day 14",   "N"
 )
 derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
 }

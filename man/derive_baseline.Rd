@@ -27,17 +27,21 @@ Derive a baseline variable, e.g. \code{BASE}, in a BDS dataset
 }
 \examples{
 dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
-  "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",    "LAST",
-  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM01", "LOW",    "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Day 14",   "N",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Baseline", "Y",
+  "TEST01", "PAT01",  "PARAM02", "HIGH",   "Day 7",    "N",
+  "TEST01", "PAT01",  "PARAM02", "MEDIUM", "Day 14",   "N",
+  "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Baseline", "Y",
+  "TEST01", "PAT02",  "PARAM01", "LOW",    "Day 7",    "N",
+  "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Day 14",   "N",
 )
+
 derive_baseline(
   dataset,
-  by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+  by_vars = vars(USUBJID, PARAMCD),
   source_var = AVALC,
   new_var = BASEC
 )

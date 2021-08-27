@@ -86,7 +86,10 @@ squote <- function(x) {
 #' @examples
 #' admiral:::vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
-  map_chr(quosures, ~as_string(quo_get_expr(.x)))
+  rlang::set_names(
+    map_chr(quosures, ~as_string(quo_get_expr(.x))),
+    names(quosures)
+  )
 }
 
 #' Helper function to convert date (or date-time) objects to characters of dtc format
@@ -307,6 +310,19 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 
 is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
+}
+
+replace_values_by_names <- function(quosures) {
+  vars <- map2(quosures, names(quosures), function(q, n) {
+    if (n == "") {
+      return(q)
+    }
+    quo_set_env(
+      quo(!!as.symbol(n)),
+      quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures", names = NULL)
 }
 
 get_duplicates <- function(x) {

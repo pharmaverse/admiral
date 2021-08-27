@@ -89,7 +89,8 @@ derive_param_rr(
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(
     PARAMCD = "RRR",
-    PARAM = "RR Duration Rederived (msec)"
+    PARAM = "RR Duration Rederived (msec)",
+    AVALU = "msec"
   )
 )
 }

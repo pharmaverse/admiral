@@ -156,4 +156,4 @@ adsl <- dm %>%
 
 # ---- Save output ----
 
-save(adsl, file = "/PATH/TO/SAVE/ADSL", compress = TRUE)
+saveRDS(adsl, file = "./ADSL.rds", compress = TRUE)
