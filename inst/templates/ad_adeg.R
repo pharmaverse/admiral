@@ -143,11 +143,11 @@ adeg <- eg %>%
 
   # Calculate ABLFL, BASE & BASEC, CHG, PCHG
   derive_extreme_flag(
-    new_var = ABLFL,
     by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
     order = vars(ADT, VISITNUM, ATPTN),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = ((!is.na(AVAL) | !is.na(AVALC)) &
+    filter = ((!is.na(AVAL) | !is.na(AVALC)) &
       ADT <= TRTSDT &
       (DTYPE != "AVERAGE" | PARAMCD != "EGINTP"))
   ) %>%
@@ -174,11 +174,11 @@ adeg <- eg %>%
 
   # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
   derive_extreme_flag(
-    new_var = ANL01FL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
+    new_var = ANL01FL,
     mode = "last",
-    flag_filter = (!is.na(AVISITN))
+    filter = (!is.na(AVISITN))
   ) %>%
 
   # Calculate ANRIND

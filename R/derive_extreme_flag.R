@@ -158,9 +158,16 @@ derive_extreme_flag <- function(dataset,
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
-  assert_character_scalar(mode, values = c("first", "last"))
+  mode <-
+    assert_character_scalar(mode,
+                            values = c("first", "last"),
+                            case_sensitive = FALSE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_character_scalar(check_type, values = c("none", "warning", "error"))
+  check_type <-
+    assert_character_scalar(
+      check_type,
+      values = c("none", "warning", "error"),
+      case_sensitive = FALSE)
 
   # select data to consider for flagging
   if (!quo_is_null(filter)) {
