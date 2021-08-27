@@ -674,7 +674,7 @@ derive_vars_dtm <- function(dataset,
   assert_character_scalar(
     flag_imputation,
     values = c("auto", "both", "date", "time", "none"),
-    case_insensitive = TRUE
+    case_sensitive = FALSE
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")

@@ -80,11 +80,11 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`
+#' @param case_sensitive Should the argument be handled case-sensitive?
+#' If set to `FALSE`, the argument is converted to lower case for checking the
+#' permitted values and returning the argument.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
-#' @param case_insensitive Should the argument be handled case-insensitive?
-#' If set to `TRUE`, the argument is converted to lower case for checking the
-#' permitted values and returning the argument.
 #'
 #' @author Thomas Neitmann
 #'
@@ -112,7 +112,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #' example_fun2 <- function(msg_type) {
 #'   msg_type <- assert_character_scalar(msg_type,
 #'                                       values = c("warning", "error"),
-#'                                       case_insensitive = TRUE)
+#'                                       case_sensitive = FALSE)
 #'  if (msg_type == "warning") {
 #'    print("A warning was requested.")
 #'  }
@@ -122,8 +122,8 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 
 assert_character_scalar <- function(arg,
                                     values = NULL,
-                                    optional = FALSE,
-                                    case_insensitive = FALSE) {
+                                    case_sensitive = TRUE,
+                                    optional = FALSE) {
   assert_character_vector(values, optional = TRUE)
   assert_logical_scalar(optional)
 
@@ -149,7 +149,7 @@ assert_character_scalar <- function(arg,
     abort(err_msg)
   }
 
-  if (case_insensitive) {
+  if (!case_sensitive) {
     arg <- tolower(arg)
   }
 
