@@ -11,7 +11,7 @@ derive_param_qtc(
   set_values_to = default_qtc_paramcd(method),
   qt_code = "QT",
   rr_code = "RR",
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
@@ -55,12 +55,6 @@ as the RR interval assessments. It is expected that RR is measured in msec.
 
 Permitted Values: character value}
 
-\item{unit_var}{Variable providing the unit of the parameter
-
-The variable is used to check the units of the input parameters.
-
-Permitted Values: A variable of the input dataset}
-
 \item{filter}{Filter condition
 
 The specified condition is applied to the input dataset before deriving the
@@ -68,6 +62,12 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
+
+\item{unit_var}{Variable providing the unit of the parameter
+
+The variable is used to check the units of the input parameters.
+
+Permitted Values: A variable of the input dataset}
 }
 \value{
 The input dataset with the new parameter added
@@ -79,16 +79,16 @@ are available.
 }
 \examples{
 adeg <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
-  "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
-  "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
-  "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
-  "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
-  "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2",
+  ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL,  ~AVALU,      ~VISIT,
+  "01-701-1015", "HR",     "Heart Rate (beats/min)",  70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT",     "QT Duration (msec)",     370,    "msec",      "WEEK 2",
+  "01-701-1015", "HR",     "Heart Rate (beats/min)",  62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR",     "RR Duration (msec)",     710,    "msec",      "WEEK 2",
+  "01-701-1028", "HR",     "Heart Rate (beats/min)",  85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT",     "QT Duration (msec)",     480,    "msec",      "WEEK 2",
+  "01-701-1028", "QT",     "QT Duration (msec)",     350,    "msec",      "WEEK 3",
+  "01-701-1028", "HR",     "Heart Rate (beats/min)",  56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR",     "RR Duration (msec)",     842,    "msec",      "WEEK 2",
 )
 
 derive_param_qtc(

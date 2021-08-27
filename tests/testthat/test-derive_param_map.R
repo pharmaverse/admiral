@@ -26,9 +26,9 @@ test_that("new observations for MAP based on DIABP and SYSBP are derived correct
   expect_dfs_equal(
     derive_param_map(
       input,
-      unit_var = AVALU,
       by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
+      set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
+      get_unit_expr = extract_unit(PARAM)
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
@@ -66,10 +66,10 @@ test_that("new observations for MAP based on DIABP, SYSBP, and HR are derived co
   expect_dfs_equal(
     derive_param_map(
       input,
-      hr_code = "PULSE",
-      unit_var = AVALU,
       by_vars = vars(USUBJID, VISIT),
-      set_values_to = (vars(PARAMCD = "MAP", AVALU = "mmHg"))
+      set_values_to = (vars(PARAMCD = "MAP", AVALU = "mmHg")),
+      hr_code = "PULSE",
+      get_unit_expr = extract_unit(PARAM)
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
@@ -92,9 +92,9 @@ test_that("an error is issued if PARAMCD is not set", {
   expect_error(
     derive_param_map(
       input,
-      unit_var = AVALU,
       by_vars = vars(USUBJID, VISIT),
-      set_values_to = vars(PARAM = "Mean Arterial Pressure")
+      set_values_to = vars(PARAM = "Mean Arterial Pressure"),
+      get_unit_expr = extract_unit(PARAM)
     ),
     "The following required elements are missing in `set_values_to`: 'PARAMCD'"
   )

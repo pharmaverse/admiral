@@ -328,3 +328,11 @@ replace_values_by_names <- function(quosures) {
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
+
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}

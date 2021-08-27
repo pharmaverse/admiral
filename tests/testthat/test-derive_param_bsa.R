@@ -26,7 +26,7 @@ test_that("new observations are derived correctly with Mosteller method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -46,7 +46,7 @@ new_obs <-
 expected_output <- bind_rows(input, new_obs)
 
 expect_dfs_equal(
-  derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "DuBois-DuBois"),
+  derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "DuBois-DuBois", get_unit_expr = AVALU),
   expected_output,
   keys = c("USUBJID", "PARAMCD", "VISIT")
 )
@@ -66,7 +66,7 @@ test_that("new observations are derived correctly with Haycock method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Haycock"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Haycock", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -86,7 +86,7 @@ test_that("new observations are derived correctly with Gehan & George method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Gehan-George"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Gehan-George", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -107,7 +107,7 @@ test_that("new observations are derived correctly with Boyd method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Boyd"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Boyd", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -127,7 +127,7 @@ test_that("new observations are derived correctly with Fujimoto method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Fujimoto"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Fujimoto", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -147,7 +147,7 @@ test_that("new observations are derived correctly with Takahira method", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Takahira"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Takahira", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -189,7 +189,7 @@ test_that("new observations are derived correctly whenever HEIGHT and WEIGHT are
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )

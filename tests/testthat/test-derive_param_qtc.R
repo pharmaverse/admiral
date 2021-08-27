@@ -11,25 +11,31 @@ test_that("new observations are derived correctly", {
     "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
     "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2",
   )
-  by <- vars(USUBJID, VISIT)
-  output_bazett <- derive_param_qtc(input, by_vars = by, method = "Bazett")
-  output_fridericia <- derive_param_qtc(input, by_vars = by, method = "Fridericia")
-  output_sagie <- derive_param_qtc(input, by_vars = by, method = "Sagie")
+  methods <- c("Bazett", "Fridericia", "Sagie")
+  outputs <- lapply(methods, function(method) {
+    derive_param_qtc(
+      input,
+      by_vars = vars(USUBJID, VISIT),
+      method = method,
+      get_unit_expr = AVALU
+    )
+  })
+  names(outputs) <- methods
 
-  expect_identical(nrow(output_bazett), nrow(input) + 2L)
-  expect_identical(nrow(output_fridericia), nrow(input) + 2L)
-  expect_identical(nrow(output_sagie), nrow(input) + 2L)
+  expect_identical(nrow(outputs$Bazett), nrow(input) + 2L)
+  expect_identical(nrow(outputs$Fridericia), nrow(input) + 2L)
+  expect_identical(nrow(outputs$Sagie), nrow(input) + 2L)
 
   expect_identical(
-    output_bazett %>% filter(PARAMCD == "QTCBR") %>% pull(AVAL),
+    outputs$Bazett %>% filter(PARAMCD == "QTCBR") %>% pull(AVAL),
     compute_qtc(c(370, 480), c(710, 842), method = "Bazett")
   )
   expect_identical(
-    output_fridericia %>% filter(PARAMCD == "QTCFR") %>% pull(AVAL),
+    outputs$Fridericia %>% filter(PARAMCD == "QTCFR") %>% pull(AVAL),
     compute_qtc(c(370, 480), c(710, 842), method = "Fridericia")
   )
   expect_identical(
-    output_sagie %>% filter(PARAMCD == "QTLCR") %>% pull(AVAL),
+    outputs$Sagie %>% filter(PARAMCD == "QTLCR") %>% pull(AVAL),
     compute_qtc(c(370, 480), c(710, 842), method = "Sagie")
   )
 })

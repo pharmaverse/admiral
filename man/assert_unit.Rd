@@ -4,16 +4,16 @@
 \alias{assert_unit}
 \title{Asserts That a Parameter is Provided in the Expected Unit}
 \usage{
-assert_unit(dataset, param, unit_var, unit)
+assert_unit(dataset, param, required_unit, get_unit_expr)
 }
 \arguments{
 \item{dataset}{A \code{data.frame}}
 
 \item{param}{Parameter code of the parameter to check}
 
-\item{unit_var}{Variable providing the unit}
-
 \item{unit}{Expected unit}
+
+\item{unit_var}{Variable providing the unit}
 }
 \value{
 The function throws an error if the unit variable differs from the

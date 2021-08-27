@@ -103,36 +103,24 @@
 #' )
 derive_param_map <- function(dataset,
                              by_vars,
+                             set_values_to = vars(PARAMCD = "MAP"),
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
-                             set_values_to = vars(PARAMCD = "MAP"),
-                             unit_var = NULL,
+                             get_unit_expr,
                              filter = NULL) {
+  assert_vars(by_vars)
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   assert_character_scalar(sysbp_code)
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
-  assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
-  if (!quo_is_null(unit_var)) {
-    unit <- dataset %>%
-      filter(PARAMCD == sysbp_code & !is.na(!!unit_var)) %>%
-      pull(!!unit_var) %>%
-      unique()
-    if (length(unit) > 1L) {
-      err_msg <- sprintf(
-        "There were more than one unique unit for `PARAMCD == '%s'`: %s",
-        sysbp_code,
-        enumerate(unit, quote_fun = squote)
-      )
-      abort(err_msg)
-    }
-  }
+  assert_unit(dataset, sysbp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
+  assert_unit(dataset, diabp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
 
   if (is.null(hr_code)) {
     analysis_value <- expr(
@@ -142,6 +130,8 @@ derive_param_map <- function(dataset,
       )
     )
   } else {
+    assert_unit(dataset, hr_code, required_unit = "beats/min", get_unit_expr = !!get_unit_expr)
+
     analysis_value <- expr(
       compute_map(
         diabp = !!sym(paste0("AVAL.", diabp_code)),
@@ -306,39 +296,33 @@ derive_param_bsa <- function(dataset,
                              set_values_to = vars(PARAMCD = "BSA"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
-                             unit_var = NULL,
+                             get_unit_expr,
                              filter = NULL) {
   assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var)
-  )
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
     method,
     values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
   )
-  assert_character_scalar(height_code)
-  assert_character_scalar(weight_code)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_character_scalar(height_code)
+  assert_character_scalar(weight_code)
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  if (!quo_is_null(unit_var)) {
-    assert_unit(
-      dataset,
-      param = height_code,
-      unit = "cm",
-      unit_var = !!unit_var
-    )
-    assert_unit(
-      dataset,
-      param = weight_code,
-      unit = "kg",
-      unit_var = !!unit_var
-    )
-  }
+  assert_unit(
+    dataset,
+    param = height_code,
+    required_unit = "cm",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    param = weight_code,
+    required_unit = "kg",
+    get_unit_expr = !!get_unit_expr
+  )
 
   bsa_formula <- expr(
     compute_bsa(
@@ -528,34 +512,29 @@ derive_param_bmi <-  function(dataset,
                               set_values_to = vars(PARAMCD = "BMI"),
                               weight_code = "WEIGHT",
                               height_code = "HEIGHT",
-                              unit_var = NULL,
+                              get_unit_expr = NULL,
                               filter = NULL) {
-  assert_character_scalar(weight_code)
-  assert_character_scalar(height_code)
   assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD,AVAL,AVALU), unit_var)
-  )
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_character_scalar(weight_code)
+  assert_character_scalar(height_code)
+  get_unit_expr <- assert_symbol(enquo(get_unit_expr))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  if (!quo_is_null(unit_var)) {
-    assert_unit(
-      dataset,
-      param = weight_code,
-      unit = "kg",
-      unit_var = !!unit_var
-    )
-    assert_unit(
-      dataset,
-      param = height_code,
-      unit = "cm",
-      unit_var = !!unit_var
-    )
-  }
+  assert_unit(
+    dataset,
+    param = weight_code,
+    unit = "kg",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    param = height_code,
+    unit = "cm",
+    get_unit_expr = !!get_unit_expr
+  )
 
   derive_derived_param(
     dataset,

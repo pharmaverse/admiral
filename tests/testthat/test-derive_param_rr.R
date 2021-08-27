@@ -35,7 +35,7 @@ test_that("new observations are derived correctly", {
         PARAM = "RR Duration Rederived (msec)",
         AVALU = "msec"
       ),
-      unit_var = AVALU
+      get_unit_expr = AVALU
     ),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
