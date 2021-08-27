@@ -498,7 +498,7 @@ derive_param_bmi <-  function(dataset,
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   assert_character_scalar(weight_code)
   assert_character_scalar(height_code)
-  get_unit_expr <- assert_symbol(enquo(get_unit_expr))
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(
