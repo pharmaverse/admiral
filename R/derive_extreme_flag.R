@@ -1,17 +1,10 @@
-#' Adds a Variable Flagging the First or Last Observation Within Each By Group
+#' Add a Variable Flagging the First or Last Observation Within Each By Group
 #'
-#' Adds a variable flagging the first or last observation within each by group
+#' Add a variable flagging the first or last observation within each by group
 #'
 #' @param dataset Input dataset
 #'
 #'   The variables specified by the `by_vars` parameter are expected.
-#'
-#' @param new_var Variable to add
-#'
-#'   The specified variable is added to the output dataset. It is set to `"Y"`
-#'   for the first or last observation (depending on the mode) of each by group.
-#'
-#'   Permitted Values: list of name-value pairs
 #'
 #' @param order Sort order
 #'
@@ -19,6 +12,13 @@
 #'   order.
 #'
 #'   Permitted Values: list of variables or functions of variables
+#'
+#' @param new_var Variable to add
+#'
+#'   The specified variable is added to the output dataset. It is set to `"Y"`
+#'   for the first or last observation (depending on the mode) of each by group.
+#'
+#'   Permitted Values: list of name-value pairs
 #'
 #' @param mode Flag mode
 #'
@@ -30,7 +30,7 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @param flag_filter Filter for flag data
+#' @param filter Filter for flag data
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for flagging. If the parameter is not specified, all observations are
@@ -68,11 +68,11 @@
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
 #' vs %>%
 #'   derive_extreme_flag(
-#'     new_var = LASTFL,
 #'     by_vars = vars(USUBJID, VSTESTCD, VISIT),
 #'     order = vars(VSTPTNUM),
+#'     new_var = LASTFL,
 #'     mode = "last",
-#'     flag_filter = VISIT != "BASELINE"
+#'     filter = VISIT != "BASELINE"
 #'   ) %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
@@ -109,49 +109,49 @@
 #' # Last observation
 #' derive_extreme_flag(
 #'   input,
-#'   new_var = ABLFL,
 #'   by_vars = vars(USUBJID, PARAMCD),
 #'   order = vars(ADT),
+#'   new_var = ABLFL,
 #'   mode = "last",
-#'   flag_filter = AVISIT == "BASELINE"
+#'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = High
 #' derive_extreme_flag(
 #'   input,
-#'   new_var = ABLFL,
 #'   by_vars = vars(USUBJID, PARAMCD),
 #'   order = vars(AVAL, ADT),
+#'   new_var = ABLFL,
 #'   mode = "last",
-#'   flag_filter = AVISIT == "BASELINE"
+#'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = Lo
 #' derive_extreme_flag(
 #'   input,
-#'   new_var = ABLFL,
 #'   by_vars = vars(USUBJID, PARAMCD),
 #'   order = vars(desc(AVAL), ADT),
+#'   new_var = ABLFL,
 #'   mode = "last",
-#'   flag_filter = AVISIT == "BASELINE"
+#'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Average observation
 #' derive_extreme_flag(
 #'   input,
-#'   new_var = ABLFL,
 #'   by_vars = vars(USUBJID, PARAMCD),
 #'   order = vars(ADT, desc(AVAL)),
+#'   new_var = ABLFL,
 #'   mode = "last",
-#'   flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
+#'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
 #'
 derive_extreme_flag <- function(dataset,
-                                new_var,
                                 by_vars,
                                 order,
+                                new_var,
                                 mode,
-                                flag_filter = NULL,
+                                filter = NULL,
                                 check_type = "warning") {
   # checking and quoting
   new_var <- assert_symbol(enquo(new_var))
@@ -159,14 +159,14 @@ derive_extreme_flag <- function(dataset,
   assert_order_vars(order)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
   assert_character_scalar(mode, values = c("first", "last"))
-  flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_character_scalar(check_type, values = c("none", "warning", "error"))
 
   # select data to consider for flagging
-  if (!quo_is_null(flag_filter)) {
-    data <- dataset %>% filter(!!flag_filter)
+  if (!quo_is_null(filter)) {
+    data <- dataset %>% filter(!!filter)
     data_ignore <- dataset %>%
-      filter(!(!!flag_filter) | is.na(!!flag_filter))
+      filter(!(!!filter) | is.na(!!filter))
   } else {
     data <- dataset
   }
@@ -189,7 +189,7 @@ derive_extreme_flag <- function(dataset,
   }
 
   # add ignored data
-  if (!quo_is_null(flag_filter)) {
+  if (!quo_is_null(filter)) {
     data <- data %>% bind_rows(data_ignore)
   }
 
@@ -202,11 +202,11 @@ derive_extreme_flag <- function(dataset,
 #' @inheritParams derive_extreme_flag
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
-#' @param new_var Variable to add to the `dataset`.
-#' It is set `"Y"` for the maximal / minimal observation of each group,
-#' see Details section for more information.
 #' @param order Sort order.
 #' Used to determine maximal / minimal observation if they are not unique,
+#' see Details section for more information.
+#' @param new_var Variable to add to the `dataset`.
+#' It is set `"Y"` for the maximal / minimal observation of each group,
 #' see Details section for more information.
 #' @param param_var Variable with the parameter values for which the maximal / minimal
 #' value is calculated.
@@ -272,9 +272,9 @@ derive_extreme_flag <- function(dataset,
 #'
 #' derive_worst_flag(
 #'   input,
-#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(desc(ADT)),
+#'   new_var = WORSTFL,
 #'   param_var = PARAMCD,
 #'   analysis_var = AVAL,
 #'   worst_high = c("PARAM01", "PARAM03"),
@@ -285,26 +285,26 @@ derive_extreme_flag <- function(dataset,
 #' # example with ADVS
 #' derive_worst_flag(
 #'   advs,
-#'   new_var = WORSTFL,
 #'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
 #'   order = vars(ADT, ATPTN),
+#'   new_var = WORSTFL,
 #'   param_var = PARAMCD,
 #'   analysis_var = AVAL,
 #'   worst_high = c("SYSBP", "DIABP"),
 #'   worst_low = "RESP",
-#'   flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+#'   filter = !is.na(AVISIT) & !is.na(AVAL)
 #' )
 #'}
 #'
 derive_worst_flag <- function(dataset,
-                              new_var,
                               by_vars,
                               order,
+                              new_var,
                               param_var,
                               analysis_var,
                               worst_high,
                               worst_low,
-                              flag_filter = NULL,
+                              filter = NULL,
                               check_type = "warning") {
 
   # perform argument checks
@@ -319,7 +319,7 @@ derive_worst_flag <- function(dataset,
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
-  flag_filter <- assert_filter_cond(enquo(flag_filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   # additional checks for worstflag - parameters overlap
   if (length(intersect(worst_high, worst_low)) > 0) {
@@ -359,20 +359,20 @@ derive_worst_flag <- function(dataset,
   bind_rows(
     derive_extreme_flag(
       dataset = filter(dataset, !!param_var %in% worst_low),
-      new_var = !!new_var,
       by_vars = by_vars,
       order = quo_c(analysis_var, order),
+      new_var = !!new_var,
       mode = "first",
-      flag_filter = !!flag_filter,
+      filter = !!filter,
       check_type = check_type
     ),
     derive_extreme_flag(
       dataset = filter(dataset, !!param_var %in% worst_high),
-      new_var = !!new_var,
       by_vars = by_vars,
       order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
+      new_var = !!new_var,
       mode = "first",
-      flag_filter = !!flag_filter,
+      filter = !!filter,
       check_type = check_type
     ),
     filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
