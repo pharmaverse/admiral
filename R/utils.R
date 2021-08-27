@@ -382,5 +382,6 @@ convert_blanks_to_na.list <- function(x) {
 #' @export
 #' @rdname convert_blanks_to_na
 convert_blanks_to_na.data.frame <- function(x) {
-  purrr::map_dfc(x, convert_blanks_to_na)
+  x[] <- lapply(x, convert_blanks_to_na)
+  x
 }
