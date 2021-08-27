@@ -16,7 +16,7 @@
 #'   missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. `"15-06"` for the 15th
+#'   - format with month and day specified as 'mm-dd': e.g. `"06-15"` for the 15th
 #'   of June,
 #'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
 #'   day/month.
@@ -453,7 +453,7 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g new_vars_prefix="AST".
+#' a character is expected: e.g. `new_vars_prefix="AST"`.
 #'
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
@@ -502,7 +502,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "FIRST"
 #' )
 #'
-#' # Impute partial dates to 4th of june
+#' # Impute partial dates to 6th of April
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
@@ -548,7 +548,6 @@ derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            date_imputation = NULL,
-                           # "02-01" or "LAST"
                            flag_imputation = TRUE,
                            min_dates = NULL,
                            max_dates = NULL) {
@@ -597,7 +596,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g new_vars_prefix="AST".
+#' a character is expected: e.g. `new_vars_prefix="AST"`.
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
@@ -617,7 +616,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords derivation timing
+#' @keywords derivation adam timing
 #'
 #' @export
 #'
@@ -663,9 +662,7 @@ derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
                             date_imputation = NULL,
-                            # "02-01" or "LAST"
                             time_imputation = "00:00:00",
-                            # or 'FIRST' 'LAST'
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL) {
@@ -676,7 +673,8 @@ derive_vars_dtm <- function(dataset,
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_character_scalar(
     flag_imputation,
-    values = c("auto", "both", "date", "time", "none")
+    values = c("auto", "both", "date", "time", "none"),
+    case_insensitive = TRUE
   )
 
   dtm <- paste0(new_vars_prefix, "DTM")

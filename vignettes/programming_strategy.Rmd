@@ -197,6 +197,8 @@ variables, a dataset, ... functions for checking are available (see
 
 Parameter which expect keywords should handle them case-insensitive, e.g., both
 `date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
+The `assert_character_scalar()` functions helps handling parameters
+case-insensitive.
 
 
 ## Function Header

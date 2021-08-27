@@ -4,7 +4,12 @@
 \alias{assert_character_scalar}
 \title{Is an Argument a Character Scalar (String)?}
 \usage{
-assert_character_scalar(arg, values = NULL, optional = FALSE)
+assert_character_scalar(
+  arg,
+  values = NULL,
+  optional = FALSE,
+  case_insensitive = FALSE
+)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
@@ -13,6 +18,10 @@ assert_character_scalar(arg, values = NULL, optional = FALSE)
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
+
+\item{case_insensitive}{Should the argument be handled case-insensitive?
+If set to \code{TRUE}, the argument is converted to lower case for checking the
+permitted values and returning the argument.}
 }
 \value{
 The function throws an error if \code{arg} is not a character vector or if \code{arg}
@@ -33,6 +42,18 @@ example_fun("warning")
 try(example_fun("message"))
 
 try(example_fun(TRUE))
+
+# handling parameters case-insensitive
+example_fun2 <- function(msg_type) {
+  msg_type <- assert_character_scalar(msg_type,
+                                      values = c("warning", "error"),
+                                      case_insensitive = TRUE)
+ if (msg_type == "warning") {
+   print("A warning was requested.")
+ }
+}
+
+example_fun2("Warning")
 }
 \author{
 Thomas Neitmann
