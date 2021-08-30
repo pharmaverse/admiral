@@ -1,4 +1,4 @@
-#' Derive Query Variables.
+#' Derive Query Variables
 #'
 #' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
 #'   variable will be created. For each unique `VAR_PREFIX`, if `QUERY_ID` is
