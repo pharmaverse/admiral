@@ -84,8 +84,8 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     if (!.x$IDVAR %in% c(NA, "")) {
       supp <- dataset_suppqual %>%
         filter(.data$IDVAR == .x$IDVAR, .data$QNAM == .x$QNAM) %>%
-        select(c("USUBJID", "IDVARVAL", "QNAM", "QVAL")) %>%
-        spread("QNAM", "QVAL") %>%
+        select(USUBJID, IDVARVAL, QNAM, QVAL) %>%
+        spread(key = QNAM, value = QVAL) %>%
         rename(!! .x$IDVAR := "IDVARVAL") %>%
         # Convert IDVAR to match parent domain type
         modify_at(.x$IDVAR, function(x) {
@@ -94,8 +94,8 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     } else {
       supp <- dataset_suppqual %>%
         filter(.data$QNAM == .x$QNAM) %>%
-        select(c("USUBJID", "QNAM", "QVAL")) %>%
-        spread("QNAM", "QVAL")
+        select(USUBJID, QNAM, QVAL) %>%
+        spread(key = QNAM, value = QVAL)
     }
 
     # Set label
