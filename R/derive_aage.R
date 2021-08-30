@@ -93,6 +93,7 @@ NULL
 #' Baseline Measure Information).
 #' @examples
 #' data(dm)
+#'
 #' derive_agegr_fda(dm, AGE, AGEGR1)
 #'
 #' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
@@ -106,8 +107,8 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
     dataset,
     !!new_var := cut(
       x = !!age_var,
-      breaks = c(19, 65, Inf),
-      labels = c("19-64", ">=65"),
+      breaks = c(0, 19, 65, Inf),
+      labels = c("<=18", "19-64", ">=65"),
       include.lowest = TRUE,
       right = FALSE
     )
@@ -125,10 +126,11 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
-#' data(dm)
+#'
 #' derive_agegr_ema(dm, AGE, AGEGR1)
 #'
 #' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+#'
 #' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
 
