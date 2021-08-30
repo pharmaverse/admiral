@@ -23,6 +23,8 @@ Authors:
   \item Shimeng Huang
   \item Robin Koeger
   \item Gordon Miller
+  \item Teckla Akinyi
+  \item Eric Simms
 }
 
 }
