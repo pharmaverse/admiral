@@ -7,7 +7,7 @@
 lstalvdt_source(
   dataset,
   filter = NULL,
-  date_var,
+  date,
   date_imputation = NULL,
   traceability_vars = NULL
 )
@@ -17,11 +17,11 @@ lstalvdt_source(
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
-\item{date_var}{A variable providing a date where the patient was known to be
+\item{date}{A variable providing a date where the patient was known to be
 alive. A date, a datetime, or a character variable containing ISO 8601
 dates can be specified. An unquoted symbol is expected.}
 
-\item{date_imputation}{A string defining the date imputation for \code{date_var}.
+\item{date_imputation}{A string defining the date imputation for \code{date}.
 See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the

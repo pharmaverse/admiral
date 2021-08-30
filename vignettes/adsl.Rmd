@@ -425,7 +425,7 @@ correctly defined.
 
 - `dataset`: the dataset to search for date information,
 - `filter`: the filter to apply on the datasets,
-- `date_var`: the date of interest,
+- `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
 - `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
 sequence, variable)
@@ -435,22 +435,22 @@ An example could be :
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "FIRST"
 )
 ae_src2 <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "LAST"
 )
 lb_src <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
 adsl_src <- lstalvdt_source(
   dataset = adsl,
-  date_var = TRTEDT
+  date = TRTEDT
 )
 ```
 
@@ -469,25 +469,25 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_src2 <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_src <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 adsl_src <- lstalvdt_source(
   dataset = adsl,
-  date_var = TRTEDTM,
+  date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
