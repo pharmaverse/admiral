@@ -216,8 +216,7 @@ derive_summary_records <- function(dataset,
           )
       }
     )) %>%
-    bind_rows(dataset, .) %>%
-    arrange(!!! syms(by_vars))
+    bind_rows(dataset, .)
 
   summary_data
 }
