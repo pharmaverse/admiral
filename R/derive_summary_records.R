@@ -12,10 +12,12 @@
 #' will be set to `NA`.
 #'
 #' @param dataset A data frame.
+#'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [vars()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
 #' @param fns List of formulas specifying variable to use for aggregations.
+#'
 #'   This can include base functions like `mean()`, `min()`, `max()`, `median()`,
 #'    `sd()`, or `sum()` or any other user-defined aggregation function.
 #'   For example,
@@ -32,7 +34,8 @@
 #'
 #'   In the formula representation e.g., `CHG ~ sum(., na.rm = TRUE)`, a `.`
 #'   serves as the data to be summarized which refers to the variable `CHG`.
-#' @param filter_rows Filter condition as logical expression to apply during
+#'
+#' @param filter Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
 #'   `by_vars` as this will help when an aggregating, lagging, or ranking
 #'   function is involved.
@@ -43,6 +46,7 @@
 #'   values greater than mean of AVAL with in `by_vars`.
 #'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
+#'
 #' @param set_values_to A list of variable name-value pairs. Use this argument
 #'   if you need to change the values of any newly derived records. Always new
 #'   values in `set_values_to` should be equal to the length of analysis
@@ -59,6 +63,8 @@
 #' @author Vignesh Thanikachalam
 #'
 #' @return A data frame with derived records appended to original dataset.
+#'
+#' @keywords bds derivation
 #'
 #' @export
 #'
@@ -137,13 +143,13 @@
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
 #'   fns = list(AVAL ~ mean(., na.rm = TRUE)),
-#'   filter_rows = dplyr::n() > 2,
+#'   filter = dplyr::n() > 2,
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 derive_summary_records <- function(dataset,
                                    by_vars,
                                    fns,
-                                   filter_rows = NULL,
+                                   filter = NULL,
                                    set_values_to = NULL) {
   assert_vars(by_vars)
   assert_list_of_formulas(fns)
@@ -151,7 +157,7 @@ derive_summary_records <- function(dataset,
     dataset,
     required_vars = quo_c(by_vars, extract_vars(fns))
   )
-  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   by_vars <- vars2chr(by_vars)
 
@@ -184,10 +190,10 @@ derive_summary_records <- function(dataset,
 
 
 
-  if (!quo_is_null(filter_rows)) {
+  if (!quo_is_null(filter)) {
     subset_ds <- dataset %>%
       group_by(!!! syms(by_vars)) %>%
-      filter(!! filter_rows)
+      filter(!! filter)
   } else {
     subset_ds <- dataset
   }

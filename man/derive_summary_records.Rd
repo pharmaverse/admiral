@@ -8,7 +8,7 @@ derive_summary_records(
   dataset,
   by_vars,
   fns,
-  filter_rows = NULL,
+  filter = NULL,
   set_values_to = NULL
 )
 }
@@ -20,6 +20,7 @@ records. Providing the names of variables in \code{\link[=vars]{vars()}} will cr
 groupwise summary and generate summary records for the specified groups.}
 
 \item{fns}{List of formulas specifying variable to use for aggregations.
+
 This can include base functions like \code{mean()}, \code{min()}, \code{max()}, \code{median()},
 \code{sd()}, or \code{sum()} or any other user-defined aggregation function.
 For example,
@@ -39,7 +40,7 @@ In general,
 In the formula representation e.g., \code{CHG ~ sum(., na.rm = TRUE)}, a \code{.}
 serves as the data to be summarized which refers to the variable \code{CHG}.}
 
-\item{filter_rows}{Filter condition as logical expression to apply during
+\item{filter}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
 \code{by_vars} as this will help when an aggregating, lagging, or ranking
 function is involved.
@@ -155,10 +156,12 @@ derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
   fns = list(AVAL ~ mean(., na.rm = TRUE)),
-  filter_rows = dplyr::n() > 2,
+  filter = dplyr::n() > 2,
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
 \author{
 Vignesh Thanikachalam
 }
+\keyword{bds}
+\keyword{derivation}
