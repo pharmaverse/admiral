@@ -57,10 +57,6 @@ derive_var_atirel(
   new_var = ATIREL
 )
 
-
-}
-\seealso{
-
 }
 \author{
 Teckla Akinyi

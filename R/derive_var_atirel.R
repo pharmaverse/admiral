@@ -31,8 +31,6 @@
 #'
 #' @export
 #'
-#' @seealso
-#'
 #' @examples
 #' adcm <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
@@ -53,8 +51,6 @@
 #'   new_var = ATIREL
 #' )
 #'
-#'
-# function to derive ATIREL
 derive_var_atirel <- function(dataset,
                               flag_var,
                               new_var) {
