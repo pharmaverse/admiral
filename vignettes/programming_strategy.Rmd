@@ -102,6 +102,10 @@ variables must start with `temp_` and must be removed from the output dataset
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
 
+Please note that *var* prefix should be used only if the function name includes the name of the variable 
+(e.g. `derive_var_ady`). 
+It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline`, which has a `new_var` argument).
+
 
 ## Function Parameters
 
@@ -159,11 +163,9 @@ Each expression needs to be tested for the following
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
 
-The only exception to this is `derive_var_basetype` where we allowed the use of  `exprs`. 
+The only exception to this is `derive_var_basetype` where we allowed the use of `exprs`. 
 The reason is that in this case the user needs to have the flexibility to provide not just symbols but 
 usually more complicated filtering conditions (that may be based on multiple input parameters).
-
-Ultimately, parameters in function calls should be named except the first parameter.
 
 
 ## Common Function Parameters Naming Convention
@@ -385,6 +387,16 @@ If a dataset needs to be created for testing purpose, it should be done so using
 Make sure to align columns as well. This ensures quick code readability. 
 
 If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+
+
+# Best Practices and Hints
+
+Please take the following list as recommendation and try to adhere to its rules if possible.
+
+* Parameters in function calls should be named except for the first parameter 
+(e.g. `assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)`).
+* `dplyr::if_else` should be used when there are only two conditions. 
+Try to always set the `missing` parameter whenever appropriate.
 
 
 # Readable Code for ADaM
