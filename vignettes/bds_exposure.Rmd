@@ -1,0 +1,409 @@
+---
+title: "Creating an Exposure (BDS Finding) ADaM"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Creating an Exposure (BDS Finding) ADaM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This article describes creating an Exposure ADaM using the BDS finding 
+structure. Examples are currently presented using an underlying EX domain where
+the EX domain represents data as collected on the CRF and the ADEX ADaM is
+output. However, the examples can be applied to situations where an EC domain is
+used as input and/or ADEC or another exposure ADaM is created.
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
+
+## Programming Workflow
+
+* [Read in Data](#readdata)
+* [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
+* [Compute Duration for a Record ('EXDUR`)](#duration)
+* [Create 1:1 Mapping Records](#onetoone)
+* [Create Summary Records](#summaryrec)
+* [Assign `PARAMCD`, `PARAMN`, etc. from Reference Tables](#paramcd)
+* [Assign `ASEQ`](#aseq)
+* [Derive Categorization Variables (`AVALCATx`)](#cat)
+* [Example Scripts](#example)
+
+### Read in Data {#readdata}
+
+To start, all data frames needed for the creation of ADEX should be read into
+the environment.  This will be a company specific process.  Some of the 
+data frames needed may be `ex`, `suppex`, and `adsl`.
+
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
+
+```{r message=FALSE}
+library(dplyr)
+library(lubridate)
+library(stringr)
+library(tibble)
+library(admiral)
+
+data("adsl")
+data("ex")
+```
+
+The `suppex` domain can be joined to the `ex` domain using the function `derive_suppqual_vars()`.
+
+This function will transpose the supplemental SDTM domain (e.g. `suppex`) and
+join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`, 
+`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
+
+Example call:
+
+```{r eval=FALSE}
+ex <- derive_suppqual_vars(ex, suppex)
+```
+
+Please note, the CDISC pilot did not include a `suppex` dataset and therefore this
+join is not demonstrated.
+
+At this step, it may be useful to join ADSL to your VS domain as well:
+
+```{r eval=TRUE}
+adex <- left_join(ex, adsl, by = c("STUDYID", "USUBJID"))
+
+head(adex)
+```
+
+The CDISC pilot `EX` doamin data does not contain a dose adjustment flag or 
+the planned dose information. For demonstration purposes, this will be added to 
+the data.
+
+```{r eval=TRUE echo=TRUE}
+adex <- adex %>% 
+    mutate(
+    EXADJ = case_when(
+      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
+      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
+      TRUE ~ NA_character_
+    ),
+    EXDOSE = case_when(
+      USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ 0,
+      USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ 0,
+      TRUE ~ EXDOSE
+    )
+  ) %>%
+  mutate(EXPLDOS = if_else(EXTRT == "PLACEBO", 0, 54))
+```
+
+### Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`) {#datetime}
+
+The function `derive_vars_dt()` can be used to derive `ADT`. This function allows 
+the user to impute the date as well.
+
+Example calls:
+
+```{r eval=TRUE}
+adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC)
+adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
+```
+
+or you can utilize the `call_derivation` function to calculate multiple columns.
+This example additionally demonstrates the date imputation features available in
+the `derive_vars_dtm` function:
+
+```{r eval=TRUE}
+adex <- adex %>% 
+  call_derivation(
+    derivation = derive_vars_dtm,
+    variable_params = list(
+      params(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+      params(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+    ),
+    flag_imputation = "none",
+    min_dates = list(TRTSDT),
+    max_dates = list(TRTEDT)
+  ) %>%
+```
+
+The example above imputes the start date to the first first day of the month and
+imputes the end date to the last day of the month.  The `min_dates` and 
+`max_dates` ensure no date is prior to or after the `TRTSDT` and `TRTEDT` when
+imputation is done.
+
+Please see the [BDS Finding vignette](bds_finding.Rmd) for additional examples on calculating and
+imputing analysis dates.
+
+Next, the analysis study days can be derived:
+
+```{r eval=TRUE}
+adex <- adex %>% 
+  mutate(ASTDT = date(ASTDTM), 
+         AENDT = date(AENDTM))
+```
+
+It may be necessary to obtain the analysis date from an imputed analysis datetime
+column.  This can by:
+
+```{r eval=TRUE}
+adex <- derive_var_astdy(adex, reference_date = TRTSDT, date = ASTDTM)
+adex <- derive_var_aendy(adex, reference_date = TRTSDT, date = AENDTM)
+```
+
+### Compute duration for a record ('EXDUR`) {#duration}
+
+To compute the duration of treatment or exposure for a record, the 
+`derive_duration()` function can be used.
+
+```{r eval=TRUE}
+adex <- adex %>% 
+  derive_duration(
+    new_var = EXDUR,
+    new_var_unit = EXDURU,
+    start_date = ASTDTM,
+    end_date = AENDTM
+  )
+```
+
+### Create 1:1 mapping records {#onetoone}
+
+The first set of exposure records to create will be records mapped 1:1 to an
+existing collected exposure record in SDTM.  For these records, the `AVAL` or 
+`AVALC` would be calculated using columns that exist on the data and no summarising
+of records would be necessary.
+
+These records may be used for input into summary records or be used individually
+for summarization in outputs.  Some examples may be exposure duration, dose 
+administered, dose adjusted, etc. during the start and date record interval defined
+by the exposure record. 
+
+These records can be derived using simple `mutate` assignments and then combined:
+
+```{r eval=TRUE}
+adex_durd <- adex %>% 
+  mutate(PARAMCD = "DURD", 
+         AVAL = EXDUR)
+
+adex_dose <- adex %>% 
+  mutate(PARAMCD = "DOSE", 
+         AVAL = EXDOSE)
+
+adex_pldos <- adex %>% 
+  mutate(PARAMCD = "PLDOSE", 
+         AVAL = EXPLDOS)
+
+adex_adj <- adex %>% 
+  mutate(PARAMCD = "ADJ", 
+         AVALC = if_else(!is.na(EXADJ), "Y", NA_character_))
+
+adex_adjae <- adex %>% 
+  mutate(PARAMCD = "ADJ", 
+         AVALC = if_else(EXADJ == "ADVERSE EVENT", "Y", NA_character_))
+
+adex <- bind_rows(adex_durd,
+                  adex_dose,
+                  adex_pldos,
+                  adex_adj,
+                  adex_adjae) %>% 
+  mutate(PARCAT1 = "INDIVIDUAL")
+```
+
+### Create Summary Records {#summaryrec}
+
+Exposure is commonly analyze by a timing interval (e.g. `APHASE', `APERIOD`,
+`AVISIT`, etc.). For these types of calculations, the `derive_exposure_params()`
+function may be used. In addition to creating a summarized `AVAL`, the function 
+will also compute minimum and maximum dates for the record.
+
+For example, to calculate the total dose by subject and treatment,
+
+```{r eval=TRUE}
+adex <- derive_exposure_params(
+  adex,
+  by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT),
+  input_param = "DOSE",
+  fns = AVAL ~ sum(., na.rm = TRUE),
+  set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+)
+```
+
+A record with `PARAMCD` = "TDOSE" is created with `PARCAT` set to "OVERALL" using
+the records in `ADEX` where `PARAMCD` = "DOSE" by summing `AVAL`. In addition, 
+the `ASTDTM`, `AENDTM`, `ASTDT`, and `AENDT` are created as the minimum and 
+maximum date/times associated with each `by_vars` grouping.
+
+**Note**: It should be noted, if you do not have a time associated with your data, you will
+need to impute your time as "00:00:00" and create the analysis datetime variable
+for date functionality to work.
+
+Multiple parameters (records) may be created at one time using the 
+`call_derivation()` function:
+
+```{r eval=TRUE}
+adex <- adex %>% 
+    call_derivation(
+    derivation = derive_exposure_params,
+    variable_params = list(
+      params(
+        set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
+        input_param = "DOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
+        input_param = "PLDOSE",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
+        input_param = "DURD",
+        fns = AVAL ~ sum(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL"),
+        input_param = "DOSE",
+        fns = AVAL ~ mean(., na.rm = TRUE)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
+        input_param = "ADJ",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      ),
+      params(
+        set_values_to = vars(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
+        input_param = "ADJAE",
+        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+      )
+    ),
+    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
+    )
+
+```
+
+Dose intensity can be calculated using the function `derive_param_doseint()`. The
+planned dose and administered dose are passed into the function and a new record
+is created with the dose intensity calculation.
+
+```{r eval=FALSE}
+adex <- adex %>% 
+  derive_param_doseint(new_param = "TDOSINT", 
+                       tadm_code = "TDOSE", 
+                       tpadm_code = "TPDOSE")
+```
+
+Please see the `derive_param_doseint()` documentation to see how planned doses of
+0 or `NA` are handled.  The default behavior can be changed by utilizing the
+`zero_doses` function parameter.
+
+The default calculation for dose intensity is:
+Administered Doses / Planned Doses * 100.
+
+Again, multiple dose intensity calculations may be performed using the `call_derivation()`
+function:
+
+```{r eval=FALSE}
+adex <- adex %>% 
+    call_derivation(
+    derivation = derive_param_doseint,
+    variable_params = list(
+      params(new_param = "TDOSINT", tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
+      params(new_param = "PDOSINT", tadm_code = "PDOSE", tpadm_code = "PPDOSE")
+    ),
+    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT, PARCAT1)
+  )
+```
+
+### Assign `PARAMCD`, `PARAMN`, etc. from Reference tables {#paramcd}
+
+To assign parameter level values such as `PARAM`, `PARAMN`, `PARCAT1`, etc., a 
+lookup can be created to join to the source data.
+
+For example, when creating `adex`, a lookup based on the ADaM `PARAMCD` value 
+may be created:
+
+```{r eval=TRUE, include=TRUE}
+param_lookup <- tribble(
+    ~PARAMCD, ~PARAM, ~PARAMN,
+  "DURD", "Study drug duration during constant dosing interval (days)", 1,
+  "DOSE", "Dose administered during constant dosing interval (mg)", 2,
+  "PLDOSE", "Planned dose during constant dosing interval (mg)", 3,
+  "ADJ", "Dose adjusted during constant dosing interval", 4,
+  "ADJAE", "Dose adjusted  due to AE during constant dosing interval", 5,
+  "TDURD", "Overall duration (days)", 8,
+  "TDOSE", "Total dose administered (mg)", 9,
+  "ADOSE", "Average dose administered (mg)", 10,
+  "TPDOSE", "Total planned dose (mg)", 11,
+  "TADJ", "Dose adjusted during study", 13,
+  "TADJAE", "Dose adjusted during study due to AE", 14,
+  "PDURD", "Overall duration in W2-W24 (days)", 19,
+  "PDOSE", "Total dose administered in W2-W2 (mg)4", 20,
+  "PPDOSE", "Total planned dose in W2-W24 (mg)", 21,
+  "PADOSE", "Average dose administered in W2-W24 (mg)", 22,
+  "PADJ", "Dose adjusted during W2-W24", 24,
+  "PADJAE", "Dose adjusted  in W2-W24 due to AE", 25,
+  "TDOSINT", "Overall dose intensity (%)", 90,
+  "PDOSINT", "W2-24 dose intensity (%)", 91
+)
+
+head(param_lookup)
+```
+
+```{r eval=TRUE}
+adex <-  left_join(adex, param_lookup, by = "PARAMCD")
+
+count(adex, PARAMCD, PARAM, PARAMN)
+
+head(select(adex, USUBJID, PARAMCD, PARAM, PARAMN, AVAL))
+```
+
+Please note, this is an example only and additional columns may be needed for 
+the join depending on your lookup/metadata table.
+
+### Assign `ASEQ` {#aseq}
+
+The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
+example call is:
+
+```{r eval=TRUE}
+adex <- derive_obs_number(
+  adex,
+  new_var = ASEQ,
+  by_vars = vars(STUDYID, USUBJID),
+  order = vars(PARAMCD, ASTDT),
+  check_type = "warning"
+)
+
+head(select(adex, USUBJID, PARAMCD, ASTDT, AVAL, ASEQ))
+```
+
+### Derive Categorization Variables (`AVALCATx`) {#cat}
+
+Admiral does not currently have a generic function to aid in assigning `AVALCATx`/
+`AVALCAxN` values. Below is a simple example of how these values may be
+assigned using the `dplyr::mutate` function:
+
+```{r eval=TRUE}
+adex <- adex %>% 
+  mutate(AVALCAT = case_when(
+    PARAMCD %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",
+    PARAMCD %in% c("TDURD", "PDURD") & aval >= 30 & aval < 90 ~ ">= 30 and < 90 days",
+    PARAMCD %in% c("TDURD", "PDURD") & aval >= 90 ~ ">=90 days",
+    PARAMCD %in% c("TDOSE", "PDOSE") & aval < 100 & !is.na(aval) ~ "< 100 mg",
+    PARAMCD %in% c("TDOSE", "PDOSE") & aval >= 100 ~ ">= 100 mg",
+    TRUE ~ NA_character_)
+  )
+
+distinct(PARAMCD, AVAL, AVALCAT)
+```
+
+### Example Scripts {#example}
+
+ADaM | Sample Code 
+---- | --------------
+ADEX | [ad_adex.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adex.R){target="_blank"}
