@@ -322,7 +322,7 @@ study requirement.
 
 - `dataset`: the dataset to search for death information,
 - `filter`: the condition to define death,
-- `date_var`: the date of death,
+- `date`: the date of death,
 - `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
 - `dthcaus`: variable  or text used to populate `DTHCAUS`.
 - `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
@@ -334,14 +334,14 @@ An example call to define the sources would be:
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AESTDTC,
+  date = AESTDTC,
   mode = "first",
   dthcaus = AEDECOD
 )
 src_ds <- dthcaus_source(
   dataset = ds,
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date_var = DSSTDTC,
+  date = DSSTDTC,
   mode = "first",
   dthcaus = "Death in DS"
 )
@@ -364,7 +364,7 @@ arguments:
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AESTDTC,
+  date = AESTDTC,
   mode = "first",
   dthcaus = AEDECOD,
   traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
