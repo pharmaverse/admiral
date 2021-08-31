@@ -72,5 +72,6 @@ globalVariables(c(
   "key",
   "order1",
   "order2",
-  "order3"
+  "order3",
+  "_unit"
 ))

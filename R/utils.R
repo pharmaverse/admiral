@@ -328,3 +328,77 @@ replace_values_by_names <- function(quosures) {
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
+
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#' extract_unit("Height (cm)")
+#'
+#' @examples
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}
+
+#' Convert Blank Strings Into NAs
+#'
+#' Turn SAS blank strings into proper R `NA`s.
+#'
+#' @param x Any R object
+#'
+#' @details
+#' The default methods simply returns its input unchanged. The `character` method
+#' turns every instance of `""` into `NA_character_` while preserving *all* attributes.
+#' When given a data frame as input the function keeps all non-character columns
+#' as is and applies the just described logic to `character` columns. Once again
+#' all attributes such as labels are preserved.
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @examples
+#' convert_blanks_to_na(c("a", "b", "", "d", ""))
+#'
+#' df <- tibble::tibble(
+#'   a = structure(c("a", "b", "", "c"), label = "A"),
+#'   b = structure(c(1, NA, 21, 9), label = "B"),
+#'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
+#'   d = structure(c("", "", "s", "q"), label = "D")
+#' )
+#' print(df)
+#' convert_blanks_to_na(df)
+convert_blanks_to_na <- function(x) {
+  UseMethod("convert_blanks_to_na")
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.default <- function(x) {
+  x
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.character <- function(x) {
+  do.call(structure, c(list(if_else(x == "", NA_character_, x)), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.list <- function(x) {
+  lapply(x, convert_blanks_to_na)
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.data.frame <- function(x) {
+  x[] <- lapply(x, convert_blanks_to_na)
+  x
+}
