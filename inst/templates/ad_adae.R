@@ -23,7 +23,7 @@ ex <- NULL
 
 adae <- ae %>%
   # join supplementary qualifier variables
-  derive_suppqual_vars(suppae) %>%
+  derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%

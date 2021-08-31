@@ -63,10 +63,10 @@ frames needed may be:
   * `SUPPDM`
   * `ADSL`
   
-To derive Supplemental Qualifiers, `derive_suppqual_vars()` can be used. 
+To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
 
 ```{r}
-ae <- derive_suppqual_vars(ae, suppae)
+ae <- derive_vars_suppqual(ae, suppae)
 head(suppae)
 head(select(ae, USUBJID, AEDECOD, AETRTEM))
 ```
