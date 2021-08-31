@@ -48,6 +48,10 @@
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
+#' @param flag_filter Filter for flag data
+#'
+#'   **Deprecated**: Please use the `filter` parameter instead.
+#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the
 #'   order specified for the `order` parameter and the flag mode) is included in
@@ -155,7 +159,7 @@ derive_extreme_flag <- function(dataset,
                                 check_type = "warning",
                                 flag_filter = deprecated()) {
   # handle deprecated parameter
-  if (is_present(flag_filter)) {
+  if (!missing(flag_filter)) {
     deprecate_warn("0.3.0",
                    "derive_extreme_flag(flag_filter = )",
                    "derive_extreme_flag(filter = )")
