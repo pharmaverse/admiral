@@ -101,15 +101,15 @@
 #'   adex,
 #'   by_vars=vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAMCD = "TNDOSINT"),
-#`   tadm_code = "TNDOSE",
-#`   tpadm_code = "TSNDOSE")
+#' tadm_code = "TNDOSE",
+#'   tpadm_code = "TSNDOSE")
 #'
 #' derive_param_doseint(
 #'   adex,
 #'   by_vars=vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAMCD = "TDOSINT2"),
-#`   tadm_code = "TNDOSE",
-#`   tpadm_code = "TSNDOSE",
+#'   tadm_code = "TNDOSE",
+#'   tpadm_code = "TSNDOSE",
 #'   zero_doses = "Y")
 
 derive_param_doseint <- function(dataset,
