@@ -142,9 +142,6 @@ derive_vars_suppqual <- function(dataset, dataset_suppqual, domain = NULL) {
 
 #' Join Supplementary Qualifier Variables into the Parent SDTM Domain
 #'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
 #' `derive_suppqual_vars()` was renamed to `derive_vars_suppqual()` to create a
 #' more consistent API.
 #'

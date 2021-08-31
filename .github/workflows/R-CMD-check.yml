@@ -72,14 +72,6 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
-        if: matrix.config.r == '3.5'
-        run: |
-          options(repos = Sys.getenv("R_REPOS"))
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_version("lifecycle", "0.1.0", repos = "https://cran.rstudio.com", upgrade = "never")
-        shell: Rscript {0}
-
-      - name: Install dependencies
         if: matrix.config.r == '3.6'
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
@@ -88,7 +80,7 @@ jobs:
 
 
       - name: Install dependencies
-        if: matrix.config.r == 'release'
+        if: matrix.config.r == '3.5' || matrix.config.r == 'release'
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)

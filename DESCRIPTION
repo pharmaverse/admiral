@@ -26,7 +26,6 @@ Depends: R (>= 3.5)
 Imports:
     assertthat,
     dplyr,
-    lifecycle,
     lubridate,
     magrittr,
     purrr,
@@ -37,6 +36,7 @@ Imports:
 Suggests:
     devtools,
     diffdf,
+    lifecycle,
     lintr,
     pkgdown,
     testthat,
