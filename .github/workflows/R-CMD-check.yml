@@ -76,7 +76,7 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_version("lifecycle", version = "0.1.0", repos = "https://cran.rstudio.com")
+          remotes::install_version("lifecycle", "0.1.0", repos = "https://cran.rstudio.com", upgrade = "never")
         shell: Rscript {0}
 
       - name: Install dependencies
