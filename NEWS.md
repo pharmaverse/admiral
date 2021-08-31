@@ -6,7 +6,7 @@
     - derive_query_vars -> derive_vars_query
     - derive_suppqual_vars -> derive_vars_suppqual
     - dthcaus_source: date_var -> date, traceabilty_vars -> traceability_vars
-    - lstalvdt_source - date_var -> date
+    - lstalvdt_source: date_var -> date
 
 
 # admiral 0.2.1
