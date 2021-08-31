@@ -1,5 +1,7 @@
-deprecate_warn <- if (requireNamespace("lifecycle", quietly = TRUE)) {
-  getExportedValue("lifecycle", "deprecate_warn")
-} else {
-  function(...) invisible()
+deprecate_warn <- function(...) {
+  if (requireNamespace("lifecycle", quietly = TRUE)) {
+    lifecycle::deprecate_warn(...)
+  } else {
+    invisible()
+  }
 }
