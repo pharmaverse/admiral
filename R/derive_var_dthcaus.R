@@ -192,7 +192,7 @@ dthcaus_source <- function(dataset,
                            traceabilty_vars = deprecated()) {
 
   ### BEGIN DEPRECIATION
-  if (is_present(traceabilty_vars)) {
+  if (is_present(date_var)) {
     deprecate_warn("0.2.2", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
     date <- date_var
   }
