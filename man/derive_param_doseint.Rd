@@ -126,13 +126,16 @@ adex <- tibble::tribble(
 "P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
 )
 
-adex \%>\%
-  derive_param_doseint(by_vars=vars(USUBJID, VISIT),
-                       set_values_to = vars(PARAMCD = "TNDOSINT"),
+derive_param_doseint(
+  adex,
+  by_vars=vars(USUBJID, VISIT),
+  set_values_to = vars(PARAMCD = "TNDOSINT"),
 
-  derive_param_doseint(by_vars=vars(USUBJID, VISIT),
-                       set_values_to = vars(PARAMCD = "TDOSINT2"),
-                       zero_doses = "Y")
+derive_param_doseint(
+  adex,
+  by_vars=vars(USUBJID, VISIT),
+  set_values_to = vars(PARAMCD = "TDOSINT2"),
+  zero_doses = "Y")
 }
 \author{
 Alice Ehmann

@@ -97,18 +97,20 @@
 #' "P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
 #' )
 #'
-#' adex %>%
-#'   derive_param_doseint(by_vars=vars(USUBJID, VISIT),
-#'                        set_values_to = vars(PARAMCD = "TNDOSINT"),
-#`                        tadm_code = "TNDOSE",
-#`                        tpadm_code = "TSNDOSE")
+#' derive_param_doseint(
+#'   adex,
+#'   by_vars=vars(USUBJID, VISIT),
+#'   set_values_to = vars(PARAMCD = "TNDOSINT"),
+#`   tadm_code = "TNDOSE",
+#`   tpadm_code = "TSNDOSE")
 #'
-#` adex %>%
-#'   derive_param_doseint(by_vars=vars(USUBJID, VISIT),
-#'                        set_values_to = vars(PARAMCD = "TDOSINT2"),
-#`                        tadm_code = "TNDOSE",
-#`                        tpadm_code = "TSNDOSE",
-#'                        zero_doses = "Y")
+#' derive_param_doseint(
+#'   adex,
+#'   by_vars=vars(USUBJID, VISIT),
+#'   set_values_to = vars(PARAMCD = "TDOSINT2"),
+#`   tadm_code = "TNDOSE",
+#`   tpadm_code = "TSNDOSE",
+#'   zero_doses = "Y")
 
 derive_param_doseint <- function(dataset,
                                  by_vars,
