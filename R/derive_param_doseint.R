@@ -110,7 +110,7 @@
 #'   set_values_to = vars(PARAMCD = "TDOSINT2"),
 #'   tadm_code = "TNDOSE",
 #'   tpadm_code = "TSNDOSE",
-#'   zero_doses = "Y")
+#'   zero_doses = "100")
 
 derive_param_doseint <- function(dataset,
                                  by_vars,
