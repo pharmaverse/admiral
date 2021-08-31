@@ -22,7 +22,7 @@
 #'   (e.g. 7 if 7 days should be added to the upper bound)
 #'   Optional; default is 0
 #'
-#' @param filter_pre_timepoint An expression to filter observtions as not
+#' @param filter_pre_timepoint An expression to filter observations as not
 #' on-treatment when `date` = `ref_start_date`. For example, if
 #' observations where `VSTPT = PRE` should not be considered on-treatment when
 #' `date = ref_start_date`, `filter_pre_timepoint` should be used
@@ -122,9 +122,11 @@ derive_var_ontrtfl <- function(dataset,
 
   dataset <- mutate(
     dataset,
-    ONTRTFL = case_when(
-      is.na(!!date) & !is.na(!!ref_start_date) ~ "Y",
-      !is.na(!!date) & !is.na(!!ref_start_date) & !!ref_start_date == !!date ~ "Y")
+    ONTRTFL = if_else(
+      is.na(!!date) & !is.na(!!ref_start_date) | !!ref_start_date == !!date,
+      "Y",
+      NA_character_,
+      missing = NA_character_)
     )
 
   if (!quo_is_null(filter_pre_timepoint)) {

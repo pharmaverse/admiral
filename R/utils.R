@@ -329,6 +329,26 @@ get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
 
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#'
+#' @export
+#'
+#' @examples
+#' extract_unit("Height (cm)")
+#'
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}
+
 #' Convert Blank Strings Into NAs
 #'
 #' Turn SAS blank strings into proper R `NA`s.

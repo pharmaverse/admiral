@@ -37,6 +37,7 @@ Imports:
 Suggests:
     devtools,
     diffdf,
+    lifecycle,
     lintr,
     pkgdown,
     testthat,
