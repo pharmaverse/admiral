@@ -5,17 +5,13 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `sysbp_code`, `diabp_code`
 #'   and `hr_code`.
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
 #'
 #' @param sysbp_code Systolic blood pressure parameter code
 #'
@@ -38,14 +34,9 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   For the new parameter the variable is set to the value of the variable for
-#'   systolic blood pressure.
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The analysis value of the new parameter is derived as
@@ -64,7 +55,8 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = TRUE)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' advs <- tibble::tribble(
 #'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
 #'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
@@ -85,11 +77,11 @@
 #' advs %>%
 #'   derive_param_map(
 #'     by_vars = vars(USUBJID, VISIT),
-#'     unit_var = AVALU,
 #'     set_values_to = vars(
 #'       PARAMCD = "MAP",
 #'       PARAM = "Mean Arterial Pressure (mmHg)"
-#'     )
+#'     ),
+#'     get_unit_expr = AVALU
 #'   ) %>%
 #'   filter(PARAMCD != "PULSE")
 #'
@@ -98,39 +90,32 @@
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   hr_code = "PULSE",
-#'   unit_var = AVALU,
 #'   set_values_to = vars(
 #'     PARAMCD = "MAP",
 #'     PARAM = "Mean Arterial Pressure (mmHg)"
-#'   )
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_map <- function(dataset,
                              by_vars,
+                             set_values_to = vars(PARAMCD = "MAP"),
                              sysbp_code = "SYSBP",
                              diabp_code = "DIABP",
                              hr_code = NULL,
-                             set_values_to = NULL,
-                             unit_var = NULL,
+                             get_unit_expr,
                              filter = NULL) {
+  assert_vars(by_vars)
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   assert_character_scalar(sysbp_code)
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
-  assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(dataset, required_vars = quo_c(by_vars, vars(PARAMCD, AVAL), unit_var))
-  assert_varval_list(set_values_to, required_elements = "PARAMCD")
-  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
-  if (!quo_is_null(unit_var)) {
-    unit <- dataset %>%
-      filter(PARAMCD == sysbp_code & !is.na(!!unit_var)) %>%
-      pull(!!unit_var) %>%
-      unique()
-    set_unit_var <- vars(!!unit_var := unit)
-  } else {
-    set_unit_var <- NULL
-  }
+  assert_unit(dataset, sysbp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
+  assert_unit(dataset, diabp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
 
   if (is.null(hr_code)) {
     analysis_value <- expr(
@@ -140,6 +125,8 @@ derive_param_map <- function(dataset,
       )
     )
   } else {
+    assert_unit(dataset, hr_code, required_unit = "beats/min", get_unit_expr = !!get_unit_expr)
+
     analysis_value <- expr(
       compute_map(
         diabp = !!sym(paste0("AVAL.", diabp_code)),
@@ -155,7 +142,7 @@ derive_param_map <- function(dataset,
     parameters = c(sysbp_code, diabp_code, hr_code),
     by_vars = by_vars,
     analysis_value = !!analysis_value,
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
@@ -214,8 +201,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -253,18 +240,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   The variable is used to check the units of the input parameters and it is
-#'   set to `"m^2"` for the new parameter.
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @author Eric Simms
 #'
@@ -290,57 +268,49 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   method = "Mosteller"
+#'   method = "Mosteller",
+#'   get_unit_expr = AVALU
 #' )
 #'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   method = "Fujimoto"
+#'   method = "Fujimoto",
+#'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_bsa <- function(dataset,
                              by_vars,
-                             method = "Mosteller",
-                             set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
+                             method,
+                             set_values_to = vars(PARAMCD = "BSA"),
                              height_code = "HEIGHT",
                              weight_code = "WEIGHT",
-                             unit_var = NULL,
+                             get_unit_expr,
                              filter = NULL) {
-
   assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD, AVAL, AVALU), unit_var)
-  )
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
     method,
     values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
   )
-  assert_character_scalar(height_code)
-  assert_character_scalar(weight_code)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_character_scalar(height_code)
+  assert_character_scalar(weight_code)
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  if (!quo_is_null(unit_var)) {
-    assert_unit(
-      dataset,
-      param = height_code,
-      unit = "cm",
-      unit_var = !!unit_var
-    )
-    assert_unit(
-      dataset,
-      param = weight_code,
-      unit = "kg",
-      unit_var = !!unit_var
-    )
-    set_unit_var <- vars(!!unit_var := "m^2")
-  } else {
-    set_unit_var <- NULL
-  }
+  assert_unit(
+    dataset,
+    param = height_code,
+    required_unit = "cm",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    param = weight_code,
+    required_unit = "kg",
+    get_unit_expr = !!get_unit_expr
+  )
 
   bsa_formula <- expr(
     compute_bsa(
@@ -356,7 +326,7 @@ derive_param_bsa <- function(dataset,
     parameters = c(height_code, weight_code),
     by_vars = by_vars,
     analysis_value = !!bsa_formula,
-    set_values_to = vars(!!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 
@@ -418,7 +388,7 @@ derive_param_bsa <- function(dataset,
 #' )
 compute_bsa <- function(height = height,
                         weight = weight,
-                        method = "Mosteller") {
+                        method) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
   assert_character_scalar(
@@ -457,8 +427,8 @@ compute_bsa <- function(height = height,
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` and the `unit_var` parameter,
-#'   `PARAMCD`, and `AVAL` are expected.
+#'   The variables specified by the `by_vars` parameter, `PARAMCD`, and
+#'   `AVAL` are expected.
 #'
 #'   The variable specified by `by_vars` and `PARAMCD` must be a unique key of
 #'   the input dataset after restricting it by the filter condition (`filter`
@@ -478,18 +448,9 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
-#' @param unit_var Variable providing the unit of the parameter
-#'
-#'   The variable is used to check the units of the input parameters and it is
-#'   set to `"kg/m^2"` for the new parameter.
-#'
-#'   Permitted Values: A variable of the input dataset
-#'
 #' @inheritParams derive_derived_param
+#'
+#' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The analysis value of the new parameter is derived as
@@ -524,44 +485,37 @@ compute_bsa <- function(height = height,
 #'   set_values_to = vars(
 #'     PARAMCD = "BMI",
 #'     PARAM = "Body Mass Index (kg/m^2)"
-#'   )
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
 #'  )
 derive_param_bmi <-  function(dataset,
                               by_vars,
                               set_values_to = vars(PARAMCD = "BMI"),
                               weight_code = "WEIGHT",
                               height_code = "HEIGHT",
-                              unit_var = NULL,
+                              get_unit_expr,
                               filter = NULL) {
-  assert_character_scalar(weight_code)
-  assert_character_scalar(height_code)
   assert_vars(by_vars)
-  unit_var <- assert_symbol(enquo(unit_var), optional = TRUE)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_data_frame(
-    dataset,
-    required_vars = quo_c(by_vars, vars(PARAMCD,AVAL,AVALU), unit_var)
-  )
+  assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  assert_character_scalar(weight_code)
+  assert_character_scalar(height_code)
+  get_unit_expr <- assert_expr(enquo(get_unit_expr))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  if (!quo_is_null(unit_var)) {
-    assert_unit(
-      dataset,
-      param = weight_code,
-      unit = "kg",
-      unit_var = !!unit_var
-    )
-    assert_unit(
-      dataset,
-      param = height_code,
-      unit = "cm",
-      unit_var = !!unit_var
-    )
-    set_unit_var <- vars(!!unit_var := "kg/m^2")
-  } else {
-    set_unit_var <- NULL
-  }
+  assert_unit(
+    dataset,
+    param = weight_code,
+    required_unit = "kg",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    param = height_code,
+    required_unit = "cm",
+    get_unit_expr = !!get_unit_expr
+  )
 
   derive_derived_param(
     dataset,
@@ -572,7 +526,7 @@ derive_param_bmi <-  function(dataset,
       height = !!sym(paste0("AVAL.", height_code)),
       weight = !!sym(paste0("AVAL.", weight_code))
     ),
-    set_values_to = vars(!!!set_unit_var, !!!set_values_to)
+    set_values_to = set_values_to
   )
 }
 

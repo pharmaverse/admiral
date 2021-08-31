@@ -1,6 +1,5 @@
 context("test-derive_obs_number")
 
-
 test_that("first observation for each group are selected", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
@@ -20,8 +19,8 @@ test_that("first observation for each group are selected", {
 
   actual_output <- filter_extreme(
     input,
-    order = vars(AVISITN, AVAL),
     by_vars = vars(USUBJID),
+    order = vars(AVISITN, AVAL),
     mode = "first"
   )
 

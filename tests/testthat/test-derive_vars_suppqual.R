@@ -1,5 +1,4 @@
-context("test-derive_suppqual_vars")
-
+context("test-derive_vars_suppqual")
 
 test_that("IDVAR is missing, join by USUBJID", {
   input <- tibble::tribble(
@@ -28,7 +27,7 @@ test_that("IDVAR is missing, join by USUBJID", {
   attr(expected_output$TEST1, "label") <- "Test QNAM1"
   attr(expected_output$TEST2, "label") <- "Test QNAM2"
 
-  actual_output <- derive_suppqual_vars(
+  actual_output <- derive_vars_suppqual(
     input,
     input_supp
   )
@@ -73,7 +72,7 @@ test_that("Multiple IDVARs, differing types", {
   attr(expected_output$TEST1, "label") <- "Test QNAM1"
   attr(expected_output$TEST2, "label") <- "Test QNAM2"
 
-  actual_output <- derive_suppqual_vars(
+  actual_output <- derive_vars_suppqual(
     input,
     input_supp
   )
@@ -110,7 +109,7 @@ test_that("Multiple Records for each IDVAR", {
   )
   attr(expected_output$TEST1, "label") <- "Test QNAM1"
 
-  actual_output <- derive_suppqual_vars(
+  actual_output <- derive_vars_suppqual(
     input,
     input_supp
   )
@@ -149,7 +148,7 @@ test_that("Test domain paramter", {
   )
   attr(expected_output$TEST1, "label") <- "Test QNAM1"
 
-  actual_output <- derive_suppqual_vars(
+  actual_output <- derive_vars_suppqual(
     input,
     input_supp,
     domain = "DM"
@@ -177,7 +176,7 @@ test_that("Errors", {
   )
 
   expect_error(
-    derive_suppqual_vars(
+    derive_vars_suppqual(
       input,
       input_supp,
       domain = "DS"
@@ -196,7 +195,7 @@ test_that("Errors", {
   )
 
   expect_error(
-    derive_suppqual_vars(
+    derive_vars_suppqual(
       input,
       input_supp
     ),
