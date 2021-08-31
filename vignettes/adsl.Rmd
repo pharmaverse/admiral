@@ -357,7 +357,7 @@ adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
 store the domain where the date of death is collected, and `DTHSEQ` would store the `xxSEQ` value of 
-that domain). To add them, the `traceabilty_vars()` argument must be added to the `dthcaus_source()`
+that domain). To add them, the `traceability_vars` argument must be added to the `dthcaus_source()`
 arguments:
 
 ```{r eval=FALSE}
@@ -367,7 +367,7 @@ src_ae <- dthcaus_source(
   date = AESTDTC,
   mode = "first",
   dthcaus = AEDECOD,
-  traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -376,7 +376,7 @@ src_ds <- dthcaus_source(
   date = DSSTDTC,
   mode = "first",
   dthcaus = DSTERM,
-  traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
