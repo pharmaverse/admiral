@@ -94,7 +94,8 @@ derive_param_qtcf(
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(
     PARAMCD = "QTCFR",
-    PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)"
+    PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
+    AVALU = "msec"
   )
 )
 }

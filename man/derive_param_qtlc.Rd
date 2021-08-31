@@ -98,7 +98,8 @@ derive_param_qtlc(
   by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(
     PARAMCD = "QTLCR",
-    PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)"
+    PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
+    AVALU = "msec"
   )
 )
 }

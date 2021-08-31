@@ -24,8 +24,7 @@ QT interval in msec:
 Computes corrected QT using Sagie's formula.
 }
 \examples{
-compute_qtlc(qt = 350,
-             rr = 56.54)
+compute_qtlc(qt = 350, rr = 56.54)
 }
 \author{
 Stefan Bundfuss
