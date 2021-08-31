@@ -18,6 +18,7 @@ reference:
         dataset and return the extended dataset.
 - contents:
   - starts_with("derive")
+
 - title: Computations
   desc: Computations expect vectors as input and return a vector
   contents:
@@ -32,6 +33,10 @@ reference:
   desc: BDS specific functions
   contents:
   - has_keyword('bds')
+- subtitle: OCCDS
+  desc: OCCDS specific functions
+  contents:
+  - has_keyword('occds')
 - subtitle: ADSL
   desc: Functions specific for ADSL
   contents:
@@ -40,6 +45,14 @@ reference:
   desc: Functions specific for ADEG
   contents:
   - has_keyword('adeg')
+- subtitle: ADAE
+  desc: Functions specific for ADAE
+  contents:
+  - has_keyword('adae')
+- subtitle: ADCM
+  desc: Functions specific for ADCM
+  contents:
+  - has_keyword('adcm')
 
 - title: Other Keywords
 - subtitle: Timing
