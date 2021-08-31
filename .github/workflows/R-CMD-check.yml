@@ -78,7 +78,6 @@ jobs:
           renv::restore()
         shell: Rscript {0}
 
-
       - name: Install dependencies
         if: matrix.config.r == '3.5' || matrix.config.r == 'release'
         run: |
@@ -93,7 +92,8 @@ jobs:
         run: |
           if (!requireNamespace("rcmdcheck", quietly = TRUE)) install.packages("rcmdcheck")
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          error_on <- if (grepl("^3.5", getRversion())) "warning" else "note"
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = error_on, check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
