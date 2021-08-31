@@ -170,6 +170,9 @@ derive_var_dthcaus <- function(dataset, ...) {
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
+#' @param date_var Deprecated, please use `date` instead.
+#' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
+#'
 #' @author Shimeng Huang
 #'
 #' @keywords source_specifications
@@ -184,7 +187,21 @@ dthcaus_source <- function(dataset,
                            date,
                            mode = "first",
                            dthcaus,
-                           traceability_vars = NULL) {
+                           traceability_vars = NULL,
+                           date_var = deprecated(),
+                           traceabilty_vars = deprecated()) {
+
+  ### BEGIN DEPRECIATION
+  if (is_present(traceabilty_vars)) {
+    deprecate_warn("0.2.1", "date_var", "date")
+    date <- date_var
+  }
+  if (is_present(traceabilty_vars)) {
+    deprecate_warn("0.2.1", "traceabilty_vars", "traceability_vars")
+    traceability_vars <- traceabilty_vars
+  }
+  ### END DEPRECIATION
+
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
