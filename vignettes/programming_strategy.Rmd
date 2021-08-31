@@ -103,8 +103,8 @@ variables must start with `temp_` and must be removed from the output dataset
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
 
 Please note that *var* prefix should be used only if the function name includes the name of the variable 
-(e.g. `derive_var_ady`). 
-It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline`, which has a `new_var` argument).
+(e.g. `derive_var_ady()`). 
+It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline()`, which has a `new_var` argument).
 
 
 ## Function Parameters
@@ -163,7 +163,7 @@ Each expression needs to be tested for the following
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
 
-The only exception to this is `derive_var_basetype` where we allowed the use of `exprs`. 
+The only exception to this is `derive_var_basetype()` where we allowed the use of `rlang::exprs()`. 
 The reason is that in this case the user needs to have the flexibility to provide not just symbols but 
 usually more complicated filtering conditions (that may be based on multiple input parameters).
 
@@ -184,18 +184,19 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 
 | Parameter Name   | Description                                                                                                        |
 |------------------|--------------------------------------------------------------------------------------------------------------------|
+| `dataset`        | The input dataset. Expects a data.frame or a tibble.                                                               |
+| `by_vars`        | Variables to group by.                                                                                             |
+| `order`          | List of expressions for sorting a dataset, e.g., `vars(PARAMCD, AVISITN, desc(AVAL))`.                             |
+| `new_var`        | Name of a single variable to be added to the dataset.                                                              |
+| `new_vars`       | List of variables to be added to the dataset.                                                                      |
+| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter.  |
+| `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
 | `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
 | `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
 | `start_dtc`      |                                                                                                                    |
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
-| `by_vars`        | Variables to group by.                                                                                             |
-| `new_var`        | Name of a single variable to be added to the dataset.                                                              |
-| `new_vars`       | List of variables to be added to the dataset.                                                                      |
-| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter. |
-| `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
-| `order`          | List of expressions for sorting a dataset, e.g., `vars(PARAMCD, AVISITN, desc(AVAL))`.                             |
-| `set_values_to`  | List of variable name-value pairs.                                                                                 |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
+| `set_values_to`  | List of variable name-value pairs.                                                                                 |
 
 
 ## Source Code Formatting
@@ -223,6 +224,7 @@ Parameter which expect keywords should handle them case-insensitive, e.g., both
 `date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
 
 A parameter should not be checked in outer function if the parameter name is the same as in the inner function. 
+This rule is applicable only if both functions are part of admiral.
 
 
 ## Function Header (Documentation)
@@ -294,7 +296,7 @@ Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully-self contained example of how to use the function. 
 Self-contained means that if this code is executed in a new R session it will run without errors. 
 That requires any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
-If a dataset is created in the example, it should be done so using the function `tibble::tribble`. 
+If a dataset is created in the example, it should be done so using the function `tibble::tribble()`. 
 Make sure to align columns as well. This ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to
@@ -354,7 +356,7 @@ Package dependencies have to be documented in the `DESCRIPTION` file.
 If a package is used only in examples and/or unit tests then it should be listed in `Suggests`, otherwise in `Imports`.
 
 Functions from other packages have to be explicitly imported by using the` @importFrom` tag in the `R/admiral-package.R` file. 
-To import the `if_else` and `mutate` function from `dplyr` the following line would have to be included in that file:
+To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
 
 
@@ -362,7 +364,7 @@ To import the `if_else` and `mutate` function from `dplyr` the following line wo
 
 Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
 
-The only exception is `derive_suppqual_vars` which takes it from its argument `dataset_suppqual`, 
+The only exception is `derive_suppqual_vars()` which takes it from its argument `dataset_suppqual`, 
 where the labels are stored.
 
 
@@ -383,7 +385,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble`. 
+If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
 Make sure to align columns as well. This ensures quick code readability. 
 
 If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
@@ -395,7 +397,7 @@ Please take the following list as recommendation and try to adhere to its rules 
 
 * Parameters in function calls should be named except for the first parameter 
 (e.g. `assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)`).
-* `dplyr::if_else` should be used when there are only two conditions. 
+* `dplyr::if_else()` should be used when there are only two conditions. 
 Try to always set the `missing` parameter whenever appropriate.
 
 
