@@ -297,6 +297,30 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+assert_expr <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (quo_is_missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!(quo_is_symbol(arg) || quo_is_call(arg))) {
+    err_msg <- sprintf(
+      "`%s` must be an expression but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(quo_get_expr(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
 #' Is an Argument a Filter Condition?
 #'
 #' @param arg Quosure - filtering condition.
@@ -780,13 +804,9 @@ assert_function_param <- function(arg, params) {
 #' unit.
 #'
 #' @param dataset A `data.frame`
-#' @param param
-#'   Parameter code of the parameter to check
-#' @param unit
-#'   Expected unit
-#'
-#' @param unit_var
-#'   Variable providing the unit
+#' @param param Parameter code of the parameter to check
+#' @param required_unit Expected unit
+#' @param get_unit_expr Expression used to provide the unit of `param`
 #'
 #' @author Stefan Bundfuss
 #'
@@ -799,23 +819,29 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' data(advs)
-#' assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
 #' }
-assert_unit <- function(dataset, param, unit_var, unit) {
-  unit_var <- assert_symbol(enquo(unit_var))
-  assert_data_frame(dataset, required_vars = vars(PARAMCD, !!unit_var))
-  units <-
-    unique(filter(dataset, PARAMCD == param &
-                    !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
-  if (length(units) != 1 || units != unit) {
+assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_character_scalar(param)
+  assert_character_scalar(required_unit)
+  get_unit_expr <- enquo(get_unit_expr)
+
+  units <- dataset %>%
+    mutate(`_unit` = !!get_unit_expr) %>%
+    filter(PARAMCD == param & !is.na(`_unit`)) %>%
+    pull(`_unit`) %>%
+    unique()
+
+  if (length(units) != 1L || units != required_unit) {
     abort(
       paste0(
         "It is expected that ",
         param,
         " is measured in ",
-        unit,
+        required_unit,
         ".\n",
         "In the input dataset it is measured in ",
         enumerate(units),
