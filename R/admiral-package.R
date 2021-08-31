@@ -3,7 +3,6 @@
 #'             if_else mutate mutate_at n pull rename rename_at row_number select slice
 #'             starts_with transmute ungroup vars n_distinct union bind_rows distinct
 #'             summarise_at summarise coalesce bind_cols na_if tibble
-#' @importFrom lifecycle deprecate_warn deprecated is_present
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_string call2 caller_env
 #'             call_name .data enexpr enquo eval_bare eval_tidy expr expr_interp

@@ -26,7 +26,6 @@ Depends: R (>= 3.5)
 Imports:
     assertthat,
     dplyr,
-    lifecycle,
     lubridate,
     magrittr,
     purrr,
