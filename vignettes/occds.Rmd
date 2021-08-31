@@ -239,4 +239,23 @@ adae %>%
 
 ### Derive Query Variables {#query}
 
-*These functionalities are in progress.*
+To Derive Query Variables, we use an input dataset with a data.frame containing required columns `VAR_PREFIX`, `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns`QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
+The content of the dataset can be checked by `assert_valid_queries()`. The expected result is the input dataset with query variables derived
+
+```{r, eval=FALSE}
+data("queries")
+ adae <- tibble::tribble(
+   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+     3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+     5, "Basedow's disease", NA_character_, 1L,
+   "03", "2020-06-07 23:59:59", "SOME TERM",
+     2, "Some query", "Some term", NA_integer_,
+   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+     7, "Alveolar proteinosis", NA_character_,  NA_integer_
+ )
+  
+  adae <- derive_query_vars(dataset = adae , dataset_queries = queries)
+
+```
