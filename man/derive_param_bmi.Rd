@@ -10,15 +10,15 @@ derive_param_bmi(
   set_values_to = vars(PARAMCD = "BMI"),
   weight_code = "WEIGHT",
   height_code = "HEIGHT",
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -26,7 +26,10 @@ parameter) and to the parameters specified by \code{weight_code} and \code{heigh
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
 
 \item{set_values_to}{Variables to be set
 
@@ -50,12 +53,11 @@ as the HEIGHT. It is expected that HEIGHT is measured in cm
 
 Permitted Values: character value}
 
-\item{unit_var}{Variable providing the unit of the parameter
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The variable is used to check the units of the input parameters and it is
-set to \code{"kg/m^2"} for the new parameter.
+The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 
@@ -97,7 +99,8 @@ derive_param_bmi (
   set_values_to = vars(
     PARAMCD = "BMI",
     PARAM = "Body Mass Index (kg/m^2)"
-  )
+  ),
+  get_unit_expr = extract_unit(PARAM)
  )
 }
 \author{

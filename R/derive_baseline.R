@@ -78,8 +78,6 @@ derive_var_basec <- function(dataset, by_vars) {
 #'
 #' @export
 #'
-#' @export
-#'
 #' @author Thomas Neitmann
 #'
 #' @keywords bds derivation
