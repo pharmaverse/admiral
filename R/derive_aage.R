@@ -36,7 +36,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_duration()]
+#' @seealso [derive_vars_duration()]
 #'
 #' @examples
 #' data <- tibble::tribble(
@@ -58,7 +58,7 @@ derive_vars_aage <- function(dataset,
     values = c("years", "months", "days", "hours", "minutes", "seconds")
   )
 
-  derive_duration(
+  derive_vars_duration(
     dataset,
     new_var = AAGE,
     new_var_unit = AAGEU,

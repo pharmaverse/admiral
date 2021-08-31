@@ -387,7 +387,7 @@ adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 
 ### Duration Relative to Death {#death_other}
 
-The function `derive_duration()` can be used to derive duration relative to death like the Relative 
+The function `derive_vars_duration()` can be used to derive duration relative to death like the Relative 
 Day of Death (`DTHADY`) or the numbers of days from last dose to death (`LDDTHELD`).
 
 Example calls: 
@@ -395,7 +395,7 @@ Example calls:
 - Relative Day of Death
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_duration(
+  derive_vars_duration(
     new_var = DTHADY,
     start_date = TRTSDT,
     end_date = DTHDT
@@ -405,7 +405,7 @@ adsl <- adsl %>%
 - Elapsed Days from Last Dose to Death
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_duration(
+  derive_vars_duration(
     new_var = LDDTHELD,
     start_date = TRTEDT,
     end_date = DTHDT,

@@ -65,7 +65,7 @@ adae <- ae %>%
   ) %>%
 
   # derive analysis duration (value and unit)
-  derive_duration(
+  derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,

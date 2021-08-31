@@ -44,7 +44,7 @@ derive_var_astdy <- function(dataset, reference_date = TRTSDT, date = ASTDT) {
   date <- assert_symbol(enquo(date))
   assert_data_frame(dataset, vars(!!reference_date, !!date))
 
-  derive_duration(
+  derive_vars_duration(
     dataset,
     new_var = ASTDY,
     start_date = !!reference_date,

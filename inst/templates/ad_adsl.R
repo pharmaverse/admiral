@@ -126,14 +126,14 @@ adsl <- dm %>%
   ) %>%
 
   # Relative Day of Death
-  derive_duration(
+  derive_vars_duration(
     new_var = DTHADY,
     start_date = TRTSDT,
     end_date = DTHDT
   ) %>%
 
   # Elapsed Days from Last Dose to Death
-  derive_duration(
+  derive_vars_duration(
     new_var = LDDTHELD,
     start_date = TRTEDT,
     end_date = DTHDT,
