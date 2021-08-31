@@ -7,13 +7,12 @@
 derive_var_atirel(dataset, flag_var, new_var)
 }
 \arguments{
-\item{`dataset`}{Input dataset
-
+\item{dataset}{Input dataset
 The variables \code{TRTSDTM}, \code{ASTDTM}, \code{AENDTM} are expected}
 
-\item{`flag_var`}{Name of the variable with Analysis Start Date Imputation Flag}
+\item{flag_var}{Name of the variable with Analysis Start Date Imputation Flag}
 
-\item{`new_var`}{Name of variable to create}
+\item{new_var}{Name of variable to create}
 }
 \value{
 A dataset containing all observations and variables of the input
@@ -38,6 +37,7 @@ the Analysis Start Time Imputation Flag is 'H' or 'M',
 }
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
 adcm <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
   "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", "",
@@ -56,10 +56,6 @@ derive_var_atirel(
   flag_var = ASTTMF,
   new_var = ATIREL
 )
-
-
-}
-\seealso{
 
 }
 \author{
