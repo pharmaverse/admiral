@@ -1,4 +1,4 @@
-# admiral 0.2.2
+# admiral 0.3.0
 
 - Bunch of functions and function arguments have been renamed, the old names are now deprecated (#493, #507): 
     - derive_aage -> derive_vars_aage

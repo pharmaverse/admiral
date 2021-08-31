@@ -70,6 +70,21 @@ derive_vars_aage <- function(dataset,
   )
 }
 
+#' Derive Analysis Age
+#'
+#' `derive_aage()` was renamed to `derive_vars_aage()` to create a
+#' more consistent API.
+#'
+#' @keywords internal
+#'
+#' @export
+derive_aage <- function(dataset,
+                        start_date = BRTHDT,
+                        end_date = RANDDT,
+                        unit = "years") {
+  deprecate_warn("0.3.0", "derive_aage()", "derive_vars_aage()")
+  derive_vars_aage(dataset, start_date = start_date, end_date = end_date, unit = unit)
+}
 
 #' Derive Age Groups
 #'
