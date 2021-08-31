@@ -2,21 +2,75 @@
 % Please edit documentation in R/derive_param_doseint.R
 \name{derive_param_doseint}
 \alias{derive_param_doseint}
-\title{Adds a parameter for dose intensity}
+\title{Adds a Parameter for Dose Intensity}
 \usage{
 derive_param_doseint(
   dataset,
-  filter = NULL,
-  new_param = "TNDOSINT",
+  by_vars,
+  set_values_to = vars(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
-  by_vars
+  zero_doses = "Inf",
+  filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} parameter are expected.}
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
+
+The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
+the input dataset after restricting it by the filter condition (\code{filter}
+parameter) and to the parameters specified by \code{tadm_code} and \code{padm_code}.}
+
+\item{by_vars}{Grouping variables
+
+Permitted Values: list of variables}
+
+\item{set_values_to}{Variables to be set
+
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
+
+\emph{Permitted Values:} List of variable-value pairs}
+
+\item{tadm_code}{Total Doses Administered parameter code
+
+The observations where \code{PARAMCD} equals the specified value are considered
+as the total dose administered.  The \code{AVAL} associated with this \code{PARAMCD}
+will be the numerator of the dose intensity calculation.
+
+Permitted Values: character value}
+
+\item{tpadm_code}{Total Doses Planned parameter code
+
+The observations where \code{PARAMCD} equals the specified value are considered
+as the total planned dose.  The \code{AVAL} associated with this \code{PARAMCD}
+will be the denominator of the dose intensity calculation.
+
+Permitted Values: character value}
+
+\item{zero_doses}{Flag indicating logic for handling 0 planned or
+administered doses for a \code{by_vars} group
+
+If some instances, the planned dose (\code{tpadm_code}) or administered dose
+(\code{adm_code}) will be \code{NA} or 0.  The following options may be applied for cases
+where the planned dose (\code{tpadm_code}) and/or (\code{tadm_code}) are 0.
+
+Permitted Values: \code{Inf}, \code{100}
+
+\code{Inf}: Default, No record is returned if either the planned (\code{tpadm_code})
+or administered (\code{tadm_code}) \code{AVAL} are \code{NA}.  If the planned dose
+(\code{tpadm_code}) is 0, \code{Inf} is returned. If the administered dose
+(\code{tadm_code}) is 0 and the planned dose (\code{tpadm_code}) is > 0, 0 is
+returned. A record must exist for both \code{tadm_code} and \code{tpadm_code} for the
+dose intensity calculation to be done.
+
+\code{100}: Returns 100 when the planned dose (\code{tpadm_code}) is 0 and the
+administered dose (\code{tadm_code}) is > 0. Returns 0 when the planned dose
+(\code{tpadm_code}) is 0 and the administered dose (\code{tadm_code}) is 0.}
 
 \item{filter}{Filter condition
 
@@ -25,41 +79,67 @@ new parameter, i.e., only observations fulfilling the condition are taken
 into account.
 
 \emph{Permitted Values:} a condition}
-
-\item{new_param}{Parameter code to add
-
-For the new observations \code{PARAMCD} is set to the specified value.
-
-Permitted Values: character value}
-
-\item{tadm_code}{Total Doses Administered parameter code
-
-The observations where \code{PARAMCD} equals the specified value are considered
-as the total dose administered.  This will be the numerator of the dose
-intensity calculation.
-
-Permitted Values: character value}
-
-\item{tpadm_code}{Total Doses Planned parameter code
-
-The observations where \code{PARAMCD} equals the specified value are considered
-as the total planned dose.  This will be the denominator of the dose
-intensity calculation.
-
-Permitted Values: character value}
-
-\item{by_vars}{Grouping variables
-
-Permitted Values: list of variables}
 }
 \value{
-The input dataset with the new flag variable added
+The input dataset with the new parameter rows added
+
+No record is returned if either the planned (\code{tpadm_code}) or administered
+(\code{tadm_code}) \code{AVAL} are \code{NA}.  No record is returned is a record does not
+exist for both \code{tadm_code} and \code{tpadm_code} for the specified \code{by_var}.
+If \code{zero_doses} = \code{Inf}:
+\enumerate{
+\item If the planned dose (\code{tpadm_code}) is 0 and administered dose
+(\code{tadm_code}) is 0, \code{NaN} is returned.
+\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+(\code{tadm_code}) is > 0, \code{Inf} is returned.
+}
+
+If \code{zero_doses} = \code{100} :
+\enumerate{
+\item If the planned dose (\code{tpadm_code}) is 0 and administered dose
+(\code{tadm_code}) is 0, 0 is returned.
+\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+(\code{tadm_code}) is > 0, 100 is returned.
+}
 }
 \description{
-Adds a parameter for dose intensity
+Adds a record for the dose intensity for each by group
+(e.g., subject and visit) where the source parameters are available.
+}
+\details{
+The analysis value of the new parameter is derived as
+Total Dose / Planned Dose * 100
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+
 adex <- tibble::tribble(
+~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
+"P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
+"P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
+"P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
+"P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
+"P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
+"P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
+"P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
+"P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
+)
+
+derive_param_doseint(
+  adex,
+  by_vars=vars(USUBJID, VISIT),
+  set_values_to = vars(PARAMCD = "TNDOSINT"),
+tadm_code = "TNDOSE",
+  tpadm_code = "TSNDOSE")
+
+derive_param_doseint(
+  adex,
+  by_vars=vars(USUBJID, VISIT),
+  set_values_to = vars(PARAMCD = "TDOSINT2"),
+  tadm_code = "TNDOSE",
+  tpadm_code = "TSNDOSE",
+  zero_doses = "100")
 }
 \author{
 Alice Ehmann
