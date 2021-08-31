@@ -44,11 +44,11 @@
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 #' )
 #'
-#' derive_aage(data)
-derive_aage <- function(dataset,
-                        start_date = BRTHDT,
-                        end_date = RANDDT,
-                        unit = "years") {
+#' derive_vars_aage(data)
+derive_vars_aage <- function(dataset,
+                             start_date = BRTHDT,
+                             end_date = RANDDT,
+                             unit = "years") {
 
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
