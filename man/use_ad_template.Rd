@@ -7,6 +7,7 @@
 use_ad_template(
   adam_name = "adsl",
   save_path = paste0("./", adam_name, ".R"),
+  overwrite = FALSE,
   open = interactive()
 )
 }
@@ -14,6 +15,8 @@ use_ad_template(
 \item{adam_name}{An ADaM dataset name.}
 
 \item{save_path}{Path to save the script.}
+
+\item{overwrite}{Whether to overwrite an existing file named \code{save_path}.}
 
 \item{open}{Whether to open the script right away.}
 }

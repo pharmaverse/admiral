@@ -9,8 +9,7 @@ derive_summary_records(
   by_vars,
   fns,
   filter_rows = NULL,
-  set_values_to = NULL,
-  drop_values_from = NULL
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -66,9 +65,6 @@ retaining.
 \code{set_values_to = vars(AVISITN = c(9998, 9999))} would change \code{AVISITN} to
 \code{9998} for \code{AVAL} and \code{AVISITN} to \code{9999} for \code{CHG}.
 }}
-
-\item{drop_values_from}{Providing the names of variables in \code{\link[=vars]{vars()}}
-will drop values and set as missing.}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -127,7 +123,6 @@ advs <- tibble::tribble(
 
 # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 # and `DTYPE = AVERAGE` refers to `mean()` records.
-# `set_values_to` must be of the same length as `fns`
 derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
@@ -135,16 +130,7 @@ derive_summary_records(
   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 )
 
-# Drop retained value of VSSTRESU in the derived record
-derive_summary_records(
-  advs,
-  by_vars = vars(USUBJID, PARAM),
-  fns = list(AVAL ~ mean),
-  set_values_to = vars(DTYPE = "MAXIMUM"),
-  drop_values_from = vars(VSSTRESU)
-)
-
-# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 adeg <- tibble::tribble(
   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -163,7 +149,8 @@ adeg <- tibble::tribble(
   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
 )
 
-# Summarize the average of AVAL for AVISIT records greater than 2
+# Compute the average of AVAL only if there are more than 2 records within the
+# by group
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),

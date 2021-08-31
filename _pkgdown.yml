@@ -1,6 +1,9 @@
 template:
   params:
     bootswatch: flatly
+    docsearch:
+      api_key: 2d4895759f79e89d6eb1c3b990bca6d8
+      index_name: roche-gsk
 repo:
   url:
     home: https://github.com/Roche-GSK/admiral/
@@ -15,6 +18,7 @@ reference:
         dataset and return the extended dataset.
 - contents:
   - starts_with("derive")
+
 - title: Computations
   desc: Computations expect vectors as input and return a vector
   contents:
@@ -33,6 +37,18 @@ reference:
   desc: Functions specific for ADSL
   contents:
   - has_keyword('adsl')
+- subtitle: ADEG
+  desc: Functions specific for ADEG
+  contents:
+  - has_keyword('adeg')
+- subtitle: ADAE
+  desc: Functions specific for ADAE
+  contents:
+  - has_keyword('adae')
+- subtitle: ADCM
+  desc: Functions specific for ADCM
+  contents:
+  - has_keyword('adcm')
 
 - title: Other Keywords
 - subtitle: Timing
@@ -54,12 +70,15 @@ reference:
   - ex
   - lb
   - mh
+  - qs
+  - starts_with("supp")
   - ts
   - vs
 
 - title: ADaM Datasets
 - contents:
   - adsl
+  - advs
 
 - title: User Utilities
 - contents:
@@ -80,12 +99,18 @@ reference:
   - has_keyword("dev_utility")
 
 articles:
-- title: All vignettes
-  navbar: ~
+- title: User Guides
+  navbar: User Guides
   contents:
   - admiral
   - adsl
   - occds
   - bds_finding
-  - contributing
+  - imputation
   - faq
+
+- title: Developer Guides
+  navbar: Developer Guides
+  contents:
+  - programming_strategy
+  - git_usage

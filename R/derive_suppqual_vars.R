@@ -41,7 +41,7 @@
 #'
 #' ## The following example included subjects with multiple/other specific race.
 #' dm <- tibble::tribble(
-#'   ~STUDYID, ~DOMAIN,	~USUBJID,	~RACE,
+#'   ~STUDYID, ~DOMAIN, ~USUBJID, ~RACE,
 #'   "ABC",    "DM",    "001",    "OTHER",
 #'   "ABC",    "DM",    "002",    "MULTIPLE",
 #'   "ABC",    "DM",    "003",    NA,
@@ -49,11 +49,11 @@
 #' )
 #'
 #' suppdm <- tibble::tribble(
-#' ~STUDYID, ~RDOMAIN, ~USUBJID, ~IDVAR, ~IDVARVAL, ~QNAM,     ~QLABEL,       ~QVAL,
-#'  "ABC",   "DM",   	"001",     "",     "",        "RACEOTH", "Race, Other", "BRAZILIAN",
-#'  "ABC",   "DM",	  "002",     "",     "",        "RACE1"  , "Race 1",      "AMERICAN",
-#'  "ABC",   "DM",	  "002",     "",     "",        "RACE2"  , "Race 2",      "OTHER",
-#'  "ABC",   "DM",	  "002",     "",     "",        "RACEOTH", "Race, Other", "ABORIGINE"
+#'   ~STUDYID, ~RDOMAIN, ~USUBJID, ~IDVAR, ~IDVARVAL, ~QNAM,     ~QLABEL,       ~QVAL,
+#'   "ABC",   "DM",      "001",     "",     "",       "RACEOTH", "Race, Other", "BRAZILIAN",
+#'   "ABC",   "DM",      "002",     "",     "",       "RACE1"  , "Race 1",      "AMERICAN",
+#'   "ABC",   "DM",      "002",     "",     "",       "RACE2"  , "Race 2",      "OTHER",
+#'   "ABC",   "DM",      "002",     "",     "",       "RACEOTH", "Race, Other", "ABORIGINE"
 #' )
 #'
 #' derive_suppqual_vars(dm, suppdm)
