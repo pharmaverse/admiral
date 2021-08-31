@@ -92,11 +92,17 @@ NULL
 #' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
 #' Baseline Measure Information).
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' data(dm)
 #'
-#' derive_agegr_fda(dm, AGE, AGEGR1)
+#' dm %>%
+#'   derive_agegr_fda(AGE, AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
 #'
-#' derive_agegr_fda(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+#' data.frame(AGE = 1:100) %>%
+#'   derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
+#'
 derive_agegr_fda <- function(dataset, age_var, new_var) {
 
   age_var <- assert_symbol(enquo(age_var))
@@ -126,12 +132,19 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
 #'
-#' derive_agegr_ema(dm, AGE, AGEGR1)
+#' data(dm)
 #'
-#' derive_agegr_ema(data.frame(age = 1:100), age_var = age, new_var = agegr1)
+#' dm %>%
+#'   derive_agegr_ema(AGE, AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
 #'
-#' derive_agegr_ema(data.frame(age = 1:20), age_var = age, new_var = agegr1, adults = FALSE)
+#' data.frame(AGE = 1:100) %>%
+#'   derive_agegr_ema(age_var = AGE, new_var = AGEGR1)
+#'
+#' data.frame(AGE = 1:20) %>%
+#'   derive_agegr_ema(age_var = AGE, new_var = AGEGR1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, adults = TRUE) {
 
   age_var <- assert_symbol(enquo(age_var))

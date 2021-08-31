@@ -238,4 +238,4 @@ advs <- advs0 %>%
 
 # ---- Save output ----
 
-save(advs, file = "/PATH/TO/SAVE/ADVS", compress = TRUE)
+saveRDS(advs, file = "./ADVS.rds", compress = TRUE)
