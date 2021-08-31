@@ -152,7 +152,16 @@ derive_extreme_flag <- function(dataset,
                                 new_var,
                                 mode,
                                 filter = NULL,
-                                check_type = "warning") {
+                                check_type = "warning",
+                                flag_filter = deprecated()) {
+  # handle deprecated parameter
+  if (is_present(flag_filter)) {
+    deprecate_warn("0.3.0",
+                   "derive_extreme_flag(flag_filter = )",
+                   "derive_extreme_flag(filter = )")
+    filter <- enquo(flag_filter)
+  }
+
   # checking and quoting
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
