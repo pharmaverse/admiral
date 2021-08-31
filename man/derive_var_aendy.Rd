@@ -47,6 +47,7 @@ derive_var_aendy(data)
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
+\keyword{bds}
 \keyword{derivation}
+\keyword{occds}
 \keyword{timing}
