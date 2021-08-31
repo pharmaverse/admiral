@@ -74,7 +74,7 @@ jobs:
       - name: Install dependencies
         if: matrix.config.r == '3.5'
         run: |
-          options(repos = Sys.getenv("R_REPOS"))
+          options(repos = c(Sys.getenv("R_REPOS"), "https://cran.rstudio.com"))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_version("lifecycle", "0.1.0")
         shell: Rscript {0}
