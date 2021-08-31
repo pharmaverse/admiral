@@ -57,7 +57,7 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
     "1", 2, "something", "other", NA_character_, NA_integer_
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_query_vars(my_ae, dataset_queries = query)
 
   expect_equal(expected_output, actual_output)
 })
@@ -85,7 +85,7 @@ test_that("Derive when an adverse event is in multiple baskets", {
     "1", 2, "something", "other", NA_character_, NA_integer_, NA_character_, NA_integer_
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_query_vars(my_ae, dataset_queries = query)
 
   expect_equal(expected_output, actual_output)
 })
@@ -107,7 +107,7 @@ test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE colum
     "1", 2, "something", "other"
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_query_vars(my_ae, dataset_queries = query)
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM,
@@ -135,7 +135,7 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
     "1", 3, NA, NA, 1
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_query_vars(my_ae, dataset_queries = query)
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
