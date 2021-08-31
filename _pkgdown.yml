@@ -33,6 +33,10 @@ reference:
   desc: BDS specific functions
   contents:
   - has_keyword('bds')
+- subtitle: OCCDS
+  desc: OCCDS specific functions
+  contents:
+  - has_keyword('occds')
 - subtitle: ADSL
   desc: Functions specific for ADSL
   contents:

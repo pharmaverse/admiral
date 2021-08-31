@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_query_vars.R
 \name{derive_query_vars}
 \alias{derive_query_vars}
-\title{Derive Query Variables.}
+\title{Derive Query Variables}
 \usage{
 derive_query_vars(dataset, dataset_queries)
 }
@@ -19,7 +19,7 @@ The content of the dataset will be verified by \code{\link[=assert_valid_queries
 The input dataset with query variables derived.
 }
 \description{
-Derive Query Variables.
+Derive Query Variables
 }
 \details{
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
