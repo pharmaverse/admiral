@@ -8,6 +8,10 @@
 #' @param date The assessment date (e.g. `ADT` for the date of a VS test)
 #'   Required; A date or date-time object column is expected
 #'
+#' @param enddate The end date of assessment/event
+#'  (e.g. `AENDT` for the date of a VS test)
+#'   Optional; A date or date-time object column is expected
+#'
 #' @param ref_start_date The lower bound of the on-treatment period
 #'   Required; A date or date-time object column is expected.
 #'
@@ -22,7 +26,7 @@
 #'   (e.g. 7 if 7 days should be added to the upper bound)
 #'   Optional; default is 0
 #'
-#' @param filter_pre_timepoint An expression to filter observations as not
+#' @param filter_pre_timepoint An expression to filter observtions as not
 #' on-treatment when `date` = `ref_start_date`. For example, if
 #' observations where `VSTPT = PRE` should not be considered on-treatment when
 #' `date = ref_start_date`, `filter_pre_timepoint` should be used
@@ -46,7 +50,7 @@
 #'
 #' Any date imputations needed should be done prior to calling this function.
 #'
-#' @author Alice Ehmann
+#' @author Alice Ehmann, Teckla Akinyi
 #'
 #' @keywords bds derivation
 #'
@@ -56,61 +60,74 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate, warn.conflict = FALSE)
 #'
-#' bds1 <- tibble::tribble(
+#' advs <- tibble::tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
 #' derive_var_ontrtfl(
-#'   bds1,
+#'   advs,
 #'   date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT
 #' )
 #'
-#' bds2 <- tibble::tribble(
+#' advs <- tibble::tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
 #' derive_var_ontrtfl(
-#'   bds2,
+#'   advs,
 #'   date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT,
 #'   ref_end_window = 60
 #' )
 #'
-#' bds3 <- tibble::tribble(
-#'   ~USUBJID, ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
-#'   "P01",    "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
-#'   "P02",    "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
-#'   "P03",    "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
-#' ) %>%
-#'   mutate(
-#'     ADTM = ymd_hm(ADTM),
-#'     TRTSDTM = ymd_hm(TRTSDTM),
-#'     TRTEDTM = ymd_hm(TRTEDTM)
-#'   )
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~ADTM,                ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
+#'   "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "",
+#'   "P02", ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
+#'   "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), ""
+#' )
 #' derive_var_ontrtfl(
-#'   bds3,
+#'   advs,
 #'   date = ADTM,
 #'   ref_start_date = TRTSDTM,
 #'   ref_end_date = TRTEDTM,
 #'   filter_pre_timepoint = TPT == "PRE"
 #' )
+#'
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+#'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+#'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+#'   "P03",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2021-01-01")
+#' )
+#'
+#' derive_var_ontrtfl(
+#'  advs,
+#'  date = ASTDT,
+#'  enddate = AENDT,
+#'  ref_start_date = TRTSDT,
+#'  ref_end_date = TRTEDT,
+#'  ref_end_window = 60
+#' )
+
 derive_var_ontrtfl <- function(dataset,
                                date,
+                               enddate = NULL,
                                ref_start_date,
                                ref_end_date = NULL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL) {
   date <- assert_symbol(enquo(date))
+  enddate <-  assert_symbol(enquo(enddate), optional = TRUE)
   ref_start_date <- assert_symbol(enquo(ref_start_date))
   ref_end_date <- assert_symbol(enquo(ref_end_date), optional = TRUE)
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
@@ -127,7 +144,7 @@ derive_var_ontrtfl <- function(dataset,
       "Y",
       NA_character_,
       missing = NA_character_)
-    )
+  )
 
   if (!quo_is_null(filter_pre_timepoint)) {
     dataset <- mutate(
@@ -136,7 +153,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  if (quo_is_null(ref_end_date)) {
+  if (quo_is_null(ref_end_date) & quo_is_null(enddate)) {
     # Scenario 1: No treatment end date is passed
     dataset <- mutate(
       dataset,
@@ -144,14 +161,25 @@ derive_var_ontrtfl <- function(dataset,
         !is.na(!!ref_start_date) & !is.na(!!date) & !!ref_start_date < !!date,
         "Y",
         ONTRTFL)
-      )
-  } else {
+    )
+  } else if (!quo_is_null(ref_end_date) & quo_is_null(enddate)) {
     # Scenario 2: Treatment end date is passed, window added above
     dataset <- mutate(
       dataset,
       ONTRTFL = if_else(
         !is.na(!!ref_start_date) & !is.na(!!date) & !!ref_start_date < !!date &
           !is.na(!!ref_end_date) & !!date <= (!!ref_end_date + days(!!ref_end_window)),
+        "Y",
+        ONTRTFL
+      )
+    )
+  } else {
+    #Scenario 3: date or end date fall within reference window
+    dataset <- mutate(
+      dataset,
+      ONTRTFL = if_else(
+        !!date > !!ref_end_date & !!date <= (!!ref_end_date + days(!!ref_end_window)) |
+          !!enddate > !!ref_end_date & !!enddate <= (!!ref_end_date + days(!!ref_end_window)),
         "Y",
         ONTRTFL
       )

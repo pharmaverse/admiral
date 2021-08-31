@@ -186,3 +186,84 @@ test_that("`target` is set to `Y` when `date` >= `ref_start_date` and `date` <=
     keys = c("STUDYID", "USUBJID", "ADT")
   )
 })
+
+test_that("`target` is set to `Y` when `date` >`ref_end_date`but falls within specified window inclusive,
+            regardless of if enddate is specified", {
+            input <- tibble::tribble(
+              ~STUDYID,  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+              "TEST01", "PAT01",  ymd("2020-03-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+            )
+            expected_output <- tibble::tribble(
+              ~STUDYID, ~USUBJID,  ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT, ~ONTRTFL,
+              "TEST01", "PAT01",  ymd("2020-03-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"), "Y",
+            )
+
+            actual_output <-derive_var_ontrtfl(
+              input,
+              date = ASTDT,
+              enddate = ,
+              ref_start_date = TRTSDT,
+              ref_end_date = TRTEDT,
+              ref_end_window = 60
+            )
+
+            expect_dfs_equal(
+              expected_output,
+              actual_output,
+              keys = c("STUDYID", "USUBJID", "ASTDT")
+            )
+          })
+
+test_that("`target` is set to `Y` when `date` >`ref_end_date`but falls within specified window inclusive,
+            regardless of  enddate", {
+              input <- tibble::tribble(
+                ~STUDYID,  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+                "TEST01", "PAT01",  ymd("2020-04-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2021-12-01"),
+              )
+              expected_output <- tibble::tribble(
+                ~STUDYID, ~USUBJID,  ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT, ~ONTRTFL,
+                "TEST01", "PAT01",  ymd("2020-04-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2021-12-01"), "Y",
+              )
+
+              actual_output <-derive_var_ontrtfl(
+                input,
+                date = ASTDT,
+                enddate = AENDT,
+                ref_start_date = TRTSDT,
+                ref_end_date = TRTEDT,
+                ref_end_window = 60
+              )
+
+              expect_dfs_equal(
+                expected_output,
+                actual_output,
+                keys = c("STUDYID", "USUBJID", "ASTDT")
+              )
+            })
+
+test_that("`target` is set to `Y` when `enddate` >`ref_end_date`but falls within specified window inclusive,
+           regardless of date", {
+  input <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+    "TEST01", "PAT01",  ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID,  ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,           ~ONTRTFL,
+    "TEST01", "PAT01",  ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"), "Y",
+  )
+
+  actual_output <-derive_var_ontrtfl(
+    input,
+    date = ASTDT,
+    enddate = AENDT ,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT,
+    ref_end_window = 60
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "ASTDT")
+  )
+})
