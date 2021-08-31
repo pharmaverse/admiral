@@ -2,14 +2,14 @@
 % Please edit documentation in R/derive_query_vars.R
 \name{derive_query_vars}
 \alias{derive_query_vars}
-\title{Derive query variables.}
+\title{Derive Query Variables}
 \usage{
-derive_query_vars(dataset, queries)
+derive_query_vars(dataset, dataset_queries)
 }
 \arguments{
 \item{dataset}{Input dataset.}
 
-\item{queries}{A data.frame containing required columns \code{VAR_PREFIX},
+\item{dataset_queries}{A data.frame containing required columns \code{VAR_PREFIX},
 \code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}, and optional columns
 \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
 
@@ -19,7 +19,7 @@ The content of the dataset will be verified by \code{\link[=assert_valid_queries
 The input dataset with query variables derived.
 }
 \description{
-Derive query variables.
+Derive Query Variables
 }
 \details{
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"
@@ -30,9 +30,9 @@ be created; if \code{QUERY_SCOPE_NUM} is not "" or NA, then the corresponding
 "SCN" variable will be created.
 
 For each record in \code{dataset}, the "NAM" variable takes the value of
-\code{QUERY_NAME} if the value of \code{TERM_NAME} or \code{TERM_ID} in \code{queries} matches
+\code{QUERY_NAME} if the value of \code{TERM_NAME} or \code{TERM_ID} in \code{dataset_queries} matches
 the value of the respective TERM_LEVEL in \code{dataset}.
-Note that \code{TERM_NAME} in \code{queries} dataset may be NA only when \code{TERM_ID}
+Note that \code{TERM_NAME} in \code{dataset_queries} dataset may be NA only when \code{TERM_ID}
 is non-NA and vice versa.
 The "CD", "SC", and "SCN" variables are derived accordingly based on
 \code{QUERY_ID}, \code{QUERY_SCOPE}, and \code{QUERY_SCOPE_NUM} respectively,
@@ -61,4 +61,4 @@ Ondrej Slama, Shimeng Huang
 }
 \keyword{adae}
 \keyword{adcm}
-\keyword{derivations}
+\keyword{derivation}

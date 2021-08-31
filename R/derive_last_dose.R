@@ -50,6 +50,8 @@
 #'
 #' @author Ondrej Slama
 #'
+#' @keywords adae derivation
+#'
 #' @export
 #'
 #' @examples
