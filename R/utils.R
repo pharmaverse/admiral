@@ -334,9 +334,12 @@ get_duplicates <- function(x) {
 #' Extract the unit of a parameter from a description like "Param (unit)".
 #'
 #' @param x A parameter description
-#' extract_unit("Height (cm)")
+#'
+#' @export
 #'
 #' @examples
+#' extract_unit("Height (cm)")
+#'
 #' extract_unit("Diastolic Blood Pressure (mmHg)")
 extract_unit <- function(x) {
   assert_character_vector(x)
