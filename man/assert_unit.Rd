@@ -4,16 +4,16 @@
 \alias{assert_unit}
 \title{Asserts That a Parameter is Provided in the Expected Unit}
 \usage{
-assert_unit(dataset, param, unit_var, unit)
+assert_unit(dataset, param, required_unit, get_unit_expr)
 }
 \arguments{
 \item{dataset}{A \code{data.frame}}
 
 \item{param}{Parameter code of the parameter to check}
 
-\item{unit_var}{Variable providing the unit}
+\item{required_unit}{Expected unit}
 
-\item{unit}{Expected unit}
+\item{get_unit_expr}{Expression used to provide the unit of \code{param}}
 }
 \value{
 The function throws an error if the unit variable differs from the
@@ -25,9 +25,9 @@ unit.
 }
 \examples{
 data(advs)
-assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
+assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
 \dontrun{
-assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
+assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
 }
 }
 \author{

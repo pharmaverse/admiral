@@ -12,7 +12,7 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords adsl
+#' @keywords derivation adsl
 #'
 #' @author
 #' Shimeng Huang
@@ -45,7 +45,7 @@
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
-#'   date_var = AEDTHDTC,
+#'   date = AEDTHDTC,
 #'   mode = "first",
 #'   dthcaus = AEDECOD
 #' )
@@ -64,19 +64,19 @@
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
-#'   date_var = AEDTHDTC,
+#'   date = AEDTHDTC,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' src_ds <- dthcaus_source(
 #'   dataset = ds,
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date_var = DSSTDTC,
+#'   date = DSSTDTC,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
@@ -112,25 +112,25 @@ derive_var_dthcaus <- function(dataset, ...) {
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
-    # add traceabilty param if required
+    # add traceability param if required
     # inconsitent traceability lists issue a warning
     if (ii > 1) {
       warn_if_inconsistent_list(
-        base = sources[[ii - 1]]$traceabilty,
-        compare = sources[[ii]]$traceabilty,
+        base = sources[[ii - 1]]$traceability,
+        compare = sources[[ii]]$traceability,
         list_name = "dthcaus_source()",
         i = ii
       )
     }
-    if (!is.null(sources[[ii]]$traceabilty)) {
-      warn_if_vars_exist(dataset, names(sources[[ii]]$traceabilty))
+    if (!is.null(sources[[ii]]$traceability)) {
+      warn_if_vars_exist(dataset, names(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
           USUBJID,
           temp_source_nr,
           temp_date,
           DTHCAUS,
-          !!!sources[[ii]]$traceabilty
+          !!!sources[[ii]]$traceability
         )
     }
     else {
@@ -154,14 +154,24 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'
 #' @param dataset A data.frame containing a source dataset.
 #' @param filter An expression used for filtering `dataset`.
-#' @param date_var A character vector to be used for sorting `dataset`.
+#' @param date A character vector to be used for sorting `dataset`.
 #' @param mode One of `"first"` or `"last"`.
+#' Either the `"first"` or `"last"` observation is preserved from the `dataset`
+#' which is ordered by `date`.
 #' @param dthcaus A variable name or a string literal --- if a variable name, e.g., `AEDECOD`,
 #'   it is the variable in the source dataset to be used to assign values to
 #'   `DTHCAUS`; if a string literal, e.g. `"Adverse Event"`, it is the fixed value
 #'   to be assigned to `DTHCAUS`.
-#' @param traceabilty_vars A named list returned by [`vars()`] listing the traceability
-#'  variables, e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
+#' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
+#' e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
+#' The left-hand side (names of the list elements) gives the names of the traceability variables
+#' in the returned dataset.
+#' The right-hand side (values of the list elements) gives the values of the traceability variables
+#' in the returned dataset.
+#' These can be either strings or symbols referring to existing variables.
+#'
+#' @param date_var Deprecated, please use `date` instead.
+#' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
 #'
 #' @author Shimeng Huang
 #'
@@ -174,17 +184,33 @@ derive_var_dthcaus <- function(dataset, ...) {
 #' @return An object of class "dthcaus_source".
 dthcaus_source <- function(dataset,
                            filter,
-                           date_var,
+                           date,
                            mode = "first",
                            dthcaus,
-                           traceabilty_vars = NULL) {
+                           traceability_vars = NULL,
+                           date_var = deprecated(),
+                           traceabilty_vars = deprecated()) {
+
+  ### BEGIN DEPRECIATION
+  if (is_present(date_var)) {
+    deprecate_warn("0.2.2", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
+    date <- date_var
+  }
+  if (is_present(traceabilty_vars)) {
+    deprecate_warn("0.2.2",
+                   "dthcaus_source(traceabilty_vars = )",
+                   "dthcaus_source(traceability_vars = )")
+    traceability_vars <- traceabilty_vars
+  }
+  ### END DEPRECIATION
+
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date_var)),
-    mode = assert_character_scalar(mode, values = c("first", "last")),
+    date = assert_symbol(enquo(date)),
+    mode = assert_character_scalar(tolower(mode), values = c("first", "last")),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
-    traceabilty = assert_varval_list(traceabilty_vars, optional = TRUE)
+    traceability = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "list")
   out
