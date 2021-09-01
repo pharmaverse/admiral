@@ -159,7 +159,7 @@ derive_extreme_flag <- function(dataset,
                                 check_type = "warning",
                                 flag_filter = deprecated()) {
   # handle deprecated parameter
-  if (!missing(flag_filter)) {
+  if (is_present(enquo(flag_filter), quoted = TRUE)) {
     deprecate_warn("0.3.0",
                    "derive_extreme_flag(flag_filter = )",
                    "derive_extreme_flag(filter = )")
