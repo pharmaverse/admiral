@@ -8,7 +8,7 @@ test_that("creates a new record for each group and new data frame retains groupi
     derive_summary_records(
       by_vars = vars(x, y),
       analysis_var = z,
-      summary_function = mean
+      summary_fun = mean
     )
 
   expect_equal(nrow(actual_output), nrow(input) + 4)
@@ -21,7 +21,7 @@ test_that("`fns` as inlined", {
     input,
     by_vars = vars(x),
     analysis_var = y,
-    summary_function = function(x) mean(x, na.rm = TRUE)
+    summary_fun = function(x) mean(x, na.rm = TRUE)
   )
   expected_output <- tibble(
     x = rep(1:2, each = 3),
@@ -38,7 +38,7 @@ test_that("set new value to a derived record", {
     input,
     by_vars = vars(x),
     analysis_var = y,
-    summary_function = mean,
+    summary_fun = mean,
     set_values_to = vars(z = "MEAN")
   )
   expected_output <- tibble(
@@ -56,13 +56,13 @@ test_that("check `set_values_to` mapping", {
     derive_summary_records(
       by_vars = vars(x, y),
       analysis_var = z,
-      summary_function = mean,
+      summary_fun = mean,
       set_values_to = vars(d = "MEAN")
     ) %>%
     derive_summary_records(
       by_vars = vars(x, y),
       analysis_var = z,
-      summary_function = sum,
+      summary_fun = sum,
       set_values_to = vars(d = "SUM")
     )
   tf <- rep(c(NA, "MEAN", "SUM"), c(16, 4, 4))
@@ -77,7 +77,7 @@ test_that("Filter record within `by_vars`", {
     input,
     by_vars = vars(x),
     analysis_var = y,
-    summary_function = mean,
+    summary_fun = mean,
     filter = n() > 2,
     set_values_to = vars(d = "MEAN")
   )
@@ -94,7 +94,7 @@ test_that("Filter record within `by_vars`", {
     input,
     by_vars = vars(x),
     analysis_var = y,
-    summary_function = mean,
+    summary_fun = mean,
     filter = z == 1,
     set_values_to = vars(d = "MEAN")
   )
@@ -119,7 +119,7 @@ test_that("Errors", {
       input,
       by_vars = "x",
       analysis_var = z,
-      summary_function = mean
+      summary_fun = mean
     ),
     regexp = "`by_vars` must be a list of unquoted variable names"
   )
@@ -130,31 +130,32 @@ test_that("Errors", {
       input,
       by_vars = vars(a),
       analysis_var = z,
-      summary_function = mean
+      summary_fun = mean
     ),
     regexp = "Required variable `a` is missing"
   )
 
-  # summary_function must be a single function
+  # summary_fun must be a single function
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
       analysis_var = y,
-      summary_function = list(mean, sum)
+      summary_fun = list(mean, sum)
     ),
-    regexp = "`summary_function` must be a function."
+    regexp = "`summary_fun` must be an object of class 'function' but is a list"
   )
 
-  # summary_function must be a single function
+  # summary_fun must be a single function
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
       analysis_var = z,
-      summary_function = ~ mean
+      summary_fun = ~ mean
     ),
-    regexp = "`summary_function` must be a function."
+    regexp = paste("`summary_fun` must be an object of class 'function'",
+                   "but is an object of class 'formula'")
   )
 
 })

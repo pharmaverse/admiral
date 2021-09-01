@@ -31,7 +31,7 @@
 #'
 #' @param analysis_var Analysis variable.
 #'
-#' @param summary_function Function that takes as an input the `analysis_var` and
+#' @param summary_fun Function that takes as an input the `analysis_var` and
 #'   performs the calculation.
 #'   This can include built-in functions as well as user defined functions,
 #'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
@@ -49,7 +49,7 @@
 #'   `set_values_to = vars(AVISITN = c(9998, 9999))` would change `AVISITN` to
 #'   `9998` for `AVAL` and `AVISITN` to `9999` for `CHG`.
 #'
-#' @param fns Deprecated, please use `analysis_var` and `summary_function` instead.
+#' @param fns Deprecated, please use `analysis_var` and `summary_fun` instead.
 #'
 #' @author Vignesh Thanikachalam, Ondrej Slama
 #'
@@ -88,7 +88,7 @@
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
 #'   analysis_var = AVAL,
-#'   summary_function = function(x) mean(x, na.rm = TRUE),
+#'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
@@ -108,13 +108,13 @@
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
 #'   analysis_var = AVAL,
-#'   summary_function = max,
+#'   summary_fun = max,
 #'   set_values_to = vars(DTYPE = "MAXIMUM")
 #' ) %>%
 #' derive_summary_records(
 #'   by_vars = vars(USUBJID, PARAM),
 #'   analysis_var = AVAL,
-#'   summary_function = mean,
+#'   summary_fun = mean,
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
@@ -144,7 +144,7 @@
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
 #'   filter = dplyr::n() > 2,
 #'   analysis_var = AVAL,
-#'   summary_function = function(x) mean(x, na.rm = TRUE),
+#'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
@@ -152,7 +152,7 @@ derive_summary_records <- function(dataset,
                                    by_vars,
                                    filter = NULL,
                                    analysis_var,
-                                   summary_function,
+                                   summary_fun,
                                    set_values_to = NULL,
                                    fns = deprecated()) {
 
@@ -161,7 +161,7 @@ derive_summary_records <- function(dataset,
     rlang::abort(paste(
       "The fns argument of `derive_summary_records()` is deprecated",
       "as of admiral 0.3.0.",
-      "Please use the `analysis_var` and `summary_function` arguments instead."
+      "Please use the `analysis_var` and `summary_fun` arguments instead."
     ))
   }
   ### END DEPRECIATION
@@ -169,10 +169,7 @@ derive_summary_records <- function(dataset,
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  assert_that(
-    is.function(summary_function),
-    msg = "`summary_function` must be a function."
-  )
+  assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
     required_vars = quo_c(by_vars, analysis_var)
@@ -201,7 +198,7 @@ derive_summary_records <- function(dataset,
     dataset,
     subset_ds %>%
       group_by(!!! by_vars) %>%
-      summarise(!!analysis_var := summary_function(!!analysis_var)) %>%
+      summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
       mutate(!!!set_values_to)
   )
 }

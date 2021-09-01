@@ -142,7 +142,7 @@ advs <- advs0 %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
     analysis_var = AVAL,
-    summary_function = mean,
+    summary_fun = mean,
     set_values_to = vars(DTYPE = "AVERAGE")
   ) %>%
 

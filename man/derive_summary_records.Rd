@@ -9,7 +9,7 @@ derive_summary_records(
   by_vars,
   filter = NULL,
   analysis_var,
-  summary_function,
+  summary_fun,
   set_values_to = NULL,
   fns = deprecated()
 )
@@ -36,7 +36,7 @@ than 2.
 
 \item{analysis_var}{Analysis variable.}
 
-\item{summary_function}{Function that takes as an input the \code{analysis_var} and
+\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
 performs the calculation.
 This can include built-in functions as well as user defined functions,
 for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
@@ -55,7 +55,7 @@ retaining.
 \code{9998} for \code{AVAL} and \code{AVISITN} to \code{9999} for \code{CHG}.
 }}
 
-\item{fns}{Deprecated, please use \code{analysis_var} and \code{summary_function} instead.}
+\item{fns}{Deprecated, please use \code{analysis_var} and \code{summary_fun} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -100,7 +100,7 @@ derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
   analysis_var = AVAL,
-  summary_function = function(x) mean(x, na.rm = TRUE),
+  summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
@@ -120,13 +120,13 @@ derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
   analysis_var = AVAL,
-  summary_function = max,
+  summary_fun = max,
   set_values_to = vars(DTYPE = "MAXIMUM")
 ) \%>\%
 derive_summary_records(
   by_vars = vars(USUBJID, PARAM),
   analysis_var = AVAL,
-  summary_function = mean,
+  summary_fun = mean,
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
@@ -156,7 +156,7 @@ derive_summary_records(
   by_vars = vars(USUBJID, PARAM, AVISIT),
   filter = dplyr::n() > 2,
   analysis_var = AVAL,
-  summary_function = function(x) mean(x, na.rm = TRUE),
+  summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 

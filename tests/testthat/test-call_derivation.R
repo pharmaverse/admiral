@@ -8,21 +8,21 @@ test_that("call_derivation works", {
     derive_summary_records(
       by_vars = vars(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
-      summary_function = function(x) mean(x, na.rm = TRUE),
+      summary_fun = function(x) mean(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "AVERAGE"),
       filter = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = vars(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
-      summary_function = function(x) max(x, na.rm = TRUE),
+      summary_fun = function(x) max(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "MAXIMUM"),
       filter = dplyr::n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = vars(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
-      summary_function = function(x) min(x, na.rm = TRUE),
+      summary_fun = function(x) min(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "MINIMUM"),
       filter = dplyr::n() >= 2L
     )
@@ -31,11 +31,12 @@ test_that("call_derivation works", {
     dataset = input,
     derivation = derive_summary_records,
     variable_params = list(
-      params(analysis_var = VSSTRESN, summary_function = function(x) mean(x, na.rm = TRUE), set_values_to = vars(DTYPE = "AVERAGE")),
-      params(analysis_var = VSSTRESN, summary_function = function(x) max(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MAXIMUM")),
-      params(analysis_var = VSSTRESN, summary_function = function(x) min(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MINIMUM"))
+      params(summary_fun = function(x) mean(x, na.rm = TRUE), set_values_to = vars(DTYPE = "AVERAGE")),
+      params(summary_fun = function(x) max(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MAXIMUM")),
+      params(summary_fun = function(x) min(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MINIMUM"))
     ),
     by_vars = vars(USUBJID, VSTESTCD),
+    analysis_var = VSSTRESN,
     filter = dplyr::n() >= 2L
   )
 

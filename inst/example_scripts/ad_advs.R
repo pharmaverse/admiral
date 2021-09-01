@@ -105,7 +105,7 @@ advs <- derive_summary_records(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
   analysis_var = AVAL,
-  summary_function = mean,
+  summary_fun = mean,
   set_values_to = vars(DTYPE = "AVERAGE"))
 
 # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
