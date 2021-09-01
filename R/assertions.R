@@ -943,7 +943,7 @@ assert_supp_idvar <- function(x) {
 #'
 #' @noRd
 #'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_suppqual_vars`.
+#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
 #'
 #' @family suppqual
 assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
