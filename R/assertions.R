@@ -80,6 +80,9 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #' @param values A `character` vector of valid values for `arg`
+#' @param case_sensitive Should the argument be handled case-sensitive?
+#' If set to `FALSE`, the argument is converted to lower case for checking the
+#' permitted values and returning the argument.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -104,7 +107,23 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #' try(example_fun("message"))
 #'
 #' try(example_fun(TRUE))
-assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
+#'
+#' # handling parameters case-insensitive
+#' example_fun2 <- function(msg_type) {
+#'   msg_type <- assert_character_scalar(msg_type,
+#'                                       values = c("warning", "error"),
+#'                                       case_sensitive = FALSE)
+#'  if (msg_type == "warning") {
+#'    print("A warning was requested.")
+#'  }
+#' }
+#'
+#' example_fun2("Warning")
+
+assert_character_scalar <- function(arg,
+                                    values = NULL,
+                                    case_sensitive = TRUE,
+                                    optional = FALSE) {
   assert_character_vector(values, optional = TRUE)
   assert_logical_scalar(optional)
 
@@ -128,6 +147,10 @@ assert_character_scalar <- function(arg, values = NULL, optional = FALSE) {
       length(arg)
     )
     abort(err_msg)
+  }
+
+  if (!case_sensitive) {
+    arg <- tolower(arg)
   }
 
   if (!is.null(values) && arg %notin% values) {
@@ -288,6 +311,30 @@ assert_symbol <- function(arg, optional = FALSE) {
   if (!quo_is_symbol(arg)) {
     err_msg <- sprintf(
       "`%s` must be a symbol but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(quo_get_expr(arg))
+    )
+    abort(err_msg)
+  }
+
+  invisible(arg)
+}
+
+assert_expr <- function(arg, optional = FALSE) {
+  assert_logical_scalar(optional)
+
+  if (optional && quo_is_null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (quo_is_missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default", arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!(quo_is_symbol(arg) || quo_is_call(arg))) {
+    err_msg <- sprintf(
+      "`%s` must be an expression but is %s",
       arg_name(substitute(arg)),
       what_is_it(quo_get_expr(arg))
     )
@@ -780,13 +827,9 @@ assert_function_param <- function(arg, params) {
 #' unit.
 #'
 #' @param dataset A `data.frame`
-#' @param param
-#'   Parameter code of the parameter to check
-#' @param unit
-#'   Expected unit
-#'
-#' @param unit_var
-#'   Variable providing the unit
+#' @param param Parameter code of the parameter to check
+#' @param required_unit Expected unit
+#' @param get_unit_expr Expression used to provide the unit of `param`
 #'
 #' @author Stefan Bundfuss
 #'
@@ -799,23 +842,29 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' data(advs)
-#' assert_unit(advs, param = "WEIGHT", unit = "kg", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", unit = "g", unit_var = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
 #' }
-assert_unit <- function(dataset, param, unit_var, unit) {
-  unit_var <- assert_symbol(enquo(unit_var))
-  assert_data_frame(dataset, required_vars = vars(PARAMCD, !!unit_var))
-  units <-
-    unique(filter(dataset, PARAMCD == param &
-                    !is.na(!!unit_var))[[as_string(quo_get_expr(unit_var))]])
-  if (length(units) != 1 || units != unit) {
+assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_character_scalar(param)
+  assert_character_scalar(required_unit)
+  get_unit_expr <- enquo(get_unit_expr)
+
+  units <- dataset %>%
+    mutate(`_unit` = !!get_unit_expr) %>%
+    filter(PARAMCD == param & !is.na(`_unit`)) %>%
+    pull(`_unit`) %>%
+    unique()
+
+  if (length(units) != 1L || units != required_unit) {
     abort(
       paste0(
         "It is expected that ",
         param,
         " is measured in ",
-        unit,
+        required_unit,
         ".\n",
         "In the input dataset it is measured in ",
         enumerate(units),
@@ -862,6 +911,56 @@ assert_param_does_not_exist <- function(dataset, param) {
     )
   }
 }
+
+#' Helper function to checks IDVAR per QNAM
+#'
+#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
+#'
+#' @return If multiple IDVAR per QNAM are found, returns a user level message.
+#'
+#' @family suppqual
+#'
+#' @noRd
+assert_supp_idvar <- function(x) {
+  x <- unclass(x)
+  dup <- duplicated(x$QNAM)
+  if (any(dup)) {
+    message(
+      msg <- paste0(
+        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
+        collapse = "\n")
+    )
+    inform(msg)
+  }
+}
+
+#' Helper function to check DOAMIN and RDOMAIN
+#'
+#' @param dataset A SDTM domain data set.
+#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
+#' @param domain Two letter domain value. Used when supplemental data set is
+#'   common across multiple SDTM domain.
+#'
+#' @noRd
+#'
+#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
+#'
+#' @family suppqual
+assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
+  parent <- unique(parent$DOMAIN)
+  supp <- unique(supp$RDOMAIN)
+
+  if (!is.null(.domain)) {
+    if (!.domain %in% supp) {
+      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
+    }
+  }
+
+  if (!parent %in% supp) {
+    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
+  }
+}
+
 
 #' Is Date/Date-time?
 #'

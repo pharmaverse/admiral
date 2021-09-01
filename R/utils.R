@@ -115,13 +115,18 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @param expr An expression created inside a function using `substitute()`
 #'
-#' @author Thomas Neitmann
+#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
 #'
 #' @examples
 #' test_fun <- function(something) {
 #'   admiral:::arg_name(substitute(something))
+#' }
+#'
+#' inner_function <- function(x) x
+#' test_fun2 <- function(something) {
+#'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
 arg_name <- function(expr) {
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -130,6 +135,10 @@ arg_name <- function(expr) {
              (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
              is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
+  } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
+    deparse(expr[[2L]])
+  } else if (is.call(expr) && length(expr) >= 2 && is.call(expr[[2]])) {
+    arg_name(expr[[2L]])
   } else {
     abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
   }
@@ -327,6 +336,26 @@ replace_values_by_names <- function(quosures) {
 
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
+}
+
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#'
+#' @export
+#'
+#' @examples
+#' extract_unit("Height (cm)")
+#'
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
 }
 
 #' Convert Blank Strings Into NAs

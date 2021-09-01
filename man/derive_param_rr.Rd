@@ -9,7 +9,7 @@ derive_param_rr(
   by_vars,
   set_values_to = vars(PARAMCD = "RRR"),
   hr_code = "HR",
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
@@ -45,12 +45,11 @@ as the heart rate assessments.
 
 Permitted Values: character value}
 
-\item{unit_var}{Variable providing the unit of the parameter
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The variable is used to check the units of the input parameters and it is
-set to \code{"msec"} for the new parameter.
+The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 
@@ -73,17 +72,18 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 adeg <- tibble::tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
-  "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
-  "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
-  "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
-  "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2",
+  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
+  "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
+  "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
+  "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
+  "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
+  "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2"
 )
+
 derive_param_rr(
   adeg,
   by_vars = vars(USUBJID, VISIT),
@@ -91,7 +91,8 @@ derive_param_rr(
     PARAMCD = "RRR",
     PARAM = "RR Duration Rederived (msec)",
     AVALU = "msec"
-  )
+  ),
+  get_unit_expr = AVALU
 )
 }
 \author{

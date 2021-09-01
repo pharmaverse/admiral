@@ -3,13 +3,10 @@
 #' Derives the variable `ATIREL` to CONCOMITANT, PRIOR, PRIOR_CONCOMITANT or NULL
 #' based on the relationship of cm Analysis start/end date/times to treatment start date/time
 #'
-#' @param `dataset` Input dataset
-#'
+#' @param dataset Input dataset
 #'   The variables `TRTSDTM`, `ASTDTM`, `AENDTM` are expected
-#'
-#' @param `flag_var` Name of the variable with Analysis Start Date Imputation Flag
-#'
-#' @param `new_var` Name of variable to create
+#' @param flag_var Name of the variable with Analysis Start Date Imputation Flag
+#' @param new_var Name of variable to create
 #'
 #' @details `ATIREL` is set to:
 #'    - null, if Datetime of First Exposure to Treatment is missing,
@@ -31,9 +28,8 @@
 #'
 #' @export
 #'
-#' @seealso
-#'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
 #' adcm <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
 #'   "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", "",
@@ -53,8 +49,6 @@
 #'   new_var = ATIREL
 #' )
 #'
-#'
-# function to derive ATIREL
 derive_var_atirel <- function(dataset,
                               flag_var,
                               new_var) {
@@ -67,7 +61,7 @@ derive_var_atirel <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   #logic to create ATIREL
-  dataset <- dataset %>%
+  dataset %>%
     mutate(!!new_var :=
       case_when(
         is.na(TRTSDTM) ~ NA_character_,

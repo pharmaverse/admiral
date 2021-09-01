@@ -33,7 +33,7 @@ measured in days
 (e.g. 7 if 7 days should be added to the upper bound)
 Optional; default is 0}
 
-\item{filter_pre_timepoint}{An expression to filter observtions as not
+\item{filter_pre_timepoint}{An expression to filter observations as not
 on-treatment when \code{date} = \code{ref_start_date}. For example, if
 observations where \code{VSTPT = PRE} should not be considered on-treatment when
 \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used

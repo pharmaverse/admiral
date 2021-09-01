@@ -16,8 +16,13 @@ Extract Argument Name from an Expression
 test_fun <- function(something) {
   admiral:::arg_name(substitute(something))
 }
+
+inner_function <- function(x) x
+test_fun2 <- function(something) {
+  admiral:::arg_name(substitute(inner_function(something)))
+}
 }
 \author{
-Thomas Neitmann
+Thomas Neitmann, Ondrej Slama
 }
 \keyword{dev_utility}

@@ -1,4 +1,4 @@
-#' Derive query variables.
+#' Derive Query Variables
 #'
 #' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
 #'   variable will be created. For each unique `VAR_PREFIX`, if `QUERY_ID` is
@@ -8,9 +8,9 @@
 #'   "SCN" variable will be created.
 #'
 #'   For each record in `dataset`, the "NAM" variable takes the value of
-#'   `QUERY_NAME` if the value of `TERM_NAME` or `TERM_ID` in `queries` matches
+#'   `QUERY_NAME` if the value of `TERM_NAME` or `TERM_ID` in `dataset_queries` matches
 #'   the value of the respective TERM_LEVEL in `dataset`.
-#'   Note that `TERM_NAME` in `queries` dataset may be NA only when `TERM_ID`
+#'   Note that `TERM_NAME` in `dataset_queries` dataset may be NA only when `TERM_ID`
 #'   is non-NA and vice versa.
 #'   The "CD", "SC", and "SCN" variables are derived accordingly based on
 #'   `QUERY_ID`, `QUERY_SCOPE`, and `QUERY_SCOPE_NUM` respectively,
@@ -18,7 +18,7 @@
 #'
 #' @param dataset Input dataset.
 #'
-#' @param queries A data.frame containing required columns `VAR_PREFIX`,
+#' @param dataset_queries A data.frame containing required columns `VAR_PREFIX`,
 #' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns
 #' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
 #'
@@ -28,7 +28,7 @@
 #'
 #' @return The input dataset with query variables derived.
 #'
-#' @keywords adae adcm derivations
+#' @keywords adae adcm derivation
 #'
 #' @seealso [assert_valid_queries()]
 #'
@@ -47,29 +47,30 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'     7, "Alveolar proteinosis", NA_character_,  NA_integer_
 #' )
-#' derive_query_vars(adae, queries)
-derive_query_vars <- function(dataset, queries) {
+#' derive_vars_query(adae, queries)
+derive_vars_query <- function(dataset, dataset_queries) {
 
-  assert_data_frame(queries)
-  assert_valid_queries(queries, deparse(substitute(queries)))
-  assert_data_frame(dataset, vars(!!!syms(unique(queries$TERM_LEVEL))))
+  assert_data_frame(dataset_queries)
+  assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
+  assert_data_frame(dataset, required_vars = vars(!!!syms(unique(dataset_queries$TERM_LEVEL))),
+                    optional = FALSE)
 
   # replace all "" by NA
-  queries <- queries %>%
+  dataset_queries <- dataset_queries %>%
     dplyr::mutate_if(is.character, function(x) {
       ifelse(x == "", NA_character_, x)})
 
   # names of new columns
-  if ("QUERY_ID" %notin% names(queries)) {
-    queries$QUERY_ID <- NA_integer_ # nolint
+  if ("QUERY_ID" %notin% names(dataset_queries)) {
+    dataset_queries$QUERY_ID <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE" %notin% names(queries)) {
-    queries$QUERY_SCOPE <- NA_integer_ # nolint
+  if ("QUERY_SCOPE" %notin% names(dataset_queries)) {
+    dataset_queries$QUERY_SCOPE <- NA_integer_ # nolint
   }
-  if ("QUERY_SCOPE_NUM" %notin% names(queries)) {
-    queries$QUERY_SCOPE_NUM <- NA_integer_ # nolint
+  if ("QUERY_SCOPE_NUM" %notin% names(dataset_queries)) {
+    dataset_queries$QUERY_SCOPE_NUM <- NA_integer_ # nolint
   }
-  new_col_names <- queries %>%
+  new_col_names <- dataset_queries %>%
     group_by(VAR_PREFIX) %>%
     mutate(NAM = paste0(VAR_PREFIX, "NAM"),
            CD = ifelse(!all(is.na(QUERY_ID)),
@@ -90,7 +91,7 @@ derive_query_vars <- function(dataset, queries) {
     pull(value)
 
   # queries restructured
-  queries_wide <- queries %>%
+  queries_wide <- dataset_queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
     spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
@@ -127,7 +128,7 @@ derive_query_vars <- function(dataset, queries) {
   }
 
   # prepare input dataset for joining
-  static_cols <- setdiff(names(dataset), unique(queries$TERM_LEVEL))
+  static_cols <- setdiff(names(dataset), unique(dataset_queries$TERM_LEVEL))
   # if dataset does not have a unique key, create a temp one
   no_key <- dataset %>% select(!!!syms(static_cols)) %>% distinct()
   if (nrow(no_key) != nrow(dataset)) {
@@ -273,7 +274,7 @@ assert_valid_queries <- function(queries, queries_name) {
     idx <- which(count_unique$n_qnam > 1)
     abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
                  paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
-          "' is not unique."))
+                 "' is not unique."))
   }
 
   if (any(count_unique$n_qid > 1)) {
@@ -283,4 +284,17 @@ assert_valid_queries <- function(queries, queries_name) {
                  "' is not unique."))
   }
 
+}
+
+#' Derive Query Variables
+#'
+#' `derive_query_vars()` was renamed to `derive_vars_query()` to create a
+#' more consistent API.
+#'
+#' @keywords internal
+#'
+#' @export
+derive_query_vars <- function(dataset, dataset_queries) {
+  deprecate_warn("0.3.0", "derive_query_vars()", "derive_vars_query()")
+  derive_vars_query(dataset, dataset_queries)
 }

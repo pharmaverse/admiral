@@ -7,11 +7,14 @@
 #' as SUPPDM, SUPPAE, and SUPPEX. When a `dataset_suppqual` is a single SUPPQUAL
 #' dataset, specify two character`domain` value.
 #'
-#' `derive_suppqual_vars()` expects `USUBJID`, `RDOMAIN`, `IDVAR`, `IDVARVAL`,
+#' `derive_vars_suppqual()` expects `USUBJID`, `RDOMAIN`, `IDVAR`, `IDVARVAL`,
 #'  `QNAM`, `QLABEL`, and `QVAL` variables to exist in `dataset_suppqual`.
 #'
 #' @param dataset A SDTM domain data set.
+#'
 #' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
+#'
+#'
 #' @param domain Two letter domain value. Used when supplemental data set is
 #'   common across multiple SDTM domain.
 #'
@@ -29,15 +32,13 @@
 #'   "1234-005", "AE",    "XYZ-1001",      1, "RASH",  "MULTIPLE",
 #'   "1234-005", "AE",    "XYZ-1002",      1, "NAUSEA", "",
 #' )
-#'
 #' suppae <- tibble::tribble(
 #'   ~STUDYID,   ~RDOMAIN, ~USUBJID,    ~IDVAR,  ~IDVARVAL, ~QNAM,     ~QLABEL,     ~QVAL,
 #'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC1", "Location 1", "FACE",
 #'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC2", "Location 2", "NECK",
 #'   "1234-005", "AE",     "XYZ-1001", "AESEQ", "1",        "AELOC3", "Location 3", "CHEST",
 #' )
-#'
-#' derive_suppqual_vars(ae, suppae)
+#' derive_vars_suppqual(ae, suppae)
 #'
 #' ## The following example included subjects with multiple/other specific race.
 #' dm <- tibble::tribble(
@@ -47,7 +48,6 @@
 #'   "ABC",    "DM",    "003",    NA,
 #'   "ABC",    "DM",    "004",    "ASIAN"
 #' )
-#'
 #' suppdm <- tibble::tribble(
 #'   ~STUDYID, ~RDOMAIN, ~USUBJID, ~IDVAR, ~IDVARVAL, ~QNAM,     ~QLABEL,       ~QVAL,
 #'   "ABC",   "DM",      "001",     "",     "",       "RACEOTH", "Race, Other", "BRAZILIAN",
@@ -55,9 +55,8 @@
 #'   "ABC",   "DM",      "002",     "",     "",       "RACE2"  , "Race 2",      "OTHER",
 #'   "ABC",   "DM",      "002",     "",     "",       "RACEOTH", "Race, Other", "ABORIGINE"
 #' )
-#'
-#' derive_suppqual_vars(dm, suppdm)
-derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
+#' derive_vars_suppqual(dm, suppdm)
+derive_vars_suppqual <- function(dataset, dataset_suppqual, domain = NULL) {
   assert_data_frame(dataset)
   assert_data_frame(
     dataset_suppqual,
@@ -84,8 +83,8 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     if (!.x$IDVAR %in% c(NA, "")) {
       supp <- dataset_suppqual %>%
         filter(.data$IDVAR == .x$IDVAR, .data$QNAM == .x$QNAM) %>%
-        select(c("USUBJID", "IDVARVAL", "QNAM", "QVAL")) %>%
-        spread("QNAM", "QVAL") %>%
+        select(USUBJID, IDVARVAL, QNAM, QVAL) %>%
+        spread(key = QNAM, value = QVAL) %>%
         rename(!! .x$IDVAR := "IDVARVAL") %>%
         # Convert IDVAR to match parent domain type
         modify_at(.x$IDVAR, function(x) {
@@ -94,8 +93,8 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
     } else {
       supp <- dataset_suppqual %>%
         filter(.data$QNAM == .x$QNAM) %>%
-        select(c("USUBJID", "QNAM", "QVAL")) %>%
-        spread("QNAM", "QVAL")
+        select(USUBJID, QNAM, QVAL) %>%
+        spread(key = QNAM, value = QVAL)
     }
 
     # Set label
@@ -141,51 +140,15 @@ derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
   dataset
 }
 
-#' Helper function to checks IDVAR per QNAM
+#' Join Supplementary Qualifier Variables into the Parent SDTM Domain
 #'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
+#' `derive_suppqual_vars()` was renamed to `derive_vars_suppqual()` to create a
+#' more consistent API.
 #'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
+#' @keywords internal
 #'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-    msg <- paste0(
-      str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-      collapse = "\n")
-    )
-    inform(msg)
-  }
-}
-
-#' Helper function to check DOAMIN and RDOMAIN
-#'
-#' @param dataset A SDTM domain data set.
-#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
-#' @param domain Two letter domain value. Used when supplemental data set is
-#'   common across multiple SDTM domain.
-#'
-#' @noRd
-#'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_suppqual_vars`.
-#'
-#' @family suppqual
-assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
-  parent <- unique(parent$DOMAIN)
-  supp <- unique(supp$RDOMAIN)
-
-  if (!is.null(.domain)) {
-    if (!.domain %in% supp) {
-      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
-    }
-  }
-
-  if (!parent %in% supp) {
-    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
-  }
+#' @export
+derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
+  deprecate_warn("0.3.0", "derive_suppqual_vars()", "derive_vars_suppqual()")
+  derive_vars_suppqual(dataset, dataset_suppqual, domain)
 }
