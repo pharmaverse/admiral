@@ -38,33 +38,14 @@
 #' @param zero_doses Flag indicating logic for handling 0 planned or
 #' administered doses for a `by_vars` group
 #'
-#'   If some instances, the planned dose (`tpadm_code`) or administered dose
-#'   (`adm_code`) will be `NA` or 0.  The following options may be applied for cases
-#'   where the planned dose (`tpadm_code`) and/or (`tadm_code`) are 0.
+#'   Default: `Inf`
 #'
 #'   Permitted Values: `Inf`, `100`
-#'
-#'   `Inf`: Default, No record is returned if either the planned (`tpadm_code`)
-#'   or administered (`tadm_code`) `AVAL` are `NA`.  If the planned dose
-#'   (`tpadm_code`) is 0, `Inf` is returned. If the administered dose
-#'   (`tadm_code`) is 0 and the planned dose (`tpadm_code`) is > 0, 0 is
-#'   returned. A record must exist for both `tadm_code` and `tpadm_code` for the
-#'   dose intensity calculation to be done.
-#'
-#'   `100`: Returns 100 when the planned dose (`tpadm_code`) is 0 and the
-#'   administered dose (`tadm_code`) is > 0. Returns 0 when the planned dose
-#'   (`tpadm_code`) is 0 and the administered dose (`tadm_code`) is 0.
-#'
-#' @inheritParams derive_derived_param
-#'
-#' @author Alice Ehmann
-#'
-#' @return The input dataset with the new parameter rows added
 #'
 #' No record is returned if either the planned (`tpadm_code`) or administered
 #' (`tadm_code`) `AVAL` are `NA`.  No record is returned is a record does not
 #' exist for both `tadm_code` and `tpadm_code` for the specified `by_var`.
-
+#'
 #' If `zero_doses` = `Inf`:
 #'   1. If the planned dose (`tpadm_code`) is 0 and administered dose
 #'   (`tadm_code`) is 0, `NaN` is returned.
@@ -77,13 +58,19 @@
 #'   2. If the planned dose (`tpadm_code`) is 0 and the admnistered dose
 #'   (`tadm_code`) is > 0, 100 is returned.
 #'
-#' @keywords derivation adec adex
+#' @inheritParams derive_derived_param
+#'
+#' @author Alice Ehmann
+#'
+#' @return The input dataset with the new parameter rows added
+#'
+#' @keywords derivation adex
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate)
+#' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adex <- tibble::tribble(
 #' ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
@@ -101,7 +88,7 @@
 #'   adex,
 #'   by_vars=vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAMCD = "TNDOSINT"),
-#' tadm_code = "TNDOSE",
+#'   tadm_code = "TNDOSE",
 #'   tpadm_code = "TSNDOSE")
 #'
 #' derive_param_doseint(
@@ -147,10 +134,10 @@ derive_param_doseint <- function(dataset,
   # # handle 0 doses planned if needed
   if (zero_doses == "100") {
    dataset <- mutate(dataset,
-                      AVAL = case_when((temp_planned_dose == 0) &
-                                         (temp_admin_dose > 0) ~ 100,
-                                       (temp_planned_dose == 0) &
-                                         (temp_admin_dose == 0) ~ 0,
+                      AVAL = case_when(temp_planned_dose == 0 &
+                                         temp_admin_dose > 0 ~ 100,
+                                       temp_planned_dose == 0 &
+                                         temp_admin_dose == 0 ~ 0,
                                        TRUE ~ AVAL))
   }
 

@@ -55,37 +55,14 @@ Permitted Values: character value}
 \item{zero_doses}{Flag indicating logic for handling 0 planned or
 administered doses for a \code{by_vars} group
 
-If some instances, the planned dose (\code{tpadm_code}) or administered dose
-(\code{adm_code}) will be \code{NA} or 0.  The following options may be applied for cases
-where the planned dose (\code{tpadm_code}) and/or (\code{tadm_code}) are 0.
+Default: \code{Inf}
 
 Permitted Values: \code{Inf}, \code{100}
-
-\code{Inf}: Default, No record is returned if either the planned (\code{tpadm_code})
-or administered (\code{tadm_code}) \code{AVAL} are \code{NA}.  If the planned dose
-(\code{tpadm_code}) is 0, \code{Inf} is returned. If the administered dose
-(\code{tadm_code}) is 0 and the planned dose (\code{tpadm_code}) is > 0, 0 is
-returned. A record must exist for both \code{tadm_code} and \code{tpadm_code} for the
-dose intensity calculation to be done.
-
-\code{100}: Returns 100 when the planned dose (\code{tpadm_code}) is 0 and the
-administered dose (\code{tadm_code}) is > 0. Returns 0 when the planned dose
-(\code{tpadm_code}) is 0 and the administered dose (\code{tadm_code}) is 0.}
-
-\item{filter}{Filter condition
-
-The specified condition is applied to the input dataset before deriving the
-new parameter, i.e., only observations fulfilling the condition are taken
-into account.
-
-\emph{Permitted Values:} a condition}
-}
-\value{
-The input dataset with the new parameter rows added
 
 No record is returned if either the planned (\code{tpadm_code}) or administered
 (\code{tadm_code}) \code{AVAL} are \code{NA}.  No record is returned is a record does not
 exist for both \code{tadm_code} and \code{tpadm_code} for the specified \code{by_var}.
+
 If \code{zero_doses} = \code{Inf}:
 \enumerate{
 \item If the planned dose (\code{tpadm_code}) is 0 and administered dose
@@ -100,7 +77,18 @@ If \code{zero_doses} = \code{100} :
 (\code{tadm_code}) is 0, 0 is returned.
 \item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
 (\code{tadm_code}) is > 0, 100 is returned.
+}}
+
+\item{filter}{Filter condition
+
+The specified condition is applied to the input dataset before deriving the
+new parameter, i.e., only observations fulfilling the condition are taken
+into account.
+
+\emph{Permitted Values:} a condition}
 }
+\value{
+The input dataset with the new parameter rows added
 }
 \description{
 Adds a record for the dose intensity for each by group
@@ -112,7 +100,7 @@ Total Dose / Planned Dose * 100
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate)
+library(lubridate, warn.conflicts = FALSE)
 
 adex <- tibble::tribble(
 ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
@@ -130,7 +118,7 @@ derive_param_doseint(
   adex,
   by_vars=vars(USUBJID, VISIT),
   set_values_to = vars(PARAMCD = "TNDOSINT"),
-tadm_code = "TNDOSE",
+  tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE")
 
 derive_param_doseint(
@@ -144,6 +132,5 @@ derive_param_doseint(
 \author{
 Alice Ehmann
 }
-\keyword{adec}
 \keyword{adex}
 \keyword{derivation}
