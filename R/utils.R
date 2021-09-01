@@ -414,3 +414,7 @@ convert_blanks_to_na.data.frame <- function(x) {
   x[] <- lapply(x, convert_blanks_to_na)
   x
 }
+
+valid_time_units <- function() {
+  c("years", "months", "days", "hours", "minutes", "seconds")
+}
