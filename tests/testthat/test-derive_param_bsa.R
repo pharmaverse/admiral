@@ -20,13 +20,12 @@ test_that("new observations are derived correctly with Mosteller method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = sqrt(AVAL.HEIGHT * AVAL.WEIGHT / 3600),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -45,11 +44,22 @@ test_that("new observations are derived correctly with DuBois & DuBois method", 
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
-  expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "DuBois-DuBois"),
-    expected_output,
-    keys = c("USUBJID", "PARAMCD", "VISIT")
-  )
+new_obs <-
+  inner_join(input %>% filter(PARAMCD == "HEIGHT") %>% select(USUBJID, VISIT, AVAL, AVALU),
+             input %>% filter(PARAMCD == "WEIGHT") %>% select(USUBJID, VISIT, AVAL),
+             by = c("USUBJID", "VISIT"),
+             suffix = c(".HEIGHT", ".WEIGHT")) %>%
+  mutate(AVAL = 0.20247 * (AVAL.HEIGHT/100) ^ 0.725 * AVAL.WEIGHT ^ 0.425,
+         PARAMCD = "BSA",
+         AVALU = NA) %>%
+  select(-AVAL.HEIGHT, -AVAL.WEIGHT)
+expected_output <- bind_rows(input, new_obs)
+
+expect_dfs_equal(
+  derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "DuBois-DuBois", get_unit_expr = AVALU),
+  expected_output,
+  keys = c("USUBJID", "PARAMCD", "VISIT")
+)
 })
 
 test_that("new observations are derived correctly with Haycock method", {
@@ -60,13 +70,12 @@ test_that("new observations are derived correctly with Haycock method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = 0.024265 * AVAL.HEIGHT ^ 0.3964 * AVAL.WEIGHT ^ 0.5378,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Haycock"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Haycock", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -80,13 +89,12 @@ test_that("new observations are derived correctly with Gehan & George method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = 0.0235 * AVAL.HEIGHT ^ 0.42246 * AVAL.WEIGHT ^ 0.51456,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Gehan-George"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Gehan-George", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -102,13 +110,12 @@ test_that("new observations are derived correctly with Boyd method", {
     mutate(AVAL = 0.0003207 * (AVAL.HEIGHT ^ 0.3) *
              (1000 * AVAL.WEIGHT) ^ (0.7285 - (0.0188 * log10(1000 * AVAL.WEIGHT))),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Boyd"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Boyd", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -123,13 +130,12 @@ test_that("new observations are derived correctly with Fujimoto method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL =  0.008883 * AVAL.HEIGHT ^ 0.663 * AVAL.WEIGHT ^ 0.444,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Fujimoto"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Fujimoto", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -144,13 +150,12 @@ test_that("new observations are derived correctly with Takahira method", {
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL =  0.007241 * AVAL.HEIGHT ^ 0.725 * AVAL.WEIGHT ^ 0.425,
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Takahira"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Takahira", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )
@@ -187,13 +192,12 @@ test_that("new observations are derived correctly whenever HEIGHT and WEIGHT are
                suffix = c(".HEIGHT", ".WEIGHT")) %>%
     mutate(AVAL = sqrt(AVAL.HEIGHT * AVAL.WEIGHT / 3600),
            PARAMCD = "BSA",
-           PARAM = "Body Surface Area",
-           AVALU = "m^2") %>%
+           AVALU = NA) %>%
     select(-AVAL.HEIGHT, -AVAL.WEIGHT)
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller"),
+    derive_param_bsa(input, by_vars = vars(USUBJID, VISIT), method = "Mosteller", get_unit_expr = AVALU),
     expected_output,
     keys = c("USUBJID", "PARAMCD", "VISIT")
   )

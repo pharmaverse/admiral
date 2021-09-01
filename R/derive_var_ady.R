@@ -27,7 +27,7 @@
 #'
 #' @return The input dataset with `ADY` column added
 #'
-#' @keywords bds timing
+#' @keywords derivation bds timing
 #'
 #' @export
 #'
@@ -43,7 +43,7 @@ derive_var_ady <- function(dataset, reference_date = TRTSDT, date = ADT) {
   date <- assert_symbol(enquo(date))
   assert_data_frame(dataset, vars(!!reference_date, !!date))
 
-  derive_duration(
+  derive_vars_duration(
     dataset,
     new_var = ADY,
     start_date = !!reference_date,
