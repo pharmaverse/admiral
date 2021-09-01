@@ -45,7 +45,7 @@ ds <- tibble::tribble(
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AEDTHDTC,
+  date = AEDTHDTC,
   mode = "first",
   dthcaus = AEDECOD
 )
@@ -64,19 +64,19 @@ derive_var_dthcaus(adsl, src_ae, src_ds)
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AEDTHDTC,
+  date = AEDTHDTC,
   mode = "first",
   dthcaus = AEDECOD,
-  traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
   dataset = ds,
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date_var = DSSTDTC,
+  date = DSSTDTC,
   mode = "first",
   dthcaus = DSTERM,
-  traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
 derive_var_dthcaus(adsl, src_ae, src_ds)
@@ -89,3 +89,4 @@ Shimeng Huang
 Samia Kabi
 }
 \keyword{adsl}
+\keyword{derivation}
