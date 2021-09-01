@@ -7,7 +7,8 @@ test_that("creates a new record for each group and new data frame retains groupi
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
-      fns = list(z ~ mean)
+      analysis_var = z,
+      summary_function = mean
     )
 
   expect_equal(nrow(actual_output), nrow(input) + 4)
@@ -19,7 +20,8 @@ test_that("`fns` as inlined", {
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
-    fns = list(y ~ mean(., na.rm = TRUE))
+    analysis_var = y,
+    summary_function = function(x) mean(x, na.rm = TRUE)
   )
   expected_output <- tibble(
     x = rep(1:2, each = 3),
@@ -35,7 +37,8 @@ test_that("set new value to a derived record", {
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
-    fns = list(y ~ mean),
+    analysis_var = y,
+    summary_function = mean,
     set_values_to = vars(z = "MEAN")
   )
   expected_output <- tibble(
@@ -52,10 +55,17 @@ test_that("check `set_values_to` mapping", {
   actual_output <- input %>%
     derive_summary_records(
       by_vars = vars(x, y),
-      fns = list(z ~ mean, z ~ sum),
-      set_values_to = vars(d = c("MEAN", "SUM"))
+      analysis_var = z,
+      summary_function = mean,
+      set_values_to = vars(d = "MEAN")
+    ) %>%
+    derive_summary_records(
+      by_vars = vars(x, y),
+      analysis_var = z,
+      summary_function = sum,
+      set_values_to = vars(d = "SUM")
     )
-  tf <- rep(c(rep_len(NA, 4), "MEAN", "SUM"), 4)
+  tf <- rep(c(NA, "MEAN", "SUM"), c(16, 4, 4))
 
   expect_equal(actual_output$d, tf)
 })
@@ -66,7 +76,8 @@ test_that("Filter record within `by_vars`", {
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
-    fns = list(y ~ mean),
+    analysis_var = y,
+    summary_function = mean,
     filter = n() > 2,
     set_values_to = vars(d = "MEAN")
   )
@@ -82,7 +93,8 @@ test_that("Filter record within `by_vars`", {
   actual_output <- derive_summary_records(
     input,
     by_vars = vars(x),
-    fns = list(y ~ mean),
+    analysis_var = y,
+    summary_function = mean,
     filter = z == 1,
     set_values_to = vars(d = "MEAN")
   )
@@ -99,81 +111,50 @@ test_that("Filter record within `by_vars`", {
 # Errors ---
 
 test_that("Errors", {
-  # Is by_vars and drop_values_from are quosures/`vars()` object?
   input <- tibble(x = rep(1:4, each = 4), y = rep(1:2, each = 8), z = runif(16))
 
+  # Is by_vars quosures/`vars()` object?
   expect_error(
     derive_summary_records(
       input,
       by_vars = "x",
-      fns = list(z ~ mean)
-    )
+      analysis_var = z,
+      summary_function = mean
+    ),
+    regexp = "`by_vars` must be a list of unquoted variable names"
   )
 
-  expect_error(
-    derive_summary_records(
-      input,
-      by_vars = vars(x),
-      fns = list(z ~ mean),
-      drop_values_from = "z"
-    )
-  )
-
-  # Is by_vars and drop_values_from exits in input dataset?
+  # Does by_vars exist in input dataset?
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(a),
-      fns = list(z ~ mean),
-      drop_values_from = vars(b)
-    )
+      analysis_var = z,
+      summary_function = mean
+    ),
+    regexp = "Required variable `a` is missing"
   )
 
-  # Can't have multiple function for a single analysis variable
+  # summary_function must be a single function
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z ~ list(mean, sum))
-    )
+      analysis_var = y,
+      summary_function = list(mean, sum)
+    ),
+    regexp = "`summary_function` must be a function."
   )
 
-  # check function must be a formula
+  # summary_function must be a single function
   expect_error(
     derive_summary_records(
       input,
       by_vars = vars(x),
-      fns = list(z = mean)
-    )
+      analysis_var = z,
+      summary_function = ~ mean
+    ),
+    regexp = "`summary_function` must be a function."
   )
 
-  # Is `set_values_to` is a quosures?
-  expect_error(
-    derive_summary_records(
-      input,
-      by_vars = vars(x),
-      fns = list(z ~ mean),
-      set_values_to = list(d = "a")
-    )
-  )
-
-  # Is length of `set_values_to` equal to derived records within a `by_vars`?
-  expect_error(
-    derive_summary_records(
-      input,
-      by_vars = vars(x),
-      fns = list(z ~ mean, z ~ sum),
-      set_values_to = vars(d = "a")
-    )
-  )
-
-  # Problem with handling RHS of `fns` argument
-  expect_error(
-    derive_summary_records(
-      input,
-      by_vars = vars(x),
-      fns = list(z ~ vars(mean, sum)),
-      set_values_to = vars(d = "a")
-    )
-  )
 })

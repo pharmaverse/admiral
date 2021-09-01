@@ -431,7 +431,7 @@ assert_vars <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
   default_err_msg <- sprintf(
-    "`%s` must be a a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
+    "`%s` must be a list of unquoted variable names, e.g. `vars(USUBJID, VISIT)`",
     arg_name(substitute(arg))
   )
 
@@ -1366,33 +1366,6 @@ on_failure(is_expr) <- function(call, env) {
     deparse(call$arg),
     "` is not an expression created using `expr()`"
   )
-}
-
-#' Checks the length of derived records and new values of are equal
-#'
-#' @param x an R object
-#' @param y an R object to compare the length with `x`.
-#' @param x_arg Argument name of x.
-#' @param y_arg Argument name of y.
-#'
-#' @return Logical value.
-#'
-#' @noRd
-#'
-#' @examples
-#' \dontrun{
-#' x <- list("x", "y")
-#' y <- list("y", "z")
-#' assertthat::assert_that(are_records_same(x, y, "x", "y"))
-#' }
-are_records_same <- function(x, y, x_arg, y_arg) {
-  stopifnot(is.vector(x), is.vector(y))
-  length(x) == length(y)
-}
-
-on_failure(are_records_same) <- function(call, env) {
-  str_glue("`{call$x_arg}` must have consistent length to the new derived records
-           of `{call$y_arg}` within `by_vars`.")
 }
 
 #' Check whether an argument is not a quosure of a missing argument

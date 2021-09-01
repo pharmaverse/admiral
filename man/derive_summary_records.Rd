@@ -7,9 +7,11 @@
 derive_summary_records(
   dataset,
   by_vars,
-  fns,
   filter = NULL,
-  set_values_to = NULL
+  analysis_var,
+  summary_function,
+  set_values_to = NULL,
+  fns = deprecated()
 )
 }
 \arguments{
@@ -18,27 +20,6 @@ derive_summary_records(
 \item{by_vars}{Variables to consider for generation of groupwise summary
 records. Providing the names of variables in \code{\link[=vars]{vars()}} will create a
 groupwise summary and generate summary records for the specified groups.}
-
-\item{fns}{List of formulas specifying variable to use for aggregations.
-
-This can include base functions like \code{mean()}, \code{min()}, \code{max()}, \code{median()},
-\code{sd()}, or \code{sum()} or any other user-defined aggregation function.
-For example,
-\itemize{
-\item When a summary function is same for one or more analysis variable, use
-\verb{fns = list(vars(AVAL, CHG) ~ mean}).
-\item If a different summary function is required for each analysis variable,
-use \code{fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))}.
-}
-
-In general,
-\itemize{
-\item LHS refer to the one or more variable to use for summarizing.
-\item RHS refer to a \strong{single} summary function.
-}
-
-In the formula representation e.g., \code{CHG ~ sum(., na.rm = TRUE)}, a \code{.}
-serves as the data to be summarized which refers to the variable \code{CHG}.}
 
 \item{filter}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
@@ -53,6 +34,13 @@ values greater than mean of AVAL with in \code{by_vars}.
 than 2.
 }}
 
+\item{analysis_var}{Analysis variable.}
+
+\item{summary_function}{Function that takes as an input the \code{analysis_var} and
+performs the calculation.
+This can include built-in functions as well as user defined functions,
+for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
+
 \item{set_values_to}{A list of variable name-value pairs. Use this argument
 if you need to change the values of any newly derived records. Always new
 values in \code{set_values_to} should be equal to the length of analysis
@@ -66,6 +54,8 @@ retaining.
 \code{set_values_to = vars(AVISITN = c(9998, 9999))} would change \code{AVISITN} to
 \code{9998} for \code{AVAL} and \code{AVISITN} to \code{9999} for \code{CHG}.
 }}
+
+\item{fns}{Deprecated, please use \code{analysis_var} and \code{summary_function} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -108,7 +98,8 @@ adeg <- tibble::tribble(
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  fns = list(AVAL ~ mean(., na.rm = TRUE)),
+  analysis_var = AVAL,
+  summary_function = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
@@ -127,8 +118,15 @@ advs <- tibble::tribble(
 derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
-  fns = list(AVAL ~ max, AVAL ~ mean),
-  set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
+  analysis_var = AVAL,
+  summary_function = max,
+  set_values_to = vars(DTYPE = "MAXIMUM")
+) \%>\%
+derive_summary_records(
+  by_vars = vars(USUBJID, PARAM),
+  analysis_var = AVAL,
+  summary_function = mean,
+  set_values_to = vars(DTYPE = "AVERAGE")
 )
 
 # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
@@ -155,13 +153,15 @@ adeg <- tibble::tribble(
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  fns = list(AVAL ~ mean(., na.rm = TRUE)),
   filter = dplyr::n() > 2,
+  analysis_var = AVAL,
+  summary_function = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
+
 }
 \author{
-Vignesh Thanikachalam
+Vignesh Thanikachalam, Ondrej Slama
 }
 \keyword{bds}
 \keyword{derivation}
