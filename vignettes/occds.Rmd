@@ -239,8 +239,8 @@ adae %>%
 
 ### Derive Query Variables {#query}
 
-To Derive Query Variables, we use an input dataset with a data.frame containing required columns `VAR_PREFIX`, `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns`QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
-The content of the dataset can be checked by `assert_valid_queries()`. The expected result is the input dataset with query variables derived
+It is sometimes necessary to add dictionary query variables to an ADaM. For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be needed. This function expects the dictionary and/or lookup information to be provided as input in a standard structure.
+The expected result is the input dataset with query variables derived
 
 ```{r, eval=FALSE}
 data("queries")
@@ -257,5 +257,6 @@ data("queries")
  )
   
   adae <- derive_query_vars(dataset = adae , dataset_queries = queries)
+head(adae)
 
 ```
