@@ -1,3 +1,14 @@
+# admiral 0.3.0
+
+- Bunch of functions and function arguments have been renamed, the old names are now deprecated (#493, #507): 
+    - derive_aage -> derive_vars_aage
+    - derive_duration -> derive_vars_duration
+    - derive_query_vars -> derive_vars_query
+    - derive_suppqual_vars -> derive_vars_suppqual
+    - dthcaus_source: date_var -> date, traceabilty_vars -> traceability_vars
+    - lstalvdt_source: date_var -> date
+
+
 # admiral 0.2.1
 
 - Fixed a critical bug in `use_ad_template()` that prevented the function from being usable at all (#326)
