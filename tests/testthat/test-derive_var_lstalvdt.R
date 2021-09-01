@@ -19,24 +19,24 @@ ae <- tibble::tribble(
 test_that("LSTALVDT is derived", {
   ae_start <- lstalvdt_source(
     dataset = ae,
-    date_var = AESTDTC,
+    date = AESTDTC,
     date_imputation = "first"
   )
 
   ae_end <- lstalvdt_source(
     dataset = ae,
-    date_var = AEENDTC,
+    date = AEENDTC,
     date_imputation = "first"
   )
 
   adsl_trtdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = TRTEDTM
+    date = TRTEDTM
   )
 
   adsl_dthdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = DTHDTC,
+    date = DTHDTC,
     filter = stringr::str_length(DTHDTC) >= 10
   )
 
@@ -57,7 +57,7 @@ test_that("LSTALVDT is derived", {
 test_that("LSTALVDT and traceability variables are derived", {
   ae_start <- lstalvdt_source(
     dataset = ae,
-    date_var = AESTDTC,
+    date = AESTDTC,
     date_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
@@ -68,7 +68,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   ae_end <- lstalvdt_source(
     dataset = ae,
-    date_var = AEENDTC,
+    date = AEENDTC,
     date_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
@@ -79,7 +79,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   adsl_trtdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = TRTEDTM,
+    date = TRTEDTM,
     traceability_vars = vars(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
@@ -89,7 +89,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   adsl_dthdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = DTHDTC,
+    date = DTHDTC,
     filter = stringr::str_length(DTHDTC) >= 10,
     traceability_vars = vars(
       LALVDOM = "ADSL",
@@ -127,7 +127,7 @@ test_that("LSTALVDT is derived for Date class as well", {
 
   adsl_trtdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = TRTEDTM
+    date = TRTEDTM
   )
 
   expected_output <- adsl %>%
@@ -152,7 +152,7 @@ test_that("validate_lstalvdt_source checks its inputs", {
   expect_error(
     lstalvdt_source(
       dataset = adsl,
-      date_var = TRTEDTM
+      date = TRTEDTM
     ),
     regexp = "`dataset` must be a data frame"
   )
@@ -160,9 +160,9 @@ test_that("validate_lstalvdt_source checks its inputs", {
   expect_error(
     lstalvdt_source(
       dataset = as.data.frame(adsl),
-      date_var = "TRTEDTM"
+      date = "TRTEDTM"
     ),
-    regexp = "`date_var` must be a symbol"
+    regexp = "`date` must be a symbol"
   )
 
 })

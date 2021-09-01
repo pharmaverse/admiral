@@ -60,19 +60,19 @@ test_that("new observations are derived correctly for AVAL", {
   actual_output <- input %>%
     derive_exposure_params(
       by_vars = vars(USUBJID),
-      input_param = "DOSE",
+      input_code = "DOSE",
       fns = AVAL ~ sum(., na.rm = TRUE),
       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_exposure_params(
       by_vars = vars(USUBJID),
-      input_param = "DOSE",
+      input_code = "DOSE",
       fns = AVAL ~ mean(., na.rm = TRUE),
       set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_exposure_params(
       by_vars = vars(USUBJID),
-      input_param = "ADJ",
+      input_code = "ADJ",
       fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_),
       set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
     )
