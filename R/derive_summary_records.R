@@ -55,8 +55,6 @@
 #'   + Multiple analysis variables in `fns = list(vars(AVAL, CHG) ~ mean)` and
 #'   `set_values_to = vars(AVISITN = c(9998, 9999))` would change `AVISITN` to
 #'   `9998` for `AVAL` and `AVISITN` to `9999` for `CHG`.
-#' @param drop_values_from Providing the names of variables in [vars()]
-#'   will drop values and set as missing.
 #'
 #' @author Vignesh Thanikachalam
 #'
@@ -107,7 +105,6 @@
 #'
 #' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 #' # and `DTYPE = AVERAGE` refers to `mean()` records.
-#' # `set_values_to` must be of the same length as `fns`
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
@@ -115,16 +112,7 @@
 #'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
 #' )
 #'
-#' # Drop retained value of VSSTRESU in the derived record
-#' derive_summary_records(
-#'   advs,
-#'   by_vars = vars(USUBJID, PARAM),
-#'   fns = list(AVAL ~ mean),
-#'   set_values_to = vars(DTYPE = "MAXIMUM"),
-#'   drop_values_from = vars(VSSTRESU)
-#' )
-#'
-#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 #' adeg <- tibble::tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
 #'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
@@ -143,7 +131,8 @@
 #'   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
 #')
 #'
-#' # Summarize the average of AVAL for AVISIT records greater than 2
+#' # Compute the average of AVAL only if there are more than 2 records within the
+#' # by group
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
@@ -155,28 +144,24 @@ derive_summary_records <- function(dataset,
                                    by_vars,
                                    fns,
                                    filter_rows = NULL,
-                                   set_values_to = NULL,
-                                   drop_values_from = NULL) {
+                                   set_values_to = NULL) {
   assert_vars(by_vars)
-  assert_vars(drop_values_from, optional = TRUE)
-  assert_data_frame(dataset, required_vars = quo_c(by_vars, drop_values_from))
+  assert_list_of_formulas(fns)
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(by_vars, extract_vars(fns))
+  )
+  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
 
   by_vars <- vars2chr(by_vars)
-  drop_values_from <- vars2chr(drop_values_from)
 
   # Manipulate functions as direct call for each analysis variable
   # Returns: A list of function call with attributes "variable" and "stats"
-  funs <- manip_fun(dataset, fns, .env = caller_env())
+  funs <- manip_fun(fns, .env = caller_env())
 
   # Get input analysis variable
   summarise_vars <- map_chr(funs, attr, "variable")
 
-  # Get variable values that are constant across the grouped records,
-  # that do not change
-  keep_vars <- setdiff(
-    names(dataset),
-    union(drop_values_from(dataset, by_vars), drop_values_from)
-  )
   # For mutate input
   set_values <- NULL
 
@@ -197,7 +182,7 @@ derive_summary_records <- function(dataset,
     )
   }
 
-  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
+
 
   if (!quo_is_null(filter_rows)) {
     subset_ds <- dataset %>%
@@ -215,8 +200,7 @@ derive_summary_records <- function(dataset,
         # Get unique values by grouping variable and do a left join with
         # summarised data
         subset_ds %>%
-          distinct(!!! syms(by_vars), .keep_all = TRUE) %>%
-          select(!!! syms(keep_vars)) %>%
+          distinct(!!! syms(by_vars)) %>%
           left_join(
             subset_ds %>%
               group_by(!!! syms(by_vars)) %>%
@@ -274,7 +258,7 @@ as_inlined_function <- function(funs, env) {
 #'
 #' @param .funs A two sided formula as a list (e.g. `list(A ~ mean)`).
 #'
-#'  + LHS refer to the one or more variable to use for summarizing.
+#'  + LHS refer to the one variable to use for summarizing.
 #'  + RHS refer to a **single** summary function.
 #' @param .env The environment in which to evaluate the expression.
 #'
@@ -288,7 +272,7 @@ as_inlined_function <- function(funs, env) {
 #' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
 #' as_fun_list(fm, caller_env())
 as_fun_list <- function(.funs, .env) {
-  funs <- map(.funs, function(.x) {
+  map(.funs, function(.x) {
     rhs <- f_rhs(.x)
     if (is_call(rhs)) {
       if (is_call(rhs, c("list", "vars"))) {
@@ -302,8 +286,6 @@ as_fun_list <- function(.funs, .env) {
     }
     .x
   })
-
-  funs
 }
 
 #' Utility to extract a variable from an object of class formula
@@ -320,16 +302,8 @@ as_fun_list <- function(.funs, .env) {
 #' @examples
 #' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
 #' get_fun_vars(fm, mtcars)
-get_fun_vars <- function(f, dataset) {
-  x <- map_if(f, is_quosure, quo_squash)
-  lhs <- map_if(x, is_bare_formula, f_lhs)
-  lhs <- map(lhs, function(.x) {
-    if (is_symbol(.x)) as_string(.x)
-    else eval_bare(.x, caller_env())
-  })
-  lhs <- map_if(lhs, is_quosures, vars2chr)
-  walk(lhs, ~assert_has_variables(dataset, .))
-  lhs
+get_fun_vars <- function(f) {
+  map(f, ~as_string(f_lhs(.x)))
 }
 
 #' Reconstruct a call object from its components using [rlang::call2()]
@@ -374,52 +348,8 @@ as_call_list <- function(funs, vars) {
 #' @return An anonymous function with call.
 #'
 #' @noRd
-manip_fun <- function(dataset, fns, .env) {
-  if (is_formula(fns)) {
-    fns <- list(fns)
-  }
-
-  if (!every(fns, is_formula)) {
-    abort(
-      str_glue(
-        "Problem with input `fns`, expecting a two sided formula.
-        LHS = an analysis variable and RHS = a function, or a function name.
-        e.g `fns = list(aval ~ mean)`."))
-  }
-
-  fn_vars <- get_fun_vars(fns, dataset)
+manip_fun <- function(fns, .env) {
+  fn_vars <- get_fun_vars(fns)
   fn_list <- as_fun_list(fns, .env = .env)
   as_call_list(fn_list, fn_vars)
-}
-
-#' Utility to find variable that have constant values across grouped variables
-#'
-#' `drop_values_from` help [derive_summary_records] to find all variable values that
-#' are constant across the original records, that do not change.
-#'
-#' @param dataset A data frame.
-#' @param group_vars Variables to group across records.
-#'
-#' @family row summary
-#'
-#' @return Variable vector.
-#'
-#' @noRd
-drop_values_from <- function(dataset, group_vars) {
-  non_group_vars <- setdiff(names(dataset), group_vars)
-
-  # Get unique values within each group by variables
-  unique_count <- dataset %>%
-    group_by(!!! syms(group_vars)) %>%
-    summarise_at(vars(!! non_group_vars), n_distinct) %>%
-    ungroup() %>%
-    select(!!! syms(non_group_vars))
-
-  # If unique values > 1, should be dropped; else retain
-  lgl_vars <- unique_count %>%
-    map_lgl(~ all(!.x > 1)) %>%
-    which() %>%
-    names()
-
-  setdiff(non_group_vars, lgl_vars)
 }

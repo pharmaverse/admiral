@@ -150,9 +150,10 @@ adsl <- dm %>%
     SAFFL = if_else(!is.na(TRTSDTM), "Y", "N"),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
     DTHA30FL = if_else(LDDTHGR1 == "> 30", "Y", NA_character_),
-    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_)
+    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
+    DOMAIN = NULL
   )
 
 # ---- Save output ----
 
-save(adsl, file = "/PATH/TO/SAVE/ADSL", compress = TRUE)
+saveRDS(adsl, file = "./ADSL.rds", compress = TRUE)

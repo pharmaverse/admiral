@@ -9,7 +9,13 @@ Authors@R: c(
     person("Samia", "Kabi", email = "samia.kabi@roche.com", role = "aut"),
     person("Vignesh", "Thanikachalam", role = "aut"),
     person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
-    person("Shimeng", "Huang", role = "aut")
+    person("Shimeng", "Huang", role = "aut"),
+    person("Robin", "Koeger", role = "aut"),
+    person("Gordon", "Miller", role = "aut"),
+    person("Teckla", "Akinyi", role = "aut"),
+    person("Eric", "Simms", email = "eric.m.simms@gsk.com", role = "aut"),
+    person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut"),
+    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
@@ -24,13 +30,14 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    readxl,
     rlang,
     stringr,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests:
     devtools,
     diffdf,
+    lifecycle,
     lintr,
     pkgdown,
     testthat,
@@ -42,5 +49,6 @@ Suggests:
     spelling,
     styler,
     tibble,
-    usethis
+    usethis,
+    covr
 VignetteBuilder: knitr

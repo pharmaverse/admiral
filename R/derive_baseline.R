@@ -18,13 +18,13 @@
 #'
 #' @examples
 #' dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL,
-#'   "TEST01", "PAT01",  "PARAM01", 10.12, "Y",
-#'   "TEST01", "PAT01",  "PARAM01",  9.7,  "N",
-#'   "TEST01", "PAT01",  "PARAM01", 15.01, "N",
-#'   "TEST01", "PAT01",  "PARAM02",  8.35, "Y",
-#'   "TEST01", "PAT01",  "PARAM02", NA,    "N",
-#'   "TEST01", "PAT01",  "PARAM02",  8.35, "N"
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVISIT,    ~ABLFL,
+#'   "TEST01", "PAT01",  "PARAM01", 10.12, "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM01",  9.7,  "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM01", 15.01, "Day 14",   "N",
+#'   "TEST01", "PAT01",  "PARAM02",  8.35, "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM02", NA,    "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM02",  8.35, "Day 14",   "N"
 #' )
 #' derive_var_base(dataset, by_vars = vars(USUBJID, PARAMCD))
 derive_var_base <- function(dataset, by_vars) {
@@ -49,13 +49,13 @@ derive_var_base <- function(dataset, by_vars) {
 #'
 #' @examples
 #' dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL,
-#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",
-#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "N",
-#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",
-#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",
-#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",
-#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N"
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Day 14",   "N",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "Day 14",   "N"
 #' )
 #' derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
 derive_var_basec <- function(dataset, by_vars) {
@@ -78,30 +78,31 @@ derive_var_basec <- function(dataset, by_vars) {
 #'
 #' @export
 #'
-#' @export
-#'
 #' @author Thomas Neitmann
 #'
 #' @keywords bds derivation
 #'
 #' @examples
 #' dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
-#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
-#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "N",    "LAST",
-#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "N",    "LAST",
-#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
-#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "N",    "LAST",
-#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "N",    "LAST"
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM01", "LOW",    "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Day 14",   "N",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Baseline", "Y",
+#'   "TEST01", "PAT01",  "PARAM02", "HIGH",   "Day 7",    "N",
+#'   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "Day 14",   "N",
+#'   "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Baseline", "Y",
+#'   "TEST01", "PAT02",  "PARAM01", "LOW",    "Day 7",    "N",
+#'   "TEST01", "PAT02",  "PARAM01", "MEDIUM", "Day 14",   "N",
 #' )
+#'
 #' derive_baseline(
 #'   dataset,
-#'   by_vars = vars(USUBJID, PARAMCD, BASETYPE),
+#'   by_vars = vars(USUBJID, PARAMCD),
 #'   source_var = AVALC,
 #'   new_var = BASEC
 #' )
 derive_baseline <- function(dataset, by_vars, source_var, new_var) {
-
   by_vars <- assert_vars(by_vars)
   source_var <- assert_symbol(enquo(source_var))
   new_var <- assert_symbol(enquo(new_var))

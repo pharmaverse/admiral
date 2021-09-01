@@ -22,7 +22,7 @@
 #'   (e.g. 7 if 7 days should be added to the upper bound)
 #'   Optional; default is 0
 #'
-#' @param filter_pre_timepoint An expression to filter observtions as not
+#' @param filter_pre_timepoint An expression to filter observations as not
 #' on-treatment when `date` = `ref_start_date`. For example, if
 #' observations where `VSTPT = PRE` should not be considered on-treatment when
 #' `date = ref_start_date`, `filter_pre_timepoint` should be used
@@ -56,43 +56,49 @@
 #' @export
 #'
 #' @examples
-#' library(lubridate, warn.conflict = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate, warn.conflicts = FALSE)
 #'
-#' advs <- tibble::tribble(
+#' bds1 <- tibble::tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
 #' derive_var_ontrtfl(
-#'   advs,
+#'   bds1,
 #'   date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT
 #' )
 #'
-#' advs <- tibble::tribble(
+#' bds2 <- tibble::tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
 #' )
 #' derive_var_ontrtfl(
-#'   advs,
+#'   bds2,
 #'   date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT,
 #'   ref_end_window = 60
 #' )
 #'
-#' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
-#'   "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "",
-#'   "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
-#'   "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), ""
-#' )
+#' bds3 <- tibble::tribble(
+#'   ~USUBJID, ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
+#'   "P01",    "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
+#'   "P02",    "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
+#'   "P03",    "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
+#' ) %>%
+#'   mutate(
+#'     ADTM = ymd_hm(ADTM),
+#'     TRTSDTM = ymd_hm(TRTSDTM),
+#'     TRTEDTM = ymd_hm(TRTEDTM)
+#'   )
 #' derive_var_ontrtfl(
-#'   advs,
+#'   bds3,
 #'   date = ADTM,
 #'   ref_start_date = TRTSDTM,
 #'   ref_end_date = TRTEDTM,
@@ -116,9 +122,11 @@ derive_var_ontrtfl <- function(dataset,
 
   dataset <- mutate(
     dataset,
-    ONTRTFL = case_when(
-      is.na(!!date) & !is.na(!!ref_start_date) ~ "Y",
-      !is.na(!!date) & !is.na(!!ref_start_date) & !!ref_start_date == !!date ~ "Y")
+    ONTRTFL = if_else(
+      is.na(!!date) & !is.na(!!ref_start_date) | !!ref_start_date == !!date,
+      "Y",
+      NA_character_,
+      missing = NA_character_)
     )
 
   if (!quo_is_null(filter_pre_timepoint)) {

@@ -4,7 +4,13 @@
 \alias{convert_dtc_to_dtm}
 \title{Convert a Date Character Vector into a Datetime Object}
 \usage{
-convert_dtc_to_dtm(dtc)
+convert_dtc_to_dtm(
+  dtc,
+  date_imputation = NULL,
+  time_imputation = NULL,
+  min_dates = NULL,
+  max_dates = NULL
+)
 }
 \arguments{
 \item{dtc}{The --DTC date to convert.
@@ -12,6 +18,62 @@ convert_dtc_to_dtm(dtc)
 A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
 A partial datetime will issue a warning.
 Note: you can use impute_dtc function to build a complete datetime.}
+
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
+
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
+
+Otherwise, a character value is expected, either as a
+\itemize{
+\item format with month and day specified as 'mm-dd': e.g. \code{"06-15"} for the 15th
+of June,
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+day/month.
+}
+
+Default is \code{NULL}.}
+
+\item{time_imputation}{The value to impute the time when a timepart is
+missing.
+
+A character value is expected, either as a
+\itemize{
+\item format with hour, min and sec specified as 'hh:mm:ss': e.g. \code{"00:00:00"}
+for the start of the day,
+\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
+}
+
+Default is \code{"00:00:00"}.}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the dtc value are considered. The possible dates
+are defined by the missing parts of the dtc date (see example below). This
+ensures that the non-missing parts of the dtc date are not changed. For
+example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+  date_imputation = "first"
+)
+}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the dtc date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.}
 }
 \value{
 a datetime  object

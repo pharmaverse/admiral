@@ -1,7 +1,5 @@
 ---
 title: "Creating ADSL"
-author: "admiral team"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: false
@@ -55,7 +53,7 @@ data frames needed may be `dm`, `ex`, `ds`, `ae`, and `lb`.
 
 For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(admiral)
 library(lubridate)
@@ -71,7 +69,8 @@ data("lb")
 The `dm` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
-adsl <- dm
+adsl <- dm %>% 
+  mutate(DOMAIN = NULL)
 head(adsl)
 ```
 
@@ -109,8 +108,8 @@ adsl <- adsl %>%
 ```
 
 
-Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdur()` can be used to
-calculate the Treatment duration (`TRTDURD`).
+Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
+can be used to calculate the Treatment duration (`TRTDURD`).
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
@@ -248,7 +247,7 @@ Example function `format_dcsreas()`:
 format_dcsreas <- function(dsdecod, dsterm = NULL) {
   out <- if (is.null(dsterm)) dsdecod else dsterm
   case_when(
-    dsdecod %!in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
+    dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
     TRUE ~ NA_character_
   )
 }
@@ -304,6 +303,8 @@ adsl <- adsl %>%
   )
 ```
 
+See also [Date and Time Imputation](imputation.html).
+
 ### Cause of Death  (`DTHCAUS`) {#death_cause}
 
 The cause of death `DTHCAUS` can be derived using the function `derive_var_dthcaus()`.
@@ -321,7 +322,7 @@ study requirement.
 
 - `dataset`: the dataset to search for death information,
 - `filter`: the condition to define death,
-- `date_var`: the date of death,
+- `date`: the date of death,
 - `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
 - `dthcaus`: variable  or text used to populate `DTHCAUS`.
 - `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
@@ -333,14 +334,14 @@ An example call to define the sources would be:
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AESTDTC,
+  date = AESTDTC,
   mode = "first",
   dthcaus = AEDECOD
 )
 src_ds <- dthcaus_source(
   dataset = ds,
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-  date_var = DSSTDTC,
+  date = DSSTDTC,
   mode = "first",
   dthcaus = "Death in DS"
 )
@@ -356,17 +357,17 @@ adsl %>% select(USUBJID, starts_with("DTH")) %>% filter(DTHFL == "Y")
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
 store the domain where the date of death is collected, and `DTHSEQ` would store the `xxSEQ` value of 
-that domain). To add them, the `traceabilty_vars()` argument must be added to the `dthcaus_source()`
+that domain). To add them, the `traceability_vars` argument must be added to the `dthcaus_source()`
 arguments:
 
 ```{r eval=FALSE}
 src_ae <- dthcaus_source(
   dataset = ae,
   filter = AEOUT == "FATAL",
-  date_var = AESTDTC,
+  date = AESTDTC,
   mode = "first",
   dthcaus = AEDECOD,
-  traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+  traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
 )
 
 src_ds <- dthcaus_source(
@@ -375,7 +376,7 @@ src_ds <- dthcaus_source(
   date = DSSTDTC,
   mode = "first",
   dthcaus = DSTERM,
-  traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+  traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
@@ -424,7 +425,7 @@ correctly defined.
 
 - `dataset`: the dataset to search for date information,
 - `filter`: the filter to apply on the datasets,
-- `date_var`: the date of interest,
+- `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
 - `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
 sequence, variable)
@@ -434,22 +435,22 @@ An example could be :
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "FIRST"
 )
 ae_src2 <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "LAST"
 )
 lb_src <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
 adsl_src <- lstalvdt_source(
   dataset = adsl,
-  date_var = TRTEDT
+  date = TRTEDT
 )
 ```
 
@@ -468,25 +469,25 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_src2 <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_src <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 adsl_src <- lstalvdt_source(
   dataset = adsl,
-  date_var = TRTEDTM,
+  date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
