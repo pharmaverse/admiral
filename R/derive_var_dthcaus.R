@@ -192,9 +192,11 @@ dthcaus_source <- function(dataset,
                            traceabilty_vars = deprecated()) {
 
   ### BEGIN DEPRECIATION
-  if (is_present(date_var)) {
+  if (is_present(enquo(date_var), quoted = TRUE)) {
     deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
-    date <- date_var
+    date <- enquo(date_var)
+  } else {
+    date <- enquo(date)
   }
   if (is_present(traceabilty_vars)) {
     deprecate_warn("0.3.0",
@@ -207,7 +209,7 @@ dthcaus_source <- function(dataset,
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date)),
+    date = assert_symbol(date),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)

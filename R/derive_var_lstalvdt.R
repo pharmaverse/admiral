@@ -219,9 +219,11 @@ lstalvdt_source <- function(dataset,
                             date_var = deprecated()) {
 
   ### BEGIN DEPRECIATION
-  if (is_present(date_var)) {
+  if (is_present(enquo(date_var), quoted = TRUE)) {
     deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
-    date <- date_var
+    date <- enquo(date_var)
+  } else {
+    date <- enquo(date)
   }
   ### END DEPRECIATION
 
@@ -231,7 +233,7 @@ lstalvdt_source <- function(dataset,
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date = assert_symbol(enquo(date)),
+    date = assert_symbol(date),
     date_imputation = date_imputation,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
