@@ -11,6 +11,13 @@ deprecate_warn <- function(...) {
 
 deprecated <- function() rlang::missing_arg()
 
+#' Extension of `lifecycle::is_present()` function to handle quosures as well
+#'
+#' @param arg Argument to test for presence.
+#' @param quoted Logical, is `arg` quoted?
+#'
+#' @noRd
+#'
 is_present <- function(arg, quoted = FALSE) {
   stopifnot(rlang::is_scalar_logical(quoted))
   if (quoted) {
