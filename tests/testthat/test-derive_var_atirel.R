@@ -31,6 +31,7 @@ test_that("Derive ATIREL", {
 
   actual_output <- derive_var_atirel(
     dataset = input,
+    flag_var = ASTTMF,
     new_var = ATIREL
   )
 

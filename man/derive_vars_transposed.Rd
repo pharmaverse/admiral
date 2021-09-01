@@ -25,9 +25,11 @@ are expected}
 
 \item{by_vars}{Keys used to merge \code{dataset_facm} with \code{dataset}}
 
-\item{key_var}{The variable of \code{dataset_merge} that containing the names of the transposed variables}
+\item{key_var}{The variable of \code{dataset_merge} containing the names of the
+transposed variables}
 
-\item{value_var}{The variable of \code{dataset_merge} containing the values of the transposed variables}
+\item{value_var}{The variable of \code{dataset_merge} containing the values of the
+transposed variables}
 
 \item{filter}{Expression used to restrict the records of \code{dataset_merge} prior to transposing}
 }
