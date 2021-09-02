@@ -54,7 +54,7 @@ adex0 <- ex %>%
   left_join(adsl0, by = c("STUDYID", "USUBJID")) %>%
 
   # Calculate ASTDTM, AENDTM using derive_vars_dtm
-  derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST")%>%
+  derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
   derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
 
   # Calculate ASTDY, AENDY
@@ -62,7 +62,7 @@ adex0 <- ex %>%
   derive_var_aendy(date = AENDTM) %>%
 
   # add EXDUR, the duration of trt for each record
-  derive_duration(
+  derive_vars_duration(
     new_var = EXDURD,
     start_date = ASTDTM,
     end_date = AENDTM
@@ -92,32 +92,37 @@ adex <- bind_rows(
 
   # Overall exposure
   call_derivation(
-    derivation = derive_exposure_params,
+    derivation = derive_params_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
         input_code = "DOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
         input_code = "PLDOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
         input_code = "DURD",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
         input_code = "ADJ",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        analysis_var = AVALC,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       ),
       params(
         set_values_to = vars(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
         input_code = "ADJAE",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        analysis_var = AVALC,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
     by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
@@ -125,32 +130,37 @@ adex <- bind_rows(
 
   # W2-W24 exposure
   call_derivation(
-    derivation = derive_exposure_params,
+    derivation = derive_params_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "PDOSE", PARCAT1 = "WEEK 2-24"),
         input_code = "DOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "PPDOSE", PARCAT1 = "WEEK 2-24"),
         input_code = "PLDOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "PDURD", PARCAT1 = "WEEK 2-24"),
         input_code = "DURD",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "PADJ", PARCAT1 = "WEEK 2-24"),
         input_code = "ADJ",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        analysis_var = AVALC,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       ),
       params(
         set_values_to = vars(PARAMCD = "PADJAE", PARCAT1 = "WEEK 2-24"),
         input_code = "ADJAE",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        analysis_var = AVALC,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
@@ -158,15 +168,17 @@ adex <- bind_rows(
   ) %>%
 
   # Overall Dose intensity and W2-24 dose intensity
-  #  call_derivation(
-  #    derivation = derive_param_doseint,
-  #    variable_params = list(
-  #      params(new_param = "TDOSINT", tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
-  #      params(new_param = "PDOSINT", tadm_code = "PDOSE", tpadm_code = "PPDOSE")
-  #    ),
-  #    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-  #                   PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT)
-  #  ) %>%
+  call_derivation(
+    derivation = derive_param_doseint,
+    variable_params = list(
+      params(set_values_to = vars(PARAMCD = "TDOSINT"), tadm_code = "TDOSE", tpadm_code = "TPDOSE"),
+      params(set_values_to = vars(PARAMCD = "PDOSINT"), tadm_code = "PDOSE", tpadm_code = "PPDOSE")
+    ),
+    by_vars = vars(
+      STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+      PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+    )
+  ) %>%
   # Overall/W2-24 Average daily dose
   call_derivation(
     derivation = derive_derived_param,
@@ -243,10 +255,9 @@ adex <- adex %>%
   derive_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
-    order = vars(ASTDT, VISIT, VISITNUM, EXSEQ, PARAMCD),
+    order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
     check_type = "warning"
   )
-
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
