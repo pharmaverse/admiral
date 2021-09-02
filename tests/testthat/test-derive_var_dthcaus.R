@@ -4,7 +4,7 @@ test_that("error on a dthcaus_source object with invalid mode", {
   expect_error(dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "blah",
     dthcaus = AEDECOD
   ))
@@ -40,7 +40,7 @@ test_that("DTHCAUS is added from AE and DS", {
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = AEDECOD
   )
@@ -48,7 +48,7 @@ test_that("DTHCAUS is added from AE and DS", {
   src_ds <- dthcaus_source(
     dataset = ds,
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-    date_var = DSSTDTC,
+    date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM
   )
@@ -91,7 +91,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = "Adverse Event"
   )
@@ -99,7 +99,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
   src_ds <- dthcaus_source(
     dataset = ds,
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-    date_var = DSSTDTC,
+    date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM
   )
@@ -115,7 +115,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-test_that("DTHCAUS and traceabilty variables are added from AE and DS", {
+test_that("DTHCAUS and traceability variables are added from AE and DS", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -145,10 +145,10 @@ test_that("DTHCAUS and traceabilty variables are added from AE and DS", {
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = AEDECOD,
-    traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+    traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
@@ -157,7 +157,7 @@ test_that("DTHCAUS and traceabilty variables are added from AE and DS", {
     date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM,
-    traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -203,19 +203,19 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = AEDECOD,
-    traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+    traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
     dataset = ds,
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-    date_var = DSSTDTC,
+    date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM,
-    traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -261,19 +261,19 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = AEDECOD,
-    traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+    traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
   )
 
   src_ds <- dthcaus_source(
     dataset = ds,
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-    date_var = DSSTDTC,
+    date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM,
-    traceabilty = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+    traceability = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
   expected_output <- tibble::tribble(
@@ -320,7 +320,7 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
   src_ae <- dthcaus_source(
     dataset = ae,
     filter = AEOUT == "FATAL",
-    date_var = AEDTHDTC,
+    date = AEDTHDTC,
     mode = "first",
     dthcaus = AEDECOD
   )
@@ -328,7 +328,7 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
   src_ds <- dthcaus_source(
     dataset = ds,
     filter = NULL,
-    date_var = DSSTDTC,
+    date = DSSTDTC,
     mode = "first",
     dthcaus = DSTERM
   )

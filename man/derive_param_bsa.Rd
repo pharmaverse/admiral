@@ -7,19 +7,19 @@
 derive_param_bsa(
   dataset,
   by_vars,
-  method = "Mosteller",
-  set_values_to = vars(PARAMCD = "BSA", PARAM = "Body Surface Area", AVALU = "m^2"),
+  method,
+  set_values_to = vars(PARAMCD = "BSA"),
   height_code = "HEIGHT",
   weight_code = "WEIGHT",
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -27,7 +27,10 @@ parameter) and to the parameters specified by \code{HEIGHT} and \code{WEIGHT}.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
 
 \item{method}{Derivation method to use:
 
@@ -69,12 +72,11 @@ as the WEIGHT assessments. It is expected that WEIGHT is measured in kg.
 
 Permitted Values: character value}
 
-\item{unit_var}{Variable providing the unit of the parameter
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The variable is used to check the units of the input parameters and it is
-set to \code{"m^2"} for the new parameter.
+The result is used to check the units of the input parameters.
 
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 
@@ -107,13 +109,15 @@ advs <- tibble::tribble(
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
-  method = "Mosteller"
+  method = "Mosteller",
+  get_unit_expr = AVALU
 )
 
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
-  method = "Fujimoto"
+  method = "Fujimoto",
+  get_unit_expr = extract_unit(PARAM)
 )
 }
 \author{

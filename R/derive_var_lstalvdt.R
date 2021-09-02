@@ -17,10 +17,10 @@
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
 #'   the `filter` element are selected. Then for each patient the last
-#'   oservation (with respect to `date_var`) is selected.
+#'   oservation (with respect to `date`) is selected.
 #'
 #'   \item The `LSTALVDT` variable is set to the variable specified by the
-#'   \code{date_var} element. If the date variable is a datetime variable, only
+#'   \code{date} element. If the date variable is a datetime variable, only
 #'   the datepart is copied. If the source variable is a character variable, it
 #'   is converted to a date. If the date is incomplete, it is imputed as
 #'   specified by the \code{date_imputation} element.
@@ -52,20 +52,20 @@
 #'
 #' ae_start <- lstalvdt_source(
 #'   dataset = ae,
-#'   date_var = AESTDTC,
+#'   date = AESTDTC,
 #'   date_imputation = "first"
 #' )
 #' ae_end <- lstalvdt_source(
 #'   dataset = ae,
-#'   date_var = AEENDTC,
+#'   date = AEENDTC,
 #'   date_imputation = "first"
 #' )
 #' lb_date <- lstalvdt_source(
 #'   dataset = lb,
-#'   date_var = LBDTC,
+#'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10
 #' )
-#' adsl_date <- lstalvdt_source(dataset = adsl, date_var = TRTEDT)
+#' adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
 #'
 #' dm %>%
 #'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
@@ -74,7 +74,7 @@
 #' # derive last alive date and traceability variables
 #' ae_start <- lstalvdt_source(
 #'   dataset = ae,
-#'   date_var = AESTDTC,
+#'   date = AESTDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
@@ -85,7 +85,7 @@
 #'
 #' ae_end <- lstalvdt_source(
 #'   dataset = ae,
-#'   date_var = AEENDTC,
+#'   date = AEENDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
@@ -95,7 +95,7 @@
 #' )
 #' lb_date <- lstalvdt_source(
 #'   dataset = lb,
-#'   date_var = LBDTC,
+#'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
@@ -106,7 +106,7 @@
 #'
 #' adsl_date <- lstalvdt_source(
 #'   dataset = adsl,
-#'   date_var = TRTEDT,
+#'   date = TRTEDT,
 #'   traceability_vars = vars(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
@@ -136,28 +136,28 @@ derive_var_lstalvdt <- function(dataset,
         i = i
       )
     }
-    date_var <- quo_get_expr(sources[[i]]$date_var)
+    date <- quo_get_expr(sources[[i]]$date)
     add_data[[i]] <- sources[[i]]$dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
-        order = vars(!!date_var),
+        order = vars(!!date),
         by_vars = subject_keys,
         mode = "last",
         check_type = "none"
       )
-    if (is.Date(add_data[[i]][[as_string(date_var)]])) {
+    if (is.Date(add_data[[i]][[as_string(date)]])) {
       add_data[[i]] <- transmute(
         add_data[[i]],
         !!!subject_keys,
         !!!sources[[i]]$traceability_vars,
-        LSTALVDT = !!date_var
+        LSTALVDT = !!date
       )
-    } else if (is.instant(add_data[[i]][[as_string(date_var)]])) {
+    } else if (is.instant(add_data[[i]][[as_string(date)]])) {
       add_data[[i]] <- transmute(
         add_data[[i]],
         !!!subject_keys,
         !!!sources[[i]]$traceability_vars,
-        LSTALVDT = date(!!date_var)
+        LSTALVDT = date(!!date)
       )
     } else {
       add_data[[i]] <- transmute(
@@ -165,7 +165,7 @@ derive_var_lstalvdt <- function(dataset,
         !!!subject_keys,
         !!!sources[[i]]$traceability_vars,
         LSTALVDT = convert_dtc_to_dt(
-          !!date_var,
+          !!date,
           date_imputation = sources[[i]]$date_imputation
         )
       )
@@ -191,16 +191,18 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
-#' @param date_var A variable providing a date where the patient was known to be
+#' @param date A variable providing a date where the patient was known to be
 #'   alive. A date, a datetime, or a character variable containing ISO 8601
 #'   dates can be specified. An unquoted symbol is expected.
 #'
-#' @param date_imputation A string defining the date imputation for `date_var`.
+#' @param date_imputation A string defining the date imputation for `date`.
 #'   See `date_imputation` parameter of `impute_dtc()` for valid values.
 #'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
+#'
+#' @param date_var Deprecated, please use `date` instead.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -211,16 +213,25 @@ derive_var_lstalvdt <- function(dataset,
 #' @return An object of class "lstalvdt_source".
 lstalvdt_source <- function(dataset,
                             filter = NULL,
-                            date_var,
+                            date,
                             date_imputation = NULL,
-                            traceability_vars = NULL) {
+                            traceability_vars = NULL,
+                            date_var = deprecated()) {
+
+  ### BEGIN DEPRECIATION
+  if (is_present(date_var)) {
+    deprecate_warn("0.2.2", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
+    date <- date_var
+  }
+  ### END DEPRECIATION
+
   if (!is.null(date_imputation)) {
     assert_that(is_valid_date_entry(date_imputation))
   }
   out <- list(
     dataset = assert_data_frame(dataset),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    date_var = assert_symbol(enquo(date_var)),
+    date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
