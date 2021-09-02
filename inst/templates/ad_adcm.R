@@ -16,7 +16,6 @@ data("ex")
 data("adsl")
 
 # ---- Derivations ----
-
 adcm <- cm %>%
   # Join supplementary qualifier variables
   # Derive_suppqual_vars(suppcm)
@@ -79,7 +78,8 @@ adcm <- cm %>%
 
   # Derive On-Treatment flag
   derive_var_ontrtfl(
-    date = ASTDT,
+    start_date = ASTDT,
+    end_date = AENDT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
    ) %>%
