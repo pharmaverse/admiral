@@ -115,7 +115,7 @@
 #'   ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
-#'   "P03",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2021-01-01")
+#'   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 #' )
 #'
 #' derive_var_ontrtfl(
@@ -124,7 +124,8 @@
 #'  end_date = AENDT,
 #'  ref_start_date = TRTSDT,
 #'  ref_end_date = TRTEDT,
-#'  ref_end_window = 60
+#'  ref_end_window = 60,
+#'  span_period="Y"
 #' )
 
 derive_var_ontrtfl <- function(dataset,
@@ -199,7 +200,7 @@ derive_var_ontrtfl <- function(dataset,
   }
 
   #scenario 4: end_date and span_period are parsed
-  if (span_period == "Y") {
+  if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
       ONTRTFL = if_else(
