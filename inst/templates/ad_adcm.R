@@ -5,11 +5,6 @@
 # Input: cm, adsl, suppcm, suppdm, ex
 #
 
-#devtools :: load_all()
-#library(admiral)
-#library(dplyr)
-#library(lubridate)
-
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
@@ -18,20 +13,18 @@
 data("cm")
 data("adsl")
 data("ex")
-adsl <- adsl
-suppcm <- NULL
-ex <- NULL
+data("adsl")
 
 # ---- Derivations ----
 
 adcm <- cm %>%
-  # join supplementary qualifier variables
-  #derive_suppqual_vars(suppcm) %>%
+  # Join supplementary qualifier variables
+  # Derive_suppqual_vars(suppcm)
 
-  # join adsl to cm
+  # Join adsl to cm
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
 
-  # derive analysis start time
+  # Derive analysis start time
   derive_vars_dtm(
     dtc = CMSTDTC,
     new_vars_prefix = "AST",
@@ -40,7 +33,7 @@ adcm <- cm %>%
     min_dates = list(TRTSDT)
   ) %>%
 
-  # derive analysis end time
+  # Derive analysis end time
   derive_vars_dtm(
     dtc = CMENDTC,
     new_vars_prefix = "AEN",
@@ -49,25 +42,25 @@ adcm <- cm %>%
     max_dates = list(DTHDT, EOSDT)
   ) %>%
 
-  # derive analysis end/start date
+  # Derive analysis end/start date
   mutate(
     ASTDT = date(ASTDTM),
     AENDT = date(AENDTM)
   ) %>%
 
-  # derive analysis start relative day
+  # Derive analysis start relative day
   derive_var_astdy(
     reference_date = TRTSDT,
     date = ASTDT
   ) %>%
 
-  # derive analysis end relative day
+  # Derive analysis end relative day
   derive_var_aendy(
     reference_date = TRTSDT,
     date = AENDT
   ) %>%
 
-  # derive analysis duration (value and unit)
+  # Derive analysis duration (value and unit)
   derive_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
@@ -78,60 +71,62 @@ adcm <- cm %>%
     add_one = TRUE,
     trunc_out = FALSE
   ) %>%
+
   # Derive Time Relative to Reference
   derive_var_atirel(flag_var = ASTTMF,
                     new_var = ATIREL
   ) %>%
-  # derive On-Treatment flag
+
+  # Derive On-Treatment flag
   derive_var_ontrtfl(
-   date = ASTDT,
-     ref_start_date = TRTSDT,
-     ref_end_date = TRTEDT
+    date = ASTDT,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT
    ) %>%
-  # derive Pre-Treatment flag
+
+  # Derive Pre-Treatment flag
   mutate(
     PREFL = ifelse(ASTDT < TRTSDT, "Y", "")
   ) %>%
-  # derive Follow-Up flag
+
+  # Derive Follow-Up flag
   mutate(
-    FUPFL = ifelse(ASTDT > TRTSDT+28, "Y", "")
+    FUPFL = ifelse(ASTDT > TRTEDT, "Y", "")
   ) %>%
-  # derive Aphase and Aphasen Variable
+
+  # Derive Aphase and Aphasen Variable
   # Other timing variable can be derived similarly.
+  # This variable is sponsor specific and may be used to indicate particular records to be used in subsequent derivations or analysis.
   mutate(
-    APHASE = case_when(ONTRTFL == "Y"~"On-Treatment",
-                       PREFL == "Y" ~ "Pre-Treatment",
+    APHASE = case_when(PREFL == "Y" ~ "Pre-Treatment",
+                       ONTRTFL == "Y"~"On-Treatment",
                        FUPFL == "Y" ~ "Follow-Up"),
-    APHASEN = case_when(ONTRTFL == "Y"~2,
-                       PREFL == "Y" ~ 1,
+    APHASEN = case_when(PREFL == "Y" ~ 1,
+                       ONTRTFL == "Y"~2,
                        FUPFL == "Y" ~ 3)
   ) %>%
+
   # Assign TRTP/TRTA
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-  # derive ANL01FL : This is variable is sponsor specific
+
+  # Derive ANL01FL : This is variable is sponsor specific
   mutate(
     ANL01FL = ifelse(ONTRTFL == "Y","Y", "")
   ) %>%
-  # derive occurrence flags
+
+  # Derive occurrence flags
   derive_extreme_flag(
     new_var = AOCCIFL,
-    by_vars = vars(USUBJID),
+    by_vars = vars(USUBJID,CMDECOD,APHASE),
     order = vars(ASTDTM, CMSEQ),
     flag_filter = ANL01FL == "Y",
     mode = "last"
   )
 
 
-
-# Note some of the roche specific variables are not included like ADCUTFL, ATC Variable, PERASTDY, APERIOD.I can add this variable based on
-# the discussion.
-
-
 # ---- Save output ----
 
 saveRDS(adcm, file = "./ADCM.rds", compress = TRUE)
-
-
