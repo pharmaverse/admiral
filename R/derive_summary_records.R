@@ -157,7 +157,7 @@ derive_summary_records <- function(dataset,
                                    fns = deprecated()) {
 
   ### BEGIN DEPRECIATION
-  if (is_present(fns)) {
+  if (!missing(fns)) {
     rlang::abort(paste(
       "The fns argument of `derive_summary_records()` is deprecated",
       "as of admiral 0.3.0.",
