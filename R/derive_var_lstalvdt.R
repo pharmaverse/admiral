@@ -220,7 +220,7 @@ lstalvdt_source <- function(dataset,
 
   ### BEGIN DEPRECIATION
   if (is_present(date_var)) {
-    deprecate_warn("0.2.2", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
+    deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
     date <- date_var
   }
   ### END DEPRECIATION

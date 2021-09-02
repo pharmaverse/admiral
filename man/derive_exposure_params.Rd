@@ -2,14 +2,14 @@
 % Please edit documentation in R/derive_exposure_params.R
 \name{derive_exposure_params}
 \alias{derive_exposure_params}
-\title{Add a Record Computed from the Aggregated Analysis Value of another Parameter and derive the
-associated start and end dates}
+\title{Add an Aggregated Parameter and Derive the Associated Start and End Dates}
 \usage{
 derive_exposure_params(
   dataset,
   by_vars,
   input_code,
-  fns,
+  analysis_var,
+  summary_fun,
   filter = NULL,
   set_values_to = NULL
 )
@@ -17,9 +17,9 @@ derive_exposure_params(
 \arguments{
 \item{dataset}{Input dataset
 \itemize{
-\item The variables specified by the \code{by_vars} parameter and \code{PARAMCD} are expected,
-\item The variable specified on the LHS of \code{fns} is expected,
-\item \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are expected.
+\item The variables specified by the \code{by_vars},\code{analysis_var} parameters and \code{PARAMCD} are
+expected,
+\item Either \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are also expected.
 }}
 
 \item{by_vars}{Grouping variables
@@ -36,20 +36,12 @@ summary record.
 
 \emph{Permitted Values:} A character of \code{PARAMCD} value}
 
-\item{fns}{List of formulas specifying variable to use for aggregations.
+\item{analysis_var}{Analysis variable.}
 
-This can include base functions like \code{mean()}, \code{min()}, \code{max()}, \code{median()},
-\code{sd()}, or \code{sum()} or any other user-defined aggregation function.
-For example, \code{fns = list(AVAL~ mean)}.
-
-In general,
-\itemize{
-\item LHS refer to a variable to use for summarizing.
-\item RHS refer to a \strong{single} summary function.
-}
-
-In the formula representation e.g., \code{CHG ~ sum(., na.rm = TRUE)}, a \code{.}
-serves as the data to be summarized which refers to the variable \code{CHG}.}
+\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
+performs the calculation.
+This can include built-in functions as well as user defined functions,
+for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 
 \item{filter}{Filter condition
 
@@ -61,11 +53,13 @@ into account.
 
 \item{set_values_to}{Variable-value pairs
 
-Set a list of variables to some specified value for the new observation(s).
+Set a list of variables to some specified value for the new observation(s)
 \itemize{
 \item LHS refer to a variable. It is expected that at least \code{PARAMCD} is defined.
-\item RHS refers to the values to set to the variable. This can be a string, or NA.
-More general expression are not allowed (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+\item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+value or NA.
+(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+More general expression are not allowed.
 }}
 }
 \value{
@@ -73,10 +67,13 @@ The input dataset with a new record added for each group (with respect to the va
 specified for the \code{by_vars} parameter).
 For each new record,
 \itemize{
-\item the variable specified on the LHS of \code{fns} is computed as defined by the  RHS of \code{fns},
+\item the variable specified \code{analysis_var} is computed as defined by \code{summary_fun},
 \item the variable(s) specified on the LHS of \code{set_values_to} are set to their paired value (RHS).
 In addition, the start and end date are computed as the minimum/maximum dates by \code{by_vars}.
+}
+
 If the input datasets contains
+\itemize{
 \item both \code{AxxDTM} and \code{AxxDT} then all \code{ASTDTM},\code{AENDTM}, \code{ASTDT}, \code{AENDT} are computed
 \item only \code{AxxDTM} then \code{ASTDTM},\code{AENDTM} are computed
 \item only \code{AxxDT} then \code{ASTDT},\code{AENDT} are computed.
@@ -120,8 +117,9 @@ adex \%>\%
     by_vars = vars(USUBJID),
     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
     input_code = "DOSE",
-    fns = AVAL ~ sum(., na.rm = TRUE)
-  )
+    analysis_var = AVAL,
+    summary_fun = function(x) sum(x, na.rm = TRUE)
+   )
 
 # average dose in w2-24
 adex \%>\%
@@ -130,7 +128,8 @@ adex \%>\%
     filter = VISIT \%in\% c("WEEK2", "WEEK 24"),
     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
     input_code = "DOSE",
-    fns = AVAL ~ mean(., na.rm = TRUE)
+    analysis_var = AVAL,
+    summary_fun = function(x) mean(x, na.rm = TRUE)
   )
 
 # Any dose adjustement?
@@ -139,7 +138,8 @@ adex \%>\%
     by_vars = vars(USUBJID),
     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
     input_code = "ADJ",
-    fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+    analysis_var = AVALC,
+    summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
   )
 }
 \author{
