@@ -96,13 +96,12 @@ adcm <- cm %>%
 
   # Derive Aphase and Aphasen Variable
   # Other timing variable can be derived similarly.
-  # This variable is sponsor specific and may be used to indicate particular records to be used in subsequent derivations or analysis.
   mutate(
     APHASE = case_when(PREFL == "Y" ~ "Pre-Treatment",
-                       ONTRTFL == "Y"~"On-Treatment",
+                       ONTRTFL == "Y" ~ "On-Treatment",
                        FUPFL == "Y" ~ "Follow-Up"),
     APHASEN = case_when(PREFL == "Y" ~ 1,
-                       ONTRTFL == "Y"~2,
+                       ONTRTFL == "Y" ~ 2,
                        FUPFL == "Y" ~ 3)
   ) %>%
 
@@ -113,14 +112,15 @@ adcm <- cm %>%
   ) %>%
 
   # Derive ANL01FL : This is variable is sponsor specific
+  # This variable is sponsor specific and may be used to indicate particular records to be used in subsequent derivations or analysis.
   mutate(
     ANL01FL = ifelse(ONTRTFL == "Y","Y", "")
   ) %>%
 
-  # Derive occurrence flags
+  # Derive 1st Occurrence of Preferred Term Flag
   derive_extreme_flag(
-    new_var = AOCCIFL,
-    by_vars = vars(USUBJID,CMDECOD,APHASE),
+    new_var = AOCCPFL,
+    by_vars = vars(USUBJID, CMDECOD, APHASE),
     order = vars(ASTDTM, CMSEQ),
     flag_filter = ANL01FL == "Y",
     mode = "last"
