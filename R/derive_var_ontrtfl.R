@@ -1,7 +1,7 @@
 #' Derive On-Treatment Flag Variable
 #'
 #' Derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
-#' assessment date
+#' assessment date (e.g `ADT`) or event start/end dates (e.g. ASTDT/AENDT)
 #'
 #' @param dataset `data.frame`.
 #'
@@ -27,14 +27,19 @@
 #' @param ref_end_window A window to add to the upper bound `ref_end_date`
 #'   measured in days
 #'   (e.g. 7 if 7 days should be added to the upper bound)
-#'   Optional; default is 0
+#'   Optional; default is 0.
 #'
 #' @param filter_pre_timepoint An expression to filter observations as not
 #' on-treatment when `date` = `ref_start_date`. For example, if
 #' observations where `VSTPT = PRE` should not be considered on-treatment when
 #' `date = ref_start_date`, `filter_pre_timepoint` should be used
 #' to denote when the on-treatment flag should be set to null.
-#' Optional; default = NULL
+#' Optional; default is NULL.
+#'
+#' @param span_period A Y/Null scalar character. If `Y` events with missing end dates and
+#'  non-missing start dates i.e. potentially ongoing, are flagged as on treatment,
+#'  if NULL they are not flagged.
+#'  Optional; default is NULL.
 #'
 #' @details
 #' On-Treatment is calculated by determining whether the assessment date or
@@ -73,7 +78,7 @@
 #' )
 #' derive_var_ontrtfl(
 #'   advs,
-#'   date = ADT,
+#'   start_date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT
 #' )
@@ -86,7 +91,7 @@
 #' )
 #' derive_var_ontrtfl(
 #'   advs,
-#'   date = ADT,
+#'   start_date = ADT,
 #'   ref_start_date = TRTSDT,
 #'   ref_end_date = TRTEDT,
 #'   ref_end_window = 60
@@ -100,7 +105,7 @@
 #' )
 #' derive_var_ontrtfl(
 #'   advs,
-#'   date = ADTM,
+#'   start_date = ADTM,
 #'   ref_start_date = TRTSDTM,
 #'   ref_end_date = TRTEDTM,
 #'   filter_pre_timepoint = TPT == "PRE"
@@ -115,7 +120,7 @@
 #'
 #' derive_var_ontrtfl(
 #'  advs,
-#'  date = ASTDT,
+#'  start_date = ASTDT,
 #'  end_date = AENDT,
 #'  ref_start_date = TRTSDT,
 #'  ref_end_date = TRTEDT,
@@ -137,7 +142,7 @@ derive_var_ontrtfl <- function(dataset,
   ref_end_date <- assert_symbol(enquo(ref_end_date), optional = TRUE)
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
-  assert_character_scalar(span_period,values=c("Y","y"), optional = TRUE)
+  assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
   assert_data_frame(
     dataset,
@@ -186,15 +191,15 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(!!end_date >= !!ref_start_date,
-                        "Y",
+      ONTRTFL = if_else(!!end_date < !!ref_start_date,
+                        NA_character_,
                         ONTRTFL
                         )
                       )
   }
 
   #scenario 4: end_date and span_period are parsed
-  if (span_period) {
+  if (span_period == "Y") {
     dataset <- mutate(
       dataset,
       ONTRTFL = if_else(
@@ -210,32 +215,3 @@ derive_var_ontrtfl <- function(dataset,
 
   dataset
 }
-
-
-
-bds4 <- tibble::tribble(
-  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT, ~TPT,
-  "P01",    ymd("2020-03-01"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"), NA,
-  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"), NA,
-  "P03",    NA,                 ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"), NA, #endate is after trtsdt & start is NA
-  "P03",    NA,                 ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-12-01"), NA, #endate is before trtsdt & start is NA
-  "P03",    NA,                 ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-04-01"), NA, #endate is after trtsdt & start is NA
-  "try3",     ymd("2019-01-01"),ymd("2020-01-01"), ymd("2020-03-01"), NA, NA, #endate is NA & start is before trtsdt
-  "PAT04",  ymd("2020-03-01"), ymd("2020-01-01"), ymd("2021-02-01"), ymd("2021-01-01"), NA,
-  "PAT01",  ymd("2020-01-01"), ymd("2020-01-01"),ymd("2020-03-01"), ymd("2020-03-01"), "PRE",
-  "PAT02",  ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01") ,ymd("2020-03-01"), "POST"
-
-
-)
-
-derive_var_ontrtfl(
-  bds4,
-  start_date =  ASTDT,
-  end_date =  AENDT,
-  ref_start_date = TRTSDT,
-  ref_end_date = TRTEDT,
-  ref_end_window = 160,
-  filter_pre_timepoint = TPT == "PRE",
-  span_period="y"
-)
-
