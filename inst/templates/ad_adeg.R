@@ -136,7 +136,8 @@ adeg <- eg %>%
   # records available) for all parameter except EGINTP
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, VISIT, ADT),
-    fns = list(AVAL ~ mean(., na.rm = TRUE)),
+    analysis_var = AVAL,
+    summary_fun = function(x) mean(x, na.rm = TRUE),
     filter_rows = (dplyr::n() >= 2 & PARAMCD != "EGINTP"),
     set_values_to = vars(DTYPE = "AVERAGE")
   ) %>%
