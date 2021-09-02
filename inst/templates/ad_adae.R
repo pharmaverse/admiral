@@ -103,10 +103,10 @@ adae <- ae %>%
 
   # derive occurrence flags
   derive_extreme_flag(
-    new_var = AOCCIFL,
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
-    flag_filter = TRTEMFL == "Y",
+    new_var = AOCCIFL,
+    filter = TRTEMFL == "Y",
     mode = "last"
   )
 

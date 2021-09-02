@@ -111,11 +111,11 @@ advs <- derive_summary_records(
 # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
 advs <- derive_extreme_flag(
   advs,
-  new_var = ANL01FL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
   order = vars(ADT, AVAL),
+  new_var = ANL01FL,
   mode = "last",
-  flag_filter = (!is.na(AVISITN)))
+  filter = (!is.na(AVISITN)))
 
 # Calculate ONTRTFL
 # Note: ONTRTFL is not calculated in the CDISC pilot
@@ -146,11 +146,11 @@ advs <- derive_var_basetype(
 # Calculate ABLFL
 advs <- derive_extreme_flag(
   advs,
-  new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT, VISITNUM),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
+  filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE)))
 
 # Calculate BASE & BASEC
 advs <- derive_var_base(
@@ -175,11 +175,11 @@ advs <- mutate(advs,
 advs <-
   derive_extreme_flag(
     advs,
-    new_var = EOTFL,
     by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = vars(ADT),
+    new_var = EOTFL,
     mode = "last",
-    flag_filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")) %>%
+    filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")) %>%
     filter(EOTFL == "Y") %>%
   mutate(AVISIT = "End of Treatment",
          AVISITN = 99) %>%
