@@ -315,13 +315,13 @@ adex <- adex %>%
       params(
         set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
         input_code = "ADJ",
-        analysis_var = AVAL,
+        analysis_var = AVALC,
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       ),
       params(
         set_values_to = vars(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
         input_code = "ADJAE",
-        analysis_var = AVAL,
+        analysis_var = AVALC,
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
