@@ -12,8 +12,15 @@ library(admiral)
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
-adsl <- NULL
-vs <- NULL
+# For illustration purposes Read in Admiral Test Data
+
+data("vs")
+data("adsl")
+
+# The CDISC Pilot Data contains no SUPPVS data
+# If you have a SUPPVS then uncomment function below
+
+# derive_vars_suppqual(vs, suppvs)
 
 
 # ---- Lookup tables ----
@@ -61,7 +68,7 @@ format_avalcat1n <- function(param, aval) {
 
 # Join with ADSL immediately to pick up TRTSDT only (for ADY derivation)
 # Join with ADSL again after derived parameters
-advs_init <- vs %>%
+advs <- vs %>%
   left_join(
     adsl %>% select(STUDYID, USUBJID, TRTSDT),
     by = c("STUDYID", "USUBJID")
@@ -73,7 +80,9 @@ advs_init <- vs %>%
     flag_imputation = FALSE
   ) %>%
   # Calculate ADY
-  derive_var_ady(reference_date = TRTSDT, date = ADT) %>%
+  derive_var_ady(reference_date = TRTSDT, date = ADT)
+
+advs <- advs %>%
   # Add PARAMCD and PARAM
   left_join(param_lookup, by = "VSTESTCD") %>%
   # Calculate AVAL, AVALC, AVALU
@@ -81,10 +90,8 @@ advs_init <- vs %>%
     AVAL = VSSTRESN,
     AVALC = VSSTRESC,
     AVALU = VSSTRESU
-  )
-
-# Derive new parameters based on existing records.
-advs_param <- advs_init %>%
+  ) %>%
+  # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
     unit_var = NULL,
@@ -102,70 +109,67 @@ advs_param <- advs_init %>%
     unit_var = NULL,
     by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2")
-  ) %>%
-  # Add parameter details for derived parameters
-  select(filter(PARAMCD %in% c("MAP", "BSA")),
-         -PARAM, -PARAMN) %>%
-  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD") %>%
-  union_all(advs_init,filter(!(PARAMCD %in% c("MAP", "BSA"))))
+  )
+
+# Add parameter details for derived parameters
+advs_new <- advs %>%
+  filter(PARAMCD %in% c("MAP", "BMI", "BSA")) %>%
+  select(-PARAM, -PARAMN) %>%
+  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD")
+
+# Combine all parameters
+advs_params <- advs_new %>%
+  union_all(advs,filter(!(PARAMCD %in% c("MAP", "BMI", "BSA"))))
 
 # join ADSL vars and get visit info
-advs_visit <- advs_param %>%
-  select(-DOMAIN, -TRTSDT)
+advs <- advs %>%
+  select(-DOMAIN, -TRTSDT) %>%
   left_join(adsl,by = c("STUDYID", "USUBJID")) %>%
   # Derive Timing
   mutate(
-    ATPTN = VSTPTNUM,
-    ATPT = VSTPT,
     AVISIT = case_when(
-      str_detect(VISIT, "SCREEN") |
-        str_detect(VISIT, "UNSCHED") |
-        str_detect(VISIT, "RETRIEVAL") |
-        str_detect(VISIT, "AMBUL") ~ NA_character_,
+      str_detect(VISIT, "SCREEN") ~ NA_character_,
+      str_detect(VISIT, "UNSCHED") ~ NA_character_,
+      str_detect(VISIT, "RETRIEVAL") ~ NA_character_,
+      str_detect(VISIT, "AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
-    ),
-    AVISITN = case_when(
-      VISIT == "BASELINE" ~ 0,
-      str_detect(VISIT, "WEEK") ~ as.numeric(str_sub(VISIT, start = 5)),
-      TRUE ~ NA_real_
-    )
-  ) %>%
+      ),
+    AVISITN = as.numeric(case_when(
+      VISIT == "BASELINE" ~ "0",
+      str_detect(VISIT, "WEEK") ~ str_trim(str_replace(VISIT, "WEEK", "")),
+      TRUE ~ NA_character_
+      )),
+    ATPTN = VSTPTNUM,
+    ATPT = VSTPT
+  )
+
   # Derive a new a new record as a summary record (e.g. mean of the triplictaes at each time point)
-  # Note: This is not derived in the CDISC pilot and is presented
-  #       for demonstration purposes.
+advs <- advs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
     fns = list(AVAL ~ mean),
     set_values_to = vars(DTYPE = "AVERAGE")
   )
 
-# Derive flag derivations
-advs_flags <- advs_visit %>%
-  # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
-  derive_extreme_flag(
-    new_var = ANL01FL,
-    by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-    order = vars(ADT, AVAL),
-    mode = "last",
-    flag_filter = (!is.na(AVISITN))
-  ) %>%
+# Derive Timing flag derivation
 
+advs <- advs %>%
   # Calculate ONTRTFL
-  # Note: ONTRTFL is not calculated in the CDISC pilot
   derive_var_ontrtfl(
     date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
-  ) %>%
+  )
 
+# Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
+# Also accommodates the ranges A1LO, A1HI
+advs <- left_join(advs, range_lookup, by = "PARAMCD") %>%
   # Calculate ANRIND
-  # Note: ANRIND along with ANRLO and ANRHI are not included in CDISC pilot
-  left_join(range_lookup, by = "PARAMCD") %>%
   derive_var_anrind()
 
 # Derive baseline derivations
-advs_base <- advs_flags %>%
+advs <- advs %>%
   # Calculate BASETYPE
   derive_var_basetype(
     basetypes = exprs(
@@ -174,6 +178,7 @@ advs_base <- advs_flags %>%
       "AFTER STANDING FOR 3 MINUTES" = ATPTN == 817
     )
   ) %>%
+
   # Calculate ABLFL
   derive_extreme_flag(
     new_var = ABLFL,
@@ -183,26 +188,41 @@ advs_base <- advs_flags %>%
     flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   ) %>%
 
-  # Calculate BASE & BASEC
+  # Calculate BASE, BASEC & BNRIND
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
   ) %>%
   derive_var_basec(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
   ) %>%
+  derive_baseline(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ANRIND,
+    new_var = BNRIND
+  ) %>%
 
   # Calculate CHG, PCHG
   derive_var_chg() %>%
   derive_var_pchg()
 
+
+# ANL01FL: Flag last result within an AVISIT and ATPT
+advs <- advs %>%
+  derive_extreme_flag(
+    new_var = ANL01FL,
+    by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
+    order = vars(ADT, AVAL),
+    mode = "last",
+    flag_filter = (!is.na(AVISITN))
+    )
+
 # Get treatment information
-advs_trt <- advs_base %>%
+advs <- advs %>%
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-
   # Create End of Treatment Record
   derive_extreme_flag(
     new_var = EOTFL,
@@ -216,11 +236,11 @@ advs_trt <- advs_base %>%
     AVISIT = "End of Treatment",
     AVISITN = 99
   ) %>%
-  # union_all(advs) %>%
+  union_all(advs) %>%
   select(-EOTFL)
 
 # Get ASEQ and AVALCATx
-advs_final <- advs_trt %>%
+advs <- advs %>%
   # Calculate ASEQ
   derive_obs_number(
     new_var = ASEQ,
@@ -230,8 +250,6 @@ advs_final <- advs_trt %>%
   ) %>%
 
   # Derive AVALCATx
-  # Note: Derivation of AVALCAT is not represented in the CDISC Pilot. It is
-  #       presented for demonstration purposes.
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
   left_join(avalcat_lookup, by = "PARAMCD")
 
