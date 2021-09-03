@@ -268,8 +268,9 @@ For example, to calculate the total dose by subject and treatment,
 adex <- derive_exposure_params(
   adex,
   by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT),
-  input_param = "DOSE",
-  fns = AVAL ~ sum(., na.rm = TRUE),
+  input_code = "DOSE",
+  analysis_var = AVAL,
+  summary_fun = function(x) sum(x, na.rm = TRUE),
   set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
 )
 
@@ -295,28 +296,33 @@ adex <- adex %>%
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
-        input_param = "DOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        input_code = "DOSE",
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TPDOSE", PARCAT1 = "OVERALL"),
-        input_param = "PLDOSE",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        input_code = "PLDOSE",
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TDURD", PARCAT1 = "OVERALL"),
-        input_param = "DURD",
-        fns = AVAL ~ sum(., na.rm = TRUE)
+        input_code = "DURD",
+        analysis_var = AVAL,
+        summary_fun = function(x) sum(x, na.rm = TRUE)
       ),
       params(
         set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
-        input_param = "ADJ",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        input_code = "ADJ",
+        analysis_var = AVAL,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       ),
       params(
         set_values_to = vars(PARAMCD = "TADJAE", PARCAT1 = "OVERALL"),
-        input_param = "ADJAE",
-        fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
+        input_code = "ADJAE",
+        analysis_var = AVAL,
+        summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
     by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
