@@ -95,7 +95,7 @@
 #'
 #' # Cumulative dose
 #' adex %>%
-#'   derive_exposure_params(
+#'   derive_params_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
@@ -105,7 +105,7 @@
 #'
 #' # average dose in w2-24
 #' adex %>%
-#'   derive_exposure_params(
+#'   derive_params_exposure(
 #'     by_vars = vars(USUBJID),
 #'     filter = VISIT %in% c("WEEK2", "WEEK 24"),
 #'     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
@@ -116,14 +116,14 @@
 #'
 #' # Any dose adjustement?
 #' adex %>%
-#'   derive_exposure_params(
+#'   derive_params_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
 #'   )
-derive_exposure_params <- function(dataset,
+derive_params_exposure <- function(dataset,
                                    by_vars,
                                    input_code,
                                    analysis_var,
