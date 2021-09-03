@@ -150,9 +150,7 @@ head(select(adex, EXSTDTC, EXENDTC, ASTDT, ASTDTM, AENDT, AENDTM))
 ```
 
 The example above imputes the start date to the first first day of the month and
-imputes the end date to the last day of the month.  The `min_dates` and
-`max_dates` ensure no date is prior to or after the `TRTSDT` and `TRTEDT` when
-imputation is done.
+imputes the end date to the last day of the month.  
 
 Please see the [Date and Time Imputation](imputation.Rmd) for additional examples on 
 calculating and imputing analysis dates.
