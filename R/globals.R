@@ -69,8 +69,13 @@ globalVariables(c(
   "SC",
   "SCN",
   "value",
+  "ASTDTM",
+  "temp_start",
+  "AENDTM",
+  "temp_end",
   "key",
   "order1",
   "order2",
-  "order3"
+  "order3",
+  "_unit"
 ))

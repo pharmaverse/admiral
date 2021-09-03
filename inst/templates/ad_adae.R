@@ -23,7 +23,7 @@ ex <- NULL
 
 adae <- ae %>%
   # join supplementary qualifier variables
-  derive_suppqual_vars(suppae) %>%
+  derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
@@ -65,7 +65,7 @@ adae <- ae %>%
   ) %>%
 
   # derive analysis duration (value and unit)
-  derive_duration(
+  derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,
@@ -103,10 +103,10 @@ adae <- ae %>%
 
   # derive occurrence flags
   derive_extreme_flag(
-    new_var = AOCCIFL,
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
-    flag_filter = TRTEMFL == "Y",
+    new_var = AOCCIFL,
+    filter = TRTEMFL == "Y",
     mode = "last"
   )
 

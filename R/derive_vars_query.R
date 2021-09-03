@@ -47,8 +47,8 @@
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
 #'     7, "Alveolar proteinosis", NA_character_,  NA_integer_
 #' )
-#' derive_query_vars(adae, queries)
-derive_query_vars <- function(dataset, dataset_queries) {
+#' derive_vars_query(adae, queries)
+derive_vars_query <- function(dataset, dataset_queries) {
 
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
@@ -274,7 +274,7 @@ assert_valid_queries <- function(queries, queries_name) {
     idx <- which(count_unique$n_qnam > 1)
     abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
                  paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
-          "' is not unique."))
+                 "' is not unique."))
   }
 
   if (any(count_unique$n_qid > 1)) {
@@ -284,4 +284,17 @@ assert_valid_queries <- function(queries, queries_name) {
                  "' is not unique."))
   }
 
+}
+
+#' Derive Query Variables
+#'
+#' `derive_query_vars()` was renamed to `derive_vars_query()` to create a
+#' more consistent API.
+#'
+#' @keywords internal
+#'
+#' @export
+derive_query_vars <- function(dataset, dataset_queries) {
+  deprecate_warn("0.3.0", "derive_query_vars()", "derive_vars_query()")
+  derive_vars_query(dataset, dataset_queries)
 }
