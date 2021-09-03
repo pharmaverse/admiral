@@ -43,7 +43,7 @@ data <- tibble::tribble(
 derive_var_trtdurd(data)
 }
 \seealso{
-\code{\link[=derive_duration]{derive_duration()}}
+\code{\link[=derive_vars_duration]{derive_vars_duration()}}
 }
 \author{
 Stefan Bundfuss

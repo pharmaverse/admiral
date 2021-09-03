@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_duration()]
+#' @seealso [derive_vars_duration()]
 #'
 #' @examples
 #' data <- tibble::tribble(
@@ -46,7 +46,7 @@ derive_var_trtdurd <- function(dataset,
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, vars(!!start_date, !!end_date))
 
-  derive_duration(
+  derive_vars_duration(
     dataset,
     new_var = TRTDURD,
     start_date = !!start_date,

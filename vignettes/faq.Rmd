@@ -54,7 +54,7 @@ knitr::opts_chunk$set(
 ##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
 * Functions are usually not necessarily specific but parameter driven: 
-    * e.g. the `derive_aage` has a parameterized start and end-date and a unit.
+    * e.g. the `derive_vars_aage` has a parameterized start and end-date and a unit.
     * Depending on the parameters results may vary as does the specification.
     * Functions serve as a toolbox so the user can create their ADaM according to the requirements.
     * The principles, programming strategy and documentation of admiral are considered as a framework for users to contribute.

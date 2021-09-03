@@ -7,15 +7,15 @@
 #'   The variables specified by the `order` and the `by_vars` parameter are
 #'   expected.
 #'
+#' @param by_vars Grouping variables
+#'
+#'   Permitted Values: list of variables
+#'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
 #'   Permitted Values: list of variables or functions of variables
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -55,8 +55,8 @@
 #' # Select first dose for each patient
 #' ex %>%
 #'   filter_extreme(
-#'     order = vars(EXSEQ),
 #'     by_vars = vars(USUBJID),
+#'     order = vars(EXSEQ),
 #'     mode = "first"
 #'   ) %>%
 #'   select(USUBJID, EXSEQ)
@@ -64,19 +64,24 @@
 #' # Select highest dose for each patient
 #' ex %>%
 #'   filter_extreme(
-#'     order = vars(EXDOSE),
 #'     by_vars = vars(USUBJID),
+#'     order = vars(EXDOSE),
 #'     mode = "last",
 #'     check_type = "none"
 #'   ) %>%
 #'   select(USUBJID, EXDOSE)
 filter_extreme <- function(dataset,
-                           order,
                            by_vars = NULL,
+                           order,
                            mode,
                            check_type = "warning") {
-  arg_match(mode, c("first", "last"))
-  arg_match(check_type, c("none", "warning", "error"))
+  mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
+  check_type <-
+    assert_character_scalar(
+      check_type,
+      values = c("none", "warning", "error"),
+      case_sensitive = FALSE
+    )
 
   # group and sort input dataset
   if (!is.null(by_vars)) {

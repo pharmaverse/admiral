@@ -141,17 +141,18 @@ advs <- advs0 %>%
   #       for demonstration purposes.
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
-    fns = list(AVAL ~ mean),
+    analysis_var = AVAL,
+    summary_fun = mean,
     set_values_to = vars(DTYPE = "AVERAGE")
   ) %>%
 
   # ANL01FL: Flag last (and highest) results within an AVISIT and ATPT
   derive_extreme_flag(
-    new_var = ANL01FL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
+    new_var = ANL01FL,
     mode = "last",
-    flag_filter = (!is.na(AVISITN))
+    filter = (!is.na(AVISITN))
   ) %>%
 
   # Calculate ONTRTFL
@@ -176,11 +177,11 @@ advs <- advs0 %>%
   ) %>%
   # Calculate ABLFL
   derive_extreme_flag(
-    new_var = ABLFL,
     by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
     order = vars(ADT, VSSEQ),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
+    filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   ) %>%
 
   # Calculate BASE & BASEC
@@ -203,11 +204,11 @@ advs <- advs0 %>%
 
   # Create End of Treatment Record
   derive_extreme_flag(
-    new_var = EOTFL,
     by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = vars(ADT),
+    new_var = EOTFL,
     mode = "last",
-    flag_filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")
+    filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y")
   ) %>%
   filter(EOTFL == "Y") %>%
   mutate(
