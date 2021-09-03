@@ -12,7 +12,7 @@ format_eoxxstt_default(x)
 \value{
 A \code{character} vector derived based on the values given in \code{x}:
 "COMPLETED" if \code{x} == "COMPLETED",
-"DISCONTINUED" if \code{x} is not "COMPLETED" or NA,
+"DISCONTINUED" if \code{x} is not "COMPLETED" nor NA,
 "ONGOING" otherwise.
 }
 \description{

@@ -6,12 +6,12 @@
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: ds).
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `status_var`
 #' - The variables used in `filter_ds`.
 #'
-#' @param new_var Name of the disposition date variable.
+#' @param new_var Name of the disposition status variable.
 #'
 #' A variable name is expected (e.g. `EOSSTT`).
 #'
@@ -43,7 +43,7 @@
 #'  defined by `format_new_var` (e.g. when the default format is used, the function will derive
 #'  `new_var` as:
 #'  "COMPLETED" if `status_var` == "COMPLETED",
-#'  "DISCONTINUED" if `status_var` is not "COMPLETED" or NA,
+#'  "DISCONTINUED" if `status_var` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise).
 #'
 #' @keywords adsl
@@ -59,7 +59,7 @@
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
-#' #- DISCONTINUED when status_var != COMPLETED
+#' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
 #' dm %>%
@@ -137,7 +137,7 @@ derive_disposition_status <- function(dataset,
 #'
 #' @return A `character` vector derived based on the values given in `x`:
 #'  "COMPLETED" if `x` == "COMPLETED",
-#'  "DISCONTINUED" if `x` is not "COMPLETED" or NA,
+#'  "DISCONTINUED" if `x` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
@@ -146,7 +146,7 @@ derive_disposition_status <- function(dataset,
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
-    x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
+    !(x %in% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }

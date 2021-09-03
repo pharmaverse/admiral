@@ -18,14 +18,14 @@ derive_disposition_status(
 
 \item{dataset_ds}{Dataset containing the disposition information (e.g.: ds).
 
-It must contains
+It must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{status_var}
 \item The variables used in \code{filter_ds}.
 }}
 
-\item{new_var}{Name of the disposition date variable.
+\item{new_var}{Name of the disposition status variable.
 
 A variable name is expected (e.g. \code{EOSSTT}).}
 
@@ -57,7 +57,7 @@ The input dataset with the disposition status (\code{new_var}) added.
 defined by \code{format_new_var} (e.g. when the default format is used, the function will derive
 \code{new_var} as:
 "COMPLETED" if \code{status_var} == "COMPLETED",
-"DISCONTINUED" if \code{status_var} is not "COMPLETED" or NA,
+"DISCONTINUED" if \code{status_var} is not "COMPLETED" nor NA,
 "ONGOING" otherwise).
 }
 \description{
@@ -70,7 +70,7 @@ data("ds")
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
-#- DISCONTINUED when status_var != COMPLETED
+#- DISCONTINUED when status_var != COMPLETED nor NA
 #- ONGOING otherwise
 
 dm \%>\%
