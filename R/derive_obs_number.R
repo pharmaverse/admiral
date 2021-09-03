@@ -7,22 +7,22 @@
 #'   The variables specified by the `order` and the `by_vars` parameter are
 #'   expected.
 #'
-#' @param new_var Name of variable to create
+#' @param by_vars Grouping variables
 #'
-#'   The new variable is set to the observation number for each by group. The
-#'   numbering starts with 1.
+#'   Permitted Values: list of variables
 #'
-#'   Default: `ASEQ`
-
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
 #'   Permitted Values: list of variables or functions of variables
 #'
-#' @param by_vars Grouping variables
+#' @param new_var Name of variable to create
 #'
-#'   Permitted Values: list of variables
+#'   The new variable is set to the observation number for each by group. The
+#'   numbering starts with 1.
+#'
+#'   Default: `ASEQ`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -60,9 +60,9 @@
 #'     order = vars(VISITNUM, VSTPTNUM)
 #'   )
 derive_obs_number <- function(dataset,
-                              new_var = ASEQ,
-                              order = NULL,
                               by_vars = NULL,
+                              order = NULL,
+                              new_var = ASEQ,
                               check_type = "none") {
   # checks and quoting
   new_var <- assert_symbol(enquo(new_var))
@@ -78,7 +78,11 @@ derive_obs_number <- function(dataset,
     required_vars <- vars(!!!required_vars, !!!extract_vars(order))
   }
   assert_data_frame(dataset, required_vars = required_vars)
-  assert_character_scalar(check_type, values = c("none", "warning", "error"))
+  check_type <-
+    assert_character_scalar(
+      check_type,
+      values = c("none", "warning", "error"),
+      case_sensitive = FALSE)
 
   # derivation
   data <- dataset
@@ -86,8 +90,6 @@ derive_obs_number <- function(dataset,
   if (!is.null(by_vars) | !is.null(order)) {
     # group and sort input dataset
     if (!is.null(by_vars)) {
-      assert_has_variables(data, vars2chr(by_vars))
-
       data <- data %>%
         group_by(!!!by_vars) %>%
         arrange(!!!order, .by_group = TRUE)
@@ -95,7 +97,7 @@ derive_obs_number <- function(dataset,
       if (check_type != "none") {
         signal_duplicate_records(
           data,
-          by_vars = c(by_vars, extract_vars(order)),
+          by_vars = required_vars,
           cnd_type = check_type
         )
       }

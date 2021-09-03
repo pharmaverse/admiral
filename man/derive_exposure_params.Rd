@@ -2,12 +2,12 @@
 % Please edit documentation in R/derive_exposure_params.R
 \name{derive_exposure_params}
 \alias{derive_exposure_params}
-\title{Add a Record Computed from the Aggregated Analysis Value of another Parameter}
+\title{Add an Aggregated Parameter and Derive the Associated Start and End Dates}
 \usage{
 derive_exposure_params(
   dataset,
   by_vars,
-  input_param,
+  input_code,
   fns,
   filter = NULL,
   set_values_to = NULL
@@ -15,13 +15,11 @@ derive_exposure_params(
 }
 \arguments{
 \item{dataset}{Input dataset
-
-The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, \code{AVAL}, \code{AVALC}, \code{ASTDTM}
-and \code{AENDTM} are expected.
-
-The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
-the input dataset after restricting it by the filter condition (\code{filter}
-parameter) and to the parameters specified by \code{parameters}.}
+\itemize{
+\item The variables specified by the \code{by_vars} parameter and \code{PARAMCD} are expected,
+\item The variable specified on the LHS of \code{fns} is expected,
+\item \code{ASTDTM} and \code{AENDTM} or \code{ASTDT} and \code{AENDT} are expected.
+}}
 
 \item{by_vars}{Grouping variables
 
@@ -30,7 +28,7 @@ dataset.
 
 \emph{Permitted Values:} list of variables}
 
-\item{input_param}{Required parameter code
+\item{input_code}{Required parameter code
 
 The observations where \code{PARAMCD} equals the specified value are considered to compute the
 summary record.
@@ -45,7 +43,7 @@ For example, \code{fns = list(AVAL~ mean)}.
 
 In general,
 \itemize{
-\item LHS refer to the one or more variable to use for summarizing.
+\item LHS refer to a variable to use for summarizing.
 \item RHS refer to a \strong{single} summary function.
 }
 
@@ -60,67 +58,96 @@ into account.
 
 \emph{Permitted Values:} a condition}
 
-\item{set_values_to}{Variables to be set
+\item{set_values_to}{Variable-value pairs
 
-The specified variables are set to the specified values for the new
-observations (e.g. \code{vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")}).
-
-\emph{Permitted Values:} List of variable-value pairs}
+Set a list of variables to some specified value for the new observation(s).
+\itemize{
+\item LHS refer to a variable. It is expected that at least \code{PARAMCD} is defined.
+\item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+value or NA.
+More general expression are not allowed (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+}}
 }
 \value{
-The input dataset with a new record added. ASTDT(M) and AENDT(M) are computed as the
-minimum/maximum dates by \code{by_vars}
+The input dataset with a new record added for each group (with respect to the variables
+specified for the \code{by_vars} parameter).
+For each new record,
+\itemize{
+\item the variable specified on the LHS of \code{fns} is computed as defined by the  RHS of \code{fns},
+\item the variable(s) specified on the LHS of \code{set_values_to} are set to their paired value (RHS).
+In addition, the start and end date are computed as the minimum/maximum dates by \code{by_vars}.
+}
+
+If the input datasets contains
+\itemize{
+\item both \code{AxxDTM} and \code{AxxDT} then all \code{ASTDTM},\code{AENDTM}, \code{ASTDT}, \code{AENDT} are computed
+\item only \code{AxxDTM} then \code{ASTDTM},\code{AENDTM} are computed
+\item only \code{AxxDT} then \code{ASTDT},\code{AENDT} are computed.
+}
 }
 \description{
-Add a record computed from the aggregated analysis value of another parameter.
+Add a record computed from the aggregated analysis value of another parameter and compute the
+start (\code{ASTDT(M)})and end date (\code{AENDT(M)}) as the minimum and maximum date by \code{by_vars}.
+}
+\details{
+For each group (with respect to the variables specified for the \code{by_vars} parameter),
+an observation is added to the output dataset and the defined values are set to the defined
+variables
+
+\emph{Permitted Values:} List of variable-value pairs
 }
 \examples{
-library(dplyr)
-library(lubridate)
-library(stringr)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
+library(stringr, warn.conflicts = FALSE)
 adex <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
-  "01-701-1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-  "01-701-1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-  "01-701-1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-  "01-701-1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-  "01-701-1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-  "01-701-1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-  "01-701-1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-  "01-701-1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-  "01-701-1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
-  "01-701-1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-  "01-701-1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-  "01-701-1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
+  "01-701-1015", "DOSE", 80, NA_character_,    "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+  "01-701-1015", "DOSE", 85, NA_character_,    "WEEK 2",   ymd("2014-01-17"), ymd("2014-06-18"),
+  "01-701-1015", "DOSE", 82, NA_character_,    "WEEK 24",  ymd("2014-06-19"), ymd("2014-07-02"),
+  "01-701-1015", "ADJ",  NA, NA_character_,    "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+  "01-701-1015", "ADJ",  NA, NA_character_,    "WEEK 2",   ymd("2014-01-17"), ymd("2014-06-18"),
+  "01-701-1015", "ADJ",  NA, NA_character_,    "WEEK 24",  ymd("2014-06-19"), ymd("2014-07-02"),
+  "01-701-1017", "DOSE", 80, NA_character_,    "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+  "01-701-1017", "DOSE", 50, NA_character_,    "WEEK 2",   ymd("2014-01-20"), ymd("2014-05-10"),
+  "01-701-1017", "DOSE", 65, NA_character_,    "WEEK 24",  ymd("2014-05-10"), ymd("2014-07-02"),
+  "01-701-1017", "ADJ",  NA, NA_character_,    "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+  "01-701-1017", "ADJ",  NA, "ADVERSE EVENT",  "WEEK 2",   ymd("2014-01-20"), ymd("2014-05-10"),
+  "01-701-1017", "ADJ",  NA, NA_character_,    "WEEK 24",  ymd("2014-05-10"), ymd("2014-07-02")
 ) \%>\%
   mutate(ASTDTM = ymd_hms(paste(ASTDT, "00:00:00")), AENDTM = ymd_hms(paste(AENDT, "00:00:00")))
 
-  # Cumulative dose
-  adex \%>\%
+# Cumulative dose
+adex \%>\%
   derive_exposure_params(
     by_vars = vars(USUBJID),
     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
-    input_param = "DOSE",
+    input_code = "DOSE",
     fns = AVAL ~ sum(., na.rm = TRUE)
-  ) \%>\%
-  # average dose in w2-24
+  )
+
+# average dose in w2-24
+adex \%>\%
   derive_exposure_params(
     by_vars = vars(USUBJID),
     filter = VISIT \%in\% c("WEEK2", "WEEK 24"),
     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
-    input_param = "DOSE",
+    input_code = "DOSE",
     fns = AVAL ~ mean(., na.rm = TRUE)
-  ) \%>\%
-  # Any dose adjustement?
+  )
+
+# Any dose adjustement?
+adex \%>\%
   derive_exposure_params(
     by_vars = vars(USUBJID),
     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
-    input_param = "ADJ",
+    input_code = "ADJ",
     fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_)
   )
 }
 \author{
 Samia Kabi
 }
+\keyword{adex}
 \keyword{bds}
 \keyword{derivation}

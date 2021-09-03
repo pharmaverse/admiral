@@ -4,7 +4,7 @@
 \alias{compute_bsa}
 \title{Compute Body Surface Area (BSA)}
 \usage{
-compute_bsa(height = height, weight = weight, method = "Mosteller")
+compute_bsa(height = height, weight = weight, method)
 }
 \arguments{
 \item{height}{HEIGHT value

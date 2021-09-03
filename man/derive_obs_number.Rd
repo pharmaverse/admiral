@@ -6,9 +6,9 @@
 \usage{
 derive_obs_number(
   dataset,
-  new_var = ASEQ,
-  order = NULL,
   by_vars = NULL,
+  order = NULL,
+  new_var = ASEQ,
   check_type = "none"
 )
 }
@@ -18,12 +18,9 @@ derive_obs_number(
 The variables specified by the \code{order} and the \code{by_vars} parameter are
 expected.}
 
-\item{new_var}{Name of variable to create
+\item{by_vars}{Grouping variables
 
-The new variable is set to the observation number for each by group. The
-numbering starts with 1.
-
-Default: \code{ASEQ}}
+Permitted Values: list of variables}
 
 \item{order}{Sort order
 
@@ -31,9 +28,12 @@ Within each by group the observations are ordered by the specified order.
 
 Permitted Values: list of variables or functions of variables}
 
-\item{by_vars}{Grouping variables
+\item{new_var}{Name of variable to create
 
-Permitted Values: list of variables}
+The new variable is set to the observation number for each by group. The
+numbering starts with 1.
+
+Default: \code{ASEQ}}
 
 \item{check_type}{Check uniqueness?
 
