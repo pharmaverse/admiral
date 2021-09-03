@@ -68,6 +68,21 @@ test_that("check `set_values_to` mapping", {
   tf <- rep(c(NA, "MEAN", "SUM"), c(16, 4, 4))
 
   expect_equal(actual_output$d, tf)
+
+  actual_output <- input %>%
+    derive_summary_records(
+      by_vars = vars(x, y),
+      analysis_var = z,
+      summary_fun = mean,
+      set_values_to = vars(d = "MEAN", p1 = "PARAM1", p2 = "PARAM2")
+    )
+  tf <- rep(c(NA, "MEAN"), c(16, 4))
+  tp1 <- rep(c(NA, "PARAM1"), c(16, 4))
+  tp2 <- rep(c(NA, "PARAM2"), c(16, 4))
+
+  expect_equal(actual_output$d, tf)
+  expect_equal(actual_output$p1, tp1)
+  expect_equal(actual_output$p2, tp2)
 })
 
 test_that("Filter record within `by_vars`", {
@@ -152,10 +167,11 @@ test_that("Errors", {
       input,
       by_vars = vars(x),
       analysis_var = z,
-      summary_fun = ~ mean
+      summary_fun = ~mean
     ),
-    regexp = paste("`summary_fun` must be an object of class 'function'",
-                   "but is an object of class 'formula'")
+    regexp = paste(
+      "`summary_fun` must be an object of class 'function'",
+      "but is an object of class 'formula'"
+    )
   )
-
 })

@@ -1,29 +1,29 @@
 context("test-derive_exposure_params")
+input <- tibble::tribble(
+  ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
+  "01-701-1015", "BASELINE", "DOSE", 80, NA_character_, "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2",   "DOSE", 80, NA_character_, "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12",  "DOSE", 65, NA_character_, "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24",  "DOSE", 65, NA_character_, "2020-12-17", "2021-06-02",
+  "01-701-1015", "BASELINE", "ADJ",  NA, NA_character_, "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2",   "ADJ",  NA, "Y",           "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12", "ADJ",   NA, "Y",           "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24",  "ADJ",  NA, NA_character_, "2020-12-17", "2021-06-02",
+  "01-701-1281", "BASELINE", "DOSE", 80, NA_character_, "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2",   "DOSE", 80, NA_character_, "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12",  "DOSE", 82, NA_character_, "2020-10-02", "2020-12-01",
+  "01-701-1281", "BASELINE", "ADJ",  NA, NA_character_, "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2",   "ADJ",  NA, NA_character_, "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12",  "ADJ",  NA, NA_character_, "2020-10-02", "2020-12-01"
+) %>%
+  mutate(
+    ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
+    ASTDT = date(ASTDTM),
+    AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
+    AENDT = date(AENDTM)
+  )
 
 test_that("new observations are derived correctly for AVAL", {
-  input <- tibble::tribble(
-    ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
-    "01-701-1015", "BASELINE", "DOSE", 80, NA_character_, "2020-07-01", "2020-07-14",
-    "01-701-1015", "WEEK 2", "DOSE", 80, NA_character_, "2020-07-15", "2020-09-23",
-    "01-701-1015", "WEEK 12", "DOSE", 65, NA_character_, "2020-09-24", "2020-12-16",
-    "01-701-1015", "WEEK 24", "DOSE", 65, NA_character_, "2020-12-17", "2021-06-02",
-    "01-701-1015", "BASELINE", "ADJ", NA, NA_character_, "2020-07-01", "2020-07-14",
-    "01-701-1015", "WEEK 2", "ADJ", NA, "Y", "2020-07-15", "2020-09-23",
-    "01-701-1015", "WEEK 12", "ADJ", NA, "Y", "2020-09-24", "2020-12-16",
-    "01-701-1015", "WEEK 24", "ADJ", NA, NA_character_, "2020-12-17", "2021-06-02",
-    "01-701-1281", "BASELINE", "DOSE", 80, NA_character_, "2020-07-03", "2020-07-18",
-    "01-701-1281", "WEEK 2", "DOSE", 80, NA_character_, "2020-07-19", "2020-10-01",
-    "01-701-1281", "WEEK 12", "DOSE", 82, NA_character_, "2020-10-02", "2020-12-01",
-    "01-701-1281", "BASELINE", "ADJ", NA, NA_character_, "2020-07-03", "2020-07-18",
-    "01-701-1281", "WEEK 2", "ADJ", NA, NA_character_, "2020-07-19", "2020-10-01",
-    "01-701-1281", "WEEK 12", "ADJ", NA, NA_character_, "2020-10-02", "2020-12-01"
-  ) %>%
-    mutate(
-      ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
-      ASTDT = date(ASTDTM),
-      AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
-      AENDT = date(AENDTM)
-    )
 
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
@@ -61,19 +61,22 @@ test_that("new observations are derived correctly for AVAL", {
     derive_exposure_params(
       by_vars = vars(USUBJID),
       input_code = "DOSE",
-      fns = AVAL ~ sum(., na.rm = TRUE),
-      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      analysis_var = AVAL,
+      summary_fun = function(x) sum(x, na.rm = TRUE),
+       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_exposure_params(
       by_vars = vars(USUBJID),
       input_code = "DOSE",
-      fns = AVAL ~ mean(., na.rm = TRUE),
+      analysis_var = AVAL,
+      summary_fun = function(x) mean(x, na.rm = TRUE),
       set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_exposure_params(
       by_vars = vars(USUBJID),
       input_code = "ADJ",
-      fns = AVALC ~ if_else(sum(!is.na(.)) > 0, "Y", NA_character_),
+      analysis_var = AVALC,
+      summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_),
       set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
     )
 
@@ -81,4 +84,50 @@ test_that("new observations are derived correctly for AVAL", {
     expected_output,
     keys = c("USUBJID", "VISIT", "PARAMCD")
   )
+})
+
+
+test_that("Errors", {
+
+# PARAMCD must be specified
+expect_error(
+  input <- input %>%
+    derive_exposure_params(
+      by_vars = vars(USUBJID),
+      input_code = "DOSE",
+      analysis_var = AVAL,
+      summary_fun = function(x) mean(x, na.rm = TRUE),
+      set_values_to = vars(PARCAT1 = "OVERALL")
+    ),
+  regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
+)
+  # input code must be present
+  expect_error(
+    input <- input %>%
+      derive_exposure_params(
+        by_vars = vars(USUBJID),
+        input_code = "DOSED",
+        analysis_var = AVAL,
+        summary_fun = function(x) mean(x, na.rm = TRUE),
+        set_values_to = vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")
+      ),
+    regexp = paste("`input_code` contains invalid values:\n`DOSED`\nValid",
+                    "values:\n`DOSE` and `ADJ`")
+  )
+
+  # ASTDTM/AENDTM or ASTDT/AENDT must be present
+  expect_error(
+    input <- input %>%
+      select(-starts_with("AST"),-starts_with("AEN"))%>%
+      derive_exposure_params(
+        by_vars = vars(USUBJID),
+        input_code = "DOSE",
+        analysis_var = AVAL,
+        summary_fun = function(x) mean(x, na.rm = TRUE),
+        set_values_to = vars(PARCAT1 = "OVERALL")
+      ),
+    regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
+  )
+
+
 })
