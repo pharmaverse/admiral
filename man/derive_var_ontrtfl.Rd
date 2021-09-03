@@ -46,9 +46,8 @@ observations where \code{VSTPT = PRE} should not be considered on-treatment when
 to denote when the on-treatment flag should be set to null.
 Optional; default is NULL.}
 
-\item{span_period}{A Y/Null scalar character. If \code{Y} events with missing end dates and
-non-missing start dates i.e. potentially ongoing, are flagged as on treatment,
-if NULL they are not flagged.
+\item{span_period}{A \code{Y} scalar character. If \code{Y}, events that started prior
+to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{Y}.
 Optional; default is NULL.}
 
 \item{date}{The assessment date (e.g. \code{ADT} for the date of a VS test)
@@ -78,6 +77,13 @@ and the filter provided in \code{filter_pre_timepoint} is not true.
 \item \code{ref_end_date} is provided and \code{ref_start_date < date} <=
 \code{ref_end_date + ref_end_window}.
 }
+
+If the \code{end_date} is provided and the \code{end_date} < ref_start_date
+then the \code{ONTRTFL} is set to NULL.This would be applicable to cases where
+the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{Y} above.
+
+If the \code{span_period} is specified as \code{Y}, this allows the user to assign \code{ONTRTFL} as 'Y' to
+cases where the record started prior to the 'ref_start_date\verb{and was ongoing or ended after the}ref_end_date`.
 
 Any date imputations needed should be done prior to calling this function.
 }

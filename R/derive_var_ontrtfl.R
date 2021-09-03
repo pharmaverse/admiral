@@ -36,9 +36,8 @@
 #' to denote when the on-treatment flag should be set to null.
 #' Optional; default is NULL.
 #'
-#' @param span_period A Y/Null scalar character. If `Y` events with missing end dates and
-#'  non-missing start dates i.e. potentially ongoing, are flagged as on treatment,
-#'  if NULL they are not flagged.
+#' @param span_period A `Y` scalar character. If `Y`, events that started prior
+#' to the `ref_start_date`and are ongoing or end after the `ref_start_date` are flagged as `Y`.
 #'  Optional; default is NULL.
 #'
 #' @details
@@ -55,6 +54,14 @@
 #'   4. `ref_end_date` is not provided and `ref_start_date < date`
 #'   5. `ref_end_date` is provided and `ref_start_date < date` <=
 #'      `ref_end_date + ref_end_window`.
+#'
+#' If the `end_date` is provided and the `end_date` < ref_start_date
+#' then the `ONTRTFL` is set to NULL.This would be applicable to cases where
+#' the `start_date` is missing and `ONTRTFL` has been assigned as `Y` above.
+#'
+#' If the `span_period` is specified as `Y`, this allows the user to assign `ONTRTFL` as 'Y' to
+#' cases where the record started prior to the 'ref_start_date` and
+#' was ongoing or ended after the `ref_end_date`.
 #'
 #' Any date imputations needed should be done prior to calling this function.
 #'
@@ -162,7 +169,7 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(filter_pre_timepoint)) {
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(!!filter_pre_timepoint, NA_character_, ONTRTFL)
+      ONTRTFL = if_else(!!filter_pre_timepoint, NA_character_, ONTRTFL,missing = ONTRTFL)
     )
   }
 
@@ -173,7 +180,8 @@ derive_var_ontrtfl <- function(dataset,
       ONTRTFL = if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date,
         "Y",
-        ONTRTFL)
+        ONTRTFL,
+        missing = ONTRTFL)
     )
   } else {
     # Scenario 2: Treatment end date is passed, window added above
@@ -183,8 +191,8 @@ derive_var_ontrtfl <- function(dataset,
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date &
           !is.na(!!ref_end_date) & !!start_date <= (!!ref_end_date + days(!!ref_end_window)),
         "Y",
-        ONTRTFL
-      )
+        ONTRTFL,
+        missing = ONTRTFL)
     )
   }
 
@@ -194,23 +202,21 @@ derive_var_ontrtfl <- function(dataset,
       dataset,
       ONTRTFL = if_else(!!end_date < !!ref_start_date,
                         NA_character_,
-                        ONTRTFL
-                        )
+                        ONTRTFL,
+                        missing = ONTRTFL)
                       )
   }
 
-  #scenario 4: end_date and span_period are parsed
+    #scenario 4: end_date and span_period are parsed
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
       ONTRTFL = if_else(
-        !is.na(!!start_date)  &
           !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
-          is.na(!!end_date) |
-          !!end_date >= !!ref_start_date,
+          (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
-        ONTRTFL
-      )
+        ONTRTFL,
+        missing = ONTRTFL)
     )
   }
 
