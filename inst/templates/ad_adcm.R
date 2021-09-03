@@ -18,7 +18,7 @@ data("adsl")
 # ---- Derivations ----
 adcm <- cm %>%
   # Join supplementary qualifier variables
-  # Derive_suppqual_vars(suppcm)
+  # derive_vars_suppqual(suppcm)
 
   # Join adsl to cm
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
@@ -72,8 +72,9 @@ adcm <- cm %>%
   ) %>%
 
   # Derive Time Relative to Reference
-  derive_var_atirel(flag_var = ASTTMF,
-                    new_var = ATIREL
+  derive_var_atirel(
+    flag_var = ASTTMF,
+    new_var = ATIREL
   ) %>%
 
   # Derive On-Treatment flag
