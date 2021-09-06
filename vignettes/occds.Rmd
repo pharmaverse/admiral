@@ -67,7 +67,7 @@ frames needed may be:
   
 To derive Supplemental Qualifiers, `derive_suppqual_vars()` can be used. 
 
-```{r}
+```{r eval=TRUE}
 ae <- derive_suppqual_vars(ae, suppae)
 head(suppae)
 head(select(ae, USUBJID, AEDECOD, AETRTEM))
@@ -75,7 +75,7 @@ head(select(ae, USUBJID, AEDECOD, AETRTEM))
 
 Now start creating ADAE by joining the required data sets together. 
 
-```{r}
+```{r eval=TRUE}
 adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
 ```
 
@@ -89,7 +89,7 @@ where `ASTDTM` could be company-specific.
 `ASTADT` and `AENDT` can be created with a simple `dplyr::mutate()`. 
 `derive_var_astdy()` and `derive_var_aendy()` can be used to create `ASTDY` and `AENDY`, respectively.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>% 
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -126,7 +126,7 @@ See also [Date and Time Imputation](imputation.html).
 The function `derive_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>%
   derive_duration(
     new_var = ADURN,
@@ -140,6 +140,82 @@ adae <- adae %>%
   )
 ```
 
+### Derive ATC variables{#ATC}
+
+The function `derive_vars_atc` can be used to derive 
+ATC Class Variables.
+
+It helps to add Anatomical Therapeutic Chemical class variables from `FACM` to `ADCM`.
+
+The expected result is the input dataset with ATC variables added.
+
+
+```{r eval=TRUE}
+cm <- tibble::tribble(
+         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
+   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
+   "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",
+   "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE"
+ )
+ facm <- tibble::tribble(
+         ~USUBJID, ~FAGRPID,  ~FAREFID,   ~FATESTCD, ~FASTRESC,
+   "BP40257-1001",      "1", "1192056",  "CMATC1CD",       "N",
+   "BP40257-1001",      "1", "1192056",  "CMATC2CD",     "N02",
+   "BP40257-1001",      "1", "1192056",  "CMATC3CD",    "N02B",
+   "BP40257-1001",      "1", "1192056",  "CMATC4CD",   "N02BE",
+
+   "BP40257-1001",      "1", "2007001",  "CMATC1CD",       "D",
+   "BP40257-1001",      "1", "2007001",  "CMATC2CD",     "D10",
+   "BP40257-1001",      "1", "2007001",  "CMATC3CD",    "D10A",
+   "BP40257-1001",      "1", "2007001",  "CMATC4CD",   "D10AA",
+   "BP40257-1001",      "2", "2007001",  "CMATC1CD",       "D",
+   "BP40257-1001",      "2", "2007001",  "CMATC2CD",     "D07",
+   "BP40257-1001",      "2", "2007001",  "CMATC3CD",    "D07A",
+   "BP40257-1001",      "2", "2007001",  "CMATC4CD",   "D07AA",
+   "BP40257-1001",      "3", "2007001",  "CMATC1CD",       "H",
+   "BP40257-1001",      "3", "2007001",  "CMATC2CD",     "H02",
+   "BP40257-1001",      "3", "2007001",  "CMATC3CD",    "H02A",
+   "BP40257-1001",      "3", "2007001",  "CMATC4CD",   "H02AB",
+
+   "BP40257-1002",      "1", "2791596",  "CMATC1CD",       "C",
+   "BP40257-1002",      "1", "2791596",  "CMATC2CD",     "C03",
+   "BP40257-1002",      "1", "2791596",  "CMATC3CD",    "C03D",
+   "BP40257-1002",      "1", "2791596",  "CMATC4CD",   "C03DA"
+ )
+
+derive_vars_atc(cm, facm)
+```
+
+### Derive Time Relative to Reference{#ATIREL}
+
+The function `derive_var_atirel` can be used to derive the variable `ATIREL` to CONCOMITANT, PRIOR, PRIOR_CONCOMITANT or NULL based on the 
+relationship 
+of CM Analysis start/end date/times to treatment start date/time.
+
+The expected result is a dataset containing all observations and variables of the input dataset 
+and additionally the variable specified by the `new_var` parameter.
+
+```{r eval=TRUE}
+library(dplyr, warn.conflicts = FALSE)
+adcm <- tibble::tribble(
+~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
+"TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", "",
+"TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
+"TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
+"TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
+"TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00", ""
+) %>% dplyr::mutate(
+TRTSDTM = lubridate::as_datetime(TRTSDTM),
+ASTDTM = lubridate::as_datetime(ASTDTM),
+AENDTM = lubridate::as_datetime(AENDTM)
+ )
+
+ derive_var_atirel(
+     dataset = adcm,
+    flag_var = ASTTMF,
+    new_var = ATIREL
+  )
+```
 ### Derive Analysis Phase and Period {#phase_period}
 
 *These functionalities are in progress.*
@@ -157,7 +233,7 @@ Additionally, this function can also provide the traceability variables
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
 
-```{r}
+```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
   derive_last_dose(
@@ -180,7 +256,7 @@ adae <- adae %>%
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
 `dplyr::mutate()` if no imputation is required.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>%
   mutate(
     ASEV = AESEV, 
@@ -193,7 +269,7 @@ adae <- adae %>%
 To derive the treatment emergent flag `TRTEMFL`, one can use simple
 `dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>% 
   mutate(
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", "")
