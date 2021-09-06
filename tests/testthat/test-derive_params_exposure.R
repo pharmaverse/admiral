@@ -1,4 +1,5 @@
 context("test-derive_params_exposure")
+
 input <- tibble::tribble(
   ~USUBJID, ~VISIT, ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC, ~EXENDTC,
   "01-701-1015", "BASELINE", "DOSE", 80, NA_character_, "2020-07-01", "2020-07-14",
@@ -24,7 +25,6 @@ input <- tibble::tribble(
   )
 
 test_that("new observations are derived correctly for AVAL", {
-
   new_obs1 <- input %>%
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
@@ -80,27 +80,26 @@ test_that("new observations are derived correctly for AVAL", {
       set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL")
     )
 
-  expect_dfs_equal(actual_output,
+  expect_dfs_equal(
+    actual_output,
     expected_output,
     keys = c("USUBJID", "VISIT", "PARAMCD")
   )
 })
 
-
 test_that("Errors", {
-
-# PARAMCD must be specified
-expect_error(
-  input <- input %>%
-    derive_params_exposure(
-      by_vars = vars(USUBJID),
-      input_code = "DOSE",
-      analysis_var = AVAL,
-      summary_fun = function(x) mean(x, na.rm = TRUE),
-      set_values_to = vars(PARCAT1 = "OVERALL")
-    ),
-  regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
-)
+  # PARAMCD must be specified
+  expect_error(
+    input <- input %>%
+      derive_params_exposure(
+        by_vars = vars(USUBJID),
+        input_code = "DOSE",
+        analysis_var = AVAL,
+        summary_fun = function(x) mean(x, na.rm = TRUE),
+        set_values_to = vars(PARCAT1 = "OVERALL")
+      ),
+    regexp = paste("The following required elements are missing in `set_values_to`: 'PARAMCD'")
+  )
   # input code must be present
   expect_error(
     input <- input %>%
@@ -128,6 +127,4 @@ expect_error(
       ),
     regexp = paste("Required variables `ASTDT` and `AENDT` are missing")
   )
-
-
 })
