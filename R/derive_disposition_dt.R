@@ -6,7 +6,7 @@
 #'
 #' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `dtc`
 #' - The variables used in `filter_ds`.
