@@ -10,6 +10,7 @@
 #'   expected.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
+#'
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
@@ -17,7 +18,7 @@
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
 #'   the `filter` element are selected. Then for each patient the last
-#'   oservation (with respect to `date`) is selected.
+#'   observation (with respect to `date`) is selected.
 #'
 #'   \item The `LSTALVDT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only

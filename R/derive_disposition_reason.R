@@ -6,7 +6,7 @@
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: `ds`).
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
@@ -82,7 +82,7 @@
 #' This functions returns the main reason for discontinuation (e.g. `DCSREAS` or `DCTREAS`).
 #' The reason for discontinuation is derived based on `reason_var` (e.g. `DSDECOD`) and
 #' `format_new_vars`.
-#' If `new_var_spe` is not NULL, then the function will also returns the details associated
+#' If `new_var_spe` is not NULL, then the function will also return the details associated
 #' with the reason for discontinuation (e.g. `DCSREASP`).
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
@@ -201,8 +201,8 @@ derive_disposition_reason <- function(dataset,
 #'
 #' @details
 #' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
-#' 'COMPLETED' or `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
-#' `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
+#' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
 #'
 #' For example:
 #' ```
