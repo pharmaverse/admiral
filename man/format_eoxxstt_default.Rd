@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_disposition_status.R
 \name{format_eoxxstt_default}
 \alias{format_eoxxstt_default}
-\title{Default format for the disposition status}
+\title{Default Format for Disposition Status}
 \usage{
 format_eoxxstt_default(x)
 }
@@ -11,7 +11,7 @@ format_eoxxstt_default(x)
 }
 \value{
 A \code{character} vector derived based on the values given in \code{x}:
-"COMPLETED" if \code{x} == "COMPLETED",
+"COMPLETED" if \code{x} is "COMPLETED",
 "DISCONTINUED" if \code{x} is not "COMPLETED" nor NA,
 "ONGOING" otherwise.
 }

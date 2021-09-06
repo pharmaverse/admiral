@@ -35,14 +35,15 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
-Default: format_eoxxstt_default defined as:
-format_eoxxstt_default <- function(x) {
-case_when(
-x \%in\% c("COMPLETED") ~ "COMPLETED",
-!(x \%in\% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
-TRUE ~ "ONGOING"
-)
+Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(x) \{
+  case_when(
+    x == "COMPLETED" ~ "COMPLETED",
+    x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
+    TRUE ~ "ONGOING"
+  )
+\}
 }
+
 where \code{x} is the \code{status_var.}}
 
 \item{filter_ds}{Filter condition for the disposition data.
@@ -70,7 +71,7 @@ data("ds")
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
-#- DISCONTINUED when status_var != COMPLETED nor NA
+#- DISCONTINUED when status_var is not COMPLETED nor NA
 #- ONGOING otherwise
 
 dm \%>\%

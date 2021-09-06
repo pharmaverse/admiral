@@ -21,14 +21,16 @@
 #'
 #' @param format_new_var The format used to derive the status.
 #'
-#' Default: format_eoxxstt_default defined as:
+#' Default: `format_eoxxstt_default()` defined as:
+#' ```
 #' format_eoxxstt_default <- function(x) {
 #'   case_when(
-#'     x %in% c("COMPLETED") ~ "COMPLETED",
-#'     !(x %in% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
+#'     x == "COMPLETED" ~ "COMPLETED",
+#'     x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
+#' ```
 #' where `x` is the `status_var.`
 #'
 #' @param filter_ds Filter condition for the disposition data.
@@ -129,14 +131,14 @@ derive_disposition_status <- function(dataset,
     select(-!!enquo(status_var))
 }
 
-#' Default format for the disposition status
+#' Default Format for Disposition Status
 #'
 #' Define a function to map the disposition status.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
 #' @return A `character` vector derived based on the values given in `x`:
-#'  "COMPLETED" if `x` == "COMPLETED",
+#'  "COMPLETED" if `x` is "COMPLETED",
 #'  "DISCONTINUED" if `x` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise.
 #'
@@ -146,7 +148,7 @@ derive_disposition_status <- function(dataset,
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
-    !(x %in% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
+    x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
