@@ -121,12 +121,11 @@ adcm <- cm %>%
   # Derive 1st Occurrence of Preferred Term Flag
   derive_extreme_flag(
     new_var = AOCCPFL,
-    by_vars = vars(USUBJID, CMDECOD, APHASE),
+    by_vars = vars(USUBJID, CMDECOD),
     order = vars(ASTDTM, CMSEQ),
     flag_filter = ANL01FL == "Y",
     mode = "last"
   )
-
 
 # ---- Save output ----
 
