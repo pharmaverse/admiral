@@ -47,9 +47,9 @@ test_that("first observation for each group is flagged", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = firstfl,
-    order = vars(AVISITN, desc(AVAL)),
     by_vars = vars(USUBJID),
+    order = vars(AVISITN, desc(AVAL)),
+    new_var = firstfl,
     mode = "first"
   )
 
@@ -60,7 +60,7 @@ test_that("first observation for each group is flagged", {
   )
 })
 
-test_that("last observation for each group is flagged, flag_filter works", {
+test_that("last observation for each group is flagged, filter works", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
@@ -74,11 +74,11 @@ test_that("last observation for each group is flagged, flag_filter works", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = lastfl,
-    order = vars(AVISITN, desc(AVAL)),
     by_vars = vars(USUBJID),
+    order = vars(AVISITN, desc(AVAL)),
+    new_var = lastfl,
     mode = "last",
-    flag_filter = USUBJID != 2
+    filter = USUBJID != 2
   )
 
   expect_dfs_equal(
@@ -145,11 +145,11 @@ test_that("ABLFL = Y using last observation within a subset", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = ABLFL,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = AVISIT == "BASELINE"
+    filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -216,11 +216,11 @@ test_that("ABLFL = Y worst observation = HI within a subset", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = ABLFL,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(AVAL, ADT),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = AVISIT == "BASELINE"
+    filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -287,11 +287,11 @@ test_that("ABLFL = Y worst observation = LO within a subset", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = ABLFL,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(desc(AVAL), ADT),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = AVISIT == "BASELINE"
+    filter = AVISIT == "BASELINE"
   )
 
   expect_dfs_equal(
@@ -358,11 +358,11 @@ test_that("ABLFL = Y average records within a subset", {
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = ABLFL,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT, desc(AVAL)),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
+    filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
   )
 
   expect_dfs_equal(
@@ -430,11 +430,11 @@ test_that("ABLFL = Y using last observation within a subset and multiple baselin
 
   actual_output <- derive_extreme_flag(
     input,
-    new_var = ABLFL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(ADT),
+    new_var = ABLFL,
     mode = "last",
-    flag_filter = AVISIT %in% c("BASELINE", "WEEK 1")
+    filter = AVISIT %in% c("BASELINE", "WEEK 1")
   )
 
   expect_dfs_equal(
@@ -453,9 +453,9 @@ test_that("Derive worst flag works correctly", {
 
   actual_output <- derive_worst_flag(
     input_worst_flag,
-    new_var = WORSTFL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(desc(ADT)),
+    new_var = WORSTFL,
     param_var = PARAMCD,
     analysis_var = AVAL,
     worst_high = c("PARAM01", "PARAM03"),
@@ -476,9 +476,9 @@ test_that("Derive worst flag works correctly with no worst_high option", {
 
   actual_output <- derive_worst_flag(
     input_worst_flag,
-    new_var = WORSTFL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(ADT),
+    new_var = WORSTFL,
     param_var = PARAMCD,
     analysis_var = AVAL,
     worst_high = character(0),
@@ -495,9 +495,9 @@ test_that("Derive worst flag catches invalid parameters", {
   expect_error(
     derive_worst_flag(
       input_worst_flag,
-      new_var = WORSTFL,
       by_vars = vars(USUBJID, PARAMCD, AVISIT),
       order = vars(ADT),
+      new_var = WORSTFL,
       param_var = PARAMCD,
       analysis_var = AVAL,
       worst_high = character(0),
@@ -529,9 +529,9 @@ test_that("Derive worst flag catches invalid parameters", {
   expect_error(
     derive_worst_flag(
       input_worst_flag,
-      new_var = WORSTFL,
       by_vars = vars(USUBJID, PARAMCD, AVISIT),
       order = vars(ADT),
+      new_var = WORSTFL,
       param_var = PARAMCD,
       analysis_var = AVAL,
       worst_high = c("A", "B", "C"),

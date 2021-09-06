@@ -130,7 +130,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     dtc = XXSTDTC,
     date_imputation = "LAST",
     time_imputation = "LAST",
-    flag_imputation = "none"
+    flag_imputation = "None"
   )
 
   expect_equal(

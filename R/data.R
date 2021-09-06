@@ -127,3 +127,11 @@
 #'
 "eg"
 
+#' Exposure Analysis Dataset
+#'
+#' An example exposure analysis dataset
+#'
+#' @source
+#' Derived from the [adsl] and [ex] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adex.R})
+#'
+"adex"

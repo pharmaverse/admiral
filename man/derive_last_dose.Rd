@@ -49,13 +49,13 @@ An assumption that start and end dates of treatment match is checked.
 By default (\code{FALSE}), the date as well as the time component is checked.
 If set to \code{TRUE}, then only the date component of those variables is checked.}
 
-\item{traceability_vars}{A named list returned by \code{vars} listing the traceability variables,
+\item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
-Those can be either strings or symbols referring to existing variables.}
+These can be either strings or symbols referring to existing variables.}
 }
 \value{
 Input dataset with additional column \code{new_var}.
@@ -131,3 +131,5 @@ ae \%>\%
 \author{
 Ondrej Slama
 }
+\keyword{adae}
+\keyword{derivation}
