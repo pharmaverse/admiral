@@ -124,7 +124,7 @@ adcm <- cm %>%
     by_vars = vars(USUBJID, CMDECOD),
     order = vars(ASTDTM, CMSEQ),
     flag_filter = ANL01FL == "Y",
-    mode = "last"
+    mode = "first"
   )
 
 # ---- Save output ----
