@@ -5,18 +5,21 @@
 # Description: Based on CDISC Pilot data, create ADEG analysis dataset
 #
 # Input: dm, eg
-#
-
+library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(admiral)
 
-# Read in Data
+# ---- Load source datasets ----
+
+# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
+
 data("adsl")
-# The CDISC Pilot Data contains no EG data
-### Fake EG for demonstration
 data("eg")
+
+# ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -38,13 +41,14 @@ range_lookup <- tibble::tribble(
   "QTLCR", 350, 450,
 )
 
-# Start
+# ---- Derivations ----
 
-# Join ADSL & EG
 adeg <- eg %>%
 
-  left_join(select(adsl, STUDYID, USUBJID, starts_with("TRT")),
-            by = c("STUDYID", "USUBJID")
+  # Join ADSL & EG
+  left_join(
+    select(adsl, STUDYID, USUBJID, starts_with("TRT")),
+    by = c("STUDYID", "USUBJID")
   ) %>%
 
   # Calculate ADT, ADY
@@ -69,20 +73,22 @@ adeg <- eg %>%
   # Add required derived Parameters: QTcf, QTcB, RRd
   derive_param_rr(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    set_values_to = vars(PARAMCD = "RRR",
-                         PARAM = "RR Duration Rederived (msec)",
-                         PARAMN = 4
-                         ),
+    set_values_to = vars(
+      PARAMCD = "RRR",
+      PARAM = "RR Duration Rederived (msec)",
+      PARAMN = 4
+    ),
     hr_code = "HR",
     filter = EGSTAT != "NOT DONE"
   ) %>%
 
   derive_param_qtcb(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    set_values_to = vars(PARAMCD = "QTCBR",
-                         PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
-                         PARAMN = 11
-                         ),
+    set_values_to = vars(
+      PARAMCD = "QTCBR",
+      PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
+      PARAMN = 11
+    ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
@@ -90,10 +96,11 @@ adeg <- eg %>%
 
   derive_param_qtcf(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    set_values_to = vars(PARAMCD = "QTCFR",
-                         PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
-                         PARAMN = 12
-                         ),
+    set_values_to = vars(
+      PARAMCD = "QTCFR",
+      PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
+      PARAMN = 12
+    ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
@@ -101,10 +108,11 @@ adeg <- eg %>%
 
   derive_param_qtlc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
-    set_values_to = vars(PARAMCD = "QTLCR",
-                         PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
-                         PARAMN = 13
-                         ),
+    set_values_to = vars(
+      PARAMCD = "QTLCR",
+      PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
+      PARAMN = 13
+    ),
     qt_code = "QT",
     rr_code = "RR",
     filter = EGSTAT != "NOT DONE"
@@ -179,7 +187,7 @@ adeg <- eg %>%
     order = vars(ADT, AVAL),
     new_var = ANL01FL,
     mode = "last",
-    filter = (!is.na(AVISITN))
+    filter = !is.na(AVISITN)
   ) %>%
 
   # Calculate ANRIND
@@ -207,8 +215,9 @@ adeg <- eg %>%
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
-    check_type = "warning"
+    check_type = "error"
   )
 
+# ---- Save output ----
 
 saveRDS(adeg, file = "./ADEG.rds", compress = TRUE)

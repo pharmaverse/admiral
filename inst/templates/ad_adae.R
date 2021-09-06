@@ -3,8 +3,6 @@
 # Label: Adverse Event Analysis Dataset
 #
 # Input: ae, adsl, suppae, suppdm, ex
-#
-
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -12,12 +10,13 @@ library(lubridate)
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
-ae <- NULL
-adsl <- NULL
-suppae <- NULL
-ex <- NULL
+data("ae")
+data("suppae")
+data("adsl")
+data("ex")
 
 # ---- Derivations ----
 
@@ -109,9 +108,6 @@ adae <- ae %>%
     filter = TRTEMFL == "Y",
     mode = "last"
   )
-
-
-
 
 # ---- Save output ----
 

@@ -3,16 +3,16 @@
 # Label: Vital Signs Analysis Dataset
 #
 # Input: adsl, vs
-#
-
+library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(admiral)
+
+# ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
-# For illustration purposes Read in Admiral Test Data
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
 data("vs")
 data("adsl")
@@ -21,7 +21,7 @@ vs <- convert_blanks_to_na(vs)
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below
 
-# derive_vars_suppqual(vs, suppvs)
+# vs <- derive_vars_suppqual(vs, suppvs)
 
 
 # ---- Lookup tables ----
@@ -167,7 +167,8 @@ advs <- advs %>%
 
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
-advs <- left_join(advs, range_lookup, by = "PARAMCD") %>%
+advs <- advs %>%
+  left_join(range_lookup, by = "PARAMCD") %>%
   # Calculate ANRIND
   derive_var_anrind()
 

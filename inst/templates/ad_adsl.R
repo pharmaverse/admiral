@@ -3,8 +3,6 @@
 # Label: Subject Level Analysis Dataset
 #
 # Input: dm, ex, ds
-#
-
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -12,11 +10,12 @@ library(lubridate)
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
-dm <- NULL
-ex <- NULL
-ds <- NULL
+data("dm")
+data("ds")
+data("ex")
 
 # ---- User defined functions ----
 
@@ -70,9 +69,7 @@ format_eoxxstt <- function(x) {
 
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
-  mutate(
-    TRT01P = ARMCD, TRT01A = ARMCD
-  ) %>%
+  mutate(TRT01P = ARMCD, TRT01A = ARMCD) %>%
 
   # derive treatment start date (TRTSDTM, TRTSDT)
   derive_var_trtsdtm(dataset_ex = ex) %>%
