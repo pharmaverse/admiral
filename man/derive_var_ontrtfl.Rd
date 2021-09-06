@@ -12,14 +12,19 @@ derive_var_ontrtfl(
   ref_end_date = NULL,
   ref_end_window = 0,
   filter_pre_timepoint = NULL,
-  span_period = NULL
+  span_period = NULL,
+  date = deprecated()
 )
 }
 \arguments{
-\item{dataset}{\code{data.frame}.}
+\item{dataset}{Input dataset.
 
-\item{end_date}{The end date of assessment/event
-(e.g. \code{AENDT} for the date of a CM test)
+Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date}.}
+
+\item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})
+Required; A date or date-time object column is expected}
+
+\item{end_date}{The end date of assessment/event (e.g. \code{AENDT})
 A date or date-time object column is expected.
 Optional; Default is null. If the used and date value is missing
 on an observation, it is assumed the medication is ongoing and
@@ -50,8 +55,7 @@ Optional; default is NULL.}
 to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{Y}.
 Optional; default is NULL.}
 
-\item{date}{The assessment date (e.g. \code{ADT} for the date of a VS test)
-Required; A date or date-time object column is expected}
+\item{date}{\strong{Deprecated}. Please use \code{start_date} instead.}
 }
 \value{
 The input dataset with an additional column named
@@ -119,9 +123,9 @@ derive_var_ontrtfl(
 
 advs <- tibble::tribble(
   ~USUBJID, ~ADTM,                ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
-  "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "",
+  "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA,
   "P02", ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
-  "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), ""
+  "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA
 )
 derive_var_ontrtfl(
   advs,
@@ -137,7 +141,6 @@ advs <- tibble::tribble(
   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
-
 derive_var_ontrtfl(
  advs,
  start_date = ASTDT,
@@ -145,7 +148,7 @@ derive_var_ontrtfl(
  ref_start_date = TRTSDT,
  ref_end_date = TRTEDT,
  ref_end_window = 60,
- span_period="Y"
+ span_period = "Y"
 )
 }
 \author{
