@@ -86,7 +86,10 @@ squote <- function(x) {
 #' @examples
 #' admiral:::vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
-  map_chr(quosures, ~as_string(quo_get_expr(.x)))
+  rlang::set_names(
+    map_chr(quosures, ~as_string(quo_get_expr(.x))),
+    names(quosures)
+  )
 }
 
 #' Helper function to convert date (or date-time) objects to characters of dtc format
@@ -112,13 +115,18 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @param expr An expression created inside a function using `substitute()`
 #'
-#' @author Thomas Neitmann
+#' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
 #'
 #' @examples
 #' test_fun <- function(something) {
 #'   admiral:::arg_name(substitute(something))
+#' }
+#'
+#' inner_function <- function(x) x
+#' test_fun2 <- function(something) {
+#'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
 arg_name <- function(expr) {
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -127,6 +135,10 @@ arg_name <- function(expr) {
              (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
              is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
+  } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
+    deparse(expr[[2L]])
+  } else if (is.call(expr) && length(expr) >= 2 && is.call(expr[[2]])) {
+    arg_name(expr[[2L]])
   } else {
     abort(paste0("Could not extract argument name from `", deparse(expr), "`"))
   }
@@ -309,6 +321,96 @@ is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
 
+replace_values_by_names <- function(quosures) {
+  vars <- map2(quosures, names(quosures), function(q, n) {
+    if (n == "") {
+      return(q)
+    }
+    quo_set_env(
+      quo(!!as.symbol(n)),
+      quo_get_env(q)
+    )
+  })
+  structure(vars, class = "quosures", names = NULL)
+}
+
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
+}
+
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#'
+#' @export
+#'
+#' @examples
+#' extract_unit("Height (cm)")
+#'
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}
+
+#' Convert Blank Strings Into NAs
+#'
+#' Turn SAS blank strings into proper R `NA`s.
+#'
+#' @param x Any R object
+#'
+#' @details
+#' The default methods simply returns its input unchanged. The `character` method
+#' turns every instance of `""` into `NA_character_` while preserving *all* attributes.
+#' When given a data frame as input the function keeps all non-character columns
+#' as is and applies the just described logic to `character` columns. Once again
+#' all attributes such as labels are preserved.
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @examples
+#' convert_blanks_to_na(c("a", "b", "", "d", ""))
+#'
+#' df <- tibble::tibble(
+#'   a = structure(c("a", "b", "", "c"), label = "A"),
+#'   b = structure(c(1, NA, 21, 9), label = "B"),
+#'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
+#'   d = structure(c("", "", "s", "q"), label = "D")
+#' )
+#' print(df)
+#' convert_blanks_to_na(df)
+convert_blanks_to_na <- function(x) {
+  UseMethod("convert_blanks_to_na")
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.default <- function(x) {
+  x
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.character <- function(x) {
+  do.call(structure, c(list(if_else(x == "", NA_character_, x)), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.list <- function(x) {
+  lapply(x, convert_blanks_to_na)
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.data.frame <- function(x) {
+  x[] <- lapply(x, convert_blanks_to_na)
+  x
 }

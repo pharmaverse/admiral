@@ -15,6 +15,7 @@ The \code{USUBJID} variable is expected.}
 expected.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
+
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
 }
@@ -29,10 +30,10 @@ The following steps are performed to create the output dataset:
 
 \enumerate{ \item For each source dataset the observations as specified by
 the \code{filter} element are selected. Then for each patient the last
-oservation (with respect to \code{date_var}) is selected.
+observation (with respect to \code{date}) is selected.
 
 \item The \code{LSTALVDT} variable is set to the variable specified by the
-\code{date_var} element. If the date variable is a datetime variable, only
+\code{date} element. If the date variable is a datetime variable, only
 the datepart is copied. If the source variable is a character variable, it
 is converted to a date. If the date is incomplete, it is imputed as
 specified by the \code{date_imputation} element.
@@ -56,20 +57,20 @@ data("adsl")
 
 ae_start <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "first"
 )
 ae_end <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "first"
 )
 lb_date <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = nchar(LBDTC) >= 10
 )
-adsl_date <- lstalvdt_source(dataset = adsl, date_var = TRTEDT)
+adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
 
 dm \%>\%
   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) \%>\%
@@ -78,7 +79,7 @@ dm \%>\%
 # derive last alive date and traceability variables
 ae_start <- lstalvdt_source(
   dataset = ae,
-  date_var = AESTDTC,
+  date = AESTDTC,
   date_imputation = "first",
   traceability_vars = vars(
     LALVDOM = "AE",
@@ -89,7 +90,7 @@ ae_start <- lstalvdt_source(
 
 ae_end <- lstalvdt_source(
   dataset = ae,
-  date_var = AEENDTC,
+  date = AEENDTC,
   date_imputation = "first",
   traceability_vars = vars(
     LALVDOM = "AE",
@@ -99,7 +100,7 @@ ae_end <- lstalvdt_source(
 )
 lb_date <- lstalvdt_source(
   dataset = lb,
-  date_var = LBDTC,
+  date = LBDTC,
   filter = nchar(LBDTC) >= 10,
   traceability_vars = vars(
     LALVDOM = "LB",
@@ -110,7 +111,7 @@ lb_date <- lstalvdt_source(
 
 adsl_date <- lstalvdt_source(
   dataset = adsl,
-  date_var = TRTEDT,
+  date = TRTEDT,
   traceability_vars = vars(
     LALVDOM = "ADSL",
     LALVSEQ = NA_integer_,

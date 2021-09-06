@@ -18,13 +18,13 @@
 #' An assumption that start and end dates of treatment match is checked.
 #' By default (`FALSE`), the date as well as the time component is checked.
 #' If set to `TRUE`, then only the date component of those variables is checked.
-#' @param traceability_vars A named list returned by `vars` listing the traceability variables,
+#' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
 #' e.g. `vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)`.
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
 #' in the returned dataset.
 #' The right-hand side (values of the list elements) gives the values of the traceability variables
 #' in the returned dataset.
-#' Those can be either strings or symbols referring to existing variables.
+#' These can be either strings or symbols referring to existing variables.
 #'
 #' @details All date (date-time) variables can be characters in standard ISO format or
 #' of date / date-time class.
@@ -50,39 +50,48 @@
 #'
 #' @author Ondrej Slama
 #'
+#' @keywords adae derivation
+#'
 #' @export
 #'
 #' @examples
-#' data(ae); data(ex_single)
-#' derive_last_dose(
-#'   head(ae, 100),
-#'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'     nchar(EXENDTC) >= 10,
-#'   dose_start = EXSTDTC,
-#'   dose_end = EXENDTC,
-#'   analysis_date = AESTDTC,
-#'   dataset_seq_var = AESEQ,
-#'   new_var = LDOSEDTM,
-#'   output_datetime = TRUE,
-#'   check_dates_only = FALSE
-#' )
+#' library(dplyr, warn.conflicts = FALSE)
+#' data(ae)
+#' data(ex_single)
+#'
+#' ae %>%
+#'   head(100) %>%
+#'   derive_last_dose(
+#'     head(ex_single, 100),
+#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'       nchar(EXENDTC) >= 10,
+#'     dose_start = EXSTDTC,
+#'     dose_end = EXENDTC,
+#'     analysis_date = AESTDTC,
+#'     dataset_seq_var = AESEQ,
+#'     new_var = LDOSEDTM,
+#'     output_datetime = TRUE,
+#'     check_dates_only = FALSE
+#'   ) %>%
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 #'
 #' # or with traceability variables
-#' derive_last_dose(
-#'   head(ae, 100),
-#'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'     nchar(EXENDTC) >= 10,
-#'   dose_start = EXSTDTC,
-#'   dose_end = EXENDTC,
-#'   analysis_date = AESTDTC,
-#'   dataset_seq_var = AESEQ,
-#'   new_var = LDOSEDTM,
-#'   output_datetime = TRUE,
-#'   check_dates_only = FALSE,
-#'   traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
-#' )
+#' ae %>%
+#'   head(100) %>%
+#'   derive_last_dose(
+#'     head(ex_single, 100),
+#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'       nchar(EXENDTC) >= 10,
+#'     dose_start = EXSTDTC,
+#'     dose_end = EXENDTC,
+#'     analysis_date = AESTDTC,
+#'     dataset_seq_var = AESEQ,
+#'     new_var = LDOSEDTM,
+#'     output_datetime = TRUE,
+#'     check_dates_only = FALSE,
+#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+#'   ) %>%
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 #'
 derive_last_dose <- function(dataset,
                              dataset_ex,

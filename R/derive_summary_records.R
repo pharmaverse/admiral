@@ -12,27 +12,12 @@
 #' will be set to `NA`.
 #'
 #' @param dataset A data frame.
+#'
 #' @param by_vars Variables to consider for generation of groupwise summary
 #'   records. Providing the names of variables in [vars()] will create a
 #'   groupwise summary and generate summary records for the specified groups.
-#' @param fns List of formulas specifying variable to use for aggregations.
-#'   This can include base functions like `mean()`, `min()`, `max()`, `median()`,
-#'    `sd()`, or `sum()` or any other user-defined aggregation function.
-#'   For example,
 #'
-#'   + When a summary function is same for one or more analysis variable, use
-#'   `fns = list(vars(AVAL, CHG) ~ mean`).
-#'   + If a different summary function is required for each analysis variable,
-#'   use `fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))`.
-#'
-#'   In general,
-#'
-#'   + LHS refer to the one or more variable to use for summarizing.
-#'   + RHS refer to a **single** summary function.
-#'
-#'   In the formula representation e.g., `CHG ~ sum(., na.rm = TRUE)`, a `.`
-#'   serves as the data to be summarized which refers to the variable `CHG`.
-#' @param filter_rows Filter condition as logical expression to apply during
+#' @param filter Filter condition as logical expression to apply during
 #'   summary calculation. By default, filtering expressions are computed within
 #'   `by_vars` as this will help when an aggregating, lagging, or ranking
 #'   function is involved.
@@ -43,313 +28,168 @@
 #'   values greater than mean of AVAL with in `by_vars`.
 #'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
+#'
+#' @param analysis_var Analysis variable.
+#'
+#' @param summary_fun Function that takes as an input the `analysis_var` and
+#'   performs the calculation.
+#'   This can include built-in functions as well as user defined functions,
+#'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
+#'
 #' @param set_values_to A list of variable name-value pairs. Use this argument
-#'   if you need to change the values of any newly derived records. Always new
-#'   values in `set_values_to` should be equal to the length of analysis
-#'   variable used in the `fns` argument. For example,
+#'   if you need to change the values of any newly derived records.
 #'
-#'   + On using single analysis variable in `fns = list(AVAL ~ mean)` and
-#'   `set_values_to = vars(AVISITN = 9999, AVISIT = "Endpoint")` would change
-#'   the value of `AVISITN` to `9999` and `AVISIT` to `Endpoint` instead of
-#'   retaining.
-#'   + Multiple analysis variables in `fns = list(vars(AVAL, CHG) ~ mean)` and
-#'   `set_values_to = vars(AVISITN = c(9998, 9999))` would change `AVISITN` to
-#'   `9998` for `AVAL` and `AVISITN` to `9999` for `CHG`.
+#'   Set a list of variables to some specified value for the new observation(s)
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+#'   value or NA.
+#'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
+#'   More general expression are not allowed.
 #'
-#' @author Vignesh Thanikachalam
+#' @param fns Deprecated, please use `analysis_var` and `summary_fun` instead.
+#'
+#' @author Vignesh Thanikachalam, Ondrej Slama
 #'
 #' @return A data frame with derived records appended to original dataset.
+#'
+#' @keywords bds derivation
 #'
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
 #' adeg <- tibble::tribble(
-#'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
-#'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
-#'   "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
-#'   "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
-#'   "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45",  384, "Placebo",
-#'   "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
-#'   "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
-#'   "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45",  385, "Placebo",
-#'   "XYZ-1001",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
-#'   "XYZ-1001",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
-#'   "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
-#'   "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
-#'   "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
-#'   "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50",  401, "Active 20mg",
-#'   "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
-#'   "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
-#'   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50",  412, "Active 20mg",
-#'   "XYZ-1002",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
-#'   "XYZ-1002",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
-#')
+#'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
+#'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
+#'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
+#'   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
+#'   "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384, "Placebo",
+#'   "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
+#'   "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
+#'   "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385, "Placebo",
+#'   "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
+#'   "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+#'   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
+#'   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
+#'   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
+#'   "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401, "Active 20mg",
+#'   "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
+#'   "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
+#'   "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412, "Active 20mg",
+#'   "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
+#'   "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
+#' )
 #'
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
-#'   fns = list(AVAL ~ mean(., na.rm = TRUE)),
+#'   analysis_var = AVAL,
+#'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
-#'   "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
-#'   "XYZ-001-001",  1165, "Weight",  101, "kg",      "Run-In"   , "2018-03-26",
-#'   "XYZ-001-001",  1166, "Weight",  100, "kg",      "Baseline" , "2018-04-16",
-#'   "XYZ-001-001",  1167, "Weight",   94, "kg",      "Week 24"  , "2018-09-30",
-#'   "XYZ-001-001",  1168, "Weight",   92, "kg",      "Week 48"  , "2019-03-17",
-#'   "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
+#'   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
+#'   "XYZ-001-001", 1164, "Weight", 99,  "kg", "Screening", "2018-03-19",
+#'   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In",    "2018-03-26",
+#'   "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline",  "2018-04-16",
+#'   "XYZ-001-001", 1167, "Weight", 94,  "kg", "Week 24",   "2018-09-30",
+#'   "XYZ-001-001", 1168, "Weight", 92,  "kg", "Week 48",   "2019-03-17",
+#'   "XYZ-001-001", 1169, "Weight", 95,  "kg", "Week 52",   "2019-04-14",
 #' )
 #'
 #' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 #' # and `DTYPE = AVERAGE` refers to `mean()` records.
-#' # `set_values_to` must be of the same length as `fns`
 #' derive_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
-#'   fns = list(AVAL ~ max, AVAL ~ mean),
-#'   set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
+#'   analysis_var = AVAL,
+#'   summary_fun = max,
+#'   set_values_to = vars(DTYPE = "MAXIMUM")
+#' ) %>%
+#'   derive_summary_records(
+#'     by_vars = vars(USUBJID, PARAM),
+#'     analysis_var = AVAL,
+#'     summary_fun = mean,
+#'     set_values_to = vars(DTYPE = "AVERAGE")
+#'   )
+#'
+#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
+#' adeg <- tibble::tribble(
+#'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
+#'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
+#'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
+#'   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
+#'   "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
+#'   "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
+#'   "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
+#'   "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+#'   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
+#'   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
+#'   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
+#'   "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
+#'   "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
+#'   "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
+#'   "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
 #' )
 #'
-#' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
-#' adeg <- tibble::tribble(
-#'   ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
-#'   "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
-#'   "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
-#'   "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
-#'   "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
-#'   "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
-#'   "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
-#'   "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
-#'   "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
-#'   "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
-#'   "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
-#'   "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
-#'   "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
-#'   "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
-#'   "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
-#')
-#'
-#' # Summarize the average of AVAL for AVISIT records greater than 2
+#' # Compute the average of AVAL only if there are more than 2 records within the
+#' # by group
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
-#'   fns = list(AVAL ~ mean(., na.rm = TRUE)),
-#'   filter_rows = dplyr::n() > 2,
+#'   filter = dplyr::n() > 2,
+#'   analysis_var = AVAL,
+#'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 derive_summary_records <- function(dataset,
                                    by_vars,
-                                   fns,
-                                   filter_rows = NULL,
-                                   set_values_to = NULL) {
+                                   filter = NULL,
+                                   analysis_var,
+                                   summary_fun,
+                                   set_values_to = NULL,
+                                   fns = deprecated()) {
+
+  ### BEGIN DEPRECIATION
+  if (!missing(fns)) {
+    rlang::abort(paste(
+      "The fns argument of `derive_summary_records()` is deprecated",
+      "as of admiral 0.3.0.",
+      "Please use the `analysis_var` and `summary_fun` arguments instead."
+    ))
+  }
+  ### END DEPRECIATION
+
   assert_vars(by_vars)
-  assert_list_of_formulas(fns)
+  analysis_var <- assert_symbol(enquo(analysis_var))
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, extract_vars(fns))
+    required_vars = quo_c(by_vars, analysis_var)
   )
-  filter_rows <- assert_filter_cond(enquo(filter_rows), optional = TRUE)
-
-  by_vars <- vars2chr(by_vars)
-
-  # Manipulate functions as direct call for each analysis variable
-  # Returns: A list of function call with attributes "variable" and "stats"
-  funs <- manip_fun(fns, .env = caller_env())
-
-  # Get input analysis variable
-  summarise_vars <- map_chr(funs, attr, "variable")
-
-  # For mutate input
-  set_values <- NULL
-
-  # Transpose into list-of-list
   if (!is.null(set_values_to)) {
-    assert_that(is_quosures(set_values_to),
-                msg = str_glue("`set_values_to` must be a `vars()` object, \\
-                             not {friendly_type(typeof(set_values_to))}."))
-
-    set_values <- set_values_to %>%
-      map(quo_get_expr) %>%
-      map(eval_tidy) %>%
-      transpose()
-
-    # Check new values and derived records have same length
-    assert_that(
-      are_records_same(set_values, funs, x_arg = "set_values_to", y_arg = "fns")
-    )
+    assert_varval_list(set_values_to, optional = TRUE)
   }
 
-
-
-  if (!quo_is_null(filter_rows)) {
+  # Apply filter
+  if (!quo_is_null(filter)) {
     subset_ds <- dataset %>%
-      group_by(!!! syms(by_vars)) %>%
-      filter(!! filter_rows)
+      group_by(!!!by_vars) %>%
+      filter(!!filter) %>%
+      ungroup()
   } else {
     subset_ds <- dataset
   }
 
-  # Summaries the analysis value and bind to the original dataset
-  summary_data <- bind_rows(
-    lapply(
-      seq_along(funs),
-      function(.x) {
-        # Get unique values by grouping variable and do a left join with
-        # summarised data
-        subset_ds %>%
-          distinct(!!! syms(by_vars)) %>%
-          left_join(
-            subset_ds %>%
-              group_by(!!! syms(by_vars)) %>%
-              summarise(!!! funs[.x]) %>%
-              mutate(!!! set_values[[.x]]),
-            by = by_vars
-          )
-      }
-    )) %>%
-    bind_rows(dataset, .) %>%
-    arrange(!!! syms(by_vars))
-
-  summary_data
-}
-
-#' Creates an anonymous function without giving it a name
-#'
-#' @param funs A function expression.
-#' @param env The environment in which to evaluate the expression.
-#'
-#' @family row summary
-#'
-#' @return An anonymous function as `body`.
-#'
-#' ```
-#' body(function(x = 4) g(x) + h(x))
-#' #> g(x) + h(x)
-#' ```
-#' @noRd
-as_inlined_function <- function(funs, env) {
-  funs <- new_formula(NULL, f_rhs(funs), env = env)
-  # Process unquote operator at inlining time
-  funs <- expr_interp(funs)
-  # Transform to a purrr-like lambda
-  fn <- as_function(funs, env = env)
-
-  body(fn) <- expr({
-    # Transform the lambda body into a maskable quosure inheriting
-    # from the execution environment
-    `_quo` <- rlang::quo(!!body(fn)) # nolint
-
-    # Evaluate the quosure in the mask
-    rlang::eval_bare(`_quo`, base::parent.frame())
-  })
-
-  structure(
-    fn,
-    class = "inline_function",
-    stats = call_name(funs),
-    formula = funs
+  # Summarise the analysis value and bind to the original dataset
+  bind_rows(
+    dataset,
+    subset_ds %>%
+      group_by(!!!by_vars) %>%
+      summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
+      mutate(!!!set_values_to)
   )
-}
-
-#' Utility to extract a function from an object of class formula
-#'
-#' @param .funs A two sided formula as a list (e.g. `list(A ~ mean)`).
-#'
-#'  + LHS refer to the one variable to use for summarizing.
-#'  + RHS refer to a **single** summary function.
-#' @param .env The environment in which to evaluate the expression.
-#'
-#' @family row summary
-#'
-#' @return A list of anonymous functions for each formula.
-#'
-#' @noRd
-#'
-#' @examples
-#' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
-#' as_fun_list(fm, caller_env())
-as_fun_list <- function(.funs, .env) {
-  map(.funs, function(.x) {
-    rhs <- f_rhs(.x)
-    if (is_call(rhs)) {
-      if (is_call(rhs, c("list", "vars"))) {
-        abort("The LHS of `fns` must be a string or a function")
-      }
-      .x <- as_inlined_function(.x, env = .env)
-    } else if (is_character(rhs) || is_symbol(rhs)) {
-      rhs <- as_string(rhs)
-      fn <- rlang::as_closure(rhs)
-      .x <- structure(fn, stats = as_string(rhs))
-    }
-    .x
-  })
-}
-
-#' Utility to extract a variable from an object of class formula
-#'
-#' @inheritParams as_fun_list
-#' @param dataset A dataset to conform input variables.
-#'
-#' @family row summary
-#'
-#' @return Variable as list
-#'
-#' @noRd
-#'
-#' @examples
-#' fm <- list(cyl ~ max, hp ~ mean(., na.rm = TRUE))
-#' get_fun_vars(fm, mtcars)
-get_fun_vars <- function(f) {
-  map(f, ~as_string(f_lhs(.x)))
-}
-
-#' Reconstruct a call object from its components using [rlang::call2()]
-#'
-#' @param funs Return value of [as_fun_list]
-#' @param vars Return value of [get_fun_vars]
-#'
-#' @family row summary
-#'
-#' @return An anonymous function with call.
-#'
-#' @noRd
-as_call_list <- function(funs, vars) {
-  out <- vector("list", length(funs) * max(lengths(vars)))
-  dim(out) <- c(length(funs), max(lengths(vars)))
-
-  for (i in seq_along(funs)) {
-    isymvars <- syms(vars[[i]])
-    for (j in seq_along(isymvars)) {
-      out[[i, j]] <- call2(funs[[i]], isymvars[[j]])
-      attr(out[[i, j]], "variable") <- as_string(isymvars[[j]])
-      attr(out[[i, j]], "stats") <- attr(funs[[i]], "stats")
-    }
-  }
-  dim(out) <- NULL
-  out <- keep(out, ~!is.null(.))
-  names(out) <- map_chr(out, attr, "variable")
-  out
-}
-
-#' Utility function to manipulate `fns` argument of [derive_summary_records]
-#'
-#' @param dataset A data frame.
-#' @param fns A two sided formula as a list (e.g. `list(A ~ mean)`).
-#'
-#'  + LHS refer to the one or more variable to use for summarizing.
-#'  + RHS refer to a **single** summary function.
-#' @param .env The environment in which to evaluate the expression.
-#'
-#' @family row summary
-#'
-#' @return An anonymous function with call.
-#'
-#' @noRd
-manip_fun <- function(fns, .env) {
-  fn_vars <- get_fun_vars(fns)
-  fn_list <- as_fun_list(fns, .env = .env)
-  as_call_list(fn_list, fn_vars)
 }

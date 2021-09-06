@@ -7,19 +7,19 @@
 derive_param_map(
   dataset,
   by_vars,
+  set_values_to = vars(PARAMCD = "MAP"),
   sysbp_code = "SYSBP",
   diabp_code = "DIABP",
   hr_code = NULL,
-  set_values_to = NULL,
-  unit_var = NULL,
+  get_unit_expr,
   filter = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} and the \code{unit_var} parameter,
-\code{PARAMCD}, and \code{AVAL} are expected.
+The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and
+\code{AVAL} are expected.
 
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
@@ -28,7 +28,18 @@ and \code{hr_code}.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+For each group defined by \code{by_vars} an observation is added to the output
+dataset.
+
+\emph{Permitted Values:} list of variables}
+
+\item{set_values_to}{Variables to be set
+
+The specified variables are set to the specified values for the new
+observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
+code for the new parameter.
+
+\emph{Permitted Values:} List of variable-value pairs}
 
 \item{sysbp_code}{Systolic blood pressure parameter code
 
@@ -51,20 +62,11 @@ as the heart rate assessments.
 
 Permitted Values: character value}
 
-\item{set_values_to}{Variables to be set
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The specified variables are set to the specified values for the new
-observations. For example \code{vars(PARAMCD = "MAP")} defines the parameter
-code for the new parameter.
+The result is used to check the units of the input parameters.
 
-\emph{Permitted Values:} List of variable-value pairs}
-
-\item{unit_var}{Variable providing the unit of the parameter
-
-For the new parameter the variable is set to the value of the variable for
-systolic blood pressure.
-
-Permitted Values: A variable of the input dataset}
+Permitted Values: A variable of the input dataset or a function call}
 
 \item{filter}{Filter condition
 
@@ -90,26 +92,8 @@ DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 if it is based on diastolic, systolic blood pressure, and heart rate.
 }
 \examples{
-# Derive MAP based on diastolic and systolic blood pressure
-advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg", "BASELINE",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg", "WEEK 2",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "BASELINE",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg", "WEEK 2",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg", "BASELINE",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg", "WEEK 2",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg", "BASELINE",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg", "WEEK 2"
-)
+library(dplyr, warn.conflicts = FALSE)
 
-derive_param_map(advs,
-                 by_vars = vars(USUBJID, VISIT),
-                 unit_var = AVALU,
-                 set_values_to = vars(PARAMCD = "MAP",
-                                      PARAM = "Mean Arterial Pressure (mmHg)"))
-
-# Derive MAP based on diastolic and systolic blood pressure and heart rate
 advs <- tibble::tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
@@ -126,12 +110,29 @@ advs <- tibble::tribble(
   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg",      "WEEK 2"
 )
 
-derive_param_map(advs,
+# Derive MAP based on diastolic and systolic blood pressure
+advs \%>\%
+  derive_param_map(
+    by_vars = vars(USUBJID, VISIT),
+    set_values_to = vars(
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)"
+    ),
+    get_unit_expr = AVALU
+  ) \%>\%
+  filter(PARAMCD != "PULSE")
+
+# Derive MAP based on diastolic and systolic blood pressure and heart rate
+derive_param_map(
+  advs,
   by_vars = vars(USUBJID, VISIT),
   hr_code = "PULSE",
-  unit_var = AVALU,
-  set_values_to = vars(PARAMCD = "MAP",
-                       PARAM = "Mean Arterial Pressure (mmHg)"))
+  set_values_to = vars(
+    PARAMCD = "MAP",
+    PARAM = "Mean Arterial Pressure (mmHg)"
+  ),
+  get_unit_expr = extract_unit(PARAM)
+)
 }
 \author{
 Stefan Bundfuss

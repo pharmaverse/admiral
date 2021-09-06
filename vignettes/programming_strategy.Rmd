@@ -1,10 +1,10 @@
 ---
-title: "Contributing to admiral"
+title: "Programming Strategy"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Contributing to admiral}
+  %\VignetteIndexEntry{Programming Strategy}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -81,6 +81,7 @@ I.e., all input like datasets, variable names, options, … must be provided to 
 * It is expected that the input datasets are not grouped. If not, the function must issue an error.
 * If a function requires grouping, the function must provide the by_vars parameter.
 * The output dataset must be ungrouped.
+* The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, these
 variables must start with `temp_` and must be removed from the output dataset
 (link to remove function).
@@ -97,13 +98,29 @@ variables must start with `temp_` and must be removed from the output dataset
 | `assert_` / `warn_` / `is_`                  | Functions that check other functions’ inputs                                                        |
 | `derive_`                                    | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
 | `derive_var_` (e.g. `derive_var_trtdurd`)    | Functions which add a single variable                                                               |
+| `derive_vars_` (e.g. `derive_vars_dt`)       | Functions which add multiple variables                                                              |
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
+
+Please note that *var* prefix should be used only if the function name includes the name of the variable 
+(e.g. `derive_var_ady()`). 
+It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline()`, which has a `new_var` argument).
 
 
 ## Function Parameters
 
 The default value of optional parameters should be `NULL`.
+
+There is a recommended parameter order that all contributors are asked to adhere to 
+(in order to keep consistency across functions):
+
+1. `dataset` (and any additional datasets denoted by `dataset_*`)
+1. `by_vars`
+1. `order`
+1. `new_var` (and any related `new_var_*` parameters)
+1. `filter` (and any additional filters denoted by `filter_*`)
+1. all additional arguments:
+    * Make sure to always mention `start_date` before `end_date` (or related).
 
 Names of variables inside a dataset should be passed as symbols rather than strings, i.e. `AVAL` rather than `"AVAL"`.
 If a parameter accepts one or more variables as input, the variables should be wrapped inside `vars()`.
@@ -117,7 +134,7 @@ For example:
 
 Parameter must not accept expressions for assigning the value of the new
 variable. Instead separate parameters need to be provided for defining the
-value. For example if a function derives a variable which may be imputed, the
+value. For example, if a function derives a variable which may be imputed, the
 following is **not acceptable**.
 
 ```
@@ -140,10 +157,15 @@ Separate parameters for the imputation must be provided, e.g.:
 
 Each function parameter needs to be tested with `assert_` type of function. 
 
-Each expression needs to be tested for the following:
+Each expression needs to be tested for the following 
+(there are many utility functions in admiral available to the contributor):
+
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
-There is a utility function for that.
+
+The only exception to this is `derive_var_basetype()` where we allowed the use of `rlang::exprs()`. 
+The reason is that in this case the user needs to have the flexibility to provide not just symbols but 
+usually more complicated filtering conditions (that may be based on multiple input parameters).
 
 
 ## Common Function Parameters Naming Convention
@@ -160,18 +182,21 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 
 ## List of Common Parameters
 
-| Parameter Name   | Description                                                                                                       |
-|------------------|-------------------------------------------------------------------------------------------------------------------|
-| `start_date`     | The start date of an event/interval. Expects a date object.                                                       |
-| `end_date`       | The end date of an event/interval. Expects a date object.                                                         |
-| `start_dtc`      |                                                                                                                   |
-| `dtc`            | (Partial) date/datetime in ISO 8601 format                                                                        |
-| `by_vars`        | Variables to group by                                                                                             |
-| `new_var`        | Name of a single variable to be added to the dataset                                                              |
-| `new_vars`       | List of variables to be added to the dataset                                                                      |
-| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter. |
-| `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`                                                         |
-| `order`          | List of expressions for sorting a dataset, e.g., `vars(PARAMCD, AVISITN, desc(AVAL))`                              |
+| Parameter Name   | Description                                                                                                        |
+|------------------|--------------------------------------------------------------------------------------------------------------------|
+| `dataset`        | The input dataset. Expects a data.frame or a tibble.                                                               |
+| `by_vars`        | Variables to group by.                                                                                             |
+| `order`          | List of expressions for sorting a dataset, e.g., `vars(PARAMCD, AVISITN, desc(AVAL))`.                             |
+| `new_var`        | Name of a single variable to be added to the dataset.                                                              |
+| `new_vars`       | List of variables to be added to the dataset.                                                                      |
+| `new_var_unit`   | Name of the unit variable to be added. It should be the unit of the variable specified for the new_var parameter.  |
+| `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
+| `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
+| `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
+| `start_dtc`      |                                                                                                                    |
+| `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
+| `date`           | Date of an event / interval. Expects a date object.                                                                |
+| `set_values_to`  | List of variable name-value pairs.                                                                                 |
 
 
 ## Source Code Formatting
@@ -197,9 +222,14 @@ variables, a dataset, ... functions for checking are available (see
 
 Parameter which expect keywords should handle them case-insensitive, e.g., both
 `date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
+The `assert_character_scalar()` functions helps handling parameters
+case-insensitive.
+
+A parameter should not be checked in outer function if the parameter name is the same as in the inner function. 
+This rule is applicable only if both functions are part of admiral.
 
 
-## Function Header
+## Function Header (Documentation)
 
 Every function that is exported from the package must have an accompanying header 
 that should be formatted according to the [roxygen2](https://CRAN.R-project.org/package=pkgname) convention. 
@@ -263,10 +293,13 @@ If the expected input is a dataset then the required variables should be clearly
 * `@details`: A natural-language description of the derivation used inside the function.
 * `@author`: The person who wrote the function. In case a function is later on updated by another person the name should be appended to the list of authors.
 * `@keyword`: One or more keywords applicable to the function.
-* `@return`: A description of the return value of the function.
+* `@return`: A description of the return value of the function. 
+Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully-self contained example of how to use the function. 
 Self-contained means that if this code is executed in a new R session it will run without errors. 
 That requires any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
+If a dataset is created in the example, it should be done so using the function `tibble::tribble()`. 
+Make sure to align columns as well. This ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to
 maintain. For example if the same parameter with the same description is used by
@@ -325,13 +358,16 @@ Package dependencies have to be documented in the `DESCRIPTION` file.
 If a package is used only in examples and/or unit tests then it should be listed in `Suggests`, otherwise in `Imports`.
 
 Functions from other packages have to be explicitly imported by using the` @importFrom` tag in the `R/admiral-package.R` file. 
-To import the `if_else` and `mutate` function from `dplyr` the following line would have to be included in that file:
+To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
 
 
 # Metadata
 
 Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
+
+The only exception is `derive_vars_suppqual()` which takes it from its argument `dataset_suppqual`, 
+where the labels are stored.
 
 
 # Unit Testing
@@ -351,13 +387,25 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
+If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
+Make sure to align columns as well. This ensures quick code readability. 
+
 If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+
+
+# Best Practices and Hints
+
+Please take the following list as recommendation and try to adhere to its rules if possible.
+
+* Parameters in function calls should be named except for the first parameter 
+(e.g. `assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)`).
+* `dplyr::if_else()` should be used when there are only two conditions. 
+Try to always set the `missing` parameter whenever appropriate.
 
 
 # Readable Code for ADaM
 
-General Guidance explaining the why and the definition of readable code:
-[General Readable Code Guidance](https://drive.google.com/file/d/107VOGN9lvKZfjBmz13fuiOYWpNoOVtgK/view).
+Each function should be considered as readable code by default.
 
 
 ## Basic Rules

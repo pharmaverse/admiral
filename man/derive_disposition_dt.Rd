@@ -18,7 +18,7 @@ derive_disposition_dt(
 
 \item{dataset_ds}{Datasets containing the disposition information (e.g.: ds)
 
-It must contains
+It must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{dtc}
@@ -59,15 +59,17 @@ the input dataset with the disposition date (\code{new_var}) added
 Derive a disposition status date from the the relevant records in the disposition domain.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
-derive_disposition_dt(
-  dataset = dm,
-  dataset_ds = ds,
-  new_var = FRVDT,
-  dtc = DSSTDTC,
-  filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
-)
+dm \%>\%
+  derive_disposition_dt(
+    dataset_ds = ds,
+    new_var = FRVDT,
+    dtc = DSSTDTC,
+    filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+  ) \%>\%
+  select(STUDYID, USUBJID, FRVDT)
 }
 \author{
 Samia Kabi
