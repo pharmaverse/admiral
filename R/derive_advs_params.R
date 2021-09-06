@@ -536,7 +536,6 @@ derive_param_bmi <-  function(dataset,
   )
 }
 
-
 #' Compute Body Mass Index (BMI)
 #'
 #' Computes BMI from height and weight
