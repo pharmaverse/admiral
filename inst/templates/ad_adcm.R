@@ -3,12 +3,15 @@
 # Label: Concomitant Medications Analysis Dataset
 #
 # Input: cm, adsl, suppcm, suppdm, ex
-#
+library(admiral)
+library(dplyr)
+library(lubridate)
 
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
 data("cm")
 data("adsl")
@@ -17,6 +20,7 @@ data("adsl")
 
 # ---- Derivations ----
 adcm <- cm %>%
+
   # Join supplementary qualifier variables
   # derive_vars_suppqual(suppcm)
 
@@ -86,24 +90,24 @@ adcm <- cm %>%
   ) %>%
 
   # Derive Pre-Treatment flag
-  mutate(
-    PREFL = ifelse(ASTDT < TRTSDT, "Y", "")
-  ) %>%
+  mutate(PREFL = if_else(ASTDT < TRTSDT, "Y", NA_character_)) %>%
 
   # Derive Follow-Up flag
-  mutate(
-    FUPFL = ifelse(ASTDT > TRTEDT, "Y", "")
-  ) %>%
+  mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
 
   # Derive Aphase and Aphasen Variable
   # Other timing variable can be derived similarly.
   mutate(
-    APHASE = case_when(PREFL == "Y" ~ "Pre-Treatment",
-                       ONTRTFL == "Y" ~ "On-Treatment",
-                       FUPFL == "Y" ~ "Follow-Up"),
-    APHASEN = case_when(PREFL == "Y" ~ 1,
-                        ONTRTFL == "Y" ~ 2,
-                        FUPFL == "Y" ~ 3)
+    APHASE = case_when(
+      PREFL == "Y" ~ "Pre-Treatment",
+      ONTRTFL == "Y" ~ "On-Treatment",
+      FUPFL == "Y" ~ "Follow-Up"
+    ),
+    APHASEN = case_when(
+      PREFL == "Y" ~ 1,
+      ONTRTFL == "Y" ~ 2,
+      FUPFL == "Y" ~ 3
+    )
   ) %>%
 
   # Assign TRTP/TRTA
@@ -112,11 +116,10 @@ adcm <- cm %>%
     TRTA = TRT01A
   ) %>%
 
-  # Derive ANL01FL : This is variable is sponsor specific
-  # This variable is sponsor specific and may be used to indicate particular records to be used in subsequent derivations or analysis.
-  mutate(
-    ANL01FL = ifelse(ONTRTFL == "Y","Y", "")
-  ) %>%
+  # Derive ANL01FL
+  # This variable is sponsor specific and may be used to indicate particular
+  # records to be used in subsequent derivations or analysis.
+  mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
 
   # Derive 1st Occurrence of Preferred Term Flag
   derive_extreme_flag(
