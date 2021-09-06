@@ -217,7 +217,7 @@ advs <- advs %>%
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
     mode = "last",
-    flag_filter = (!is.na(AVISITN))
+    filter = !is.na(AVISITN)
     )
 
 # Get treatment information

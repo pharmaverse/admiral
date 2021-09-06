@@ -18,6 +18,7 @@ library(stringr)
 
 data("adsl")
 data("eg")
+eg <- convert_blanks_to_na(eg)
 
 # ---- Lookup tables ----
 
@@ -79,11 +80,13 @@ adeg <- eg %>%
       PARAMN = 4
     ),
     hr_code = "HR",
+    get_unit_expr = AVALU,
     filter = EGSTAT != "NOT DONE"
   ) %>%
 
-  derive_param_qtcb(
+  derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    method = "Bazett",
     set_values_to = vars(
       PARAMCD = "QTCBR",
       PARAM = "QTcB - Bazett's Correction Formula Rederived (msec)",
@@ -91,11 +94,13 @@ adeg <- eg %>%
     ),
     qt_code = "QT",
     rr_code = "RR",
+    get_unit_expr = AVALU,
     filter = EGSTAT != "NOT DONE"
   ) %>%
 
-  derive_param_qtcf(
+  derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    method = "Fridericia",
     set_values_to = vars(
       PARAMCD = "QTCFR",
       PARAM = "QTcF - Fridericia's Correction Formula Rederived (msec)",
@@ -103,11 +108,13 @@ adeg <- eg %>%
     ),
     qt_code = "QT",
     rr_code = "RR",
+    get_unit_expr = AVALU,
     filter = EGSTAT != "NOT DONE"
   ) %>%
 
-  derive_param_qtlc(
+  derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM),
+    method = "Sagie",
     set_values_to = vars(
       PARAMCD = "QTLCR",
       PARAM = "QTlc - Sagie's Correction Formula Rederived (msec)",
@@ -115,6 +122,7 @@ adeg <- eg %>%
     ),
     qt_code = "QT",
     rr_code = "RR",
+    get_unit_expr = AVALU,
     filter = EGSTAT != "NOT DONE"
   ) %>%
 
@@ -146,7 +154,7 @@ adeg <- eg %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, VISIT, ADT),
     analysis_var = AVAL,
     summary_fun = function(x) mean(x, na.rm = TRUE),
-    filter_rows = (dplyr::n() >= 2 & PARAMCD != "EGINTP"),
+    filter = dplyr::n() >= 2 & PARAMCD != "EGINTP",
     set_values_to = vars(DTYPE = "AVERAGE")
   ) %>%
 
@@ -175,7 +183,7 @@ adeg <- eg %>%
 
   # Calculate ONTRTFL: from trt start up to 30 days after trt ends.
   derive_var_ontrtfl(
-    date = ADT,
+    start_date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
     ref_end_window = 30

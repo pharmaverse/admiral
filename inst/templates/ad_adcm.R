@@ -64,7 +64,7 @@ adcm <- cm %>%
   ) %>%
 
   # Derive analysis duration (value and unit)
-  derive_duration(
+  derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,
@@ -126,7 +126,7 @@ adcm <- cm %>%
     new_var = AOCCPFL,
     by_vars = vars(USUBJID, CMDECOD),
     order = vars(ASTDTM, CMSEQ),
-    flag_filter = ANL01FL == "Y",
+    filter = ANL01FL == "Y",
     mode = "first"
   )
 

@@ -97,7 +97,7 @@ adae <- ae %>%
 
   # derive treatment emergent flag
   mutate(
-    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", "")
+    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
 
   # derive occurrence flags
