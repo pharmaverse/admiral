@@ -272,7 +272,7 @@ start and treatment end, the flag may be derived as:
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs, 
-  date = ADT, 
+  start_date = ADT, 
   ref_start_date = TRTSDT, 
   ref_end_date = TRTEDT
 )
@@ -292,7 +292,7 @@ advs <- select(advs, -ONTRTFL)
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs, 
-  date = ADT, 
+  start_date = ADT, 
   ref_start_date = TRTSDT, 
   ref_end_date = TRTEDT,
   ref_end_window = 60
@@ -312,7 +312,7 @@ advs <- select(advs, -ONTRTFL)
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs,
-  date = ADT,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
   filter_pre_timepoint = ATPT == "AFTER LYING DOWN FOR 5 MINUTES"
