@@ -6,14 +6,14 @@
 \usage{
 derive_worst_flag(
   dataset,
-  new_var,
   by_vars,
   order,
+  new_var,
   param_var,
   analysis_var,
   worst_high,
   worst_low,
-  flag_filter = NULL,
+  filter = NULL,
   check_type = "warning"
 )
 }
@@ -21,16 +21,16 @@ derive_worst_flag(
 \item{dataset}{Input dataset.
 Variables specified by \code{by_vars}, \code{order}, \code{param_var}, and \code{analysis_var} are expected.}
 
-\item{new_var}{Variable to add to the \code{dataset}.
-It is set \code{"Y"} for the maximal / minimal observation of each group,
-see Details section for more information.}
-
 \item{by_vars}{Grouping variables
 
 Permitted Values: list of variables}
 
 \item{order}{Sort order.
 Used to determine maximal / minimal observation if they are not unique,
+see Details section for more information.}
+
+\item{new_var}{Variable to add to the \code{dataset}.
+It is set \code{"Y"} for the maximal / minimal observation of each group,
 see Details section for more information.}
 
 \item{param_var}{Variable with the parameter values for which the maximal / minimal
@@ -47,7 +47,7 @@ Use \code{character(0)} if not required.}
 referring to "low".
 Use \code{character(0)} if not required.}
 
-\item{flag_filter}{Filter for flag data
+\item{filter}{Filter for flag data
 
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
@@ -117,9 +117,9 @@ input <- tibble::tribble(
 
 derive_worst_flag(
   input,
-  new_var = WORSTFL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(desc(ADT)),
+  new_var = WORSTFL,
   param_var = PARAMCD,
   analysis_var = AVAL,
   worst_high = c("PARAM01", "PARAM03"),
@@ -130,14 +130,14 @@ derive_worst_flag(
 # example with ADVS
 derive_worst_flag(
   advs,
-  new_var = WORSTFL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN),
+  new_var = WORSTFL,
   param_var = PARAMCD,
   analysis_var = AVAL,
   worst_high = c("SYSBP", "DIABP"),
   worst_low = "RESP",
-  flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+  filter = !is.na(AVISIT) & !is.na(AVAL)
 )
 }
 

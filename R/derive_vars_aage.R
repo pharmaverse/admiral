@@ -36,7 +36,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_duration()]
+#' @seealso [derive_vars_duration()]
 #'
 #' @examples
 #' data <- tibble::tribble(
@@ -44,11 +44,11 @@
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 #' )
 #'
-#' derive_aage(data)
-derive_aage <- function(dataset,
-                        start_date = BRTHDT,
-                        end_date = RANDDT,
-                        unit = "years") {
+#' derive_vars_aage(data)
+derive_vars_aage <- function(dataset,
+                             start_date = BRTHDT,
+                             end_date = RANDDT,
+                             unit = "years") {
 
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
@@ -58,7 +58,7 @@ derive_aage <- function(dataset,
     values = c("years", "months", "days", "hours", "minutes", "seconds")
   )
 
-  derive_duration(
+  derive_vars_duration(
     dataset,
     new_var = AAGE,
     new_var_unit = AAGEU,
@@ -70,6 +70,21 @@ derive_aage <- function(dataset,
   )
 }
 
+#' Derive Analysis Age
+#'
+#' `derive_aage()` was renamed to `derive_vars_aage()` to create a
+#' more consistent API.
+#'
+#' @keywords internal
+#'
+#' @export
+derive_aage <- function(dataset,
+                        start_date = BRTHDT,
+                        end_date = RANDDT,
+                        unit = "years") {
+  deprecate_warn("0.3.0", "derive_aage()", "derive_vars_aage()")
+  derive_vars_aage(dataset, start_date = start_date, end_date = end_date, unit = unit)
+}
 
 #' Derive Age Groups
 #'

@@ -1,4 +1,4 @@
-context("test-derive_query_vars")
+context("test-derive_vars_query")
 
 test_that("Derive CQ and SMQ variables with two term levels", {
 
@@ -29,7 +29,7 @@ test_that("Derive CQ and SMQ variables with two term levels", {
     "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA,                               NA,       NA,       NA,        NA, "Immune-Mediated Pneumonitis", "NARROW",         1,                                                            NA,       NA,       NA,       NA,           NA,      NA
   )
 
-  actual_output <- derive_query_vars(adae, queries)
+  actual_output <- derive_vars_query(adae, queries)
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -57,7 +57,7 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
     "1", 2, "something", "other", NA_character_, NA_integer_
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
   expect_equal(expected_output, actual_output)
 })
@@ -85,7 +85,7 @@ test_that("Derive when an adverse event is in multiple baskets", {
     "1", 2, "something", "other", NA_character_, NA_integer_, NA_character_, NA_integer_
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
   expect_equal(expected_output, actual_output)
 })
@@ -107,7 +107,7 @@ test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE colum
     "1", 2, "something", "other"
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM,
@@ -135,7 +135,7 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
     "1", 3, NA, NA, 1
   )
 
-  actual_output <- derive_query_vars(my_ae, queries = query)
+  actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
@@ -147,7 +147,7 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
   expect_equal(expected_output, actual_output)
 
   expect_error(
-    derive_query_vars(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
+    derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
     regexp = ".* is of type logical, numeric or character is required"
   )
 

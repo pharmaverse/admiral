@@ -64,7 +64,7 @@ data("adsl")
 data("vs")
 ```
 
-The `suppvs` domain can be joined to the `vs` domain using the function `derive_suppqual_vars()`.
+The `suppvs` domain can be joined to the `vs` domain using the function `derive_vars_suppqual()`.
 
 This function will transpose the supplemental SDTM domain (e.g. `suppvs`) and
 join the transposed data to the parent domain (e.g. `vs`) by `STUDYID`, 
@@ -73,7 +73,7 @@ join the transposed data to the parent domain (e.g. `vs`) by `STUDYID`,
 Example call:
 
 ```{r eval=FALSE}
-vs <- derive_suppqual_vars(vs, suppvs)
+vs <- derive_vars_suppqual(vs, suppvs)
 ```
 
 Please note, the CDISC pilot did not include a `suppvs` dataset and therefore this
@@ -338,7 +338,7 @@ start and treatment end, the flag may be derived as:
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs, 
-  date = ADT, 
+  start_date = ADT, 
   ref_start_date = TRTSDT, 
   ref_end_date = TRTEDT
 )
@@ -358,7 +358,7 @@ advs <- select(advs, -ONTRTFL)
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs, 
-  date = ADT, 
+  start_date = ADT, 
   ref_start_date = TRTSDT, 
   ref_end_date = TRTEDT,
   ref_end_window = 60
@@ -378,7 +378,7 @@ advs <- select(advs, -ONTRTFL)
 ```{r eval=TRUE}
 advs <- derive_var_ontrtfl(
   advs,
-  date = ADT,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
   filter_pre_timepoint = ATPT == "AFTER LYING DOWN FOR 5 MINUTES"
@@ -445,11 +445,11 @@ non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 ```{r eval=TRUE}
 advs <- derive_extreme_flag(
   advs,
-  new_var = ABLFL,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT, ATPTN, VISITNUM),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
+  filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
 )
 
 head(select(advs, USUBJID, BASETYPE, PARAMCD, ADT, TRTSDT, ATPTN, TRTSDT, ABLFL))
@@ -514,11 +514,11 @@ highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 ```{r eval=TRUE}
 advs <- derive_extreme_flag(
   advs,
-  new_var = ANL01FL,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN, AVAL),
+  new_var = ANL01FL,
   mode = "last",
-  flag_filter = !is.na(AVISITN)
+  filter = !is.na(AVISITN)
 )
 
 head(select(advs, USUBJID, PARAMCD, AVISIT, ATPTN, ADT, AVAL, ANL01FL))
@@ -532,20 +532,20 @@ and DIABP and low is worst for RESP.
 ```{r eval=TRUE}
 advs <- derive_extreme_flag(
   advs,
-  new_var = WORST_HIGH,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT, ATPTN),
+  new_var = WORST_HIGH,
   mode = "last",
-  flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+  filter = !is.na(AVISIT) & !is.na(AVAL)
 ) 
 
 advs <- derive_extreme_flag(
   advs,
-  new_var = WORST_LOW,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(AVAL, ADT, ATPTN),
+  new_var = WORST_LOW,
   mode = "first",
-  flag_filter = !is.na(AVISIT) & !is.na(AVAL)
+  filter = !is.na(AVISIT) & !is.na(AVAL)
 )
 
 advs <- mutate(
@@ -611,11 +611,11 @@ Example 1 (Creating a new record):
 ```{r eval=TRUE}
 advs <- advs %>%
   derive_extreme_flag(
-    new_var = EOTFL,
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(ADT, AVISITN, ATPTN, AVAL),
+    new_var = EOTFL,
     mode = "last",
-    flag_filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y")
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y")
   ) %>%
   filter(EOTFL == "Y") %>%
   mutate(
@@ -638,7 +638,8 @@ Example 2 (Deriving a Summary record):
 advs <- derive_summary_records(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, VISITNUM, ADT),
-  fns = list(AVAL ~ mean),
+  analysis_var = AVAL,
+  summary_fun = mean,
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 

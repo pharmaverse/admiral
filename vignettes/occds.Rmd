@@ -63,10 +63,10 @@ frames needed may be:
   * `SUPPDM`
   * `ADSL`
   
-To derive Supplemental Qualifiers, `derive_suppqual_vars()` can be used. 
+To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
 
 ```{r}
-ae <- derive_suppqual_vars(ae, suppae)
+ae <- derive_vars_suppqual(ae, suppae)
 head(suppae)
 head(select(ae, USUBJID, AEDECOD, AETRTEM))
 ```
@@ -121,12 +121,12 @@ See also [Date and Time Imputation](imputation.html).
 
 ### Derive Durations {#duration}
 
-The function `derive_duration()` can be used to create the variables 
+The function `derive_vars_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
 
 ```{r}
 adae <- adae %>%
-  derive_duration(
+  derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,
@@ -210,10 +210,10 @@ If grades were collected, the following can be used.
 ```{r, eval=FALSE}
 adae <- adae %>% 
   derive_extreme_flag(
-    new_var = AOCCIFL,
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, ATOXGR, AESEQ),
-    flag_filter = TRTEMFL == "Y", 
+    new_var = AOCCIFL,
+    filter = TRTEMFL == "Y", 
     mode = "last"
   )
 ```
@@ -228,10 +228,10 @@ adae %>%
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
   derive_extreme_flag(
-    new_var = AOCCIFL,
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, ASEVN, AESEQ),
-    flag_filter = TRTEMFL == "Y", 
+    new_var = AOCCIFL,
+    filter = TRTEMFL == "Y", 
     mode = "last"
   )
 ```

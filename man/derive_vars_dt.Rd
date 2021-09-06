@@ -21,7 +21,7 @@ The date character vector (dtc) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g new_vars_prefix="AST".}
+a character is expected: e.g. \code{new_vars_prefix="AST"}.}
 
 \item{dtc}{The --DTC date to impute
 
@@ -37,7 +37,7 @@ missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
+\item format with month and day specified as 'mm-dd': e.g. \code{"06-15"} for the 15th
 of June,
 \item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
@@ -118,7 +118,7 @@ derive_vars_dt(
   date_imputation = "FIRST"
 )
 
-# Impute partial dates to 4th of june
+# Impute partial dates to 6th of April
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",

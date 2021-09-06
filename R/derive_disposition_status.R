@@ -6,12 +6,12 @@
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: ds).
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `status_var`
 #' - The variables used in `filter_ds`.
 #'
-#' @param new_var Name of the disposition date variable.
+#' @param new_var Name of the disposition status variable.
 #'
 #' A variable name is expected (e.g. `EOSSTT`).
 #'
@@ -21,14 +21,16 @@
 #'
 #' @param format_new_var The format used to derive the status.
 #'
-#' Default: format_eoxxstt_default defined as:
+#' Default: `format_eoxxstt_default()` defined as:
+#' ```
 #' format_eoxxstt_default <- function(x) {
 #'   case_when(
-#'     x %in% c("COMPLETED") ~ "COMPLETED",
-#'     !(x %in% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
+#'     x == "COMPLETED" ~ "COMPLETED",
+#'     x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
+#' ```
 #' where `x` is the `status_var.`
 #'
 #' @param filter_ds Filter condition for the disposition data.
@@ -43,7 +45,7 @@
 #'  defined by `format_new_var` (e.g. when the default format is used, the function will derive
 #'  `new_var` as:
 #'  "COMPLETED" if `status_var` == "COMPLETED",
-#'  "DISCONTINUED" if `status_var` is not "COMPLETED" or NA,
+#'  "DISCONTINUED" if `status_var` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise).
 #'
 #' @keywords adsl
@@ -59,7 +61,7 @@
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
-#' #- DISCONTINUED when status_var != COMPLETED
+#' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
 #' dm %>%
@@ -129,15 +131,15 @@ derive_disposition_status <- function(dataset,
     select(-!!enquo(status_var))
 }
 
-#' Default format for the disposition status
+#' Default Format for Disposition Status
 #'
 #' Define a function to map the disposition status.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
 #' @return A `character` vector derived based on the values given in `x`:
-#'  "COMPLETED" if `x` == "COMPLETED",
-#'  "DISCONTINUED" if `x` is not "COMPLETED" or NA,
+#'  "COMPLETED" if `x` is "COMPLETED",
+#'  "DISCONTINUED" if `x` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi

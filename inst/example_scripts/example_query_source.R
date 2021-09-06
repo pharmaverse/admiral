@@ -55,4 +55,4 @@ adae <- tibble::tribble(
 )
 
 # try below:
-derive_query_vars(adae, queries)
+derive_vars_query(adae, queries)
