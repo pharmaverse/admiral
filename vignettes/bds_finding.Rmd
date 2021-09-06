@@ -234,9 +234,9 @@ other variables). Below is an example of creating `Mean Arterial Pressure` for `
 ```{r eval=TRUE}
 advs <- derive_param_map(
   advs,
-  unit_var = NULL,
   by_vars = vars(USUBJID, VISIT, ADT, VSTPTNUM),
-  set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
+  set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
+  get_unit_expr = AVALU
 )
  
 head(select(filter(advs, PARAMCD == "MAP"), USUBJID, VISIT, VSTPTNUM, PARAMCD, AVAL, AVALU))
@@ -250,7 +250,8 @@ advs <- derive_param_bsa(
   advs,
   unit_var = NULL,
   by_vars = vars(USUBJID, VISIT, ADT),
-  set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2")
+  set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2"),
+  get_unit_expr = AVALU
   )
  
 head(select(filter(advs, PARAMCD == "BSA"), USUBJID, VISIT, PARAMCD, AVAL, AVALU))
