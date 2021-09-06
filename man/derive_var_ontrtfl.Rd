@@ -28,7 +28,7 @@ Required; A date or date-time object column is expected}
 A date or date-time object column is expected.
 Optional; Default is null. If the used and date value is missing
 on an observation, it is assumed the medication is ongoing and
-ONTRTFL is set to Y.#'}
+\code{ONTRTFL} is set to \code{"Y"}.}
 
 \item{ref_start_date}{The lower bound of the on-treatment period
 Required; A date or date-time object column is expected.}
@@ -37,7 +37,7 @@ Required; A date or date-time object column is expected.}
 A date or date-time object column is expected.
 Optional; This can be null and everything after \code{ref_start_date} will be
 considered on-treatment.
-Default is NULL.}
+Default is \code{NULL}.}
 
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
 measured in days
@@ -49,11 +49,11 @@ on-treatment when \code{date} = \code{ref_start_date}. For example, if
 observations where \code{VSTPT = PRE} should not be considered on-treatment when
 \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used
 to denote when the on-treatment flag should be set to null.
-Optional; default is NULL.}
+Optional; default is \code{NULL}.}
 
-\item{span_period}{A \code{Y} scalar character. If \code{Y}, events that started prior
-to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{Y}.
-Optional; default is NULL.}
+\item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started prior
+to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{"Y"}.
+Optional; default is \code{NULL}.}
 
 \item{date}{\strong{Deprecated}. Please use \code{start_date} instead.}
 }
@@ -63,30 +63,30 @@ The input dataset with an additional column named
 }
 \description{
 Derive on-treatment flag (\code{ONTRTFL}) in an ADaM dataset with a single
-assessment date (e.g \code{ADT}) or event start/end dates (e.g. ASTDT/AENDT)
+assessment date (e.g \code{ADT}) or event start and end dates (e.g. \code{ASTDT}/\code{AENDT}).
 }
 \details{
 On-Treatment is calculated by determining whether the assessment date or
 start/stop dates fall between 2 dates. The following logic is used to
-assign on-treatment = Y:
+assign on-treatment = \code{"Y"}:
 \enumerate{
-\item \code{date} is missing and \code{ref_start_date}is non-missing
+\item \code{start_date} is missing and \code{ref_start_date}is non-missing
 \item No timepoint filter is provided (\code{filter_pre_timepoint}) and both
-\code{date} and \code{ref_start_date} are non-missing and \code{date} =
+\code{start_date} and \code{ref_start_date} are non-missing and \code{start_date} =
 \code{ref_start_date}
-\item A timepoint is provided (\code{filter_pre_timepoint}) and both \code{date}
-and \code{ref_start_date} are non-missing and \code{date = ref_start_date}
+\item A timepoint is provided (\code{filter_pre_timepoint}) and both \code{start_date}
+and \code{ref_start_date} are non-missing and \code{start_date = ref_start_date}
 and the filter provided in \code{filter_pre_timepoint} is not true.
-\item \code{ref_end_date} is not provided and \code{ref_start_date < date}
-\item \code{ref_end_date} is provided and \code{ref_start_date < date} <=
+\item \code{ref_end_date} is not provided and \code{ref_start_date < start_date}
+\item \code{ref_end_date} is provided and \code{ref_start_date < start_date} <=
 \code{ref_end_date + ref_end_window}.
 }
 
 If the \code{end_date} is provided and the \code{end_date} < ref_start_date
-then the \code{ONTRTFL} is set to NULL.This would be applicable to cases where
-the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{Y} above.
+then the \code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases where
+the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{"Y"} above.
 
-If the \code{span_period} is specified as \code{Y}, this allows the user to assign \code{ONTRTFL} as 'Y' to
+If the \code{span_period} is specified as \code{"Y"}, this allows the user to assign \code{ONTRTFL} as \code{"Y"} to
 cases where the record started prior to the 'ref_start_date\verb{and was ongoing or ended after the}ref_end_date`.
 
 Any date imputations needed should be done prior to calling this function.
