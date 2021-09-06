@@ -81,10 +81,11 @@ join is not demonstrated.
 At this step, it may be useful to join `adsl` to your `ex` domain as well:
 
 ```{r eval=TRUE}
-adex <- left_join(ex, 
-                  select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT, TRTSDTM, TRTEDTM,
-                         TRT01A, TRT01P),
-                  by = c("STUDYID", "USUBJID"))
+adex <- left_join(
+  ex,
+  select(adsl, STUDYID, USUBJID, starts_with("TRT")),
+  by = c("STUDYID", "USUBJID")
+)
 
 head(adex)
 ```
@@ -94,8 +95,8 @@ the planned dose information. For demonstration purposes, this will be added to
 the data.
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- adex %>% 
-    mutate(
+adex <- adex %>%
+  mutate(
     EXADJ = case_when(
       USUBJID == "01-701-1034" & VISIT %in% c("WEEK 2", "WEEK 24") ~ "ADVERSE EVENT",
       USUBJID == "01-701-1148" & VISIT %in% c("WEEK 24") ~ "MEDICATION ERROR",
@@ -136,15 +137,19 @@ This next examples demonstrates the datetime imputation features available
 in the `derive_vars_dtm` function where the time is imputed as "00:00:00":
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_dtm(adex, 
-                        dtc = EXSTDTC, 
-                        date_imputation = "first", 
-                        new_vars_prefix = "AST")
+adex <- derive_vars_dtm(
+  adex,
+  dtc = EXSTDTC,
+  date_imputation = "first",
+  new_vars_prefix = "AST"
+)
 
-adex <- derive_vars_dtm(adex, 
-                        dtc = EXENDTC, 
-                        date_imputation = "last", 
-                        new_vars_prefix = "AEN")
+adex <- derive_vars_dtm(
+  adex,
+  dtc = EXENDTC,
+  date_imputation = "last",
+  new_vars_prefix = "AEN"
+)
 
 head(select(adex, EXSTDTC, EXENDTC, ASTDT, ASTDTM, AENDT, AENDTM))
 ```
@@ -203,8 +208,10 @@ the cumulative doses received and cumulative planned doses may be calculated as:
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
-  mutate(DOSEO = EXDOSE * EXDURD,
-         PDOSEO = EXPLDOS * EXDURD)
+  mutate(
+    DOSEO = EXDOSE * EXDURD,
+    PDOSEO = EXPLDOS * EXDURD
+  )
 
 head(distinct(adex, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO))
 ```
@@ -225,30 +232,42 @@ These records can be derived using simple `dplyr::mutate` assignments and then c
 
 ```{r eval=TRUE, echo=TRUE}
 adex_durd <- adex %>%
-  mutate(PARAMCD = "DURD",
-         AVAL = EXDURD)
+  mutate(
+    PARAMCD = "DURD",
+    AVAL = EXDURD
+  )
 
 adex_dose <- adex %>%
-  mutate(PARAMCD = "DOSE",
-         AVAL = DOSEO)
+  mutate(
+    PARAMCD = "DOSE",
+    AVAL = DOSEO
+  )
 
 adex_pldos <- adex %>%
-  mutate(PARAMCD = "PLDOSE",
-         AVAL = PDOSEO)
+  mutate(
+    PARAMCD = "PLDOSE",
+    AVAL = PDOSEO
+  )
 
 adex_adj <- adex %>%
-  mutate(PARAMCD = "ADJ",
-         AVALC = if_else(!is.na(EXADJ), "Y", NA_character_))
+  mutate(
+    PARAMCD = "ADJ",
+    AVALC = if_else(!is.na(EXADJ), "Y", NA_character_)
+  )
 
 adex_adjae <- adex %>%
-  mutate(PARAMCD = "ADJAE",
-         AVALC = if_else(EXADJ == "ADVERSE EVENT", "Y", NA_character_))
+  mutate(
+    PARAMCD = "ADJAE",
+    AVALC = if_else(EXADJ == "ADVERSE EVENT", "Y", NA_character_)
+  )
 
-adex <- bind_rows(adex_durd,
-                  adex_dose,
-                  adex_pldos,
-                  adex_adj,
-                  adex_adjae) %>%
+adex <- bind_rows(
+  adex_durd,
+  adex_dose,
+  adex_pldos,
+  adex_adj,
+  adex_adjae
+) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
 count(adex, PARAMCD)
@@ -258,7 +277,7 @@ head(distinct(adex, PARAMCD, AVAL))
 ### Create Summary Records {#summaryrec}
 
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`, `APERIOD`,
-`AVISIT`, etc.). For these types of calculations, the `derive_exposure_params()`
+`AVISIT`, etc.). For these types of calculations, the `derive_params_exposure()`
 function may be used. In addition to creating a summarized `AVAL`, the function
 will also compute minimum and maximum dates for the record.
 
@@ -281,8 +300,8 @@ head(select(filter(adex, PARAMCD == "TDOSE"), PARAMCD, PARCAT1, AVAL, ASTDT, AEN
 adex <- filter(adex, PARAMCD != "TDOSE")
 ```
 
-A record with `PARAMCD` = "TDOSE" is created with `PARCAT1` set to "OVERALL" using
-the records in `ADEX` where `PARAMCD` = "DOSE" by summing `AVAL`. In addition,
+A record with `PARAMCD == "TDOSE"` is created with `PARCAT1` set to `"OVERALL"` using
+the records in `ADEX` where `PARAMCD == "DOSE"` by summing `AVAL`. In addition,
 the `ASTDT`, and `AENDT` are created as the minimum and
 maximum date/times associated with each `by_vars` grouping.
 
@@ -342,9 +361,14 @@ adex <- adex %>%
     by_vars = vars(USUBJID),
     set_values_to = vars(PARAMCD = "TNDOSINT"),
     tadm_code = "TDOSE",
-    tpadm_code = "TPDOSE")
+    tpadm_code = "TPDOSE"
+  )
 
-head(arrange(select(filter(adex, PARAMCD %in% c("TNDOSINT", "TDOSE", "TPDOSE")), USUBJID, PARAMCD, AVAL), USUBJID))
+adex %>% 
+  filter(PARAMCD %in% c("TNDOSINT", "TDOSE", "TPDOSE")) %>% 
+  select(USUBJID, PARAMCD, AVAL) %>% 
+  arrange(USUBJID) %>% 
+  head()
 ```
 
 The default calculation for dose intensity is:
@@ -377,7 +401,7 @@ TNOSINT | Overall dose intensity (%) | 12
 
 ```{r eval=TRUE, include=FALSE}
 param_lookup <- tribble(
-    ~PARAMCD, ~PARAM, ~PARAMN,
+  ~PARAMCD, ~PARAM, ~PARAMN,
   "DURD", "Study drug duration during constant dosing interval (days)", 1,
   "DOSE", "Dose administered during constant dosing interval (mg)", 2,
   "PLDOSE", "Planned dose during constant dosing interval (mg)", 3,
@@ -395,7 +419,7 @@ head(param_lookup)
 ```
 
 ```{r eval=TRUE, echo=TRUE}
-adex <-  left_join(adex, param_lookup, by = "PARAMCD")
+adex <- left_join(adex, param_lookup, by = "PARAMCD")
 
 count(adex, PARAMCD, PARAM, PARAMN)
 ```
@@ -428,13 +452,15 @@ assigned using the `dplyr::mutate` function:
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
-  mutate(AVALCAT = case_when(
-    PARAMCD %in% c("TDURD", "PDURD") & AVAL < 30 ~ "< 30 days",
-    PARAMCD %in% c("TDURD", "PDURD") & AVAL >= 30 & AVAL < 90 ~ ">= 30 and < 90 days",
-    PARAMCD %in% c("TDURD", "PDURD") & AVAL >= 90 ~ ">=90 days",
-    PARAMCD %in% c("TDOSE", "PDOSE") & AVAL < 100 ~ "< 100 mg",
-    PARAMCD %in% c("TDOSE", "PDOSE") & AVAL >= 100 ~ ">= 100 mg",
-    TRUE ~ NA_character_)
+  mutate(
+    AVALCAT = case_when(
+      PARAMCD %in% c("TDURD", "PDURD") & AVAL < 30 ~ "< 30 days",
+      PARAMCD %in% c("TDURD", "PDURD") & AVAL >= 30 & AVAL < 90 ~ ">= 30 and < 90 days",
+      PARAMCD %in% c("TDURD", "PDURD") & AVAL >= 90 ~ ">=90 days",
+      PARAMCD %in% c("TDOSE", "PDOSE") & AVAL < 100 ~ "< 100 mg",
+      PARAMCD %in% c("TDOSE", "PDOSE") & AVAL >= 100 ~ ">= 100 mg",
+      TRUE ~ NA_character_
+    )
   )
 
 distinct(filter(adex, PARAMCD %in% c("TDURD", "PDURD")), PARAMCD, AVAL, AVALCAT)
