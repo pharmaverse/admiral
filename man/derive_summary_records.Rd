@@ -11,7 +11,8 @@ derive_summary_records(
   analysis_var,
   summary_fun,
   set_values_to = NULL,
-  fns = deprecated()
+  fns = deprecated(),
+  filter_rows = deprecated()
 )
 }
 \arguments{
@@ -53,7 +54,9 @@ value or NA.
 More general expression are not allowed.
 }}
 
-\item{fns}{Deprecated, please use \code{analysis_var} and \code{summary_fun} instead.}
+\item{fns}{\emph{Deprecated}, please use \code{analysis_var} and \code{summary_fun} instead.}
+
+\item{filter_rows}{\emph{Deprecated}, please use \code{filter} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.
