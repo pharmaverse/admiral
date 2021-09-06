@@ -10,6 +10,7 @@
 #'   expected.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
+#'
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
@@ -17,7 +18,7 @@
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
 #'   the `filter` element are selected. Then for each patient the last
-#'   oservation (with respect to `date`) is selected.
+#'   observation (with respect to `date`) is selected.
 #'
 #'   \item The `LSTALVDT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
@@ -219,9 +220,9 @@ lstalvdt_source <- function(dataset,
                             date_var = deprecated()) {
 
   ### BEGIN DEPRECIATION
-  if (is_present(date_var)) {
+  if (!missing(date_var)) {
     deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
-    date <- date_var
+    date <- enquo(date_var)
   }
   ### END DEPRECIATION
 
