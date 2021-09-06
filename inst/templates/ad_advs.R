@@ -16,6 +16,7 @@ library(admiral)
 
 data("vs")
 data("adsl")
+vs <- convert_blanks_to_na(vs)
 
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below
@@ -94,21 +95,22 @@ advs <- advs %>%
   # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
-    unit_var = NULL,
     by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg")
+    set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
+    get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    unit_var = NULL,
     by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2")
+    method = "Mosteller",
+    set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2"),
+    get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bmi(
-    unit_var = NULL,
     by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2")
+    set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2"),
+    get_unit_expr = AVALU
   )
 
 # Add parameter details for derived parameters
@@ -158,7 +160,7 @@ advs <- advs %>%
 advs <- advs %>%
   # Calculate ONTRTFL
   derive_var_ontrtfl(
-    date = ADT,
+    start_date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
   )
