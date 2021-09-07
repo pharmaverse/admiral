@@ -10,6 +10,8 @@
 
 - The `date_var` and `traceabilty_vars` parameters of `dthcaus_source()` have been renamed to `date` and `traceability_vars`, respectively. The old names are now deprecated. They can still be used but a warning will be issued (#493).
 
+- The `date_var` parameter of `lstalvdt_source()` have been renamed to `date`
+
 - The format of the `date_imputation` parameter of `derive_vars_dt()` and `derive_vars_dtm()` has been changed from "dd-mm" to "mm-dd". Thus, "01-12" now refers to January 12th rather than December 1st (#492).
 
 - The `filter_rows` parameter of `derive_summary_records()` has been renamed to `filter`. The `fns` parameter has been deprecated in favor of `analysis_var` and `summary_fun` (#491).
@@ -46,9 +48,21 @@
 
 - `derive_param_qtc()` enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (#325).
 
+- `derive_param_rr()` enables the derivation of respiratory rate
+
 - `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
 
-- New template scripts for ADCM (#268) and ADEG (#258) have been created
+- New template scripts for ADEX (#181), ADCM (#268) and ADEG (#258) have been created
+
+- New vignette for programming ADEX has been created (#372)
+
+- `derive_params_exposure()` enables the derivation of summary exposure parameters (#400)
+
+- `derive_param_doseint()` enables the derivation of dose intensity (#179)
+
+- A section on how to create query variables (e.g. SMQs in ADAE) has been added to the Occurrence datasets vignette (#370)
+
+- The BDS vignette has been updated to incorporate examples of ADVS and ADEG specific functions (#371) 
 
 # admiral 0.2.1
 
