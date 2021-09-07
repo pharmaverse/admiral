@@ -1,4 +1,4 @@
-context("test-derive_duration")
+context("test-derive_vars_duration")
 
 
 test_that("duration and unit variable are added", {
@@ -7,7 +7,7 @@ test_that("duration and unit variable are added", {
     ymd("1999-09-09"), ymd("2020-02-20")
   )
   expected_output <- mutate(input, AGE = 20, AGEU = "YEARS")
-  actual_output <- derive_duration(
+  actual_output <- derive_vars_duration(
     input,
     new_var = AGE,
     start_date = BRTHDT,

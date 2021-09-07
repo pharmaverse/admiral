@@ -22,7 +22,7 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF",
     "2019", ymd_hms(NA), NA_character_,
     "2019---07", ymd_hms(NA), NA_character_
   ) %>%
-    mutate(ASTDTM = as_iso_dttm(ASTDTM))
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
   actual_output <- derive_vars_dtm(
     input,
@@ -47,7 +47,7 @@ test_that("Partial date imputed to the first day/month", {
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dttm(ASTDTM))
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
   actual_output <- derive_vars_dtm(
     input,
@@ -83,7 +83,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     "2019", ymd_hms("2019-12-31T23:59:59"), "M", "H",
     "2019---07", ymd_hms("2019-12-31T23:59:59"), "M", "H"
   ) %>%
-    mutate(AENDTM = as_iso_dttm(AENDTM))
+    mutate(AENDTM = as_iso_dtm(AENDTM))
 
   actual_output <- derive_vars_dtm(
     input,
@@ -122,7 +122,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     "2019", ymd_hms("2019-12-31T23:59:59"),
     "2019---07", ymd_hms("2019-12-31T23:59:59")
   ) %>%
-    mutate(AENDTM = as_iso_dttm(AENDTM))
+    mutate(AENDTM = as_iso_dtm(AENDTM))
 
   actual_output <- derive_vars_dtm(
     input,
@@ -150,7 +150,7 @@ test_that("Partial date imputed to the mid day/month", {
     "2019", ymd_hms("2019-06-15T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dttm(ASTDTM))
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
   actual_output <- derive_vars_dtm(
     input,
@@ -187,7 +187,7 @@ test_that("No re-derivation is done if --DTF variable already exists", {
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dttm(ASTDTM)) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
     select(XXSTDTC, ASTDTF, everything())
 
   actual_output <- expect_message(

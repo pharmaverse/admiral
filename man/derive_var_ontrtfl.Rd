@@ -6,18 +6,29 @@
 \usage{
 derive_var_ontrtfl(
   dataset,
-  date,
+  start_date,
+  end_date = NULL,
   ref_start_date,
   ref_end_date = NULL,
   ref_end_window = 0,
-  filter_pre_timepoint = NULL
+  filter_pre_timepoint = NULL,
+  span_period = NULL,
+  date = deprecated()
 )
 }
 \arguments{
-\item{dataset}{\code{data.frame}.}
+\item{dataset}{Input dataset.
 
-\item{date}{The assessment date (e.g. \code{ADT} for the date of a VS test)
+Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date}.}
+
+\item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})
 Required; A date or date-time object column is expected}
+
+\item{end_date}{The end date of assessment/event (e.g. \code{AENDT})
+A date or date-time object column is expected.
+Optional; Default is null. If the used and date value is missing
+on an observation, it is assumed the medication is ongoing and
+ONTRTFL is set to Y.#'}
 
 \item{ref_start_date}{The lower bound of the on-treatment period
 Required; A date or date-time object column is expected.}
@@ -31,14 +42,20 @@ Default is NULL.}
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
 measured in days
 (e.g. 7 if 7 days should be added to the upper bound)
-Optional; default is 0}
+Optional; default is 0.}
 
 \item{filter_pre_timepoint}{An expression to filter observations as not
 on-treatment when \code{date} = \code{ref_start_date}. For example, if
 observations where \code{VSTPT = PRE} should not be considered on-treatment when
 \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used
 to denote when the on-treatment flag should be set to null.
-Optional; default = NULL}
+Optional; default is NULL.}
+
+\item{span_period}{A \code{Y} scalar character. If \code{Y}, events that started prior
+to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{Y}.
+Optional; default is NULL.}
+
+\item{date}{\strong{Deprecated}. Please use \code{start_date} instead.}
 }
 \value{
 The input dataset with an additional column named
@@ -46,7 +63,7 @@ The input dataset with an additional column named
 }
 \description{
 Derive on-treatment flag (\code{ONTRTFL}) in an ADaM dataset with a single
-assessment date
+assessment date (e.g \code{ADT}) or event start/end dates (e.g. ASTDT/AENDT)
 }
 \details{
 On-Treatment is calculated by determining whether the assessment date or
@@ -65,60 +82,77 @@ and the filter provided in \code{filter_pre_timepoint} is not true.
 \code{ref_end_date + ref_end_window}.
 }
 
+If the \code{end_date} is provided and the \code{end_date} < ref_start_date
+then the \code{ONTRTFL} is set to NULL.This would be applicable to cases where
+the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{Y} above.
+
+If the \code{span_period} is specified as \code{Y}, this allows the user to assign \code{ONTRTFL} as 'Y' to
+cases where the record started prior to the 'ref_start_date\verb{and was ongoing or ended after the}ref_end_date`.
+
 Any date imputations needed should be done prior to calling this function.
 }
 \examples{
-library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
+library(lubridate, warn.conflict = FALSE)
 
-bds1 <- tibble::tribble(
+advs <- tibble::tribble(
   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
 )
 derive_var_ontrtfl(
-  bds1,
-  date = ADT,
+  advs,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT
 )
 
-bds2 <- tibble::tribble(
+advs <- tibble::tribble(
   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
 )
 derive_var_ontrtfl(
-  bds2,
-  date = ADT,
+  advs,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
   ref_end_window = 60
 )
 
-bds3 <- tibble::tribble(
-  ~USUBJID, ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
-  "P01",    "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
-  "P02",    "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
-  "P03",    "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
-) \%>\%
-  mutate(
-    ADTM = ymd_hm(ADTM),
-    TRTSDTM = ymd_hm(TRTSDTM),
-    TRTEDTM = ymd_hm(TRTEDTM)
-  )
+advs <- tibble::tribble(
+  ~USUBJID, ~ADTM,                ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
+  "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA,
+  "P02", ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
+  "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA
+)
 derive_var_ontrtfl(
-  bds3,
-  date = ADTM,
+  advs,
+  start_date = ADTM,
   ref_start_date = TRTSDTM,
   ref_end_date = TRTEDTM,
   filter_pre_timepoint = TPT == "PRE"
 )
+
+advs <- tibble::tribble(
+  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+)
+derive_var_ontrtfl(
+ advs,
+ start_date = ASTDT,
+ end_date = AENDT,
+ ref_start_date = TRTSDT,
+ ref_end_date = TRTEDT,
+ ref_end_window = 60,
+ span_period = "Y"
+)
 }
 \author{
-Alice Ehmann
+Alice Ehmann, Teckla Akinyi
 }
 \keyword{bds}
 \keyword{derivation}

@@ -345,18 +345,17 @@ convert_dtc_to_dtm <- function(dtc,
                                time_imputation = NULL,
                                min_dates = NULL,
                                max_dates = NULL) {
-  assert_that(is.character(dtc))
+  assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
-  as_iso_dttm(ymd_hms(
+  dtc %>%
     impute_dtc(
-      dtc = dtc,
       date_imputation = date_imputation,
       time_imputation = time_imputation,
       min_dates = min_dates,
       max_dates = max_dates
-    )
-  ))
+    ) %>%
+    as_iso_dtm()
 }
 
 #' Derive the Date Imputation Flag
