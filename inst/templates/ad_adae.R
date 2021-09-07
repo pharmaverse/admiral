@@ -16,7 +16,8 @@ library(lubridate)
 data("ae")
 data("suppae")
 data("adsl")
-data("ex")
+data("ex_single")
+ex <- ex_single
 
 # ---- Derivations ----
 
