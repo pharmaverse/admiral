@@ -568,7 +568,7 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be %s integer scalar but is %s",
       arg_name(substitute(arg)),
-      if (subset == "none") "an" else paste("a", subset),
+      ifelse(subset == "none", "an", paste("a", subset)),
       what_is_it(arg)
     )
     abort(err_msg)
@@ -751,7 +751,9 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) || !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) ||
+      !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
     err_msg <- paste(
       backquote(arg_name(substitute(arg))),
       "must be a list of formulas where each formula's left-hand side is a single",

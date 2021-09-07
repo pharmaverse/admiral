@@ -218,7 +218,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Gehan-George: `0.0235 * height ^ 0.42246 * weight ^ 0.51456`
 #'
-#'   Boyd: `0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))`
+#'   Boyd: `0.0003207 * (height ^ 0.3) * (1000 * weight) ^
+#'                  (0.7285 - (0.0188 * log10(1000 * weight)))`
 #'
 #'   Fujimoto: `0.008883 * height ^ 0.663 * weight ^ 0.444`
 #'
@@ -290,7 +291,10 @@ derive_param_bsa <- function(dataset,
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(
     method,
-    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+    values = c(
+      "Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George",
+      "Boyd", "Fujimoto", "Takahira"
+    )
   )
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -393,7 +397,10 @@ compute_bsa <- function(height = height,
   assert_numeric_vector(weight)
   assert_character_scalar(
     method,
-    values = c("Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George", "Boyd", "Fujimoto", "Takahira")
+    values = c(
+      "Mosteller", "DuBois-DuBois", "Haycock", "Gehan-George",
+      "Boyd", "Fujimoto", "Takahira"
+    )
   )
 
   if (method == "Mosteller") {

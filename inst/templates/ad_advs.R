@@ -3,16 +3,16 @@
 # Label: Vital Signs Analysis Dataset
 #
 # Input: adsl, vs
-#
-
+library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(admiral)
+
+# ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
-# For illustration purposes Read in Admiral Test Data
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
 data("vs")
 data("adsl")
@@ -21,7 +21,7 @@ vs <- convert_blanks_to_na(vs)
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below
 
-# derive_vars_suppqual(vs, suppvs)
+# vs <- derive_vars_suppqual(vs, suppvs)
 
 
 # ---- Lookup tables ----
@@ -95,20 +95,20 @@ advs <- advs %>%
   # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
     get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
     set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2"),
     get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bmi(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2"),
     get_unit_expr = AVALU
   )
@@ -121,12 +121,12 @@ advs_new <- advs %>%
 
 # Combine all parameters
 advs_params <- advs_new %>%
-  union_all(advs,filter(!(PARAMCD %in% c("MAP", "BMI", "BSA"))))
+  union_all(advs, filter(!(PARAMCD %in% c("MAP", "BMI", "BSA"))))
 
 # join ADSL vars and get visit info
 advs <- advs %>%
   select(-DOMAIN, -TRTSDT) %>%
-  left_join(adsl,by = c("STUDYID", "USUBJID")) %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
   # Derive Timing
   mutate(
     AVISIT = case_when(
@@ -167,7 +167,8 @@ advs <- advs %>%
 
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
-advs <- left_join(advs, range_lookup, by = "PARAMCD") %>%
+advs <- advs %>%
+  left_join(range_lookup, by = "PARAMCD") %>%
   # Calculate ANRIND
   derive_var_anrind()
 
@@ -216,7 +217,7 @@ advs <- advs %>%
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
     mode = "last",
-    flag_filter = (!is.na(AVISITN))
+    filter = !is.na(AVISITN)
     )
 
 # Get treatment information

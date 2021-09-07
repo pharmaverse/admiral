@@ -11,11 +11,13 @@
 #'   The variables specified by the `by_vars`, `key_var` and `value_var` parameters
 #'   are expected
 #'
-#' @param by_vars Keys used to merge `dataset_facm` with `dataset`
+#' @param by_vars Keys used to merge `dataset_merge` with `dataset`
 #'
-#' @param key_var The variable of `dataset_merge` that containing the names of the transposed variables
+#' @param key_var The variable of `dataset_merge` containing the names of the
+#'   transposed variables
 #'
-#' @param value_var The variable of `dataset_merge` containing the values of the transposed variables
+#' @param value_var The variable of `dataset_merge` containing the values of the
+#'   transposed variables
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
@@ -23,7 +25,7 @@
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
-#' @keywords derivation bds
+#' @keywords derivation adam
 #'
 #' @export
 #'
@@ -111,7 +113,7 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @return The input dataset with ATC variables added
 #'
-#' @keywords derivation bds
+#' @keywords derivation adcm
 #'
 #' @export
 #'

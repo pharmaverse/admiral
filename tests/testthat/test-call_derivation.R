@@ -2,7 +2,7 @@ data(ae)
 data(vs)
 
 test_that("call_derivation works", {
-  input <- vs[sample(1:nrow(vs), 1000), ]
+  input <- vs[sample(seq_len(nrow(vs)), 1000), ]
 
   expected_output <- input %>%
     derive_summary_records(
@@ -31,20 +31,33 @@ test_that("call_derivation works", {
     dataset = input,
     derivation = derive_summary_records,
     variable_params = list(
-      params(summary_fun = function(x) mean(x, na.rm = TRUE), set_values_to = vars(DTYPE = "AVERAGE")),
-      params(summary_fun = function(x) max(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MAXIMUM")),
-      params(summary_fun = function(x) min(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MINIMUM"))
+      params(
+        summary_fun = function(x) mean(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "AVERAGE")
+      ),
+      params(
+        summary_fun = function(x) max(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "MAXIMUM")
+      ),
+      params(
+        summary_fun = function(x) min(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "MINIMUM")
+      )
     ),
     by_vars = vars(USUBJID, VSTESTCD),
     analysis_var = VSSTRESN,
     filter = dplyr::n() >= 2L
   )
 
-  expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "VSTESTCD", "VISIT", "DTYPE", "VSSEQ"))
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("USUBJID", "VSTESTCD", "VISIT", "DTYPE", "VSSEQ")
+  )
 })
 
 test_that("call_derivation works", {
-  input <- ae[sample(1:nrow(ae), 1000), ] %>%
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expected_output <- input %>%

@@ -96,4 +96,3 @@ test_that("ATC variables are merged properly", {
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMDECOD", "ATC4CD"))
 })
-

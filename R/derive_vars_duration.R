@@ -102,17 +102,13 @@ derive_vars_duration <- function(dataset,
                                  floor_in = TRUE,
                                  add_one = TRUE,
                                  trunc_out = FALSE) {
-
-  # checking and quoting
   new_var <- assert_symbol(enquo(new_var))
   new_var_unit <- assert_symbol(enquo(new_var_unit), optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, required_vars = vars(!!start_date, !!end_date))
-  assert_character_scalar(in_unit,
-                          values = c("years", "months", "days", "hours", "minutes", "seconds"))
-  assert_character_scalar(out_unit,
-                          values = c("years", "months", "days", "hours", "minutes", "seconds"))
+  assert_character_scalar(in_unit, values = valid_time_units())
+  assert_character_scalar(out_unit, values = valid_time_units())
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)
@@ -125,7 +121,6 @@ derive_vars_duration <- function(dataset,
     )
   )
 
-  # derivation
   dataset <- dataset %>%
     mutate(
       !!new_var := compute_duration(
@@ -142,6 +137,7 @@ derive_vars_duration <- function(dataset,
   if (!quo_is_null(new_var_unit)) {
     dataset <- dataset %>% mutate(!!new_var_unit := toupper(out_unit))
   }
+
   dataset
 }
 
@@ -164,9 +160,16 @@ derive_duration <- function(dataset,
                             add_one = TRUE,
                             trunc_out = FALSE) {
   deprecate_warn("0.3.0", "derive_duration()", "derive_vars_duration()")
-  derive_vars_duration(dataset, new_var = new_var, new_var_unit = new_var_unit,
-                       start_date = start_date, end_date = end_date, in_unit = in_unit,
-                       out_unit = out_unit, floor_in = floor_in, add_one = add_one,
-                       trunc_out = trunc_out)
+  derive_vars_duration(
+    dataset,
+    new_var = new_var,
+    new_var_unit = new_var_unit,
+    start_date = start_date,
+    end_date = end_date,
+    in_unit = in_unit,
+    out_unit = out_unit,
+    floor_in = floor_in,
+    add_one = add_one,
+    trunc_out = trunc_out
+  )
 }
-

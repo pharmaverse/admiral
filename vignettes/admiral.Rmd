@@ -136,8 +136,6 @@ list_all_templates()
 
 # See also
 
-- See
-[doc/inst/example_scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/example_scripts)
-for example scripts creating ADaM datasets.
+- [Template scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/templates)
 
 - [Contributing to admiral](contributing.html)
