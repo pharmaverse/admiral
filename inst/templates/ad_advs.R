@@ -95,20 +95,20 @@ advs <- advs %>%
   # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
     get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
     set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2"),
     get_unit_expr = AVALU
   ) %>%
   # Derive Body Surface Area
   derive_param_bmi(
-    by_vars = vars(USUBJID, VISIT, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2"),
     get_unit_expr = AVALU
   )
