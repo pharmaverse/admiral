@@ -65,7 +65,7 @@ frames needed may be:
   
 To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
 
-```{r}
+```{r eval=TRUE}
 ae <- derive_vars_suppqual(ae, suppae)
 head(suppae)
 head(select(ae, USUBJID, AEDECOD, AETRTEM))
@@ -73,7 +73,7 @@ head(select(ae, USUBJID, AEDECOD, AETRTEM))
 
 Now start creating ADAE by joining the required data sets together. 
 
-```{r}
+```{r eval=TRUE}
 adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
 ```
 
@@ -87,7 +87,7 @@ where `ASTDTM` could be company-specific.
 `ASTADT` and `AENDT` can be created with a simple `dplyr::mutate()`. 
 `derive_var_astdy()` and `derive_var_aendy()` can be used to create `ASTDY` and `AENDY`, respectively.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>% 
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -124,7 +124,7 @@ See also [Date and Time Imputation](imputation.html).
 The function `derive_vars_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>%
   derive_vars_duration(
     new_var = ADURN,
@@ -155,7 +155,7 @@ Additionally, this function can also provide the traceability variables
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
 
-```{r}
+```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
   derive_last_dose(
@@ -178,7 +178,7 @@ adae <- adae %>%
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
 `dplyr::mutate()` if no imputation is required.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>%
   mutate(
     ASEV = AESEV, 
@@ -191,7 +191,7 @@ adae <- adae %>%
 To derive the treatment emergent flag `TRTEMFL`, one can use simple
 `dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
 
-```{r}
+```{r eval=TRUE}
 adae <- adae %>% 
   mutate(
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", "")
@@ -222,7 +222,7 @@ Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
 numeric one:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 adae %>% 
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
@@ -239,4 +239,31 @@ adae %>%
 
 ### Derive Query Variables {#query}
 
-*These functionalities are in progress.*
+It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in `derive_vars_query()` to an ADaM. 
+
+For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be needed. 
+
+This function expects the dictionary and/or lookup information to be provided as input in a standard structure.
+
+The expected result is the input dataset with query variables added.
+
+```{r, eval=TRUE}
+data("queries")
+head(queries)
+ adae <- tibble::tribble(
+   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
+   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
+     3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+     5, "Basedow's disease", NA_character_, 1L,
+   "03", "2020-06-07 23:59:59", "SOME TERM",
+     2, "Some query", "Some term", NA_integer_,
+   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+     7, "Alveolar proteinosis", NA_character_,  NA_integer_
+ )
+  
+  adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
+  head(adae)
+head(select(adae, USUBJID ,ASTDTM , AETERM, AESEQ, AEDECOD, AELLT, AELLTCD, SMQ02NAM, SMQ02SCN, SMQ03CD ))
+
+```
