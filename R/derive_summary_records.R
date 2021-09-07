@@ -165,7 +165,11 @@ derive_summary_records <- function(dataset,
     abort(err_msg)
   }
   if (!missing(filter_rows)) {
-    deprecate_warn("0.3.0", "derive_summary_records(filter_rows = )", "derive_summary_records(filter = )")
+    deprecate_warn(
+      "0.3.0",
+      "derive_summary_records(filter_rows = )",
+      "derive_summary_records(filter = )"
+    )
     filter <- enquo(filter_rows)
   }
   ### END DEPRECIATION

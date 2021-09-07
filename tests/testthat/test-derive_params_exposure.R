@@ -108,7 +108,7 @@ test_that("Errors", {
         input_code = "DOSED",
         analysis_var = AVAL,
         summary_fun = function(x) mean(x, na.rm = TRUE),
-        set_values_to = vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")
+        set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
       ),
     regexp = paste("`input_code` contains invalid values:\n`DOSED`\nValid",
                     "values:\n`DOSE` and `ADJ`")
@@ -117,7 +117,7 @@ test_that("Errors", {
   # ASTDTM/AENDTM or ASTDT/AENDT must be present
   expect_error(
     input <- input %>%
-      select(-starts_with("AST"),-starts_with("AEN"))%>%
+      select(-starts_with("AST"), -starts_with("AEN")) %>%
       derive_params_exposure(
         by_vars = vars(USUBJID),
         input_code = "DOSE",
