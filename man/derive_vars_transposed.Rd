@@ -23,7 +23,7 @@ The variables specified by the \code{by_vars} parameter are required}
 The variables specified by the \code{by_vars}, \code{key_var} and \code{value_var} parameters
 are expected}
 
-\item{by_vars}{Keys used to merge \code{dataset_facm} with \code{dataset}}
+\item{by_vars}{Keys used to merge \code{dataset_merge} with \code{dataset}}
 
 \item{key_var}{The variable of \code{dataset_merge} containing the names of the
 transposed variables}
@@ -86,5 +86,5 @@ cm \%>\%
 \author{
 Thomas Neitmann
 }
-\keyword{bds}
+\keyword{adam}
 \keyword{derivation}

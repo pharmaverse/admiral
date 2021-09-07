@@ -68,5 +68,5 @@ derive_vars_atc(cm, facm)
 \author{
 Thomas Neitmann
 }
-\keyword{bds}
+\keyword{adcm}
 \keyword{derivation}
