@@ -121,12 +121,12 @@ advs_new <- advs %>%
 
 # Combine all parameters
 advs_params <- advs_new %>%
-  union_all(advs,filter(!(PARAMCD %in% c("MAP", "BMI", "BSA"))))
+  union_all(advs, filter(!(PARAMCD %in% c("MAP", "BMI", "BSA"))))
 
 # join ADSL vars and get visit info
 advs <- advs %>%
   select(-DOMAIN, -TRTSDT) %>%
-  left_join(adsl,by = c("STUDYID", "USUBJID")) %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
   # Derive Timing
   mutate(
     AVISIT = case_when(

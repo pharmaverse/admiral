@@ -568,7 +568,7 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
     err_msg <- sprintf(
       "`%s` must be %s integer scalar but is %s",
       arg_name(substitute(arg)),
-      if (subset == "none") "an" else paste("a", subset),
+      ifelse(subset == "none", "an", paste("a", subset)),
       what_is_it(arg)
     )
     abort(err_msg)

@@ -218,7 +218,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Gehan-George: `0.0235 * height ^ 0.42246 * weight ^ 0.51456`
 #'
-#'   Boyd: `0.0003207 * (height ^ 0.3) * (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))`
+#'   Boyd: `0.0003207 * (height ^ 0.3) * (1000 * weight) ^
+#'                  (0.7285 - (0.0188 * log10(1000 * weight)))`
 #'
 #'   Fujimoto: `0.008883 * height ^ 0.663 * weight ^ 0.444`
 #'

@@ -109,7 +109,7 @@ derive_param_doseint <- function(dataset,
 
   assert_character_scalar(tadm_code)
   assert_character_scalar(tpadm_code)
-  assert_character_scalar(zero_doses, values = c("Inf", "100"), optional=TRUE)
+  assert_character_scalar(zero_doses, values = c("Inf", "100"), optional = TRUE)
   assert_vars(by_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
@@ -119,17 +119,19 @@ derive_param_doseint <- function(dataset,
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   # Create Dose intensity records
-  dataset <-
-    derive_derived_param(dataset,
-                         filter = !!filter,
-                         parameters = c(tadm_code, tpadm_code),
-                         by_vars = by_vars,
-                         analysis_value = (!!sym(paste0("AVAL.", tadm_code)) / !!sym(paste0("AVAL.", tpadm_code))*100),
-                         set_values_to = vars(!!!set_values_to,
-                                              temp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
-                                              temp_admin_dose = !!sym(paste0("AVAL.", tadm_code)))
-                       )
-
+  dataset <- derive_derived_param(
+    dataset,
+    filter = !!filter,
+    parameters = c(tadm_code, tpadm_code),
+    by_vars = by_vars,
+    analysis_value = (!!sym(paste0("AVAL.", tadm_code)) /
+                        !!sym(paste0("AVAL.", tpadm_code)) * 100),
+    set_values_to = vars(
+      !!!set_values_to,
+      temp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
+      temp_admin_dose = !!sym(paste0("AVAL.", tadm_code))
+    )
+  )
 
   # # handle 0 doses planned if needed
   if (zero_doses == "100") {
