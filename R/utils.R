@@ -410,7 +410,7 @@ convert_blanks_to_na.list <- function(x) {
 
 #' @export
 #' @rdname convert_blanks_to_na
-convert_blanks_to_na.data.frame <- function(x) {
+convert_blanks_to_na.data.frame <- function(x) { # nolint
   x[] <- lapply(x, convert_blanks_to_na)
   x
 }
