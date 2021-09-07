@@ -1,13 +1,54 @@
 # admiral 0.3.0
 
-- Bunch of functions and function arguments have been renamed, the old names are now deprecated (#493, #507): 
-    - derive_aage -> derive_vars_aage
-    - derive_duration -> derive_vars_duration
-    - derive_query_vars -> derive_vars_query
-    - derive_suppqual_vars -> derive_vars_suppqual
-    - dthcaus_source: date_var -> date, traceabilty_vars -> traceability_vars
-    - lstalvdt_source: date_var -> date
+- Several functions have been renamed. The old names are now deprecated. They can still be used but a warning will be issued (#507). 
+    - `derive_aage()` -> `derive_vars_aage()`
+    - `derive_duration()` -> `derive_vars_duration()`
+    - `derive_query_vars()` -> `derive_vars_query()`
+    - `derive_suppqual_vars()` -> `derive_vars_suppqual()`
 
+- The Programming Strategy has been updated (#495)
+
+- The `date_var` and `traceabilty_vars` parameters of `dthcaus_source()` have been renamed to `date` and `traceability_vars`, respectively. The old names are now deprecated. They can still be used but a warning will be issued (#493).
+
+- The format of the `date_imputation` parameter of `derive_vars_dt()` and `derive_vars_dtm()` has been changed from "dd-mm" to "mm-dd". Thus, "01-12" now refers to January 12th rather than December 1st (#492).
+
+- The `filter_rows` parameter of `derive_summary_records()` has been renamed to `filter`. The `fns` parameter has been deprecated in favor of `analysis_var` and `summary_fun` (#491).
+
+- The `flag_filter` parameter of `derive_extreme_flag()` has been renamed to `filter` (#487).
+
+- `derive_var_anrind()` checks whether the `AVAL` variable is present in the input dataset (#486).
+
+- "OCCDS" has been added as a new section on the reference page on the package website (#485)
+
+- `convert_blanks_to_na()` enables the conversion of SAS blanks, i.e. `""`, into proper R `NA` values (#482).
+
+- `derive_agegr_fda()` used to return `NA` for ages less than or equal 18. It now returns `<=18` (#441).
+
+- A search feature has been added to the package website (#438).
+
+- `use_ad_template()` has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (#433).
+
+- The `drop_values_from` parameter has been removed from `derive_summary_records()` (#425).
+
+- All derivation functions check whether the input dataset is grouped and throw an error if it is (#408).
+
+- `call_derivation()` enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (#403)
+
+- `derive_var_atirel()` enables the derivation of the "Analysis Time Relative to Reference" (#397).
+
+- `derive_vars_atc()` can be used to add ATC variables from FACM to ADCM (#396).
+
+- A performance issue in `derive_vars_dt()` has been resolved (#384).
+
+- `derive_vars_dtm_to_dt()` enables the easy conversion of datetime to date variables (#376).
+
+- `derive_param_bmi()`, `derive_param_bsa()` and `derive_param_map()` enables the derivation of the body mass index, body surface area and mean arterial pressure parameters respectively (#368).
+
+- `derive_param_qtc()` enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (#325).
+
+- `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
+
+- A template for ADCM has been created (#268)
 
 # admiral 0.2.1
 
