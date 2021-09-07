@@ -13,10 +13,10 @@ test_that("TRTSDTM variable is added", {
 
   expected_output <- mutate(
     adsl,
-    TRTSDTM = as_iso_dttm(c(
-      ymd_hms("2020-01-01T00:00:00"),
-      ymd_hms("2020-01-02T00:00:00"),
-      ymd_hms("2020-03-13T00:00:00")
+    TRTSDTM = as_iso_dtm(c(
+      "2020-01-01T00:00:00",
+      "2020-01-02T00:00:00",
+      "2020-03-13T00:00:00"
     ))
   )
 
