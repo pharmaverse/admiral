@@ -33,6 +33,8 @@ ADCM, ADMH, ADDV, etc.
 * [Read in Data](#readdata)
 * [Derive/Impute End and Start Analysis Date/time and Relative Day](#datetime)
 * [Derive Durations](#duration)
+* [Derive ATC variables](#ATC)
+* [Derive Time Relative to Reference](#ATIREL)
 * [Derive Analysis Phase and Period](#phase_period)
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
@@ -138,6 +140,82 @@ adae <- adae %>%
   )
 ```
 
+### Derive ATC variables{#ATC}
+
+The function `derive_vars_atc()` can be used to derive 
+ATC Class Variables.
+
+It helps to add Anatomical Therapeutic Chemical class variables from `FACM` to `ADCM`.
+
+The expected result is the input dataset with ATC variables added.
+
+
+```{r eval=TRUE}
+cm <- tibble::tribble(
+         ~USUBJID, ~CMGRPID,  ~CMREFID,            ~CMDECOD,
+   "BP40257-1001",     "14", "1192056",       "PARACETAMOL",
+   "BP40257-1001",     "18", "2007001",        "SOLUMEDROL",
+   "BP40257-1002",     "19", "2791596",    "SPIRONOLACTONE"
+ )
+ facm <- tibble::tribble(
+         ~USUBJID, ~FAGRPID,  ~FAREFID,   ~FATESTCD, ~FASTRESC,
+   "BP40257-1001",      "1", "1192056",  "CMATC1CD",       "N",
+   "BP40257-1001",      "1", "1192056",  "CMATC2CD",     "N02",
+   "BP40257-1001",      "1", "1192056",  "CMATC3CD",    "N02B",
+   "BP40257-1001",      "1", "1192056",  "CMATC4CD",   "N02BE",
+
+   "BP40257-1001",      "1", "2007001",  "CMATC1CD",       "D",
+   "BP40257-1001",      "1", "2007001",  "CMATC2CD",     "D10",
+   "BP40257-1001",      "1", "2007001",  "CMATC3CD",    "D10A",
+   "BP40257-1001",      "1", "2007001",  "CMATC4CD",   "D10AA",
+   "BP40257-1001",      "2", "2007001",  "CMATC1CD",       "D",
+   "BP40257-1001",      "2", "2007001",  "CMATC2CD",     "D07",
+   "BP40257-1001",      "2", "2007001",  "CMATC3CD",    "D07A",
+   "BP40257-1001",      "2", "2007001",  "CMATC4CD",   "D07AA",
+   "BP40257-1001",      "3", "2007001",  "CMATC1CD",       "H",
+   "BP40257-1001",      "3", "2007001",  "CMATC2CD",     "H02",
+   "BP40257-1001",      "3", "2007001",  "CMATC3CD",    "H02A",
+   "BP40257-1001",      "3", "2007001",  "CMATC4CD",   "H02AB",
+
+   "BP40257-1002",      "1", "2791596",  "CMATC1CD",       "C",
+   "BP40257-1002",      "1", "2791596",  "CMATC2CD",     "C03",
+   "BP40257-1002",      "1", "2791596",  "CMATC3CD",    "C03D",
+   "BP40257-1002",      "1", "2791596",  "CMATC4CD",   "C03DA"
+ )
+
+derive_vars_atc(cm, facm)
+```
+
+### Derive Time Relative to Reference{#ATIREL}
+
+The function `derive_var_atirel()` can be used to derive the variable `ATIREL` to CONCOMITANT, PRIOR, PRIOR_CONCOMITANT or NULL based on the 
+relationship 
+of CM Analysis start/end date/times to treatment start date/time.
+
+The expected result is a dataset containing all observations and variables of the input dataset 
+and additionally the variable specified by the `new_var` parameter.
+
+```{r eval=TRUE}
+library(dplyr, warn.conflicts = FALSE)
+adcm <- tibble::tribble(
+  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
+  "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28    19:00:00", "2012-02-25 23:00:00", "",
+  "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
+  "TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25    19:00:00", "2014-02-25 19:00:00", "",
+  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25    14:00:00", "2017-03-25 23:00:00", "m",
+  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25    14:00:00", "2017-04-29 14:00:00", ""
+) %>% mutate(
+  TRTSDTM = lubridate::as_datetime(TRTSDTM),
+  ASTDTM = lubridate::as_datetime(ASTDTM),
+  AENDTM = lubridate::as_datetime(AENDTM)
+ )
+
+ derive_var_atirel(
+    dataset = adcm,
+    flag_var = ASTTMF,
+    new_var = ATIREL
+  )
+```
 ### Derive Analysis Phase and Period {#phase_period}
 
 *These functionalities are in progress.*
@@ -198,8 +276,61 @@ adae <- adae %>%
   )
 ```
 
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single assessment date, we
+use `derive_var_ontrtfl()`.
 
+The expected result is The input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
 
+```{r eval=TRUE}
+ library(dplyr, warn.conflicts = FALSE)
+ library(lubridate, warn.conflicts = FALSE)
+
+ bds1 <- tibble::tribble(
+   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
+   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+   "P03",    ymd("2019-12-31"), ymd("2020-01-01"), ymd("2020-03-01")
+ )
+ derive_var_ontrtfl(
+   bds1,
+   date = ADT,
+   ref_start_date = TRTSDT,
+   ref_end_date = TRTEDT
+ )
+
+ bds2 <- tibble::tribble(
+   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
+   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
+   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
+   "P03",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01")
+ )
+ derive_var_ontrtfl(
+   bds2,
+   date = ADT,
+   ref_start_date = TRTSDT,
+   ref_end_date = TRTEDT,
+   ref_end_window = 60
+ )
+
+ bds3 <- tibble::tribble(
+   ~USUBJID, ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
+   "P01",    "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
+   "P02",    "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
+   "P03",    "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
+ ) %>%
+   mutate(
+     ADTM = ymd_hm(ADTM),
+     TRTSDTM = ymd_hm(TRTSDTM),
+    TRTEDTM = ymd_hm(TRTEDTM)
+   )
+ derive_var_ontrtfl(
+   bds3,
+   date = ADTM,
+   ref_start_date = TRTSDTM,
+   ref_end_date = TRTEDTM,
+   filter_pre_timepoint = TPT == "PRE"
+ )
+```
 ### Derive Occurrence Flags {#occflag}
 
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
@@ -249,7 +380,6 @@ The expected result is the input dataset with query variables added.
 
 ```{r, eval=TRUE}
 data("queries")
-head(queries)
  adae <- tibble::tribble(
    ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
    "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
@@ -263,7 +393,36 @@ head(queries)
  )
   
   adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
-  head(adae)
-head(select(adae, USUBJID ,ASTDTM , AETERM, AESEQ, AEDECOD, AELLT, AELLTCD, SMQ02NAM, SMQ02SCN, SMQ03CD ))
+  head(select(adae, USUBJID ,ASTDTM , AETERM, AESEQ, AEDECOD, AELLT, AELLTCD,       SMQ02NAM, SMQ02SCN, SMQ03CD ))
+```
+Similarly to SMQ, we use the `derive_vars_query()` function is used to derive SDG Standardised 
+Drug Grouping.
 
+```{r, eval=TRUE}
+  data("queries")
+head(queries)
+  SDG <- tibble::tribble(
+  ~VAR_PREFIX, ~QUERY_NAME, ~SDG_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME , ~TERM_ID, 
+  "SDG01", "Dermatolo", 11,
+  "BROAD", 1, "CMDECOD", "CMNAME", 1,
+  "SDG02", "Dermatolo", 12,
+  "BROAD", 2, "CMDECOD", "CMNAME", 2,
+  "SDG03", "Dermatolo", 13,
+  "BROAD", 1, "CMDECOD", "CMNAME", 3,
+  "SDG04", "Dermatolo", 14,
+  "BROAD", 2, "CMDECOD", "CMNAME", 4,
+  )
+  adcm <- tibble::tribble(
+  ~USUBJID, ~ASTDTM, ~CMTERM, ~CMSEQ, ~CMDECOD, ~CMLLT,    ~CMLLTCD,
+  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE   ABNORMAL",
+  3, "Alanine aminotransferase abnormal", NA_character_,   NA_integer_,
+  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
+  5, "Basedow's disease", NA_character_, 1L,
+  "03", "2020-06-07 23:59:59", "SOME TERM",
+  2, "Some query", "Some term", NA_integer_,
+  "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
+  7, "Alveolar proteinosis", NA_character_,  NA_integer_
+  )
+  derive_query_vars(adcm, SDG)
+  
 ```
