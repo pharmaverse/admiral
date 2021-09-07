@@ -1,15 +1,5 @@
 # admiral 0.3.0
 
-## Updates of Existing Functions
-
-- `derive_var_anrind()` now checks whether the `AVAL` variable is present in the input dataset (#486).
-
-- All derivation functions check whether the input dataset is grouped and throw an error if it is (#408).
-
-- `use_ad_template()` has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (#433).
-
-- A performance issue in `derive_vars_dt()` has been resolved (#384).
-
 ## New Features
 
 ### General
@@ -44,6 +34,16 @@
 - `derive_var_atirel()` enables the derivation of the "Analysis Time Relative to Reference" (#397).
 
 - `derive_vars_atc()` can be used to add ATC variables from FACM to ADCM (#396).
+
+## Updates of Existing Functions
+
+- `derive_var_anrind()` now checks whether the `AVAL` variable is present in the input dataset (#486).
+
+- All derivation functions check whether the input dataset is grouped and throw an error if it is (#408).
+
+- `use_ad_template()` has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (#433).
+
+- A performance issue in `derive_vars_dt()` has been resolved (#384).
 
 ## Breaking Changes
 
