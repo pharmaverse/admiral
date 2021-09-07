@@ -178,8 +178,8 @@ derive_params_exposure <- function(dataset,
     expo_data <- add_data %>%
       left_join(dates, by = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(as_iso_dttm(ASTDTM), as_iso_dttm(temp_start)),
-        AENDTM = coalesce(as_iso_dttm(AENDTM), as_iso_dttm(temp_end))
+        ASTDTM = coalesce(as_iso_dtm(ASTDTM), as_iso_dtm(temp_start)),
+        AENDTM = coalesce(as_iso_dtm(AENDTM), as_iso_dtm(temp_end))
       ) %>%
       select(-starts_with("temp_"))
 
