@@ -61,7 +61,7 @@ derive_var_atirel <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   #logic to create ATIREL
-  dataset <- dataset %>%
+  dataset %>%
     mutate(!!new_var :=
       case_when(
         is.na(TRTSDTM) ~ NA_character_,

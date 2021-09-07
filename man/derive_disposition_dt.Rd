@@ -18,7 +18,7 @@ derive_disposition_dt(
 
 \item{dataset_ds}{Datasets containing the disposition information (e.g.: ds)
 
-It must contains
+It must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{dtc}

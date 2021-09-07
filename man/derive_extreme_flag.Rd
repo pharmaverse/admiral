@@ -2,29 +2,23 @@
 % Please edit documentation in R/derive_extreme_flag.R
 \name{derive_extreme_flag}
 \alias{derive_extreme_flag}
-\title{Adds a Variable Flagging the First or Last Observation Within Each By Group}
+\title{Add a Variable Flagging the First or Last Observation Within Each By Group}
 \usage{
 derive_extreme_flag(
   dataset,
-  new_var,
   by_vars,
   order,
+  new_var,
   mode,
-  flag_filter = NULL,
-  check_type = "warning"
+  filter = NULL,
+  check_type = "warning",
+  flag_filter = deprecated()
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
 The variables specified by the \code{by_vars} parameter are expected.}
-
-\item{new_var}{Variable to add
-
-The specified variable is added to the output dataset. It is set to \code{"Y"}
-for the first or last observation (depending on the mode) of each by group.
-
-Permitted Values: list of name-value pairs}
 
 \item{by_vars}{Grouping variables
 
@@ -37,13 +31,20 @@ order.
 
 Permitted Values: list of variables or functions of variables}
 
+\item{new_var}{Variable to add
+
+The specified variable is added to the output dataset. It is set to \code{"Y"}
+for the first or last observation (depending on the mode) of each by group.
+
+Permitted Values: list of name-value pairs}
+
 \item{mode}{Flag mode
 
 Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
-\item{flag_filter}{Filter for flag data
+\item{filter}{Filter for flag data
 
 Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
@@ -60,12 +61,16 @@ by variables and the order.
 Default: \code{"warning"}
 
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{flag_filter}{Filter for flag data
+
+\strong{Deprecated}: Please use the \code{filter} parameter instead.}
 }
 \value{
 The input dataset with the new flag variable added
 }
 \description{
-Adds a variable flagging the first or last observation within each by group
+Add a variable flagging the first or last observation within each by group
 }
 \details{
 For each group (with respect to the variables specified for the
@@ -80,11 +85,11 @@ data("vs")
 # Flag last value for each patient, test, and visit, baseline observations are ignored
 vs \%>\%
   derive_extreme_flag(
-    new_var = LASTFL,
     by_vars = vars(USUBJID, VSTESTCD, VISIT),
     order = vars(VSTPTNUM),
+    new_var = LASTFL,
     mode = "last",
-    flag_filter = VISIT != "BASELINE"
+    filter = VISIT != "BASELINE"
   ) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
@@ -121,41 +126,41 @@ input <- tibble::tribble(
 # Last observation
 derive_extreme_flag(
   input,
-  new_var = ABLFL,
   by_vars = vars(USUBJID, PARAMCD),
   order = vars(ADT),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = AVISIT == "BASELINE"
+  filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = High
 derive_extreme_flag(
   input,
-  new_var = ABLFL,
   by_vars = vars(USUBJID, PARAMCD),
   order = vars(AVAL, ADT),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = AVISIT == "BASELINE"
+  filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = Lo
 derive_extreme_flag(
   input,
-  new_var = ABLFL,
   by_vars = vars(USUBJID, PARAMCD),
   order = vars(desc(AVAL), ADT),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = AVISIT == "BASELINE"
+  filter = AVISIT == "BASELINE"
 )
 
 # Average observation
 derive_extreme_flag(
   input,
-  new_var = ABLFL,
   by_vars = vars(USUBJID, PARAMCD),
   order = vars(ADT, desc(AVAL)),
+  new_var = ABLFL,
   mode = "last",
-  flag_filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
+  filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
 
 }

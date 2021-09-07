@@ -1,4 +1,4 @@
-context("test-derive_aage")
+context("test-derive_vars_aage")
 
 
 test_that("duration and unit variable are added", {
@@ -8,7 +8,7 @@ test_that("duration and unit variable are added", {
   )
   expected_output <- mutate(input, AAGE = 20, AAGEU = "YEARS")
 
-  expect_dfs_equal(derive_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
+  expect_dfs_equal(derive_vars_aage(input), expected_output, keys = c("BRTHDT", "RANDDT"))
 })
 
 
