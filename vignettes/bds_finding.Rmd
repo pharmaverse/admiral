@@ -714,4 +714,5 @@ advs %>%
 
 ADaM | Sample Code 
 ---- | --------------
-ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R){target="_blank"}
+ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R){target="_blank"}
+ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R){target="_blank"}
