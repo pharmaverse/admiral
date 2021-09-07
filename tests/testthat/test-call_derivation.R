@@ -31,9 +31,18 @@ test_that("call_derivation works", {
     dataset = input,
     derivation = derive_summary_records,
     variable_params = list(
-      params(summary_fun = function(x) mean(x, na.rm = TRUE), set_values_to = vars(DTYPE = "AVERAGE")),
-      params(summary_fun = function(x) max(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MAXIMUM")),
-      params(summary_fun = function(x) min(x, na.rm = TRUE), set_values_to = vars(DTYPE = "MINIMUM"))
+      params(
+        summary_fun = function(x) mean(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "AVERAGE")
+      ),
+      params(
+        summary_fun = function(x) max(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "MAXIMUM")
+      ),
+      params(
+        summary_fun = function(x) min(x, na.rm = TRUE),
+        set_values_to = vars(DTYPE = "MINIMUM")
+      )
     ),
     by_vars = vars(USUBJID, VSTESTCD),
     analysis_var = VSSTRESN,
