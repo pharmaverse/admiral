@@ -4,7 +4,7 @@
 \alias{filter_extreme}
 \title{Filter the First or Last Observation for Each By Group}
 \usage{
-filter_extreme(dataset, order, by_vars = NULL, mode, check_type = "warning")
+filter_extreme(dataset, by_vars = NULL, order, mode, check_type = "warning")
 }
 \arguments{
 \item{dataset}{Input dataset
@@ -12,15 +12,15 @@ filter_extreme(dataset, order, by_vars = NULL, mode, check_type = "warning")
 The variables specified by the \code{order} and the \code{by_vars} parameter are
 expected.}
 
+\item{by_vars}{Grouping variables
+
+Permitted Values: list of variables}
+
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
 Permitted Values: list of variables or functions of variables}
-
-\item{by_vars}{Grouping variables
-
-Permitted Values: list of variables}
 
 \item{mode}{Selection mode (first or last)
 
@@ -59,8 +59,8 @@ data("ex")
 # Select first dose for each patient
 ex \%>\%
   filter_extreme(
-    order = vars(EXSEQ),
     by_vars = vars(USUBJID),
+    order = vars(EXSEQ),
     mode = "first"
   ) \%>\%
   select(USUBJID, EXSEQ)
@@ -68,8 +68,8 @@ ex \%>\%
 # Select highest dose for each patient
 ex \%>\%
   filter_extreme(
-    order = vars(EXDOSE),
     by_vars = vars(USUBJID),
+    order = vars(EXDOSE),
     mode = "last",
     check_type = "none"
   ) \%>\%

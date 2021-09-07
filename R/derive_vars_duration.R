@@ -83,7 +83,7 @@
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 #' )
 #'
-#' derive_duration(data,
+#' derive_vars_duration(data,
 #'   new_var = AAGE,
 #'   new_var_unit = AAGEU,
 #'   start_date = BRTHDT,
@@ -92,16 +92,16 @@
 #'   add_one = FALSE,
 #'   trunc_out = TRUE
 #' )
-derive_duration <- function(dataset,
-                            new_var,
-                            new_var_unit = NULL,
-                            start_date,
-                            end_date,
-                            in_unit = "days",
-                            out_unit = "days",
-                            floor_in = TRUE,
-                            add_one = TRUE,
-                            trunc_out = FALSE) {
+derive_vars_duration <- function(dataset,
+                                 new_var,
+                                 new_var_unit = NULL,
+                                 start_date,
+                                 end_date,
+                                 in_unit = "days",
+                                 out_unit = "days",
+                                 floor_in = TRUE,
+                                 add_one = TRUE,
+                                 trunc_out = FALSE) {
 
   # checking and quoting
   new_var <- assert_symbol(enquo(new_var))
@@ -144,3 +144,29 @@ derive_duration <- function(dataset,
   }
   dataset
 }
+
+#' Derive Duration
+#'
+#' `derive_duration()` was renamed to `derive_vars_duration()` to create a
+#' more consistent API.
+#'
+#' @keywords internal
+#'
+#' @export
+derive_duration <- function(dataset,
+                            new_var,
+                            new_var_unit = NULL,
+                            start_date,
+                            end_date,
+                            in_unit = "days",
+                            out_unit = "days",
+                            floor_in = TRUE,
+                            add_one = TRUE,
+                            trunc_out = FALSE) {
+  deprecate_warn("0.3.0", "derive_duration()", "derive_vars_duration()")
+  derive_vars_duration(dataset, new_var = new_var, new_var_unit = new_var_unit,
+                       start_date = start_date, end_date = end_date, in_unit = in_unit,
+                       out_unit = out_unit, floor_in = floor_in, add_one = add_one,
+                       trunc_out = trunc_out)
+}
+

@@ -10,5 +10,3 @@ deprecate_warn <- function(...) {
 }
 
 deprecated <- function() rlang::missing_arg()
-
-is_present <- function(arg) !rlang::is_missing(rlang::maybe_missing(arg))
