@@ -48,7 +48,7 @@
 
 - `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
 
-- A template for ADCM has been created (#268)
+- New template scripts for ADCM (#268) and ADEG (#258) have been created
 
 # admiral 0.2.1
 
