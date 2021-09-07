@@ -81,7 +81,7 @@ adeg <- eg %>%
     ),
     hr_code = "HR",
     get_unit_expr = AVALU,
-    filter = EGSTAT != "NOT DONE"
+    filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
   derive_param_qtc(
@@ -95,7 +95,7 @@ adeg <- eg %>%
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = AVALU,
-    filter = EGSTAT != "NOT DONE"
+    filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
   derive_param_qtc(
@@ -109,7 +109,7 @@ adeg <- eg %>%
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = AVALU,
-    filter = EGSTAT != "NOT DONE"
+    filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
   derive_param_qtc(
@@ -123,7 +123,7 @@ adeg <- eg %>%
     qt_code = "QT",
     rr_code = "RR",
     get_unit_expr = AVALU,
-    filter = EGSTAT != "NOT DONE"
+    filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
   # Derive Timing, Assign BASETYPE, TRTA/P
@@ -203,7 +203,7 @@ adeg <- eg %>%
 
   derive_var_anrind() %>%
 
-  #Derive AVALCTx, CHGCATx
+  # Derive AVALCTx, CHGCATx
   mutate(
     AVALCAT1 = case_when(
       str_detect(PARAMCD, "QT") & AVAL <= 450 ~ "<= 450 msec",
