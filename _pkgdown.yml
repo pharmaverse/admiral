@@ -45,6 +45,14 @@ reference:
   desc: Functions specific for ADEG
   contents:
   - has_keyword('adeg')
+- subtitle: ADVS
+  desc: Functions specific for ADVS
+  contents:
+  - has_keyword('advs')
+- subtitle: ADEX
+  desc: Functions specific for ADEX
+  contents:
+  - has_keyword('adex')
 - subtitle: ADAE
   desc: Functions specific for ADAE
   contents:
@@ -83,6 +91,7 @@ reference:
 - contents:
   - adsl
   - advs
+  - adex
 
 - title: User Utilities
 - contents:
