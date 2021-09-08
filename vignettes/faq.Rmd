@@ -104,12 +104,13 @@ knitr::opts_chunk$set(
  * ADaM  IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.
  * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
  * The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).
- * For standard ADaM datasets (ADAE, ADCM ...) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation
+ * For standard ADaM datasets (ADAE, ADCM, ...) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation
 
 ##### Will there be a user/**contribution** guide?
 
  * All admiral information can be found on the [github webpage](https://roche-gsk.github.io/admiral/articles/admiral.html).
- * Our programming strategy serves as a framework for users how to create their own functions [contribution guide](https://roche-gsk.github.io/admiral/articles/contributing.html).
+ * Our [programming strategy](programming_strategy.html) serves as a framework
+ for users how to create their own functions.
 
 ##### How would a **contribution model** look like? 
 
