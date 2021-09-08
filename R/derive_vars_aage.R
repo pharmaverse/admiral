@@ -83,7 +83,12 @@ derive_aage <- function(dataset,
                         end_date = RANDDT,
                         unit = "years") {
   deprecate_warn("0.3.0", "derive_aage()", "derive_vars_aage()")
-  derive_vars_aage(dataset, start_date = start_date, end_date = end_date, unit = unit)
+  derive_vars_aage(
+    dataset,
+    start_date = !!enquo(start_date),
+    end_date = !!enquo(end_date),
+    unit = unit
+  )
 }
 
 #' Derive Age Groups
