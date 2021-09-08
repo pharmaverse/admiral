@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Get Started">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Get Started">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -63,7 +65,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="divider">
+    <li class="dropdown-header">User Guides</li>
+    <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
@@ -73,10 +77,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -92,7 +107,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -105,9 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get Started</h1>
-                        <h4 class="author">Stefan Bundfuss</h4>
             
-            <h4 class="date">2021-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/admiral.Rmd"><code>vignettes/admiral.Rmd</code></a></small>
       <div class="hidden name"><code>admiral.Rmd</code></div>
@@ -149,7 +168,7 @@
 <a href="#input-and-output" class="anchor"></a>Input and Output</h2>
 <p>It is expected that the input dataset is not grouped. Otherwise an error is issued.</p>
 <p>The input dataset should not include variables starting with <code>temp_</code>. These variable names are reserved for temporary variable used within the derivation and are removed from the output dataset. If the input dataset contains such variables, an error is issued.</p>
-<p>It is expected all variable names are uppercase in the input dataset and new variables will be returned in uppercase. It is expected all <code>SUPPxx.QNAM</code> values are uppercase to conform with this convention when using the <code>derive_suppqual_vars</code> to adhere to the uppercase requirement.</p>
+<p>It is expected all variable names are uppercase in the input dataset and new variables will be returned in uppercase. It is expected all <code>SUPPxx.QNAM</code> values are uppercase to conform with this convention when using the <code>derive_vars_suppqual</code> to adhere to the uppercase requirement.</p>
 <p>The output dataset is ungrouped. The observations are not ordered in a dedicated way. In particular, the order of the observations of the input dataset may not be preserved.</p>
 </div>
 </div>
@@ -190,7 +209,7 @@
   <span class="kw">save_path</span> <span class="kw">=</span> <span class="st">"./ad_adsl.R"</span>)</pre></body></html></div>
 <p>A list of all available templates can be obtained by <code><a href="../reference/list_all_templates.html">list_all_templates()</a></code>:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/list_all_templates.html">list_all_templates</a></span>()
-<span class="co">#&gt; [1] "ADSL" "ADVS"</span>
+<span class="co">#&gt; [1] "ADAE" "ADCM" "ADEG" "ADEX" "ADSL" "ADVS"</span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "adam_templates" "character"</span></pre></body></html></div>
 </div>
@@ -202,7 +221,7 @@
 <h1 class="hasAnchor">
 <a href="#see-also" class="anchor"></a>See also</h1>
 <ul>
-<li><p>See <a href="https://github.com/Roche-GSK/admiral/tree/master/inst/example_scripts">doc/inst/example_scripts</a> for example scripts creating ADaM datasets.</p></li>
+<li><p><a href="https://github.com/Roche-GSK/admiral/tree/master/inst/templates">Template scripts</a></p></li>
 <li><p><a href="contributing.html">Contributing to admiral</a></p></li>
 </ul>
 </div>
@@ -219,7 +238,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -230,7 +249,20 @@
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

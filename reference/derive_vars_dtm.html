@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Derive/Impute a Datetime from a Date Character Vector — derive_vars_dtm" />
@@ -82,7 +88,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -107,6 +113,8 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -117,10 +125,21 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -136,6 +155,12 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added." />
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -165,7 +190,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added.</p>
   <span class='no'>dtc</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"00:00:00"</span>,
-  <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>flag_imputation</span> <span class='kw'>=</span> <span class='st'>"auto"</span>,
   <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
@@ -181,7 +206,7 @@ and the date/time imputation flag ('--DTF', '--TMF') can be added.</p>
     <tr>
       <th>new_vars_prefix</th>
       <td><p>Prefix used for the output variable(s).</p>
-<p>a character is expected: e.g new_vars_prefix="AST".</p></td>
+<p>a character is expected: e.g. <code>new_vars_prefix="AST"</code>.</p></td>
     </tr>
     <tr>
       <th>dtc</th>
@@ -197,7 +222,7 @@ missing.</p>
 <p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
 missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. <code>"15-06"</code> for the 15th
+<li><p>format with month and day specified as 'mm-dd': e.g. <code>"06-15"</code> for the 15th
 of June,</p></li>
 <li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
 day/month.</p></li>
@@ -325,7 +350,7 @@ in the input dataset, a warning is issued and --TMF will be overwritten.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -336,6 +361,23 @@ in the input dataset, a warning is issued and --TMF will be overwritten.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

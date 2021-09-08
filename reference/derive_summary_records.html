@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Add New Records Within By Groups Using Aggregation Functions — derive_summary_records" />
@@ -83,7 +89,7 @@ records has been added to a dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -108,6 +114,8 @@ records has been added to a dataset." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -118,10 +126,21 @@ records has been added to a dataset." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -137,6 +156,12 @@ records has been added to a dataset." />
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -164,10 +189,12 @@ records has been added to a dataset.</p>
     <pre class="usage"><span class='fu'>derive_summary_records</span>(
   <span class='no'>dataset</span>,
   <span class='no'>by_vars</span>,
-  <span class='no'>fns</span>,
-  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>analysis_var</span>,
+  <span class='no'>summary_fun</span>,
   <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>drop_values_from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>(),
+  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,27 +211,7 @@ records. Providing the names of variables in <code><a href='https://dplyr.tidyve
 groupwise summary and generate summary records for the specified groups.</p></td>
     </tr>
     <tr>
-      <th>fns</th>
-      <td><p>List of formulas specifying variable to use for aggregations.
-This can include base functions like <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code>, <code><a href='https://rdrr.io/r/base/Extremes.html'>min()</a></code>, <code><a href='https://rdrr.io/r/base/Extremes.html'>max()</a></code>, <code><a href='https://rdrr.io/r/stats/median.html'>median()</a></code>,
-<code><a href='https://rdrr.io/r/stats/sd.html'>sd()</a></code>, or <code><a href='https://rdrr.io/r/base/sum.html'>sum()</a></code> or any other user-defined aggregation function.
-For example,</p><ul>
-<li><p>When a summary function is same for one or more analysis variable, use
-<code>fns = list(vars(AVAL, CHG) ~ mean</code>).</p></li>
-<li><p>If a different summary function is required for each analysis variable,
-use <code>fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))</code>.</p></li>
-</ul>
-
-<p>In general,</p><ul>
-<li><p>LHS refer to the one or more variable to use for summarizing.</p></li>
-<li><p>RHS refer to a <strong>single</strong> summary function.</p></li>
-</ul>
-
-<p>In the formula representation e.g., <code>CHG ~ sum(., na.rm = TRUE)</code>, a <code>.</code>
-serves as the data to be summarized which refers to the variable <code>CHG</code>.</p></td>
-    </tr>
-    <tr>
-      <th>filter_rows</th>
+      <th>filter</th>
       <td><p>Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
 <code>by_vars</code> as this will help when an aggregating, lagging, or ranking
@@ -217,24 +224,35 @@ than 2.</p></li>
 </ul></td>
     </tr>
     <tr>
+      <th>analysis_var</th>
+      <td><p>Analysis variable.</p></td>
+    </tr>
+    <tr>
+      <th>summary_fun</th>
+      <td><p>Function that takes as an input the <code>analysis_var</code> and
+performs the calculation.
+This can include built-in functions as well as user defined functions,
+for example <code>mean</code> or <code>function(x) mean(x, na.rm = TRUE)</code>.</p></td>
+    </tr>
+    <tr>
       <th>set_values_to</th>
       <td><p>A list of variable name-value pairs. Use this argument
-if you need to change the values of any newly derived records. Always new
-values in <code>set_values_to</code> should be equal to the length of analysis
-variable used in the <code>fns</code> argument. For example,</p><ul>
-<li><p>On using single analysis variable in <code>fns = list(AVAL ~ mean)</code> and
-<code>set_values_to = vars(AVISITN = 9999, AVISIT = "Endpoint")</code> would change
-the value of <code>AVISITN</code> to <code>9999</code> and <code>AVISIT</code> to <code>Endpoint</code> instead of
-retaining.</p></li>
-<li><p>Multiple analysis variables in <code>fns = list(vars(AVAL, CHG) ~ mean)</code> and
-<code>set_values_to = vars(AVISITN = c(9998, 9999))</code> would change <code>AVISITN</code> to
-<code>9998</code> for <code>AVAL</code> and <code>AVISITN</code> to <code>9999</code> for <code>CHG</code>.</p></li>
+if you need to change the values of any newly derived records.</p>
+<p>Set a list of variables to some specified value for the new observation(s)</p><ul>
+<li><p>LHS refer to a variable.</p></li>
+<li><p>RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+value or NA.
+(e.g.  <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</a></code>).
+More general expression are not allowed.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>drop_values_from</th>
-      <td><p>Providing the names of variables in <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code>
-will drop values and set as missing.</p></td>
+      <th>fns</th>
+      <td><p><em>Deprecated</em>, please use <code>analysis_var</code> and <code>summary_fun</code> instead.</p></td>
+    </tr>
+    <tr>
+      <th>filter_rows</th>
+      <td><p><em>Deprecated</em>, please use <code>filter</code> instead.</p></td>
     </tr>
     </table>
 
@@ -248,67 +266,75 @@ retain those common values in the newly derived records. Otherwise new value
 will be set to <code>NA</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>adeg</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>EGSEQ</span>, ~<span class='no'>PARAM</span>,             ~<span class='no'>AVISIT</span>,    ~<span class='no'>EGDTC</span>,            ~<span class='no'>AVAL</span>, ~<span class='no'>TRTA</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:50"</span>,  <span class='fl'>385</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:52"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:56"</span>,  <span class='fl'>396</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:45"</span>,  <span class='fl'>384</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:48"</span>,  <span class='fl'>393</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:51"</span>,  <span class='fl'>388</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:45"</span>,  <span class='fl'>385</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>8</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:48"</span>,  <span class='fl'>394</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>9</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:51"</span>,  <span class='fl'>402</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>410</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T08:01"</span>,  <span class='fl'>392</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:50"</span>,  <span class='fl'>401</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:53"</span>,  <span class='fl'>407</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:56"</span>,  <span class='fl'>400</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:50"</span>,  <span class='fl'>412</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>8</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:53"</span>,  <span class='fl'>414</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>9</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:56"</span>,  <span class='fl'>402</span>, <span class='st'>"Active 20mg"</span>,
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>adeg</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>EGSEQ</span>, ~<span class='no'>PARAM</span>, ~<span class='no'>AVISIT</span>, ~<span class='no'>EGDTC</span>, ~<span class='no'>AVAL</span>, ~<span class='no'>TRTA</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:50"</span>, <span class='fl'>385</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:52"</span>, <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:56"</span>, <span class='fl'>396</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:45"</span>, <span class='fl'>384</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:48"</span>, <span class='fl'>393</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:51"</span>, <span class='fl'>388</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:45"</span>, <span class='fl'>385</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>8</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:48"</span>, <span class='fl'>394</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>9</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:51"</span>, <span class='fl'>402</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>, <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>, <span class='fl'>410</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T08:01"</span>, <span class='fl'>392</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:50"</span>, <span class='fl'>401</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:53"</span>, <span class='fl'>407</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:56"</span>, <span class='fl'>400</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:50"</span>, <span class='fl'>412</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>8</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:53"</span>, <span class='fl'>414</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>9</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:56"</span>, <span class='fl'>402</span>, <span class='st'>"Active 20mg"</span>,
 )
 
 <span class='co'># Summarize the average of the triplicate ECG interval values (AVAL)</span>
 <span class='fu'>derive_summary_records</span>(
   <span class='no'>adeg</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>, <span class='no'>AVISIT</span>),
-  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>AVAL</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)),
+  <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+  <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"AVERAGE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 24 x 8
-#&gt;    USUBJID  EGSEQ PARAM           AVISIT   EGDTC            AVAL TRTA     DTYPE 
-#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; 
-#&gt;  1 XYZ-1001     1 QTcF Int. (mse… Baseline 2016-02-24T07:…  385  ""       &lt;NA&gt;  
-#&gt;  2 XYZ-1001     2 QTcF Int. (mse… Baseline 2016-02-24T07:…  399  ""       &lt;NA&gt;  
-#&gt;  3 XYZ-1001     3 QTcF Int. (mse… Baseline 2016-02-24T07:…  396  ""       &lt;NA&gt;  
-#&gt;  4 XYZ-1001    NA QTcF Int. (mse… Baseline &lt;NA&gt;             393. ""       AVERA…
-#&gt;  5 XYZ-1001     4 QTcF Int. (mse… Visit 2  2016-03-08T09:…  384  "Placeb… &lt;NA&gt;  
-#&gt;  6 XYZ-1001     5 QTcF Int. (mse… Visit 2  2016-03-08T09:…  393  "Placeb… &lt;NA&gt;  
-#&gt;  7 XYZ-1001     6 QTcF Int. (mse… Visit 2  2016-03-08T09:…  388  "Placeb… &lt;NA&gt;  
-#&gt;  8 XYZ-1001    NA QTcF Int. (mse… Visit 2  &lt;NA&gt;             388. "Placeb… AVERA…
-#&gt;  9 XYZ-1001     7 QTcF Int. (mse… Visit 3  2016-03-22T10:…  385  "Placeb… &lt;NA&gt;  
-#&gt; 10 XYZ-1001     8 QTcF Int. (mse… Visit 3  2016-03-22T10:…  394  "Placeb… &lt;NA&gt;  
+#&gt;    USUBJID  EGSEQ PARAM            AVISIT   EGDTC            AVAL TRTA     DTYPE
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;
+#&gt;  1 XYZ-1001     1 QTcF Int. (msec) Baseline 2016-02-24T07:…   385 ""       &lt;NA&gt; 
+#&gt;  2 XYZ-1001     2 QTcF Int. (msec) Baseline 2016-02-24T07:…   399 ""       &lt;NA&gt; 
+#&gt;  3 XYZ-1001     3 QTcF Int. (msec) Baseline 2016-02-24T07:…   396 ""       &lt;NA&gt; 
+#&gt;  4 XYZ-1001     4 QTcF Int. (msec) Visit 2  2016-03-08T09:…   384 "Placeb… &lt;NA&gt; 
+#&gt;  5 XYZ-1001     5 QTcF Int. (msec) Visit 2  2016-03-08T09:…   393 "Placeb… &lt;NA&gt; 
+#&gt;  6 XYZ-1001     6 QTcF Int. (msec) Visit 2  2016-03-08T09:…   388 "Placeb… &lt;NA&gt; 
+#&gt;  7 XYZ-1001     7 QTcF Int. (msec) Visit 3  2016-03-22T10:…   385 "Placeb… &lt;NA&gt; 
+#&gt;  8 XYZ-1001     8 QTcF Int. (msec) Visit 3  2016-03-22T10:…   394 "Placeb… &lt;NA&gt; 
+#&gt;  9 XYZ-1001     9 QTcF Int. (msec) Visit 3  2016-03-22T10:…   402 "Placeb… &lt;NA&gt; 
+#&gt; 10 XYZ-1002     1 QTcF Int. (msec) Baseline 2016-02-22T07:…   399 ""       &lt;NA&gt; 
 #&gt; # … with 14 more rows</div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>,     ~<span class='no'>VSSEQ</span>, ~<span class='no'>PARAM</span>,  ~<span class='no'>AVAL</span>, ~<span class='no'>VSSTRESU</span>, ~<span class='no'>VISIT</span>,      ~<span class='no'>VSDTC</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1164</span>, <span class='st'>"Weight"</span>,   <span class='fl'>99</span>, <span class='st'>"kg"</span>,      <span class='st'>"Screening"</span>, <span class='st'>"2018-03-19"</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1165</span>, <span class='st'>"Weight"</span>,  <span class='fl'>101</span>, <span class='st'>"kg"</span>,      <span class='st'>"Run-In"</span>   , <span class='st'>"2018-03-26"</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1166</span>, <span class='st'>"Weight"</span>,  <span class='fl'>100</span>, <span class='st'>"kg"</span>,      <span class='st'>"Baseline"</span> , <span class='st'>"2018-04-16"</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1167</span>, <span class='st'>"Weight"</span>,   <span class='fl'>94</span>, <span class='st'>"kg"</span>,      <span class='st'>"Week 24"</span>  , <span class='st'>"2018-09-30"</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1168</span>, <span class='st'>"Weight"</span>,   <span class='fl'>92</span>, <span class='st'>"kg"</span>,      <span class='st'>"Week 48"</span>  , <span class='st'>"2019-03-17"</span>,
-  <span class='st'>"XYZ-001-001"</span>,  <span class='fl'>1169</span>, <span class='st'>"Weight"</span>,   <span class='fl'>95</span>, <span class='st'>"kg"</span>,      <span class='st'>"Week 52"</span>  , <span class='st'>"2019-04-14"</span>,
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>VSSEQ</span>, ~<span class='no'>PARAM</span>, ~<span class='no'>AVAL</span>, ~<span class='no'>VSSTRESU</span>, ~<span class='no'>VISIT</span>, ~<span class='no'>VSDTC</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1164</span>, <span class='st'>"Weight"</span>, <span class='fl'>99</span>,  <span class='st'>"kg"</span>, <span class='st'>"Screening"</span>, <span class='st'>"2018-03-19"</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1165</span>, <span class='st'>"Weight"</span>, <span class='fl'>101</span>, <span class='st'>"kg"</span>, <span class='st'>"Run-In"</span>,    <span class='st'>"2018-03-26"</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1166</span>, <span class='st'>"Weight"</span>, <span class='fl'>100</span>, <span class='st'>"kg"</span>, <span class='st'>"Baseline"</span>,  <span class='st'>"2018-04-16"</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1167</span>, <span class='st'>"Weight"</span>, <span class='fl'>94</span>,  <span class='st'>"kg"</span>, <span class='st'>"Week 24"</span>,   <span class='st'>"2018-09-30"</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1168</span>, <span class='st'>"Weight"</span>, <span class='fl'>92</span>,  <span class='st'>"kg"</span>, <span class='st'>"Week 48"</span>,   <span class='st'>"2019-03-17"</span>,
+  <span class='st'>"XYZ-001-001"</span>, <span class='fl'>1169</span>, <span class='st'>"Weight"</span>, <span class='fl'>95</span>,  <span class='st'>"kg"</span>, <span class='st'>"Week 52"</span>,   <span class='st'>"2019-04-14"</span>,
 )
 
 <span class='co'># Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records</span>
 <span class='co'># and `DTYPE = AVERAGE` refers to `mean()` records.</span>
-<span class='co'># `set_values_to` must be of the same length as `fns`</span>
 <span class='fu'>derive_summary_records</span>(
   <span class='no'>advs</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>),
-  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>AVAL</span> ~ <span class='no'>max</span>, <span class='no'>AVAL</span> ~ <span class='no'>mean</span>),
-  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"MAXIMUM"</span>, <span class='st'>"AVERAGE"</span>))
-)</div><div class='output co'>#&gt; # A tibble: 8 x 8
+  <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+  <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='no'>max</span>,
+  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"MAXIMUM"</span>)
+) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_summary_records</span>(
+    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>),
+    <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+    <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='no'>mean</span>,
+    <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"AVERAGE"</span>)
+  )</div><div class='output co'>#&gt; # A tibble: 8 x 8
 #&gt;   USUBJID     VSSEQ PARAM   AVAL VSSTRESU VISIT     VSDTC      DTYPE  
 #&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  
 #&gt; 1 XYZ-001-001  1164 Weight  99   kg       Screening 2018-03-19 &lt;NA&gt;   
@@ -317,50 +343,35 @@ will be set to <code>NA</code>.</p>
 #&gt; 4 XYZ-001-001  1167 Weight  94   kg       Week 24   2018-09-30 &lt;NA&gt;   
 #&gt; 5 XYZ-001-001  1168 Weight  92   kg       Week 48   2019-03-17 &lt;NA&gt;   
 #&gt; 6 XYZ-001-001  1169 Weight  95   kg       Week 52   2019-04-14 &lt;NA&gt;   
-#&gt; 7 XYZ-001-001    NA Weight 101   kg       &lt;NA&gt;      &lt;NA&gt;       MAXIMUM
-#&gt; 8 XYZ-001-001    NA Weight  96.8 kg       &lt;NA&gt;      &lt;NA&gt;       AVERAGE</div><div class='input'>
-<span class='co'># Drop retained value of VSSTRESU in the derived record</span>
-<span class='fu'>derive_summary_records</span>(
-  <span class='no'>advs</span>,
-  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>),
-  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>AVAL</span> ~ <span class='no'>mean</span>),
-  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"MAXIMUM"</span>),
-  <span class='kw'>drop_values_from</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>VSSTRESU</span>)
-)</div><div class='output co'>#&gt; # A tibble: 7 x 8
-#&gt;   USUBJID     VSSEQ PARAM   AVAL VSSTRESU VISIT     VSDTC      DTYPE  
-#&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  
-#&gt; 1 XYZ-001-001  1164 Weight  99   kg       Screening 2018-03-19 &lt;NA&gt;   
-#&gt; 2 XYZ-001-001  1165 Weight 101   kg       Run-In    2018-03-26 &lt;NA&gt;   
-#&gt; 3 XYZ-001-001  1166 Weight 100   kg       Baseline  2018-04-16 &lt;NA&gt;   
-#&gt; 4 XYZ-001-001  1167 Weight  94   kg       Week 24   2018-09-30 &lt;NA&gt;   
-#&gt; 5 XYZ-001-001  1168 Weight  92   kg       Week 48   2019-03-17 &lt;NA&gt;   
-#&gt; 6 XYZ-001-001  1169 Weight  95   kg       Week 52   2019-04-14 &lt;NA&gt;   
-#&gt; 7 XYZ-001-001    NA Weight  96.8 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       MAXIMUM</div><div class='input'>
-<span class='co'># Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---</span>
+#&gt; 7 XYZ-001-001    NA Weight 101   &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       MAXIMUM
+#&gt; 8 XYZ-001-001    NA Weight  97.4 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       AVERAGE</div><div class='input'>
+<span class='co'># Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'</span>
 <span class='no'>adeg</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>EGSEQ</span>, ~<span class='no'>PARAM</span>,             ~<span class='no'>AVISIT</span>,    ~<span class='no'>EGDTC</span>,            ~<span class='no'>AVAL</span>, ~<span class='no'>TRTA</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:50"</span>,  <span class='fl'>385</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:52"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:56"</span>,  <span class='fl'>396</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:48"</span>,  <span class='fl'>393</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:51"</span>,  <span class='fl'>388</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:48"</span>,  <span class='fl'>394</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1001"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:51"</span>,  <span class='fl'>402</span>, <span class='st'>"Placebo"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>399</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>,  <span class='fl'>410</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T08:01"</span>,  <span class='fl'>392</span>, <span class='st'>""</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:53"</span>,  <span class='fl'>407</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:56"</span>,  <span class='fl'>400</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:53"</span>,  <span class='fl'>414</span>, <span class='st'>"Active 20mg"</span>,
-  <span class='st'>"XYZ-1002"</span>,    <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:56"</span>,  <span class='fl'>402</span>, <span class='st'>"Active 20mg"</span>,
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>EGSEQ</span>, ~<span class='no'>PARAM</span>, ~<span class='no'>AVISIT</span>, ~<span class='no'>EGDTC</span>, ~<span class='no'>AVAL</span>, ~<span class='no'>TRTA</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:50"</span>, <span class='fl'>385</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:52"</span>, <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-24T07:56"</span>, <span class='fl'>396</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:48"</span>, <span class='fl'>393</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-08T09:51"</span>, <span class='fl'>388</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:48"</span>, <span class='fl'>394</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1001"</span>, <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-22T10:51"</span>, <span class='fl'>402</span>, <span class='st'>"Placebo"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>1</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>, <span class='fl'>399</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>2</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T07:58"</span>, <span class='fl'>410</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>3</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Baseline"</span>, <span class='st'>"2016-02-22T08:01"</span>, <span class='fl'>392</span>, <span class='st'>""</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>4</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:53"</span>, <span class='fl'>407</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>5</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 2"</span>,  <span class='st'>"2016-03-06T09:56"</span>, <span class='fl'>400</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>6</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:53"</span>, <span class='fl'>414</span>, <span class='st'>"Active 20mg"</span>,
+  <span class='st'>"XYZ-1002"</span>, <span class='fl'>7</span>, <span class='st'>"QTcF Int. (msec)"</span>, <span class='st'>"Visit 3"</span>,  <span class='st'>"2016-03-24T10:56"</span>, <span class='fl'>402</span>, <span class='st'>"Active 20mg"</span>,
 )
 
-<span class='co'># Summarize the average of AVAL for AVISIT records greater than 2</span>
+<span class='co'># Compute the average of AVAL only if there are more than 2 records within the</span>
+<span class='co'># by group</span>
 <span class='fu'>derive_summary_records</span>(
   <span class='no'>adeg</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAM</span>, <span class='no'>AVISIT</span>),
-  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>AVAL</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)),
-  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/n.html'>n</a></span>() <span class='kw'>&gt;</span> <span class='fl'>2</span>,
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/n.html'>n</a></span>() <span class='kw'>&gt;</span> <span class='fl'>2</span>,
+  <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+  <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>DTYPE</span> <span class='kw'>=</span> <span class='st'>"AVERAGE"</span>)
 )</div><div class='output co'>#&gt; # A tibble: 16 x 8
 #&gt;    USUBJID  EGSEQ PARAM          AVISIT   EGDTC          AVAL TRTA        DTYPE 
@@ -368,19 +379,19 @@ will be set to <code>NA</code>.</p>
 #&gt;  1 XYZ-1001     1 QTcF Int. (ms… Baseline 2016-02-24T0…  385  ""          &lt;NA&gt;  
 #&gt;  2 XYZ-1001     2 QTcF Int. (ms… Baseline 2016-02-24T0…  399  ""          &lt;NA&gt;  
 #&gt;  3 XYZ-1001     3 QTcF Int. (ms… Baseline 2016-02-24T0…  396  ""          &lt;NA&gt;  
-#&gt;  4 XYZ-1001    NA QTcF Int. (ms… Baseline &lt;NA&gt;           393. ""          AVERA…
-#&gt;  5 XYZ-1001     4 QTcF Int. (ms… Visit 2  2016-03-08T0…  393  "Placebo"   &lt;NA&gt;  
-#&gt;  6 XYZ-1001     5 QTcF Int. (ms… Visit 2  2016-03-08T0…  388  "Placebo"   &lt;NA&gt;  
-#&gt;  7 XYZ-1001     6 QTcF Int. (ms… Visit 3  2016-03-22T1…  394  "Placebo"   &lt;NA&gt;  
-#&gt;  8 XYZ-1001     7 QTcF Int. (ms… Visit 3  2016-03-22T1…  402  "Placebo"   &lt;NA&gt;  
-#&gt;  9 XYZ-1002     1 QTcF Int. (ms… Baseline 2016-02-22T0…  399  ""          &lt;NA&gt;  
-#&gt; 10 XYZ-1002     2 QTcF Int. (ms… Baseline 2016-02-22T0…  410  ""          &lt;NA&gt;  
-#&gt; 11 XYZ-1002     3 QTcF Int. (ms… Baseline 2016-02-22T0…  392  ""          &lt;NA&gt;  
-#&gt; 12 XYZ-1002    NA QTcF Int. (ms… Baseline &lt;NA&gt;           400. ""          AVERA…
-#&gt; 13 XYZ-1002     4 QTcF Int. (ms… Visit 2  2016-03-06T0…  407  "Active 20… &lt;NA&gt;  
-#&gt; 14 XYZ-1002     5 QTcF Int. (ms… Visit 2  2016-03-06T0…  400  "Active 20… &lt;NA&gt;  
-#&gt; 15 XYZ-1002     6 QTcF Int. (ms… Visit 3  2016-03-24T1…  414  "Active 20… &lt;NA&gt;  
-#&gt; 16 XYZ-1002     7 QTcF Int. (ms… Visit 3  2016-03-24T1…  402  "Active 20… &lt;NA&gt;  </div></pre>
+#&gt;  4 XYZ-1001     4 QTcF Int. (ms… Visit 2  2016-03-08T0…  393  "Placebo"   &lt;NA&gt;  
+#&gt;  5 XYZ-1001     5 QTcF Int. (ms… Visit 2  2016-03-08T0…  388  "Placebo"   &lt;NA&gt;  
+#&gt;  6 XYZ-1001     6 QTcF Int. (ms… Visit 3  2016-03-22T1…  394  "Placebo"   &lt;NA&gt;  
+#&gt;  7 XYZ-1001     7 QTcF Int. (ms… Visit 3  2016-03-22T1…  402  "Placebo"   &lt;NA&gt;  
+#&gt;  8 XYZ-1002     1 QTcF Int. (ms… Baseline 2016-02-22T0…  399  ""          &lt;NA&gt;  
+#&gt;  9 XYZ-1002     2 QTcF Int. (ms… Baseline 2016-02-22T0…  410  ""          &lt;NA&gt;  
+#&gt; 10 XYZ-1002     3 QTcF Int. (ms… Baseline 2016-02-22T0…  392  ""          &lt;NA&gt;  
+#&gt; 11 XYZ-1002     4 QTcF Int. (ms… Visit 2  2016-03-06T0…  407  "Active 20… &lt;NA&gt;  
+#&gt; 12 XYZ-1002     5 QTcF Int. (ms… Visit 2  2016-03-06T0…  400  "Active 20… &lt;NA&gt;  
+#&gt; 13 XYZ-1002     6 QTcF Int. (ms… Visit 3  2016-03-24T1…  414  "Active 20… &lt;NA&gt;  
+#&gt; 14 XYZ-1002     7 QTcF Int. (ms… Visit 3  2016-03-24T1…  402  "Active 20… &lt;NA&gt;  
+#&gt; 15 XYZ-1001    NA QTcF Int. (ms… Baseline &lt;NA&gt;           393.  &lt;NA&gt;       AVERA…
+#&gt; 16 XYZ-1002    NA QTcF Int. (ms… Baseline &lt;NA&gt;           400.  &lt;NA&gt;       AVERA…</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -392,7 +403,7 @@ will be set to <code>NA</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -403,6 +414,23 @@ will be set to <code>NA</code>.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

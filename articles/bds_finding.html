@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Creating a BDS Finding ADaM">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Creating a BDS Finding ADaM">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -63,7 +65,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="divider">
+    <li class="dropdown-header">User Guides</li>
+    <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
@@ -73,10 +77,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -92,7 +107,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -105,9 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Creating a BDS Finding ADaM</h1>
-                        <h4 class="author">admiral team</h4>
             
-            <h4 class="date">2021-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/bds_finding.Rmd"><code>vignettes/bds_finding.Rmd</code></a></small>
       <div class="hidden name"><code>bds_finding.Rmd</code></div>
@@ -128,8 +147,9 @@
 <ul>
 <li><a href="#readdata">Read in Data</a></li>
 <li><a href="#datetime">Derive/Impute Numeric Date/Time and Analysis Day (<code>ADT</code>, <code>ADTM</code>, <code>ADY</code>, <code>ADTF</code>, <code>ATMF</code>)</a></li>
-<li><a href="#aval">Derive Results (<code>AVAL</code>, <code>AVALC</code>, <code>AVALU</code>)</a></li>
 <li><a href="#paramcd">Assign <code>PARAMCD</code>, <code>PARAM</code>, <code>PARAMN</code>, <code>PARCATy</code></a></li>
+<li><a href="#aval">Derive Results (<code>AVAL</code>, <code>AVALC</code>, <code>AVALU</code>)</a></li>
+<li><a href="#derive_param">Derive Additional Parameters (e.g. <code>BMI</code> or <code>MAP</code> for ADVS)</a></li>
 <li><a href="#timing">Derive Timing Variables (e.g. <code>APHASE</code>, <code>AVISIT</code>, <code>APERIOD</code>)</a></li>
 <li><a href="#timingflag">Timing Flag Variables (e.g. <code>ONTRTFL</code>)</a></li>
 <li><a href="#referencerange">Assign Reference Range Indicator (<code>ANRIND</code>)</a></li>
@@ -154,38 +174,39 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"adsl"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"vs"</span>)</pre></body></html></div>
-<p>The <code>suppvs</code> domain can be joined to the <code>vs</code> domain using the function <code><a href="../reference/derive_suppqual_vars.html">derive_suppqual_vars()</a></code>.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"vs"</span>)
+<span class="no">vs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na</a></span>(<span class="no">vs</span>)</pre></body></html></div>
+<p>The <code>suppvs</code> domain can be joined to the <code>vs</code> domain using the function <code><a href="../reference/derive_vars_suppqual.html">derive_vars_suppqual()</a></code>.</p>
 <p>This function will transpose the supplemental SDTM domain (e.g. <code>suppvs</code>) and join the transposed data to the parent domain (e.g. <code>vs</code>) by <code>STUDYID</code>, <code>USUBJID</code> using the <code>IDVAR</code> and <code>IDVARVAL</code> as an additional join variable.</p>
 <p>Example call:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">vs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_suppqual_vars.html">derive_suppqual_vars</a></span>(<span class="no">vs</span>, <span class="no">suppvs</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">vs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_vars_suppqual.html">derive_vars_suppqual</a></span>(<span class="no">vs</span>, <span class="no">suppvs</span>)</pre></body></html></div>
 <p>Please note, the CDISC pilot did not include a <code>suppvs</code> dataset and therefore this join is not demonstrated.</p>
 <p>At this step, it may be useful to join ADSL to your VS domain as well:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="no">vs</span>, <span class="no">adsl</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>))
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">advs</span>)
-<span class="co">#&gt; # A tibble: 6 x 73</span>
-<span class="co">#&gt;   STUDYID DOMAIN.x USUBJID VSSEQ VSTESTCD VSTEST VSPOS VSORRES VSORRESU VSSTRESC</span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   </span>
-<span class="co">#&gt; 1 CDISCP… VS       01-701…     1 DIABP    Diast… SUPI… 64      mmHg     64      </span>
-<span class="co">#&gt; 2 CDISCP… VS       01-701…     2 DIABP    Diast… STAN… 83      mmHg     83      </span>
-<span class="co">#&gt; 3 CDISCP… VS       01-701…     3 DIABP    Diast… STAN… 57      mmHg     57      </span>
-<span class="co">#&gt; 4 CDISCP… VS       01-701…     4 DIABP    Diast… SUPI… 68      mmHg     68      </span>
-<span class="co">#&gt; 5 CDISCP… VS       01-701…     5 DIABP    Diast… STAN… 59      mmHg     59      </span>
-<span class="co">#&gt; 6 CDISCP… VS       01-701…     6 DIABP    Diast… STAN… 71      mmHg     71      </span>
-<span class="co">#&gt; # … with 63 more variables: VSSTRESN &lt;dbl&gt;, VSSTRESU &lt;chr&gt;, VSSTAT &lt;chr&gt;,</span>
+<span class="co">#&gt; # A tibble: 6 x 72</span>
+<span class="co">#&gt;   STUDYID DOMAIN USUBJID VSSEQ VSTESTCD VSTEST VSPOS VSORRES VSORRESU VSSTRESC</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   </span>
+<span class="co">#&gt; 1 CDISCP… VS     01-701…     1 DIABP    Diast… SUPI… 64      mmHg     64      </span>
+<span class="co">#&gt; 2 CDISCP… VS     01-701…     2 DIABP    Diast… STAN… 83      mmHg     83      </span>
+<span class="co">#&gt; 3 CDISCP… VS     01-701…     3 DIABP    Diast… STAN… 57      mmHg     57      </span>
+<span class="co">#&gt; 4 CDISCP… VS     01-701…     4 DIABP    Diast… SUPI… 68      mmHg     68      </span>
+<span class="co">#&gt; 5 CDISCP… VS     01-701…     5 DIABP    Diast… STAN… 59      mmHg     59      </span>
+<span class="co">#&gt; 6 CDISCP… VS     01-701…     6 DIABP    Diast… STAN… 71      mmHg     71      </span>
+<span class="co">#&gt; # … with 62 more variables: VSSTRESN &lt;dbl&gt;, VSSTRESU &lt;chr&gt;, VSSTAT &lt;chr&gt;,</span>
 <span class="co">#&gt; #   VSLOC &lt;chr&gt;, VSBLFL &lt;chr&gt;, VISITNUM &lt;dbl&gt;, VISIT &lt;chr&gt;, VISITDY &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   VSDTC &lt;chr&gt;, VSDY &lt;dbl&gt;, VSTPT &lt;chr&gt;, VSTPTNUM &lt;dbl&gt;, VSELTM &lt;chr&gt;,</span>
-<span class="co">#&gt; #   VSTPTREF &lt;chr&gt;, DOMAIN.y &lt;chr&gt;, SUBJID &lt;chr&gt;, RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;,</span>
-<span class="co">#&gt; #   RFXSTDTC &lt;chr&gt;, RFXENDTC &lt;chr&gt;, RFICDTC &lt;chr&gt;, RFPENDTC &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;, AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;,</span>
-<span class="co">#&gt; #   RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;, ARMCD &lt;chr&gt;, ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;,</span>
-<span class="co">#&gt; #   ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;, DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;, TRT01P &lt;chr&gt;,</span>
-<span class="co">#&gt; #   TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;, TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;, TRTEDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;, EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;, DCSREAS &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;, DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;, RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;, LDDTHGR1 &lt;chr&gt;,</span>
-<span class="co">#&gt; #   FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;, DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;, DTHB30FL &lt;chr&gt;</span></pre></body></html></div>
+<span class="co">#&gt; #   VSTPTREF &lt;chr&gt;, SUBJID &lt;chr&gt;, RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, RFXSTDTC &lt;chr&gt;,</span>
+<span class="co">#&gt; #   RFXENDTC &lt;chr&gt;, RFICDTC &lt;chr&gt;, RFPENDTC &lt;chr&gt;, DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;,</span>
+<span class="co">#&gt; #   SITEID &lt;chr&gt;, AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ARMCD &lt;chr&gt;, ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;,</span>
+<span class="co">#&gt; #   DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;, TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;,</span>
+<span class="co">#&gt; #   TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;, TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;, DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;, LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;,</span>
+<span class="co">#&gt; #   DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;, DTHB30FL &lt;chr&gt;</span></pre></body></html></div>
 </div>
 <div id="datetime" class="section level3">
 <h3 class="hasAnchor">
@@ -232,6 +253,7 @@
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"FIRST"</span>
 )</pre></body></html></div>
 <p>By default, the variable <code>ADTF</code> for <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> or <code>ADTF</code> and <code>ATMF</code> for <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> will be created and populated with the controlled terminology outlined in the ADaM IG for date imputations.</p>
+<p>See also <a href="imputation.html">Date and Time Imputation</a>.</p>
 <p>Once <code>ADT</code> is derived, the function <code><a href="../reference/derive_var_ady.html">derive_var_ady()</a></code> can be used to derive <code>ADY</code>. This example assumes both <code>ADT</code> and <code>TRTSDT</code> exist on the data frame.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ady.html">derive_var_ady</a></span>(<span class="no">advs</span>, <span class="kw">reference_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>, <span class="kw">date</span> <span class="kw">=</span> <span class="no">ADT</span>)
 
@@ -245,28 +267,6 @@
 <span class="co">#&gt; 4 01-701-1015 2014-01-02 2013-12-31    -2</span>
 <span class="co">#&gt; 5 01-701-1015 2014-01-02 2013-12-31    -2</span>
 <span class="co">#&gt; 6 01-701-1015 2014-01-02 2013-12-31    -2</span></pre></body></html></div>
-</div>
-<div id="aval" class="section level3">
-<h3 class="hasAnchor">
-<a href="#aval" class="anchor"></a>Derive Results (<code>AVAL</code>, <code>AVALC</code>, <code>AVALU</code>)</h3>
-<p>The mapping of <code>AVAL</code>, <code>AVALC</code>, and <code>AVALU</code> is left to the ADaM programmer. An example mapping may be:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-  <span class="no">advs</span>,
-  <span class="kw">AVAL</span> <span class="kw">=</span> <span class="no">VSSTRESN</span>,
-  <span class="kw">AVALC</span> <span class="kw">=</span> <span class="no">VSSTRESC</span>,
-  <span class="kw">AVALU</span> <span class="kw">=</span> <span class="no">VSSTRESU</span>
-)
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">VSSTRESN</span>, <span class="no">VSSTRESC</span>, <span class="no">VSSTRESU</span>, <span class="no">AVAL</span>, <span class="no">AVALC</span>, <span class="no">AVALU</span>))
-<span class="co">#&gt; # A tibble: 6 x 7</span>
-<span class="co">#&gt;   USUBJID     VSSTRESN VSSTRESC VSSTRESU  AVAL AVALC AVALU</span>
-<span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 01-701-1015       64 64       mmHg        64 64    mmHg </span>
-<span class="co">#&gt; 2 01-701-1015       83 83       mmHg        83 83    mmHg </span>
-<span class="co">#&gt; 3 01-701-1015       57 57       mmHg        57 57    mmHg </span>
-<span class="co">#&gt; 4 01-701-1015       68 68       mmHg        68 68    mmHg </span>
-<span class="co">#&gt; 5 01-701-1015       59 59       mmHg        59 59    mmHg </span>
-<span class="co">#&gt; 6 01-701-1015       71 71       mmHg        71 71    mmHg</span></pre></body></html></div>
 </div>
 <div id="paramcd" class="section level3">
 <h3 class="hasAnchor">
@@ -343,7 +343,7 @@
 </tbody>
 </table>
 <p>This lookup may now be joined to the source data:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="no">advs</span>, <span class="no">param_lookup</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"VSTESTCD"</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="no">advs</span>, <span class="no">param_lookup</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"VSTESTCD"</span>)
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(<span class="no">advs</span>, <span class="no">VSTESTCD</span>, <span class="no">PARAMCD</span>, <span class="no">PARAM</span>, <span class="no">PARAMN</span>, <span class="no">PARCAT1</span>, <span class="no">PARCAT1N</span>)
 <span class="co">#&gt; # A tibble: 6 x 7</span>
@@ -351,9 +351,9 @@
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;int&gt;</span>
 <span class="co">#&gt; 1 DIABP    DIABP   Diastolic Blood Press…      3 Vital Sign              2  8207</span>
 <span class="co">#&gt; 2 HEIGHT   HEIGHT  Height (cm)                 1 Subject Charact…        1   254</span>
-<span class="co">#&gt; 3 PULSE    PULSE   Pulse Rate (beats/min)      5 Vital Sign              2  8204</span>
-<span class="co">#&gt; 4 SYSBP    SYSBP   Systolic Blood Pressu…      6 Vital Sign              2  8208</span>
-<span class="co">#&gt; 5 TEMP     TEMP    Temperature (C)             7 Vital Sign              2  2720</span>
+<span class="co">#&gt; 3 PULSE    PULSE   Pulse Rate (beats/min)      6 Vital Sign              2  8204</span>
+<span class="co">#&gt; 4 SYSBP    SYSBP   Systolic Blood Pressu…      7 Vital Sign              2  8208</span>
+<span class="co">#&gt; 5 TEMP     TEMP    Temperature (C)             8 Vital Sign              2  2720</span>
 <span class="co">#&gt; 6 WEIGHT   WEIGHT  Weight (kg)                 2 Subject Charact…        1  2050</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">VSTESTCD</span>, <span class="no">PARAMCD</span>, <span class="no">PARAM</span>, <span class="no">PARAMN</span>, <span class="no">PARCAT1</span>, <span class="no">PARCAT1N</span>))
@@ -366,18 +366,105 @@
 <span class="co">#&gt; 4 01-701-10… DIABP    DIABP   Diastolic Blood Pressur…      3 Vital Si…        2</span>
 <span class="co">#&gt; 5 01-701-10… DIABP    DIABP   Diastolic Blood Pressur…      3 Vital Si…        2</span>
 <span class="co">#&gt; 6 01-701-10… DIABP    DIABP   Diastolic Blood Pressur…      3 Vital Si…        2</span></pre></body></html></div>
-<p>Please note, it may be necessary to include other variables in the join. For example, perhaps the <code>PARCAT1</code> is based on <code>VSTESTCD</code> and <code>VSPOS</code>, it may be necessary to expand this lookup or create a separate look up for <code>PARCAT1</code>.</p>
+<p>Please note, it may be necessary to include other variables in the join. For example, perhaps the <code>PARAMCD</code> is based on <code>VSTESTCD</code> and <code>VSPOS</code>, it may be necessary to expand this lookup or create a separate look up for <code>PARAMCD</code>.</p>
+</div>
+<div id="aval" class="section level3">
+<h3 class="hasAnchor">
+<a href="#aval" class="anchor"></a>Derive Results (<code>AVAL</code>, <code>AVALC</code>, <code>AVALU</code>)</h3>
+<p>The mapping of <code>AVAL</code>, <code>AVALC</code>, and <code>AVALU</code> is left to the ADaM programmer. An example mapping may be:</p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
+  <span class="no">advs</span>,
+  <span class="kw">AVAL</span> <span class="kw">=</span> <span class="no">VSSTRESN</span>,
+  <span class="kw">AVALC</span> <span class="kw">=</span> <span class="no">VSSTRESC</span>,
+  <span class="kw">AVALU</span> <span class="kw">=</span> <span class="no">VSSTRESU</span>
+)
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">VSSTRESN</span>, <span class="no">VSSTRESC</span>, <span class="no">VSSTRESU</span>, <span class="no">VSTPT</span>, <span class="no">AVAL</span>, <span class="no">AVALC</span>, <span class="no">AVALU</span>))
+<span class="co">#&gt; # A tibble: 6 x 8</span>
+<span class="co">#&gt;   USUBJID    VSSTRESN VSSTRESC VSSTRESU VSTPT                   AVAL AVALC AVALU</span>
+<span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 01-701-10…       64 64       mmHg     AFTER LYING DOWN FOR …    64 64    mmHg </span>
+<span class="co">#&gt; 2 01-701-10…       83 83       mmHg     AFTER STANDING FOR 1 …    83 83    mmHg </span>
+<span class="co">#&gt; 3 01-701-10…       57 57       mmHg     AFTER STANDING FOR 3 …    57 57    mmHg </span>
+<span class="co">#&gt; 4 01-701-10…       68 68       mmHg     AFTER LYING DOWN FOR …    68 68    mmHg </span>
+<span class="co">#&gt; 5 01-701-10…       59 59       mmHg     AFTER STANDING FOR 1 …    59 59    mmHg </span>
+<span class="co">#&gt; 6 01-701-10…       71 71       mmHg     AFTER STANDING FOR 3 …    71 71    mmHg</span></pre></body></html></div>
+</div>
+<div id="derive_param" class="section level3">
+<h3 class="hasAnchor">
+<a href="#derive_param" class="anchor"></a>Derive Additional Parameters (e.g. <code>BSA</code> or <code>MAP</code> for <code>ADVS</code>)]</h3>
+<p>Optionally derive new parameters creating <code>PARAMCD</code>, <code>PARAM</code>, <code>AVAL</code> (and any other variables). Below is an example of creating <code>Mean Arterial Pressure</code> for <code>advs</code>, see also Example 3 in section below <a href="#additional">Derive New Rows</a> for alternative way of creating new parameters.</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_param_map.html">derive_param_map</a></span>(
+  <span class="no">advs</span>,
+  <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">VISIT</span>, <span class="no">ADT</span>, <span class="no">VSTPTNUM</span>),
+  <span class="kw">set_values_to</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAMCD</span> <span class="kw">=</span> <span class="st">"MAP"</span>, <span class="kw">AVALU</span> <span class="kw">=</span> <span class="st">"mmHg"</span>),
+  <span class="kw">get_unit_expr</span> <span class="kw">=</span> <span class="no">AVALU</span>
+)
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">advs</span>, <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"MAP"</span>), <span class="no">USUBJID</span>, <span class="no">VISIT</span>, <span class="no">VSTPTNUM</span>, <span class="no">PARAMCD</span>, <span class="no">AVAL</span>, <span class="no">AVALU</span>))
+<span class="co">#&gt; # A tibble: 6 x 6</span>
+<span class="co">#&gt;   USUBJID     VISIT               VSTPTNUM PARAMCD  AVAL AVALU</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 01-701-1015 AMBUL ECG PLACEMENT      815 MAP      90.3 mmHg </span>
+<span class="co">#&gt; 2 01-701-1015 AMBUL ECG PLACEMENT      816 MAP      83   mmHg </span>
+<span class="co">#&gt; 3 01-701-1015 AMBUL ECG PLACEMENT      817 MAP      92   mmHg </span>
+<span class="co">#&gt; 4 01-701-1015 AMBUL ECG REMOVAL        815 MAP      94   mmHg </span>
+<span class="co">#&gt; 5 01-701-1015 AMBUL ECG REMOVAL        816 MAP      84.3 mmHg </span>
+<span class="co">#&gt; 6 01-701-1015 AMBUL ECG REMOVAL        817 MAP      76.3 mmHg</span></pre></body></html></div>
+<p>Likewise, function call below, to create parameter `Body Surface Area’ for ‘advs’ domain.</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_param_bsa.html">derive_param_bsa</a></span>(
+  <span class="no">advs</span>,
+  <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">VISIT</span>, <span class="no">ADT</span>),
+  <span class="kw">method</span> <span class="kw">=</span> <span class="st">"Mosteller"</span>,
+  <span class="kw">set_values_to</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAMCD</span> <span class="kw">=</span> <span class="st">"BSA"</span>, <span class="kw">AVALU</span> <span class="kw">=</span> <span class="st">"m^2"</span>),
+  <span class="kw">get_unit_expr</span> <span class="kw">=</span> <span class="no">AVALU</span>
+  )
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">advs</span>, <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"BSA"</span>), <span class="no">USUBJID</span>, <span class="no">VISIT</span>, <span class="no">PARAMCD</span>, <span class="no">AVAL</span>, <span class="no">AVALU</span>))
+<span class="co">#&gt; # A tibble: 6 x 5</span>
+<span class="co">#&gt;   USUBJID     VISIT       PARAMCD  AVAL AVALU</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 01-701-1015 SCREENING 1 BSA      1.49 m^2  </span>
+<span class="co">#&gt; 2 01-701-1023 SCREENING 1 BSA      1.88 m^2  </span>
+<span class="co">#&gt; 3 01-701-1028 SCREENING 1 BSA      2.21 m^2  </span>
+<span class="co">#&gt; 4 01-701-1033 SCREENING 1 BSA      2.08 m^2  </span>
+<span class="co">#&gt; 5 01-701-1034 SCREENING 1 BSA      1.65 m^2  </span>
+<span class="co">#&gt; 6 01-701-1047 SCREENING 1 BSA      1.65 m^2</span></pre></body></html></div>
+<p>You can either create <code>PARAM</code>, <code>PARCAT1</code>, etc in function calls above in the <code>set_values_to</code> parameter or derive from look-up table described earlier.</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">advs</span>, <span class="no">PARAMCD</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"MAP"</span>, <span class="st">"BSA"</span>)),
+               -<span class="no">PARAM</span>, -<span class="no">PARAMN</span>, -<span class="no">PARCAT1</span>, -<span class="no">PARCAT1N</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">param_lookup</span>, -<span class="no">VSTESTCD</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="st">"PARAMCD"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/setops.html">union_all</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">advs</span>, !(<span class="no">PARAMCD</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"MAP"</span>, <span class="st">"BSA"</span>))))
+
+<span class="no">advs</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">PARAMCD</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"BSA"</span>, <span class="st">"MAP"</span>) <span class="kw">&amp;</span> <span class="no">USUBJID</span> <span class="kw">==</span> <span class="st">"01-701-1015"</span> <span class="kw">&amp;</span>
+           <span class="no">VISIT</span> <span class="kw">==</span> <span class="st">"SCREENING 1"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">PARAMCD</span>, <span class="no">PARAM</span>, <span class="no">PARAMN</span>, <span class="no">PARCAT1</span>, <span class="no">PARCAT1N</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
+<span class="co">#&gt; # A tibble: 4 x 5</span>
+<span class="co">#&gt;   PARAMCD PARAM                         PARAMN PARCAT1    PARCAT1N</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;                          &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 MAP     Mean Arterial Pressure (mmHg)      4 Vital Sign        2</span>
+<span class="co">#&gt; 2 MAP     Mean Arterial Pressure (mmHg)      4 Vital Sign        2</span>
+<span class="co">#&gt; 3 MAP     Mean Arterial Pressure (mmHg)      4 Vital Sign        2</span>
+<span class="co">#&gt; 4 BSA     Body Surface Area (m^2)            5 Vital Sign        2</span></pre></body></html></div>
+<p>Similarly, for ‘adeg’ domain, the parameters ‘QTCBF’ ‘QTCBS’ and ‘QTCL’ can be created with a function call. See example below for <code>PARAMCD</code> = `QTCF’.</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">adeg</span> <span class="kw">&lt;-</span> <span class="fu">derive_param_qtcf</span>(
+  <span class="no">adeg</span>,
+  <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">VISIT</span>, <span class="no">ADT</span>),
+  <span class="kw">set_values_to</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAMCD</span> <span class="kw">=</span> <span class="st">"QTCFR"</span>, <span class="kw">AVALU</span> <span class="kw">=</span> <span class="st">'msec'</span>)
+  )</pre></body></html></div>
 </div>
 <div id="timing" class="section level3">
 <h3 class="hasAnchor">
 <a href="#timing" class="anchor"></a>Derive Timing Variables (e.g. <code>APHASE</code>, <code>AVISIT</code>, <code>APERIOD</code>)</h3>
 <p>Categorical timing variables are protocol and analysis dependent. Below is a simple example to calculate <code>APHASE</code>.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
     <span class="kw">APHASE</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(
       <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">ADT</span>) ~ <span class="fl">NA_character_</span>,
       <span class="no">ADT</span> <span class="kw">&lt;</span> <span class="no">RFSTDTC</span> ~ <span class="st">"Screening"</span>,
-      <span class="no">RFSTDTC</span> <span class="kw">&lt;=</span> <span class="no">ADT</span> <span class="kw">|</span> <span class="no">ADT</span> <span class="kw">&lt;=</span> <span class="no">RFENDTC</span> ~ <span class="st">"Treatment"</span>,
+      <span class="no">RFSTDTC</span> <span class="kw">&lt;=</span> <span class="no">ADT</span> <span class="kw">&amp;</span> <span class="no">ADT</span> <span class="kw">&lt;=</span> <span class="no">RFENDTC</span> ~ <span class="st">"Treatment"</span>,
       <span class="no">RFENDTC</span> <span class="kw">&lt;</span> <span class="no">ADT</span> ~ <span class="st">"Follow-up"</span>,
       <span class="fl">TRUE</span> ~ <span class="st">"UNASSIGNED"</span>
     ),
@@ -432,19 +519,19 @@
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   VSTPTNUM VSTPT                        ATPTN ATPT                             n</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt; &lt;chr&gt;                        &lt;int&gt;</span>
-<span class="co">#&gt; 1      815 "AFTER LYING DOWN FOR 5 MIN…   815 "AFTER LYING DOWN FOR 5 MIN…  8208</span>
-<span class="co">#&gt; 2      816 "AFTER STANDING FOR 1 MINUT…   816 "AFTER STANDING FOR 1 MINUT…  8204</span>
-<span class="co">#&gt; 3      817 "AFTER STANDING FOR 3 MINUT…   817 "AFTER STANDING FOR 3 MINUT…  8207</span>
-<span class="co">#&gt; 4       NA ""                              NA ""                            5024</span></pre></body></html></div>
+<span class="co">#&gt; 1      815 AFTER LYING DOWN FOR 5 MINU…   815 AFTER LYING DOWN FOR 5 MINU…  8208</span>
+<span class="co">#&gt; 2      816 AFTER STANDING FOR 1 MINUTE    816 AFTER STANDING FOR 1 MINUTE   8204</span>
+<span class="co">#&gt; 3      817 AFTER STANDING FOR 3 MINUTES   817 AFTER STANDING FOR 3 MINUTES  8207</span>
+<span class="co">#&gt; 4       NA &lt;NA&gt;                            NA &lt;NA&gt;                          5024</span></pre></body></html></div>
 </div>
 <div id="timingflag" class="section level3">
 <h3 class="hasAnchor">
 <a href="#timingflag" class="anchor"></a>Timing Flag Variables (e.g. <code>ONTRTFL</code>)</h3>
 <p>In some analyses, it may be necessary to flag an observation as on-treatment. The admiral function <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> can be used.</p>
 <p>For example, if on-treatment is defined as any observation between treatment start and treatment end, the flag may be derived as:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">date</span> <span class="kw">=</span> <span class="no">ADT</span>,
+  <span class="kw">start_date</span> <span class="kw">=</span> <span class="no">ADT</span>,
   <span class="kw">ref_start_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>,
   <span class="kw">ref_end_date</span> <span class="kw">=</span> <span class="no">TRTEDT</span>
 )
@@ -460,17 +547,17 @@
 <span class="co">#&gt; 5 01-701-1015 DIABP   2013-12-31 2014-01-02 2014-07-02 &lt;NA&gt;   </span>
 <span class="co">#&gt; 6 01-701-1015 DIABP   2013-12-31 2014-01-02 2014-07-02 &lt;NA&gt;</span></pre></body></html></div>
 <p>This function returns the original data frame with the column <code>ONTRTFL</code> added. Additionally, this function does have functionality to handle a window on the <code>ref_end_date</code>. For example, if on-treatment is defined as between treatment start and treatment end plus 60 days, the call would be:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">date</span> <span class="kw">=</span> <span class="no">ADT</span>,
+  <span class="kw">start_date</span> <span class="kw">=</span> <span class="no">ADT</span>,
   <span class="kw">ref_start_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>,
   <span class="kw">ref_end_date</span> <span class="kw">=</span> <span class="no">TRTEDT</span>,
   <span class="kw">ref_end_window</span> <span class="kw">=</span> <span class="fl">60</span>
 )</pre></body></html></div>
 <p>Lastly, the function does allow you to filter out pre-treatment observations that occurred on the start date. For example, if observations with <code>VSTPT == PRE</code> should not be considered on-treatment when the observation date falls between the treatment start and end date, the user may specify this using the <code>filter_pre_timepoint</code> parameter:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">date</span> <span class="kw">=</span> <span class="no">ADT</span>,
+  <span class="kw">start_date</span> <span class="kw">=</span> <span class="no">ADT</span>,
   <span class="kw">ref_start_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>,
   <span class="kw">ref_end_date</span> <span class="kw">=</span> <span class="no">TRTEDT</span>,
   <span class="kw">filter_pre_timepoint</span> <span class="kw">=</span> <span class="no">ATPT</span> <span class="kw">==</span> <span class="st">"AFTER LYING DOWN FOR 5 MINUTES"</span>
@@ -482,7 +569,7 @@
 <p>The admiral function <code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code> may be used to derive the reference range indicator <code>ANRIND</code>.</p>
 <p>This function requires the reference range boundaries to exist on the data frame (<code>ANRLO</code>, <code>ANRHI</code>) and also accommodates the additional boundaries <code>A1LO</code> and <code>A1HI</code>.</p>
 <p>The function is called as:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_anrind.html">derive_var_anrind</a></span>(<span class="no">advs</span>)
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_anrind.html">derive_var_anrind</a></span>(<span class="no">advs</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVAL</span>, <span class="no">ANRLO</span>, <span class="no">ANRHI</span>, <span class="no">A1LO</span>, <span class="no">A1HI</span>, <span class="no">ANRIND</span>))
 <span class="co">#&gt; # A tibble: 6 x 8</span>
@@ -499,7 +586,7 @@
 <h3 class="hasAnchor">
 <a href="#baseline" class="anchor"></a>Derive Baseline (<code>BASETYPE</code>, <code>ABLFL</code>, <code>BASE</code>, <code>BASEC</code>, <code>BNRIND</code>)</h3>
 <p>The <code>BASETYPE</code> should be derived using the function <code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code>. The parameter basetypes of this function requires a named list of expression detailing how the BASETYPE should be assigned. Note, if a record falls into multiple expressions within the basetypes expression, a row will be produced for each <code>BASETYPE</code>.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_basetype.html">derive_var_basetype</a></span>(
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_basetype.html">derive_var_basetype</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">advs</span>,
   <span class="kw">basetypes</span> <span class="kw">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs</a></span>(
     <span class="st">"AFTER LYING DOWN FOR 5 MINUTES"</span> <span class="kw">=</span> <span class="no">ATPTN</span> <span class="kw">==</span> <span class="fl">815</span>,
@@ -509,22 +596,21 @@
 )
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(<span class="no">advs</span>, <span class="no">ATPT</span>, <span class="no">ATPTN</span>, <span class="no">BASETYPE</span>)
-<span class="co">#&gt; # A tibble: 4 x 4</span>
-<span class="co">#&gt;   ATPT                             ATPTN BASETYPE                           n</span>
-<span class="co">#&gt;   &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;                          &lt;int&gt;</span>
-<span class="co">#&gt; 1 ""                                  NA &lt;NA&gt;                            5024</span>
-<span class="co">#&gt; 2 "AFTER LYING DOWN FOR 5 MINUTES"   815 AFTER LYING DOWN FOR 5 MINUTES  8208</span>
-<span class="co">#&gt; 3 "AFTER STANDING FOR 1 MINUTE"      816 AFTER STANDING FOR 1 MINUTE     8204</span>
-<span class="co">#&gt; 4 "AFTER STANDING FOR 3 MINUTES"     817 AFTER STANDING FOR 3 MINUTES    8207</span></pre></body></html></div>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
+<span class="co">#&gt;   ATPT                           ATPTN BASETYPE                           n</span>
+<span class="co">#&gt;   &lt;chr&gt;                          &lt;dbl&gt; &lt;chr&gt;                          &lt;int&gt;</span>
+<span class="co">#&gt; 1 AFTER LYING DOWN FOR 5 MINUTES   815 AFTER LYING DOWN FOR 5 MINUTES  8208</span>
+<span class="co">#&gt; 2 AFTER STANDING FOR 1 MINUTE      816 AFTER STANDING FOR 1 MINUTE     8204</span>
+<span class="co">#&gt; 3 AFTER STANDING FOR 3 MINUTES     817 AFTER STANDING FOR 3 MINUTES    8207</span></pre></body></html></div>
 <p>It is important to derive <code>BASETYPE</code> first so that it can be utilized in subsequent derivations. This will be important if the data frame contains multiple values for <code>BASETYPE</code>.</p>
 <p>Next, the analysis baseline flag (<code>ABLFL</code>) can be derived using the admiral function <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code>. For example, if baseline is defined as the last non-missing <code>AVAL</code> prior or on <code>TRTSDT</code>, the function call for <code>ABLFL</code> would be:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">ABLFL</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">STUDYID</span>, <span class="no">USUBJID</span>, <span class="no">BASETYPE</span>, <span class="no">PARAMCD</span>),
   <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">ADT</span>, <span class="no">ATPTN</span>, <span class="no">VISITNUM</span>),
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">ABLFL</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">flag_filter</span> <span class="kw">=</span> (!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>) <span class="kw">&amp;</span> <span class="no">ADT</span> <span class="kw">&lt;=</span> <span class="no">TRTSDT</span> <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">BASETYPE</span>))
+  <span class="kw">filter</span> <span class="kw">=</span> (!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>) <span class="kw">&amp;</span> <span class="no">ADT</span> <span class="kw">&lt;=</span> <span class="no">TRTSDT</span> <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">BASETYPE</span>))
 )
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">BASETYPE</span>, <span class="no">PARAMCD</span>, <span class="no">ADT</span>, <span class="no">TRTSDT</span>, <span class="no">ATPTN</span>, <span class="no">TRTSDT</span>, <span class="no">ABLFL</span>))
@@ -539,7 +625,7 @@
 <span class="co">#&gt; 6 01-701-1015 AFTER LYING DOWN FOR 5 … PULSE   2014-01-02 2014-01-02   815 Y</span></pre></body></html></div>
 <p>Note: Additional examples of the <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code> function can be found <a href="#analysisrec">above.</a></p>
 <p>Lastly, the <code>BASE</code> and <code>BASEC</code> columns can be derived using the admiral function <code><a href="../reference/derive_var_base.html">derive_var_base()</a></code> and <code><a href="../reference/derive_var_basec.html">derive_var_basec()</a></code>. In addition, <code>BNRIND</code> can be derived using the low-level function <code><a href="../reference/derive_baseline.html">derive_baseline()</a></code>. Example calls are:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_base.html">derive_var_base</a></span>(
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_base.html">derive_var_base</a></span>(
   <span class="no">advs</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">STUDYID</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">BASETYPE</span>)
 )
@@ -571,7 +657,7 @@
 <h3 class="hasAnchor">
 <a href="#bchange" class="anchor"></a>Derive Change from Baseline (<code>CHG</code>, <code>PCHG</code>)</h3>
 <p>Change and percent change from baseline can be derived using the admiral functions <code><a href="../reference/derive_var_chg.html">derive_var_chg()</a></code> and <code><a href="../reference/derive_var_pchg.html">derive_var_pchg()</a></code>. These functions expect <code>AVAL</code> and <code>BASE</code> to exist in the data frame. The <code>CHG</code> is simply <code>AVAl - BASE</code> and the <code>PCHG</code> is <code>(AVAL - BASE) / absolute value (BASE) * 100</code>. Examples calls are:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_chg.html">derive_var_chg</a></span>(<span class="no">advs</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_chg.html">derive_var_chg</a></span>(<span class="no">advs</span>)
 
 <span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_var_pchg.html">derive_var_pchg</a></span>(<span class="no">advs</span>)
 
@@ -592,13 +678,13 @@
 <p>In most finding ADaMs, an analysis flag is derived to identify the appropriate observation(s) to use for a particular analysis when a subject has multiple observations within a particular timing period.</p>
 <p>In this situation, an analysis flag (e.g. <code>ANLxxFL</code>) may be used to choose the appropriate record for analysis.</p>
 <p>This flag may be derived using the admiral function <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code>. For this example, we will assume we would like to choose the latest and highest value by <code>USUBJID</code>, <code>PARAMCD</code>, <code>AVISIT</code>, and <code>ATPT</code>.</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">ANL01FL</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVISIT</span>),
   <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">ADT</span>, <span class="no">ATPTN</span>, <span class="no">AVAL</span>),
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">ANL01FL</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">flag_filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISITN</span>)
+  <span class="kw">filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISITN</span>)
 )
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVISIT</span>, <span class="no">ATPTN</span>, <span class="no">ADT</span>, <span class="no">AVAL</span>, <span class="no">ANL01FL</span>))
@@ -612,22 +698,22 @@
 <span class="co">#&gt; 5 01-701-1015 DIABP   Week 12    816 2014-03-26    60 &lt;NA&gt;   </span>
 <span class="co">#&gt; 6 01-701-1015 DIABP   Week 12    817 2014-03-26    64 Y</span></pre></body></html></div>
 <p>Another common example would be flagging the worst value for a subject, parameter, and visit. For this example, we will assume we have 3 <code>PARAMCD</code> values (SYSBP, DIABP, and RESP). We will also assume high is worst for SYSBP and DIABP and low is worst for RESP.</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">WORST_HIGH</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVISIT</span>),
   <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">AVAL</span>, <span class="no">ADT</span>, <span class="no">ATPTN</span>),
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">WORST_HIGH</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">flag_filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISIT</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>)
+  <span class="kw">filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISIT</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>)
 )
 
 <span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
   <span class="no">advs</span>,
-  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">WORST_LOW</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVISIT</span>),
   <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">AVAL</span>, <span class="no">ADT</span>, <span class="no">ATPTN</span>),
+  <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">WORST_LOW</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"first"</span>,
-  <span class="kw">flag_filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISIT</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>)
+  <span class="kw">filter</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVISIT</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">AVAL</span>)
 )
 
 <span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -655,15 +741,15 @@
 <p><code>TRTA</code> and <code>TRTP</code> must correlate to treatment <code>TRTxxP</code> and/or <code>TRTxxA</code> in ADSL. The derivation of <code>TRTA</code> and <code>TRTP</code> for a record are protocol and analysis specific.<br>
 admiral does not currently have functionality to assist with <code>TRTA</code> and <code>TRTP</code> assignment.</p>
 <p>However, an example of a simple implementation could be:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="no">advs</span>, <span class="kw">TRTP</span> <span class="kw">=</span> <span class="no">TRT01P</span>, <span class="kw">TRTA</span> <span class="kw">=</span> <span class="no">TRT01A</span>)
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="no">advs</span>, <span class="kw">TRTP</span> <span class="kw">=</span> <span class="no">TRT01P</span>, <span class="kw">TRTA</span> <span class="kw">=</span> <span class="no">TRT01A</span>)
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(<span class="no">advs</span>, <span class="no">TRTP</span>, <span class="no">TRTA</span>, <span class="no">TRT01P</span>, <span class="no">TRT01A</span>)
 <span class="co">#&gt; # A tibble: 3 x 5</span>
 <span class="co">#&gt;   TRTP   TRTA   TRT01P TRT01A     n</span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt;</span>
-<span class="co">#&gt; 1 Pbo    Pbo    Pbo    Pbo    11287</span>
-<span class="co">#&gt; 2 Xan_Hi Xan_Hi Xan_Hi Xan_Hi  9133</span>
-<span class="co">#&gt; 3 Xan_Lo Xan_Lo Xan_Lo Xan_Lo  9223</span>
+<span class="co">#&gt; 1 Pbo    Pbo    Pbo    Pbo     9366</span>
+<span class="co">#&gt; 2 Xan_Hi Xan_Hi Xan_Hi Xan_Hi  7586</span>
+<span class="co">#&gt; 3 Xan_Lo Xan_Lo Xan_Lo Xan_Lo  7667</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">TRT01P</span>, <span class="no">TRT01A</span>, <span class="no">TRTP</span>, <span class="no">TRTA</span>))
 <span class="co">#&gt; # A tibble: 6 x 5</span>
@@ -681,7 +767,7 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 <a href="#aseq" class="anchor"></a>Assign <code>ASEQ</code>
 </h3>
 <p>The admiral function <code><a href="../reference/derive_obs_number.html">derive_obs_number()</a></code> can be used to derive <code>ASEQ</code>. An example call is:</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_obs_number.html">derive_obs_number</a></span>(
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_obs_number.html">derive_obs_number</a></span>(
   <span class="no">advs</span>,
   <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">ASEQ</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">STUDYID</span>, <span class="no">USUBJID</span>),
@@ -729,13 +815,13 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 </tbody>
 </table>
 <p>Example 1 (Creating a new record):</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
-    <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">EOTFL</span>,
     <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">STUDYID</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>),
     <span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">ADT</span>, <span class="no">AVISITN</span>, <span class="no">ATPTN</span>, <span class="no">AVAL</span>),
+    <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">EOTFL</span>,
     <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"last"</span>,
-    <span class="kw">flag_filter</span> <span class="kw">=</span> (<span class="fl">4</span> <span class="kw">&lt;</span> <span class="no">AVISITN</span> <span class="kw">&amp;</span> <span class="no">AVISITN</span> <span class="kw">&lt;=</span> <span class="fl">12</span> <span class="kw">&amp;</span> <span class="no">ANL01FL</span> <span class="kw">==</span> <span class="st">"Y"</span>)
+    <span class="kw">filter</span> <span class="kw">=</span> (<span class="fl">4</span> <span class="kw">&lt;</span> <span class="no">AVISITN</span> <span class="kw">&amp;</span> <span class="no">AVISITN</span> <span class="kw">&lt;=</span> <span class="fl">12</span> <span class="kw">&amp;</span> <span class="no">ANL01FL</span> <span class="kw">==</span> <span class="st">"Y"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">EOTFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -764,25 +850,26 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 <span class="co">#&gt;  9 01-701-1015 DIABP   2014-05-21      20 Week 20            817    63 Y      </span>
 <span class="co">#&gt; 10 01-701-1015 DIABP   2014-06-18      24 Week 24            817    71 Y</span></pre></body></html></div>
 <p>Example 2 (Deriving a Summary record):</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_summary_records.html">derive_summary_records</a></span>(
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">advs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/derive_summary_records.html">derive_summary_records</a></span>(
   <span class="no">advs</span>,
   <span class="kw">by_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">STUDYID</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">VISITNUM</span>, <span class="no">ADT</span>),
-  <span class="kw">fns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">AVAL</span> ~ <span class="no">mean</span>),
+  <span class="kw">analysis_var</span> <span class="kw">=</span> <span class="no">AVAL</span>,
+  <span class="kw">summary_fun</span> <span class="kw">=</span> <span class="no">mean</span>,
   <span class="kw">set_values_to</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">DTYPE</span> <span class="kw">=</span> <span class="st">"AVERAGE"</span>)
 )
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">advs</span>, <span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">VISITNUM</span>, <span class="no">ADT</span>, <span class="no">AVAL</span>, <span class="no">DTYPE</span>))
 <span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;   USUBJID     PARAMCD VISITNUM ADT         AVAL DTYPE  </span>
-<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;  </span>
-<span class="co">#&gt; 1 01-701-1015 DIABP          1 2013-12-26    64 &lt;NA&gt;   </span>
-<span class="co">#&gt; 2 01-701-1015 DIABP          1 2013-12-26    83 &lt;NA&gt;   </span>
-<span class="co">#&gt; 3 01-701-1015 DIABP          1 2013-12-26    57 &lt;NA&gt;   </span>
-<span class="co">#&gt; 4 01-701-1015 DIABP          1 2013-12-26    68 AVERAGE</span>
-<span class="co">#&gt; 5 01-701-1015 DIABP          2 2013-12-31    68 &lt;NA&gt;   </span>
-<span class="co">#&gt; 6 01-701-1015 DIABP          2 2013-12-31    59 &lt;NA&gt;</span></pre></body></html></div>
+<span class="co">#&gt;   USUBJID     PARAMCD VISITNUM ADT         AVAL DTYPE</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 01-701-1015 DIABP          9 2014-03-26    64 &lt;NA&gt; </span>
+<span class="co">#&gt; 2 01-701-1015 PULSE          9 2014-03-26    52 &lt;NA&gt; </span>
+<span class="co">#&gt; 3 01-701-1015 SYSBP          9 2014-03-26   138 &lt;NA&gt; </span>
+<span class="co">#&gt; 4 01-701-1028 DIABP          9 2013-10-09    80 &lt;NA&gt; </span>
+<span class="co">#&gt; 5 01-701-1028 PULSE          9 2013-10-09    70 &lt;NA&gt; </span>
+<span class="co">#&gt; 6 01-701-1028 SYSBP          9 2013-10-09   138 &lt;NA&gt;</span></pre></body></html></div>
 <p>Example 3 (Derive a new PARAMCD):</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">sysbp</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">sysbp</span> <span class="kw">&lt;-</span> <span class="no">advs</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">VSTESTCD</span> <span class="kw">==</span> <span class="st">"SYSBP"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(
     -<span class="no">VSSEQ</span>, -<span class="no">VSTESTCD</span>, -<span class="no">VSTEST</span>, -<span class="no">VSORRES</span>, -<span class="no">VSORRESU</span>, -<span class="no">VSSTRESC</span>, -<span class="no">VSSTRESN</span>,
@@ -797,7 +884,7 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 <span class="no">advs</span> <span class="kw">&lt;-</span> <span class="no">sysbp</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(
     <span class="no">diabp</span>,
-    <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>, <span class="st">"VISITNUM"</span>, <span class="st">"VSDTC"</span>, <span class="st">"VSDTC"</span>, <span class="st">"VSTPT"</span>)
+    <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>, <span class="st">"VISITNUM"</span>, <span class="st">"VSDTC"</span>, <span class="st">"VSTPT"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
     <span class="kw">AVAL</span> <span class="kw">=</span> (<span class="fl">2</span> * <span class="no">DBPAVAL</span> + <span class="no">AVAL</span>) / <span class="fl">3</span>,
@@ -812,42 +899,43 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">PARAMCD</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>, <span class="st">"MAP"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">VISITNUM</span>, <span class="no">VSDTC</span>, <span class="no">VSTPT</span>, <span class="no">AVAL</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 118</span>
-<span class="co">#&gt;   STUDYID DOMAIN.x USUBJID VSPOS VISITNUM VISIT VISITDY VSDTC  VSDY VSTPT</span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 CDISCP… VS       01-701… SUPI…        1 SCRE…      -7 2013…    -7 AFTE…</span>
-<span class="co">#&gt; 2 CDISCP… VS       01-701… STAN…        1 SCRE…      -7 2013…    -7 AFTE…</span>
-<span class="co">#&gt; 3 CDISCP… VS       01-701… STAN…        1 SCRE…      -7 2013…    -7 AFTE…</span>
-<span class="co">#&gt; 4 CDISCP… VS       01-701… &lt;NA&gt;         1 SCRE…      -7 2013…    -7 &lt;NA&gt; </span>
-<span class="co">#&gt; 5 CDISCP… VS       01-701… SUPI…        2 SCRE…      -1 2013…    -2 AFTE…</span>
-<span class="co">#&gt; 6 CDISCP… VS       01-701… STAN…        2 SCRE…      -1 2013…    -2 AFTE…</span>
-<span class="co">#&gt; # … with 108 more variables: VSTPTNUM &lt;dbl&gt;, VSELTM &lt;chr&gt;, VSTPTREF &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DOMAIN.y &lt;chr&gt;, SUBJID &lt;chr&gt;, RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, RFXSTDTC &lt;chr&gt;,</span>
-<span class="co">#&gt; #   RFXENDTC &lt;chr&gt;, RFICDTC &lt;chr&gt;, RFPENDTC &lt;chr&gt;, DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;,</span>
-<span class="co">#&gt; #   SITEID &lt;chr&gt;, AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;,</span>
-<span class="co">#&gt; #   ARMCD &lt;chr&gt;, ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;, TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;,</span>
-<span class="co">#&gt; #   TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;, TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;, DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;,</span>
-<span class="co">#&gt; #   DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;,</span>
-<span class="co">#&gt; #   RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;, LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;, DTHB30FL &lt;chr&gt;, ADT &lt;date&gt;, ADTF &lt;chr&gt;,</span>
-<span class="co">#&gt; #   ADY &lt;dbl&gt;, AVAL &lt;dbl&gt;, AVALU &lt;chr&gt;, PARAMCD &lt;chr&gt;, PARAM.x &lt;chr&gt;,</span>
-<span class="co">#&gt; #   PARAMN.x &lt;dbl&gt;, PARCAT1.x &lt;chr&gt;, PARCAT1N.x &lt;dbl&gt;, APHASE &lt;chr&gt;,</span>
-<span class="co">#&gt; #   AVISIT &lt;chr&gt;, AVISITN &lt;dbl&gt;, ATPT &lt;chr&gt;, ATPTN &lt;dbl&gt;, ONTRTFL &lt;chr&gt;,</span>
-<span class="co">#&gt; #   ANRLO &lt;dbl&gt;, ANRHI &lt;dbl&gt;, A1LO &lt;dbl&gt;, A1HI &lt;dbl&gt;, ANRIND &lt;chr&gt;,</span>
-<span class="co">#&gt; #   BASETYPE &lt;chr&gt;, ABLFL &lt;chr&gt;, BASE &lt;dbl&gt;, BASEC &lt;chr&gt;, BNRIND &lt;chr&gt;,</span>
-<span class="co">#&gt; #   CHG &lt;dbl&gt;, PCHG &lt;dbl&gt;, ANL01FL &lt;chr&gt;, WORST_HIGH &lt;chr&gt;, WORST_LOW &lt;chr&gt;,</span>
-<span class="co">#&gt; #   WORSTFL &lt;chr&gt;, TRTP &lt;chr&gt;, TRTA &lt;chr&gt;, ASEQ &lt;int&gt;, DTYPE &lt;chr&gt;,</span>
-<span class="co">#&gt; #   PARAM.y &lt;chr&gt;, PARAMN.y &lt;dbl&gt;, PARCAT1.y &lt;chr&gt;, PARCAT1N.y &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   VSSEQ &lt;dbl&gt;, VSTESTCD &lt;chr&gt;, VSTEST &lt;chr&gt;, VSORRES &lt;chr&gt;, VSORRESU &lt;chr&gt;,</span>
-<span class="co">#&gt; #   VSSTRESC &lt;chr&gt;, VSSTRESN &lt;dbl&gt;, VSSTRESU &lt;chr&gt;, …</span></pre></body></html></div>
+<span class="co">#&gt; # A tibble: 6 x 117</span>
+<span class="co">#&gt;   STUDYID DOMAIN USUBJID VSPOS VISITNUM VISIT VISITDY VSDTC  VSDY VSTPT VSTPTNUM</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 CDISCP… VS     01-701… SUPI…        1 SCRE…      -7 2013…    -7 AFTE…      815</span>
+<span class="co">#&gt; 2 CDISCP… VS     01-701… STAN…        1 SCRE…      -7 2013…    -7 AFTE…      816</span>
+<span class="co">#&gt; 3 CDISCP… VS     01-701… STAN…        1 SCRE…      -7 2013…    -7 AFTE…      817</span>
+<span class="co">#&gt; 4 CDISCP… &lt;NA&gt;   01-701… &lt;NA&gt;         1 &lt;NA&gt;       NA &lt;NA&gt;     NA &lt;NA&gt;        NA</span>
+<span class="co">#&gt; 5 CDISCP… VS     01-701… SUPI…        2 SCRE…      -1 2013…    -2 AFTE…      815</span>
+<span class="co">#&gt; 6 CDISCP… VS     01-701… STAN…        2 SCRE…      -1 2013…    -2 AFTE…      816</span>
+<span class="co">#&gt; # … with 106 more variables: VSELTM &lt;chr&gt;, VSTPTREF &lt;chr&gt;, SUBJID &lt;chr&gt;,</span>
+<span class="co">#&gt; #   RFSTDTC &lt;chr&gt;, RFENDTC &lt;chr&gt;, RFXSTDTC &lt;chr&gt;, RFXENDTC &lt;chr&gt;,</span>
+<span class="co">#&gt; #   RFICDTC &lt;chr&gt;, RFPENDTC &lt;chr&gt;, DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;,</span>
+<span class="co">#&gt; #   AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;, ARMCD &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;, DMDTC &lt;chr&gt;,</span>
+<span class="co">#&gt; #   DMDY &lt;dbl&gt;, TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;, TRTSDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   TRTEDTM &lt;dttm&gt;, TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;, EOSDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   EOSSTT &lt;chr&gt;, DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;, DTHDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;, RACEGR1 &lt;chr&gt;,</span>
+<span class="co">#&gt; #   REGION1 &lt;chr&gt;, LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;, DTH30FL &lt;chr&gt;,</span>
+<span class="co">#&gt; #   DTHA30FL &lt;chr&gt;, DTHB30FL &lt;chr&gt;, ADT &lt;date&gt;, ADTF &lt;chr&gt;, ADY &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   PARAMCD &lt;chr&gt;, AVAL &lt;dbl&gt;, AVALU &lt;chr&gt;, PARAM.x &lt;chr&gt;, PARAMN.x &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   PARCAT1.x &lt;chr&gt;, PARCAT1N.x &lt;dbl&gt;, APHASE &lt;chr&gt;, AVISIT &lt;chr&gt;,</span>
+<span class="co">#&gt; #   AVISITN &lt;dbl&gt;, ATPT &lt;chr&gt;, ATPTN &lt;dbl&gt;, ONTRTFL &lt;chr&gt;, ANRLO &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   ANRHI &lt;dbl&gt;, A1LO &lt;dbl&gt;, A1HI &lt;dbl&gt;, ANRIND &lt;chr&gt;, BASETYPE &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ABLFL &lt;chr&gt;, BASE &lt;dbl&gt;, BASEC &lt;chr&gt;, BNRIND &lt;chr&gt;, CHG &lt;dbl&gt;, PCHG &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   ANL01FL &lt;chr&gt;, WORST_HIGH &lt;chr&gt;, WORST_LOW &lt;chr&gt;, WORSTFL &lt;chr&gt;,</span>
+<span class="co">#&gt; #   TRTP &lt;chr&gt;, TRTA &lt;chr&gt;, ASEQ &lt;int&gt;, DTYPE &lt;chr&gt;, PARAM.y &lt;chr&gt;,</span>
+<span class="co">#&gt; #   PARAMN.y &lt;dbl&gt;, PARCAT1.y &lt;chr&gt;, PARCAT1N.y &lt;dbl&gt;, VSSEQ &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   VSTESTCD &lt;chr&gt;, VSTEST &lt;chr&gt;, VSORRES &lt;chr&gt;, VSORRESU &lt;chr&gt;,</span>
+<span class="co">#&gt; #   VSSTRESC &lt;chr&gt;, VSSTRESN &lt;dbl&gt;, VSSTRESU &lt;chr&gt;, VSSTAT &lt;chr&gt;, VSLOC &lt;chr&gt;,</span>
+<span class="co">#&gt; #   …</span></pre></body></html></div>
 </div>
 <div id="cat" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cat" class="anchor"></a>Derive Categorization Variables (<code>AVALCATx</code>)</h3>
 <p>Admiral does not currently have a generic function to aid in assigning <code>AVALCATx</code>/ <code>AVALCAxN</code> values. Below is a simple example of how these values may be assigned:</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">avalcat_lookup</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="no">avalcat_lookup</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">PARAMCD</span>, ~<span class="no">AVALCA1N</span>, ~<span class="no">AVALCAT1</span>,
   <span class="st">"HEIGHT"</span>, <span class="fl">1</span>, <span class="st">"&gt;100 cm"</span>,
   <span class="st">"HEIGHT"</span>, <span class="fl">2</span>, <span class="st">"&lt;= 100 cm"</span>
@@ -866,15 +954,9 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">USUBJID</span>, <span class="no">PARAMCD</span>, <span class="no">AVAL</span>, <span class="no">AVALCA1N</span>, <span class="no">AVALCAT1</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"HEIGHT"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
-<span class="co">#&gt; # A tibble: 6 x 5</span>
-<span class="co">#&gt;   USUBJID     PARAMCD  AVAL AVALCA1N AVALCAT1</span>
-<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   </span>
-<span class="co">#&gt; 1 01-701-1015 HEIGHT   147.        1 &gt;100 cm </span>
-<span class="co">#&gt; 2 01-701-1015 HEIGHT   147.        1 &gt;100 cm </span>
-<span class="co">#&gt; 3 01-701-1023 HEIGHT   163.        1 &gt;100 cm </span>
-<span class="co">#&gt; 4 01-701-1023 HEIGHT   163.        1 &gt;100 cm </span>
-<span class="co">#&gt; 5 01-701-1028 HEIGHT   178.        1 &gt;100 cm </span>
-<span class="co">#&gt; 6 01-701-1028 HEIGHT   178.        1 &gt;100 cm</span></pre></body></html></div>
+<span class="co">#&gt; # A tibble: 0 x 5</span>
+<span class="co">#&gt; # … with 5 variables: USUBJID &lt;chr&gt;, PARAMCD &lt;chr&gt;, AVAL &lt;dbl&gt;, AVALCA1N &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   AVALCAT1 &lt;chr&gt;</span></pre></body></html></div>
 </div>
 <div id="example" class="section level3">
 <h3 class="hasAnchor">
@@ -884,10 +966,16 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 <th>ADaM</th>
 <th>Sample Code</th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody>
+<tr class="odd">
+<td>ADEG</td>
+<td><a href="https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R" target="_blank">ad_adeg.R</a></td>
+</tr>
+<tr class="even">
 <td>ADVS</td>
-<td><a href="https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R" target="_blank">ad_advs.R</a></td>
-</tr></tbody>
+<td><a href="https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R" target="_blank">ad_advs.R</a></td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -904,7 +992,7 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -915,7 +1003,20 @@ admiral does not currently have functionality to assist with <code>TRTA</code> a
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds a Variable Flagging the First or Last Observation Within Each By Group — derive_extreme_flag • admiral</title>
+<title>Add a Variable Flagging the First or Last Observation Within Each By Group — derive_extreme_flag • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -44,10 +44,16 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Adds a Variable Flagging the First or Last Observation Within Each By Group — derive_extreme_flag" />
-<meta property="og:description" content="Adds a variable flagging the first or last observation within each by group" />
+
+<meta property="og:title" content="Add a Variable Flagging the First or Last Observation Within Each By Group — derive_extreme_flag" />
+<meta property="og:description" content="Add a variable flagging the first or last observation within each by group" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -105,6 +111,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -115,10 +123,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -135,6 +154,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -146,23 +171,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds a Variable Flagging the First or Last Observation Within Each By Group</h1>
+    <h1>Add a Variable Flagging the First or Last Observation Within Each By Group</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_extreme_flag.R'><code>R/derive_extreme_flag.R</code></a></small>
     <div class="hidden name"><code>derive_extreme_flag.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adds a variable flagging the first or last observation within each by group</p>
+    <p>Add a variable flagging the first or last observation within each by group</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_extreme_flag</span>(
   <span class='no'>dataset</span>,
-  <span class='no'>new_var</span>,
   <span class='no'>by_vars</span>,
   <span class='no'>order</span>,
+  <span class='no'>new_var</span>,
   <span class='no'>mode</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>check_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>,
+  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -172,13 +198,6 @@
       <th>dataset</th>
       <td><p>Input dataset</p>
 <p>The variables specified by the <code>by_vars</code> parameter are expected.</p></td>
-    </tr>
-    <tr>
-      <th>new_var</th>
-      <td><p>Variable to add</p>
-<p>The specified variable is added to the output dataset. It is set to <code>"Y"</code>
-for the first or last observation (depending on the mode) of each by group.</p>
-<p>Permitted Values: list of name-value pairs</p></td>
     </tr>
     <tr>
       <th>by_vars</th>
@@ -193,13 +212,20 @@ order.</p>
 <p>Permitted Values: list of variables or functions of variables</p></td>
     </tr>
     <tr>
+      <th>new_var</th>
+      <td><p>Variable to add</p>
+<p>The specified variable is added to the output dataset. It is set to <code>"Y"</code>
+for the first or last observation (depending on the mode) of each by group.</p>
+<p>Permitted Values: list of name-value pairs</p></td>
+    </tr>
+    <tr>
       <th>mode</th>
       <td><p>Flag mode</p>
 <p>Determines of the first or last observation is flagged.</p>
 <p>Permitted Values: <code>"first"</code>, <code>"last"</code></p></td>
     </tr>
     <tr>
-      <th>flag_filter</th>
+      <th>filter</th>
       <td><p>Filter for flag data</p>
 <p>Only observations fulfilling the specified condition are taken into account
 for flagging. If the parameter is not specified, all observations are
@@ -214,6 +240,11 @@ if the observations of the input dataset are not unique with respect to the
 by variables and the order.</p>
 <p>Default: <code>"warning"</code></p>
 <p>Permitted Values: <code>"none"</code>, <code>"warning"</code>, <code>"error"</code></p></td>
+    </tr>
+    <tr>
+      <th>flag_filter</th>
+      <td><p>Filter for flag data</p>
+<p><strong>Deprecated</strong>: Please use the <code>filter</code> parameter instead.</p></td>
     </tr>
     </table>
 
@@ -234,11 +265,11 @@ the output dataset.</p>
 <span class='co'># Flag last value for each patient, test, and visit, baseline observations are ignored</span>
 <span class='no'>vs</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>derive_extreme_flag</span>(
-    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
     <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>),
     <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>VSTPTNUM</span>),
+    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LASTFL</span>,
     <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-    <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>
+    <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>VISIT</span> <span class='kw'>!=</span> <span class='st'>"BASELINE"</span>
   ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISITNUM</span>, <span class='no'>VSTPTNUM</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>, <span class='no'>VISIT</span>, <span class='no'>VSTPTNUM</span>, <span class='no'>VSSTRESN</span>, <span class='no'>LASTFL</span>)</div><div class='output co'>#&gt; # A tibble: 29,643 x 6
@@ -287,11 +318,11 @@ the output dataset.</p>
 <span class='co'># Last observation</span>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>ADT</span>),
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -318,11 +349,11 @@ the output dataset.</p>
 <span class='co'># Worst observation - Direction = High</span>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>AVAL</span>, <span class='no'>ADT</span>),
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -349,11 +380,11 @@ the output dataset.</p>
 <span class='co'># Worst observation - Direction = Lo</span>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>), <span class='no'>ADT</span>),
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -380,11 +411,11 @@ the output dataset.</p>
 <span class='co'># Average observation</span>
 <span class='fu'>derive_extreme_flag</span>(
   <span class='no'>input</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
   <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>ADT</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span>(<span class='no'>AVAL</span>)),
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ABLFL</span>,
   <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-  <span class='kw'>flag_filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>AVISIT</span> <span class='kw'>==</span> <span class='st'>"BASELINE"</span> <span class='kw'>&amp;</span> <span class='no'>DTYPE</span> <span class='kw'>==</span> <span class='st'>"AVERAGE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 20 x 8
 #&gt;    STUDYID USUBJID PARAMCD AVISIT    ADT         AVAL DTYPE   ABLFL
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;
@@ -420,7 +451,7 @@ the output dataset.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -431,6 +462,23 @@ the output dataset.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

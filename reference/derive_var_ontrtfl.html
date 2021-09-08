@@ -44,11 +44,17 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Derive On-Treatment Flag Variable — derive_var_ontrtfl" />
 <meta property="og:description" content="Derive on-treatment flag (ONTRTFL) in an ADaM dataset with a single
-assessment date" />
+assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -81,7 +87,7 @@ assessment date" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -106,6 +112,8 @@ assessment date" />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -116,10 +124,21 @@ assessment date" />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -135,6 +154,12 @@ assessment date" />
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -154,16 +179,19 @@ assessment date" />
 
     <div class="ref-description">
     <p>Derive on-treatment flag (<code>ONTRTFL</code>) in an ADaM dataset with a single
-assessment date</p>
+assessment date (e.g <code>ADT</code>) or event start and end dates (e.g. <code>ASTDT</code>/<code>AENDT</code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>dataset</span>,
-  <span class='no'>date</span>,
+  <span class='no'>start_date</span>,
+  <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>ref_start_date</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>span_period</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -171,12 +199,21 @@ assessment date</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p><code>data.frame</code>.</p></td>
+      <td><p>Input dataset.</p>
+<p>Required columns are <code>start_date</code>, <code>end_date</code>, <code>ref_start_date</code> and <code>ref_end_date</code>.</p></td>
     </tr>
     <tr>
-      <th>date</th>
-      <td><p>The assessment date (e.g. <code>ADT</code> for the date of a VS test)
+      <th>start_date</th>
+      <td><p>The start date (e.g. <code>AESDT</code>) or assessment date (e.g. <code>ADT</code>)
 Required; A date or date-time object column is expected</p></td>
+    </tr>
+    <tr>
+      <th>end_date</th>
+      <td><p>The end date of assessment/event (e.g. <code>AENDT</code>)
+A date or date-time object column is expected.
+Optional; Default is null. If the used and date value is missing
+on an observation, it is assumed the medication is ongoing and
+<code>ONTRTFL</code> is set to <code>"Y"</code>.</p></td>
     </tr>
     <tr>
       <th>ref_start_date</th>
@@ -189,23 +226,33 @@ Required; A date or date-time object column is expected.</p></td>
 A date or date-time object column is expected.
 Optional; This can be null and everything after <code>ref_start_date</code> will be
 considered on-treatment.
-Default is NULL.</p></td>
+Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>ref_end_window</th>
       <td><p>A window to add to the upper bound <code>ref_end_date</code>
 measured in days
 (e.g. 7 if 7 days should be added to the upper bound)
-Optional; default is 0</p></td>
+Optional; default is 0.</p></td>
     </tr>
     <tr>
       <th>filter_pre_timepoint</th>
-      <td><p>An expression to filter observtions as not
+      <td><p>An expression to filter observations as not
 on-treatment when <code>date</code> = <code>ref_start_date</code>. For example, if
 observations where <code>VSTPT = PRE</code> should not be considered on-treatment when
 <code>date = ref_start_date</code>, <code>filter_pre_timepoint</code> should be used
 to denote when the on-treatment flag should be set to null.
-Optional; default = NULL</p></td>
+Optional; default is <code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>span_period</th>
+      <td><p>A <code>"Y"</code> scalar character. If <code>"Y"</code>, events that started prior
+to the <code>ref_start_date</code>and are ongoing or end after the <code>ref_start_date</code> are flagged as <code>"Y"</code>.
+Optional; default is <code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>date</th>
+      <td><p><strong>Deprecated</strong>. Please use <code>start_date</code> instead.</p></td>
     </tr>
     </table>
 
@@ -217,19 +264,24 @@ Optional; default = NULL</p></td>
 
     <p>On-Treatment is calculated by determining whether the assessment date or
 start/stop dates fall between 2 dates. The following logic is used to
-assign on-treatment = Y:</p><ol>
-<li><p><code>date</code> is missing and <code>ref_start_date</code>is non-missing</p></li>
+assign on-treatment = <code>"Y"</code>:</p><ol>
+<li><p><code>start_date</code> is missing and <code>ref_start_date</code>is non-missing</p></li>
 <li><p>No timepoint filter is provided (<code>filter_pre_timepoint</code>) and both
-<code>date</code> and <code>ref_start_date</code> are non-missing and <code>date</code> =
+<code>start_date</code> and <code>ref_start_date</code> are non-missing and <code>start_date</code> =
 <code>ref_start_date</code></p></li>
-<li><p>A timepoint is provided (<code>filter_pre_timepoint</code>) and both <code>date</code>
-and <code>ref_start_date</code> are non-missing and <code>date = ref_start_date</code>
+<li><p>A timepoint is provided (<code>filter_pre_timepoint</code>) and both <code>start_date</code>
+and <code>ref_start_date</code> are non-missing and <code>start_date = ref_start_date</code>
 and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></li>
-<li><p><code>ref_end_date</code> is not provided and <code>ref_start_date &lt; date</code></p></li>
-<li><p><code>ref_end_date</code> is provided and <code>ref_start_date &lt; date</code> &lt;=
+<li><p><code>ref_end_date</code> is not provided and <code>ref_start_date &lt; start_date</code></p></li>
+<li><p><code>ref_end_date</code> is provided and <code>ref_start_date &lt; start_date</code> &lt;=
 <code>ref_end_date + ref_end_window</code>.</p></li>
 </ol>
 
+<p>If the <code>end_date</code> is provided and the <code>end_date</code> &lt; ref_start_date
+then the <code>ONTRTFL</code> is set to <code>NULL</code>.This would be applicable to cases where
+the <code>start_date</code> is missing and <code>ONTRTFL</code> has been assigned as <code>"Y"</code> above.</p>
+<p>If the <code>span_period</code> is specified as <code>"Y"</code>, this allows the user to assign <code>ONTRTFL</code> as <code>"Y"</code> to
+cases where the record started prior to the 'ref_start_date<code>and was ongoing or ended after the</code>ref_end_date`.</p>
 <p>Any date imputations needed should be done prior to calling this function.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -243,7 +295,7 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 )
 <span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
+  <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
   <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>
 )</div><div class='output co'>#&gt; # A tibble: 3 x 5
@@ -260,7 +312,7 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 )
 <span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
+  <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ADT</span>,
   <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>,
   <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>60</span>
@@ -271,22 +323,42 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 #&gt; 2 P02     2020-04-30 2020-01-01 2020-03-01 Y      
 #&gt; 3 P03     2020-03-15 2020-01-01 2020-03-01 Y      </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADTM</span>,                   ~<span class='no'>TRTSDTM</span>,                   ~<span class='no'>TRTEDTM</span>,                   ~<span class='no'>TPT</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>,
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>,
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>""</span>
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ADTM</span>,                ~<span class='no'>TRTSDTM</span>,                   ~<span class='no'>TRTEDTM</span>,                   ~<span class='no'>TPT</span>,
+  <span class='st'>"P01"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>,
+  <span class='st'>"P02"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>,
+  <span class='st'>"P03"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>
 )</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='input'><span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>,
+  <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>,
   <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDTM</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDTM</span>,
   <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='no'>TPT</span> <span class='kw'>==</span> <span class='st'>"PRE"</span>
 )</div><div class='output co'>#&gt; # A tibble: 3 x 6
 #&gt;   USUBJID ADTM       TRTSDTM             TRTEDTM             TPT   ONTRTFL
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt; &lt;chr&gt;  
-#&gt; 1 P01     NA         2020-01-01 12:00:00 2020-03-01 12:00:00 ""    Y      
-#&gt; 2 P02     2020-01-01 2020-01-01 12:00:00 2020-03-01 12:00:00 "PRE" &lt;NA&gt;   
-#&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 ""    &lt;NA&gt;   </div></pre>
+#&gt; 1 P01     NA         2020-01-01 12:00:00 2020-03-01 12:00:00 &lt;NA&gt;  Y      
+#&gt; 2 P02     2020-01-01 2020-01-01 12:00:00 2020-03-01 12:00:00 PRE   &lt;NA&gt;   
+#&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 &lt;NA&gt;  &lt;NA&gt;   </div><div class='input'>
+<span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ASTDT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,           ~<span class='no'>AENDT</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>NA</span>,
+)
+<span class='fu'>derive_var_ontrtfl</span>(
+ <span class='no'>advs</span>,
+ <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ASTDT</span>,
+ <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>AENDT</span>,
+ <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>TRTSDT</span>,
+ <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>,
+ <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>60</span>,
+ <span class='kw'>span_period</span> <span class='kw'>=</span> <span class='st'>"Y"</span>
+)</div><div class='output co'>#&gt; # A tibble: 3 x 6
+#&gt;   USUBJID ASTDT      TRTSDT     TRTEDT     AENDT      ONTRTFL
+#&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  
+#&gt; 1 P01     2020-03-15 2020-01-01 2020-03-01 2020-12-01 Y      
+#&gt; 2 P02     2019-04-30 2020-01-01 2020-03-01 2020-03-15 Y      
+#&gt; 3 P03     2019-04-30 2020-01-01 2020-03-01 NA         Y      </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -298,7 +370,7 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -309,6 +381,23 @@ and the filter provided in <code>filter_pre_timepoint</code> is not true.</p></l
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

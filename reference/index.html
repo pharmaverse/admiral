@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Function reference" />
@@ -79,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -104,6 +110,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -114,10 +122,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -133,6 +152,12 @@
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -171,12 +196,6 @@
       <tr>
         
         <td>
-          <p><code><a href="derive_aage.html">derive_aage()</a></code> </p>
-        </td>
-        <td><p>Derive Analysis Age</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="derive_agegr_fda.html">derive_agegr_fda()</a></code> <code><a href="derive_agegr_fda.html">derive_agegr_ema()</a></code> </p>
         </td>
         <td><p>Derive Age Groups</p></td>
@@ -186,6 +205,12 @@
           <p><code><a href="derive_baseline.html">derive_baseline()</a></code> </p>
         </td>
         <td><p>Derive Baseline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_derived_param.html">derive_derived_param()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter Computed from the Analysis Value of Other Parameters</p></td>
       </tr><tr>
         
         <td>
@@ -207,15 +232,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_duration.html">derive_duration()</a></code> </p>
-        </td>
-        <td><p>Derive Duration</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="derive_extreme_flag.html">derive_extreme_flag()</a></code> </p>
         </td>
-        <td><p>Adds a Variable Flagging the First or Last Observation Within Each By Group</p></td>
+        <td><p>Add a Variable Flagging the First or Last Observation Within Each By Group</p></td>
       </tr><tr>
         
         <td>
@@ -231,15 +250,51 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_summary_records.html">derive_summary_records()</a></code> </p>
+          <p><code><a href="derive_param_bmi.html">derive_param_bmi()</a></code> </p>
         </td>
-        <td><p>Add New Records Within By Groups Using Aggregation Functions</p></td>
+        <td><p>Adds a Parameter for BMI</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_suppqual_vars.html">derive_suppqual_vars()</a></code> </p>
+          <p><code><a href="derive_param_bsa.html">derive_param_bsa()</a></code> </p>
         </td>
-        <td><p>Join Supplementary Qualifier Variables into the Parent SDTM Domain</p></td>
+        <td><p>Adds a parameter for BSA (Body Surface Area) using the specified method</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_doseint.html">derive_param_doseint()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Dose Intensity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_map.html">derive_param_map()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Mean Arterial Pressure</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_qtc.html">derive_param_qtc()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Corrected QT</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_rr.html">derive_param_rr()</a></code> </p>
+        </td>
+        <td><p>Adds a parameter for derived RR</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_params_exposure.html">derive_params_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_summary_records.html">derive_summary_records()</a></code> </p>
+        </td>
+        <td><p>Add New Records Within By Groups Using Aggregation Functions</p></td>
       </tr><tr>
         
         <td>
@@ -264,6 +319,12 @@
           <p><code><a href="derive_var_astdy.html">derive_var_astdy()</a></code> </p>
         </td>
         <td><p>Derive Analysis Start Relative Day</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_atirel.html">derive_var_atirel()</a></code> </p>
+        </td>
+        <td><p>Derive Time Relative to Reference</p></td>
       </tr><tr>
         
         <td>
@@ -333,6 +394,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_aage.html">derive_vars_aage()</a></code> </p>
+        </td>
+        <td><p>Derive Analysis Age</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_atc.html">derive_vars_atc()</a></code> </p>
+        </td>
+        <td><p>Derive ATC Class Variables</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> </p>
         </td>
         <td><p>Derive/Impute a Date from a Date Character Vector</p></td>
@@ -342,6 +415,42 @@
           <p><code><a href="derive_vars_dtm.html">derive_vars_dtm()</a></code> </p>
         </td>
         <td><p>Derive/Impute a Datetime from a Date Character Vector</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt()</a></code> </p>
+        </td>
+        <td><p>Derive date variables from datetime variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code> </p>
+        </td>
+        <td><p>Derive Duration</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_query.html">derive_vars_query()</a></code> </p>
+        </td>
+        <td><p>Derive Query Variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_suppqual.html">derive_vars_suppqual()</a></code> </p>
+        </td>
+        <td><p>Join Supplementary Qualifier Variables into the Parent SDTM Domain</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_transposed.html">derive_vars_transposed()</a></code> </p>
+        </td>
+        <td><p>Derive Variables by Transposing and Merging a Second Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_worst_flag.html">derive_worst_flag()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Flagging the maximal / minimal value within a group of observations</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -358,6 +467,18 @@
       <tr>
         
         <td>
+          <p><code><a href="compute_bmi.html">compute_bmi()</a></code> </p>
+        </td>
+        <td><p>Compute Body Mass Index (BMI)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_bsa.html">compute_bsa()</a></code> </p>
+        </td>
+        <td><p>Compute Body Surface Area (BSA)</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="compute_dtf.html">compute_dtf()</a></code> </p>
         </td>
         <td><p>Derive the Date Imputation Flag</p></td>
@@ -367,6 +488,24 @@
           <p><code><a href="compute_duration.html">compute_duration()</a></code> </p>
         </td>
         <td><p>Derive Duration</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_map.html">compute_map()</a></code> </p>
+        </td>
+        <td><p>Compute Mean Arterial Pressure (MAP)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_qtc.html">compute_qtc()</a></code> </p>
+        </td>
+        <td><p>Compute Corrected QT</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_rr.html">compute_rr()</a></code> </p>
+        </td>
+        <td><p>Compute RR Interval From Heart Rate</p></td>
       </tr><tr>
         
         <td>
@@ -390,7 +529,7 @@
         <td>
           <p><code><a href="format_eoxxstt_default.html">format_eoxxstt_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition status</p></td>
+        <td><p>Default Format for Disposition Status</p></td>
       </tr><tr>
         
         <td>
@@ -428,13 +567,19 @@
       <tr>
         
         <td>
-          <p><code><a href="compute_duration.html">compute_duration()</a></code> </p>
+          <p><code><a href="compute_bmi.html">compute_bmi()</a></code> </p>
         </td>
-        <td><p>Derive Duration</p></td>
+        <td><p>Compute Body Mass Index (BMI)</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_duration.html">derive_duration()</a></code> </p>
+          <p><code><a href="compute_bsa.html">compute_bsa()</a></code> </p>
+        </td>
+        <td><p>Compute Body Surface Area (BSA)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_duration.html">compute_duration()</a></code> </p>
         </td>
         <td><p>Derive Duration</p></td>
       </tr><tr>
@@ -442,7 +587,7 @@
         <td>
           <p><code><a href="derive_extreme_flag.html">derive_extreme_flag()</a></code> </p>
         </td>
-        <td><p>Adds a Variable Flagging the First or Last Observation Within Each By Group</p></td>
+        <td><p>Add a Variable Flagging the First or Last Observation Within Each By Group</p></td>
       </tr><tr>
         
         <td>
@@ -452,21 +597,33 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_var_aendy.html">derive_var_aendy()</a></code> </p>
-        </td>
-        <td><p>Derive Analysis End Relative Day</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="derive_var_astdy.html">derive_var_astdy()</a></code> </p>
-        </td>
-        <td><p>Derive Analysis Start Relative Day</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> </p>
         </td>
         <td><p>Derive/Impute a Date from a Date Character Vector</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_dtm.html">derive_vars_dtm()</a></code> </p>
+        </td>
+        <td><p>Derive/Impute a Datetime from a Date Character Vector</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code> </p>
+        </td>
+        <td><p>Derive Duration</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_transposed.html">derive_vars_transposed()</a></code> </p>
+        </td>
+        <td><p>Derive Variables by Transposing and Merging a Second Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_worst_flag.html">derive_worst_flag()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Flagging the maximal / minimal value within a group of observations</p></td>
       </tr><tr>
         
         <td>
@@ -495,15 +652,45 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_derived_param.html">derive_derived_param()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter Computed from the Analysis Value of Other Parameters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_params_exposure.html">derive_params_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_summary_records.html">derive_summary_records()</a></code> </p>
+        </td>
+        <td><p>Add New Records Within By Groups Using Aggregation Functions</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_ady.html">derive_var_ady()</a></code> </p>
         </td>
         <td><p>Derive Analysis Study Day</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_aendy.html">derive_var_aendy()</a></code> </p>
+        </td>
+        <td><p>Derive Analysis End Relative Day</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_anrind.html">derive_var_anrind()</a></code> </p>
         </td>
         <td><p>Derive Reference Range Indicator</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_astdy.html">derive_var_astdy()</a></code> </p>
+        </td>
+        <td><p>Derive Analysis Start Relative Day</p></td>
       </tr><tr>
         
         <td>
@@ -540,6 +727,31 @@
           <p><code><a href="derive_var_pchg.html">derive_var_pchg()</a></code> </p>
         </td>
         <td><p>Derive Percent Change from Baseline</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-occds" class="hasAnchor"><a href="#section-occds" class="anchor"></a>OCCDS</h3>
+          <p class="section-desc"><p>OCCDS specific functions</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="derive_var_aendy.html">derive_var_aendy()</a></code> </p>
+        </td>
+        <td><p>Derive Analysis End Relative Day</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_astdy.html">derive_var_astdy()</a></code> </p>
+        </td>
+        <td><p>Derive Analysis Start Relative Day</p></td>
       </tr>
     </tbody><tbody>
       
@@ -606,13 +818,162 @@
         <td>
           <p><code><a href="format_eoxxstt_default.html">format_eoxxstt_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition status</p></td>
+        <td><p>Default Format for Disposition Status</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="format_reason_default.html">format_reason_default()</a></code> </p>
         </td>
         <td><p>Default format for the disposition reason</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-adeg" class="hasAnchor"><a href="#section-adeg" class="anchor"></a>ADEG</h3>
+          <p class="section-desc"><p>Functions specific for ADEG</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="compute_qtc.html">compute_qtc()</a></code> </p>
+        </td>
+        <td><p>Compute Corrected QT</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_rr.html">compute_rr()</a></code> </p>
+        </td>
+        <td><p>Compute RR Interval From Heart Rate</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_qtc.html">derive_param_qtc()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Corrected QT</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_rr.html">derive_param_rr()</a></code> </p>
+        </td>
+        <td><p>Adds a parameter for derived RR</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-advs" class="hasAnchor"><a href="#section-advs" class="anchor"></a>ADVS</h3>
+          <p class="section-desc"><p>Functions specific for ADVS</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="compute_map.html">compute_map()</a></code> </p>
+        </td>
+        <td><p>Compute Mean Arterial Pressure (MAP)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_bmi.html">derive_param_bmi()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for BMI</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_bsa.html">derive_param_bsa()</a></code> </p>
+        </td>
+        <td><p>Adds a parameter for BSA (Body Surface Area) using the specified method</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_map.html">derive_param_map()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Mean Arterial Pressure</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-adex" class="hasAnchor"><a href="#section-adex" class="anchor"></a>ADEX</h3>
+          <p class="section-desc"><p>Functions specific for ADEX</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="derive_param_doseint.html">derive_param_doseint()</a></code> </p>
+        </td>
+        <td><p>Adds a Parameter for Dose Intensity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_params_exposure.html">derive_params_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-adae" class="hasAnchor"><a href="#section-adae" class="anchor"></a>ADAE</h3>
+          <p class="section-desc"><p>Functions specific for ADAE</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="derive_last_dose.html">derive_last_dose()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose Date(-time)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_query.html">derive_vars_query()</a></code> </p>
+        </td>
+        <td><p>Derive Query Variables</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-adcm" class="hasAnchor"><a href="#section-adcm" class="anchor"></a>ADCM</h3>
+          <p class="section-desc"><p>Functions specific for ADCM</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="derive_vars_atc.html">derive_vars_atc()</a></code> </p>
+        </td>
+        <td><p>Derive ATC Class Variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_query.html">derive_vars_query()</a></code> </p>
+        </td>
+        <td><p>Derive Query Variables</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -674,12 +1035,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="derive_duration.html">derive_duration()</a></code> </p>
-        </td>
-        <td><p>Derive Duration</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="derive_var_ady.html">derive_var_ady()</a></code> </p>
         </td>
         <td><p>Derive Analysis Study Day</p></td>
@@ -728,6 +1083,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_duration.html">derive_vars_duration()</a></code> </p>
+        </td>
+        <td><p>Derive Duration</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="impute_dtc.html">impute_dtc()</a></code> </p>
         </td>
         <td><p>Impute Partial Date(-time) Portion of a --DTC Variable</p></td>
@@ -756,6 +1117,12 @@
           <p><code><a href="lstalvdt_source.html">lstalvdt_source()</a></code> </p>
         </td>
         <td><p>Create an <code>lstalvdt_source</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="params.html">params()</a></code> </p>
+        </td>
+        <td><p>Create a Set of Parameters</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -814,6 +1181,36 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="qs.html">qs</a></code> </p>
+        </td>
+        <td><p>Questionnaire Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="suppae.html">suppae</a></code> </p>
+        </td>
+        <td><p>Supplemental Adverse Events Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="suppdm.html">suppdm</a></code> </p>
+        </td>
+        <td><p>Supplemental Demography Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="suppds.html">suppds</a></code> </p>
+        </td>
+        <td><p>Supplemental Disposition Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="suppress_warning.html">suppress_warning()</a></code> </p>
+        </td>
+        <td><p>Suppress Specific Warnings</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="ts.html">ts</a></code> </p>
         </td>
         <td><p>Trial Design Dataset</p></td>
@@ -842,6 +1239,18 @@
           <p><code><a href="adsl.html">adsl</a></code> </p>
         </td>
         <td><p>Subject Level Analysis Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="advs.html">advs</a></code> </p>
+        </td>
+        <td><p>Vital Signs Analysis Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="adex.html">adex</a></code> </p>
+        </td>
+        <td><p>Exposure Analysis Dataset</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -858,9 +1267,21 @@
       <tr>
         
         <td>
+          <p><code><a href="call_derivation.html">call_derivation()</a></code> </p>
+        </td>
+        <td><p>Call a Single Derivation Multiple Times</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="default_qtc_paramcd.html">default_qtc_paramcd()</a></code> </p>
+        </td>
+        <td><p>Get Default Parameter Code for Corrected QT</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="format_eoxxstt_default.html">format_eoxxstt_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition status</p></td>
+        <td><p>Default Format for Disposition Status</p></td>
       </tr><tr>
         
         <td>
@@ -946,9 +1367,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="assert_list_of.html">assert_list_of()</a></code> </p>
+        </td>
+        <td><p>Is an Argument a List of Objects of a Specific S3 Class?</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="assert_logical_scalar.html">assert_logical_scalar()</a></code> </p>
         </td>
         <td><p>Is an Argument a Logical Scalar (Boolean)?</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="assert_numeric_vector.html">assert_numeric_vector()</a></code> </p>
+        </td>
+        <td><p>Is an Argument a Numeric Vector?</p></td>
       </tr><tr>
         
         <td>
@@ -958,15 +1391,45 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="assert_param_does_not_exist.html">assert_param_does_not_exist()</a></code> </p>
+        </td>
+        <td><p>Asserts That a Parameter Does not Exist in the Dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="assert_s3_class.html">assert_s3_class()</a></code> </p>
+        </td>
+        <td><p>Is an Argument an Object of a Specific S3 Class?</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="assert_symbol.html">assert_symbol()</a></code> </p>
         </td>
         <td><p>Is an Argument a Symbol?</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="assert_unit.html">assert_unit()</a></code> </p>
+        </td>
+        <td><p>Asserts That a Parameter is Provided in the Expected Unit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="assert_valid_queries.html">assert_valid_queries()</a></code> </p>
+        </td>
+        <td><p>Verify if a dataset has the required format as queries dataset.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="assert_vars.html">assert_vars()</a></code> </p>
         </td>
         <td><p>Is an Argument a List of Variables?</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="assert_varval_list.html">assert_varval_list()</a></code> </p>
+        </td>
+        <td><p>Is an Argument a Variable-Value List?</p></td>
       </tr>
     </tbody><tbody>
       
@@ -1028,12 +1491,6 @@
           <p><code><a href="is_valid_time_entry.html">is_valid_time_entry()</a></code> </p>
         </td>
         <td><p>Check Validity of the Time Imputation Input</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is_varval_list.html">is_varval_list()</a></code> </p>
-        </td>
-        <td><p>Is Variable-Value List?</p></td>
       </tr>
     </tbody><tbody>
       
@@ -1087,6 +1544,31 @@
       <tr>
         
         <td>
+          <p><code><a href="arg_name.html">arg_name()</a></code> </p>
+        </td>
+        <td><p>Extract Argument Name from an Expression</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="backquote.html">backquote()</a></code> </p>
+        </td>
+        <td><p>Wrap a String in Backquotes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="convert_dtm_to_dtc.html">convert_dtm_to_dtc()</a></code> </p>
+        </td>
+        <td><p>Helper function to convert date (or date-time) objects to characters of dtc format
+(-DTC type of variable)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="enumerate.html">enumerate()</a></code> </p>
+        </td>
+        <td><p>Enumerate Multiple Strings</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="expect_dfs_equal.html">expect_dfs_equal()</a></code> </p>
         </td>
         <td><p>Expectation: Are Two Datasets Equal?</p></td>
@@ -1099,9 +1581,57 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="extract_vars.html">extract_vars()</a></code> </p>
+        </td>
+        <td><p>Extract All Symbols from a List of Quosures</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filter_if.html">filter_if()</a></code> </p>
+        </td>
+        <td><p>Optional Filter</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_constant_vars.html">get_constant_vars()</a></code> </p>
+        </td>
+        <td><p>Get constant variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="grapes-notin-grapes.html">`%notin%`</a></code> </p>
+        </td>
+        <td><p>Negated Value Matching</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="quo_c.html">quo_c()</a></code> </p>
+        </td>
+        <td><p>Concatenate One or More Quosure(s)</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="signal_duplicate_records.html">signal_duplicate_records()</a></code> </p>
         </td>
         <td><p>Signal Duplicate Records</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="squote.html">squote()</a></code> </p>
+        </td>
+        <td><p>Wrap a String in Single Quotes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="vars2chr.html">vars2chr()</a></code> </p>
+        </td>
+        <td><p>Turn a List of Quosures into a Character Vector</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="what_is_it.html">what_is_it()</a></code> </p>
+        </td>
+        <td><p>What Kind of Object is This?</p></td>
       </tr>
     </tbody>
     </table>
@@ -1117,7 +1647,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -1128,6 +1658,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

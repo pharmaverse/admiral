@@ -44,11 +44,17 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Derive Duration — derive_duration" />
-<meta property="og:description" content="Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ..." />
+<meta property="og:description" content="derive_duration() was renamed to derive_vars_duration() to create a
+more consistent API." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -81,7 +87,7 @@ day, age, ..." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -106,6 +112,8 @@ day, age, ..." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -116,10 +124,21 @@ day, age, ..." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -136,6 +155,12 @@ day, age, ..." />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -148,13 +173,13 @@ day, age, ..." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive Duration</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_duration.R'><code>R/derive_duration.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_vars_duration.R'><code>R/derive_vars_duration.R</code></a></small>
     <div class="hidden name"><code>derive_duration.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ...</p>
+    <p><code>derive_duration()</code> was renamed to <code><a href='derive_vars_duration.html'>derive_vars_duration()</a></code> to create a
+more consistent API.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_duration</span>(
@@ -170,104 +195,8 @@ day, age, ...</p>
   <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dataset</th>
-      <td><p>Input dataset</p>
-<p>The columns specified by the <code>start_date</code> and the <code>end_date</code> parameter are
-expected.</p></td>
-    </tr>
-    <tr>
-      <th>new_var</th>
-      <td><p>Name of variable to create</p></td>
-    </tr>
-    <tr>
-      <th>new_var_unit</th>
-      <td><p>Name of the unit variable
-If the parameter is not specified, no variable for the unit is created.</p></td>
-    </tr>
-    <tr>
-      <th>start_date</th>
-      <td><p>The start date</p>
-<p>A date or date-time object is expected.</p></td>
-    </tr>
-    <tr>
-      <th>end_date</th>
-      <td><p>The end date</p>
-<p>A date or date-time object is expected.</p></td>
-    </tr>
-    <tr>
-      <th>in_unit</th>
-      <td><p>Input unit</p>
-<p>See floor_in and add_one parameter for details.</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'</p></td>
-    </tr>
-    <tr>
-      <th>out_unit</th>
-      <td><p>Output unit</p>
-<p>The duration is derived in the specified unit</p>
-<p>Default: 'days'</p>
-<p>Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'</p></td>
-    </tr>
-    <tr>
-      <th>floor_in</th>
-      <td><p>Round down input dates?</p>
-<p>The input dates are round down with respect to the input unit, e.g., if the
-input unit is 'days', the time of the input dates is ignored.</p>
-<p>Default: `TRUE``</p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>add_one</th>
-      <td><p>Add one input unit?</p>
-<p>If the duration is non-negative, one input unit is added. I.e., the
-duration can not be zero.</p>
-<p>Default: <code>TRUE</code>
-Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>trunc_out</th>
-      <td><p>Return integer part</p>
-<p>The fractional part of the duration (in output unit) is removed, i.e., the
-integer part is returned.</p>
-<p>Default: <code>FALSE</code></p>
-<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The input dataset with the duration and unit variable added</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the duration
-is negative.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='compute_duration.html'>compute_duration()</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>BRTHDT</span>, ~<span class='no'>RANDDT</span>,
-  <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"1984-09-06"</span>), <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>)
-)
-
-<span class='fu'>derive_duration</span>(<span class='no'>data</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AAGE</span>,
-  <span class='kw'>new_var_unit</span> <span class='kw'>=</span> <span class='no'>AAGEU</span>,
-  <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>BRTHDT</span>,
-  <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>RANDDT</span>,
-  <span class='kw'>out_unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>,
-  <span class='kw'>add_one</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>trunc_out</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</div><div class='output co'>#&gt; # A tibble: 1 x 4
-#&gt;   BRTHDT     RANDDT      AAGE AAGEU
-#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;
-#&gt; 1 1984-09-06 2020-02-24    35 YEARS</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -279,7 +208,7 @@ is negative.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -290,6 +219,23 @@ is negative.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

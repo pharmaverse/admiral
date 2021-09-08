@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="FAQ">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="FAQ">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -63,7 +65,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="divider">
+    <li class="dropdown-header">User Guides</li>
+    <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
@@ -73,10 +77,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -92,7 +107,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -105,9 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>FAQ</h1>
-                        <h4 class="author">admiral team</h4>
             
-            <h4 class="date">2021-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/faq.Rmd"><code>vignettes/faq.Rmd</code></a></small>
       <div class="hidden name"><code>faq.Rmd</code></div>
@@ -116,15 +135,57 @@
 
     
     
+<div id="what-is-admiral" class="section level5">
+<h5 class="hasAnchor">
+<a href="#what-is-admiral" class="anchor"></a><strong>What is admiral</strong>?</h5>
+<ul>
+<li>Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations →
+<ul>
+<li>each block has a stand alone purpose (each function provides a specific functionality)</li>
+<li>Data Scientists can create their own blocks (create own R functions)</li>
+</ul>
+</li>
+<li>Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions.</li>
+</ul>
+</div>
+<div id="why-did-we-decide-to-start-admiral" class="section level5">
+<h5 class="hasAnchor">
+<a href="#why-did-we-decide-to-start-admiral" class="anchor"></a><strong>Why</strong> did we decide to start <strong>admiral</strong>?</h5>
+<ul>
+<li>Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets?</li>
+<li>Build ADaMs via collaboration and co-creation</li>
+<li>Early engagement with other like-minded companies moving towards R could lead to our solution being shared open source as a framework for contribution across-industry</li>
+<li>Building ADaMs like a modular building blocks, here everyone can contribute and each module has a clear input and output to enable re-usable solutions</li>
+<li>Users can “slot in” their own modules to address specific company/TA/Molecule/Study requirements</li>
+<li>TA specific requirements can be open sourced again and transformed into a common ADaM approach for such analysis</li>
+<li>the long-term gain of a consistent way of producing ADaM and a wider community of across-industry developers contributing to grow the codebase to cover the infinite array of possibilities</li>
+<li>Contributors: An option to make a name for yourself in the Pharma open-source community &amp; an avenue to collaborate with other like-minded people across the industry</li>
+<li>Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow</li>
+</ul>
+</div>
+<div id="why-did-we-use-r-as-a-programming-language" class="section level5">
+<h5 class="hasAnchor">
+<a href="#why-did-we-use-r-as-a-programming-language" class="anchor"></a>Why did we use <strong>R as a programming language</strong>?</h5>
+<ul>
+<li>R is not an isolated software product, everyone can contribute (open source principal)</li>
+<li>People from Universitiy/Statistical talent pipeline more likely to come through with R skills rather than a proprietary language</li>
+<li>There seems to be a strong data science/analytics R community</li>
+<li>FDA open to accepting R submissions and are heavy users themselves</li>
+<li>Top of the line visualization/graphics - R-Shiny for interactive data displays and also R Markdown offers great report writing functionality</li>
+<li>R is very popular among statisticians so new statistical methods are likely implemented in R before any other language</li>
+<li>There might be equally suited programming languages out there - however at some stage we had to make a decision :)</li>
+</ul>
+</div>
 <div id="admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean" class="section level5">
 <h5 class="hasAnchor">
 <a href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean" class="anchor"></a>Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?</h5>
 <ul>
 <li>Functions are usually not necessarily specific but parameter driven:
 <ul>
-<li>e.g. the <code>derive_aage</code> has a parameterized start and end-date and a unit.</li>
+<li>e.g. the <code>derive_vars_aage</code> has a parameterized start and end-date and a unit.</li>
 <li>Depending on the parameters results may vary as does the specification.</li>
 <li>Functions serve as a toolbox so the user can create their ADaM according to the requirements.</li>
+<li>The principles, programming strategy and documentation of admiral are considered as a framework for users to contribute.</li>
 </ul>
 </li>
 </ul>
@@ -134,7 +195,7 @@
 <a href="#how-does-a-user-know-what-a-function-does-exactly" class="anchor"></a>How does a user <strong>know what a function does</strong> exactly?</h5>
 <ul>
 <li>Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.</li>
-<li>Complex functions potentially have an own vignette (wiki page) on the admiral homepage (date imputation).</li>
+<li>Complex functions potentially have an own vignette on the admiral homepage to provide more details.</li>
 <li>admiral does not provide a link to an explicit specification in the define.xml.</li>
 </ul>
 </div>
@@ -142,7 +203,9 @@
 <h5 class="hasAnchor">
 <a href="#would-admiral-create-a-whole-adam-dataset" class="anchor"></a>Would admiral <strong>create a whole</strong> ADaM dataset?</h5>
 <ul>
-<li>No, users will use the functions from the admiral package to create their ADaM dataset.</li>
+<li>admiral is meant as a toolbox to enables Data Scientist to build ADaMs according to their varying analysis needs</li>
+<li>admiral is not meant as a –&gt; click a button out comes your ADaM &lt;– tool</li>
+<li>on the admiral webpage example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
 </ul>
 </div>
 <div id="in-which-order-does-a-user-need-to-execute-the-functions" class="section level5">
@@ -156,10 +219,21 @@
 <h5 class="hasAnchor">
 <a href="#is-the-admiral-package-validated" class="anchor"></a>Is the admiral package <strong>validated</strong>?</h5>
 <ul>
-<li>All functions are reviewed and tested to ensure that they work as described in the documentation.</li>
+<li>All functions are reviewed and tested (see <a href="#what-will-be-provided-around-function-testing">What will be provided around <strong>function testing</strong>?</a>) to ensure that they work as described in the documentation.</li>
 <li>Test cases for each function will be part of the R package.</li>
 <li>The testing the admiral team will do for each functions does <strong>not replace the QC and validation process at each company</strong>.</li>
 <li>Users can add to the tests or provide additional feedback.</li>
+</ul>
+</div>
+<div id="what-will-be-provided-around-function-testing" class="section level5">
+<h5 class="hasAnchor">
+<a href="#what-will-be-provided-around-function-testing" class="anchor"></a>What will be provided around <strong>function testing</strong>?</h5>
+<ul>
+<li>Unit tests for reliability of each function - available as part of open source release</li>
+<li>Some integration testing will be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)</li>
+<li>Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:</li>
+<li>validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence</li>
+<li>strategy of how the use of admiral fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)</li>
 </ul>
 </div>
 <div id="will-admiral-provide-harmonized-define-xml-or-submittable-specifications-for-functions" class="section level5">
@@ -168,6 +242,7 @@
 <ul>
 <li>No. The functions are documented via programming headers, the define.xml is the responsibility of the end user.</li>
 <li>Functions are usually generalized and not specific. (see <a href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam.-what-does-that-mean">Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?</a>)</li>
+<li>The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml</li>
 </ul>
 </div>
 <div id="will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="section level5">
@@ -182,7 +257,7 @@
 <a href="#how-much-of-the-adam-ig-is-covered-by-admiral" class="anchor"></a>How much of the <strong>ADaM IG is covered by admiral?</strong>
 </h5>
 <ul>
-<li>ADaM IG is a standard framework without a specific No of datasets or variables, so it cannot be used as a specific baseline to answer that question.</li>
+<li>ADaM IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.</li>
 <li>We will provide guidance for each ADaM dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see <a href="#in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?</a>)</li>
 <li>The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).</li>
 <li>For standard ADaM datasets (ADAE, ADCM …) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation</li>
@@ -193,8 +268,27 @@
 <a href="#will-there-be-a-usercontribution-guide" class="anchor"></a>Will there be a user/<strong>contribution</strong> guide?</h5>
 <ul>
 <li>All admiral information can be found on the <a href="https://roche-gsk.github.io/admiral/articles/admiral.html">github webpage</a>.</li>
-<li>Our programming strategy serves as a <a href="https://roche-gsk.github.io/admiral/articles/contributing.html">contribution guide</a>.</li>
-<li>How users can contribute technically is TBD.</li>
+<li>Our programming strategy serves as a framework for users how to create their own functions <a href="https://roche-gsk.github.io/admiral/articles/contributing.html">contribution guide</a>.</li>
+</ul>
+</div>
+<div id="how-would-a-contribution-model-look-like" class="section level5">
+<h5 class="hasAnchor">
+<a href="#how-would-a-contribution-model-look-like" class="anchor"></a>How would a <strong>contribution model</strong> look like?</h5>
+<ul>
+<li><p><strong>This is still under discussion and below is a very early draft proposal to provide an idea</strong></p></li>
+<li><p>There are 2 levels as explained below, but the target is always to store things at the highest possible level.</p></li>
+<li><p>Each level would be heavily dependent on select leads, and so succession planning always needs to be considered.</p></li>
+<li><p><strong>Core level - {admiral} package</strong></p></li>
+<li><p>for core standard functions developed by the initial Roche/GSK development team via pull requests stored in a dedicated open Github repo</p></li>
+<li><p>control of master branch would be kept with a select limited number of technical leads</p></li>
+<li>
+<p><strong>Company-specific level - e.g. {admiral.roche} &amp; {admiral.gsk} packages</strong></p>
+<ul>
+<li>mainly for plug-ins to connect with company interfaces (e.g. metadata links with MDRs or MedDRA baskets):</li>
+<li>a Github repo would be needed for each company - our request of companies using admiral would be to also keep these open source as we will do with the Roche &amp; GSK versions, as this transparency could help us identify modules that are better moved up to the core package.</li>
+<li>control of master branch is recommanded to be kept with a select limited number of company reps for each respective company repo</li>
+</ul>
+</li>
 </ul>
 </div>
   </div>
@@ -208,7 +302,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -219,7 +313,20 @@
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

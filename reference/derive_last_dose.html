@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Derive Last Dose Date(-time) — derive_last_dose" />
@@ -80,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -105,6 +111,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -115,10 +123,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -134,6 +153,12 @@
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -226,13 +251,13 @@ If set to <code>TRUE</code>, then only the date component of those variables is 
     </tr>
     <tr>
       <th>traceability_vars</th>
-      <td><p>A named list returned by <code>vars</code> listing the traceability variables,
+      <td><p>A named list returned by <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code> listing the traceability variables,
 e.g. <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)</a></code>.
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
-Those can be either strings or symbols referring to existing variables.</p></td>
+These can be either strings or symbols referring to existing variables.</p></td>
     </tr>
     </table>
 
@@ -264,72 +289,68 @@ The last dose date is derived per <code>by_vars</code> and <code>dataset_seq_var
 Use <code>check_dates_only</code> to control whether only dates or whole date-times need to be equal.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ae</span>); <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ex_single</span>)
-<span class='fu'>derive_last_dose</span>(
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ae</span>, <span class='fl'>100</span>),
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ex_single</span>, <span class='fl'>100</span>),
-  <span class='kw'>filter_ex</span> <span class='kw'>=</span> (<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='kw pkg'>stringr</span><span class='kw ns'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span>(<span class='no'>EXTRT</span>, <span class='st'>"PLACEBO"</span>))) <span class='kw'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>EXENDTC</span>)) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
-  <span class='kw'>dose_start</span> <span class='kw'>=</span> <span class='no'>EXSTDTC</span>,
-  <span class='kw'>dose_end</span> <span class='kw'>=</span> <span class='no'>EXENDTC</span>,
-  <span class='kw'>analysis_date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
-  <span class='kw'>dataset_seq_var</span> <span class='kw'>=</span> <span class='no'>AESEQ</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LDOSEDTM</span>,
-  <span class='kw'>output_datetime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>check_dates_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</div><div class='output co'>#&gt; # A tibble: 100 x 36
-#&gt;    STUDYID DOMAIN USUBJID AESEQ AESPID AETERM AELLT AELLTCD AEDECOD AEPTCD AEHLT
-#&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;
-#&gt;  1 CDISCP… AE     01-701…     1 E07    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  2 CDISCP… AE     01-701…     2 E08    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  3 CDISCP… AE     01-701…     3 E06    DIARR… DIAR…      NA DIARRH…     NA HLT_…
-#&gt;  4 CDISCP… AE     01-701…     3 E10    ATRIO… AV B…      NA ATRIOV…     NA HLT_…
-#&gt;  5 CDISCP… AE     01-701…     1 E08    ERYTH… ERYT…      NA ERYTHE…     NA HLT_…
-#&gt;  6 CDISCP… AE     01-701…     2 E09    ERYTH… LOCA…      NA ERYTHE…     NA HLT_…
-#&gt;  7 CDISCP… AE     01-701…     4 E08    ERYTH… ERYT…      NA ERYTHE…     NA HLT_…
-#&gt;  8 CDISCP… AE     01-701…     1 E04    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  9 CDISCP… AE     01-701…     2 E05    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt; 10 CDISCP… AE     01-701…     1 E08    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt; # … with 90 more rows, and 25 more variables: AEHLTCD &lt;dbl&gt;, AEHLGT &lt;chr&gt;,
-#&gt; #   AEHLGTCD &lt;dbl&gt;, AEBODSYS &lt;chr&gt;, AEBDSYCD &lt;dbl&gt;, AESOC &lt;chr&gt;, AESOCCD &lt;dbl&gt;,
-#&gt; #   AESEV &lt;chr&gt;, AESER &lt;chr&gt;, AEACN &lt;chr&gt;, AEREL &lt;chr&gt;, AEOUT &lt;chr&gt;,
-#&gt; #   AESCAN &lt;chr&gt;, AESCONG &lt;chr&gt;, AESDISAB &lt;chr&gt;, AESDTH &lt;chr&gt;, AESHOSP &lt;chr&gt;,
-#&gt; #   AESLIFE &lt;chr&gt;, AESOD &lt;chr&gt;, AEDTC &lt;chr&gt;, AESTDTC &lt;chr&gt;, AEENDTC &lt;chr&gt;,
-#&gt; #   AESTDY &lt;dbl&gt;, AEENDY &lt;dbl&gt;, LDOSEDTM &lt;dttm&gt;</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ae</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ex_single</span>)
+
+<span class='no'>ae</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fl'>100</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_last_dose</span>(
+    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ex_single</span>, <span class='fl'>100</span>),
+    <span class='kw'>filter_ex</span> <span class='kw'>=</span> (<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"PLACEBO"</span>, <span class='no'>EXTRT</span>))) <span class='kw'>&amp;</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>EXENDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
+    <span class='kw'>dose_start</span> <span class='kw'>=</span> <span class='no'>EXSTDTC</span>,
+    <span class='kw'>dose_end</span> <span class='kw'>=</span> <span class='no'>EXENDTC</span>,
+    <span class='kw'>analysis_date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
+    <span class='kw'>dataset_seq_var</span> <span class='kw'>=</span> <span class='no'>AESEQ</span>,
+    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LDOSEDTM</span>,
+    <span class='kw'>output_datetime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <span class='kw'>check_dates_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  ) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>AESEQ</span>, <span class='no'>AESTDTC</span>, <span class='no'>LDOSEDTM</span>)</div><div class='output co'>#&gt; # A tibble: 100 x 5
+#&gt;    STUDYID      USUBJID     AESEQ AESTDTC    LDOSEDTM           
+#&gt;    &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;      &lt;dttm&gt;             
+#&gt;  1 CDISCPILOT01 01-701-1015     1 2014-01-03 NA                 
+#&gt;  2 CDISCPILOT01 01-701-1015     2 2014-01-03 NA                 
+#&gt;  3 CDISCPILOT01 01-701-1015     3 2014-01-09 NA                 
+#&gt;  4 CDISCPILOT01 01-701-1023     3 2012-08-26 2012-08-11 00:00:00
+#&gt;  5 CDISCPILOT01 01-701-1023     1 2012-08-07 2012-08-07 00:00:00
+#&gt;  6 CDISCPILOT01 01-701-1023     2 2012-08-07 2012-08-07 00:00:00
+#&gt;  7 CDISCPILOT01 01-701-1023     4 2012-08-07 2012-08-07 00:00:00
+#&gt;  8 CDISCPILOT01 01-701-1028     1 2013-07-21 NA                 
+#&gt;  9 CDISCPILOT01 01-701-1028     2 2013-08-08 NA                 
+#&gt; 10 CDISCPILOT01 01-701-1034     1 2014-08-27 NA                 
+#&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># or with traceability variables</span>
-<span class='fu'>derive_last_dose</span>(
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ae</span>, <span class='fl'>100</span>),
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ex_single</span>, <span class='fl'>100</span>),
-  <span class='kw'>filter_ex</span> <span class='kw'>=</span> (<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='kw pkg'>stringr</span><span class='kw ns'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_detect.html'>str_detect</a></span>(<span class='no'>EXTRT</span>, <span class='st'>"PLACEBO"</span>))) <span class='kw'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>EXENDTC</span>)) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
-  <span class='kw'>dose_start</span> <span class='kw'>=</span> <span class='no'>EXSTDTC</span>,
-  <span class='kw'>dose_end</span> <span class='kw'>=</span> <span class='no'>EXENDTC</span>,
-  <span class='kw'>analysis_date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
-  <span class='kw'>dataset_seq_var</span> <span class='kw'>=</span> <span class='no'>AESEQ</span>,
-  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LDOSEDTM</span>,
-  <span class='kw'>output_datetime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>check_dates_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>LDOSEDOM</span> <span class='kw'>=</span> <span class='st'>"EX"</span>, <span class='kw'>LDOSESEQ</span> <span class='kw'>=</span> <span class='no'>EXSEQ</span>, <span class='kw'>LDOSEVAR</span> <span class='kw'>=</span> <span class='st'>"EXSTDTC"</span>)
-)</div><div class='output co'>#&gt; # A tibble: 100 x 39
-#&gt;    STUDYID DOMAIN USUBJID AESEQ AESPID AETERM AELLT AELLTCD AEDECOD AEPTCD AEHLT
-#&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;
-#&gt;  1 CDISCP… AE     01-701…     1 E07    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  2 CDISCP… AE     01-701…     2 E08    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  3 CDISCP… AE     01-701…     3 E06    DIARR… DIAR…      NA DIARRH…     NA HLT_…
-#&gt;  4 CDISCP… AE     01-701…     3 E10    ATRIO… AV B…      NA ATRIOV…     NA HLT_…
-#&gt;  5 CDISCP… AE     01-701…     1 E08    ERYTH… ERYT…      NA ERYTHE…     NA HLT_…
-#&gt;  6 CDISCP… AE     01-701…     2 E09    ERYTH… LOCA…      NA ERYTHE…     NA HLT_…
-#&gt;  7 CDISCP… AE     01-701…     4 E08    ERYTH… ERYT…      NA ERYTHE…     NA HLT_…
-#&gt;  8 CDISCP… AE     01-701…     1 E04    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt;  9 CDISCP… AE     01-701…     2 E05    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt; 10 CDISCP… AE     01-701…     1 E08    APPLI… APPL…      NA APPLIC…     NA HLT_…
-#&gt; # … with 90 more rows, and 28 more variables: AEHLTCD &lt;dbl&gt;, AEHLGT &lt;chr&gt;,
-#&gt; #   AEHLGTCD &lt;dbl&gt;, AEBODSYS &lt;chr&gt;, AEBDSYCD &lt;dbl&gt;, AESOC &lt;chr&gt;, AESOCCD &lt;dbl&gt;,
-#&gt; #   AESEV &lt;chr&gt;, AESER &lt;chr&gt;, AEACN &lt;chr&gt;, AEREL &lt;chr&gt;, AEOUT &lt;chr&gt;,
-#&gt; #   AESCAN &lt;chr&gt;, AESCONG &lt;chr&gt;, AESDISAB &lt;chr&gt;, AESDTH &lt;chr&gt;, AESHOSP &lt;chr&gt;,
-#&gt; #   AESLIFE &lt;chr&gt;, AESOD &lt;chr&gt;, AEDTC &lt;chr&gt;, AESTDTC &lt;chr&gt;, AEENDTC &lt;chr&gt;,
-#&gt; #   AESTDY &lt;dbl&gt;, AEENDY &lt;dbl&gt;, LDOSEDTM &lt;dttm&gt;, LDOSEDOM &lt;chr&gt;,
-#&gt; #   LDOSESEQ &lt;int&gt;, LDOSEVAR &lt;chr&gt;</div><div class='input'>
+<span class='no'>ae</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fl'>100</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_last_dose</span>(
+    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ex_single</span>, <span class='fl'>100</span>),
+    <span class='kw'>filter_ex</span> <span class='kw'>=</span> (<span class='no'>EXDOSE</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>|</span> (<span class='no'>EXDOSE</span> <span class='kw'>==</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"PLACEBO"</span>, <span class='no'>EXTRT</span>))) <span class='kw'>&amp;</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>EXENDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
+    <span class='kw'>dose_start</span> <span class='kw'>=</span> <span class='no'>EXSTDTC</span>,
+    <span class='kw'>dose_end</span> <span class='kw'>=</span> <span class='no'>EXENDTC</span>,
+    <span class='kw'>analysis_date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
+    <span class='kw'>dataset_seq_var</span> <span class='kw'>=</span> <span class='no'>AESEQ</span>,
+    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>LDOSEDTM</span>,
+    <span class='kw'>output_datetime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <span class='kw'>check_dates_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>LDOSEDOM</span> <span class='kw'>=</span> <span class='st'>"EX"</span>, <span class='kw'>LDOSESEQ</span> <span class='kw'>=</span> <span class='no'>EXSEQ</span>, <span class='kw'>LDOSEVAR</span> <span class='kw'>=</span> <span class='st'>"EXSTDTC"</span>)
+  ) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>AESEQ</span>, <span class='no'>AESTDTC</span>, <span class='no'>LDOSEDTM</span>, <span class='no'>LDOSEDOM</span>, <span class='no'>LDOSESEQ</span>, <span class='no'>LDOSEVAR</span>)</div><div class='output co'>#&gt; # A tibble: 100 x 8
+#&gt;    STUDYID  USUBJID AESEQ AESTDTC LDOSEDTM            LDOSEDOM LDOSESEQ LDOSEVAR
+#&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dttm&gt;              &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;   
+#&gt;  1 CDISCPI… 01-701…     1 2014-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt;  2 CDISCPI… 01-701…     2 2014-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt;  3 CDISCPI… 01-701…     3 2014-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt;  4 CDISCPI… 01-701…     3 2012-0… 2012-08-11 00:00:00 EX              7 EXSTDTC 
+#&gt;  5 CDISCPI… 01-701…     1 2012-0… 2012-08-07 00:00:00 EX              3 EXSTDTC 
+#&gt;  6 CDISCPI… 01-701…     2 2012-0… 2012-08-07 00:00:00 EX              3 EXSTDTC 
+#&gt;  7 CDISCPI… 01-701…     4 2012-0… 2012-08-07 00:00:00 EX              3 EXSTDTC 
+#&gt;  8 CDISCPI… 01-701…     1 2013-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt;  9 CDISCPI… 01-701…     2 2013-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt; 10 CDISCPI… 01-701…     1 2014-0… NA                  &lt;NA&gt;           NA &lt;NA&gt;    
+#&gt; # … with 90 more rows</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -342,7 +363,7 @@ Use <code>check_dates_only</code> to control whether only dates or whole date-ti
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -353,6 +374,23 @@ Use <code>check_dates_only</code> to control whether only dates or whole date-ti
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

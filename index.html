@@ -17,7 +17,9 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="ADaM in R Asset Library">
+<script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="ADaM in R Asset Library">
 <meta property="og:description" content="A toolbox for programming ADaM datasets in R.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -63,7 +65,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="divider">
+    <li class="dropdown-header">User Guides</li>
+    <li>
       <a href="articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
@@ -73,10 +77,21 @@
       <a href="articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="articles/contributing.html">Contributing to admiral</a>
+      <a href="articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -92,7 +107,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -107,25 +128,52 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#admiral-" class="anchor"></a>admiral <img src="reference/figures/logo.png" align="right" width="200" style="margin-left:50px;">
 </h1></div>
+<!-- badges: start -->
+
 <p>ADaM in R Asset Library</p>
 <div id="purpose" class="section level3">
 <h3 class="hasAnchor">
 <a href="#purpose" class="anchor"></a>Purpose</h3>
-<p>To provide an open source modularized toolbox that enables companies and communities to develop ADaM datasets in R.</p>
+<p>To provide an open source, modularized toolbox that enables the pharmaceutical programming community to develop ADaM datasets in R.</p>
 </div>
 <div id="scope" class="section level3">
 <h3 class="hasAnchor">
 <a href="#scope" class="anchor"></a>Scope</h3>
 <ul>
-<li>Build a toolbox of re-usable functions and utilities to create ADaM datasets in R in a modular manner.</li>
-<li>Communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach, in terms of global/company/therapeutic area/molecule or study-specific functions.</li>
-<li>All functions are created based upon the ADaM Implementation Guide and aim to facilitate the programming of ADaM dataset standards.</li>
+<li>Build a toolbox of re-usable functions and utilities to create ADaM datasets in R in a modular manner</li>
+<li>Pharmaceutical communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach</li>
+<li>All functions are documented, tested, include examples and are listed <a href="https://roche-gsk.github.io/admiral/reference/index.html">in the Reference section</a>
+</li>
+<li>Vignettes how to create ADSL, BDS and OCCUR datasets, including example scripts</li>
+<li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
 </ul>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
-<p>Please go to <a href="https://roche-gsk.github.io/admiral/articles/admiral.html">Get Started</a> section to start using admiral.</p>
+<ul>
+<li>Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations
+<ul>
+<li>Each block has a stand alone purpose, i.e. each function provides a specific functionality</li>
+<li>Data Scientists can create their own blocks, i.e. create own R functions</li>
+</ul>
+</li>
+<li>Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions</li>
+</ul>
+</div>
+<div id="references-and-documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#references-and-documentation" class="anchor"></a>References and Documentation</h3>
+<ul>
+<li>Please go to <a href="https://roche-gsk.github.io/admiral/articles/admiral.html">Get Started</a> section to start using admiral</li>
+<li>Please see the Programming Strategy () to understand how functions are created</li>
+<li>Please see the <a href="https://roche-gsk.github.io/admiral/articles/faq.html">FAQ</a> for the most frequent questions</li>
+</ul>
+</div>
+<div id="contact" class="section level3">
+<h3 class="hasAnchor">
+<a href="#contact" class="anchor"></a>Contact</h3>
+<p>In case your questions are not answered please contact us on <a href="https://app.slack.com/client/T028PB489D3/C028SJ83KM1">Slack</a></p>
 </div>
 </div>
   </div>
@@ -155,15 +203,27 @@
 <li>Vignesh Thanikachalam <br><small class="roles"> Author </small>  </li>
 <li>Ondrej Slama <br><small class="roles"> Author </small>  </li>
 <li>Shimeng Huang <br><small class="roles"> Author </small>  </li>
+<li>Robin Koeger <br><small class="roles"> Author </small>  </li>
+<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
+<li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
+<li>Eric Simms <br><small class="roles"> Author </small>  </li>
+<li>Michael Thorpe <br><small class="roles"> Author </small>  </li>
+<li>Pavan Kumar <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://codecov.io/gh/Roche-GSK/admiral?branch=master"><img src="https://codecov.io/gh/Roche-GSK/admiral/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -174,7 +234,20 @@
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

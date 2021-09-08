@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Creating ADSL">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Creating ADSL">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -63,7 +65,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="divider">
+    <li class="dropdown-header">User Guides</li>
+    <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
     <li>
@@ -73,10 +77,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -92,7 +107,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -105,9 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Creating ADSL</h1>
-                        <h4 class="author">admiral team</h4>
             
-            <h4 class="date">2021-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/adsl.Rmd"><code>vignettes/adsl.Rmd</code></a></small>
       <div class="hidden name"><code>adsl.Rmd</code></div>
@@ -162,21 +181,8 @@
 <p>To start, all data frames needed for the creation of ADSL should be read into the environment. This will be a company specific process. Some of the data frames needed may be <code>dm</code>, <code>ex</code>, <code>ds</code>, <code>ae</code>, and <code>lb</code>.</p>
 <p>For example purpose, the CDISC Pilot SDTM datasets—which are included in <code>{admiral}</code>—are used.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">admiral</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lubridate</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'lubridate'</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     date</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">stringr</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"dm"</span>)
@@ -185,21 +191,21 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"ae"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"lb"</span>)</pre></body></html></div>
 <p>The <code>dm</code> domain is used as the basis for <code>ADSL</code>:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">dm</span>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">dm</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">DOMAIN</span> <span class="kw">=</span> <span class="kw">NULL</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">adsl</span>)
-<span class="co">#&gt; # A tibble: 6 x 25</span>
-<span class="co">#&gt;   STUDYID DOMAIN USUBJID SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC</span>
-<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  </span>
-<span class="co">#&gt; 1 CDISCP… DM     01-701… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""     </span>
-<span class="co">#&gt; 2 CDISCP… DM     01-701… 1023   2012-0… 2012-0… 2012-08… 2012-09… ""     </span>
-<span class="co">#&gt; 3 CDISCP… DM     01-701… 1028   2013-0… 2014-0… 2013-07… 2014-01… ""     </span>
-<span class="co">#&gt; 4 CDISCP… DM     01-701… 1033   2014-0… 2014-0… 2014-03… 2014-03… ""     </span>
-<span class="co">#&gt; 5 CDISCP… DM     01-701… 1034   2014-0… 2014-1… 2014-07… 2014-12… ""     </span>
-<span class="co">#&gt; 6 CDISCP… DM     01-701… 1047   2013-0… 2013-0… 2013-02… 2013-03… ""     </span>
-<span class="co">#&gt; # … with 16 more variables: RFPENDTC &lt;chr&gt;, DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;,</span>
-<span class="co">#&gt; #   SITEID &lt;chr&gt;, AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;,</span>
-<span class="co">#&gt; #   ARMCD &lt;chr&gt;, ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;,</span>
-<span class="co">#&gt; #   DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;</span></pre></body></html></div>
+<span class="co">#&gt; # A tibble: 6 x 24</span>
+<span class="co">#&gt;   STUDYID USUBJID SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC RFPENDTC</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   </span>
+<span class="co">#&gt; 1 CDISCP… 01-701… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""      2014-07…</span>
+<span class="co">#&gt; 2 CDISCP… 01-701… 1023   2012-0… 2012-0… 2012-08… 2012-09… ""      2013-02…</span>
+<span class="co">#&gt; 3 CDISCP… 01-701… 1028   2013-0… 2014-0… 2013-07… 2014-01… ""      2014-01…</span>
+<span class="co">#&gt; 4 CDISCP… 01-701… 1033   2014-0… 2014-0… 2014-03… 2014-03… ""      2014-09…</span>
+<span class="co">#&gt; 5 CDISCP… 01-701… 1034   2014-0… 2014-1… 2014-07… 2014-12… ""      2014-12…</span>
+<span class="co">#&gt; 6 CDISCP… 01-701… 1047   2013-0… 2013-0… 2013-02… 2013-03… ""      2013-07…</span>
+<span class="co">#&gt; # … with 15 more variables: DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;, AGE &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;, ARMCD &lt;chr&gt;, ARM &lt;chr&gt;,</span>
+<span class="co">#&gt; #   ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;, DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;</span></pre></body></html></div>
 </div>
 <div id="treatmentvar" class="section level2">
 <h2 class="hasAnchor">
@@ -222,7 +228,7 @@
     <span class="kw">TRTSDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">TRTSDTM</span>),
     <span class="kw">TRTEDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">TRTEDTM</span>)
   )</pre></body></html></div>
-<p>Now, that <code>TRTSDT</code> and <code>TRTEDT</code> are derived, the function <code>derive_var_trtdur()</code> can be used to calculate the Treatment duration (<code>TRTDURD</code>).</p>
+<p>Now, that <code>TRTSDT</code> and <code>TRTEDT</code> are derived, the function <code><a href="../reference/derive_var_trtdurd.html">derive_var_trtdurd()</a></code> can be used to calculate the Treatment duration (<code>TRTDURD</code>).</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_var_trtdurd.html">derive_var_trtdurd</a></span>()
 
@@ -359,7 +365,7 @@
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">format_dcsreas</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">dsdecod</span>, <span class="no">dsterm</span> <span class="kw">=</span> <span class="kw">NULL</span>) {
   <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="no">dsterm</span>)) <span class="no">dsdecod</span> <span class="kw">else</span> <span class="no">dsterm</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(
-    <span class="no">dsdecod</span> <span class="kw">%!in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COMPLETED"</span>, <span class="st">"SCREEN FAILURE"</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">dsdecod</span>) ~ <span class="no">out</span>,
+    <span class="no">dsdecod</span> <span class="kw">%notin%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COMPLETED"</span>, <span class="st">"SCREEN FAILURE"</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">dsdecod</span>) ~ <span class="no">out</span>,
     <span class="fl">TRUE</span> ~ <span class="fl">NA_character_</span>
   )
 }</pre></body></html></div>
@@ -404,6 +410,7 @@
     <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">DTHDTC</span>,
     <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"FIRST"</span>
   )</pre></body></html></div>
+<p>See also <a href="imputation.html">Date and Time Imputation</a>.</p>
 </div>
 <div id="death_cause" class="section level3">
 <h3 class="hasAnchor">
@@ -418,7 +425,7 @@
 <li>
 <code>filter</code>: the condition to define death,</li>
 <li>
-<code>date_var</code>: the date of death,</li>
+<code>date</code>: the date of death,</li>
 <li>
 <code>mode</code>: <code>first</code> or <code>last</code> to select the first/last date of death if multiple dates are collected,</li>
 <li>
@@ -430,14 +437,14 @@
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">src_ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dthcaus_source.html">dthcaus_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
   <span class="kw">filter</span> <span class="kw">=</span> <span class="no">AEOUT</span> <span class="kw">==</span> <span class="st">"FATAL"</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"first"</span>,
   <span class="kw">dthcaus</span> <span class="kw">=</span> <span class="no">AEDECOD</span>
 )
 <span class="no">src_ds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dthcaus_source.html">dthcaus_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ds</span>,
   <span class="kw">filter</span> <span class="kw">=</span> <span class="no">DSDECOD</span> <span class="kw">==</span> <span class="st">"DEATH"</span> <span class="kw">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="st">"DEATH DUE TO"</span>, <span class="no">DSTERM</span>),
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">DSSTDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">DSSTDTC</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"first"</span>,
   <span class="kw">dthcaus</span> <span class="kw">=</span> <span class="st">"Death in DS"</span>
 )</pre></body></html></div>
@@ -451,14 +458,14 @@
 <span class="co">#&gt; 1 01-701-1211 2013-01-14 Y     2013-01-14 &lt;NA&gt;   SUDDEN DEATH         </span>
 <span class="co">#&gt; 2 01-704-1445 2014-11-01 Y     2014-11-01 &lt;NA&gt;   COMPLETED SUICIDE    </span>
 <span class="co">#&gt; 3 01-710-1083 2013-08-02 Y     2013-08-02 &lt;NA&gt;   MYOCARDIAL INFARCTION</span></pre></body></html></div>
-<p>The function also offers the option to add some traceability variables (e.g. <code>DTHDOM</code> would store the domain where the date of death is collected, and <code>DTHSEQ</code> would store the <code>xxSEQ</code> value of that domain). To add them, the <code>traceabilty_vars()</code> argument must be added to the <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> arguments:</p>
+<p>The function also offers the option to add some traceability variables (e.g. <code>DTHDOM</code> would store the domain where the date of death is collected, and <code>DTHSEQ</code> would store the <code>xxSEQ</code> value of that domain). To add them, the <code>traceability_vars</code> argument must be added to the <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> arguments:</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">src_ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dthcaus_source.html">dthcaus_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
   <span class="kw">filter</span> <span class="kw">=</span> <span class="no">AEOUT</span> <span class="kw">==</span> <span class="st">"FATAL"</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"first"</span>,
   <span class="kw">dthcaus</span> <span class="kw">=</span> <span class="no">AEDECOD</span>,
-  <span class="kw">traceabilty_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">DTHDOM</span> <span class="kw">=</span> <span class="st">"AE"</span>, <span class="kw">DTHSEQ</span> <span class="kw">=</span> <span class="no">AESEQ</span>)
+  <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">DTHDOM</span> <span class="kw">=</span> <span class="st">"AE"</span>, <span class="kw">DTHSEQ</span> <span class="kw">=</span> <span class="no">AESEQ</span>)
 )
 
 <span class="no">src_ds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/dthcaus_source.html">dthcaus_source</a></span>(
@@ -467,7 +474,7 @@
   <span class="kw">date</span> <span class="kw">=</span> <span class="no">DSSTDTC</span>,
   <span class="kw">mode</span> <span class="kw">=</span> <span class="st">"first"</span>,
   <span class="kw">dthcaus</span> <span class="kw">=</span> <span class="no">DSTERM</span>,
-  <span class="kw">traceabilty_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">DTHDOM</span> <span class="kw">=</span> <span class="st">"DS"</span>, <span class="kw">DTHSEQ</span> <span class="kw">=</span> <span class="no">DSSEQ</span>)
+  <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">DTHDOM</span> <span class="kw">=</span> <span class="st">"DS"</span>, <span class="kw">DTHSEQ</span> <span class="kw">=</span> <span class="no">DSSEQ</span>)
 )
 <span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(-<span class="no">DTHCAUS</span>) <span class="kw">%&gt;%</span> <span class="co"># remove it before deriving it again</span>
@@ -478,13 +485,13 @@
 <div id="death_other" class="section level3">
 <h3 class="hasAnchor">
 <a href="#death_other" class="anchor"></a>Duration Relative to Death</h3>
-<p>The function <code><a href="../reference/derive_duration.html">derive_duration()</a></code> can be used to derive duration relative to death like the Relative Day of Death (<code>DTHADY</code>) or the numbers of days from last dose to death (<code>LDDTHELD</code>).</p>
+<p>The function <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> can be used to derive duration relative to death like the Relative Day of Death (<code>DTHADY</code>) or the numbers of days from last dose to death (<code>LDDTHELD</code>).</p>
 <p>Example calls:</p>
 <ul>
 <li>Relative Day of Death</li>
 </ul>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/derive_duration.html">derive_duration</a></span>(
+  <span class="fu"><a href="../reference/derive_vars_duration.html">derive_vars_duration</a></span>(
     <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">DTHADY</span>,
     <span class="kw">start_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>,
     <span class="kw">end_date</span> <span class="kw">=</span> <span class="no">DTHDT</span>
@@ -493,7 +500,7 @@
 <li>Elapsed Days from Last Dose to Death</li>
 </ul>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/derive_duration.html">derive_duration</a></span>(
+  <span class="fu"><a href="../reference/derive_vars_duration.html">derive_vars_duration</a></span>(
     <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">LDDTHELD</span>,
     <span class="kw">start_date</span> <span class="kw">=</span> <span class="no">TRTEDT</span>,
     <span class="kw">end_date</span> <span class="kw">=</span> <span class="no">DTHDT</span>,
@@ -520,7 +527,7 @@
 <li>
 <code>filter</code>: the filter to apply on the datasets,</li>
 <li>
-<code>date_var</code>: the date of interest,</li>
+<code>date</code>: the date of interest,</li>
 <li>
 <code>date_imputation</code>: whether and how to impute partial dates,</li>
 <li>
@@ -529,22 +536,22 @@
 <p>An example could be :</p>
 <div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">ae_src1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"FIRST"</span>
 )
 <span class="no">ae_src2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"LAST"</span>
 )
 <span class="no">lb_src</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">lb</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">LBDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">LBDTC</span>,
   <span class="kw">filter</span> <span class="kw">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span>(<span class="no">LBDTC</span>) <span class="kw">&gt;=</span> <span class="fl">10</span>
 )
 <span class="no">adsl_src</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">adsl</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">TRTEDT</span>
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">TRTEDT</span>
 )</pre></body></html></div>
 <p>Once the sources are defined, the function <code><a href="../reference/derive_var_lstalvdt.html">derive_var_lstalvdt()</a></code> can be used to derive <code>LSTALVDT</code>:</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
@@ -563,25 +570,25 @@
 <p>Similarly to <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code>, the traceability variables can be added by specifying the <code>traceability_vars</code> argument in <code><a href="../reference/lstalvdt_source.html">lstalvdt_source()</a></code>.</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">ae_src1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"FIRST"</span>,
   <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">LALVDOM</span> <span class="kw">=</span> <span class="st">"AE"</span>, <span class="kw">LALVSEQ</span> <span class="kw">=</span> <span class="no">AESEQ</span>, <span class="kw">LALVVAR</span> <span class="kw">=</span> <span class="st">"AESTDTC"</span>)
 )
 <span class="no">ae_src2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">ae</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"LAST"</span>,
   <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">LALVDOM</span> <span class="kw">=</span> <span class="st">"AE"</span>, <span class="kw">LALVSEQ</span> <span class="kw">=</span> <span class="no">AESEQ</span>, <span class="kw">LALVVAR</span> <span class="kw">=</span> <span class="st">"AEENDTC"</span>)
 )
 <span class="no">lb_src</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">lb</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">LBDTC</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">LBDTC</span>,
   <span class="kw">filter</span> <span class="kw">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span>(<span class="no">LBDTC</span>) <span class="kw">&gt;=</span> <span class="fl">10</span>,
   <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">LALVDOM</span> <span class="kw">=</span> <span class="st">"LB"</span>, <span class="kw">LALVSEQ</span> <span class="kw">=</span> <span class="no">LBSEQ</span>, <span class="kw">LALVVAR</span> <span class="kw">=</span> <span class="st">"LBDTC"</span>)
 )
 <span class="no">adsl_src</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lstalvdt_source.html">lstalvdt_source</a></span>(
   <span class="kw">dataset</span> <span class="kw">=</span> <span class="no">adsl</span>,
-  <span class="kw">date_var</span> <span class="kw">=</span> <span class="no">TRTEDTM</span>,
+  <span class="kw">date</span> <span class="kw">=</span> <span class="no">TRTEDTM</span>,
   <span class="kw">traceability_vars</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">LALVDOM</span> <span class="kw">=</span> <span class="st">"ADSL"</span>, <span class="kw">LALVSEQ</span> <span class="kw">=</span> <span class="fl">NA_integer_</span>, <span class="kw">LALVVAR</span> <span class="kw">=</span> <span class="st">"TRTEDTM"</span>)
 )
 
@@ -707,7 +714,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -718,7 +725,20 @@
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

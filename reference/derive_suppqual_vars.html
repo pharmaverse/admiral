@@ -44,15 +44,17 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Join Supplementary Qualifier Variables into the Parent SDTM Domain — derive_suppqual_vars" />
-<meta property="og:description" content="The SDTM does not allow any new variables beside ones assigned to each SDTM
-domain. So, Supplemental Qualifier is introduced to supplement each SDTM
-domain to contain non standard variables. dataset_suppqual can be either
-a single SUPPQUAL dataset or separate supplementary data sets (SUPP) such
-as SUPPDM, SUPPAE, and SUPPEX. When a dataset_suppqual is a single SUPPQUAL
-dataset, specify two characterdomain value." />
+<meta property="og:description" content="derive_suppqual_vars() was renamed to derive_vars_suppqual() to create a
+more consistent API." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -85,7 +87,7 @@ dataset, specify two characterdomain value." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -110,6 +112,8 @@ dataset, specify two characterdomain value." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -120,10 +124,21 @@ dataset, specify two characterdomain value." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -140,6 +155,12 @@ dataset, specify two characterdomain value." />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -152,92 +173,19 @@ dataset, specify two characterdomain value." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Join Supplementary Qualifier Variables into the Parent SDTM Domain</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_suppqual_vars.R'><code>R/derive_suppqual_vars.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_vars_suppqual.R'><code>R/derive_vars_suppqual.R</code></a></small>
     <div class="hidden name"><code>derive_suppqual_vars.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The SDTM does not allow any new variables beside ones assigned to each SDTM
-domain. So, Supplemental Qualifier is introduced to supplement each SDTM
-domain to contain non standard variables. <code>dataset_suppqual</code> can be either
-a single SUPPQUAL dataset or separate supplementary data sets (SUPP) such
-as SUPPDM, SUPPAE, and SUPPEX. When a <code>dataset_suppqual</code> is a single SUPPQUAL
-dataset, specify two character<code>domain</code> value.</p>
+    <p><code>derive_suppqual_vars()</code> was renamed to <code><a href='derive_vars_suppqual.html'>derive_vars_suppqual()</a></code> to create a
+more consistent API.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_suppqual_vars</span>(<span class='no'>dataset</span>, <span class='no'>dataset_suppqual</span>, <span class='kw'>domain</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dataset</th>
-      <td><p>A SDTM domain data set.</p></td>
-    </tr>
-    <tr>
-      <th>dataset_suppqual</th>
-      <td><p>A Supplemental Qualifier (SUPPQUAL) data set.</p></td>
-    </tr>
-    <tr>
-      <th>domain</th>
-      <td><p>Two letter domain value. Used when supplemental data set is
-common across multiple SDTM domain.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with SUPPQUAL variables appended to parent data set.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>derive_suppqual_vars()</code> expects <code>USUBJID</code>, <code>RDOMAIN</code>, <code>IDVAR</code>, <code>IDVARVAL</code>,
-<code>QNAM</code>, <code>QLABEL</code>, and <code>QVAL</code> variables to exist in <code>dataset_suppqual</code>.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## The following example includes selected variables from AE and SUPPAE</span>
-<span class='co'>## datasets for a rash whose locations are the face, neck, and chest.</span>
-<span class='no'>ae</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>,   ~<span class='no'>DOMAIN</span>, ~<span class='no'>USUBJID</span>,   ~<span class='no'>AESEQ</span>, ~<span class='no'>AETERM</span>,  ~<span class='no'>AELOC</span>,
-  <span class='st'>"1234-005"</span>, <span class='st'>"AE"</span>,    <span class='st'>"XYZ-1001"</span>,      <span class='fl'>1</span>, <span class='st'>"RASH"</span>,  <span class='st'>"MULTIPLE"</span>,
-  <span class='st'>"1234-005"</span>, <span class='st'>"AE"</span>,    <span class='st'>"XYZ-1002"</span>,      <span class='fl'>1</span>, <span class='st'>"NAUSEA"</span>, <span class='st'>""</span>,
-)
-
-<span class='no'>suppae</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>,   ~<span class='no'>RDOMAIN</span>, ~<span class='no'>USUBJID</span>,    ~<span class='no'>IDVAR</span>,  ~<span class='no'>IDVARVAL</span>, ~<span class='no'>QNAM</span>,     ~<span class='no'>QLABEL</span>,     ~<span class='no'>QVAL</span>,
-  <span class='st'>"1234-005"</span>, <span class='st'>"AE"</span>,     <span class='st'>"XYZ-1001"</span>, <span class='st'>"AESEQ"</span>, <span class='st'>"1"</span>,        <span class='st'>"AELOC1"</span>, <span class='st'>"Location 1"</span>, <span class='st'>"FACE"</span>,
-  <span class='st'>"1234-005"</span>, <span class='st'>"AE"</span>,     <span class='st'>"XYZ-1001"</span>, <span class='st'>"AESEQ"</span>, <span class='st'>"1"</span>,        <span class='st'>"AELOC2"</span>, <span class='st'>"Location 2"</span>, <span class='st'>"NECK"</span>,
-  <span class='st'>"1234-005"</span>, <span class='st'>"AE"</span>,     <span class='st'>"XYZ-1001"</span>, <span class='st'>"AESEQ"</span>, <span class='st'>"1"</span>,        <span class='st'>"AELOC3"</span>, <span class='st'>"Location 3"</span>, <span class='st'>"CHEST"</span>,
-)
-
-<span class='fu'>derive_suppqual_vars</span>(<span class='no'>ae</span>, <span class='no'>suppae</span>)</div><div class='output co'>#&gt; # A tibble: 2 x 9
-#&gt;   STUDYID  DOMAIN USUBJID  AESEQ AETERM AELOC      AELOC1 AELOC2 AELOC3
-#&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
-#&gt; 1 1234-005 AE     XYZ-1001     1 RASH   "MULTIPLE" FACE   NECK   CHEST 
-#&gt; 2 1234-005 AE     XYZ-1002     1 NAUSEA ""         &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;  </div><div class='input'>
-<span class='co'>## The following example included subjects with multiple/other specific race.</span>
-<span class='no'>dm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>, ~<span class='no'>DOMAIN</span>,    ~<span class='no'>USUBJID</span>,       ~<span class='no'>RACE</span>,
-  <span class='st'>"ABC"</span>,    <span class='st'>"DM"</span>,    <span class='st'>"001"</span>,    <span class='st'>"OTHER"</span>,
-  <span class='st'>"ABC"</span>,    <span class='st'>"DM"</span>,    <span class='st'>"002"</span>,    <span class='st'>"MULTIPLE"</span>,
-  <span class='st'>"ABC"</span>,    <span class='st'>"DM"</span>,    <span class='st'>"003"</span>,    <span class='fl'>NA</span>,
-  <span class='st'>"ABC"</span>,    <span class='st'>"DM"</span>,    <span class='st'>"004"</span>,    <span class='st'>"ASIAN"</span>
-)
-
-<span class='no'>suppdm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-~<span class='no'>STUDYID</span>, ~<span class='no'>RDOMAIN</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>IDVAR</span>, ~<span class='no'>IDVARVAL</span>, ~<span class='no'>QNAM</span>,     ~<span class='no'>QLABEL</span>,       ~<span class='no'>QVAL</span>,
- <span class='st'>"ABC"</span>,   <span class='st'>"DM"</span>,         <span class='st'>"001"</span>,     <span class='st'>""</span>,     <span class='st'>""</span>,        <span class='st'>"RACEOTH"</span>, <span class='st'>"Race, Other"</span>, <span class='st'>"BRAZILIAN"</span>,
- <span class='st'>"ABC"</span>,   <span class='st'>"DM"</span>,   <span class='st'>"002"</span>,     <span class='st'>""</span>,     <span class='st'>""</span>,        <span class='st'>"RACE1"</span>  , <span class='st'>"Race 1"</span>,      <span class='st'>"AMERICAN"</span>,
- <span class='st'>"ABC"</span>,   <span class='st'>"DM"</span>,   <span class='st'>"002"</span>,     <span class='st'>""</span>,     <span class='st'>""</span>,        <span class='st'>"RACE2"</span>  , <span class='st'>"Race 2"</span>,      <span class='st'>"OTHER"</span>,
- <span class='st'>"ABC"</span>,   <span class='st'>"DM"</span>,   <span class='st'>"002"</span>,     <span class='st'>""</span>,     <span class='st'>""</span>,        <span class='st'>"RACEOTH"</span>, <span class='st'>"Race, Other"</span>, <span class='st'>"ABORIGINE"</span>
-)
-
-<span class='fu'>derive_suppqual_vars</span>(<span class='no'>dm</span>, <span class='no'>suppdm</span>)</div><div class='output co'>#&gt; # A tibble: 4 x 7
-#&gt;   STUDYID DOMAIN USUBJID RACE     RACEOTH   RACE1    RACE2
-#&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;
-#&gt; 1 ABC     DM     001     OTHER    BRAZILIAN &lt;NA&gt;     &lt;NA&gt; 
-#&gt; 2 ABC     DM     002     MULTIPLE ABORIGINE AMERICAN OTHER
-#&gt; 3 ABC     DM     003     &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; 
-#&gt; 4 ABC     DM     004     ASIAN    &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -249,7 +197,7 @@ common across multiple SDTM domain.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -260,6 +208,23 @@ common across multiple SDTM domain.</p></td>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

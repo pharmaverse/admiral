@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Get Duplicate Records that Lead to a Prior Error — get_duplicates_dataset" />
@@ -80,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -105,6 +111,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li class="dropdown-header">User Guides</li>
     <li>
       <a href="../articles/adsl.html">Creating ADSL</a>
     </li>
@@ -115,10 +123,21 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/contributing.html">Contributing to admiral</a>
+      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/imputation.html">Date and Time Imputation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer Guides</li>
+    <li>
+      <a href="../articles/programming_strategy.html">Programming Strategy</a>
+    </li>
+    <li>
+      <a href="../articles/git_usage.html">Guidance for git Usage</a>
     </li>
   </ul>
 </li>
@@ -134,6 +153,12 @@
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -177,20 +202,20 @@ it has been saved in a variable).</p>
 
 <span class='fu'><a href='signal_duplicate_records.html'>signal_duplicate_records</a></span>(<span class='no'>adsl</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>), <span class='kw'>cnd_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Dataset contains duplicate records with respect to `USUBJID`</span>
 #&gt; <span class='warning'>Run `get_duplicates_dataset()` to access the duplicate records</span></div><div class='input'>
-<span class='fu'>get_duplicates_dataset</span>()</div><div class='output co'>#&gt; # A tibble: 2 x 51
-#&gt;   USUBJID STUDYID DOMAIN SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC
-#&gt; * &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  
-#&gt; 1 01-701… CDISCP… DM     1015   2014-0… 2014-0… 2014-01… 2014-07… ""     
-#&gt; 2 01-701… CDISCP… DM     1015   2014-0… 2014-0… 2014-01… 2014-07… ""     
-#&gt; # … with 42 more variables: RFPENDTC &lt;chr&gt;, DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;,
-#&gt; #   SITEID &lt;chr&gt;, AGE &lt;dbl&gt;, AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;,
-#&gt; #   ARMCD &lt;chr&gt;, ARM &lt;chr&gt;, ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;,
-#&gt; #   DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;, TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;,
-#&gt; #   TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;, TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;,
-#&gt; #   EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;, DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;,
-#&gt; #   DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;,
-#&gt; #   RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;, LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;,
-#&gt; #   DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;, DTHB30FL &lt;chr&gt;</div></pre>
+<span class='fu'>get_duplicates_dataset</span>()</div><div class='output co'>#&gt; # A tibble: 2 x 50
+#&gt;   USUBJID STUDYID SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC RFPENDTC
+#&gt; * &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   
+#&gt; 1 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""      2014-07…
+#&gt; 2 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""      2014-07…
+#&gt; # … with 41 more variables: DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;, AGE &lt;dbl&gt;,
+#&gt; #   AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;, ARMCD &lt;chr&gt;, ARM &lt;chr&gt;,
+#&gt; #   ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;, DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;,
+#&gt; #   TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;, TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;,
+#&gt; #   TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;, EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;,
+#&gt; #   DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;, DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;,
+#&gt; #   DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;, RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;,
+#&gt; #   LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;, DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;,
+#&gt; #   DTHB30FL &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -202,7 +227,7 @@ it has been saved in a variable).</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
 </div>
 
 <div class="pkgdown">
@@ -213,6 +238,23 @@ it has been saved in a variable).</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
+    indexName: 'roche-gsk',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>
