@@ -373,6 +373,8 @@ The expected result is the input dataset with query variables added.
 
 ```{r, eval=TRUE}
 data("queries")
+head(queries)
+
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
@@ -386,11 +388,11 @@ adae <- tibble::tribble(
 )
   
 adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
-head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, AELLT, AELLTCD, SMQ02NAM, SMQ02SCN, SMQ03CD))
+head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, starts_with("SMQ05"), starts_with("CQ06")))
 ```
 
-Similarly to SMQ, we use the `derive_vars_query()` function is used to derive SDG Standardized 
-Drug Grouping.
+Similarly to SMQ, the `derive_vars_query()` function can be used to derive Standardized 
+Drug Groupings (SDQ).
 
 ```{r, eval=TRUE}
 sdg <- tibble::tribble(
