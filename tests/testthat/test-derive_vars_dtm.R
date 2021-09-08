@@ -14,10 +14,10 @@ input <- tibble::tribble(
 test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),  NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()),  NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00", tz=Sys.timezone()), "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00", tz=Sys.timezone()), "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00", tz=Sys.timezone()), "H",
     "2019-02", ymd_hms(NA), NA_character_,
     "2019", ymd_hms(NA), NA_character_,
     "2019---07", ymd_hms(NA), NA_character_
@@ -39,13 +39,13 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF",
 test_that("Partial date imputed to the first day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
-    "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
-    "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00", tz=Sys.timezone()), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00", tz=Sys.timezone()), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00", tz=Sys.timezone()), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-01T00:00:00", tz=Sys.timezone()), "D", "H",
+    "2019", ymd_hms("2019-01-01T00:00:00", tz=Sys.timezone()), "M", "H",
+    "2019---07", ymd_hms("2019-01-01T00:00:00", tz=Sys.timezone()), "M", "H"
   ) %>%
     mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
@@ -75,13 +75,13 @@ test_that("Partial date imputed to the first day/month", {
 test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59:59", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~AENDTM, ~AENDTF, ~AENTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59"), NA_character_, "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59"), NA_character_, "M",
-    "2019-07-18", ymd_hms("2019-07-18T23:59:59"), NA_character_, "H",
-    "2019-02", ymd_hms("2019-02-28T23:59:59"), "D", "H",
-    "2019", ymd_hms("2019-12-31T23:59:59"), "M", "H",
-    "2019---07", ymd_hms("2019-12-31T23:59:59"), "M", "H"
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59", tz=Sys.timezone()), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59", tz=Sys.timezone()), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T23:59:59", tz=Sys.timezone()), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-28T23:59:59", tz=Sys.timezone()), "D", "H",
+    "2019", ymd_hms("2019-12-31T23:59:59", tz=Sys.timezone()), "M", "H",
+    "2019---07", ymd_hms("2019-12-31T23:59:59", tz=Sys.timezone()), "M", "H"
   ) %>%
     mutate(AENDTM = as_iso_dtm(AENDTM))
 
@@ -114,13 +114,13 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
 test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59:59, no imputation flag", { # nolint
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~AENDTM,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59"),
-    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59"),
-    "2019-07-18", ymd_hms("2019-07-18T23:59:59"),
-    "2019-02", ymd_hms("2019-02-28T23:59:59"),
-    "2019", ymd_hms("2019-12-31T23:59:59"),
-    "2019---07", ymd_hms("2019-12-31T23:59:59")
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()),
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59", tz=Sys.timezone()),
+    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59", tz=Sys.timezone()),
+    "2019-07-18", ymd_hms("2019-07-18T23:59:59", tz=Sys.timezone()),
+    "2019-02", ymd_hms("2019-02-28T23:59:59", tz=Sys.timezone()),
+    "2019", ymd_hms("2019-12-31T23:59:59", tz=Sys.timezone()),
+    "2019---07", ymd_hms("2019-12-31T23:59:59", tz=Sys.timezone())
   ) %>%
     mutate(AENDTM = as_iso_dtm(AENDTM))
 
@@ -142,13 +142,13 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
 test_that("Partial date imputed to the mid day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
-    "2019", ymd_hms("2019-06-15T00:00:00"), "M", "H",
-    "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00", tz=Sys.timezone()), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00", tz=Sys.timezone()), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00", tz=Sys.timezone()), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-15T00:00:00", tz=Sys.timezone()), "D", "H",
+    "2019", ymd_hms("2019-06-15T00:00:00", tz=Sys.timezone()), "M", "H",
+    "2019---07", ymd_hms("2019-06-15T00:00:00", tz=Sys.timezone()), "M", "H"
   ) %>%
     mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
@@ -179,13 +179,13 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
-    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
-    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
-    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
-    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
-    "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
-    "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40", tz=Sys.timezone()), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00", tz=Sys.timezone()), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00", tz=Sys.timezone()), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00", tz=Sys.timezone()), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-01T00:00:00", tz=Sys.timezone()), "D", "H",
+    "2019", ymd_hms("2019-01-01T00:00:00", tz=Sys.timezone()), "M", "H",
+    "2019---07", ymd_hms("2019-01-01T00:00:00", tz=Sys.timezone()), "M", "H"
   ) %>%
     mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
     select(XXSTDTC, ASTDTF, everything())
