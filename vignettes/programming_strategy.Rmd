@@ -392,6 +392,91 @@ Make sure to align columns as well. This ensures quick code readability.
 
 If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
 
+# Deprecation
+
+As admiral is still evolving, functions or parameters may need to be removed or replaced with more 
+efficient options from one release to another. In such cases, the relevant function or parameter 
+must be marked as deprecated. 
+
+## Documentation
+
+If a function or parameter is removed, the documentation must be updated to indicate the function 
+or the parameter is now deprecated and which new function/parameter should be used instead.
+
+The documentation will be updated at:
+
++ the main title (??? or another section???) level for a function, 
+
+```
+#' Title of the function
+#'*Deprecated*, please use `new_fun()` instead.
+#'
+#' @description
+#' description of the function in plain english
+``` 
+
++ the `@param` level for a parameter.
+
+```
+@param old_param *Deprecated*, please use `new_param` instead.
+```
+
+## Handling of warning and error
+
+When a function or parameter is deprecated, the function must be updated to issue an error or a 
+warning to inform the user.
+
+### Function
+
+If the deprecated function still exist in the package besides the new function, a **warning** must be
+issued. If if it has been removed, an **error** must be generated.
+
+```
+### BEGIN DEPRECIATION
+# Warning if the deprecated function still exists
+deprecate_warn("x.y.z", "fun_xxxxx_x()", "new_fun_xxxxx_x()")
+
+# Error if the deprecated function does not exist anymore
+rlang::abort(paste(
+    err_msg <- paste(
+      "The function `fun_xxxxx_x()` is deprecated",
+      "as of admiral x.y.z.",
+      "Please use the new function `new_fun_xxxxx_x()` instead."
+    ))
+### END DEPRECIATION
+```
+
+### Parameter
+
+If a parameter is removed and is not replaced, an **error** must be generated:
+
+```
+### BEGIN DEPRECIATION
+  if (!missing(old_param)) {
+    rlang::abort(paste(
+    err_msg <- paste(
+      "The `old_param` argument of `fun_xxx()` is deprecated",
+      "as of admiral x.y.z.",
+      "Please use the `new_param` arguments instead."
+    ))
+    )
+    abort(err_msg)
+  }
+### END DEPRECIATION
+```
+
+If the parameter is renamed or replaced, a **warning** must be issued and the new parameter takes 
+the value of the old parameter until the next release.
+
+``` 
+### BEGIN DEPRECIATION
+  if (!missing(old_param)) {
+    deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+    new_param <- enquo(old_param)
+  }
+### END DEPRECIATION
+```
+
 
 # Best Practices and Hints
 
@@ -462,7 +547,7 @@ Code within function that creates a specific variable should have a starting com
 ```{r, eval=F}
 # calculate X
 # describe how the code works in meaningful plain english
- "<code>"
+"<code>"
 # end of X
 ```
 
@@ -471,8 +556,6 @@ If meaningful, comments can cover multiple variables within a piece of code
 ```{r, eval=F}
 # creates X, Y, Z
 # describe how the code works in meaningful plain english
- "<code>"
+"<code>"
 # end of X, Y, Z
-
 ```
-

@@ -132,11 +132,7 @@ adae <- adae %>%
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,
-    end_date = AENDT,
-    in_unit = "days",
-    out_unit = "days",
-    add_one = TRUE,
-    trunc_out = FALSE
+    end_date = AENDT
   )
 ```
 
@@ -209,11 +205,9 @@ adcm <- tibble::tribble(
   AENDTM = lubridate::as_datetime(AENDTM)
  )
 
-derive_var_atirel(
-  dataset = adcm,
-  flag_var = ASTTMF,
-  new_var = ATIREL
-)
+adcm %>% 
+  derive_var_atirel(flag_var = ASTTMF, new_var = ATIREL) %>% 
+  select(STUDYID, USUBJID, ATIREL, everything())
 ```
 
 ### Derive Analysis Phase and Period {#phase_period}
@@ -228,7 +222,7 @@ derive_var_atirel(
 
 ### Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_last_dose()` can be used to derive the last dose date. 
+The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
 Additionally, this function can also provide the traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
@@ -362,7 +356,8 @@ adae %>%
     new_var = AOCCIFL,
     filter = TRTEMFL == "Y", 
     mode = "last"
-  )
+  ) %>% 
+  select(STUDYID, USUBJID, AOCCIFL, ASTDTM, ASEVN, AESEQ, TRTEMFL)
 ```
 
 
@@ -378,6 +373,8 @@ The expected result is the input dataset with query variables added.
 
 ```{r, eval=TRUE}
 data("queries")
+head(queries)
+
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
@@ -391,37 +388,27 @@ adae <- tibble::tribble(
 )
   
 adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
-head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, AELLT, AELLTCD, SMQ02NAM, SMQ02SCN, SMQ03CD))
+head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, starts_with("SMQ05"), starts_with("CQ06")))
 ```
 
-Similarly to SMQ, we use the `derive_vars_query()` function is used to derive SDG Standardized 
-Drug Grouping.
+Similarly to SMQ, the `derive_vars_query()` function can be used to derive Standardized 
+Drug Groupings (SDQ).
 
 ```{r, eval=TRUE}
-data("queries")
-head(queries)
-
 sdg <- tibble::tribble(
-  ~VAR_PREFIX, ~QUERY_NAME, ~SDG_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME , ~TERM_ID, 
-  "SDG01", "Dermatolo", 11,
-  "BROAD", 1, "CMDECOD", "CMNAME", 1,
-  "SDG02", "Dermatolo", 12,
-  "BROAD", 2, "CMDECOD", "CMNAME", 2,
-  "SDG03", "Dermatolo", 13,
-  "BROAD", 1, "CMDECOD", "CMNAME", 3,
-  "SDG04", "Dermatolo", 14,
-  "BROAD", 2, "CMDECOD", "CMNAME", 4,
-)
+  ~VAR_PREFIX, ~QUERY_NAME,       ~SDG_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,         ~TERM_ID,
+  "SDG01",     "Diuretics",       11,      "BROAD",      1,                "CMDECOD",   "Diuretic 1",       NA,
+  "SDG01",     "Diuretics",       11,      "BROAD",      2,                "CMDECOD",   "Diuretic 2",       NA,
+  "SDG02",     "Costicosteroids", 12,      "BROAD",      1,                "CMDECOD",   "Costicosteroid 1", NA,
+  "SDG02",     "Costicosteroids", 12,      "BROAD",      2,                "CMDECOD",   "Costicosteroid 2", NA,
+  "SDG02",     "Costicosteroids", 12,      "BROAD",      2,                "CMDECOD",   "Costicosteroid 3", NA,
+)          
 adcm <- tibble::tribble(
-  ~USUBJID, ~ASTDTM, ~CMTERM, ~CMSEQ, ~CMDECOD, ~CMLLT,    ~CMLLTCD,
-  "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE   ABNORMAL",
-  3, "Alanine aminotransferase abnormal", NA_character_,   NA_integer_,
-  "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-  5, "Basedow's disease", NA_character_, 1L,
-  "03", "2020-06-07 23:59:59", "SOME TERM",
-  2, "Some query", "Some term", NA_integer_,
-  "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-  7, "Alveolar proteinosis", NA_character_,  NA_integer_
+  ~USUBJID, ~ASTDTM,               ~CMDECOD,
+  "01",     "2020-06-02 23:59:59", "Diuretic 1",
+  "02",     "2020-06-05 23:59:59", "Diuretic 1",
+  "03",     "2020-06-07 23:59:59", "Costicosteroid 2",
+  "05",     "2020-06-09 23:59:59", "Diuretic 2"
 )
-derive_query_vars(adcm, sdg)
+derive_vars_query(adcm, sdg)
 ```

@@ -63,7 +63,7 @@ data("adsl")
 data("ex")
 ```
 
-The `suppex` domain can be joined to the `ex` domain using the function `derive_suppqual_vars()`.
+The `suppex` domain can be joined to the `ex` domain using the function `derive_vars_suppqual()`.
 
 This function will transpose the supplemental SDTM domain (e.g. `suppex`) and
 join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`, 
@@ -72,7 +72,7 @@ join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`,
 Example call:
 
 ```{r eval=FALSE}
-ex <- derive_suppqual_vars(ex, suppex)
+ex <- derive_vars_suppqual(ex, suppex)
 ```
 
 Please note, the CDISC pilot did not include a `suppex` dataset and therefore this
