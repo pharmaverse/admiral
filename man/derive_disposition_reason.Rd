@@ -20,7 +20,7 @@ derive_disposition_reason(
 
 \item{dataset_ds}{Dataset containing the disposition information (e.g.: \code{ds}).
 
-It must contains
+It must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{reason_var} (and \code{reason_var_spe}, if required)
@@ -99,7 +99,7 @@ Derive a disposition reason from the the relevant records in the disposition dom
 This functions returns the main reason for discontinuation (e.g. \code{DCSREAS} or \code{DCTREAS}).
 The reason for discontinuation is derived based on \code{reason_var} (e.g. \code{DSDECOD}) and
 \code{format_new_vars}.
-If \code{new_var_spe} is not NULL, then the function will also returns the details associated
+If \code{new_var_spe} is not NULL, then the function will also return the details associated
 with the reason for discontinuation (e.g. \code{DCSREASP}).
 The details associated with the reason for discontinuation are derived based on
 \code{reason_var_spe} (e.g. \code{DSTERM}), \code{reason_var} and \code{format_new_vars}.
@@ -110,13 +110,15 @@ data("dm")
 data("ds")
 
 # Derive DCSREAS using the default format
-derive_disposition_reason(
-  dataset = dm,
-  dataset_ds = ds,
-  new_var = DCSREAS,
-  reason_var = DSDECOD,
-  filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+dm \%>\%
+  derive_disposition_reason(
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  ) \%>\%
+  select(STUDYID, USUBJID, DCSREAS)
+
 # Derive DCSREAS and DCSREASP using a study-specific format
 format_dcsreas <- function(x, y = NULL) {
   out <- if (is.null(y)) x else y
@@ -125,16 +127,17 @@ format_dcsreas <- function(x, y = NULL) {
     TRUE ~ NA_character_
   )
 }
-derive_disposition_reason(
-  dataset = dm,
-  dataset_ds = ds,
-  new_var = DCSREAS,
-  reason_var = DSDECOD,
-  new_var_spe = DCSREASP,
-  reason_var_spe = DSTERM,
-  format_new_vars = format_dcsreas,
-  filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+dm \%>\%
+  derive_disposition_reason(
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    new_var_spe = DCSREASP,
+    reason_var_spe = DSTERM,
+    format_new_vars = format_dcsreas,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  ) \%>\%
+  select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 }
 \seealso{
 \code{\link[=format_reason_default]{format_reason_default()}}

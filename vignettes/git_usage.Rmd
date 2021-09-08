@@ -1,0 +1,93 @@
+---
+title: "Guidance for git Usage"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 6
+vignette: >
+  %\VignetteIndexEntry{Guidance for git Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+admiral GitHub: https://github.com/Roche-GSK/admiral.git
+
+# Branches
+
+-	The `master` branch contains the latest **released** version and should not be used for development.  
+-	The `devel` branch contains the latest development version of the package.  
+-	‘Feature’ branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  
+
+# Working with Feature Branches
+
+## Implementing an Issue
+
+Each feature branch must be related to an issue.
+
+**Name:**  
+The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 "Program function to derive `LSTALVDT`", the Branch name would be: `94_lstalvdt`.
+
+### Create a New Feature Branch (from `devel`)
+
+-	Checkout the devel branch: `git checkout devel`  
+-	Pull the latest changes from GitHub: `git pull`  
+-	Create a new branch off the’ devel branch and switch to it: `git checkout -b <new_branch_name>`
+
+**Using code from unmerged branches**  
+-	Checkout the unmerged branch you want to use: `git checkout <unmerged_branch>`  
+-	Pull the latest committed changes from the unmerged branch: `git pull`  
+-	Check out your feature branch: `git checkout <my_branch>`  
+-	Merge the unmerged branch to <my_branch>: `git merge <unmerged_branch>`
+
+**Commit**  
+When committing, prefix the message with the issue number and add a meaningful message  
+`git commit –m '#94 last alive date implementation'`
+
+**Pull request**  
+Once all changes are committed, push the new branch to GitHub:  
+`git push -u origin <new_branch_name>`  
+  
+In GitHub, under “Pull request”, the user has to ‘Compare and pull request’. The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge. All committed changes are then available for review.
+
+### Reviewing/Closing an Issue
+
+At least one reviewer must approve the PR.  
+The reviewer must ensure that the function follows the programming strategy recommendations.  
+Any comment/question/discussion must be addressed and documented in GitHub before the PR is merged and the issue closed.
+
+Once the review is completed, and the PR is merged, the branch must be removed: click “delete branch” in the PR.
+
+### Solving Merge Conflicts
+
+Merge conflict is a situation where git cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):
+
+```
+git checkout devel
+git pull
+git checkout <feature_branch>  
+git merge devel
+```
+  
+This provides a list of all files with conflicts In the file with conflicts the conflicting sections are marked with `<<<<<<<`, `=======`, and `>>>>>>>`. The code between these markers must be updated and the markers be removed. Source files need to be updated manually. Generated files like NAMESPACE or the generated documentation files should not be updated manually but recreated after the source files were updated.  
+  
+To make the changes available call:
+
+```
+git add <file with conflict> 
+git commit -m "<insert_message>"
+git push
+```
+
+## Useful git Commands
+
+-	merging: `git merge <my_branch>` - merge my_branch into current branch  
+-	stashing: useful when one wants to go back to clean directory  
+-	`git stash` - stash (store) current changes and restore a clean directory  
+-	`git stash pop` - put back (restore) stashed changes  

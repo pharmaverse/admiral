@@ -19,24 +19,24 @@ ae <- tibble::tribble(
 test_that("LSTALVDT is derived", {
   ae_start <- lstalvdt_source(
     dataset = ae,
-    date_var = AESTDTC,
+    date = AESTDTC,
     date_imputation = "first"
   )
 
   ae_end <- lstalvdt_source(
     dataset = ae,
-    date_var = AEENDTC,
+    date = AEENDTC,
     date_imputation = "first"
   )
 
   adsl_trtdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = TRTEDTM
+    date = TRTEDTM
   )
 
   adsl_dthdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = DTHDTC,
+    date = DTHDTC,
     filter = stringr::str_length(DTHDTC) >= 10
   )
 
@@ -57,7 +57,7 @@ test_that("LSTALVDT is derived", {
 test_that("LSTALVDT and traceability variables are derived", {
   ae_start <- lstalvdt_source(
     dataset = ae,
-    date_var = AESTDTC,
+    date = AESTDTC,
     date_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
@@ -68,7 +68,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   ae_end <- lstalvdt_source(
     dataset = ae,
-    date_var = AEENDTC,
+    date = AEENDTC,
     date_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
@@ -79,7 +79,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   adsl_trtdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = TRTEDTM,
+    date = TRTEDTM,
     traceability_vars = vars(
       LALVDOM = "ADSL",
       LALVSEQ = NA_integer_,
@@ -89,7 +89,7 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   adsl_dthdate <- lstalvdt_source(
     dataset = adsl,
-    date_var = DTHDTC,
+    date = DTHDTC,
     filter = stringr::str_length(DTHDTC) >= 10,
     traceability_vars = vars(
       LALVDOM = "ADSL",
@@ -113,4 +113,56 @@ test_that("LSTALVDT and traceability variables are derived", {
     compare = actual_output,
     keys = c("USUBJID")
   )
+})
+
+test_that("LSTALVDT is derived for Date class as well", {
+
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTEDTM,
+    "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"),
+    "STUDY01",  "2", as.POSIXct(ymd("2020-02-03")),
+    "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00")
+  ) %>%
+    mutate(TRTEDTM = as.Date(TRTEDTM))
+
+  adsl_trtdate <- lstalvdt_source(
+    dataset = adsl,
+    date = TRTEDTM
+  )
+
+  expected_output <- adsl %>%
+    mutate(LSTALVDT = c(ymd("2020-01-01"), ymd("2020-02-03"), ymd("2020-04-12")))
+
+  actual_output <- derive_var_lstalvdt(
+    adsl,
+    adsl_trtdate
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID")
+  )
+})
+
+test_that("validate_lstalvdt_source checks its inputs", {
+
+  adsl <- list(STUDYID = "STUDY01", USUBJID = 1, TRTEDTM = ymd("2020-01-01"))
+
+  expect_error(
+    lstalvdt_source(
+      dataset = adsl,
+      date = TRTEDTM
+    ),
+    regexp = "`dataset` must be a data frame"
+  )
+
+  expect_error(
+    lstalvdt_source(
+      dataset = as.data.frame(adsl),
+      date = "TRTEDTM"
+    ),
+    regexp = "`date` must be a symbol"
+  )
+
 })

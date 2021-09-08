@@ -7,10 +7,12 @@
 derive_summary_records(
   dataset,
   by_vars,
-  fns,
-  filter_rows = NULL,
+  filter = NULL,
+  analysis_var,
+  summary_fun,
   set_values_to = NULL,
-  drop_values_from = NULL
+  fns = deprecated(),
+  filter_rows = deprecated()
 )
 }
 \arguments{
@@ -20,27 +22,7 @@ derive_summary_records(
 records. Providing the names of variables in \code{\link[=vars]{vars()}} will create a
 groupwise summary and generate summary records for the specified groups.}
 
-\item{fns}{List of formulas specifying variable to use for aggregations.
-This can include base functions like \code{mean()}, \code{min()}, \code{max()}, \code{median()},
-\code{sd()}, or \code{sum()} or any other user-defined aggregation function.
-For example,
-\itemize{
-\item When a summary function is same for one or more analysis variable, use
-\verb{fns = list(vars(AVAL, CHG) ~ mean}).
-\item If a different summary function is required for each analysis variable,
-use \code{fns = list(AVAL ~ mean, CHG ~ sum(., na.rm = TRUE))}.
-}
-
-In general,
-\itemize{
-\item LHS refer to the one or more variable to use for summarizing.
-\item RHS refer to a \strong{single} summary function.
-}
-
-In the formula representation e.g., \code{CHG ~ sum(., na.rm = TRUE)}, a \code{.}
-serves as the data to be summarized which refers to the variable \code{CHG}.}
-
-\item{filter_rows}{Filter condition as logical expression to apply during
+\item{filter}{Filter condition as logical expression to apply during
 summary calculation. By default, filtering expressions are computed within
 \code{by_vars} as this will help when an aggregating, lagging, or ranking
 function is involved.
@@ -53,22 +35,28 @@ values greater than mean of AVAL with in \code{by_vars}.
 than 2.
 }}
 
+\item{analysis_var}{Analysis variable.}
+
+\item{summary_fun}{Function that takes as an input the \code{analysis_var} and
+performs the calculation.
+This can include built-in functions as well as user defined functions,
+for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
+
 \item{set_values_to}{A list of variable name-value pairs. Use this argument
-if you need to change the values of any newly derived records. Always new
-values in \code{set_values_to} should be equal to the length of analysis
-variable used in the \code{fns} argument. For example,
+if you need to change the values of any newly derived records.
+
+Set a list of variables to some specified value for the new observation(s)
 \itemize{
-\item On using single analysis variable in \code{fns = list(AVAL ~ mean)} and
-\code{set_values_to = vars(AVISITN = 9999, AVISIT = "Endpoint")} would change
-the value of \code{AVISITN} to \code{9999} and \code{AVISIT} to \code{Endpoint} instead of
-retaining.
-\item Multiple analysis variables in \code{fns = list(vars(AVAL, CHG) ~ mean)} and
-\code{set_values_to = vars(AVISITN = c(9998, 9999))} would change \code{AVISITN} to
-\code{9998} for \code{AVAL} and \code{AVISITN} to \code{9999} for \code{CHG}.
+\item LHS refer to a variable.
+\item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+value or NA.
+(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
+More general expression are not allowed.
 }}
 
-\item{drop_values_from}{Providing the names of variables in \code{\link[=vars]{vars()}}
-will drop values and set as missing.}
+\item{fns}{\emph{Deprecated}, please use \code{analysis_var} and \code{summary_fun} instead.}
+
+\item{filter_rows}{\emph{Deprecated}, please use \code{filter} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.
@@ -85,93 +73,96 @@ retain those common values in the newly derived records. Otherwise new value
 will be set to \code{NA}.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
 adeg <- tibble::tribble(
-  ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
-  "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
-  "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
-  "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
-  "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45",  384, "Placebo",
-  "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
-  "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
-  "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45",  385, "Placebo",
-  "XYZ-1001",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
-  "XYZ-1001",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
-  "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
-  "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
-  "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
-  "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50",  401, "Active 20mg",
-  "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
-  "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
-  "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50",  412, "Active 20mg",
-  "XYZ-1002",    8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
-  "XYZ-1002",    9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
+  ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
+  "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
+  "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
+  "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385, "Placebo",
+  "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
+  "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
+  "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412, "Active 20mg",
+  "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
 )
 
 # Summarize the average of the triplicate ECG interval values (AVAL)
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  fns = list(AVAL ~ mean(., na.rm = TRUE)),
+  analysis_var = AVAL,
+  summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 
 advs <- tibble::tribble(
-  ~USUBJID,     ~VSSEQ, ~PARAM,  ~AVAL, ~VSSTRESU, ~VISIT,      ~VSDTC,
-  "XYZ-001-001",  1164, "Weight",   99, "kg",      "Screening", "2018-03-19",
-  "XYZ-001-001",  1165, "Weight",  101, "kg",      "Run-In"   , "2018-03-26",
-  "XYZ-001-001",  1166, "Weight",  100, "kg",      "Baseline" , "2018-04-16",
-  "XYZ-001-001",  1167, "Weight",   94, "kg",      "Week 24"  , "2018-09-30",
-  "XYZ-001-001",  1168, "Weight",   92, "kg",      "Week 48"  , "2019-03-17",
-  "XYZ-001-001",  1169, "Weight",   95, "kg",      "Week 52"  , "2019-04-14",
+  ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
+  "XYZ-001-001", 1164, "Weight", 99,  "kg", "Screening", "2018-03-19",
+  "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In",    "2018-03-26",
+  "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline",  "2018-04-16",
+  "XYZ-001-001", 1167, "Weight", 94,  "kg", "Week 24",   "2018-09-30",
+  "XYZ-001-001", 1168, "Weight", 92,  "kg", "Week 48",   "2019-03-17",
+  "XYZ-001-001", 1169, "Weight", 95,  "kg", "Week 52",   "2019-04-14",
 )
 
 # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 # and `DTYPE = AVERAGE` refers to `mean()` records.
-# `set_values_to` must be of the same length as `fns`
 derive_summary_records(
   advs,
   by_vars = vars(USUBJID, PARAM),
-  fns = list(AVAL ~ max, AVAL ~ mean),
-  set_values_to = vars(DTYPE = c("MAXIMUM", "AVERAGE"))
-)
+  analysis_var = AVAL,
+  summary_fun = max,
+  set_values_to = vars(DTYPE = "MAXIMUM")
+) \%>\%
+  derive_summary_records(
+    by_vars = vars(USUBJID, PARAM),
+    analysis_var = AVAL,
+    summary_fun = mean,
+    set_values_to = vars(DTYPE = "AVERAGE")
+  )
 
-# Drop retained value of VSSTRESU in the derived record
-derive_summary_records(
-  advs,
-  by_vars = vars(USUBJID, PARAM),
-  fns = list(AVAL ~ mean),
-  set_values_to = vars(DTYPE = "MAXIMUM"),
-  drop_values_from = vars(VSSTRESU)
-)
-
-# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline' ---
+# Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
 adeg <- tibble::tribble(
-  ~USUBJID, ~EGSEQ, ~PARAM,             ~AVISIT,    ~EGDTC,            ~AVAL, ~TRTA,
-  "XYZ-1001",    1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50",  385, "",
-  "XYZ-1001",    2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52",  399, "",
-  "XYZ-1001",    3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56",  396, "",
-  "XYZ-1001",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48",  393, "Placebo",
-  "XYZ-1001",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51",  388, "Placebo",
-  "XYZ-1001",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48",  394, "Placebo",
-  "XYZ-1001",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51",  402, "Placebo",
-  "XYZ-1002",    1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  399, "",
-  "XYZ-1002",    2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58",  410, "",
-  "XYZ-1002",    3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01",  392, "",
-  "XYZ-1002",    4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53",  407, "Active 20mg",
-  "XYZ-1002",    5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56",  400, "Active 20mg",
-  "XYZ-1002",    6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53",  414, "Active 20mg",
-  "XYZ-1002",    7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56",  402, "Active 20mg",
+  ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
+  "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
+  "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
+  "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
+  "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
+  "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
 )
 
-# Summarize the average of AVAL for AVISIT records greater than 2
+# Compute the average of AVAL only if there are more than 2 records within the
+# by group
 derive_summary_records(
   adeg,
   by_vars = vars(USUBJID, PARAM, AVISIT),
-  fns = list(AVAL ~ mean(., na.rm = TRUE)),
-  filter_rows = dplyr::n() > 2,
+  filter = dplyr::n() > 2,
+  analysis_var = AVAL,
+  summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
 \author{
-Vignesh Thanikachalam
+Vignesh Thanikachalam, Ondrej Slama
 }
+\keyword{bds}
+\keyword{derivation}

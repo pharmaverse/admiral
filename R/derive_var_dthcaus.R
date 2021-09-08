@@ -12,7 +12,7 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords adsl
+#' @keywords derivation adsl
 #'
 #' @author
 #' Shimeng Huang
@@ -45,7 +45,7 @@
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
-#'   date_var = AEDTHDTC,
+#'   date = AEDTHDTC,
 #'   mode = "first",
 #'   dthcaus = AEDECOD
 #' )
@@ -64,33 +64,33 @@
 #' src_ae <- dthcaus_source(
 #'   dataset = ae,
 #'   filter = AEOUT == "FATAL",
-#'   date_var = AEDTHDTC,
+#'   date = AEDTHDTC,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
-#'   traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
 #' )
 #'
 #' src_ds <- dthcaus_source(
 #'   dataset = ds,
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date_var = DSSTDTC,
+#'   date = DSSTDTC,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
-#'   traceabilty_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
 derive_var_dthcaus <- function(dataset, ...) {
   assert_data_frame(dataset)
   sources <- list(...)
-  walk(sources, validate_dthcaus_source)
+  assert_list_of(sources, "dthcaus_source")
 
   warn_if_vars_exist(dataset, "DTHCAUS")
 
   # process each source
   add_data <- vector("list", length(sources))
   for (ii in seq_along(sources)) {
-    if (!is.null(sources[[ii]]$filter)) {
+    if (!quo_is_null(sources[[ii]]$filter)) {
       add_data[[ii]] <- sources[[ii]]$dataset %>%
         filter(!!sources[[ii]]$filter)
     } else {
@@ -112,25 +112,25 @@ derive_var_dthcaus <- function(dataset, ...) {
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
-    # add traceabilty param if required
+    # add traceability param if required
     # inconsitent traceability lists issue a warning
     if (ii > 1) {
       warn_if_inconsistent_list(
-        base = sources[[ii - 1]]$traceabilty,
-        compare = sources[[ii]]$traceabilty,
+        base = sources[[ii - 1]]$traceability,
+        compare = sources[[ii]]$traceability,
         list_name = "dthcaus_source()",
         i = ii
       )
     }
-    if (!is.null(sources[[ii]]$traceabilty)) {
-      warn_if_vars_exist(dataset, names(sources[[ii]]$traceabilty))
+    if (!is.null(sources[[ii]]$traceability)) {
+      warn_if_vars_exist(dataset, names(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
           USUBJID,
           temp_source_nr,
           temp_date,
           DTHCAUS,
-          !!!sources[[ii]]$traceabilty
+          !!!sources[[ii]]$traceability
         )
     }
     else {
@@ -154,14 +154,24 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'
 #' @param dataset A data.frame containing a source dataset.
 #' @param filter An expression used for filtering `dataset`.
-#' @param date_var A character vector to be used for sorting `dataset`.
+#' @param date A character vector to be used for sorting `dataset`.
 #' @param mode One of `"first"` or `"last"`.
+#' Either the `"first"` or `"last"` observation is preserved from the `dataset`
+#' which is ordered by `date`.
 #' @param dthcaus A variable name or a string literal --- if a variable name, e.g., `AEDECOD`,
 #'   it is the variable in the source dataset to be used to assign values to
 #'   `DTHCAUS`; if a string literal, e.g. `"Adverse Event"`, it is the fixed value
 #'   to be assigned to `DTHCAUS`.
-#' @param traceabilty_vars A named list returned by [`vars()`] listing the traceability
-#'  variables, e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
+#' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
+#' e.g. `vars(DTHDOM = "DS", DTHSEQ = DSSEQ)`.
+#' The left-hand side (names of the list elements) gives the names of the traceability variables
+#' in the returned dataset.
+#' The right-hand side (values of the list elements) gives the values of the traceability variables
+#' in the returned dataset.
+#' These can be either strings or symbols referring to existing variables.
+#'
+#' @param date_var Deprecated, please use `date` instead.
+#' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
 #'
 #' @author Shimeng Huang
 #'
@@ -174,39 +184,34 @@ derive_var_dthcaus <- function(dataset, ...) {
 #' @return An object of class "dthcaus_source".
 dthcaus_source <- function(dataset,
                            filter,
-                           date_var,
+                           date,
                            mode = "first",
                            dthcaus,
-                           traceabilty_vars = NULL) {
+                           traceability_vars = NULL,
+                           date_var = deprecated(),
+                           traceabilty_vars = deprecated()) {
+
+  ### BEGIN DEPRECIATION
+  if (!missing(date_var)) {
+    deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
+    date <- enquo(date_var)
+  }
+  if (!missing(traceabilty_vars)) {
+    deprecate_warn("0.3.0",
+                   "dthcaus_source(traceabilty_vars = )",
+                   "dthcaus_source(traceability_vars = )")
+    traceability_vars <- traceabilty_vars
+  }
+  ### END DEPRECIATION
+
   out <- list(
-    dataset = dataset,
-    filter = enquo(filter),
-    date = enquo(date_var),
-    mode = mode,
-    dthcaus = enquo(dthcaus),
-    traceabilty = traceabilty_vars
+    dataset = assert_data_frame(dataset),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
+    date = assert_symbol(enquo(date)),
+    mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
+    dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
+    traceability = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("dthcaus_source", "list")
-  validate_dthcaus_source(out)
-}
-
-#' Validate an object is indeed a `dthcaus_source` object
-#'
-#' @param x An object to be validated.
-#'
-#' @author Shimeng Huang
-#'
-#' @noRd
-#'
-#' @return The original object.
-validate_dthcaus_source <- function(x) {
-  assert_that(inherits(x, "dthcaus_source"))
-  values <- unclass(x)
-  assert_that(is.data.frame(values$dataset))
-  assert_that(is_expr(values$filter))
-  assert_that(is_expr(values$date))
-  assert_that(values$mode %in% c("first", "last"))
-  assert_that(quo_is_symbol(values$dthcaus) | is.character(quo_get_expr(values$dthcaus)))
-  assert_that(is.list(values$traceabilty) | is.null(values$traceability))
-  x
+  out
 }

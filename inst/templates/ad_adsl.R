@@ -3,8 +3,6 @@
 # Label: Subject Level Analysis Dataset
 #
 # Input: dm, ex, ds
-#
-
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -12,11 +10,12 @@ library(lubridate)
 # ---- Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
-#  as needed and assign to the variables below.
+# as needed and assign to the variables below.
+# For illustration purposes read in admiral test data
 
-dm <- NULL
-ex <- NULL
-ds <- NULL
+data("dm")
+data("ds")
+data("ex")
 
 # ---- User defined functions ----
 
@@ -70,9 +69,7 @@ format_eoxxstt <- function(x) {
 
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
-  mutate(
-    TRT01P = ARMCD, TRT01A = ARMCD
-  ) %>%
+  mutate(TRT01P = ARMCD, TRT01A = ARMCD) %>%
 
   # derive treatment start date (TRTSDTM, TRTSDT)
   derive_var_trtsdtm(dataset_ex = ex) %>%
@@ -126,14 +123,14 @@ adsl <- dm %>%
   ) %>%
 
   # Relative Day of Death
-  derive_duration(
+  derive_vars_duration(
     new_var = DTHADY,
     start_date = TRTSDT,
     end_date = DTHDT
   ) %>%
 
   # Elapsed Days from Last Dose to Death
-  derive_duration(
+  derive_vars_duration(
     new_var = LDDTHELD,
     start_date = TRTEDT,
     end_date = DTHDT,
@@ -150,9 +147,10 @@ adsl <- dm %>%
     SAFFL = if_else(!is.na(TRTSDTM), "Y", "N"),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
     DTHA30FL = if_else(LDDTHGR1 == "> 30", "Y", NA_character_),
-    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_)
+    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
+    DOMAIN = NULL
   )
 
 # ---- Save output ----
 
-save(adsl, file = "/PATH/TO/SAVE/ADSL", compress = TRUE)
+saveRDS(adsl, file = "./ADSL.rds", compress = TRUE)

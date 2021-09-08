@@ -1,6 +1,99 @@
+# admiral 0.3.0
+
+## New Features
+
+### General
+
+- `convert_blanks_to_na()` can be used to convert SAS blanks, i.e. `""`, into proper R `NA` values (#482).
+
+- `call_derivation()` enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (#403)
+
+- `derive_vars_dtm_to_dt()` enables the easy conversion of datetime to date variables (#376).
+
+
+- `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
+
+- `derive_worst_flag()` enables the flagging of worst records (#300)
+
+### BDS
+
+- `derive_derived_param()` can be used to derive a new parameter from existing parameters in a BDS dataset (#325)
+
+- `derive_param_bmi()`, `derive_param_bsa()` and `derive_param_map()` enables the derivation of the body mass index, body surface area and mean arterial pressure parameters respectively (#368).
+
+- `derive_param_qtc()` enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (#325).
+
+- `derive_param_rr()` enables the derivation of the RR interval (#325)
+
+- `derive_params_exposure()` enables the derivation of summary exposure parameters (#400)
+
+- `derive_param_doseint()` enables the derivation of dose intensity (#179)
+
+### OCCDS
+
+- `derive_var_atirel()` enables the derivation of the "Analysis Time Relative to Reference" (#397).
+
+- `derive_vars_atc()` can be used to add ATC variables from FACM to ADCM (#396).
+
+## Updates of Existing Functions
+
+- `derive_var_anrind()` now checks whether the `AVAL` variable is present in the input dataset (#486).
+
+- All derivation functions check whether the input dataset is grouped and throw an error if it is (#408).
+
+- `use_ad_template()` has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (#433).
+
+- A performance issue in `derive_vars_dt()` has been resolved (#384).
+
+## Breaking Changes
+
+- The `drop_values_from` parameter has been removed from `derive_summary_records()` (#425).
+
+- The format of the `date_imputation` parameter of `derive_vars_dt()` and `derive_vars_dtm()` has been changed from "dd-mm" to "mm-dd". Thus, "01-12" now refers to January 12th rather than December 1st (#492).
+
+- Several functions have been renamed. The old names are now deprecated. They can still be used but a warning will be issued (#507). 
+    - `derive_aage()` -> `derive_vars_aage()`
+    - `derive_duration()` -> `derive_vars_duration()`
+    - `derive_query_vars()` -> `derive_vars_query()`
+    - `derive_suppqual_vars()` -> `derive_vars_suppqual()`
+    
+- The `date_var` parameter of `lstalvdt_source()` has been renamed to `date`
+
+- The `filter_rows` parameter of `derive_summary_records()` has been renamed to `filter`. The `fns` parameter has been deprecated in favor of `analysis_var` and `summary_fun` (#491).
+
+- The `date_var` and `traceabilty_vars` parameters of `dthcaus_source()` have been renamed to `date` and `traceability_vars`, respectively (#493).
+
+- The `flag_filter` parameter of `derive_extreme_flag()` has been renamed to `filter` (#487).
+
+## Bug Fixes
+
+- `derive_agegr_fda()` used to return `NA` for ages less than or equal 18. It now returns `<=18` (#441).
+
+## Documentation
+
+- New vignette on "Date and Time Imputation" has been created (#198)
+
+- A "Guidance for git Usage" has been created (#266)
+
+- "OCCDS" has been added as a new section on the reference page on the package website (#485)
+
+- The Programming Strategy has been updated (#495)
+
+- A search feature has been added to the package website (#438).
+
+- New template scripts for ADEX (#181), ADCM (#268) and ADEG (#258) have been created
+
+- New vignette for programming ADEX has been created (#372)
+
+- A section on how to create query variables (e.g. SMQs in ADAE) has been added to the Occurrence datasets vignette (#370)
+
+- The BDS vignette has been updated to incorporate examples of ADVS and ADEG specific functions (#371)
+
+
 # admiral 0.2.1
 
 - Fixed a critical bug in `use_ad_template()` that prevented the function from being usable at all (#326)
+
 
 # admiral 0.2.0
 

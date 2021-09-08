@@ -6,7 +6,7 @@
 #'
 #' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `dtc`
 #' - The variables used in `filter_ds`.
@@ -47,15 +47,17 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")
-#' derive_disposition_dt(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = FRVDT,
-#'   dtc = DSSTDTC,
-#'   filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
-#' )
+#' dm %>%
+#'   derive_disposition_dt(
+#'     dataset_ds = ds,
+#'     new_var = FRVDT,
+#'     dtc = DSSTDTC,
+#'     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, FRVDT)
 derive_disposition_dt <- function(dataset,
                                   dataset_ds,
                                   new_var,

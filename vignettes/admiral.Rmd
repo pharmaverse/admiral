@@ -1,7 +1,5 @@
 ---
 title: "Get Started"
-author: "Stefan Bundfuss"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Get Started}
@@ -72,7 +70,7 @@ variables, an error is issued.
 It is expected all variable names are uppercase in the input dataset and new
 variables will be returned in uppercase. It is expected all `SUPPxx.QNAM` 
 values are uppercase to conform with this convention when using the 
-`derive_suppqual_vars` to adhere to the uppercase requirement.
+`derive_vars_suppqual` to adhere to the uppercase requirement.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
@@ -138,8 +136,6 @@ list_all_templates()
 
 # See also
 
-- See
-[doc/inst/example_scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/example_scripts)
-for example scripts creating ADaM datasets.
+- [Template scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/templates)
 
 - [Contributing to admiral](contributing.html)

@@ -18,13 +18,13 @@
 #' An assumption that start and end dates of treatment match is checked.
 #' By default (`FALSE`), the date as well as the time component is checked.
 #' If set to `TRUE`, then only the date component of those variables is checked.
-#' @param traceability_vars A named list returned by `vars` listing the traceability variables,
+#' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
 #' e.g. `vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)`.
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
 #' in the returned dataset.
 #' The right-hand side (values of the list elements) gives the values of the traceability variables
 #' in the returned dataset.
-#' Those can be either strings or symbols referring to existing variables.
+#' These can be either strings or symbols referring to existing variables.
 #'
 #' @details All date (date-time) variables can be characters in standard ISO format or
 #' of date / date-time class.
@@ -50,39 +50,48 @@
 #'
 #' @author Ondrej Slama
 #'
+#' @keywords adae derivation
+#'
 #' @export
 #'
 #' @examples
-#' data(ae); data(ex_single)
-#' derive_last_dose(
-#'   head(ae, 100),
-#'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
-#'   dose_start = EXSTDTC,
-#'   dose_end = EXENDTC,
-#'   analysis_date = AESTDTC,
-#'   dataset_seq_var = AESEQ,
-#'   new_var = LDOSEDTM,
-#'   output_datetime = TRUE,
-#'   check_dates_only = FALSE
-#' )
+#' library(dplyr, warn.conflicts = FALSE)
+#' data(ae)
+#' data(ex_single)
+#'
+#' ae %>%
+#'   head(100) %>%
+#'   derive_last_dose(
+#'     head(ex_single, 100),
+#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'       nchar(EXENDTC) >= 10,
+#'     dose_start = EXSTDTC,
+#'     dose_end = EXENDTC,
+#'     analysis_date = AESTDTC,
+#'     dataset_seq_var = AESEQ,
+#'     new_var = LDOSEDTM,
+#'     output_datetime = TRUE,
+#'     check_dates_only = FALSE
+#'   ) %>%
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 #'
 #' # or with traceability variables
-#' derive_last_dose(
-#'   head(ae, 100),
-#'   head(ex_single, 100),
-#'   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & stringr::str_detect(EXTRT, "PLACEBO"))) &
-#'     nchar(as.character(EXENDTC)) >= 10,
-#'   dose_start = EXSTDTC,
-#'   dose_end = EXENDTC,
-#'   analysis_date = AESTDTC,
-#'   dataset_seq_var = AESEQ,
-#'   new_var = LDOSEDTM,
-#'   output_datetime = TRUE,
-#'   check_dates_only = FALSE,
-#'   traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
-#' )
+#' ae %>%
+#'   head(100) %>%
+#'   derive_last_dose(
+#'     head(ex_single, 100),
+#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'       nchar(EXENDTC) >= 10,
+#'     dose_start = EXSTDTC,
+#'     dose_end = EXENDTC,
+#'     analysis_date = AESTDTC,
+#'     dataset_seq_var = AESEQ,
+#'     new_var = LDOSEDTM,
+#'     output_datetime = TRUE,
+#'     check_dates_only = FALSE,
+#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+#'   ) %>%
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 #'
 derive_last_dose <- function(dataset,
                              dataset_ex,
@@ -109,11 +118,6 @@ derive_last_dose <- function(dataset,
   stopifnot(is_quosures(traceability_vars) | is.null(traceability_vars))
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
-
-  # apply filtering condition
-  if (!quo_is_null(filter_ex)) {
-    dataset_ex <- filter(dataset_ex, !!filter_ex)
-  }
 
   # by_vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -142,7 +146,9 @@ derive_last_dose <- function(dataset,
   }
 
   # select only a subset of columns
-  dataset_ex <- select(dataset_ex, !!!by_vars, !!dose_end, trace_vars_str)
+  dataset_ex <- dataset_ex %>%
+    filter_if(filter_ex) %>%
+    select(!!!by_vars, !!dose_end, trace_vars_str)
 
   # calculate the last dose date
   res <- dataset %>%
@@ -150,30 +156,39 @@ derive_last_dose <- function(dataset,
     inner_join(dataset_ex, by = by_vars_str) %>%
     mutate_at(vars(!!dose_end, !!analysis_date),
               ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
-    group_by(!!!by_vars, !!dataset_seq_var) %>%
     mutate(
-      tmp_dose_end_date = impute_dtc(dtc = !!dose_end,
-                                     date_imputation = NULL,
-                                     time_imputation = "00:00:00") %>%
-        convert_dtc_to_dtm(),
-      tmp_analysis_date = impute_dtc(dtc = !!analysis_date,
-                                     date_imputation = NULL,
-                                     time_imputation = "23:59:59") %>%
-        convert_dtc_to_dtm())
+      tmp_dose_end_date = convert_dtc_to_dtm(
+        dtc = !!dose_end,
+        date_imputation = NULL,
+        time_imputation = "00:00:00"
+      ),
+      tmp_analysis_date = convert_dtc_to_dtm(
+        dtc = !!analysis_date,
+        date_imputation = NULL,
+        time_imputation = "23:59:59"
+      )
+    ) %>%
+    group_by(!!!by_vars, !!dataset_seq_var)
 
   # if no traceability variables are required, simply calculate the last dose date
   if (is.null(traceability_vars)) {
     res <- res %>%
-      summarise(ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
-                                              analysis_date = .data$tmp_analysis_date),
-                !!new_var := .data$tmp_dose_end_date[.data$ldose_idx]) %>%
+      summarise(
+        ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
+                                      analysis_date = .data$tmp_analysis_date),
+        !!new_var := as.POSIXct(as.character(.data$tmp_dose_end_date[.data$ldose_idx]),
+                                tz = lubridate::tz(.data$tmp_dose_end_date))
+      ) %>%
       ungroup()
   } else {
     # calculate the last dose date and get the appropriate traceability variables
     res <- res %>%
-      mutate(ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
-                                           analysis_date = .data$tmp_analysis_date),
-             !!new_var := .data$tmp_dose_end_date[.data$ldose_idx]) %>%
+      mutate(
+        ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
+                                      analysis_date = .data$tmp_analysis_date),
+        !!new_var := as.POSIXct(as.character(.data$tmp_dose_end_date[.data$ldose_idx]),
+                                tz = lubridate::tz(.data$tmp_dose_end_date))
+      ) %>%
       mutate_at(trace_vars_str, list(~ .[.data$ldose_idx])) %>%
       distinct(!!new_var, !!!syms(trace_vars_str)) %>%
       ungroup()

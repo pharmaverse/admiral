@@ -27,7 +27,7 @@ missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. \code{"15-06"} for the 15th
+\item format with month and day specified as 'mm-dd': e.g. \code{"06-15"} for the 15th
 of June,
 \item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
@@ -145,11 +145,12 @@ impute_dtc(
 # minimum dates
 impute_dtc(
   "2020-12",
-  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-                   ymd_hms("2020-11-11T11:11:11")),
+  min_dates = list(
+    ymd_hms("2020-12-06T12:12:12"),
+    ymd_hms("2020-11-11T11:11:11")
+  ),
   date_imputation = "first"
 )
-
 }
 \author{
 Samia Kabi

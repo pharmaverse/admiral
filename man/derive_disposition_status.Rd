@@ -18,14 +18,14 @@ derive_disposition_status(
 
 \item{dataset_ds}{Dataset containing the disposition information (e.g.: ds).
 
-It must contains
+It must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{status_var}
 \item The variables used in \code{filter_ds}.
 }}
 
-\item{new_var}{Name of the disposition date variable.
+\item{new_var}{Name of the disposition status variable.
 
 A variable name is expected (e.g. \code{EOSSTT}).}
 
@@ -35,14 +35,15 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
-Default: format_eoxxstt_default defined as:
-format_eoxxstt_default <- function(x) {
-case_when(
-x \%in\% c("COMPLETED") ~ "COMPLETED",
-!(x \%in\% c("COMPLETED")) & !is.na(x) ~ "DISCONTINUED",
-TRUE ~ "ONGOING"
-)
+Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(x) \{
+  case_when(
+    x == "COMPLETED" ~ "COMPLETED",
+    x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
+    TRUE ~ "ONGOING"
+  )
+\}
 }
+
 where \code{x} is the \code{status_var.}}
 
 \item{filter_ds}{Filter condition for the disposition data.
@@ -57,7 +58,7 @@ The input dataset with the disposition status (\code{new_var}) added.
 defined by \code{format_new_var} (e.g. when the default format is used, the function will derive
 \code{new_var} as:
 "COMPLETED" if \code{status_var} == "COMPLETED",
-"DISCONTINUED" if \code{status_var} is not "COMPLETED" or NA,
+"DISCONTINUED" if \code{status_var} is not "COMPLETED" nor NA,
 "ONGOING" otherwise).
 }
 \description{
@@ -70,16 +71,17 @@ data("ds")
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
-#- DISCONTINUED when status_var != COMPLETED
+#- DISCONTINUED when status_var is not COMPLETED nor NA
 #- ONGOING otherwise
 
-derive_disposition_status(
-  dataset = dm,
-  dataset_ds = ds,
-  new_var = EOSSTT,
-  status_var = DSDECOD,
-  filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+dm \%>\%
+  derive_disposition_status(
+    dataset_ds = ds,
+    new_var = EOSSTT,
+    status_var = DSDECOD,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  ) \%>\%
+  select(STUDYID, USUBJID, EOSSTT)
 
 # Specific derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
@@ -96,14 +98,15 @@ format_eoxxstt1 <- function(x) {
   )
 }
 
-derive_disposition_status(
-  dataset = dm,
-  dataset_ds = ds,
-  new_var = EOSSTT,
-  status_var = DSDECOD,
-  format_new_var = format_eoxxstt1,
-  filter_ds = DSCAT == "DISPOSITION EVENT"
-)
+dm \%>\%
+  derive_disposition_status(
+    dataset_ds = ds,
+    new_var = EOSSTT,
+    status_var = DSDECOD,
+    format_new_var = format_eoxxstt1,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  ) \%>\%
+  select(STUDYID, USUBJID, EOSSTT)
 }
 \author{
 Samia Kabi

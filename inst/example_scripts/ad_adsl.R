@@ -125,14 +125,14 @@ adsl <- dm %>%
   ) %>%
 
   # Relative Day of Death
-  derive_duration(
+  derive_vars_duration(
     new_var = DTHADY,
     start_date = TRTSDT,
     end_date = DTHDT
   ) %>%
 
   # Elapsed Days from Last Dose to Death
-  derive_duration(
+  derive_vars_duration(
     new_var = LDDTHELD,
     start_date = TRTEDT,
     end_date = DTHDT,
@@ -149,7 +149,8 @@ adsl <- dm %>%
     SAFFL = if_else(!is.na(TRTSDTM), "Y", "N"),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
     DTHA30FL = if_else(LDDTHGR1 == "> 30", "Y", NA_character_),
-    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_)
+    DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
+    DOMAIN = NULL
   )
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)

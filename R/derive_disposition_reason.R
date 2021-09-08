@@ -6,7 +6,7 @@
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: `ds`).
 #'
-#' It must contains
+#' It must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
@@ -82,7 +82,7 @@
 #' This functions returns the main reason for discontinuation (e.g. `DCSREAS` or `DCTREAS`).
 #' The reason for discontinuation is derived based on `reason_var` (e.g. `DSDECOD`) and
 #' `format_new_vars`.
-#' If `new_var_spe` is not NULL, then the function will also returns the details associated
+#' If `new_var_spe` is not NULL, then the function will also return the details associated
 #' with the reason for discontinuation (e.g. `DCSREASP`).
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
@@ -100,13 +100,15 @@
 #' data("ds")
 #'
 #' # Derive DCSREAS using the default format
-#' derive_disposition_reason(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = DCSREAS,
-#'   reason_var = DSDECOD,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' )
+#' dm %>%
+#'   derive_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS)
+#'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
 #'   out <- if (is.null(y)) x else y
@@ -115,16 +117,17 @@
 #'     TRUE ~ NA_character_
 #'   )
 #' }
-#' derive_disposition_reason(
-#'   dataset = dm,
-#'   dataset_ds = ds,
-#'   new_var = DCSREAS,
-#'   reason_var = DSDECOD,
-#'   new_var_spe = DCSREASP,
-#'   reason_var_spe = DSTERM,
-#'   format_new_vars = format_dcsreas,
-#'   filter_ds = DSCAT == "DISPOSITION EVENT"
-#' )
+#' dm %>%
+#'   derive_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     new_var_spe = DCSREASP,
+#'     reason_var_spe = DSTERM,
+#'     format_new_vars = format_dcsreas,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_disposition_reason <- function(dataset,
                                       dataset_ds,
                                       new_var,
@@ -152,7 +155,7 @@ derive_disposition_reason <- function(dataset,
       err_msg <- paste(
         "`new_var_spe` is specified as ", quo_text(new_var_spe),
         "but `reason_var_spe` is NULL.",
-        "Please specifiy `reason_var_spe` together with `new_var_spe`."
+        "Please specify `reason_var_spe` together with `new_var_spe`."
       )
       abort(err_msg)
     }
@@ -197,11 +200,15 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' or `NA`.
-#' `format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not 'COMPLETED' or `NA`.
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
+#' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
+#' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
+#'
 #' For example:
-#' `DCSREAS = format_reason_default(DSDECOD)`
-#' `DCSREASP = format_reason_default(DSDECOD, DSTERM)`
+#' ```
+#' DCSREAS = format_reason_default(DSDECOD)
+#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
+#' ```
 #'
 #' @return A `character` vector
 #'

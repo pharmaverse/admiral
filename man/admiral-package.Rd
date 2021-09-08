@@ -21,6 +21,12 @@ Authors:
   \item Vignesh Thanikachalam
   \item Ondrej Slama \email{ondrej.slama@roche.com}
   \item Shimeng Huang
+  \item Robin Koeger
+  \item Gordon Miller
+  \item Teckla Akinyi
+  \item Eric Simms \email{eric.m.simms@gsk.com}
+  \item Michael Thorpe \email{michael.thorpe.mt1@roche.com}
+  \item Pavan Kumar \email{pavan.10.kumar@gsk.com}
 }
 
 }

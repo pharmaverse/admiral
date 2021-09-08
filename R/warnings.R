@@ -33,26 +33,19 @@ warn_if_vars_exist <- function(dataset, vars) {
 }
 
 is_valid_dtc <- function(arg) {
-  pattern0 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$"
-  pattern1 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$"
-  pattern2 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$"
-  pattern3 <- "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$"
-  pattern4 <- "^(\\d{4})-(\\d{2})-(\\d{2})$"
-  pattern5 <- "^(\\d{4})-(\\d{2})$"
-  pattern6 <- "^(\\d{4})$"
-  pattern7 <- "^(\\d{4})---(\\d{2})$"
+  pattern <- paste(
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
+     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})$",
+    "^(\\d{4})-(\\d{2})$",
+    "^(\\d{4})$",
+    "^(\\d{4})---(\\d{2})$",
+    sep = "|"
+  )
 
-
-  grepl(pattern0, arg) |
-    grepl(pattern1, arg) |
-    grepl(pattern2, arg) |
-    grepl(pattern3, arg) |
-    grepl(pattern4, arg) |
-    grepl(pattern5, arg) |
-    grepl(pattern6, arg) |
-    grepl(pattern7, arg) |
-    arg == "" |
-    is.na(arg)
+  grepl(pattern, arg) | arg == "" | is.na(arg)
 }
 
 #' Warn If a vector contains unknown datetime format
@@ -61,6 +54,7 @@ is_valid_dtc <- function(arg) {
 #' "2003-12-15T-:15:18", "2003-12-15T13:-:19","--12-15","-----T07:15"
 #'
 #' @param dtc a character vector containing the dates
+#' @param is_valid a logical vector indicating whether elements in `dtc` are valid
 #'
 #' @author Samia Kabi
 #'
@@ -75,14 +69,15 @@ is_valid_dtc <- function(arg) {
 #'
 #' ## Issues a warning
 #' warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
-warn_if_invalid_dtc <- function(dtc) {
-  is_valid_dtc <- is_valid_dtc(dtc)
-
-  if (!all(is_valid_dtc)) {
-    incorrect_dtc <- dtc[!is_valid_dtc]
-    incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid_dtc]
+warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
+  if (!all(is_valid)) {
+    incorrect_dtc <- dtc[!is_valid]
+    incorrect_dtc_row <- rownames(as.data.frame(dtc))[!is_valid]
     tbl <- paste("Row", incorrect_dtc_row, ": --DTC =", incorrect_dtc)
-    main_msg <- "Dataset contains incorrect datetime format: --DTC may be incorrectly imputed on row(s)"
+    main_msg <- paste(
+      "Dataset contains incorrect datetime format:",
+      "--DTC may be incorrectly imputed on row(s)"
+    )
 
     info <- paste0(
       "The following ISO representations are handled: \n",
