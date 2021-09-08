@@ -222,7 +222,7 @@ adcm %>%
 
 ### Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_last_dose()` can be used to derive the last dose date. 
+The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
 Additionally, this function can also provide the traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
