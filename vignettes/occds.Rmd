@@ -132,11 +132,7 @@ adae <- adae %>%
     new_var = ADURN,
     new_var_unit = ADURU,
     start_date = ASTDT,
-    end_date = AENDT,
-    in_unit = "days",
-    out_unit = "days",
-    add_one = TRUE,
-    trunc_out = FALSE
+    end_date = AENDT
   )
 ```
 
