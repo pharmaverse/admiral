@@ -356,7 +356,8 @@ adae %>%
     new_var = AOCCIFL,
     filter = TRTEMFL == "Y", 
     mode = "last"
-  )
+  ) %>% 
+  select(STUDYID, USUBJID, AOCCIFL, ASTDTM, ASEVN, AESEQ, TRTEMFL)
 ```
 
 
