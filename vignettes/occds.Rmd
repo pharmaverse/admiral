@@ -209,11 +209,9 @@ adcm <- tibble::tribble(
   AENDTM = lubridate::as_datetime(AENDTM)
  )
 
-derive_var_atirel(
-  dataset = adcm,
-  flag_var = ASTTMF,
-  new_var = ATIREL
-)
+adcm %>% 
+  derive_var_atirel(flag_var = ASTTMF, new_var = ATIREL) %>% 
+  select(STUDYID, USUBJID, ATIREL, everything())
 ```
 
 ### Derive Analysis Phase and Period {#phase_period}
