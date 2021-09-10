@@ -6,7 +6,9 @@
 \usage{
 derive_param_tte(
   dataset = NULL,
+  dataset_adsl,
   start_date = TRTSDT,
+  start_imputation_flag = NULL,
   event_conditions,
   censor_conditions,
   set_values_to,
@@ -17,6 +19,23 @@ derive_param_tte(
 \item{dataset}{Input dataset
 
 The \code{USUBJID} variable is expected.}
+
+\item{dataset_adsl}{ADSL input dataset
+The variables specified for \code{start_date} and \code{start_imputation_flag} are
+expected.}
+
+\item{start_date}{Time to event origin date
+The variable \code{STARTDT} is set to the specified date. The value is taken
+from the ADSL dataset.
+
+If the event or censoring date is before the origin date, \code{ADT} is set to
+the origin date.
+
+If the specified variable is imputed, the corresponding date imputation
+flag must specified for \code{start_imputation_flag}.}
+
+\item{start_imputation_flag}{If the start date is imputed, the corresponding date imputation flag must
+be specified. The variable \code{STARTDTF} is set to the specified variable.}
 
 \item{event_conditions}{Sources and conditions defining events. A list of
 \code{tte_source()} objects is expected.}

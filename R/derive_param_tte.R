@@ -6,6 +6,24 @@
 #'
 #'   The `USUBJID` variable is expected.
 #'
+#' @param dataset_adsl ADSL input dataset
+#'   The variables specified for `start_date` and `start_imputation_flag` are
+#'   expected.
+#'
+#' @param start_date Time to event origin date
+#'   The variable `STARTDT` is set to the specified date. The value is taken
+#'   from the ADSL dataset.
+#'
+#'   If the event or censoring date is before the origin date, `ADT` is set to
+#'   the origin date.
+#'
+#'   If the specified variable is imputed, the corresponding date imputation
+#'   flag must specified for `start_imputation_flag`.
+#'
+#' @param start_imputation_flag
+#'   If the start date is imputed, the corresponding date imputation flag must
+#'   be specified. The variable `STARTDTF` is set to the specified variable.
+#'
 #' @param event_conditions Sources and conditions defining events. A list of
 #'   `tte_source()` objects is expected.
 #'
@@ -113,14 +131,20 @@
 #'   set_values_to = vars(PARAMCD = "OS",
 #'                        PARAM = "Overall Survival"))
 derive_param_tte <- function(dataset = NULL,
+                             dataset_adsl,
                              start_date = TRTSDT,
+                             start_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
                              set_values_to,
                              subject_keys = vars(STUDYID, USUBJID)) {
   assert_data_frame(dataset, optional = TRUE)
+  start_date <- assert_symbol(enquo(start_date))
+  start_imputation_flag <- assert_symbol(enquo(start_imputation_flag),
+                                         optional = TRUE)
+  assert_data_frame(dataset_adsl,
+                    required_vars = quo_c(start_date, start_imputation_flag))
   assert_vars(subject_keys)
-
   assert_list_of(event_conditions, "tte_source")
   assert_list_of(censor_conditions, "tte_source")
   assert_varval_list(set_values_to, optional = TRUE)
@@ -134,12 +158,24 @@ derive_param_tte <- function(dataset = NULL,
                                      mode = "last") %>%
     mutate(temp_event = 0)
 
+  adsl_vars = vars(!!!subject_keys,
+                   STARTDT = !!start_date)
+  if (!quo_is_null(start_imputation_flag)) {
+    adls_vars = vars(!!!adsl_vars,
+                     STARTDTF = !!start_imputation_flag)
+  }
+  adsl <- dataset_adsl %>%
+    select(!!!adsl_vars)
+
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = subject_keys,
     order = vars(temp_event),
     mode = "last") %>%
-    mutate(!!!set_values_to) %>%
+    left_join(adsl,
+              by = vars2chr(subject_keys)) %>%
+    mutate(!!!set_values_to,
+           ADT = max(ADT, STARTDT)) %>%
     select(-starts_with("temp_"))
 
   bind_rows(dataset, new_param)
