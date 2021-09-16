@@ -18,11 +18,11 @@ derive_param_tte(
 \arguments{
 \item{dataset}{Input dataset
 
-The \code{USUBJID} variable is expected.}
+The \code{PARAMCD} variable is expected.}
 
 \item{dataset_adsl}{ADSL input dataset
-The variables specified for \code{start_date} and \code{start_imputation_flag} are
-expected.}
+The variables specified for \code{start_date}, \code{start_imputation_flag}, and
+\code{subject_keys} are expected.}
 
 \item{start_date}{Time to event origin date
 The variable \code{STARTDT} is set to the specified date. The value is taken
@@ -49,8 +49,7 @@ numeric value, or \code{NA}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
-A list of quosures where the expressions are symbols as returned by
-\code{vars()} is expected.}
+A list of symbols created using \code{vars()} is expected.}
 }
 \value{
 The input dataset with the new parameter added
@@ -109,11 +108,17 @@ combined into a single dataset.
 variable) from the single dataset is selected. }
 
 For each subject (as defined by the \code{subject_keys} parameter) an
-observation is added to the output dataset. If an event is available the
-event observations is added. Otherwise the censoring observation is added.
+observation is selected. If an event is available, the event observation is
+selected. Otherwise the censoring observation is selected.
 
-Finally the variables as defined by the \code{set_values_to} parameter are added
-for the new observations.
+Finally
+\enumerate{
+\item the variables specified for \code{start_date} and \code{start_imputation_flag} are
+joined from the ADSL dataset,
+\item the variables as defined by the \code{set_values_to} parameter are added,
+\item the \code{ADT} variable is set to the maximum of \code{ADT} and \code{STARTDT}, and
+\item the new observations are added to the output dataset.
+}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -138,6 +143,7 @@ lstalv <- tte_source(
     SRCVAR = "LSTALVDT"))
 
 derive_param_tte(
+  dataset_adsl = adsl,
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   set_values_to = vars(PARAMCD = "OS",

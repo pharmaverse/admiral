@@ -4,11 +4,11 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The `USUBJID` variable is expected.
+#'   The `PARAMCD` variable is expected.
 #'
 #' @param dataset_adsl ADSL input dataset
-#'   The variables specified for `start_date` and `start_imputation_flag` are
-#'   expected.
+#'   The variables specified for `start_date`, `start_imputation_flag`, and
+#'   `subject_keys` are expected.
 #'
 #' @param start_date Time to event origin date
 #'   The variable `STARTDT` is set to the specified date. The value is taken
@@ -37,8 +37,7 @@
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
+#'   A list of symbols created using `vars()` is expected.
 #'
 #' @details The following steps are performed to create the observations of the
 #'   new parameter:
@@ -90,11 +89,16 @@
 #'   variable) from the single dataset is selected. }
 #'
 #'   For each subject (as defined by the `subject_keys` parameter) an
-#'   observation is added to the output dataset. If an event is available the
-#'   event observations is added. Otherwise the censoring observation is added.
+#'   observation is selected. If an event is available, the event observation is
+#'   selected. Otherwise the censoring observation is selected.
 #'
-#'   Finally the variables as defined by the `set_values_to` parameter are added
-#'   for the new observations.
+#'   Finally
+#'   1. the variables specified for `start_date` and `start_imputation_flag` are
+#'   joined from the ADSL dataset,
+#'   1. the variables as defined by the `set_values_to` parameter are added,
+#'   1. the `ADT` variable is set to the maximum of `ADT` and `STARTDT`, and
+#'   1. the new observations are added to the output dataset.
+#'
 #' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the new parameter added
@@ -126,6 +130,7 @@
 #'     SRCVAR = "LSTALVDT"))
 #'
 #' derive_param_tte(
+#'   dataset_adsl = adsl,
 #'   event_conditions = list(death),
 #'   censor_conditions = list(lstalv),
 #'   set_values_to = vars(PARAMCD = "OS",
@@ -138,6 +143,7 @@ derive_param_tte <- function(dataset = NULL,
                              censor_conditions,
                              set_values_to,
                              subject_keys = vars(STUDYID, USUBJID)) {
+  # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
   start_imputation_flag <- assert_symbol(enquo(start_imputation_flag),
@@ -148,16 +154,23 @@ derive_param_tte <- function(dataset = NULL,
   assert_list_of(event_conditions, "tte_source")
   assert_list_of(censor_conditions, "tte_source")
   assert_varval_list(set_values_to, optional = TRUE)
+  if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
+    assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
+  }
 
+  # determine events #
   event_data <- filter_date_sources(sources = event_conditions,
                                     subject_keys = subject_keys,
                                     mode = "first") %>%
     mutate(temp_event = 1)
+
+  # determine censoring observations #
   censor_data <- filter_date_sources(sources = censor_conditions,
                                      subject_keys = subject_keys,
                                      mode = "last") %>%
     mutate(temp_event = 0)
 
+  # determine variable to add from ADSL #
   adsl_vars = vars(!!!subject_keys,
                    STARTDT = !!start_date)
   if (!quo_is_null(start_imputation_flag)) {
@@ -167,6 +180,7 @@ derive_param_tte <- function(dataset = NULL,
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
+  # create observations for new parameter #
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = subject_keys,
@@ -175,22 +189,75 @@ derive_param_tte <- function(dataset = NULL,
     left_join(adsl,
               by = vars2chr(subject_keys)) %>%
     mutate(!!!set_values_to,
-           ADT = max(ADT, STARTDT)) %>%
+           ADT = pmax(ADT, STARTDT)) %>%
     select(-starts_with("temp_"))
 
+  # add new parameter to input dataset #
   bind_rows(dataset, new_param)
 }
 
+
+#' Select the First or Last Date from Several Sources
+#'
+#' Select for each subject the first or last observation with respect to a date
+#' from a list of sources.
+#'
+#' @param sources Sources. A list of `tte_source()` objects is expected.
+#'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#'   A list of symbols created using `vars()` is expected.
+#'
+#' @param mode Selection mode (first or last)
+#'
+#'   If `"first"` is specified, for each subject the first observation with
+#'   respect to the date is included in the output dataset. If `"last"` is
+#'   specified, the last observation is included in the output dataset.
+#'
+#'   Permitted Values:  `"first"`, `"last"`
+#'
+#' @details The following steps are performed to create the output dataset:
+#'
+#'   \enumerate{ \item For each source dataset the observations as specified by
+#'   the `filter` element are selected. Then for each patient the first or last
+#'   observation (with respect to `date`) is selected.
+#'
+#'   \item The `ADT` variable is set to the variable specified by the
+#'   \code{date} element. If the date variable is a datetime variable, only
+#'   the datepart is copied. If the source variable is a character variable, it
+#'   is converted to a date. If the date is incomplete, it is imputed as
+#'   the first possible date.
+#'
+#'   \item The `CNSR` is added and set to the value of the \code{censor}
+#'   element.
+#'
+#'   \item The selected observations of all source datasets are combined into a
+#'   single dataset.
+#'
+#'   \item For each patient the first or last observation (with respect to the
+#'   `ADT` variable) from the single dataset is selected. }
+#'
+#' @return A dataset with one observation per subject as described in the
+#'   "Details" section.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @export
 filter_date_sources <- function(sources,
                                 subject_keys,
                                 mode) {
-  assert_vars(subject_keys)
 
   assert_list_of(sources, "tte_source")
+  assert_vars(subject_keys)
+  assert_character_scalar(mode,
+                          values = c("first", "last"),
+                          case_sensitive = FALSE)
 
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
-    date <- quo_get_expr(sources[[i]]$date)
+    date <- sources[[i]]$date
     data[[i]] <- sources[[i]]$dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
@@ -200,13 +267,13 @@ filter_date_sources <- function(sources,
         check_type = "none"
       )
     # add date variable and accompanying variables
-    if (is.Date(data[[i]][[as_string(date)]])) {
+    if (is.Date(pull(data[[i]], !!date))) {
       data[[i]] <- transmute(data[[i]],
                              !!!subject_keys,
                              !!!sources[[i]]$set_values_to,
                              CNSR = sources[[i]]$censor,
                              ADT = !!date)
-    } else if (is.instant(data[[i]][[as_string(date)]])) {
+    } else if (is.instant(pull(data[[i]], !!date))) {
       data[[i]] <- transmute(data[[i]],
                              !!!subject_keys,
                              !!!sources[[i]]$set_values_to,
