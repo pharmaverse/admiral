@@ -1,3 +1,19 @@
+# admiral 0.4.0
+
+## New Features
+
+### General
+
+### BDS
+
+- `derive_param_tte()` derives time-to-event-parameters (#546)
+
+## Breaking Changes
+
+## Bug Fixes
+
+## Documentation
+
 # admiral 0.3.0
 
 ## New Features

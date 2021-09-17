@@ -8,9 +8,11 @@ derive_param_tte(
   dataset = NULL,
   dataset_adsl,
   start_date = TRTSDT,
-  start_imputation_flag = NULL,
+  start_date_imputation_flag = NULL,
+  start_time_imputation_flag = NULL,
   event_conditions,
   censor_conditions,
+  create_datetime = FALSE,
   set_values_to,
   subject_keys = vars(STUDYID, USUBJID)
 )
@@ -21,10 +23,12 @@ derive_param_tte(
 The \code{PARAMCD} variable is expected.}
 
 \item{dataset_adsl}{ADSL input dataset
+
 The variables specified for \code{start_date}, \code{start_imputation_flag}, and
 \code{subject_keys} are expected.}
 
 \item{start_date}{Time to event origin date
+
 The variable \code{STARTDT} is set to the specified date. The value is taken
 from the ADSL dataset.
 
@@ -34,18 +38,35 @@ the origin date.
 If the specified variable is imputed, the corresponding date imputation
 flag must specified for \code{start_imputation_flag}.}
 
-\item{start_imputation_flag}{If the start date is imputed, the corresponding date imputation flag must
+\item{start_date_imputation_flag}{Date imputation flag for start date
+
+If the start date is imputed, the corresponding date imputation flag must
 be specified. The variable \code{STARTDTF} is set to the specified variable.}
 
-\item{event_conditions}{Sources and conditions defining events. A list of
-\code{tte_source()} objects is expected.}
+\item{start_time_imputation_flag}{Time imputation flag for start date
 
-\item{censor_conditions}{Sources and conditions defining censorings. A list
-of \code{tte_source()} objects is expected.}
+If the start time is imputed, the corresponding time imputation flag must
+be specified. The variable \code{STARTTMF} is set to the specified variable.}
 
-\item{set_values_to}{A named list returned by \code{vars()} defining the variables
-to be set for the new parameter, e.g. \code{vars(PARAMCD = "OS", PARAM = "Overall Survival")}. The values must be a symbol, a character string, a
-numeric value, or \code{NA}.}
+\item{event_conditions}{Sources and conditions defining events
+
+A list of \code{tte_source()} objects is expected.}
+
+\item{censor_conditions}{Sources and conditions defining censorings
+
+A list of \code{tte_source()} objects is expected.}
+
+\item{create_datetime}{Create datetime variables?
+
+If set to \code{TRUE}, variables \code{ADTM} and \code{STARTDTM} are created. Otherwise,
+variables \code{ADT} and \code{STARTDT} are created.}
+
+\item{set_values_to}{Variables to set
+
+A named list returned by \code{vars()} defining the variables to be set for the
+new parameter, e.g. \code{vars(PARAMCD = "OS", PARAM = "Overall Survival")} is
+expected. The values must be symbols, character strings, numeric values, or
+\code{NA}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -116,7 +137,8 @@ Finally
 \item the variables specified for \code{start_date} and \code{start_imputation_flag} are
 joined from the ADSL dataset,
 \item the variables as defined by the \code{set_values_to} parameter are added,
-\item the \code{ADT} variable is set to the maximum of \code{ADT} and \code{STARTDT}, and
+\item the \code{ADT}/\code{ADTM} variable is set to the maximum of \code{ADT}/\code{ADTM} and
+\code{STARTDT}/\code{STARTDTM} (depending on the \code{create_datetime} parameter), and
 \item the new observations are added to the output dataset.
 }
 }
@@ -147,7 +169,8 @@ derive_param_tte(
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   set_values_to = vars(PARAMCD = "OS",
-                       PARAM = "Overall Survival"))
+                       PARAM = "Overall Survival")) \%>\%
+select(-STUDYID) \%>\% `[`(20:30,)
 }
 \author{
 Stefan Bundfuss

@@ -4,10 +4,17 @@
 \alias{filter_date_sources}
 \title{Select the First or Last Date from Several Sources}
 \usage{
-filter_date_sources(sources, subject_keys, mode)
+filter_date_sources(sources, create_datetime = FALSE, subject_keys, mode)
 }
 \arguments{
-\item{sources}{Sources. A list of \code{tte_source()} objects is expected.}
+\item{sources}{Sources
+
+A list of \code{tte_source()} objects is expected.}
+
+\item{create_datetime}{Create datetime variable?
+
+If set to \code{TRUE}, variables \code{ADTM} is created. Otherwise, variables \code{ADT}
+is created.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 

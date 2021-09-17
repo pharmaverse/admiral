@@ -7,10 +7,12 @@
 #'   The `PARAMCD` variable is expected.
 #'
 #' @param dataset_adsl ADSL input dataset
+#'
 #'   The variables specified for `start_date`, `start_imputation_flag`, and
 #'   `subject_keys` are expected.
 #'
 #' @param start_date Time to event origin date
+#'
 #'   The variable `STARTDT` is set to the specified date. The value is taken
 #'   from the ADSL dataset.
 #'
@@ -20,20 +22,35 @@
 #'   If the specified variable is imputed, the corresponding date imputation
 #'   flag must specified for `start_imputation_flag`.
 #'
-#' @param start_imputation_flag
+#' @param start_date_imputation_flag Date imputation flag for start date
+#'
 #'   If the start date is imputed, the corresponding date imputation flag must
 #'   be specified. The variable `STARTDTF` is set to the specified variable.
 #'
-#' @param event_conditions Sources and conditions defining events. A list of
-#'   `tte_source()` objects is expected.
+#' @param start_time_imputation_flag Time imputation flag for start date
 #'
-#' @param censor_conditions Sources and conditions defining censorings. A list
-#'   of `tte_source()` objects is expected.
+#'   If the start time is imputed, the corresponding time imputation flag must
+#'   be specified. The variable `STARTTMF` is set to the specified variable.
 #'
-#' @param set_values_to A named list returned by `vars()` defining the variables
-#'   to be set for the new parameter, e.g. `vars(PARAMCD = "OS", PARAM =
-#'   "Overall Survival")`. The values must be a symbol, a character string, a
-#'   numeric value, or `NA`.
+#' @param event_conditions Sources and conditions defining events
+#'
+#'   A list of `tte_source()` objects is expected.
+#'
+#' @param censor_conditions Sources and conditions defining censorings
+#'
+#'   A list of `tte_source()` objects is expected.
+#'
+#' @param create_datetime Create datetime variables?
+#'
+#'   If set to `TRUE`, variables `ADTM` and `STARTDTM` are created. Otherwise,
+#'   variables `ADT` and `STARTDT` are created.
+#'
+#' @param set_values_to Variables to set
+#'
+#'   A named list returned by `vars()` defining the variables to be set for the
+#'   new parameter, e.g. `vars(PARAMCD = "OS", PARAM = "Overall Survival")` is
+#'   expected. The values must be symbols, character strings, numeric values, or
+#'   `NA`.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -96,7 +113,8 @@
 #'   1. the variables specified for `start_date` and `start_imputation_flag` are
 #'   joined from the ADSL dataset,
 #'   1. the variables as defined by the `set_values_to` parameter are added,
-#'   1. the `ADT` variable is set to the maximum of `ADT` and `STARTDT`, and
+#'   1. the `ADT`/`ADTM` variable is set to the maximum of `ADT`/`ADTM` and
+#'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter), and
 #'   1. the new observations are added to the output dataset.
 #'
 #' @author Stefan Bundfuss
@@ -134,25 +152,37 @@
 #'   event_conditions = list(death),
 #'   censor_conditions = list(lstalv),
 #'   set_values_to = vars(PARAMCD = "OS",
-#'                        PARAM = "Overall Survival"))
+#'                        PARAM = "Overall Survival")) %>%
+#' select(-STUDYID) %>% `[`(20:30,)
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
                              start_date = TRTSDT,
-                             start_imputation_flag = NULL,
+                             start_date_imputation_flag = NULL,
+                             start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
+                             create_datetime = FALSE,
                              set_values_to,
                              subject_keys = vars(STUDYID, USUBJID)) {
   # checking and quoting #
   assert_data_frame(dataset, optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
-  start_imputation_flag <- assert_symbol(enquo(start_imputation_flag),
-                                         optional = TRUE)
-  assert_data_frame(dataset_adsl,
-                    required_vars = quo_c(start_date, start_imputation_flag))
+  start_date_imputation_flag <- assert_symbol(enquo(start_date_imputation_flag),
+                                              optional = TRUE)
+  start_time_imputation_flag <- assert_symbol(enquo(start_time_imputation_flag),
+                                              optional = TRUE)
+  assert_data_frame(
+    dataset_adsl,
+    required_vars = quo_c(
+      start_date,
+      start_date_imputation_flag,
+      start_time_imputation_flag
+    )
+  )
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "tte_source")
   assert_list_of(censor_conditions, "tte_source")
+  assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -160,22 +190,36 @@ derive_param_tte <- function(dataset = NULL,
 
   # determine events #
   event_data <- filter_date_sources(sources = event_conditions,
+                                    create_datetime = create_datetime,
                                     subject_keys = subject_keys,
                                     mode = "first") %>%
     mutate(temp_event = 1)
 
   # determine censoring observations #
   censor_data <- filter_date_sources(sources = censor_conditions,
+                                     create_datetime = create_datetime,
                                      subject_keys = subject_keys,
                                      mode = "last") %>%
     mutate(temp_event = 0)
 
   # determine variable to add from ADSL #
+  if (create_datetime) {
+    date_var <- sym("ADTM")
+    start_var <- sym("STARTDTM")
+  }
+  else {
+    date_var <- sym("ADT")
+    start_var <- sym("STARTDT")
+  }
   adsl_vars = vars(!!!subject_keys,
-                   STARTDT = !!start_date)
-  if (!quo_is_null(start_imputation_flag)) {
+                   !!start_var := !!start_date)
+  if (!quo_is_null(start_date_imputation_flag)) {
     adls_vars = vars(!!!adsl_vars,
-                     STARTDTF = !!start_imputation_flag)
+                     STARTDTF = !!start_date_imputation_flag)
+  }
+  if (!quo_is_null(start_time_imputation_flag)) {
+    adls_vars = vars(!!!adsl_vars,
+                     STARTTMF = !!start_time_imputation_flag)
   }
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
@@ -189,20 +233,26 @@ derive_param_tte <- function(dataset = NULL,
     left_join(adsl,
               by = vars2chr(subject_keys)) %>%
     mutate(!!!set_values_to,
-           ADT = pmax(ADT, STARTDT)) %>%
+           !!date_var := pmax(!!date_var, !!start_var)) %>%
     select(-starts_with("temp_"))
 
   # add new parameter to input dataset #
   bind_rows(dataset, new_param)
 }
 
-
 #' Select the First or Last Date from Several Sources
 #'
 #' Select for each subject the first or last observation with respect to a date
 #' from a list of sources.
 #'
-#' @param sources Sources. A list of `tte_source()` objects is expected.
+#' @param sources Sources
+#'
+#'    A list of `tte_source()` objects is expected.
+#'
+#' @param create_datetime Create datetime variable?
+#'
+#'   If set to `TRUE`, variables `ADTM` is created. Otherwise, variables `ADT`
+#'   is created.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -246,16 +296,24 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @export
 filter_date_sources <- function(sources,
+                                create_datetime = FALSE,
                                 subject_keys,
                                 mode) {
 
   assert_list_of(sources, "tte_source")
+  assert_logical_scalar(create_datetime)
   assert_vars(subject_keys)
   assert_character_scalar(mode,
                           values = c("first", "last"),
                           case_sensitive = FALSE)
 
-  data <- vector("list", length(sources))
+  if (create_datetime) {
+    date_var <- sym("ADTM")
+  }
+  else {
+    date_var <- sym("ADT")
+  }
+data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
     data[[i]] <- sources[[i]]$dataset %>%
@@ -267,37 +325,42 @@ filter_date_sources <- function(sources,
         check_type = "none"
       )
     # add date variable and accompanying variables
-    if (is.Date(pull(data[[i]], !!date))) {
-      data[[i]] <- transmute(data[[i]],
-                             !!!subject_keys,
-                             !!!sources[[i]]$set_values_to,
-                             CNSR = sources[[i]]$censor,
-                             ADT = !!date)
-    } else if (is.instant(pull(data[[i]], !!date))) {
-      data[[i]] <- transmute(data[[i]],
-                             !!!subject_keys,
-                             !!!sources[[i]]$set_values_to,
-                             CNSR = sources[[i]]$censor,
-                             ADT = date(!!date))
+    if (is.instant(pull(data[[i]], !!date))) {
+      if (create_datetime) {
+        date_derv = vars(!!date_var := !!date)
+      }
+      else {
+        date_derv = vars(!!date_var := date(!!date))
+      }
     } else {
-      data[[i]] <- transmute(
-        data[[i]],
-        !!!subject_keys,
-        !!!sources[[i]]$set_values_to,
-        CNSR = sources[[i]]$censor,
-        ADT = convert_dtc_to_dt(!!date,
-                                date_imputation = "first")
-      )
+      if (create_datetime) {
+        date_derv = vars(
+          !!date_var := convert_dtc_to_dtm(
+            !!date,
+            date_imputation = "first",
+            time_imputation = "first"
+          )
+        )
+      }
+      else {
+        date_derv = vars(!!date_var := convert_dtc_to_dt(!!date,
+                                                        date_imputation = "first"))
+      }
     }
+    data[[i]] <- transmute(data[[i]],
+                           !!!subject_keys,
+                           !!!sources[[i]]$set_values_to,
+                           CNSR = sources[[i]]$censor,
+                           !!!date_derv)
   }
 
   # put all source data into one dataset and select first or last date per subject
   data %>%
     bind_rows() %>%
-    filter(!is.na(ADT)) %>%
+    filter(!is.na(!!date_var)) %>%
     filter_extreme(
       by_vars = subject_keys,
-      order = vars(ADT),
+      order = vars(!!date_var),
       mode = mode,
       check_type = "none"
     )
