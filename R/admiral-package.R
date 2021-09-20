@@ -18,7 +18,7 @@
 #' @importFrom stringr str_c str_detect str_extract str_remove str_remove_all
 #'             str_replace str_trim str_to_upper str_glue
 #' @importFrom assertthat assert_that is.number on_failure<-
-#' @importFrom lubridate ceiling_date date days duration floor_date is.Date is.instant
+#' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             time_length %--% ymd ymd_hms
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect contains vars_select

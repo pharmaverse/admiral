@@ -211,15 +211,15 @@ derive_param_tte <- function(dataset = NULL,
     date_var <- sym("ADT")
     start_var <- sym("STARTDT")
   }
-  adsl_vars = vars(!!!subject_keys,
-                   !!start_var := !!start_date)
+  adsl_vars <- vars(!!!subject_keys,
+                    !!start_var := !!start_date)
   if (!quo_is_null(start_date_imputation_flag)) {
-    adls_vars = vars(!!!adsl_vars,
-                     STARTDTF = !!start_date_imputation_flag)
+    adsl_vars <- vars(!!!adsl_vars,
+                      STARTDTF = !!start_date_imputation_flag)
   }
   if (!quo_is_null(start_time_imputation_flag)) {
-    adls_vars = vars(!!!adsl_vars,
-                     STARTTMF = !!start_time_imputation_flag)
+    adsl_vars <- vars(!!!adsl_vars,
+                      STARTTMF = !!start_time_imputation_flag)
   }
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
@@ -327,14 +327,14 @@ data <- vector("list", length(sources))
     # add date variable and accompanying variables
     if (is.instant(pull(data[[i]], !!date))) {
       if (create_datetime) {
-        date_derv = vars(!!date_var := !!date)
+        date_derv <- vars(!!date_var := as_datetime(!!date))
       }
       else {
-        date_derv = vars(!!date_var := date(!!date))
+        date_derv <- vars(!!date_var := date(!!date))
       }
     } else {
       if (create_datetime) {
-        date_derv = vars(
+        date_derv <- vars(
           !!date_var := convert_dtc_to_dtm(
             !!date,
             date_imputation = "first",
@@ -343,8 +343,8 @@ data <- vector("list", length(sources))
         )
       }
       else {
-        date_derv = vars(!!date_var := convert_dtc_to_dt(!!date,
-                                                        date_imputation = "first"))
+        date_derv <- vars(!!date_var := convert_dtc_to_dt(!!date,
+                                                          date_imputation = "first"))
       }
     }
     data[[i]] <- transmute(data[[i]],
