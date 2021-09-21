@@ -12,7 +12,7 @@ test_that("new observations with analysis date are derived correctly", {
     dataset = adsl,
     filter = DTHFL == "Y",
     date = DTHDT,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "DEATH",
       SRCDOM = "ADSL",
       SRCVAR = "DTHDT"))
@@ -79,7 +79,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     dataset = adrs,
     filter = AVALC == "PD",
     date = ADTM,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "PD",
       SRCDOM = "ADRS",
       SRCVAR = "ADTM",
@@ -89,7 +89,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     dataset = adsl,
     filter = DTHFL == "Y",
     date = DTHDT,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "DEATH",
       SRCDOM = "ADSL",
       SRCVAR = "DTHDT"))
@@ -162,7 +162,7 @@ test_that("new observations based on DTC variables are derived correctly", {
   ttae <- tte_source(
     dataset = ae,
     date = AESTDTC,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
@@ -221,7 +221,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
   ttae <- tte_source(
     dataset = ae,
     date = AESTDTC,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
@@ -281,7 +281,7 @@ test_that("error is issued if parameter code already exists", {
   ttae <- tte_source(
     dataset = ae,
     date = AESTDTC,
-    set_values_to =vars(
+    set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
       SRCVAR = "AESTDTC",
