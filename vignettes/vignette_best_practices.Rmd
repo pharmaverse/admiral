@@ -1,0 +1,151 @@
+---
+title: "Best practices when writing vignette in admiral"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Best practices when writing vignette in admiral}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup0, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This guidance ensures consistency across the vignettes in the admiral package in terms of content, structure and code execution. 
+As a general rule, the vignette workflow defined in [r-pkgs.org](https://r-pkgs.org/vignettes.html) is followed.
+
+
+# Metadata
+
+Each vignette in admiral should start with the following metadata.
+
+```
+---
+title: "<Title>"
+output:  rmarkdown::html_vignette:
+vignette: >
+  %\VignetteIndexEntry{<Title>}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+```
+
+The `<Title>` of the vignette should be meaningful. 
+
+# Markdown
+
+## Default options
+
+    `r ''````{r setup, include=FALSE}
+    knitr::opts_chunk$set(
+      collapse = TRUE,
+      comment = "#>"
+      )
+    ```
+
+## Required Packages
+
+    `r ''````{r, warning=FALSE, message=FALSE}
+    library(admiral)
+    #<all packages used in the vignette>
+    ```
+The `warning = FALSE` and `message = FALSE` options are there to prevent the usual messages:
+
+<span style="color: red;font-family: textmate; font-size = 12pt;" >Attaching package: 'xxxx'</span>
+
+<span style="color: red;font-family: textmate; font-size = 12pt;">The following objects are masked from 'package:yyyyy':</span>
+
+<span style="color: red;font-family: textmate; font-size = 12pt;">  fun1, fun2</span>
+
+
+
+## Format Sections
+
+### Table of contents
+
+Headings must start from Heading 1:
+
+<span style="color: red;" > **Note: some vignettes starts the heading at H2** </span>
+
+```
+# Heading 1
+## Heading 2
+
+```
+
+The first section (# Introduction) gives a brief introduction.
+
+For vignettes describing an ADaM workflow, the second section will summarize the programming workflow.
+The first sub-section within this workflow will describe the data read to demonstrate the use of the 
+admiral functions, while the last sub-section should link to a template script. 
+
+```
+## Programming Workflow
+
+* [Read in Data](#readdata)
+* [Derive/Impute End and Start Analysis Date/time and Relative Day](#datetime)
+* ...
+* [Assign `ASEQ`](#aseq)
+* [Example Script](#example)
+
+```
+
+### Conventions
+
++ Each sub-section within the programming workflow should be tagged (e.g. [Step1] (#step)), so that 
+the user can go on the relevant section from the programming workflow (in addition to the Table of
+contents). Don’t use a tag with a number but use a meaningful name (e.g. do not use `(#link1)`,
+but use `(#this_action)`)
+
++ Any variable name, dataset name, function, argument name must be quoted with backticks: e.g. "`ADSL`, `dm`, `ADT`".
+
++ Functions must also end with `()`.
+
++ All the codes must be executed and the output result displayed once the code is executed. Use:
+ 
+
+      `r ''````{r}
+      #<code>
+      ```
+
+
++ Any output created must clearly show what the function has derived. 
+It should at least show the variables/records used as input to the function and the derived variables/records.
+
+<span style="color: red;" > **Use of dataTable to show the result???** </span>
+
+
+```{r, include=FALSE}
+library(dplyr)
+library(lubridate)
+library(DT)
+data(dm)
+data(ds)
+```
+
+```{r}
+adsl <- dm %>%
+  derive_disposition_dt(
+    dataset_ds = ds,
+    new_var = EOSDT,
+    dtc = DSSTDTC,
+    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
+    date_imputation = NULL
+  )
+
+datatable(adsl %>% select(USUBJID, starts_with("EOS"),everything()),
+          rownames = FALSE,
+           filter = 'top',
+           options = list(
+             searchHighlight = TRUE,
+             searching = FALSE,
+             pageLength = 5,
+             lengthMenu = c(5, 10, 15, 20, 50, 100)
+  ))
+#head(adsl %>% select(USUBJID, starts_with("EOS"), everything()))
+```
+
+
