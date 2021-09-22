@@ -434,15 +434,10 @@ issued. If if it has been removed, an **error** must be generated.
 ```
 ### BEGIN DEPRECIATION
 # Warning if the deprecated function still exists
-deprecate_warn("x.y.z", "fun_xxxxx_x()", "new_fun_xxxxx_x()")
+deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
 
 # Error if the deprecated function does not exist anymore
-rlang::abort(paste(
-    err_msg <- paste(
-      "The function `fun_xxxxx_x()` is deprecated",
-      "as of admiral x.y.z.",
-      "Please use the new function `new_fun_xxxxx_x()` instead."
-    ))
+deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 ### END DEPRECIATION
 ```
 
@@ -453,26 +448,24 @@ If a parameter is removed and is not replaced, an **error** must be generated:
 ```
 ### BEGIN DEPRECIATION
   if (!missing(old_param)) {
-    rlang::abort(paste(
-    err_msg <- paste(
-      "The `old_param` argument of `fun_xxx()` is deprecated",
-      "as of admiral x.y.z.",
-      "Please use the `new_param` arguments instead."
-    ))
-    )
-    abort(err_msg)
+    deprecate_stop("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
   }
 ### END DEPRECIATION
 ```
 
 If the parameter is renamed or replaced, a **warning** must be issued and the new parameter takes 
-the value of the old parameter until the next release.
+the value of the old parameter until the next release. 
+Note: parameters which are not passed as `vars()` argument (e.g. new_var = VAR1 or filter = AVAL >10)
+will need to be quoted. 
 
 ``` 
 ### BEGIN DEPRECIATION
   if (!missing(old_param)) {
     deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+    # old_param is given using vars()
     new_param <- old_param
+    # old_param is NOT given using vars()
+    new_param <- enquo(old_param)
   }
 ### END DEPRECIATION
 ```
