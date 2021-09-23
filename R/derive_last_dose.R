@@ -1,4 +1,4 @@
-#' Derive Last Dose Date(-time)
+#' Update for Derive Last Dose Date(-time)
 #'
 #' @param dataset Input dataset.
 #' @param dataset_ex Input EX dataset.
