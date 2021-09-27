@@ -181,7 +181,39 @@ derive_param_tte <- function(dataset = NULL,
   )
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "tte_source")
+  # check that censor == 0 is used for events (strongly recommended by CDISC) #
+  if (any(lapply(event_conditions, `[[`, "censor") != 0)) {
+    nonzeros_idx <- which(lapply(event_conditions, `[[`, "censor") != 0)
+    abort(
+      paste0(
+        "The censor value of events must be zero.\n",
+        paste0(
+          arg_name(substitute(event_conditions)),
+          "[[", nonzeros_idx, "]]$censor",
+          " = ",
+          lapply(event_conditions[nonzeros_idx],`[[`, "censor"),
+          collapse = "\n"
+        )
+      )
+    )
+  }
   assert_list_of(censor_conditions, "tte_source")
+  # check that censor > 0 is used for censorings (strongly recommended by CDISC) #
+  if (any(lapply(censor_conditions, `[[`, "censor") <= 0)) {
+    nonpositives_idx <- which(lapply(censor_conditions, `[[`, "censor") <= 0)
+    abort(
+      paste0(
+        "The censor value of censorings must be positive.\n",
+        paste0(
+          arg_name(substitute(censor_conditions)),
+          "[[", nonpositives_idx, "]]$censor",
+          " = ",
+          lapply(censor_conditions[nonpositives_idx],`[[`, "censor"),
+          collapse = "\n"
+        )
+      )
+    )
+  }
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
