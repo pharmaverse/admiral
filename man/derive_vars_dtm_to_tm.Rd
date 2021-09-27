@@ -2,18 +2,14 @@
 % Please edit documentation in R/derive_vars_dtm_to_tm.R
 \name{derive_vars_dtm_to_tm}
 \alias{derive_vars_dtm_to_tm}
-\title{Derive time variables from datetime variables}
+\title{Derive Time Variables From Datetime Variables}
 \usage{
-derive_vars_dtm_to_tm(dataset, source_vars, hms_flag = NULL)
+derive_vars_dtm_to_tm(dataset, source_vars)
 }
 \arguments{
 \item{dataset}{Input dataset}
 
 \item{source_vars}{A list of datetime variables from which time are to be extracted}
-
-\item{hms_flag}{A \code{"Y"} scalar character. If \code{"Y"}, time is represented as \code{"HH:MM:SS"}
-otherwise they are presented as \code{"HH:MM"}.
-Optional; default is \code{NULL}.}
 }
 \value{
 A data frame containing all observations and variables of the input
@@ -35,17 +31,13 @@ adcm <- tibble::tribble(
  "TEST01", "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
  "TEST01", "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
  ) \%>\% mutate(
- TRTSDTM = lubridate::as_datetime(TRTSDTM),
- ASTDTM = lubridate::as_datetime(ASTDTM),
- AENDTM = lubridate::as_datetime(AENDTM)
+ TRTSDTM = as_datetime(TRTSDTM),
+ ASTDTM = as_datetime(ASTDTM),
+ AENDTM = as_datetime(AENDTM)
  )
 
 derive_vars_dtm_to_tm(adcm,
                       vars(TRTSDTM, ASTDTM, AENDTM))
-
-derive_vars_dtm_to_tm(adcm,
-                     vars(TRTSDTM, ASTDTM, AENDTM),
-                     hms_flag="Y")
 }
 \author{
 Teckla Akinyi

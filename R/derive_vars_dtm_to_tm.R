@@ -1,14 +1,10 @@
-#' Derive time variables from datetime variables
+#' Derive Time Variables From Datetime Variables
 #'
 #' This function creates a time as output from a datetime variable
 #'
 #' @param dataset Input dataset
 #'
 #' @param source_vars A list of datetime variables from which time are to be extracted
-#'
-#' @param hms_flag A `"Y"` scalar character. If `"Y"`, time is represented as `"HH:MM:SS"`
-#'  otherwise they are presented as `"HH:MM"`.
-#'  Optional; default is `NULL`.
 #'
 #' @author Teckla Akinyi
 #'
@@ -32,33 +28,22 @@
 #'  "TEST01", "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
 #'  "TEST01", "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
 #'  ) %>% mutate(
-#'  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-#'  ASTDTM = lubridate::as_datetime(ASTDTM),
-#'  AENDTM = lubridate::as_datetime(AENDTM)
+#'  TRTSDTM = as_datetime(TRTSDTM),
+#'  ASTDTM = as_datetime(ASTDTM),
+#'  AENDTM = as_datetime(AENDTM)
 #'  )
 #'
 #' derive_vars_dtm_to_tm(adcm,
 #'                       vars(TRTSDTM, ASTDTM, AENDTM))
-#'
-#' derive_vars_dtm_to_tm(adcm,
-#'                      vars(TRTSDTM, ASTDTM, AENDTM),
-#'                      hms_flag="Y")
 
 derive_vars_dtm_to_tm <- function(dataset,
-                                  source_vars,
-                                  hms_flag=NULL) {
-  assert_vars(source_vars)
-  assert_data_frame(dataset, required_vars = source_vars)
-  assert_character_scalar(hms_flag, values = c("Y", "y"), optional = TRUE)
+                                  source_vars) {
 
-  if (!is.null(hms_flag)) {
+    assert_vars(source_vars)
+    assert_data_frame(dataset, required_vars = source_vars)
+
     dataset %>%
-      mutate_at(source_vars, .funs = list(new = ~format(., "%T"))) %>%
+      mutate_at(source_vars, .funs = list(new = hms::as_hms)) %>%
       rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "TM"))
-  }
-  else {
-    dataset %>%
-      mutate_at(source_vars, .funs = list(new = ~format(., "%H:%M"))) %>%
-      rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "TM"))
-  }
+
 }
