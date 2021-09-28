@@ -8,7 +8,8 @@ derive_var_trtsdtm(
   dataset,
   dataset_ex,
   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &
-    nchar(EXSTDTC) >= 10
+    nchar(EXSTDTC) >= 10,
+  subject_keys = vars(STUDYID, USUBJID)
 )
 }
 \arguments{
@@ -29,6 +30,11 @@ are considered for the treatment start date.
 Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
 
 Permitted Values: logical expression}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 The input dataset with \code{TRTSDTM} variable added
