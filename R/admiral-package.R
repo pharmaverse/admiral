@@ -1,6 +1,6 @@
 #' @keywords internal
 #' @importFrom dplyr arrange bind_rows case_when desc ends_with filter group_by
-#'             if_else mutate mutate_at n pull rename rename_at row_number select slice
+#'             if_else mutate mutate_at mutate_if n pull rename rename_at row_number select slice
 #'             starts_with transmute ungroup vars n_distinct union bind_rows distinct
 #'             summarise_at summarise coalesce bind_cols na_if tibble
 #' @importFrom magrittr %>%
@@ -22,4 +22,5 @@
 #'             time_length %--% ymd ymd_hms
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect contains vars_select
+#' @importFrom DT datatable
 "_PACKAGE"

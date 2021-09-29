@@ -1,12 +1,12 @@
 ---
-title: "Best practices when writing vignette in admiral"
+title: "Writing Vignettes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Best practices when writing vignette in admiral}
+  %\VignetteIndexEntry{Writing Vignettes}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup0, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -57,16 +57,17 @@ Headings must be title case and start from Heading 1:
 # Heading 1
 This is the description of my first section.
 
-## Heading 2.1
+## Heading 1.1
 This is the description of my first sub-section within my first section.
 
-## Heading 2.2
+## Heading 1.2
 This is the description of my second sub-section within my first section.
 
 ```
 
 The first section gives a brief introduction of the vignette. The last sub-section 
-of the introduction should describe the packages required to run the admiral functions. The admiral package should be described first.
+of the introduction should describe the packages required to run the admiral functions. 
+The admiral package should be described first.
 
 ```
 # Introduction
@@ -96,6 +97,8 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 + Any variable name, dataset name, function, argument name must be quoted with backticks: e.g. '`'ADSL'`', '`'dm'`', '`'ADT'`'
 
 + Functions must also end with `()`.
+
++ Variables name is expected to be uppercase while datasets name is expected to be lowercase.
 
 + All the codes must be executed and the output result displayed once the code is executed. Use:
  
@@ -149,21 +152,17 @@ library(lubridate)
 library(DT)
 library(admiral)
 
-data(dm)
-data(ds)
+data(vs)
 ```
 
 
 ```{r, eval=FALSE, echo=TRUE}
-adsl <- dm %>%
-  derive_disposition_dt(
-    dataset_ds = ds,
-    new_var = EOSDT,
-    dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
-    date_imputation = NULL
-  )
-
+vs1 <- vs %>%
+  derive_vars_dt(
+  new_vars_prefix = "A",
+  dtc = VSDTC,
+  date_imputation = "FIRST"
+)
 
 ```
 
@@ -173,10 +172,11 @@ adsl <- dm %>%
   
       
       `r ''````{r}
-        dataset_vignette(adsl, 
-                        display_vars=vars(USUBJID, RFSTDTC, RFENDTC, DTHDTC, ARMCD, EOSDT),
-                        filter = ARMCD == "Pbo"
-                        )
+        dataset_vignette(
+          vs1, 
+          display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+          filter = VSTESTCD == "WEIGHT"
+        )
       ```
       
 
@@ -184,15 +184,17 @@ adsl <- dm %>%
   + ... so that output is displayed consistently across the vignettes: 
  
 
-```{r, echo=FALSE, include=FALSE}
-  devtools::load_all()
-```
-
 ```{r, echo=FALSE}
-  dataset_vignette(adsl, 
-                   display_vars=vars(USUBJID, RFSTDTC, RFENDTC, DTHDTC, ARMCD, EOSDT),
-                   filter = ARMCD == "Pbo"
-                   )
+vs1 <- vs %>%
+  derive_vars_dt(
+  new_vars_prefix = "A",
+  dtc = VSDTC,
+  date_imputation = "FIRST"
+)
+
+dataset_vignette(
+  vs1,
+  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  filter = VSTESTCD == "WEIGHT"
+)
 ```
-
-

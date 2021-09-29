@@ -17,15 +17,18 @@
 #'
 #' @param filter Filter condition
 #'
-#'   The specified condition is applied to the dataset before it is displayed.
+#' The specified condition is applied to the dataset before it is displayed.
 #'
-#'   *Permitted Values:* a condition
+#' Permitted Values: a condition
 #'
 #' @keywords vignette
 #'
+#' @export
+#'
 #' @examples
-#' library(DT)
 #' library(admiral)
+#' library(DT)
+#' library(dplyr)
 #'
 #' data("dm")
 #' dataset_vignette(dm)

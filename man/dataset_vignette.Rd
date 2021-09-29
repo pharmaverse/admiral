@@ -22,15 +22,16 @@ other variables are hidden. They can be made visible by clicking the\verb{Choose
 
 The specified condition is applied to the dataset before it is displayed.
 
-\emph{Permitted Values:} a condition}
+Permitted Values: a condition}
 }
 \description{
 Output a dataset in a vignette with the pre-specified format
 By default, the variables specified in \code{display_vars}
 }
 \examples{
-library(DT)
 library(admiral)
+library(DT)
+library(dplyr)
 
 data("dm")
 dataset_vignette(dm)

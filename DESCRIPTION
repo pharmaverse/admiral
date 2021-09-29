@@ -33,7 +33,8 @@ Imports:
     rlang,
     stringr,
     tidyr,
-    tidyselect
+    tidyselect,
+    DT
 Suggests:
     devtools,
     diffdf,
