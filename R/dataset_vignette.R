@@ -53,7 +53,7 @@ dataset_vignette<-function(dataset, display_vars=NULL, filter=NULL) {
     cols_to_hide<-list()
   }
 
-  datatable(
+  DT::datatable(
     out,
     rownames = FALSE,
     filter = 'top',

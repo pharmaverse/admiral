@@ -33,8 +33,7 @@ Imports:
     rlang,
     stringr,
     tidyr,
-    tidyselect,
-    DT
+    tidyselect
 Suggests:
     devtools,
     diffdf,
@@ -51,5 +50,6 @@ Suggests:
     styler,
     tibble,
     usethis,
-    covr
+    covr,
+    DT
 VignetteBuilder: knitr

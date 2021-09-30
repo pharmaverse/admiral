@@ -22,5 +22,4 @@
 #'             time_length %--% ymd ymd_hms
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect contains vars_select
-#' @importFrom DT datatable
 "_PACKAGE"
