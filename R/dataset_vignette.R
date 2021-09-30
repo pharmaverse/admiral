@@ -32,47 +32,43 @@
 #'
 #' data("dm")
 #' dataset_vignette(dm)
-#' dataset_vignette(dm, display_vars=vars(USUBJID, RFSTDTC, DTHDTC), filter= ARMCD == "Pbo")
-
-
-dataset_vignette<-function(dataset, display_vars=NULL, filter=NULL) {
-
-  display_vars<-assert_vars(display_vars, optional = TRUE)
-  assert_data_frame(dataset,required_vars = display_vars)
+#' dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
+dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
+  display_vars <- assert_vars(display_vars, optional = TRUE)
+  assert_data_frame(dataset, required_vars = display_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
-  out<-dataset %>%
-    filter_if(filter)%>%
-    mutate_if(is.character,as.factor)
+  out <- dataset %>%
+    filter_if(filter) %>%
+    mutate_if(is.character, as.factor)
 
-  if (!is.null(display_vars)){
-    hide_columns<-which(!(colnames(out) %in% vars2chr(display_vars)))
-    cols_to_hide<-list(list(targets = hide_columns-1, visible = FALSE))
+  if (!is.null(display_vars)) {
+    hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
+    cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
   }
-  else{
-    cols_to_hide<-list()
+  else {
+    cols_to_hide <- list()
   }
 
   DT::datatable(
     out,
     rownames = FALSE,
-    filter = 'top',
-    extensions = c('Buttons', 'ColReorder', 'Scroller'),
+    filter = "top",
+    extensions = c("Buttons", "ColReorder", "Scroller"),
     options = list(
-      columnDefs =cols_to_hide,
+      columnDefs = cols_to_hide,
       searchHighlight = TRUE,
       searching = TRUE,
       pageLength = 5,
       lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = 'Bfrtip',
-      buttons = list(list(extend = "colvis",
-                          text = "Choose the columns to display",
-                          scroller = T,
-                          collectionLayout= 'fixed two-column' )),
-      colReorder = TRUE)
+      dom = "Bfrtip",
+      buttons = list(list(
+        extend = "colvis",
+        text = "Choose the columns to display",
+        scroller = T,
+        collectionLayout = "fixed two-column"
+      )),
+      colReorder = TRUE
+    )
   )
 }
-
-
-
-
