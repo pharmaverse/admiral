@@ -39,6 +39,9 @@ The `<Title>` of the vignette should be meaningful.
 
 ## Default Options
 
+If any chunks are used within the vignette, the following options should be set after the metadata 
+to ensure that the chunks are rendered consistently across all vignettes.
+
     `r ''````{r setup, include=FALSE}
     knitr::opts_chunk$set(
       collapse = TRUE,
@@ -72,15 +75,15 @@ The admiral package should be described first.
 ```
 # Introduction
 
-This is the introduction of my mignette.
+This is the introduction of my vignette.
 
 ## Required Packages
+```
 
     `r ''````{r, warning=FALSE, message=FALSE}
     library(admiral)
     # <all packages used in the vignette>
     ```
-```
 
 The `warning = FALSE` and `message = FALSE` options are there to prevent the usual messages:
 
@@ -94,13 +97,21 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 
 #### General Conventions
 
-+ Any variable name, dataset name, function, argument name must be quoted with backticks: e.g. '`'ADSL'`', '`'dm'`', '`'ADT'`'
++ Any new vignette must be added to the `_pkgdown.yml` file in the relevant section.
+
++ Any variable name, dataset name, function, argument name must be quoted with backticks: e.g.
+
+
+  ```
+  The `date` parameter of the `derive_my_var()` function expects a date variable, e.g., `ADT`.
+  ```
 
 + Functions must also end with `()`.
 
 + Variables name is expected to be uppercase while datasets name is expected to be lowercase.
 
-+ All the codes must be executed and the output result displayed once the code is executed. Use:
++ All the codes must be described, executed and the output result displayed once the code is executed.
+Use:
  
 
       `r ''````{r}
@@ -109,7 +120,63 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 
 + Any output created must clearly show what the function has derived. 
 It should at least show the variables/records used as input to the function and the derived 
-variables/records.
+variables/records. If a dataset must be displayed, it will be formatted using the `dataset_vignette()`
+function so that it is displayed consistently across the vignettes.E.g.
+
+
+  + Description and execution of the code used to derive the variable/record
+  
+
+
+```{r, include=FALSE}
+library(dplyr)
+library(lubridate)
+library(DT)
+library(admiral)
+
+data(vs)
+```
+
+      ```{r, eval=FALSE, echo=TRUE}
+      vs1 <- vs %>%
+        derive_vars_dt(
+        new_vars_prefix = "A",
+        dtc = VSDTC,
+        date_imputation = "FIRST"
+      )
+
+      ```
+
+
+  + Output dataset formatted using `dataset_vignette()`...
+
+
+      ```{r, echo=FALSE}
+      vs1 <- vs %>%
+        derive_vars_dt(
+        new_vars_prefix = "A",
+        dtc = VSDTC,
+        date_imputation = "FIRST"
+      )
+      
+      dataset_vignette(
+        vs1,
+        display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+        filter = VSTESTCD == "WEIGHT"
+      )
+      ```
+
+
+    Note: The call to get the formatted dataset would be: 
+ 
+
+       ```{r, eval=FALSE, echo=TRUE}
+       dataset_vignette(
+          vs1, 
+          display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+          filter = VSTESTCD == "WEIGHT"
+        )
+      ```
 
 #### Conventions for ADaM Workflow
 
@@ -124,6 +191,7 @@ contents). Don’t use a tag with a number but use a meaningful name (e.g. do no
 but use `(#this_action)`)
 
 + the last section should link to a template script. 
+
 
 ```
 # Programming Workflow
@@ -143,58 +211,13 @@ ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templat
 
 ```
 
-+ In order to clearly demonstrate the purpose of a function, 
-  + the code used to derive the variable/record ...
+One could also add anchor directly to the headings
 
-```{r, include=FALSE}
-library(dplyr)
-library(lubridate)
-library(DT)
-library(admiral)
-
-data(vs)
+```
+## Read in Data {#readdata}
+## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
+## ...
+## Assign `ASEQ` {#aseq}
 ```
 
 
-```{r, eval=FALSE, echo=TRUE}
-vs1 <- vs %>%
-  derive_vars_dt(
-  new_vars_prefix = "A",
-  dtc = VSDTC,
-  date_imputation = "FIRST"
-)
-
-```
-
-
-  + ... must be followed by the output dataset, formatted using `dataset_vignette()`...
-  
-  
-      
-      `r ''````{r}
-        dataset_vignette(
-          vs1, 
-          display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-          filter = VSTESTCD == "WEIGHT"
-        )
-      ```
-      
-
-
-  + ... so that output is displayed consistently across the vignettes: 
- 
-
-```{r, echo=FALSE}
-vs1 <- vs %>%
-  derive_vars_dt(
-  new_vars_prefix = "A",
-  dtc = VSDTC,
-  date_imputation = "FIRST"
-)
-
-dataset_vignette(
-  vs1,
-  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-  filter = VSTESTCD == "WEIGHT"
-)
-```

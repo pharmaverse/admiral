@@ -1,11 +1,10 @@
-#' Output a dataset in a vignette in the admiral format
+#' Output a Dataset in a Vignette in the admiral Format
 #'
-#' Output a dataset in a vignette with the pre-specified format
-#' By default, the variables specified in `display_vars`
+#' Output a dataset in a vignette with the pre-specified format.
 #'
 #' @param dataset Dataset to output in the vignette
 #'
-#' @param display_vars Variables selected to demonstrate the outcome of the derivation.
+#' @param display_vars Variables selected to demonstrate the outcome of the derivation
 #'
 #' Permitted Values: list of variables
 #'
@@ -21,7 +20,7 @@
 #'
 #' Permitted Values: a condition
 #'
-#' @keywords vignette
+#' @keywords dev_utility
 #'
 #' @export
 #'
@@ -61,7 +60,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
       searching = TRUE,
       pageLength = 5,
       lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = "Bfrtip",
+      dom = "Bfrtipl",
       buttons = list(list(
         extend = "colvis",
         text = "Choose the columns to display",
