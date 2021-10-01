@@ -1,0 +1,394 @@
+---
+title: "Creating a BDS Time-to-Event ADaM"
+output:
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Creating a BDS Time-to-Event ADaM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This article describes creating a BDS time-to-event ADaM.
+
+
+
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
+otherwise specified.*
+
+## Required Packages
+
+The examples of this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(dplyr)
+```
+
+```{r, warning=FALSE, message=FALSE, include=FALSE}
+library(lubridate)
+datatable_vignette <- function(dataset) {
+  DT::datatable(
+    dataset,
+    rownames = FALSE,
+    filter = 'top',
+    class = 'comapct stripe',
+    extensions = c('Buttons', 'ColReorder'),
+    options = list(
+      searchHighlight = TRUE,
+      searching = TRUE,
+      pageLength = 5,
+      lengthMenu = c(5, 10, 15, 20, 50, 100),
+      dom = 'Bflrtip',
+      buttons = I('colvis'),
+      colReorder = TRUE
+    )
+  )
+}
+dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
+  display_vars <- assert_vars(display_vars, optional = TRUE)
+  assert_data_frame(dataset, required_vars = display_vars)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+
+  out <- dataset %>%
+     admiral::filter_if(filter) %>%
+     dplyr::mutate_if(is.character, as.factor)
+
+  if (!is.null(display_vars)) {
+    hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
+    cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
+  }
+  else {
+    cols_to_hide <- list()
+  }
+
+  DT::datatable(
+    out,
+    rownames = FALSE,
+    filter = "top",
+    extensions = c("Buttons", "ColReorder", "Scroller"),
+    options = list(
+      columnDefs = cols_to_hide,
+      searchHighlight = TRUE,
+      searching = TRUE,
+      pageLength = 5,
+      lengthMenu = c(5, 10, 15, 20, 50, 100),
+      dom = "Blfrtip",
+      buttons = list(list(
+        extend = "colvis",
+        text = "Choose the columns to display",
+        scroller = T,
+        collectionLayout = "fixed two-column"
+      )),
+      colReorder = TRUE
+    )
+  )
+}
+```
+
+# Programming Workflow
+
+* [Read in Data](#readdata)
+* [Derive Parameters](#parameters)
+* [Derive Analysis Value (`AVAL`)](#aval)
+* [Derive Analysis Sequence Number (`ASEQ`)](#aseq)
+* [Add ADSL Variables](#adslvars)
+
+## Read in Data {#readdata}
+
+To start, all datasets needed for the creation of the time-to-event dataset
+should be read into the environment. This will be a company specific process.
+
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
+in `{admiral}`---are used.
+
+```{r}
+data("adsl")
+```
+
+## Derive Parameters {#parameters}
+
+The events and censorings are defined by the `tte_source()` class. It defines
+
+- which observations (`filter` parameter) of a source dataset (`dataset`
+parameter) are potential events or censorings,
+- the value of the `CNSR` variable (`censor` parameter), and
+- which variable provides the date (`date` parameter).
+
+The date can be provided as date (`*DT` variable), datetime (`*DTM` variable),
+or character ISO-8601 date (`*DTC` variable).
+
+For example the following call defines a death event based on ADSL variables.
+The `censor` parameter is not specified as it is defaulted to `0`, which must be
+used for events.
+
+```{r}
+death <- tte_source(
+  dataset = adsl,
+  filter = DTHFL == "Y",
+  date = DTHDT)
+```
+
+A corresponding censoring based on the last known alive date can be defined by
+the following call. For censorings the value of the `CNSR` value must be a
+positive integer.
+```{r}
+lstalv <- tte_source(
+  dataset = adsl,
+  date = LSTALVDT,
+  censor = 1)
+```
+
+The definitions can be passed to `derive_param_tte()` to create a new time-to-event parameter.
+```{r}
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  event_conditions = list(death),
+  censor_conditions = list(lstalv),
+  set_values_to = vars(PARAMCD = "OS",
+                       PARAM = "Overall Survival"))
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR))
+```
+
+To add additional information like event or censoring description (`EVENTDESC`)
+or source variable (`SRCVAR`) the `set_values_to` parameter can be specified in
+the event/censoring definition.
+```{r}
+death <- tte_source(
+  dataset = adsl,
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to =vars(
+    EVENTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"))
+
+lstalv <- tte_source(
+  dataset = adsl,
+  date = LSTALVDT,
+  censor = 1,
+  set_values_to = vars(
+    EVENTDESC = "LAST KNOWN ALIVE DATE",
+    SRCDOM = "ADSL",
+    SRCVAR = "LSTALVDT"))
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  event_conditions = list(death),
+  censor_conditions = list(lstalv),
+  set_values_to = vars(PARAMCD = "OS",
+                       PARAM = "Overall Survival"))
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, EVENTDESC, SRCDOM, SRCVAR, CNSR, ADT))
+# save adtte and adsl for next section
+adtte_bak <- adtte
+adsl_bak <- adsl
+```
+
+If a subject has no valid date in any of the event or censoring source datasets,
+it will not be included in the output dataset. Therefore the `start` censoring
+is defined below to achieve that subjects without data in `adrs` are censored at
+the start date.
+
+The ADaM IG requires that computed date must be accompanied by imputation flags.
+If the start date is imputed, the date imputation flag can be specified by the
+`start_date_imputation_flag` parameter. If a date variable from one of the event
+or censoring source datasets is imputed, the imputation flag can be specified
+for the `set_values_to` parameter in `tte_source()` (see defintion of the
+`start` censoring below).
+```{r, eval=FALSE}
+View(adsl)
+```
+```{r, echo=FALSE}
+adsl <- tibble::tribble(
+    ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDT,           ~TRTSDTF,
+    "01",     "Y",    ymd("2021-06-12"), ymd("2021-01-01"), "M",
+    "02",     "N",    NA,                ymd("2021-02-03"), NA,
+    "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-10"), NA,
+    "04",     "N",    NA,                ymd("2021-02-03"), NA,
+    "05",     "N",    NA,                ymd("2021-04-01"), "D") %>%
+    mutate(STUDYID = "AB42")
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, DTHFL, DTHDT, TRTSDT, TRTSDTF))
+```
+```{r, eval=FALSE}
+View(adrs)
+```
+```{r, echo=FALSE}
+  adrs <- tibble::tribble(
+    ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+    "01",     "SD",   ymd("2021-01-03"), 1,
+    "01",     "PR",   ymd("2021-03-04"), 2,
+    "01",     "PD",   ymd("2021-05-05"), 3,
+    "02",     "PD",   ymd("2021-02-03"), 1,
+    "04",     "SD",   ymd("2021-02-13"), 1,
+    "04",     "PR",   ymd("2021-04-14"), 2,
+    "04",     "CR",   ymd("2021-05-15"), 3) %>%
+    mutate(STUDYID = "AB42",
+           PARAMCD = "OVR",
+           PARAM = "Overall Response") %>% 
+    select(STUDYID, USUBJID, PARAMCD, PARAM, ADT, ASEQ, AVALC)
+
+dataset_vignette(
+  adrs,
+  display_vars = vars(USUBJID, AVALC, ADT, ASEQ, PARAMCD, PARAM))
+```
+
+```{r}
+# progressive disease event #
+pd <- tte_source(
+  dataset = adrs,
+  filter = AVALC == "PD",
+  date = ADT,
+  set_values_to = vars(
+    EVENTDESC = "PD",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADT",
+    SRCSEQ = ASEQ
+  )
+)
+
+# death event #
+death <- tte_source(
+  dataset = adsl,
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = vars(
+    EVENTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+
+# last tumor assessment censoring #
+lastvisit <- tte_source(
+  dataset = adrs,
+  date = ADT,
+  censor = 1,
+  set_values_to = vars(
+    EVENTDESC = "LAST TUMOR ASSESSMENT",
+    SRCDOM = "ADRS",
+    SRCVAR = "ADT"
+  )
+)
+
+# start date censoring (for patients without tumor assessment) #
+start <- tte_source(
+  dataset = adsl,
+  date = TRTSDT,
+  censor = 1,
+  set_values_to = vars(
+    EVENTDESC = "TREATMENT START",
+    SRCDOM = "ADSL",
+    SRCVAR = "TRTSDT",
+    ADTF = TRTSDTF
+  )
+)
+
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  start_date_imputation_flag = TRTSDTF,
+  event_conditions = list(pd, death),
+  censor_conditions = list(lastvisit, start),
+  set_values_to = vars(PARAMCD = "PFS",
+                       PARAM = "Progression Free Survival")
+) %>%
+  select(STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
+    EVENTDESC, SRCDOM, SRCVAR
+  )
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR))
+```
+```{r echo=FALSE}
+adtte <- adtte_bak
+adsl <- adsl_bak
+```
+
+```{r}
+adsl <- adsl %>% mutate(AEOBSEDT = pmin(TRTEDT + 30, EOSDT))
+```
+```{r, echo=FALSE}
+datatable_vignette(
+  adsl)
+```
+
+## Derive Analysis Value (`AVAL`) {#aval}
+
+The analysis value (`AVAL`) can be derived by calling `derive_vars_duration()`.
+
+This example derives the time to event in days. Other units can be requested by
+the specifying the `out_unit` parameter.
+```{r echo=FALSE}
+adtte <- adtte_bak
+adsl <- adsl_bak
+```
+```{r eval=TRUE}
+adtte <- derive_vars_duration(
+  adtte,
+  new_var = AVAL,
+  start_date = STARTDT,
+  end_date = ADT
+)
+```
+```{r, echo=FALSE}
+datatable_vignette(
+  adtte)
+```
+
+## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
+
+The admiral function `derive_obs_number()` can be used to derive `ASEQ`:
+
+```{r eval=TRUE}
+adtte <- derive_obs_number(
+  adtte,
+  by_vars = vars(STUDYID, USUBJID),
+  order = vars(PARAMCD),
+  check_type = "error"
+)
+```
+```{r, echo=FALSE}
+datatable_vignette(
+  adtte)
+```
+## Add ADSL Variables {#adslvars}
+
+Variables from ADSL which are required for time-to-event analyses, e.g.,
+treatment variables or covariates can be added using `left_join()`.
+
+```{r eval=TRUE}
+adtte <- left_join(adtte,
+                   adsl %>% select(STUDYID, USUBJID, ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
+                   by = c("STUDYID", "USUBJID"))
+```
+```{r, echo=FALSE}
+datatable_vignette(
+  adtte)
+```
+# Example Scripts {#example}
+
+ADaM | Sample Code
+---- | --------------
+ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R){target="_blank"}
+ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R){target="_blank"}
