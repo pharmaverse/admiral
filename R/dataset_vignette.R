@@ -1,6 +1,6 @@
 #' Output a Dataset in a Vignette in the admiral Format
 #'
-#' Output a dataset in a vignette with the pre-specified format.
+#' Output a dataset in a vignette with the pre-specified admiral format.
 #'
 #' @param dataset Dataset to output in the vignette
 #'
