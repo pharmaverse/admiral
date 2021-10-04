@@ -98,7 +98,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
 # Programming Workflow
 
 * [Read in Data](#readdata)
-* [Derive Parameters](#parameters)
+* [Derive Parameters (`CNSR`, `ADT`, `STARTDT`)](#parameters)
 * [Derive Analysis Value (`AVAL`)](#aval)
 * [Derive Analysis Sequence Number (`ASEQ`)](#aseq)
 * [Add ADSL Variables](#adslvars)
@@ -115,7 +115,7 @@ in `{admiral}`---are used.
 data("adsl")
 ```
 
-## Derive Parameters {#parameters}
+## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
 
 The events and censorings are defined by the `tte_source()` class. It defines
 
@@ -320,6 +320,9 @@ dataset_vignette(
   adtte,
   display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR))
 ```
+
+If several similar time-to-event parameters need to be derived the
+`call_derivation()` function is useful.
 ```{r echo=FALSE}
 adtte <- adtte_bak
 adsl <- adsl_bak
@@ -329,8 +332,73 @@ adsl <- adsl_bak
 adsl <- adsl %>% mutate(AEOBSEDT = pmin(TRTEDT + 30, EOSDT))
 ```
 ```{r, echo=FALSE}
-datatable_vignette(
-  adsl)
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, TRTEDT, EOSDT, AEOBSEDT))
+```
+
+```{r}
+observation_end <- tte_source(
+  dataset = adsl,
+  date = AEOBSEDT,
+  censor = 1,
+  set_values_to = vars(
+    EVENTDESC = "OBSERVATION END",
+    SRCDOM = "ADSL",
+    SRCVAR = "AEOBSEDT"
+  )
+)
+
+tt_ae <- tte_source(
+  dataset = ae,
+  date = AESTDTC,
+  set_values_to = vars(
+    EVENTDESC = "ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC"
+  )
+)
+
+tt_ser_ae <- tte_source(
+  dataset = ae,
+  filter = AESER == "Y",
+  date = AESTDTC,
+  set_values_to = vars(
+    EVENTDESC = "SERIOUS ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC"
+  )
+)
+
+tt_rel_ae <- tte_source(
+  dataset = ae,
+  filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
+  date = AESTDTC,
+  set_values_to = vars(
+    EVENTDESC = "RELATED ADVERSE EVENT",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC"
+  )
+)
+
+adaette <- call_derivation(
+  derivation = derive_param_tte,
+  variable_params = list(
+    params(event_conditions = list(tt_ae),
+           set_values_to = vars(PARAMCD = "TTAE")),
+    params(event_conditions = list(tt_ser_ae),
+           set_values_to = vars(PARAMCD = "TTSERAE")),
+    params(event_conditions = list(tt_rel_ae),
+           set_values_to = vars(PARAMCD = "TTRELAE"))),
+  dataset_adsl = adsl,
+  censor_conditions = list(observation_end)
+  )
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adaette %>% select(STUDYID, USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVENTDESC, SRCDOM, SRCVAR)
+  %>% arrange(USUBJID, PARAMCD),
+  display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVENTDESC, SRCDOM, SRCVAR))
 ```
 
 ## Derive Analysis Value (`AVAL`) {#aval}
@@ -386,9 +454,3 @@ adtte <- left_join(adtte,
 datatable_vignette(
   adtte)
 ```
-# Example Scripts {#example}
-
-ADaM | Sample Code
----- | --------------
-ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R){target="_blank"}
-ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R){target="_blank"}
