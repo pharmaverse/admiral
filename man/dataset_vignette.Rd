@@ -2,14 +2,14 @@
 % Please edit documentation in R/dataset_vignette.R
 \name{dataset_vignette}
 \alias{dataset_vignette}
-\title{Output a dataset in a vignette in the admiral format}
+\title{Output a Dataset in a Vignette in the admiral Format}
 \usage{
 dataset_vignette(dataset, display_vars = NULL, filter = NULL)
 }
 \arguments{
 \item{dataset}{Dataset to output in the vignette}
 
-\item{display_vars}{Variables selected to demonstrate the outcome of the derivation.
+\item{display_vars}{Variables selected to demonstrate the outcome of the derivation
 
 Permitted Values: list of variables
 
@@ -25,8 +25,7 @@ The specified condition is applied to the dataset before it is displayed.
 Permitted Values: a condition}
 }
 \description{
-Output a dataset in a vignette with the pre-specified format
-By default, the variables specified in \code{display_vars}
+Output a dataset in a vignette with the pre-specified admiral format.
 }
 \examples{
 library(admiral)
@@ -35,6 +34,6 @@ library(dplyr)
 
 data("dm")
 dataset_vignette(dm)
-dataset_vignette(dm, display_vars=vars(USUBJID, RFSTDTC, DTHDTC), filter= ARMCD == "Pbo")
+dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
 }
-\keyword{vignette}
+\keyword{dev_utility}
