@@ -35,15 +35,31 @@
 #'
 #' derive_vars_dtm_to_tm(adcm,
 #'                       vars(TRTSDTM, ASTDTM, AENDTM))
+#'
+#'derive_vars_dtm_to_tm(adcm,
+#'                       vars(TRTSDTM))
 
-derive_vars_dtm_to_tm <- function(dataset,
-                                  source_vars) {
+derive_vars_dtm_to_tm <- function(dataset, source_vars) {
+  assert_vars(source_vars)
+  assert_data_frame(dataset, required_vars = source_vars)
 
-    assert_vars(source_vars)
-    assert_data_frame(dataset, required_vars = source_vars)
+  #Warn if --TM variables already exist
+  dtm_vars <- quo_c(source_vars)
+  dtm_vars2 <- vars2chr(dtm_vars)
+  n_vars <- length(dtm_vars)
 
+  for (i in n_vars) {
+    tm_vars <- str_replace(dtm_vars2[[i]], "DTM", "TM")
+    warn_if_vars_exist(dataset, tm_vars)
+  }
+
+  if (n_vars > 1) {
     dataset %>%
       mutate_at(source_vars, .funs = list(new = hms::as_hms)) %>%
       rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "TM"))
-
+  }
+  else{
+    dataset %>%
+      mutate(!!sym(tm_vars) := hms::as_hms(!!sym(dtm_vars2)))
+  }
 }

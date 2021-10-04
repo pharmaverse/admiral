@@ -38,6 +38,9 @@ adcm <- tibble::tribble(
 
 derive_vars_dtm_to_tm(adcm,
                       vars(TRTSDTM, ASTDTM, AENDTM))
+
+derive_vars_dtm_to_tm(adcm,
+                      vars(TRTSDTM))
 }
 \author{
 Teckla Akinyi
