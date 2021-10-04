@@ -57,7 +57,7 @@ the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_os()` derives the `OS` parameter.
 
-## Input and Output
+# Input and Output
 
 It is expected that the input dataset is not grouped. Otherwise an error is
 issued.
@@ -70,11 +70,40 @@ variables, an error is issued.
 It is expected all variable names are uppercase in the input dataset and new
 variables will be returned in uppercase. It is expected all `SUPPxx.QNAM` 
 values are uppercase to conform with this convention when using the 
-`derive_vars_suppqual` to adhere to the uppercase requirement.
+`derive_vars_suppqual()` to adhere to the uppercase requirement.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
 be preserved.
+
+# Handling of Missing Values
+
+When using the {haven} package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using {admiral}'s `convert_blanks_to_na()` function, e.g.
+
+```r
+dm <- haven::read_sas("dm.sas7bdat") %>% 
+  convert_blanks_to_na()
+```
+
+Note that any logical operator being applied to an `NA` value *always* returns `NA` rather than `TRUE` or `FALSE`.
+
+```{r}
+visits <- c("Baseline", NA, "Screening", "Week 1 Day 7")
+visits != "Baseline"
+```
+
+The only exception is `is.na()` which returns `TRUE` if the input is `NA`.
+
+```{r}
+is.na(visits)
+```
+
+Thus, to filter all visits which are not `"Baseline"` the following condition would need to be used.
+
+```{r}
+visits != "Baseline" | is.na(visits)
+```
+
 
 # Computations
 
@@ -124,7 +153,8 @@ created by calling `use_ad_template()`, e.g.,
 ```r
 use_ad_template(
   adam_name = "adsl",
-  save_path = "./ad_adsl.R")
+  save_path = "./ad_adsl.R"
+)
 ```
 
 A list of all available templates can be obtained by `list_all_templates()`:
