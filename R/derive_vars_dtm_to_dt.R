@@ -35,11 +35,28 @@
 #'   )
 #'
 #' derive_vars_dtm_to_dt(adcm, vars(TRTSDTM, ASTDTM, AENDTM))
+
 derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
-  dataset %>%
-    mutate_at(source_vars, .funs = list(new = lubridate::date)) %>%
-    rename_at(vars(ends_with("new")), .funs = ~str_remove(., "M_new"))
+  #Warn if --TM variables already exist
+  dtm_vars <- quo_c(source_vars)
+  dtm_vars2 <- vars2chr(dtm_vars)
+  n_vars <- length(dtm_vars)
+
+  for (i in n_vars) {
+    dt_vars <- str_replace(dtm_vars2[[i]], "DTM", "DT")
+    warn_if_vars_exist(dataset, dt_vars)
+  }
+
+  if (n_vars > 1) {
+    dataset %>%
+      mutate_at(source_vars, .funs = list(new = lubridate::date)) %>%
+      rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "DT"))
+  }
+  else{
+    dataset %>%
+      mutate(!!sym(dt_vars) := lubridate::date(!!sym(dtm_vars2)))
+  }
 }
