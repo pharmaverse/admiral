@@ -66,7 +66,7 @@ adae \%>\%
   )
 }
 \seealso{
-params
+\code{\link[=params]{params()}}
 }
 \author{
 Thomas Neitmann, Stefan Bundfuss
