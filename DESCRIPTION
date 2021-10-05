@@ -50,5 +50,6 @@ Suggests:
     styler,
     tibble,
     usethis,
-    covr
+    covr,
+    DT
 VignetteBuilder: knitr
