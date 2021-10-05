@@ -1,6 +1,6 @@
-#' Derive date variables from datetime variables
+#' Derive Date Variables from Datetime Variables
 #'
-#' This function creates a date as output from a datetime variable
+#' This function creates date(s) as output from datetime variable(S)
 #'
 #' @param dataset Input dataset
 #'
@@ -8,9 +8,8 @@
 #'
 #' @author Teckla Akinyi
 #'
-#' @return A data frame containing all observations and variables of the input
-#'   dataset and adds the corresponding date variable of all specified datetime variables from
-#'   the source_vars option with the correct name.
+#' @return A data frame containing the input dataset with the corresponding date (--DT)
+#'          variable(s) of all datetime variables (--DTM) specified in source_vars.
 #'
 #' @keywords ADaM Timing Date
 #'
@@ -21,12 +20,12 @@
 #' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adcm <- tibble::tribble(
-#'   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF,
-#'   "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", NA,
-#'   "PAT01",  NA,                    "2012-02-28 19:00:00", NA,                    NA,
-#'   "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", NA,
-#'   "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "M",
-#'   "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00", NA
+#'   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
+#'   "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00",
+#'   "PAT01",  NA,                    "2012-02-28 19:00:00", NA,
+#'   "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00",
+#'   "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00",
+#'   "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00",
 #' ) %>%
 #'   mutate(
 #'     TRTSDTM = as_datetime(TRTSDTM),
