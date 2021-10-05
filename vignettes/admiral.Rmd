@@ -104,6 +104,19 @@ Thus, to filter all visits which are not `"Baseline"` the following condition wo
 visits != "Baseline" | is.na(visits)
 ```
 
+Also note that most aggregation functions, like `mean()` or `max()`, also return `NA` if any element of the input vector is missing.
+
+```{r}
+mean(c(1, NA, 2))
+```
+
+To avoid this behavior one has to explicitly set `na.rm = TRUE`.
+
+```{r}
+mean(c(1, NA, 2), na.rm = TRUE)
+```
+
+This is very important to keep in mind when using {admiral}'s aggregation functions such as `derive_summary_records()`.
 
 # Computations
 
