@@ -4,12 +4,18 @@
 \alias{derive_var_dthcaus}
 \title{Derive Death Cause}
 \usage{
-derive_var_dthcaus(dataset, ...)
+derive_var_dthcaus(dataset, ..., subject_keys = vars(STUDYID, USUBJID))
 }
 \arguments{
-\item{dataset}{Input dataset. \code{USUBJID} is an expected column.}
+\item{dataset}{Input dataset.
+The variables specified by the \code{subject_keys} parameter are expected.}
 
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 The input dataset with \code{DTHCAUS} variable added.

@@ -10,7 +10,8 @@ derive_disposition_dt(
   new_var,
   dtc,
   filter_ds,
-  date_imputation = NULL
+  date_imputation = NULL,
+  subject_keys = vars(STUDYID, USUBJID)
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ If the year part is not recorded (missing date), no imputation is performed.}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
+Filter used to select the relevant disposition data.
+It is expected that the filter restricts \code{dataset_ds} such that there is at most
 one observation per patient. An error is issued otherwise.
 
 Permitted Values: logical expression.}
@@ -51,6 +54,11 @@ Otherwise, a character value is expected, either as a
 }
 
 Default is NULL}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 the input dataset with the disposition date (\code{new_var}) added
