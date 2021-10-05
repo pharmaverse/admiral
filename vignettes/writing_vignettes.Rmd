@@ -216,9 +216,6 @@ ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templat
 ## ...
 ## Assign `ASEQ` {#aseq}
 
-# Another Section
-
-
 ```
 
 
