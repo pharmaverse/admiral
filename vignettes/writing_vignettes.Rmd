@@ -201,16 +201,6 @@ but use `(#this_action)`)
 * ...
 * [Assign `ASEQ`](#aseq)
 
-# Another Section
-
-# Example Script
-ADaM | Sample Code
----- | --------------
-ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adxx.R){target="_blank"}
-
-
-# Programming Workflow
-
 ## Read in Data {#readdata}
 ## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 ## ...
@@ -218,6 +208,10 @@ ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templat
 
 # Another Section
 
+# Example Script
+ADaM | Sample Code
+---- | --------------
+ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adxx.R){target="_blank"}
 
 ```
 
