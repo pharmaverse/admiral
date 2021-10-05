@@ -92,7 +92,7 @@
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
 #'
-#' @seealso [`format_reason_default()`]
+#' @seealso [format_reason_default()]
 #' @keywords adsl
 #'
 #' @author Samia Kabi

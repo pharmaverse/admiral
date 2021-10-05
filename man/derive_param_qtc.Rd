@@ -128,7 +128,7 @@ derive_param_qtc(
 )
 }
 \seealso{
-compute_qtc
+\code{\link[=compute_qtc]{compute_qtc()}}
 }
 \author{
 Stefan Bundfuss

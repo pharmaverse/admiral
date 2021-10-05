@@ -44,7 +44,7 @@
 #'
 #' @inheritParams derive_derived_param
 #'
-#' @seealso compute_qtc
+#' @seealso [compute_qtc()]
 #'
 #' @author Stefan Bundfuss
 #'
