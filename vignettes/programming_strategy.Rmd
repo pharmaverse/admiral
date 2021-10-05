@@ -396,7 +396,8 @@ If a unit test fails, it must provide a helpful error message, e.g., if the outp
 
 As admiral is still evolving, functions or parameters may need to be removed or replaced with more 
 efficient options from one release to another. In such cases, the relevant function or parameter 
-must be marked as deprecated. 
+must be marked as deprecated. A warning will be issued until the next release and an error will be 
+generated thereafter. Information about deprecation timelines must be added to the warning/error message.
 
 ## Documentation
 
@@ -455,7 +456,7 @@ If a parameter is removed and is not replaced, an **error** must be generated:
 
 If the parameter is renamed or replaced, a **warning** must be issued and the new parameter takes 
 the value of the old parameter until the next release. 
-Note: parameters which are not passed as `vars()` argument (e.g. new_var = VAR1 or filter = AVAL >10)
+Note: parameters which are not passed as `vars()` argument (e.g. `new_var = VAR1` or `filter = AVAL >10`)
 will need to be quoted. 
 
 ``` 
