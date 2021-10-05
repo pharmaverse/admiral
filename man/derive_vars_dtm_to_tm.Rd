@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dtm_to_tm.R
 \name{derive_vars_dtm_to_tm}
 \alias{derive_vars_dtm_to_tm}
-\title{Derive Time Variables From Datetime Variables}
+\title{Derive Time Variables from Datetime Variables}
 \usage{
 derive_vars_dtm_to_tm(dataset, source_vars)
 }
@@ -12,12 +12,12 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \item{source_vars}{A list of datetime variables from which time are to be extracted}
 }
 \value{
-A data frame containing all observations and variables of the input
-dataset and adds the corresponding time variable of all specified datetime variables from
+A data frame containing the input dataset with the datetime (--DTM)variable(s) and
+the corresponding time (--TM) variable(s) of all specified datetime variables from
 the source_vars option with the correct name.
 }
 \description{
-This function creates a time as output from a datetime variable
+This function creates time variable(S) as output from a datetime variable(s)
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

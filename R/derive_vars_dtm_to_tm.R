@@ -1,6 +1,6 @@
-#' Derive Time Variables From Datetime Variables
+#' Derive Time Variables from Datetime Variables
 #'
-#' This function creates a time as output from a datetime variable
+#' This function creates time variable(S) as output from a datetime variable(s)
 #'
 #' @param dataset Input dataset
 #'
@@ -8,9 +8,9 @@
 #'
 #' @author Teckla Akinyi
 #'
-#' @return A data frame containing all observations and variables of the input
-#'   dataset and adds the corresponding time variable of all specified datetime variables from
-#'   the source_vars option with the correct name.
+#' @return A data frame containing the input dataset with the datetime (--DTM)variable(s) and
+#'          the corresponding time (--TM) variable(s) of all specified datetime variables from
+#'           the source_vars option with the correct name.
 #'
 #' @keywords ADaM Timing Date
 #'
