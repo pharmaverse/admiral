@@ -153,7 +153,7 @@ library(dplyr, warn.conflicts = FALSE)
 data("adsl")
 
 death <- tte_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to =vars(
@@ -162,7 +162,7 @@ death <- tte_source(
     SRCVAR = "DTHDT"))
 
 lstalv <- tte_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = LSTALVDT,
   censor = 1,
   set_values_to = vars(
@@ -174,6 +174,7 @@ derive_param_tte(
   dataset_adsl = adsl,
   event_conditions = list(death),
   censor_conditions = list(lstalv),
+  source_datasets = list(adsl = adsl),
   set_values_to = vars(PARAMCD = "OS",
                        PARAM = "Overall Survival")) \%>\%
 select(-STUDYID) \%>\% `[`(20:30,)

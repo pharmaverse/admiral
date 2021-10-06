@@ -16,6 +16,8 @@ assert_varval_list(
 
 \item{required_elements}{A \code{character} vector of names that must be present in \code{arg}}
 
+\item{accept_expr}{Should expressions on the right hand side be accepted?}
+
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}
 }
