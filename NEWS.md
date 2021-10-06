@@ -10,6 +10,7 @@
 
 - `derive_vars_dtm_to_dt()` enables the easy conversion of datetime to date variables (#376).
 
+- `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551).
 
 - `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
 
