@@ -40,6 +40,11 @@
 #'
 #'   A list of `tte_source()` objects is expected.
 #'
+#' @param source_datasets Source datasets
+#'
+#'   A named list of datasets is expected. The `dataset_name` field of
+#'   `tte_source()` refers to the dataset provided in the list.
+#'
 #' @param create_datetime Create datetime variables?
 #'
 #'   If set to `TRUE`, variables `ADTM` and `STARTDTM` are created. Otherwise,
@@ -161,6 +166,7 @@ derive_param_tte <- function(dataset = NULL,
                              start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
+                             source_datasets,
                              create_datetime = FALSE,
                              set_values_to,
                              subject_keys = vars(STUDYID, USUBJID)) {
@@ -182,38 +188,32 @@ derive_param_tte <- function(dataset = NULL,
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "tte_source")
   # check that censor == 0 is used for events (strongly recommended by CDISC) #
-  if (any(lapply(event_conditions, `[[`, "censor") != 0)) {
-    nonzeros_idx <- which(lapply(event_conditions, `[[`, "censor") != 0)
-    abort(
-      paste0(
-        "The censor value of events must be zero.\n",
-        paste0(
-          arg_name(substitute(event_conditions)),
-          "[[", nonzeros_idx, "]]$censor",
-          " = ",
-          lapply(event_conditions[nonzeros_idx],`[[`, "censor"),
-          collapse = "\n"
-        )
-      )
-    )
-  }
+  assert_list_element(list = event_conditions,
+                      element = "censor",
+                      condition = censor == 0,
+                      message_text = "The censor value of events must be zero.")
   assert_list_of(censor_conditions, "tte_source")
   # check that censor > 0 is used for censorings (strongly recommended by CDISC) #
-  if (any(lapply(censor_conditions, `[[`, "censor") <= 0)) {
-    nonpositives_idx <- which(lapply(censor_conditions, `[[`, "censor") <= 0)
-    abort(
-      paste0(
-        "The censor value of censorings must be positive.\n",
-        paste0(
-          arg_name(substitute(censor_conditions)),
-          "[[", nonpositives_idx, "]]$censor",
-          " = ",
-          lapply(censor_conditions[nonpositives_idx],`[[`, "censor"),
-          collapse = "\n"
-        )
-      )
-    )
-  }
+  assert_list_element(list = censor_conditions,
+                      element = "censor",
+                      condition = censor > 0,
+                      message_text = "The censor value of censorings must be positive.")
+  assert_list_of(source_datasets, "data.frame")
+  source_names <- names(source_datasets)
+  assert_list_element(list = event_conditions,
+                      element = "dataset_name",
+                      condition = dataset_name %in% source_names,
+                      source_names = source_names,
+                      message_text = paste0("The dataset names must be included in list specified for the `source_datasets` parameter.\n",
+                                            "Following names were provided by `source_datasets`:\n",
+                                            enumerate(source_names, quote_fun = squote)))
+  assert_list_element(list = censor_conditions,
+                      element = "dataset_name",
+                      condition = dataset_name %in% source_names,
+                      source_names = source_names,
+                      message_text = paste0("The dataset names must be included in list specified for the `source_datasets` parameter.\n",
+                                            "Following names were provided by `source_datasets`:\n",
+                                            enumerate(source_names, quote_fun = squote)))
   assert_logical_scalar(create_datetime)
   assert_varval_list(set_values_to, optional = TRUE)
   if (!is.null(set_values_to$PARAMCD) & !is.null(dataset)) {
@@ -222,6 +222,7 @@ derive_param_tte <- function(dataset = NULL,
 
   # determine events #
   event_data <- filter_date_sources(sources = event_conditions,
+                                    source_datasets = source_datasets,
                                     create_datetime = create_datetime,
                                     subject_keys = subject_keys,
                                     mode = "first") %>%
@@ -229,6 +230,7 @@ derive_param_tte <- function(dataset = NULL,
 
   # determine censoring observations #
   censor_data <- filter_date_sources(sources = censor_conditions,
+                                     source_datasets = source_datasets,
                                      create_datetime = create_datetime,
                                      subject_keys = subject_keys,
                                      mode = "last") %>%
@@ -281,6 +283,11 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #'    A list of `tte_source()` objects is expected.
 #'
+#' @param source_datasets Source datasets
+#'
+#'   A named list of datasets is expected. The `dataset_name` field of
+#'   `tte_source()` refers to the dataset provided in the list.
+#'
 #' @param create_datetime Create datetime variable?
 #'
 #'   If set to `TRUE`, variables `ADTM` is created. Otherwise, variables `ADT`
@@ -328,6 +335,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @export
 filter_date_sources <- function(sources,
+                                source_datasets,
                                 create_datetime = FALSE,
                                 subject_keys,
                                 mode) {
@@ -345,10 +353,10 @@ filter_date_sources <- function(sources,
   else {
     date_var <- sym("ADT")
   }
-data <- vector("list", length(sources))
+  data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
-    data[[i]] <- sources[[i]]$dataset %>%
+    data[[i]] <- source_datasets[[sources[[i]]$dataset_name]] %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = vars(!!date),
@@ -403,7 +411,9 @@ data <- vector("list", length(sources))
 #' The `tte_source` object is used to define events and possible censorings as
 #' input for the `derive_param_tte()` function.
 #'
-#' @param dataset The source dataset
+#' @param dataset_name The name of the source dataset
+#'   The name refers to the dataset provided by the `source_datasets` parameter
+#'   of `derive_param_tte()`.
 #'
 #' @param filter An unquoted condition for selecting the observations from
 #'   `dataset` which are events or possible censoring time points.
@@ -419,7 +429,7 @@ data <- vector("list", length(sources))
 #' @param set_values_to A named list returned by `vars()` defining the
 #'   variables to be set for the event or censoring, e.g. `vars(EVENTDESC =
 #'   “DEATH”, SRCDOM = “ADSL”, SRCVAR = “DTHDT”)`. The values must be a symbol,
-#'   a character string, a numerig value, or `NA`.
+#'   a character string, a numeric value, `NA`, or an expression.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -428,18 +438,20 @@ data <- vector("list", length(sources))
 #' @export
 #'
 #' @return An object of class "tte_source".
-tte_source <- function(dataset,
+tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
                        censor = 0,
                        set_values_to = NULL) {
   out <- list(
-    dataset = assert_data_frame(dataset),
+    dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     censor = assert_integer_scalar(censor),
-    set_values_to = assert_varval_list(set_values_to, optional = TRUE)
+    set_values_to = assert_varval_list(set_values_to,
+                                       accept_expr = TRUE,
+                                       optional = TRUE)
   )
-  class(out) <- c("tte_source", "list")
+  class(out) <- c("tte_source", "source", "list")
   out
 }

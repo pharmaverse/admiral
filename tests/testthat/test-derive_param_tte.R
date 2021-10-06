@@ -9,7 +9,7 @@ test_that("new observations with analysis date are derived correctly", {
     mutate(STUDYID = "AB42")
 
   death <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     filter = DTHFL == "Y",
     date = DTHDT,
     set_values_to = vars(
@@ -18,7 +18,7 @@ test_that("new observations with analysis date are derived correctly", {
       SRCVAR = "DTHDT"))
 
   lstalv <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = LSTALVDT,
     censor = 1,
     set_values_to = vars(
@@ -43,6 +43,7 @@ test_that("new observations with analysis date are derived correctly", {
       start_date_imputation_flag = TRTSDTF,
       event_conditions = list(death),
       censor_conditions = list(lstalv),
+      source_datasets = list(adsl = adsl),
       set_values_to = vars(
         PARAMCD = "OS",
         PARAM = "Overall Survival"
@@ -76,7 +77,7 @@ test_that("new observations with analysis datetime are derived correctly", {
            PARAMCD = "OVR")
 
   pd <- tte_source(
-    dataset = adrs,
+    dataset_name = "adrs",
     filter = AVALC == "PD",
     date = ADTM,
     set_values_to = vars(
@@ -86,7 +87,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCSEQ = ASEQ))
 
   death <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     filter = DTHFL == "Y",
     date = DTHDT,
     set_values_to = vars(
@@ -95,7 +96,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCVAR = "DTHDT"))
 
   lastvisit <- tte_source(
-    dataset = adrs,
+    dataset_name = "adrs",
     date = ADTM,
     censor = 1,
     set_values_to = vars(
@@ -104,7 +105,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCVAR = "ADTM"))
 
   start <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = TRTSDTM,
     censor = 1,
     set_values_to = vars(
@@ -133,6 +134,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       start_time_imputation_flag = TRTSTMF,
       event_conditions = list(pd, death),
       censor_conditions = list(lastvisit, start),
+      source_datasets = list(adsl = adsl, adrs = adrs),
       create_datetime = TRUE,
       set_values_to = vars(
         PARAMCD = "PFS",
@@ -160,7 +162,7 @@ test_that("new observations based on DTC variables are derived correctly", {
     mutate(STUDYID = "AB42")
 
   ttae <- tte_source(
-    dataset = ae,
+    dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
       EVENTDESC = "AE",
@@ -169,7 +171,7 @@ test_that("new observations based on DTC variables are derived correctly", {
       SRCSEQ = AESEQ))
 
   eos <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
     set_values_to = vars(
@@ -193,6 +195,7 @@ test_that("new observations based on DTC variables are derived correctly", {
       start_date = TRTSDT,
       event_conditions = list(ttae),
       censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = vars(
         PARAMCD = "TTAE",
         PARAM = "Time to First Adverse Event"
@@ -219,7 +222,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
     mutate(STUDYID = "AB42")
 
   ttae <- tte_source(
-    dataset = ae,
+    dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
       EVENTDESC = "AE",
@@ -228,7 +231,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
       SRCSEQ = AESEQ))
 
   eos <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
     set_values_to = vars(
@@ -252,6 +255,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
       start_date = TRTSDTM,
       event_conditions = list(ttae),
       censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
       create_datetime = TRUE,
       set_values_to = vars(
         PARAMCD = "TTAE",
@@ -279,7 +283,7 @@ test_that("error is issued if parameter code already exists", {
     mutate(STUDYID = "AB42")
 
   ttae <- tte_source(
-    dataset = ae,
+    dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
       EVENTDESC = "AE",
@@ -288,7 +292,7 @@ test_that("error is issued if parameter code already exists", {
       SRCSEQ = AESEQ))
 
   eos <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
     set_values_to = vars(
@@ -313,6 +317,7 @@ test_that("error is issued if parameter code already exists", {
       start_date = TRTSDT,
       event_conditions = list(ttae),
       censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = vars(
         PARAMCD = "TTAE",
         PARAM = "Time to First Adverse Event"
@@ -338,7 +343,7 @@ test_that("error is issued if events with censor != 0 exists", {
     mutate(STUDYID = "AB42")
 
   ttae <- tte_source(
-    dataset = ae,
+    dataset_name = "ae",
     date = AESTDTC,
     censor = 1,
     set_values_to = vars(
@@ -348,7 +353,7 @@ test_that("error is issued if events with censor != 0 exists", {
       SRCSEQ = AESEQ))
 
   eos <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
     set_values_to = vars(
@@ -373,6 +378,7 @@ test_that("error is issued if events with censor != 0 exists", {
       start_date = TRTSDT,
       event_conditions = list(ttae),
       censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = vars(
         PARAMCD = "TTAE",
         PARAM = "Time to First Adverse Event"
@@ -397,7 +403,7 @@ test_that("error is issued if events with censor != 0 exists", {
     mutate(STUDYID = "AB42")
 
   ttae <- tte_source(
-    dataset = ae,
+    dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
       EVENTDESC = "AE",
@@ -406,7 +412,7 @@ test_that("error is issued if events with censor != 0 exists", {
       SRCSEQ = AESEQ))
 
   eos <- tte_source(
-    dataset = adsl,
+    dataset_name = "adsl",
     date = EOSDT,
     censor = 0,
     set_values_to = vars(
@@ -431,6 +437,7 @@ test_that("error is issued if events with censor != 0 exists", {
       start_date = TRTSDT,
       event_conditions = list(ttae),
       censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
       set_values_to = vars(
         PARAMCD = "TTAE",
         PARAM = "Time to First Adverse Event"

@@ -4,12 +4,23 @@
 \alias{filter_date_sources}
 \title{Select the First or Last Date from Several Sources}
 \usage{
-filter_date_sources(sources, create_datetime = FALSE, subject_keys, mode)
+filter_date_sources(
+  sources,
+  source_datasets,
+  create_datetime = FALSE,
+  subject_keys,
+  mode
+)
 }
 \arguments{
 \item{sources}{Sources
 
 A list of \code{tte_source()} objects is expected.}
+
+\item{source_datasets}{Source datasets
+
+A named list of datasets is expected. The \code{dataset_name} field of
+\code{tte_source()} refers to the dataset provided in the list.}
 
 \item{create_datetime}{Create datetime variable?
 

@@ -4,7 +4,12 @@
 \alias{assert_varval_list}
 \title{Is an Argument a Variable-Value List?}
 \usage{
-assert_varval_list(arg, required_elements = NULL, optional = FALSE)
+assert_varval_list(
+  arg,
+  required_elements = NULL,
+  accept_expr = FALSE,
+  optional = FALSE
+)
 }
 \arguments{
 \item{arg}{A function argument to be checked}

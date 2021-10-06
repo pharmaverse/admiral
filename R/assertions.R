@@ -1249,7 +1249,12 @@ on_failure(is_valid_month) <- function(call, env) {
 #' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
 #' try(example_fun(vars("AE", DTSEQ = AESEQ)))
-assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) {
+assert_varval_list <- function(arg,
+                               required_elements = NULL,
+                               accept_expr = FALSE,
+                               optional =  FALSE) {
+
+  assert_logical_scalar(accept_expr)
   assert_logical_scalar(optional)
   assert_character_vector(required_elements, optional = TRUE)
 
@@ -1257,11 +1262,19 @@ assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) 
     return(invisible(arg))
   }
 
+  if (accept_expr) {
+    valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
+  }
+  else {
+    valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
+  }
+
   if (!is_quosures(arg) || !is_named(arg)) {
     err_msg <- sprintf(
       paste0(
-        "`%s` must be a named list of quosures where each element is a symbol, ",
-        "character scalar, numeric scalar, or `NA` but it is %s\n",
+        "`%s` must be a named list of quosures where each element is ",
+        valid_vals,
+        " but it is %s\n",
         "\u2139 To create a list of quosures use `vars()`"
       ),
       arg_name(substitute(arg)),
@@ -1283,18 +1296,33 @@ assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) 
   }
 
   expr_list <- map(arg, quo_get_expr)
-  invalids <- expr_list[!map_lgl(
-    expr_list,
-    ~ is.symbol(.x) ||
-      is.character(.x) ||
-      is.numeric(.x) || is.atomic(.x) && is.na(.x)
-  )]
+  if (accept_expr) {
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) ||
+        is.language(.x) ||
+        is.atomic(.x) && is.na(.x)
+    )]
+  }
+  else{
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) ||
+        is.atomic(.x) && is.na(.x)
+    )]
+  }
   if (length(invalids) > 0) {
     abort(
-      paste(
-        "The elements of the list",
+      paste0(
+        "The elements of the list ",
         arg_name(substitute(arg)),
-        "must be a symbol, a character scalar, a numeric, or `NA`.\n",
+        " must be ",
+        valid_vals,
+        ".\n",
         paste(
           names(invalids),
           "=",
@@ -1391,4 +1419,107 @@ quo_not_missing <- function(x) {
 }
 on_failure(quo_not_missing) <- function(call, env) {
   paste0("Argument `", deparse(call$x), "` is missing, with no default")
+}
+
+
+#' Is an Element of a List of Lists/Classes Fulfilling a Condition?
+#'
+#' Checks if the elements of a list of named lists/classes fulfill a certain
+#' condition. If not, an error is issued and all elements of the list not
+#' fulfilling the condition are listed.
+#'
+#' @param list A list to be checked
+#'
+#'   A list of named lists or classes is expected.
+#'
+#' @param element The name of an element of the lists/classes
+#'
+#'   A character scalar is expected.
+#'
+#' @param condition Condition to be fulfilled
+#'
+#'   The condition is evaluated for each element of the list. The element of the
+#'   lists/classes can be referred to by its name, e.g., `censor == 0` to check
+#'   the `censor` field of a class.
+#'
+#' @param message_text Text to be displayed in the message
+#'
+#'   The text should describe the condition to be fulfilled, e.g., "For events
+#'   the censor values must be zero.".
+#'
+#' @param ... Objects required to evaluate the condition
+#'
+#'   If the condition contains objects apart from the element, they have to be
+#'   passed to the function. See the second example below.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @export
+#'
+#' @examples
+#' death <- tte_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to =vars(
+#'     EVENTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"))
+#'
+#' lstalv <- tte_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVENTDESC = "LAST KNOWN ALIVE DATE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"))
+#'
+#' events = list(death, lstalv)
+#'
+#' try(assert_list_element(
+#'   list = events,
+#'   element = "censor",
+#'   condition = censor == 0,
+#'   message_text = "For events the censor values must be zero."
+#' ))
+#'
+#' valid_datasets = c("adrs", "adae")
+#'
+#' try(assert_list_element(
+#'   list = events,
+#'   element = "dataset_name",
+#'   condition = dataset_name %in% valid_datasets,
+#'   valid_datasets = valid_datasets,
+#'   message_text = paste0("The dataset name must be one of the following:\n",
+#'                         paste(valid_datasets, collapse = ", "))
+#' ))
+assert_list_element <- function(list, element, condition, message_text, ...) {
+  assert_s3_class(list, "list")
+  assert_character_scalar(element)
+  condition <- assert_filter_cond(enquo(condition))
+  assert_character_scalar(message_text)
+  # store elements of the lists/classes in a vector named as the element #
+  rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
+  invalids <-  ! eval(quo_get_expr(condition),
+                      envir = list(...),
+                      enclos = current_env())
+  if (any(invalids)) {
+    invalids_idx <- which(invalids)
+    abort(
+      paste0(
+        message_text,
+        "\n",
+        paste0(
+          arg_name(substitute(list)),
+          "[[", invalids_idx, "]]$", element,
+          " = ",
+          lapply(list[invalids_idx],`[[`, element),
+          collapse = "\n"
+        )
+      )
+    )
+  }
 }

@@ -4,10 +4,12 @@
 \alias{tte_source}
 \title{Create an \code{tte_source} object}
 \usage{
-tte_source(dataset, filter = NULL, date, censor = 0, set_values_to = NULL)
+tte_source(dataset_name, filter = NULL, date, censor = 0, set_values_to = NULL)
 }
 \arguments{
-\item{dataset}{The source dataset}
+\item{dataset_name}{The name of the source dataset
+The name refers to the dataset provided by the \code{source_datasets} parameter
+of \code{derive_param_tte()}.}
 
 \item{filter}{An unquoted condition for selecting the observations from
 \code{dataset} which are events or possible censoring time points.}
@@ -22,7 +24,7 @@ censoring.}
 
 \item{set_values_to}{A named list returned by \code{vars()} defining the
 variables to be set for the event or censoring, e.g. \verb{vars(EVENTDESC = “DEATH”, SRCDOM = “ADSL”, SRCVAR = “DTHDT”)}. The values must be a symbol,
-a character string, a numerig value, or \code{NA}.}
+a character string, a numeric value, \code{NA}, or an expression.}
 }
 \value{
 An object of class "tte_source".

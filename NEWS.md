@@ -8,6 +8,10 @@
 
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
+### Developer
+
+- `assert_list_element()` checks if an element of a list of lists/classes fulfills a condition.
+
 ## Breaking Changes
 
 ## Bug Fixes

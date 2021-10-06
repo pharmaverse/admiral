@@ -12,6 +12,7 @@ derive_param_tte(
   start_time_imputation_flag = NULL,
   event_conditions,
   censor_conditions,
+  source_datasets,
   create_datetime = FALSE,
   set_values_to,
   subject_keys = vars(STUDYID, USUBJID)
@@ -55,6 +56,11 @@ A list of \code{tte_source()} objects is expected.}
 \item{censor_conditions}{Sources and conditions defining censorings
 
 A list of \code{tte_source()} objects is expected.}
+
+\item{source_datasets}{Source datasets
+
+A named list of datasets is expected. The \code{dataset_name} field of
+\code{tte_source()} refers to the dataset provided in the list.}
 
 \item{create_datetime}{Create datetime variables?
 
