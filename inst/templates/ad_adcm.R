@@ -16,16 +16,20 @@ library(lubridate)
 data("cm")
 data("adsl")
 data("ex")
-data("adsl")
 
 # ---- Derivations ----
+
+# Derive flags
 adcm <- cm %>%
 
   # Join supplementary qualifier variables
   # derive_vars_suppqual(suppcm)
 
-  # Join adsl to cm
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  # Join ADSL with CM (only ADSL vars required for derivations)
+  left_join(
+    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
+    by = c("STUDYID", "USUBJID")
+    ) %>%
 
   # Derive analysis start time
   derive_vars_dtm(
@@ -34,7 +38,7 @@ adcm <- cm %>%
     date_imputation = "first",
     time_imputation = "first",
     min_dates = list(TRTSDT)
-  ) %>%
+    ) %>%
 
   # Derive analysis end time
   derive_vars_dtm(
@@ -43,25 +47,25 @@ adcm <- cm %>%
     date_imputation = "last",
     time_imputation = "last",
     max_dates = list(DTHDT, EOSDT)
-  ) %>%
+    ) %>%
 
   # Derive analysis end/start date
   mutate(
     ASTDT = date(ASTDTM),
     AENDT = date(AENDTM)
-  ) %>%
+    ) %>%
 
   # Derive analysis start relative day
   derive_var_astdy(
     reference_date = TRTSDT,
     date = ASTDT
-  ) %>%
+    ) %>%
 
   # Derive analysis end relative day
   derive_var_aendy(
     reference_date = TRTSDT,
     date = AENDT
-  ) %>%
+    ) %>%
 
   # Derive analysis duration (value and unit)
   derive_vars_duration(
@@ -73,13 +77,10 @@ adcm <- cm %>%
     out_unit = "days",
     add_one = TRUE,
     trunc_out = FALSE
-  ) %>%
+    )
 
-  # Derive Time Relative to Reference
-  derive_var_atirel(
-    flag_var = ASTTMF,
-    new_var = ATIREL
-  ) %>%
+# Derive flags
+adcm <- adcm %>%
 
   # Derive On-Treatment flag
   derive_var_ontrtfl(
@@ -87,34 +88,13 @@ adcm <- cm %>%
     end_date = AENDT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
-  ) %>%
+    ) %>%
 
   # Derive Pre-Treatment flag
   mutate(PREFL = if_else(ASTDT < TRTSDT, "Y", NA_character_)) %>%
 
   # Derive Follow-Up flag
   mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
-
-  # Derive Aphase and Aphasen Variable
-  # Other timing variable can be derived similarly.
-  mutate(
-    APHASE = case_when(
-      PREFL == "Y" ~ "Pre-Treatment",
-      ONTRTFL == "Y" ~ "On-Treatment",
-      FUPFL == "Y" ~ "Follow-Up"
-    ),
-    APHASEN = case_when(
-      PREFL == "Y" ~ 1,
-      ONTRTFL == "Y" ~ 2,
-      FUPFL == "Y" ~ 3
-    )
-  ) %>%
-
-  # Assign TRTP/TRTA
-  mutate(
-    TRTP = TRT01P,
-    TRTA = TRT01A
-  ) %>%
 
   # Derive ANL01FL
   # This variable is sponsor specific and may be used to indicate particular
@@ -130,6 +110,44 @@ adcm <- cm %>%
     mode = "first"
   )
 
+
+# Derive Aphase and Aphasen Variable
+# Other timing variable can be derived similarly.
+adcm <- adcm %>%
+
+  mutate(
+    APHASE = case_when(
+      PREFL == "Y" ~ "Pre-Treatment",
+      ONTRTFL == "Y" ~ "On-Treatment",
+      FUPFL == "Y" ~ "Follow-Up"
+    ),
+    APHASEN = case_when(
+      PREFL == "Y" ~ 1,
+      ONTRTFL == "Y" ~ 2,
+      FUPFL == "Y" ~ 3
+    )
+  ) %>%
+
+  left_join(
+    adsl %>% select(STUDYID, USUBJID, TRT01P, TRT01A),
+    by = c("STUDYID", "USUBJID")
+  ) %>%
+
+  # Assign TRTP/TRTA
+  mutate(
+    TRTP = TRT01P,
+    TRTA = TRT01A
+  )
+
+# Join all ADSL with CM
+adcm <- adcm %>%
+
+  select(-TRTSDT, -TRTEDT, -DTHDT, -EOSDT, TRT01P, TRT01A) %>%
+
+  left_join(adsl, by = c("STUDYID", "USUBJID"))
+
+
+
 # ---- Save output ----
 
-saveRDS(adcm, file = "./ADCM.rds", compress = TRUE)
+save(adcm, file = "data/ADCM.rda", compress = TRUE)

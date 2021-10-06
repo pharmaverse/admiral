@@ -26,7 +26,10 @@ adae <- ae %>%
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  left_join(
+    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
+    by = c("STUDYID", "USUBJID")
+  ) %>%
 
   # derive analysis start time
   derive_vars_dtm(
@@ -74,7 +77,10 @@ adae <- ae %>%
     out_unit = "days",
     add_one = TRUE,
     trunc_out = FALSE
-  ) %>%
+  )
+
+
+adae <- adae %>%
 
   # derive last dose date/time
   derive_last_dose(
@@ -110,6 +116,14 @@ adae <- ae %>%
     mode = "last"
   )
 
+# Join all ADSL with AE
+adae <- adae %>%
+
+  select(-TRTSDT, -TRTEDT, -DTHDT, -EOSDT) %>%
+
+  left_join(adsl, by = c("STUDYID", "USUBJID"))
+
+
 # ---- Save output ----
 
-saveRDS(adae, file = "./ADAE.rds", compress = TRUE)
+save(adae, file = "data/ADAE.rda", compress = TRUE)
