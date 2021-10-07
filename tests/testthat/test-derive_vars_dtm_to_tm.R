@@ -1,5 +1,7 @@
 context("test-derive_vars_dtm_to_tm")
 
+as_hms <- if ("as_hms" %in% getNamespaceExports("hms")) hms::as_hms else hms::as.hms
+
 input <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
   "TEST01", "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
@@ -26,9 +28,9 @@ expected_output <- tibble::tribble(
   TRTSDTM = lubridate::as_datetime(TRTSDTM),
   ASTDTM = lubridate::as_datetime(ASTDTM),
   AENDTM = lubridate::as_datetime(AENDTM),
-  TRTSTM = hms::as_hms(TRTSTM),
-  ASTTM = hms::as_hms(ASTTM),
-  AENTM = hms::as_hms(AENTM)
+  TRTSTM = as_hms(TRTSTM),
+  ASTTM = as_hms(ASTTM),
+  AENTM = as_hms(AENTM)
 
 )
 
@@ -43,7 +45,7 @@ expected_output2 <- tibble::tribble(
   TRTSDTM = lubridate::as_datetime(TRTSDTM),
   ASTDTM = lubridate::as_datetime(ASTDTM),
   AENDTM = lubridate::as_datetime(AENDTM),
-  TRTSTM = hms::as_hms(TRTSTM),
+  TRTSTM = as_hms(TRTSTM),
 )
 # nolint end
 
