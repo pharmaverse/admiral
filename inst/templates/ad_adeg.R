@@ -4,7 +4,7 @@
 #
 # Description: Based on CDISC Pilot data, create ADEG analysis dataset
 #
-# Input: dm, eg
+# Input: adsl, eg
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -18,6 +18,7 @@ library(stringr)
 
 data("adsl")
 data("eg")
+
 eg <- convert_blanks_to_na(eg)
 
 # ---- Lookup tables ----
@@ -95,14 +96,15 @@ adeg <- eg %>%
     by = c("STUDYID", "USUBJID")
   ) %>%
 
-  # Calculate ADT, ADY
+  # Calculate ADTM, ADY
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
     flag_imputation = "time"
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADTM)
+  derive_var_ady(reference_date = TRTSDT, date = ADTM) %>%
+  select(-TRTSDT)
 
 adeg <- adeg %>%
 
@@ -112,20 +114,19 @@ adeg <- adeg %>%
     by = "EGTESTCD"
     ) %>%
 
-  # Calculate AVAL, AVALC, AVALU
+  # Calculate AVAL and AVALC
   mutate(
     AVAL = EGSTRESN,
-    AVALC = EGSTRESC,
-    AVALU = if_else(EGSTRESU=='BEATS/MIN', tolower(EGSTRESU), EGSTRESU)
+    AVALC = EGSTRESC
   ) %>%
 
   # Derive new parameters based on existing records.
   # Derive RRR
   derive_param_rr(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
-    set_values_to = vars(PARAMCD = "RRR", AVALU = "msec"),
+    set_values_to = vars(PARAMCD = "RRR"),
     hr_code = "HR",
-    get_unit_expr = AVALU,
+    get_unit_expr = tolower(EGSTRESU),
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
@@ -133,10 +134,10 @@ adeg <- adeg %>%
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Bazett",
-    set_values_to = vars(PARAMCD = "QTCBR", AVALU = "msec"),
+    set_values_to = vars(PARAMCD = "QTCBR"),
     qt_code = "QT",
     rr_code = "RR",
-    get_unit_expr = AVALU,
+    get_unit_expr = EGSTRESU,
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
@@ -144,10 +145,10 @@ adeg <- adeg %>%
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Fridericia",
-    set_values_to = vars(PARAMCD = "QTCFR", AVALU = "msec"),
+    set_values_to = vars(PARAMCD = "QTCFR"),
     qt_code = "QT",
     rr_code = "RR",
-    get_unit_expr = AVALU,
+    get_unit_expr = EGSTRESU,
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
 
@@ -155,10 +156,10 @@ adeg <- adeg %>%
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Sagie",
-    set_values_to = vars(PARAMCD = "QTLCR", AVALU = "msec"),
+    set_values_to = vars(PARAMCD = "QTLCR"),
     qt_code = "QT",
     rr_code = "RR",
-    get_unit_expr = AVALU,
+    get_unit_expr = EGSTRESU,
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   )
 
@@ -188,7 +189,7 @@ adeg <- adeg %>%
 # records available) for all parameter except EGINTP
 adeg <- adeg %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVALU, AVISITN, AVISIT, ADT),
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVISITN, AVISIT, ADT),
     analysis_var = AVAL,
     summary_fun = function(x) mean(x, na.rm = TRUE),
     filter = dplyr::n() >= 2 & PARAMCD != "EGINTP",
@@ -198,9 +199,8 @@ adeg <- adeg %>%
 adeg <- adeg %>%
 
   # Join ADSL with EG (need TRTSDT and TRTEDT for ONTRTFL derivation)
-  select(-TRTSDT) %>%
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT),
+    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -211,7 +211,8 @@ adeg <- adeg %>%
     ref_end_date = TRTEDT,
     ref_end_window = 30,
     filter_pre_timepoint = AVISIT == "Baseline"
-    )
+  ) %>%
+  select(-TRTEDT)
 
 # Calculate ANRIND: requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
@@ -244,7 +245,8 @@ adeg <- adeg %>%
     filter = ((!is.na(AVAL) | !is.na(AVALC)) &
       ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
       PARAMCD != "EGINTP")
-  )
+  ) %>%
+  select(-TRTSDT)
 
 # Derive baseline information
 adeg <- adeg %>%
@@ -280,16 +282,15 @@ adeg <- adeg %>%
     order = vars(ADT, AVAL),
     new_var = ANL01FL,
     mode = "last",
-    filter = !is.na(AVISITN) & ONTRTFL=="Y"
-    )
+    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+  )
 
 # Get treatment information
 adeg <- adeg %>%
 
   # Join ADSL with VS (need TRT01P/TRT01A for TRTA/TRTP derivation)
-  select(-TRTSDT, -TRTEDT) %>%
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRT01A, TRT01P),
+    select(adsl, STUDYID, USUBJID, TRT01A, TRT01P),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -324,12 +325,10 @@ adeg <- adeg %>%
 
 # Add all ADSL variables
 adeg <- adeg %>%
-  left_join(
-    adsl,
-    by = c("STUDYID", "USUBJID")
-  )
+
+  left_join(adsl, by = c("STUDYID", "USUBJID"))
 
 
 # ---- Save output ----
 
-save(adeg, file = "data/ADEG.rda", compress = TRUE)
+save(adeg, file = "data/adeg.rda", compress = "bzip2")

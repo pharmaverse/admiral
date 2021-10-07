@@ -17,6 +17,10 @@ data("dm")
 data("ds")
 data("ex")
 
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
+
 # ---- User defined functions ----
 
 # Here are some examples of how you can create your own functions that
@@ -153,4 +157,4 @@ adsl <- dm %>%
 
 # ---- Save output ----
 
-save(adsl, file = "data/ADSL.rda", compress = TRUE)
+save(adsl, file = "data/adsl.rda", compress = "bzip2")

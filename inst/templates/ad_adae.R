@@ -2,7 +2,7 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, suppae, suppdm, ex
+# Input: ae, adsl, suppae, ex_single
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,11 @@ data("ae")
 data("suppae")
 data("adsl")
 data("ex_single")
-ex <- ex_single
+
+ae <- convert_blanks_to_na(ae)
+suppae <- convert_blanks_to_na(suppae)
+ex <- convert_blanks_to_na(ex_single)
+
 
 # ---- Derivations ----
 
@@ -48,6 +52,8 @@ adae <- ae %>%
     time_imputation = "last",
     max_dates = list(DTHDT, EOSDT)
   ) %>%
+
+  select(-DTHDT, -EOSDT) %>%
 
   # derive analysis end/start date
   mutate(
@@ -107,6 +113,8 @@ adae <- adae %>%
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
 
+  select(-TRTSDT, -TRTEDT) %>%
+
   # derive occurrence flags
   derive_extreme_flag(
     by_vars = vars(USUBJID),
@@ -119,11 +127,9 @@ adae <- adae %>%
 # Join all ADSL with AE
 adae <- adae %>%
 
-  select(-TRTSDT, -TRTEDT, -DTHDT, -EOSDT) %>%
-
   left_join(adsl, by = c("STUDYID", "USUBJID"))
 
 
 # ---- Save output ----
 
-save(adae, file = "data/ADAE.rda", compress = TRUE)
+save(adae, file = "data/adae.rda", compress = "bzip2")

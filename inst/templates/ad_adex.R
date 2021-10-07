@@ -16,6 +16,8 @@ library(stringr)
 data("adsl")
 data("ex")
 
+ex <- convert_blanks_to_na(ex)
+
 # The CDISC pilot data does not contain EXADJ,nor a SUPPEX dataset
 # add a fake EXADJ to demonstrate the derivation for Dose adjustment flag
 # add SUPPEX.EXPLDOS to demonstrate the derivation for dose intensity
@@ -71,7 +73,8 @@ adex0 <- ex %>%
     # Compute the cumulative dose
     DOSEO = EXDOSE * EXDURD,
     PDOSEO = EXPLDOS * EXDURD
-  )
+  ) %>%
+  select(-TRTSDT, -TRTSDTM, -TRTEDTM)
 
 # Part 2
 # 1:1 mapping
@@ -258,8 +261,6 @@ adex <- adex %>%
 # Join all ADSL with EX
 adex <- adex %>%
 
-  select(-TRTSDT, -TRTSDTM, -TRTEDTM) %>%
-
   left_join(adsl, by = c("STUDYID", "USUBJID"))
 
 # Final Steps, Select final variables and Add labels
@@ -268,4 +269,4 @@ adex <- adex %>%
 
 # ---- Save output ----
 
-save(adex, file = "data/adex.rda", compress = TRUE)
+save(adex, file = "data/adex.rda", compress = "bzip2")

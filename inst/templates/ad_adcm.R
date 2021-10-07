@@ -2,7 +2,7 @@
 #
 # Label: Concomitant Medications Analysis Dataset
 #
-# Input: cm, adsl, suppcm, suppdm, ex
+# Input: cm, adsl
 library(admiral)
 library(dplyr)
 library(lubridate)
@@ -15,7 +15,8 @@ library(lubridate)
 
 data("cm")
 data("adsl")
-data("ex")
+
+cm <- convert_blanks_to_na(cm)
 
 # ---- Derivations ----
 
@@ -23,13 +24,13 @@ data("ex")
 adcm <- cm %>%
 
   # Join supplementary qualifier variables
-  # derive_vars_suppqual(suppcm)
+  # derive_vars_suppqual(suppcm) %>%
 
   # Join ADSL with CM (only ADSL vars required for derivations)
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
+    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
     by = c("STUDYID", "USUBJID")
-    ) %>%
+  ) %>%
 
   # Derive analysis start time
   derive_vars_dtm(
@@ -38,7 +39,7 @@ adcm <- cm %>%
     date_imputation = "first",
     time_imputation = "first",
     min_dates = list(TRTSDT)
-    ) %>%
+  ) %>%
 
   # Derive analysis end time
   derive_vars_dtm(
@@ -47,25 +48,27 @@ adcm <- cm %>%
     date_imputation = "last",
     time_imputation = "last",
     max_dates = list(DTHDT, EOSDT)
-    ) %>%
+  ) %>%
+
+  select(-DTHDT, -EOSDT) %>%
 
   # Derive analysis end/start date
   mutate(
     ASTDT = date(ASTDTM),
     AENDT = date(AENDTM)
-    ) %>%
+  ) %>%
 
   # Derive analysis start relative day
   derive_var_astdy(
     reference_date = TRTSDT,
     date = ASTDT
-    ) %>%
+  ) %>%
 
   # Derive analysis end relative day
   derive_var_aendy(
     reference_date = TRTSDT,
     date = AENDT
-    ) %>%
+  ) %>%
 
   # Derive analysis duration (value and unit)
   derive_vars_duration(
@@ -77,7 +80,7 @@ adcm <- cm %>%
     out_unit = "days",
     add_one = TRUE,
     trunc_out = FALSE
-    )
+  )
 
 # Derive flags
 adcm <- adcm %>%
@@ -88,7 +91,7 @@ adcm <- adcm %>%
     end_date = AENDT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
-    ) %>%
+  ) %>%
 
   # Derive Pre-Treatment flag
   mutate(PREFL = if_else(ASTDT < TRTSDT, "Y", NA_character_)) %>%
@@ -100,6 +103,8 @@ adcm <- adcm %>%
   # This variable is sponsor specific and may be used to indicate particular
   # records to be used in subsequent derivations or analysis.
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
+
+  select(-TRTSDT, -TRTEDT) %>%
 
   # Derive 1st Occurrence of Preferred Term Flag
   derive_extreme_flag(
@@ -137,12 +142,12 @@ adcm <- adcm %>%
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
-  )
+  ) %>%
+
+  select(-TRT01P, -TRT01A)
 
 # Join all ADSL with CM
 adcm <- adcm %>%
-
-  select(-TRTSDT, -TRTEDT, -DTHDT, -EOSDT, TRT01P, TRT01A) %>%
 
   left_join(adsl, by = c("STUDYID", "USUBJID"))
 
@@ -150,4 +155,4 @@ adcm <- adcm %>%
 
 # ---- Save output ----
 
-save(adcm, file = "data/ADCM.rda", compress = TRUE)
+save(adcm, file = "data/adcm.rda", compress = "bzip2")

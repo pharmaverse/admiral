@@ -16,12 +16,13 @@ library(stringr)
 
 data("vs")
 data("adsl")
+
 vs <- convert_blanks_to_na(vs)
 
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below
 
-# vs <- derive_vars_suppqual(vs, suppvs)
+# vs <- derive_vars_suppqual(vs, suppvs) %>%
 
 
 # ---- Lookup tables ----
@@ -74,7 +75,7 @@ advs <- vs %>%
 
   # Join ADSL with VS (need TRTSDT for ADY derivation)
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT),
+    select(adsl, STUDYID, USUBJID, TRTSDT),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -85,28 +86,29 @@ advs <- vs %>%
     flag_imputation = FALSE
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADT)
+  derive_var_ady(reference_date = TRTSDT, date = ADT) %>%
+
+  select(-TRTSDT)
 
 advs <- advs %>%
   # Add PARAMCD only - add PARAM etc later
   left_join(
-    param_lookup %>% select(VSTESTCD, PARAMCD),
+    select(param_lookup, VSTESTCD, PARAMCD),
     by = "VSTESTCD"
-    ) %>%
+  ) %>%
 
-  # Calculate AVAL, AVALC, AVALU
+  # Calculate AVAL and AVALC
   mutate(
     AVAL = VSSTRESN,
-    AVALC = VSSTRESC,
-    AVALU = VSSTRESU
+    AVALC = VSSTRESC
   ) %>%
 
   # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "MAP", AVALU = "mmHg"),
-    get_unit_expr = AVALU,
+    set_values_to = vars(PARAMCD = "MAP"),
+    get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
 
@@ -114,16 +116,16 @@ advs <- advs %>%
   derive_param_bsa(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
-    set_values_to = vars(PARAMCD = "BSA", AVALU = "m^2"),
-    get_unit_expr = AVALU,
+    set_values_to = vars(PARAMCD = "BSA"),
+    get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
 
   # Derive Body Surface Area
   derive_param_bmi(
     by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = vars(PARAMCD = "BMI", AVALU = "kg/m^2"),
-    get_unit_expr = AVALU,
+    set_values_to = vars(PARAMCD = "BMI"),
+    get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   )
 
@@ -150,7 +152,7 @@ advs <- advs %>%
 # Derive a new record as a summary record (e.g. mean of the triplicates at each time point)
 advs <- advs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVALU, AVISITN, AVISIT, ADT, ADY),
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter = !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = mean,
@@ -160,9 +162,8 @@ advs <- advs %>%
 advs <- advs %>%
 
   # Join ADSL with VS (need TRTSDT and TRTEDT for ONTRTFL derivation)
-  select(-TRTSDT) %>%
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT),
+    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -172,7 +173,8 @@ advs <- advs %>%
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
     filter_pre_timepoint = AVISIT == "Baseline"
-  )
+  ) %>%
+  select(-TRTEDT)
 
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
@@ -200,7 +202,8 @@ advs <- advs %>%
     new_var = ABLFL,
     mode = "last",
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
-  )
+  ) %>%
+  select(-TRTSDT)
 
 # Derive baseline information
 advs <- advs %>%
@@ -236,16 +239,15 @@ advs <- advs %>%
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
     mode = "last",
-    filter = !is.na(AVISITN) & ONTRTFL=="Y"
-    )
+    filter = !is.na(AVISITN) & ONTRTFL == "Y"
+  )
 
 # Get treatment information
 advs <- advs %>%
 
   # Join ADSL with VS (need TRT01P/TRT01A for TRTA/TRTP derivation)
-  select(-TRTSDT, -TRTEDT) %>%
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRT01A, TRT01P),
+    select(adsl, STUDYID, USUBJID, TRT01A, TRT01P),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -291,10 +293,8 @@ advs <- advs %>%
 
 # Add all ADSL variables
 advs <- advs %>%
-  left_join(
-    adsl,
-    by = c("STUDYID", "USUBJID")
-  )
+
+  left_join(adsl, by = c("STUDYID", "USUBJID"))
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
@@ -302,4 +302,4 @@ advs <- advs %>%
 
 # ---- Save output ----
 
-save(advs, file = "data/ADVS.rda", compress = TRUE)
+save(advs, file = "data/advs.rda", compress = "bzip2")
