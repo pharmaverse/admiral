@@ -1,7 +1,5 @@
 context("test-derive_vars_dtm_to_tm")
 
-as_hms <- if ("as_hms" %in% getNamespaceExports("hms")) hms::as_hms else hms::as.hms
-
 input <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
   "TEST01", "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
@@ -9,11 +7,12 @@ input <- tibble::tribble(
   "TEST01", "PAT01",  "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56",
   "TEST01", "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
   "TEST01", "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
-) %>% mutate(
-  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-  ASTDTM = lubridate::as_datetime(ASTDTM),
-  AENDTM = lubridate::as_datetime(AENDTM)
-)
+) %>%
+  mutate(
+    TRTSDTM = lubridate::as_datetime(TRTSDTM),
+    ASTDTM = lubridate::as_datetime(ASTDTM),
+    AENDTM = lubridate::as_datetime(AENDTM)
+  )
 
 # nolint start
 #expected output - multiple vars, displaying HH:MM:SS
@@ -24,15 +23,15 @@ expected_output <- tibble::tribble(
   "TEST01", "PAT01",  "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56", "23:00:02", "19:00:15", "19:00:56",
   "TEST01", "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00", "16:00:00", "14:25:00", "23:00:00",
   "TEST01", "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45", "16:05:17", "14:20:00", "14:06:45",
-) %>% mutate(
-  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-  ASTDTM = lubridate::as_datetime(ASTDTM),
-  AENDTM = lubridate::as_datetime(AENDTM),
-  TRTSTM = as_hms(TRTSTM),
-  ASTTM = as_hms(ASTTM),
-  AENTM = as_hms(AENTM)
-
-)
+) %>%
+  mutate(
+    TRTSDTM = lubridate::as_datetime(TRTSDTM),
+    ASTDTM = lubridate::as_datetime(ASTDTM),
+    AENDTM = lubridate::as_datetime(AENDTM),
+    TRTSTM = as_hms(TRTSTM),
+    ASTTM = as_hms(ASTTM),
+    AENTM = as_hms(AENTM)
+  )
 
 expected_output2 <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,             ~TRTSTM,
