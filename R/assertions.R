@@ -881,8 +881,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
 #'
 #' @param dataset A `data.frame`
-#' @param param
-#'   Parameter code to check
+#' @param param Parameter code to check
 #'
 #' @author Stefan Bundfuss
 #'
@@ -895,17 +894,15 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @examples
 #' data(advs)
-#' assert_param_does_not_exist(advs, param = "BSA")
-#' \dontrun{
-#' assert_param_does_not_exist(advs, param = "WEIGHT")
-#' }
+#' assert_param_does_not_exist(advs, param = "HR")
+#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
     abort(
       paste0(
         "The parameter code ",
-        param,
+        squote(param),
         " does already exist in `",
         arg_name(substitute(dataset)),
         "`."
