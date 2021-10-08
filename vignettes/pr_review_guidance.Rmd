@@ -80,7 +80,7 @@ Add `some_var` to the list of "global" variables in `R/globals.R`.
 
 Add an `@param some_param` section in the header of `function_xyz()` and run `devtools::document()` afterwards.
 
-### Outdated Documentation
+## Outdated Documentation
 
 ```
 ❯ checking for code/documentation mismatches ... WARNING
