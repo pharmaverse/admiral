@@ -67,9 +67,11 @@ adex0 <- ex %>%
     start_date = ASTDTM,
     end_date = AENDTM
   ) %>%
+
+  # Derive analysis end/start date
+  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
+
   mutate(
-    ASTDT = date(ASTDTM),
-    AENDT = date(AENDTM),
     # Compute the cumulative dose
     DOSEO = EXDOSE * EXDURD,
     PDOSEO = EXPLDOS * EXDURD

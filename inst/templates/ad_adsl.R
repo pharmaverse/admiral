@@ -75,13 +75,14 @@ adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
   mutate(TRT01P = ARMCD, TRT01A = ARMCD) %>%
 
-  # derive treatment start date (TRTSDTM, TRTSDT)
+  # derive treatment start date (TRTSDTM)
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  mutate(TRTSDT = date(TRTSDTM)) %>%
 
-  # derive treatment end date (TRTEDTM, TRTEDT)
+  # derive treatment end date (TRTEDTM)
   derive_var_trtedtm(dataset_ex = ex) %>%
-  mutate(TRTEDT = date(TRTEDTM)) %>%
+
+  # Derive treatment end/start date TRTSDT/TRTEDT
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
 
   # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%

@@ -53,10 +53,7 @@ adcm <- cm %>%
   select(-DTHDT, -EOSDT) %>%
 
   # Derive analysis end/start date
-  mutate(
-    ASTDT = date(ASTDTM),
-    AENDT = date(AENDTM)
-  ) %>%
+  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
 
   # Derive analysis start relative day
   derive_var_astdy(

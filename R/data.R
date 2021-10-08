@@ -26,6 +26,12 @@
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/ds.xpt}
 "ds"
 
+#' Electrocardiogram Dataset
+#'
+#' An example of standard SDTM EG dataset to be used in deriving ADEG dataset
+#'
+"eg"
+
 #' Exposure Dataset
 #'
 #' A SDTM EX dataset from the CDISC pilot project
@@ -97,6 +103,13 @@
 #' @source \url{https://bitbucket.cdisc.org/projects/CED/repos/sdtm-adam-pilot-project/browse/updated-pilot-submission-package/900172/m5/datasets/cdiscpilot01/tabulations/sdtm/vs.xpt}
 "vs"
 
+
+#' Queries Dataset
+#'
+#' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+#'
+"queries"
+
 #' Subject Level Analysis Dataset
 #'
 #' An example subject level analysis dataset
@@ -106,26 +119,32 @@
 #'
 "adsl"
 
-#' Vital Signs Analysis Dataset
+#' Adverse Event Analysis Dataset
 #'
-#' An example vital signs analysis dataset
+#' An example adverse event analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [vs] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R})
+#' Derived from the [adsl] and [ae] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R})
 #'
-"advs"
+"adae"
 
-#' Queries Dataset
+#' Concomitant Medication Analysis Dataset
 #'
-#' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+#' An example concomitant medication analysis dataset
 #'
-"queries"
+#' @source
+#' Derived from the [adsl] and [cm] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R})
+#'
+"adcm"
 
-#' Electrocardiogram Dataset
+#' Electrocardiogram Analysis Dataset
 #'
-#' An example of standard SDTM EG dataset to be used in deriving ADEG dataset
+#' An example electrocardiogram analysis dataset
 #'
-"eg"
+#' @source
+#' Derived from the [adsl] and [eg] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adeg.R})
+#'
+"adeg"
 
 #' Exposure Analysis Dataset
 #'
@@ -135,3 +154,12 @@
 #' Derived from the [adsl] and [ex] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adex.R})
 #'
 "adex"
+
+#' Vital Signs Analysis Dataset
+#'
+#' An example vital signs analysis dataset
+#'
+#' @source
+#' Derived from the [adsl] and [vs] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R})
+#'
+"advs"
