@@ -137,15 +137,6 @@
 #'
 "adcm"
 
-#' Electrocardiogram Analysis Dataset
-#'
-#' An example electrocardiogram analysis dataset
-#'
-#' @source
-#' Derived from the [adsl] and [eg] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adeg.R})
-#'
-"adeg"
-
 #' Exposure Analysis Dataset
 #'
 #' An example exposure analysis dataset
