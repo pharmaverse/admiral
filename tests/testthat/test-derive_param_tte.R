@@ -424,15 +424,14 @@ test_that("an error if issued set_values_to contains invalid expressions", {
     )
     ,
     regexp = paste0("Assigning new variables failed!\n",
-                    "set_values_to = (\n",
-                    "  PARAMCD = paste0(\"TTAE\", as.numeric(as.factor(AEDECOD)))\n",
-                    "  PARAM = past(\"Time to First\", AEDECOD, \"Adverse Event\")\n",
+                    "set_values_to = \\(\n",
+                    "  PARAMCD = paste0\\(\"TTAE\", as.numeric\\(as.factor\\(AEDECOD\\)\\)\\)\n",
+                    "  PARAM = past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\)\n",
                     "  PARCAT1 = TTAE\n",
                     "  PARCAT2 = AEDECOD\n",
-                    ")\n",
+                    "\\)\n",
                     "Error message:\n",
-                    "  Error in past(\"Time to First\", AEDECOD, \"Adverse Event\"): could not find function \"past\"\n"),
-    fixed = TRUE
+                    "  Error in past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\):.* could not find function \"past\"\n")
   )
 })
 
