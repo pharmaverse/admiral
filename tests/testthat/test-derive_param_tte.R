@@ -114,12 +114,12 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCVAR = "TRTSDTM"))
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,               ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd_hms("2021-05-05 12:02:00"), 0L,     "PD",                    "ADRS",  "ADTM",    3,
-    "02",     ymd_hms("2021-02-03 10:56:00"), 0L,     "PD",                    "ADRS",  "ADTM",    1,
-    "03",     as_datetime(ymd("2021-08-21")), 0L,     "DEATH",                 "ADSL",  "DTHDT",   NA,
-    "04",     ymd_hms("2021-05-15 12:02:00"), 1L,     "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
-    "05",     ymd_hms("2021-04-05 11:22:33"), 1L,     "TREATMENT START",       "ADSL",  "TRTSDTM", NA) %>%
+    ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
+    "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
+    "02",     ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
+    "03",     as_datetime(ymd("2021-08-21")), 0L,    "DEATH",                 "ADSL",  "DTHDT",   NA,
+    "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
+    "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA) %>%
     mutate(STUDYID = "AB42",
            PARAMCD = "PFS",
            PARAM = "Progression Free Survival") %>%
@@ -204,6 +204,235 @@ test_that("new observations based on DTC variables are derived correctly", {
     ,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
+  )
+})
+
+test_that("by_vars parameter works correctly", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03T10:56", 1,      "Flu",
+    "01",     "2021-03-04",       2,      "Cough",
+    "01",     "2021",             3,      "Flu") %>%
+    mutate(STUDYID = "AB42")
+
+  ttae <- tte_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ))
+
+  eos <- tte_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "END OF STUDY",
+      SRCDOM = "ADSL",
+      SRCVAR = "EOSDT"))
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
+    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
+    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Flu",    "TTAE2",
+    "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
+    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1") %>%
+    mutate(STUDYID = "AB42",
+           PARCAT1 = "TTAE",
+           PARAM = paste("Time to First", PARCAT2, "Adverse Event")) %>%
+    left_join(adsl %>% select(USUBJID, STARTDT = TRTSDT),
+              by = "USUBJID")
+
+  expect_dfs_equal(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      by_vars = vars(AEDECOD),
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = vars(
+        PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+        PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+        PARCAT1 = "TTAE",
+        PARCAT2 = AEDECOD
+      )
+    )
+    ,
+    expected_output,
+    keys = c("USUBJID", "PARAMCD")
+  )
+})
+
+test_that("an error is issued if some of the by variables are missing", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03T10:56", 1,      "Flu",
+    "01",     "2021-03-04",       2,      "Cough",
+    "01",     "2021",             3,      "Flu") %>%
+    mutate(STUDYID = "AB42")
+
+  ttae <- tte_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ))
+
+  eos <- tte_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "END OF STUDY",
+      SRCDOM = "ADSL",
+      SRCVAR = "EOSDT"))
+
+  expect_error(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      by_vars = vars(AEBODSYS, AEDECOD),
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = vars(
+        PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+        PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+        PARCAT1 = "TTAE",
+        PARCAT2 = AEDECOD
+      )
+    )
+    ,
+    regexp = "^Only AEDECOD are included in source dataset.*"
+  )
+})
+test_that("an error is issued all by variables are missing in all source datasets", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03T10:56", 1,      "Flu",
+    "01",     "2021-03-04",       2,      "Cough",
+    "01",     "2021",             3,      "Flu") %>%
+    mutate(STUDYID = "AB42")
+
+  ttae <- tte_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ))
+
+  eos <- tte_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "END OF STUDY",
+      SRCDOM = "ADSL",
+      SRCVAR = "EOSDT"))
+
+  expect_error(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      by_vars = vars(AEBODSYS),
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = vars(
+        PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+        PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+        PARCAT1 = "TTAE",
+        PARCAT2 = AEDECOD
+      )
+    )
+    ,
+    regexp = "The by variables (AEBODSYS) are not contained in any of the source datasets.",
+    fixed = TRUE
+  )
+})
+test_that("an error if issued set_values_to contains invalid expressions", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03T10:56", 1,      "Flu",
+    "01",     "2021-03-04",       2,      "Cough",
+    "01",     "2021",             3,      "Flu") %>%
+    mutate(STUDYID = "AB42")
+
+  ttae <- tte_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ))
+
+  eos <- tte_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "END OF STUDY",
+      SRCDOM = "ADSL",
+      SRCVAR = "EOSDT"))
+
+  expect_error(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      by_vars = vars(AEDECOD),
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = vars(
+        PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+        PARAM = past("Time to First", AEDECOD, "Adverse Event"),
+        PARCAT1 = "TTAE",
+        PARCAT2 = AEDECOD
+      )
+    )
+    ,
+    regexp = paste0("Assigning new variables failed!\n",
+                    "set_values_to = (\n",
+                    "  PARAMCD = paste0(\"TTAE\", as.numeric(as.factor(AEDECOD)))\n",
+                    "  PARAM = past(\"Time to First\", AEDECOD, \"Adverse Event\")\n",
+                    "  PARCAT1 = TTAE\n",
+                    "  PARCAT2 = AEDECOD\n",
+                    ")\n",
+                    "Error message:\n",
+                    "  Error in past(\"Time to First\", AEDECOD, \"Adverse Event\"): could not find function \"past\"\n"),
+    fixed = TRUE
   )
 })
 

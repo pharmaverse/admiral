@@ -7,6 +7,7 @@
 derive_param_tte(
   dataset = NULL,
   dataset_adsl,
+  by_vars = NULL,
   start_date = TRTSDT,
   start_date_imputation_flag = NULL,
   start_time_imputation_flag = NULL,
@@ -27,6 +28,17 @@ The \code{PARAMCD} variable is expected.}
 
 The variables specified for \code{start_date}, \code{start_imputation_flag}, and
 \code{subject_keys} are expected.}
+
+\item{by_vars}{By variables
+
+If the parameter is specified, separate time to event parameters are
+derived for each by group.
+
+The by variables must be in at least one of the source datasets. Each
+source dataset must contain either all by variables or none of the by
+variables.
+
+The by variables are not included in the output dataset.}
 
 \item{start_date}{Time to event origin date
 
@@ -150,6 +162,7 @@ joined from the ADSL dataset,
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
 data("adsl")
 
 death <- tte_source(
@@ -178,6 +191,54 @@ derive_param_tte(
   set_values_to = vars(PARAMCD = "OS",
                        PARAM = "Overall Survival")) \%>\%
 select(-STUDYID) \%>\% `[`(20:30,)
+
+# derive time to adverse event for each preferred term #
+adsl <- tibble::tribble(
+~USUBJID, ~TRTSDT,           ~EOSDT,
+"01",     ymd("2020-12-06"), ymd("2021-03-06"),
+"02",     ymd("2021-01-16"), ymd("2021-02-03")) \%>\%
+  mutate(STUDYID = "AB42")
+
+ae <- tibble::tribble(
+  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+  "01",     "2021-01-03T10:56", 1,      "Flu",
+  "01",     "2021-03-04",       2,      "Cough",
+  "01",     "2021",             3,      "Flu") \%>\%
+  mutate(STUDYID = "AB42")
+
+ttae <- tte_source(
+  dataset_name = "ae",
+  date = AESTDTC,
+  set_values_to = vars(
+    EVENTDESC = "AE",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ))
+
+eos <- tte_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  censor = 1,
+  set_values_to = vars(
+    EVENTDESC = "END OF STUDY",
+    SRCDOM = "ADSL",
+    SRCVAR = "EOSDT"))
+
+derive_param_tte(
+  dataset_adsl = adsl,
+  by_vars = vars(AEDECOD),
+  start_date = TRTSDT,
+  event_conditions = list(ttae),
+  censor_conditions = list(eos),
+  source_datasets = list(adsl = adsl, ae = ae),
+  set_values_to = vars(
+    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+    PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+    PARCAT1 = "TTAE",
+    PARCAT2 = AEDECOD
+  )
+) \%>\%
+select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 }
 \author{
 Stefan Bundfuss

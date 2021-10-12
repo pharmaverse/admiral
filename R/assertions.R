@@ -1517,7 +1517,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
           arg_name(substitute(list)),
           "[[", invalids_idx, "]]$", element,
           " = ",
-          lapply(list[invalids_idx],`[[`, element),
+          lapply(list[invalids_idx], `[[`, element),
           collapse = "\n"
         )
       )

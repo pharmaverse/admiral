@@ -57,6 +57,7 @@ globalVariables(c(
   "ex",
   "idtc__",
   "Source",
+  "temp_dummy",
   "temp_event",
   "temp_obs_nr",
   "temp_source_nr",
