@@ -553,6 +553,8 @@ derive_vars_dt <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
+  assert_vars(max_dates)
+  assert_vars(min_dates)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_logical_scalar(flag_imputation)
@@ -668,6 +670,8 @@ derive_vars_dtm <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
+  assert_vars(max_dates)
+  assert_vars(min_dates)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_character_scalar(
