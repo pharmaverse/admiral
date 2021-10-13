@@ -4,13 +4,18 @@
 
 ### General
 
+- `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551).
+
 ### BDS
 
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 ### Developer
 
-- `assert_list_element()` checks if an element of a list of lists/classes fulfills a condition.
+- `assert_list_element()` checks if an element of a list of lists/classes
+fulfills a condition.
+- `negate_vars()` negates a list of variables to remove them from a dataset with
+`select()`.
 
 ## Breaking Changes
 
@@ -29,7 +34,6 @@
 - `call_derivation()` enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (#403)
 
 - `derive_vars_dtm_to_dt()` enables the easy conversion of datetime to date variables (#376).
-
 
 - `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
 
