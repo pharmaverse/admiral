@@ -108,8 +108,7 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 
 + Functions must also end with `()`.
 
-+ Variables name is expected to be uppercase while datasets name is expected to be lowercase.
-
+ 
 + All the codes must be described, executed and the output result displayed once the code is executed.
 Use:
  
