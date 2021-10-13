@@ -388,21 +388,31 @@ derive_param_tte <- function(dataset = NULL,
   ) %>%
     left_join(adsl,
               by = vars2chr(subject_keys))
- tryCatch(
-   new_param <- mutate(new_param, !!!set_values_to),
-   error = function(cnd) {
-     abort(paste0("Assigning new variables failed!\n",
-                 "set_values_to = (\n",
-                 paste(" ", names(set_values_to),
-                       "=",
-                       lapply(set_values_to, quo_get_expr),
-                       collapse = "\n"),
-                 "\n)\nError message:\n  ",
-                 cnd))
-   })
+  tryCatch(
+    new_param <- mutate(new_param,!!!set_values_to),
+    error = function(cnd) {
+      abort(
+        paste0(
+          "Assigning new variables failed!\n",
+          "set_values_to = (\n",
+          paste(
+            " ",
+            names(set_values_to),
+            "=",
+            lapply(set_values_to, quo_get_expr),
+            collapse = "\n"
+          ),
+          "\n)\nError message:\n  ",
+          cnd
+        )
+      )
+    }
+  )
+
   new_param <-
     mutate(new_param, !!date_var := pmax(!!date_var, !!start_var)) %>%
-    select(-starts_with("temp_"), -vars2chr(by_vars))
+    # -vars2chr(by_vars) does not work for 3.5 #
+    select(-starts_with("temp_"), !!!negate_vars(by_vars))
 
   # add new parameter to input dataset #
   bind_rows(dataset, new_param)

@@ -194,6 +194,25 @@ quo_c <- function(...) {
   rlang::as_quosures(inputs[!is_null])
 }
 
+#' Negate List of Variables
+#'
+#' The function adds a minus sign as prefix to each variable.
+#'
+#' This is useful if a list of variables should be removed from a dataset,
+#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
+#'
+#' @param vars List of variables created by `vars()`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::negate_vars(vars(USUBJID, STUDYID))
+negate_vars <- function(vars) {
+  lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+}
+
 #' What Kind of Object is This?
 #'
 #' Returns a string describing what kind of object the input is.
