@@ -431,7 +431,7 @@ test_that("an error if issued set_values_to contains invalid expressions", {
                     "  PARCAT2 = AEDECOD\n",
                     "\\)\n",
                     "Error message:\n",
-                    "  Error in past\\(\"Time to First\", AEDECOD, \"Adverse Event\"\\):.* could not find function \"past\"\n")
+                    "  .*")
   )
 })
 
