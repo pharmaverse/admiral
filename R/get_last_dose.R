@@ -34,7 +34,7 @@
 #' 1. The `dataset_ex` is filtered using `filter_ex`, if provided.
 #' This is useful for, for example, filtering for valid dose only.
 #' 2. The datasets `dataset` and `dataset_ex` are joined using `by_vars`.
-#' 3. The last dose date is identified:
+#' 3. The last dose is identified:
 #' the last dose is the EX record with maximum date where `dose_end` is lower to or equal to
 #' `analysis_date`, subject to both date values are non-NA.
 #' The last dose is identified per `by_vars` and `dataset_seq_var`.
@@ -43,7 +43,7 @@
 #' Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
 #' Use `check_dates_only` to control whether only dates or whole date-times need to be equal.
 #'
-#' @return Input dataset with EX source variables from last dose appended.
+#' @return Input dataset with EX source variables from last dose added.
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
@@ -68,7 +68,7 @@
 #'     dataset_seq_var = AESEQ,
 #'     check_dates_only = FALSE
 #'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXSTDTC, EXENDTC)
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC)
 #'
 #' # or with traceability variables
 #' ae %>%
@@ -84,7 +84,7 @@
 #'     check_dates_only = FALSE,
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
 #'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXSTDTC, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 #'
 get_last_dose <- function(dataset,
                              dataset_ex,
@@ -135,23 +135,23 @@ get_last_dose <- function(dataset,
   }
 
   # filter based on user-specified condition
-  dataset_ex <- dataset_ex %>%
-    filter_if(filter_ex)
+  if(!is.null(quo_get_expr(filter_ex))){
+    dataset_ex <- dataset_ex %>%
+      filter_if(filter_ex)
+  }
 
   # join dataset with ex and create tmp numeric date to enable comparison
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
-    mutate_at(vars(!!dose_end, !!analysis_date),
-              ~ `if`(is_date(.), convert_dtm_to_dtc(.), .)) %>%
     mutate(
       tmp_dose_end_date = convert_dtc_to_dtm(
-        dtc = !!dose_end,
+        dtc = as.character(!!dose_end),
         date_imputation = NULL,
         time_imputation = "00:00:00"
       ),
       tmp_analysis_date = convert_dtc_to_dtm(
-        dtc = !!analysis_date,
+        dtc = as.character(!!analysis_date),
         date_imputation = NULL,
         time_imputation = "23:59:59"
       )
@@ -168,7 +168,8 @@ get_last_dose <- function(dataset,
     ) %>%
     filter(tmp_dose_end_date == tmp_ldose_dt) %>%
     distinct(tmp_ldose_dt, !!!syms(trace_vars_str), .keep_all = TRUE) %>%
-    select(!!!syms(trace_vars_str),!!!by_vars, !!dataset_seq_var, colnames(dataset_ex), -DOMAIN) %>%
+    select(!!!syms(trace_vars_str), !!!by_vars, !!dataset_seq_var, colnames(dataset_ex)) %>%
+    mutate(DOMAIN = NULL) %>%
     ungroup()
 
 
