@@ -29,7 +29,7 @@ For a pull request to be merged it needs to pass the automated `R CMD check` and
 
 - the function does what is intended for (as described in the header and corresponding issue)
 
-- the function header properly explains the function
+- the function header properly explains the intention of the function, the expected inputs (incl. permitted values of parameters) and the output produced; after reading the documentation the reader should be able to predict the output of the function without having to read the source code
 
 - the implemented derivation is in the scope of admiral, e.g. does not expect company specific input or hard-code company-specific rules
 
