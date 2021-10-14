@@ -31,6 +31,8 @@ For a pull request to be merged it needs to pass the automated `R CMD check` and
 
 - the function header properly explains the intention of the function, the expected inputs (incl. permitted values of parameters) and the output produced; after reading the documentation the reader should be able to predict the output of the function without having to read the source code
 
+- the function has an accompanying set of unit tests; for derivations these unit test should have a code coverage of 100%
+
 - the implemented derivation is in the scope of admiral, e.g. does not expect company specific input or hard-code company-specific rules
 
 - meaningful error or warning messages are issued if the input is invalid
