@@ -52,6 +52,28 @@ For a pull request to be merged it needs to pass the automated `R CMD check` and
 
 `R CMD check` is a command line tool that checks R packages against a standard set of criteria. For a pull request to pass the check must not issue any notes, warnings or errors. Below is a list of common issues and how to resolve them.
 
+## Check Fails Only on One Version
+
+If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally. The test environment for R version 3.6 is the same we use for development.
+
+To reproduce the R version 3.5 environment open the admiral project in R version 3.5.x, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+
+```r
+install.packages("remotes")
+options(repos = "https://cran.microsoft.com/snapshot/2018-12-20/")
+remotes::install_deps(dependencies = TRUE)
+devtools::check()
+```
+
+To reproduce the R release version environment open the admiral project in the latest available R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+
+```r
+install.packages("remotes")
+options(repos = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
+remotes::install_deps(dependencies = TRUE)
+devtools::check()
+```
+
 ## Package Dependencies
 
 ```
