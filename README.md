@@ -17,7 +17,7 @@ Once the package is available from CRAN you'll be able to install it using `inst
 In the meantime you can install the latest release of the package directly from GitHub.
 
 ```r
-if (!requireNamespace("remotes", quitely = TRUE)) {
+if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 remotes::install_github("Roche-GSK/admiral")
