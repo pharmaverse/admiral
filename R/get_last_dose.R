@@ -135,7 +135,7 @@ get_last_dose <- function(dataset,
   }
 
   # filter based on user-specified condition
-  if(!is.null(quo_get_expr(filter_ex))){
+  if (!is.null(quo_get_expr(filter_ex))) {
     dataset_ex <- dataset_ex %>%
       filter_if(filter_ex)
   }
