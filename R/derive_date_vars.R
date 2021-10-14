@@ -541,7 +541,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   date_imputation = "first",
-#'   min_dates = list(TRTSDTM)
+#'   min_dates = vars(TRTSDTM)
 #' )
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
@@ -553,8 +553,8 @@ derive_vars_dt <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
-  assert_vars(max_dates)
-  assert_vars(min_dates)
+  assert_vars(max_dates, optional = TRUE)
+  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_logical_scalar(flag_imputation)
@@ -569,8 +569,8 @@ derive_vars_dt <- function(dataset,
       !!sym(dt) := convert_dtc_to_dt(
         dtc = !!dtc,
         date_imputation = date_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
+        min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
       )
     )
 
@@ -657,7 +657,7 @@ derive_vars_dt <- function(dataset,
 #'   new_vars_prefix = "AEN",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = list(DTHDT, DCUTDT)
+#'   max_dates = vars(DTHDT, DCUTDT)
 #' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
@@ -670,8 +670,8 @@ derive_vars_dtm <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
-  assert_vars(max_dates)
-  assert_vars(min_dates)
+  assert_vars(max_dates, optional = TRUE)
+  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_character_scalar(
@@ -687,12 +687,11 @@ derive_vars_dtm <- function(dataset,
 
   dataset <- dataset %>%
     mutate(
-      !!sym(dtm) := convert_dtc_to_dtm(
+      !!sym(dt) := convert_dtc_to_dt(
         dtc = !!dtc,
         date_imputation = date_imputation,
-        time_imputation = time_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
+        min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
       )
     )
 
