@@ -46,7 +46,7 @@
 #' ```
 #' impute_dtc(
 #'   "2020-11",
-#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
+#'   min_dates = vars(ymd_hms("2020-12-06T12:12:12"),
 #'                    ymd_hms("2020-11-11T11:11:11")),
 #'   date_imputation = "first"
 #' )
@@ -134,7 +134,7 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = list(
+#'   min_dates = vars(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
