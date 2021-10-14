@@ -51,7 +51,7 @@ in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
 }
 \value{
-Input dataset with EX source variables from last dose appended.
+Input dataset with EX source variables from last dose added.
 }
 \description{
 Get Last Dose
@@ -71,7 +71,7 @@ The last dose records are identified as follows:
 \item The \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
 This is useful for, for example, filtering for valid dose only.
 \item The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
-\item The last dose date is identified:
+\item The last dose is identified:
 the last dose is the EX record with maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
 The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
@@ -98,7 +98,7 @@ ae \%>\%
     dataset_seq_var = AESEQ,
     check_dates_only = FALSE
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXSTDTC, EXENDTC)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC)
 
 # or with traceability variables
 ae \%>\%
@@ -114,7 +114,7 @@ ae \%>\%
     check_dates_only = FALSE,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXSTDTC, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 }
 \author{
