@@ -1524,3 +1524,127 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
     )
   }
 }
+
+
+#' Is There a One to One Mapping between Variables?
+#'
+#' Checks if there is a one to one mapping between two lists of variables.
+#'
+#' @param dataset Dataset to be checked
+#'
+#'   The variables specified for `vars1` and `vars2` are expected.
+#'
+#' @param vars1 First list of variables
+#'
+#' @param vars2 Second list of variables
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @export
+#'
+#' @examples
+#' data("adsl")
+#' try(
+#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#' )
+assert_one_to_one <- function(dataset, vars1, vars2) {
+  assert_vars(vars1)
+  assert_vars(vars2)
+  assert_data_frame(dataset, required_vars = quo_c(vars1, vars2))
+
+  uniques <- unique(select(dataset, !!!vars1, !!!vars2))
+  one_to_many <- uniques %>%
+    group_by(!!!vars1) %>%
+    filter(n() > 1) %>%
+    arrange(!!!vars1)
+  if (nrow(one_to_many) > 0) {
+    .datasets$one_to_many <- one_to_many
+    abort(
+      paste0(
+        "For some values of ",
+        vars2chr(vars1),
+        " there is more than one value of ",
+        vars2chr(vars2),
+        ".\nCall `get_one_to_many_dataset()` to get all one to many values."
+      )
+    )
+  }
+  many_to_one <- uniques %>%
+    group_by(!!!vars2) %>%
+    filter(n() > 1) %>%
+    arrange(!!!vars2)
+  if (nrow(many_to_one) > 0) {
+    .datasets$many_to_one <- many_to_one
+    abort(
+      paste0(
+        "There is more than one value of ",
+        vars2chr(vars1),
+        " for some values of ",
+        vars2chr(vars2),
+        ".\nCall `get_many_to_one_dataset()` to get all many to one values."
+      )
+    )
+  }
+}
+
+#' Get One to Many Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the one to many values are stored
+#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
+#'
+#' Note that the function always returns the one to many values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(adsl)
+#'
+#' try(
+#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+#' )
+#'
+#' get_one_to_many_dataset()
+get_one_to_many_dataset <- function() {
+  .datasets$one_to_many
+}
+
+#' Get Many to One Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the many to one values are stored
+#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
+#'
+#' Note that the function always returns the many to one values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(adsl)
+#'
+#' try(
+#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
+#' )
+#'
+#' get_many_to_one_dataset()
+get_many_to_one_dataset <- function() {
+  .datasets$many_to_one
+}

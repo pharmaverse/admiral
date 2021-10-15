@@ -411,8 +411,16 @@ derive_param_tte <- function(dataset = NULL,
 
   new_param <-
     mutate(new_param, !!date_var := pmax(!!date_var, !!start_var)) %>%
+    select(-starts_with("temp_"))
+
+  if (!is.null(by_vars)) {
+    if (!is.null(set_values_to$PARAMCD)) {
+      assert_one_to_one(new_param, vars(PARAMCD), by_vars)
+    }
+
     # -vars2chr(by_vars) does not work for 3.5 #
-    select(-starts_with("temp_"), !!!negate_vars(by_vars))
+    new_param <- select(new_param,!!!negate_vars(by_vars))
+  }
 
   # add new parameter to input dataset #
   bind_rows(dataset, new_param)

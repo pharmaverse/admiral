@@ -375,6 +375,59 @@ test_that("an error is issued all by variables are missing in all source dataset
     fixed = TRUE
   )
 })
+
+test_that("an error is issued if there is no one to one mapping between PARAMCD and by_vars", {
+  adsl <- tibble::tribble(
+    ~USUBJID, ~TRTSDT,           ~EOSDT,
+    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+    mutate(STUDYID = "AB42")
+
+  ae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03T10:56", 1,      "Flu",
+    "01",     "2021-03-04",       2,      "Cough",
+    "01",     "2021",             3,      "Flu") %>%
+    mutate(STUDYID = "AB42")
+
+  ttae <- tte_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ))
+
+  eos <- tte_source(
+    dataset_name = "adsl",
+    date = EOSDT,
+    censor = 1,
+    set_values_to = vars(
+      EVENTDESC = "END OF STUDY",
+      SRCDOM = "ADSL",
+      SRCVAR = "EOSDT"))
+
+  expect_error(
+    derive_param_tte(
+      dataset_adsl = adsl,
+      by_vars = vars(AEDECOD),
+      start_date = TRTSDT,
+      event_conditions = list(ttae),
+      censor_conditions = list(eos),
+      source_datasets = list(adsl = adsl, ae = ae),
+      set_values_to = vars(
+        PARAMCD = "TTAE",
+        PARCAT2 = AEDECOD
+      )
+    )
+    ,
+    regexp = paste0("For some values of PARAMCD there is more than one value of AEDECOD.\n",
+                    "Call `get_one_to_many_dataset()` to get all one to many values."),
+    fixed = TRUE
+  )
+})
+
 test_that("an error if issued set_values_to contains invalid expressions", {
   adsl <- tibble::tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
