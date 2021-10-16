@@ -79,7 +79,10 @@ The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
 }
 
 Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
-Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
+Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal. This
+is required because if start and end dates (datetimes) don't match, the \code{analysis_date} can occur
+between \code{dose_start} and \code{dose_end}. When this happens, the function will choose the dose with a
+latest \code{dose_end} date prior to \code{analysis_date}, as opposed to the actual last dose.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -112,7 +115,7 @@ ae \%>\%
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     check_dates_only = FALSE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 

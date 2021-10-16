@@ -41,7 +41,10 @@
 #' 4. The EX source variables from last dose are appended to the `dataset` and returned to the user.
 #'
 #' Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
-#' Use `check_dates_only` to control whether only dates or whole date-times need to be equal.
+#' Use `check_dates_only` to control whether only dates or whole date-times need to be equal. This
+#' is required because if start and end dates (datetimes) don't match, the `analysis_date` can occur
+#' between `dose_start` and `dose_end`. When this happens, the function will choose the dose with a
+#' latest `dose_end` date prior to `analysis_date`, as opposed to the actual last dose.
 #'
 #' @return Input dataset with EX source variables from last dose added.
 #'
@@ -82,7 +85,7 @@
 #'     analysis_date = AESTDTC,
 #'     dataset_seq_var = AESEQ,
 #'     check_dates_only = FALSE,
-#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 #'
@@ -144,14 +147,18 @@ get_last_dose <- function(dataset,
   res <- dataset %>%
     mutate(DOMAIN = NULL) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
+    mutate_at(vars(!!dose_end, !!analysis_date),
+              list(tmp = ~ `if`(is_date(.), convert_dtm_to_dtc(.), .))) %>%
+    rename(tmp_dose_end_date = paste(quo_get_expr(dose_end), "tmp", sep = "_"),
+           tmp_analysis_date = paste(quo_get_expr(analysis_date), "tmp", sep = "_")) %>%
     mutate(
       tmp_dose_end_date = convert_dtc_to_dtm(
-        dtc = as.character(!!dose_end),
+        dtc = tmp_dose_end_date,
         date_imputation = NULL,
         time_imputation = "00:00:00"
       ),
       tmp_analysis_date = convert_dtc_to_dtm(
-        dtc = as.character(!!analysis_date),
+        dtc = tmp_analysis_date,
         date_imputation = NULL,
         time_imputation = "23:59:59"
       )
