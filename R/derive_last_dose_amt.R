@@ -1,5 +1,6 @@
 #' Derive Last Dose Amount
 #'
+#' @inheritParams get_last_dose
 #' @param new_var The output variable.
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #'
