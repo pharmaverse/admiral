@@ -17,16 +17,16 @@ derive_vars_dt(
 \arguments{
 \item{dataset}{Input dataset.
 
-The date character vector (dtc) must be present.}
+The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g. \code{new_vars_prefix="AST"}.}
+A character is expected: e.g. \code{new_vars_prefix = "AST"}.}
 
-\item{dtc}{The --DTC date to impute
+\item{dtc}{The \code{'--DTC'} date to impute
 
-A character date is expected in a format like yyyy-mm-dd or
-yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+A character date is expected in a format like \code{yyyy-mm-dd} or
+\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
 imputation is performed.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
@@ -37,7 +37,7 @@ missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with month and day specified as 'mm-dd': e.g. \code{"06-15"} for the 15th
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
 \item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
@@ -45,24 +45,26 @@ day/month.
 
 Default is \code{NULL}.}
 
-\item{flag_imputation}{Whether the date imputation flag must also be derived.
+\item{flag_imputation}{Whether the date imputation flag should also be derived.
 
 A logical value
 
-Default: TRUE}
+Default: \code{TRUE}}
 
 \item{min_dates}{Minimum dates
 
 A list of dates is expected. It is ensured that the imputed date is not
 before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
-range of possible dates of the dtc value are considered. The possible dates
-are defined by the missing parts of the dtc date (see example below). This
-ensures that the non-missing parts of the dtc date are not changed. For
+range of possible dates of the \code{dtc} value are considered. The possible dates
+are defined by the missing parts of the \code{dtc} date (see example below). This
+ensures that the non-missing parts of the \code{dtc} date are not changed. For
 example\preformatted{impute_dtc(
   "2020-11",
-  min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-                   ymd_hms("2020-11-11T11:11:11")),
+  min_dates = list(
+    ymd_hms("2020-12-06T12:12:12"),
+    ymd_hms("2020-11-11T11:11:11")
+  ),
   date_imputation = "first"
 )
 }
@@ -70,7 +72,7 @@ example\preformatted{impute_dtc(
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the dtc date).}
+have changed the month although it is not missing (in the \code{dtc} date).}
 
 \item{max_dates}{Maximum dates
 
@@ -80,12 +82,12 @@ cut off date. Only dates which are in the range of possible dates are
 considered.}
 }
 \value{
-the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
+The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'} if requested) added.
 }
 \description{
-Derive a date ('--DT') from a date character vector ('---DTC').
-The date can be imputed (see date_imputation parameter)
-and the date imputation flag ('--DTF') can be added.
+Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
+The date can be imputed (see \code{date_imputation} parameter)
+and the date imputation flag ('\verb{--DTF'}) can be added.
 }
 \examples{
 library(lubridate)
