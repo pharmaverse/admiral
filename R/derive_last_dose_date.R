@@ -81,6 +81,7 @@ derive_last_dose_date <- function(dataset,
                                   by_vars ,
                                   dose_start,
                                   dose_end,
+                                  new_var,
                                   analysis_date,
                                   dataset_seq_var,
                                   check_dates_only,
@@ -92,12 +93,13 @@ derive_last_dose_date <- function(dataset,
   dose_end <- assert_symbol(enquo(dose_end))
   analysis_date <- assert_symbol(enquo(analysis_date))
   dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
+  new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(check_dates_only)
   stopifnot(is_quosures(traceability_vars) | is.null(traceability_vars))
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
 
-  get_last_dose(dataset = dataset,
+  res <- get_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
                 by_vars = by_vars ,
@@ -108,6 +110,10 @@ derive_last_dose_date <- function(dataset,
                 check_dates_only = !!check_dates_only,
                 traceability_vars = traceability_vars) %>%
   select(colnames(dataset), !!dose_start)
+
+  if (!is.null(new_var)){res %>% rename(!!new_var := !!dose_start)}
+
+  else {res}
 
 }
 

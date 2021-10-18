@@ -1,4 +1,4 @@
-context("test-derive_last_dose.R")
+context("test-derive_last_dose_date.R")
 
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
@@ -33,7 +33,7 @@ test_that("derive_last_dose works as expected", {
     )
   )
 
-  res <- derive_last_dose(
+  res <- derive_last_dose_date(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
