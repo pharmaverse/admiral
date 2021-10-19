@@ -43,7 +43,7 @@ remotes::install_github("Roche-GSK/admiral")
 ## References and Documentation
 
 * Please go to [Get Started](https://roche-gsk.github.io/admiral/articles/admiral.html) section to start using admiral
-* Please see the Programming Strategy () to understand how functions are created
+* Please see the [Programming Strategy](https://roche-gsk.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://roche-gsk.github.io/admiral/articles/faq.html) for the most frequent questions
 
 ## Contact 
