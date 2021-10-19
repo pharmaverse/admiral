@@ -143,7 +143,7 @@ derive_params_exposure <- function(dataset,
   }
 
   assert_data_frame(dataset,
-    required_vars = quo_c(by_vars, analysis_var, vars(PARAMCD), dates)
+                    required_vars = quo_c(by_vars, analysis_var, vars(PARAMCD), dates)
   )
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
@@ -158,13 +158,58 @@ derive_params_exposure <- function(dataset,
 
   add_data <- subset_ds %>%
     filter(PARAMCD == input_code) %>%
-    derive_summary_records(
-      by_vars = by_vars,
-      analysis_var = !!analysis_var,
-      summary_fun = summary_fun,
-      set_values_to = set_values_to
-    ) %>%
-    filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
+
+    derive_summary_records_expo <- function(dataset,
+                                            by_vars,
+                                            filter = NULL,
+                                            analysis_var,
+                                            summary_fun,
+                                            set_values_to = NULL,
+                                            fns = deprecated(),
+                                            filter_rows = deprecated()) {
+
+      ### BEGIN DEPRECIATION
+      if (!missing(fns)) {
+        err_msg <- paste(
+          "The fns argument of `derive_summary_records()` is deprecated",
+          "as of admiral 0.3.0.",
+          "Please use the `analysis_var` and `summary_fun` arguments instead."
+        )
+        abort(err_msg)
+      }
+      if (!missing(filter_rows)) {
+        deprecate_warn(
+          "0.3.0",
+          "derive_summary_records(filter_rows = )",
+          "derive_summary_records(filter = )"
+        )
+        filter <- enquo(filter_rows)
+      }
+      ### END DEPRECIATION
+
+      assert_vars(by_vars)
+      analysis_var <- assert_symbol(enquo(analysis_var))
+      filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+      assert_s3_class(summary_fun, "function")
+      assert_data_frame(
+        dataset,
+        required_vars = quo_c(by_vars, analysis_var)
+      )
+      if (!is.null(set_values_to)) {
+        assert_varval_list(set_values_to, optional = TRUE)
+      }
+
+      # Apply filter
+      if (!quo_is_null(filter)) {
+        subset_ds <- dataset %>%
+          group_by(!!!by_vars) %>%
+          filter(!!filter) %>%
+          ungroup()
+      } else {
+        subset_ds <- dataset
+      }
+
+    }
 
   # add the dates for the derived parameters
   by_vars <- vars2chr(by_vars)
