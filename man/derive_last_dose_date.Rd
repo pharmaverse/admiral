@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_last_dose_date.R
 \name{derive_last_dose_date}
 \alias{derive_last_dose_date}
-\title{Derive Last Dose Date(-time)}
+\title{Derive Last Dose Date-Time}
 \usage{
 derive_last_dose_date(
   dataset,
@@ -11,8 +11,10 @@ derive_last_dose_date(
   by_vars,
   dose_start,
   dose_end,
+  new_var,
   analysis_date,
   dataset_seq_var,
+  output_datetime = TRUE,
   check_dates_only,
   traceability_vars
 )
@@ -32,10 +34,14 @@ Defaults to NULL.}
 
 \item{dose_end}{The dose end date variable.}
 
+\item{new_var}{The output variable.}
+
 \item{analysis_date}{The analysis date variable.}
 
 \item{dataset_seq_var}{The sequence variable
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
+
+\item{output_datetime}{Display \code{new_var} as datetime or as date}
 
 \item{check_dates_only}{Logical.
 An assumption that start and end dates of treatment match is checked.
@@ -49,42 +55,15 @@ in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
-
-\item{new_var}{The output variable.}
-
-\item{output_datetime}{Logical. Should only date or date-time variable be returned?
-Defaults to \code{TRUE} (i.e. date-time variable).}
 }
 \value{
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Derive Last Dose Date(-time)
+Derive Last Dose Date-Time
 }
 \details{
-All date (date-time) variables can be characters in standard ISO format or
-of date / date-time class.
-For ISO format, see \code{\link{impute_dtc}} - parameter \code{dtc} for further details.
-Date-time imputations are done as follows:
-\itemize{
-\item \code{dose_end}: no date imputation, time imputation to \code{00:00:00} if time is missing.
-\item \code{analysis_date}: no date imputation, time imputation to \code{23:59:59} if time is missing.
-}
-
-The last dose date is derived as follows:
-\enumerate{
-\item The \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
-This is useful for, for example, filtering for valid dose only.
-\item The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
-\item The last dose date is derived:
-the last dose date is the maximum date where \code{dose_end} is lower to or equal to
-\code{analysis_date}, subject to both date values are non-NA.
-The last dose date is derived per \code{by_vars} and \code{dataset_seq_var}.
-\item The last dose date is appended to the \code{dataset} and returned to the user.
-}
-
-Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
-Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
+The last dose date
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -93,7 +72,7 @@ data(ex_single)
 
 ae \%>\%
   head(100) \%>\%
-  derive_last_dose(
+  derive_last_dose_date(
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
@@ -107,8 +86,11 @@ ae \%>\%
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 }
+\seealso{
+\code{\link[=get_last_dose]{get_last_dose()}}
+}
 \author{
-Ondrej Slama
+Ben Straub
 }
 \keyword{adae}
 \keyword{derivation}
