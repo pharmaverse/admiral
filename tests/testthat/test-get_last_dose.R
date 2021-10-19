@@ -28,12 +28,8 @@ test_that("get_last_dose works as expected", {
 
   expected_output <- mutate(
     input_ae,
-    EXSTDTC = as.Date(
-      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"
-    ),
-    EXENDTC = as.Date(
-      c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"
-    ),
+    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
     EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
@@ -121,28 +117,23 @@ test_that(
         "- time component (check_dates_only = TRUE)"), {
 
           input_ex_wrong <- dplyr::bind_rows(
-            mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), as.POSIXct),
+            mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), ~as.POSIXct(.x, tz = "UTC")),
             tibble::tribble(
               ~STUDYID,   ~USUBJID,   ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-              "my_study", "subject4", as.POSIXct("2020-11-06T00:00:00"),
-              as.POSIXct("2020-11-06T00:00:01"), 1, 10, "treatment")
+              "my_study", "subject4", as.POSIXct("2020-11-06T00:00:00", tz = "UTC"),
+              as.POSIXct("2020-11-06T00:00:01", tz = "UTC"), 1, 10, "treatment")
           )
 
           expected_output <- mutate(
             input_ae,
-            EXSTDTC = as.POSIXct(as.Date(
-              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA))
-              ),
-            EXENDTC = as.POSIXct(as.Date(
-              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA))
-            ),
+            EXSTDTC = as.POSIXct(
+              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"),
+            EXENDTC = as.POSIXct(
+              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"),
             EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
             EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
             EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
           )
-
-          attr(expected_output$EXENDTC, "tzone") <- ""
-          attr(expected_output$EXSTDTC, "tzone") <- ""
 
           res <- get_last_dose(
             input_ae,
@@ -158,5 +149,37 @@ test_that(
           )
 
           expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
+
+})
+
+
+test_that("derive_last_dose returns traceability vars", {
+
+  expected_output <- mutate(
+    input_ae,
+    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
+    EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
+    EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA),
+    LDOSEDOM = c("EX", "EX", "EX", NA, "EX", NA, NA),
+    LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
+    LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA)
+    )
+
+  res <- get_last_dose(
+    input_ae,
+    input_ex,
+    filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+    by_vars = vars(STUDYID, USUBJID),
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    check_dates_only = FALSE,
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+  )
+
+  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 
 })
