@@ -43,7 +43,6 @@ test_that("derive_last_dose works as expected", {
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
     check_dates_only = FALSE,
     traceability_vars = NULL
   )

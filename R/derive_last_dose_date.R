@@ -84,9 +84,11 @@ derive_last_dose_date <- function(dataset,
                                   new_var,
                                   analysis_date,
                                   dataset_seq_var,
+                                  output_datetime = TRUE,
                                   check_dates_only,
                                   traceability_vars ){
 
+  # assert funtions found in assertions.R
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_start <- assert_symbol(enquo(dose_start))
@@ -95,6 +97,7 @@ derive_last_dose_date <- function(dataset,
   dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(check_dates_only)
+  assert_logical_scalar(output_datetime)
   stopifnot(is_quosures(traceability_vars) | is.null(traceability_vars))
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
@@ -111,9 +114,16 @@ derive_last_dose_date <- function(dataset,
                 traceability_vars = traceability_vars) %>%
   select(colnames(dataset), !!dose_start)
 
-  if (!is.null(new_var)){res %>% rename(!!new_var := !!dose_start)}
-
+  # User-defined variable rename
+  if (!is.null(new_var)){
+    res <- res %>% rename(!!new_var := !!dose_start)}
   else {res}
 
+  # return either date or date-time variable
+  if (!output_datetime) {
+    res <- res %>%  mutate(!!new_var := as.Date(!!new_var))}
+  else {res}
+
+  return(res)
 }
 
