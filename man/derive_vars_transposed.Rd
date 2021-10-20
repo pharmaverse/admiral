@@ -39,6 +39,11 @@ The input dataset with transposed variables from \code{dataset_merge} added
 \description{
 Adds variables from a vertical dataset after transposing it into a wide one.
 }
+\details{
+After filtering \code{dataset_merge} based upon the condition provided in \code{filter}, this
+dataset is transposed and subsequently merged onto \code{dataset} using \code{by_vars} as
+keys.
+}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 
