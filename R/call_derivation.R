@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @seealso params
+#' @seealso [params()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

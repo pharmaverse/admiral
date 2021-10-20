@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dtm_to_dt.R
 \name{derive_vars_dtm_to_dt}
 \alias{derive_vars_dtm_to_dt}
-\title{Derive date variables from datetime variables}
+\title{Derive Date Variables from Datetime Variables}
 \usage{
 derive_vars_dtm_to_dt(dataset, source_vars)
 }
@@ -12,24 +12,23 @@ derive_vars_dtm_to_dt(dataset, source_vars)
 \item{source_vars}{A list of datetime variables from which dates are to be extracted}
 }
 \value{
-A data frame containing all observations and variables of the input
-dataset and adds the corresponding date variable of all specified datetime variables from
-the source_vars option with the correct name.
+A data frame containing the input dataset with the corresponding date (--DT)
+variable(s) of all datetime variables (--DTM) specified in source_vars.
 }
 \description{
-This function creates a date as output from a datetime variable
+This function creates date(s) as output from datetime variable(S)
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 
 adcm <- tibble::tribble(
-  ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF,
-  "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", NA,
-  "PAT01",  NA,                    "2012-02-28 19:00:00", NA,                    NA,
-  "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", NA,
-  "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "M",
-  "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00", NA
+  ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
+  "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00",
+  "PAT01",  NA,                    "2012-02-28 19:00:00", NA,
+  "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00",
+  "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00",
+  "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00",
 ) \%>\%
   mutate(
     TRTSDTM = as_datetime(TRTSDTM),

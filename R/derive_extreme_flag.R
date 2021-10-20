@@ -53,9 +53,11 @@
 #'   **Deprecated**: Please use the `filter` parameter instead.
 #'
 #' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first or last observation (with respect to the
-#'   order specified for the `order` parameter and the flag mode) is included in
-#'   the output dataset.
+#'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
+#'   (with respect to the order specified for the `order` parameter and the flag mode
+#'   specified for the `mode` parameter). Only observations included by the `filter` parameter
+#'   are considered for flagging.
+#'   Otherwise, `new_var` is set to `NA`.
 #'
 #' @author Stefan Bundfuss
 #'
