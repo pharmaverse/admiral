@@ -7,20 +7,20 @@
 compute_dtf(dtc, dt)
 }
 \arguments{
-\item{dtc}{The date character vector ('--DTC').
+\item{dtc}{The date character vector (\code{'--DTC'}).
 
-A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).}
+A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).}
 
 \item{dt}{The  Date vector to compare.
 
 A date object is expected.}
 }
 \value{
-the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )
+The date imputation flag (\code{'--DTF'}) (character value of \code{'D'}, \code{'M'} , \code{'Y'} or \code{NA})
 }
 \description{
-Derive the date imputation flag ('--DTF') comparing a date character vector
-('--DTC') with a Date vector ('--DT').
+Derive the date imputation flag (\code{'--DTF'}) comparing a date character vector
+(\code{'--DTC'}) with a Date vector (\code{'--DT'}).
 }
 \examples{
 compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))

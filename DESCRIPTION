@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
@@ -32,6 +32,7 @@ Imports:
     purrr,
     rlang,
     stringr,
+    hms,
     tidyr,
     tidyselect
 Suggests:
@@ -50,5 +51,6 @@ Suggests:
     styler,
     tibble,
     usethis,
-    covr
+    covr,
+    DT
 VignetteBuilder: knitr

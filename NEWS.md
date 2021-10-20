@@ -1,3 +1,21 @@
+# admiral 0.4.0
+
+## New Features
+
+### General
+
+- `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551).
+
+### BDS
+
+### Developer
+
+## Breaking Changes
+
+## Bug Fixes
+
+## Documentation
+
 # admiral 0.3.0
 
 ## New Features
@@ -9,7 +27,6 @@
 - `call_derivation()` enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (#403)
 
 - `derive_vars_dtm_to_dt()` enables the easy conversion of datetime to date variables (#376).
-
 
 - `derive_var_ontrtfl()` can now handle events with a start and end date rather than just a single assessment date (#395).
 

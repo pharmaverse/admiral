@@ -303,6 +303,13 @@
       "Repository": "CRAN",
       "Hash": "4dc5bb88961e347a0f4d8aad597cbfac"
     },
+    "hms": {
+      "Package": "hms",
+      "Version": "0.5.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "726671f634529d470545f9fd1a9d1869"
+    },
     "htmltools": {
       "Package": "htmltools",
       "Version": "0.4.0",
@@ -704,10 +711,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.2.3",
+      "Version": "0.3.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2c0f41d87be7a186139a6d3d5215848e"
+      "Hash": "ecf749a1b39ea72bd9b51b76292261f1"
     },
     "waldo": {
       "Package": "waldo",
