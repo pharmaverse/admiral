@@ -36,7 +36,7 @@
 #'     new_var = LDOSEDTM,
 #'     output_datetime = TRUE,
 #'     check_dates_only = FALSE,
-#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE"
+#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 
