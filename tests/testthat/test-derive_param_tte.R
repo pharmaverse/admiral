@@ -8,7 +8,7 @@ test_that("new observations with analysis date are derived correctly", {
     "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA) %>%
     mutate(STUDYID = "AB42")
 
-  death <- tte_source(
+  death <- event_source(
     dataset_name = "adsl",
     filter = DTHFL == "Y",
     date = DTHDT,
@@ -17,7 +17,7 @@ test_that("new observations with analysis date are derived correctly", {
       SRCDOM = "ADSL",
       SRCVAR = "DTHDT"))
 
-  lstalv <- tte_source(
+  lstalv <- censor_source(
     dataset_name = "adsl",
     date = LSTALVDT,
     censor = 1,
@@ -76,7 +76,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     mutate(STUDYID = "AB42",
            PARAMCD = "OVR")
 
-  pd <- tte_source(
+  pd <- event_source(
     dataset_name = "adrs",
     filter = AVALC == "PD",
     date = ADTM,
@@ -86,7 +86,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCVAR = "ADTM",
       SRCSEQ = ASEQ))
 
-  death <- tte_source(
+  death <- event_source(
     dataset_name = "adsl",
     filter = DTHFL == "Y",
     date = DTHDT,
@@ -95,7 +95,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCDOM = "ADSL",
       SRCVAR = "DTHDT"))
 
-  lastvisit <- tte_source(
+  lastvisit <- censor_source(
     dataset_name = "adrs",
     date = ADTM,
     censor = 1,
@@ -104,7 +104,7 @@ test_that("new observations with analysis datetime are derived correctly", {
       SRCDOM = "ADRS",
       SRCVAR = "ADTM"))
 
-  start <- tte_source(
+  start <- censor_source(
     dataset_name = "adsl",
     date = TRTSDTM,
     censor = 1,
@@ -161,7 +161,7 @@ test_that("new observations based on DTC variables are derived correctly", {
     "01",     "2021",             3) %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -170,7 +170,7 @@ test_that("new observations based on DTC variables are derived correctly", {
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -221,7 +221,7 @@ test_that("by_vars parameter works correctly", {
     "01",     "2021",             3,      "Flu") %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -230,7 +230,7 @@ test_that("by_vars parameter works correctly", {
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -286,7 +286,7 @@ test_that("an error is issued if some of the by variables are missing", {
     "01",     "2021",             3,      "Flu") %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -295,7 +295,7 @@ test_that("an error is issued if some of the by variables are missing", {
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -337,7 +337,7 @@ test_that("an error is issued all by variables are missing in all source dataset
     "01",     "2021",             3,      "Flu") %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -346,7 +346,7 @@ test_that("an error is issued all by variables are missing in all source dataset
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -390,7 +390,7 @@ test_that("an error is issued if there is no one to one mapping between PARAMCD 
     "01",     "2021",             3,      "Flu") %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -399,7 +399,7 @@ test_that("an error is issued if there is no one to one mapping between PARAMCD 
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -442,7 +442,7 @@ test_that("an error if issued set_values_to contains invalid expressions", {
     "01",     "2021",             3,      "Flu") %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -451,7 +451,7 @@ test_that("an error if issued set_values_to contains invalid expressions", {
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -502,7 +502,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
     "01",     "2021-03",          3) %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -511,7 +511,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -563,7 +563,7 @@ test_that("error is issued if parameter code already exists", {
     "01",     "2021",             3) %>%
     mutate(STUDYID = "AB42")
 
-  ttae <- tte_source(
+  ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
     set_values_to = vars(
@@ -572,7 +572,7 @@ test_that("error is issued if parameter code already exists", {
       SRCVAR = "AESTDTC",
       SRCSEQ = AESEQ))
 
-  eos <- tte_source(
+  eos <- censor_source(
     dataset_name = "adsl",
     date = EOSDT,
     censor = 1,
@@ -606,125 +606,5 @@ test_that("error is issued if parameter code already exists", {
     )
     ,
     regexp = "^The parameter code TTAE does already exist in `dataset`.$"
-  )
-})
-
-test_that("error is issued if events with censor != 0 exists", {
-  adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
-    mutate(STUDYID = "AB42")
-
-  ae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ,
-    "01",     "2021-01-03T10:56", 1,
-    "01",     "2021-03-04",       2,
-    "01",     "2021",             3) %>%
-    mutate(STUDYID = "AB42")
-
-  ttae <- tte_source(
-    dataset_name = "ae",
-    date = AESTDTC,
-    censor = 1,
-    set_values_to = vars(
-      EVENTDESC = "AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ))
-
-  eos <- tte_source(
-    dataset_name = "adsl",
-    date = EOSDT,
-    censor = 1,
-    set_values_to = vars(
-      EVENTDESC = "END OF STUDY",
-      SRCDOM = "ADSL",
-      SRCVAR = "EOSDT"))
-
-  expected_output <- tibble::tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA) %>%
-    mutate(STUDYID = "AB42",
-           PARAMCD = "TTAE",
-           PARAM = "Time to First Adverse Event") %>%
-    left_join(adsl %>% select(USUBJID, STARTDT = TRTSDT),
-              by = "USUBJID")
-
-  expect_error(
-    derive_param_tte(
-      expected_output,
-      dataset_adsl = adsl,
-      start_date = TRTSDT,
-      event_conditions = list(ttae),
-      censor_conditions = list(eos),
-      source_datasets = list(adsl = adsl, ae = ae),
-      set_values_to = vars(
-        PARAMCD = "TTAE",
-        PARAM = "Time to First Adverse Event"
-      )
-    )
-    ,
-    regexp = "^The censor value of events must be zero..*"
-  )
-})
-test_that("error is issued if events with censor != 0 exists", {
-  adsl <- tibble::tribble(
-    ~USUBJID, ~TRTSDT,           ~EOSDT,
-    "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-    "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
-    mutate(STUDYID = "AB42")
-
-  ae <- tibble::tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ,
-    "01",     "2021-01-03T10:56", 1,
-    "01",     "2021-03-04",       2,
-    "01",     "2021",             3) %>%
-    mutate(STUDYID = "AB42")
-
-  ttae <- tte_source(
-    dataset_name = "ae",
-    date = AESTDTC,
-    set_values_to = vars(
-      EVENTDESC = "AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ))
-
-  eos <- tte_source(
-    dataset_name = "adsl",
-    date = EOSDT,
-    censor = 0,
-    set_values_to = vars(
-      EVENTDESC = "END OF STUDY",
-      SRCDOM = "ADSL",
-      SRCVAR = "EOSDT"))
-
-  expected_output <- tibble::tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA) %>%
-    mutate(STUDYID = "AB42",
-           PARAMCD = "TTAE",
-           PARAM = "Time to First Adverse Event") %>%
-    left_join(adsl %>% select(USUBJID, STARTDT = TRTSDT),
-              by = "USUBJID")
-
-  expect_error(
-    derive_param_tte(
-      expected_output,
-      dataset_adsl = adsl,
-      start_date = TRTSDT,
-      event_conditions = list(ttae),
-      censor_conditions = list(eos),
-      source_datasets = list(adsl = adsl, ae = ae),
-      set_values_to = vars(
-        PARAMCD = "TTAE",
-        PARAM = "Time to First Adverse Event"
-      )
-    )
-    ,
-    regexp = "^The censor value of censorings must be positive..*"
   )
 })

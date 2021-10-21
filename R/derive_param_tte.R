@@ -1,4 +1,4 @@
-#' Derive a Time-to-event Parameter
+#' Derive a Time-to-Event Parameter
 #'
 #' Add a time-to-event parameter to the input dataset.
 #'
@@ -10,6 +10,11 @@
 #'
 #'   The variables specified for `start_date`, `start_imputation_flag`, and
 #'   `subject_keys` are expected.
+#'
+#' @param source_datasets Source datasets
+#'
+#'   A named list of datasets is expected. The `dataset_name` field of
+#'   `tte_source()` refers to the dataset provided in the list.
 #'
 #' @param by_vars By variables
 #'
@@ -45,16 +50,11 @@
 #'
 #' @param event_conditions Sources and conditions defining events
 #'
-#'   A list of `tte_source()` objects is expected.
+#'   A list of `event_source()` objects is expected.
 #'
 #' @param censor_conditions Sources and conditions defining censorings
 #'
-#'   A list of `tte_source()` objects is expected.
-#'
-#' @param source_datasets Source datasets
-#'
-#'   A named list of datasets is expected. The `dataset_name` field of
-#'   `tte_source()` refers to the dataset provided in the list.
+#'   A list of `censor_source()` objects is expected.
 #'
 #' @param create_datetime Create datetime variables?
 #'
@@ -65,8 +65,8 @@
 #'
 #'   A named list returned by `vars()` defining the variables to be set for the
 #'   new parameter, e.g. `vars(PARAMCD = "OS", PARAM = "Overall Survival")` is
-#'   expected. The values must be symbols, character strings, numeric values, or
-#'   `NA`.
+#'   expected. The values must be symbols, character strings, numeric values,
+#'   expressions, or `NA`.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -137,7 +137,7 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation adtte
+#' @keywords derivation bds
 #'
 #' @export
 #'
@@ -146,7 +146,7 @@
 #' library(lubridate, warn.conflicts = FALSE)
 #' data("adsl")
 #'
-#' death <- tte_source(
+#' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
@@ -155,7 +155,7 @@
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "DTHDT"))
 #'
-#' lstalv <- tte_source(
+#' lstalv <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
 #'   censor = 1,
@@ -171,7 +171,7 @@
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = vars(PARAMCD = "OS",
 #'                        PARAM = "Overall Survival")) %>%
-#' select(-STUDYID) %>% `[`(20:30,)
+#' select(-STUDYID) %>% filter(row_number() %in% 20:30)
 #'
 #' # derive time to adverse event for each preferred term #
 #' adsl <- tibble::tribble(
@@ -187,7 +187,7 @@
 #'   "01",     "2021",             3,      "Flu") %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ttae <- tte_source(
+#' ttae <- event_source(
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   set_values_to = vars(
@@ -196,7 +196,7 @@
 #'     SRCVAR = "AESTDTC",
 #'     SRCSEQ = AESEQ))
 #'
-#' eos <- tte_source(
+#' eos <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
 #'   censor = 1,
@@ -222,13 +222,13 @@
 #' select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 derive_param_tte <- function(dataset = NULL,
                              dataset_adsl,
+                             source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
                              start_date_imputation_flag = NULL,
                              start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
-                             source_datasets,
                              create_datetime = FALSE,
                              set_values_to,
                              subject_keys = vars(STUDYID, USUBJID)) {
@@ -249,18 +249,8 @@ derive_param_tte <- function(dataset = NULL,
     )
   )
   assert_vars(subject_keys)
-  assert_list_of(event_conditions, "tte_source")
-  # check that censor == 0 is used for events (strongly recommended by CDISC) #
-  assert_list_element(list = event_conditions,
-                      element = "censor",
-                      condition = censor == 0,
-                      message_text = "The censor value of events must be zero.")
-  assert_list_of(censor_conditions, "tte_source")
-  # check that censor > 0 is used for censorings (strongly recommended by CDISC) #
-  assert_list_element(list = censor_conditions,
-                      element = "censor",
-                      condition = censor > 0,
-                      message_text = "The censor value of censorings must be positive.")
+  assert_list_of(event_conditions, "event_source")
+  assert_list_of(censor_conditions, "censor_source")
   assert_list_of(source_datasets, "data.frame")
   source_names <- names(source_datasets)
   assert_list_element(
@@ -293,50 +283,9 @@ derive_param_tte <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   }
   if (!is.null(by_vars)) {
-    # ensure that the by variables are contained in all source datasets #
-    by_vars_chr <- vars2chr(by_vars)
-    # determine which source datasets need to be extended #
-    by_groups <- list()
-    extend <- vector("list", length(source_datasets))
-    for (i in seq_along(source_datasets)) {
-      missing_by_vars <- setdiff(by_vars_chr, names(source_datasets[[i]]))
-      if (length(missing_by_vars) == 0) {
-        # all by variables are included in the source dataset #
-        extend[[i]] <- FALSE
-        by_groups <-
-          append(by_groups,
-                 list(unique(select(
-                   source_datasets[[i]], !!!by_vars
-                 ))))
-      }
-      else if (!setequal(by_vars_chr, missing_by_vars)) {
-        # only some of the by variables are included in the source dataset #
-        abort(paste("Only",
-                    paste(setdiff(by_vars_chr, missing_by_vars), collapse = ", "),
-                    "are included in source dataset",
-                    names(source_datasets)[[i]],
-                    ".\n The source dataset must include all or none of the by variables."))
-      }
-      else {
-        extend[[i]] <- TRUE
-      }
-    }
-    if (length(by_groups) == 0) {
-      abort(paste0("The by variables (",
-                   paste(by_vars_chr, collapse = ", "),
-                   ") are not contained in any of the source datasets."))
-    }
-    # extend source datasets #
-    by_groups <- unique(bind_rows(by_groups))
-    for (i in seq_along(source_datasets)) {
-      if (extend[[i]]) {
-        source_datasets[[i]] <-
-          full_join(mutate(by_groups, temp_dummy = 1),
-                    mutate(source_datasets[[i]], temp_dummy = 1),
-                    by = "temp_dummy") %>%
-          select(-temp_dummy)
-      }
-    }
+    source_datasets <-
+      extend_source_datasets(source_datasets = source_datasets,
+                             by_vars = by_vars)
   }
 
   # determine events #
@@ -499,6 +448,7 @@ filter_date_sources <- function(sources,
                                 mode) {
 
   assert_list_of(sources, "tte_source")
+  assert_list_of(source_datasets, "data.frame")
   assert_logical_scalar(create_datetime)
   assert_vars(subject_keys)
   assert_character_scalar(mode,
@@ -565,12 +515,90 @@ filter_date_sources <- function(sources,
     )
 }
 
-#' Create an `tte_source` object
+#' Add By Groups to all Datasets if Necessary
 #'
-#' The `tte_source` object is used to define events and possible censorings as
-#' input for the `derive_param_tte()` function.
+#' The function ensures that the by variables are contained in all source
+#' datasets.
+#'
+#' @details
+#'   1. The by groups are determined as the union of the by groups occuring in
+#'   the source datasets.
+#'   1. For all source datasets which do not contain the by variables the source
+#'   dataset is replaced by the cartesian product of the source dataset and the
+#'   by groups.
+#'
+#' @param source_datasets Source datasets
+#'
+#'   A named list of datasets is expected. Each dataset must contain either all
+#'   by variables or none of the by variables.
+#'
+#' @param by_vars By variables
+#'
+#'
+#' @return The list of extended source datasets
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @export
+extend_source_datasets <- function(source_datasets,
+                                   by_vars) {
+  assert_list_of(source_datasets, "data.frame")
+  assert_vars(by_vars)
+  # ensure that the by variables are contained in all source datasets #
+  by_vars_chr <- vars2chr(by_vars)
+  # determine which source datasets need to be extended #
+  by_groups <- list()
+  extend <- vector("list", length(source_datasets))
+  for (i in seq_along(source_datasets)) {
+    missing_by_vars <- setdiff(by_vars_chr, names(source_datasets[[i]]))
+    if (length(missing_by_vars) == 0) {
+      # all by variables are included in the source dataset #
+      extend[[i]] <- FALSE
+      by_groups <-
+        append(by_groups,
+               list(unique(select(
+                 source_datasets[[i]], !!!by_vars
+               ))))
+    }
+    else if (!setequal(by_vars_chr, missing_by_vars)) {
+      # only some of the by variables are included in the source dataset #
+      abort(paste("Only",
+                  paste(setdiff(by_vars_chr, missing_by_vars), collapse = ", "),
+                  "are included in source dataset",
+                  names(source_datasets)[[i]],
+                  ".\n The source dataset must include all or none of the by variables."))
+    }
+    else {
+      extend[[i]] <- TRUE
+    }
+  }
+  if (length(by_groups) == 0) {
+    abort(paste0("The by variables (",
+                 paste(by_vars_chr, collapse = ", "),
+                 ") are not contained in any of the source datasets."))
+  }
+  # extend source datasets #
+  by_groups <- unique(bind_rows(by_groups))
+  for (i in seq_along(source_datasets)) {
+    if (extend[[i]]) {
+      source_datasets[[i]] <-
+        full_join(mutate(by_groups, temp_dummy = 1),
+                  mutate(source_datasets[[i]], temp_dummy = 1),
+                  by = "temp_dummy") %>%
+        select(-temp_dummy)
+    }
+  }
+  source_datasets
+}
+
+#' Create a `tte_source` Object
+#'
+#' The `tte_source` object is used to define events and possible censorings.
 #'
 #' @param dataset_name The name of the source dataset
+#'
 #'   The name refers to the dataset provided by the `source_datasets` parameter
 #'   of `derive_param_tte()`.
 #'
@@ -582,17 +610,18 @@ filter_date_sources <- function(sources,
 #'   specified. An unquoted symbol is expected.
 #'
 #' @param censor Censoring value
+#'
 #'   CDISC strongly recommends using `0` for events and positive integers for
 #'   censoring.
 #'
-#' @param set_values_to A named list returned by `vars()` defining the
-#'   variables to be set for the event or censoring, e.g. `vars(EVENTDESC =
-#'   “DEATH”, SRCDOM = “ADSL”, SRCVAR = “DTHDT”)`. The values must be a symbol,
-#'   a character string, a numeric value, `NA`, or an expression.
+#' @param set_values_to A named list returned by `vars()` defining the variables
+#'   to be set for the event or censoring, e.g. `vars(EVENTDESC = "DEATH",
+#'   SRCDOM = "ADSL", SRCVAR = "DTHDT")`. The values must be a symbol, a
+#'   character string, a numeric value, or `NA`.
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords source_specifications
+#' @keywords dev_utility
 #'
 #' @export
 #'
@@ -608,9 +637,65 @@ tte_source <- function(dataset_name,
     date = assert_symbol(enquo(date)),
     censor = assert_integer_scalar(censor),
     set_values_to = assert_varval_list(set_values_to,
-                                       accept_expr = TRUE,
                                        optional = TRUE)
   )
   class(out) <- c("tte_source", "source", "list")
+  out
+}
+#' Create an `event_source` Object
+#'
+#' The `event_source` object is used to define events as input for the
+#' `derive_param_tte()` function.
+#'
+#' @inheritParams tte_source
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords source_specifications
+#'
+#' @export
+#'
+#' @return An object of class "event_source".
+event_source <- function(dataset_name,
+                         filter = NULL,
+                         date,
+                         set_values_to = NULL) {
+  out <- tte_source(
+    dataset_name = assert_character_scalar(dataset_name),
+    filter = !!enquo(filter),
+    date = !!assert_symbol(enquo(date)),
+    censor = 0,
+    set_values_to = set_values_to
+  )
+  class(out) <- c("event_source", class(out))
+  out
+}
+#' Create an `censor_source` Object
+#'
+#' The `censor_source` object is used to define censorings as input for the
+#' `derive_param_tte()` function.
+#'
+#' @inheritParams tte_source
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords source_specifications
+#'
+#' @export
+#'
+#' @return An object of class "censor_source".
+censor_source <- function(dataset_name,
+                         filter = NULL,
+                         date,
+                         censor,
+                         set_values_to = NULL) {
+  out <- tte_source(
+    dataset_name = assert_character_scalar(dataset_name),
+    filter = !!enquo(filter),
+    date = !!assert_symbol(enquo(date)),
+    censor = assert_integer_scalar(censor, subset = "positive"),
+    set_values_to = set_values_to
+  )
+  class(out) <- c("censor_source", class(out))
   out
 }

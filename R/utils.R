@@ -209,8 +209,14 @@ quo_c <- function(...) {
 #'
 #' @examples
 #' admiral:::negate_vars(vars(USUBJID, STUDYID))
-negate_vars <- function(vars) {
-  lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+negate_vars <- function(vars = NULL) {
+  assert_vars(vars, optional = TRUE)
+  if (is.null(vars)) {
+    NULL
+  }
+  else {
+    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+  }
 }
 
 #' What Kind of Object is This?

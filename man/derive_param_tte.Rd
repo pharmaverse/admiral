@@ -2,18 +2,18 @@
 % Please edit documentation in R/derive_param_tte.R
 \name{derive_param_tte}
 \alias{derive_param_tte}
-\title{Derive a Time-to-event Parameter}
+\title{Derive a Time-to-Event Parameter}
 \usage{
 derive_param_tte(
   dataset = NULL,
   dataset_adsl,
+  source_datasets,
   by_vars = NULL,
   start_date = TRTSDT,
   start_date_imputation_flag = NULL,
   start_time_imputation_flag = NULL,
   event_conditions,
   censor_conditions,
-  source_datasets,
   create_datetime = FALSE,
   set_values_to,
   subject_keys = vars(STUDYID, USUBJID)
@@ -28,6 +28,11 @@ The \code{PARAMCD} variable is expected.}
 
 The variables specified for \code{start_date}, \code{start_imputation_flag}, and
 \code{subject_keys} are expected.}
+
+\item{source_datasets}{Source datasets
+
+A named list of datasets is expected. The \code{dataset_name} field of
+\code{tte_source()} refers to the dataset provided in the list.}
 
 \item{by_vars}{By variables
 
@@ -63,16 +68,11 @@ be specified. The variable \code{STARTTMF} is set to the specified variable.}
 
 \item{event_conditions}{Sources and conditions defining events
 
-A list of \code{tte_source()} objects is expected.}
+A list of \code{event_source()} objects is expected.}
 
 \item{censor_conditions}{Sources and conditions defining censorings
 
-A list of \code{tte_source()} objects is expected.}
-
-\item{source_datasets}{Source datasets
-
-A named list of datasets is expected. The \code{dataset_name} field of
-\code{tte_source()} refers to the dataset provided in the list.}
+A list of \code{censor_source()} objects is expected.}
 
 \item{create_datetime}{Create datetime variables?
 
@@ -83,8 +83,8 @@ variables \code{ADT} and \code{STARTDT} are created.}
 
 A named list returned by \code{vars()} defining the variables to be set for the
 new parameter, e.g. \code{vars(PARAMCD = "OS", PARAM = "Overall Survival")} is
-expected. The values must be symbols, character strings, numeric values, or
-\code{NA}.}
+expected. The values must be symbols, character strings, numeric values,
+expressions, or \code{NA}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -165,7 +165,7 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 data("adsl")
 
-death <- tte_source(
+death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
@@ -174,7 +174,7 @@ death <- tte_source(
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"))
 
-lstalv <- tte_source(
+lstalv <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
   censor = 1,
@@ -190,7 +190,7 @@ derive_param_tte(
   source_datasets = list(adsl = adsl),
   set_values_to = vars(PARAMCD = "OS",
                        PARAM = "Overall Survival")) \%>\%
-select(-STUDYID) \%>\% `[`(20:30,)
+select(-STUDYID) \%>\% filter(row_number() \%in\% 20:30)
 
 # derive time to adverse event for each preferred term #
 adsl <- tibble::tribble(
@@ -206,7 +206,7 @@ ae <- tibble::tribble(
   "01",     "2021",             3,      "Flu") \%>\%
   mutate(STUDYID = "AB42")
 
-ttae <- tte_source(
+ttae <- event_source(
   dataset_name = "ae",
   date = AESTDTC,
   set_values_to = vars(
@@ -215,7 +215,7 @@ ttae <- tte_source(
     SRCVAR = "AESTDTC",
     SRCSEQ = AESEQ))
 
-eos <- tte_source(
+eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
   censor = 1,
@@ -243,5 +243,5 @@ select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 \author{
 Stefan Bundfuss
 }
-\keyword{adtte}
+\keyword{bds}
 \keyword{derivation}

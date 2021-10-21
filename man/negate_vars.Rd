@@ -4,7 +4,7 @@
 \alias{negate_vars}
 \title{Negate List of Variables}
 \usage{
-negate_vars(vars)
+negate_vars(vars = NULL)
 }
 \arguments{
 \item{vars}{List of variables created by \code{vars()}}
