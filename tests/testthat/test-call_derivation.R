@@ -65,15 +65,15 @@ test_that("call_derivation works", {
       new_vars_prefix = "AST",
       dtc = AESTDTC,
       date_imputation = "first",
-      min_dates = list(TRTSDT),
-      max_dates = list(TRTEDT)
+      min_dates = vars(TRTSDT),
+      max_dates = vars(TRTEDT)
     ) %>%
     derive_vars_dt(
       new_vars_prefix = "AEN",
       dtc = AEENDTC,
       date_imputation = "last",
-      min_dates = list(TRTSDT),
-      max_dates = list(TRTEDT)
+      min_dates = vars(TRTSDT),
+      max_dates = vars(TRTEDT)
     )
 
   actual_output <- call_derivation(
@@ -83,8 +83,8 @@ test_that("call_derivation works", {
       params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
       params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
     ),
-    min_dates = list(TRTSDT),
-    max_dates = list(TRTEDT)
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
   )
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))

@@ -34,7 +34,7 @@ adae <- ae %>%
     new_vars_prefix = "AST",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = list(TRTSDT)
+    min_dates = vars(TRTSDT)
   ) %>%
 
   # derive analysis end time
@@ -43,7 +43,7 @@ adae <- ae %>%
     new_vars_prefix = "AEN",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = list(DTHDT, EOSDT)
+    max_dates = vars(DTHDT, EOSDT)
   ) %>%
 
   # derive analysis end/start date
