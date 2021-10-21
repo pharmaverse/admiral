@@ -77,5 +77,9 @@ globalVariables(c(
   "order1",
   "order2",
   "order3",
-  "_unit"
+  "_unit",
+  "tmp_analysis_date",
+  "tmp_dose_end_date",
+  "tmp_ldose_dt"
+
 ))

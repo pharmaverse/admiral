@@ -71,6 +71,29 @@ Derive Last Dose with user-defined groupings
 \details{
 Holding this space
 }
+\examples{
+library(dplyr, warn.conflicts = FALSE)
+data(ae)
+data(ex_single)
+
+ae \%>\%
+  head(100) \%>\%
+  derive_last_dose_grp(
+    head(ex_single, 100),
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
+    by_vars = vars(STUDYID, USUBJID),
+    dose_start = EXSTDTC,
+    dose_end = EXENDTC,
+    grp_var = LDGRP,
+    grp_brks = c(1, 5, 10, 15),
+    grp_lbls = c("G1", "G2", "G3"),
+    dose_var = EXDOSE,
+    analysis_date = AESTDTC,
+    dataset_seq_var = AESEQ,
+    check_dates_only = FALSE,
+    traceability_vars = NULL)
+}
 \seealso{
 \code{\link[=get_last_dose]{get_last_dose()}}
 }
