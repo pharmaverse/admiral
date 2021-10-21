@@ -42,7 +42,7 @@
 derive_last_dose_date <- function(dataset,
                                   dataset_ex,
                                   filter_ex,
-                                  by_vars ,
+                                  by_vars = vars(STUDYID, USUBJID),
                                   dose_start,
                                   dose_end,
                                   new_var,
