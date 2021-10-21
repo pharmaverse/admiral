@@ -43,6 +43,10 @@ Defaults to NULL.}
 
 \item{grp_var}{The output variable.}
 
+\item{grp_brks}{Breaks to apply to groups}
+
+\item{grp_lbls}{Labels to apply to groups}
+
 \item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
 
 \item{check_dates_only}{Logical.
@@ -57,10 +61,6 @@ in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
-
-\item{grp_brk}{Breaks to apply to groups}
-
-\item{grp_lbl}{Labels to apply to groups}
 }
 \value{
 Input dataset with additional column \code{new_var}.

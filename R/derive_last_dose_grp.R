@@ -2,8 +2,8 @@
 #'
 #' @inheritParams get_last_dose
 #' @param grp_var The output variable.
-#' @param grp_brk Breaks to apply to groups
-#' @param grp_lbl Labels to apply to groups
+#' @param grp_brks Breaks to apply to groups
+#' @param grp_lbls Labels to apply to groups
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #'
 #' @details Holding this space
