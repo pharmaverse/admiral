@@ -69,13 +69,13 @@ Input dataset with additional column \code{new_var}.
 Derive Last Dose with user-defined groupings
 }
 \details{
-
+Holding this space
 }
 \seealso{
 \code{\link[=get_last_dose]{get_last_dose()}}
 }
 \author{
-
+Ben Straub
 }
 \keyword{adae}
 \keyword{derivation}

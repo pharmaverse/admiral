@@ -6,11 +6,11 @@
 #' @param grp_lbl Labels to apply to groups
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #'
-#' @details
+#' @details Holding this space
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
-#' @author
+#' @author Ben Straub
 #'
 #' @keywords adae derivation
 #'
@@ -18,8 +18,6 @@
 #'
 #' @seealso [get_last_dose()]
 #'
-#' @examples
-
 
 
 derive_last_dose_grp <- function(dataset,
