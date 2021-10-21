@@ -88,11 +88,14 @@ format_chgcat1n <- function(paramcd, chg) {
 
 # ---- Derivations ----
 
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+
 adeg <- eg %>%
 
   # Join ADSL & EG (need TRTSDT for ADY derivation)
   left_join(
-    select(adsl, STUDYID, USUBJID, TRTSDT),
+    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -103,8 +106,7 @@ adeg <- eg %>%
     flag_imputation = "time"
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADTM) %>%
-  select(-TRTSDT)
+  derive_var_ady(reference_date = TRTSDT, date = ADTM)
 
 adeg <- adeg %>%
 
@@ -123,7 +125,7 @@ adeg <- adeg %>%
   # Derive new parameters based on existing records.
   # Derive RRR
   derive_param_rr(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     set_values_to = vars(PARAMCD = "RRR"),
     hr_code = "HR",
     get_unit_expr = tolower(EGSTRESU),
@@ -132,7 +134,7 @@ adeg <- adeg %>%
 
   # Derive QTCBR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Bazett",
     set_values_to = vars(PARAMCD = "QTCBR"),
     qt_code = "QT",
@@ -143,7 +145,7 @@ adeg <- adeg %>%
 
   # Derive QTCFR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Fridericia",
     set_values_to = vars(PARAMCD = "QTCFR"),
     qt_code = "QT",
@@ -154,7 +156,7 @@ adeg <- adeg %>%
 
   # Derive QTLCR
   derive_param_qtc(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
     method = "Sagie",
     set_values_to = vars(PARAMCD = "QTLCR"),
     qt_code = "QT",
@@ -189,7 +191,7 @@ adeg <- adeg %>%
 # records available) for all parameter except EGINTP
 adeg <- adeg %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVISITN, AVISIT, ADT),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
     analysis_var = AVAL,
     summary_fun = function(x) mean(x, na.rm = TRUE),
     filter = dplyr::n() >= 2 & PARAMCD != "EGINTP",
@@ -198,12 +200,6 @@ adeg <- adeg %>%
 
 adeg <- adeg %>%
 
-  # Join ADSL with EG (need TRTSDT and TRTEDT for ONTRTFL derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT),
-    by = c("STUDYID", "USUBJID")
-  ) %>%
-
   # Calculate ONTRTFL: from trt start up to 30 days after trt ends
   derive_var_ontrtfl(
     start_date = ADT,
@@ -211,8 +207,7 @@ adeg <- adeg %>%
     ref_end_date = TRTEDT,
     ref_end_window = 30,
     filter_pre_timepoint = AVISIT == "Baseline"
-  ) %>%
-  select(-TRTEDT)
+  )
 
 # Calculate ANRIND: requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
@@ -245,8 +240,7 @@ adeg <- adeg %>%
     filter = ((!is.na(AVAL) | !is.na(AVALC)) &
       ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
       PARAMCD != "EGINTP")
-  ) %>%
-  select(-TRTSDT)
+  )
 
 # Derive baseline information
 adeg <- adeg %>%
@@ -288,18 +282,9 @@ adeg <- adeg %>%
 # Get treatment information
 adeg <- adeg %>%
 
-  # Join ADSL with VS (need TRT01P/TRT01A for TRTA/TRTP derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, TRT01A, TRT01P),
-    by = c("STUDYID", "USUBJID")
-  ) %>%
-
   # Assign TRTA, TRTP
-  mutate(
-    TRTP = TRT01P,
-    TRTA = TRT01A
-  ) %>%
-  select(-TRT01A, -TRT01P)
+  mutate(TRTP = TRT01P, TRTA = TRT01A)
+
 
 # Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN
 adeg <- adeg %>%
@@ -326,7 +311,9 @@ adeg <- adeg %>%
 # Add all ADSL variables
 adeg <- adeg %>%
 
-  left_join(adsl, by = c("STUDYID", "USUBJID"))
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
 
 
 # ---- Save output ----

@@ -25,13 +25,16 @@ ex <- convert_blanks_to_na(ex_single)
 
 # ---- Derivations ----
 
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
+
 adae <- ae %>%
   # join supplementary qualifier variables
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
+    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -52,8 +55,6 @@ adae <- ae %>%
     time_imputation = "last",
     max_dates = list(DTHDT, EOSDT)
   ) %>%
-
-  select(-DTHDT, -EOSDT) %>%
 
   # derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
@@ -110,8 +111,6 @@ adae <- adae %>%
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
 
-  select(-TRTSDT, -TRTEDT) %>%
-
   # derive occurrence flags
   derive_extreme_flag(
     by_vars = vars(USUBJID),
@@ -123,8 +122,9 @@ adae <- adae %>%
 
 # Join all ADSL with AE
 adae <- adae %>%
-
-  left_join(adsl, by = c("STUDYID", "USUBJID"))
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
 
 
 # ---- Save output ----

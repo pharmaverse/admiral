@@ -20,6 +20,9 @@ cm <- convert_blanks_to_na(cm)
 
 # ---- Derivations ----
 
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
+
 # Derive flags
 adcm <- cm %>%
 
@@ -28,7 +31,7 @@ adcm <- cm %>%
 
   # Join ADSL with CM (only ADSL vars required for derivations)
   left_join(
-    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT, DTHDT, EOSDT),
+    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -49,8 +52,6 @@ adcm <- cm %>%
     time_imputation = "last",
     max_dates = list(DTHDT, EOSDT)
   ) %>%
-
-  select(-DTHDT, -EOSDT) %>%
 
   # Derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
@@ -101,8 +102,6 @@ adcm <- adcm %>%
   # records to be used in subsequent derivations or analysis.
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
 
-  select(-TRTSDT, -TRTEDT) %>%
-
   # Derive 1st Occurrence of Preferred Term Flag
   derive_extreme_flag(
     new_var = AOCCPFL,
@@ -130,23 +129,18 @@ adcm <- adcm %>%
     )
   ) %>%
 
-  left_join(
-    adsl %>% select(STUDYID, USUBJID, TRT01P, TRT01A),
-    by = c("STUDYID", "USUBJID")
-  ) %>%
-
   # Assign TRTP/TRTA
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
-  ) %>%
-
-  select(-TRT01P, -TRT01A)
+  )
 
 # Join all ADSL with CM
 adcm <- adcm %>%
 
-  left_join(adsl, by = c("STUDYID", "USUBJID"))
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
 
 
 

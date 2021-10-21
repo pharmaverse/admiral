@@ -71,11 +71,14 @@ format_avalcat1n <- function(param, aval) {
 
 # ---- Derivations ----
 
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
+
 advs <- vs %>%
 
   # Join ADSL with VS (need TRTSDT for ADY derivation)
   left_join(
-    select(adsl, STUDYID, USUBJID, TRTSDT),
+    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -86,9 +89,7 @@ advs <- vs %>%
     flag_imputation = FALSE
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADT) %>%
-
-  select(-TRTSDT)
+  derive_var_ady(reference_date = TRTSDT, date = ADT)
 
 advs <- advs %>%
   # Add PARAMCD only - add PARAM etc later
@@ -106,7 +107,7 @@ advs <- advs %>%
   # Derive new parameters based on existing records.
   # Derive Mean Arterial Pressure
   derive_param_map(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
@@ -114,7 +115,7 @@ advs <- advs %>%
 
   # Derive Body Surface Area
   derive_param_bsa(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     method = "Mosteller",
     set_values_to = vars(PARAMCD = "BSA"),
     get_unit_expr = VSSTRESU,
@@ -123,7 +124,7 @@ advs <- advs %>%
 
   # Derive Body Surface Area
   derive_param_bmi(
-    by_vars = vars(STUDYID, USUBJID, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI"),
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
@@ -152,7 +153,7 @@ advs <- advs %>%
 # Derive a new record as a summary record (e.g. mean of the triplicates at each time point)
 advs <- advs %>%
   derive_summary_records(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, AVISITN, AVISIT, ADT, ADY),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
     filter = !is.na(AVAL),
     analysis_var = AVAL,
     summary_fun = mean,
@@ -161,20 +162,13 @@ advs <- advs %>%
 
 advs <- advs %>%
 
-  # Join ADSL with VS (need TRTSDT and TRTEDT for ONTRTFL derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, TRTSDT, TRTEDT),
-    by = c("STUDYID", "USUBJID")
-  ) %>%
-
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
     filter_pre_timepoint = AVISIT == "Baseline"
-  ) %>%
-  select(-TRTEDT)
+  )
 
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
@@ -202,8 +196,7 @@ advs <- advs %>%
     new_var = ABLFL,
     mode = "last",
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
-  ) %>%
-  select(-TRTSDT)
+  )
 
 # Derive baseline information
 advs <- advs %>%
@@ -245,12 +238,6 @@ advs <- advs %>%
 # Get treatment information
 advs <- advs %>%
 
-  # Join ADSL with VS (need TRT01P/TRT01A for TRTA/TRTP derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, TRT01A, TRT01P),
-    by = c("STUDYID", "USUBJID")
-  ) %>%
-
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
@@ -271,7 +258,7 @@ advs <- advs %>%
     AVISITN = 99
   ) %>%
   union_all(advs) %>%
-  select(-EOTFL, -TRT01A, -TRT01P)
+  select(-EOTFL)
 
 # Get ASEQ and AVALCATx and add PARAM/PARAMN
 advs <- advs %>%
@@ -294,7 +281,9 @@ advs <- advs %>%
 # Add all ADSL variables
 advs <- advs %>%
 
-  left_join(adsl, by = c("STUDYID", "USUBJID"))
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason

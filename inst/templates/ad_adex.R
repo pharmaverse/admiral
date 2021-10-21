@@ -44,12 +44,15 @@ ex <- ex %>%
 
 # ---- Derivations ----
 
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
+
 # Part 1
 # Join ADSL with ex and derive required dates, variables
 adex0 <- ex %>%
   # Join ADSL with EX (only ADSL vars required for derivations)
   left_join(
-    adsl %>% select(STUDYID, USUBJID, TRTSDT, TRTSDTM, TRTEDTM),
+    adsl %>% select(STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -75,8 +78,7 @@ adex0 <- ex %>%
     # Compute the cumulative dose
     DOSEO = EXDOSE * EXDURD,
     PDOSEO = EXPLDOS * EXDURD
-  ) %>%
-  select(-TRTSDT, -TRTSDTM, -TRTEDTM)
+  )
 
 # Part 2
 # 1:1 mapping
@@ -128,7 +130,7 @@ adex <- adex %>%
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
 
   # W2-W24 exposure
@@ -167,7 +169,7 @@ adex <- adex %>%
       )
     ),
     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = vars(STUDYID, USUBJID)
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
 
   # Overall Dose intensity and W2-24 dose intensity
@@ -178,7 +180,7 @@ adex <- adex %>%
       params(set_values_to = vars(PARAMCD = "PDOSINT"), tadm_code = "PDOSE", tpadm_code = "PPDOSE")
     ),
     by_vars = vars(
-      STUDYID, USUBJID, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   ) %>%
   # Overall/W2-24 Average daily dose
@@ -197,7 +199,7 @@ adex <- adex %>%
       )
     ),
     by_vars = vars(
-      STUDYID, USUBJID, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   )
 
@@ -263,7 +265,9 @@ adex <- adex %>%
 # Join all ADSL with EX
 adex <- adex %>%
 
-  left_join(adsl, by = c("STUDYID", "USUBJID"))
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
 
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
