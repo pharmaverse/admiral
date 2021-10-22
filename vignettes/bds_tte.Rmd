@@ -3,6 +3,7 @@ title: "Creating a BDS Time-to-Event ADaM"
 output:
   rmarkdown::html_vignette:
     toc: false
+
 vignette: >
   %\VignetteIndexEntry{Creating a BDS Time-to-Event ADaM}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,7 +21,10 @@ knitr::opts_chunk$set(
 
 This article describes creating a BDS time-to-event ADaM.
 
-
+The main part in programming a time-to-event dataset is the definition of the
+events and censoring times. admiral supports single events like death or
+composite events like disease progression or death. More than one source dataset
+can be used for the definition of the event and censoring times.
 
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless
 otherwise specified.*
@@ -36,63 +40,6 @@ library(dplyr)
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
 library(lubridate)
-# datatable_vignette <- function(dataset) {
-#   DT::datatable(
-#     dataset,
-#     rownames = FALSE,
-#     filter = 'top',
-#     class = 'comapct stripe',
-#     extensions = c('Buttons', 'ColReorder'),
-#     options = list(
-#       searchHighlight = TRUE,
-#       searching = TRUE,
-#       pageLength = 5,
-#       lengthMenu = c(5, 10, 15, 20, 50, 100),
-#       dom = 'Bflrtip',
-#       buttons = I('colvis'),
-#       colReorder = TRUE
-#     )
-#   )
-# }
-# dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
-#   display_vars <- assert_vars(display_vars, optional = TRUE)
-#   assert_data_frame(dataset, required_vars = display_vars)
-#   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-# 
-#   out <- dataset %>%
-#      admiral::filter_if(filter) %>%
-#      dplyr::mutate_if(is.character, as.factor)
-# 
-#   if (!is.null(display_vars)) {
-#     hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
-#     cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
-#   }
-#   else {
-#     cols_to_hide <- list()
-#   }
-# 
-#   DT::datatable(
-#     out,
-#     rownames = FALSE,
-#     filter = "top",
-#     extensions = c("Buttons", "ColReorder", "Scroller"),
-#     options = list(
-#       columnDefs = cols_to_hide,
-#       searchHighlight = TRUE,
-#       searching = TRUE,
-#       pageLength = 5,
-#       lengthMenu = c(5, 10, 15, 20, 50, 100),
-#       dom = "Blfrtip",
-#       buttons = list(list(
-#         extend = "colvis",
-#         text = "Choose the columns to display",
-#         scroller = T,
-#         collectionLayout = "fixed two-column"
-#       )),
-#       colReorder = TRUE
-#     )
-#   )
-# }
 ```
 
 # Programming Workflow
@@ -118,9 +65,9 @@ data("adsl")
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
 
 The events and censorings are defined by the `event_source()` and the
-`event_source()` class. It defines
+`censor_source()` class respectively. It defines
 
-- which observations (`filter` parameter) of a source dataset (`dataset`
+- which observations (`filter` parameter) of a source dataset (`dataset_name`
 parameter) are potential events or censorings,
 - the value of the `CNSR` variable (`censor` parameter), and
 - which variable provides the date (`date` parameter).
@@ -128,25 +75,33 @@ parameter) are potential events or censorings,
 The date can be provided as date (`*DT` variable), datetime (`*DTM` variable),
 or character ISO-8601 date (`*DTC` variable).
 
+The `dataset_name` parameter expects a character value which is used as an
+identifier. The actual data which is used for the derivation of the parameter is
+provided via the `source_datasets` parameter of `derive_param_tte()`. It expects
+a named list of datasets. The names correspond to the identifiers specified for
+the `dataset_name` parameter. This allows to define events and censoring
+independent of the data.
+
+### First Example
+
 For example the following call defines a death event based on ADSL variables.
-The `censor` parameter is not specified as it is defaulted to `0`, which must be
-used for events.
+The `censor` parameter is not available for events because `CNSR = 0` is used
+for events following the CDISC recommendation.
 
 ```{r}
 death <- event_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT)
 ```
 
 A corresponding censoring based on the last known alive date can be defined by
-the following call. For censorings the value of the `CNSR` value must be a
-positive integer.
+the following call. For censorings the value of the `CNSR` variable must be a
+positive integer. It is defaulted to `1`.
 ```{r}
 lstalv <- censor_source(
-  dataset = "adsl",
-  date = LSTALVDT,
-  censor = 1)
+  dataset_name = "adsl",
+  date = LSTALVDT)
 ```
 
 The definitions can be passed to `derive_param_tte()` to create a new time-to-event parameter.
@@ -165,28 +120,31 @@ dataset_vignette(
   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR))
 ```
 
-To add additional information like event or censoring description (`EVENTDESC`)
+### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
+To add additional information like event or censoring description (`EVNTDESC`)
 or source variable (`SRCVAR`) the `set_values_to` parameter can be specified in
 the event/censoring definition.
 ```{r}
+# define death event #
 death <- event_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to =vars(
-    EVENTDESC = "DEATH",
+    EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"))
 
+# define censoring at last known alive date #
 lstalv <- censor_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   date = LSTALVDT,
-  censor = 1,
   set_values_to = vars(
-    EVENTDESC = "LAST KNOWN ALIVE DATE",
+    EVNTDESC = "LAST KNOWN ALIVE DATE",
     SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"))
 
+# derive time-to-event parameter #
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl),
@@ -198,11 +156,13 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte,
-  display_vars = vars(USUBJID, EVENTDESC, SRCDOM, SRCVAR, CNSR, ADT))
+  display_vars = vars(USUBJID, EVNTDESC, SRCDOM, SRCVAR, CNSR, ADT))
 # save adtte and adsl for next section
 adtte_bak <- adtte
 adsl_bak <- adsl
 ```
+
+### Handling Subjects Without Assessments
 
 If a subject has no valid date in any of the event or censoring source datasets,
 it will not be included in the output dataset. Therefore the `start` censoring
@@ -213,8 +173,8 @@ The ADaM IG requires that computed date must be accompanied by imputation flags.
 If the start date is imputed, the date imputation flag can be specified by the
 `start_date_imputation_flag` parameter. If a date variable from one of the event
 or censoring source datasets is imputed, the imputation flag can be specified
-for the `set_values_to` parameter in `tte_source()` (see defintion of the
-`start` censoring below).
+for the `set_values_to` parameter in `event_source()` or `censor_source()` (see
+definition of the `start` censoring below).
 ```{r, eval=FALSE}
 View(adsl)
 ```
@@ -257,11 +217,11 @@ dataset_vignette(
 ```{r}
 # progressive disease event #
 pd <- event_source(
-  dataset = "adrs",
+  dataset_name = "adrs",
   filter = AVALC == "PD",
   date = ADT,
   set_values_to = vars(
-    EVENTDESC = "PD",
+    EVNTDESC = "PD",
     SRCDOM = "ADRS",
     SRCVAR = "ADT",
     SRCSEQ = ASEQ
@@ -270,41 +230,41 @@ pd <- event_source(
 
 # death event #
 death <- event_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to = vars(
-    EVENTDESC = "DEATH",
+    EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
   )
 )
 
-# last tumor assessment censoring #
+# last tumor assessment censoring (CNSR = 1 by default) #
 lastvisit <- censor_source(
-  dataset = "adrs",
+  dataset_name = "adrs",
   date = ADT,
-  censor = 1,
   set_values_to = vars(
-    EVENTDESC = "LAST TUMOR ASSESSMENT",
+    EVNTDESC = "LAST TUMOR ASSESSMENT",
     SRCDOM = "ADRS",
     SRCVAR = "ADT"
   )
 )
 
-# start date censoring (for patients without tumor assessment) #
+# start date censoring (for patients without tumor assessment) (CNSR = 2) #
 start <- censor_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   date = TRTSDT,
-  censor = 1,
+  censor = 2,
   set_values_to = vars(
-    EVENTDESC = "TREATMENT START",
+    EVNTDESC = "TREATMENT START",
     SRCDOM = "ADSL",
     SRCVAR = "TRTSDT",
     ADTF = TRTSDTF
   )
 )
 
+# derive time-to-event parameter #
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl, adrs = adrs),
@@ -314,25 +274,31 @@ adtte <- derive_param_tte(
   censor_conditions = list(lastvisit, start),
   set_values_to = vars(PARAMCD = "PFS",
                        PARAM = "Progression Free Survival")
-) %>%
-  select(STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
-    EVENTDESC, SRCDOM, SRCVAR
-  )
+)
 ```
 ```{r, echo=FALSE}
 dataset_vignette(
-  adtte,
+  adtte %>%
+  select(STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
+    EVNTDESC, SRCDOM, SRCVAR
+  ),
   display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR))
 ```
 
+### Deriving a Series of Time-to-Event Parameters
 If several similar time-to-event parameters need to be derived the
 `call_derivation()` function is useful.
+
+In the following example parameters for time to first AE, time to first serious
+AE, and time to first related AE are derived. The censoring is the same for all
+three. Only the definition of the event differs.
 ```{r echo=FALSE}
 adtte <- adtte_bak
 adsl <- adsl_bak
 ```
 
 ```{r}
+# add end of AE observation period to ADSL #
 adsl <- adsl %>% mutate(AEOBSEDT = pmin(TRTEDT + 30, EOSDT))
 ```
 ```{r, echo=FALSE}
@@ -342,49 +308,54 @@ dataset_vignette(
 ```
 
 ```{r}
+# define censoring #
 observation_end <- censor_source(
-  dataset = "adsl",
+  dataset_name = "adsl",
   date = AEOBSEDT,
   censor = 1,
   set_values_to = vars(
-    EVENTDESC = "OBSERVATION END",
+    EVNTDESC = "OBSERVATION END",
     SRCDOM = "ADSL",
     SRCVAR = "AEOBSEDT"
   )
 )
 
+# define time to first AE #
 tt_ae <- event_source(
-  dataset = "ae",
+  dataset_name = "ae",
   date = AESTDTC,
   set_values_to = vars(
-    EVENTDESC = "ADVERSE EVENT",
+    EVNTDESC = "ADVERSE EVENT",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC"
   )
 )
 
+# define time to first serious AE #
 tt_ser_ae <- event_source(
-  dataset = "ae",
+  dataset_name = "ae",
   filter = AESER == "Y",
   date = AESTDTC,
   set_values_to = vars(
-    EVENTDESC = "SERIOUS ADVERSE EVENT",
+    EVNTDESC = "SERIOUS ADVERSE EVENT",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC"
   )
 )
 
+# define time to first related AE #
 tt_rel_ae <- event_source(
-  dataset = "ae",
+  dataset_name = "ae",
   filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
   date = AESTDTC,
   set_values_to = vars(
-    EVENTDESC = "RELATED ADVERSE EVENT",
+    EVNTDESC = "RELATED ADVERSE EVENT",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC"
   )
 )
 
+# derive all three time to event parameters #
 adaette <- call_derivation(
   derivation = derive_param_tte,
   variable_params = list(
@@ -401,9 +372,97 @@ adaette <- call_derivation(
 ```
 ```{r, echo=FALSE}
 dataset_vignette(
-  adaette %>% select(STUDYID, USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVENTDESC, SRCDOM, SRCVAR)
+  adaette %>% select(STUDYID, USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR)
   %>% arrange(USUBJID, PARAMCD),
-  display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVENTDESC, SRCDOM, SRCVAR))
+  display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+```
+
+### Deriving Time-to-Event Parameters Using By Groups
+
+If time-to-event parameters need to be derived for each by group of a source
+dataset, the `by_vars` parameter can be specified. Then a time-to-event
+parameter is derived for each by group.
+
+Please note that CDISC requires separate parameters (`PARAMCD`, `PARAM`) for the
+by groups. Therefore the variables specified for the `by_vars` parameter are not
+included in the output dataset. The `PARAMCD` variable should be specified for
+the `set_value_to` parameter using an expression on the right hand side which
+results in a unique value for each by group. If the values of the by variables
+should be included in the output dataset, they can be stored in `PARCATn`
+variables.
+
+In the following example a time-to-event parameter for each preferred term in
+the AE dataset is derived.
+```
+View(adsl)
+```
+```{r, echo=FALSE}
+adsl <- tibble::tribble(
+  ~USUBJID, ~TRTSDT,           ~EOSDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",     ymd("2021-01-16"), ymd("2021-02-03")) %>%
+  mutate(STUDYID = "AB42")
+
+dataset_vignette(adsl)
+```
+```
+View(ae)
+```
+```{r, echo=FALSE}
+ae <- tibble::tribble(
+  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+  "01",     "2021-01-03T10:56", 1,      "Flu",
+  "01",     "2021-03-04",       2,      "Cough",
+  "01",     "2021",             3,      "Flu") %>%
+  mutate(STUDYID = "AB42")
+
+dataset_vignette(ae)
+```
+```{r}
+# define time to first adverse event event #
+ttae <- event_source(
+  dataset_name = "ae",
+  date = AESTDTC,
+  set_values_to = vars(
+    EVNTDESC = "AE",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ))
+
+# define censoring at end of study #
+eos <- censor_source(
+  dataset_name = "adsl",
+  date = EOSDT,
+  set_values_to = vars(
+    EVNTDESC = "END OF STUDY",
+    SRCDOM = "ADSL",
+    SRCVAR = "EOSDT"))
+
+# derive time-to-event parameter #
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  by_vars = vars(AEDECOD),
+  start_date = TRTSDT,
+  event_conditions = list(ttae),
+  censor_conditions = list(eos),
+  source_datasets = list(adsl = adsl, ae = ae),
+  set_values_to = vars(
+    PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
+    PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
+    PARCAT1 = "TTAE",
+    PARCAT2 = AEDECOD
+  )
+)
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte %>%
+    select(
+      USUBJID, STARTDT, PARAMCD, PARAM, PARCAT1, PARCAT2, ADT, CNSR,
+      EVNTDESC, SRCDOM, SRCVAR, SRCSEQ
+    ),
+  display_vars = vars(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+)
 ```
 
 ## Derive Analysis Value (`AVAL`) {#aval}
@@ -445,6 +504,7 @@ adtte <- derive_obs_number(
 dataset_vignette(
   adtte)
 ```
+
 ## Add ADSL Variables {#adslvars}
 
 Variables from ADSL which are required for time-to-event analyses, e.g.,
