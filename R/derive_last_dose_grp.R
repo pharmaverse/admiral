@@ -1,12 +1,13 @@
 #' Derive Last Dose with user-defined groupings
 #'
 #' @inheritParams get_last_dose
-#' @param grp_var The output variable.
-#' @param grp_brks Breaks to apply to groups
-#' @param grp_lbls Labels to apply to groups
+#' @param grp_var The output variable defined by the user.
+#' @param grp_brks User supplied breaks to apply to groups
+#' @param grp_lbls User supplied labels to apply to groups
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #'
-#' @details Holding this space
+#' @details This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
+#'  the most recent last dose.  Users can supply custom grouping breaks and grouping labels for EXDOSE exploration.  These
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
@@ -64,10 +65,9 @@ derive_last_dose_grp <- function(dataset,
   analysis_date <- assert_symbol(enquo(analysis_date))
   dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   grp_var <- assert_symbol(enquo(grp_var))
-  #grp_brks <- assert_symbol(enquo(grp_brks))
-  #grp_lbls <- assert_symbol(enquo(grp_lbls))
   dose_var <- assert_symbol(enquo(dose_var))
   trace_vars_str <- names(traceability_vars)
+
 
   get_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
@@ -79,11 +79,13 @@ derive_last_dose_grp <- function(dataset,
                 dataset_seq_var = !!dataset_seq_var,
                 check_dates_only = !!check_dates_only,
                 traceability_vars = traceability_vars) %>%
-    mutate(!!grp_var := cut(
+    mutate(!!grp_var :=
+             as.character(
+               cut(
                    EXDOSE,
                    breaks = !!grp_brks,
                    right = T,
                    include.lowest = T,
-                   labels = !!grp_lbls)) %>%
+                   labels = !!grp_lbls)))  %>%
     select(colnames(dataset), !!!syms(trace_vars_str), !!grp_var)
 }

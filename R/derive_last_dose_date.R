@@ -1,12 +1,14 @@
 #' Derive Last Dose Date-Time
 #'
-#' Displays the start date or start datetime from the exposure dataset relative to an adverse event
+#' Displays the start date or start datetime of the last dose with respect to the most recent adverse event
 #'
 #' @inheritParams get_last_dose
-#' @param new_var The output variable.
+#' @param new_var The output variable defined by the user.
 #' @param output_datetime  Display `new_var` as datetime or as date
 #'
-#' @details The last dose date
+#' @details This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
+#'  the most recent last dose.  The function will return a `new_var` with the either the date or the datetime of the most
+#'  recent last dose relative to the adverse event.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'

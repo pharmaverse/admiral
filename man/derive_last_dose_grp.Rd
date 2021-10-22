@@ -41,11 +41,11 @@ Defaults to NULL.}
 \item{dataset_seq_var}{The sequence variable
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
 
-\item{grp_var}{The output variable.}
+\item{grp_var}{The output variable defined by the user.}
 
-\item{grp_brks}{Breaks to apply to groups}
+\item{grp_brks}{User supplied breaks to apply to groups}
 
-\item{grp_lbls}{Labels to apply to groups}
+\item{grp_lbls}{User supplied labels to apply to groups}
 
 \item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
 
@@ -69,7 +69,8 @@ Input dataset with additional column \code{new_var}.
 Derive Last Dose with user-defined groupings
 }
 \details{
-Holding this space
+This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
+the most recent last dose.  Users can supply custom grouping breaks and grouping labels for EXDOSE exploration.  These
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

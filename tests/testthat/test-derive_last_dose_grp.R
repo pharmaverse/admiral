@@ -1,3 +1,5 @@
+context("test-derive_last_dose_grp.R")
+
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
@@ -21,7 +23,19 @@ input_ex <- tibble::tribble(
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
-derive_last_dose_grp(input_ae,
+test_that("derive_last_dose_date works as expected", {
+
+  expected_output <- tibble::tribble(
+  ~STUDYID, ~USUBJID,  ~AESEQ, ~AESTDTC, ~LDGRP,
+  "my_study", "subject1",     1, "2020-01-02", "G1",
+  "my_study", "subject1",     2, "2020-08-31", "G1",
+  "my_study", "subject1",     3, "2020-10-10", "G1",
+  "my_study", "subject2",     2, "2020-02-20", "G2",
+  "my_study", "subject3",     1, "2020-03-02", "G2",
+  "my_study", "subject4",     1, "2020-11-02", "G3")
+
+
+  res <- derive_last_dose_grp(input_ae,
                      input_ex,
                      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
                      by_vars = vars(STUDYID, USUBJID),
@@ -35,3 +49,8 @@ derive_last_dose_grp(input_ae,
                      dataset_seq_var = AESEQ,
                      check_dates_only = FALSE,
                      traceability_vars = NULL)
+
+  expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
+
+  })
+

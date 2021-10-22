@@ -34,7 +34,7 @@ Defaults to NULL.}
 
 \item{dose_end}{The dose end date variable.}
 
-\item{new_var}{The output variable.}
+\item{new_var}{The output variable defined by the user.}
 
 \item{analysis_date}{The analysis date variable.}
 
@@ -60,10 +60,12 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Displays the start date or start datetime from the exposure dataset relative to an adverse event
+Displays the start date or start datetime of the last dose with respect to the most recent adverse event
 }
 \details{
-The last dose date
+This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
+the most recent last dose.  The function will return a \code{new_var} with the either the date or the datetime of the most
+recent last dose relative to the adverse event.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
