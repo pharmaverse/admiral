@@ -36,63 +36,63 @@ library(dplyr)
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
 library(lubridate)
-datatable_vignette <- function(dataset) {
-  DT::datatable(
-    dataset,
-    rownames = FALSE,
-    filter = 'top',
-    class = 'comapct stripe',
-    extensions = c('Buttons', 'ColReorder'),
-    options = list(
-      searchHighlight = TRUE,
-      searching = TRUE,
-      pageLength = 5,
-      lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = 'Bflrtip',
-      buttons = I('colvis'),
-      colReorder = TRUE
-    )
-  )
-}
-dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
-  display_vars <- assert_vars(display_vars, optional = TRUE)
-  assert_data_frame(dataset, required_vars = display_vars)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-
-  out <- dataset %>%
-     admiral::filter_if(filter) %>%
-     dplyr::mutate_if(is.character, as.factor)
-
-  if (!is.null(display_vars)) {
-    hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
-    cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
-  }
-  else {
-    cols_to_hide <- list()
-  }
-
-  DT::datatable(
-    out,
-    rownames = FALSE,
-    filter = "top",
-    extensions = c("Buttons", "ColReorder", "Scroller"),
-    options = list(
-      columnDefs = cols_to_hide,
-      searchHighlight = TRUE,
-      searching = TRUE,
-      pageLength = 5,
-      lengthMenu = c(5, 10, 15, 20, 50, 100),
-      dom = "Blfrtip",
-      buttons = list(list(
-        extend = "colvis",
-        text = "Choose the columns to display",
-        scroller = T,
-        collectionLayout = "fixed two-column"
-      )),
-      colReorder = TRUE
-    )
-  )
-}
+# datatable_vignette <- function(dataset) {
+#   DT::datatable(
+#     dataset,
+#     rownames = FALSE,
+#     filter = 'top',
+#     class = 'comapct stripe',
+#     extensions = c('Buttons', 'ColReorder'),
+#     options = list(
+#       searchHighlight = TRUE,
+#       searching = TRUE,
+#       pageLength = 5,
+#       lengthMenu = c(5, 10, 15, 20, 50, 100),
+#       dom = 'Bflrtip',
+#       buttons = I('colvis'),
+#       colReorder = TRUE
+#     )
+#   )
+# }
+# dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
+#   display_vars <- assert_vars(display_vars, optional = TRUE)
+#   assert_data_frame(dataset, required_vars = display_vars)
+#   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+# 
+#   out <- dataset %>%
+#      admiral::filter_if(filter) %>%
+#      dplyr::mutate_if(is.character, as.factor)
+# 
+#   if (!is.null(display_vars)) {
+#     hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
+#     cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
+#   }
+#   else {
+#     cols_to_hide <- list()
+#   }
+# 
+#   DT::datatable(
+#     out,
+#     rownames = FALSE,
+#     filter = "top",
+#     extensions = c("Buttons", "ColReorder", "Scroller"),
+#     options = list(
+#       columnDefs = cols_to_hide,
+#       searchHighlight = TRUE,
+#       searching = TRUE,
+#       pageLength = 5,
+#       lengthMenu = c(5, 10, 15, 20, 50, 100),
+#       dom = "Blfrtip",
+#       buttons = list(list(
+#         extend = "colvis",
+#         text = "Choose the columns to display",
+#         scroller = T,
+#         collectionLayout = "fixed two-column"
+#       )),
+#       colReorder = TRUE
+#     )
+#   )
+# }
 ```
 
 # Programming Workflow
@@ -117,7 +117,8 @@ data("adsl")
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
 
-The events and censorings are defined by the `tte_source()` class. It defines
+The events and censorings are defined by the `event_source()` and the
+`event_source()` class. It defines
 
 - which observations (`filter` parameter) of a source dataset (`dataset`
 parameter) are potential events or censorings,
@@ -132,8 +133,8 @@ The `censor` parameter is not specified as it is defaulted to `0`, which must be
 used for events.
 
 ```{r}
-death <- tte_source(
-  dataset = adsl,
+death <- event_source(
+  dataset = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT)
 ```
@@ -142,8 +143,8 @@ A corresponding censoring based on the last known alive date can be defined by
 the following call. For censorings the value of the `CNSR` value must be a
 positive integer.
 ```{r}
-lstalv <- tte_source(
-  dataset = adsl,
+lstalv <- censor_source(
+  dataset = "adsl",
   date = LSTALVDT,
   censor = 1)
 ```
@@ -152,6 +153,7 @@ The definitions can be passed to `derive_param_tte()` to create a new time-to-ev
 ```{r}
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl),
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   set_values_to = vars(PARAMCD = "OS",
@@ -167,8 +169,8 @@ To add additional information like event or censoring description (`EVENTDESC`)
 or source variable (`SRCVAR`) the `set_values_to` parameter can be specified in
 the event/censoring definition.
 ```{r}
-death <- tte_source(
-  dataset = adsl,
+death <- event_source(
+  dataset = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to =vars(
@@ -176,8 +178,8 @@ death <- tte_source(
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"))
 
-lstalv <- tte_source(
-  dataset = adsl,
+lstalv <- censor_source(
+  dataset = "adsl",
   date = LSTALVDT,
   censor = 1,
   set_values_to = vars(
@@ -187,6 +189,7 @@ lstalv <- tte_source(
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl),
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   set_values_to = vars(PARAMCD = "OS",
@@ -253,8 +256,8 @@ dataset_vignette(
 
 ```{r}
 # progressive disease event #
-pd <- tte_source(
-  dataset = adrs,
+pd <- event_source(
+  dataset = "adrs",
   filter = AVALC == "PD",
   date = ADT,
   set_values_to = vars(
@@ -266,8 +269,8 @@ pd <- tte_source(
 )
 
 # death event #
-death <- tte_source(
-  dataset = adsl,
+death <- event_source(
+  dataset = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to = vars(
@@ -278,8 +281,8 @@ death <- tte_source(
 )
 
 # last tumor assessment censoring #
-lastvisit <- tte_source(
-  dataset = adrs,
+lastvisit <- censor_source(
+  dataset = "adrs",
   date = ADT,
   censor = 1,
   set_values_to = vars(
@@ -290,8 +293,8 @@ lastvisit <- tte_source(
 )
 
 # start date censoring (for patients without tumor assessment) #
-start <- tte_source(
-  dataset = adsl,
+start <- censor_source(
+  dataset = "adsl",
   date = TRTSDT,
   censor = 1,
   set_values_to = vars(
@@ -304,6 +307,7 @@ start <- tte_source(
 
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adrs = adrs),
   start_date = TRTSDT,
   start_date_imputation_flag = TRTSDTF,
   event_conditions = list(pd, death),
@@ -338,8 +342,8 @@ dataset_vignette(
 ```
 
 ```{r}
-observation_end <- tte_source(
-  dataset = adsl,
+observation_end <- censor_source(
+  dataset = "adsl",
   date = AEOBSEDT,
   censor = 1,
   set_values_to = vars(
@@ -349,8 +353,8 @@ observation_end <- tte_source(
   )
 )
 
-tt_ae <- tte_source(
-  dataset = ae,
+tt_ae <- event_source(
+  dataset = "ae",
   date = AESTDTC,
   set_values_to = vars(
     EVENTDESC = "ADVERSE EVENT",
@@ -359,8 +363,8 @@ tt_ae <- tte_source(
   )
 )
 
-tt_ser_ae <- tte_source(
-  dataset = ae,
+tt_ser_ae <- event_source(
+  dataset = "ae",
   filter = AESER == "Y",
   date = AESTDTC,
   set_values_to = vars(
@@ -370,8 +374,8 @@ tt_ser_ae <- tte_source(
   )
 )
 
-tt_rel_ae <- tte_source(
-  dataset = ae,
+tt_rel_ae <- event_source(
+  dataset = "ae",
   filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
   date = AESTDTC,
   set_values_to = vars(
@@ -391,6 +395,7 @@ adaette <- call_derivation(
     params(event_conditions = list(tt_rel_ae),
            set_values_to = vars(PARAMCD = "TTRELAE"))),
   dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, ae = ae),
   censor_conditions = list(observation_end)
   )
 ```
@@ -420,7 +425,7 @@ adtte <- derive_vars_duration(
 )
 ```
 ```{r, echo=FALSE}
-datatable_vignette(
+dataset_vignette(
   adtte)
 ```
 
@@ -437,7 +442,7 @@ adtte <- derive_obs_number(
 )
 ```
 ```{r, echo=FALSE}
-datatable_vignette(
+dataset_vignette(
   adtte)
 ```
 ## Add ADSL Variables {#adslvars}
@@ -451,6 +456,6 @@ adtte <- left_join(adtte,
                    by = c("STUDYID", "USUBJID"))
 ```
 ```{r, echo=FALSE}
-datatable_vignette(
+dataset_vignette(
   adtte)
 ```
