@@ -177,7 +177,6 @@ death <- event_source(
 lstalv <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  censor = 1,
   set_values_to = vars(
     EVENTDESC = "LAST KNOWN ALIVE DATE",
     SRCDOM = "ADSL",
@@ -218,7 +217,6 @@ ttae <- event_source(
 eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
-  censor = 1,
   set_values_to = vars(
     EVENTDESC = "END OF STUDY",
     SRCDOM = "ADSL",

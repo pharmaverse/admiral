@@ -158,7 +158,6 @@
 #' lstalv <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
-#'   censor = 1,
 #'   set_values_to = vars(
 #'     EVENTDESC = "LAST KNOWN ALIVE DATE",
 #'     SRCDOM = "ADSL",
@@ -199,7 +198,6 @@
 #' eos <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
-#'   censor = 1,
 #'   set_values_to = vars(
 #'     EVENTDESC = "END OF STUDY",
 #'     SRCDOM = "ADSL",
@@ -687,7 +685,7 @@ event_source <- function(dataset_name,
 censor_source <- function(dataset_name,
                          filter = NULL,
                          date,
-                         censor,
+                         censor = 1,
                          set_values_to = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),

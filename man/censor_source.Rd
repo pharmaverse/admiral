@@ -4,7 +4,13 @@
 \alias{censor_source}
 \title{Create an \code{censor_source} Object}
 \usage{
-censor_source(dataset_name, filter = NULL, date, censor, set_values_to = NULL)
+censor_source(
+  dataset_name,
+  filter = NULL,
+  date,
+  censor = 1,
+  set_values_to = NULL
+)
 }
 \arguments{
 \item{dataset_name}{The name of the source dataset
