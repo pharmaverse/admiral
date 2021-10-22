@@ -686,8 +686,8 @@ derive_vars_dtm <- function(dataset,
     dtc = eval_tidy(dtc, mask),
     date_imputation = date_imputation,
     time_imputation = time_imputation,
-    min_dates = eval_tidy(min_dates, mask),
-    max_dates = eval_tidy(max_dates, mask)
+    min_dates = eval_tidy(enquo(min_dates), mask),
+    max_dates = eval_tidy(enquo(max_dates), mask)
   )
 
   if (flag_imputation %in% c("both", "date") ||
