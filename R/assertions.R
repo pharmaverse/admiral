@@ -1233,6 +1233,7 @@ on_failure(is_valid_month) <- function(call, env) {
 #'
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
+#' @param accept_expr Should expressions on the right hand side be accepted?
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
@@ -1249,7 +1250,12 @@ on_failure(is_valid_month) <- function(call, env) {
 #' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
 #' try(example_fun(vars("AE", DTSEQ = AESEQ)))
-assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) {
+assert_varval_list <- function(arg,
+                               required_elements = NULL,
+                               accept_expr = FALSE,
+                               optional =  FALSE) {
+
+  assert_logical_scalar(accept_expr)
   assert_logical_scalar(optional)
   assert_character_vector(required_elements, optional = TRUE)
 
@@ -1257,11 +1263,19 @@ assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) 
     return(invisible(arg))
   }
 
+  if (accept_expr) {
+    valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
+  }
+  else {
+    valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
+  }
+
   if (!is_quosures(arg) || !is_named(arg)) {
     err_msg <- sprintf(
       paste0(
-        "`%s` must be a named list of quosures where each element is a symbol, ",
-        "character scalar, numeric scalar, or `NA` but it is %s\n",
+        "`%s` must be a named list of quosures where each element is ",
+        valid_vals,
+        " but it is %s\n",
         "\u2139 To create a list of quosures use `vars()`"
       ),
       arg_name(substitute(arg)),
@@ -1283,18 +1297,33 @@ assert_varval_list <- function(arg, required_elements = NULL, optional = FALSE) 
   }
 
   expr_list <- map(arg, quo_get_expr)
-  invalids <- expr_list[!map_lgl(
-    expr_list,
-    ~ is.symbol(.x) ||
-      is.character(.x) ||
-      is.numeric(.x) || is.atomic(.x) && is.na(.x)
-  )]
+  if (accept_expr) {
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) ||
+        is.language(.x) ||
+        is.atomic(.x) && is.na(.x)
+    )]
+  }
+  else{
+    invalids <- expr_list[!map_lgl(
+      expr_list,
+      ~ is.symbol(.x) ||
+        is.character(.x) ||
+        is.numeric(.x) ||
+        is.atomic(.x) && is.na(.x)
+    )]
+  }
   if (length(invalids) > 0) {
     abort(
-      paste(
-        "The elements of the list",
+      paste0(
+        "The elements of the list ",
         arg_name(substitute(arg)),
-        "must be a symbol, a character scalar, a numeric, or `NA`.\n",
+        " must be ",
+        valid_vals,
+        ".\n",
         paste(
           names(invalids),
           "=",
@@ -1391,4 +1420,231 @@ quo_not_missing <- function(x) {
 }
 on_failure(quo_not_missing) <- function(call, env) {
   paste0("Argument `", deparse(call$x), "` is missing, with no default")
+}
+
+
+#' Is an Element of a List of Lists/Classes Fulfilling a Condition?
+#'
+#' Checks if the elements of a list of named lists/classes fulfill a certain
+#' condition. If not, an error is issued and all elements of the list not
+#' fulfilling the condition are listed.
+#'
+#' @param list A list to be checked
+#'
+#'   A list of named lists or classes is expected.
+#'
+#' @param element The name of an element of the lists/classes
+#'
+#'   A character scalar is expected.
+#'
+#' @param condition Condition to be fulfilled
+#'
+#'   The condition is evaluated for each element of the list. The element of the
+#'   lists/classes can be referred to by its name, e.g., `censor == 0` to check
+#'   the `censor` field of a class.
+#'
+#' @param message_text Text to be displayed in the message
+#'
+#'   The text should describe the condition to be fulfilled, e.g., "For events
+#'   the censor values must be zero.".
+#'
+#' @param ... Objects required to evaluate the condition
+#'
+#'   If the condition contains objects apart from the element, they have to be
+#'   passed to the function. See the second example below.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @export
+#'
+#' @examples
+#' death <- tte_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to =vars(
+#'     EVENTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"))
+#'
+#' lstalv <- tte_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVENTDESC = "LAST KNOWN ALIVE DATE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"))
+#'
+#' events = list(death, lstalv)
+#'
+#' try(assert_list_element(
+#'   list = events,
+#'   element = "censor",
+#'   condition = censor == 0,
+#'   message_text = "For events the censor values must be zero."
+#' ))
+#'
+#' valid_datasets = c("adrs", "adae")
+#'
+#' try(assert_list_element(
+#'   list = events,
+#'   element = "dataset_name",
+#'   condition = dataset_name %in% valid_datasets,
+#'   valid_datasets = valid_datasets,
+#'   message_text = paste0("The dataset name must be one of the following:\n",
+#'                         paste(valid_datasets, collapse = ", "))
+#' ))
+assert_list_element <- function(list, element, condition, message_text, ...) {
+  assert_s3_class(list, "list")
+  assert_character_scalar(element)
+  condition <- assert_filter_cond(enquo(condition))
+  assert_character_scalar(message_text)
+  # store elements of the lists/classes in a vector named as the element #
+  rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
+  invalids <-  ! eval(quo_get_expr(condition),
+                      envir = list(...),
+                      enclos = current_env())
+  if (any(invalids)) {
+    invalids_idx <- which(invalids)
+    abort(
+      paste0(
+        message_text,
+        "\n",
+        paste0(
+          arg_name(substitute(list)),
+          "[[", invalids_idx, "]]$", element,
+          " = ",
+          lapply(list[invalids_idx], `[[`, element),
+          collapse = "\n"
+        )
+      )
+    )
+  }
+}
+
+
+#' Is There a One to One Mapping between Variables?
+#'
+#' Checks if there is a one to one mapping between two lists of variables.
+#'
+#' @param dataset Dataset to be checked
+#'
+#'   The variables specified for `vars1` and `vars2` are expected.
+#'
+#' @param vars1 First list of variables
+#'
+#' @param vars2 Second list of variables
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @export
+#'
+#' @examples
+#' data("adsl")
+#' try(
+#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#' )
+assert_one_to_one <- function(dataset, vars1, vars2) {
+  assert_vars(vars1)
+  assert_vars(vars2)
+  assert_data_frame(dataset, required_vars = quo_c(vars1, vars2))
+
+  uniques <- unique(select(dataset, !!!vars1, !!!vars2))
+  one_to_many <- uniques %>%
+    group_by(!!!vars1) %>%
+    filter(n() > 1) %>%
+    arrange(!!!vars1)
+  if (nrow(one_to_many) > 0) {
+    .datasets$one_to_many <- one_to_many
+    abort(
+      paste0(
+        "For some values of ",
+        vars2chr(vars1),
+        " there is more than one value of ",
+        vars2chr(vars2),
+        ".\nCall `get_one_to_many_dataset()` to get all one to many values."
+      )
+    )
+  }
+  many_to_one <- uniques %>%
+    group_by(!!!vars2) %>%
+    filter(n() > 1) %>%
+    arrange(!!!vars2)
+  if (nrow(many_to_one) > 0) {
+    .datasets$many_to_one <- many_to_one
+    abort(
+      paste0(
+        "There is more than one value of ",
+        vars2chr(vars1),
+        " for some values of ",
+        vars2chr(vars2),
+        ".\nCall `get_many_to_one_dataset()` to get all many to one values."
+      )
+    )
+  }
+}
+
+#' Get One to Many Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the one to many values are stored
+#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
+#'
+#' Note that the function always returns the one to many values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(adsl)
+#'
+#' try(
+#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+#' )
+#'
+#' get_one_to_many_dataset()
+get_one_to_many_dataset <- function() {
+  .datasets$one_to_many
+}
+
+#' Get Many to One Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the many to one values are stored
+#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
+#'
+#' Note that the function always returns the many to one values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(adsl)
+#'
+#' try(
+#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
+#' )
+#'
+#' get_many_to_one_dataset()
+get_many_to_one_dataset <- function() {
+  .datasets$many_to_one
 }
