@@ -5,6 +5,8 @@
 #' @param grp_brks User supplied breaks to apply to groups
 #' @param grp_lbls User supplied labels to apply to groups
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
+#' @param include.lowest logical, indicating if a value equal to the lowest (or highest, for right = FALSE) ‘breaks’ value should be included.
+#' @param right logical, indicating if the intervals should be closed on the right (and open on the left) or vice versa
 #'
 #' @details This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
 #'  the most recent last dose.  Users can supply custom grouping breaks and grouping labels for EXDOSE exploration.  These
@@ -24,23 +26,30 @@
 #' data(ae)
 #' data(ex_single)
 #'
-#' ae %>%
-#'   head(100) %>%
-#'   derive_last_dose_grp(
-#'     head(ex_single, 100),
-#'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       nchar(EXENDTC) >= 10,
-#'     by_vars = vars(STUDYID, USUBJID),
-#'     dose_start = EXSTDTC,
-#'     dose_end = EXENDTC,
-#'     grp_var = LDGRP,
-#'     grp_brks = c(1, 5, 10, 15),
-#'     grp_lbls = c("G1", "G2", "G3"),
-#'     dose_var = EXDOSE,
-#'     analysis_date = AESTDTC,
-#'     dataset_seq_var = AESEQ,
-#'     check_dates_only = FALSE,
-#'     traceability_vars = NULL)
+#' ex_single_new <- ex_single %>%
+#'  mutate(EXDOSE_ex = sample(0:84, 22439, replace=TRUE)) %>%
+#'  select(-EXDOSE, "EXDOSE" = EXDOSE_ex)
+
+#' res <- derive_last_dose_grp(
+#'  head(ae, 100),
+#'  head(ex_single_new, 100),
+#'  filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+#'    nchar(EXENDTC) >= 10,
+#'  by_vars = vars(STUDYID, USUBJID),
+#'  dose_start = EXSTDTC,
+#'  dose_end = EXENDTC,
+#'  grp_var = LDGRP,
+#'  grp_brks = c(1, 40, 60, 100),
+#'  grp_lbls = c("Low", "Medium", "High"),
+#'  include.lowest = TRUE,
+#'  right = TRUE,
+#'  dose_var = EXDOSE,
+#'  analysis_date = AESTDTC,
+#'  dataset_seq_var = AESEQ,
+#'  check_dates_only = FALSE,
+#'  traceability_vars = NULL)
+#'
+#'  res %>% select(USUBJID, LDGRP)
 
 
 derive_last_dose_grp <- function(dataset,
@@ -54,6 +63,8 @@ derive_last_dose_grp <- function(dataset,
                                  grp_var,
                                  grp_brks,
                                  grp_lbls,
+                                 include.lowest = TRUE,
+                                 right = TRUE,
                                  dose_var = EXDOSE,
                                  check_dates_only = FALSE,
                                  traceability_vars = NULL) {
@@ -84,8 +95,8 @@ derive_last_dose_grp <- function(dataset,
                cut(
                    EXDOSE,
                    breaks = !!grp_brks,
-                   right = T,
-                   include.lowest = T,
+                   include.lowest = !!include.lowest,
+                   right = !!right,
                    labels = !!grp_lbls)))  %>%
     select(colnames(dataset), !!!syms(trace_vars_str), !!grp_var)
 }
