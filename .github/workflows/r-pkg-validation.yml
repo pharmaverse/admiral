@@ -9,6 +9,8 @@ jobs:
     name: Create report 📃
     runs-on: ubuntu-latest
     # Set Github token permissions
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       packages: write
@@ -19,13 +21,6 @@ jobs:
 
       - name: Build report 🏗
         uses: insightsengineering/r-pkg-validation@main
-        with:
-          # R package root path, in case your R package is within a subdirectory of the repo
-          report_pkg_dir: "."
-          # Template location
-          report_template_path: ".github/validation_template.rmd"
-          # Report format - provided to `rmarkdown::render` `output_format`
-          report_rmarkdown_format: "pdf_document"
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼

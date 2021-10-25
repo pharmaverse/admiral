@@ -687,16 +687,14 @@ derive_vars_dtm <- function(dataset,
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
 
-  dataset <- dataset %>%
-    mutate(
-      !!sym(dtm) := convert_dtc_to_dtm(
-        dtc = !!dtc,
-        date_imputation = date_imputation,
-        time_imputation = time_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
-      )
-    )
+  mask <- rlang::as_data_mask(dataset)
+  dataset[[dtm]] <- convert_dtc_to_dtm(
+    dtc = eval_tidy(dtc, mask),
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = eval_tidy(enquo(min_dates), mask),
+    max_dates = eval_tidy(enquo(max_dates), mask)
+  )
 
   if (flag_imputation %in% c("both", "date") ||
       flag_imputation == "auto" && !is.null(date_imputation)) {
