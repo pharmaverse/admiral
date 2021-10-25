@@ -25,7 +25,25 @@ test_that("derive_agegr_fda works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_fda(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output, keys = "AGE")
+
+})
+
+test_that("derive_agegr_fda works with age_unit missing and multiple units in AGEU", {
+
+  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months"))
+
+  expected_output <- mutate(
+    input,
+    AGEGR_EXP = factor(
+      c("<=18", "<=18", "19-64", "19-64", "19-64", ">=65", "<=18", "<=18"),
+      levels = c("<=18", "19-64", ">=65"),
+      exclude = NULL
+    )
+  )
+
+  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output, keys = "AGE")
 
 })
 
@@ -42,7 +60,7 @@ test_that("derive_agegr_ema works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_ema(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output, keys = "AGE")
 
 })
 
@@ -56,6 +74,50 @@ test_that("derive_agegr_ema - pediatric version - works as expected", {
       c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
         "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
         NA),
+      levels = c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+                 "12-17 (Adolescents)", NA_character_),
+      exclude = NULL
+    )
+  )
+
+  expect_dfs_equal(
+    derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP, adults = FALSE),
+    expected_output,
+    keys = "AGE"
+  )
+
+})
+
+
+test_that("derive_agegr_ema works with age_unit missing and multiple units in AGEU", {
+
+  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "years"))
+
+  expected_output <- mutate(
+    input,
+    AGEGR_EXP = factor(
+      c(NA, "18-64", "18-64", "18-64", "18-64", "65-84", NA, ">=85"),
+      levels = c("18-64", "65-84", ">=85", NA_character_),
+      exclude = NULL
+    )
+  )
+
+  expect_dfs_equal(derive_agegr_ema(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
+
+})
+
+test_that("derive_agegr_ema - pediatric version - works with age_unit missing and multiple units in AGEU", {
+
+  input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18, 36, 72),
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months"))
+
+  expected_output <- mutate(
+    input,
+    AGEGR_EXP = factor(
+      c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+        "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
+        NA, "2-11 (Children)", "2-11 (Children)"),
       levels = c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
                  "12-17 (Adolescents)", NA_character_),
       exclude = NULL
