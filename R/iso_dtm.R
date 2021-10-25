@@ -12,6 +12,7 @@ as.POSIXct.iso_dtm <- function(x, ...) {
   structure(x, class = setdiff(class(x), "iso_dtm"))
 }
 
+#' @export
 print.iso_dtm <- function(x, ...) {
   print(format(x, "%Y-%m-%d %H:%M:%S"), quote = FALSE, print.gap = 2L)
 }
