@@ -2,7 +2,7 @@
 #
 # Label: Subject Level Analysis Dataset
 #
-# Input: dm, ex, ds
+# Input: ae, dm, ex, ds, lb
 #
 
 library(dplyr)
@@ -12,6 +12,8 @@ library(admiral)
 data("dm")
 data("ex")
 data("ds")
+data("lb")
+data("ae")
 
 # User defined functions
 # Grouping
@@ -152,5 +154,20 @@ adsl <- dm %>%
     DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
     DOMAIN = NULL
   )
+
+# Last known alive date
+ae_start <- lstalvdt_source(dataset = ae,
+                            date = AESTDTC,
+                            date_imputation = "first")
+ae_end <- lstalvdt_source(dataset = ae,
+                          date = AEENDTC,
+                          date_imputation = "first")
+lb_date <- lstalvdt_source(dataset = lb,
+                           date = LBDTC,
+                           filter = nchar(LBDTC) >= 10)
+adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
+
+adsl <- adsl %>%
+  derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date)
 
 save(adsl, file = "data/adsl.rda", compress = TRUE)

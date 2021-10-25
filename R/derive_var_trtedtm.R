@@ -50,7 +50,7 @@ derive_var_trtedtm <- function(dataset,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10 , # nolint
                                subject_keys = vars(STUDYID, USUBJID)) {
 
-  assert_data_frame(dataset,subject_keys)
+  assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXENDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
