@@ -169,10 +169,12 @@ death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to =vars(
+  set_values_to = vars(
     EVENTDESC = "DEATH",
     SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"))
+    SRCVAR = "DTHDT"
+  )
+)
 
 lstalv <- censor_source(
   dataset_name = "adsl",
@@ -180,29 +182,37 @@ lstalv <- censor_source(
   set_values_to = vars(
     EVENTDESC = "LAST KNOWN ALIVE DATE",
     SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"))
+    SRCVAR = "LSTALVDT"
+  )
+)
 
 derive_param_tte(
   dataset_adsl = adsl,
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   source_datasets = list(adsl = adsl),
-  set_values_to = vars(PARAMCD = "OS",
-                       PARAM = "Overall Survival")) \%>\%
-select(-STUDYID) \%>\% filter(row_number() \%in\% 20:30)
+  set_values_to = vars(
+    PARAMCD = "OS",
+    PARAM = "Overall Survival"
+  )
+) \%>\%
+  select(-STUDYID) \%>\%
+  filter(row_number() \%in\% 20:30)
 
 # derive time to adverse event for each preferred term #
 adsl <- tibble::tribble(
-~USUBJID, ~TRTSDT,           ~EOSDT,
-"01",     ymd("2020-12-06"), ymd("2021-03-06"),
-"02",     ymd("2021-01-16"), ymd("2021-02-03")) \%>\%
+  ~USUBJID, ~TRTSDT,           ~EOSDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",     ymd("2021-01-16"), ymd("2021-02-03")
+) \%>\%
   mutate(STUDYID = "AB42")
 
 ae <- tibble::tribble(
   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
   "01",     "2021-01-03T10:56", 1,      "Flu",
   "01",     "2021-03-04",       2,      "Cough",
-  "01",     "2021",             3,      "Flu") \%>\%
+  "01",     "2021",             3,      "Flu"
+) \%>\%
   mutate(STUDYID = "AB42")
 
 ttae <- event_source(
@@ -212,7 +222,9 @@ ttae <- event_source(
     EVENTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
-    SRCSEQ = AESEQ))
+    SRCSEQ = AESEQ
+  )
+)
 
 eos <- censor_source(
   dataset_name = "adsl",
@@ -220,7 +232,9 @@ eos <- censor_source(
   set_values_to = vars(
     EVENTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
-    SRCVAR = "EOSDT"))
+    SRCVAR = "EOSDT"
+  )
+)
 
 derive_param_tte(
   dataset_adsl = adsl,
@@ -236,7 +250,7 @@ derive_param_tte(
     PARCAT2 = AEDECOD
   )
 ) \%>\%
-select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
+  select(USUBJID, STARTDT, PARAMCD, PARAM, ADT, CNSR, SRCSEQ)
 }
 \author{
 Stefan Bundfuss
