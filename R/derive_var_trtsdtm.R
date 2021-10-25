@@ -59,11 +59,13 @@ derive_var_trtsdtm <- function(dataset,
       order = vars(EXSTDTC, EXSEQ),
       by_vars = subject_keys,
       mode = "first"
-    ) %>%
-    transmute(
-      !!!subject_keys,
-      TRTSDTM = convert_dtc_to_dtm(EXSTDTC, date_imputation = "first", time_imputation = "first")
     )
 
-  left_join(dataset, add, by = vars2chr(subject_keys))
+  add$TRTSDTM <- convert_dtc_to_dtm(
+    dtc = add$EXSTDTC,
+    date_imputation = "first",
+    time_imputation = "first"
+  )
+
+  left_join(dataset, select(add, !!!subject_keys, TRTSDTM), by = vars2chr(subject_keys))
 }
