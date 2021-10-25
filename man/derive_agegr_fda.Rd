@@ -5,14 +5,16 @@
 \alias{derive_agegr_ema}
 \title{Derive Age Groups}
 \usage{
-derive_agegr_fda(dataset, age_var, new_var)
+derive_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 
-derive_agegr_ema(dataset, age_var, new_var, adults = TRUE)
+derive_agegr_ema(dataset, age_var, new_var, age_unit = NULL, adults = TRUE)
 }
 \arguments{
 \item{dataset}{Input dataset.}
 
 \item{age_var}{AGE variable.}
+
+\item{age_unit}{AGE unit variable.}
 
 \item{new_var}{New variable to be created.}
 
@@ -39,25 +41,34 @@ library(dplyr, warn.conflicts = FALSE)
 data(dm)
 
 dm \%>\%
-  derive_agegr_fda(AGE, AGEGR1) \%>\%
+  derive_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
+data <- tibble::tribble(
+  ~BRTHDT, ~RANDDT,
+  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  )
+
+data \%>\%
+  derive_vars_aage(unit = "months") \%>\%
+  derive_agegr_fda(AAGE, age_unit = NULL, AGEGR1)
+
 data.frame(AGE = 1:100) \%>\%
-  derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
+  derive_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 library(dplyr, warn.conflicts = FALSE)
 
 data(dm)
 
 dm \%>\%
-  derive_agegr_ema(AGE, AGEGR1) \%>\%
+  derive_agegr_ema(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
 data.frame(AGE = 1:100) \%>\%
-  derive_agegr_ema(age_var = AGE, new_var = AGEGR1)
+  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 data.frame(AGE = 1:20) \%>\%
-  derive_agegr_ema(age_var = AGE, new_var = AGEGR1, adults = FALSE)
+  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1, adults = FALSE)
 }
 \author{
 Ondrej Slama
