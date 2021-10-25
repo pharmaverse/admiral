@@ -138,6 +138,7 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
   assert_data_frame(dataset, required_vars = quo_c(age_var))
+  assert_numeric_vector(tolower(pull(dataset,!!age_var)))
 
   if (!paste0(quo_get_expr(age_var), "U") %in% colnames(dataset)) {
 
@@ -231,6 +232,7 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
   assert_data_frame(dataset, required_vars = quo_c(age_var))
+  assert_numeric_vector(tolower(pull(dataset,!!age_var)))
   assert_logical_scalar(adults)
 
   if (!paste0(quo_get_expr(age_var), "U") %in% colnames(dataset)) {
