@@ -135,18 +135,22 @@ NULL
 #'
 derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 
-  age_var <- assert_symbol(enquo(age_var))
+  age_variable <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quo_c(age_var))
-  assert_numeric_vector(tolower(pull(dataset,!!age_var)))
+  assert_data_frame(dataset, required_vars = quo_c(age_variable))
 
-  if (!paste0(quo_get_expr(age_var), "U") %in% colnames(dataset)) {
+  age_var <- pull(dataset,!!age_variable)
+  assert_numeric_vector(age_var)
+
+  age_var <- age_variable
+  unit_var <- paste0(quo_get_expr(age_var), "U")
+
+  if (!unit_var %in% colnames(dataset)) {
 
     if (is.null(age_unit)) {
 
       err_msg<- paste(
-        "There is no variable unit:", paste0(quo_get_expr(age_var), "U") ,
-        "associated with", quo_get_expr(age_var),
+        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
         "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
       )
       abort(err_msg)
@@ -157,8 +161,7 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
     }
   } else {
 
-    unitvar <- paste0(quo_get_expr(age_var), "U")
-    unit <- tolower(pull(dataset,!!sym(unitvar)))
+    unit <- tolower(pull(dataset,!!sym(unit_var)))
     assert_character_vector(unit, values = valid_time_units())
 
     if (!is.null(age_unit)) {
@@ -166,11 +169,10 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
       if (unit != tolower(age_unit)){
 
         msg <-paste(
-          "The variable unit", paste0(quo_get_expr(age_var), "U") ,
-          "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
-          unitvar)
+          unit_var)
         warn(msg)
       }
     }
@@ -183,7 +185,7 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
                            years = 1)
 
     ds <- dataset %>%
-      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unitvar))])
+      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
       )
   }
 
@@ -229,19 +231,22 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults = TRUE) {
 
-  age_var <- assert_symbol(enquo(age_var))
+  age_variable <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quo_c(age_var))
-  assert_numeric_vector(tolower(pull(dataset,!!age_var)))
-  assert_logical_scalar(adults)
+  assert_data_frame(dataset, required_vars = quo_c(age_variable))
 
-  if (!paste0(quo_get_expr(age_var), "U") %in% colnames(dataset)) {
+  age_var <- pull(dataset,!!age_variable)
+  assert_numeric_vector(age_var)
+
+  age_var <- age_variable
+  unit_var <- paste0(quo_get_expr(age_var), "U")
+
+  if (!unit_var %in% colnames(dataset)) {
 
     if (is.null(age_unit)) {
 
       err_msg<- paste(
-        "There is no variable unit:", paste0(quo_get_expr(age_var), "U") ,
-        "associated with", quo_get_expr(age_var),
+        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
         "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
       )
       abort(err_msg)
@@ -252,8 +257,7 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
     }
   } else {
 
-    unitvar <- paste0(quo_get_expr(age_var), "U")
-    unit <- tolower(pull(dataset,!!sym(unitvar)))
+    unit <- tolower(pull(dataset,!!sym(unit_var)))
     assert_character_vector(unit, values = valid_time_units())
 
     if (!is.null(age_unit)) {
@@ -261,11 +265,10 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
       if (unit != tolower(age_unit)){
 
         msg <-paste(
-          "The variable unit", paste0(quo_get_expr(age_var), "U") ,
-          "is associated with", quo_get_expr(age_var),
+          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
-          unitvar)
+          unit_var)
         warn(msg)
       }
     }
@@ -278,7 +281,7 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
                            years = 1)
 
     ds <- dataset %>%
-      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unitvar))])
+      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
       )
   }
 
