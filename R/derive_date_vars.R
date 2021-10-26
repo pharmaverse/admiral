@@ -46,7 +46,7 @@
 #' ```
 #' impute_dtc(
 #'   "2020-11",
-#'   min_dates = list(
+#'   min_dates = vars(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
@@ -136,7 +136,7 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = list(
+#'   min_dates = vars(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
@@ -543,7 +543,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   date_imputation = "first",
-#'   min_dates = list(TRTSDTM)
+#'   min_dates = vars(TRTSDTM)
 #' )
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
@@ -603,7 +603,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' A logical value
 #'
-#' Default: TRUE
+#' Default: can be set to either "auto", "date" or "both"
 #'
 #' @inheritParams impute_dtc
 #'
@@ -657,7 +657,7 @@ derive_vars_dt <- function(dataset,
 #'   new_vars_prefix = "AEN",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = list(DTHDT, DCUTDT)
+#'   max_dates = vars(DTHDT, DCUTDT)
 #' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
