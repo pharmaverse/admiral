@@ -686,10 +686,9 @@ derive_vars_dtm <- function(dataset,
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
-
   dataset <- dataset %>%
     mutate(
-      !!sym(dt) := convert_dtc_to_dt(
+      !!sym(dt) := convert_dtc_to_dtm(
         dtc = !!dtc,
         date_imputation = date_imputation,
         min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
