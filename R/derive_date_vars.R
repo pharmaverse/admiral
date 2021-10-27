@@ -601,8 +601,6 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
-#' A logical value
-#'
 #' Default: can be set to either "auto", "date" or "both"
 #'
 #' @inheritParams impute_dtc
