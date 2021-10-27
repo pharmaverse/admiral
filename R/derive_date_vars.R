@@ -466,6 +466,10 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
 #'
+#' @details
+#' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
+#' a warning is issued and `'--DTF'` will be overwritten.
+#'
 #' @author Samia Kabi
 #'
 #' @keywords adam derivation timing
@@ -612,7 +616,7 @@ derive_vars_dt <- function(dataset,
 #' if it already exists in the input dataset. However, if `'--TMF'` already exists
 #' in the input dataset, a warning is issued and `'--TMF'` will be overwritten.
 #'
-#' @return  the input dataset with the datetime `'--DTM'` (and the date/time imputation
+#' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
 #' @author Samia Kabi
