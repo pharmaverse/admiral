@@ -2,8 +2,6 @@
 title: "Creating a BDS Time-to-Event ADaM"
 output:
   rmarkdown::html_vignette:
-    toc: false
-
 vignette: >
   %\VignetteIndexEntry{Creating a BDS Time-to-Event ADaM}
   %\VignetteEngine{knitr::rmarkdown}
@@ -64,6 +62,15 @@ data("adsl")
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
 
+To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`,
+`EVNTDESC`, `SRCDOM`, `PARAMCD`, ... the `derive_param_tte()` function can be
+used. It adds one parameter to the input dataset with one observation per
+subject. Usually it is called several times.
+
+For each subject it is determined if an event occurred. In the affirmative the
+analysis date `ADT` is set to the earliest event date. If no event occurred, the
+analysis date is set to the latest censoring date.
+
 The events and censorings are defined by the `event_source()` and the
 `censor_source()` class respectively. It defines
 
@@ -75,6 +82,10 @@ parameter) are potential events or censorings,
 The date can be provided as date (`*DT` variable), datetime (`*DTM` variable),
 or character ISO-8601 date (`*DTC` variable).
 
+CDISC strongly recommends `CNSR = 0` for events and positive integers for
+censorings. admiral enforces this recommendation. Therefore the `censor`
+parameter is available for `censor_source()` only. It is defaulted to `1`.
+
 The `dataset_name` parameter expects a character value which is used as an
 identifier. The actual data which is used for the derivation of the parameter is
 provided via the `source_datasets` parameter of `derive_param_tte()`. It expects
@@ -82,12 +93,9 @@ a named list of datasets. The names correspond to the identifiers specified for
 the `dataset_name` parameter. This allows to define events and censoring
 independent of the data.
 
-### First Example
+### Single Event
 
-For example the following call defines a death event based on ADSL variables.
-The `censor` parameter is not available for events because `CNSR = 0` is used
-for events following the CDISC recommendation.
-
+For example, the overall survival time could be defined from treatment start to death. Patients alive or lost to follow-up would be censored to the last alive date. The following call defines a death event based on ADSL variables.
 ```{r}
 death <- event_source(
   dataset_name = "adsl",
@@ -96,8 +104,7 @@ death <- event_source(
 ```
 
 A corresponding censoring based on the last known alive date can be defined by
-the following call. For censorings the value of the `CNSR` variable must be a
-positive integer. It is defaulted to `1`.
+the following call.
 ```{r}
 lstalv <- censor_source(
   dataset_name = "adsl",
@@ -109,6 +116,7 @@ The definitions can be passed to `derive_param_tte()` to create a new time-to-ev
 adtte <- derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl),
+  start_date = TRTSDT,
   event_conditions = list(death),
   censor_conditions = list(lstalv),
   set_values_to = vars(PARAMCD = "OS",
@@ -162,12 +170,14 @@ adtte_bak <- adtte
 adsl_bak <- adsl
 ```
 
-### Handling Subjects Without Assessments
+### Handling Subjects Without Assessment
 
-If a subject has no valid date in any of the event or censoring source datasets,
-it will not be included in the output dataset. Therefore the `start` censoring
-is defined below to achieve that subjects without data in `adrs` are censored at
-the start date.
+If a subject has no event and has no record meeting the censoring rule, it will
+not be included in the output dataset. In order to have a record for this
+subject in the output dataset, another `censoring_source()` object should be
+created to specify how those patients will be censored. Therefore the `start`
+censoring is defined below to achieve that subjects without data in `adrs` are
+censored at the start date.
 
 The ADaM IG requires that computed date must be accompanied by imputation flags.
 If the start date is imputed, the date imputation flag can be specified by the
@@ -175,6 +185,9 @@ If the start date is imputed, the date imputation flag can be specified by the
 or censoring source datasets is imputed, the imputation flag can be specified
 for the `set_values_to` parameter in `event_source()` or `censor_source()` (see
 definition of the `start` censoring below).
+
+As the CDISC pilot does not contain a `RS` dataset, the following example for
+progression free survival uses manually created datasets.
 ```{r, eval=FALSE}
 View(adsl)
 ```
@@ -214,6 +227,18 @@ dataset_vignette(
   display_vars = vars(USUBJID, AVALC, ADT, ASEQ, PARAMCD, PARAM))
 ```
 
+An event for progression free survival occurs if
+
+- progression of disease is observed or
+- the subject dies.
+
+Therefore two `event_source()` objects are defined:
+
+- `pd` for progression of disease and
+- `death` for death.
+
+Some subjects may experience both events. In this case the first one is selected
+by `derive_param_tte()`.
 ```{r}
 # progressive disease event #
 pd <- event_source(
@@ -239,7 +264,13 @@ death <- event_source(
     SRCVAR = "DTHDT"
   )
 )
-
+```
+Subjects without event must be censored at the last tumor assessment. For the
+censoring the `lastvisit` object is defined as _all_ tumor assessments. Please
+note that it is not necessary to select the last one or exclude assessments
+which resulted in progression of disease. This is handled within
+`derive_param_tte()`.
+```{r}
 # last tumor assessment censoring (CNSR = 1 by default) #
 lastvisit <- censor_source(
   dataset_name = "adrs",
@@ -250,7 +281,13 @@ lastvisit <- censor_source(
     SRCVAR = "ADT"
   )
 )
-
+```
+Patients without tumor assessment should be censored at the start date.
+Therefore the `start` object is defined with the treatment start date as
+censoring date. It is not necessary to exclude patient with tumor assessment in
+the definition of `start` because `derive_param_tte()` selects the last date
+across all `censor_source()` objects as censoring date.
+```{r}
 # start date censoring (for patients without tumor assessment) (CNSR = 2) #
 start <- censor_source(
   dataset_name = "adsl",
@@ -296,27 +333,16 @@ three. Only the definition of the event differs.
 adtte <- adtte_bak
 adsl <- adsl_bak
 ```
-
-```{r}
-# add end of AE observation period to ADSL #
-adsl <- adsl %>% mutate(AEOBSEDT = pmin(TRTEDT + 30, EOSDT))
-```
-```{r, echo=FALSE}
-dataset_vignette(
-  adsl,
-  display_vars = vars(USUBJID, TRTEDT, EOSDT, AEOBSEDT))
-```
-
 ```{r}
 # define censoring #
 observation_end <- censor_source(
   dataset_name = "adsl",
-  date = AEOBSEDT,
+  date = EOSDT,
   censor = 1,
   set_values_to = vars(
-    EVNTDESC = "OBSERVATION END",
+    EVNTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
-    SRCVAR = "AEOBSEDT"
+    SRCVAR = "EOSDT"
   )
 )
 
