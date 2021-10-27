@@ -9,6 +9,7 @@ get_last_dose(
   dataset_ex,
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
+  dose_id = vars(),
   dose_start,
   dose_end,
   analysis_date,
@@ -27,6 +28,9 @@ For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
+
+\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+Defaults to empty \code{vars()}.}
 
 \item{dose_start}{The dose start date variable.}
 
@@ -75,6 +79,9 @@ This is useful for, for example, filtering for valid dose only.
 the last dose is the EX record with maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
 The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
+If multiple such EX records exist for the same \code{dose_end} date, then either \code{dose_id}
+needs to be supplied (e.g. \code{dose_id = vars(EXSEQ)}) to identify unique records,
+or an error is issued.
 \item The EX source variables from last dose are appended to the \code{dataset} and returned to the user.
 }
 
@@ -123,6 +130,6 @@ ae \%>\%
 \author{
 Ondrej Slama, Annie Yang
 }
-\keyword{adae}
+\keyword{adam}
 \keyword{derivation}
 \keyword{user_utility}

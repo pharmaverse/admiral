@@ -6,6 +6,8 @@
 #' For example, it can be used to filter for valid dose.
 #' Defaults to NULL.
 #' @param by_vars Variables to join by (created by `dplyr::vars`).
+#' @param dose_id Variables to identify unique dose (created by `dplyr::vars`).
+#' Defaults to empty `vars()`.
 #' @param dose_start The dose start date variable.
 #' @param dose_end The dose end date variable.
 #' @param analysis_date The analysis date variable.
@@ -38,6 +40,9 @@
 #' the last dose is the EX record with maximum date where `dose_end` is lower to or equal to
 #' `analysis_date`, subject to both date values are non-NA.
 #' The last dose is identified per `by_vars` and `dataset_seq_var`.
+#' If multiple such EX records exist for the same `dose_end` date, then either `dose_id`
+#' needs to be supplied (e.g. `dose_id = vars(EXSEQ)`) to identify unique records,
+#' or an error is issued.
 #' 4. The EX source variables from last dose are appended to the `dataset` and returned to the user.
 #'
 #' Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
@@ -50,7 +55,7 @@
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
-#' @keywords adae derivation user_utility
+#' @keywords adam derivation user_utility
 #'
 #' @export
 #'
@@ -93,6 +98,7 @@ get_last_dose <- function(dataset,
                              dataset_ex,
                              filter_ex = NULL,
                              by_vars = vars(STUDYID, USUBJID),
+                             dose_id = vars(),
                              dose_start,
                              dose_end,
                              analysis_date,
@@ -102,6 +108,7 @@ get_last_dose <- function(dataset,
 
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
+  dose_id <- assert_vars(dose_id)
   dose_start <- assert_symbol(enquo(dose_start))
   dose_end <- assert_symbol(enquo(dose_end))
   analysis_date <- assert_symbol(enquo(analysis_date))
@@ -165,16 +172,24 @@ get_last_dose <- function(dataset,
     ) %>%
     group_by(!!!by_vars, !!dataset_seq_var)
 
-  # get last dose EX records
+  # filter last dose records with dose_end before or on analysis_date
   res <- res %>%
     mutate(
       tmp_ldose_idx = compute_ldose_idx(dose_end = .data$tmp_dose_end_date,
-                                    analysis_date = .data$tmp_analysis_date),
+                                        analysis_date = .data$tmp_analysis_date),
       tmp_ldose_dt = as.POSIXct(as.character(.data$tmp_dose_end_date[.data$tmp_ldose_idx]),
-                            tz = lubridate::tz(.data$tmp_dose_end_date))
+                                tz = lubridate::tz(.data$tmp_dose_end_date))
     ) %>%
-    filter(tmp_dose_end_date == tmp_ldose_dt) %>%
-    distinct(tmp_ldose_dt, !!!syms(trace_vars_str), .keep_all = TRUE) %>%
+    filter(tmp_dose_end_date == tmp_ldose_dt)
+
+  # issue an error if multiple last dose on the same date exist
+  signal_duplicate_records(res, c(by_vars, dataset_seq_var, dose_end, dose_id),
+                           "Last dose is not unique.")
+
+  # get unique last dose records
+  res <- res %>%
+    arrange(!!!by_vars, !!dataset_seq_var, tmp_dose_end_date, !!!dose_id) %>%
+    slice(n()) %>%
     select(!!!syms(trace_vars_str), !!!by_vars, !!dataset_seq_var, colnames(dataset_ex)) %>%
     mutate(DOMAIN = NULL) %>%
     ungroup()
