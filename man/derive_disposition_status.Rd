@@ -10,7 +10,8 @@ derive_disposition_status(
   new_var,
   status_var,
   format_new_var = format_eoxxstt_default,
-  filter_ds
+  filter_ds,
+  subject_keys = vars(STUDYID, USUBJID)
 )
 }
 \arguments{
@@ -51,6 +52,11 @@ where \code{x} is the \code{status_var.}}
 one observation per patient. An error is issued otherwise.
 
 Permitted Values: logical expression.}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 The input dataset with the disposition status (\code{new_var}) added.

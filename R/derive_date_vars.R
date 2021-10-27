@@ -1,12 +1,12 @@
-#' Impute Partial Date(-time) Portion of a --DTC Variable
+#' Impute Partial Date(-time) Portion of a `'--DTC'` Variable
 #'
-#' Imputation partial date/time portion of a --DTC variable. based on user
+#' Imputation partial date/time portion of a `'--DTC'` variable. based on user
 #' input.
 #'
-#' @param dtc The --DTC date to impute
+#' @param dtc The `'--DTC'` date to impute
 #'
-#'   A character date is expected in a format like yyyy-mm-dd or
-#'   yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+#'   A character date is expected in a format like `yyyy-mm-dd` or
+#'   `yyyy-mm-ddThh:mm:ss`. If the year part is not recorded (missing date), no
 #'   imputation is performed.
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is
@@ -16,7 +16,7 @@
 #'   missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with month and day specified as 'mm-dd': e.g. `"06-15"` for the 15th
+#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
 #'   of June,
 #'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
 #'   day/month.
@@ -27,7 +27,7 @@
 #'   missing.
 #'
 #'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. `"00:00:00"`
+#'   - format with hour, min and sec specified as `"hh:mm:ss"`: e.g. `"00:00:00"`
 #'   for the start of the day,
 #'   - or as a keyword: `"FIRST"`,`"LAST"` to impute to the start/end of a day.
 #'
@@ -38,23 +38,25 @@
 #' A list of dates is expected. It is ensured that the imputed date is not
 #' before any of the specified dates, e.g., that the imputed adverse event start
 #' date is not before the first treatment date. Only dates which are in the
-#' range of possible dates of the dtc value are considered. The possible dates
-#' are defined by the missing parts of the dtc date (see example below). This
-#' ensures that the non-missing parts of the dtc date are not changed. For
+#' range of possible dates of the `dtc` value are considered. The possible dates
+#' are defined by the missing parts of the `dtc` date (see example below). This
+#' ensures that the non-missing parts of the `dtc` date are not changed. For
 #' example
 #'
 #' ```
 #' impute_dtc(
 #'   "2020-11",
-#'   min_dates = list(ymd_hms("2020-12-06T12:12:12"),
-#'                    ymd_hms("2020-11-11T11:11:11")),
+#'   min_dates = list(
+#'     ymd_hms("2020-12-06T12:12:12"),
+#'     ymd_hms("2020-11-11T11:11:11")
+#'   ),
 #'   date_imputation = "first"
 #' )
 #' ```
 #' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
 #' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
 #' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
-#' have changed the month although it is not missing (in the dtc date).
+#' have changed the month although it is not missing (in the `dtc` date).
 #'
 #' @param max_dates Maximum dates
 #'
@@ -65,7 +67,7 @@
 #'
 #' @author Samia Kabi
 #'
-#' @return a character vector
+#' @return A character vector
 #'
 #' @keywords computation timing
 #'
@@ -318,19 +320,19 @@ convert_dtc_to_dt <- function(dtc,
 
 #' Convert a Date Character Vector into a Datetime Object
 #'
-#' Convert a date character vector (usually '--DTC') into a Date vector (usually '--DTM').
+#' Convert a date character vector (usually `'--DTC'`) into a Date vector (usually `'--DTM'`).
 #'
-#' @param dtc The --DTC date to convert.
+#' @param dtc The `'--DTC'` date to convert.
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss.
+#'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
 #'   A partial datetime will issue a warning.
-#'   Note: you can use impute_dtc function to build a complete datetime.
+#'   Note: you can use [impute_dtc()] function to build a complete datetime.
 #'
 #' @inheritParams impute_dtc
 #'
 #' @author Samia Kabi
 #'
-#' @return a datetime  object
+#' @return A datetime object
 #'
 #' @keywords computation timing
 #'
@@ -360,12 +362,12 @@ convert_dtc_to_dtm <- function(dtc,
 
 #' Derive the Date Imputation Flag
 #'
-#' Derive the date imputation flag ('--DTF') comparing a date character vector
-#' ('--DTC') with a Date vector ('--DT').
+#' Derive the date imputation flag (`'--DTF'`) comparing a date character vector
+#' (`'--DTC'`) with a Date vector (`'--DT'`).
 #'
-#' @param dtc The date character vector ('--DTC').
+#' @param dtc The date character vector (`'--DTC'`).
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).
+#'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss` (partial or complete).
 #'
 #' @param dt The  Date vector to compare.
 #'
@@ -373,7 +375,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
-#' @return the date imputation flag ('--DTF') (character value of 'D', 'M' , 'Y' or NA )
+#' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
 #' @keywords computation timing
 #'
@@ -401,20 +403,20 @@ compute_dtf <- function(dtc, dt) {
 
 #' Derive the Time Imputation Flag
 #'
-#' Derive the time imputation flag ('--TMF') comparing a date character vector
-#' ('--DTC') with a Datetime vector ('--DTM').
+#' Derive the time imputation flag (`'--TMF'`) comparing a date character vector
+#' (`'--DTC'`) with a Datetime vector (`'--DTM'`).
 #'
-#' @param dtc The date character vector ('--DTC').
+#' @param dtc The date character vector (`'--DTC'`).
 #'
-#'   A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).
+#'   A character date is expected in a format like `yyyy-mm-ddThh:mm:ss` (partial or complete).
 #'
-#' @param dtm The  Date vector to compare ('--DTM').
+#' @param dtm The Date vector to compare (`'--DTM'`).
 #'
 #'   A datetime object is expected.
 #'
 #' @author Samia Kabi
 #'
-#' @return the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)
+#' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
 #' @keywords computation timing
 #'
@@ -442,27 +444,27 @@ compute_tmf <- function(dtc, dtm) {
 
 #' Derive/Impute a Date from a Date Character Vector
 #'
-#' Derive a date ('--DT') from a date character vector ('---DTC').
-#' The date can be imputed (see date_imputation parameter)
-#' and the date imputation flag ('--DTF') can be added.
+#' Derive a date (`'--DT'`) from a date character vector (`'--DTC`').
+#' The date can be imputed (see `date_imputation` parameter)
+#' and the date imputation flag ('`--DTF'`) can be added.
 #'
 #' @param dataset Input dataset.
 #'
-#'   The date character vector (dtc) must be present.
+#'   The date character vector (`dtc`) must be present.
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g. `new_vars_prefix="AST"`.
+#'   A character is expected: e.g. `new_vars_prefix = "AST"`.
 #'
-#' @param flag_imputation Whether the date imputation flag must also be derived.
+#' @param flag_imputation Whether the date imputation flag should also be derived.
 #'
-#' A logical value
+#'   A logical value
 #'
-#' Default: TRUE
+#'   Default: `TRUE`
 #'
 #' @inheritParams impute_dtc
 #'
-#' @return  the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.
+#' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
 #'
 #' @author Samia Kabi
 #'
@@ -585,17 +587,17 @@ derive_vars_dt <- function(dataset,
 
 #' Derive/Impute a Datetime from a Date Character Vector
 #'
-#' Derive a datetime object ('--DTM') from a date character vector ('---DTC').
-#' The date and time can be imputed (see date_imputation/time_imputation parameters)
-#' and the date/time imputation flag ('--DTF', '--TMF') can be added.
+#' Derive a datetime object (`'--DTM'`) from a date character vector (`'--DTC'`).
+#' The date and time can be imputed (see `date_imputation`/`time_imputation` parameters)
+#' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
 #'
 #' @param dataset Input dataset
 #'
-#'   The date character vector (dtc) must be present.
+#'   The date character vector (`dtc`) must be present.
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g. `new_vars_prefix="AST"`.
+#' a character is expected: e.g. `new_vars_prefix = "AST"`.
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
@@ -606,12 +608,12 @@ derive_vars_dt <- function(dataset,
 #' @inheritParams impute_dtc
 #'
 #' @details
-#' The presence of a --DTF variable is checked and the variable is not derived
-#' if it already exists in the input dataset. However, if --TMF already exists
-#' in the input dataset, a warning is issued and --TMF will be overwritten.
+#' The presence of a `'--DTF'` variable is checked and the variable is not derived
+#' if it already exists in the input dataset. However, if `'--TMF'` already exists
+#' in the input dataset, a warning is issued and `'--TMF'` will be overwritten.
 #'
-#' @return  the input dataset with the datetime '--DTM' (and the date/time imputation
-#' flag '--DTF', '--TMF') added.
+#' @return  the input dataset with the datetime `'--DTM'` (and the date/time imputation
+#' flag `'--DTF'`, `'--TMF'`) added.
 #'
 #' @author Samia Kabi
 #'
@@ -681,16 +683,14 @@ derive_vars_dtm <- function(dataset,
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
 
-  dataset <- dataset %>%
-    mutate(
-      !!sym(dtm) := convert_dtc_to_dtm(
-        dtc = !!dtc,
-        date_imputation = date_imputation,
-        time_imputation = time_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
-      )
-    )
+  mask <- rlang::as_data_mask(dataset)
+  dataset[[dtm]] <- convert_dtc_to_dtm(
+    dtc = eval_tidy(dtc, mask),
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = eval_tidy(enquo(min_dates), mask),
+    max_dates = eval_tidy(enquo(max_dates), mask)
+  )
 
   if (flag_imputation %in% c("both", "date") ||
       flag_imputation == "auto" && !is.null(date_imputation)) {

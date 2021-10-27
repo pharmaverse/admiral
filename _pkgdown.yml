@@ -128,3 +128,5 @@ articles:
   contents:
   - programming_strategy
   - git_usage
+  - writing_vignettes
+  - pr_review_guidance
