@@ -8,7 +8,16 @@
 
 ### BDS
 
+- `derive_param_tte()` derives time-to-event-parameters (#546)
+
 ### Developer
+
+- `assert_list_element()` checks if an element of a list of lists/classes
+fulfills a condition.
+- `assert_one_to_one()` checks if there is a one to one mapping between two
+lists of variables.
+- `negate_vars()` negates a list of variables to remove them from a dataset with
+`select()`.
 
 ## Breaking Changes
 

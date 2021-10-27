@@ -7,20 +7,20 @@
 compute_tmf(dtc, dtm)
 }
 \arguments{
-\item{dtc}{The date character vector ('--DTC').
+\item{dtc}{The date character vector (\code{'--DTC'}).
 
-A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).}
+A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partial or complete).}
 
-\item{dtm}{The  Date vector to compare ('--DTM').
+\item{dtm}{The Date vector to compare (\code{'--DTM'}).
 
 A datetime object is expected.}
 }
 \value{
-the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)
+The time imputation flag (\code{'--TMF'}) (character value of \code{'H'}, \code{'M'} , \code{'S'} or \code{NA})
 }
 \description{
-Derive the time imputation flag ('--TMF') comparing a date character vector
-('--DTC') with a Datetime vector ('--DTM').
+Derive the time imputation flag (\code{'--TMF'}) comparing a date character vector
+(\code{'--DTC'}) with a Datetime vector (\code{'--DTM'}).
 }
 \examples{
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
