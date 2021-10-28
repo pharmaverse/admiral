@@ -157,20 +157,20 @@
 #'   )
 #' )
 #'
-#' lstalv <- censor_source(
+#' end_of_study <- censor_source(
 #'   dataset_name = "adsl",
-#'   date = LSTALVDT,
+#'   date = EOSDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "LAST KNOWN ALIVE DATE",
+#'     EVENTDESC = "END OF STUDY DATE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
+#'     SRCVAR = "EOSDT"
 #'   )
 #' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
 #'   event_conditions = list(death),
-#'   censor_conditions = list(lstalv),
+#'   censor_conditions = list(end_of_study),
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = vars(
 #'     PARAMCD = "OS",
@@ -488,10 +488,10 @@ filter_date_sources <- function(sources,
 
   if (create_datetime) {
     date_var <- sym("ADTM")
-  }
-  else {
+  } else {
     date_var <- sym("ADT")
   }
+
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
@@ -507,8 +507,7 @@ filter_date_sources <- function(sources,
     if (is.instant(pull(data[[i]], !!date))) {
       if (create_datetime) {
         date_derv <- vars(!!date_var := as_datetime(!!date))
-      }
-      else {
+      } else {
         date_derv <- vars(!!date_var := date(!!date))
       }
     } else {
@@ -520,8 +519,7 @@ filter_date_sources <- function(sources,
             time_imputation = "first"
           )
         )
-      }
-      else {
+      } else {
         date_derv <- vars(
           !!date_var := convert_dtc_to_dt(
             !!date,
@@ -529,6 +527,7 @@ filter_date_sources <- function(sources,
         ))
       }
     }
+
     data[[i]] <- transmute(
       data[[i]],
       !!!by_vars,
@@ -688,6 +687,7 @@ tte_source <- function(dataset_name,
   class(out) <- c("tte_source", "source", "list")
   out
 }
+
 #' Create an `event_source` Object
 #'
 #' The `event_source` object is used to define events as input for the
@@ -716,6 +716,7 @@ event_source <- function(dataset_name,
   class(out) <- c("event_source", class(out))
   out
 }
+
 #' Create an `censor_source` Object
 #'
 #' The `censor_source` object is used to define censorings as input for the

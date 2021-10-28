@@ -176,20 +176,20 @@ death <- event_source(
   )
 )
 
-lstalv <- censor_source(
+end_of_study <- censor_source(
   dataset_name = "adsl",
-  date = LSTALVDT,
+  date = EOSDT,
   set_values_to = vars(
-    EVENTDESC = "LAST KNOWN ALIVE DATE",
+    EVENTDESC = "END OF STUDY DATE",
     SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"
+    SRCVAR = "EOSDT"
   )
 )
 
 derive_param_tte(
   dataset_adsl = adsl,
   event_conditions = list(death),
-  censor_conditions = list(lstalv),
+  censor_conditions = list(end_of_study),
   source_datasets = list(adsl = adsl),
   set_values_to = vars(
     PARAMCD = "OS",

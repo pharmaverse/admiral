@@ -605,6 +605,6 @@ test_that("error is issued if parameter code already exists", {
       )
     )
     ,
-    regexp = "^The parameter code TTAE does already exist in `dataset`.$"
+    regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
 })
