@@ -305,12 +305,10 @@ adex <- bind_rows(
 count(adex, PARAMCD)
 ```
 
-`ADEX` is filtered on USUBJID == "01-701-1028" for demonstration purpose.
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
   arrange(USUBJID,VISIT,desc(PARAMCD), EXSTDTC, EXENDTC) %>%
-  dataset_vignette(display_vars = vars(USUBJID,VISIT, EXSTDTC, EXENDTC, PARAMCD, AVAL, AVALC),
-                   filter = USUBJID=="01-701-1028"
+  dataset_vignette(display_vars = vars(USUBJID,VISIT, ASTDT, AENDT, PARAMCD, AVAL, AVALC)
                    )
 ```
 
@@ -334,14 +332,11 @@ adex <- derive_params_exposure(
 )
 ```
 
-`ADEX` is filtered on USUBJID == "01-701-1028" and PARAMCD %in% c("DOSE", "TDOSE") for demonstration
-purpose.
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
   arrange(USUBJID,PARAMCD,PARCAT1,VISIT, EXSTDTC, EXENDTC)%>%
   dataset_vignette(display_vars = vars(USUBJID,VISIT, 
-                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT),
-                   filter = PARAMCD %in% c("DOSE", "TDOSE") & USUBJID =="01-701-1028"
+                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT)
                  )
 ```
 
@@ -355,7 +350,7 @@ the records in `ADEX` where `PARAMCD == "DOSE"` by summing `AVAL`. In addition,
 the `ASTDT`, and `AENDT` are created as the minimum and
 maximum date/times associated with each `by_vars` grouping.
 
-Multiple parameters (records) may be created at one time using the
+Multiple parameters (records) may be created at one time using the 
 `call_derivation()` function:
 
 ```{r eval=TRUE, echo=TRUE}
@@ -402,15 +397,11 @@ count(adex, PARAMCD, PARCAT1)
 ```
 
 
-`ADEX` is filtered on USUBJID == "01-701-1028" and PARAMCD == "DOSE", "TDOSE","TDURD","DURD", "ADJAE", "TADJAE" for demonstration purpose.
-
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
   arrange(USUBJID,PARAMCD,PARCAT1,VISIT, EXSTDTC, EXENDTC)%>%
   dataset_vignette(display_vars = vars(USUBJID,VISIT,
-                                       PARCAT1,PARAMCD,  AVAL,AVALC, ASTDT, AENDT),
-                   filter = PARAMCD %in% c("DOSE","ADJAE", "TDOSE","TADJAE","TDURD","DURD") 
-                   & USUBJID =="01-701-1028"
+                                       PARCAT1,PARAMCD,  AVAL,AVALC, ASTDT, AENDT)
                    )
 ```
 
@@ -429,14 +420,11 @@ adex <- adex %>%
 
 ```
 
-`ADEX` is filtered on USUBJID == "01-701-1028" and PARAMCD == "TNDOSINT", "TDOSE", "TPDOSE" for demonstration
-purpose.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adex, 
                  display_vars = vars(USUBJID,VISIT, EXSTDTC, EXENDTC,
-                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT),
-                 filter = PARAMCD %in% c("TNDOSINT", "TDOSE", "TPDOSE") & USUBJID =="01-701-1028"
+                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT)
                  )
 ```
 
@@ -484,10 +472,6 @@ param_lookup <- tribble(
   "TADJAE", "Dose adjusted during study due to AE", 11,
   "TNDOSINT", "Overall dose intensity (%)", 12
 )
-```
-
-```{r, eval=TRUE, echo=FALSE}
-#dataset_vignette(param_lookup)
 ```
 
 
