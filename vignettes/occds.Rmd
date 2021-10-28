@@ -369,7 +369,8 @@ For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be neede
 
 This function expects the dictionary and/or lookup information to be provided as input in a standard structure.
 
-The expected result is the input dataset with query variables added.
+The expected result is the input dataset with query variables added: See also [Queries dataset documentation](queries_dataset.html).
+
 
 ```{r, eval=TRUE}
 data("queries")

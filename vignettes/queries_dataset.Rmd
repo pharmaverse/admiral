@@ -1,0 +1,179 @@
+---
+title: "Queries dataset documentation"
+output:
+  rmarkdown::html_vignette:
+  toc: false
+vignette: >
+  %\VignetteIndexEntry{Queries dataset documentation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+  ```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+To support the analysis of the safety analysis, it is quite common to define specific grouping of events. One of the most common way is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping . 
+
+
+To help with the derivation of these variables, the admiral function `derive_vars_query()` can be used.
+This function takes as input the dataset (`dataset`) where the grouping must occurs (e.g `ADAE`) and
+a dataset containing the required information to perform the derivation of the grouping variables 
+(`dataset_queries`).
+
+Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the `dataset_queries` argument of the `derive_vars_query()` function should be created outside of admiral in a specific format so that it can be passed in the function.
+
+This vignette describes the expected structure and content of the dataset passed to the
+`dataset_queries` argument in the `derive_vars_query()` function. 
+
+# Structure of the Query Dataset.
+
+## Variables
+
+Variable | Scope |  Type | Example Value
+------- | ----- | ------ | ----- | ----- | -----
+**VAR_PREFIX** | The prefix used to define the grouping variables |  Character |  "SMQ01" 
+**QUERY_NAME** | The value provided to the grouping variables name|   Character | "Immune-Mediated Guillain-Barre Syndrome"
+**TERM_LEVEL** | The variable used to define the grouping. Used in conjunction with TERM_NAME |  Character | "AEDECOD"
+**TERM_NAME** | A term used to define the grouping. Used in conjunction with TERM_LEVEL |  Character | "GUILLAIN-BARRE SYNDROME"
+**TERM_ID** | A code used to define the grouping. Used in conjunction with TERM_LEVEL |  Integer | 10018767
+QUERY_ID | Id. number of the query. This could be a SMQ identifier |  Integer | 20000131
+QUERY_SCOPE | For SMQs, scope (Broad/Narrow) of the query |  Character | BROAD, NARROW, NA
+QUERY_SCOPE_NUM | For SMQs, scope (Broad/Narrow) of the query |  Integer | 1, 2, NA
+
+**Bold  variables** are required in `dataset_queries`: an error is issued if any of these variables is missing. Other variables are optional.
+
+## Required Content
+
+Each row must be unique within the dataset.
+
+As described above, the variables `VAR_PREFIX`, `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME` and `TERM_ID` are required.
+The combination of these variables will allow the creation of the grouping variable.
+
+### Input
+
+  + `VAR_PREFIX` must be a character string starting with 2 or 3 letters, followed by a 2-digits number (e.g. "CQ01").
+
+  + `QUERY_NAME` must be a non missing character string and it must be unique within `VAR_PREFIX`. 
+
+  + `TERM_LEVEL` must be a non missing character string. 
+  
+      Each value in `TERM_LEVEL` represents a variable from `dataset` used to define the grouping variables (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
+    The function `derive_vars_query()` will check that each value given in `TERM_LEVEL` has a corresponding variable in the input  `dataset` and issue an error otherwise.
+
+  + `TERM_NAME` must be a character string. 
+  This **must** be populated if `TERM_ID` is missing.
+  
+  + `TERM_ID` must be an integer. 
+  This **must** be populated if `TERM_NAME` is missing.
+  
+  
+
+
+### Output
+
+  + `VAR_PREFIX` will be used to create the grouping variable appending the suffix "NAM". This variable will now be referred to as `ABCzzNAM`: the name of the grouping variable.
+
+    E.g. `VAR_PREFIX == "SMQ01"` will create the `SMQ01NAM` variable.
+
+    
+
+
+    For each `VAR_PREFIX`, a new `ABCzzNAM` variable is created in `dataset`.
+
+
+  + [`QUERY_NAME`]{#query_name} will be used to populate the corresponding `ABCzzNAM` variable.
+
+  + `TERM_LEVEL` will be used to identify the variables from `dataset` used to perform the grouping (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
+
+  + `TERM_NAME` (for character variables), `TERM_ID` (for numeric variables) will be used to identify the records meeting the criteria in `dataset` based on the variable defined in `TERM_LEVEL`.
+  
+  
+  + **Result:**
+  
+    For each record in `dataset`, where the variable defined by `TERM_LEVEL` match a term from the `TERM_NAME` (for character variables) or `TERM_ID` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `QUERY_NAME`.
+    
+    
+    Note: The type (numeric or character) of the variable defined in `TERM_LEVEL` is checked in `dataset`. 
+    
+    **IS THAT CORRECT ??** If the type of the variable is character then `TERM_NAME` will be used to populate `ABCzzNAM`, if it is numeric, `TERM_ID` will be used.
+
+
+### Example
+
+In this example, 1 standard MedDRA query (`VAR_PREFIX = "SMQ01"`) and 1 customized query (`VAR_PREFIX = "CQ02"`) are  defined to analyze the adverse events. 
+
+  + The standard MedDRA query variable `SMQ01NAM` [`VAR_PREFIX`] will be populated with "Standard Query 1" [`QUERY_NAME`] if any preferred term (`AEDECOD`) [`TERM_LEVEL`] in `dataset` is equal to "AE1" or "AE2" [`TERM_NAME`]
+  
+  + The customized query (`CQ02NAM`) [`VAR_PREFIX`] will be populated with "Query 2" [`QUERY_NAME`] if any Low Level Term Code (`AELLTCD`)  [`TERM_LEVEL`] in `dataset` is equal to 10  [`TERM_ID`].
+  
+  **`dataset_queries = ds_query`: **
+  
+VAR_PREFIX | QUERY_NAME | TERM_LEVEL | TERM_NAME | TERM_ID |
+------- | ----- | ------ | ----- | ----- | -----
+SMQ01| Standard Query 1 | AEDECOD | AE1 | 
+SMQ01| Standard Query 1 | AEDECOD | AE2 | 
+CQ02| Query 2 | AELLTCD | | 10
+
+  **`dataset = ae`: **
+  
+USUBJID | AEDECOD | AELLTCD 
+------- | ----- | ------ 
+0001 | AE1 | 101 | 
+0001 | AE4 | 120 | 
+0001 | AE5 | 130 |
+0001 | AE3 | 10| | 
+
+
+  **output dataset from `derive_vars_query(dataset = ae, dataset_queries = ds_query)`:**
+
+USUBJID | AEDECOD | AELLTCD | SMQ01NAM |CQ02NAM
+------- | ----- | ------ | ----- | ----- 
+0001 | AE1 | 101 | Standard Query 1 |
+0001 | AE4 | 120 |  |
+0001 | AE5 | 130 |  |
+0001 | AE3 | 10| | Query 2
+
+
+  Subject 0001 has 1 event meeting the Standard Query 1 criteria (`AEDECOD = "AE1"`) and 1 event meeting the customized query (`AELLTCD = 10)`. 
+
+
+## Optional Content
+
+
+When standardized MedDRA Queries are added to the dataset, it is expected that the name of the query (`ABCzzNAM`) is populated along with its number code (`ABCzzCD`),  and its Broad or Narrow scope (`ABCzzSC`).
+
+The following variables can be added to `queries_datset` to derive this information.
+
+
+#### Input
+
+  + `QUERY_ID` must be an integer. 
+  
+  + `QUERY_SCOPE` must be a character string. Possible values are: "BROAD", "NARROW" or `NA`. 
+  
+  + `QUERY_SCOPE_NUM` must be an integer. Possible values are: `1`, `2` or `NA`. 
+
+#### Output
+
+  + `QUERY_ID`, `QUERY_SCOPE` and `QUERY_SCOPE_NUM` will be used in the same way as `QUERY_NAME` [(see here)](#query_name) and will help in the creation of the `ABCzzCD`, `ABCzzSC` and `ABCzzSCN` variables.
+  
+#### Output Variables
+
+These variables are optional and if not populated in `dataset_queries`, the corresponding output variable will not be created:
+
+
+VAR_PREFIX | QUERY_NAME | QUERY_ID | QUERY_SCOPE |QUERY_SCOPE | **Variables created**
+------- | ----- | ------ | ----- | ----- | -----
+SMQ01| Query 1 | XXXXXXXX | NARROW | 2 | `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` 
+SMQ02| Query 2 | XXXXXXXX |BROAD  | | `SMQ02NAM`, `SMQ02CD`, `SMQ02SC`
+SMQ03| Query 3 | XXXXXXXX |  |1 | `SMQ03NAM`, `SMQ03CD`, `SMQ03SCN`
+SMQ04| Query 4 | XXXXXXXX |  | | `SMQ04NAM`, `SMQ04CD`
+SMQ05| Query 5|  |  | | `SMQ05NAM`
+
+
