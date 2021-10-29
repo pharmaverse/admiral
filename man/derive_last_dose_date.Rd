@@ -7,16 +7,18 @@
 derive_last_dose_date(
   dataset,
   dataset_ex,
-  filter_ex,
+  filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
+  dose_id = vars(),
+  ex_keep_vars = NULL,
   dose_start,
   dose_end,
   new_var,
   analysis_date,
   dataset_seq_var,
   output_datetime = TRUE,
-  check_dates_only,
-  traceability_vars
+  check_dates_only = FALSE,
+  traceability_vars = NULL
 )
 }
 \arguments{
@@ -30,6 +32,14 @@ Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
 
+\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+Defaults to empty \code{vars()}.}
+
+\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
+be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
+(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
+kept without renaming. Defaults to \code{NULL}.}
+
 \item{dose_start}{The dose start date variable.}
 
 \item{dose_end}{The dose end date variable.}
@@ -41,7 +51,7 @@ Defaults to NULL.}
 \item{dataset_seq_var}{The sequence variable
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
 
-\item{output_datetime}{Display \code{new_var} as datetime or as date}
+\item{output_datetime}{Display \code{new_var} as datetime or as date only.}
 
 \item{check_dates_only}{Logical.
 An assumption that start and end dates of treatment match is checked.
@@ -63,9 +73,10 @@ Input dataset with additional column \code{new_var}.
 Displays the start date or start datetime of the last dose with respect to the most recent adverse event
 }
 \details{
-This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
-the most recent last dose.  The function will return a \code{new_var} with the either the date or the datetime of the most
-recent last dose relative to the adverse event.
+The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}. The last dose date
+is the maximum date where \code{dose_end} is lower to or equal to \code{analysis_date}, subject to both
+date values are non-NA. The last dose date is derived per \code{by_vars} and \code{dataset_seq_var}, and
+is appended to the \code{dataset} and returned to the user as the \code{new_var}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -78,6 +89,7 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
+    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = AESTDTC,
@@ -87,13 +99,13 @@ ae \%>\%
     check_dates_only = FALSE,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 }
 \seealso{
-\code{\link[=get_last_dose]{get_last_dose()}}
+\code{\link[=derive_last_dose]{derive_last_dose()}}
 }
 \author{
 Ben Straub
 }
-\keyword{adae}
+\keyword{adam}
 \keyword{derivation}

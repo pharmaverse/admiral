@@ -9,6 +9,8 @@ derive_last_dose_amt(
   dataset_ex,
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
+  dose_id = vars(),
+  ex_keep_vars = NULL,
   dose_start,
   dose_end,
   analysis_date,
@@ -29,6 +31,14 @@ For example, it can be used to filter for valid dose.
 Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
+
+\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+Defaults to empty \code{vars()}.}
+
+\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
+be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
+(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
+kept without renaming. Defaults to \code{NULL}.}
 
 \item{dose_start}{The dose start date variable.}
 
@@ -77,6 +87,7 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
+    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = AESTDTC,
@@ -94,6 +105,7 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
+    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = AESTDTC,
@@ -106,10 +118,10 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
 }
 \seealso{
-\code{\link[=get_last_dose]{get_last_dose()}}
+\code{\link[=derive_last_dose]{derive_last_dose()}}
 }
 \author{
 Annie Yang
 }
-\keyword{adae}
+\keyword{adam}
 \keyword{derivation}

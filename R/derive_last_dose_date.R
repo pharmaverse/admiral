@@ -2,23 +2,24 @@
 #'
 #' Displays the start date or start datetime of the last dose with respect to the most recent adverse event
 #'
-#' @inheritParams get_last_dose
+#' @inheritParams derive_last_dose
 #' @param new_var The output variable defined by the user.
-#' @param output_datetime  Display `new_var` as datetime or as date
+#' @param output_datetime  Display `new_var` as datetime or as date only.
 #'
-#' @details This function brings in two datasets (e.g. adex and adae), finds the most recent adverse event and then finds
-#'  the most recent last dose.  The function will return a `new_var` with the either the date or the datetime of the most
-#'  recent last dose relative to the adverse event.
+#' @details The datasets `dataset` and `dataset_ex` are joined using `by_vars`. The last dose date
+#' is the maximum date where `dose_end` is lower to or equal to `analysis_date`, subject to both
+#' date values are non-NA. The last dose date is derived per `by_vars` and `dataset_seq_var`, and
+#' is appended to the `dataset` and returned to the user as the `new_var`.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
 #' @author Ben Straub
 #'
-#' @keywords adae derivation
+#' @keywords adam derivation
 #'
 #' @export
 #'
-#' @seealso [get_last_dose()]
+#' @seealso [derive_last_dose()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -31,6 +32,7 @@
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
+#'     ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
 #'     dose_start = EXSTDTC,
 #'     dose_end = EXENDTC,
 #'     analysis_date = AESTDTC,
@@ -40,20 +42,22 @@
 #'     check_dates_only = FALSE,
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
 #'   ) %>%
-#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
+#'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 
 derive_last_dose_date <- function(dataset,
                                   dataset_ex,
-                                  filter_ex,
+                                  filter_ex = NULL,
                                   by_vars = vars(STUDYID, USUBJID),
+                                  dose_id = vars(),
+                                  ex_keep_vars = NULL,
                                   dose_start,
                                   dose_end,
                                   new_var,
                                   analysis_date,
                                   dataset_seq_var,
                                   output_datetime = TRUE,
-                                  check_dates_only,
-                                  traceability_vars ){
+                                  check_dates_only = FALSE,
+                                  traceability_vars = NULL){
 
   # assert functions found in assertions.R
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
@@ -69,15 +73,17 @@ derive_last_dose_date <- function(dataset,
   assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
   assert_data_frame(dataset_ex, quo_c(by_vars, dose_start, dose_end))
 
-  res <- get_last_dose(dataset = dataset,
+  res <- derive_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
                 by_vars = by_vars ,
+                dose_id = dose_id,
+                ex_keep_vars = ex_keep_vars,
                 dose_start = !!dose_start,
                 dose_end  = !!dose_end,
                 analysis_date = !!analysis_date,
                 dataset_seq_var = !!dataset_seq_var,
-                check_dates_only = !!check_dates_only,
+                check_dates_only = check_dates_only,
                 traceability_vars = traceability_vars) %>%
   select(colnames(dataset), !!new_var := !!dose_start, !!!syms(trace_vars_str))
 

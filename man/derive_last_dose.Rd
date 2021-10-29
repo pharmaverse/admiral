@@ -2,19 +2,19 @@
 % Please edit documentation in R/derive_last_dose.R
 \name{derive_last_dose}
 \alias{derive_last_dose}
-\title{Derive Last Dose Date(-time)}
+\title{Derive Last Dose}
 \usage{
 derive_last_dose(
   dataset,
   dataset_ex,
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
+  dose_id = vars(),
+  ex_keep_vars = NULL,
   dose_start,
   dose_end,
   analysis_date,
   dataset_seq_var,
-  new_var,
-  output_datetime = TRUE,
   check_dates_only = FALSE,
   traceability_vars = NULL
 )
@@ -30,6 +30,14 @@ Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
 
+\item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+Defaults to empty \code{vars()}.}
+
+\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
+be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
+(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
+kept without renaming. Defaults to \code{NULL}.}
+
 \item{dose_start}{The dose start date variable.}
 
 \item{dose_end}{The dose end date variable.}
@@ -38,11 +46,6 @@ Defaults to NULL.}
 
 \item{dataset_seq_var}{The sequence variable
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
-
-\item{new_var}{The output variable.}
-
-\item{output_datetime}{Logical. Should only date or date-time variable be returned?
-Defaults to \code{TRUE} (i.e. date-time variable).}
 
 \item{check_dates_only}{Logical.
 An assumption that start and end dates of treatment match is checked.
@@ -58,35 +61,46 @@ in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
 }
 \value{
-Input dataset with additional column \code{new_var}.
+Input dataset with EX source variables from last dose added.
 }
 \description{
-Derive Last Dose Date(-time)
+Derive Last Dose
 }
 \details{
 All date (date-time) variables can be characters in standard ISO format or
 of date / date-time class.
 For ISO format, see \code{\link{impute_dtc}} - parameter \code{dtc} for further details.
-Date-time imputations are done as follows:
+When doing date comparison to identify last dose, date-time imputations are done as follows:
 \itemize{
 \item \code{dose_end}: no date imputation, time imputation to \code{00:00:00} if time is missing.
 \item \code{analysis_date}: no date imputation, time imputation to \code{23:59:59} if time is missing.
 }
 
-The last dose date is derived as follows:
+The last dose records are identified as follows:
 \enumerate{
 \item The \code{dataset_ex} is filtered using \code{filter_ex}, if provided.
 This is useful for, for example, filtering for valid dose only.
 \item The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
-\item The last dose date is derived:
-the last dose date is the maximum date where \code{dose_end} is lower to or equal to
+\item The last dose is identified:
+the last dose is the EX record with maximum date where \code{dose_end} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
-The last dose date is derived per \code{by_vars} and \code{dataset_seq_var}.
-\item The last dose date is appended to the \code{dataset} and returned to the user.
+The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
+If multiple such EX records exist for the same \code{dose_end} date, then either \code{dose_id}
+needs to be supplied (e.g. \code{dose_id = vars(EXSEQ)}) to identify unique records,
+or an error is issued.
+\item The EX source variables from last dose are appended to the \code{dataset} and returned to the user.
 }
 
 Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
-Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal.
+Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal. This
+is required because if start and end dates (datetimes) don't match, the \code{analysis_date} can occur
+between \code{dose_start} and \code{dose_end}. When this happens, the function will choose the dose with a
+latest \code{dose_end} date prior to \code{analysis_date}, as opposed to the actual last dose.
+
+If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{ex_dataset},
+then join cannot be performed properly and an error is issued. To resolve the error, use
+\code{ex_keep_vars} to either keep variables unique to \code{ex_dataset}, or use this option to rename
+variables from \code{ex_dataset} (e.g. \code{ex_keep_vars = vars(LSTEXVIS = VISIT)}).
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -99,15 +113,14 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
+    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
-    new_var = LDOSEDTM,
-    output_datetime = TRUE,
     check_dates_only = FALSE
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC)
 
 # or with traceability variables
 ae \%>\%
@@ -116,20 +129,20 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
+    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
     dose_start = EXSTDTC,
     dose_end = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
-    new_var = LDOSEDTM,
-    output_datetime = TRUE,
     check_dates_only = FALSE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 }
 \author{
-Ondrej Slama
+Ondrej Slama, Annie Yang
 }
-\keyword{adae}
+\keyword{adam}
 \keyword{derivation}
+\keyword{user_utility}
