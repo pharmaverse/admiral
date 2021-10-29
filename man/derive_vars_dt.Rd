@@ -89,6 +89,10 @@ Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
 The date can be imputed (see \code{date_imputation} parameter)
 and the date imputation flag ('\verb{--DTF'}) can be added.
 }
+\details{
+The presence of a \code{'--DTF'} variable is checked and if it already exists in the input dataset,
+a warning is issued and \code{'--DTF'} will be overwritten.
+}
 \examples{
 library(lubridate)
 

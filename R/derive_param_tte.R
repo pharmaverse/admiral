@@ -151,7 +151,7 @@
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "DEATH",
+#'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "DTHDT"
 #'   )
@@ -161,7 +161,7 @@
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "END OF STUDY DATE",
+#'     EVNTDESC = "END OF STUDY DATE",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "EOSDT"
 #'   )
@@ -200,7 +200,7 @@
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   set_values_to = vars(
-#'     EVENTDESC = "AE",
+#'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
 #'     SRCVAR = "AESTDTC",
 #'     SRCSEQ = AESEQ
@@ -211,7 +211,7 @@
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "END OF STUDY",
+#'     EVNTDESC = "END OF STUDY",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "EOSDT"
 #'   )
