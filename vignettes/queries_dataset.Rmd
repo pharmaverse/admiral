@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-To support the analysis of the safety analysis, it is quite common to define specific grouping of events. One of the most common way is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping . 
+To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping. 
 
 
 To help with the derivation of these variables, the admiral function `derive_vars_query()` can be used.
-This function takes as input the dataset (`dataset`) where the grouping must occurs (e.g `ADAE`) and
+This function takes as input the dataset (`dataset`) where the grouping must occur (e.g `ADAE`) and
 a dataset containing the required information to perform the derivation of the grouping variables 
 (`dataset_queries`).
 
@@ -42,7 +42,7 @@ Variable | Scope |  Type | Example Value
 **TERM_LEVEL** | The variable used to define the grouping. Used in conjunction with TERM_NAME |  Character | "AEDECOD"
 **TERM_NAME** | A term used to define the grouping. Used in conjunction with TERM_LEVEL |  Character | "GUILLAIN-BARRE SYNDROME"
 **TERM_ID** | A code used to define the grouping. Used in conjunction with TERM_LEVEL |  Integer | 10018767
-QUERY_ID | Id. number of the query. This could be a SMQ identifier |  Integer | 20000131
+QUERY_ID | Id number of the query. This could be a SMQ identifier |  Integer | 20000131
 QUERY_SCOPE | For SMQs, scope (Broad/Narrow) of the query |  Character | BROAD, NARROW, NA
 QUERY_SCOPE_NUM | For SMQs, scope (Broad/Narrow) of the query |  Integer | 1, 2, NA
 
@@ -71,7 +71,6 @@ The combination of these variables will allow the creation of the grouping varia
   
   + `TERM_ID` must be an integer. 
   This **must** be populated if `TERM_NAME` is missing.
-  
   
 
 
@@ -163,7 +162,7 @@ The following variables can be added to `queries_datset` to derive this informat
 
   + `QUERY_ID`, `QUERY_SCOPE` and `QUERY_SCOPE_NUM` will be used in the same way as `QUERY_NAME` [(see here)](#query_name) and will help in the creation of the `ABCzzCD`, `ABCzzSC` and `ABCzzSCN` variables.
   
-#### Output Variables
+## Output Variables
 
 These variables are optional and if not populated in `dataset_queries`, the corresponding output variable will not be created:
 
