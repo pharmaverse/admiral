@@ -46,7 +46,7 @@
 #' ```
 #' impute_dtc(
 #'   "2020-11",
-#'   min_dates = vars(
+#'   min_dates = list(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'    ),
@@ -137,7 +137,7 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = vars(
+#'   min_dates = list(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
@@ -691,15 +691,14 @@ derive_vars_dtm <- function(dataset,
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
-  dataset <- dataset %>%
-    mutate(
-      !!sym(dt) := convert_dtc_to_dtm(
-        dtc = !!dtc,
-        date_imputation = date_imputation,
-        min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
-        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
-      )
-    )
+  mask <- rlang::as_data_mask(dataset)
+  dataset[[dtm]] <- convert_dtc_to_dtm(
+    dtc = eval_tidy(dtc, mask),
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = lapply(min_dates, eval_tidy, data = mask),
+    max_dates = lapply(min_dates, eval_tidy, data = mask)
+  )
 
   if (flag_imputation %in% c("both", "date") ||
       flag_imputation == "auto" && !is.null(date_imputation)) {
