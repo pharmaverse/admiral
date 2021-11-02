@@ -121,6 +121,7 @@ articles:
   - bds_finding
   - bds_exposure
   - imputation
+  - queries_dataset
   - faq
 
 - title: Developer Guides

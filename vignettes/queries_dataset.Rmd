@@ -72,7 +72,6 @@ The combination of these variables will allow the creation of the grouping varia
   + `TERM_ID` must be an integer. 
   This **must** be populated if `TERM_NAME` is missing.
   
-  
 
 
 ### Output
