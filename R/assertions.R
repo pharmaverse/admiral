@@ -973,8 +973,6 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
 #' refdate <- lubridate::ymd("2020-01-02")
 #' date <- lubridate::ymd("2020-02-03")
@@ -1014,8 +1012,6 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
 #' unit <- "days"
 #' assertthat::assert_that(admiral:::is_timeunit(unit))
@@ -1045,8 +1041,6 @@ on_failure(is_timeunit) <- function(call, env) {
 #' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
 #'
 #' @keywords check
-#'
-#' @export
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
@@ -1080,11 +1074,9 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(is_valid_time_entry("FIRST"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
@@ -1113,10 +1105,8 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_sec_min(59))
+#' assertthat::assert_that(admiral:::is_valid_sec_min(59))
 is_valid_sec_min <- function(arg) {
   arg %in% 0:59
 }
@@ -1144,7 +1134,7 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #' @keywords check
 #'
 #' @examples
-#' assertthat::assert_that(is_valid_hour(20))
+#' assertthat::assert_that(admiral:::is_valid_hour(20))
 is_valid_hour <- function(arg) {
   arg %in% 0:23
 }
@@ -1200,7 +1190,7 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @keywords check
 #'
 #' @examples
-#' assertthat::assert_that(is_valid_month(12))
+#' assertthat::assert_that(admiral:::is_valid_month(12))
 is_valid_month <- function(arg) {
   arg %in% 1:12
 }
