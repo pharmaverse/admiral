@@ -1162,7 +1162,7 @@ on_failure(is_valid_hour) <- function(call, env) {
 #' @keywords check
 #'
 #' @examples
-#' assertthat::assert_that(is_valid_day(20))
+#' assertthat::assert_that(admiral:::is_valid_day(20))
 is_valid_day <- function(arg) {
   arg %in% 1:31
 }
