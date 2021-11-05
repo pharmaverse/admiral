@@ -47,8 +47,7 @@ ae_ser_event <- event_source(
 
 ae_gr1_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR == '1',
+  filter = TRTEMFL == "Y" & ATOXGR == "1",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 1 ADVERSE EVENT",
@@ -57,10 +56,10 @@ ae_gr1_event <- event_source(
     SRCSEQ = AESEQ
   )
 )
+
 ae_gr2_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR == '2',
+  filter = TRTEMFL == "Y" & ATOXGR == "2",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 2 ADVERSE EVENT",
@@ -69,10 +68,10 @@ ae_gr2_event <- event_source(
     SRCSEQ = AESEQ
   )
 )
+
 ae_gr3_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR == '3',
+  filter = TRTEMFL == "Y" & ATOXGR == "3",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 3 ADVERSE EVENT",
@@ -81,10 +80,10 @@ ae_gr3_event <- event_source(
     SRCSEQ = AESEQ
   )
 )
+
 ae_gr4_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR == '4',
+  filter = TRTEMFL == "Y" & ATOXGR == "4",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 4 ADVERSE EVENT",
@@ -93,10 +92,10 @@ ae_gr4_event <- event_source(
     SRCSEQ = AESEQ
   )
 )
+
 ae_gr5_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR == '5',
+  filter = TRTEMFL == "Y" & ATOXGR == "5",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 5 ADVERSE EVENT",
@@ -105,10 +104,10 @@ ae_gr5_event <- event_source(
     SRCSEQ = AESEQ
   )
 )
+
 ae_gr35_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" &
-    ATOXGR %in% c('3', '4', '5'),
+  filter = TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5"),
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "GRADE 5 ADVERSE EVENT",
@@ -120,7 +119,7 @@ ae_gr35_event <- event_source(
 
 ae_sev_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" & AESEV == "SEVERE" ,
+  filter = TRTEMFL == "Y" & AESEV == "SEVERE",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "SEVERE ADVERSE EVENT",
@@ -130,9 +129,9 @@ ae_sev_event <- event_source(
   )
 )
 
-ae_wd_event  <- event_source(
+ae_wd_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" & AEACN == "	DRUG WITHDRAWN" ,
+  filter = TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "ADVERSE EVENT LEADING TO DRUG WITHDRAWAL",
