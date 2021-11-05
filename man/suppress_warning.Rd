@@ -23,6 +23,7 @@ are suppressed.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data(adsl)
 data(vs)
 

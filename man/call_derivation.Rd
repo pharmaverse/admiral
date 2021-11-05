@@ -28,6 +28,7 @@ iterations and others varying.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data(ae)
 data(adsl)
 

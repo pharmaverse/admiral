@@ -271,7 +271,9 @@ what_is_it <- function(x) {
 #' @keywords dev_utility
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(vs)
+#'
 #' admiral:::filter_if(vs, rlang::quo(NULL))
 #' admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
@@ -304,8 +306,9 @@ filter_if <- function(dataset, filter) {
 #' @return Variable vector.
 #'
 #' @examples
-#'
+#' library(cdiscpilot)
 #' data(vs)
+#'
 #' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
 #' admiral:::get_constant_vars(

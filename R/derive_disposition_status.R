@@ -61,6 +61,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(cdiscpilot)
 #' data("dm")
 #' data("ds")
 #'

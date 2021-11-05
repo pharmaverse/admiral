@@ -26,6 +26,7 @@ RoxygenNote: 7.0.2
 Depends: R (>= 3.5)
 Imports:
     assertthat,
+    cdiscpilot,
     dplyr,
     lubridate,
     magrittr,
@@ -53,4 +54,5 @@ Suggests:
     usethis,
     covr,
     DT
+Remotes: Roche-GSK/cdiscpilot
 VignetteBuilder: knitr
