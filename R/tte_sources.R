@@ -1,5 +1,6 @@
 #' @include utils.R
 
+#' @export
 death_event <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
@@ -11,6 +12,7 @@ death_event <- event_source(
   )
 )
 
+#' @export
 lastalive_censor <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
@@ -21,6 +23,7 @@ lastalive_censor <- censor_source(
   )
 )
 
+#' @export
 ae_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y",
@@ -33,6 +36,7 @@ ae_event <- event_source(
   )
 )
 
+#' @export
 ae_ser_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AESER == "Y" ,
@@ -57,6 +61,7 @@ ae_gr1_event <- event_source(
   )
 )
 
+#' @export
 ae_gr2_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "2",
@@ -69,6 +74,7 @@ ae_gr2_event <- event_source(
   )
 )
 
+#' @export
 ae_gr3_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "3",
@@ -81,6 +87,7 @@ ae_gr3_event <- event_source(
   )
 )
 
+#' @export
 ae_gr4_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "4",
@@ -93,6 +100,7 @@ ae_gr4_event <- event_source(
   )
 )
 
+#' @export
 ae_gr5_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR == "5",
@@ -105,6 +113,7 @@ ae_gr5_event <- event_source(
   )
 )
 
+#' @export
 ae_gr35_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5"),
@@ -117,6 +126,7 @@ ae_gr35_event <- event_source(
   )
 )
 
+#' @export
 ae_sev_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AESEV == "SEVERE",
@@ -129,6 +139,7 @@ ae_sev_event <- event_source(
   )
 )
 
+#' @export
 ae_wd_event <- event_source(
   dataset_name = "adae",
   filter = TRTEMFL == "Y" & AEACN == "DRUG WITHDRAWN",
