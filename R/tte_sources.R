@@ -18,7 +18,7 @@ lastalive_censor <- censor_source(
   date = LSTALVDT,
   set_values_to = vars(
     EVNTDESC = "ALIVE",
-    SRCDOM = "ADLS",
+    SRCDOM = "ADSL",
     SRCVAR = "LSTALVDT"
   )
 )
