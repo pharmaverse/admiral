@@ -746,3 +746,29 @@ censor_source <- function(dataset_name,
   class(out) <- c("censor_source", class(out))
   out
 }
+
+list_tte_source_objects <- function() {
+  objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
+
+  rows <- lapply(objects, function(obj_name) {
+    obj <- get(obj_name)
+    data.frame(
+      object = obj_name,
+      dataset_name = obj$dataset_name,
+      filter = rlang::quo_text(obj$filter),
+      date = rlang::quo_text(obj$date),
+      censor = obj$censor,
+      set_values_to = paste(
+        paste(
+          names(obj$set_values_to),
+          purrr::map_chr(obj$set_values_to, rlang::quo_text, width = 100),
+          sep = ": "
+        ),
+        collapse = "<br>"
+      ),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  do.call(rbind, rows)
+}
