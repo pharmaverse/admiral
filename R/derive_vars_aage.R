@@ -25,7 +25,7 @@
 #'
 #'   Default: 'years'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @details The age is derived as the integer part of the duration from start to
 #'   end date in the specified unit.
@@ -55,7 +55,7 @@ derive_vars_aage <- function(dataset,
   assert_data_frame(dataset, required_vars = quo_c(start_date, end_date))
   assert_character_scalar(
     unit,
-    values = c("years", "months", "days", "hours", "minutes", "seconds")
+    values = c("years", "months", "weeks", "days", "hours", "minutes", "seconds")
   )
 
   derive_vars_duration(
@@ -98,6 +98,14 @@ derive_aage <- function(dataset,
 #' @param dataset Input dataset.
 #' @param age_var AGE variable.
 #' @param age_unit AGE unit variable.
+#'
+#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
+#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
+#'
+#'   Default: NULL
+#'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'
 #' @param new_var New variable to be created.
 #'
 #' @return `dataset` with new column `new_var` of class factor.
@@ -106,6 +114,84 @@ derive_aage <- function(dataset,
 #'
 #' @name derive_agegr_fda
 NULL
+
+#' Derive Age Group function
+#'
+#' This function is used to produce a temporary age variable in years.
+#' The derive_agegr_fda and derive_agegr_ema functions then group this age appropriately.
+#'
+#' @author Michael Thorpe
+#'
+derive_agegrp <- function(dataset, age_var, age_unit = NULL){
+
+  age_variable <- assert_symbol(enquo(age_var))
+  assert_data_frame(dataset, required_vars = quo_c(age_variable))
+
+  age_var <- pull(dataset,!!age_variable)
+  assert_numeric_vector(age_var)
+
+  age_var <- age_variable
+  unit_var <- paste0(quo_get_expr(age_var), "U")
+
+  if (!unit_var %in% colnames(dataset)) {
+
+    if (is.null(age_unit)) {
+
+      err_msg<- paste(
+        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
+        "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
+      )
+      abort(err_msg)
+    } else{
+      assert_character_scalar(tolower(age_unit), values = valid_time_units())
+      ds <-dataset %>%
+        mutate(temp_age = time_length(duration(!!age_var, units = tolower(age_unit)), unit= "years"))
+    }
+  } else {
+
+    unit <- tolower(unique(pull(dataset,!!sym(unit_var))))
+    assert_character_vector(unit,
+                            values = c(NA, "years", "months", "weeks", "days", "hours", "minutes", "seconds"))
+
+    if (!is.null(age_unit)) {
+
+      if (length(unit) > 1){
+
+        msg <-paste(
+          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "and contatins multiple values but the argument `age_unit` has been specified with a single different value.",
+          "The `age_unit` argument is ignored and the grouping will based on",
+          unit_var)
+        warn(msg)
+
+      }
+
+      else if (unit != tolower(age_unit)) {
+
+        msg <-paste(
+          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
+          "but the argument `age_unit` has been specified with a different value.",
+          "The `age_unit` argument is ignored and the grouping will based on",
+          unit_var)
+        warn(msg)
+      }
+
+    }
+
+    average_durations <- c(seconds = 365.25*24*60*60,
+                           minutes = 365.25*24*60,
+                           hours = 365.25*24,
+                           days = 365.25,
+                           weeks = 365.25/7,
+                           months = 12,
+                           years = 1)
+
+    ds <- dataset %>%
+      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
+      )
+  }
+
+}
 
 #' @rdname derive_agegr_fda
 #' @export
@@ -135,61 +221,11 @@ NULL
 #'
 derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 
-  age_variable <- assert_symbol(enquo(age_var))
+  age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quo_c(age_variable))
-
-  age_var <- pull(dataset,!!age_variable)
-  assert_numeric_vector(age_var)
-
-  age_var <- age_variable
-  unit_var <- paste0(quo_get_expr(age_var), "U")
-
-  if (!unit_var %in% colnames(dataset)) {
-
-    if (is.null(age_unit)) {
-
-      err_msg<- paste(
-        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
-        "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
-      )
-      abort(err_msg)
-    } else{
-      assert_character_scalar(tolower(age_unit), values = valid_time_units())
-      ds <-dataset %>%
-        mutate(temp_age = time_length(duration(!!age_var, units = tolower(age_unit)), unit= "years"))
-    }
-  } else {
-
-    unit <- tolower(pull(dataset,!!sym(unit_var)))
-    assert_character_vector(unit, values = valid_time_units())
-
-    if (!is.null(age_unit)) {
-
-      if (unit != tolower(age_unit)){
-
-        msg <-paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
-          "but the argument `age_unit` has been specified with a different value.",
-          "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var)
-        warn(msg)
-      }
-    }
-
-    average_durations <- c(seconds = 365.25*24*60*60,
-                           minutes = 365.25*24*60,
-                           hours = 365.25*24,
-                           days = 365.25,
-                           months = 12,
-                           years = 1)
-
-    ds <- dataset %>%
-      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
-      )
-  }
-
   warn_if_vars_exist(dataset, quo_text(new_var))
+
+  ds <- derive_agegrp(dataset, !!age_var, age_unit)
 
   out <- ds %>%
     mutate(
@@ -231,61 +267,11 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1, adults = FALSE)
 derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults = TRUE) {
 
-  age_variable <- assert_symbol(enquo(age_var))
+  age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
-  assert_data_frame(dataset, required_vars = quo_c(age_variable))
-
-  age_var <- pull(dataset,!!age_variable)
-  assert_numeric_vector(age_var)
-
-  age_var <- age_variable
-  unit_var <- paste0(quo_get_expr(age_var), "U")
-
-  if (!unit_var %in% colnames(dataset)) {
-
-    if (is.null(age_unit)) {
-
-      err_msg<- paste(
-        "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
-        "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
-      )
-      abort(err_msg)
-    } else{
-      assert_character_scalar(tolower(age_unit), values = valid_time_units())
-      ds <-dataset %>%
-        mutate(temp_age = time_length(duration(!!age_var, units = tolower(age_unit)), unit= "years"))
-    }
-  } else {
-
-    unit <- tolower(pull(dataset,!!sym(unit_var)))
-    assert_character_vector(unit, values = valid_time_units())
-
-    if (!is.null(age_unit)) {
-
-      if (unit != tolower(age_unit)){
-
-        msg <-paste(
-          "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
-          "but the argument `age_unit` has been specified with a different value.",
-          "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var)
-        warn(msg)
-      }
-    }
-
-    average_durations <- c(seconds = 365.25*24*60*60,
-                           minutes = 365.25*24*60,
-                           hours = 365.25*24,
-                           days = 365.25,
-                           months = 12,
-                           years = 1)
-
-    ds <- dataset %>%
-      mutate(temp_age = !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
-      )
-  }
-
   warn_if_vars_exist(dataset, quo_text(new_var))
+
+  ds <- derive_agegrp(dataset, !!age_var, age_unit)
 
   if (adults) {
     out <- mutate(
@@ -305,8 +291,8 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
       ds,
       !!new_var := cut(
         x = temp_age,
-        breaks = c(-Inf, 2, 12, 18),
-        labels = c("0-1 (Newborns / Infants / Toddlers)",
+        breaks = c(-Inf, (28/365.25), 2, 12, 18),
+        labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
                    "2-11 (Children)", "12-17 (Adolescents)"),
         include.lowest = FALSE,
         right = FALSE

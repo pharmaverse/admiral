@@ -14,7 +14,14 @@ derive_agegr_ema(dataset, age_var, new_var, age_unit = NULL, adults = TRUE)
 
 \item{age_var}{AGE variable.}
 
-\item{age_unit}{AGE unit variable.}
+\item{age_unit}{AGE unit variable.
+
+The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
+This is only used when the age_var variable does not have a corresponding unit in the dataset.
+
+Default: NULL
+
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 
 \item{new_var}{New variable to be created.}
 

@@ -71,10 +71,10 @@ test_that("derive_agegr_ema - pediatric version - works as expected", {
   expected_output <- mutate(
     input,
     AGEGR_EXP = factor(
-      c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+      c("28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
         "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
         NA),
-      levels = c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+      levels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
                  "12-17 (Adolescents)", NA_character_),
       exclude = NULL
     )
@@ -109,16 +109,16 @@ test_that("derive_agegr_ema works with age_unit missing and multiple units in AG
 
 test_that("derive_agegr_ema - pediatric version - works with age_unit missing and multiple units in AGEU", {
 
-  input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18, 36, 72),
-                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months"))
+  input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18, 36, 72, 3),
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months", "weeks"))
 
   expected_output <- mutate(
     input,
     AGEGR_EXP = factor(
-      c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+      c("28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
         "2-11 (Children)", "12-17 (Adolescents)", "12-17 (Adolescents)",
-        NA, "2-11 (Children)", "2-11 (Children)"),
-      levels = c("0-1 (Newborns / Infants / Toddlers)", "2-11 (Children)",
+        NA, "2-11 (Children)", "2-11 (Children)", "0-27 days (Newborns)"),
+      levels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)", "2-11 (Children)",
                  "12-17 (Adolescents)", NA_character_),
       exclude = NULL
     )
@@ -131,3 +131,4 @@ test_that("derive_agegr_ema - pediatric version - works with age_unit missing an
   )
 
 })
+

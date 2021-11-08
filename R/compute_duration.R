@@ -25,7 +25,7 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param floor_in Round down input dates?
 #'
@@ -98,7 +98,7 @@ compute_duration <- function(start_date,
                              trunc_out = FALSE) {
   # Checks
   assert_that(is_date(start_date), is_date(end_date))
-  assert_that(is_timeunit(in_unit), is_timeunit(out_unit))
+  assert_that(is_timeunit(in_unit), is_timeunit(out_unit)| out_unit == "weeks")
   assert_that(is.logical(floor_in), is.logical(add_one), is.logical(trunc_out))
 
   # Derivation
