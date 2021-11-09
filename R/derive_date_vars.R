@@ -466,6 +466,10 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
 #'
+#' @details
+#' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
+#' a warning is issued and `'--DTF'` will be overwritten.
+#'
 #' @author Samia Kabi
 #'
 #' @keywords adam derivation timing
@@ -612,7 +616,7 @@ derive_vars_dt <- function(dataset,
 #' if it already exists in the input dataset. However, if `'--TMF'` already exists
 #' in the input dataset, a warning is issued and `'--TMF'` will be overwritten.
 #'
-#' @return  the input dataset with the datetime `'--DTM'` (and the date/time imputation
+#' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
 #' @author Samia Kabi
@@ -683,16 +687,14 @@ derive_vars_dtm <- function(dataset,
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
 
-  dataset <- dataset %>%
-    mutate(
-      !!sym(dtm) := convert_dtc_to_dtm(
-        dtc = !!dtc,
-        date_imputation = date_imputation,
-        time_imputation = time_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
-      )
-    )
+  mask <- rlang::as_data_mask(dataset)
+  dataset[[dtm]] <- convert_dtc_to_dtm(
+    dtc = eval_tidy(dtc, mask),
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = eval_tidy(enquo(min_dates), mask),
+    max_dates = eval_tidy(enquo(max_dates), mask)
+  )
 
   if (flag_imputation %in% c("both", "date") ||
       flag_imputation == "auto" && !is.null(date_imputation)) {

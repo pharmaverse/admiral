@@ -108,3 +108,15 @@ test_that("blank strings are turned into `NA` inside data frames", {
 
   expect_identical(convert_blanks_to_na(input), expected_output)
 })
+
+test_that("negate_vars returns list of negated variables", {
+  expect_identical(negate_vars(vars(var1, var2)),
+                   exprs(-var1, -var2))
+}
+)
+
+test_that("negate_vars returns NULL if input is NULL", {
+  expect_identical(negate_vars(NULL),
+                   NULL)
+}
+)
