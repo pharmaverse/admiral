@@ -247,8 +247,6 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 
 #' @rdname derive_agegr_fda
 #' @export
-#' @param adults Logical, should the age group be valid for adults studies or pediatric studies?
-#' Defaults to `TRUE` (adult studies).
 #' @details `derive_agegr_ema` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
@@ -264,8 +262,8 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 #'
 #' data.frame(AGE = 1:20) %>%
-#'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1, adults = FALSE)
-derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults = TRUE) {
+#'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
+derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL) {
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
@@ -273,33 +271,19 @@ derive_agegr_ema <- function(dataset, age_var, new_var, age_unit = NULL, adults 
 
   ds <- derive_agegrp(dataset, !!age_var, age_unit)
 
-  if (adults) {
-    out <- mutate(
-      ds,
-      !!new_var := cut(
-        x = temp_age,
-        breaks = c(18, 65, 85, Inf),
-        labels = c("18-64", "65-84", ">=85"),
-        include.lowest = TRUE,
-        right = FALSE
+  out <- mutate(
+    ds,
+    !!new_var := cut(
+      x = temp_age,
+      breaks = c(-Inf, (28/365.25), 2, 12, 18, 65, 85, Inf),
+      labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
+                 "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"),
+      include.lowest = FALSE,
+      right = FALSE
       )
     ) %>%
-      select(-temp_age)
+    select(-temp_age)
 
-  } else {
-    out <- mutate(
-      ds,
-      !!new_var := cut(
-        x = temp_age,
-        breaks = c(-Inf, (28/365.25), 2, 12, 18),
-        labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-                   "2-11 (Children)", "12-17 (Adolescents)"),
-        include.lowest = FALSE,
-        right = FALSE
-      )
-    ) %>%
-      select(-temp_age)
-  }
   if (anyNA(dplyr::pull(out, !!new_var))) {
     out <- mutate(out, !!new_var := addNA(!!new_var))
   }

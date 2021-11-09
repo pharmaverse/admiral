@@ -7,7 +7,7 @@
 \usage{
 derive_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 
-derive_agegr_ema(dataset, age_var, new_var, age_unit = NULL, adults = TRUE)
+derive_agegr_ema(dataset, age_var, new_var, age_unit = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset.}
@@ -24,9 +24,6 @@ Default: NULL
 Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 
 \item{new_var}{New variable to be created.}
-
-\item{adults}{Logical, should the age group be valid for adults studies or pediatric studies?
-Defaults to \code{TRUE} (adult studies).}
 }
 \value{
 \code{dataset} with new column \code{new_var} of class factor.
@@ -75,7 +72,7 @@ data.frame(AGE = 1:100) \%>\%
   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 data.frame(AGE = 1:20) \%>\%
-  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1, adults = FALSE)
+  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 }
 \author{
 Ondrej Slama
