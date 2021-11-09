@@ -1,0 +1,121 @@
+---
+title: "Pull Request Review Guidance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pr_review_guidance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This document is intended to be a guidance for reviewers of pull requests (PRs) in the {admiral} package. PR authors will benefit from shorter review times by closely following the guidance provided here.
+
+
+# Review Criteria
+
+For a pull request to be merged it needs to pass the automated `R CMD check` and `lintr` workflows on GitHub at a minimum. These checks can also be run locally using the `devtools::check()` and `lintr::lint_package()` commands, respectively. In addition the PR reviewer should make sure that
+
+- the [Programming Strategy](programming_strategy.html) is followed
+
+- the function is ADaM IG compliant
+
+- the function does what is intended for (as described in the header and corresponding issue)
+
+- the function header properly explains the intention of the function, the expected inputs (incl. permitted values of parameters) and the output produced; after reading the documentation the reader should be able to predict the output of the function without having to read the source code
+
+- the function has an accompanying set of unit tests; for derivations these unit test should have a code coverage of at least 90%; the whole package should have a coverage of >= 80%
+
+- the implemented derivation is in the scope of admiral, e.g. does not expect company specific input or hard-code company-specific rules
+
+- meaningful error or warning messages are issued if the input is invalid
+
+- documentation is created/updated by running `devtools::document()`
+
+- functions which are supposed to be exported are listed in the `NAMESPACE` file; this requires an `@export` tag in the function header
+
+- examples print relevant source variables and newly created variables and/or records in their output
+
+- the `NEWS.md` file is updated with an entry that explains the new features or changes
+
+- the author of a function is listed in the `DESCRIPTION` file
+
+- all files affected by the implemented changes, e.g. vignettes and templates, are updated
+
+
+# Common R CMD Check Issues
+
+`R CMD check` is a command line tool that checks R packages against a standard set of criteria. For a pull request to pass the check must not issue any notes, warnings or errors. Below is a list of common issues and how to resolve them.
+
+## Check Fails Only on One Version
+
+If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally. The test environment for R version 3.6 is the same we use for development.
+
+To reproduce the R version 3.5 environment open the admiral project in R version 3.5.x, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+
+```r
+install.packages("remotes")
+options(repos = "https://cran.microsoft.com/snapshot/2018-12-20/")
+remotes::install_deps(dependencies = TRUE)
+devtools::check()
+```
+
+To reproduce the R release version environment open the admiral project in the latest available R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+
+```r
+install.packages("remotes")
+options(repos = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
+remotes::install_deps(dependencies = TRUE)
+devtools::check()
+```
+
+## Package Dependencies
+
+```
+> checking package dependencies ... ERROR
+  Namespace dependency not required: ‘pkg’
+```
+
+Add `pkg` to the `Imports` or `Suggests` field in the `DESCRIPTION` file. In general, dependencies should be listed in the `Imports` field. However, if a package is only used inside vignettes or unit tests it should be listed in `Suggests` because all {admiral} functions would work without these "soft" dependencies being installed.
+
+## Global Variables
+
+```
+❯ checking R code for possible problems ... NOTE
+  function_xyz: no visible binding for global variable ‘some_var’
+```
+
+Add `some_var` to the list of "global" variables in `R/globals.R`.
+
+## Undocumented Function Parameter
+
+```
+❯ checking Rd \usage sections ... WARNING
+  Undocumented arguments in documentation object 'function_xyz'
+    ‘some_param’
+```
+
+Add an `@param some_param` section in the header of `function_xyz()` and run `devtools::document()` afterwards.
+
+## Outdated Documentation
+
+```
+❯ checking for code/documentation mismatches ... WARNING
+  Codoc mismatches from documentation object 'function_xyz':
+  ...
+  Argument names in code not in docs:
+    new_param_name
+  Argument names in docs not in code:
+    old_param_name
+  Mismatches in argument names:
+    Position: 6 Code: new_param_name Docs: old_param_name
+```
+
+The name of a parameter has been changed in the function code but not yet in the header. Change `@param old_param_name` to `@param new_param_name` and run `devtools::document()`.

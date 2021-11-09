@@ -21,6 +21,11 @@
 #'
 #' @param filter Expression used to restrict the records of `dataset_merge` prior to transposing
 #'
+#' @details
+#' After filtering `dataset_merge` based upon the condition provided in `filter`, this
+#' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
+#' keys.
+#'
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added

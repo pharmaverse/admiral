@@ -17,7 +17,7 @@ library(admiral)
 
 # Main Idea
 
-The main idea of admiral is that an ADaM dataset is build by a sequence of
+The main idea of admiral is that an ADaM dataset is built by a sequence of
 derivations. Each derivation adds one or more variables or parameters to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
@@ -48,7 +48,7 @@ adsl <- dm %>%
 The most important functions in admiral are the
 [derivations](../reference/index.html#section-derivations). These functions
 start with `derive_`. The first parameter of these functions expects the
-input dataset. This allows to string together derivations using the `%>%`
+input dataset. This allows us to string together derivations using the `%>%`
 operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
@@ -57,24 +57,66 @@ the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_os()` derives the `OS` parameter.
 
-## Input and Output
+# Input and Output
 
 It is expected that the input dataset is not grouped. Otherwise an error is
 issued.
 
 The input dataset should not include variables starting with `temp_`. These
-variable names are reserved for temporary variable used within the derivation
+variable names are reserved for temporary variables used within the derivation
 and are removed from the output dataset. If the input dataset contains such
 variables, an error is issued.
 
 It is expected all variable names are uppercase in the input dataset and new
 variables will be returned in uppercase. It is expected all `SUPPxx.QNAM` 
 values are uppercase to conform with this convention when using the 
-`derive_vars_suppqual` to adhere to the uppercase requirement.
+`derive_vars_suppqual()` to adhere to the uppercase requirement.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
 be preserved.
+
+# Handling of Missing Values
+
+When using the {haven} package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using {admiral}'s `convert_blanks_to_na()` function, e.g.
+
+```r
+dm <- haven::read_sas("dm.sas7bdat") %>% 
+  convert_blanks_to_na()
+```
+
+Note that any logical operator being applied to an `NA` value *always* returns `NA` rather than `TRUE` or `FALSE`.
+
+```{r}
+visits <- c("Baseline", NA, "Screening", "Week 1 Day 7")
+visits != "Baseline"
+```
+
+The only exception is `is.na()` which returns `TRUE` if the input is `NA`.
+
+```{r}
+is.na(visits)
+```
+
+Thus, to filter all visits which are not `"Baseline"` the following condition would need to be used.
+
+```{r}
+visits != "Baseline" | is.na(visits)
+```
+
+Also note that most aggregation functions, like `mean()` or `max()`, also return `NA` if any element of the input vector is missing.
+
+```{r}
+mean(c(1, NA, 2))
+```
+
+To avoid this behavior one has to explicitly set `na.rm = TRUE`.
+
+```{r}
+mean(c(1, NA, 2), na.rm = TRUE)
+```
+
+This is very important to keep in mind when using {admiral}'s aggregation functions such as `derive_summary_records()`.
 
 # Computations
 
@@ -85,19 +127,19 @@ example above.
 
 # Parameters
 
-For parameters which expect variable names or expressions of variable names
+For parameters which expect variable names or expressions of variable names, 
 symbols or expressions must be specified rather than strings.
 
-- For parameters which expects a single variable name the name can be specified
+- For parameters which expect a single variable name, the name can be specified
 without quotes and quotation, e.g. `new_var = TEMPBL`
 
-- For parameters which expects one or more variable names a list of symbols is
+- For parameters which expect one or more variable names, a list of symbols is
 expected, e.g. `by_vars = vars(PARAMCD, AVISIT)` 
 
-- For parameters which expects a single expression the expression needs to be
+- For parameters which expect a single expression, the expression needs to be
 passed "as is", e.g. `filter = PARAMCD == "TEMP"`
 
-- For parameters which expects one or more expressions a list of expressions is
+- For parameters which expect one or more expressions, a list of expressions is
 expected, e.g. `order = desc(AVISIT, desc(AESEV))`
 
 # Validation
@@ -105,13 +147,13 @@ expected, e.g. `order = desc(AVISIT, desc(AESEV))`
 All functions are reviewed and tested to ensure that they work as described in
 the documentation. They are **not validated** yet.
 
-Although admiral follows CDISC standards it does not claim that the dataset
+Although admiral follows CDISC standards, it does not claim that the dataset
 resulting from calling admiral functions is ADaM compliant. This has to be
 ensured by the user.
 
 # Starting a Script
 
-For the ADaM data structures an overview of the flow and example function calls
+For the ADaM data structures, an overview of the flow and example function calls
 for the most common steps are provided by the following vignettes:
 
 - [Creating ADSL](adsl.html)
@@ -124,7 +166,8 @@ created by calling `use_ad_template()`, e.g.,
 ```r
 use_ad_template(
   adam_name = "adsl",
-  save_path = "./ad_adsl.R")
+  save_path = "./ad_adsl.R"
+)
 ```
 
 A list of all available templates can be obtained by `list_all_templates()`:

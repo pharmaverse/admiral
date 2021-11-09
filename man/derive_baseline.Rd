@@ -25,6 +25,12 @@ dataset plus the \code{new_var} variable.
 \description{
 Derive a baseline variable, e.g. \code{BASE}, in a BDS dataset
 }
+\details{
+For each \code{by_vars} group the baseline record is identified by filtering using the
+condition \code{ABLFL == "Y"}. Subsequently, every value of the \code{new_var} variable for the \code{by_vars}
+group is set to the value of the \code{source_var} variable of the baseline record. In case there
+are multiple baseline records within \code{by_vars} an error is issued.
+}
 \examples{
 dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
@@ -45,6 +51,9 @@ derive_baseline(
   source_var = AVALC,
   new_var = BASEC
 )
+}
+\seealso{
+\code{\link[=derive_var_base]{derive_var_base()}}, \code{\link[=derive_var_basec]{derive_var_basec()}}
 }
 \author{
 Thomas Neitmann
