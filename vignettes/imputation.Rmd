@@ -83,7 +83,7 @@ impute_dtc(
   "2019-02",
   date_imputation = "last",
   time_imputation = "last",
-  max_dates = vars(ymd("2019-01-14"), ymd("2019-02-25"))
+  max_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
 )
 ```
 
