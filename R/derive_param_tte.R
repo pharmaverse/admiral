@@ -747,6 +747,27 @@ censor_source <- function(dataset_name,
   out
 }
 
+#' Print `tte_source` Objects
+#'
+#' @param x A `tte_source` object
+#' @param ... Not used
+#'
+#' @export
+#'
+#' @examples
+#' print(death_event)
+print.tte_source <- function(x, ...) {
+  cat("<tte_source> object\n")
+  cat("dataset_name: \"", x$dataset_name, "\"\n", sep = "")
+  cat("filter:", quo_text(x$filter), "\n")
+  cat("date:", quo_text(x$date), "\n")
+  cat("censor:", x$censor, "\n")
+  cat("set_values_to:\n")
+  for (name in names(x$set_values_to)) {
+    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n", sep = "")
+  }
+}
+
 list_tte_source_objects <- function() {
   objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
 
