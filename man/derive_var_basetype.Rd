@@ -42,7 +42,7 @@ bds <- tibble::tribble(
   "P02",    "OPEN-LABEL",   "PARAM01", 5,     10.8
 )
 
-derive_var_basetype(
+bds_with_basetype <- derive_var_basetype(
   dataset = bds,
   basetypes = exprs(
     "RUN-IN" = EPOCH \%in\% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
@@ -50,6 +50,9 @@ derive_var_basetype(
     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
   )
 )
+print(bds_with_basetype)
+
+dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
 }
 \author{
 Thomas Neitmann

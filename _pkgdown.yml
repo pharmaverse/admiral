@@ -120,6 +120,7 @@ articles:
   - occds
   - bds_finding
   - bds_exposure
+  - bds_tte
   - imputation
   - faq
 
@@ -128,3 +129,5 @@ articles:
   contents:
   - programming_strategy
   - git_usage
+  - writing_vignettes
+  - pr_review_guidance

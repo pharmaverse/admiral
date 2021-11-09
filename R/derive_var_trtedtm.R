@@ -50,7 +50,7 @@ derive_var_trtedtm <- function(dataset,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10 , # nolint
                                subject_keys = vars(STUDYID, USUBJID)) {
 
-  assert_data_frame(dataset,subject_keys)
+  assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXENDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
@@ -60,11 +60,13 @@ derive_var_trtedtm <- function(dataset,
       order = vars(EXENDTC, EXSEQ),
       by_vars = subject_keys,
       mode = "last"
-    ) %>%
-    transmute(
-      !!!subject_keys,
-      TRTEDTM = convert_dtc_to_dtm(EXENDTC, date_imputation = "last", time_imputation = "last")
     )
 
-  left_join(dataset, add, by = vars2chr(subject_keys))
+  add$TRTEDTM <- convert_dtc_to_dtm(
+    dtc = add$EXENDTC,
+    date_imputation = "last",
+    time_imputation = "last"
+  )
+
+  left_join(dataset, select(add, !!!subject_keys, TRTEDTM), by = vars2chr(subject_keys))
 }

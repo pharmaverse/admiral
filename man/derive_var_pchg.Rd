@@ -32,6 +32,9 @@ advs <- tibble::tribble(
 )
 derive_var_pchg(advs)
 }
+\seealso{
+\code{\link[=derive_var_chg]{derive_var_chg()}}
+}
 \author{
 Thomas Neitmann
 }

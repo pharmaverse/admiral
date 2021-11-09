@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @seealso params
+#' @seealso [params()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -61,8 +61,8 @@
 #'     min_dates = list(TRTSDT),
 #'     max_dates = list(TRTEDT)
 #'   )
-call_derivation <- function(dataset, derivation, variable_params, ...) {
-  assert_data_frame(dataset)
+call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
+  assert_data_frame(dataset, optional = TRUE)
   assert_s3_class(derivation, "function")
   assert_list_of(variable_params, "params")
 

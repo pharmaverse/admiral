@@ -187,7 +187,7 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @keywords source_specifications
 #'
-#' @seealso [`derive_var_dthcaus()`]
+#' @seealso [derive_var_dthcaus()]
 #'
 #' @export
 #'

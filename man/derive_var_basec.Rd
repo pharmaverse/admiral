@@ -19,6 +19,12 @@ dataset plus the \code{BASEC} variable
 \description{
 Derive the \code{BASEC} variable in a BDS dataset
 }
+\details{
+For each \code{by_vars} group the baseline record is identified by filtering using the
+condition \code{ABLFL == "Y"}. Subsequently, every value of the \code{BASEC} variable for the \code{by_vars}
+group is set to the value of the \code{AVALC} variable of the baseline record. In case there
+are multiple baseline records within \code{by_vars} an error is issued.
+}
 \examples{
 dataset <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~AVISIT,    ~ABLFL,
@@ -30,6 +36,9 @@ dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM02", "MEDIUM", "Day 14",   "N"
 )
 derive_var_basec(dataset, by_vars = vars(USUBJID, PARAMCD))
+}
+\seealso{
+\code{\link[=derive_var_base]{derive_var_base()}}, \code{\link[=derive_baseline]{derive_baseline()}}
 }
 \author{
 Thomas Neitmann
