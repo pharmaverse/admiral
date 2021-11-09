@@ -143,15 +143,21 @@ adsl <- dm %>%
   )
 
 # Last known alive date
-ae_start <- lstalvdt_source(dataset = ae,
-                            date = AESTDTC,
-                            date_imputation = "first")
-ae_end <- lstalvdt_source(dataset = ae,
-                          date = AEENDTC,
-                          date_imputation = "first")
-lb_date <- lstalvdt_source(dataset = lb,
-                           date = LBDTC,
-                           filter = nchar(LBDTC) >= 10)
+ae_start <- lstalvdt_source(
+  dataset = ae,
+  date = AESTDTC,
+  date_imputation = "first"
+)
+ae_end <- lstalvdt_source(
+  dataset = ae,
+  date = AEENDTC,
+  date_imputation = "first"
+)
+lb_date <- lstalvdt_source(
+  dataset = lb,
+  date = LBDTC,
+  filter = nchar(LBDTC) >= 10
+)
 adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
 
 adsl <- adsl %>%
