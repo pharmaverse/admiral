@@ -93,6 +93,15 @@ a named list of datasets. The names correspond to the identifiers specified for
 the `dataset_name` parameter. This allows to define events and censoring
 independent of the data.
 
+### Pre-Defined Time-to-Event Source Objects
+
+The table below shows all pre-defined `tte_source` objects which should cover the most common use cases.
+
+```{r echo=FALSE}
+knitr::kable(admiral:::list_tte_source_objects())
+```
+
+
 ### Single Event
 
 For example, the overall survival time could be defined from treatment start to death. Patients alive or lost to follow-up would be censored to the last alive date. The following call defines a death event based on ADSL variables.
@@ -135,6 +144,7 @@ dataset_vignette(
 ```
 
 ### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
+
 To add additional information like event or censoring description (`EVNTDESC`)
 or source variable (`SRCVAR`) the `set_values_to` parameter can be specified in
 the event/censoring definition.
