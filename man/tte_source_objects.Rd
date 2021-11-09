@@ -42,6 +42,13 @@ ae_sev_event
 ae_wd_event
 }
 \description{
-Pre-Defined Time-to-Event Source Objects
+These pre-defined \code{tte_source} objects can be used as input to \code{derive_param_tte()}.
+}
+\details{
+To see the definition of the various objects simply print the object in the
+R console, e.g. \code{print(death_event)}.
+}
+\seealso{
+\code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
 }
 \keyword{datasets}

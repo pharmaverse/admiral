@@ -3,6 +3,14 @@ NULL
 
 #' Pre-Defined Time-to-Event Source Objects
 #'
+#' These pre-defined `tte_source` objects can be used as input to `derive_param_tte()`.
+#'
+#' @details
+#' To see the definition of the various objects simply print the object in the
+#' R console, e.g. `print(death_event)`.
+#'
+#' @seealso [derive_param_tte()], [tte_source()], [event_source()], [censor_source()]
+#'
 #' @export
 #'
 #' @rdname tte_source_objects
