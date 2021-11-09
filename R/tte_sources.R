@@ -143,7 +143,7 @@ ae_gr35_event <- event_source(
   filter = TRTEMFL == "Y" & ATOXGR %in% c("3", "4", "5"),
   date = ASTDT,
   set_values_to = vars(
-    EVNTDESC = "GRADE 5 ADVERSE EVENT",
+    EVNTDESC = "GRADE 3-5 ADVERSE EVENT",
     SRCDOM = "ADAE",
     SRCVAR = "ASTDT",
     SRCSEQ = AESEQ
