@@ -170,26 +170,26 @@ death <- event_source(
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to = vars(
-    EVENTDESC = "DEATH",
+    EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
   )
 )
 
-lstalv <- censor_source(
+end_of_study <- censor_source(
   dataset_name = "adsl",
-  date = LSTALVDT,
+  date = EOSDT,
   set_values_to = vars(
-    EVENTDESC = "LAST KNOWN ALIVE DATE",
+    EVNTDESC = "END OF STUDY DATE",
     SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"
+    SRCVAR = "EOSDT"
   )
 )
 
 derive_param_tte(
   dataset_adsl = adsl,
   event_conditions = list(death),
-  censor_conditions = list(lstalv),
+  censor_conditions = list(end_of_study),
   source_datasets = list(adsl = adsl),
   set_values_to = vars(
     PARAMCD = "OS",
@@ -219,7 +219,7 @@ ttae <- event_source(
   dataset_name = "ae",
   date = AESTDTC,
   set_values_to = vars(
-    EVENTDESC = "AE",
+    EVNTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
     SRCSEQ = AESEQ
@@ -230,7 +230,7 @@ eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
   set_values_to = vars(
-    EVENTDESC = "END OF STUDY",
+    EVNTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
     SRCVAR = "EOSDT"
   )

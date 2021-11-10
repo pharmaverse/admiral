@@ -94,7 +94,7 @@ cut off date. Only dates which are in the range of possible dates are
 considered.}
 }
 \value{
-the input dataset with the datetime \code{'--DTM'} (and the date/time imputation
+The input dataset with the datetime \code{'--DTM'} (and the date/time imputation
 flag \code{'--DTF'}, \code{'--TMF'}) added.
 }
 \description{

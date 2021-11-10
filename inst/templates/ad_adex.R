@@ -5,17 +5,18 @@
 # Input: adsl, ex
 #
 
+library(admiral)
 library(dplyr)
 library(lubridate)
 library(stringr)
-library(admiral)
-
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
 data("adsl")
 data("ex")
+
+ex <- convert_blanks_to_na(ex)
 
 # The CDISC pilot data does not contain EXADJ,nor a SUPPEX dataset
 # add a fake EXADJ to demonstrate the derivation for Dose adjustment flag
@@ -41,17 +42,19 @@ ex <- ex %>%
   mutate(EXPLDOS = if_else(EXTRT == "PLACEBO", 0, 54))
 
 
-
-
-
 # ---- Derivations ----
-adsl0 <- adsl %>%
-  select(STUDYID, USUBJID, starts_with("TRT"))
+
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
 
 # Part 1
 # Join ADSL with ex and derive required dates, variables
 adex0 <- ex %>%
-  left_join(adsl0, by = c("STUDYID", "USUBJID")) %>%
+  # Join ADSL with EX (only ADSL vars required for derivations)
+  left_join(
+    adsl %>% select(STUDYID, USUBJID, !!!adsl_vars),
+    by = c("STUDYID", "USUBJID")
+  ) %>%
 
   # Calculate ASTDTM, AENDTM using derive_vars_dtm
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
@@ -67,9 +70,11 @@ adex0 <- ex %>%
     start_date = ASTDTM,
     end_date = AENDTM
   ) %>%
+
+  # Derive analysis end/start date
+  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
+
   mutate(
-    ASTDT = date(ASTDTM),
-    AENDT = date(AENDTM),
     # Compute the cumulative dose
     DOSEO = EXDOSE * EXDURD,
     PDOSEO = EXPLDOS * EXDURD
@@ -85,11 +90,11 @@ adex <- bind_rows(
   adex0 %>% mutate(PARAMCD = "ADJ", AVALC = if_else(!is.na(EXADJ), "Y", NA_character_)),
   adex0 %>% mutate(PARAMCD = "ADJAE", AVALC = if_else(EXADJ == "ADVERSE EVENT", "Y", NA_character_))
 ) %>%
-  mutate(PARCAT1 = "INDIVIDUAL") %>%
+  mutate(PARCAT1 = "INDIVIDUAL")
 
   # Part 3
   # Derive summary parameters
-
+adex <- adex %>%
   # Overall exposure
   call_derivation(
     derivation = derive_params_exposure,
@@ -125,7 +130,7 @@ adex <- bind_rows(
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
-    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
 
   # W2-W24 exposure
@@ -164,7 +169,7 @@ adex <- bind_rows(
       )
     ),
     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
-    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
 
   # Overall Dose intensity and W2-24 dose intensity
@@ -175,8 +180,7 @@ adex <- bind_rows(
       params(set_values_to = vars(PARAMCD = "PDOSINT"), tadm_code = "PDOSE", tpadm_code = "PPDOSE")
     ),
     by_vars = vars(
-      STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-      PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   ) %>%
   # Overall/W2-24 Average daily dose
@@ -195,8 +199,7 @@ adex <- bind_rows(
       )
     ),
     by_vars = vars(
-      STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-      PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
+      STUDYID, USUBJID, !!!adsl_vars, PARCAT1, ASTDTM, ASTDT, AENDTM, AENDT
     )
   )
 
@@ -256,7 +259,14 @@ adex <- adex %>%
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
-    check_type = "warning"
+    check_type = "error"
+  )
+
+# Join all ADSL with EX
+adex <- adex %>%
+
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
   )
 
 # Final Steps, Select final variables and Add labels
@@ -265,4 +275,4 @@ adex <- adex %>%
 
 # ---- Save output ----
 
-save(adex, file = "data/adex.rda", compress = TRUE)
+save(adex, file = "data/adex.rda", compress = "bzip2")

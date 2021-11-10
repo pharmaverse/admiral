@@ -4,7 +4,7 @@
 \alias{call_derivation}
 \title{Call a Single Derivation Multiple Times}
 \usage{
-call_derivation(dataset, derivation, variable_params, ...)
+call_derivation(dataset = NULL, derivation, variable_params, ...)
 }
 \arguments{
 \item{dataset}{The input dataset}
