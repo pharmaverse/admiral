@@ -56,7 +56,7 @@ ae_event <- event_source(
 #' @export
 ae_ser_event <- event_source(
   dataset_name = "adae",
-  filter = TRTEMFL == "Y" & AESER == "Y" ,
+  filter = TRTEMFL == "Y" & AESER == "Y",
   date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "SERIOUS ADVERSE EVENT",

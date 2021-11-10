@@ -180,4 +180,3 @@ adsl <- adsl %>%
 # ---- Save output ----
 
 save(adsl, file = "data/adsl.rda", compress = "bzip2")
-
