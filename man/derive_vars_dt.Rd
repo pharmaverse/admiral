@@ -61,10 +61,9 @@ are defined by the missing parts of the \code{dtc} date (see example below). Thi
 ensures that the non-missing parts of the \code{dtc} date are not changed. For
 example\preformatted{impute_dtc(
   "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-  ),
+  min_dates = vars(ymd_hms("2020-12-06T12:12:12"),
+                   ymd_hms("2020-11-11T11:11:11")),
+
   date_imputation = "first"
 )
 }
@@ -164,7 +163,7 @@ derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AST",
   date_imputation = "first",
-  min_dates = list(TRTSDTM)
+  min_dates = vars(TRTSDTM)
 )
 }
 \author{
