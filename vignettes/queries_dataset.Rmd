@@ -168,7 +168,7 @@ The following variables can be added to `queries_datset` to derive this informat
 These variables are optional and if not populated in `dataset_queries`, the corresponding output variable will not be created:
 
 
-VAR_PREFIX | QUERY_NAME | QUERY_ID | QUERY_SCOPE |QUERY_SCOPE | **Variables created**
+VAR_PREFIX | QUERY_NAME | QUERY_ID | QUERY_SCOPE |QUERY_SCOPE_NUM | **Variables created**
 ------- | ----- | ------ | ----- | ----- | -----
 SMQ01| Query 1 | XXXXXXXX | NARROW | 2 | `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` 
 SMQ02| Query 2 | XXXXXXXX |BROAD  | | `SMQ02NAM`, `SMQ02CD`, `SMQ02SC`
