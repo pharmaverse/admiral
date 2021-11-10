@@ -34,6 +34,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
 library(dplyr)
+library(cdiscpilot)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
