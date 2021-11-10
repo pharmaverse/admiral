@@ -120,6 +120,7 @@ articles:
   - occds
   - bds_finding
   - bds_exposure
+  - bds_tte
   - imputation
   - queries_dataset
   - faq

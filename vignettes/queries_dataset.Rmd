@@ -65,6 +65,8 @@ The combination of these variables will allow the creation of the grouping varia
   
       Each value in `TERM_LEVEL` represents a variable from `dataset` used to define the grouping variables (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
     The function `derive_vars_query()` will check that each value given in `TERM_LEVEL` has a corresponding variable in the input  `dataset` and issue an error otherwise.
+    
+    Different `TERM_LEVEL` variables may be specified within a `VAR_PREFIX`.
 
   + `TERM_NAME` must be a character string. 
   This **must** be populated if `TERM_ID` is missing.
@@ -98,10 +100,8 @@ The combination of these variables will allow the creation of the grouping varia
     For each record in `dataset`, where the variable defined by `TERM_LEVEL` match a term from the `TERM_NAME` (for character variables) or `TERM_ID` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `QUERY_NAME`.
     
     
-    Note: The type (numeric or character) of the variable defined in `TERM_LEVEL` is checked in `dataset`. 
+    Note: The type (numeric or character) of the variable defined in `TERM_LEVEL` is checked in `dataset`. If the variable is a character variable (e.g. `AEDECOD`), it is expected that `TERM_NAME` is populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is expected that `TERM_ID` is populated, otherwise an error is issued.
     
-    **IS THAT CORRECT ??** If the type of the variable is character then `TERM_NAME` will be used to populate `ABCzzNAM`, if it is numeric, `TERM_ID` will be used.
-
 
 ### Example
 
@@ -109,7 +109,7 @@ In this example, 1 standard MedDRA query (`VAR_PREFIX = "SMQ01"`) and 1 customiz
 
   + The standard MedDRA query variable `SMQ01NAM` [`VAR_PREFIX`] will be populated with "Standard Query 1" [`QUERY_NAME`] if any preferred term (`AEDECOD`) [`TERM_LEVEL`] in `dataset` is equal to "AE1" or "AE2" [`TERM_NAME`]
   
-  + The customized query (`CQ02NAM`) [`VAR_PREFIX`] will be populated with "Query 2" [`QUERY_NAME`] if any Low Level Term Code (`AELLTCD`)  [`TERM_LEVEL`] in `dataset` is equal to 10  [`TERM_ID`].
+  + The customized query (`CQ02NAM`) [`VAR_PREFIX`] will be populated with "Query 2" [`QUERY_NAME`] if any Low Level Term Code (`AELLTCD`)  [`TERM_LEVEL`] in `dataset` is equal to 10  [`TERM_ID`] or any preferred term (`AEDECOD`) [`TERM_LEVEL`] in `dataset` is equal to "AE4" [`TERM_NAME`].
   
   **`dataset_queries = ds_query`: **
   
@@ -118,15 +118,16 @@ VAR_PREFIX | QUERY_NAME | TERM_LEVEL | TERM_NAME | TERM_ID |
 SMQ01| Standard Query 1 | AEDECOD | AE1 | 
 SMQ01| Standard Query 1 | AEDECOD | AE2 | 
 CQ02| Query 2 | AELLTCD | | 10
+CQ02| Query 2 | AEDECOD | AE4| 
 
   **`dataset = ae`: **
   
 USUBJID | AEDECOD | AELLTCD 
 ------- | ----- | ------ 
 0001 | AE1 | 101 | 
+0001 | AE3 | 10| | 
 0001 | AE4 | 120 | 
 0001 | AE5 | 130 |
-0001 | AE3 | 10| | 
 
 
   **output dataset from `derive_vars_query(dataset = ae, dataset_queries = ds_query)`:**
@@ -134,12 +135,12 @@ USUBJID | AEDECOD | AELLTCD
 USUBJID | AEDECOD | AELLTCD | SMQ01NAM |CQ02NAM
 ------- | ----- | ------ | ----- | ----- 
 0001 | AE1 | 101 | Standard Query 1 |
-0001 | AE4 | 120 |  |
-0001 | AE5 | 130 |  |
 0001 | AE3 | 10| | Query 2
+0001 | AE4 | 120 |  | Query 2
+0001 | AE5 | 130 |  |
 
 
-  Subject 0001 has 1 event meeting the Standard Query 1 criteria (`AEDECOD = "AE1"`) and 1 event meeting the customized query (`AELLTCD = 10)`. 
+  Subject 0001 has 1 event meeting the Standard Query 1 criteria (`AEDECOD = "AE1"`) and 2 events meeting the customized query (`AELLTCD = 10` and `AEDECOD = "AE4"`). 
 
 
 ## Optional Content
