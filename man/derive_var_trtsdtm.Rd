@@ -49,6 +49,7 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data("ex")
 data("dm")
 

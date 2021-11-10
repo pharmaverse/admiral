@@ -1,3 +1,4 @@
+library(cdiscpilot)
 data(ae)
 data(vs)
 
