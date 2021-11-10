@@ -77,13 +77,16 @@ ex <- derive_vars_suppqual(ex, suppex)
 Please note, the CDISC pilot did not include a `SUPPEX` dataset and therefore this
 join is not demonstrated.
 
-At this step, it may be useful to join `ADSL` to your `EX` domain as well:
+At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only the `ADSL` variables used for derivations are selected at this step. The rest of the relevant `ADSL` would be added later.
 
 
 ```{r eval=TRUE}
+
+adsl_vars<-vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM )
+
 adex <- left_join(
   ex,
-  select(adsl, STUDYID, USUBJID, starts_with("TRT")),
+  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
   by = c("STUDYID", "USUBJID")
 )
 ```
@@ -92,7 +95,7 @@ adex <- left_join(
 dataset_vignette(adex, 
                  display_vars = vars(USUBJID, EXTRT, EXDOSE,EXDOSFRQ,
                                      VISIT,EXSTDTC , EXENDTC ,
-                                     TRT01A,    TRTSDTM,   TRTEDTM))
+                                         TRTSDTM,   TRTEDTM))
 ```
 
 The CDISC pilot `EX` domain data does not contain a dose adjustment flag or 
@@ -324,7 +327,7 @@ For example, to calculate the total dose by subject and treatment,
 ```{r eval=TRUE, echo=TRUE}
 adex <- derive_params_exposure(
   adex,
-  by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT),
+  by_vars = vars(STUDYID, USUBJID, !!!adsl_vars),
   input_code = "DOSE",
   analysis_var = AVAL,
   set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
@@ -389,7 +392,7 @@ adex <- adex %>%
         summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
       )
     ),
-    by_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A, TRTSDTM, TRTEDTM, TRTSDT, TRTEDT)
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   )
 
 count(adex, PARAMCD, PARCAT1)
@@ -412,7 +415,7 @@ is created with the dose intensity calculation.
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
   derive_param_doseint(
-    by_vars = vars(USUBJID),
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars),
     set_values_to = vars(PARAMCD = "TNDOSINT"),
     tadm_code = "TDOSE",
     tpadm_code = "TPDOSE"
@@ -521,7 +524,7 @@ adex <- derive_obs_number(
   adex,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
-  order = vars(PARAMN, ASTDT),
+  order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
   check_type = "error"
 )
 
@@ -532,6 +535,17 @@ dataset_vignette(adex,
                  display_vars = vars(USUBJID,VISIT, PARCAT1,PARAMCD,  AVAL, ASTDT,  ASEQ))
 ```
 
+## Add the `ADSL` variables  {#adsl_vars}
+
+If needed, the other `ADSL` variables can now be added:
+
+```{r eval=TRUE, echo=TRUE}
+adex <- adex %>%
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
+
+```
 # Example Scripts {#example}
 
 ADaM | Sample Code
