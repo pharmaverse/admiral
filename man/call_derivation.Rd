@@ -4,7 +4,7 @@
 \alias{call_derivation}
 \title{Call a Single Derivation Multiple Times}
 \usage{
-call_derivation(dataset, derivation, variable_params, ...)
+call_derivation(dataset = NULL, derivation, variable_params, ...)
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -45,8 +45,8 @@ call_derivation(
     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
   ),
-  min_dates = list(TRTSDT),
-  max_dates = list(TRTEDT)
+  min_dates = vars(TRTSDT),
+  max_dates = vars(TRTEDT)
 )
 
 ## The above call using `call_derivation()` is equivalent to the following
@@ -55,15 +55,15 @@ adae \%>\%
     new_vars_prefix = "AST",
     dtc = AESTDTC,
     date_imputation = "first",
-    min_dates = list(TRTSDT),
-    max_dates = list(TRTEDT)
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
   ) \%>\%
   derive_vars_dt(
     new_vars_prefix = "AEN",
     dtc = AEENDTC,
     date_imputation = "last",
-    min_dates = list(TRTSDT),
-    max_dates = list(TRTEDT)
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
   )
 }
 \seealso{
