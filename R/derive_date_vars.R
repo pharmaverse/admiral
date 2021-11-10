@@ -46,7 +46,7 @@
 #' ```
 #' impute_dtc(
 #'   "2020-11",
-#'   min_dates = vars(
+#'   min_dates = list(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
@@ -136,7 +136,7 @@
 #' # minimum dates
 #' impute_dtc(
 #'   "2020-12",
-#'   min_dates = vars(
+#'   min_dates = list(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
 #'   ),
@@ -601,7 +601,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
-#' Default: can be set to either "auto", "date" or "both"
+#' One of "auto", "date" or "both"
+#'
+#' Default: "auto"
 #'
 #' @inheritParams impute_dtc
 #'
