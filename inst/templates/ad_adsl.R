@@ -161,6 +161,7 @@ lb_date <- lstalvdt_source(
 adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
 
 adsl <- adsl %>%
+
   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 
   # Groupings, populations and others variables
