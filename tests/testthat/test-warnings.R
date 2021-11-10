@@ -1,4 +1,4 @@
-context("test-warnings")
+library(cdiscpilot)
 
 test_that("a warning is issued when a variable to be derived already exists in the input dataset", {
   data(dm)
