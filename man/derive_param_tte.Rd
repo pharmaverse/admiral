@@ -170,7 +170,7 @@ death <- event_source(
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to = vars(
-    EVENTDESC = "DEATH",
+    EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
   )
@@ -180,7 +180,7 @@ end_of_study <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
   set_values_to = vars(
-    EVENTDESC = "END OF STUDY DATE",
+    EVNTDESC = "END OF STUDY DATE",
     SRCDOM = "ADSL",
     SRCVAR = "EOSDT"
   )
@@ -219,7 +219,7 @@ ttae <- event_source(
   dataset_name = "ae",
   date = AESTDTC,
   set_values_to = vars(
-    EVENTDESC = "AE",
+    EVNTDESC = "AE",
     SRCDOM = "AE",
     SRCVAR = "AESTDTC",
     SRCSEQ = AESEQ
@@ -230,7 +230,7 @@ eos <- censor_source(
   dataset_name = "adsl",
   date = EOSDT,
   set_values_to = vars(
-    EVENTDESC = "END OF STUDY",
+    EVNTDESC = "END OF STUDY",
     SRCDOM = "ADSL",
     SRCVAR = "EOSDT"
   )
