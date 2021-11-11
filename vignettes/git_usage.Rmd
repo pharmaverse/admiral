@@ -38,7 +38,7 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 
 -	Checkout the devel branch: `git checkout devel`  
 -	Pull the latest changes from GitHub: `git pull`  
--	Create a new branch off the’ devel branch and switch to it: `git checkout -b <new_branch_name>`
+-	Create a new branch off the devel branch and switch to it: `git checkout -b <new_branch_name>`
 
 **Using code from unmerged branches**  
 -	Checkout the unmerged branch you want to use: `git checkout <unmerged_branch>`  
@@ -54,7 +54,7 @@ When committing, prefix the message with the issue number and add a meaningful m
 Once all changes are committed, push the new branch to GitHub:  
 `git push -u origin <new_branch_name>`  
   
-In GitHub, under “Pull request”, the user has to ‘Compare and pull request’. The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge. All committed changes are then available for review.
+In GitHub, under "Pull request", the user has to "Compare and pull request". The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge. All committed changes are then available for review.
 
 ### Reviewing/Closing an Issue
 

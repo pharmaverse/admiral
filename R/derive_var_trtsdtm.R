@@ -11,7 +11,7 @@
 #'   The variables `EXSTDTC`, `EXSEQ`, and those specified by the `filter_ex`
 #'   parameter are expected.
 #'
-#' @param filter_ex Fiter condition for the ex dataset
+#' @param filter_ex Filter condition for the ex dataset
 #'
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.

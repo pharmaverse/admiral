@@ -14,7 +14,7 @@ is_valid_time_entry(arg)
 }
 \description{
 Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-or as a keyword: "FISRT", "LAST"
+or as a keyword: "FIRST", "LAST"
 }
 \examples{
 assertthat::assert_that(is_valid_time_entry("23:59:59"))

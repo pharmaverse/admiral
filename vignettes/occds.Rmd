@@ -39,7 +39,7 @@ ADCM, ADMH, ADDV, etc.
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
 * [Derive Severity, Causality, and Toxicity Grade](#severity)
-* [Derive Treatement Emergent Flag](#trtfag)
+* [Derive Treatment Emergent Flag](#trtfag)
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
 

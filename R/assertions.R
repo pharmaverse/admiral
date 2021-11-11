@@ -1041,7 +1041,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
-#' or as a keyword: "FISRT", "MID", "LAST"
+#' or as a keyword: "FIRST", "MID", "LAST"
 #'
 #' @param arg The argument to check
 #'
@@ -1075,7 +1075,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-#' or as a keyword: "FISRT", "LAST"
+#' or as a keyword: "FIRST", "LAST"
 #'
 #' @param arg The argument to check
 #'

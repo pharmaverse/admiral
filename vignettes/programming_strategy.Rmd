@@ -413,7 +413,7 @@ The documentation will be updated at:
 #'
 #' @description
 #'*Deprecated*, please use `new_fun()` instead.
-#' description of the function in plain english
+#' description of the function in plain English
 ``` 
 
 + the `@param` level for a parameter.

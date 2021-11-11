@@ -158,7 +158,7 @@ impute_dtc <- function(dtc,
     # check input for date_imputation
     assert_that(is_valid_date_entry(date_imputation))
 
-    # Specific setup for FISRT/MID/LAST
+    # Specific setup for FIRST/MID/LAST
     # make keywords case-insensitive
     date_imputation <- str_to_upper(date_imputation)
     if (date_imputation %in% c("FIRST", "MID", "LAST")) {

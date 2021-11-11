@@ -222,7 +222,7 @@ head(distinct(adex, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO))
 
 The first set of exposure records to create will be records mapped 1:1 to an
 existing collected exposure record in SDTM.  For these records, the `AVAL` or
-`AVALC` would be calculated using columns that exist on the data and no summarising
+`AVALC` would be calculated using columns that exist on the data and no summarizing
 of records would be necessary.
 
 These records may be used for input into summary records or be used individually

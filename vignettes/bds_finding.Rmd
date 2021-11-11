@@ -171,7 +171,7 @@ etc., a lookup can be created to join to the source data.
 For example, when creating `advs`, a lookup based on the SDTM `--TESTCD` value 
 may be created:
 
-VSTESTCD | PARAMCD | PARAM | PARAMN | PARCAT1 | PARCAT1N
+`VSTESTCD` | `PARAMCD` | `PARAM` | `PARAMN` | `PARCAT1` | `PARCAT1N`
 --------- | --------- | -------- | ------- | --------- | ----------
 HEIGHT | HEIGHT | Height (cm) | 1 | Subject Characteristic | 1
 WEIGHT | WEIGHT | Weight (kg) | 2 | Subject Characteristic | 1
@@ -604,9 +604,9 @@ record and what computations must be done with the new records.
 
 Sample Code | Description 
 ----------- | ------------------------------------------------------------------
-ad_advs.R | Create End of Treatment based on a subset of rows, for each USUBJID, PARAMCD
-ad_advs.R | Derive an Average Record (e.g. Triplicates) for each USUBJID, PARAMCD, and timepoint.
-ad_advs.R | Derive a new PARAMCD based on existing PARAMCDs (MAP, based on Systolic and Diastolic BP collected at a particular timepoint.)
+ad_advs.R | Create End of Treatment based on a subset of rows, for each `USUBJID`, `PARAMCD`
+ad_advs.R | Derive an Average Record (e.g. Triplicates) for each `USUBJID`, `PARAMCD`, and timepoint.
+ad_advs.R | Derive a new `PARAMCD` based on existing `PARAMCD`s (MAP, based on Systolic and Diastolic BP collected at a particular timepoint.)
 
 Example 1 (Creating a new record):
 
