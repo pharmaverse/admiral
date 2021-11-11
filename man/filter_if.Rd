@@ -15,7 +15,9 @@ filter_if(dataset, filter)
 Filters the input dataset if the provided expression is not \code{NULL}
 }
 \examples{
+library(cdiscpilot)
 data(vs)
+
 admiral:::filter_if(vs, rlang::quo(NULL))
 admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 }

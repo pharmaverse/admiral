@@ -60,6 +60,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data("vs")
 
 vs \%>\%

@@ -53,8 +53,9 @@ data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
-library(dplyr)
 library(admiral)
+library(dplyr)
+library(cdiscpilot)
 library(lubridate)
 library(stringr)
 

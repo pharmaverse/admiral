@@ -1,9 +1,9 @@
 ---
-title: "Creating an Exposure (BDS) ADaM"
+title: "Creating a BDS Exposure ADaM"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating an Exposure (BDS) ADaM}
+  %\VignetteIndexEntry{Creating a BDS Exposure ADaM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -52,11 +52,12 @@ data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
 
 ```{r message=FALSE}
+library(admiral)
 library(dplyr)
+library(cdiscpilot)
 library(lubridate)
 library(stringr)
 library(tibble)
-library(admiral)
 
 data("adsl")
 data("ex")
@@ -146,8 +147,8 @@ adex <- select(adex, -ASTDTF, -AENDTF)
 ```
 
 
-This next examples demonstrates the datetime imputation features available
-in the `derive_vars_dtm()` function where the time is imputed as "00:00:00":
+The next examples demonstrates the datetime imputation features available
+in the `derive_vars_dtm()` function, where the time is imputed as "00:00:00":
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- derive_vars_dtm(
