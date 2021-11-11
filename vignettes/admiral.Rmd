@@ -23,7 +23,7 @@ processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following script which creates a (very simple) ADSL dataset.
 
-```r
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(lubridate)
 library(admiral)
@@ -32,15 +32,21 @@ library(admiral)
 data("dm")
 data("ds")
 data("ex")
+```
 
+```{r, eval=TRUE}
 # derive treatment variables
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  mutate(TRTSDT = date(TRTSDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
-  mutate(TRTEDT = date(TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTEDTM)) %>%
   derive_var_trtdurd()
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl)
 ```
 
 # Derivations
@@ -83,22 +89,28 @@ input and return a vector. These function can be used in expressions like
 `convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
 example below:
 
-```r
-# derive treatment variables
+```{r, eval=TRUE}
+# keep final lab visit records
+ds_final_lab_visit <- ds %>% 
+  filter(DSDECOD == "FINAL LAB VISIT")
+
+# derive treatment variables  
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  mutate(TRTSDT = date(TRTSDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
-  mutate(TRTEDT = date(TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTEDTM)) %>%
   derive_var_trtdurd() %>%
   # derive final lab visit date
-  left_join(ds %>% 
-              filter(DSDECOD == "FINAL LAB VISIT") %>%
+  left_join(ds_final_lab_visit %>% 
               transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC)),
             by = "USUBJID")
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl)
+```
 # Parameters
 
 For parameters which expect variable names or expressions of variable names, 
