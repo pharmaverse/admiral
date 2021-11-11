@@ -139,8 +139,6 @@ NULL
 #'
 #' @export
 #'
-#' @seealso [derive_agegrp_fda()] [derive_agegrp_ema()]
-#'
 #' @examples
 #'
 #' library(dplyr, warn.conflicts = FALSE)
@@ -149,10 +147,10 @@ NULL
 #'                    AGEU = c("days", "months", "years", "weeks", "years"))
 #'
 #' data %>%
-#'      derive_var_age_years(dataset, AGE, new_var = AAGE)
+#'      derive_var_age_years(., AGE, new_var = AAGE)
 #'
 #' data.frame(AGE = c(12, 24, 36, 48)) %>%
-#'  derive_var_age_years(dataset, AGE, age_unit = "months", new_var = AAGE)
+#'  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 #'
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 

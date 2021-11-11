@@ -40,14 +40,11 @@ data <- data.frame(AGE = c(27, 24, 3, 4, 1),
                    AGEU = c("days", "months", "years", "weeks", "years"))
 
 data \%>\%
-     derive_var_age_years(dataset, AGE, new_var = AAGE)
+     derive_var_age_years(., AGE, new_var = AAGE)
 
 data.frame(AGE = c(12, 24, 36, 48)) \%>\%
- derive_var_age_years(dataset, AGE, age_unit = "months", new_var = AAGE)
+ derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 
-}
-\seealso{
-\code{\link[=derive_agegrp_fda]{derive_agegrp_fda()}} \code{\link[=derive_agegrp_ema]{derive_agegrp_ema()}}
 }
 \author{
 Michael Thorpe
