@@ -2,7 +2,7 @@
 #'
 #' Add the last known alive date (`LSTALVDT`) to the dataset.
 #'
-#' @param dataset Input dataset
+#' @param dataset_name Input dataset
 #'
 #'   The `USUBJID` variable is expected.
 #'
@@ -52,21 +52,21 @@
 #' data("adsl")
 #'
 #' ae_start <- lstalvdt_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   date = AESTDTC,
 #'   date_imputation = "first"
 #' )
 #' ae_end <- lstalvdt_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   date = AEENDTC,
 #'   date_imputation = "first"
 #' )
 #' lb_date <- lstalvdt_source(
-#'   dataset = lb,
+#'   dataset_name = lb,
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10
 #' )
-#' adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
+#' adsl_date <- lstalvdt_source(dataset_name = adsl, date = TRTEDT)
 #'
 #' dm %>%
 #'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
@@ -74,7 +74,7 @@
 #'
 #' # derive last alive date and traceability variables
 #' ae_start <- lstalvdt_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   date = AESTDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
@@ -85,7 +85,7 @@
 #' )
 #'
 #' ae_end <- lstalvdt_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
@@ -95,7 +95,7 @@
 #'   )
 #' )
 #' lb_date <- lstalvdt_source(
-#'   dataset = lb,
+#'   dataset_name = lb,
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
@@ -106,7 +106,7 @@
 #' )
 #'
 #' adsl_date <- lstalvdt_source(
-#'   dataset = adsl,
+#'   dataset_name = adsl,
 #'   date = TRTEDT,
 #'   traceability_vars = vars(
 #'     LALVDOM = "ADSL",
@@ -118,14 +118,30 @@
 #' dm %>%
 #'   derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
-derive_var_lstalvdt <- function(dataset,
+derive_var_lstalvdt <- function(dataset_name,
+                                source_datasets,
+                                event_conditions,
                                 ...,
                                 subject_keys = vars(STUDYID, USUBJID)) {
-  assert_data_frame(dataset)
+  assert_data_frame(dataset_name)
   assert_vars(subject_keys)
 
   sources <- list(...)
   assert_list_of(sources, "lstalvdt_source")
+
+  source_names <- names(source_datasets)
+  assert_list_element(
+    list = event_conditions,
+    element = "dataset_name",
+    condition = dataset_name %in% source_names,
+    source_names = source_names,
+    message_text = paste0(
+      "The dataset names must be included in the list specified for the ",
+      "`source_datasets` parameter.\n",
+      "Following names were provided by `source_datasets`:\n",
+      enumerate(source_names, quote_fun = squote)
+    )
+  )
 
   add_data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
@@ -138,7 +154,7 @@ derive_var_lstalvdt <- function(dataset,
       )
     }
     date <- quo_get_expr(sources[[i]]$date)
-    add_data[[i]] <- sources[[i]]$dataset %>%
+    add_data[[i]] <- sources[[i]]$dataset_name %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = vars(!!date),
@@ -183,12 +199,12 @@ derive_var_lstalvdt <- function(dataset,
       check_type = "none"
     )
 
-  left_join(dataset, all_data, by = vars2chr(subject_keys))
+  left_join(dataset_name, all_data, by = vars2chr(subject_keys))
 }
 
 #' Create an `lstalvdt_source` object
 #'
-#' @param dataset A data.frame containing a source dataset.
+#' @param dataset_name A data.frame containing a source dataset.
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
@@ -212,7 +228,7 @@ derive_var_lstalvdt <- function(dataset,
 #' @export
 #'
 #' @return An object of class "lstalvdt_source".
-lstalvdt_source <- function(dataset,
+lstalvdt_source <- function(dataset_name,
                             filter = NULL,
                             date,
                             date_imputation = NULL,
@@ -230,7 +246,7 @@ lstalvdt_source <- function(dataset,
     assert_that(is_valid_date_entry(date_imputation))
   }
   out <- list(
-    dataset = assert_data_frame(dataset),
+    dataset_name = assert_data_frame(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,

@@ -2,7 +2,7 @@
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
-#' @param dataset Input dataset. `USUBJID` is an expected column.
+#' @param dataset_name Input dataset. `USUBJID` is an expected column.
 #' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
 #'
 #' @details
@@ -18,7 +18,7 @@
 #' Shimeng Huang
 #' Samia Kabi
 #'
-#' @return The input dataset with `DTHCAUS` variable added.
+#' @return The input dataset_name with `DTHCAUS` variable added.
 #'
 #' @export
 #'
@@ -43,7 +43,7 @@
 #'
 #' # Derive `DTHCAUS` only
 #' src_ae <- dthcaus_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   filter = AEOUT == "FATAL",
 #'   date = AEDTHDTC,
 #'   mode = "first",
@@ -51,7 +51,7 @@
 #' )
 #'
 #' src_ds <- dthcaus_source(
-#'   dataset = ds,
+#'   dataset_name = ds,
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
 #'   date = DSSTDTC,
 #'   mode = "first",
@@ -62,7 +62,7 @@
 #'
 #' # Derive `DTHCAUS` and add traceability variables
 #' src_ae <- dthcaus_source(
-#'   dataset = ae,
+#'   dataset_name = ae,
 #'   filter = AEOUT == "FATAL",
 #'   date = AEDTHDTC,
 #'   mode = "first",
@@ -71,7 +71,7 @@
 #' )
 #'
 #' src_ds <- dthcaus_source(
-#'   dataset = ds,
+#'   dataset_name = ds,
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
 #'   date = DSSTDTC,
 #'   mode = "first",
@@ -80,21 +80,39 @@
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
-derive_var_dthcaus <- function(dataset, ...) {
-  assert_data_frame(dataset)
+derive_var_dthcaus <- function(dataset_name,
+                               source_datasets,
+                               event_conditions,
+                               ...) {
+  assert_data_frame(dataset_name)
   sources <- list(...)
   assert_list_of(sources, "dthcaus_source")
 
-  warn_if_vars_exist(dataset, "DTHCAUS")
+  source_names <- names(source_datasets)
+  assert_list_element(
+    list = event_conditions,
+    element = "dataset_name",
+    condition = dataset_name %in% source_names,
+    source_names = source_names,
+    message_text = paste0(
+      "The dataset names must be included in the list specified for the ",
+      "`source_datasets` parameter.\n",
+      "Following names were provided by `source_datasets`:\n",
+      enumerate(source_names, quote_fun = squote)
+    )
+  )
+
+
+  warn_if_vars_exist(dataset_name, "DTHCAUS")
 
   # process each source
   add_data <- vector("list", length(sources))
   for (ii in seq_along(sources)) {
     if (!quo_is_null(sources[[ii]]$filter)) {
-      add_data[[ii]] <- sources[[ii]]$dataset %>%
+      add_data[[ii]] <- sources[[ii]]$dataset_name %>%
         filter(!!sources[[ii]]$filter)
     } else {
-      add_data[[ii]] <- sources[[ii]]$dataset
+      add_data[[ii]] <- sources[[ii]]$dataset_name
     }
 
     # if several death records, use the first/last according to 'mode'
@@ -123,7 +141,7 @@ derive_var_dthcaus <- function(dataset, ...) {
       )
     }
     if (!is.null(sources[[ii]]$traceability)) {
-      warn_if_vars_exist(dataset, names(sources[[ii]]$traceability))
+      warn_if_vars_exist(dataset_name, names(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
           USUBJID,
@@ -147,12 +165,12 @@ derive_var_dthcaus <- function(dataset, ...) {
     ) %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = "USUBJID")
+  left_join(dataset_name, dataset_add, by = "USUBJID")
 }
 
 #' Create an `dthcaus_source` object
 #'
-#' @param dataset A data.frame containing a source dataset.
+#' @param dataset_name A data.frame containing a source dataset.
 #' @param filter An expression used for filtering `dataset`.
 #' @param date A character vector to be used for sorting `dataset`.
 #' @param mode One of `"first"` or `"last"`.
@@ -182,7 +200,7 @@ derive_var_dthcaus <- function(dataset, ...) {
 #' @export
 #'
 #' @return An object of class "dthcaus_source".
-dthcaus_source <- function(dataset,
+dthcaus_source <- function(dataset_name,
                            filter,
                            date,
                            mode = "first",
@@ -205,7 +223,7 @@ dthcaus_source <- function(dataset,
   ### END DEPRECIATION
 
   out <- list(
-    dataset = assert_data_frame(dataset),
+    dataset_name = assert_data_frame(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
