@@ -18,10 +18,10 @@ Filters the input dataset if the provided expression is not \code{NULL}
 library(cdiscpilot)
 data(vs)
 
-admiral:::filter_if(vs, rlang::quo(NULL))
-admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+filter_if(vs, rlang::quo(NULL))
+filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 }
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\keyword{user_utility}
