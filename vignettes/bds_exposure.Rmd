@@ -542,7 +542,7 @@ If needed, the other `ADSL` variables can now be added:
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+  left_join(select(adsl, !!!negate_vars(adsl_vars)),
             by = c("STUDYID", "USUBJID")
   )
 

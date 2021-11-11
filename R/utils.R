@@ -81,10 +81,12 @@ squote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
-#' admiral:::vars2chr(vars(USUBJID, AVAL))
+#' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
     map_chr(quosures, ~as_string(quo_get_expr(.x))),
@@ -205,16 +207,17 @@ quo_c <- function(...) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
-#' admiral:::negate_vars(vars(USUBJID, STUDYID))
+#' negate_vars(vars(USUBJID, STUDYID))
 negate_vars <- function(vars = NULL) {
   assert_vars(vars, optional = TRUE)
   if (is.null(vars)) {
     NULL
-  }
-  else {
+  } else {
     lapply(vars, function(var) expr(-!!quo_get_expr(var)))
   }
 }
@@ -268,14 +271,16 @@ what_is_it <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
 #' library(cdiscpilot)
 #' data(vs)
 #'
-#' admiral:::filter_if(vs, rlang::quo(NULL))
-#' admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+#' filter_if(vs, rlang::quo(NULL))
+#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)

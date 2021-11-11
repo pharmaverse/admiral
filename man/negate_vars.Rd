@@ -17,9 +17,9 @@ This is useful if a list of variables should be removed from a dataset,
 e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 }
 \examples{
-admiral:::negate_vars(vars(USUBJID, STUDYID))
+negate_vars(vars(USUBJID, STUDYID))
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\keyword{user_utility}

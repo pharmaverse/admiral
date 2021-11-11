@@ -60,9 +60,9 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-A logical value
+One of "auto", "date" or "both"
 
-Default: TRUE}
+Default: "auto"}
 
 \item{min_dates}{Minimum dates
 
@@ -74,9 +74,10 @@ are defined by the missing parts of the \code{dtc} date (see example below). Thi
 ensures that the non-missing parts of the \code{dtc} date are not changed. For
 example\preformatted{impute_dtc(
   "2020-11",
-  min_dates = vars(ymd_hms("2020-12-06T12:12:12"),
-                   ymd_hms("2020-11-11T11:11:11")),
-
+  min_dates = list(
+    ymd_hms("2020-12-06T12:12:12"),
+    ymd_hms("2020-11-11T11:11:11")
+   ),
   date_imputation = "first"
 )
 }
