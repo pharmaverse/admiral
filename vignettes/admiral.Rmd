@@ -39,9 +39,8 @@ data("ex")
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_vars_dtm_to_dt(vars(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
-  derive_vars_dtm_to_dt(vars(TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd()
 ```
 
@@ -90,22 +89,20 @@ input and return a vector. These function can be used in expressions like
 example below:
 
 ```{r, eval=TRUE}
-# keep final lab visit records
+# derive final lab visit date
 ds_final_lab_visit <- ds %>% 
-  filter(DSDECOD == "FINAL LAB VISIT")
+  filter(DSDECOD == "FINAL LAB VISIT") %>% 
+  transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
 
 # derive treatment variables  
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_vars_dtm_to_dt(vars(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
-  derive_vars_dtm_to_dt(vars(TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd() %>%
-  # derive final lab visit date
-  left_join(ds_final_lab_visit %>% 
-              transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC)),
-            by = "USUBJID")
+  # merge on final lab visit date
+  left_join(ds_final_lab_visit, by = "USUBJID")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
