@@ -122,6 +122,7 @@ articles:
   - bds_exposure
   - bds_tte
   - imputation
+  - queries_dataset
   - faq
 
 - title: Developer Guides
