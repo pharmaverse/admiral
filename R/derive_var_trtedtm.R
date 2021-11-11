@@ -63,7 +63,7 @@ derive_var_trtedtm <- function(dataset,
       mode = "last"
     )
 
-  add$TRTEDTM <- convert_dtc_to_dtm(
+  add[["TRTEDTM"]] <- convert_dtc_to_dtm(
     dtc = add$EXENDTC,
     date_imputation = "last",
     time_imputation = "last"

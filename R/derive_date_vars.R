@@ -465,7 +465,9 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @inheritParams impute_dtc
 #'
-#' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
+#' @return
+#' The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'`
+#' if requested) added.
 #'
 #' @details
 #' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,

@@ -62,7 +62,7 @@ derive_var_trtsdtm <- function(dataset,
       mode = "first"
     )
 
-  add$TRTSDTM <- convert_dtc_to_dtm(
+  add[["TRTSDTM"]] <- convert_dtc_to_dtm(
     dtc = add$EXSTDTC,
     date_imputation = "first",
     time_imputation = "first"
