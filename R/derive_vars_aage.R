@@ -113,7 +113,7 @@ NULL
 #' Baseline Measure Information).
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#'
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' dm %>%
@@ -153,7 +153,7 @@ derive_agegr_fda <- function(dataset, age_var, new_var) {
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#'
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' dm %>%

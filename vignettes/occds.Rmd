@@ -48,9 +48,10 @@ ADCM, ADMH, ADDV, etc.
 Let's start by attaching packages and loading some example datasets:
 
 ```{r, message=FALSE, warning=FALSE}
-library(dplyr)
-library(lubridate)
 library(admiral)
+library(dplyr)
+library(cdiscpilot)
+library(lubridate)
 
 data(ae)
 data(adsl)
@@ -96,14 +97,14 @@ adae <- adae %>%
     new_vars_prefix = "AST",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = list(TRTSDT)
+    min_dates = vars(TRTSDT)
   ) %>% 
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = list(DTHDT, EOSDT)
+    max_dates = vars(DTHDT, EOSDT)
   ) %>% 
   mutate(
     ASTDT = date(ASTDTM),

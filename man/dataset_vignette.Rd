@@ -31,8 +31,9 @@ Output a dataset in a vignette with the pre-specified admiral format.
 library(admiral)
 library(DT)
 library(dplyr)
-
+library(cdiscpilot)
 data("dm")
+
 dataset_vignette(dm)
 dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
 }

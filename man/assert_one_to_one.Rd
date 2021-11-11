@@ -19,7 +19,7 @@ The variables specified for \code{vars1} and \code{vars2} are expected.}
 Checks if there is a one to one mapping between two lists of variables.
 }
 \examples{
-data("adsl")
+data(adsl)
 try(
   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 )
