@@ -7,7 +7,7 @@
 \usage{
 derive_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 
-derive_agegr_ema(dataset, age_var, new_var, age_unit = NULL)
+derive_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 }
 \arguments{
 \item{dataset}{Input dataset.}

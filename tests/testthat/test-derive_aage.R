@@ -12,6 +12,34 @@ test_that("duration and unit variable are added", {
 })
 
 
+test_that("derive_var_age_years works as expected", {
+
+  input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60),
+                          AGEU = c("months", "months", "months", "months", "months"))
+
+  expected_output <- mutate(
+    input,
+    AAGE = c(1,2,3,4,5)
+    )
+
+  expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE), expected_output, keys = "AGE")
+
+})
+
+test_that("derive_var_age_years works as expected", {
+
+  input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
+
+  expected_output <- mutate(
+    input,
+    AAGE = c(1,2,3,4,5)
+  )
+
+  expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE, age_unit = "months"),
+                   expected_output, keys = "AGE")
+
+})
+
 test_that("derive_agegr_fda works as expected", {
 
   input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80))
@@ -25,14 +53,16 @@ test_that("derive_agegr_fda works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
+                   keys = "AGE")
 
 })
 
 test_that("derive_agegr_fda works with age_unit missing and multiple units in AGEU", {
 
   input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
-                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months"))
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months",
+                                   "months"))
 
   expected_output <- mutate(
     input,
@@ -43,7 +73,8 @@ test_that("derive_agegr_fda works with age_unit missing and multiple units in AG
     )
   )
 
-  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output,
+                   keys = "AGE")
 
 })
 
@@ -61,7 +92,8 @@ test_that("derive_agegr_ema works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
+                   keys = "AGE")
 
 })
 
@@ -93,7 +125,8 @@ test_that("derive_agegr_ema - works as expected", {
 test_that("derive_agegr_ema works with age_unit missing and multiple units in AGEU (adults)", {
 
   input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
-                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "years"))
+                          AGEU = c("years", "years", "years", "years", "years", "years",
+                                   "months", "years"))
 
   expected_output <- mutate(
     input,
@@ -105,14 +138,16 @@ test_that("derive_agegr_ema works with age_unit missing and multiple units in AG
     )
   )
 
-  expect_dfs_equal(derive_agegr_ema(input, AGE, AGEGR_EXP), expected_output, keys = "AGE")
+  expect_dfs_equal(derive_agegr_ema(input, AGE, new_var = AGEGR_EXP), expected_output,
+                   keys = "AGE")
 
 })
 
 test_that("derive_agegr_ema - works with age_unit missing and multiple units in AGEU (pediatric)", {
 
   input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18, 36, 72, 3),
-                          AGEU = c("years", "years", "years", "years", "years", "years", "months", "months", "weeks"))
+                          AGEU = c("years", "years", "years", "years", "years", "years", "months",
+                                   "months", "weeks"))
 
   expected_output <- mutate(
     input,
@@ -127,7 +162,7 @@ test_that("derive_agegr_ema - works with age_unit missing and multiple units in 
   )
 
   expect_dfs_equal(
-    derive_agegr_ema(input, AGE, AGEGR_EXP),
+    derive_agegr_ema(input, AGE, new_var = AGEGR_EXP),
     expected_output,
     keys = "AGE"
   )
