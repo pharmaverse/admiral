@@ -151,26 +151,26 @@
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "DEATH",
+#'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "DTHDT"
 #'   )
 #' )
 #'
-#' lstalv <- censor_source(
+#' end_of_study <- censor_source(
 #'   dataset_name = "adsl",
-#'   date = LSTALVDT,
+#'   date = EOSDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "LAST KNOWN ALIVE DATE",
+#'     EVNTDESC = "END OF STUDY DATE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
+#'     SRCVAR = "EOSDT"
 #'   )
 #' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
 #'   event_conditions = list(death),
-#'   censor_conditions = list(lstalv),
+#'   censor_conditions = list(end_of_study),
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = vars(
 #'     PARAMCD = "OS",
@@ -200,7 +200,7 @@
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   set_values_to = vars(
-#'     EVENTDESC = "AE",
+#'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
 #'     SRCVAR = "AESTDTC",
 #'     SRCSEQ = AESEQ
@@ -211,7 +211,7 @@
 #'   dataset_name = "adsl",
 #'   date = EOSDT,
 #'   set_values_to = vars(
-#'     EVENTDESC = "END OF STUDY",
+#'     EVNTDESC = "END OF STUDY",
 #'     SRCDOM = "ADSL",
 #'     SRCVAR = "EOSDT"
 #'   )
@@ -488,10 +488,10 @@ filter_date_sources <- function(sources,
 
   if (create_datetime) {
     date_var <- sym("ADTM")
-  }
-  else {
+  } else {
     date_var <- sym("ADT")
   }
+
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
@@ -507,8 +507,7 @@ filter_date_sources <- function(sources,
     if (is.instant(pull(data[[i]], !!date))) {
       if (create_datetime) {
         date_derv <- vars(!!date_var := as_datetime(!!date))
-      }
-      else {
+      } else {
         date_derv <- vars(!!date_var := date(!!date))
       }
     } else {
@@ -520,8 +519,7 @@ filter_date_sources <- function(sources,
             time_imputation = "first"
           )
         )
-      }
-      else {
+      } else {
         date_derv <- vars(
           !!date_var := convert_dtc_to_dt(
             !!date,
@@ -529,6 +527,7 @@ filter_date_sources <- function(sources,
         ))
       }
     }
+
     data[[i]] <- transmute(
       data[[i]],
       !!!by_vars,
@@ -688,6 +687,7 @@ tte_source <- function(dataset_name,
   class(out) <- c("tte_source", "source", "list")
   out
 }
+
 #' Create an `event_source` Object
 #'
 #' The `event_source` object is used to define events as input for the
@@ -716,6 +716,7 @@ event_source <- function(dataset_name,
   class(out) <- c("event_source", class(out))
   out
 }
+
 #' Create an `censor_source` Object
 #'
 #' The `censor_source` object is used to define censorings as input for the
@@ -744,4 +745,51 @@ censor_source <- function(dataset_name,
   )
   class(out) <- c("censor_source", class(out))
   out
+}
+
+#' Print `tte_source` Objects
+#'
+#' @param x A `tte_source` object
+#' @param ... Not used
+#'
+#' @export
+#'
+#' @examples
+#' print(death_event)
+print.tte_source <- function(x, ...) {
+  cat("<tte_source> object\n")
+  cat("dataset_name: \"", x$dataset_name, "\"\n", sep = "")
+  cat("filter:", quo_text(x$filter), "\n")
+  cat("date:", quo_text(x$date), "\n")
+  cat("censor:", x$censor, "\n")
+  cat("set_values_to:\n")
+  for (name in names(x$set_values_to)) {
+    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n", sep = "")
+  }
+}
+
+list_tte_source_objects <- function() {
+  objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
+
+  rows <- lapply(objects, function(obj_name) {
+    obj <- get(obj_name)
+    data.frame(
+      object = obj_name,
+      dataset_name = obj$dataset_name,
+      filter = rlang::quo_text(obj$filter),
+      date = rlang::quo_text(obj$date),
+      censor = obj$censor,
+      set_values_to = paste(
+        paste(
+          names(obj$set_values_to),
+          purrr::map_chr(obj$set_values_to, rlang::quo_text, width = 100),
+          sep = ": "
+        ),
+        collapse = "<br>"
+      ),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  do.call(rbind, rows)
 }

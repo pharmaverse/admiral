@@ -20,6 +20,7 @@
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -282,6 +283,7 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -360,6 +362,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -782,7 +785,9 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
+#'
 #' assert_has_variables(dm, "STUDYID")
 #' \dontrun{
 #' assert_has_variables(dm, "AVAL")
@@ -844,9 +849,9 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' data(advs)
-#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
+#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 #' }
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
@@ -860,16 +865,16 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || units != required_unit) {
+  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
-        param,
+        squote(param),
         " is measured in ",
-        required_unit,
+        squote(required_unit),
         ".\n",
         "In the input dataset it is measured in ",
-        enumerate(units),
+        enumerate(units, quote_fun = squote),
         "."
       )
     )
@@ -881,8 +886,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
 #'
 #' @param dataset A `data.frame`
-#' @param param
-#'   Parameter code to check
+#' @param param Parameter code to check
 #'
 #' @author Stefan Bundfuss
 #'
@@ -895,17 +899,15 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @examples
 #' data(advs)
-#' assert_param_does_not_exist(advs, param = "BSA")
-#' \dontrun{
-#' assert_param_does_not_exist(advs, param = "WEIGHT")
-#' }
+#' assert_param_does_not_exist(advs, param = "HR")
+#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
     abort(
       paste0(
         "The parameter code ",
-        param,
+        squote(param),
         " does already exist in `",
         arg_name(substitute(dataset)),
         "`."
@@ -1545,7 +1547,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @export
 #'
 #' @examples
-#' data("adsl")
+#' data(adsl)
 #' try(
 #'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 #' )

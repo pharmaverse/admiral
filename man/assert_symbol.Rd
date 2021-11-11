@@ -20,6 +20,7 @@ invisibly otherwise.
 Checks if an argument is a symbol
 }
 \examples{
+library(cdiscpilot)
 data(dm)
 
 example_fun <- function(dat, var) {

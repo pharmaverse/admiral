@@ -25,9 +25,9 @@ unit.
 }
 \examples{
 data(advs)
-assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = AVALU)
+assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 \dontrun{
-assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = AVALU)
+assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 }
 }
 \author{

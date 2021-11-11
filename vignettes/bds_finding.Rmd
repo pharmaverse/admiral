@@ -54,8 +54,9 @@ data frames needed may be `vs`, `suppvs`, and `adsl`.
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
 
 ```{r message=FALSE}
-library(dplyr)
 library(admiral)
+library(dplyr)
+library(cdiscpilot)
 library(lubridate)
 library(stringr)
 library(tibble)

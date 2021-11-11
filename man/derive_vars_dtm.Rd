@@ -60,9 +60,9 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-A logical value
+One of "auto", "date" or "both"
 
-Default: TRUE}
+Default: "auto"}
 
 \item{min_dates}{Minimum dates
 
@@ -77,7 +77,7 @@ example\preformatted{impute_dtc(
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
     ymd_hms("2020-11-11T11:11:11")
-  ),
+   ),
   date_imputation = "first"
 )
 }
@@ -95,7 +95,7 @@ cut off date. Only dates which are in the range of possible dates are
 considered.}
 }
 \value{
-the input dataset with the datetime \code{'--DTM'} (and the date/time imputation
+The input dataset with the datetime \code{'--DTM'} (and the date/time imputation
 flag \code{'--DTF'}, \code{'--TMF'}) added.
 }
 \description{
@@ -144,7 +144,7 @@ derive_vars_dtm(
   new_vars_prefix = "AEN",
   date_imputation = "last",
   time_imputation = "last",
-  max_dates = list(DTHDT, DCUTDT)
+  max_dates = vars(DTHDT, DCUTDT)
 )
 }
 \author{
