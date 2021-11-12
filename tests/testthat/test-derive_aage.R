@@ -32,7 +32,7 @@ test_that("derive_var_age_years works as expected", {
 
   expected_output <- mutate(
     input,
-    AAGE = c(1,2,3,4,5)
+    AAGE = c(1, 2, 3, 4, 5)
   )
 
   expect_dfs_equal(derive_var_age_years(input, AGE, new_var = AAGE, age_unit = "months"),
