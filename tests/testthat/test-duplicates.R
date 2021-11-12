@@ -34,5 +34,5 @@ test_that("dataset of duplicate records can be accessed using `get_duplicates_da
     fixed = TRUE
   )
 
-  expect_true(expected_ouput == get_duplicates_dataset())
+  expect_true(all(expected_ouput == get_duplicates_dataset()))
 })
