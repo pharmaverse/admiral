@@ -19,7 +19,7 @@ missing in the input dataset
 Checks if a dataset contains all required variables
 }
 \examples{
-library(cdiscpilot)
+library(admiral.test)
 data(dm)
 
 assert_has_variables(dm, "STUDYID")
