@@ -26,6 +26,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(cdiscpilot)
 #' data(ae)
 #' data(ex_single)
 #'
