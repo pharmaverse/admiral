@@ -78,6 +78,7 @@ equal to the \code{analysis_date} per \code{by_vars} and \code{dataset_seq_var}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data(ae)
 data(ex_single)
 
