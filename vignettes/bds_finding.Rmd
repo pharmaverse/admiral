@@ -229,7 +229,7 @@ param_lookup <- tribble(
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 ```
 
-At this stage, only `PARAMCD` required to perform the derivations. Additional
+At this stage, only `PARAMCD` is required to perform the derivations. Additional
 derived parameters may be added, so only `PARAMCD` is joined to the datasets at
 this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
 will be added when all `PARAMCD` are derived.
@@ -792,7 +792,7 @@ dataset_vignette(advs_ex2,
 
 ### Example 3 (Deriving a new PARAMCD):
 Use function `derive_derived_param` to create a new `PARAMCD`. Below is an
-example of creating `Mean Arterial Pressure` (`PARAMCD`=`MAP`) with an 
+example of creating `Mean Arterial Pressure` (`PARAMCD`=`MAP2`) with an 
 alternative formula.
 
 ```{r eval=TRUE}
