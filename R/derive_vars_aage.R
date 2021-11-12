@@ -312,7 +312,7 @@ derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
     ds,
     !!new_var := cut(
       x = temp_age,
-      breaks = c( - Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
+      breaks = c(-Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
       labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
                  "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"),
       include.lowest = FALSE,
