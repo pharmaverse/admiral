@@ -199,6 +199,7 @@ derive_summary_records <- function(dataset,
   # Summarise the analysis value and bind to the original dataset
   bind_rows(
     dataset,
+    subset_ds %>%
       group_by(!!!by_vars) %>%
       summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
       mutate(!!!set_values_to)
