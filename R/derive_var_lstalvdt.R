@@ -46,7 +46,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data("dm")
 #' data("ae")
 #' data("lb")

@@ -25,8 +25,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Depends: R (>= 3.5)
 Imports:
+    admiral.test,
     assertthat,
-    cdiscpilot,
     dplyr,
     lubridate,
     magrittr,

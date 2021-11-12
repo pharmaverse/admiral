@@ -56,7 +56,7 @@ For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(cdiscpilot)
+library(admiral.test)
 library(lubridate)
 library(stringr)
 library(tibble)

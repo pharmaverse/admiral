@@ -1,4 +1,4 @@
-library(cdiscpilot)
+library(admiral.test)
 
 test_that("an error is thrown if a required variable is missing", {
   data(dm)
