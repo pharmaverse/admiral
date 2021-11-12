@@ -45,3 +45,16 @@ test_that("age in months", {
     425
   )
 })
+
+test_that("age in weeks", {
+  expect_equal(
+    compute_duration(
+      ymd("2020-02-03"),
+      ymd("2020-02-24"),
+      trunc_out = TRUE,
+      out_unit = "weeks",
+      add_one = FALSE
+    ),
+    3
+  )
+})
