@@ -12,7 +12,7 @@ test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter 
       mode = "last",
       flag_filter = AVISIT == "BASELINE"
     ),
-    "The `flag_filter` argument of `derive_extreme_flag()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -28,7 +28,7 @@ test_that("a warning is issued when specifying `dthcaus_source(date_var = )", {
       mode = "first",
       dthcaus = AEDECOD
     ),
-    "The `date_var` argument of `dthcaus_source()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -45,7 +45,7 @@ test_that("a warning is issued when specifying `dthcaus_source(traceabilty_vars 
       dthcaus = AEDECOD,
       traceabilty_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
     ),
-    "The `traceabilty_vars` argument of `dthcaus_source()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -55,7 +55,7 @@ test_that("a warning is issued when specifying `lstalvdt_source(date_var = )", {
 
   expect_warning(
     lstalvdt_source(dataset = adsl, date_var = TRTEDT),
-    "The `date_var` argument of `lstalvdt_source()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -66,7 +66,7 @@ test_that("a warning is issued when using `derive_suppqual_vars()", {
 
   expect_warning(
     derive_suppqual_vars(ae, suppae),
-    "`derive_suppqual_vars()` is deprecated as of admiral 0.3.0",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -87,7 +87,7 @@ test_that("a warning is issued when using `derive_query_vars()", {
 
   expect_warning(
     derive_query_vars(adae, queries),
-    "`derive_query_vars()` is deprecated as of admiral 0.3.0",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -109,7 +109,7 @@ test_that("a warning is issued when using `derive_duration()", {
       add_one = FALSE,
       trunc_out = TRUE
     ),
-    "`derive_duration()` is deprecated as of admiral 0.3.0",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -122,7 +122,7 @@ test_that("a warning is issued when using `derive_aage()", {
 
   expect_warning(
     derive_aage(adsl),
-    "`derive_aage()` is deprecated as of admiral 0.3.0",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -137,7 +137,7 @@ test_that("a warning is issued when specifying `derive_var_ontrtfl(date = )", {
       ref_start_date = TRTSDT,
       ref_end_date = TRTEDT
     ),
-    "The `date` argument of `derive_var_ontrtfl()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -154,7 +154,7 @@ test_that("a warning is issued when specifying `derive_summary_records(filter_ro
       filter_rows = dplyr::n() > 2,
       set_values_to = vars(DTYPE = "AVERAGE")
     ),
-    "The `filter_rows` argument of `derive_summary_records()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
@@ -170,7 +170,7 @@ test_that("an error is thrown when specifying `derive_summary_records(fns = )", 
       filter = dplyr::n() > 2,
       set_values_to = vars(DTYPE = "AVERAGE")
     ),
-    "The `fns` argument of `derive_summary_records()` is deprecated as of admiral 0.3.0.",
+    "deprecated",
     fixed = TRUE
   )
 })
