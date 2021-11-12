@@ -50,6 +50,7 @@ merged to the input dataset. }
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(cdiscpilot)
 data("dm")
 data("ae")
 data("lb")

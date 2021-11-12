@@ -20,6 +20,7 @@
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -282,6 +283,7 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -360,6 +362,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -782,7 +785,9 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
+#'
 #' assert_has_variables(dm, "STUDYID")
 #' \dontrun{
 #' assert_has_variables(dm, "AVAL")
@@ -860,16 +865,16 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || units != required_unit) {
+  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
-        param,
+        squote(param),
         " is measured in ",
-        required_unit,
+        squote(required_unit),
         ".\n",
         "In the input dataset it is measured in ",
-        enumerate(units),
+        enumerate(units, quote_fun = squote),
         "."
       )
     )
@@ -1526,7 +1531,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @export
 #'
 #' @examples
-#' data("adsl")
+#' data(adsl)
 #' try(
 #'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 #' )
