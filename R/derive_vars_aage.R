@@ -115,7 +115,7 @@ derive_aage <- function(dataset,
 #' @name derive_agegr_fda
 NULL
 
-#' Derive Age Group function
+#' Derive Age in Years function
 #'
 #' @details This function is used to convert age variables into years.
 #' These can then be used to create age groups.
@@ -180,11 +180,11 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
                                                             "hours", "minutes", "seconds"))
       ds <- dataset %>%
         mutate(!!new_var := time_length(duration(!!age_var, units = tolower(age_unit)),
-                                        unit= "years"))
+                                        unit = "years"))
     }
   } else {
 
-    unit <- tolower(unique(pull(dataset,!!sym(unit_var))))
+    unit <- tolower(unique(pull(dataset, !!sym(unit_var))))
     assert_character_vector(unit,
                             values = c(NA, "years", "months", "weeks", "days",
                                        "hours", "minutes", "seconds"))
@@ -193,7 +193,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 
       if (length(unit) > 1){
 
-        msg <-paste(
+        msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "and contatins multiple values but the argument `age_unit`
           has been specified with a single different value.",
@@ -205,7 +205,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 
       else if (unit != tolower(age_unit)) {
 
-        msg <-paste(
+        msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
@@ -215,9 +215,9 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 
     }
 
-    average_durations <- c(seconds = 365.25*24*60*60,
-                           minutes = 365.25*24*60,
-                           hours = 365.25*24,
+    average_durations <- c(seconds = 365.25 * 24 * 60 * 60,
+                           minutes = 365.25 * 24 * 60,
+                           hours = 365.25 * 24,
                            days = 365.25,
                            weeks = 365.25/7,
                            months = 12,
