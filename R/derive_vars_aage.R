@@ -91,31 +91,7 @@ derive_aage <- function(dataset,
   )
 }
 
-#' Derive Age Groups
-#'
-#' Functions for deriving standardized age groups.
-#'
-#' @param dataset Input dataset.
-#' @param age_var AGE variable.
-#' @param age_unit AGE unit variable.
-#'
-#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
-#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
-#'
-#'   Default: NULL
-#'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
-#'
-#' @param new_var New variable to be created.
-#'
-#' @return `dataset` with new column `new_var` of class factor.
-#'
-#' @author Ondrej Slama
-#'
-#' @name derive_agegr_fda
-NULL
-
-#' Derive Age in Years function
+#' Derive Age in Years
 #'
 #' @details This function is used to convert age variables into years.
 #' These can then be used to create age groups.
@@ -191,7 +167,7 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 
     if (!is.null(age_unit)) {
 
-      if (length(unit) > 1){
+      if (length(unit) > 1) {
 
         msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
@@ -219,16 +195,40 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
                            minutes = 365.25 * 24 * 60,
                            hours = 365.25 * 24,
                            days = 365.25,
-                           weeks = 365.25/7,
+                           weeks = 365.25 / 7,
                            months = 12,
                            years = 1)
 
     ds <- dataset %>%
-      mutate(!!new_var := !!age_var/unname(average_durations[tolower(!!sym(unit_var))])
+      mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))])
       )
   }
 
 }
+
+#' Derive Age Groups
+#'
+#' Functions for deriving standardized age groups.
+#'
+#' @param dataset Input dataset.
+#' @param age_var AGE variable.
+#' @param age_unit AGE unit variable.
+#'
+#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
+#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
+#'
+#'   Default: NULL
+#'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'
+#' @param new_var New variable to be created.
+#'
+#' @return `dataset` with new column `new_var` of class factor.
+#'
+#' @author Ondrej Slama
+#'
+#' @name derive_agegr_fda
+NULL
 
 #' @rdname derive_agegr_fda
 #' @export
@@ -312,7 +312,7 @@ derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
     ds,
     !!new_var := cut(
       x = temp_age,
-      breaks = c(-Inf, (28/365.25), 2, 12, 18, 65, 85, Inf),
+      breaks = c( - Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
       labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
                  "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"),
       include.lowest = FALSE,

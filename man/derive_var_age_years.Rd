@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_aage.R
 \name{derive_var_age_years}
 \alias{derive_var_age_years}
-\title{Derive Age Group function}
+\title{Derive Age in Years}
 \usage{
 derive_var_age_years(dataset, age_var, age_unit = NULL, new_var)
 }
@@ -26,7 +26,7 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 The input dataset with new_var paramater added in years.
 }
 \description{
-Derive Age Group function
+Derive Age in Years
 }
 \details{
 This function is used to convert age variables into years.
