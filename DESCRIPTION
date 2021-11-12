@@ -54,7 +54,7 @@ Suggests:
     usethis,
     covr,
     DT
-Remotes: Roche-GSK/cdiscpilot
+Remotes: Roche-GSK/admiral.test
 VignetteBuilder: knitr
 Collate: 
     'admiral-package.R'
