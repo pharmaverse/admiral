@@ -1,6 +1,6 @@
-#' Derive Datetime of First Exposure to Treatment
+#' Derive Datetime of Any Treatment Start Date
 #'
-#' Derives datetime of first exposure to treatment (`TRTSDTM`)
+#' Derives datetime of first exposure to treatment e.g. (`TRTSDTM`)
 #'
 #' @param dataset Input dataset
 #'
@@ -29,56 +29,7 @@
 #'
 #' @param dtc name of variable from which start date is derived e.g. `EXSTDTC`
 #'
-#' @param date_imputation The value to impute the day/month when a datepart is
-#'   missing.
-#'
-#'   If `NULL`: no date imputation is performed and partial dates are returned as
-#'   missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with month and day specified as 'mm-dd': e.g. `"06-15"` for the 15th
-#'   of June,
-#'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
-#'   day/month.
-#'
-#'   Default is `NULL`.
-#'
-#' @param time_imputation The value to impute the time when a timepart is
-#'   missing.
-#'
-#'   A character value is expected, either as a
-#'   - format with hour, min and sec specified as 'hh:mm:ss': e.g. `"00:00:00"`
-#'   for the start of the day,
-#'   - or as a keyword: `"FIRST"`,`"LAST"` to impute to the start/end of a day.
-#'
-#'   Default is `"00:00:00"`.
-#'
-#' @param min_dates Minimum dates
-#'  A list of dates is expected. It is ensured that the imputed date is not
-#'  before any of the specified dates, e.g., that the imputed adverse event start
-#'  date is not before the first treatment date. Only dates which are in the
-#'  range of possible dates of the dtc value are considered. The possible dates
-#'  are defined by the missing parts of the dtc date (see example below). This
-#'  ensures that the non-missing parts of the dtc date are not changed.
-#'
-#' @param max_dates Maximum dates
-#'
-#' A list of dates is expected. It is ensured that the imputed date is not after
-#' any of the specified dates, e.g., that the imputed date is not after the data
-#' cut off date. Only dates which are in the range of possible dates are
-#' considered.
-#'
-#' @param ord_vars
-#'  Order of variables for which either the last or first observation
-#'  is picked as treatment start date
-#'  e.g. vars(EXSTDTC,EXSEQ)
-#'
-#' @param ord_filter
-#'  The mode by which the filter_extreme is chosen.
-#'  If "first", the first observation of each by group is included in the output dataset.
-#'  If "last", the last observation of each by group is included in the output dataset.
-#'
-#'  Permitted Values: "first", "last"
+#' @inheritParams impute_dtc
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first observation (with respect to the order
@@ -97,62 +48,105 @@
 #' data("ex")
 #' data("dm")
 #'
-#' dm %>%
-#'   derive_vars_trt_start(dataset_ex = ex
-#'                         filter_ex =  (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10, # nolint
-#'                         subject_keys = vars(STUDYID, USUBJID),
-#'                         new_var=TRTSDTM,
-#'                         dtc=EXSTDTC,
-#'                         date_imputation = "first",
-#'                         time_imputation="first",
-#'                         min_dates = NULL,
-#'                         max_dates = NULL,
-#'                         ord_vars = vars(EXSTDTC,EXSEQ),
-#'                         ord_filter="first") %>%
-#'   select(USUBJID, TRTSDTM)
+#'dm %>%
+#'  derive_vars_trt_start(dataset_ex = ex,
+#'                        new_var=TRTSDTM,
+#'                        dtc=EXSTDTC,
+#'                        date_imputation = "first",
+#'                        time_imputation="first",
+#'                        min_dates = NULL,
+#'                        max_dates = NULL,
+#'                        order = vars(EXSTDTC,EXSEQ),
+#'                        subject_keys=vars(STUDYID,USUBJID),
+#'                        flag_imputation = "AUTO",
+#'                        filter_ex = EXDOSE>0 ,
+#'                        ord_filter="first") %>%
+#'  select(USUBJID, TRTSDTM)
 derive_vars_trt_start <- function(dataset,
-                                 dataset_ex,
-                                 filter_ex = NULL,
-                                 subject_keys,
-                                 new_var,
-                                 dtc,
-                                 date_imputation,
-                                 time_imputation,
-                                 min_dates = NULL,
-                                 max_dates = NULL,
-                                 ord_vars,
-                                 ord_filter) {
-    new_var <- assert_symbol(enquo(new_var))
-    dtc <- assert_symbol(enquo(dtc))
-    ord <- assert_symbol(enquo(ord))
-    assert_data_frame(dataset,subject_keys)
-    assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, ord_vars))
-    assert_character_scalar(ord_filter, values = c("first","last"))
+                                  dataset_ex,
+                                  filter_ex = NULL,
+                                  subject_keys,
+                                  new_var,
+                                  dtc,
+                                  date_imputation,
+                                  time_imputation,
+                                  min_dates = NULL,
+                                  max_dates = NULL,
+                                  flag_imputation = "AUTO",
+                                  order,
+                                  ord_filter) {
 
-    filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  new_var <- assert_symbol(enquo(new_var))
+  dtc <- assert_symbol(enquo(dtc))
+  assert_data_frame(dataset, subject_keys)
+  assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, order))
+  assert_character_scalar(ord_filter, values = c("first", "last"), case_sensitive = F)
 
-    add <- dataset_ex %>%
-      mutate(imputed_dtc = convert_dtc_to_dtm(!!dtc,
-                                              date_imputation = date_imputation,
-                                              time_imputation = time_imputation,
-                                              min_dates = min_dates,
-                                              max_dates = max_dates)
-      )
-    if (!quo_is_null(filter_pre_timepoint)){
-      add %>% filter_if(filter_ex) %>%
-        filter_extreme(
-          order = vars(!!dtc, !!ord_vars),
-          by_vars = !!!subject_keys,
-          mode = ord_filter) %>%
-        mutate(!!new_var := imputed_dtc)
-    } else {
-      filter_extreme(
-        order = ord,
-        by_vars = !!!subject_keys,
-        mode = ord_filter) %>%
-        mutate(!!new_var := imputed_dtc)
-    }
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  filter_ex <- enquo(filter_ex)
 
-    left_join(dataset, add, by = vars2chr(subject_keys)) %>%
-      select(-imputed_dtc)
+  assert_character_scalar(flag_imputation, values = c("auto", "both", "date", "time", "none"),
+                          case_sensitive = FALSE)
+
+  #Issue warning that new_var should be DTM
+  if (str_detect(rlang::quo_name(new_var), "DTM", negate = T)) {
+    msg <- sprintf(
+      "This function derives the treatment datetime, new_var must end in DTM.")
+    warn(msg)
   }
+
+  add <- dataset_ex %>%
+    mutate(imputed_dtc = convert_dtc_to_dtm(!!dtc,
+                                            date_imputation = date_imputation,
+                                            time_imputation = time_imputation,
+                                            min_dates = min_dates,
+                                            max_dates = max_dates))
+
+  #filter EX data based on study requirements
+  if (quo_is_null(filter_ex)) {
+    add
+    msg <- sprintf(
+      "Input EX dataset has not been filtered. Check study requirement if ex needs to be filtered.")  # nolint
+    warn(msg)
+  } else {
+    add <- add %>% filter(!!filter_ex)
+  }
+
+  #pick last or first date in sequence
+  add <- add %>%
+    filter_extreme(order = order,
+                   by_vars = subject_keys,
+                   mode = ord_filter) %>%
+    mutate(!!new_var := imputed_dtc) %>%
+    select(!!!subject_keys, !!new_var, !!dtc, imputed_dtc)
+
+  #add imputation flags
+  if (flag_imputation %in% c("both", "date") ||
+      flag_imputation == "auto" && !is.null(date_imputation)) {
+    # add --DTF if not there already
+    dtf <- paste0("TRT", "DTF")
+    dtf_exist <- dtf %in% colnames(add)
+    if (!dtf_exist) {
+      add <- add %>%
+        mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = imputed_dtc))
+    } else {
+      msg <- sprintf(
+        "The %s variable is already present in the input dataset and will not be re-derived.",
+        dtf
+      )
+      inform(msg)
+    }
+  }
+
+  if (flag_imputation %in% c("both", "time") ||
+      flag_imputation == "auto" && !is.null(time_imputation)) {
+    # add --TMF variable
+    tmf <- paste0("TRT", "TMF")
+    warn_if_vars_exist(dataset, tmf)
+    add <- add %>%
+      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = imputed_dtc))
+  }
+  add <- add %>% select(-!!dtc, -imputed_dtc)
+
+  left_join(dataset, add, by = vars2chr(subject_keys))
+}
