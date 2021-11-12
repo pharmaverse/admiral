@@ -684,3 +684,29 @@ test_that("error is issued if parameter code already exists", {
     regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
 })
+
+test_that("`tte_source`  object are printed as intended", {
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+  expected_print_output <- c(
+    "<tte_source> object",
+    "dataset_name: \"ae\"",
+    "filter: NULL",
+    "date: AESTDTC",
+    "censor: 0",
+    "set_values_to:",
+    "  EVENTDESC: \"AE\"",
+    "  SRCDOM: \"AE\"",
+    "  SRCVAR: \"AESTDTC\"",
+    "  SRCSEQ: AESEQ"
+  )
+  expect_identical(capture.output(print(ttae)), expected_print_output)
+})

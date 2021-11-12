@@ -757,14 +757,15 @@ censor_source <- function(dataset_name,
 #' @examples
 #' print(death_event)
 print.tte_source <- function(x, ...) {
+  cat <- function(...) base::cat(..., sep = "")
   cat("<tte_source> object\n")
-  cat("dataset_name: \"", x$dataset_name, "\"\n", sep = "")
-  cat("filter:", quo_text(x$filter), "\n")
-  cat("date:", quo_text(x$date), "\n")
-  cat("censor:", x$censor, "\n")
+  cat("dataset_name: \"", x$dataset_name, "\"\n")
+  cat("filter: ", quo_text(x$filter), "\n")
+  cat("date: ", quo_text(x$date), "\n")
+  cat("censor: ", x$censor, "\n")
   cat("set_values_to:\n")
   for (name in names(x$set_values_to)) {
-    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n", sep = "")
+    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
   }
 }
 
