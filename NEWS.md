@@ -25,6 +25,8 @@ lists of variables.
 
 ## Documentation
 
+- New vignette [Creating a BDS Time-to-Event ADaM](../articles/bds_tte.html)
+
 # admiral 0.3.0
 
 ## New Features

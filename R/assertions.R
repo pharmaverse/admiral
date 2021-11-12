@@ -20,6 +20,7 @@
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -282,6 +283,7 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -360,6 +362,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -782,7 +785,9 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
+#' library(cdiscpilot)
 #' data(dm)
+#'
 #' assert_has_variables(dm, "STUDYID")
 #' \dontrun{
 #' assert_has_variables(dm, "AVAL")
@@ -1542,7 +1547,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @export
 #'
 #' @examples
-#' data("adsl")
+#' data(adsl)
 #' try(
 #'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 #' )

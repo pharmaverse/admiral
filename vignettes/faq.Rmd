@@ -114,18 +114,16 @@ knitr::opts_chunk$set(
 ##### What would a **contribution model** look like? 
 
   * **This is still under discussion and below is a very early draft proposal to provide an idea**
-  * There are 2 levels as explained below, but the target is always to store things at the highest possible level. 
-  * Each level would be heavily dependent on select leads, and so succession planning always needs to be considered.
+    * There are 2 levels as explained below, but the target is always to store things at the highest possible level. 
+    * Each level would be heavily dependent on select leads, and so succession planning always needs to be considered.
 
   * **Core level - {admiral} package** 
-  * for core standard functions developed by the initial Roche/GSK development team via pull requests stored in a dedicated open Github repo
-  * control of master branch would be kept with a select limited number of technical leads 
+    * for core standard functions developed by the initial Roche/GSK development team via pull requests stored in a dedicated open Github repo
+    * control of master branch would be kept with a select limited number of technical leads 
 
-* **Company-specific level - e.g. {admiral.roche} & {admiral.gsk} packages** 
- 
-   * mainly for plug-ins to connect with company interfaces (e.g. metadata links with MDRs or MedDRA baskets):
-   * a Github repo would be needed for each company - our request of companies using admiral would be to also keep these open source as we will do with the Roche & GSK versions, as this transparency could help us identify modules that are better moved up to the core package.
-   * control of master branch is recommended to be kept with a select limited number of company reps for each respective company repo 
+  * **Company-specific level - e.g. {admiral.roche} & {admiral.gsk} packages** 
+    * mainly for plug-ins to connect with company interfaces (e.g. metadata links with MDRs or MedDRA baskets)
+    * control of master branch is recommended to be kept with a select limited number of company reps for each respective company repo 
 
    
 

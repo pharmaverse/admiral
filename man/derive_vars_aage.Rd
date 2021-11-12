@@ -35,7 +35,7 @@ The age is derived in the specified unit
 
 Default: 'years'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 }
 \value{
 The input dataset with \code{AAGE} and \code{AAGEU} added

@@ -28,8 +28,9 @@
 #' library(admiral)
 #' library(DT)
 #' library(dplyr)
-#'
+#' library(cdiscpilot)
 #' data("dm")
+#'
 #' dataset_vignette(dm)
 #' dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
 dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
@@ -41,11 +42,19 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
     filter_if(filter) %>%
     mutate_if(is.character, as.factor)
 
+  # Create a short markdown table when this function is called outside {pkgdown}
+  if (!pkgdown::in_pkgdown()) {
+    if (is.null(display_vars)) {
+      return(knitr::kable(utils::head(out, 10)))
+    } else {
+      return(knitr::kable(utils::head(select(out, !!!display_vars), 10)))
+    }
+  }
+
   if (!is.null(display_vars)) {
     hide_columns <- which(!(colnames(out) %in% vars2chr(display_vars)))
     cols_to_hide <- list(list(targets = hide_columns - 1, visible = FALSE))
-  }
-  else {
+  } else {
     cols_to_hide <- list()
   }
 
