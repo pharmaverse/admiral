@@ -16,6 +16,8 @@
 #' @keywords bds derivation
 #' @export
 #'
+#' @seealso [derive_var_chg()]
+#'
 #' @examples
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
