@@ -32,7 +32,7 @@ otherwise specified.*
 * [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
 * [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCATy`](#paramcd)
 * [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
-* [Derive Additional Parameters (e.g. `BMI` `BSA` `MAP` for ADVS)](#derive_param)
+* [Derive Additional Parameters (e.g. `BMI`, `BSA`, `MAP` for ADVS)](#derive_param)
 * [Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
@@ -42,9 +42,8 @@ otherwise specified.*
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
 * [Derive Categorization Variables (`AVALCATx`)](#cat)
-* [Add ADSL variables `ASEQ`](#adsl_vars)
+* [Add ADSL variables](#adsl_vars)
 * [Derive New Rows](#additional)
-* [Example Scripts](#example)
 
 ## Read in Data {#readdata}
 
@@ -230,14 +229,10 @@ param_lookup <- tribble(
 attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
 ```
 
-We will create more parameters so only merge on `PARAMCD` for now from lookup 
-table. Then add all other derivations from lookup after all parameters created.
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(param_lookup, 
-                 display_vars = vars(VSTESTCD, PARAMCD, PARAM, PARAMN, PARCAT1, 
-                                     PARCAT1N))
-```
+At this stage, only `PARAMCD` required to perform the derivations. Additional
+derived parameters may be added, so only `PARAMCD` is joined to the datasets at
+this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`, ...)
+will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}
 
@@ -275,7 +270,7 @@ dataset_vignette(advs,
                  filter = USUBJID == "01-716-1024")
 ```
 
-## Derive Additional Parameters (e.g. `BSA`, `BMI` or `MAP` for `ADVS`)] {#derive_param}
+## Derive Additional Parameters (e.g. `BSA`, `BMI` or `MAP` for `ADVS`) {#derive_param}
 
 Optionally derive new parameters creating `PARAMCD` and `AVAL`. Below is an
 example of creating `Mean Arterial Pressure` for `ADVS`, see also Example 3 in 
@@ -336,13 +331,13 @@ created with a function call. See example below for `PARAMCD` = `QTCF`.
 adeg <- derive_param_qtcf(
   adeg,
   by_vars = vars(USUBJID, VISIT, ADT),
-  set_values_to = vars(PARAMCD = "QTCFR", AVALU = 'msec')
+  set_values_to = vars(PARAMCD = "QTCFR")
   )
  
 ```
 
-All parameters now added so can add other parameter information from lookup
-table containing ``PARAMCD`` information.
+When all `PARAMCD` have been derived and added to the dataset, the other information 
+from the look-up table (`PARAM`, `PARAMCAT1`,...) should be added.
 
 ```{r eval=TRUE}
 
@@ -622,31 +617,18 @@ values (`SYSBP`, `DIABP`, and `RESP`).  We will also assume high is worst for `S
 and `DIABP` and low is worst for `RESP`.
 
 ```{r eval=TRUE}
-advs <- derive_extreme_flag(
+advs <- derive_worst_flag(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(AVAL, ADT, ATPTN),
-  new_var = WORST_HIGH,
-  mode = "last",
+  order = vars(ADT, ATPTN),
+  new_var = WORSTFL,
+  param_var = PARAMCD,
+  analysis_var = AVAL,
+  worst_high = c("SYSBP", "DIABP"),
+  worst_low = "PULSE",
   filter = !is.na(AVISIT) & !is.na(AVAL)
-) 
-
-advs <- derive_extreme_flag(
-  advs,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(AVAL, ADT, ATPTN),
-  new_var = WORST_LOW,
-  mode = "first",
-  filter = !is.na(AVISIT) & !is.na(AVAL)
-)
-
-advs <- mutate(
-  advs, 
-  WORSTFL = case_when(
-    PARAMCD %in% c("SYSBP", "DIABP") ~ WORST_HIGH,
-    PARAMCD == "RESP" ~ WORST_LOW
   )
-)
+
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -672,10 +654,6 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 
 ```
 
-
-
-
-
 ## Assign `ASEQ` {#aseq}
 
 The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
@@ -697,6 +675,7 @@ dataset_vignette(advs,
                  filter = USUBJID == '01-701-1015'
 )
 ```
+
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
 Admiral does not currently have a generic function to aid in assigning `AVALCATx`/
@@ -732,7 +711,7 @@ dataset_vignette(advs,
 )
 ```
 
-## Add ADSL variables `ASEQ`](#adsl_vars)
+## Add ADSL variables {#adsl_vars}
 If needed, the other `ADSL` variables can now be added.
 List of ADSL variables already merged held in vector `adsl_vars`
 
@@ -757,13 +736,11 @@ time to insert this derivation in the correct location of the code. The location
 will vary depending on what previous computations should be retained on the new 
 record and what computations must be done with the new records.
 
-Sample Code | Description 
------------ | ------------------------------------------------------------------
-ad_advs.R | Create End of Treatment based on a subset of rows, for each USUBJID, PARAMCD
-ad_advs.R | Derive an Average Record (e.g. Triplicates) for each USUBJID, PARAMCD, and timepoint.
-ad_advs.R | Derive a new PARAMCD based on existing PARAMCDs (MAP, based on Systolic and Diastolic BP collected at a particular timepoint.)
 
-Example 1 (Creating a new record):
+### Example 1 (Creating a new record):
+For each subject and Vital Signs parameter, add a record holding last valid
+observation before end of treatment. Set `AVISIT` to `End of Treatment` and assign
+a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
@@ -791,7 +768,10 @@ dataset_vignette(advs_ex1,
 ```
 
 
-Example 2 (Deriving a Summary record):
+### Example 2 (Deriving a Summary record):
+For each subject, Vital Signs parameter, visit, and date add a record holding
+the average value for observations on that date.
+Set `DTYPE` to `AVERAGE`.
 
 ```{r eval=TRUE}
 advs_ex2 <- derive_summary_records(
@@ -810,9 +790,32 @@ dataset_vignette(advs_ex2,
 )
 ```
 
+### Example 3 (Deriving a new PARAMCD):
+Use function `derive_derived_param` to create a new `PARAMCD`. Below is an
+example of creating `Mean Arterial Pressure` (`PARAMCD`=`MAP`) with an 
+alternative formula.
 
+```{r eval=TRUE}
+advs_ex3 <- derive_derived_param(
+  advs,
+  by_vars = vars(USUBJID, VISIT, ATPT),
+  parameters = c("SYSBP", "DIABP"),
+  analysis_value = (AVAL.SYSBP-AVAL.DIABP)/3 + AVAL.DIABP ,
+  set_values_to = vars(
+    PARAMCD = "MAP2",
+    PARAM = "Mean Arterial Pressure 2 (mmHg)"
+    )
+  )
+```
 
-## Example Scripts {#example}
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(advs_ex3, 
+                 display_vars = vars(USUBJID, PARAMCD, VISIT, ATPT, AVAL),
+                 filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP2", "SYSBP", "DIABP") 
+)
+```
+
+# Example Scripts {#example}
 
 ADaM | Sample Code 
 ---- | --------------
