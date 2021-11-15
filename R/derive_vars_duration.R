@@ -108,7 +108,7 @@ derive_vars_duration <- function(dataset,
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, required_vars = vars(!!start_date, !!end_date))
   assert_character_scalar(in_unit, values = valid_time_units())
-  assert_character_scalar(out_unit, values = valid_time_units())
+  assert_character_scalar(out_unit, values = c(valid_time_units(), "weeks"))
   assert_logical_scalar(floor_in)
   assert_logical_scalar(add_one)
   assert_logical_scalar(trunc_out)

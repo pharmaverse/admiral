@@ -5,19 +5,25 @@
 \alias{derive_agegr_ema}
 \title{Derive Age Groups}
 \usage{
-derive_agegr_fda(dataset, age_var, new_var)
+derive_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 
-derive_agegr_ema(dataset, age_var, new_var, adults = TRUE)
+derive_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 }
 \arguments{
 \item{dataset}{Input dataset.}
 
 \item{age_var}{AGE variable.}
 
-\item{new_var}{New variable to be created.}
+\item{age_unit}{AGE unit variable.
 
-\item{adults}{Logical, should the age group be valid for adults studies or pediatric studies?
-Defaults to \code{TRUE} (adult studies).}
+The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
+This is only used when the age_var variable does not have a corresponding unit in the dataset.
+
+Default: NULL
+
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+
+\item{new_var}{New variable to be created.}
 }
 \value{
 \code{dataset} with new column \code{new_var} of class factor.
@@ -35,29 +41,38 @@ Baseline Measure Information).
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(dm)
 
 dm \%>\%
-  derive_agegr_fda(AGE, AGEGR1) \%>\%
+  derive_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
+data <- tibble::tribble(
+  ~BRTHDT, ~RANDDT,
+  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  )
+
+data \%>\%
+  derive_vars_aage(unit = "months") \%>\%
+  derive_agegr_fda(AAGE, age_unit = NULL, AGEGR1)
+
 data.frame(AGE = 1:100) \%>\%
-  derive_agegr_fda(age_var = AGE, new_var = AGEGR1)
+  derive_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(dm)
 
 dm \%>\%
-  derive_agegr_ema(AGE, AGEGR1) \%>\%
+  derive_agegr_ema(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
 data.frame(AGE = 1:100) \%>\%
-  derive_agegr_ema(age_var = AGE, new_var = AGEGR1)
+  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 data.frame(AGE = 1:20) \%>\%
-  derive_agegr_ema(age_var = AGE, new_var = AGEGR1, adults = FALSE)
+  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 }
 \author{
 Ondrej Slama

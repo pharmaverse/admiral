@@ -17,8 +17,8 @@ Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
 or as a keyword: "FIRST", "MID", "LAST"
 }
 \examples{
-assertthat::assert_that(is_valid_date_entry("01-02"))
-assertthat::assert_that(is_valid_date_entry("FIRST"))
+assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
+assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
 }
 \author{
 Samia Kabi

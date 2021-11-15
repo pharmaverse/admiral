@@ -50,7 +50,7 @@ Let's start by attaching packages and loading some example datasets:
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr)
-library(cdiscpilot)
+library(admiral.test)
 library(lubridate)
 
 data(ae)
