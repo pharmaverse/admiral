@@ -30,9 +30,9 @@ otherwise specified.*
 
 * [Read in Data](#readdata)
 * [Derive/Impute Numeric Date/Time and Analysis Day (`ADT`, `ADTM`, `ADY`, `ADTF`, `ATMF`)](#datetime)
-* [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCATy`](#paramcd)
-* [Derive Results (`AVAL`, `AVALC`, `AVALU`)](#aval)
-* [Derive Additional Parameters (e.g. `BMI`, `BSA`, `MAP` for ADVS)](#derive_param)
+* [Assign `PARAMCD`, `PARAM`, `PARAMN`, `PARCAT1`](#paramcd)
+* [Derive Results (`AVAL`, `AVALC`)](#aval)
+* [Derive Additional Parameters (e.g. `BSA`, `BMI`, or `MAP` for `ADVS`)](#derive_param)
 * [Derive Timing Variables (e.g. `APHASE`, `AVISIT`, `APERIOD`)](#timing)
 * [Timing Flag Variables (e.g. `ONTRTFL`)](#timingflag)
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
@@ -750,8 +750,8 @@ record and what computations must be done with the new records.
 ### Example 1 (Creating a New Record):
 
 For each subject and Vital Signs parameter, add a record holding last valid
-observation before end of treatment. Set `AVISIT` to `End of Treatment` and assign
-a unique `AVISITN` value.
+observation before end of treatment. Set `AVISIT` to `"End of Treatment"` and
+assign a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
@@ -798,7 +798,7 @@ advs_ex2 <- derive_summary_records(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs_ex2, 
+  arrange(advs_ex2, USUBJID, PARAMCD, VISITNUM, ADT, DTYPE), 
   display_vars = vars(USUBJID, PARAMCD, VISITNUM, ADT, AVAL, DTYPE),
   filter = USUBJID == "01-701-1015"
 )
@@ -806,7 +806,7 @@ dataset_vignette(
 
 ### Example 3 (Deriving a New `PARAMCD`)
 
-Use function `derive_derived_param` to create a new `PARAMCD`. Below is an
+Use function `derive_derived_param()` to create a new `PARAMCD`. Below is an
 example of creating `Mean Arterial Pressure` (`PARAMCD = MAP2`) with an 
 alternative formula.
 
@@ -825,7 +825,7 @@ advs_ex3 <- derive_derived_param(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs_ex3, 
+  arrange(advs_ex3, USUBJID, VISIT, ATPT, PARAMCD), 
   display_vars = vars(USUBJID, PARAMCD, VISIT, ATPT, AVAL),
   filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP2", "SYSBP", "DIABP") 
 )
