@@ -16,7 +16,7 @@ is_valid_day(arg)
 Days are expected to range from 1 to 31
 }
 \examples{
-assertthat::assert_that(is_valid_day(20))
+assertthat::assert_that(admiral:::is_valid_day(20))
 }
 \author{
 Samia Kabi

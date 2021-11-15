@@ -16,7 +16,7 @@ is_valid_month(arg)
 Days are expected to range from 1 to 12
 }
 \examples{
-assertthat::assert_that(is_valid_month(12))
+assertthat::assert_that(admiral:::is_valid_month(12))
 }
 \author{
 Samia Kabi

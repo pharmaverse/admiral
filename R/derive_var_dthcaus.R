@@ -200,19 +200,18 @@ dthcaus_source <- function(dataset,
                            traceability_vars = NULL,
                            date_var = deprecated(),
                            traceabilty_vars = deprecated()) {
-
-  ### BEGIN DEPRECIATION
   if (!missing(date_var)) {
     deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
     date <- enquo(date_var)
   }
   if (!missing(traceabilty_vars)) {
-    deprecate_warn("0.3.0",
-                   "dthcaus_source(traceabilty_vars = )",
-                   "dthcaus_source(traceability_vars = )")
+    deprecate_warn(
+      "0.3.0",
+      "dthcaus_source(traceabilty_vars = )",
+      "dthcaus_source(traceability_vars = )"
+    )
     traceability_vars <- traceabilty_vars
   }
-  ### END DEPRECIATION
 
   out <- list(
     dataset = assert_data_frame(dataset),

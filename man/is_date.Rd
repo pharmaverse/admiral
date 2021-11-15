@@ -18,7 +18,7 @@ Checks if a date or date-time vector was specified
 \examples{
 refdate <- lubridate::ymd("2020-01-02")
 date <- lubridate::ymd("2020-02-03")
-assertthat::assert_that(is_date(refdate), is_date(date))
+assertthat::assert_that(admiral:::is_date(refdate), admiral:::is_date(date))
 }
 \author{
 Stefan Bundfuss
