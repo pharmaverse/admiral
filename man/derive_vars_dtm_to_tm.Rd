@@ -9,15 +9,20 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables from which time are to be extracted}
+\item{source_vars}{A list of datetime variables created using \code{vars()} from which time are to be extracted}
 }
 \value{
-A data frame containing the input dataset with the datetime (--DTM)variable(s) and
-the corresponding time (--TM) variable(s) of all specified datetime variables from
-the source_vars option with the correct name.
+A data frame containing the input dataset with the datetime (\code{--DTM}) variable(s) and
+the corresponding time (\code{--TM}) variable(s) of all specified datetime variables from
+the \code{source_vars} option with the correct name.
 }
 \description{
-This function creates time variable(S) as output from a datetime variable(s)
+This function creates time variable(s) as output from a datetime variable(s)
+}
+\details{
+The names of the newly added variables are automatically set by replacing the
+\code{--DTM} suffix of the \code{source_vars} with \code{--TM}. The \code{--TM} variables are created
+using the {hms} package.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
