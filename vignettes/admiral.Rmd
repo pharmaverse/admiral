@@ -45,7 +45,10 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl)
+dataset_vignette(adsl, 
+                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
+                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+                                     TRTDURD))
 ```
 
 <br><br>
@@ -108,7 +111,10 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl)
+dataset_vignette(adsl, 
+                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
+                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+                                     TRTDURD, FINLABDT))
 ```
 
 <br><br>
