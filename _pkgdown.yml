@@ -73,20 +73,6 @@ reference:
   contents:
   - has_keyword('source_specifications')
 
-- title: SDTM Datasets
-- contents:
-  - ae
-  - cm
-  - dm
-  - ds
-  - ex
-  - lb
-  - mh
-  - qs
-  - starts_with("supp")
-  - ts
-  - vs
-
 - title: ADaM Datasets
 - contents:
   - adsl
