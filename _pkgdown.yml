@@ -75,6 +75,8 @@ reference:
 
 - title: ADaM Datasets
 - contents:
+  - adae
+  - adcm
   - adsl
   - advs
   - adex
