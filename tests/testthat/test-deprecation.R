@@ -1,4 +1,4 @@
-library(cdiscpilot)
+library(admiral.test)
 
 test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter = )`", {
   data(advs)
