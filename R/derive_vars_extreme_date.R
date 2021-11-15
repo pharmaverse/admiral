@@ -1,35 +1,35 @@
-#' Derive Datetime of Any Treatment Start Date
+#' Derive Datetime of Any Extreme Dates
 #'
-#' Derives datetime of first exposure to treatment e.g. (`TRTSDTM`)
+#' Derives datetime of any extreme dates e.g. treatment start or end dates
 #'
 #' @param dataset Input dataset
+#'
+#' @param subject_keys Variables to uniquely identify a subject
 #'
 #'   The variables specified by the `subject_keys` parameter are expected.
 #'
 #'   Default: vars(STUDYID,USUBJID)
 #'
-#' @param dataset_ex `ex` dataset
+#' @param dataset_date dataset that contains the date values e.g. `ex`
 #'
-#'   The variables `EXSTDTC`, `EXSEQ`, and those specified by the `filter_ex`
+#'   The variables `--ENDTC`, `--SEQ`, and those specified by the `filter_dataset_date`,
 #'   `dtc` and `subject_keys` parameters are expected.
 #'
-#' @param filter_ex Filter condition for the ex dataset
+#' @param filter_dataset_date Filter condition for the dataset with dates
 #'
-#'   Only observations of the ex dataset which fulfill the specified condition
+#'   Only observations of the dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
 #'   Default: NULL
 #'
 #'   Permitted Values: logical expression
 #'
-#' @param subject_keys Variables to uniquely identify a subject
-#'
 #' A list of quosures where the expressions are symbols as returned by
 #' `vars()` is expected.
 #'
-#' @param new_var name of treatment start date e.g. `TRTSDTM`
+#' @param dtc name of variable from which the extreme date is derived e.g. `EXENDTC`
 #'
-#' @param dtc name of variable from which start date is derived e.g. `EXSTDTC`
+#' @param new_var name of the extreme date derived e.g.treatment end date `TRTEDTM`
 #'
 #' @inheritParams impute_dtc
 #'
@@ -39,7 +39,7 @@
 #'
 #' @author Stefan Bundfuss, Teckla Akinyi
 #'
-#' @return The input dataset with start date variable added e.g. `TRTSDTM`
+#' @return The input dataset with extreme date variable added e.g. `TRTEDTM`
 #'
 #' @export
 #'
@@ -51,41 +51,41 @@
 #' data("dm")
 #'
 #'dm %>%
-#'  derive_vars_trt_start(dataset_ex = ex,
-#'                        filter_ex = EXDOSE>0 ,
-#'                        subject_keys=vars(STUDYID,USUBJID),
-#'                        new_var=TRTSDTM,
-#'                        dtc=EXSTDTC,
-#'                        date_imputation = "first",
-#'                        time_imputation="first",
-#'                        flag_imputation = "AUTO",
-#'                        min_dates = NULL,
-#'                        max_dates = NULL,
-#'                        order = vars(EXSTDTC,EXSEQ),
-#'                        mode="first") %>%
-#'  select(USUBJID, TRTSDTM)
-derive_vars_trt_start <- function(dataset,
-                                  dataset_ex,
-                                  filter_ex = NULL,
-                                  subject_keys = vars(STUDYID,USUBJID),
-                                  new_var,
-                                  dtc,
-                                  date_imputation,
-                                  time_imputation,
-                                  flag_imputation = "AUTO",
-                                  min_dates = NULL,
-                                  max_dates = NULL,
-                                  order,
-                                  mode) {
+#'  derive_vars_extreme_date(subject_keys=vars(STUDYID,USUBJID),
+#'                           dataset_date = ex,
+#'                           filter_dataset_date = EXDOSE>0,
+#'                           dtc = EXSTDTC,
+#'                           order = vars(EXSTDTC,EXSEQ),
+#'                           new_var=TRTEDTM,
+#'                           date_imputation = "first",
+#'                           time_imputation = "first",
+#'                           flag_imputation = "AUTO",
+#'                           min_dates = NULL,
+#'                           max_dates = NULL,
+#'                           mode="LAST") %>%
+#'   select(USUBJID, TRTEDTM)
+derive_vars_extreme_date <- function(dataset,
+                                     subject_keys =vars(STUDYID,USUBJID),
+                                     dataset_date,
+                                     filter_dataset_date = NULL,
+                                     dtc,
+                                     order,
+                                     new_var,
+                                     date_imputation,
+                                     time_imputation,
+                                     flag_imputation = "AUTO",
+                                     min_dates = NULL,
+                                     max_dates = NULL,
+                                     mode) {
 
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, subject_keys)
-  assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, order))
+  assert_data_frame(dataset_date, required_vars = quo_c(subject_keys, order))
   assert_character_scalar(mode, values = c("first", "last"), case_sensitive = F)
 
-  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
-  filter_ex <- enquo(filter_ex)
+  filter_dataset_date <- assert_filter_cond(enquo(filter_dataset_date), optional = TRUE)
+  filter_dataset_date <- enquo(filter_dataset_date)
 
   assert_character_scalar(flag_imputation, values = c("auto", "both", "date", "time", "none"),
                           case_sensitive = FALSE)
@@ -97,24 +97,24 @@ derive_vars_trt_start <- function(dataset,
     warn(msg)
   }
 
-  add <- dataset_ex %>%
+  add <- dataset_date %>%
     mutate(imputed_dtc = convert_dtc_to_dtm(!!dtc,
                                             date_imputation = date_imputation,
                                             time_imputation = time_imputation,
                                             min_dates = min_dates,
-                                            max_dates = max_dates))
+                                            max_dates = max_dates)
+    )
 
   #filter EX data based on study requirements
-  if (quo_is_null(filter_ex)) {
+  if (quo_is_null(filter_dataset_date)) {
     add
     msg <- sprintf(
-      "Input EX dataset has not been filtered. Check study requirement if ex needs to be filtered.")  # nolint
+      "Input EX dataset has no been filtered. Check study requirement if ex needs to be filtered.")  # nolint
     inform(msg)
   } else {
-    add <- add %>% filter(!!filter_ex)
+    add <- add %>% filter(!!filter_dataset_date)
   }
 
-  #pick last or first date in sequence
   add <- add %>%
     filter_extreme(order = order,
                    by_vars = subject_keys,

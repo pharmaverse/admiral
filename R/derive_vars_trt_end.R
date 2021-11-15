@@ -4,12 +4,14 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables specified by the `by_vars` parameter are expected.
+#'   The variables specified by the `subject_keys` parameter are expected.
+#'
+#'   Default: vars(STUDYID,USUBJID)
 #'
 #' @param dataset_ex `ex` dataset
 #'
 #'   The variables `EXENDTC`, `EXSEQ`, and those specified by the `filter_ex`,
-#'   `dtc` and `subject_keys`parameters are expected.
+#'   `dtc` and `subject_keys` parameters are expected.
 #'
 #' @param filter_ex Filter condition for the ex dataset
 #'
@@ -47,40 +49,39 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("ex")
 #' data("dm")
-#'
 #'dm %>%
-#'  derive_vars_trt_end(dataset_ex = ex,
-#'                      new_var=TRTEDTM,
-#'                      dtc=EXSTDTC,
-#'                      date_imputation = "first",
-#'                      time_imputation="first",
-#'                      min_dates = NULL,
-#'                      max_dates = NULL,
-#'                      order = vars(EXSTDTC,EXSEQ),
-#'                      subject_keys=vars(STUDYID,USUBJID),
-#'                      flag_imputation = "AUTO",
-#'                      filter_ex = EXDOSE>0 ,
-#'                      ord_filter="LAST")
-#'   select(USUBJID, TRTEDTM)
+#'  derive_vars_trt_start(dataset_ex = ex,
+#'                        filter_ex = EXDOSE>0 ,
+#'                        subject_keys=vars(STUDYID,USUBJID),
+#'                        new_var=TRTEDTM,
+#'                        dtc=EXENDTC,
+#'                        date_imputation = "first",
+#'                        time_imputation="first",
+#'                        flag_imputation = "AUTO",
+#'                        min_dates = NULL,
+#'                        max_dates = NULL,
+#'                        order = vars(EXENDTC,EXSEQ),
+#'                        mode="LAST") %>%
+#'  select(USUBJID, TRTEDTM)
 derive_vars_trt_end <- function(dataset,
                                   dataset_ex,
                                   filter_ex = NULL,
-                                  subject_keys,
+                                  subject_keys =vars(STUDYID,USUBJID),
                                   new_var,
                                   dtc,
                                   date_imputation,
                                   time_imputation,
+                                  flag_imputation = "AUTO",
                                   min_dates = NULL,
                                   max_dates = NULL,
-                                  flag_imputation = "AUTO",
                                   order,
-                                  ord_filter) {
+                                  mode) {
 
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, order))
-  assert_character_scalar(ord_filter, values = c("first", "last"), case_sensitive = F)
+  assert_character_scalar(mode, values = c("first", "last"), case_sensitive = F)
 
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   filter_ex <- enquo(filter_ex)
@@ -108,7 +109,7 @@ derive_vars_trt_end <- function(dataset,
     add
     msg <- sprintf(
       "Input EX dataset has no been filtered. Check study requirement if ex needs to be filtered.")  # nolint
-    warn(msg)
+    inform(msg)
   } else {
     add <- add %>% filter(!!filter_ex)
   }
@@ -116,7 +117,7 @@ derive_vars_trt_end <- function(dataset,
   add <- add %>%
     filter_extreme(order = order,
                    by_vars = subject_keys,
-                   mode = ord_filter) %>%
+                   mode = mode) %>%
     mutate(!!new_var := imputed_dtc) %>%
     select(!!!subject_keys, !!new_var, !!dtc, imputed_dtc)
 
@@ -134,7 +135,7 @@ derive_vars_trt_end <- function(dataset,
         "The %s variable is already present in the input dataset and will not be re-derived.",
         dtf
       )
-      inform(msg)
+      warn(msg)
     }
   }
 

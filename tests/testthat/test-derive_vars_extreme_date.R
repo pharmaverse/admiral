@@ -1,4 +1,4 @@
-context("test-derive_vars_trt_end")
+context("test-derive_vars_extreme_date")
 
 #test 1
 test_that("Test1::Adds treatment end date - no imputations
@@ -29,19 +29,19 @@ test_that("Test1::Adds treatment end date - no imputations
             )
             # nolint end
 
-            actual_output <- derive_vars_trt_end(input,
-                                                   input_ex,
-                                                   new_var=TRTEDTM,
-                                                   dtc=EXENDTC,
-                                                   date_imputation = "first",
-                                                   time_imputation="first",
-                                                   min_dates = NULL,
-                                                   max_dates = NULL,
-                                                   order = vars(EXENDTC,EXSEQ),
-                                                   subject_keys=vars(STUDYID,USUBJID),
-                                                   flag_imputation = "AUTO",
-                                                   filter_ex = EXDOSE>0 ,
-                                                   mode="LAST")
+            actual_output <- derive_vars_extreme_date(input,
+                                                 input_ex,
+                                                 new_var=TRTEDTM,
+                                                 dtc=EXENDTC,
+                                                 date_imputation = "first",
+                                                 time_imputation="first",
+                                                 min_dates = NULL,
+                                                 max_dates = NULL,
+                                                 order = vars(EXENDTC,EXSEQ),
+                                                 subject_keys=vars(STUDYID,USUBJID),
+                                                 flag_imputation = "AUTO",
+                                                 filter_dataset_date = EXDOSE>0 ,
+                                                 mode="LAST")
 
 
             expect_dfs_equal(
@@ -81,19 +81,19 @@ test_that("Test2::Adds treatment start date - no imputations
             )
             # nolint end
 
-            actual_output <- derive_vars_trt_end(input,
-                                                   input_ex,
-                                                   new_var=TRTEDTM,
-                                                   dtc=EXENDTC,
-                                                   date_imputation = "first",
-                                                   time_imputation="first",
-                                                   min_dates = NULL,
-                                                   max_dates = NULL,
-                                                   order = vars(EXENDTC,EXSEQ),
-                                                   subject_keys=vars(STUDYID,USUBJID),
-                                                   filter_ex = NULL,
-                                                   flag_imputation = "AUTO",
-                                                   mode="last")
+            actual_output <- derive_vars_extreme_date(input,
+                                                 input_ex,
+                                                 new_var=TRTEDTM,
+                                                 dtc=EXENDTC,
+                                                 date_imputation = "first",
+                                                 time_imputation="first",
+                                                 min_dates = NULL,
+                                                 max_dates = NULL,
+                                                 order = vars(EXENDTC,EXSEQ),
+                                                 subject_keys=vars(STUDYID,USUBJID),
+                                                 filter_dataset_date = NULL,
+                                                 flag_imputation = "AUTO",
+                                                 mode="last")
 
 
             expect_dfs_equal(
@@ -134,20 +134,19 @@ test_that("Test3::Adds treatment start date - no imputations
             )
             # nolint end
 
-            actual_output <- derive_vars_trt_end(input,
-                                                   input_ex,
-                                                   new_var=TRTEDT,
-                                                   dtc=EXENDTC,
-                                                   date_imputation = "first",
-                                                   time_imputation="first",
-                                                   min_dates = NULL,
-                                                   max_dates = NULL,
-                                                   order = vars(EXENDTC,EXSEQ),
-                                                   subject_keys=vars(STUDYID,USUBJID),
-                                                   #filter_ex = NULL,
-                                                   flag_imputation = "AUTO",
-                                                   filter_ex = EXDOSE>0 ,
-                                                   mode="last")
+            actual_output <- derive_vars_extreme_date(input,
+                                                 input_ex,
+                                                 new_var=TRTEDT,
+                                                 dtc=EXENDTC,
+                                                 date_imputation = "first",
+                                                 time_imputation="first",
+                                                 min_dates = NULL,
+                                                 max_dates = NULL,
+                                                 order = vars(EXENDTC,EXSEQ),
+                                                 subject_keys=vars(STUDYID,USUBJID),
+                                                 flag_imputation = "AUTO",
+                                                 filter_dataset_date = EXDOSE>0 ,
+                                                 mode="last")
 
 
             expect_dfs_equal(
@@ -185,19 +184,19 @@ test_that("Test4::Adds treatment END date IMPUTING WHEN NECESSARY - and imputati
             )
             # nolint end
 
-            actual_output <- derive_vars_trt_end(input,
-                                                   input_ex,
-                                                   new_var=TRTEDTM,
-                                                   dtc=EXENDTC,
-                                                   date_imputation = "first",
-                                                   time_imputation="first",
-                                                   min_dates = NULL,
-                                                   max_dates = NULL,
-                                                   order = vars(EXENDTC,EXSEQ),
-                                                   subject_keys=vars(STUDYID,USUBJID),
-                                                   flag_imputation = "date",
-                                                   filter_ex = EXDOSE>0 ,
-                                                   mode="LAST")
+            actual_output <- derive_vars_extreme_date(input,
+                                                 input_ex,
+                                                 new_var=TRTEDTM,
+                                                 dtc=EXENDTC,
+                                                 date_imputation = "first",
+                                                 time_imputation="first",
+                                                 min_dates = NULL,
+                                                 max_dates = NULL,
+                                                 order = vars(EXENDTC,EXSEQ),
+                                                 subject_keys=vars(STUDYID,USUBJID),
+                                                 flag_imputation = "date",
+                                                 filter_dataset_date = EXDOSE>0 ,
+                                                 mode="LAST")
 
 
             expect_dfs_equal(

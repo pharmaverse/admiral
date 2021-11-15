@@ -42,7 +42,7 @@ test_that("Test1::Adds treatment start date - no imputations
                                          #filter_ex = NULL,
                                          flag_imputation = "AUTO",
                                          filter_ex = EXDOSE>0 ,
-                                         ord_filter="first")
+                                         mode="first")
 
 
   expect_dfs_equal(
@@ -95,7 +95,7 @@ test_that("Test2::Adds treatment start date - no imputations
                                                    filter_ex = NULL,
                                                    flag_imputation = "AUTO",
                                                    #filter_ex = EXDOSE>0 ,
-                                                   ord_filter="first")
+                                                   mode="first")
 
 
             expect_dfs_equal(
@@ -149,7 +149,7 @@ test_that("Test 3::Adds treatment start date - no imputations
                                                    #filter_ex = NULL,
                                                    flag_imputation = "AUTO",
                                                    filter_ex = EXDOSE>0 ,
-                                                   ord_filter="first")
+                                                   mode="first")
 
 
             expect_dfs_equal(
@@ -198,7 +198,7 @@ test_that("Test4::Adds treatment START date IMPUTING WHEN NECESSARY - and imputa
                                                    subject_keys=vars(STUDYID,USUBJID),
                                                    flag_imputation = "date",
                                                    filter_ex = EXDOSE>0 ,
-                                                   ord_filter="FIRST")
+                                                   mode="FIRST")
 
 
             expect_dfs_equal(
