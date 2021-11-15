@@ -276,7 +276,7 @@ what_is_it <- function(x) {
 #' @keywords user_utility
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(vs)
 #'
 #' filter_if(vs, rlang::quo(NULL))
@@ -311,7 +311,7 @@ filter_if <- function(dataset, filter) {
 #' @return Variable vector.
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(vs)
 #'
 #' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))

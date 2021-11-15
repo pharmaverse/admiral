@@ -25,8 +25,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Depends: R (>= 3.5)
 Imports:
+    admiral.test,
     assertthat,
-    cdiscpilot,
     dplyr,
     lubridate,
     magrittr,
@@ -54,7 +54,7 @@ Suggests:
     usethis,
     covr,
     DT
-Remotes: Roche-GSK/cdiscpilot
+Remotes: Roche-GSK/admiral.test
 VignetteBuilder: knitr
 Collate: 
     'admiral-package.R'

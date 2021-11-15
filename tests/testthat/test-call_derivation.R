@@ -1,4 +1,4 @@
-library(cdiscpilot)
+library(admiral.test)
 data(ae)
 data(vs)
 

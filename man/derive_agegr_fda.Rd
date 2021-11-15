@@ -41,7 +41,7 @@ Baseline Measure Information).
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(dm)
 
 dm \%>\%
@@ -61,7 +61,7 @@ data.frame(AGE = 1:100) \%>\%
   derive_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(dm)
 
 dm \%>\%
