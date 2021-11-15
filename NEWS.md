@@ -26,6 +26,10 @@ lists of variables.
 ## Documentation
 
 - New vignette [Creating a BDS Time-to-Event ADaM](../articles/bds_tte.html)
+- New vignette [Queries Dataset Documentation](../articles/queries_dataset.html)
+- New vignette [Writing Vignettes](../articles/writing_vignettes.html)
+- New vignette [Pull Request Review Guidance](../articles/pr_review_guidance.html)
+
 
 # admiral 0.3.0
 
