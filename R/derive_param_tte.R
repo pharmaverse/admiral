@@ -672,7 +672,7 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @examples
 #' # Death event
-#' tte_source(
+#' admiral:::tte_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
@@ -685,7 +685,7 @@ extend_source_datasets <- function(source_datasets,
 #' )
 #'
 #' # Last study date known alive censor
-#' tte_source(
+#' admiral:::tte_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
 #'   censor = 1,

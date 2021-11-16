@@ -36,7 +36,7 @@ The \code{tte_source} object is used to define events and possible censorings.
 }
 \examples{
 # Death event
-tte_source(
+admiral:::tte_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
@@ -49,7 +49,7 @@ tte_source(
 )
 
 # Last study date known alive censor
-tte_source(
+admiral:::tte_source(
   dataset_name = "adsl",
   date = LSTALVDT,
   censor = 1,

@@ -37,39 +37,38 @@ condition. If not, an error is issued and all elements of the list not
 fulfilling the condition are listed.
 }
 \examples{
-death <- tte_source(
+death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to =vars(
-    EVENTDESC = "DEATH",
+  set_values_to = vars(
+    EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"))
+    SRCVAR = "DTHDT"
+  )
+)
 
-lstalv <- tte_source(
+lstalv <- censor_source(
   dataset_name = "adsl",
   date = LSTALVDT,
-  censor = 1,
   set_values_to = vars(
-    EVENTDESC = "LAST KNOWN ALIVE DATE",
+    EVNTDESC = "LAST KNOWN ALIVE DATE",
     SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"))
-
-events = list(death, lstalv)
+    SRCVAR = "LSTALVDT"
+  )
+)
 
 try(assert_list_element(
-  list = events,
+  list = list(death, lstalv),
   element = "censor",
   condition = censor == 0,
   message_text = "For events the censor values must be zero."
 ))
 
-valid_datasets = c("adrs", "adae")
-
 try(assert_list_element(
   list = events,
   element = "dataset_name",
-  condition = dataset_name \%in\% valid_datasets,
+  condition = dataset_name \%in\% c("adrs", "adae"),
   valid_datasets = valid_datasets,
   message_text = paste0("The dataset name must be one of the following:\n",
                         paste(valid_datasets, collapse = ", "))
