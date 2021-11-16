@@ -685,7 +685,7 @@ test_that("error is issued if parameter code already exists", {
   )
 })
 
-test_that("`tte_source`  object are printed as intended", {
+test_that("`tte_source` objects are printed as intended", {
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,
