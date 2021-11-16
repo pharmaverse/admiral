@@ -46,3 +46,4 @@ convert_blanks_to_na(df)
 \author{
 Thomas Neitmann
 }
+\keyword{user_utility}
