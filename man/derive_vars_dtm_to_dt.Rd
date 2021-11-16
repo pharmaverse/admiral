@@ -44,6 +44,5 @@ adcm \%>\%
 \author{
 Teckla Akinyi
 }
-\keyword{ADaM}
-\keyword{Date}
-\keyword{Timing}
+\keyword{adam}
+\keyword{timing}
