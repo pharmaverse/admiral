@@ -20,6 +20,7 @@ In the meantime you can install the latest release of the package directly from 
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
+remotes::install_github("Roche-GSK/admiral.test") # This is a required dependency of {admiral}
 remotes::install_github("Roche-GSK/admiral")
 ```
 
