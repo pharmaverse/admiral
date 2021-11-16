@@ -17,3 +17,6 @@ Print \code{tte_source} Objects
 \examples{
 print(death_event)
 }
+\seealso{
+\code{\link[=tte_source]{tte_source()}}, \code{\link[=censore_source]{censore_source()}}, \code{\link[=event_source]{event_source()}}
+}

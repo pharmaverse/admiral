@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_param_tte.R
 \name{censor_source}
 \alias{censor_source}
-\title{Create an \code{censor_source} Object}
+\title{Create a \code{censor_source} Object}
 \usage{
 censor_source(
   dataset_name,
@@ -35,11 +35,26 @@ to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDO
 character string, a numeric value, or \code{NA}.}
 }
 \value{
-An object of class "censor_source".
+An object of class \code{censor_source}, inheriting from class \code{tte_source}
 }
 \description{
-The \code{censor_source} object is used to define censorings as input for the
+\code{censor_source} objects are used to define censorings as input for the
 \code{derive_param_tte()} function.
+}
+\examples{
+# Last study date known alive censor
+censor_source(
+  dataset_name = "adsl",
+  date = LSTALVDT,
+  set_values_to = vars(
+    EVNTDESC = "ALIVE",
+    SRCDOM = "ADSL",
+    SRCVAR = "LSTALVDT"
+  )
+)
+}
+\seealso{
+\code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=event_source]{event_source()}}
 }
 \author{
 Stefan Bundfuss

@@ -666,9 +666,37 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @keywords dev_utility
 #'
+#' @seealso [derive_param_tte()], [censor_source()], [event_source()]
+#'
 #' @export
 #'
-#' @return An object of class "tte_source".
+#' @return An object of class `tte_source`
+#'
+#' @examples
+#' # Death event
+#' tte_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   censor = 0,
+#'   set_values_to = vars(
+#'     EVNTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
+#'
+#' # Last study date known alive censor
+#' tte_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVNTDESC = "ALIVE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"
+#'   )
+#' )
 tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
@@ -690,7 +718,7 @@ tte_source <- function(dataset_name,
 
 #' Create an `event_source` Object
 #'
-#' The `event_source` object is used to define events as input for the
+#' `event_source` objects are used to define events as input for the
 #' `derive_param_tte()` function.
 #'
 #' @inheritParams tte_source
@@ -699,9 +727,24 @@ tte_source <- function(dataset_name,
 #'
 #' @keywords source_specifications
 #'
+#' @seealso [derive_param_tte()], [censor_source()]
+#'
 #' @export
 #'
-#' @return An object of class "event_source".
+#' @return An object of class `event_source`, inheriting from class `tte_source`
+#'
+#' @examples
+#' # Death event
+#' event_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to = vars(
+#'     EVNTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
 event_source <- function(dataset_name,
                          filter = NULL,
                          date,
@@ -717,9 +760,9 @@ event_source <- function(dataset_name,
   out
 }
 
-#' Create an `censor_source` Object
+#' Create a `censor_source` Object
 #'
-#' The `censor_source` object is used to define censorings as input for the
+#' `censor_source` objects are used to define censorings as input for the
 #' `derive_param_tte()` function.
 #'
 #' @inheritParams tte_source
@@ -728,9 +771,23 @@ event_source <- function(dataset_name,
 #'
 #' @keywords source_specifications
 #'
+#' @seealso [derive_param_tte()], [event_source()]
+#'
 #' @export
 #'
-#' @return An object of class "censor_source".
+#' @return An object of class `censor_source`, inheriting from class `tte_source`
+#'
+#' @examples
+#' # Last study date known alive censor
+#' censor_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   set_values_to = vars(
+#'     EVNTDESC = "ALIVE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"
+#'   )
+#' )
 censor_source <- function(dataset_name,
                           filter = NULL,
                           date,
@@ -753,6 +810,8 @@ censor_source <- function(dataset_name,
 #' @param ... Not used
 #'
 #' @export
+#'
+#' @seealso [tte_source()], [censore_source()], [event_source()]
 #'
 #' @examples
 #' print(death_event)
