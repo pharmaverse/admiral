@@ -33,10 +33,10 @@ These contributions could include, for example, company specific derivations of 
 * Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an admiral function or a company specific function.
 * Admiral functions can be re-used for company specific functions.
 * Each function belongs to a category or multiple categories.
-* Each function that is used to derive a or multiple variable(s) requires to be unit tested.
+* Each function that is used to derive one or multiple variable(s) is required to be unit tested.
 * Functions do have a naming convention.
-* Double coding is not used as a QC method (only if absolutely necessary)
-* ADaMs are created including readable code and submission ready.
+* Double coding is not used as a QC method (only if absolutely necessary).
+* ADaMs are created with readable, submission-ready code.
 
 
 # Categorization of Functions
@@ -209,7 +209,7 @@ The [lintr](https://github.com/jimhester/lintr) package will be used to check an
 
 In line with the [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) design principle, 
 function inputs should be checked for validity 
-and if there’s an invalid input the function should stop immediately with an error. 
+and, if there’s an invalid input, the function should stop immediately with an error. 
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
