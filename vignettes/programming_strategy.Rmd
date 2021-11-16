@@ -232,7 +232,7 @@ This rule is applicable only if both functions are part of admiral.
 ## Function Header (Documentation)
 
 Every function that is exported from the package must have an accompanying header 
-that should be formatted according to the [roxygen2](https://CRAN.R-project.org/package=pkgname) convention. 
+that should be formatted according to the [roxygen2](https://roxygen2.r-lib.org/) convention. 
 
 In addition to the roxygen2 parameters, `@author` and `@keywords` are also used. 
 
