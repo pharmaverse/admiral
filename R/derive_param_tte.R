@@ -668,8 +668,6 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
-#' @export
-#'
 #' @return An object of class `tte_source`
 #'
 #' @examples
