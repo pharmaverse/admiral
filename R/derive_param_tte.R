@@ -809,7 +809,7 @@ censor_source <- function(dataset_name,
 #'
 #' @export
 #'
-#' @seealso [tte_source()], [censore_source()], [event_source()]
+#' @seealso [tte_source()], [censor_source()], [event_source()]
 #'
 #' @examples
 #' print(death_event)
