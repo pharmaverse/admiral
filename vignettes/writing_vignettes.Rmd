@@ -178,6 +178,13 @@ data(vs)
           filter = VSTESTCD == "WEIGHT"
         )
       ```
+      
+    Displaying many big datasets on a vignette, may require a long time to load
+    the page and may cause messages from the browser that the page is not
+    responsive. In this case the number of displayed observations should be
+    restricted either by restricting the source datasets at the beginning of the
+    vignette or in the call of `dataset_vignette()` if only some calls are
+    affected.
 
 #### Conventions for ADaM Workflow
 

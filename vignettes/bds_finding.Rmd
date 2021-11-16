@@ -65,6 +65,9 @@ data("adsl")
 data("vs")
 vs <- convert_blanks_to_na(vs)
 ```
+```{r echo=FALSE}
+vs <- filter(vs, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
+```
 
 The `SUPPVS` domain can be joined to the `VS` domain using the function `derive_vars_suppqual()`.
 
@@ -294,7 +297,7 @@ advs <- derive_param_map(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs, 
+  arrange(advs, USUBJID, VISITNUM, VSTPTNUM, ADT, PARAMCD),
   display_vars = vars(VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL, AVALC),
   filter = USUBJID == "01-701-1015" & PARAMCD %in% c("MAP", "DIABP","SYSBP")
 )
@@ -324,7 +327,7 @@ advs <- derive_param_bmi(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs, 
+  arrange(advs, USUBJID, VISITNUM, VSTPTNUM, ADT, PARAMCD),
   display_vars = vars(USUBJID, VSTESTCD, PARAMCD, VISIT, VSTPT, AVAL, AVALC),
   filter = PARAMCD %in% c("BSA", "BMI")
 )
