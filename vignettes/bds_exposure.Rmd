@@ -62,6 +62,9 @@ library(tibble)
 data("adsl")
 data("ex")
 ```
+```{r echo=FALSE}
+ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
+```
 
 The `SUPPEX` domain can be joined to the `EX` domain using the function `derive_vars_suppqual()`.
 

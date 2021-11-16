@@ -9,15 +9,16 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables created using \code{vars()} from which time are to be extracted}
+\item{source_vars}{A list of datetime variables created using \code{vars()} from
+which time is to be extracted}
 }
 \value{
-A data frame containing the input dataset with the datetime (\code{--DTM}) variable(s) and
-the corresponding time (\code{--TM}) variable(s) of all specified datetime variables from
-the \code{source_vars} option with the correct name.
+A data frame containing the input dataset with the corresponding time
+(\code{--TM}) variable(s) of all datetime variables (\code{--DTM}) specified in
+\code{source_vars} with the correct name.
 }
 \description{
-This function creates time variable(s) as output from a datetime variable(s)
+This function creates time variable(s) as output from datetime variable(s)
 }
 \details{
 The names of the newly added variables are automatically set by replacing the
@@ -53,6 +54,5 @@ adcm \%>\%
 \author{
 Teckla Akinyi
 }
-\keyword{ADaM}
-\keyword{Date}
-\keyword{Timing}
+\keyword{adam}
+\keyword{timing}

@@ -1,10 +1,11 @@
 #' Derive Time Variables from Datetime Variables
 #'
-#' This function creates time variable(s) as output from a datetime variable(s)
+#' This function creates time variable(s) as output from datetime variable(s)
 #'
 #' @param dataset Input dataset
 #'
-#' @param source_vars A list of datetime variables created using `vars()` from which time are to be extracted
+#' @param source_vars A list of datetime variables created using `vars()` from
+#'   which time is to be extracted
 #'
 #' @author Teckla Akinyi
 #'
@@ -14,11 +15,11 @@
 #' using the {hms} package.
 #'
 #' @return
-#' A data frame containing the input dataset with the datetime (`--DTM`) variable(s) and
-#' the corresponding time (`--TM`) variable(s) of all specified datetime variables from
-#' the `source_vars` option with the correct name.
+#' A data frame containing the input dataset with the corresponding time
+#' (`--TM`) variable(s) of all datetime variables (`--DTM`) specified in
+#' `source_vars` with the correct name.
 #'
-#' @keywords ADaM Timing Date
+#' @keywords adam timing
 #'
 #' @export
 #'
