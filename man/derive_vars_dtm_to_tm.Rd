@@ -9,7 +9,8 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables created using \code{vars()} from which time is to be extracted}
+\item{source_vars}{A list of datetime variables created using \code{vars()} from
+which time is to be extracted}
 }
 \value{
 A data frame containing the input dataset with the corresponding time

@@ -4,7 +4,8 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param source_vars A list of datetime variables created using `vars()` from which time is to be extracted
+#' @param source_vars A list of datetime variables created using `vars()` from
+#'   which time is to be extracted
 #'
 #' @author Teckla Akinyi
 #'
