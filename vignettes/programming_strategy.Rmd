@@ -193,7 +193,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
 | `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
 | `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
-| `start_dtc`      |                                                                                                                    |
+| `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                                                                    |
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
 | `set_values_to`  | List of variable name-value pairs.                                                                                 |
