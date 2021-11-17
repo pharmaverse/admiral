@@ -157,20 +157,20 @@
 #'   )
 #' )
 #'
-#' end_of_study <- censor_source(
+#' last_alive_dt <- censor_source(
 #'   dataset_name = "adsl",
-#'   date = EOSDT,
+#'   date = LSTALVDT,
 #'   set_values_to = vars(
-#'     EVNTDESC = "END OF STUDY DATE",
+#'     EVNTDESC = "LAST DATE KNOWN ALIVE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "EOSDT"
+#'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
 #'   event_conditions = list(death),
-#'   censor_conditions = list(end_of_study),
+#'   censor_conditions = list(last_alive_dt),
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = vars(
 #'     PARAMCD = "OS",
