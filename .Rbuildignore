@@ -3,9 +3,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^pkgdown$
-^_pkgdown.yml$
+^_pkgdown\.yml$
 ^.github$
 ^.lintr$
 ^doc$
 ^Meta$
 ^codecov\.yml$
+^vignettes/pr_review_guidance\.Rmd$
+^vignettes/programming_strategy\.Rmd$
+^vignettes/git_usage\.Rmd$
+^vignettes/faq\.Rmd$

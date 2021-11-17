@@ -41,23 +41,25 @@ These contributions could include, for example, company specific derivations of 
 
 # Categorization of Functions
 
-The functions are categorized by keywords. The keywords can be specified in the function header via the `@keywords` field. 
-Each function must use at least one of the following keywords.
+The functions are categorized by keywords. The keywords can be specified in the
+function header via the `@keywords` field. Each function must use at least one
+of the following keywords. Please note that the keywords are handled
+case-sensitive. Thus they must be in lower case.
 
 | Keyword                                                                           | Description                                                                                                              |
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| general_utility                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
-| getadata                                                                          | A function that provides Metadata functionality.                                                                         |
-| derivation                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
-| assertion                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
-| warning                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
-| predicate                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
-| Across ADaM dataset structures keywords: ADaM                                     | A function that is applicable across ADaM datasets.                                                                      |
-| ADaM dataset structure specific keywords: ADSL, OCCDS, BDS, OTHER                 | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
-| ADaM dataset specific keywords:  ADEX, ADLB, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
-| timing                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
-| computation                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
-| Therapeutic Area specific functions: Oncology, Infectious Diseases, Neuroscience  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
+| `general_utility`                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
+| `metadata`                                                                          | A function that provides Metadata functionality.                                                                         |
+| `derivation`                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
+| `assertion`                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
+| `warning`                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
+| `predicate`                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
+| Across ADaM dataset structures keywords: `adam`                                     | A function that is applicable across ADaM datasets.                                                                      |
+| ADaM dataset structure specific keywords: `adls`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
+| ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
+| `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
+| `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
+| Therapeutic Area specific functions: `oncology`, `infectious_diseases`, `neuroscience`  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
 | Company specific keywords                                                         |                                                                                                                          |
 
 
@@ -413,7 +415,7 @@ The documentation will be updated at:
 #'
 #' @description
 #'*Deprecated*, please use `new_fun()` instead.
-#' description of the function in plain english
+#' description of the function in plain English
 ``` 
 
 + the `@param` level for a parameter.

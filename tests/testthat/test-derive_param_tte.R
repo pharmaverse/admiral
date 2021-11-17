@@ -129,6 +129,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     )
   )
 
+  # nolint start
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
@@ -137,6 +138,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
     "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
   ) %>%
+  # nolint end
     mutate(
       STUDYID = "AB42",
       PARAMCD = "PFS",
@@ -272,6 +274,7 @@ test_that("by_vars parameter works correctly", {
     )
   )
 
+  # nolint start
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
     "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
@@ -279,6 +282,7 @@ test_that("by_vars parameter works correctly", {
     "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
   ) %>%
+  # nolint end
     mutate(
       STUDYID = "AB42",
       PARCAT1 = "TTAE",
@@ -679,4 +683,30 @@ test_that("error is issued if parameter code already exists", {
     ),
     regexp = "^The parameter code 'TTAE' does already exist in `dataset`.$"
   )
+})
+
+test_that("`tte_source` objects are printed as intended", {
+  ttae <- event_source(
+    dataset_name = "ae",
+    date = AESTDTC,
+    set_values_to = vars(
+      EVENTDESC = "AE",
+      SRCDOM = "AE",
+      SRCVAR = "AESTDTC",
+      SRCSEQ = AESEQ
+    )
+  )
+  expected_print_output <- c(
+    "<tte_source> object",
+    "dataset_name: \"ae\"",
+    "filter: NULL",
+    "date: AESTDTC",
+    "censor: 0",
+    "set_values_to:",
+    "  EVENTDESC: \"AE\"",
+    "  SRCDOM: \"AE\"",
+    "  SRCVAR: \"AESTDTC\"",
+    "  SRCSEQ: AESEQ"
+  )
+  expect_identical(capture.output(print(ttae)), expected_print_output)
 })

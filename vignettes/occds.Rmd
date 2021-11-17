@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+# Introduction
 
 This article describes creating an OCCDS ADaM. Examples are currently 
 presented and tested in the context of ADAE.
@@ -28,7 +28,7 @@ ADCM, ADMH, ADDV, etc.
 **Note:** 
 *All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.*
 
-## Programming Workflow
+# Programming Workflow
 
 * [Read in Data](#readdata)
 * [Derive/Impute End and Start Analysis Date/time and Relative Day](#datetime)
@@ -39,11 +39,11 @@ ADCM, ADMH, ADDV, etc.
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
 * [Derive Severity, Causality, and Toxicity Grade](#severity)
-* [Derive Treatement Emergent Flag](#trtfag)
+* [Derive Treatment Emergent Flag](#trtfag)
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
 
-### Read in Data {#readdata}
+## Read in Data {#readdata}
 
 Let's start by attaching packages and loading some example datasets:
 
@@ -82,7 +82,7 @@ adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID"))
 
 
 
-### Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
+## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part includes variables `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
 The function `derive_vars_dtm()` can be used to derive `ASTDTM` and `AENDTM` 
@@ -122,7 +122,7 @@ adae <- adae %>%
 
 See also [Date and Time Imputation](imputation.html).
 
-### Derive Durations {#duration}
+## Derive Durations {#duration}
 
 The function `derive_vars_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
@@ -137,7 +137,7 @@ adae <- adae %>%
   )
 ```
 
-### Derive ATC variables {#atc}
+## Derive ATC variables {#atc}
 
 The function `derive_vars_atc()` can be used to derive 
 ATC Class Variables.
@@ -183,7 +183,7 @@ cm <- tibble::tribble(
 derive_vars_atc(cm, facm)
 ```
 
-### Derive Time Relative to Reference {#atirel}
+## Derive Time Relative to Reference {#atirel}
 
 The function `derive_var_atirel()` can be used to derive the variable `ATIREL` to `"CONCOMITANT"`, `"PRIOR"`, `"PRIOR_CONCOMITANT"` or `NULL` based on the 
 relationship 
@@ -211,17 +211,17 @@ adcm %>%
   select(STUDYID, USUBJID, ATIREL, everything())
 ```
 
-### Derive Analysis Phase and Period {#phase_period}
+## Derive Analysis Phase and Period {#phase_period}
 
 *These functionalities are in progress.*
 
 
-### Derive Planned and Actual Treatment {#trtpa}
+## Derive Planned and Actual Treatment {#trtpa}
 
 *These functionalities are in progress.*
 
 
-### Derive Date/Date-time of Last Dose {#last_dose}
+## Derive Date/Date-time of Last Dose {#last_dose}
 
 The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
 Additionally, this function can also provide the traceability variables 
@@ -246,7 +246,7 @@ adae <- adae %>%
 ```
 
 
-### Derive Severity, Causality, and Toxicity Grade {#severity}
+## Derive Severity, Causality, and Toxicity Grade {#severity}
 
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
 `mutate()` if no imputation is required.
@@ -259,7 +259,7 @@ adae <- adae %>%
   )
 ```
 
-### Derive Treatment Emergent Flag {#trtflag}
+## Derive Treatment Emergent Flag {#trtflag}
 
 To derive the treatment emergent flag `TRTEMFL`, one can use simple
 `dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
@@ -324,7 +324,7 @@ derive_var_ontrtfl(
 )
 ```
 
-### Derive Occurrence Flags {#occflag}
+## Derive Occurrence Flags {#occflag}
 
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
@@ -362,7 +362,7 @@ adae %>%
 ```
 
 
-### Derive Query Variables {#query}
+## Derive Query Variables {#query}
 
 It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in `derive_vars_query()` to an ADaM. 
 
@@ -393,8 +393,8 @@ adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
 head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, starts_with("SMQ05"), starts_with("CQ06")))
 ```
 
-Similarly to SMQ, the `derive_vars_query()` function can be used to derive Standardized 
-Drug Groupings (SDQ).
+Similarly to SMQ, the `derive_vars_query()` function can be used to derive
+Standardized Drug Groupings (SDG).
 
 ```{r, eval=TRUE}
 sdg <- tibble::tribble(
@@ -414,3 +414,10 @@ adcm <- tibble::tribble(
 )
 derive_vars_query(adcm, sdg)
 ```
+
+# Example Scripts
+
+ADaM | Sample Code
+---- | --------------
+ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R){target="_blank"}

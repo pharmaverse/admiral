@@ -379,6 +379,8 @@ get_duplicates <- function(x) {
 #'
 #' @export
 #'
+#' @keywords user_utility
+#'
 #' @examples
 #' extract_unit("Height (cm)")
 #'
@@ -405,6 +407,8 @@ extract_unit <- function(x) {
 #' all attributes such as labels are preserved.
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords user_utility
 #'
 #' @export
 #'

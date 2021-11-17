@@ -225,8 +225,10 @@ derive_vars_dtm(
   min_dates = vars(TRTSDTM)
 )
 ```
+
 ## Avoid Imputed Dates After a Particular Date
-If a date is imputed as the lastest date of all possible dates when filling the
+
+If a date is imputed as the latest date of all possible dates when filling the
 missing parts, it should not result in dates after data cut off or death. This
 can be achieved by specifying the dates for the `max_dates` parameter.
 

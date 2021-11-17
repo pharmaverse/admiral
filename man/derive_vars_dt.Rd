@@ -82,7 +82,8 @@ cut off date. Only dates which are in the range of possible dates are
 considered.}
 }
 \value{
-The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'} if requested) added.
+The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
+if requested) added.
 }
 \description{
 Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
