@@ -28,7 +28,8 @@ remotes::install_github("Roche-GSK/admiral")
 
 * Build a toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner
 * Pharmaceutical communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach
-* All functions are documented, tested, include examples and are listed [in the Reference section](https://roche-gsk.github.io/admiral/reference/index.html) 
+* All functions are documented, tested, include examples and are listed in the
+[Reference section](reference/index.html)
 * Vignettes how to create ADSL, BDS and OCCUR datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...)
 
@@ -49,4 +50,4 @@ remotes::install_github("Roche-GSK/admiral")
 
 ## Contact 
 
-In case your questions are not answered please contact us on [Slack](https://app.slack.com/client/T028PB489D3/C028SJ83KM1)
+In case your questions are not answered please contact us on [Slack](https://app.slack.com/client/T028PB489D3/C02C8UN2JTT).

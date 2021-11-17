@@ -217,4 +217,4 @@ list_all_templates()
 
 - [Template scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/templates)
 
-- [Contributing to admiral](contributing.html)
+- [Programming Strategy](programming_strategy.html)
