@@ -72,6 +72,18 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
+    "admiral.test": {
+      "Package": "admiral.test",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "Roche-GSK",
+      "RemoteRepo": "admiral.test",
+      "RemoteRef": "main",
+      "RemoteSha": "660224bfeb8450f6ef69769e6982aa921dc8130a",
+      "Hash": "869b5006c7e15f0364d09695c461471c"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
@@ -120,18 +132,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "461aa75a11ce2400245190ef5d3995df"
-    },
-    "cdiscpilot": {
-      "Package": "cdiscpilot",
-      "Version": "0.1.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "Roche-GSK",
-      "RemoteRepo": "cdiscpilot",
-      "RemoteRef": "main",
-      "RemoteSha": "59c66d0f71f99b04189f50e2775ad7c283c4f950",
-      "Hash": "81cc60d524bcfb8f82135547454ec75b"
     },
     "cli": {
       "Package": "cli",

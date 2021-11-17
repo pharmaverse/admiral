@@ -16,7 +16,7 @@ is_valid_sec_min(arg)
 Minutes and seconds are expected to range from 0 to 59
 }
 \examples{
-assertthat::assert_that(is_valid_sec_min(59))
+assertthat::assert_that(admiral:::is_valid_sec_min(59))
 }
 \author{
 Samia Kabi

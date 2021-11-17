@@ -18,7 +18,7 @@ Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours',
 }
 \examples{
 unit <- "days"
-assertthat::assert_that(is_timeunit(unit))
+assertthat::assert_that(admiral:::is_timeunit(unit))
 }
 \author{
 Stefan Bundfuss

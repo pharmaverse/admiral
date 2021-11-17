@@ -104,7 +104,7 @@ variables from \code{ex_dataset} (e.g. \code{ex_keep_vars = vars(LSTEXVIS = VISI
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(ae)
 data(ex_single)
 

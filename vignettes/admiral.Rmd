@@ -12,7 +12,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(admiral)
 ```
 
 # Main Idea
@@ -23,25 +22,36 @@ processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following script which creates a (very simple) ADSL dataset.
 
-```r
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(lubridate)
 library(admiral)
+library(admiral.test)
 
 # read in SDTM datasets
 data("dm")
 data("ds")
 data("ex")
+```
 
+```{r, eval=TRUE}
 # derive treatment variables
 adsl <- dm %>%
   mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  mutate(TRTSDT = date(TRTSDTM)) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
-  mutate(TRTEDT = date(TRTEDTM)) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd()
 ```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, 
+                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
+                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+                                     TRTDURD))
+```
+
+<br><br>
 
 # Derivations
 
@@ -75,6 +85,56 @@ values are uppercase to conform with this convention when using the
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not
 be preserved.
+
+# Computations
+
+[Computations](../reference/index.html#section-computations) expect vectors as
+input and return a vector. These function can be used in expressions like
+`convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
+example below:
+
+```{r, eval=TRUE}
+# derive final lab visit date
+ds_final_lab_visit <- ds %>% 
+  filter(DSDECOD == "FINAL LAB VISIT") %>% 
+  transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
+
+# derive treatment variables  
+adsl <- dm %>%
+  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
+  derive_var_trtsdtm(dataset_ex = ex) %>%
+  derive_var_trtedtm(dataset_ex = ex) %>%
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
+  derive_var_trtdurd() %>%
+  # merge on final lab visit date
+  left_join(ds_final_lab_visit, by = "USUBJID")
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, 
+                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
+                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+                                     TRTDURD, FINLABDT))
+```
+
+<br><br>
+
+# Parameters
+
+For parameters which expect variable names or expressions of variable names, 
+symbols or expressions must be specified rather than strings.
+
+- For parameters which expect a single variable name, the name can be specified
+without quotes and quotation, e.g. `new_var = TEMPBL`
+
+- For parameters which expect one or more variable names, a list of symbols is
+expected, e.g. `by_vars = vars(PARAMCD, AVISIT)` 
+
+- For parameters which expect a single expression, the expression needs to be
+passed "as is", e.g. `filter = PARAMCD == "TEMP"`
+
+- For parameters which expect one or more expressions, a list of expressions is
+expected, e.g. `order = vars(AVISIT, desc(AESEV))`
 
 # Handling of Missing Values
 
@@ -117,30 +177,6 @@ mean(c(1, NA, 2), na.rm = TRUE)
 ```
 
 This is very important to keep in mind when using {admiral}'s aggregation functions such as `derive_summary_records()`.
-
-# Computations
-
-[Computations](../reference/index.html#section-computations) expect vectors as
-input and return a vector. These function can be used in expressions like
-`convert_dtc_to_dt()` and `impute_dtc()` in the derivation of `EOSDT` in the
-example above.
-
-# Parameters
-
-For parameters which expect variable names or expressions of variable names, 
-symbols or expressions must be specified rather than strings.
-
-- For parameters which expect a single variable name, the name can be specified
-without quotes and quotation, e.g. `new_var = TEMPBL`
-
-- For parameters which expect one or more variable names, a list of symbols is
-expected, e.g. `by_vars = vars(PARAMCD, AVISIT)` 
-
-- For parameters which expect a single expression, the expression needs to be
-passed "as is", e.g. `filter = PARAMCD == "TEMP"`
-
-- For parameters which expect one or more expressions, a list of expressions is
-expected, e.g. `order = desc(AVISIT, desc(AESEV))`
 
 # Validation
 

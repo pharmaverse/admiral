@@ -154,11 +154,9 @@ derive_summary_records <- function(dataset,
                                    set_values_to = NULL,
                                    fns = deprecated(),
                                    filter_rows = deprecated()) {
-
-  ### BEGIN DEPRECIATION
   if (!missing(fns)) {
     err_msg <- paste(
-      "The fns argument of `derive_summary_records()` is deprecated",
+      "The `fns` argument of `derive_summary_records()` is deprecated",
       "as of admiral 0.3.0.",
       "Please use the `analysis_var` and `summary_fun` arguments instead."
     )
@@ -172,7 +170,6 @@ derive_summary_records <- function(dataset,
     )
     filter <- enquo(filter_rows)
   }
-  ### END DEPRECIATION
 
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))

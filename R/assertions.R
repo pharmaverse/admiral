@@ -20,7 +20,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -283,7 +283,7 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -362,7 +362,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -785,7 +785,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(dm)
 #'
 #' assert_has_variables(dm, "STUDYID")
@@ -978,12 +978,10 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
 #' refdate <- lubridate::ymd("2020-01-02")
 #' date <- lubridate::ymd("2020-02-03")
-#' assertthat::assert_that(is_date(refdate), is_date(date))
+#' assertthat::assert_that(admiral:::is_date(refdate), admiral:::is_date(date))
 is_date <- function(arg) {
   is.instant(arg)
 }
@@ -1019,11 +1017,9 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
 #' unit <- "days"
-#' assertthat::assert_that(is_timeunit(unit))
+#' assertthat::assert_that(admiral:::is_timeunit(unit))
 is_timeunit <- function(arg) {
   arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
@@ -1051,11 +1047,9 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_date_entry("01-02"))
-#' assertthat::assert_that(is_valid_date_entry("FIRST"))
+#' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
+#' assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
@@ -1085,11 +1079,9 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(is_valid_time_entry("FIRST"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
@@ -1118,10 +1110,8 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_sec_min(59))
+#' assertthat::assert_that(admiral:::is_valid_sec_min(59))
 is_valid_sec_min <- function(arg) {
   arg %in% 0:59
 }
@@ -1148,10 +1138,8 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_hour(20))
+#' assertthat::assert_that(admiral:::is_valid_hour(20))
 is_valid_hour <- function(arg) {
   arg %in% 0:23
 }
@@ -1178,10 +1166,8 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_day(20))
+#' assertthat::assert_that(admiral:::is_valid_day(20))
 is_valid_day <- function(arg) {
   arg %in% 1:31
 }
@@ -1208,10 +1194,8 @@ on_failure(is_valid_day) <- function(call, env) {
 #'
 #' @keywords check
 #'
-#' @export
-#'
 #' @examples
-#' assertthat::assert_that(is_valid_month(12))
+#' assertthat::assert_that(admiral:::is_valid_month(12))
 is_valid_month <- function(arg) {
   arg %in% 1:12
 }
