@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -180,18 +192,25 @@
     <p>Derive death cause (<code>DTHCAUS</code>) and add traceability variables if required.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_dthcaus</span>(<span class='no'>dataset</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_var_dthcaus</span>(<span class='no'>dataset</span>, <span class='no'>...</span>, <span class='kw'>subject_keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>Input dataset. <code>USUBJID</code> is an expected column.</p></td>
+      <td><p>Input dataset.
+The variables specified by the <code>subject_keys</code> parameter are expected.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Objects of class "dthcaus_source" created by <code><a href='dthcaus_source.html'>dthcaus_source()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>subject_keys</th>
+      <td><p>Variables to uniquely identify a subject</p>
+<p>A list of quosures where the expressions are symbols as returned by
+<code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code> is expected.</p></td>
     </tr>
     </table>
 
@@ -283,7 +302,7 @@ the preferred order.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

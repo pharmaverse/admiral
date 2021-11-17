@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -226,6 +238,11 @@ transposed variables</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The input dataset with transposed variables from <code>dataset_merge</code> added</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>After filtering <code>dataset_merge</code> based upon the condition provided in <code>filter</code>, this
+dataset is transposed and subsequently merged onto <code>dataset</code> using <code>by_vars</code> as
+keys.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -288,7 +305,7 @@ transposed variables</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

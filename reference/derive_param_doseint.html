@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -245,14 +257,14 @@ exist for both <code>tadm_code</code> and <code>tpadm_code</code> for the specif
 <p>If <code>zero_doses</code> = <code>Inf</code>:</p><ol>
 <li><p>If the planned dose (<code>tpadm_code</code>) is 0 and administered dose
 (<code>tadm_code</code>) is 0, <code>NaN</code> is returned.</p></li>
-<li><p>If the planned dose (<code>tpadm_code</code>) is 0 and the admnistered dose
+<li><p>If the planned dose (<code>tpadm_code</code>) is 0 and the administered dose
 (<code>tadm_code</code>) is &gt; 0, <code>Inf</code> is returned.</p></li>
 </ol>
 
 <p>If <code>zero_doses</code> = <code>100</code> :</p><ol>
 <li><p>If the planned dose (<code>tpadm_code</code>) is 0 and administered dose
 (<code>tadm_code</code>) is 0, 0 is returned.</p></li>
-<li><p>If the planned dose (<code>tpadm_code</code>) is 0 and the admnistered dose
+<li><p>If the planned dose (<code>tpadm_code</code>) is 0 and the administered dose
 (<code>tadm_code</code>) is &gt; 0, 100 is returned.</p></li>
 </ol></td>
     </tr>
@@ -280,14 +292,14 @@ Total Dose / Planned Dose * 100</p>
 
 <span class='no'>adex</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
 ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>, ~<span class='no'>VISIT</span>, ~<span class='no'>ANL01FL</span>, ~<span class='no'>ASTDT</span>,            ~<span class='no'>AENDT</span>,            ~<span class='no'>AVAL</span>,
-<span class='st'>"P001"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-30"</span>), <span class='fl'>59</span>,
-<span class='st'>"P001"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-01"</span>), <span class='fl'>96</span>,
-<span class='st'>"P001"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fl'>88</span>,
-<span class='st'>"P001"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-05"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>88</span>,
-<span class='st'>"P002"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-30"</span>), <span class='fl'>0</span>,
-<span class='st'>"P002"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-01"</span>), <span class='fl'>0</span>,
-<span class='st'>"P002"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-03-15"</span>), <span class='fl'>52</span>,
-<span class='st'>"P002"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-05"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-03-01"</span>), <span class='fl'>0</span>
+<span class='st'>"P001"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-30"</span>), <span class='fl'>59</span>,
+<span class='st'>"P001"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-01"</span>), <span class='fl'>96</span>,
+<span class='st'>"P001"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fl'>88</span>,
+<span class='st'>"P001"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>88</span>,
+<span class='st'>"P002"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-30"</span>), <span class='fl'>0</span>,
+<span class='st'>"P002"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V1"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-01"</span>), <span class='fl'>0</span>,
+<span class='st'>"P002"</span>,   <span class='st'>"TNDOSE"</span>, <span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-03-15"</span>), <span class='fl'>52</span>,
+<span class='st'>"P002"</span>,   <span class='st'>"TSNDOSE"</span>,<span class='st'>"V2"</span>,   <span class='st'>"Y"</span>,      <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-02-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2021-03-01"</span>), <span class='fl'>0</span>
 )
 
 <span class='fu'>derive_param_doseint</span>(
@@ -342,7 +354,7 @@ Total Dose / Planned Dose * 100</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

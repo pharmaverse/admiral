@@ -87,7 +87,7 @@ iterations and others varying." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@ iterations and others varying." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@ iterations and others varying." />
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -182,7 +194,7 @@ iterations and others varying." />
 iterations and others varying.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>call_derivation</span>(<span class='no'>dataset</span>, <span class='no'>derivation</span>, <span class='no'>variable_params</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>call_derivation</span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>derivation</span>, <span class='no'>variable_params</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,10 +226,11 @@ the value in <code>variable_params</code> overwrites the one in <code>...</code>
 which <code>derivation</code> has been used.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>params</p></div>
+    <div class='dont-index'><p><code><a href='params.html'>params()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>ae</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>adsl</span>)
 
@@ -233,8 +246,8 @@ which <code>derivation</code> has been used.</p>
     <span class='fu'><a href='params.html'>params</a></span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>, <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>, <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>),
     <span class='fu'><a href='params.html'>params</a></span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>, <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"last"</span>, <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AEN"</span>)
   ),
-  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTSDT</span>),
-  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTEDT</span>)
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDT</span>),
+  <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTEDT</span>)
 )</div><div class='output co'>#&gt; # A tibble: 1,000 x 9
 #&gt;    USUBJID AESTDTC AEENDTC TRTSDT     TRTEDT     ASTDT      ASTDTF AENDT     
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;date&gt;    
@@ -255,15 +268,15 @@ which <code>derivation</code> has been used.</p>
     <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
     <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
     <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>,
-    <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTSDT</span>),
-    <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTEDT</span>)
+    <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDT</span>),
+    <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTEDT</span>)
   ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='derive_vars_dt.html'>derive_vars_dt</a></span>(
     <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AEN"</span>,
     <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
     <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"last"</span>,
-    <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTSDT</span>),
-    <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTEDT</span>)
+    <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDT</span>),
+    <span class='kw'>max_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTEDT</span>)
   )</div><div class='output co'>#&gt; # A tibble: 1,000 x 9
 #&gt;    USUBJID AESTDTC AEENDTC TRTSDT     TRTEDT     ASTDT      ASTDTF AENDT     
 #&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  &lt;date&gt;    
@@ -289,7 +302,7 @@ which <code>derivation</code> has been used.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

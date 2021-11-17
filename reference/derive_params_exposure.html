@@ -87,7 +87,7 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -278,20 +290,20 @@ variables</p>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>stringr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>adex</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>, ~<span class='no'>AVAL</span>, ~<span class='no'>AVALC</span>, ~<span class='no'>VISIT</span>, ~<span class='no'>ASTDT</span>, ~<span class='no'>AENDT</span>,
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>85</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>82</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>50</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>65</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='st'>"ADVERSE EVENT"</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>)
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>85</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>82</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
+  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>50</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>65</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='st'>"ADVERSE EVENT"</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
+  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>)
 ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>ASTDTM</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>ASTDT</span>, <span class='st'>"00:00:00"</span>)), <span class='kw'>AENDTM</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>AENDT</span>, <span class='st'>"00:00:00"</span>)))
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>ASTDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>ASTDT</span>, <span class='st'>"00:00:00"</span>)), <span class='kw'>AENDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>AENDT</span>, <span class='st'>"00:00:00"</span>)))
 
 <span class='co'># Cumulative dose</span>
 <span class='no'>adex</span> <span class='kw'>%&gt;%</span>
@@ -383,7 +395,7 @@ variables</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

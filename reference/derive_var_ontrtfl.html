@@ -87,7 +87,7 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -289,9 +301,9 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
 )
 <span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
@@ -306,9 +318,9 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 #&gt; 3 P03     2019-12-31 2020-01-01 2020-03-01 &lt;NA&gt;   </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>USUBJID</span>, ~<span class='no'>ADT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-07-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-07-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-04-30"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>)
 )
 <span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
@@ -324,9 +336,9 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 #&gt; 3 P03     2020-03-15 2020-01-01 2020-03-01 Y      </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>USUBJID</span>, ~<span class='no'>ADTM</span>,                ~<span class='no'>TRTSDTM</span>,                   ~<span class='no'>TRTEDTM</span>,                   ~<span class='no'>TPT</span>,
-  <span class='st'>"P01"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>,
-  <span class='st'>"P02"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>,
-  <span class='st'>"P03"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>),       <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>
+  <span class='st'>"P01"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-02T12:00"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>,
+  <span class='st'>"P02"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>),       <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='st'>"PRE"</span>,
+  <span class='st'>"P03"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-12-31"</span>),       <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-01-01T12:00"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hm</a></span>(<span class='st'>"2020-03-01T12:00"</span>), <span class='fl'>NA</span>
 )</div><div class='output co'>#&gt; <span class='warning'>Warning: All formats failed to parse. No formats found.</span></div><div class='input'><span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>advs</span>,
   <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ADTM</span>,
@@ -341,9 +353,9 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 #&gt; 3 P03     2019-12-31 2020-01-01 12:00:00 2020-03-01 12:00:00 &lt;NA&gt;  &lt;NA&gt;   </div><div class='input'>
 <span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>USUBJID</span>, ~<span class='no'>ASTDT</span>,              ~<span class='no'>TRTSDT</span>,           ~<span class='no'>TRTEDT</span>,           ~<span class='no'>AENDT</span>,
-  <span class='st'>"P01"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-01"</span>),
-  <span class='st'>"P02"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>),
-  <span class='st'>"P03"</span>,    <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>NA</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>NA</span>,
 )
 <span class='fu'>derive_var_ontrtfl</span>(
  <span class='no'>advs</span>,
@@ -370,7 +382,7 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

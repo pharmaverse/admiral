@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -186,7 +198,8 @@
   <span class='no'>new_var</span>,
   <span class='no'>dtc</span>,
   <span class='no'>filter_ds</span>,
-  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>subject_keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -219,7 +232,9 @@ If the year part is not recorded (missing date), no imputation is performed.</p>
     <tr>
       <th>filter_ds</th>
       <td><p>Filter condition for the disposition data.</p>
-<p>one observation per patient. An error is issued otherwise.</p>
+<p>Filter used to select the relevant disposition data.
+It is expected that the filter restricts <code>dataset_ds</code> such that there is at most
+one observation per patient. An error is issued otherwise.</p>
 <p>Permitted Values: logical expression.</p></td>
     </tr>
     <tr>
@@ -233,6 +248,12 @@ If the year part is not recorded (missing date), no imputation is performed.</p>
 
 <p>Default is NULL</p></td>
     </tr>
+    <tr>
+      <th>subject_keys</th>
+      <td><p>Variables to uniquely identify a subject</p>
+<p>A list of quosures where the expressions are symbols as returned by
+<code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code> is expected.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -241,8 +262,10 @@ If the year part is not recorded (missing date), no imputation is performed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"dm"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ds"</span>)
+
 <span class='no'>dm</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>derive_disposition_dt</span>(
     <span class='kw'>dataset_ds</span> <span class='kw'>=</span> <span class='no'>ds</span>,
@@ -275,7 +298,7 @@ If the year part is not recorded (missing date), no imputation is performed.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

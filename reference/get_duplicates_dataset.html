@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -202,18 +214,18 @@ it has been saved in a variable).</p>
 
 <span class='fu'><a href='signal_duplicate_records.html'>signal_duplicate_records</a></span>(<span class='no'>adsl</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>), <span class='kw'>cnd_type</span> <span class='kw'>=</span> <span class='st'>"warning"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Dataset contains duplicate records with respect to `USUBJID`</span>
 #&gt; <span class='warning'>Run `get_duplicates_dataset()` to access the duplicate records</span></div><div class='input'>
-<span class='fu'>get_duplicates_dataset</span>()</div><div class='output co'>#&gt; # A tibble: 2 x 50
+<span class='fu'>get_duplicates_dataset</span>()</div><div class='output co'>#&gt; # A tibble: 2 x 49
 #&gt;   USUBJID STUDYID SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC RFPENDTC
 #&gt; * &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   
-#&gt; 1 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""      2014-07…
-#&gt; 2 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… ""      2014-07…
-#&gt; # … with 41 more variables: DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;, AGE &lt;dbl&gt;,
+#&gt; 1 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… &lt;NA&gt;    2014-07…
+#&gt; 2 01-701… CDISCP… 1015   2014-0… 2014-0… 2014-01… 2014-07… &lt;NA&gt;    2014-07…
+#&gt; # … with 40 more variables: DTHDTC &lt;chr&gt;, DTHFL &lt;chr&gt;, SITEID &lt;chr&gt;, AGE &lt;dbl&gt;,
 #&gt; #   AGEU &lt;chr&gt;, SEX &lt;chr&gt;, RACE &lt;chr&gt;, ETHNIC &lt;chr&gt;, ARMCD &lt;chr&gt;, ARM &lt;chr&gt;,
 #&gt; #   ACTARMCD &lt;chr&gt;, ACTARM &lt;chr&gt;, COUNTRY &lt;chr&gt;, DMDTC &lt;chr&gt;, DMDY &lt;dbl&gt;,
-#&gt; #   TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;, TRTSDT &lt;date&gt;, TRTEDTM &lt;dttm&gt;,
+#&gt; #   TRT01P &lt;chr&gt;, TRT01A &lt;chr&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, TRTSDT &lt;date&gt;,
 #&gt; #   TRTEDT &lt;date&gt;, TRTDURD &lt;dbl&gt;, SCRFDT &lt;date&gt;, EOSDT &lt;date&gt;, EOSSTT &lt;chr&gt;,
-#&gt; #   DCSREAS &lt;chr&gt;, DCSREASP &lt;chr&gt;, FRVDT &lt;date&gt;, DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;,
-#&gt; #   DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;, AGEGR1 &lt;chr&gt;, RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;,
+#&gt; #   FRVDT &lt;date&gt;, DTHDT &lt;date&gt;, DTHDTF &lt;chr&gt;, DTHADY &lt;dbl&gt;, LDDTHELD &lt;dbl&gt;,
+#&gt; #   LSTALVDT &lt;date&gt;, AGEGR1 &lt;chr&gt;, RACEGR1 &lt;chr&gt;, REGION1 &lt;chr&gt;,
 #&gt; #   LDDTHGR1 &lt;chr&gt;, FASFL &lt;chr&gt;, SAFFL &lt;chr&gt;, DTH30FL &lt;chr&gt;, DTHA30FL &lt;chr&gt;,
 #&gt; #   DTHB30FL &lt;chr&gt;</div></pre>
   </div>
@@ -227,7 +239,7 @@ it has been saved in a variable).</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

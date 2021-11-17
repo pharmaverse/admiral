@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -210,34 +222,35 @@ like <code>starts_with("EX")</code></p></td>
     <p>Variable vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vs</span>)
+
 <span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>get_constant_vars</span>(<span class='no'>vs</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>VSTESTCD</span>))</div><div class='output co'>#&gt; &lt;list_of&lt;quosure&gt;&gt;
 #&gt; 
 #&gt; [[1]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^USUBJID
-#&gt; env:  0x55e7f86e8d88
+#&gt; env:  0x564cde037190
 #&gt; 
 #&gt; [[2]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTESTCD
-#&gt; env:  0x55e7f86e8d88
+#&gt; env:  0x564cde037190
 #&gt; 
 #&gt; [[3]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^STUDYID
-#&gt; env:  0x55e7f827ec10
+#&gt; env:  0x564cdf03b998
 #&gt; 
 #&gt; [[4]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^DOMAIN
-#&gt; env:  0x55e7f827ec10
+#&gt; env:  0x564cdf03b998
 #&gt; 
 #&gt; [[5]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTEST
-#&gt; env:  0x55e7f827ec10
+#&gt; env:  0x564cdf03b998
 #&gt; </div><div class='input'>
 <span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>get_constant_vars</span>(
   <span class='no'>vs</span>,
@@ -248,17 +261,17 @@ like <code>starts_with("EX")</code></p></td>
 #&gt; [[1]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^USUBJID
-#&gt; env:  0x55e7f86e8d88
+#&gt; env:  0x564cde037190
 #&gt; 
 #&gt; [[2]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTESTCD
-#&gt; env:  0x55e7f86e8d88
+#&gt; env:  0x564cde037190
 #&gt; 
 #&gt; [[3]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^STUDYID
-#&gt; env:  0x55e8025cb498
+#&gt; env:  0x564cdf6b6ae8
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -271,7 +284,7 @@ like <code>starts_with("EX")</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

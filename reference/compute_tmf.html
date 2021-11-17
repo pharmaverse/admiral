@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -178,8 +190,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Derive the time imputation flag ('--TMF') comparing a date character vector
-('--DTC') with a Datetime vector ('--DTM').</p>
+    <p>Derive the time imputation flag (<code>'--TMF'</code>) comparing a date character vector
+(<code>'--DTC'</code>) with a Datetime vector (<code>'--DTM'</code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>compute_tmf</span>(<span class='no'>dtc</span>, <span class='no'>dtm</span>)</pre>
@@ -189,19 +201,19 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dtc</th>
-      <td><p>The date character vector ('--DTC').</p>
-<p>A character date is expected in a format like yyyy-mm-ddThh:mm:ss (partial or complete).</p></td>
+      <td><p>The date character vector (<code>'--DTC'</code>).</p>
+<p>A character date is expected in a format like <code>yyyy-mm-ddThh:mm:ss</code> (partial or complete).</p></td>
     </tr>
     <tr>
       <th>dtm</th>
-      <td><p>The  Date vector to compare ('--DTM').</p>
+      <td><p>The Date vector to compare (<code>'--DTM'</code>).</p>
 <p>A datetime object is expected.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the time imputation flag ('--TMF') (character value of 'H', 'M' , 'S' or NA)</p>
+    <p>The time imputation flag (<code>'--TMF'</code>) (character value of <code>'H'</code>, <code>'M'</code> , <code>'S'</code> or <code>NA</code>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>compute_tmf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019-07-18T15:25"</span>, <span class='kw'>dtm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2019-07-18T15:25:00"</span>))</div><div class='output co'>#&gt; [1] "S"</div><div class='input'><span class='fu'>compute_tmf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019-07-18T15"</span>, <span class='kw'>dtm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2019-07-18T15:25:00"</span>))</div><div class='output co'>#&gt; [1] "M"</div><div class='input'><span class='fu'>compute_tmf</span>(<span class='kw'>dtc</span> <span class='kw'>=</span> <span class='st'>"2019-07-18"</span>, <span class='kw'>dtm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2019-07-18"</span>))</div><div class='output co'>#&gt; [1] "H"</div></pre>
@@ -216,7 +228,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

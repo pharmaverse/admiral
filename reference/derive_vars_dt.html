@@ -53,7 +53,7 @@
 
 
 <meta property="og:title" content="Derive/Impute a Date from a Date Character Vector — derive_vars_dt" />
-<meta property="og:description" content="Derive a date ('--DT') from a date character vector ('---DTC').
+<meta property="og:description" content="Derive a date ('--DT') from a date character vector ('--DTC').
 The date can be imputed (see date_imputation parameter)
 and the date imputation flag ('--DTF') can be added." />
 <meta property="og:image" content="/logo.png" />
@@ -88,7 +88,7 @@ and the date imputation flag ('--DTF') can be added." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -125,10 +125,16 @@ and the date imputation flag ('--DTF') can be added." />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -140,6 +146,12 @@ and the date imputation flag ('--DTF') can be added." />
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -179,9 +191,9 @@ and the date imputation flag ('--DTF') can be added." />
     </div>
 
     <div class="ref-description">
-    <p>Derive a date ('--DT') from a date character vector ('---DTC').
-The date can be imputed (see date_imputation parameter)
-and the date imputation flag ('--DTF') can be added.</p>
+    <p>Derive a date (<code>'--DT'</code>) from a date character vector (<code>'--DTC</code>').
+The date can be imputed (see <code>date_imputation</code> parameter)
+and the date imputation flag ('<code>--DTF'</code>) can be added.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_vars_dt</span>(
@@ -200,18 +212,18 @@ and the date imputation flag ('--DTF') can be added.</p>
     <tr>
       <th>dataset</th>
       <td><p>Input dataset.</p>
-<p>The date character vector (dtc) must be present.</p></td>
+<p>The date character vector (<code>dtc</code>) must be present.</p></td>
     </tr>
     <tr>
       <th>new_vars_prefix</th>
       <td><p>Prefix used for the output variable(s).</p>
-<p>a character is expected: e.g. <code>new_vars_prefix="AST"</code>.</p></td>
+<p>A character is expected: e.g. <code>new_vars_prefix = "AST"</code>.</p></td>
     </tr>
     <tr>
       <th>dtc</th>
-      <td><p>The --DTC date to impute</p>
-<p>A character date is expected in a format like yyyy-mm-dd or
-yyyy-mm-ddThh:mm:ss. If the year part is not recorded (missing date), no
+      <td><p>The <code>'--DTC'</code> date to impute</p>
+<p>A character date is expected in a format like <code>yyyy-mm-dd</code> or
+<code>yyyy-mm-ddThh:mm:ss</code>. If the year part is not recorded (missing date), no
 imputation is performed.</p></td>
     </tr>
     <tr>
@@ -221,7 +233,7 @@ missing.</p>
 <p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as
 missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with month and day specified as 'mm-dd': e.g. <code>"06-15"</code> for the 15th
+<li><p>format with month and day specified as <code>"mm-dd"</code>: e.g. <code>"06-15"</code> for the 15th
 of June,</p></li>
 <li><p>or as a keyword: <code>"FIRST"</code>, <code>"MID"</code>, <code>"LAST"</code> to impute to the first/mid/last
 day/month.</p></li>
@@ -231,9 +243,9 @@ day/month.</p></li>
     </tr>
     <tr>
       <th>flag_imputation</th>
-      <td><p>Whether the date imputation flag must also be derived.</p>
+      <td><p>Whether the date imputation flag should also be derived.</p>
 <p>A logical value</p>
-<p>Default: TRUE</p></td>
+<p>Default: <code>TRUE</code></p></td>
     </tr>
     <tr>
       <th>min_dates</th>
@@ -241,20 +253,22 @@ day/month.</p></li>
 <p>A list of dates is expected. It is ensured that the imputed date is not
 before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
-range of possible dates of the dtc value are considered. The possible dates
-are defined by the missing parts of the dtc date (see example below). This
-ensures that the non-missing parts of the dtc date are not changed. For
+range of possible dates of the <code>dtc</code> value are considered. The possible dates
+are defined by the missing parts of the <code>dtc</code> date (see example below). This
+ensures that the non-missing parts of the <code>dtc</code> date are not changed. For
 example</p><pre><span class='fu'><a href='impute_dtc.html'>impute_dtc</a></span>(
   <span class='st'>"2020-11"</span>,
-  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>ymd_hms</span>(<span class='st'>"2020-12-06T12:12:12"</span>),
-                   <span class='fu'>ymd_hms</span>(<span class='st'>"2020-11-11T11:11:11"</span>)),
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='fu'>ymd_hms</span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+    <span class='fu'>ymd_hms</span>(<span class='st'>"2020-11-11T11:11:11"</span>)
+   ),
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
 )</pre>
 
 <p>returns <code>"2020-11-11T11:11:11"</code> because the possible dates for <code>"2020-11"</code>
 range from <code>"2020-11-01T00:00:00"</code> to <code>"2020-11-30T23:59:59"</code>. Therefore
 <code>"2020-12-06T12:12:12"</code> is ignored. Returning <code>"2020-12-06T12:12:12"</code> would
-have changed the month although it is not missing (in the dtc date).</p></td>
+have changed the month although it is not missing (in the <code>dtc</code> date).</p></td>
     </tr>
     <tr>
       <th>max_dates</th>
@@ -268,7 +282,12 @@ considered.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the input dataset with the date '--DT' (and the date imputation flag '--DTF') added.</p>
+    <p>The input dataset with the date <code>'--DT'</code> (and the date imputation flag <code>'--DTF'</code>
+if requested) added.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The presence of a <code>'--DTF'</code> variable is checked and if it already exists in the input dataset,
+a warning is issued and <code>'--DTF'</code> will be overwritten.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)
@@ -372,8 +391,8 @@ considered.</p></td>
 <span class='co'># is not before the treatment start date</span>
 <span class='no'>adae</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
   ~<span class='no'>AESTDTC</span>, ~<span class='no'>TRTSDTM</span>,
-  <span class='st'>"2020-12"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>),
-  <span class='st'>"2020-11"</span>, <span class='fu'><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>)
+  <span class='st'>"2020-12"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>),
+  <span class='st'>"2020-11"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='st'>"2020-12-06T12:12:12"</span>)
 )
 
 <span class='fu'>derive_vars_dt</span>(
@@ -381,7 +400,7 @@ considered.</p></td>
   <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
   <span class='kw'>new_vars_prefix</span> <span class='kw'>=</span> <span class='st'>"AST"</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>,
-  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>TRTSDTM</span>)
+  <span class='kw'>min_dates</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDTM</span>)
 )</div><div class='output co'>#&gt; # A tibble: 2 x 4
 #&gt;   AESTDTC TRTSDTM             ASTDT      ASTDTF
 #&gt;   &lt;chr&gt;   &lt;dttm&gt;              &lt;date&gt;     &lt;chr&gt; 
@@ -398,7 +417,7 @@ considered.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

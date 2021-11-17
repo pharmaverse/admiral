@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -254,12 +266,15 @@ by variables and the order.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For each group (with respect to the variables specified for the
-<code>by_vars</code> parameter) the first or last observation (with respect to the
-order specified for the <code>order</code> parameter and the flag mode) is included in
-the output dataset.</p>
+<code>by_vars</code> parameter), <code>new_var</code> is set to "Y" for the first or last observation
+(with respect to the order specified for the <code>order</code> parameter and the flag mode
+specified for the <code>mode</code> parameter). Only observations included by the <code>filter</code> parameter
+are considered for flagging.
+Otherwise, <code>new_var</code> is set to <code>NA</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"vs"</span>)
 
 <span class='co'># Flag last value for each patient, test, and visit, baseline observations are ignored</span>
@@ -438,8 +453,7 @@ the output dataset.</p>
 #&gt; 17 TEST01  PAT02   PARAM02 BASELINE  2021-04-25    14 &lt;NA&gt;    &lt;NA&gt; 
 #&gt; 18 TEST01  PAT02   PARAM02 WEEK 1    2021-04-23    15 &lt;NA&gt;    &lt;NA&gt; 
 #&gt; 19 TEST01  PAT02   PARAM02 WEEK 1    2021-04-27    10 &lt;NA&gt;    &lt;NA&gt; 
-#&gt; 20 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; </div><div class='input'>
-</div></pre>
+#&gt; 20 TEST01  PAT02   PARAM02 BASELINE  2021-04-30    12 &lt;NA&gt;    &lt;NA&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -451,7 +465,7 @@ the output dataset.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

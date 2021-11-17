@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive date variables from datetime variables — derive_vars_dtm_to_dt • admiral</title>
+<title>Derive Date Variables from Datetime Variables — derive_vars_dtm_to_dt • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Derive date variables from datetime variables — derive_vars_dtm_to_dt" />
-<meta property="og:description" content="This function creates a date as output from a datetime variable" />
+<meta property="og:title" content="Derive Date Variables from Datetime Variables — derive_vars_dtm_to_dt" />
+<meta property="og:description" content="This function creates date(s) as output from datetime variable(s)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -171,13 +183,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive date variables from datetime variables</h1>
+    <h1>Derive Date Variables from Datetime Variables</h1>
     <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_vars_dtm_to_dt.R'><code>R/derive_vars_dtm_to_dt.R</code></a></small>
     <div class="hidden name"><code>derive_vars_dtm_to_dt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function creates a date as output from a datetime variable</p>
+    <p>This function creates date(s) as output from datetime variable(s)</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_vars_dtm_to_dt</span>(<span class='no'>dataset</span>, <span class='no'>source_vars</span>)</pre>
@@ -191,43 +203,45 @@
     </tr>
     <tr>
       <th>source_vars</th>
-      <td><p>A list of datetime variables from which dates are to be extracted</p></td>
+      <td><p>A list of datetime variables created using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code> from
+which dates are to be extracted</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame containing all observations and variables of the input
-dataset and adds the corresponding date variable of all specified datetime variables from
-the source_vars option with the correct name.</p>
+    <p>A data frame containing the input dataset with the corresponding date (<code>--DT</code>)
+variable(s) of all datetime variables (<code>--DTM</code>) specified in <code>source_vars.</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>)
 
 <span class='no'>adcm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>TRTSDTM</span>,              ~<span class='no'>ASTDTM</span>,               ~<span class='no'>AENDTM</span>,               ~<span class='no'>ASTTMF</span>,
-  <span class='st'>"PAT01"</span>,  <span class='st'>"2012-02-25 23:00:00"</span>, <span class='st'>"2012-02-28 19:00:00"</span>, <span class='st'>"2012-02-25 23:00:00"</span>, <span class='fl'>NA</span>,
-  <span class='st'>"PAT01"</span>,  <span class='fl'>NA</span>,                    <span class='st'>"2012-02-28 19:00:00"</span>, <span class='fl'>NA</span>,                    <span class='fl'>NA</span>,
-  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 23:00:00"</span>, <span class='st'>"2013-02-25 19:00:00"</span>, <span class='st'>"2014-02-25 19:00:00"</span>, <span class='fl'>NA</span>,
-  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 16:00:00"</span>, <span class='st'>"2017-02-25 14:00:00"</span>, <span class='st'>"2017-03-25 23:00:00"</span>, <span class='st'>"M"</span>,
-  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 16:00:00"</span>, <span class='st'>"2017-02-25 14:00:00"</span>, <span class='st'>"2017-04-29 14:00:00"</span>, <span class='fl'>NA</span>
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>TRTSDTM</span>,              ~<span class='no'>ASTDTM</span>,               ~<span class='no'>AENDTM</span>,
+  <span class='st'>"PAT01"</span>,  <span class='st'>"2012-02-25 23:00:00"</span>, <span class='st'>"2012-02-28 19:00:00"</span>, <span class='st'>"2012-02-25 23:00:00"</span>,
+  <span class='st'>"PAT01"</span>,  <span class='fl'>NA</span>,                    <span class='st'>"2012-02-28 19:00:00"</span>, <span class='fl'>NA</span>,
+  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 23:00:00"</span>, <span class='st'>"2013-02-25 19:00:00"</span>, <span class='st'>"2014-02-25 19:00:00"</span>,
+  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 16:00:00"</span>, <span class='st'>"2017-02-25 14:00:00"</span>, <span class='st'>"2017-03-25 23:00:00"</span>,
+  <span class='st'>"PAT01"</span>,  <span class='st'>"2017-02-25 16:00:00"</span>, <span class='st'>"2017-02-25 14:00:00"</span>, <span class='st'>"2017-04-29 14:00:00"</span>,
 ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
-    <span class='kw'>TRTSDTM</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>TRTSDTM</span>),
-    <span class='kw'>ASTDTM</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>ASTDTM</span>),
-    <span class='kw'>AENDTM</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>AENDTM</span>)
+    <span class='kw'>TRTSDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>TRTSDTM</span>),
+    <span class='kw'>ASTDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>ASTDTM</span>),
+    <span class='kw'>AENDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></span>(<span class='no'>AENDTM</span>)
   )
 
-<span class='fu'>derive_vars_dtm_to_dt</span>(<span class='no'>adcm</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDTM</span>, <span class='no'>ASTDTM</span>, <span class='no'>AENDTM</span>))</div><div class='output co'>#&gt; # A tibble: 5 x 8
-#&gt;   USUBJID TRTSDTM             ASTDTM              AENDTM              ASTTMF
-#&gt;   &lt;chr&gt;   &lt;dttm&gt;              &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt; 
-#&gt; 1 PAT01   2012-02-25 23:00:00 2012-02-28 19:00:00 2012-02-25 23:00:00 &lt;NA&gt;  
-#&gt; 2 PAT01   NA                  2012-02-28 19:00:00 NA                  &lt;NA&gt;  
-#&gt; 3 PAT01   2017-02-25 23:00:00 2013-02-25 19:00:00 2014-02-25 19:00:00 &lt;NA&gt;  
-#&gt; 4 PAT01   2017-02-25 16:00:00 2017-02-25 14:00:00 2017-03-25 23:00:00 M     
-#&gt; 5 PAT01   2017-02-25 16:00:00 2017-02-25 14:00:00 2017-04-29 14:00:00 &lt;NA&gt;  
-#&gt; # … with 3 more variables: TRTSDT &lt;date&gt;, ASTDT &lt;date&gt;, AENDT &lt;date&gt;</div></pre>
+<span class='no'>adcm</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_vars_dtm_to_dt</span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>TRTSDTM</span>, <span class='no'>ASTDTM</span>, <span class='no'>AENDTM</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>starts_with</a></span>(<span class='st'>"TRT"</span>), <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>starts_with</a></span>(<span class='st'>"AST"</span>), <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>starts_with</a></span>(<span class='st'>"AEN"</span>))</div><div class='output co'>#&gt; # A tibble: 5 x 7
+#&gt;   USUBJID TRTSDTM             TRTSDT     ASTDTM              ASTDT     
+#&gt;   &lt;chr&gt;   &lt;dttm&gt;              &lt;date&gt;     &lt;dttm&gt;              &lt;date&gt;    
+#&gt; 1 PAT01   2012-02-25 23:00:00 2012-02-25 2012-02-28 19:00:00 2012-02-28
+#&gt; 2 PAT01   NA                  NA         2012-02-28 19:00:00 2012-02-28
+#&gt; 3 PAT01   2017-02-25 23:00:00 2017-02-25 2013-02-25 19:00:00 2013-02-25
+#&gt; 4 PAT01   2017-02-25 16:00:00 2017-02-25 2017-02-25 14:00:00 2017-02-25
+#&gt; 5 PAT01   2017-02-25 16:00:00 2017-02-25 2017-02-25 14:00:00 2017-02-25
+#&gt; # … with 2 more variables: AENDTM &lt;dttm&gt;, AENDT &lt;date&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -239,7 +253,7 @@ the source_vars option with the correct name.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

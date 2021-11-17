@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -77,10 +77,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -92,6 +98,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -135,15 +147,15 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>This article describes creating an OCCDS ADaM. Examples are currently presented and tested in the context of ADAE. However, the examples could be applied to other OCCDS ADaMs such as ADCM, ADMH, ADDV, etc.</p>
 <p><strong>Note:</strong> <em>All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.</em></p>
 </div>
-<div id="programming-workflow" class="section level2">
-<h2 class="hasAnchor">
-<a href="#programming-workflow" class="anchor"></a>Programming Workflow</h2>
+<div id="programming-workflow" class="section level1">
+<h1 class="hasAnchor">
+<a href="#programming-workflow" class="anchor"></a>Programming Workflow</h1>
 <ul>
 <li><a href="#readdata">Read in Data</a></li>
 <li><a href="#datetime">Derive/Impute End and Start Analysis Date/time and Relative Day</a></li>
@@ -154,17 +166,18 @@
 <li><a href="#trtpa">Derive Planned and Actual Treatment</a></li>
 <li><a href="#last_dose">Derive Date/Date-time of Last Dose</a></li>
 <li><a href="#severity">Derive Severity, Causality, and Toxicity Grade</a></li>
-<li><a href="#trtfag">Derive Treatement Emergent Flag</a></li>
+<li><a href="#trtfag">Derive Treatment Emergent Flag</a></li>
 <li><a href="#occflag">Derive Occurrence Flags</a></li>
 <li><a href="#query">Derive Query Variables</a></li>
 </ul>
-<div id="readdata" class="section level3">
-<h3 class="hasAnchor">
-<a href="#readdata" class="anchor"></a>Read in Data</h3>
+<div id="readdata" class="section level2">
+<h2 class="hasAnchor">
+<a href="#readdata" class="anchor"></a>Read in Data</h2>
 <p>Let’s start by attaching packages and loading some example datasets:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">admiral</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">admiral.test</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lubridate</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">admiral</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">ae</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">adsl</span>)</pre></body></html></div>
@@ -201,9 +214,9 @@
 <p>Now start creating ADAE by joining the required data sets together.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(<span class="no">ae</span>, <span class="no">adsl</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>))</pre></body></html></div>
 </div>
-<div id="datetime" class="section level3">
-<h3 class="hasAnchor">
-<a href="#datetime" class="anchor"></a>Derive/Impute End and Start Analysis Date/time and Relative Day</h3>
+<div id="datetime" class="section level2">
+<h2 class="hasAnchor">
+<a href="#datetime" class="anchor"></a>Derive/Impute End and Start Analysis Date/time and Relative Day</h2>
 <p>This part includes variables <code>ASTDTM</code>, <code>ASTDT</code>, <code>ASTDY</code>, <code>AENDTM</code>, <code>AENDT</code>, and <code>AENDY</code>. The function <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> can be used to derive <code>ASTDTM</code> and <code>AENDTM</code> where <code>ASTDTM</code> could be company-specific. <code>ASTADT</code> and <code>AENDT</code> can be created with a simple <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>. <code><a href="../reference/derive_var_astdy.html">derive_var_astdy()</a></code> and <code><a href="../reference/derive_var_aendy.html">derive_var_aendy()</a></code> can be used to create <code>ASTDY</code> and <code>AENDY</code>, respectively.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
@@ -211,18 +224,18 @@
     <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
     <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
     <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
-    <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">TRTSDT</span>)
+    <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">TRTSDT</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
     <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
     <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AEN"</span>,
     <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
     <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
-    <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">DTHDT</span>, <span class="no">EOSDT</span>)
+    <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">DTHDT</span>, <span class="no">EOSDT</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-    <span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>),
-    <span class="kw">AENDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">AENDTM</span>)
+    <span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>),
+    <span class="kw">AENDT</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">AENDTM</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_var_astdy.html">derive_var_astdy</a></span>(
     <span class="kw">reference_date</span> <span class="kw">=</span> <span class="no">TRTSDT</span>,
@@ -234,9 +247,9 @@
   )</pre></body></html></div>
 <p>See also <a href="imputation.html">Date and Time Imputation</a>.</p>
 </div>
-<div id="duration" class="section level3">
-<h3 class="hasAnchor">
-<a href="#duration" class="anchor"></a>Derive Durations</h3>
+<div id="duration" class="section level2">
+<h2 class="hasAnchor">
+<a href="#duration" class="anchor"></a>Derive Durations</h2>
 <p>The function <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> can be used to create the variables <code>ADURN</code> and <code>ADURU</code>.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_vars_duration.html">derive_vars_duration</a></span>(
@@ -246,9 +259,9 @@
     <span class="kw">end_date</span> <span class="kw">=</span> <span class="no">AENDT</span>
   )</pre></body></html></div>
 </div>
-<div id="atc" class="section level3">
-<h3 class="hasAnchor">
-<a href="#atc" class="anchor"></a>Derive ATC variables</h3>
+<div id="atc" class="section level2">
+<h2 class="hasAnchor">
+<a href="#atc" class="anchor"></a>Derive ATC variables</h2>
 <p>The function <code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> can be used to derive ATC Class Variables.</p>
 <p>It helps to add Anatomical Therapeutic Chemical class variables from <code>FACM</code> to <code>ADCM</code>.</p>
 <p>The expected result is the input dataset with ATC variables added.</p>
@@ -294,9 +307,9 @@
 <span class="co">#&gt; 4 BP40257-1001 18      2007001 SOLUMEDROL     H      H02    H02A   H02AB </span>
 <span class="co">#&gt; 5 BP40257-1002 19      2791596 SPIRONOLACTONE C      C03    C03D   C03DA</span></pre></body></html></div>
 </div>
-<div id="atirel" class="section level3">
-<h3 class="hasAnchor">
-<a href="#atirel" class="anchor"></a>Derive Time Relative to Reference</h3>
+<div id="atirel" class="section level2">
+<h2 class="hasAnchor">
+<a href="#atirel" class="anchor"></a>Derive Time Relative to Reference</h2>
 <p>The function <code><a href="../reference/derive_var_atirel.html">derive_var_atirel()</a></code> can be used to derive the variable <code>ATIREL</code> to <code>"CONCOMITANT"</code>, <code>"PRIOR"</code>, <code>"PRIOR_CONCOMITANT"</code> or <code>NULL</code> based on the relationship of CM Analysis start/end date/times to treatment start date/time.</p>
 <p>The expected result is a dataset containing all observations and variables of the input dataset and additionally the variable specified by the <code>new_var</code> parameter.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">adcm</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
@@ -307,9 +320,9 @@
   <span class="st">"TEST01"</span>, <span class="st">"PAT01"</span>, <span class="st">"2017-02-25 16:00:00"</span>, <span class="st">"2017-02-25    14:00:00"</span>, <span class="st">"2017-03-25 23:00:00"</span>, <span class="st">"m"</span>,
   <span class="st">"TEST01"</span>, <span class="st">"PAT01"</span>, <span class="st">"2017-02-25 16:00:00"</span>, <span class="st">"2017-02-25    14:00:00"</span>, <span class="st">"2017-04-29 14:00:00"</span>, <span class="st">""</span>
 ) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-  <span class="kw">TRTSDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">TRTSDTM</span>),
-  <span class="kw">ASTDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">ASTDTM</span>),
-  <span class="kw">AENDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">AENDTM</span>)
+  <span class="kw">TRTSDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">TRTSDTM</span>),
+  <span class="kw">ASTDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">ASTDTM</span>),
+  <span class="kw">AENDTM</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_datetime</a></span>(<span class="no">AENDTM</span>)
  )
 
 <span class="no">adcm</span> <span class="kw">%&gt;%</span>
@@ -325,19 +338,19 @@
 <span class="co">#&gt; 5 TEST01  PAT01   PRIOR… 2017-02-25 16:00:00 2017-02-25 14:00:00</span>
 <span class="co">#&gt; # … with 2 more variables: AENDTM &lt;dttm&gt;, ASTTMF &lt;chr&gt;</span></pre></body></html></div>
 </div>
-<div id="phase_period" class="section level3">
-<h3 class="hasAnchor">
-<a href="#phase_period" class="anchor"></a>Derive Analysis Phase and Period</h3>
+<div id="phase_period" class="section level2">
+<h2 class="hasAnchor">
+<a href="#phase_period" class="anchor"></a>Derive Analysis Phase and Period</h2>
 <p><em>These functionalities are in progress.</em></p>
 </div>
-<div id="trtpa" class="section level3">
-<h3 class="hasAnchor">
-<a href="#trtpa" class="anchor"></a>Derive Planned and Actual Treatment</h3>
+<div id="trtpa" class="section level2">
+<h2 class="hasAnchor">
+<a href="#trtpa" class="anchor"></a>Derive Planned and Actual Treatment</h2>
 <p><em>These functionalities are in progress.</em></p>
 </div>
-<div id="last_dose" class="section level3">
-<h3 class="hasAnchor">
-<a href="#last_dose" class="anchor"></a>Derive Date/Date-time of Last Dose</h3>
+<div id="last_dose" class="section level2">
+<h2 class="hasAnchor">
+<a href="#last_dose" class="anchor"></a>Derive Date/Date-time of Last Dose</h2>
 <p>The function <code><a href="../reference/derive_last_dose.html">derive_last_dose()</a></code> can be used to derive the last dose date before the start of the event. Additionally, this function can also provide the traceability variables (e.g. <code>LDOSEDOM</code>, <code>LDOSESEQ</code>) using the <code>traceability_vars</code> argument.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">ex_single</span>)
 <span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
@@ -354,9 +367,9 @@
     <span class="kw">check_dates_only</span> <span class="kw">=</span> <span class="fl">FALSE</span>
   )</pre></body></html></div>
 </div>
-<div id="severity" class="section level3">
-<h3 class="hasAnchor">
-<a href="#severity" class="anchor"></a>Derive Severity, Causality, and Toxicity Grade</h3>
+<div id="severity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#severity" class="anchor"></a>Derive Severity, Causality, and Toxicity Grade</h2>
 <p>The variables <code>ASEV</code>, <code>AREL</code>, and <code>ATOXGR</code> can be added by simply <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> if no imputation is required.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -364,21 +377,21 @@
     <span class="kw">AREL</span> <span class="kw">=</span> <span class="no">AEREL</span>
   )</pre></body></html></div>
 </div>
-<div id="trtflag" class="section level3">
-<h3 class="hasAnchor">
-<a href="#trtflag" class="anchor"></a>Derive Treatment Emergent Flag</h3>
+<div id="trtflag" class="section level2">
+<h2 class="hasAnchor">
+<a href="#trtflag" class="anchor"></a>Derive Treatment Emergent Flag</h2>
 <p>To derive the treatment emergent flag <code>TRTEMFL</code>, one can use simple <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>. In the example below, we use 30 days in the flag derivation.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-    <span class="kw">TRTEMFL</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">ASTDT</span> <span class="kw">&gt;=</span> <span class="no">TRTSDT</span> <span class="kw">&amp;</span> <span class="no">ASTDT</span> <span class="kw">&lt;=</span> <span class="no">TRTEDT</span> + <span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="fl">30</span>), <span class="st">"Y"</span>, <span class="st">""</span>)
+    <span class="kw">TRTEMFL</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">ASTDT</span> <span class="kw">&gt;=</span> <span class="no">TRTSDT</span> <span class="kw">&amp;</span> <span class="no">ASTDT</span> <span class="kw">&lt;=</span> <span class="no">TRTEDT</span> + <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="fl">30</span>), <span class="st">"Y"</span>, <span class="st">""</span>)
   )</pre></body></html></div>
 <p>To derive on-treatment flag (<code>ONTRTFL</code>) in an ADaM dataset with a single assessment date, we use <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code>.</p>
 <p>The expected result is The input dataset with an additional column named <code>ONTRTFL</code> with a value of <code>"Y"</code> or <code>NA</code>.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">bds1</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">USUBJID</span>, ~<span class="no">ADT</span>,              ~<span class="no">TRTSDT</span>,           ~<span class="no">TRTEDT</span>,
-  <span class="st">"P01"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-02-24"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
-  <span class="st">"P02"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
-  <span class="st">"P03"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-31"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>)
+  <span class="st">"P01"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-02-24"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
+  <span class="st">"P02"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
+  <span class="st">"P03"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-31"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>)
 )
 <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">bds1</span>,
@@ -399,9 +412,9 @@
 
 <span class="no">bds2</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">USUBJID</span>, ~<span class="no">ADT</span>,              ~<span class="no">TRTSDT</span>,           ~<span class="no">TRTEDT</span>,
-  <span class="st">"P01"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-07-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
-  <span class="st">"P02"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-04-30"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
-  <span class="st">"P03"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-15"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>)
+  <span class="st">"P01"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-07-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
+  <span class="st">"P02"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-04-30"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>),
+  <span class="st">"P03"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-15"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-01-01"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2020-03-01"</span>)
 )
 <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">bds2</span>,
@@ -424,9 +437,9 @@
   <span class="st">"P03"</span>,    <span class="st">"2019-12-31T12:00"</span>, <span class="st">"2020-01-01T12:00"</span>, <span class="st">"2020-03-01T12:00"</span>, <span class="fl">NA</span>
 ) <span class="kw">%&gt;%</span>
  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-  <span class="kw">ADTM</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">ADTM</span>),
-  <span class="kw">TRTSDTM</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">TRTSDTM</span>),
-  <span class="kw">TRTEDTM</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">TRTEDTM</span>)
+  <span class="kw">ADTM</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">ADTM</span>),
+  <span class="kw">TRTSDTM</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">TRTSDTM</span>),
+  <span class="kw">TRTEDTM</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hm</a></span>(<span class="no">TRTEDTM</span>)
  )
 <span class="fu"><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl</a></span>(
   <span class="no">bds3</span>,
@@ -443,9 +456,9 @@
 <span class="co">#&gt; 3 P03     2019-12-31 12:00:00 2020-01-01 12:00:00 2020-03-01 12:00:00 &lt;NA&gt; </span>
 <span class="co">#&gt; # … with 1 more variable: ONTRTFL &lt;chr&gt;</span></pre></body></html></div>
 </div>
-<div id="occflag" class="section level3">
-<h3 class="hasAnchor">
-<a href="#occflag" class="anchor"></a>Derive Occurrence Flags</h3>
+<div id="occflag" class="section level2">
+<h2 class="hasAnchor">
+<a href="#occflag" class="anchor"></a>Derive Occurrence Flags</h2>
 <p>The function <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code> can help derive variables such as <code>AOCCIFL</code>, <code>AOCCPIFL</code>, <code>AOCCSIFL</code>, <code>AOCXIFL</code>, <code>AOCXPIFL</code>, and <code>AOCXSIFL</code>.</p>
 <p>If grades were collected, the following can be used.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">adae</span> <span class="kw">&lt;-</span> <span class="no">adae</span> <span class="kw">%&gt;%</span>
@@ -484,13 +497,13 @@
 <span class="co">#&gt; 10 CDISCPILOT01 01-701-1034 &lt;NA&gt;    2014-08-27 00:00:00     1     1 Y      </span>
 <span class="co">#&gt; # … with 1,181 more rows</span></pre></body></html></div>
 </div>
-<div id="query" class="section level3">
-<h3 class="hasAnchor">
-<a href="#query" class="anchor"></a>Derive Query Variables</h3>
+<div id="query" class="section level2">
+<h2 class="hasAnchor">
+<a href="#query" class="anchor"></a>Derive Query Variables</h2>
 <p>It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> to an ADaM.</p>
 <p>For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be needed.</p>
 <p>This function expects the dictionary and/or lookup information to be provided as input in a standard structure.</p>
-<p>The expected result is the input dataset with query variables added.</p>
+<p>The expected result is the input dataset with query variables added: See also <a href="queries_dataset.html">Queries dataset documentation</a>.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"queries"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">queries</span>)
 <span class="co">#&gt; # A tibble: 6 x 8</span>
@@ -526,7 +539,7 @@
 <span class="co">#&gt; 3 03      2020-… SOME …     2 Some q… &lt;NA&gt;     NA      &lt;NA&gt;          NA &lt;NA&gt;   </span>
 <span class="co">#&gt; 4 05      2020-… ALVEO…     7 Alveol… Immune-…  2.00e7 NARROW         2 &lt;NA&gt;   </span>
 <span class="co">#&gt; # … with 1 more variable: CQ06CD &lt;int&gt;</span></pre></body></html></div>
-<p>Similarly to SMQ, the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function can be used to derive Standardized Drug Groupings (SDQ).</p>
+<p>Similarly to SMQ, the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function can be used to derive Standardized Drug Groupings (SDG).</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">sdg</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">VAR_PREFIX</span>, ~<span class="no">QUERY_NAME</span>,       ~<span class="no">SDG_ID</span>, ~<span class="no">QUERY_SCOPE</span>, ~<span class="no">QUERY_SCOPE_NUM</span>, ~<span class="no">TERM_LEVEL</span>, ~<span class="no">TERM_NAME</span>,         ~<span class="no">TERM_ID</span>,
   <span class="st">"SDG01"</span>,     <span class="st">"Diuretics"</span>,       <span class="fl">11</span>,      <span class="st">"BROAD"</span>,      <span class="fl">1</span>,                <span class="st">"CMDECOD"</span>,   <span class="st">"Diuretic 1"</span>,       <span class="fl">NA</span>,
@@ -552,6 +565,26 @@
 <span class="co">#&gt; 4 05      2020-06… Diuretic… Diureti… BROAD          2 &lt;NA&gt;     &lt;NA&gt;          NA</span></pre></body></html></div>
 </div>
 </div>
+<div id="example-scripts" class="section level1">
+<h1 class="hasAnchor">
+<a href="#example-scripts" class="anchor"></a>Example Scripts</h1>
+<table class="table">
+<thead><tr class="header">
+<th>ADaM</th>
+<th>Sample Code</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>ADAE</td>
+<td><a href="https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R" target="_blank">ad_adae.R</a></td>
+</tr>
+<tr class="even">
+<td>ADCM</td>
+<td><a href="https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R" target="_blank">ad_adcm.R</a></td>
+</tr>
+</tbody>
+</table>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -565,7 +598,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

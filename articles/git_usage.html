@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -77,10 +77,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -92,6 +98,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -164,7 +176,7 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 </li>
 <li>Pull the latest changes from GitHub: <code>git pull</code><br>
 </li>
-<li>Create a new branch off the’ devel branch and switch to it: <code>git checkout -b &lt;new_branch_name&gt;</code>
+<li>Create a new branch off the devel branch and switch to it: <code>git checkout -b &lt;new_branch_name&gt;</code>
 </li>
 </ul>
 <p><strong>Using code from unmerged branches</strong><br>
@@ -176,7 +188,7 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 When committing, prefix the message with the issue number and add a meaningful message<br><code>git commit –m '#94 last alive date implementation'</code></p>
 <p><strong>Pull request</strong><br>
 Once all changes are committed, push the new branch to GitHub:<br><code>git push -u origin &lt;new_branch_name&gt;</code></p>
-<p>In GitHub, under “Pull request”, the user has to ‘Compare and pull request’. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge. All committed changes are then available for review.</p>
+<p>In GitHub, under “Pull request”, the user has to “Compare and pull request”. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge. All committed changes are then available for review.</p>
 </div>
 <div id="reviewingclosing-an-issue" class="section level3">
 <h3 class="hasAnchor">
@@ -230,7 +242,7 @@ git push</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

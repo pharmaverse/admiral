@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -123,10 +123,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -138,6 +144,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -197,29 +209,10 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vs</span>)
-<span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>filter_if</span>(<span class='no'>vs</span>, <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quo</a></span>(<span class='kw'>NULL</span>))</div><div class='output co'>#&gt; # A tibble: 29,643 x 24
-#&gt;    STUDYID DOMAIN USUBJID VSSEQ VSTESTCD VSTEST VSPOS VSORRES VSORRESU VSSTRESC
-#&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   
-#&gt;  1 CDISCP… VS     01-701…     1 DIABP    Diast… SUPI… 64      mmHg     64      
-#&gt;  2 CDISCP… VS     01-701…     2 DIABP    Diast… STAN… 83      mmHg     83      
-#&gt;  3 CDISCP… VS     01-701…     3 DIABP    Diast… STAN… 57      mmHg     57      
-#&gt;  4 CDISCP… VS     01-701…     4 DIABP    Diast… SUPI… 68      mmHg     68      
-#&gt;  5 CDISCP… VS     01-701…     5 DIABP    Diast… STAN… 59      mmHg     59      
-#&gt;  6 CDISCP… VS     01-701…     6 DIABP    Diast… STAN… 71      mmHg     71      
-#&gt;  7 CDISCP… VS     01-701…     7 DIABP    Diast… SUPI… 56      mmHg     56      
-#&gt;  8 CDISCP… VS     01-701…     8 DIABP    Diast… STAN… 51      mmHg     51      
-#&gt;  9 CDISCP… VS     01-701…     9 DIABP    Diast… STAN… 61      mmHg     61      
-#&gt; 10 CDISCP… VS     01-701…    10 DIABP    Diast… SUPI… 67      mmHg     67      
-#&gt; # … with 29,633 more rows, and 14 more variables: VSSTRESN &lt;dbl&gt;,
-#&gt; #   VSSTRESU &lt;chr&gt;, VSSTAT &lt;chr&gt;, VSLOC &lt;chr&gt;, VSBLFL &lt;chr&gt;, VISITNUM &lt;dbl&gt;,
-#&gt; #   VISIT &lt;chr&gt;, VISITDY &lt;dbl&gt;, VSDTC &lt;chr&gt;, VSDY &lt;dbl&gt;, VSTPT &lt;chr&gt;,
-#&gt; #   VSTPTNUM &lt;dbl&gt;, VSELTM &lt;chr&gt;, VSTPTREF &lt;chr&gt;</div><div class='input'><span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>filter_if</span>(<span class='no'>vs</span>, <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quo</a></span>(<span class='no'>VSTESTCD</span> <span class='kw'>==</span> <span class='st'>"Weight"</span>))</div><div class='output co'>#&gt; # A tibble: 0 x 24
-#&gt; # … with 24 variables: STUDYID &lt;chr&gt;, DOMAIN &lt;chr&gt;, USUBJID &lt;chr&gt;, VSSEQ &lt;dbl&gt;,
-#&gt; #   VSTESTCD &lt;chr&gt;, VSTEST &lt;chr&gt;, VSPOS &lt;chr&gt;, VSORRES &lt;chr&gt;, VSORRESU &lt;chr&gt;,
-#&gt; #   VSSTRESC &lt;chr&gt;, VSSTRESN &lt;dbl&gt;, VSSTRESU &lt;chr&gt;, VSSTAT &lt;chr&gt;, VSLOC &lt;chr&gt;,
-#&gt; #   VSBLFL &lt;chr&gt;, VISITNUM &lt;dbl&gt;, VISIT &lt;chr&gt;, VISITDY &lt;dbl&gt;, VSDTC &lt;chr&gt;,
-#&gt; #   VSDY &lt;dbl&gt;, VSTPT &lt;chr&gt;, VSTPTNUM &lt;dbl&gt;, VSELTM &lt;chr&gt;, VSTPTREF &lt;chr&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vs</span>)
+
+<span class='fu'>filter_if</span>(<span class='no'>vs</span>, <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quo</a></span>(<span class='kw'>NULL</span>))</div><div class='output co'>#&gt; <span class='error'>Error in selected[[i]] &lt;- eval_tidy(.p(column, ...)): replacement has length zero</span></div><div class='input'><span class='fu'>filter_if</span>(<span class='no'>vs</span>, <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quo</a></span>(<span class='no'>VSTESTCD</span> <span class='kw'>==</span> <span class='st'>"Weight"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in .p(column, ...): object 'VSTESTCD' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -231,7 +224,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

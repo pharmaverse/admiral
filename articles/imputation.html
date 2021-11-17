@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -77,10 +77,16 @@
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -92,6 +98,12 @@
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -182,7 +194,7 @@
   <span class="st">"2019-02"</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
   <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-01-14"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-02-25"</span>))
+  <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-01-14"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-02-25"</span>))
 )
 <span class="co">#&gt; [1] "2019-02-25T00:00:00"</span></pre></body></html></div>
 <p>It is ensured that the imputed date is not after any of the specified dates. Only dates which are in the range of possible dates of the dtc value are considered. The possible dates are defined by the missing parts of the dtc date, i.e., for “2019-02” the possible dates range from “2019-02-01” to “2019-02-28”. Thus “2019-01-14” is ignored. This ensures that the non-missing parts of the dtc date are not changed.</p>
@@ -235,7 +247,7 @@
     <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
     <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>
   ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>))
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>))
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   AESTDTC             ASTDTM              ASTDTF ASTTMF ASTDT     </span>
 <span class="co">#&gt;   &lt;chr&gt;               &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;    </span>
@@ -302,10 +314,10 @@
 <p>Please note that <code>TRTSDTM</code> is used as imputed date only if the non missing date and time parts of <code>AESTDTC</code> coincide with those of <code>TRTSDTM</code>. Therefore <code>2019-10</code> is not imputed as <code>2019-11-11 12:34:56</code>. This ensures that collected information is not changed by the imputation.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">AESTDTC</span>,              ~<span class="no">TRTSDTM</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
-  <span class="st">"2019-10"</span>,             <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
-  <span class="st">"2019-11"</span>,             <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
-  <span class="st">"2019-12-04"</span>,          <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>)
+  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
+  <span class="st">"2019-10"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
+  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
+  <span class="st">"2019-12-04"</span>,          <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>)
 )
 <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
   <span class="no">ae</span>,
@@ -313,7 +325,7 @@
   <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
   <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
-  <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">TRTSDTM</span>)
+  <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">TRTSDTM</span>)
 )
 <span class="co">#&gt; # A tibble: 4 x 5</span>
 <span class="co">#&gt;   AESTDTC             TRTSDTM             ASTDTM              ASTDTF ASTTMF</span>
@@ -326,14 +338,14 @@
 <div id="avoid-imputed-dates-after-a-particular-date" class="section level2">
 <h2 class="hasAnchor">
 <a href="#avoid-imputed-dates-after-a-particular-date" class="anchor"></a>Avoid Imputed Dates After a Particular Date</h2>
-<p>If a date is imputed as the lastest date of all possible dates when filling the missing parts, it should not result in dates after data cut off or death. This can be achieved by specifying the dates for the <code>max_dates</code> parameter.</p>
+<p>If a date is imputed as the latest date of all possible dates when filling the missing parts, it should not result in dates after data cut off or death. This can be achieved by specifying the dates for the <code>max_dates</code> parameter.</p>
 <p>Please note that non missing date parts are not changed. Thus <code>2019-12-04</code> is imputed as <code>2019-12-04 23:59:59</code> although it is after the data cut off date. It may make sense to replace it by the data cut off date but this is not part of the imputation. It should be done in a separate data cleaning or data cut off step.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">AEENDTC</span>,              ~<span class="no">DTHDT</span>,            ~<span class="no">DCUTDT</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-11-11"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
-  <span class="st">"2019-11"</span>,             <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-11-11"</span>), <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
-  <span class="st">"2019-12"</span>,             <span class="fl">NA</span>,                <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
-  <span class="st">"2019-12-04"</span>,          <span class="fl">NA</span>,                <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>)
+  <span class="st">"2019-08-09T12:34:56"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-11-11"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
+  <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-11-11"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
+  <span class="st">"2019-12"</span>,             <span class="fl">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
+  <span class="st">"2019-12-04"</span>,          <span class="fl">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>)
 )
 <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
   <span class="no">ae</span>,
@@ -341,14 +353,14 @@
   <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AEN"</span>,
   <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
   <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">DTHDT</span>, <span class="no">DCUTDT</span>)
+  <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">DTHDT</span>, <span class="no">DCUTDT</span>)
 )
 <span class="co">#&gt; # A tibble: 4 x 6</span>
 <span class="co">#&gt;   AEENDTC             DTHDT      DCUTDT     AENDTM              AENDTF AENTMF</span>
 <span class="co">#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; </span>
 <span class="co">#&gt; 1 2019-08-09T12:34:56 2019-11-11 2019-12-02 2019-08-09 12:34:56 &lt;NA&gt;   &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 2019-11             2019-11-11 2019-12-02 2019-11-11 00:00:00 D      H     </span>
-<span class="co">#&gt; 3 2019-12             NA         2019-12-02 2019-12-02 00:00:00 D      H     </span>
+<span class="co">#&gt; 2 2019-11             2019-11-11 2019-12-02 2019-11-30 23:59:59 D      H     </span>
+<span class="co">#&gt; 3 2019-12             NA         2019-12-02 2019-12-31 23:59:59 D      H     </span>
 <span class="co">#&gt; 4 2019-12-04          NA         2019-12-02 2019-12-04 23:59:59 &lt;NA&gt;   H</span></pre></body></html></div>
 </div>
 <div id="imputation-without-creating-a-new-variable" class="section level2">
@@ -357,10 +369,10 @@
 <p>If imputation is required without creating a new variable the <code><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> function can be called to obtain a vector of imputed dates. It can be used for example in conditions:</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">mh</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
   ~<span class="no">MHSTDTC</span>,     ~<span class="no">TRTSDT</span>,
-  <span class="st">"2019-04"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
-  <span class="st">"2019-04-01"</span>, <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
-  <span class="st">"2019-05"</span>,    <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
-  <span class="st">"2019-06-21"</span>, <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>)
+  <span class="st">"2019-04"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
+  <span class="st">"2019-04-01"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
+  <span class="st">"2019-05"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
+  <span class="st">"2019-06-21"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>)
 )
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(
   <span class="no">mh</span>,
@@ -425,7 +437,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">

@@ -87,7 +87,7 @@ the provided conditions" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,16 @@ the provided conditions" />
       <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
     </li>
     <li>
-      <a href="../articles/bds_exposure.html">Creating an Exposure (BDS) ADaM</a>
+      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    </li>
+    <li>
+      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
     </li>
     <li>
       <a href="../articles/imputation.html">Date and Time Imputation</a>
+    </li>
+    <li>
+      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
     </li>
     <li>
       <a href="../articles/faq.html">FAQ</a>
@@ -139,6 +145,12 @@ the provided conditions" />
     </li>
     <li>
       <a href="../articles/git_usage.html">Guidance for git Usage</a>
+    </li>
+    <li>
+      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    </li>
+    <li>
+      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
     </li>
   </ul>
 </li>
@@ -223,14 +235,15 @@ condition are kept and <code>BASETYPE</code> is set to <code>NA</code>.</p>
   <span class='st'>"P02"</span>,    <span class='st'>"OPEN-LABEL"</span>,   <span class='st'>"PARAM01"</span>, <span class='fl'>5</span>,     <span class='fl'>10.8</span>
 )
 
-<span class='fu'>derive_var_basetype</span>(
+<span class='no'>bds_with_basetype</span> <span class='kw'>&lt;-</span> <span class='fu'>derive_var_basetype</span>(
   <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>bds</span>,
   <span class='kw'>basetypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>exprs</a></span>(
     <span class='st'>"RUN-IN"</span> <span class='kw'>=</span> <span class='no'>EPOCH</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"RUN-IN"</span>, <span class='st'>"STABILIZATION"</span>, <span class='st'>"DOUBLE-BLIND"</span>, <span class='st'>"OPEN-LABEL"</span>),
     <span class='st'>"DOUBLE-BLIND"</span> <span class='kw'>=</span> <span class='no'>EPOCH</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"DOUBLE-BLIND"</span>, <span class='st'>"OPEN-LABEL"</span>),
     <span class='st'>"OPEN-LABEL"</span> <span class='kw'>=</span> <span class='no'>EPOCH</span> <span class='kw'>==</span> <span class='st'>"OPEN-LABEL"</span>
   )
-)</div><div class='output co'>#&gt; # A tibble: 23 x 6
+)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>bds_with_basetype</span>)</div><div class='output co'>#&gt; # A tibble: 23 x 6
 #&gt;    USUBJID EPOCH        PARAMCD  ASEQ  AVAL BASETYPE
 #&gt;    &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   
 #&gt;  1 P01     RUN-IN       PARAM01     1  10   RUN-IN  
@@ -243,7 +256,13 @@ condition are kept and <code>BASETYPE</code> is set to <code>NA</code>.</p>
 #&gt;  8 P02     DOUBLE-BLIND PARAM01     2  10.2 RUN-IN  
 #&gt;  9 P02     DOUBLE-BLIND PARAM01     3  10.8 RUN-IN  
 #&gt; 10 P02     OPEN-LABEL   PARAM01     4  11.4 RUN-IN  
-#&gt; # … with 13 more rows</div></pre>
+#&gt; # … with 13 more rows</div><div class='input'>
+<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/tally.html'>count</a></span>(<span class='no'>bds_with_basetype</span>, <span class='no'>BASETYPE</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"Number of Records"</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
+#&gt;   BASETYPE     `Number of Records`
+#&gt;   &lt;chr&gt;                      &lt;int&gt;
+#&gt; 1 DOUBLE-BLIND                   8
+#&gt; 2 OPEN-LABEL                     4
+#&gt; 3 RUN-IN                        11</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -255,7 +274,7 @@ condition are kept and <code>BASETYPE</code> is set to <code>NA</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
 </div>
 
 <div class="pkgdown">
