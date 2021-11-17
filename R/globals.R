@@ -83,7 +83,8 @@ globalVariables(c(
   "order3",
   "_unit",
   "tmp_analysis_date",
-  "tmp_dose_end_date",
+  "tmp_dose_date",
+  "EXDOSFRQ",
   "tmp_ldose_dt"
 
 ))

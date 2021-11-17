@@ -39,15 +39,14 @@ test_that("derive_last_dose_date works as expected", {
                      input_ex,
                      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
                      by_vars = vars(STUDYID, USUBJID),
-                     dose_start = EXSTDTC,
-                     dose_end = EXENDTC,
+                     dose_date = EXENDTC,
                      new_var = LDGRP,
                      grp_brks = c(1, 5, 10, 15),
                      grp_lbls = c("G1", "G2", "G3"),
                      dose_var = EXDOSE,
                      analysis_date = AESTDTC,
                      dataset_seq_var = AESEQ,
-                     check_dates_only = FALSE,
+                     single_dose_condition = (EXSTDTC == EXENDTC),
                      traceability_vars = NULL)
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))

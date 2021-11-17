@@ -1220,6 +1220,7 @@ on_failure(is_valid_month) <- function(call, env) {
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param accept_expr Should expressions on the right hand side be accepted?
+#' @param accept_var Should variable names on the right hand side be accepted?
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
@@ -1239,9 +1240,11 @@ on_failure(is_valid_month) <- function(call, env) {
 assert_varval_list <- function(arg,
                                required_elements = NULL,
                                accept_expr = FALSE,
+                               accept_var = FALSE,
                                optional =  FALSE) {
 
   assert_logical_scalar(accept_expr)
+  assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
   assert_character_vector(required_elements, optional = TRUE)
 
@@ -1252,14 +1255,31 @@ assert_varval_list <- function(arg,
   if (accept_expr) {
     valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
   }
+  else if (accept_var){
+    valid_vals <- "a symbol, character scalar, numeric scalar, variable names or `NA`"
+  }
   else {
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
-  if (!is_quosures(arg) || !is_named(arg)) {
+  if (!accept_var & (!is_quosures(arg) || !is_named(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a named list of quosures where each element is ",
+        valid_vals,
+        " but it is %s\n",
+        "\u2139 To create a list of quosures use `vars()`"
+      ),
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+
+  if (accept_var & (!is_quosures(arg))) {
+    err_msg <- sprintf(
+      paste0(
+        "`%s` must be a list of quosures where each element is ",
         valid_vals,
         " but it is %s\n",
         "\u2139 To create a list of quosures use `vars()`"

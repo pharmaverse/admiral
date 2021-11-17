@@ -36,13 +36,12 @@ test_that("derive_last_dose_amt works as expected", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSE,
     dose_var = EXDOSE,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
 
@@ -65,13 +64,12 @@ test_that("derive_last_dose_amt returns traceability vars", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSE,
     dose_var = EXDOSE,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
 

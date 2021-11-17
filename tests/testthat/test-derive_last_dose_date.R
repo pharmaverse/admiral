@@ -42,12 +42,11 @@ test_that("derive_last_dose_date works as expected output_datetime = FALSE", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = FALSE,
     traceability_vars = NULL
   )
@@ -74,13 +73,12 @@ test_that("derive_last_dose_date works as expected with output_datetime = TRUE",
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    check_dates_only = FALSE,
     output_datetime = TRUE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
 
@@ -109,12 +107,11 @@ test_that("derive_last_dose_date returns traceability vars", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC"))
 

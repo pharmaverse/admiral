@@ -10,12 +10,11 @@ derive_last_dose(
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
   dose_id = vars(),
-  ex_keep_vars = NULL,
-  dose_start,
-  dose_end,
+  dose_date,
   analysis_date,
   dataset_seq_var,
-  check_dates_only = FALSE,
+  single_dose_condition = (EXDOSFRQ == "ONCE"),
+  ex_keep_vars = NULL,
   traceability_vars = NULL
 )
 }
@@ -33,24 +32,21 @@ Defaults to NULL.}
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
 Defaults to empty \code{vars()}.}
 
-\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
-be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
-(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
-kept without renaming. Defaults to \code{NULL}.}
-
-\item{dose_start}{The dose start date variable.}
-
-\item{dose_end}{The dose end date variable.}
+\item{dose_date}{The EX dose date variable.}
 
 \item{analysis_date}{The analysis date variable.}
 
-\item{dataset_seq_var}{The sequence variable
+\item{dataset_seq_var}{The sequence variable from \code{dataset}.
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
 
-\item{check_dates_only}{Logical.
-An assumption that start and end dates of treatment match is checked.
-By default (\code{FALSE}), the date as well as the time component is checked.
-If set to \code{TRUE}, then only the date component of those variables is checked.}
+\item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
+is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
+
+\item{ex_keep_vars}{Variables to keep from \code{dataset_ex}, with the option to rename. Can either
+be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
+(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{dataset_ex} are
+kept without renaming.
+Defaults to \code{NULL}.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
@@ -64,7 +60,7 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with EX source variables from last dose added.
 }
 \description{
-Derive Last Dose
+Add EX source variables from last dose to the input dataset.
 }
 \details{
 All date (date-time) variables can be characters in standard ISO format or
@@ -72,7 +68,7 @@ of date / date-time class.
 For ISO format, see \code{\link{impute_dtc}} - parameter \code{dtc} for further details.
 When doing date comparison to identify last dose, date-time imputations are done as follows:
 \itemize{
-\item \code{dose_end}: no date imputation, time imputation to \code{00:00:00} if time is missing.
+\item \code{dose_date}: no date imputation, time imputation to \code{00:00:00} if time is missing.
 \item \code{analysis_date}: no date imputation, time imputation to \code{23:59:59} if time is missing.
 }
 
@@ -82,25 +78,25 @@ The last dose records are identified as follows:
 This is useful for, for example, filtering for valid dose only.
 \item The datasets \code{dataset} and \code{dataset_ex} are joined using \code{by_vars}.
 \item The last dose is identified:
-the last dose is the EX record with maximum date where \code{dose_end} is lower to or equal to
+the last dose is the EX record with maximum date where \code{dose_date} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
 The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
-If multiple such EX records exist for the same \code{dose_end} date, then either \code{dose_id}
+If multiple EX records exist for the same \code{dose_date}, then either \code{dose_id}
 needs to be supplied (e.g. \code{dose_id = vars(EXSEQ)}) to identify unique records,
-or an error is issued.
-\item The EX source variables from last dose are appended to the \code{dataset} and returned to the user.
+or an error is issued. When \code{dose_id} is supplied, the last EX record from the same \code{dose_date}
+sorted by \code{dose_id} will be used to identify last dose.
+\item The EX source variables (as specified in \code{ex_keep_vars}) from last dose are appended to the
+\code{dataset} and returned to the user.
 }
 
-Furthermore, the following assumption is checked: start and end dates (datetimes) need to match.
-Use \code{check_dates_only} to control whether only dates or whole date-times need to be equal. This
-is required because if start and end dates (datetimes) don't match, the \code{analysis_date} can occur
-between \code{dose_start} and \code{dose_end}. When this happens, the function will choose the dose with a
-latest \code{dose_end} date prior to \code{analysis_date}, as opposed to the actual last dose.
+This function only works correctly for EX dataset with a structure of single dose per row.
+If your study EX dataset has multiple doses per row, use \verb{expansion_function_name??} to
+transform the EX dataset into single dose per row structure before calling \code{derive_last_dose}.
 
-If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{ex_dataset},
+If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{dataset_ex},
 then join cannot be performed properly and an error is issued. To resolve the error, use
-\code{ex_keep_vars} to either keep variables unique to \code{ex_dataset}, or use this option to rename
-variables from \code{ex_dataset} (e.g. \code{ex_keep_vars = vars(LSTEXVIS = VISIT)}).
+\code{ex_keep_vars} to either keep variables unique to \code{dataset_ex}, or use this option to rename
+variables from \code{dataset_ex} (e.g. \code{ex_keep_vars = vars(LSTEXVIS = VISIT)}).
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -114,14 +110,13 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
-    check_dates_only = FALSE
+    single_dose_condition = (EXSTDTC == EXENDTC),
+    dataset_seq_var = AESEQ
   ) \%>\%
-  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC)
+  select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 
 # or with traceability variables
 ae \%>\%
@@ -130,12 +125,11 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     dataset_seq_var = AESEQ,
-    check_dates_only = FALSE,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)

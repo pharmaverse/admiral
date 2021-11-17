@@ -10,14 +10,12 @@ derive_last_dose_amt(
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
   dose_id = vars(),
-  ex_keep_vars = NULL,
-  dose_start,
-  dose_end,
+  dose_date,
   analysis_date,
   dataset_seq_var,
+  single_dose_condition = (EXDOSFRQ == "ONCE"),
   new_var,
   dose_var = EXDOSE,
-  check_dates_only = FALSE,
   traceability_vars = NULL
 )
 }
@@ -35,28 +33,19 @@ Defaults to NULL.}
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
 Defaults to empty \code{vars()}.}
 
-\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
-be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
-(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
-kept without renaming. Defaults to \code{NULL}.}
-
-\item{dose_start}{The dose start date variable.}
-
-\item{dose_end}{The dose end date variable.}
+\item{dose_date}{The EX dose date variable.}
 
 \item{analysis_date}{The analysis date variable.}
 
-\item{dataset_seq_var}{The sequence variable
+\item{dataset_seq_var}{The sequence variable from \code{dataset}.
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
 
-\item{new_var}{The output variable.}
+\item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
+is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
 
-\item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
+\item{new_var}{The new variable added to \code{dataset}.}
 
-\item{check_dates_only}{Logical.
-An assumption that start and end dates of treatment match is checked.
-By default (\code{FALSE}), the date as well as the time component is checked.
-If set to \code{TRUE}, then only the date component of those variables is checked.}
+\item{dose_var}{The EX source dose amount variable. Defaults to \code{EXDOSE}.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
@@ -70,15 +59,15 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Derive Last Dose Amount
+Add a variable for dose amount from the last dose to the input dataset.
 }
 \details{
-The last dose amount is derived as the dose amount where the \code{end_date} is lower to or
-equal to the \code{analysis_date} per \code{by_vars} and \code{dataset_seq_var}.
+The last dose amount is derived as the dose amount where the maximum \code{dose_date} is
+lower to or equal to the \code{analysis_date} per \code{by_vars} and \code{dataset_seq_var}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(ae)
 data(ex_single)
 
@@ -88,14 +77,12 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSE,
-    dose_var = EXDOSE,
-    check_dates_only = FALSE
+    dose_var = EXDOSE
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
 
@@ -106,14 +93,12 @@ ae \%>\%
     head(ex_single, 100),
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSE,
     dose_var = EXDOSE,
-    check_dates_only = FALSE,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)

@@ -235,14 +235,12 @@ adae <- adae %>%
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
-    ex_keep_vars = vars(EXSEQ, EXTRT, EXDOSE, EXSTDTC, EXENDTC, VISIT),
+    dose_date = EXSTDTC,
     analysis_date = ASTDT,
     dataset_seq_var = AESEQ,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    check_dates_only = FALSE
+    output_datetime = TRUE
   )
 ```
 

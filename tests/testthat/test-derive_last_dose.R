@@ -40,11 +40,10 @@ test_that("derive_last_dose works as expected", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
 
@@ -68,87 +67,14 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
       input_ex_wrong,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
-      dose_start = EXSTDTC,
-      dose_end = EXENDTC,
+      dose_date = EXENDTC,
       analysis_date = AESTDTC,
       dataset_seq_var = AESEQ,
-      check_dates_only = FALSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Not all values of EXSTDTC are equal to EXENDTC"
+    regexp = "Specified single_dose_condition is not satisfied."
   )
-
-})
-
-
-test_that(paste("derive_last_dose checks validity of start and end dose inputs",
-                "- time component (check_dates_only = FALSE)"), {
-
-                  input_ex_wrong <- dplyr::bind_rows(
-                    mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), as.POSIXct),
-                    tibble::tribble(
-                      ~STUDYID,   ~USUBJID,   ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-                      "my_study", "subject4", as.POSIXct("2020-11-06 00:00:00"),
-                      as.POSIXct("2020-11-06 00:00:01"), 1, 10, "treatment")
-                  )
-
-                  expect_error(
-                    derive_last_dose(
-                      input_ae,
-                      input_ex_wrong,
-                      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-                      by_vars = vars(STUDYID, USUBJID),
-                      dose_start = EXSTDTC,
-                      dose_end = EXENDTC,
-                      analysis_date = AESTDTC,
-                      dataset_seq_var = AESEQ,
-                      check_dates_only = FALSE,
-                      traceability_vars = NULL
-                    ),
-                    regexp = "Not all values of EXSTDTC are equal to EXENDTC"
-                  )
-
-})
-
-
-
-test_that(
-  paste("derive_last_dose checks validity of start and end dose inputs",
-        "- time component (check_dates_only = TRUE)"), {
-
-          input_ex_wrong <- dplyr::bind_rows(
-            mutate_at(input_ex, c("EXSTDTC", "EXENDTC"), ~as.POSIXct(.x, tz = "UTC")),
-            tibble::tribble(
-              ~STUDYID,   ~USUBJID,   ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-              "my_study", "subject4", as.POSIXct("2020-11-06T00:00:00", tz = "UTC"),
-              as.POSIXct("2020-11-06T00:00:01", tz = "UTC"), 1, 10, "treatment")
-          )
-
-          expected_output <- mutate(
-            input_ae,
-            EXSTDTC = as.POSIXct(
-              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"),
-            EXENDTC = as.POSIXct(
-              c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA), tz = "UTC"),
-            EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
-            EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
-            EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
-          )
-
-          res <- derive_last_dose(
-            input_ae,
-            input_ex_wrong,
-            filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-            by_vars = vars(STUDYID, USUBJID),
-            dose_start = EXSTDTC,
-            dose_end = EXENDTC,
-            analysis_date = AESTDTC,
-            dataset_seq_var = AESEQ,
-            check_dates_only = TRUE,
-            traceability_vars = NULL
-          )
-
-          expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 
 })
 
@@ -172,11 +98,10 @@ test_that("derive_last_dose returns traceability vars", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
 
@@ -208,14 +133,13 @@ test_that("derive_last_dose when multiple doses on same date - error", {
       input_ex_dup,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
-      dose_start = EXSTDTC,
-      dose_end = EXENDTC,
+      dose_date = EXENDTC,
       analysis_date = AESTDTC,
       dataset_seq_var = AESEQ,
-      check_dates_only = FALSE,
+      single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Last dose is not unique."
+    regexp = "Multiple doses exists for the same dose_date. Update dose_id to identify unique doses."
   )
 
 })
@@ -243,12 +167,11 @@ test_that("derive_last_dose when multiple doses on same date - dose_id supplied"
     input_ex_dup,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXENDTC,
     dose_id = vars(EXSEQ),
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
-    check_dates_only = FALSE,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
 
@@ -256,11 +179,4 @@ test_that("derive_last_dose when multiple doses on same date - dose_id supplied"
 
 
 })
-
-
-
-
-
-
-
 

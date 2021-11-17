@@ -11,17 +11,16 @@ derive_last_dose_grp(
   by_vars = vars(STUDYID, USUBJID),
   dose_id = vars(),
   ex_keep_vars = NULL,
-  dose_start,
-  dose_end,
+  dose_date,
   analysis_date,
   dataset_seq_var,
+  single_dose_condition = (EXDOSFRQ == "ONCE"),
   new_var,
   grp_brks,
   grp_lbls,
   include_lowest = TRUE,
   right = TRUE,
   dose_var = EXDOSE,
-  check_dates_only = FALSE,
   traceability_vars = NULL
 )
 }
@@ -39,38 +38,35 @@ Defaults to NULL.}
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
 Defaults to empty \code{vars()}.}
 
-\item{ex_keep_vars}{Variables to keep from \code{ex_dataset}, with the option to rename. Can either
+\item{ex_keep_vars}{Variables to keep from \code{dataset_ex}, with the option to rename. Can either
 be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
-(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{ex_dataset} are
-kept without renaming. Defaults to \code{NULL}.}
+(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{dataset_ex} are
+kept without renaming.
+Defaults to \code{NULL}.}
 
-\item{dose_start}{The dose start date variable.}
-
-\item{dose_end}{The dose end date variable.}
+\item{dose_date}{The EX dose date variable.}
 
 \item{analysis_date}{The analysis date variable.}
 
-\item{dataset_seq_var}{The sequence variable
+\item{dataset_seq_var}{The sequence variable from \code{dataset}.
 (this together with \code{by_vars} creates the keys of \code{dataset}).}
+
+\item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
+is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
 
 \item{new_var}{The output variable defined by the user.}
 
-\item{grp_brks}{User supplied breaks to apply to groups}
+\item{grp_brks}{User supplied breaks to apply to groups.}
 
-\item{grp_lbls}{User supplied labels to apply to groups}
+\item{grp_lbls}{User supplied labels to apply to groups.}
 
 \item{include_lowest}{logical, indicating if a value equal to the lowest
 (or highest, for right = FALSE) ‘breaks’ value should be included.}
 
 \item{right}{logical, indicating if the intervals should be closed on the right
-(and open on the left) or vice versa}
+(and open on the left) or vice versa.}
 
 \item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
-
-\item{check_dates_only}{Logical.
-An assumption that start and end dates of treatment match is checked.
-By default (\code{FALSE}), the date as well as the time component is checked.
-If set to \code{TRUE}, then only the date component of those variables is checked.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
@@ -84,72 +80,43 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Derive Last Dose with user-defined groupings
+Add a variable for user-defined dose grouping of the last dose to the input dataset.
 }
 \details{
-This function brings in two datasets (e.g. adex and adae), finds the most recent
-adverse event and then finds the most recent last dose.  Users can supply custom grouping breaks
-and grouping labels for EXDOSE exploration.
+Last dose is the dose with maximum \code{dose_date} that is lower to or equal to the
+\code{analysis_date} per \code{by_vars} and  \code{dataset_seq_var}.
+The last dose group is then derived by user-defined grouping, which groups
+\code{dose_var} as specified in \code{grp_brks}, and returns \code{grp_lbls} as the values for \code{new_var}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(cdiscpilot)
+library(admiral.test)
 data(ae)
 data(ex_single)
 
-ex_single_new <- ex_single \%>\%
- mutate(EXDOSE_ex = sample(0:84, 22439, replace=TRUE)) \%>\%
- select(-EXDOSE, "EXDOSE" = EXDOSE_ex)
-
 ae \%>\%
    head(100) \%>\%
    derive_last_dose_grp(
-   head(ex_single_new, 100),
+   head(ex_single, 100),
    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
    nchar(EXENDTC) >= 10,
-   ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
    by_vars = vars(STUDYID, USUBJID),
-   dose_start = EXSTDTC,
-   dose_end = EXENDTC,
+   dose_date = EXSTDTC,
    new_var = LDGRP,
-   grp_brks = c(1, 40, 60, 100),
+   grp_brks = c(0, 20, 40, 60),
    grp_lbls = c("Low", "Medium", "High"),
    include_lowest = TRUE,
    right = TRUE,
    dose_var = EXDOSE,
    analysis_date = AESTDTC,
    dataset_seq_var = AESEQ,
-   check_dates_only = FALSE,
-   traceability_vars = NULL
-   ) \%>\%
-   select(USUBJID, LDGRP)
-
-# or with traceability variables
-ae \%>\%
-   head(100) \%>\%
-   derive_last_dose_grp(
-   head(ex_single_new, 100),
-   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-   nchar(EXENDTC) >= 10,
-   ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-   by_vars = vars(STUDYID, USUBJID),
-   dose_start = EXSTDTC,
-   dose_end = EXENDTC,
-   new_var = LDGRP,
-   grp_brks = c(1, 40, 60, 100),
-   grp_lbls = c("Low", "Medium", "High"),
-   include_lowest = TRUE,
-   right = TRUE,
-   dose_var = EXDOSE,
-   analysis_date = AESTDTC,
-   dataset_seq_var = AESEQ,
-   check_dates_only = FALSE,
+   single_dose_condition = (EXSTDTC == EXENDTC),
    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-   )\%>\%
+   ) \%>\%
    select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
 \seealso{
-\code{\link[=derive_last_dose]{derive_last_dose()}}
+\code{\link[=derive_last_dose]{derive_last_dose()}}, \code{\link[=cut]{cut()}}
 }
 \author{
 Ben Straub

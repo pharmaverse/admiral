@@ -1,18 +1,21 @@
 #' Derive Last Dose with user-defined groupings
 #'
+#' Add a variable for user-defined dose grouping of the last dose to the input dataset.
+#'
 #' @inheritParams derive_last_dose
 #' @param new_var The output variable defined by the user.
-#' @param grp_brks User supplied breaks to apply to groups
-#' @param grp_lbls User supplied labels to apply to groups
+#' @param grp_brks User supplied breaks to apply to groups.
+#' @param grp_lbls User supplied labels to apply to groups.
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #' @param include_lowest logical, indicating if a value equal to the lowest
 #' (or highest, for right = FALSE) ‘breaks’ value should be included.
 #' @param right logical, indicating if the intervals should be closed on the right
-#' (and open on the left) or vice versa
+#' (and open on the left) or vice versa.
 #'
-#' @details This function brings in two datasets (e.g. adex and adae), finds the most recent
-#' adverse event and then finds the most recent last dose.  Users can supply custom grouping breaks
-#' and grouping labels for EXDOSE exploration.
+#' @details Last dose is the dose with maximum `dose_date` that is lower to or equal to the
+#' `analysis_date` per `by_vars` and  `dataset_seq_var`.
+#' The last dose group is then derived by user-defined grouping, which groups
+#' `dose_var` as specified in `grp_brks`, and returns `grp_lbls` as the values for `new_var`.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
@@ -22,63 +25,33 @@
 #'
 #' @export
 #'
-#' @seealso [derive_last_dose()]
+#' @seealso [derive_last_dose()], [cut()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(cdiscpilot)
+#' library(admiral.test)
 #' data(ae)
 #' data(ex_single)
 #'
-#' ex_single_new <- ex_single %>%
-#'  mutate(EXDOSE_ex = sample(0:84, 22439, replace=TRUE)) %>%
-#'  select(-EXDOSE, "EXDOSE" = EXDOSE_ex)
-#'
 #' ae %>%
 #'    head(100) %>%
 #'    derive_last_dose_grp(
-#'    head(ex_single_new, 100),
+#'    head(ex_single, 100),
 #'    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'    nchar(EXENDTC) >= 10,
-#'    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
 #'    by_vars = vars(STUDYID, USUBJID),
-#'    dose_start = EXSTDTC,
-#'    dose_end = EXENDTC,
+#'    dose_date = EXSTDTC,
 #'    new_var = LDGRP,
-#'    grp_brks = c(1, 40, 60, 100),
+#'    grp_brks = c(0, 20, 40, 60),
 #'    grp_lbls = c("Low", "Medium", "High"),
 #'    include_lowest = TRUE,
 #'    right = TRUE,
 #'    dose_var = EXDOSE,
 #'    analysis_date = AESTDTC,
 #'    dataset_seq_var = AESEQ,
-#'    check_dates_only = FALSE,
-#'    traceability_vars = NULL
-#'    ) %>%
-#'    select(USUBJID, LDGRP)
-#'
-#' # or with traceability variables
-#' ae %>%
-#'    head(100) %>%
-#'    derive_last_dose_grp(
-#'    head(ex_single_new, 100),
-#'    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'    nchar(EXENDTC) >= 10,
-#'    ex_keep_vars = vars(EXSTDTC, EXENDTC, EXDOSE, EXTRT, EXSEQ, VISIT),
-#'    by_vars = vars(STUDYID, USUBJID),
-#'    dose_start = EXSTDTC,
-#'    dose_end = EXENDTC,
-#'    new_var = LDGRP,
-#'    grp_brks = c(1, 40, 60, 100),
-#'    grp_lbls = c("Low", "Medium", "High"),
-#'    include_lowest = TRUE,
-#'    right = TRUE,
-#'    dose_var = EXDOSE,
-#'    analysis_date = AESTDTC,
-#'    dataset_seq_var = AESEQ,
-#'    check_dates_only = FALSE,
+#'    single_dose_condition = (EXSTDTC == EXENDTC),
 #'    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-#'    )%>%
+#'    ) %>%
 #'    select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 
@@ -88,46 +61,44 @@ derive_last_dose_grp <- function(dataset,
                                  by_vars = vars(STUDYID, USUBJID),
                                  dose_id = vars(),
                                  ex_keep_vars = NULL,
-                                 dose_start,
-                                 dose_end,
+                                 dose_date,
                                  analysis_date,
                                  dataset_seq_var,
+                                 single_dose_condition = (EXDOSFRQ == "ONCE"),
                                  new_var,
                                  grp_brks,
                                  grp_lbls,
                                  include_lowest = TRUE,
                                  right = TRUE,
                                  dose_var = EXDOSE,
-                                 check_dates_only = FALSE,
                                  traceability_vars = NULL) {
 
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
-  dose_start <- assert_symbol(enquo(dose_start))
-  dose_end <- assert_symbol(enquo(dose_end))
+  dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
   dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
+  single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
   trace_vars_str <- names(traceability_vars)
 
 
   derive_last_dose(dataset = dataset,
-                dataset_ex = dataset_ex,
-                filter_ex = !!filter_ex,
-                by_vars = by_vars,
-                dose_id = dose_id,
-                ex_keep_vars = ex_keep_vars,
-                dose_start = !!dose_start,
-                dose_end = !!dose_end,
-                analysis_date = !!analysis_date,
-                dataset_seq_var = !!dataset_seq_var,
-                check_dates_only = check_dates_only,
-                traceability_vars = traceability_vars) %>%
+                   dataset_ex = dataset_ex,
+                   filter_ex = !!filter_ex,
+                   by_vars = by_vars,
+                   dose_id = dose_id,
+                   dose_date = !!dose_date,
+                   analysis_date = !!analysis_date,
+                   dataset_seq_var = !!dataset_seq_var,
+                   single_dose_condition = !!single_dose_condition,
+                   ex_keep_vars = vars(!!dose_var),
+                   traceability_vars = traceability_vars)%>%
     mutate(!!new_var :=
              as.character(
                cut(
-                   EXDOSE,
+                   !!dose_var,
                    breaks = !!grp_brks,
                    include.lowest = include_lowest,
                    right = right,
