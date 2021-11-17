@@ -20,7 +20,7 @@ test_that("TRTSDTM variable is added", {
     ))
   )
 
-  actual_output <- derive_var_trtsdtm(adsl, dataset_ex = ex)
+  actual_output <- derive_var_trtsdtm(adsl, dataset_ex = ex, subject_keys = vars(USUBJID))
 
   expect_dfs_equal(
     base = expected_output,

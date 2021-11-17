@@ -22,8 +22,8 @@
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-# 'Filter used to select the relevant disposition data.
-# 'It is expected that the filter restricts `dataset_ds` such that there is at most
+#' Filter used to select the relevant disposition data.
+#' It is expected that the filter restricts `dataset_ds` such that there is at most
 #' one observation per patient. An error is issued otherwise.
 #'
 #' Permitted Values: logical expression.
@@ -38,6 +38,11 @@
 #'
 #'   Default is NULL
 #'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#' A list of quosures where the expressions are symbols as returned by
+#' `vars()` is expected.
+#'
 #' @return the input dataset with the disposition date (`new_var`) added
 #'
 #' @keywords adsl timing
@@ -48,8 +53,10 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("dm")
 #' data("ds")
+#'
 #' dm %>%
 #'   derive_disposition_dt(
 #'     dataset_ds = ds,
@@ -63,8 +70,8 @@ derive_disposition_dt <- function(dataset,
                                   new_var,
                                   dtc,
                                   filter_ds,
-                                  date_imputation = NULL) {
-
+                                  date_imputation = NULL,
+                                  subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -72,6 +79,7 @@ derive_disposition_dt <- function(dataset,
   assert_data_frame(dataset)
   assert_data_frame(dataset_ds, quo_c(dtc))
   warn_if_vars_exist(dataset, quo_text(new_var))
+  assert_vars(subject_keys)
 
   # Process the disposition data
   prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
@@ -85,16 +93,16 @@ derive_disposition_dt <- function(dataset,
       date_imputation = date_imputation,
       flag_imputation = FALSE
     ) %>%
-    select(STUDYID, USUBJID, !!enquo(new_var) := !!sym(newvar))
+    select(!!!subject_keys, !!enquo(new_var) := !!sym(newvar))
 
   # Expect 1 record per subject - issue a warning otherwise
   signal_duplicate_records(
     ds_subset,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = subject_keys,
     msg = "The filter used for DS results in multiple records per patient"
   )
 
   # add the new dispo date to the input dataset
   dataset %>%
-    left_join(ds_subset, by = c("STUDYID", "USUBJID"))
+    left_join(ds_subset, by = vars2chr(subject_keys))
 }

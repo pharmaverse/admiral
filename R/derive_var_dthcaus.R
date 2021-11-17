@@ -2,8 +2,15 @@
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
-#' @param dataset Input dataset. `USUBJID` is an expected column.
+#' @param dataset Input dataset.
+#' The variables specified by the `subject_keys` parameter are expected.
+#'
 #' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
+#'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#' A list of quosures where the expressions are symbols as returned by
+#' `vars()` is expected.
 #'
 #' @details
 #' This function derives `DTHCAUS` along with the user-defined traceability
@@ -80,8 +87,11 @@
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds)
-derive_var_dthcaus <- function(dataset, ...) {
-  assert_data_frame(dataset)
+derive_var_dthcaus <- function(dataset,
+                               ...,
+                               subject_keys = vars(STUDYID, USUBJID)) {
+
+  assert_data_frame(dataset, subject_keys)
   sources <- list(...)
   assert_list_of(sources, "dthcaus_source")
 
@@ -101,7 +111,7 @@ derive_var_dthcaus <- function(dataset, ...) {
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
         order = vars(!!sources[[ii]]$date),
-        by_vars = vars(USUBJID),
+        by_vars = subject_keys,
         mode = sources[[ii]]$mode
       )
 
@@ -126,7 +136,7 @@ derive_var_dthcaus <- function(dataset, ...) {
       warn_if_vars_exist(dataset, names(sources[[ii]]$traceability))
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
-          USUBJID,
+          !!!subject_keys,
           temp_source_nr,
           temp_date,
           DTHCAUS,
@@ -135,19 +145,19 @@ derive_var_dthcaus <- function(dataset, ...) {
     }
     else {
       add_data[[ii]] <- add_data[[ii]] %>%
-        select(USUBJID, temp_source_nr, temp_date, DTHCAUS)
+        select(!!!subject_keys, temp_source_nr, temp_date, DTHCAUS)
     }
   }
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
     filter_extreme(
       order = vars(temp_date, temp_source_nr),
-      by_vars = vars(USUBJID),
+      by_vars = subject_keys,
       mode = "first"
     ) %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = "USUBJID")
+  left_join(dataset, dataset_add, by = vars2chr(subject_keys))
 }
 
 #' Create an `dthcaus_source` object
@@ -177,7 +187,7 @@ derive_var_dthcaus <- function(dataset, ...) {
 #'
 #' @keywords source_specifications
 #'
-#' @seealso [`derive_var_dthcaus()`]
+#' @seealso [derive_var_dthcaus()]
 #'
 #' @export
 #'
@@ -190,19 +200,18 @@ dthcaus_source <- function(dataset,
                            traceability_vars = NULL,
                            date_var = deprecated(),
                            traceabilty_vars = deprecated()) {
-
-  ### BEGIN DEPRECIATION
   if (!missing(date_var)) {
     deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
     date <- enquo(date_var)
   }
   if (!missing(traceabilty_vars)) {
-    deprecate_warn("0.3.0",
-                   "dthcaus_source(traceabilty_vars = )",
-                   "dthcaus_source(traceability_vars = )")
+    deprecate_warn(
+      "0.3.0",
+      "dthcaus_source(traceabilty_vars = )",
+      "dthcaus_source(traceability_vars = )"
+    )
     traceability_vars <- traceabilty_vars
   }
-  ### END DEPRECIATION
 
   out <- list(
     dataset = assert_data_frame(dataset),

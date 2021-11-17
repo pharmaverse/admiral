@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
@@ -15,7 +15,8 @@ Authors@R: c(
     person("Teckla", "Akinyi", role = "aut"),
     person("Eric", "Simms", email = "eric.m.simms@gsk.com", role = "aut"),
     person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut"),
-    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut")
+    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut"),
+    person("Hamza", "Rahal", role = "aut")
     )
 Description: A toolbox for programming ADaM datasets in R.
 License: file LICENSE
@@ -25,6 +26,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Depends: R (>= 3.5)
 Imports:
+    admiral.test,
     assertthat,
     dplyr,
     lubridate,
@@ -32,6 +34,7 @@ Imports:
     purrr,
     rlang,
     stringr,
+    hms,
     tidyr,
     tidyselect
 Suggests:
@@ -50,5 +53,63 @@ Suggests:
     styler,
     tibble,
     usethis,
-    covr
+    covr,
+    DT
+Remotes: Roche-GSK/admiral.test
 VignetteBuilder: knitr
+Collate: 
+    'admiral-package.R'
+    'assertions.R'
+    'call_derivation.R'
+    'compute_duration.R'
+    'data.R'
+    'dataset_vignette.R'
+    'derive_adeg_params.R'
+    'derive_advs_params.R'
+    'derive_baseline.R'
+    'derive_date_vars.R'
+    'derive_derived_param.R'
+    'derive_disposition_dt.R'
+    'derive_disposition_reason.R'
+    'derive_disposition_status.R'
+    'derive_extreme_flag.R'
+    'derive_last_dose.R'
+    'derive_obs_number.R'
+    'derive_param_doseint.R'
+    'derive_param_tte.R'
+    'derive_params_exposure.R'
+    'derive_summary_records.R'
+    'derive_var_ady.R'
+    'derive_var_aendy.R'
+    'derive_var_anrind.R'
+    'derive_var_astdy.R'
+    'derive_var_atirel.R'
+    'derive_var_basetype.R'
+    'derive_var_chg.R'
+    'derive_var_dthcaus.R'
+    'derive_var_lstalvdt.R'
+    'derive_var_ontrtfl.R'
+    'derive_var_pchg.R'
+    'derive_var_trtdurd.R'
+    'derive_var_trtedtm.R'
+    'derive_var_trtsdtm.R'
+    'derive_vars_aage.R'
+    'derive_vars_dtm_to_dt.R'
+    'derive_vars_dtm_to_tm.R'
+    'derive_vars_duration.R'
+    'derive_vars_query.R'
+    'derive_vars_suppqual.R'
+    'derive_vars_transposed.R'
+    'duplicates.R'
+    'filter_extreme.R'
+    'globals.R'
+    'hms.R'
+    'iso_dtm.R'
+    'joins.R'
+    'lifecycle.R'
+    'reexports.R'
+    'test_helpers.R'
+    'utils.R'
+    'tte_sources.R'
+    'user_helpers.R'
+    'warnings.R'

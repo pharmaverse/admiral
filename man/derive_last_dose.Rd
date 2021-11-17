@@ -90,6 +90,7 @@ Use \code{check_dates_only} to control whether only dates or whole date-times ne
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data(ae)
 data(ex_single)
 

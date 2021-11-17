@@ -2,8 +2,9 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, suppae, suppdm, ex
+# Input: ae, adsl, suppae, ex_single
 library(admiral)
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -17,16 +18,26 @@ data("ae")
 data("suppae")
 data("adsl")
 data("ex_single")
-ex <- ex_single
+
+ae <- convert_blanks_to_na(ae)
+suppae <- convert_blanks_to_na(suppae)
+ex <- convert_blanks_to_na(ex_single)
+
 
 # ---- Derivations ----
+
+# Get list of ADSL vars required for derivations
+adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
 
 adae <- ae %>%
   # join supplementary qualifier variables
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  left_join(
+    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
+    by = c("STUDYID", "USUBJID")
+  ) %>%
 
   # derive analysis start time
   derive_vars_dtm(
@@ -34,7 +45,7 @@ adae <- ae %>%
     new_vars_prefix = "AST",
     date_imputation = "first",
     time_imputation = "first",
-    min_dates = list(TRTSDT)
+    min_dates = vars(TRTSDT)
   ) %>%
 
   # derive analysis end time
@@ -43,14 +54,11 @@ adae <- ae %>%
     new_vars_prefix = "AEN",
     date_imputation = "last",
     time_imputation = "last",
-    max_dates = list(DTHDT, EOSDT)
+    max_dates = vars(DTHDT, EOSDT)
   ) %>%
 
   # derive analysis end/start date
-  mutate(
-    ASTDT = date(ASTDTM),
-    AENDT = date(AENDTM)
-  ) %>%
+  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
 
   # derive analysis start relative day
   derive_var_astdy(
@@ -74,7 +82,10 @@ adae <- ae %>%
     out_unit = "days",
     add_one = TRUE,
     trunc_out = FALSE
-  ) %>%
+  )
+
+
+adae <- adae %>%
 
   # derive last dose date/time
   derive_last_dose(
@@ -110,6 +121,13 @@ adae <- ae %>%
     mode = "last"
   )
 
+# Join all ADSL with AE
+adae <- adae %>%
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
+
+
 # ---- Save output ----
 
-saveRDS(adae, file = "./ADAE.rds", compress = TRUE)
+save(adae, file = "data/adae.rda", compress = "bzip2")

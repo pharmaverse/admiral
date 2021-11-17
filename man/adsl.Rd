@@ -4,9 +4,9 @@
 \name{adsl}
 \alias{adsl}
 \title{Subject Level Analysis Dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 306 rows and 50 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 306 rows and 49 columns.}
 \source{
-Derived from the \link{dm} and \link{ds} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R})
+Derived from the \link{dm} and \link{ds} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adsl.R})
 }
 \usage{
 adsl

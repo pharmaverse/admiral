@@ -161,7 +161,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #' - `QUERY_ID`, could be NA, must be unique per each `VAR_PREFIX`
 #' - `QUERY_SCOPE`, 'BROAD', 'NARROW', or NA
 #' - `QUERY_SCOPE_NUM`, 1, 2, or NA
-#' - `TERM_LEVEL`, e.g., AEDECOD, AELLT, AELLTCD, ...
+#' - `TERM_LEVEL`, e.g., `"AEDECOD"`, `"AELLT"`, `"AELLTCD"`, ...
 #' - `TERM_NAME`, character, could be NA only at those observations
 #' where `TERM_ID` is non-NA
 #' - `TERM_ID`, integer, could be NA only at those observations

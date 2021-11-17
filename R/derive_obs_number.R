@@ -50,6 +50,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("vs")
 #'
 #' vs %>%

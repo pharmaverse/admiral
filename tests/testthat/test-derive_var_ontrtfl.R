@@ -158,7 +158,7 @@ test_that("`target` is set to `Y` when ` start_date` >= `ref_start_date` and ` s
 })
 
 test_that("`target` is set to `Y` when ` start_date` >= `ref_start_date` and ` start_date` <=
-            `ref_end_date` + 'ref_end_window`", {
+            `ref_end_date` + `ref_end_window`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~ADT, ~TRTSDT, ~TRTEDT,
     "TEST01", "PAT01", as.Date("2020-02-01"), as.Date("2020-01-01"), as.Date("2020-02-01"),

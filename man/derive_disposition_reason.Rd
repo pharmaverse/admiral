@@ -12,7 +12,8 @@ derive_disposition_reason(
   new_var_spe = NULL,
   reason_var_spe = NULL,
   format_new_vars = format_reason_default,
-  filter_ds
+  filter_ds,
+  subject_keys = vars(STUDYID, USUBJID)
 )
 }
 \arguments{
@@ -84,9 +85,16 @@ format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD}
 
 \item{filter_ds}{Filter condition for the disposition data.
 
+Filter used to select the relevant disposition data.
+It is expected that the filter restricts \code{dataset_ds} such that there is at most
 one observation per patient. An error is issued otherwise.
 
 Permitted Values: logical expression.}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 the input dataset with the disposition reason(s) (\code{new_var} and
@@ -106,6 +114,7 @@ The details associated with the reason for discontinuation are derived based on
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("dm")
 data("ds")
 
