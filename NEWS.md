@@ -6,16 +6,23 @@
 
 - `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551)
 
+- `derive_var_age_years()` derives age in years from a variable providing the
+age in different units (#569)
+
 ### BDS
 
 - `derive_param_tte()` derives time-to-event-parameters (#546)
+
+- For common time-to-event endpoints [event and censoring source
+objects](../reference/index.html#section-pre-defined-time-to-event-sources) are
+provided (#612)
 
 ### Developer
 
 - `assert_list_element()` checks if an element of a list of lists/classes
 fulfills a condition
 
-- `assert_one_to_one()` checksif there is a one to one mapping between two
+- `assert_one_to_one()` checks if there is a one to one mapping between two
 lists of variables
 
 - `negate_vars()` negates a list of variables to remove them from a dataset with
@@ -25,7 +32,8 @@ lists of variables
 
 - Unit checks in `derive_param_*()` functions are no longer case sensitive (#631)
 
-- `derive_vars_aage()`, `derive_agegr_ema()` and `derive_agegr_fda()` gain a `age_unit` parameter used to specify the unit of the input age (#569)
+- `derive_agegr_ema()` and `derive_agegr_fda()` gain a `age_unit` parameter used
+to specify the unit of the input age (#569)
 
 ## Breaking Changes
 
