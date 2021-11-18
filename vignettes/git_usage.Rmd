@@ -21,9 +21,11 @@ admiral GitHub: https://github.com/Roche-GSK/admiral.git
 
 # Branches
 
--	The `master` branch contains the latest **released** version and should not be used for development.  
+-	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://github.com/Roche-GSK/admiral/releases) 
 -	The `devel` branch contains the latest development version of the package.  
--	‘Feature’ branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  
+- The `gh-pages` branches contains the code used to render this website you are looking at right now!
+-	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  
+
 
 # Working with Feature Branches
 
@@ -91,3 +93,11 @@ git push
 -	stashing: useful when one wants to go back to clean directory  
 -	`git stash` - stash (store) current changes and restore a clean directory  
 -	`git stash pop` - put back (restore) stashed changes  
+
+## Resources on using git, Github and RStudio
+
+* [Github and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
+* [Happy Git and GitHub for the useR](https://happygitwithr.com/)
+* [Git and GitHub from the R Package Manual](https://r-pkgs.org/git.html)
+
+
