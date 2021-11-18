@@ -129,6 +129,7 @@ derive_last_dose <- function(dataset,
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
+  dose_id_str <- vars2chr(dose_id)
 
   # check if single_dose_condition is true for all EX records
   single_dose_eval <- dataset_ex %>%
@@ -167,7 +168,8 @@ derive_last_dose <- function(dataset,
   }
 
   dataset_ex <- dataset_ex %>% mutate(!!!ex_keep_vars) %>%
-    select(!!!by_vars, !!!dose_id, !!!dose_date, !!!syms(ex_keep_vars_str), !!!syms(trace_vars_str))
+    select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
+           !!!syms(ex_keep_vars_str), !!!syms(trace_vars_str))
 
   # check if any variable exist in both dataset and dataset_ex (except for by_vars) before join
   dataset_var <- colnames(dataset)[!colnames(dataset) %in% by_vars_str]

@@ -66,7 +66,7 @@ test_that("derive_last_dose_date works as expected with output_datetime = TRUE",
     "my_study",   "subject2",  2,        "2020-02-20",   "2020-01-20 00:00:00",
     "my_study",   "subject3",  1,        "2020-03-02",   NA_character_,
     "my_study",   "subject4",  1,        "2020-11-02",   NA_character_) %>%
-    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM)))
+    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = 'UTC'))
 
   res <- derive_last_dose_date(
     input_ae,
@@ -97,10 +97,10 @@ test_that("derive_last_dose_date returns traceability vars", {
     "my_study",  "subject2",  2,      "2020-02-20",  "2020-01-20 00:00:00",
     "my_study",  "subject3",  1,      "2020-03-02",  NA_character_,
     "my_study",  "subject4",  1,      "2020-11-02",  NA_character_) %>%
-    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM)),
+    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"),
           LDOSEDOM = c("EX", "EX", "EX", NA, "EX", NA, NA),
           LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
-          LDOSEVAR = c("EXSTDTC", "EXSTDTC", "EXSTDTC", NA, "EXSTDTC", NA, NA))
+          LDOSEVAR = c("EXENDTC", "EXENDTC", "EXENDTC", NA, "EXENDTC", NA, NA))
 
   res <- derive_last_dose_date(
     input_ae,
@@ -113,7 +113,7 @@ test_that("derive_last_dose_date returns traceability vars", {
     new_var = LDOSEDTM,
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC"))
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC"))
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 
