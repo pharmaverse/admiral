@@ -1,5 +1,5 @@
 ---
-title: "Guidance for git Usage"
+title: "Guidance for git and Github Usage"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 ```
 
 admiral GitHub: https://github.com/Roche-GSK/admiral.git
+
+# Introduction
+
+This article will give you an overview of how the admiral project is utilizing the version-control software git and the website Github while working with RStudio.  We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address Issues.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers.  Finally, we provide the bare minimum git commands needed to get up and running.  Please refer to the Resource section for more in-depth guidance on using git and Github.  
 
 # Branches
 
@@ -62,11 +66,24 @@ You can also create a feature branch in Github.
 -	Check out your feature branch: `git checkout <my_branch>`  
 -	Merge the unmerged branch to <my_branch>: `git merge <unmerged_branch>`
 
-**Commit**  
+### Commits from the Terminal in RStudio
+
 When committing, prefix the message with the issue number and add a meaningful message  
 `git commit –m '#94 last alive date implementation'`
 
-**Pull request**  
+### Commits from the Git Tab in RStudio
+
+You can also make use of the Git Tab within RStudio to committ your changes.  A benefit of using this Tab is being able to see your changes to the file with red and green highligting.  
+
+```{r, echo = FALSE}
+    knitr::include_graphics("github_committ.png", dpi = 144)
+```
+
+
+## Pull request
+
+We recommend a thorough read through of the articles, [Pull Request Review Guidance](pr_review_guidance.html) and the [Programming Strategy](programming_strategy.html) for in-depth discussions on a doing a proper Pull Request.   Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles.  Below we discuss some simple git commands in the terminal and on Github for doing a Pull Request.  
+
 Once all changes are committed, push the new branch to GitHub:  
 `git push -u origin <new_branch_name>`  
   
@@ -74,9 +91,9 @@ In GitHub, under "Pull request", the user has to "Compare and pull request". The
 
 ### Reviewing/Closing an Issue
 
-At least one reviewer must approve the Pull Request.  
-The reviewer must ensure that the function follows the programming strategy recommendations.  
-Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
+- At least one reviewer must approve the Pull Request.  Another article, [Pull Request Review Guidance](pr_review_guidance.html) provides in depth guidance on doing a proper Pull Request. 
+- The reviewer must ensure that the function follows the programming strategy recommendations.  
+- Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
 
 Once the review is completed, and the Pull Request is merged, the branch must be removed: click “delete branch” in the Pull Request.
 
@@ -103,15 +120,17 @@ git push
 
 ### Solving Merge Conflicts in Github
 
+A simple write up with an image here.
 
 ## Useful git Commands
 
 -	merging: `git merge <my_branch>` - merge my_branch into current branch  
--	stashing: useful when one wants to go back to clean directory  
+-	The stashing commands are useful when one wants to go back to clean directory 
 -	`git stash` - stash (store) current changes and restore a clean directory  
 -	`git stash pop` - put back (restore) stashed changes  
+- `git revert` is also helpful but why?
 
-## Resources on using git, Github and RStudio
+# Resources on using git, Github and RStudio
 
 * [Github and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
