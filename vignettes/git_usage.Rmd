@@ -36,11 +36,25 @@ Each feature branch must be related to an issue.
 **Name:**  
 The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 "Program function to derive `LSTALVDT`", the Branch name would be: `94_lstalvdt`.
 
-### Create a New Feature Branch (from `devel`)
+### Create a New Feature Branch from the Terminal (from `devel`)
 
 -	Checkout the devel branch: `git checkout devel`  
 -	Pull the latest changes from GitHub: `git pull`  
 -	Create a new branch off the devel branch and switch to it: `git checkout -b <new_branch_name>`
+
+### Create a New Feature Branch from Github (from `devel`)
+
+You can also create a feature branch in Github.  
+
+- Switch to the `devel` branch
+- Type in your new feature branch name
+- Click Create branch: 94_lstalvdt from `devel`
+- Be Sure to Pull down newly created branch into RStudio
+
+```{r, echo = FALSE}
+    knitr::include_graphics("github_feature_branch.png", dpi = 144)
+```
+
 
 **Using code from unmerged branches**  
 -	Checkout the unmerged branch you want to use: `git checkout <unmerged_branch>`  
@@ -60,13 +74,13 @@ In GitHub, under "Pull request", the user has to "Compare and pull request". The
 
 ### Reviewing/Closing an Issue
 
-At least one reviewer must approve the PR.  
+At least one reviewer must approve the Pull Request.  
 The reviewer must ensure that the function follows the programming strategy recommendations.  
-Any comment/question/discussion must be addressed and documented in GitHub before the PR is merged and the issue closed.
+Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
 
-Once the review is completed, and the PR is merged, the branch must be removed: click “delete branch” in the PR.
+Once the review is completed, and the Pull Request is merged, the branch must be removed: click “delete branch” in the Pull Request.
 
-### Solving Merge Conflicts
+### Solving Merge Conflicts in the Terminal on RStudio
 
 Merge conflict is a situation where git cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):
 
@@ -86,6 +100,9 @@ git add <file with conflict>
 git commit -m "<insert_message>"
 git push
 ```
+
+### Solving Merge Conflicts in Github
+
 
 ## Useful git Commands
 
