@@ -111,7 +111,11 @@ adae <- adae %>%
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
 
-  # derive occurrence flags
+  # derive occurrence flags: first occurence of most severe AE
+  # create numeric value ASEVN for severity
+  mutate(
+    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
+  ) %>%
   derive_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
