@@ -13,6 +13,8 @@ NULL
 #'
 #' @export
 #'
+#' @keywords tte_source
+#'
 #' @rdname tte_source_objects
 #'
 death_event <- event_source(
@@ -26,6 +28,7 @@ death_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 lastalive_censor <- censor_source(
@@ -38,6 +41,7 @@ lastalive_censor <- censor_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_event <- event_source(
@@ -52,6 +56,7 @@ ae_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_ser_event <- event_source(
@@ -66,6 +71,7 @@ ae_ser_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr1_event <- event_source(
@@ -80,6 +86,7 @@ ae_gr1_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr2_event <- event_source(
@@ -94,6 +101,7 @@ ae_gr2_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr3_event <- event_source(
@@ -108,6 +116,7 @@ ae_gr3_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr4_event <- event_source(
@@ -122,6 +131,7 @@ ae_gr4_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr5_event <- event_source(
@@ -136,6 +146,7 @@ ae_gr5_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_gr35_event <- event_source(
@@ -150,6 +161,7 @@ ae_gr35_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_sev_event <- event_source(
@@ -164,6 +176,7 @@ ae_sev_event <- event_source(
   )
 )
 
+#' @keywords tte_source
 #' @rdname tte_source_objects
 #' @export
 ae_wd_event <- event_source(

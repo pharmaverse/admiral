@@ -9,18 +9,19 @@ derive_vars_dtm_to_dt(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables from which dates are to be extracted}
+\item{source_vars}{A list of datetime variables created using \code{vars()} from
+which dates are to be extracted}
 }
 \value{
-A data frame containing the input dataset with the corresponding date (--DT)
-variable(s) of all datetime variables (--DTM) specified in source_vars.
+A data frame containing the input dataset with the corresponding date (\code{--DT})
+variable(s) of all datetime variables (\code{--DTM}) specified in \code{source_vars.}
 }
 \description{
-This function creates date(s) as output from datetime variable(S)
+This function creates date(s) as output from datetime variable(s)
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
+library(lubridate)
 
 adcm <- tibble::tribble(
   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
@@ -36,11 +37,12 @@ adcm <- tibble::tribble(
     AENDTM = as_datetime(AENDTM)
   )
 
-derive_vars_dtm_to_dt(adcm, vars(TRTSDTM, ASTDTM, AENDTM))
+adcm \%>\%
+  derive_vars_dtm_to_dt(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
+  select(USUBJID, starts_with("TRT"), starts_with("AST"), starts_with("AEN"))
 }
 \author{
 Teckla Akinyi
 }
-\keyword{ADaM}
-\keyword{Date}
-\keyword{Timing}
+\keyword{adam}
+\keyword{timing}

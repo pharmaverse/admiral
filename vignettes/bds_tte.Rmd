@@ -80,8 +80,8 @@ parameter) are potential events or censorings,
 - the value of the `CNSR` variable (`censor` parameter), and
 - which variable provides the date (`date` parameter).
 
-The date can be provided as date (`*DT` variable), datetime (`*DTM` variable),
-or character ISO-8601 date (`*DTC` variable).
+The date can be provided as date (`--DT` variable), datetime (`--DTM` variable),
+or character ISO-8601 date (`--DTC` variable).
 
 CDISC strongly recommends `CNSR = 0` for events and positive integers for
 censorings. admiral enforces this recommendation. Therefore the `censor`
@@ -180,7 +180,8 @@ adtte <- derive_param_tte(
   source_datasets = list(adsl = adsl),
   event_conditions = list(death),
   censor_conditions = list(lstalv),
-  set_values_to = vars(PARAMCD = "OS", PARAM = "Overall Survival"))
+  set_values_to = vars(PARAMCD = "OS", PARAM = "Overall Survival")
+)
 ```
 
 ```{r, echo=FALSE}
@@ -212,7 +213,7 @@ definition of the `start` censoring below).
 As the CDISC pilot does not contain a `RS` dataset, the following example for
 progression free survival uses manually created datasets.
 
-```{r, eval=FALSE}
+```
 View(adsl)
 ```
 ```{r, echo=FALSE}
@@ -232,10 +233,9 @@ dataset_vignette(
 )
 ```
 
-```{r, eval=FALSE}
+```
 View(adrs)
 ```
-
 ```{r, echo=FALSE}
   adrs <- tibble::tribble(
     ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
@@ -347,17 +347,19 @@ adtte <- derive_param_tte(
   start_date_imputation_flag = TRTSDTF,
   event_conditions = list(pd, death),
   censor_conditions = list(lastvisit, start),
-  set_values_to = vars(PARAMCD = "PFS",  PARAM = "Progression Free Survival")
+  set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival")
 )
 ```
 
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte %>%
-  select(STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
+  select(
+    STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
     EVNTDESC, SRCDOM, SRCVAR
   ),
-  display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR))
+  display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR)
+)
 ```
 
 ### Deriving a Series of Time-to-Event Parameters
@@ -467,6 +469,7 @@ variables.
 
 In the following example a time-to-event parameter for each preferred term in
 the AE dataset is derived.
+
 ```
 View(adsl)
 ```
@@ -484,7 +487,6 @@ dataset_vignette(adsl)
 ```
 View(ae)
 ```
-
 ```{r, echo=FALSE}
 ae <- tibble::tribble(
   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
@@ -588,8 +590,7 @@ adtte <- derive_obs_number(
 ```
 
 ```{r, echo=FALSE}
-dataset_vignette(
-  adtte)
+dataset_vignette(adtte)
 ```
 
 ## Add ADSL Variables {#adslvars}
@@ -606,6 +607,5 @@ adtte <- left_join(
 ```
 
 ```{r, echo=FALSE}
-dataset_vignette(
-  adtte)
+dataset_vignette(adtte)
 ```

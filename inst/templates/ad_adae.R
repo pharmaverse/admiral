@@ -4,6 +4,7 @@
 #
 # Input: ae, adsl, suppae, ex_single
 library(admiral)
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 

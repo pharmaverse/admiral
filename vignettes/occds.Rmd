@@ -34,7 +34,7 @@ otherwise specified.*
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
 * [Derive Severity, Causality, and Toxicity Grade](#severity)
-* [Derive Treatement Emergent Flag](#trtfag)
+* [Derive Treatment Emergent Flag](#trtfag)
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
 * [Add ADSL variables](#adsl_vars)
@@ -98,7 +98,6 @@ dataset_vignette(adae,
                  display_vars = vars(USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
                                      TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT))
 ```
-
 ## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
@@ -227,6 +226,7 @@ adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
 count(adae, TRTP, TRTA, TRT01P, TRT01A)
 
 ```
+
 
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
@@ -418,8 +418,8 @@ adae_query <- derive_vars_query(dataset = adae1 , dataset_queries = queries)
 head(select(adae_query, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, starts_with("SMQ05"), starts_with("CQ06")))
 ```
 
-Similarly to SMQ, the `derive_vars_query()` function can be used to derive Standardized 
-Drug Groupings (SDQ).
+Similarly to SMQ, the `derive_vars_query()` function can be used to derive
+Standardized Drug Groupings (SDG).
 
 ```{r, eval=TRUE}
 sdg <- tibble::tribble(
@@ -457,3 +457,10 @@ dataset_vignette(adae,
                  display_vars = vars(USUBJID, AEDECOD, ASTDTM, DTHDT, RFSTDTC,
                                      RFENDTC, AGE, AGEU, SEX))
 ```
+
+# Example Scripts
+
+ADaM | Sample Code
+---- | --------------
+ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R){target="_blank"}

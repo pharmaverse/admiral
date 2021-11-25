@@ -17,7 +17,7 @@
 #' An example subject level analysis dataset
 #'
 #' @source
-#' Derived from the [dm] and [ds] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R})
+#' Derived from the [dm] and [ds] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adsl.R})
 #'
 "adsl"
 
@@ -26,7 +26,7 @@
 #' An example adverse event analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [ae] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R})
+#' Derived from the [adsl] and [ae] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adae.R})
 #'
 "adae"
 
@@ -35,7 +35,7 @@
 #' An example concomitant medication analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [cm] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R})
+#' Derived from the [adsl] and [cm] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adcm.R})
 #'
 "adcm"
 
@@ -44,7 +44,7 @@
 #' An example exposure analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [ex] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adex.R})
+#' Derived from the [adsl] and [ex] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adex.R})
 #'
 "adex"
 
@@ -53,6 +53,6 @@
 #' An example vital signs analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [vs] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_advs.R})
+#' Derived from the [adsl] and [vs] datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R})
 #'
 "advs"
