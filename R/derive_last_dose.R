@@ -152,6 +152,7 @@ derive_last_dose <- function(dataset,
 
   # create traceability vars if requested
   if (!is.null(traceability_vars)) {
+    assert_data_frame(dataset_ex, quo_c(traceability_vars))
     trace_vars_str <- names(traceability_vars)
     dataset_ex <- mutate(dataset_ex, !!!traceability_vars)
   } else {
@@ -160,16 +161,16 @@ derive_last_dose <- function(dataset,
 
   # keep user-specified variables from EX, if no variables specified all EX variables are kept
   if (is.null(ex_keep_vars)) {
-    ex_keep_vars_str <- colnames(dataset_ex)
-  } else {
-    ex_keep_vars_str <- ifelse(names(ex_keep_vars) == "",
-                               vars2chr(ex_keep_vars),
-                               names(ex_keep_vars))
+    ex_keep_vars <- syms(colnames(dataset_ex))
   }
+
+  assert_data_frame(dataset_ex, quo_c(by_vars, ex_keep_vars))
 
   dataset_ex <- dataset_ex %>% mutate(!!!ex_keep_vars) %>%
     select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
-           !!!syms(ex_keep_vars_str), !!!syms(trace_vars_str))
+           !!!ex_keep_vars, !!!syms(trace_vars_str))
+
+  ex_keep_vars <- replace_values_by_names(ex_keep_vars)
 
   # check if any variable exist in both dataset and dataset_ex (except for by_vars) before join
   dataset_var <- colnames(dataset)[!colnames(dataset) %in% by_vars_str]
@@ -201,41 +202,16 @@ derive_last_dose <- function(dataset,
 
   # join datasets and keep unique last dose records (where dose_date is before or on analysis_date)
   # for each by_var and dataset_seq_var
-  res <- dataset_tmp %>%
-    inner_join(dataset_ex, by = by_vars_str) %>%
-    group_by(!!!by_vars, !!dataset_seq_var) %>%
-    mutate(
-      tmp_ldose_idx = compute_ldose_idx(dose_date = .data$tmp_dose_date,
-                                        analysis_date = .data$tmp_analysis_date),
-      tmp_ldose_dt = as.POSIXct(as.character(.data$tmp_dose_date[.data$tmp_ldose_idx]),
-                                tz = lubridate::tz(.data$tmp_dose_date))
-    ) %>%
-    ungroup() %>%
-    filter(tmp_dose_date == tmp_ldose_dt) %>%
-    filter_extreme(by_vars = c(by_vars, vars(!!dataset_seq_var, tmp_dose_date)),
-                   order = c(by_vars, vars(!!dataset_seq_var, tmp_dose_date), dose_id),
-                   mode = "last") %>%
-    select(!!!by_vars, !!dataset_seq_var, !!!syms(ex_keep_vars_str), !!!syms(trace_vars_str))
+    res <- dataset_tmp %>%
+      left_join(dataset_ex, by = by_vars_str) %>%
+      filter(is.na(tmp_dose_date) | is.na(tmp_analysis_date) | tmp_dose_date <= tmp_analysis_date) %>%
+      filter_extreme(by_vars = quo_c(by_vars, dataset_seq_var),
+                     order = c(vars(tmp_dose_date), dose_id),
+                      mode = "last") %>%
+       select(!!!by_vars, !!dataset_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
 
   # return original dataset and add EX source variables from last dose record
   left_join(dataset, res,
             by = c(by_vars_str, as_string(quo_get_expr(dataset_seq_var))))
 
-}
-
-
-#' Helper function to get the index of last dose date
-#'
-#' @param dose_date dose end date
-#' @param analysis_date analysis date
-#'
-#' @noRd
-#'
-#' @return index. The last dose date is then `dose_date[return_value]`
-compute_ldose_idx <- function(dose_date, analysis_date) {
-  if (any(!is.na(dose_date) & !is.na(analysis_date)) && any(dose_date <= analysis_date)) {
-    which.max(dose_date[dose_date <= analysis_date])
-  } else {
-    NA_integer_
-  }
 }

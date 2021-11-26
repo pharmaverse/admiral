@@ -41,6 +41,7 @@ test_that("derive_last_dose works as expected", {
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
     dose_date = EXENDTC,
+    ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, EXSTDTC),
     analysis_date = AESTDTC,
     dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),

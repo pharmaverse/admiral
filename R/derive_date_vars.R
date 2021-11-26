@@ -393,7 +393,7 @@ convert_date_to_dtm <- function(dt,
                                 max_dates = NULL) {
 
   # if input is date then convert into dtc, do not add time in this step if time is not in input
-  if (is_date(dt)){
+  if (is_date(dt)) {
     dt <- case_when(
       lubridate::is.POSIXct(dt) ~ convert_dtm_to_dtc(dt),
       TRUE ~ format(dt, "%Y-%m-%d")
