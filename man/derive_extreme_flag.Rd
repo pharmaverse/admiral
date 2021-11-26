@@ -165,7 +165,6 @@ derive_extreme_flag(
   mode = "last",
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
-
 }
 \author{
 Stefan Bundfuss

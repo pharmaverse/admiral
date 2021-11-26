@@ -157,20 +157,20 @@
 #'   )
 #' )
 #'
-#' end_of_study <- censor_source(
+#' last_alive_dt <- censor_source(
 #'   dataset_name = "adsl",
-#'   date = EOSDT,
+#'   date = LSTALVDT,
 #'   set_values_to = vars(
-#'     EVNTDESC = "END OF STUDY DATE",
+#'     EVNTDESC = "LAST DATE KNOWN ALIVE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "EOSDT"
+#'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
 #'
 #' derive_param_tte(
 #'   dataset_adsl = adsl,
 #'   event_conditions = list(death),
-#'   censor_conditions = list(end_of_study),
+#'   censor_conditions = list(last_alive_dt),
 #'   source_datasets = list(adsl = adsl),
 #'   set_values_to = vars(
 #'     PARAMCD = "OS",
@@ -666,9 +666,35 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @keywords dev_utility
 #'
-#' @export
+#' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
-#' @return An object of class "tte_source".
+#' @return An object of class `tte_source`
+#'
+#' @examples
+#' # Death event
+#' admiral:::tte_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   censor = 0,
+#'   set_values_to = vars(
+#'     EVNTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
+#'
+#' # Last study date known alive censor
+#' admiral:::tte_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   censor = 1,
+#'   set_values_to = vars(
+#'     EVNTDESC = "ALIVE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"
+#'   )
+#' )
 tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
@@ -690,7 +716,7 @@ tte_source <- function(dataset_name,
 
 #' Create an `event_source` Object
 #'
-#' The `event_source` object is used to define events as input for the
+#' `event_source` objects are used to define events as input for the
 #' `derive_param_tte()` function.
 #'
 #' @inheritParams tte_source
@@ -699,9 +725,24 @@ tte_source <- function(dataset_name,
 #'
 #' @keywords source_specifications
 #'
+#' @seealso [derive_param_tte()], [censor_source()]
+#'
 #' @export
 #'
-#' @return An object of class "event_source".
+#' @return An object of class `event_source`, inheriting from class `tte_source`
+#'
+#' @examples
+#' # Death event
+#' event_source(
+#'   dataset_name = "adsl",
+#'   filter = DTHFL == "Y",
+#'   date = DTHDT,
+#'   set_values_to = vars(
+#'     EVNTDESC = "DEATH",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
 event_source <- function(dataset_name,
                          filter = NULL,
                          date,
@@ -717,9 +758,9 @@ event_source <- function(dataset_name,
   out
 }
 
-#' Create an `censor_source` Object
+#' Create a `censor_source` Object
 #'
-#' The `censor_source` object is used to define censorings as input for the
+#' `censor_source` objects are used to define censorings as input for the
 #' `derive_param_tte()` function.
 #'
 #' @inheritParams tte_source
@@ -728,9 +769,23 @@ event_source <- function(dataset_name,
 #'
 #' @keywords source_specifications
 #'
+#' @seealso [derive_param_tte()], [event_source()]
+#'
 #' @export
 #'
-#' @return An object of class "censor_source".
+#' @return An object of class `censor_source`, inheriting from class `tte_source`
+#'
+#' @examples
+#' # Last study date known alive censor
+#' censor_source(
+#'   dataset_name = "adsl",
+#'   date = LSTALVDT,
+#'   set_values_to = vars(
+#'     EVNTDESC = "ALIVE",
+#'     SRCDOM = "ADSL",
+#'     SRCVAR = "LSTALVDT"
+#'   )
+#' )
 censor_source <- function(dataset_name,
                           filter = NULL,
                           date,
@@ -754,17 +809,20 @@ censor_source <- function(dataset_name,
 #'
 #' @export
 #'
+#' @seealso [tte_source()], [censor_source()], [event_source()]
+#'
 #' @examples
 #' print(death_event)
 print.tte_source <- function(x, ...) {
+  cat <- function(...) base::cat(..., sep = "")
   cat("<tte_source> object\n")
-  cat("dataset_name: \"", x$dataset_name, "\"\n", sep = "")
-  cat("filter:", quo_text(x$filter), "\n")
-  cat("date:", quo_text(x$date), "\n")
-  cat("censor:", x$censor, "\n")
+  cat("dataset_name: \"", x$dataset_name, "\"\n")
+  cat("filter: ", quo_text(x$filter), "\n")
+  cat("date: ", quo_text(x$date), "\n")
+  cat("censor: ", x$censor, "\n")
   cat("set_values_to:\n")
   for (name in names(x$set_values_to)) {
-    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n", sep = "")
+    cat("  ", name, ": ", quo_text(x$set_values_to[[name]]), "\n")
   }
 }
 

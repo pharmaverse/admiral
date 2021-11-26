@@ -27,7 +27,7 @@ jobs:
         if: success()
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ./validation-report.pdf
+          file: ./validation_report.pdf
           asset_name: validation-report.pdf
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
