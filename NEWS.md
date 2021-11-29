@@ -45,6 +45,8 @@ to specify the unit of the input age (#569)
 
 - `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
 
+- `derive_vars_dtm()` Change the min_dates with max_dates in the lapply statement when computing max_dates (#687)
+
 ## Documentation
 
 - New vignette [Creating a BDS Time-to-Event ADaM](../articles/bds_tte.html) (#549)

@@ -203,3 +203,31 @@ test_that("No re-derivation is done if --DTF variable already exists", {
   expect_equal(expected_output, actual_output)
 
 })
+
+test_that("Issue a warning if --DTM already exists", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-06-15T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "Date"
+  )
+
+
+  expect_equal(
+    expected_output,
+    actual_output
+  )
+
+})
