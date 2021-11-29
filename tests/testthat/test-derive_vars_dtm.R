@@ -221,7 +221,7 @@ test_that("Issue a warning if --DTM already exists", {
     input,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "Date"
+    date_imputation = "MID"
   )
 
 
