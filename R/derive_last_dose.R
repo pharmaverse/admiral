@@ -16,8 +16,6 @@
 #' Defaults to `NULL`.
 #' @param dose_date The EX dose date variable.
 #' @param analysis_date The analysis date variable.
-#' @param dataset_seq_var The sequence variable from `dataset`.
-#' (this together with `by_vars` creates the keys of `dataset`).
 #' @param single_dose_condition The condition for checking if `dataset_ex` is single dose. An error
 #' is issued if the condition is not true. Defaults to `(EXDOSFRQ == "ONCE")`.
 #' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
@@ -42,7 +40,7 @@
 #' 3. The last dose is identified:
 #' the last dose is the EX record with maximum date where `dose_date` is lower to or equal to
 #' `analysis_date`, subject to both date values are non-NA.
-#' The last dose is identified per `by_vars` and `dataset_seq_var`.
+#' The last dose is identified per `by_vars`.
 #' If multiple EX records exist for the same `dose_date`, then either `dose_id`
 #' needs to be supplied (e.g. `dose_id = vars(EXSEQ)`) to identify unique records,
 #' or an error is issued. When `dose_id` is supplied, the last EX record from the same `dose_date`
@@ -82,8 +80,7 @@
 #'     ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
-#'     single_dose_condition = (EXSTDTC == EXENDTC),
-#'     dataset_seq_var = AESEQ
+#'     single_dose_condition = (EXSTDTC == EXENDTC)
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 #'
@@ -98,7 +95,6 @@
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
-#'     dataset_seq_var = AESEQ,
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
@@ -110,7 +106,6 @@ derive_last_dose <- function(dataset,
                              dose_id = vars(),
                              dose_date,
                              analysis_date,
-                             dataset_seq_var,
                              single_dose_condition = (EXDOSFRQ == "ONCE"),
                              ex_keep_vars = NULL,
                              traceability_vars = NULL) {
@@ -120,12 +115,11 @@ derive_last_dose <- function(dataset,
   dose_id <- assert_vars(dose_id)
   dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
-  dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   assert_varval_list(ex_keep_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
-  assert_data_frame(dataset, quo_c(by_vars, analysis_date, dataset_seq_var))
-  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date))
+  assert_data_frame(dataset, quo_c(by_vars, analysis_date))
+  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, ex_keep_vars))
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -152,7 +146,6 @@ derive_last_dose <- function(dataset,
 
   # create traceability vars if requested
   if (!is.null(traceability_vars)) {
-    assert_data_frame(dataset_ex, quo_c(traceability_vars))
     trace_vars_str <- names(traceability_vars)
     dataset_ex <- mutate(dataset_ex, !!!traceability_vars)
   } else {
@@ -160,17 +153,17 @@ derive_last_dose <- function(dataset,
   }
 
   # keep user-specified variables from EX, if no variables specified all EX variables are kept
-  if (is.null(ex_keep_vars)) {
-    ex_keep_vars <- syms(colnames(dataset_ex))
+  if (!is.null(ex_keep_vars)) {
+    dataset_ex <- dataset_ex  %>%
+      select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
+             !!!ex_keep_vars, !!!syms(trace_vars_str))
+
+    ex_keep_vars <- replace_values_by_names(ex_keep_vars)
   }
 
-  assert_data_frame(dataset_ex, quo_c(by_vars, ex_keep_vars))
-
-  dataset_ex <- dataset_ex %>% mutate(!!!ex_keep_vars) %>%
-    select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
-           !!!ex_keep_vars, !!!syms(trace_vars_str))
-
-  ex_keep_vars <- replace_values_by_names(ex_keep_vars)
+  else {
+    ex_keep_vars <- syms(colnames(dataset_ex))
+  }
 
   # check if any variable exist in both dataset and dataset_ex (except for by_vars) before join
   dataset_var <- colnames(dataset)[!colnames(dataset) %in% by_vars_str]
@@ -180,6 +173,13 @@ derive_last_dose <- function(dataset,
   if (length(intersect(dataset_var, dataset_ex_var)) != 0){
     stop("Variable(s) ", paste(dup_var, "found in both datasets, cannot perform join"))
   }
+
+  # create temporary observation number to identify last dose.
+  dataset <- dataset %>%
+    derive_obs_number(
+      by_vars = vars(USUBJID),
+      order = vars(USUBJID),
+      new_var = tmp_seq_var)
 
   # create tmp numeric date to enable date comparison for identifying last dose
   dataset_ex <- dataset_ex %>%
@@ -201,17 +201,19 @@ derive_last_dose <- function(dataset,
     )
 
   # join datasets and keep unique last dose records (where dose_date is before or on analysis_date)
-  # for each by_var and dataset_seq_var
+  # for each by_var and tmp_seq_var
     res <- dataset_tmp %>%
       left_join(dataset_ex, by = by_vars_str) %>%
       filter(is.na(tmp_dose_date) | is.na(tmp_analysis_date) | tmp_dose_date <= tmp_analysis_date) %>%
-      filter_extreme(by_vars = quo_c(by_vars, dataset_seq_var),
+      filter_extreme(by_vars = quo_c(by_vars, vars(tmp_seq_var)),
                      order = c(vars(tmp_dose_date), dose_id),
                       mode = "last") %>%
-       select(!!!by_vars, !!dataset_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
+       select(!!!by_vars, tmp_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
+
 
   # return original dataset and add EX source variables from last dose record
   left_join(dataset, res,
-            by = c(by_vars_str, as_string(quo_get_expr(dataset_seq_var))))
+            by = c(by_vars_str, "tmp_seq_var")) %>%
+    select(-"tmp_seq_var")
 
 }

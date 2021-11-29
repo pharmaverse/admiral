@@ -43,7 +43,6 @@ test_that("derive_last_dose works as expected", {
     dose_date = EXENDTC,
     ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, EXSTDTC),
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
@@ -70,7 +69,6 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
       by_vars = vars(STUDYID, USUBJID),
       dose_date = EXENDTC,
       analysis_date = AESTDTC,
-      dataset_seq_var = AESEQ,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
@@ -101,7 +99,6 @@ test_that("derive_last_dose returns traceability vars", {
     by_vars = vars(STUDYID, USUBJID),
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
@@ -136,7 +133,6 @@ test_that("derive_last_dose when multiple doses on same date - error", {
       by_vars = vars(STUDYID, USUBJID),
       dose_date = EXENDTC,
       analysis_date = AESTDTC,
-      dataset_seq_var = AESEQ,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
@@ -170,8 +166,8 @@ test_that("derive_last_dose when multiple doses on same date - dose_id supplied"
     by_vars = vars(STUDYID, USUBJID),
     dose_date = EXENDTC,
     dose_id = vars(EXSEQ),
+    ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXSTDTC, EXENDTC),
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )

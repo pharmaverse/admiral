@@ -12,7 +12,6 @@ derive_last_dose(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  dataset_seq_var,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
   ex_keep_vars = NULL,
   traceability_vars = NULL
@@ -35,9 +34,6 @@ Defaults to empty \code{vars()}.}
 \item{dose_date}{The EX dose date variable.}
 
 \item{analysis_date}{The analysis date variable.}
-
-\item{dataset_seq_var}{The sequence variable from \code{dataset}.
-(this together with \code{by_vars} creates the keys of \code{dataset}).}
 
 \item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
 is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
@@ -80,7 +76,7 @@ This is useful for, for example, filtering for valid dose only.
 \item The last dose is identified:
 the last dose is the EX record with maximum date where \code{dose_date} is lower to or equal to
 \code{analysis_date}, subject to both date values are non-NA.
-The last dose is identified per \code{by_vars} and \code{dataset_seq_var}.
+The last dose is identified per \code{by_vars}.
 If multiple EX records exist for the same \code{dose_date}, then either \code{dose_id}
 needs to be supplied (e.g. \code{dose_id = vars(EXSEQ)}) to identify unique records,
 or an error is issued. When \code{dose_id} is supplied, the last EX record from the same \code{dose_date}
@@ -113,8 +109,7 @@ ae \%>\%
     ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    dataset_seq_var = AESEQ
+    single_dose_condition = (EXSTDTC == EXENDTC)
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 
@@ -129,7 +124,6 @@ ae \%>\%
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
     single_dose_condition = (EXSTDTC == EXENDTC),
-    dataset_seq_var = AESEQ,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)

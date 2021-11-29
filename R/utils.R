@@ -354,6 +354,18 @@ is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
 
+#' Replace quosure value with name
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {

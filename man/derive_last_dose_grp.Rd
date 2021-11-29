@@ -48,9 +48,6 @@ Defaults to \code{NULL}.}
 
 \item{analysis_date}{The analysis date variable.}
 
-\item{dataset_seq_var}{The sequence variable from \code{dataset}.
-(this together with \code{by_vars} creates the keys of \code{dataset}).}
-
 \item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
 is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
 
