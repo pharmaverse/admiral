@@ -8,8 +8,8 @@
 #' @param required_vars A list of variables created using `vars()`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
-#' @param check_temp_vars Check for temp_* variables? If set to `TRUE` and and temp_*
-#' variables are in `arg` then an error is thrown
+#' @param check_temp_vars Check for variables with names beginning with "temp_". If
+#' set to `TRUE` and "temp_" variables are in `arg`, then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
