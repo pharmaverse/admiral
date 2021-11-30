@@ -1,19 +1,22 @@
 #' Is an Argument a Data Frame?
 #'
-#' Checks if an argument is a data frame and (optionally) whether is contains
-#' a set of required variables
+#' Checks if an argument is a data frame and (optionally) whether it contains
+#' a set of required variables and (optionally) whether there are any variables
+#' named test_*.
 #'
 #' @param arg A function argument to be checked
 #' @param required_vars A list of variables created using `vars()`
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
+#' @param check_temp_vars Check for temp_* variables? If set to `TRUE` and and temp_*
+#' variables are in `arg` then an error is thrown
 #'
 #' @author Thomas Neitmann
 #'
 #' @return
 #' The function throws an error if `arg` is not a data frame or if `arg`
-#' is a data frame but misses any variable specified in `required_vars`. Otherwise,
-#' the input is returned invisibly.
+#' is a data frame but misses any variable specified in `required_vars` or
+#' if any temp_* variables are in `arg`. Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -31,8 +34,10 @@
 #'
 #' try(example_fun(dplyr::select(dm, -STUDYID)))
 #'
+#' try(example_fun(dplyr::mutate(dm, temp_var1 = "AAA")))
+#'
 #' try(example_fun("Not a dataset"))
-assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE, check_temp_vars = TRUE) {
   assert_vars(required_vars, optional = TRUE)
   assert_logical_scalar(optional)
 
@@ -67,6 +72,15 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
       } else {
         err_msg <- sprintf("Required variables %s are missing", enumerate(missing_vars))
       }
+      abort(err_msg)
+    }
+  }
+
+  if (check_temp_vars == TRUE) {
+    temp_vars_found <- grep("^temp_", names(arg))
+    if (any(temp_vars_found)) {
+      temp_vars_found_names <- colnames(arg[c(grep("^temp_", names(arg)))])
+      err_msg <- sprintf("Temporary variables found in data frame: `%s`", enumerate(temp_vars_found_names))
       abort(err_msg)
     }
   }
