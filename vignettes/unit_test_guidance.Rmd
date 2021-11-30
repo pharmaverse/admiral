@@ -149,7 +149,7 @@ test_that("my_new_func Test 1: <Explanation of the test>", {
   expect_equal(<function name>(input), expected_output)
 })
 ```
-**Note**: When comparing datasets in {admiral} we use function ```expect_dfs_equal()```. 
+**Note**: When comparing datasets in {admiral} we use function `expect_dfs_equal()`. 
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
 these will be compiled in the package validation report. Having the name of the
