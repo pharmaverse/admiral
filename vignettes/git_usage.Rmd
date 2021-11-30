@@ -1,5 +1,5 @@
 ---
-title: "Guidance for git and Github Usage"
+title: "Guidance for git and GitHub Usage"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -17,24 +17,24 @@ knitr::opts_chunk$set(
 )
 ```
 
-admiral GitHub: https://github.com/Roche-GSK/admiral.git
+admiral GitHub: https://GitHub.com/Roche-GSK/admiral.git
 
 # Introduction
 
-This article will give you an overview of how the admiral project is utilizing the version-control software git and the website Github while working with RStudio.  We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address **Issues.**  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers.  Finally, we provide the bare minimum of git commands needed to get up and running.  Please refer to the Resource section for more in-depth guidance on using git and Github.  
+This article will give you an overview of how the admiral project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address **Issues.**  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the Resource section for more in-depth guidance on using `git` and GitHub. 
 
 # Branches
 
--	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://github.com/Roche-GSK/admiral/releases) 
--	The `devel` branch contains the latest development version of the package.  You will mostly likely be branching off and pulling into the `devel` branch.
+-	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/Roche-GSK/admiral/releases) 
+-	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `master`, `devel` and `gh-pages` branches are under protection.  If you try and push changes to these branches you will get an error unless you are an administrator.  
--	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  Check out the [Pull Request Review Guidance](pr_review_guidance.html).
+- The `master`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+-	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
 
 # Working with Feature Branches
 
-Feature Branches are where most developers will work when addressing Issues.  
+Feature Branches are where most developers will work when addressing Issues. 
 
 ## Implementing an Issue
 
@@ -49,9 +49,9 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 -	Pull the latest changes from GitHub: `git pull`  
 -	Create a new branch off the devel branch and switch to it: `git checkout -b <new_branch_name>`
 
-### Create a New Feature Branch from Github (from `devel`)
+### Create a New Feature Branch from GitHub (from `devel`)
 
-You can also create a feature branch in Github.  
+You can also create a feature branch in GitHub. 
 
 - Switch to the `devel` branch
 - Type in your new feature branch name
@@ -59,7 +59,7 @@ You can also create a feature branch in Github.
 - Be Sure to Pull down newly created branch into RStudio
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_feature_branch.png", dpi = 144)
+    knitr::include_graphics("GitHub_feature_branch.png", dpi = 144)
 ```
 
 
@@ -70,18 +70,18 @@ When committing, prefix the message with the issue number and add a meaningful m
 
 ### Commits from the Git Tab in RStudio
 
-You can also make use of the Git Tab within RStudio to commit your changes.  A benefit of using this Tab is being able to see your changes to the file with red and green highlighting.  
+You can also make use of the Git Tab within RStudio to commit your changes. A benefit of using this Tab is being able to see your changes to the file with red and green highlighting. 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_committ.png", dpi = 144)
+    knitr::include_graphics("GitHub_committ.png", dpi = 144)
 ```
 
 
-**NOTE:**  Placing the issue number in your commit message allows new developers to quickly find discussion surrounding your issue.  When pushed to Github the issue number will hyperlink to the issue tracker.  A powerful tool for discussion.
+**NOTE:**  Placing the issue number in your commit message allows new developers to quickly find discussion surrounding your issue. When pushed to GitHub the issue number will hyperlink to the issue tracker. A powerful tool for discussion.
 
 ## Pull request
 
-We recommend a thorough read through of the articles, [Pull Request Review Guidance](pr_review_guidance.html) and the [Programming Strategy](programming_strategy.html) for in-depth discussions on a doing a proper Pull Request.   Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles.  Below we discuss some simple git commands in the terminal and on Github for doing a Pull Request.  
+We recommend a thorough read through of the articles, [Pull Request Review Guidance](pr_review_guidance.html) and the [Programming Strategy](programming_strategy.html) for in-depth discussions on a doing a proper Pull Request.  Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple `git` commands in the terminal and on GitHub for doing a Pull Request. 
 
 Once all changes are committed, push the new branch to GitHub:  
 `git push -u origin <new_branch_name>`  
@@ -90,20 +90,20 @@ In GitHub, under "Pull request", the user has to "Compare and pull request". The
 
 ### Reviewing/Closing an Issue
 
-- At least one reviewer must approve the Pull Request.  Another article, [Pull Request Review Guidance](pr_review_guidance.html) provides in depth guidance on doing a proper Pull Request. 
-- The reviewer must ensure that the function follows the programming strategy recommendations.  
+- At least one reviewer must approve the Pull Request. Another article, [Pull Request Review Guidance](pr_review_guidance.html) provides in depth guidance on doing a proper Pull Request. 
+- The reviewer must ensure that the function follows the programming strategy recommendations. 
 - Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
 
 Once the review is completed, and the Pull Request is merged, the branch must be removed: click **Delete Branch** in the Pull Request.
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_delete_branch.png", dpi = 144)
+    knitr::include_graphics("GitHub_delete_branch.png", dpi = 144)
 ```
 
 
 ### Solving Merge Conflicts in the Terminal on RStudio
 
-Merge conflict is a situation where git cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):
+Merge conflict is a situation where `git` cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):
 
 ```
 git checkout devel
@@ -112,7 +112,7 @@ git checkout <feature_branch>
 git merge devel
 ```
   
-This provides a list of all files with conflicts In the file with conflicts the conflicting sections are marked with `<<<<<<<`, `=======`, and `>>>>>>>`. The code between these markers must be updated and the markers be removed. Source files need to be updated manually. Generated files like NAMESPACE or the generated documentation files should not be updated manually but recreated after the source files were updated.  
+This provides a list of all files with conflicts In the file with conflicts the conflicting sections are marked with `<<<<<<<`, `=======`, and `>>>>>>>`. The code between these markers must be updated and the markers be removed. Source files need to be updated manually. Generated files like NAMESPACE or the generated documentation files should not be updated manually but recreated after the source files were updated. 
   
 To make the changes available call:
 
@@ -122,16 +122,16 @@ git commit -m "<insert_message>"
 git push
 ```
 
-### Solving Merge Conflicts in Github
+### Solving Merge Conflicts in GitHub
 
-For simple merge conflicts, developers can make use of the Github interface to solve merge conflicts.  Github will show the number conflicts between the two branches.  Just like in the terminal, Github will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highligh the conflicting sections.  
+For simple merge conflicts, developers can make use of the GitHub interface to solve merge conflicts. GitHub will show the number conflicts between the two branches. Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highligh the conflicting sections. 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_conflicts.png", dpi = 144)
+    knitr::include_graphics("GitHub_conflicts.png", dpi = 144)
 ```
 
 
-## Useful git Commands
+## Useful `git` Commands
 
 -	merging: `git merge <my_branch>` - merge my_branch into current branch  
 -	The stashing commands are useful when one wants to go back to clean directory 
@@ -145,9 +145,9 @@ For simple merge conflicts, developers can make use of the Github interface to s
 -	Check out your feature branch: `git checkout <my_branch>`  
 -	Merge the unmerged branch to <my_branch>: `git merge <unmerged_branch>`
 
-# Resources on using git, Github and RStudio
+# Resources on using `git`, GitHub and RStudio
 
-* [Github and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
+* [GitHub and RStudio](https://resources.GitHub.com/whitepapers/GitHub-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
 * [Git and GitHub from the R Package Manual](https://r-pkgs.org/git.html)
 
