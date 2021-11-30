@@ -21,19 +21,20 @@ admiral GitHub: https://github.com/Roche-GSK/admiral.git
 
 # Introduction
 
-This article will give you an overview of how the admiral project is utilizing the version-control software git and the website Github while working with RStudio.  We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address Issues.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers.  Finally, we provide the bare minimum git commands needed to get up and running.  Please refer to the Resource section for more in-depth guidance on using git and Github.  
+This article will give you an overview of how the admiral project is utilizing the version-control software git and the website Github while working with RStudio.  We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address **Issues.**  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers.  Finally, we provide the bare minimum of git commands needed to get up and running.  Please refer to the Resource section for more in-depth guidance on using git and Github.  
 
 # Branches
 
 -	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://github.com/Roche-GSK/admiral/releases) 
--	The `devel` branch contains the latest development version of the package.  
+-	The `devel` branch contains the latest development version of the package.  You will mostly likely be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
--	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  
+- The `master`, `devel` and `gh-pages` branches are under protection.  If you try and push changes to these branches you will get an error unless you are an administrator.  
+-	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged.  Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
 
 # Working with Feature Branches
 
-Feature Branches are where most developers will work 
+Feature Branches are where most developers will work when addressing Issues.  
 
 ## Implementing an Issue
 
@@ -62,12 +63,6 @@ You can also create a feature branch in Github.
 ```
 
 
-**Using code from unmerged branches**  
--	Checkout the unmerged branch you want to use: `git checkout <unmerged_branch>`  
--	Pull the latest committed changes from the unmerged branch: `git pull`  
--	Check out your feature branch: `git checkout <my_branch>`  
--	Merge the unmerged branch to <my_branch>: `git merge <unmerged_branch>`
-
 ### Commits from the Terminal in RStudio
 
 When committing, prefix the message with the issue number and add a meaningful message  
@@ -75,12 +70,14 @@ When committing, prefix the message with the issue number and add a meaningful m
 
 ### Commits from the Git Tab in RStudio
 
-You can also make use of the Git Tab within RStudio to committ your changes.  A benefit of using this Tab is being able to see your changes to the file with red and green highligting.  
+You can also make use of the Git Tab within RStudio to commit your changes.  A benefit of using this Tab is being able to see your changes to the file with red and green highlighting.  
 
 ```{r, echo = FALSE}
     knitr::include_graphics("github_committ.png", dpi = 144)
 ```
 
+
+**NOTE:**  Placing the issue number in your commit message allows new developers to quickly find discussion surrounding your issue.  When pushed to Github the issue number will hyperlink to the issue tracker.  A powerful tool for discussion.
 
 ## Pull request
 
@@ -136,6 +133,12 @@ For simple merge conflicts, developers can make use of the Github interface to s
 -	`git stash` - stash (store) current changes and restore a clean directory  
 -	`git stash pop` - put back (restore) stashed changes  
 - `git revert` is also helpful but why?
+
+**Using code from unmerged branches**  
+-	Checkout the unmerged branch you want to use: `git checkout <unmerged_branch>`  
+-	Pull the latest committed changes from the unmerged branch: `git pull`  
+-	Check out your feature branch: `git checkout <my_branch>`  
+-	Merge the unmerged branch to <my_branch>: `git merge <unmerged_branch>`
 
 # Resources on using git, Github and RStudio
 
