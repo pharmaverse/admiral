@@ -33,6 +33,8 @@ This article will give you an overview of how the admiral project is utilizing t
 
 # Working with Feature Branches
 
+Feature Branches are where most developers will work 
+
 ## Implementing an Issue
 
 Each feature branch must be related to an issue.
@@ -120,7 +122,12 @@ git push
 
 ### Solving Merge Conflicts in Github
 
-A simple write up with an image here.
+For simple merge conflicts, developers can make use of the Github interface to solve merge conflicts.  Github will show the number conflicts between the two branches.  Just like in the terminal, Github will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highligh the conflicting sections.  
+
+```{r, echo = FALSE}
+    knitr::include_graphics("github_conflicts.png", dpi = 144)
+```
+
 
 ## Useful git Commands
 
