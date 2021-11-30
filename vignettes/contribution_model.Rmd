@@ -1,0 +1,58 @@
+---
+title: "Contribution to admiral"
+output: 
+  rmarkdown::html_vignette
+    
+vignette: >
+  %\VignetteIndexEntry{contribution_model}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Goal: Enable users of admiral to contribute and test a contribution model for admiral.
+ 
+Our contribution model is still in a testing phase so we advise you to contact us (slack link) when an issue is created to discuss details or align expectations if you are not familiar with the admiral philosophy and programming strategy. The team will try to review the issues within the next sprint and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
+
+
+# Basics
+ * For each new contribution, the user or Data Scientist creates an issue on our project board and put it in our backlog.
+ 
+ * Please label each issue with a label named “user request” so we can easily identify new requests.
+ 
+ * Please familiarize with our [programming strategy](programming_strategy.html), guidance for [github usage](git_usage.html) and unit testing,  and overall [goal of admiral](https://roche-gsk.github.io/admiral/index.html)
+ 
+ * All created issues will be reviewed within the next sprint and the creator will receive an initial feedback via a comment
+ 
+ * Issues are meant to be taken on by users and Data Scientists from the pharma programming community and not exclusively by the admiral team from    GSK and Roche
+
+# Contribution Model
+
+```{r echo=FALSE, out.width='120%'}
+knitr::include_graphics('./admiral_contribution_model.png')
+```
+
+Type 1: 
+
+ * First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute the code
+ 
+ * User creates a new branch within the development branch (devel) and creates a [pull request](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html) for review [github usage](git_usage.html)
+
+ * Code should follow our [programming strategy](programming_strategy.html)
+ 
+ * We advise to contact an admiral directly via [Slack](https://app.slack.com/client/T028PB489D3/C02C8UN2JTT) for rather complex functionality to discuss further
+
+
+Type 2: 
+
+ * User creates an issue and ideally contacts an admiral team member via [Slack](https://app.slack.com/client/T028PB489D3/C02C8UN2JTT). 
+ 
+ * The admiral team will contact the issue creator as soon as possible to discuss further details.
+
+
+

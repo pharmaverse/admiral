@@ -109,8 +109,9 @@ knitr::opts_chunk$set(
 
 ##### Will there be a user/**contribution** guide?
 
- * All admiral information can be found on the [admiral website](https://roche-gsk.github.io/admiral/articles/admiral.html).
-
+ 
  * Our [programming strategy](programming_strategy.html) serves as a framework
  for users how to create their own functions.
+ 
+ * please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
