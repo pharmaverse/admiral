@@ -94,7 +94,12 @@ In GitHub, under "Pull request", the user has to "Compare and pull request". The
 - The reviewer must ensure that the function follows the programming strategy recommendations.  
 - Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
 
-Once the review is completed, and the Pull Request is merged, the branch must be removed: click “delete branch” in the Pull Request.
+Once the review is completed, and the Pull Request is merged, the branch must be removed: click **Delete Branch** in the Pull Request.
+
+```{r, echo = FALSE}
+    knitr::include_graphics("github_delete_branch.png", dpi = 144)
+```
+
 
 ### Solving Merge Conflicts in the Terminal on RStudio
 
