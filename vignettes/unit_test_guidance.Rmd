@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-## Why write unit tests?
+## Why Write Unit Tests?
 
 ### Unit Tests Become a Safety Net for Developers
 A comprehensive suite of unit tests can act as a safety net for developers. By 
@@ -76,7 +76,7 @@ Automate the whole process of running the unit tests and taking some action when
 they fail. Your build process should execute your unit tests and mark the build 
 as broken when the tests fail.
 
-# Writing Unit Tests in Admiral
+# Writing Unit Tests in {admiral}
 
 ## Plan your Unit Tests
 Start by considering the derivation rule you are testing and the possible 
@@ -105,14 +105,16 @@ Don’t forget to add a unit test for each exported function.
 
 ## Set up the Test Script
 Within {admiral} folder https://github.com/Roche-GSK/admiral/tree/master/tests/testthat, 
-add a script with the naming convention “test-<function name>.R” and use the 
-following format:
+add a script with the naming convention “test-\<script_containing_function\>.R”.,
+the unit test script can be created from the console also, as follows: 
 
 ```
+usethis::use_test("<script_containing_function>")
+```
+and use the following format:
 
-context("test-<function name>")
-
-test_that("<function name> Test 1: <Explanation of the test>", {
+```
+test_that("<function_name> Test 1: <Explanation of the test>", {
   input <- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
@@ -124,6 +126,30 @@ test_that("<function name> Test 1: <Explanation of the test>", {
   expect_equal(<function name>(input), expected_output)
 })
 ```
+
+For example, if you are testing a function called my_new_func that is contained 
+in script all_funcs.R then from console use:
+
+```
+usethis::use_test("all_funcs")
+```
+
+Open the newly created file "test-all_funcs.R" and use the following format:
+
+```
+test_that("my_new_func Test 1: <Explanation of the test>", {
+  input <- tibble::tribble(
+    ~inputvar1, ~inputvar2, ...
+    <Add Test Data Scenarios>
+    ...
+  )
+
+  expected_output <- mutate(input, outputvar = c(<Add Expected Outputs>))
+
+  expect_equal(<function name>(input), expected_output)
+})
+```
+
 Ensure you give a meaningful explanation of the test in the testthat call, as 
 these will be compiled in the package validation report. Having the name of the
 function and test ID included in title will also help with tracability.
@@ -132,12 +158,12 @@ Once you have tested your unit test program, you can run all unit tests from
 the console, as follows.
 
 ```
-devtools::check
+devtools::test()
 ```
 
 ## Automation of Unit Tests
 
-When a user actions a pull request in admiral github repo, the unit tests are 
+When a user actions a pull request in {admiral} GitHub repo, the unit tests are 
 automatically run and pull request will be denied if any unit tests fail.
 
 
