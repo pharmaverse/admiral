@@ -113,5 +113,5 @@ knitr::opts_chunk$set(
  * Our [programming strategy](programming_strategy.html) serves as a framework
  for users how to create their own functions.
  
- * please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
+ * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
