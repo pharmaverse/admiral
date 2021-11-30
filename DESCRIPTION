@@ -16,10 +16,12 @@ Authors@R: c(
     person("Eric", "Simms", email = "eric.m.simms@gsk.com", role = "aut"),
     person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut"),
     person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut"),
-    person("Hamza", "Rahal", role = "aut")
+    person("Hamza", "Rahal", role = "aut"),
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
+    person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
 Description: A toolbox for programming ADaM datasets in R.
-License: file LICENSE
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
