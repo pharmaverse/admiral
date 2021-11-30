@@ -46,7 +46,7 @@ Type 1 Contribution with Code:
  
  * User creates a new branch within the development branch (devel) and creates a [pull request](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html) for review [github usage](git_usage.html).
 
- * Code should follow our [programming strategy](programming_strategy.html).
+ * Code should follow our [programming strategy](programming_strategy.html) and [unit test guidance](unit_test_guidance.html).
  
  * We advise to contact an admiral core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02C8UN2JTT) before submitting code for complex functionality. 
 
