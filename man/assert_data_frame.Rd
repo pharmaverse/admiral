@@ -4,7 +4,12 @@
 \alias{assert_data_frame}
 \title{Is an Argument a Data Frame?}
 \usage{
-assert_data_frame(arg, required_vars = NULL, optional = FALSE)
+assert_data_frame(
+  arg,
+  required_vars = NULL,
+  optional = FALSE,
+  check_temp_vars = TRUE
+)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
@@ -13,15 +18,19 @@ assert_data_frame(arg, required_vars = NULL, optional = FALSE)
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}
+
+\item{check_temp_vars}{Check for variables with names beginning with "temp_". If
+set to \code{TRUE} and "temp_" variables are in \code{arg}, then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a data frame or if \code{arg}
-is a data frame but misses any variable specified in \code{required_vars}. Otherwise,
-the input is returned invisibly.
+is a data frame but misses any variable specified in \code{required_vars} or
+if any temp_* variables are in \code{arg}. Otherwise, the input is returned invisibly.
 }
 \description{
-Checks if an argument is a data frame and (optionally) whether is contains
-a set of required variables
+Checks if an argument is a data frame and (optionally) whether it contains
+a set of required variables and (optionally) whether there are any variables
+named test_*.
 }
 \examples{
 library(admiral.test)
@@ -34,6 +43,8 @@ example_fun <- function(dataset) {
 example_fun(dm)
 
 try(example_fun(dplyr::select(dm, -STUDYID)))
+
+try(example_fun(dplyr::mutate(dm, temp_var1 = "AAA")))
 
 try(example_fun("Not a dataset"))
 }
