@@ -78,7 +78,7 @@ derive_obs_number <- function(dataset,
   if (!is.null(order)) {
     required_vars <- vars(!!!required_vars, !!!extract_vars(order))
   }
-  assert_data_frame(dataset, required_vars = required_vars)
+  assert_data_frame(dataset, required_vars = required_vars, check_temp_vars = FALSE)
   check_type <-
     assert_character_scalar(
       check_type,
