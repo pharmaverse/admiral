@@ -1,3 +1,7 @@
+# admiral 0.5.0
+
+- The first truly open source release licensed under Apache 2.0 (#680)
+
 # admiral 0.4.0
 
 ## New Features
