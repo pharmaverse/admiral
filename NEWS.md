@@ -4,6 +4,8 @@
 
 - New vignette [Contributing to admiral](../articles/contribution_model.html) (#679)
 
+- New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
+
 - Broken links in README have been fixed (#564)
 
 # admiral 0.4.0
