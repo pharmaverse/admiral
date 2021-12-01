@@ -809,6 +809,43 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+assert_function <- function(arg, params = NULL, optional = FALSE) {
+  assert_character_vector(params, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default",
+                       arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!is.function(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a function but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+  if (!is.null(params)) {
+    is_param <- params %in% names(formals(arg))
+    if (!all(is_param)) {
+      txt <- if (sum(!is_param) == 1L) {
+        "%s is not a parameter of the function specified for `%s`"
+      } else {
+        "%s are not parameters of the function specified for `%s`"
+      }
+      err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
+      abort(err_msg)
+    }
+  }
+  invisible(arg)
+}
+
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)

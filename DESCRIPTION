@@ -107,6 +107,7 @@ Collate:
     'iso_dtm.R'
     'joins.R'
     'lifecycle.R'
+    'read_query_data.R'
     'reexports.R'
     'test_helpers.R'
     'utils.R'

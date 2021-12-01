@@ -455,3 +455,16 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
+
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @noRd
+#'
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
+}
