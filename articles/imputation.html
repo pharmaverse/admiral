@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -94,6 +94,9 @@
     <li class="divider">
     <li class="dropdown-header">Developer Guides</li>
     <li>
+      <a href="../articles/contribution_model.html">Contribution to admiral</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -104,6 +107,9 @@
     </li>
     <li>
       <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    </li>
+    <li>
+      <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
     </li>
   </ul>
 </li>
@@ -134,7 +140,17 @@
 
       
 
-      </header><div class="row">
+      </header><script src="imputation_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="imputation_files/jquery-3.5.1/jquery.min.js"></script><link href="imputation_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="imputation_files/datatables-binding-0.12/datatables.js"></script><link href="imputation_files/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="imputation_files/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="imputation_files/dt-core-1.10.20/js/jquery.dataTables.min.js"></script><link href="imputation_files/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet">
+<script src="imputation_files/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script><script src="imputation_files/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script><script src="imputation_files/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script><script src="imputation_files/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script><script src="imputation_files/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script><link href="imputation_files/dt-ext-colreorder-1.10.20/css/colReorder.dataTables.min.css" rel="stylesheet">
+<script src="imputation_files/dt-ext-colreorder-1.10.20/js/dataTables.colReorder.min.js"></script><link href="imputation_files/dt-ext-scroller-1.10.20/css/scroller.dataTables.min.css" rel="stylesheet">
+<script src="imputation_files/dt-ext-scroller-1.10.20/js/dataTables.scroller.min.js"></script><link href="imputation_files/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="imputation_files/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="imputation_files/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="imputation_files/selectize-0.12.0/selectize.min.js"></script><link href="imputation_files/dt-plugin-searchhighlight-1.10.20/source.css" rel="stylesheet">
+<script src="imputation_files/dt-plugin-searchhighlight-1.10.20/jquery.highlight.js"></script><script src="imputation_files/dt-plugin-searchhighlight-1.10.20/source.min.js"></script><link href="imputation_files/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet">
+<script src="imputation_files/crosstalk-1.1.1/js/crosstalk.min.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Date and Time Imputation</h1>
@@ -233,79 +249,53 @@
 <h2 class="hasAnchor">
 <a href="#create-an-imputed-datetime-and-date-variable-and-imputation-flag-variables" class="anchor"></a>Create an Imputed Datetime and Date Variable and Imputation Flag Variables</h2>
 <p>The <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> function derives an imputed datetime variable and the corresponding date and time imputation flags. The imputed date variable can be derived by a simple <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> call. It is not necessary and advisable to perform the imputation for the date variable if it was already done for the datetime variable. CDISC considers the datetime and the date variable as two representation of the same date. Thus the imputation must be the same and the imputation flags are valid for both the datetime and the date variable.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
-  ~<span class="no">AESTDTC</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>,
-  <span class="st">"2019-04-12"</span>,
-  <span class="st">"2010-09"</span>,
-  <span class="fl">NA_character_</span>
-)
-<span class="no">ae</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~ <span class="no">AESTDTC</span>,
+              <span class="st">"2019-08-09T12:34:56"</span>,
+              <span class="st">"2019-04-12"</span>,
+              <span class="st">"2010-09"</span>,
+              <span class="fl">NA_character_</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
     <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
     <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
     <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
     <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>
   ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>))
-<span class="co">#&gt; # A tibble: 4 x 5</span>
-<span class="co">#&gt;   AESTDTC             ASTDTM              ASTDTF ASTTMF ASTDT     </span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt;  &lt;date&gt;    </span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 2019-08-09 12:34:56 &lt;NA&gt;   &lt;NA&gt;   2019-08-09</span>
-<span class="co">#&gt; 2 2019-04-12          2019-04-12 00:00:00 &lt;NA&gt;   H      2019-04-12</span>
-<span class="co">#&gt; 3 2010-09             2010-09-01 00:00:00 D      H      2010-09-01</span>
-<span class="co">#&gt; 4 &lt;NA&gt;                NA                  &lt;NA&gt;   &lt;NA&gt;   NA</span></pre></body></html></div>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">ASTDT</span> <span class="kw">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html">date</a></span>(<span class="no">ASTDTM</span>))</pre></body></html></div>
+<div id="htmlwidget-1eccdb7d96bb2453b22b" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1eccdb7d96bb2453b22b">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z","2010-09-01T00:00:00Z",null],[null,null,"D",null],[null,"H","H",null],["2019-08-09","2019-04-12","2010-09-01",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n      <th>ASTDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="create-an-imputed-date-variable-and-imputation-flag-variable" class="section level2">
 <h2 class="hasAnchor">
 <a href="#create-an-imputed-date-variable-and-imputation-flag-variable" class="anchor"></a>Create an Imputed Date Variable and Imputation Flag Variable</h2>
 <p>If an imputed date variable without a corresponding datetime variable is required, it can be derived by the <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> function.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
-  ~<span class="no">AESTDTC</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>,
-  <span class="st">"2019-04-12"</span>,
-  <span class="st">"2010-09"</span>,
-  <span class="fl">NA_character_</span>
-)
-<span class="fu"><a href="../reference/derive_vars_dt.html">derive_vars_dt</a></span>(
-  <span class="no">ae</span>,
-  <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
-  <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
-  <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>
-)
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   AESTDTC             ASTDT      ASTDTF</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt; </span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 2019-08-09 &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 2019-04-12          2019-04-12 &lt;NA&gt;  </span>
-<span class="co">#&gt; 3 2010-09             2010-09-01 D     </span>
-<span class="co">#&gt; 4 &lt;NA&gt;                NA         &lt;NA&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~ <span class="no">AESTDTC</span>,
+              <span class="st">"2019-08-09T12:34:56"</span>,
+              <span class="st">"2019-04-12"</span>,
+              <span class="st">"2010-09"</span>,
+              <span class="fl">NA_character_</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/derive_vars_dt.html">derive_vars_dt</a></span>(<span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+                 <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
+                 <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>)</pre></body></html></div>
+<div id="htmlwidget-cd91cfbf8eb631195463" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cd91cfbf8eb631195463">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"date\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1283299200000\" data-max=\"1565308800000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09","2019-04-12","2010-09-01",null],[null,null,"D",null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDT<\/th>\n      <th>ASTDTF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="impute-time-without-imputing-date" class="section level2">
 <h2 class="hasAnchor">
 <a href="#impute-time-without-imputing-date" class="anchor"></a>Impute Time without Imputing Date</h2>
 <p>If the time should be imputed but not the date, the <code>date_imputation</code> parameter should be set to <code>NULL</code>. This results in <code>NA</code> if the date is partial. As no date is imputed the date imputation flag is not created.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
-  ~<span class="no">AESTDTC</span>,
-  <span class="st">"2019-08-09T12:34:56"</span>,
-  <span class="st">"2019-04-12"</span>,
-  <span class="st">"2010-09"</span>,
-  <span class="fl">NA_character_</span>
-)
-<span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
-  <span class="no">ae</span>,
-  <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
-  <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
-  <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="kw">NULL</span>,
-  <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>
-)
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   AESTDTC             ASTDTM              ASTTMF</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;dttm&gt;              &lt;chr&gt; </span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 2019-08-09 12:34:56 &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 2019-04-12          2019-04-12 00:00:00 H     </span>
-<span class="co">#&gt; 3 2010-09             NA                  &lt;NA&gt;  </span>
-<span class="co">#&gt; 4 &lt;NA&gt;                NA                  &lt;NA&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">ae</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~ <span class="no">AESTDTC</span>,
+              <span class="st">"2019-08-09T12:34:56"</span>,
+              <span class="st">"2019-04-12"</span>,
+              <span class="st">"2010-09"</span>,
+              <span class="fl">NA_character_</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
+    <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+    <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
+    <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="kw">NULL</span>,
+    <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>
+  )</pre></body></html></div>
+<div id="htmlwidget-5f9bd1774d8bdae4c2c5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5f9bd1774d8bdae4c2c5">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2010-09&quot;,&quot;2019-04-12&quot;,&quot;2019-08-09T12:34:56&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1555027200000\" data-max=\"1565354096000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-04-12","2010-09",null],["2019-08-09T12:34:56Z","2019-04-12T00:00:00Z",null,null],[null,"H",null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="avoid-imputed-dates-before-a-particular-date" class="section level2">
 <h2 class="hasAnchor">
@@ -318,22 +308,16 @@
   <span class="st">"2019-10"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
   <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>),
   <span class="st">"2019-12-04"</span>,          <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">ymd_hms</a></span>(<span class="st">"2019-11-11T12:34:56"</span>)
-)
-<span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
-  <span class="no">ae</span>,
-  <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
-  <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
-  <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
-  <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
-  <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">TRTSDTM</span>)
-)
-<span class="co">#&gt; # A tibble: 4 x 5</span>
-<span class="co">#&gt;   AESTDTC             TRTSDTM             ASTDTM              ASTDTF ASTTMF</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; </span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 2019-11-11 12:34:56 2019-08-09 12:34:56 &lt;NA&gt;   &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 2019-10             2019-11-11 12:34:56 2019-10-01 00:00:00 D      H     </span>
-<span class="co">#&gt; 3 2019-11             2019-11-11 12:34:56 2019-11-11 12:34:56 D      H     </span>
-<span class="co">#&gt; 4 2019-12-04          2019-11-11 12:34:56 2019-12-04 00:00:00 &lt;NA&gt;   H</span></pre></body></html></div>
+) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
+    <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AESTDTC</span>,
+    <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AST"</span>,
+    <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
+    <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>,
+    <span class="kw">min_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">TRTSDTM</span>)
+  )</pre></body></html></div>
+<div id="htmlwidget-46cbf7192a1b1713765f" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-46cbf7192a1b1713765f">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10&quot;,&quot;2019-11&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1575417600000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-10","2019-11","2019-12-04"],["2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z","2019-11-11T12:34:56Z"],["2019-08-09T12:34:56Z","2019-10-01T00:00:00Z","2019-11-11T12:34:56Z","2019-12-04T00:00:00Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AESTDTC<\/th>\n      <th>TRTSDTM<\/th>\n      <th>ASTDTM<\/th>\n      <th>ASTDTF<\/th>\n      <th>ASTTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="avoid-imputed-dates-after-a-particular-date" class="section level2">
 <h2 class="hasAnchor">
@@ -346,22 +330,16 @@
   <span class="st">"2019-11"</span>,             <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-11-11"</span>), <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
   <span class="st">"2019-12"</span>,             <span class="fl">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>),
   <span class="st">"2019-12-04"</span>,          <span class="fl">NA</span>,                <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-12-02"</span>)
-)
-<span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
-  <span class="no">ae</span>,
-  <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
-  <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AEN"</span>,
-  <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
-  <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">DTHDT</span>, <span class="no">DCUTDT</span>)
-)
-<span class="co">#&gt; # A tibble: 4 x 6</span>
-<span class="co">#&gt;   AEENDTC             DTHDT      DCUTDT     AENDTM              AENDTF AENTMF</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;              &lt;chr&gt;  &lt;chr&gt; </span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 2019-11-11 2019-12-02 2019-08-09 12:34:56 &lt;NA&gt;   &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 2019-11             2019-11-11 2019-12-02 2019-11-30 23:59:59 D      H     </span>
-<span class="co">#&gt; 3 2019-12             NA         2019-12-02 2019-12-31 23:59:59 D      H     </span>
-<span class="co">#&gt; 4 2019-12-04          NA         2019-12-02 2019-12-04 23:59:59 &lt;NA&gt;   H</span></pre></body></html></div>
+) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/derive_vars_dtm.html">derive_vars_dtm</a></span>(
+    <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">AEENDTC</span>,
+    <span class="kw">new_vars_prefix</span> <span class="kw">=</span> <span class="st">"AEN"</span>,
+    <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
+    <span class="kw">time_imputation</span> <span class="kw">=</span> <span class="st">"last"</span>,
+    <span class="kw">max_dates</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="no">DTHDT</span>, <span class="no">DCUTDT</span>)
+  )</pre></body></html></div>
+<div id="htmlwidget-18986800fb8ce8b7f00c" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-18986800fb8ce8b7f00c">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-11&quot;,&quot;2019-12&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"time\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1565354096000\" data-max=\"1577836799000\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;D&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-11","2019-12","2019-12-04"],["2019-11-11","2019-11-11",null,null],["2019-12-02","2019-12-02","2019-12-02","2019-12-02"],["2019-08-09T12:34:56Z","2019-11-30T23:59:59Z","2019-12-31T23:59:59Z","2019-12-04T23:59:59Z"],[null,"D","D",null],[null,"H","H","H"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>AEENDTC<\/th>\n      <th>DTHDT<\/th>\n      <th>DCUTDT<\/th>\n      <th>AENDTM<\/th>\n      <th>AENDTF<\/th>\n      <th>AENTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="imputation-without-creating-a-new-variable" class="section level2">
 <h2 class="hasAnchor">
@@ -373,16 +351,12 @@
   <span class="st">"2019-04-01"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
   <span class="st">"2019-05"</span>,    <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>),
   <span class="st">"2019-06-21"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span>(<span class="st">"2019-04-15"</span>)
-)
+) <span class="kw">%&gt;%</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(
-  <span class="no">mh</span>,
   <span class="fu"><a href="../reference/convert_dtc_to_dt.html">convert_dtc_to_dt</a></span>(<span class="no">MHSTDTC</span>, <span class="kw">date_imputation</span> <span class="kw">=</span> <span class="st">"first"</span>) <span class="kw">&lt;</span> <span class="no">TRTSDT</span>
-)
-<span class="co">#&gt; # A tibble: 2 x 2</span>
-<span class="co">#&gt;   MHSTDTC    TRTSDT    </span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;    </span>
-<span class="co">#&gt; 1 2019-04    2019-04-15</span>
-<span class="co">#&gt; 2 2019-04-01 2019-04-15</span></pre></body></html></div>
+)</pre></body></html></div>
+<div id="htmlwidget-c16fe49bcc88d405e3c3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c16fe49bcc88d405e3c3">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-04&quot;,&quot;2019-04-01&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-04","2019-04-01"],["2019-04-15","2019-04-15"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>MHSTDTC<\/th>\n      <th>TRTSDT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="using-more-than-one-imputation-rule-for-a-variable" class="section level2">
 <h2 class="hasAnchor">
@@ -394,9 +368,8 @@
   <span class="st">"2019-10-12"</span>,          <span class="st">"PRE-DOSE"</span>,
   <span class="st">"2019-11-10"</span>,          <span class="fl">NA</span>,
   <span class="st">"2019-12-04"</span>,          <span class="fl">NA</span>
-)
+) <span class="kw">%&gt;%</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
-  <span class="no">vs</span>,
   <span class="kw">ADTM</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(
     <span class="no">VSTPT</span> <span class="kw">==</span> <span class="st">"PRE-DOSE"</span>,
     <span class="fu"><a href="../reference/convert_dtc_to_dtm.html">convert_dtc_to_dtm</a></span>(
@@ -414,14 +387,9 @@
     <span class="kw">dtc</span> <span class="kw">=</span> <span class="no">VSDTC</span>,
     <span class="kw">dtm</span> <span class="kw">=</span> <span class="no">ADTM</span>
   )
-)
-<span class="co">#&gt; # A tibble: 4 x 4</span>
-<span class="co">#&gt;   VSDTC               VSTPT    ADTM                ADTMF</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;chr&gt;    &lt;dttm&gt;              &lt;chr&gt;</span>
-<span class="co">#&gt; 1 2019-08-09T12:34:56 &lt;NA&gt;     NA                  &lt;NA&gt; </span>
-<span class="co">#&gt; 2 2019-10-12          PRE-DOSE 2019-10-12 00:00:00 H    </span>
-<span class="co">#&gt; 3 2019-11-10          &lt;NA&gt;     NA                  &lt;NA&gt; </span>
-<span class="co">#&gt; 4 2019-12-04          &lt;NA&gt;     NA                  &lt;NA&gt;</span></pre></body></html></div>
+)</pre></body></html></div>
+<div id="htmlwidget-945b28d45d5c18ecd8bc" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-945b28d45d5c18ecd8bc">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;2019-08-09T12:34:56&quot;,&quot;2019-10-12&quot;,&quot;2019-11-10&quot;,&quot;2019-12-04&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;PRE-DOSE&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;H&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["2019-08-09T12:34:56","2019-10-12","2019-11-10","2019-12-04"],[null,"PRE-DOSE",null,null],[null,"2019-10-12T00:00:00Z",null,null],[null,"H",null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>VSDTC<\/th>\n      <th>VSTPT<\/th>\n      <th>ADTM<\/th>\n      <th>ADTMF<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"searchHighlight":true,"searching":true,"pageLength":5,"lengthMenu":[5,10,15,20,50,100],"dom":"Bfrtipl","buttons":[{"extend":"colvis","text":"Choose the columns to display","scroller":true,"collectionLayout":"fixed two-column"}],"colReorder":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
   </div>
@@ -437,7 +405,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
