@@ -76,7 +76,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE, check
     }
   }
 
-  if (check_temp_vars == TRUE) {
+  if (check_temp_vars) {
     temp_vars_found <- grep("^temp_", names(arg))
     if (any(temp_vars_found)) {
       temp_vars_found_names <- colnames(arg[c(grep("^temp_", names(arg)))])
