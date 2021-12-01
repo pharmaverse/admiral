@@ -89,6 +89,7 @@ knitr::opts_chunk$set(
  * Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
    * validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence 
    * strategy of how the use of admiral fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)
+   * see our guidance on [unit testing](unit_testing_guidance.html)
 
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
