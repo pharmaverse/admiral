@@ -1,8 +1,7 @@
 ---
 title: "Creating a BDS Finding ADaM"
 output: 
-  rmarkdown::html_vignette:
-    toc: false
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating a BDS Finding ADaM}
   %\VignetteEngine{knitr::rmarkdown}

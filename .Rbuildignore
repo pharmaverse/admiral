@@ -13,3 +13,4 @@
 ^vignettes/programming_strategy\.Rmd$
 ^vignettes/git_usage\.Rmd$
 ^vignettes/faq\.Rmd$
+^LICENSE\.md$

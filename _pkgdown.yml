@@ -121,7 +121,9 @@ articles:
 - title: Developer Guides
   navbar: Developer Guides
   contents:
+  - contribution_model
   - programming_strategy
   - git_usage
   - writing_vignettes
   - pr_review_guidance
+  - unit_test_guidance
