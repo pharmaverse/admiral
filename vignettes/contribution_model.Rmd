@@ -28,7 +28,7 @@ Our contribution model is still in a testing phase so we advise you to contact u
  
  * Label each issue with a label named “user request” so we can easily identify new requests.
  
- * Familiarize yourself with our [programming strategy](programming_strategy.html), guidance for [github usage](git_usage.html) and unit testing and the overall [goal of admiral](https://roche-gsk.github.io/admiral/index.html).
+ * Familiarize yourself with our [programming strategy](programming_strategy.html), guidance for [github usage](git_usage.html) and unit testing and the overall [goal of admiral](index.html).
  
  * All created issues will be reviewed within the next sprint and the creator will receive an initial feedback via a comment.
  
@@ -44,9 +44,9 @@ Type 1 Contribution with Code:
 
  * First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
  
- * User creates a new branch within the development branch (devel) and creates a [pull request](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html) for review [github usage](git_usage.html).
+ * User creates a new branch within the development branch (devel) and creates a [pull request](pr_review_guidance.html) for review [github usage](git_usage.html).
 
- * Code should follow our [programming strategy](programming_strategy.html).
+ * Code should follow our [programming strategy](programming_strategy.html) and [unit test guidance](unit_test_guidance.html).
  
  * We advise to contact an admiral core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02C8UN2JTT) before submitting code for complex functionality. 
 
