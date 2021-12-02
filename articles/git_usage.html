@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guidance for git Usage • admiral</title>
+<title>Guidance for git and GitHub Usage • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Guidance for git Usage">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Guidance for git and GitHub Usage">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -100,7 +100,7 @@
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
-      <a href="../articles/git_usage.html">Guidance for git Usage</a>
+      <a href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
     </li>
     <li>
       <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
@@ -143,7 +143,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Guidance for git Usage</h1>
+      <h1 data-toc-skip>Guidance for git and GitHub Usage</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/git_usage.Rmd"><code>vignettes/git_usage.Rmd</code></a></small>
@@ -153,30 +153,37 @@
 
     
     
-<p>admiral GitHub: <a href="https://github.com/Roche-GSK/admiral.git" class="uri">https://github.com/Roche-GSK/admiral.git</a></p>
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h1>
+<p>This article will give you an overview of how the admiral project is utilizing the version-control software <code>git</code> and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the admiral project as well as how we use <strong>Feature</strong> branches to address <strong>Issues</strong>. Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of <code>git</code> commands needed to get up and running. Please refer to the <a href="#github_resources">Resource</a> section for more in-depth guidance on using <code>git</code> and GitHub.</p>
+</div>
 <div id="branches" class="section level1">
 <h1 class="hasAnchor">
 <a href="#branches" class="anchor"></a>Branches</h1>
 <ul>
-<li>The <code>master</code> branch contains the latest <strong>released</strong> version and should not be used for development.<br>
+<li>The <code>master</code> branch contains the latest <strong>released</strong> version and should not be used for development. You can find the released versions <a href="https://GitHub.com/Roche-GSK/admiral/releases">here</a>
 </li>
-<li>The <code>devel</code> branch contains the latest development version of the package.<br>
-</li>
-<li>‘Feature’ branches are where actual development related to a specific issue happens. Feature branches are merged into <code>devel</code> once a pull request is merged.</li>
+<li>The <code>devel</code> branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the <code>devel</code> branch.</li>
+<li>The <code>gh-pages</code> branches contains the code used to render this website you are looking at right now!</li>
+<li>The <code>master</code>, <code>devel</code> and <code>gh-pages</code> branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator.</li>
+<li>
+<strong>Feature</strong> branches are where actual development related to a specific issue happens. Feature branches are merged into <code>devel</code> once a pull request is merged. Check out the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>.</li>
 </ul>
 </div>
 <div id="working-with-feature-branches" class="section level1">
 <h1 class="hasAnchor">
 <a href="#working-with-feature-branches" class="anchor"></a>Working with Feature Branches</h1>
+<p>Feature Branches are where most developers will work when addressing Issues.</p>
 <div id="implementing-an-issue" class="section level2">
 <h2 class="hasAnchor">
 <a href="#implementing-an-issue" class="anchor"></a>Implementing an Issue</h2>
 <p>Each feature branch must be related to an issue.</p>
 <p><strong>Name:</strong><br>
 The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 “Program function to derive <code>LSTALVDT</code>”, the Branch name would be: <code>94_lstalvdt</code>.</p>
-<div id="create-a-new-feature-branch-from-devel" class="section level3">
+<div id="create-a-new-feature-branch-from-the-terminal-from-devel" class="section level3">
 <h3 class="hasAnchor">
-<a href="#create-a-new-feature-branch-from-devel" class="anchor"></a>Create a New Feature Branch (from <code>devel</code>)</h3>
+<a href="#create-a-new-feature-branch-from-the-terminal-from-devel" class="anchor"></a>Create a New Feature Branch from the Terminal (from <code>devel</code>)</h3>
 <ul>
 <li>Checkout the devel branch: <code>git checkout devel</code><br>
 </li>
@@ -185,29 +192,57 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 <li>Create a new branch off the devel branch and switch to it: <code>git checkout -b &lt;new_branch_name&gt;</code>
 </li>
 </ul>
-<p><strong>Using code from unmerged branches</strong><br>
-- Checkout the unmerged branch you want to use: <code>git checkout &lt;unmerged_branch&gt;</code><br>
-- Pull the latest committed changes from the unmerged branch: <code>git pull</code><br>
-- Check out your feature branch: <code>git checkout &lt;my_branch&gt;</code><br>
-- Merge the unmerged branch to <my_branch>: <code>git merge &lt;unmerged_branch&gt;</code></my_branch></p>
-<p><strong>Commit</strong><br>
-When committing, prefix the message with the issue number and add a meaningful message<br><code>git commit –m '#94 last alive date implementation'</code></p>
-<p><strong>Pull request</strong><br>
-Once all changes are committed, push the new branch to GitHub:<br><code>git push -u origin &lt;new_branch_name&gt;</code></p>
-<p>In GitHub, under “Pull request”, the user has to “Compare and pull request”. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge. All committed changes are then available for review.</p>
 </div>
+<div id="create-a-new-feature-branch-from-github-from-devel" class="section level3">
+<h3 class="hasAnchor">
+<a href="#create-a-new-feature-branch-from-github-from-devel" class="anchor"></a>Create a New Feature Branch from GitHub (from <code>devel</code>)</h3>
+<p>You can also create a feature branch in GitHub.</p>
+<ul>
+<li>Switch to the <code>devel</code> branch</li>
+<li>Type in your new feature branch name</li>
+<li>Click Create branch: <code>&lt;your_branch_name&gt;</code> from <code>devel</code>
+</li>
+<li>Be Sure to Pull down newly created branch into RStudio</li>
+</ul>
+<p><img src="github_feature_branch.png"><!-- --></p>
+</div>
+<div id="commits-from-the-terminal-in-rstudio" class="section level3">
+<h3 class="hasAnchor">
+<a href="#commits-from-the-terminal-in-rstudio" class="anchor"></a>Commits from the Terminal in RStudio</h3>
+<p>To start the commit process, you will need to tell <code>git</code> to move your changes to the staging area. Use <code>git add &lt;your_file&gt;</code> to move all changes of <code>&lt;your_file&gt;</code> in the staging area to wait for the next commit. You can use <code>git add .</code> to move all files you have worked on to the staging area. Next you can commit, which takes a snapshot of your staged changes. When committing, prefix the message with the issue number and add a meaningful message <code>git commit –m '#94 last alive date implementation'</code>.</p>
+<p>Lastly, you should push your changes up to GitHub using <code>git push origin &lt;branch name&gt;</code></p>
+</div>
+<div id="commits-from-the-git-tab-in-rstudio" class="section level3">
+<h3 class="hasAnchor">
+<a href="#commits-from-the-git-tab-in-rstudio" class="anchor"></a>Commits from the Git Tab in RStudio</h3>
+<p>You can also make use of the Git Tab within RStudio to commit your changes. A benefit of using this Tab is being able to see your changes to the file with red and green highlighting. Just like in the terminal, start the message with the issue number and add a meaningful and succinct sentence. Hit the Commit button and then Push up to GitHub.</p>
+<p><img src="github_committ.png"><!-- --></p>
+<p><strong>NOTE:</strong> Placing the issue number in your commit message allows new developers to quickly find discussion surrounding your issue. When pushed to GitHub the issue number will hyperlink to the issue tracker. A powerful tool for discussion.</p>
+</div>
+</div>
+<div id="pull-request" class="section level2">
+<h2 class="hasAnchor">
+<a href="#pull-request" class="anchor"></a>Pull request</h2>
+<p>We recommend a thorough read through of the articles, <a href="pr_review_guidance.html">Pull Request Review Guidance</a> and the <a href="programming_strategy.html">Programming Strategy</a> for in-depth discussions on a doing a proper Pull Request. Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple <code>git</code> commands in the terminal and on GitHub for doing a Pull Request. We recommend doing the Pull Request in GitHub only and not through the terminal.</p>
+<p>Once all changes are committed, push the updated branch to GitHub:<br><code>git push -u origin &lt;branch_name&gt;</code></p>
+<p>In GitHub, under <strong>Pull requests</strong>, the user will either have a “Compare and pull request” button and/or a “Create Pull Request”. The first button will be created for you if GitHub detects recent changes you have made. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge - as shown in the below picture. Please <strong>pay close attention</strong> to the branch you are merging into!</p>
+<p>Once you have completed the Pull Request you will see all committed changes are then available for the reviewer. A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request. Pictures are nice too, which are easy to do in GitHub! Use any Screen Capture software and Copy and Paste into your summary.</p>
+<p><img src="github_create_pr.png"><!-- --></p>
 <div id="reviewingclosing-an-issue" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reviewingclosing-an-issue" class="anchor"></a>Reviewing/Closing an Issue</h3>
-<p>At least one reviewer must approve the PR.<br>
-The reviewer must ensure that the function follows the programming strategy recommendations.<br>
-Any comment/question/discussion must be addressed and documented in GitHub before the PR is merged and the issue closed.</p>
-<p>Once the review is completed, and the PR is merged, the branch must be removed: click “delete branch” in the PR.</p>
+<ul>
+<li>At least one reviewer must approve the Pull Request. Please review the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>, which provides in depth guidance on doing a proper Pull Request.</li>
+<li>The reviewer must ensure that the function follows the programming strategy recommendations.</li>
+<li>Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.</li>
+</ul>
+<p>Once the review is completed, and the Pull Request is merged, the branch must be removed: click <strong>Delete branch</strong> in the Pull Request.</p>
+<p><img src="github_delete_branch.png"><!-- --></p>
 </div>
-<div id="solving-merge-conflicts" class="section level3">
+<div id="solving-merge-conflicts-in-the-terminal-on-rstudio" class="section level3">
 <h3 class="hasAnchor">
-<a href="#solving-merge-conflicts" class="anchor"></a>Solving Merge Conflicts</h3>
-<p>Merge conflict is a situation where git cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):</p>
+<a href="#solving-merge-conflicts-in-the-terminal-on-rstudio" class="anchor"></a>Solving Merge Conflicts in the Terminal on RStudio</h3>
+<p>Merge conflict is a situation where <code>git</code> cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):</p>
 <pre><code>git checkout devel
 git pull
 git checkout &lt;feature_branch&gt;  
@@ -218,22 +253,50 @@ git merge devel</code></pre>
 git commit -m "&lt;insert_message&gt;"
 git push</code></pre>
 </div>
+<div id="solving-merge-conflicts-in-github" class="section level3">
+<h3 class="hasAnchor">
+<a href="#solving-merge-conflicts-in-github" class="anchor"></a>Solving Merge Conflicts in GitHub</h3>
+<p>For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, Github has found 3 conflicts, but we only display the first one. Just like in the terminal, GitHub will make use of the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> to highlight the conflicting sections. You will need to make the decision on whether to keep the code from the base or the feature branch. Once you have decided, go into the code and remove the section you no longer wish to keep. Be sure to remove the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> as well! Once you work through the conflicts you will mark as <strong>Resolved and Commit your changes</strong>. It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch.</p>
+<p><img src="github_conflicts.png"><!-- --></p>
+</div>
 </div>
 <div id="useful-git-commands" class="section level2">
 <h2 class="hasAnchor">
-<a href="#useful-git-commands" class="anchor"></a>Useful git Commands</h2>
+<a href="#useful-git-commands" class="anchor"></a>Useful <code>git</code> Commands</h2>
 <ul>
 <li>merging: <code>git merge &lt;my_branch&gt;</code> - merge my_branch into current branch<br>
 </li>
-<li>stashing: useful when one wants to go back to clean directory<br>
-</li>
+<li>The stashing commands are useful when one wants to go back to clean directory</li>
 <li>
 <code>git stash</code> - stash (store) current changes and restore a clean directory<br>
 </li>
 <li>
-<code>git stash pop</code> - put back (restore) stashed changes</li>
+<code>git stash pop</code> - put back (restore) stashed changes<br>
+</li>
+<li>
+<code>git revert</code> is also helpful but why?</li>
+</ul>
+<p><strong>Using code from unmerged branches</strong></p>
+<ul>
+<li>Checkout the unmerged branch you want to use: <code>git checkout &lt;unmerged_branch&gt;</code><br>
+</li>
+<li>Pull the latest committed changes from the unmerged branch: <code>git pull</code><br>
+</li>
+<li>Check out your feature branch: <code>git checkout &lt;my_branch&gt;</code><br>
+</li>
+<li>Merge the unmerged branch to <my_branch>: <code>git merge &lt;unmerged_branch&gt;</code></my_branch>
+</li>
 </ul>
 </div>
+</div>
+<div id="github_resources" class="section level1">
+<h1 class="hasAnchor">
+<a href="#github_resources" class="anchor"></a>Resources on using <code>git</code>, GitHub and RStudio</h1>
+<ul>
+<li><a href="https://resources.GitHub.com/whitepapers/GitHub-and-rstudio/">GitHub and RStudio</a></li>
+<li><a href="https://happygitwithr.com/">Happy Git and GitHub for the useR</a></li>
+<li><a href="https://r-pkgs.org/git.html">Git and GitHub from the R Package Manual</a></li>
+</ul>
 </div>
   </div>
 
