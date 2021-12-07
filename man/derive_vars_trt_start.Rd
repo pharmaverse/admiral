@@ -8,27 +8,29 @@ derive_vars_trt_start(
   dataset,
   dataset_ex,
   filter_ex = NULL,
-  subject_keys,
+  subject_keys = vars(STUDYID, USUBJID),
   new_var,
   dtc,
   date_imputation,
   time_imputation,
+  flag_imputation = "AUTO",
   min_dates = NULL,
   max_dates = NULL,
-  flag_imputation = "AUTO",
   order,
-  ord_filter
+  mode
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{subject_keys} parameter are expected.}
+The variables specified by the \code{subject_keys} parameter are expected.
+
+Default: vars(STUDYID,USUBJID)}
 
 \item{dataset_ex}{\code{ex} dataset
 
 The variables \code{EXSTDTC}, \code{EXSEQ}, and those specified by the \code{filter_ex}
-\code{dtc} and \code{subject_keys}parameters are expected.}
+\code{dtc} and \code{subject_keys} parameters are expected.}
 
 \item{filter_ex}{Filter condition for the ex dataset
 
@@ -122,17 +124,17 @@ data("dm")
 
 dm \%>\%
  derive_vars_trt_start(dataset_ex = ex,
+                       filter_ex = EXDOSE>0 ,
+                       subject_keys=vars(STUDYID,USUBJID),
                        new_var=TRTSDTM,
                        dtc=EXSTDTC,
                        date_imputation = "first",
                        time_imputation="first",
+                       flag_imputation = "AUTO",
                        min_dates = NULL,
                        max_dates = NULL,
                        order = vars(EXSTDTC,EXSEQ),
-                       subject_keys=vars(STUDYID,USUBJID),
-                       flag_imputation = "AUTO",
-                       filter_ex = EXDOSE>0 ,
-                       ord_filter="first") \%>\%
+                       mode="first") \%>\%
  select(USUBJID, TRTSDTM)
 }
 \author{
