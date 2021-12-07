@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build report 🏗
-        uses: insightsengineering/r-pkg-validation@main
+        uses: insightsengineering/thevalidatoR@v1.0
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼
