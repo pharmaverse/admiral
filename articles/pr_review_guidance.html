@@ -161,7 +161,7 @@
 <div id="review-criteria" class="section level1">
 <h1 class="hasAnchor">
 <a href="#review-criteria" class="anchor"></a>Review Criteria</h1>
-<p>For a pull request to be merged it needs to pass the automated <code>R CMD check</code> and <code>lintr</code> workflows on GitHub at a minimum. These checks can also be run locally using the <code><a href="https://devtools.r-lib.org//reference/check.html">devtools::check()</a></code> and <code><a href="https://rdrr.io/pkg/lintr/man/lint_package.html">lintr::lint_package()</a></code> commands, respectively. In addition the PR reviewer should make sure that</p>
+<p>For a pull request to be merged it needs to pass the automated <code>R CMD check</code> and <code>lintr</code> workflows on GitHub at a minimum. These checks can also be run locally using the <code><a href="https://devtools.r-lib.org/reference/check.html">devtools::check()</a></code> and <code><a href="https://rdrr.io/pkg/lintr/man/lint_package.html">lintr::lint_package()</a></code> commands, respectively. In addition the PR reviewer should make sure that</p>
 <ul>
 <li><p>the <a href="programming_strategy.html">Programming Strategy</a> is followed</p></li>
 <li><p>the function is ADaM IG compliant</p></li>
@@ -170,7 +170,7 @@
 <li><p>the function has an accompanying set of unit tests; for derivations these unit test should have a code coverage of at least 90%; the whole package should have a coverage of &gt;= 80%</p></li>
 <li><p>the implemented derivation is in the scope of admiral, e.g. does not expect company specific input or hard-code company-specific rules</p></li>
 <li><p>meaningful error or warning messages are issued if the input is invalid</p></li>
-<li><p>documentation is created/updated by running <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code></p></li>
+<li><p>documentation is created/updated by running <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code></p></li>
 <li><p>functions which are supposed to be exported are listed in the <code>NAMESPACE</code> file; this requires an <code>@export</code> tag in the function header</p></li>
 <li><p>examples print relevant source variables and newly created variables and/or records in their output</p></li>
 <li><p>the <code>NEWS.md</code> file is updated with an entry that explains the new features or changes</p></li>
@@ -190,12 +190,12 @@
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">repos</span> <span class="kw">=</span> <span class="st">"https://cran.microsoft.com/snapshot/2018-12-20/"</span>)
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html">install_deps</a></span>(<span class="kw">dependencies</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/check.html">check</a></span>()</pre></body></html></div>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html">check</a></span>()</pre></body></html></div>
 <p>To reproduce the R release version environment open the admiral project in the latest available R version, comment the line <code><a href="https://rdrr.io/r/base/source.html">source("renv/activate.R")</a></code> in the <code>.Rprofile</code> file, restart the R session and then run the following commands in the R console.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">repos</span> <span class="kw">=</span> <span class="st">"https://packagemanager.rstudio.com/cran/__linux__/focal/latest"</span>)
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html">install_deps</a></span>(<span class="kw">dependencies</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/check.html">check</a></span>()</pre></body></html></div>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html">check</a></span>()</pre></body></html></div>
 </div>
 <div id="package-dependencies" class="section level2">
 <h2 class="hasAnchor">
@@ -217,7 +217,7 @@
 <pre><code>❯ checking Rd \usage sections ... WARNING
   Undocumented arguments in documentation object 'function_xyz'
     ‘some_param’</code></pre>
-<p>Add an <code>@param some_param</code> section in the header of <code>function_xyz()</code> and run <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code> afterwards.</p>
+<p>Add an <code>@param some_param</code> section in the header of <code>function_xyz()</code> and run <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> afterwards.</p>
 </div>
 <div id="outdated-documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -231,7 +231,7 @@
     old_param_name
   Mismatches in argument names:
     Position: 6 Code: new_param_name Docs: old_param_name</code></pre>
-<p>The name of a parameter has been changed in the function code but not yet in the header. Change <code>@param old_param_name</code> to <code>@param new_param_name</code> and run <code><a href="https://devtools.r-lib.org//reference/document.html">devtools::document()</a></code>.</p>
+<p>The name of a parameter has been changed in the function code but not yet in the header. Change <code>@param old_param_name</code> to <code>@param new_param_name</code> and run <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code>.</p>
 </div>
 </div>
   </div>
