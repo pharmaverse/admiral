@@ -160,7 +160,6 @@ derive_last_dose <- function(dataset,
 
     ex_keep_vars <- replace_values_by_names(ex_keep_vars)
   }
-
   else {
     ex_keep_vars <- syms(colnames(dataset_ex))
   }
@@ -174,12 +173,18 @@ derive_last_dose <- function(dataset,
     stop("Variable(s) ", paste(dup_var, "found in both datasets, cannot perform join"))
   }
 
-  # create temporary observation number to identify last dose.
+  # create temporary observation number and temporary numeric date to identify last dose
   dataset <- dataset %>%
     derive_obs_number(
-      by_vars = vars(USUBJID),
       order = vars(USUBJID),
-      new_var = tmp_seq_var)
+      new_var = tmp_seq_var) %>%
+    mutate(
+      tmp_analysis_date = convert_date_to_dtm(
+        dt = !!analysis_date,
+        date_imputation = NULL,
+        time_imputation = "23:59:59"
+      )
+    )
 
   # create tmp numeric date to enable date comparison for identifying last dose
   dataset_ex <- dataset_ex %>%
@@ -191,29 +196,17 @@ derive_last_dose <- function(dataset,
       )
     )
 
-   dataset_tmp <- dataset %>%
-    mutate(
-      tmp_analysis_date = convert_date_to_dtm(
-        dt = !!analysis_date,
-        date_imputation = NULL,
-        time_imputation = "23:59:59"
-      )
-    )
 
   # join datasets and keep unique last dose records (where dose_date is before or on analysis_date)
-  # for each by_var and tmp_seq_var
-    res <- dataset_tmp %>%
+    res <- dataset %>%
       left_join(dataset_ex, by = by_vars_str) %>%
       filter(is.na(tmp_dose_date) | is.na(tmp_analysis_date) | tmp_dose_date <= tmp_analysis_date) %>%
-      filter_extreme(by_vars = quo_c(by_vars, vars(tmp_seq_var)),
+      filter_extreme(by_vars =  vars(tmp_seq_var),
                      order = c(vars(tmp_dose_date), dose_id),
-                      mode = "last") %>%
-       select(!!!by_vars, tmp_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
+                     mode = "last") %>%
+      select(!!!by_vars, tmp_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
 
-
-  # return original dataset and add EX source variables from last dose record
-  left_join(dataset, res,
-            by = c(by_vars_str, "tmp_seq_var")) %>%
-    select(-"tmp_seq_var")
+    # return observations from original dataset with last dose variables added
+    left_join(dataset, res, by = c(by_vars_str, "tmp_seq_var")) %>% select(-starts_with("tmp_"))
 
 }

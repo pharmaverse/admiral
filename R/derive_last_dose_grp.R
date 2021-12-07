@@ -13,7 +13,7 @@
 #' (and open on the left) or vice versa.
 #'
 #' @details Last dose is the dose with maximum `dose_date` that is lower to or equal to the
-#' `analysis_date` per `by_vars` and  `dataset_seq_var`.
+#' `analysis_date` per `by_vars` for each observation in `dataset`.
 #' The last dose group is then derived by user-defined grouping, which groups
 #' `dose_var` as specified in `grp_brks`, and returns `grp_lbls` as the values for `new_var`.
 #'
@@ -48,7 +48,6 @@
 #'    right = TRUE,
 #'    dose_var = EXDOSE,
 #'    analysis_date = AESTDTC,
-#'    dataset_seq_var = AESEQ,
 #'    single_dose_condition = (EXSTDTC == EXENDTC),
 #'    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'    ) %>%
@@ -63,7 +62,6 @@ derive_last_dose_grp <- function(dataset,
                                  ex_keep_vars = NULL,
                                  dose_date,
                                  analysis_date,
-                                 dataset_seq_var,
                                  single_dose_condition = (EXDOSFRQ == "ONCE"),
                                  new_var,
                                  grp_brks,
@@ -77,7 +75,6 @@ derive_last_dose_grp <- function(dataset,
   by_vars <- assert_vars(by_vars)
   dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
-  dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
@@ -91,7 +88,6 @@ derive_last_dose_grp <- function(dataset,
                    dose_id = dose_id,
                    dose_date = !!dose_date,
                    analysis_date = !!analysis_date,
-                   dataset_seq_var = !!dataset_seq_var,
                    single_dose_condition = !!single_dose_condition,
                    ex_keep_vars = vars(!!dose_var),
                    traceability_vars = traceability_vars)%>%

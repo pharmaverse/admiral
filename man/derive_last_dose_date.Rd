@@ -12,7 +12,6 @@ derive_last_dose_date(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  dataset_seq_var,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
   new_var,
   output_datetime = TRUE,
@@ -60,9 +59,9 @@ Add a variable for the dose date or datetime of the last dose to the input datas
 }
 \details{
 The last dose date is derived as the maximum dose date where the \code{dose_date} is lower
-to or equal to the \code{analysis_date} per \code{by_vars} and \code{dataset_seq_var}. When \code{output_datetime}
-is \code{TRUE}, the last dose date time is imputed to \code{00:00:00} if time is missing, and no
-imputation is done if date is missing.
+to or equal to the \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
+When \code{output_datetime} is \code{TRUE}, the last dose date time is imputed to \code{00:00:00} if time
+is missing, and no imputation is done if date is missing.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -78,7 +77,6 @@ ae \%>\%
       nchar(EXENDTC) >= 10,
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")

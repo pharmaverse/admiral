@@ -13,7 +13,6 @@ derive_last_dose_grp(
   ex_keep_vars = NULL,
   dose_date,
   analysis_date,
-  dataset_seq_var,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
   new_var,
   grp_brks,
@@ -81,7 +80,7 @@ Add a variable for user-defined dose grouping of the last dose to the input data
 }
 \details{
 Last dose is the dose with maximum \code{dose_date} that is lower to or equal to the
-\code{analysis_date} per \code{by_vars} and  \code{dataset_seq_var}.
+\code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
 The last dose group is then derived by user-defined grouping, which groups
 \code{dose_var} as specified in \code{grp_brks}, and returns \code{grp_lbls} as the values for \code{new_var}.
 }
@@ -106,7 +105,6 @@ ae \%>\%
    right = TRUE,
    dose_var = EXDOSE,
    analysis_date = AESTDTC,
-   dataset_seq_var = AESEQ,
    single_dose_condition = (EXSTDTC == EXENDTC),
    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
    ) \%>\%

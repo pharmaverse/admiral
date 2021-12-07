@@ -84,6 +84,7 @@ globalVariables(c(
   "_unit",
   "tmp_analysis_date",
   "tmp_dose_date",
+  "tmp_seq_var",
   "EXDOSFRQ",
   "tmp_ldose_dt"
 

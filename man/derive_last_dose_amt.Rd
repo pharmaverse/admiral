@@ -12,7 +12,6 @@ derive_last_dose_amt(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  dataset_seq_var,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
   new_var,
   dose_var = EXDOSE,
@@ -60,7 +59,7 @@ Add a variable for dose amount from the last dose to the input dataset.
 }
 \details{
 The last dose amount is derived as the dose amount where the maximum \code{dose_date} is
-lower to or equal to the \code{analysis_date} per \code{by_vars} and \code{dataset_seq_var}.
+lower to or equal to the \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -76,7 +75,6 @@ ae \%>\%
       nchar(EXENDTC) >= 10,
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSE,
     dose_var = EXDOSE
@@ -92,7 +90,6 @@ ae \%>\%
       nchar(EXENDTC) >= 10,
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSE,
     dose_var = EXDOSE,

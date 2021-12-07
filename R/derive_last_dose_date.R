@@ -7,9 +7,9 @@
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
 #'
 #' @details The last dose date is derived as the maximum dose date where the `dose_date` is lower
-#' to or equal to the `analysis_date` per `by_vars` and `dataset_seq_var`. When `output_datetime`
-#' is `TRUE`, the last dose date time is imputed to `00:00:00` if time is missing, and no
-#' imputation is done if date is missing.
+#' to or equal to the `analysis_date` per `by_vars` for each observation in `dataset`.
+#' When `output_datetime` is `TRUE`, the last dose date time is imputed to `00:00:00` if time
+#' is missing, and no imputation is done if date is missing.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
@@ -35,7 +35,6 @@
 #'       nchar(EXENDTC) >= 10,
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
-#'     dataset_seq_var = AESEQ,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
 #'     new_var = LDOSEDTM,
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
@@ -49,7 +48,6 @@ derive_last_dose_date <- function(dataset,
                                   dose_id = vars(),
                                   dose_date,
                                   analysis_date,
-                                  dataset_seq_var,
                                   single_dose_condition = (EXDOSFRQ == "ONCE"),
                                   new_var,
                                   output_datetime = TRUE,
@@ -60,7 +58,6 @@ derive_last_dose_date <- function(dataset,
   dose_id <- assert_vars(dose_id)
   dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
-  dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(output_datetime)
@@ -74,7 +71,6 @@ derive_last_dose_date <- function(dataset,
                 dose_id = dose_id,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
-                dataset_seq_var = !!dataset_seq_var,
                 single_dose_condition = !!single_dose_condition,
                 ex_keep_vars = vars(!!dose_date),
                 traceability_vars = traceability_vars) %>%

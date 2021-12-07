@@ -45,7 +45,6 @@ test_that("derive_last_dose_date works as expected", {
                      grp_lbls = c("G1", "G2", "G3"),
                      dose_var = EXDOSE,
                      analysis_date = AESTDTC,
-                     dataset_seq_var = AESEQ,
                      single_dose_condition = (EXSTDTC == EXENDTC),
                      traceability_vars = NULL)
 

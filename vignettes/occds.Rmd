@@ -237,7 +237,6 @@ adae <- adae %>%
       nchar(EXENDTC) >= 10,
     dose_date = EXSTDTC,
     analysis_date = ASTDT,
-    dataset_seq_var = AESEQ,
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
     output_datetime = TRUE

@@ -7,7 +7,7 @@
 #' @param dose_var The EX source dose amount variable. Defaults to `EXDOSE`.
 #'
 #' @details The last dose amount is derived as the dose amount where the maximum `dose_date` is
-#' lower to or equal to the `analysis_date` per `by_vars` and `dataset_seq_var`.
+#' lower to or equal to the `analysis_date` per `by_vars` for each observation in `dataset`.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'
@@ -33,7 +33,6 @@
 #'       nchar(EXENDTC) >= 10,
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
-#'     dataset_seq_var = AESEQ,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
 #'     new_var = LDOSE,
 #'     dose_var = EXDOSE
@@ -49,7 +48,6 @@
 #'       nchar(EXENDTC) >= 10,
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
-#'     dataset_seq_var = AESEQ,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
 #'     new_var = LDOSE,
 #'     dose_var = EXDOSE,
@@ -65,7 +63,6 @@ derive_last_dose_amt <- function(dataset,
                                  dose_id = vars(),
                                  dose_date,
                                  analysis_date,
-                                 dataset_seq_var,
                                  single_dose_condition = (EXDOSFRQ =="ONCE"),
                                  new_var,
                                  dose_var = EXDOSE,
@@ -76,7 +73,6 @@ derive_last_dose_amt <- function(dataset,
   dose_id <- assert_vars(dose_id)
   dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
-  dataset_seq_var <- assert_symbol(enquo(dataset_seq_var))
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
@@ -90,7 +86,6 @@ derive_last_dose_amt <- function(dataset,
                 dose_id = dose_id,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
-                dataset_seq_var = !!dataset_seq_var,
                 single_dose_condition = !!single_dose_condition,
                 ex_keep_vars = vars(!!dose_var),
                 traceability_vars = traceability_vars) %>%
