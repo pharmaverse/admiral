@@ -251,7 +251,11 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #' try(example_fun(c(TRUE, FALSE, FALSE)))
 #'
 #' try(example_fun(1:10))
-assert_logical_scalar <- function(arg) {
+assert_logical_scalar <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",

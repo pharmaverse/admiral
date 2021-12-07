@@ -4,18 +4,16 @@
 \alias{smq_select}
 \title{Create an \code{smq_select} object}
 \usage{
-smq_select(name = NULL, id = NULL)
+smq_select(name = NULL, id = NULL, scope = NULL)
 }
 \arguments{
-\item{name}{Name of the query used to select the definition of the query
-from the central database.
+\item{name}{Name of the query used to select the definition of the query.}
 
-The query with \code{BASKET_NAME == "<specified value>"} is selected.}
+\item{id}{Identifier of the query used to select the definition of the query.}
 
-\item{id}{Identifier of the query used to select the definition of the query
-from the central database.
+\item{scope}{Scope of the query used to select the definition of the query.
 
-The query with \verb{REFERENCE_NO == <specified value>} is selected.}
+\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}}
 }
 \value{
 An object of class "smq_select".
@@ -24,7 +22,7 @@ An object of class "smq_select".
 Create an \code{smq_select} object
 }
 \details{
-Exactly one \code{name} or \code{id} must be specified.
+Exactly one of \code{name} or \code{id} must be specified.
 }
 \author{
 Stefan Bundfuss

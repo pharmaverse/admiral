@@ -4,14 +4,7 @@
 \alias{query}
 \title{Create an \code{query} object}
 \usage{
-query(
-  prefix,
-  name = auto,
-  id = NULL,
-  scope = NULL,
-  scope_num = NULL,
-  definition = NULL
-)
+query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 }
 \arguments{
 \item{prefix}{Prefix of the new variables, e.g., \code{"SMQ03"}}
@@ -32,19 +25,19 @@ the variable is set to the id of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by a \code{smq_select()}
-or \code{sdg_select()} object.}
+or \code{sdg_select()} object.
 
-\item{scope}{The variable \verb{<prefix>SC} is set to the specified value for
-observations matching the query definition if the parameter is specified.
-Otherwise the variable is not created.
+@param add_scope_num The variable \verb{<prefix>SCN} is added to the output
+dataset if the parameter is specified. Otherwise the variable is not
+created.
 
-\emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}, \code{NULL}}
+The value is set to \code{1} if the scope is broad. Otherwise, it is set to \code{2}.
 
-\item{scope_num}{The variable \verb{<prefix>SCN} is set to the specified value for
-observations matching the query definition if the parameter is specified.
-Otherwise the variable is not created.
+If the parameter is set to \code{TRUE}, the definition must be a \code{smq_select()}
+object.
 
-\emph{Permitted Values}: \code{1}, \code{2}, \code{NULL}}
+\emph{Default}: \code{FALSE}
+\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
 \item{definition}{Definition of terms belonging to the query
 
