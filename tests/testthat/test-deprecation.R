@@ -18,11 +18,9 @@ test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter 
 })
 
 test_that("a warning is issued when specifying `dthcaus_source(date_var = )", {
-  data(ae)
-
   expect_warning(
     dthcaus_source(
-      dataset = ae,
+      dataset_name = "ae",
       filter = AEOUT == "FATAL",
       date_var = AEDTHDTC,
       mode = "first",
@@ -34,11 +32,9 @@ test_that("a warning is issued when specifying `dthcaus_source(date_var = )", {
 })
 
 test_that("a warning is issued when specifying `dthcaus_source(traceabilty_vars = )", {
-  data(ae)
-
   expect_warning(
     dthcaus_source(
-      dataset = ae,
+      dataset_name = "ae",
       filter = AEOUT == "FATAL",
       date = AEDTHDTC,
       mode = "first",
@@ -51,10 +47,8 @@ test_that("a warning is issued when specifying `dthcaus_source(traceabilty_vars 
 })
 
 test_that("a warning is issued when specifying `lstalvdt_source(date_var = )", {
-  data(adsl)
-
   expect_warning(
-    lstalvdt_source(dataset = adsl, date_var = TRTEDT),
+    lstalvdt_source(dataset_name = "adsl", date_var = TRTEDT),
     "deprecated",
     fixed = TRUE
   )
