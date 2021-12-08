@@ -12,17 +12,20 @@ derive_var_lstalvdt(
 )
 }
 \arguments{
-\item{...}{Source of known alive dates. A \code{lstalvdt_source()} object is
+\item{dataset}{Input dataset
+
+The variables specified by \code{subject_keys} are required.}
+
+\item{source_datasets}{A named \code{list} containing datasets in which to search for the
+last known alive date}
+
+\item{...}{Source(s) of known alive dates. One or more \code{lstalvdt_source()} object are
 expected.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
-
-\item{dataset_name}{Input dataset
-
-The \code{USUBJID} variable is expected.}
 }
 \value{
 The input dataset with the \code{LSTALVDT} variable added.
@@ -79,7 +82,10 @@ lb_date <- lstalvdt_source(
 adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
 
 dm \%>\%
-  derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) \%>\%
+  derive_var_lstalvdt(
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    ae_start, ae_end, lb_date, adsl_date
+  ) \%>\%
   select(USUBJID, LSTALVDT)
 
 # derive last alive date and traceability variables
@@ -126,11 +132,14 @@ adsl_date <- lstalvdt_source(
 )
 
 dm \%>\%
-  derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) \%>\%
+  derive_var_lstalvdt(
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    ae_start, ae_end, lb_date, adsl_date
+  ) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \author{
-Stefan Bundfuss
+Stefan Bundfuss, Thomas Neitmann
 }
 \keyword{adsl}
 \keyword{derivation}

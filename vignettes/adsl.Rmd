@@ -361,7 +361,7 @@ study requirement.
 
 `dthcause_source()` specifications:
 
-- `dataset`: the dataset to search for death information,
+- `dataset_name`: the name of the dataset where to search for death information,
 - `filter`: the condition to define death,
 - `date`: the date of death,
 - `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
@@ -373,7 +373,7 @@ An example call to define the sources would be:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -391,7 +391,7 @@ dataset_vignette(
 
 ```{r eval=TRUE}
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -411,7 +411,7 @@ Once the sources are defined, the function `derive_var_dthcaus()` can be used to
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds)
+  derive_var_dthcaus(source_dataset = list(ae = ae, ds = ds), src_ae, src_ds)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -429,7 +429,7 @@ arguments:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -438,7 +438,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -447,7 +447,7 @@ src_ds <- dthcaus_source(
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds)
+  derive_var_dthcaus(source_dataset = list(ae = ae, ds = ds), src_ae, src_ds)
 
 ```
 
@@ -503,7 +503,7 @@ correctly defined.
 
 `lstalvdt_source()` specifications:
 
-- `dataset`: the dataset to search for date information,
+- `dataset_name`: the name of the dataset where to search for date information,
 - `filter`: the filter to apply on the datasets,
 - `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
@@ -514,22 +514,22 @@ An example could be :
 
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST"
 )
 ae_src2 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST"
 )
 lb_src <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
 adsl_src <- lstalvdt_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = TRTEDT
 )
 ```
@@ -538,8 +538,10 @@ Once the sources are defined, the function `derive_var_lstalvdt()` can be used t
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_lstalvdt(ae_src1, ae_src2, lb_src, adsl_src)
-
+  derive_var_lstalvdt(
+    source_dataset = list(ae = ae, adsl = adsl, lb = lb),
+    ae_src1, ae_src2, lb_src, adsl_src
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -555,38 +557,43 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_src2 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_src <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 adsl_src <- lstalvdt_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
-  derive_var_lstalvdt(ae_src1, ae_src2, lb_src, adsl_src)
+  derive_var_lstalvdt(
+    source_dataset = list(ae = ae, adsl = adsl, lb = lb),
+    ae_src1, ae_src2, lb_src, adsl_src
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , 
-                 display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR), 
-                 filter =  !is.na(TRTSDT))
+dataset_vignette(
+  adsl, 
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR), 
+  filter =  !is.na(TRTSDT)
+)
 ```
  
 

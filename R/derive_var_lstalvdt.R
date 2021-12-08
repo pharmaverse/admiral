@@ -2,11 +2,14 @@
 #'
 #' Add the last known alive date (`LSTALVDT`) to the dataset.
 #'
-#' @param dataset_name Input dataset
+#' @param dataset Input dataset
 #'
-#'   The `USUBJID` variable is expected.
+#'   The variables specified by `subject_keys` are required.
 #'
-#' @param ... Source of known alive dates. A `lstalvdt_source()` object is
+#' @param source_datasets A named `list` containing datasets in which to search for the
+#'   last known alive date
+#'
+#' @param ... Source(s) of known alive dates. One or more `lstalvdt_source()` object are
 #'   expected.
 #'
 #' @param subject_keys Variables to uniquely identify a subject
@@ -36,7 +39,7 @@
 #'   variable) from the single dataset is selected and the new variable is
 #'   merged to the input dataset. }
 #'
-#' @author Stefan Bundfuss
+#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @return The input dataset with the `LSTALVDT` variable added.
 #'
@@ -70,7 +73,10 @@
 #' adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
 #'
 #' dm %>%
-#'   derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) %>%
+#'   derive_var_lstalvdt(
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     ae_start, ae_end, lb_date, adsl_date
+#'   ) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
 #' # derive last alive date and traceability variables
@@ -117,7 +123,10 @@
 #' )
 #'
 #' dm %>%
-#'   derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) %>%
+#'   derive_var_lstalvdt(
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     ae_start, ae_end, lb_date, adsl_date
+#'   ) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 derive_var_lstalvdt <- function(dataset,
                                 source_datasets,
@@ -211,7 +220,8 @@ derive_var_lstalvdt <- function(dataset,
 
 #' Create an `lstalvdt_source` object
 #'
-#' @param dataset_name A data.frame containing a source dataset.
+#' @param dataset_name The name of the dataset, i.e. a string, used to search for
+#'   the last known alive date.
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'

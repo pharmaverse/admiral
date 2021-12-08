@@ -14,7 +14,8 @@ lstalvdt_source(
 )
 }
 \arguments{
-\item{dataset_name}{A data.frame containing a source dataset.}
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the last known alive date.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 

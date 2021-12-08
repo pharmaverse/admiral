@@ -16,7 +16,8 @@ dthcaus_source(
 )
 }
 \arguments{
-\item{dataset_name}{A data.frame containing a source dataset.}
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the death cause.}
 
 \item{filter}{An expression used for filtering \code{dataset}.}
 

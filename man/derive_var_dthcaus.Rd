@@ -12,14 +12,19 @@ derive_var_dthcaus(
 )
 }
 \arguments{
+\item{dataset}{Input dataset.
+
+The variables specified by \code{subject_keys} are required.}
+
+\item{source_datasets}{A named \code{list} containing datasets in which to search for the
+last known alive date}
+
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
-
-\item{dataset_name}{Input dataset. \code{USUBJID} is an expected column.}
 }
 \value{
 The input dataset_name with \code{DTHCAUS} variable added.
@@ -68,7 +73,7 @@ src_ds <- dthcaus_source(
   dthcaus = DSTERM
 )
 
-derive_var_dthcaus(adsl, src_ae, src_ds)
+derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
 
 # Derive `DTHCAUS` and add traceability variables
 src_ae <- dthcaus_source(
@@ -95,7 +100,7 @@ derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_d
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 }
 \author{
-Shimeng Huang, Samia Kabi
+Shimeng Huang, Samia Kabi, Thomas Neitmann
 }
 \keyword{adsl}
 \keyword{derivation}

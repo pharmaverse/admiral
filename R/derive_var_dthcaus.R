@@ -2,7 +2,12 @@
 #'
 #' Derive death cause (`DTHCAUS`) and add traceability variables if required.
 #'
-#' @param dataset_name Input dataset. `USUBJID` is an expected column.
+#' @param dataset Input dataset.
+#'
+#'   The variables specified by `subject_keys` are required.
+#'
+#' @param source_datasets A named `list` containing datasets in which to search for the
+#'   last known alive date
 #'
 #' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
 #'
@@ -21,7 +26,7 @@
 #' @keywords derivation adsl
 #'
 #' @author
-#' Shimeng Huang, Samia Kabi
+#' Shimeng Huang, Samia Kabi, Thomas Neitmann
 #'
 #' @return The input dataset_name with `DTHCAUS` variable added.
 #'
@@ -63,7 +68,7 @@
 #'   dthcaus = DSTERM
 #' )
 #'
-#' derive_var_dthcaus(adsl, src_ae, src_ds)
+#' derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
 #'
 #' # Derive `DTHCAUS` and add traceability variables
 #' src_ae <- dthcaus_source(
@@ -177,7 +182,8 @@ derive_var_dthcaus <- function(dataset,
 
 #' Create an `dthcaus_source` object
 #'
-#' @param dataset_name A data.frame containing a source dataset.
+#' @param dataset_name The name of the dataset, i.e. a string, used to search for
+#'   the death cause.
 #'
 #' @param filter An expression used for filtering `dataset`.
 #'
