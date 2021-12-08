@@ -33,6 +33,9 @@
 #'
 #'   Default is `"00:00:00"`.
 #'
+#'
+#'
+#'
 #' @param min_dates Minimum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not
@@ -415,6 +418,12 @@ compute_dtf <- function(dtc, dt) {
 #'
 #'   A datetime object is expected.
 #'
+#' @param ignore_seconds
+#'
+#'  A logical value
+#'
+#'   Default: `FALSE`
+#'
 #' @author Samia Kabi
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
@@ -427,8 +436,12 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-compute_tmf <- function(dtc, dtm) {
+compute_tmf <- function(dtc,
+                        dtm,
+                        ignore_seconds = FALSE) {
+
   assert_that(is.character(dtc), is_date(dtm))
+  assert_logical_scalar(ignore_seconds)
 
   is_na <- is.na(dtm)
   n_chr <- nchar(dtc)
@@ -436,7 +449,8 @@ compute_tmf <- function(dtc, dtm) {
   warn_if_invalid_dtc(dtc, valid_dtc)
 
   case_when(
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+    (ignore_seconds) ~ NA_character_,
+    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc | ignore_seconds ~ NA_character_,
     n_chr == 16 ~ "S",
     n_chr == 13 ~ "M",
     n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
@@ -462,6 +476,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   A logical value
 #'
 #'   Default: `TRUE`
+#'
 #'
 #' @inheritParams impute_dtc
 #'
@@ -614,6 +629,10 @@ derive_vars_dt <- function(dataset,
 #'
 #' Default: "auto"
 #'
+#' @param ignore_seconds Defaults to FALSE.  If seconds is not collected in the data,
+#' then users can make use of this parameter.  Setting it to TRUE will remove seconds
+#' from the output and prevent a flag from being displayed.
+#'
 #' @inheritParams impute_dtc
 #'
 #' @details
@@ -675,7 +694,8 @@ derive_vars_dtm <- function(dataset,
                             time_imputation = "00:00:00",
                             flag_imputation = "auto",
                             min_dates = NULL,
-                            max_dates = NULL) {
+                            max_dates = NULL,
+                            ignore_seconds = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
