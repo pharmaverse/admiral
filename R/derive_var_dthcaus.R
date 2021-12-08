@@ -28,7 +28,7 @@
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann
 #'
-#' @return The input dataset_name with `DTHCAUS` variable added.
+#' @return The input dataset with `DTHCAUS` variable added.
 #'
 #' @export
 #'
@@ -206,6 +206,8 @@ derive_var_dthcaus <- function(dataset,
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
+#' @param dataset Deprecated, please use `dataset_name` instead.
+#'
 #' @param date_var Deprecated, please use `date` instead.
 #'
 #' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
@@ -225,6 +227,7 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL,
+                           dataset = deprecated(),
                            date_var = deprecated(),
                            traceabilty_vars = deprecated()) {
   if (!missing(date_var)) {
@@ -238,6 +241,10 @@ dthcaus_source <- function(dataset_name,
       "dthcaus_source(traceability_vars = )"
     )
     traceability_vars <- traceabilty_vars
+  }
+  if (!missing(dataset)) {
+    deprecate_warn("0.6.0", "dthcaus_source(dataset = )", "dthcaus_source(dataset_name = )")
+    dataset_name <- deparse(substitute(dataset))
   }
 
   out <- list(

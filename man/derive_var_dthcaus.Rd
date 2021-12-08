@@ -27,7 +27,7 @@ A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
 }
 \value{
-The input dataset_name with \code{DTHCAUS} variable added.
+The input dataset with \code{DTHCAUS} variable added.
 }
 \description{
 Derive death cause (\code{DTHCAUS}) and add traceability variables if required.

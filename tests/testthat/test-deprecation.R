@@ -169,3 +169,28 @@ test_that("an error is thrown when specifying `derive_summary_records(fns = )", 
   )
 })
 
+test_that("a warning is issued when specifying `dthcaus_source(dataset = )", {
+  expect_warning(
+    dthcaus_source(
+      dataset = ae,
+      filter = AEOUT == "FATAL",
+      date = AEDTHDTC,
+      mode = "first",
+      dthcaus = AEDECOD
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
+  expect_warning(
+    lstalvdt_source(
+      dataset = lb,
+      date = LBDTC,
+      filter = nchar(LBDTC) >= 10
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})

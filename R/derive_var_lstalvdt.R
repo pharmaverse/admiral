@@ -236,6 +236,8 @@ derive_var_lstalvdt <- function(dataset,
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
+#' @param dataset Deprecated, please use `dataset_name` instead.
+#'
 #' @param date_var Deprecated, please use `date` instead.
 #'
 #' @author Stefan Bundfuss
@@ -250,10 +252,15 @@ lstalvdt_source <- function(dataset_name,
                             date,
                             date_imputation = NULL,
                             traceability_vars = NULL,
+                            dataset = deprecated(),
                             date_var = deprecated()) {
   if (!missing(date_var)) {
     deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
     date <- enquo(date_var)
+  }
+  if (!missing(dataset)) {
+    deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
+    dataset_name <- deparse(substitute(dataset))
   }
 
   if (!is.null(date_imputation)) {
