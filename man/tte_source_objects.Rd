@@ -51,4 +51,4 @@ R console, e.g. \code{print(death_event)}.
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
 }
-\keyword{datasets}
+\keyword{tte_source}

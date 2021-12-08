@@ -43,7 +43,7 @@ knitr::opts_chunk$set(
 ##### Why did we use **R as a programming language**?
 
  * R is not an isolated software product, everyone can contribute (open source principal)
- * People from Universitiy/Statistical talent pipeline more likely to come through with R skills rather than a proprietary language 
+ * People from University/Statistical talent pipeline more likely to come through with R skills rather than a proprietary language 
  * There seems to be a strong data science/analytics R community
  * FDA open to accepting R submissions and are heavy users themselves
  * Top of the line visualization/graphics - R-Shiny for interactive data displays and also R Markdown offers great report writing functionality
@@ -82,12 +82,14 @@ knitr::opts_chunk$set(
  * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
  * Users can add to the  tests or provide additional feedback.
 
-##### What will be provided around **function testing**? 
+##### What will be provided around **function testing**?
+
  * Unit tests for reliability of each function - available as part of open source release
  * Some integration testing will be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)
  * Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
    * validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence 
    * strategy of how the use of admiral fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)
+   * see our guidance on [unit testing](unit_testing_guidance.html)
 
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
@@ -108,23 +110,10 @@ knitr::opts_chunk$set(
 
 ##### Will there be a user/**contribution** guide?
 
- * All admiral information can be found on the [github webpage](https://roche-gsk.github.io/admiral/articles/admiral.html).
- * Our programming strategy serves as a framework for users on how to create their own functions: [contribution guide](https://roche-gsk.github.io/admiral/articles/contributing.html).
-
-##### What would a **contribution model** look like? 
-
-  * **This is still under discussion and below is a very early draft proposal to provide an idea**
-    * There are 2 levels as explained below, but the target is always to store things at the highest possible level. 
-    * Each level would be heavily dependent on select leads, and so succession planning always needs to be considered.
-
-  * **Core level - {admiral} package** 
-    * for core standard functions developed by the initial Roche/GSK development team via pull requests stored in a dedicated open Github repo
-    * control of master branch would be kept with a select limited number of technical leads 
-
-  * **Company-specific level - e.g. {admiral.roche} & {admiral.gsk} packages** 
-    * mainly for plug-ins to connect with company interfaces (e.g. metadata links with MDRs or MedDRA baskets)
-    * control of master branch is recommended to be kept with a select limited number of company reps for each respective company repo 
-
-   
+ 
+ * Our [programming strategy](programming_strategy.html) serves as a framework
+ for users how to create their own functions.
+ 
+ * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
 

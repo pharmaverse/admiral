@@ -73,22 +73,15 @@ reference:
   contents:
   - has_keyword('source_specifications')
 
-- title: SDTM Datasets
-- contents:
-  - ae
-  - cm
-  - dm
-  - ds
-  - ex
-  - lb
-  - mh
-  - qs
-  - starts_with("supp")
-  - ts
-  - vs
+- subtitle: Pre-Defined Time-to-Event Sources
+  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
+  contents:
+  - has_keyword('tte_source')
 
 - title: ADaM Datasets
 - contents:
+  - adae
+  - adcm
   - adsl
   - advs
   - adex
@@ -128,7 +121,9 @@ articles:
 - title: Developer Guides
   navbar: Developer Guides
   contents:
+  - contribution_model
   - programming_strategy
   - git_usage
   - writing_vignettes
   - pr_review_guidance
+  - unit_test_guidance

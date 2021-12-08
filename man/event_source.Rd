@@ -24,11 +24,27 @@ to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDO
 character string, a numeric value, or \code{NA}.}
 }
 \value{
-An object of class "event_source".
+An object of class \code{event_source}, inheriting from class \code{tte_source}
 }
 \description{
-The \code{event_source} object is used to define events as input for the
+\code{event_source} objects are used to define events as input for the
 \code{derive_param_tte()} function.
+}
+\examples{
+# Death event
+event_source(
+  dataset_name = "adsl",
+  filter = DTHFL == "Y",
+  date = DTHDT,
+  set_values_to = vars(
+    EVNTDESC = "DEATH",
+    SRCDOM = "ADSL",
+    SRCVAR = "DTHDT"
+  )
+)
+}
+\seealso{
+\code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}
 }
 \author{
 Stefan Bundfuss

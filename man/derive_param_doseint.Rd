@@ -67,7 +67,7 @@ If \code{zero_doses} = \code{Inf}:
 \enumerate{
 \item If the planned dose (\code{tpadm_code}) is 0 and administered dose
 (\code{tadm_code}) is 0, \code{NaN} is returned.
-\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+\item If the planned dose (\code{tpadm_code}) is 0 and the administered dose
 (\code{tadm_code}) is > 0, \code{Inf} is returned.
 }
 
@@ -75,7 +75,7 @@ If \code{zero_doses} = \code{100} :
 \enumerate{
 \item If the planned dose (\code{tpadm_code}) is 0 and administered dose
 (\code{tadm_code}) is 0, 0 is returned.
-\item If the planned dose (\code{tpadm_code}) is 0 and the admnistered dose
+\item If the planned dose (\code{tpadm_code}) is 0 and the administered dose
 (\code{tadm_code}) is > 0, 100 is returned.
 }}
 

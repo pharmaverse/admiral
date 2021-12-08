@@ -6,6 +6,7 @@
 #
 # Input: adsl, eg
 library(admiral)
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -34,7 +35,7 @@ param_lookup <- tibble::tribble(
   "QTCBR", "QTCBR", "QTcB - Bazett's Correction Formula Rederived (msec)", 11,
   "QTCFR", "QTCFR", "QTcF - Fridericia's Correction Formula Rederived (msec)", 12,
   "QTLCR", "QTLCR", "QTlc - Sagie's Correction Formula Rederived (msec)", 13,
-  )
+)
 
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI,

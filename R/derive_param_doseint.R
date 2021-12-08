@@ -49,13 +49,13 @@
 #' If `zero_doses` = `Inf`:
 #'   1. If the planned dose (`tpadm_code`) is 0 and administered dose
 #'   (`tadm_code`) is 0, `NaN` is returned.
-#'   2. If the planned dose (`tpadm_code`) is 0 and the admnistered dose
+#'   2. If the planned dose (`tpadm_code`) is 0 and the administered dose
 #'   (`tadm_code`) is > 0, `Inf` is returned.
 #'
 #' If `zero_doses` = `100` :
 #'   1. If the planned dose (`tpadm_code`) is 0 and administered dose
 #'   (`tadm_code`) is 0, 0 is returned.
-#'   2. If the planned dose (`tpadm_code`) is 0 and the admnistered dose
+#'   2. If the planned dose (`tpadm_code`) is 0 and the administered dose
 #'   (`tadm_code`) is > 0, 100 is returned.
 #'
 #' @inheritParams derive_derived_param

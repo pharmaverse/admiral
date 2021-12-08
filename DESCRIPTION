@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
@@ -15,10 +15,13 @@ Authors@R: c(
     person("Teckla", "Akinyi", role = "aut"),
     person("Eric", "Simms", email = "eric.m.simms@gsk.com", role = "aut"),
     person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut"),
-    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut")
+    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut"),
+    person("Hamza", "Rahal", role = "aut"),
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
+    person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
 Description: A toolbox for programming ADaM datasets in R.
-License: file LICENSE
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

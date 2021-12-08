@@ -158,7 +158,7 @@ impute_dtc <- function(dtc,
     # check input for date_imputation
     assert_that(is_valid_date_entry(date_imputation))
 
-    # Specific setup for FISRT/MID/LAST
+    # Specific setup for FIRST/MID/LAST
     # make keywords case-insensitive
     date_imputation <- str_to_upper(date_imputation)
     if (date_imputation %in% c("FIRST", "MID", "LAST")) {
@@ -514,7 +514,9 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @inheritParams impute_dtc
 #'
-#' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
+#' @return
+#' The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'`
+#' if requested) added.
 #'
 #' @details
 #' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
