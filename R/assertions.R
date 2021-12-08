@@ -1277,7 +1277,7 @@ assert_varval_list <- function(arg,
     abort(err_msg)
   }
 
-  if (accept_var & (!is_vars(arg))) {
+  if (accept_var & (!contains_vars(arg))) {
     err_msg <- sprintf(
       paste0(
         "`%s` must be a list of quosures where each element is ",
@@ -1344,6 +1344,10 @@ assert_varval_list <- function(arg,
   }
 
   invisible(arg)
+}
+
+contains_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }
 
 is_vars <- function(arg) {
