@@ -5,7 +5,7 @@
 \title{Create an \code{dthcaus_source} object}
 \usage{
 dthcaus_source(
-  dataset,
+  dataset_name,
   filter,
   date,
   mode = "first",
@@ -16,7 +16,7 @@ dthcaus_source(
 )
 }
 \arguments{
-\item{dataset}{A data.frame containing a source dataset.}
+\item{dataset_name}{A data.frame containing a source dataset.}
 
 \item{filter}{An expression used for filtering \code{dataset}.}
 

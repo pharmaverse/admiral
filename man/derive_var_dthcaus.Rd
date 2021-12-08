@@ -4,21 +4,25 @@
 \alias{derive_var_dthcaus}
 \title{Derive Death Cause}
 \usage{
-derive_var_dthcaus(dataset, ..., subject_keys = vars(STUDYID, USUBJID))
+derive_var_dthcaus(
+  dataset,
+  source_datasets,
+  ...,
+  subject_keys = vars(STUDYID, USUBJID)
+)
 }
 \arguments{
-\item{dataset}{Input dataset.
-The variables specified by the \code{subject_keys} parameter are expected.}
-
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
+
+\item{dataset_name}{Input dataset. \code{USUBJID} is an expected column.}
 }
 \value{
-The input dataset with \code{DTHCAUS} variable added.
+The input dataset_name with \code{DTHCAUS} variable added.
 }
 \description{
 Derive death cause (\code{DTHCAUS}) and add traceability variables if required.
@@ -49,7 +53,7 @@ ds <- tibble::tribble(
 
 # Derive `DTHCAUS` only
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AEDTHDTC,
   mode = "first",
@@ -57,7 +61,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -68,7 +72,7 @@ derive_var_dthcaus(adsl, src_ae, src_ds)
 
 # Derive `DTHCAUS` and add traceability variables
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AEDTHDTC,
   mode = "first",
@@ -77,7 +81,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -85,14 +89,13 @@ src_ds <- dthcaus_source(
   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
-derive_var_dthcaus(adsl, src_ae, src_ds)
+derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
 }
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 }
 \author{
-Shimeng Huang
-Samia Kabi
+Shimeng Huang, Samia Kabi
 }
 \keyword{adsl}
 \keyword{derivation}
