@@ -1,4 +1,4 @@
-context("test-derive_vars_dtm")
+
 
 input <- tibble::tribble(
   ~XXSTDTC,
@@ -11,7 +11,7 @@ input <- tibble::tribble(
   "2019---07"
 )
 
-test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF", {
+test_that("default: no date imputation, time part set to 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),  NA_character_,
