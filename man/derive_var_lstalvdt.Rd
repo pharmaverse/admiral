@@ -4,13 +4,14 @@
 \alias{derive_var_lstalvdt}
 \title{Derive Last Known Alive Date}
 \usage{
-derive_var_lstalvdt(dataset, ..., subject_keys = vars(STUDYID, USUBJID))
+derive_var_lstalvdt(
+  dataset,
+  source_datasets,
+  ...,
+  subject_keys = vars(STUDYID, USUBJID)
+)
 }
 \arguments{
-\item{dataset}{Input dataset
-
-The \code{USUBJID} variable is expected.}
-
 \item{...}{Source of known alive dates. A \code{lstalvdt_source()} object is
 expected.}
 
@@ -18,6 +19,10 @@ expected.}
 
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
+
+\item{dataset_name}{Input dataset
+
+The \code{USUBJID} variable is expected.}
 }
 \value{
 The input dataset with the \code{LSTALVDT} variable added.
@@ -57,29 +62,29 @@ data("lb")
 data("adsl")
 
 ae_start <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first"
 )
 ae_end <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first"
 )
 lb_date <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10
 )
-adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
+adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
 
 dm \%>\%
-  derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) \%>\%
+  derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) \%>\%
   select(USUBJID, LSTALVDT)
 
 # derive last alive date and traceability variables
 ae_start <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first",
   traceability_vars = vars(
@@ -90,7 +95,7 @@ ae_start <- lstalvdt_source(
 )
 
 ae_end <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first",
   traceability_vars = vars(
@@ -100,7 +105,7 @@ ae_end <- lstalvdt_source(
   )
 )
 lb_date <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
   traceability_vars = vars(
@@ -111,7 +116,7 @@ lb_date <- lstalvdt_source(
 )
 
 adsl_date <- lstalvdt_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = TRTEDT,
   traceability_vars = vars(
     LALVDOM = "ADSL",
@@ -121,7 +126,7 @@ adsl_date <- lstalvdt_source(
 )
 
 dm \%>\%
-  derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) \%>\%
+  derive_var_lstalvdt(source_datasets = list(adsl = adsl, ae = ae, lb = lb), ae_start, ae_end, lb_date, adsl_date) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \author{

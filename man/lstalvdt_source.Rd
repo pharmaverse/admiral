@@ -5,7 +5,7 @@
 \title{Create an \code{lstalvdt_source} object}
 \usage{
 lstalvdt_source(
-  dataset,
+  dataset_name,
   filter = NULL,
   date,
   date_imputation = NULL,
@@ -14,7 +14,7 @@ lstalvdt_source(
 )
 }
 \arguments{
-\item{dataset}{A data.frame containing a source dataset.}
+\item{dataset_name}{A data.frame containing a source dataset.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
