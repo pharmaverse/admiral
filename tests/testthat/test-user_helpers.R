@@ -16,4 +16,3 @@ test_that("package templates can be used", {
     readLines(file)
   )
 })
-
