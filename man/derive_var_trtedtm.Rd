@@ -8,7 +8,8 @@ derive_var_trtedtm(
   dataset,
   dataset_ex,
   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) &
-    nchar(EXENDTC) >= 10
+    nchar(EXENDTC) >= 10,
+  subject_keys = vars(STUDYID, USUBJID)
 )
 }
 \arguments{
@@ -21,7 +22,7 @@ The variables specified by the \code{by_vars} parameter are expected.}
 The variables \code{EXENDTC}, \code{EXSEQ}, and those specified by the \code{filter_ex}
 parameter are expected.}
 
-\item{filter_ex}{Fiter condition for the ex dataset
+\item{filter_ex}{Filter condition for the ex dataset
 
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
@@ -29,6 +30,11 @@ are considered for the treatment start date.
 Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
 
 Permitted Values: logical expression}
+
+\item{subject_keys}{Variables to uniquely identify a subject
+
+A list of quosures where the expressions are symbols as returned by
+\code{vars()} is expected.}
 }
 \value{
 The input dataset with \code{TRTEDTM} variable added
@@ -43,6 +49,7 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("ex")
 data("dm")
 

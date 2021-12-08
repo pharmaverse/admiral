@@ -74,12 +74,15 @@ Add a variable flagging the first or last observation within each by group
 }
 \details{
 For each group (with respect to the variables specified for the
-\code{by_vars} parameter) the first or last observation (with respect to the
-order specified for the \code{order} parameter and the flag mode) is included in
-the output dataset.
+\code{by_vars} parameter), \code{new_var} is set to "Y" for the first or last observation
+(with respect to the order specified for the \code{order} parameter and the flag mode
+specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
+are considered for flagging.
+Otherwise, \code{new_var} is set to \code{NA}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -162,7 +165,6 @@ derive_extreme_flag(
   mode = "last",
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
-
 }
 \author{
 Stefan Bundfuss

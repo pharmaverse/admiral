@@ -37,7 +37,7 @@ The duration is derived in the specified unit
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
 
 \item{floor_in}{Round down input dates?
 

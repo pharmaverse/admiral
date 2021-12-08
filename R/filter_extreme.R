@@ -50,6 +50,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
+#' library(admiral.test)
 #' data("ex")
 #'
 #' # Select first dose for each patient

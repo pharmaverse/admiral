@@ -56,6 +56,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data(ae)
 #' data(ex_single)
 #'

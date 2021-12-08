@@ -16,7 +16,7 @@ is_valid_hour(arg)
 Hours are expected to range from 0 to 23
 }
 \examples{
-assertthat::assert_that(is_valid_hour(20))
+assertthat::assert_that(admiral:::is_valid_hour(20))
 }
 \author{
 Samia Kabi

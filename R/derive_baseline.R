@@ -10,7 +10,15 @@
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `BASE` variable
 #'
+#' @details
+#' For each `by_vars` group the baseline record is identified by filtering using the
+#' condition `ABLFL == "Y"`. Subsequently, every value of the `BASE` variable for the `by_vars`
+#' group is set to the value of the `AVAL` variable of the baseline record. In case there
+#' are multiple baseline records within `by_vars` an error is issued.
+#'
 #' @export
+#'
+#' @seealso [derive_var_basec()], [derive_baseline()]
 #'
 #' @author Thomas Neitmann
 #'
@@ -41,7 +49,15 @@ derive_var_base <- function(dataset, by_vars) {
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `BASEC` variable
 #'
+#' @details
+#' For each `by_vars` group the baseline record is identified by filtering using the
+#' condition `ABLFL == "Y"`. Subsequently, every value of the `BASEC` variable for the `by_vars`
+#' group is set to the value of the `AVALC` variable of the baseline record. In case there
+#' are multiple baseline records within `by_vars` an error is issued.
+#'
 #' @export
+#'
+#' @seealso [derive_var_base()], [derive_baseline()]
 #'
 #' @author Thomas Neitmann
 #'
@@ -76,11 +92,19 @@ derive_var_basec <- function(dataset, by_vars) {
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `new_var` variable.
 #'
+#' @details
+#' For each `by_vars` group the baseline record is identified by filtering using the
+#' condition `ABLFL == "Y"`. Subsequently, every value of the `new_var` variable for the `by_vars`
+#' group is set to the value of the `source_var` variable of the baseline record. In case there
+#' are multiple baseline records within `by_vars` an error is issued.
+#'
 #' @export
 #'
 #' @author Thomas Neitmann
 #'
 #' @keywords bds derivation
+#'
+#' @seealso [derive_var_base()], [derive_var_basec()]
 #'
 #' @examples
 #' dataset <- tibble::tribble(

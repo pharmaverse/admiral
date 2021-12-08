@@ -33,37 +33,39 @@ These contributions could include, for example, company specific derivations of 
 * Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an admiral function or a company specific function.
 * Admiral functions can be re-used for company specific functions.
 * Each function belongs to a category or multiple categories.
-* Each function that is used to derive a or multiple variable(s) requires to be unit tested.
+* Each function that is used to derive one or multiple variable(s) is required to be unit tested.
 * Functions do have a naming convention.
-* Double coding is not used as a QC method (only if absolutely necessary)
-* ADaMs are created including readable code and submission ready.
+* Double coding is not used as a QC method (only if absolutely necessary).
+* ADaMs are created with readable, submission-ready code.
 
 
 # Categorization of Functions
 
-The functions are categorized by keywords. The keywords can be specified in the function header via the `@keywords` field. 
-Each function must use at least one of the following keywords.
+The functions are categorized by keywords. The keywords can be specified in the
+function header via the `@keywords` field. Each function must use at least one
+of the following keywords. Please note that the keywords are handled
+case-sensitive. Thus they must be in lower case.
 
 | Keyword                                                                           | Description                                                                                                              |
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| general_utility                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
-| getadata                                                                          | A function that provides Metadata functionality.                                                                         |
-| derivation                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
-| assertion                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
-| warning                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
-| predicate                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
-| Across ADaM dataset structures keywords: ADaM                                     | A function that is applicable across ADaM datasets.                                                                      |
-| ADaM dataset structure specific keywords: ADSL, OCCDS, BDS, OTHER                 | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
-| ADaM dataset specific keywords:  ADEX, ADLB, ...                                  | A function specific to a ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
-| timing                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
-| computation                                                                       | Function which performs a computation that is used by other functions to derive a ADaM variable                          |
-| Therapeutic Area specific functions: Oncology, Infectious Diseases, Neuroscience  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
+| `general_utility`                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
+| `metadata`                                                                          | A function that provides Metadata functionality.                                                                         |
+| `derivation`                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
+| `assertion`                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
+| `warning`                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
+| `predicate`                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
+| Across ADaM dataset structures keywords: `adam`                                     | A function that is applicable across ADaM datasets.                                                                      |
+| ADaM dataset structure specific keywords: `adls`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
+| ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
+| `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
+| `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
+| Therapeutic Area specific functions: `oncology`, `infectious_diseases`, `neuroscience`  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
 | Company specific keywords                                                         |                                                                                                                          |
 
 
 # Functions in R
 
-Functions in admiral must follow the modular approach, i.e., functions which add
+Functions in admiral must follow the modular approach, i.e. functions which add
 variables should add only a single variable except if other variables are
 closely related to the derived variable and can not be derived without it. For
 example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
@@ -76,9 +78,9 @@ derive only one of them.
 
 ## Input, Output, and Side-effects
 
-* The behavior of the function is only determined by its input, not by any global object. 
-I.e., all input like datasets, variable names, options, … must be provided to the function by parameters.
-* It is expected that the input datasets are not grouped. If not, the function must issue an error.
+* The behavior of the function is only determined by its input, not by any global object,  
+i.e. all input like datasets, variable names, options, … must be provided to the function by parameters.
+* It is expected that the input datasets are not grouped. If any are grouped, the function must issue an error.
 * If a function requires grouping, the function must provide the by_vars parameter.
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
@@ -193,7 +195,7 @@ Parameters which expect a boolean or boolean vector must start with a verb, e.g.
 | `filter`         | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                         |
 | `start_date`     | The start date of an event/interval. Expects a date object.                                                        |
 | `end_date`       | The end date of an event/interval. Expects a date object.                                                          |
-| `start_dtc`      |                                                                                                                    |
+| `start_dtc`      | (Partial) start date/datetime in ISO 8601 format.                                                                                                                    |
 | `dtc`            | (Partial) date/datetime in ISO 8601 format.                                                                        |
 | `date`           | Date of an event / interval. Expects a date object.                                                                |
 | `set_values_to`  | List of variable name-value pairs.                                                                                 |
@@ -207,10 +209,10 @@ The [lintr](https://github.com/jimhester/lintr) package will be used to check an
 
 ## Input Checking
 
-In line with the [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) design principle 
+In line with the [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) design principle, 
 function inputs should be checked for validity 
-and if there’s an invalid input the function should stop immediately with an error. 
-An exception is the case where a variable to-be-added by a function already exists in the input dataset: 
+and, if there’s an invalid input, the function should stop immediately with an error. 
+An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
 Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in `R/assertions.R`. 
@@ -220,21 +222,21 @@ For the most common types of input parameters like a single variable, a list of
 variables, a dataset, ... functions for checking are available (see
 [assertions](../reference/index.html#section-assertions)).
 
-Parameter which expect keywords should handle them case-insensitive, e.g., both
+Parameters which expect keywords should handle them in a case-insensitive manner, e.g., both
 `date_imputation = "FIRST"` and `date_imputation = "first"` should be accepted.
-The `assert_character_scalar()` functions helps handling parameters
-case-insensitive.
+The `assert_character_scalar()` function helps with handling parameters in a 
+case-insensitive manner.
 
-A parameter should not be checked in outer function if the parameter name is the same as in the inner function. 
+A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. 
 This rule is applicable only if both functions are part of admiral.
 
 
 ## Function Header (Documentation)
 
 Every function that is exported from the package must have an accompanying header 
-that should be formatted according to the [roxygen2](https://CRAN.R-project.org/package=pkgname) convention. 
+that should be formatted according to the [roxygen2](https://roxygen2.r-lib.org/) convention. 
 
-In addition to the roxygen2 parameters `@author` and `@keywords` are added in addition. 
+In addition to the roxygen2 parameters, `@author` and `@keywords` are also used. 
 
 Author is the owner of the function while the keywords are used to categorize the function. 
 Please see section "Categorization of functions".
@@ -244,7 +246,7 @@ An example is given below:
 ```{r, eval=F}
 #' Derive Analysis Study Day
 #'
-#' Adds the analysis study day (`ADY`) to the dataset, i.e., study day #' of analysis date.
+#' Adds the analysis study day (`ADY`) to the dataset, i.e. study day #' of analysis date.
 #'
 #' @param dataset Input dataset
 #'
@@ -264,7 +266,7 @@ An example is given below:
 #'   The default is `ADT`
 #'
 #' @details The study day is derived as number of days from the start date
-#'   to the end date. If it is non-negative, one is added. I.e., the study day of the
+#'   to the end date. If it is non-negative, one is added, i.e. the study day of the
 #'   start date is 1.
 #'
 #' @author Stefan Bundfuss
@@ -295,11 +297,11 @@ If the expected input is a dataset then the required variables should be clearly
 * `@keyword`: One or more keywords applicable to the function.
 * `@return`: A description of the return value of the function. 
 Any newly added variable(-s) should be mentioned here.
-* `@examples`: A fully-self contained example of how to use the function. 
-Self-contained means that if this code is executed in a new R session it will run without errors. 
-That requires any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
+* `@examples`: A fully self-contained example of how to use the function. 
+Self-contained means that, if this code is executed in a new R session, it will run without errors. 
+That means any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
 If a dataset is created in the example, it should be done so using the function `tibble::tribble()`. 
-Make sure to align columns as well. This ensures quick code readability. 
+Make sure to align columns as this ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to
 maintain. For example if the same parameter with the same description is used by
@@ -323,21 +325,21 @@ easier to maintain the headers.
 Variable names, expressions, functions, and any other code must be enclosed
 which backticks. This will render it as code.
 
-For functions which derive a specific CDISC variable (i.e., those starting with
-`derive_var_`). The title must state the label of the variable without the
+For functions which derive a specific CDISC variable (i.e. those starting with
+`derive_var_`), the title must state the label of the variable without the
 variable name. The variable should be stated in the description.
 
 # Missing values
 
 Missing values (`NA`s) need to be explicitly shown.
 
-Regarding character vectors converted from SAS files: SAS treats missing values as blank. 
+Regarding character vectors converted from SAS files: SAS treats missing character values as blank. 
 Those are imported into R as empty strings (`""`) although in nature they are missing values (`NA`). 
 All empty strings that originate like this need to be converted to proper R missing values `NA`.
 
 # File Structuring
 
-Organizing function into files is more of an art than a science.
+Organizing functions into files is more of an art than a science.
 Thus, there are no hard rules but just recommendations.
 First and foremost, there are two extremes that should be avoided:
 putting each function into its own file and putting all functions into a single file.
@@ -357,7 +359,7 @@ It is the responsibility of both the author of a new function and reviewer to en
 Package dependencies have to be documented in the `DESCRIPTION` file. 
 If a package is used only in examples and/or unit tests then it should be listed in `Suggests`, otherwise in `Imports`.
 
-Functions from other packages have to be explicitly imported by using the` @importFrom` tag in the `R/admiral-package.R` file. 
+Functions from other packages have to be explicitly imported by using the `@importFrom` tag in the `R/admiral-package.R` file. 
 To import the `if_else()` and `mutate()` function from `dplyr` the following line would have to be included in that file:
 `#' @importFrom dplyr if_else mutate`.
 
@@ -372,14 +374,14 @@ where the labels are stored.
 
 # Unit Testing
 
-Any function require a set of unit tests to verify they produce the expected result. 
+A function requires a set of unit tests to verify it produces the expected result. 
 If a function is defined in a file named `R/derive_baseline.R` then its accompanying unit tests should be stored in `tests/testthat/test-derive_baseline.R`.
 
 The testing framework to be used is [testthat](https://testthat.r-lib.org/).
 
 Unit tests should cover the functionality of the function.
 If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
-This should be tested by the unit tests of g, i.e., unit tests should be added at the lowest level.
+This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
 
 The input and expected output for the unit tests must follow the following rules:
 
@@ -391,6 +393,85 @@ If a dataset needs to be created for testing purpose, it should be done so using
 Make sure to align columns as well. This ensures quick code readability. 
 
 If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+
+# Deprecation
+
+As admiral is still evolving, functions or parameters may need to be removed or replaced with more 
+efficient options from one release to another. In such cases, the relevant function or parameter 
+must be marked as deprecated. A warning will be issued until the next release and an error will be 
+generated thereafter. Information about deprecation timelines must be added to the warning/error message.
+
+## Documentation
+
+If a function or parameter is removed, the documentation must be updated to indicate the function 
+or the parameter is now deprecated and which new function/parameter should be used instead.
+
+The documentation will be updated at:
+
++ the description level for a function, 
+
+```
+#' Title of the function
+#'
+#' @description
+#'*Deprecated*, please use `new_fun()` instead.
+#' description of the function in plain English
+``` 
+
++ the `@param` level for a parameter.
+
+```
+@param old_param *Deprecated*, please use `new_param` instead.
+```
+
+## Handling of warning and error
+
+When a function or parameter is deprecated, the function must be updated to issue an error or a 
+warning to inform the user.
+
+### Function
+
+If the deprecated function still exists in the package besides the new function, a **warning** must be
+issued. If if it has been removed, an **error** must be generated.
+
+```
+### BEGIN DEPRECATION
+# Warning if the deprecated function still exists
+deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
+
+# Error if the deprecated function does not exist anymore
+deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
+### END DEPRECATION
+```
+
+### Parameter
+
+If a parameter is removed and is not replaced, an **error** must be generated:
+
+```
+### BEGIN DEPRECATION
+  if (!missing(old_param)) {
+    deprecate_stop("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+  }
+### END DEPRECATION
+```
+
+If the parameter is renamed or replaced, a **warning** must be issued and the new parameter takes 
+the value of the old parameter until the next release. 
+Note: parameters which are not passed as `vars()` argument (e.g. `new_var = VAR1` or `filter = AVAL >10`)
+will need to be quoted. 
+
+``` 
+### BEGIN DEPRECATION
+  if (!missing(old_param)) {
+    deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
+    # old_param is given using vars()
+    new_param <- old_param
+    # old_param is NOT given using vars()
+    new_param <- enquo(old_param)
+  }
+### END DEPRECATION
+```
 
 
 # Best Practices and Hints
@@ -420,7 +501,7 @@ This guidance is built on the assumption that each ADaM dataset will have one R 
 
 ## Header for the main R-Script
 
-The main R-script would contain all functional calls to create the ADaM dataset. In the header describe the ADaM dataset that will be produced:
+The main R-script would contain all function calls to create the ADaM dataset. In the header, describe the ADaM dataset that will be produced:
 
 * Name
 * Label
@@ -453,16 +534,16 @@ the following function calls flag the special Adverse Events or a comment that h
 
 ### Code
 
-The code itself should be described in meaningful plain english, so that a reviewer can understand how the piece of code works. E.g. 
+The code itself should be described in meaningful, plain English, so that a reviewer can understand how the piece of code works, e.g. 
 
 * \# calculates the sum of scores divided by the non missing numbers of scores to calculate the average score
 
-Code within function that creates a specific variable should have a starting comment and an ending comment. E.g.
+Code within a function that creates a specific variable should have a starting comment and an ending comment, e.g.
 
 ```{r, eval=F}
 # calculate X
 # describe how the code works in meaningful plain english
- "<code>"
+"<code>"
 # end of X
 ```
 
@@ -471,8 +552,6 @@ If meaningful, comments can cover multiple variables within a piece of code
 ```{r, eval=F}
 # creates X, Y, Z
 # describe how the code works in meaningful plain english
- "<code>"
+"<code>"
 # end of X, Y, Z
-
 ```
-

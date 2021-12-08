@@ -69,11 +69,16 @@
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
-# 'Filter used to select the relevant disposition data.
-# 'It is expected that the filter restricts `dataset_ds` such that there is at most
+#' Filter used to select the relevant disposition data.
+#' It is expected that the filter restricts `dataset_ds` such that there is at most
 #' one observation per patient. An error is issued otherwise.
 #'
 #' Permitted Values: logical expression.
+#'
+#' @param subject_keys Variables to uniquely identify a subject
+#'
+#' A list of quosures where the expressions are symbols as returned by
+#' `vars()` is expected.
 #'
 #' @return the input dataset with the disposition reason(s) (`new_var` and
 #' if required `new_var_spe`) added.
@@ -87,7 +92,7 @@
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
 #'
-#' @seealso [`format_reason_default()`]
+#' @seealso [format_reason_default()]
 #' @keywords adsl
 #'
 #' @author Samia Kabi
@@ -96,6 +101,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("dm")
 #' data("ds")
 #'
@@ -135,8 +141,8 @@ derive_disposition_reason <- function(dataset,
                                       new_var_spe = NULL,
                                       reason_var_spe = NULL,
                                       format_new_vars = format_reason_default,
-                                      filter_ds) {
-
+                                      filter_ds,
+                                      subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   reason_var <- assert_symbol(enquo(reason_var))
   new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
@@ -146,6 +152,7 @@ derive_disposition_reason <- function(dataset,
   assert_data_frame(dataset)
   assert_data_frame(dataset_ds)
   warn_if_vars_exist(dataset, quo_text(new_var))
+  assert_vars(subject_keys)
 
   # Additional checks
   if (!quo_is_null(new_var_spe)) {
@@ -167,25 +174,25 @@ derive_disposition_reason <- function(dataset,
   # Process the disposition data
   ds_subset <- dataset_ds %>%
     filter(!!filter_ds) %>%
-    select(STUDYID, USUBJID, !!reason_var, !!reason_var_spe)
+    select(!!!subject_keys, !!reason_var, !!reason_var_spe)
 
   # Expect 1 record per subject in the subsetted DS - issue an error otherwise
   signal_duplicate_records(
     ds_subset,
-    by_vars = vars(STUDYID, USUBJID),
+    by_vars = subject_keys,
     msg = "The filter used for DS results in multiple records per patient"
   )
 
   # Add the status variable and derive the new dispo reason(s) in the input dataset
   if (!quo_is_null(new_var_spe)) {
     dataset %>%
-      left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
+      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
       mutate(!!new_var := format_new_vars(!!reason_var)) %>%
       mutate(!!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)) %>%
       select(-statusvar)
   } else {
     dataset %>%
-      left_join(ds_subset, by = c("STUDYID", "USUBJID")) %>%
+      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
       mutate(!!new_var := format_new_vars(!!reason_var)) %>%
       select(-statusvar)
   }

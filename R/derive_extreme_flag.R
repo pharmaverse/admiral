@@ -53,9 +53,11 @@
 #'   **Deprecated**: Please use the `filter` parameter instead.
 #'
 #' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter) the first or last observation (with respect to the
-#'   order specified for the `order` parameter and the flag mode) is included in
-#'   the output dataset.
+#'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
+#'   (with respect to the order specified for the `order` parameter and the flag mode
+#'   specified for the `mode` parameter). Only observations included by the `filter` parameter
+#'   are considered for flagging.
+#'   Otherwise, `new_var` is set to `NA`.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -67,6 +69,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -149,7 +152,6 @@
 #'   mode = "last",
 #'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
-#'
 derive_extreme_flag <- function(dataset,
                                 by_vars,
                                 order,
@@ -158,31 +160,28 @@ derive_extreme_flag <- function(dataset,
                                 filter = NULL,
                                 check_type = "warning",
                                 flag_filter = deprecated()) {
-  # handle deprecated parameter
   if (!missing(flag_filter)) {
-    deprecate_warn("0.3.0",
-                   "derive_extreme_flag(flag_filter = )",
-                   "derive_extreme_flag(filter = )")
+    deprecate_warn(
+      "0.3.0",
+      "derive_extreme_flag(flag_filter = )",
+      "derive_extreme_flag(filter = )"
+    )
     filter <- enquo(flag_filter)
   }
 
-  # checking and quoting
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
-  mode <-
-    assert_character_scalar(mode,
-                            values = c("first", "last"),
-                            case_sensitive = FALSE)
+  mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  check_type <-
-    assert_character_scalar(
-      check_type,
-      values = c("none", "warning", "error"),
-      case_sensitive = FALSE)
+  check_type <- assert_character_scalar(
+    check_type,
+    values = c("none", "warning", "error"),
+    case_sensitive = FALSE
+  )
 
-  # select data to consider for flagging
+  # Select data to consider for flagging
   if (!quo_is_null(filter)) {
     data <- dataset %>% filter(!!filter)
     data_ignore <- dataset %>%
@@ -191,12 +190,14 @@ derive_extreme_flag <- function(dataset,
     data <- dataset
   }
 
-  # create flag
+  # Create flag
   data <- data %>%
-    derive_obs_number(new_var = temp_obs_nr,
-                      order = order,
-                      by_vars = by_vars,
-                      check_type = check_type)
+    derive_obs_number(
+      new_var = temp_obs_nr,
+      order = order,
+      by_vars = by_vars,
+      check_type = check_type
+    )
 
   if (mode == "first") {
     data <- data %>%
@@ -208,12 +209,12 @@ derive_extreme_flag <- function(dataset,
       ungroup()
   }
 
-  # add ignored data
+  # Add ignored data
   if (!quo_is_null(filter)) {
     data <- data %>% bind_rows(data_ignore)
   }
 
-  # remove temporary variable
+  # Remove temporary variable
   data %>% select(-temp_obs_nr)
 }
 

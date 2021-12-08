@@ -46,6 +46,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("dm")
 #' data("ae")
 #' data("lb")
@@ -234,13 +235,10 @@ lstalvdt_source <- function(dataset_name,
                             date_imputation = NULL,
                             traceability_vars = NULL,
                             date_var = deprecated()) {
-
-  ### BEGIN DEPRECIATION
   if (!missing(date_var)) {
     deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
     date <- enquo(date_var)
   }
-  ### END DEPRECIATION
 
   if (!is.null(date_imputation)) {
     assert_that(is_valid_date_entry(date_imputation))
