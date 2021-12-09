@@ -12,7 +12,8 @@ derive_vars_dtm(
   time_imputation = "00:00:00",
   flag_imputation = "auto",
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  ignore_seconds = FALSE
 )
 }
 \arguments{

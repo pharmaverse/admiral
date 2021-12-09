@@ -449,6 +449,10 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
+  if (ignore_seconds & n_chr >= 19 & valid_dtc ) {
+    abort(paste0("Seconds detected in data.  You can not use ignore  seconds option`", deparse(dtc), "`"))
+  }
+
   if (ignore_seconds){
   case_when(
     (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
@@ -699,7 +703,7 @@ derive_vars_dtm <- function(dataset,
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL,
-                            ignore_seconds = ignore_seconds) {
+                            ignore_seconds = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -749,7 +753,7 @@ derive_vars_dtm <- function(dataset,
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), ignore_seconds))
+      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), !!ignore_seconds))
   }
 
   dataset

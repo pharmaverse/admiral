@@ -30,5 +30,11 @@ Authors:
   \item Hamza Rahal
 }
 
+Other contributors:
+\itemize{
+  \item F. Hoffmann-La Roche AG [copyright holder, funder]
+  \item GlaxoSmithKline LLC [copyright holder, funder]
+}
+
 }
 \keyword{internal}

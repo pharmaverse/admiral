@@ -4,7 +4,7 @@
 \alias{compute_tmf}
 \title{Derive the Time Imputation Flag}
 \usage{
-compute_tmf(dtc, dtm)
+compute_tmf(dtc, dtm, ignore_seconds = FALSE)
 }
 \arguments{
 \item{dtc}{The date character vector (\code{'--DTC'}).
@@ -14,6 +14,10 @@ A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partia
 \item{dtm}{The Date vector to compare (\code{'--DTM'}).
 
 A datetime object is expected.}
+
+\item{ignore_seconds}{A logical value
+
+Default: \code{FALSE}}
 }
 \value{
 The time imputation flag (\code{'--TMF'}) (character value of \code{'H'}, \code{'M'} , \code{'S'} or \code{NA})
@@ -26,6 +30,7 @@ Derive the time imputation flag (\code{'--TMF'}) comparing a date character vect
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
+compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25"), ignore_seconds = TRUE)
 }
 \author{
 Samia Kabi
