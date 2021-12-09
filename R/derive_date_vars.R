@@ -436,6 +436,7 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
+#' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25"), ignore_seconds = TRUE)
 compute_tmf <- function(dtc,
                         dtm,
                         ignore_seconds = FALSE) {
@@ -448,13 +449,19 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
+  if (ignore_seconds){
   case_when(
-    (ignore_seconds) ~ NA_character_,
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc | ignore_seconds ~ NA_character_,
-    n_chr == 16 ~ "S",
+    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
     n_chr == 13 ~ "M",
     n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-  )
+  )}
+  else {
+    case_when(
+    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+    n_chr == 16 ~ "S",
+    n_chr == 13 ~ "M",
+    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")}
+
 }
 
 #' Derive/Impute a Date from a Date Character Vector
@@ -629,9 +636,6 @@ derive_vars_dt <- function(dataset,
 #'
 #' Default: "auto"
 #'
-#' @param ignore_seconds Defaults to FALSE.  If seconds is not collected in the data,
-#' then users can make use of this parameter.  Setting it to TRUE will remove seconds
-#' from the output and prevent a flag from being displayed.
 #'
 #' @inheritParams impute_dtc
 #'
@@ -695,7 +699,7 @@ derive_vars_dtm <- function(dataset,
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL,
-                            ignore_seconds = FALSE) {
+                            ignore_seconds = ignore_seconds) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -745,7 +749,7 @@ derive_vars_dtm <- function(dataset,
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm)))
+      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), ignore_seconds))
   }
 
   dataset
