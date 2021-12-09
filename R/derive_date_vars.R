@@ -449,9 +449,9 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  if (ignore_seconds & n_chr >= 19 & valid_dtc ) {
-    abort(paste0("Seconds detected in data.  You can not use ignore  seconds option`", deparse(dtc), "`"))
-  }
+  # if (ignore_seconds &&  n_chr >= 19) {
+  #   abort(paste0("Seconds detected in data.  You can not use ignore seconds option`", dtc, "`"))
+  # }
 
   if (ignore_seconds){
   case_when(

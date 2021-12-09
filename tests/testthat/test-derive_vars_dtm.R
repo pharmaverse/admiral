@@ -9,6 +9,7 @@ input <- tibble::tribble(
   "2019---07"
 )
 
+
 test_that("default: no date imputation, time part set to 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTTMF,
@@ -200,4 +201,44 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
   expect_equal(expected_output, actual_output)
 
+})
+
+
+test_that("Partial date imputed to the last day/month, Missing time part imputed with 23:59, ignore_seconds is TRUE", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~AENDTM, ~AENDTF, ~AENTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:59"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:59:59"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T23:59:59"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-28T23:59:59"), "D", "H",
+    "2019", ymd_hms("2019-12-31T23:59:59"), "M", "H",
+    "2019---07", ymd_hms("2019-12-31T23:59:59"), "M", "H"
+  ) %>%
+    mutate(AENDTM = as_iso_dtm(AENDTM))
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AEN",
+    dtc = XXSTDTC,
+    date_imputation = "LAST",
+    time_imputation = "LAST"
+  )
+
+  actual_output1 <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AEN",
+    dtc = XXSTDTC,
+    date_imputation = "LAST",
+    time_imputation = "23:59:59"
+  )
+
+  expect_equal(
+    expected_output,
+    actual_output
+  )
+  expect_equal(
+    expected_output,
+    actual_output1
+  )
 })
