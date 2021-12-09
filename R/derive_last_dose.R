@@ -119,7 +119,8 @@ derive_last_dose <- function(dataset,
   assert_varval_list(ex_keep_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
-  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, ex_keep_vars))
+  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, ex_keep_vars,
+                                      get_source_vars(traceability_vars)))
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)

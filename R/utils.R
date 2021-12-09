@@ -467,3 +467,20 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
+
+#' Get source variables from a list of quosures
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+get_source_vars <- function(quosures) {
+  quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
+}
+
