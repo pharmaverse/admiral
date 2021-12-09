@@ -74,8 +74,8 @@
 #'
 #' dm %>%
 #'   derive_var_lstalvdt(
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
-#'     ae_start, ae_end, lb_date, adsl_date
+#'     ae_start, ae_end, lb_date, adsl_date,
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb)
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
@@ -124,13 +124,13 @@
 #'
 #' dm %>%
 #'   derive_var_lstalvdt(
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
-#'     ae_start, ae_end, lb_date, adsl_date
+#'     ae_start, ae_end, lb_date, adsl_date,
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb)
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 derive_var_lstalvdt <- function(dataset,
-                                source_datasets,
                                 ...,
+                                source_datasets,
                                 subject_keys = vars(STUDYID, USUBJID)) {
   assert_data_frame(dataset)
   assert_list_of(source_datasets, "data.frame")

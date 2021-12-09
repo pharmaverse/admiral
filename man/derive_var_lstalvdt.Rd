@@ -6,8 +6,8 @@
 \usage{
 derive_var_lstalvdt(
   dataset,
-  source_datasets,
   ...,
+  source_datasets,
   subject_keys = vars(STUDYID, USUBJID)
 )
 }
@@ -16,11 +16,11 @@ derive_var_lstalvdt(
 
 The variables specified by \code{subject_keys} are required.}
 
-\item{source_datasets}{A named \code{list} containing datasets in which to search for the
-last known alive date}
-
 \item{...}{Source(s) of known alive dates. One or more \code{lstalvdt_source()} object are
 expected.}
+
+\item{source_datasets}{A named \code{list} containing datasets in which to search for the
+last known alive date}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -83,8 +83,8 @@ adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
 
 dm \%>\%
   derive_var_lstalvdt(
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
-    ae_start, ae_end, lb_date, adsl_date
+    ae_start, ae_end, lb_date, adsl_date,
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb)
   ) \%>\%
   select(USUBJID, LSTALVDT)
 
@@ -133,8 +133,8 @@ adsl_date <- lstalvdt_source(
 
 dm \%>\%
   derive_var_lstalvdt(
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
-    ae_start, ae_end, lb_date, adsl_date
+    ae_start, ae_end, lb_date, adsl_date,
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb)
   ) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }

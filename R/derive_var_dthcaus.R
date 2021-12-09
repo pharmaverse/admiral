@@ -68,7 +68,7 @@
 #'   dthcaus = DSTERM
 #' )
 #'
-#' derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
+#' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 #'
 #' # Derive `DTHCAUS` and add traceability variables
 #' src_ae <- dthcaus_source(
@@ -89,10 +89,10 @@
 #'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 #' )
 #'
-#' derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
+#' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 derive_var_dthcaus <- function(dataset,
-                               source_datasets,
                                ...,
+                               source_datasets,
                                subject_keys = vars(STUDYID, USUBJID)) {
   assert_data_frame(dataset)
   assert_list_of(source_datasets, "data.frame")

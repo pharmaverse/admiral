@@ -6,8 +6,8 @@
 \usage{
 derive_var_dthcaus(
   dataset,
-  source_datasets,
   ...,
+  source_datasets,
   subject_keys = vars(STUDYID, USUBJID)
 )
 }
@@ -16,10 +16,10 @@ derive_var_dthcaus(
 
 The variables specified by \code{subject_keys} are required.}
 
+\item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
+
 \item{source_datasets}{A named \code{list} containing datasets in which to search for the
 last known alive date}
-
-\item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -73,7 +73,7 @@ src_ds <- dthcaus_source(
   dthcaus = DSTERM
 )
 
-derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
+derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 
 # Derive `DTHCAUS` and add traceability variables
 src_ae <- dthcaus_source(
@@ -94,7 +94,7 @@ src_ds <- dthcaus_source(
   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
-derive_var_dthcaus(adsl, source_datasets = list(ae = ae, ds = ds), src_ae, src_ds)
+derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 }
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}
