@@ -6,7 +6,7 @@ on:
       - main
       - master
 
-name: pkgdown
+name: Check Templates
 
 jobs:
   pkgdown:
