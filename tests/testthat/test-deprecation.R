@@ -5,7 +5,7 @@ test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter 
 
   expect_warning(
     derive_extreme_flag(
-      advs,
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAMCD),
       order = vars(ADT),
       new_var = ABLFL,
@@ -59,7 +59,7 @@ test_that("a warning is issued when using `derive_suppqual_vars()", {
   data(suppae)
 
   expect_warning(
-    derive_suppqual_vars(ae, suppae),
+    derive_suppqual_vars(ae[1:100, ], suppae[1:100, ]),
     "deprecated",
     fixed = TRUE
   )
@@ -126,7 +126,7 @@ test_that("a warning is issued when specifying `derive_var_ontrtfl(date = )", {
 
   expect_warning(
     derive_var_ontrtfl(
-      advs[1:1000, ],
+      advs[1:100, ],
       date = ADT,
       ref_start_date = TRTSDT,
       ref_end_date = TRTEDT
@@ -141,7 +141,7 @@ test_that("a warning is issued when specifying `derive_summary_records(filter_ro
 
   expect_warning(
     derive_summary_records(
-      advs[1:1000, ],
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAM, AVISIT),
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE),
@@ -158,7 +158,7 @@ test_that("an error is thrown when specifying `derive_summary_records(fns = )", 
 
   expect_error(
     derive_summary_records(
-      advs[1:1000, ],
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAM, AVISIT),
       fns = AVAL ~ mean(., na.rm = TRUE),
       filter = dplyr::n() > 2,
