@@ -37,7 +37,7 @@ dataset <- tibble::tribble(
   "TEST01", "PAT01",  "PARAM01", 15.01,  NA,       "Day 14",   "N",
   "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Baseline", "Y",
   "TEST01", "PAT01",  "PARAM02", NA,     NA,       "Day 7",    "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Day 14",   "N"
+  "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Day 14",   "N",
   "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Baseline", "Y",
   "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Day 7",    "N",
   "TEST01", "PAT01",  "PARAM03", NA,     "MEDIUM", "Day 14",   "N",
