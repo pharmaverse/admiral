@@ -8,7 +8,7 @@ test_that("all templates are listed", {
 test_that("package templates can be used", {
   dir <- tempdir()
   file <- file.path(dir, "advs.R")
-  use_ad_template("advs", save_path = file)
+  use_ad_template("advs", save_path = file, open = FALSE)
 
   expect_true(file.exists(file))
   expect_identical(
