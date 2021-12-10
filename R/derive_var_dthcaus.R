@@ -94,11 +94,11 @@ derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
                                subject_keys = vars(STUDYID, USUBJID)) {
-  assert_data_frame(dataset)
+  assert_vars(subject_keys)
+  assert_data_frame(dataset, required_vars = subject_keys)
   assert_list_of(source_datasets, "data.frame")
   sources <- list(...)
   assert_list_of(sources, "dthcaus_source")
-  assert_vars(subject_keys)
 
   source_names <- names(source_datasets)
   assert_list_element(
