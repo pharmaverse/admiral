@@ -7,11 +7,11 @@ name: Check Templates
 
 jobs:
   check_templates:
-    build:
-      if: github.event.review.state == "approved"
-      runs-on: ubuntu-latest
-      env:
-        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    if: github.event.review.state == "approved"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - uses: actions/cache@v2
         with:
