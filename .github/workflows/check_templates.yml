@@ -1,18 +1,17 @@
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - devel
-      - main
-      - master
+  pull_request_review:
+    types: [submitted]
 
 name: Check Templates
 
 jobs:
-  pkgdown:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+  check_templates:
+    build:
+      if: github.event.review.state == "approved"
+      runs-on: ubuntu-latest
+      env:
+        GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/cache@v2
         with:
