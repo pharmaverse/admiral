@@ -134,9 +134,7 @@ derive_var_dthcaus <- function(dataset,
         order = vars(!!sources[[ii]]$date),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
-      )
-
-    add_data[[ii]] <- add_data[[ii]] %>%
+      ) %>%
       mutate(
         temp_source_nr = ii,
         temp_date = !!sources[[ii]]$date,
