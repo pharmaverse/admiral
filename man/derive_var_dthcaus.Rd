@@ -19,7 +19,7 @@ The variables specified by \code{subject_keys} are required.}
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
 
 \item{source_datasets}{A named \code{list} containing datasets in which to search for the
-last known alive date}
+death cause}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 

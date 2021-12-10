@@ -16,7 +16,7 @@ derive_var_lstalvdt(
 
 The variables specified by \code{subject_keys} are required.}
 
-\item{...}{Source(s) of known alive dates. One or more \code{lstalvdt_source()} object are
+\item{...}{Source(s) of known alive dates. One or more \code{lstalvdt_source()} objects are
 expected.}
 
 \item{source_datasets}{A named \code{list} containing datasets in which to search for the

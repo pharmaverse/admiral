@@ -109,7 +109,7 @@ function.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_vars_dtm_to_dt( source_vars = vars(TRTSDTM, TRTEDTM))
+  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
 ```
 
 
@@ -411,7 +411,7 @@ Once the sources are defined, the function `derive_var_dthcaus()` can be used to
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds, source_dataset = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -447,7 +447,7 @@ src_ds <- dthcaus_source(
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds, source_dataset = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 
 ```
 
@@ -540,7 +540,7 @@ Once the sources are defined, the function `derive_var_lstalvdt()` can be used t
 adsl <- adsl %>%
   derive_var_lstalvdt(
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_dataset = list(ae = ae, adsl = adsl, lb = lb)
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
   )
 ```
 
@@ -583,8 +583,8 @@ adsl_src <- lstalvdt_source(
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
   derive_var_lstalvdt(
-    source_dataset = list(ae = ae, adsl = adsl, lb = lb),
-    ae_src1, ae_src2, lb_src, adsl_src
+    ae_src1, ae_src2, lb_src, adsl_src,
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
   )
 ```
 

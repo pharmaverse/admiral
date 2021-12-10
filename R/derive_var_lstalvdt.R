@@ -9,7 +9,7 @@
 #' @param source_datasets A named `list` containing datasets in which to search for the
 #'   last known alive date
 #'
-#' @param ... Source(s) of known alive dates. One or more `lstalvdt_source()` object are
+#' @param ... Source(s) of known alive dates. One or more `lstalvdt_source()` objects are
 #'   expected.
 #'
 #' @param subject_keys Variables to uniquely identify a subject

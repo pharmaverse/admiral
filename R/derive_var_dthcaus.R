@@ -7,7 +7,7 @@
 #'   The variables specified by `subject_keys` are required.
 #'
 #' @param source_datasets A named `list` containing datasets in which to search for the
-#'   last known alive date
+#'   death cause
 #'
 #' @param ... Objects of class "dthcaus_source" created by [`dthcaus_source()`].
 #'
