@@ -51,4 +51,3 @@ test_that("derive_last_dose_date works as expected", {
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 
   })
-

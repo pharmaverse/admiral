@@ -51,7 +51,7 @@ derive_last_dose_date <- function(dataset,
                                   single_dose_condition = (EXDOSFRQ == "ONCE"),
                                   new_var,
                                   output_datetime = TRUE,
-                                  traceability_vars = NULL){
+                                  traceability_vars = NULL) {
 
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
@@ -67,7 +67,7 @@ derive_last_dose_date <- function(dataset,
   res <- derive_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
-                by_vars = by_vars ,
+                by_vars = by_vars,
                 dose_id = dose_id,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
@@ -78,10 +78,11 @@ derive_last_dose_date <- function(dataset,
 
   # return either date or date-time variable
   if (!output_datetime) {
-    res <- res %>%  mutate(!!new_var := as.Date(!!new_var))}
+    res <- res %>%  mutate(!!new_var := as.Date(!!new_var))
+    }
   else {
-    res <- res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))}
+    res <- res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))
+    }
 
-  return(res)
+return(res)
 }
-

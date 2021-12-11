@@ -483,4 +483,3 @@ valid_time_units <- function() {
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }
-

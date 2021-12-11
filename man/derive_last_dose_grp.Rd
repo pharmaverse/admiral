@@ -10,7 +10,6 @@ derive_last_dose_grp(
   filter_ex = NULL,
   by_vars = vars(STUDYID, USUBJID),
   dose_id = vars(),
-  ex_keep_vars = NULL,
   dose_date,
   analysis_date,
   single_dose_condition = (EXDOSFRQ == "ONCE"),
@@ -37,12 +36,6 @@ Defaults to NULL.}
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
 Defaults to empty \code{vars()}.}
 
-\item{ex_keep_vars}{Variables to keep from \code{dataset_ex}, with the option to rename. Can either
-be variables created by \code{dplyr::vars} (e.g. \code{vars(VISIT)}), or named list returned by \code{\link[=vars]{vars()}}
-(e.g. \code{vars(LSTEXVIS = VISIT)}). If set to \code{NULL}, then all variables from \code{dataset_ex} are
-kept without renaming.
-Defaults to \code{NULL}.}
-
 \item{dose_date}{The EX dose date variable.}
 
 \item{analysis_date}{The analysis date variable.}
@@ -52,15 +45,19 @@ is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.
 
 \item{new_var}{The output variable defined by the user.}
 
-\item{grp_brks}{User supplied breaks to apply to groups.}
+\item{grp_brks}{User supplied breaks to apply to groups.
+Refer to \code{breaks} parameter in \code{cut()} for details.}
 
-\item{grp_lbls}{User supplied labels to apply to groups.}
+\item{grp_lbls}{User supplied labels to apply to groups.
+Refer to \code{labels} parameter in \code{cut()} for details.}
 
 \item{include_lowest}{logical, indicating if a value equal to the lowest
-(or highest, for right = FALSE) ‘breaks’ value should be included.}
+(or highest, for right = FALSE) ‘breaks’ value should be included.
+Refer to \code{include.lowest} parameter in \code{cut()} for details.}
 
-\item{right}{logical, indicating if the intervals should be closed on the right
-(and open on the left) or vice versa.}
+\item{right}{Logical, indicating if the intervals should be closed on the right
+(and open on the left) or vice versa.
+Refer to \code{right} parameter in \code{cut()} for details.}
 
 \item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
 

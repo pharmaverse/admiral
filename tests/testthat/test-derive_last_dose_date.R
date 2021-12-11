@@ -65,7 +65,7 @@ test_that("derive_last_dose_date works as expected with output_datetime = TRUE",
     "my_study",   "subject2",  2,        "2020-02-20",   "2020-01-20 00:00:00",
     "my_study",   "subject3",  1,        "2020-03-02",   NA_character_,
     "my_study",   "subject4",  1,        "2020-11-02",   NA_character_) %>%
-    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = 'UTC'))
+    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"))
 
   res <- derive_last_dose_date(
     input_ae,

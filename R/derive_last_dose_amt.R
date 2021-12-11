@@ -63,7 +63,7 @@ derive_last_dose_amt <- function(dataset,
                                  dose_id = vars(),
                                  dose_date,
                                  analysis_date,
-                                 single_dose_condition = (EXDOSFRQ =="ONCE"),
+                                 single_dose_condition = (EXDOSFRQ == "ONCE"),
                                  new_var,
                                  dose_var = EXDOSE,
                                  traceability_vars = NULL) {

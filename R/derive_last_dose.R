@@ -131,7 +131,7 @@ derive_last_dose <- function(dataset,
     with(eval_tidy(quo_get_expr(single_dose_condition))) %>%
     all()
 
-  if (!single_dose_eval){
+  if (!single_dose_eval) {
     stop("Specified single_dose_condition is not satisfied.")
   }
 
@@ -170,7 +170,7 @@ derive_last_dose <- function(dataset,
   dataset_ex_var <- colnames(dataset_ex)[!colnames(dataset_ex) %in% by_vars_str]
   dup_var <- enumerate(intersect(dataset_var, dataset_ex_var))
 
-  if (length(intersect(dataset_var, dataset_ex_var)) != 0){
+  if (length(intersect(dataset_var, dataset_ex_var)) != 0) {
     stop("Variable(s) ", paste(dup_var, "found in both datasets, cannot perform join"))
   }
 
@@ -203,7 +203,8 @@ derive_last_dose <- function(dataset,
   res <- dataset %>%
     select(!!!by_vars, tmp_seq_var, tmp_analysis_date) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
-    filter(!is.na(tmp_dose_date) & !is.na(tmp_analysis_date) & tmp_dose_date <= tmp_analysis_date) %>%
+    filter(!is.na(tmp_dose_date) & !is.na(tmp_analysis_date) &
+             tmp_dose_date <= tmp_analysis_date) %>%
     filter_extreme(by_vars =  vars(tmp_seq_var),
                    order = c(vars(tmp_dose_date), dose_id),
                    mode = "last") %>%

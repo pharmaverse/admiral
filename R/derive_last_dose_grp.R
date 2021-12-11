@@ -5,12 +5,16 @@
 #' @inheritParams derive_last_dose
 #' @param new_var The output variable defined by the user.
 #' @param grp_brks User supplied breaks to apply to groups.
+#' Refer to `breaks` parameter in `cut()` for details.
 #' @param grp_lbls User supplied labels to apply to groups.
+#' Refer to `labels` parameter in `cut()` for details.
 #' @param dose_var The source dose amount variable. Defaults to `EXDOSE`.
 #' @param include_lowest logical, indicating if a value equal to the lowest
 #' (or highest, for right = FALSE) ‘breaks’ value should be included.
-#' @param right logical, indicating if the intervals should be closed on the right
+#' Refer to `include.lowest` parameter in `cut()` for details.
+#' @param right Logical, indicating if the intervals should be closed on the right
 #' (and open on the left) or vice versa.
+#' Refer to `right` parameter in `cut()` for details.
 #'
 #' @details Last dose is the dose with maximum `dose_date` that is lower to or equal to the
 #' `analysis_date` per `by_vars` for each observation in `dataset`.
@@ -59,7 +63,6 @@ derive_last_dose_grp <- function(dataset,
                                  filter_ex = NULL,
                                  by_vars = vars(STUDYID, USUBJID),
                                  dose_id = vars(),
-                                 ex_keep_vars = NULL,
                                  dose_date,
                                  analysis_date,
                                  single_dose_condition = (EXDOSFRQ == "ONCE"),
@@ -90,7 +93,7 @@ derive_last_dose_grp <- function(dataset,
                    analysis_date = !!analysis_date,
                    single_dose_condition = !!single_dose_condition,
                    ex_keep_vars = vars(!!dose_var),
-                   traceability_vars = traceability_vars)%>%
+                   traceability_vars = traceability_vars) %>%
     mutate(!!new_var :=
              as.character(
                cut(
