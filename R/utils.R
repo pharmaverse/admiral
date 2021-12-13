@@ -56,6 +56,26 @@ squote <- function(x) {
   paste0("'", x, "'")
 }
 
+#' Wrap a String in Double Quotes
+#'
+#' @param x A `character` vector
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::dquote("foo")
+#' admiral:::dquote(NULL)
+dquote <- function(x) {
+  if (is.null(x)) {
+    "NULL"
+  }
+  else {
+    paste0("\"", x, "\"")
+  }
+}
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the

@@ -54,7 +54,7 @@ adae <- tibble::tribble(
 derive_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=assert_valid_queries]{assert_valid_queries()}}
+\code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
 }
 \author{
 Ondrej Slama, Shimeng Huang

@@ -1,8 +1,8 @@
 #' Creates queries dataset from SMQ and SDG database or custom definitions as
-#' input dataset for `derive_query_vars()`
+#' input dataset for `derive_vars_query()`
 #'
 #' Creates queries dataset from definitions in SMQ and SDG database or custom
-#' definitions as input dataset for `derive_query_vars()`.
+#' definitions as input dataset for `derive_vars_query()`.
 #'
 #' @param queries List of queries
 #'
@@ -94,7 +94,7 @@
 #'   The following variables are created:
 #'
 #'   * `VAR_PREFIX`: Prefix of the variables to be created by
-#'   `derive_query_vars()` as specified by the `prefix` element.
+#'   `derive_vars_query()` as specified by the `prefix` element.
 #'   * `QUERY_NAME`: Name of the query as specified by the `name` element.
 #'   * `QUERY_ID`: Id of the query as specified by the `id` element. If the `id`
 #'   element is not specified for a query, the variable is set to `NA`. If the
@@ -114,9 +114,11 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return A dataset to be used as input for `derive_query_vars()`
+#' @return A dataset to be used as input for `derive_vars_query()`
 #'
-#' @keywords adae adcm
+#' @keywords adae adcm user_utility
+#'
+#' @seealso [derive_vars_query()]
 #'
 #' @export
 #'
@@ -136,23 +138,22 @@
 #'             name = "Application Site Issues",
 #'             definition = cqterms)
 #'
-#' create_query_data(queries = list(cq),
-#'                 meddra_version = "20.1")
+#' create_query_data(queries = list(cq))
 #'
 #' # create a query dataset for SMQs
-#' pregsqm <- query(
+#' pregsmq <- query(
 #'   prefix = "SMQ02",
 #'   id = auto,
-#'   scope = "NARROW",
-#'   scope_num = 2,
-#'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)"))
+#'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+#'                           scope = "NARROW"))
 #'
-#' pneuaegt <- query(prefix = "SMQ04",
-#'                   definition = smq_select(id = 8050L))
+#' pneusmq <- query(prefix = "SMQ04",
+#'                  definition = smq_select(id = 8050L,
+#'                                          scope = "BROAD"))
 #'
 #' \dontrun{
-#' create_query_data(queries = list(pregsqm, pneuaegt),
-#'                 meddra_version = "20.1")
+#' create_query_data(queries = list(pregsmq, pneusmq),
+#'                   meddra_version = "20.1")
 #' }
 #'
 #' # create a query dataset for SDGs
@@ -165,8 +166,15 @@
 #' )
 #' \dontrun{
 #' create_query_data(queries = list(sdg),
-#'                 whodd_version = "2019_09")
+#'                   whodd_version = "2019_09")
 #' }
+#'
+#' # creating a query dataset for a customized query including SMQs
+#' \dontrun{
+#' create_query_data(queries = list(pregsmq, cqterms),
+#'                   meddra_version = "20.1")
+#' }
+
 create_query_data <- function(queries,
                               meddra_version = NULL,
                               whodd_version = NULL,
@@ -190,6 +198,7 @@ create_query_data <- function(queries,
   for (i in seq_along(queries)) {
     # get term names and term variable
     if (inherits(queries[[i]]$definition, "smq_select")) {
+      # query is a SMQ
       assert_db_requirements(version = meddra_version,
                              fun = get_smq_fun,
                              queries = queries,
@@ -203,8 +212,22 @@ create_query_data <- function(queries,
           keep_id = !is.null(queries[[i]]$id),
           temp_env = temp_env
         )
-      ) %>%
-        mutate(QUERY_SCOPE = queries[[i]]$definition$scope)
+      )
+      assert_terms(
+        query_data[[i]],
+        expect_query_name = TRUE,
+        expect_query_id = !is.null(queries[[i]]$id),
+        source_text = paste0(
+          "object returned by calling get_smq_fun(smq_select = ",
+          format(queries[[i]]$definition),
+          ", version = ",
+          dquote(meddra_version),
+          ", keep_id = ",!is.null(queries[[i]]$id),
+          ")"
+        )
+      )
+      query_data[[i]] <- mutate(query_data[[i]],
+                                QUERY_SCOPE = queries[[i]]$definition$scope)
       if (queries[[i]]$add_scope_num) {
         query_data[[i]] <-
           mutate(query_data[[i]],
@@ -212,6 +235,7 @@ create_query_data <- function(queries,
       }
     }
     else if (inherits(queries[[i]]$definition, "sdg_select")) {
+      # query is a SDG
       assert_db_requirements(version = whodd_version,
                              fun = get_sdg_fun,
                              queries = queries,
@@ -225,11 +249,26 @@ create_query_data <- function(queries,
           temp_env = temp_env
         )
       )
+      assert_terms(
+        query_data[[i]],
+        expect_query_name = TRUE,
+        expect_query_id = !is.null(queries[[i]]$id),
+        source_text = paste0(
+          "object returned by calling get_sdg_fun(sdg_select = ",
+          format(queries[[i]]$definition),
+          ", version = ",
+          dquote(whodd_version),
+          ", keep_id = ",!is.null(queries[[i]]$id),
+          ")"
+        )
+      )
     }
     else if (is.data.frame(queries[[i]]$definition)) {
+      # query is a customized query
       query_data[[i]] <- queries[[i]]$definition
     }
     else if (is.list(queries[[i]]$definition)) {
+      # query is defined by customized queries and SMQs
       definition <- queries[[i]]$definition
       terms <- vector("list", length(definition))
       for (j in seq_along(definition)) {
@@ -237,17 +276,30 @@ create_query_data <- function(queries,
           terms[[j]] <- definition[[j]]
         }
         else {
-          assert_db_requirements(version = meddra_version,
-                                 fun = get_smq_fun,
-                                 queries = queries,
-                                 i = i,
-                                 type = "SMQ")
+          assert_db_requirements(
+            version = meddra_version,
+            fun = get_smq_fun,
+            queries = queries,
+            i = i,
+            type = "SMQ"
+          )
           terms[[j]] <-
             call_user_fun(get_smq_fun(
               smq_select = definition[[j]],
               version = meddra_version,
               temp_env = temp_env
             ))
+          assert_terms(
+            terms[[j]],
+            source_text = paste0(
+              "object returned by calling get_smq_fun(smq_select = ",
+              format(definition[[j]]),
+              ", version = ",
+              dquote(meddra_version),
+              ")"
+            )
+          )
+
         }
       }
       query_data[[i]] <- bind_rows(terms)
@@ -469,8 +521,8 @@ validate_query <- function(obj) {
                "It was provided for the id element."))
     }
     if (is.data.frame(values$definition)) {
-      assert_cq_terms(terms = values$definition,
-                     source_text = "the data frame provided for the `definition` element")
+      assert_terms(terms = values$definition,
+                   source_text = "the data frame provided for the `definition` element")
     }
     else {
       is_valid <- map_lgl(values$definition, is.data.frame) | map_lgl(values$definition, inherits, "smq_select")
@@ -488,7 +540,7 @@ validate_query <- function(obj) {
 
       for (i in seq_along(values$definition)) {
         if (is.data.frame(values$definition[[i]])) {
-          assert_cq_terms(
+          assert_terms(
             terms = values$definition[[i]],
             source_text = paste0("the ", i, "th element of the definition field")
           )
@@ -508,8 +560,23 @@ validate_query <- function(obj) {
   obj
 }
 
-assert_cq_terms <- function(terms,
-                            source_text) {
+assert_terms <- function(terms,
+                         expect_query_name = FALSE,
+                         expect_query_id = FALSE,
+                         source_text) {
+  if (!is.data.frame(terms)) {
+    abort(paste0(source_text,
+                 " is not a data frame but ",
+                 what_is_it(terms),
+                 "."))
+  }
+
+  if (nrow(terms) == 0) {
+    abort(paste0(
+          source_text,
+          " does not contain any observations."))
+  }
+
   vars <- names(terms)
   if (!"TERM_LEVEL" %in% vars) {
     abort(
@@ -517,6 +584,24 @@ assert_cq_terms <- function(terms,
             source_text,
             ".")
     )
+  }
+  if (expect_query_name) {
+    if (!"QUERY_NAME" %in% vars) {
+      abort(
+        paste0("Required variable `QUERY_NAME` is missing in ",
+               source_text,
+               ".")
+      )
+    }
+  }
+  if (expect_query_id) {
+    if (!"QUERY_ID" %in% vars) {
+      abort(
+        paste0("Required variable `QUERY_ID` is missing in ",
+               source_text,
+               ".")
+      )
+    }
   }
   if (!"TERM_NAME" %in% vars & !"TERM_ID" %in% vars) {
     abort(
@@ -594,6 +679,16 @@ validate_smq_select <- function(obj) {
   obj
 }
 
+format.smq_select <- function(x, ...) {
+  paste0("smq_select(name = ",
+         dquote(x$name),
+         ", id = ",
+         format(x$id),
+         ", scope = ",
+         dquote(x$scope),
+         ")")
+}
+
 #' Create an `sdg_select` object
 #'
 #' @param name Name of the query used to select the definition of the query
@@ -650,4 +745,12 @@ validate_sdg_select <- function(obj) {
     abort("Either id or name has to be null.")
   }
   obj
+}
+
+format.sdg_select <- function(x, ...) {
+  paste0("sdg_select(name = ",
+         dquote(x$name),
+         ", id = ",
+         format(x$id),
+         ")")
 }

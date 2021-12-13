@@ -30,7 +30,7 @@
 #'
 #' @keywords adae adcm derivation
 #'
-#' @seealso [assert_valid_queries()]
+#' @seealso [create_query_data()] [assert_valid_queries()]
 #'
 #' @export
 #'

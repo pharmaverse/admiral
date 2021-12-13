@@ -3,7 +3,7 @@
 \name{create_query_data}
 \alias{create_query_data}
 \title{Creates queries dataset from SMQ and SDG database or custom definitions as
-input dataset for \code{derive_query_vars()}}
+input dataset for \code{derive_vars_query()}}
 \usage{
 create_query_data(
   queries,
@@ -95,11 +95,11 @@ environment instead of accessing the database again.
 }}
 }
 \value{
-A dataset to be used as input for \code{derive_query_vars()}
+A dataset to be used as input for \code{derive_vars_query()}
 }
 \description{
 Creates queries dataset from definitions in SMQ and SDG database or custom
-definitions as input dataset for \code{derive_query_vars()}.
+definitions as input dataset for \code{derive_vars_query()}.
 }
 \details{
 For each query the terms belonging to the query are determined with
@@ -118,7 +118,7 @@ the dataframes and all terms read from the SMQ database referrenced by the
 The following variables are created:
 \itemize{
 \item \code{VAR_PREFIX}: Prefix of the variables to be created by
-\code{derive_query_vars()} as specified by the \code{prefix} element.
+\code{derive_vars_query()} as specified by the \code{prefix} element.
 \item \code{QUERY_NAME}: Name of the query as specified by the \code{name} element.
 \item \code{QUERY_ID}: Id of the query as specified by the \code{id} element. If the \code{id}
 element is not specified for a query, the variable is set to \code{NA}. If the
@@ -153,23 +153,22 @@ cq <- query(prefix = "CQ01",
             name = "Application Site Issues",
             definition = cqterms)
 
-create_query_data(queries = list(cq),
-                meddra_version = "20.1")
+create_query_data(queries = list(cq))
 
 # create a query dataset for SMQs
-pregsqm <- query(
+pregsmq <- query(
   prefix = "SMQ02",
   id = auto,
-  scope = "NARROW",
-  scope_num = 2,
-  definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)"))
+  definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+                          scope = "NARROW"))
 
-pneuaegt <- query(prefix = "SMQ04",
-                  definition = smq_select(id = 8050L))
+pneusmq <- query(prefix = "SMQ04",
+                 definition = smq_select(id = 8050L,
+                                         scope = "BROAD"))
 
 \dontrun{
-create_query_data(queries = list(pregsqm, pneuaegt),
-                meddra_version = "20.1")
+create_query_data(queries = list(pregsmq, pneusmq),
+                  meddra_version = "20.1")
 }
 
 # create a query dataset for SDGs
@@ -182,11 +181,21 @@ sdg <- query(
 )
 \dontrun{
 create_query_data(queries = list(sdg),
-                whodd_version = "2019_09")
+                  whodd_version = "2019_09")
 }
+
+# creating a query dataset for a customized query including SMQs
+\dontrun{
+create_query_data(queries = list(pregsmq, cqterms),
+                  meddra_version = "20.1")
+}
+}
+\seealso{
+\code{\link[=derive_vars_query]{derive_vars_query()}}
 }
 \author{
 Stefan Bundfuss
 }
 \keyword{adae}
 \keyword{adcm}
+\keyword{user_utility}

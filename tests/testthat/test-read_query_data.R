@@ -194,21 +194,21 @@ test_that("issues error if SMQs without get_smq_fun are requested", {
   )
 
   expect_error(
-    create_query_data(queries = list(pregsmq, pneuaegt),
+    create_query_data(queries = list(pregsmq),
                       meddra_version = "20.0"),
     regexp = "^get_smq_fun is not specified. This is expected for SMQs.*")
 })
 
 # issues error if SMQs without meddra_version are requested ----
 test_that("issues error if SMQs without meddra_version are requested", {
-  pregsqm <- query(
+  pregsmq <- query(
     prefix = "SMQ02",
     definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
                             scope = "NARROW")
   )
 
   expect_error(
-    create_query_data(queries = list(pregsqm, pneuaegt),
+    create_query_data(queries = list(pregsmq),
                       get_smq_fun = get_smq),
     regexp = "^meddra_version is not specified. This is expected for SMQs.*")
 })
@@ -320,21 +320,59 @@ test_that("query: error: invalid definition", {
     regexp = "^`definition` expects a `smq_select` or `sdg_select` object, a data frame, or a list of data frames and `smq_select` objects.*")
 })
 
-# assert_cq_vars: error: TERM_LEVEL missing ----
-test_that("query: error: TERM_LEVEL missing", {
+# assert_terms: error: TERM_LEVEL missing ----
+test_that("assert_terms: error: TERM_LEVEL missing", {
   expect_error(
-    assert_cq_terms(terms = select(cqterms, -TERM_LEVEL),
-                    source_text = "my test data"),
+    assert_terms(terms = select(cqterms, -TERM_LEVEL),
+                 source_text = "my test data"),
     regexp = "Required variable `TERM_LEVEL` is missing in my test data.",
     fixed = TRUE)
 })
 
-# assert_cq_vars: error: TERM_NAME and TERM_ID missing ----
-test_that("query: error: TERM_NAME and TERM_ID missing", {
+# assert_terms: error: TERM_NAME and TERM_ID missing ----
+test_that("assert_terms: error: TERM_NAME and TERM_ID missing", {
   expect_error(
-    assert_cq_terms(terms = select(cqterms, TERM_LEVEL),
-                    source_text = "my test data"),
+    assert_terms(terms = select(cqterms, TERM_LEVEL),
+                 source_text = "my test data"),
     regexp = "Variable `TERM_NAME` or `TERM_ID` is required.\nNone of them is in my test data.\nProvided variables: `TERM_LEVEL`",
+    fixed = TRUE)
+})
+
+# assert_terms: error: no data frame ----
+test_that("assert_terms: error: no data frame", {
+  expect_error(
+    assert_terms(terms = 42,
+                 source_text = "object returned by calling get_mysmq()"),
+    regexp = "object returned by calling get_mysmq() is not a data frame but `42`.",
+    fixed = TRUE)
+})
+
+# assert_terms: error: no observations ----
+test_that("assert_terms: error: no observations", {
+  expect_error(
+    assert_terms(terms = filter(cqterms, TERM_ID == 42),
+                 source_text = "object returned by calling get_my_smq"),
+    regexp = "object returned by calling get_my_smq does not contain any observations.",
+    fixed = TRUE)
+})
+
+# assert_terms: error: QUERY_NAME is missing ----
+test_that("assert_terms: error: QUERY_NAME is missing", {
+  expect_error(
+    assert_terms(terms = cqterms,
+                 expect_query_name = TRUE,
+                 source_text = "object returned by calling get_my_smq"),
+    regexp = "Required variable `QUERY_NAME` is missing in object returned by calling get_my_smq.",
+    fixed = TRUE)
+})
+
+# assert_terms: error: QUERY_ID is missing ----
+test_that("assert_terms: error: QUERY_ID is missing", {
+  expect_error(
+    assert_terms(terms = cqterms,
+                 expect_query_id = TRUE,
+                 source_text = "object returned by calling get_my_smq"),
+    regexp = "Required variable `QUERY_ID` is missing in object returned by calling get_my_smq.",
     fixed = TRUE)
 })
 
@@ -365,6 +403,13 @@ test_that("sdg_select: error: name and id specified", {
     fixed = TRUE)
 })
 
+# format.smq_select: formatting is correct ----
+test_that("format.smq_select: formatting is correct", {
+  expect_equal(format(smq_select(id = 42,
+                                 scope = "NARROW")),
+               "smq_select(name = NULL, id = 42, scope = \"NARROW\")")
+})
+
 # sdg_select: error: neither name nor id specified ----
 test_that("sdg_select: error: neither name nor id specified", {
   expect_error(
@@ -372,3 +417,10 @@ test_that("sdg_select: error: neither name nor id specified", {
     regexp = "Either id or name has to be non null.",
     fixed = TRUE)
 })
+
+# format.sdg_select: formatting is correct ----
+test_that("format.sdg_select: formatting is correct", {
+  expect_equal(format(sdg_select(name = "My SDG")),
+               "sdg_select(name = \"My SDG\", id = NULL)")
+})
+
