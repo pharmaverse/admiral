@@ -4,7 +4,13 @@
 \alias{derive_var_base}
 \title{Derive Baseline Variables}
 \usage{
-derive_var_base(dataset, by_vars, source_var = AVAL, new_var = BASE)
+derive_var_base(
+  dataset,
+  by_vars,
+  source_var = AVAL,
+  new_var = BASE,
+  filter = ABLFL == "Y"
+)
 }
 \arguments{
 \item{dataset}{The input dataset}
@@ -15,6 +21,10 @@ of records for which to calculate \code{new_var}}
 \item{source_var}{The column from which to extract the baseline value, e.g. \code{AVAL}}
 
 \item{new_var}{The name of the newly created baseline column, e.g. \code{BASE}}
+
+\item{filter}{The condition used to filter \code{dataset} for baseline records.
+
+By default \code{ABLFL == "Y"}}
 }
 \value{
 A new \code{data.frame} containing all records and variables of the input
@@ -25,9 +35,10 @@ Derive baseline variables, e.g. \code{BASE} or \code{BNRIND}, in a BDS dataset
 }
 \details{
 For each \code{by_vars} group the baseline record is identified by filtering using the
-condition \code{ABLFL == "Y"}. Subsequently, every value of the \code{new_var} variable for the \code{by_vars}
-group is set to the value of the \code{source_var} variable of the baseline record. In case there
-are multiple baseline records within \code{by_vars} an error is issued.
+condition specified by \code{filter} which defaults to \code{ABLFL == "Y"}. Subsequently,
+every value of the \code{new_var} variable for the \code{by_vars} group is set to the
+value of the \code{source_var} variable of the baseline record. In case there are
+multiple baseline records within \code{by_vars} an error is issued.
 }
 \examples{
 dataset <- tibble::tribble(

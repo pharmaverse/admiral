@@ -11,15 +11,20 @@
 #'
 #' @param new_var The name of the newly created baseline column, e.g. `BASE`
 #'
+#' @param filter The condition used to filter `dataset` for baseline records.
+#'
+#'   By default `ABLFL == "Y"`
+#'
 #' @return
 #' A new `data.frame` containing all records and variables of the input
 #' dataset plus the `new_var` variable
 #'
 #' @details
 #' For each `by_vars` group the baseline record is identified by filtering using the
-#' condition `ABLFL == "Y"`. Subsequently, every value of the `new_var` variable for the `by_vars`
-#' group is set to the value of the `source_var` variable of the baseline record. In case there
-#' are multiple baseline records within `by_vars` an error is issued.
+#' condition specified by `filter` which defaults to `ABLFL == "Y"`. Subsequently,
+#' every value of the `new_var` variable for the `by_vars` group is set to the
+#' value of the `source_var` variable of the baseline record. In case there are
+#' multiple baseline records within `by_vars` an error is issued.
 #'
 #' @export
 #'
@@ -69,18 +74,23 @@
 #'     new_var = BNRIND
 #'   )
 #' }
-derive_var_base <- function(dataset, by_vars, source_var = AVAL, new_var = BASE) {
+derive_var_base <- function(dataset,
+                            by_vars,
+                            source_var = AVAL,
+                            new_var = BASE,
+                            filter = ABLFL == "Y") {
   by_vars <- assert_vars(by_vars)
   source_var <- assert_symbol(enquo(source_var))
   new_var <- assert_symbol(enquo(new_var))
+  filter <- assert_filter_cond(filter)
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, source_var, quo(ABLFL))
+    required_vars = quo_c(by_vars, source_var)
   )
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   base <- dataset %>%
-    filter(ABLFL == "Y") %>%
+    filter(!!filter) %>%
     select(!!!by_vars, !!new_var := !!source_var)
 
   signal_duplicate_records(base, by_vars, "Dataset contains multiple baseline records.")
