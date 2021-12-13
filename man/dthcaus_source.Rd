@@ -5,18 +5,20 @@
 \title{Create an \code{dthcaus_source} object}
 \usage{
 dthcaus_source(
-  dataset,
+  dataset_name,
   filter,
   date,
   mode = "first",
   dthcaus,
   traceability_vars = NULL,
+  dataset = deprecated(),
   date_var = deprecated(),
   traceabilty_vars = deprecated()
 )
 }
 \arguments{
-\item{dataset}{A data.frame containing a source dataset.}
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the death cause.}
 
 \item{filter}{An expression used for filtering \code{dataset}.}
 
@@ -38,6 +40,8 @@ in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
+
+\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 
 \item{date_var}{Deprecated, please use \code{date} instead.}
 

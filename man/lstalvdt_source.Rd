@@ -5,16 +5,18 @@
 \title{Create an \code{lstalvdt_source} object}
 \usage{
 lstalvdt_source(
-  dataset,
+  dataset_name,
   filter = NULL,
   date,
   date_imputation = NULL,
   traceability_vars = NULL,
+  dataset = deprecated(),
   date_var = deprecated()
 )
 }
 \arguments{
-\item{dataset}{A data.frame containing a source dataset.}
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the last known alive date.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
@@ -27,6 +29,8 @@ See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
+
+\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 
 \item{date_var}{Deprecated, please use \code{date} instead.}
 }

@@ -5,7 +5,7 @@ test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter 
 
   expect_warning(
     derive_extreme_flag(
-      advs,
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAMCD),
       order = vars(ADT),
       new_var = ABLFL,
@@ -18,11 +18,9 @@ test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter 
 })
 
 test_that("a warning is issued when specifying `dthcaus_source(date_var = )", {
-  data(ae)
-
   expect_warning(
     dthcaus_source(
-      dataset = ae,
+      dataset_name = "ae",
       filter = AEOUT == "FATAL",
       date_var = AEDTHDTC,
       mode = "first",
@@ -34,11 +32,9 @@ test_that("a warning is issued when specifying `dthcaus_source(date_var = )", {
 })
 
 test_that("a warning is issued when specifying `dthcaus_source(traceabilty_vars = )", {
-  data(ae)
-
   expect_warning(
     dthcaus_source(
-      dataset = ae,
+      dataset_name = "ae",
       filter = AEOUT == "FATAL",
       date = AEDTHDTC,
       mode = "first",
@@ -51,10 +47,8 @@ test_that("a warning is issued when specifying `dthcaus_source(traceabilty_vars 
 })
 
 test_that("a warning is issued when specifying `lstalvdt_source(date_var = )", {
-  data(adsl)
-
   expect_warning(
-    lstalvdt_source(dataset = adsl, date_var = TRTEDT),
+    lstalvdt_source(dataset_name = "adsl", date_var = TRTEDT),
     "deprecated",
     fixed = TRUE
   )
@@ -65,7 +59,7 @@ test_that("a warning is issued when using `derive_suppqual_vars()", {
   data(suppae)
 
   expect_warning(
-    derive_suppqual_vars(ae, suppae),
+    derive_suppqual_vars(ae[1:100, ], suppae[1:100, ]),
     "deprecated",
     fixed = TRUE
   )
@@ -132,7 +126,7 @@ test_that("a warning is issued when specifying `derive_var_ontrtfl(date = )", {
 
   expect_warning(
     derive_var_ontrtfl(
-      advs[1:1000, ],
+      advs[1:100, ],
       date = ADT,
       ref_start_date = TRTSDT,
       ref_end_date = TRTEDT
@@ -147,7 +141,7 @@ test_that("a warning is issued when specifying `derive_summary_records(filter_ro
 
   expect_warning(
     derive_summary_records(
-      advs[1:1000, ],
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAM, AVISIT),
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE),
@@ -164,7 +158,7 @@ test_that("an error is thrown when specifying `derive_summary_records(fns = )", 
 
   expect_error(
     derive_summary_records(
-      advs[1:1000, ],
+      advs[1:100, ],
       by_vars = vars(USUBJID, PARAM, AVISIT),
       fns = AVAL ~ mean(., na.rm = TRUE),
       filter = dplyr::n() > 2,
@@ -175,3 +169,28 @@ test_that("an error is thrown when specifying `derive_summary_records(fns = )", 
   )
 })
 
+test_that("a warning is issued when specifying `dthcaus_source(dataset = )", {
+  expect_warning(
+    dthcaus_source(
+      dataset = ae,
+      filter = AEOUT == "FATAL",
+      date = AEDTHDTC,
+      mode = "first",
+      dthcaus = AEDECOD
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
+  expect_warning(
+    lstalvdt_source(
+      dataset = lb,
+      date = LBDTC,
+      filter = nchar(LBDTC) >= 10
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
