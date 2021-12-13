@@ -1,3 +1,7 @@
+# admiral development version
+
+- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
