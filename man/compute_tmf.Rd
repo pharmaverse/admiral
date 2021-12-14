@@ -4,7 +4,7 @@
 \alias{compute_tmf}
 \title{Derive the Time Imputation Flag}
 \usage{
-compute_tmf(dtc, dtm, ignore_seconds = FALSE)
+compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
 }
 \arguments{
 \item{dtc}{The date character vector (\code{'--DTC'}).
@@ -15,7 +15,12 @@ A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partia
 
 A datetime object is expected.}
 
-\item{ignore_seconds}{A logical value
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+if only hours and minutes are ever collected, and seconds are imputed in
+(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}.  A user can set this
+to \code{TRUE} so the  \code{'S'} Flag is dropped from (\code{'--TMF'}).
+
+A logical value
 
 Default: \code{FALSE}}
 }
@@ -30,7 +35,7 @@ Derive the time imputation flag (\code{'--TMF'}) comparing a date character vect
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25"), ignore_seconds = TRUE)
+compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"), ignore_seconds_flag = TRUE)
 }
 \author{
 Samia Kabi

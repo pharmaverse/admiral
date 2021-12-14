@@ -418,7 +418,10 @@ compute_dtf <- function(dtc, dt) {
 #'
 #'   A datetime object is expected.
 #'
-#' @param ignore_seconds
+#' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
+#' if only hours and minutes are ever collected, and seconds are imputed in
+#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`.  A user can set this
+#' to `TRUE` so the  `'S'` Flag is dropped from (`'--TMF'`).
 #'
 #'  A logical value
 #'
@@ -436,35 +439,34 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-#' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25"), ignore_seconds = TRUE)
+#' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"), ignore_seconds_flag = TRUE)
 compute_tmf <- function(dtc,
                         dtm,
-                        ignore_seconds = FALSE) {
+                        ignore_seconds_flag = FALSE) {
 
   assert_that(is.character(dtc), is_date(dtm))
-  assert_logical_scalar(ignore_seconds)
+  assert_logical_scalar(ignore_seconds_flag)
 
   is_na <- is.na(dtm)
   n_chr <- nchar(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  # if (ignore_seconds &&  n_chr >= 19) {
-  #   abort(paste0("Seconds detected in data.  You can not use ignore seconds option`", dtc, "`"))
-  # }
-
-  if (ignore_seconds){
-  case_when(
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr == 13 ~ "M",
-    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-  )}
+  if (ignore_seconds_flag  && n_chr >= 17){
+    abort("Seconds detected in data while ignore_seconds_flag is invoked")
+  }
+  else if (ignore_seconds_flag){
+    case_when(
+      (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+      n_chr == 13 ~ "M",
+      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
+    )}
   else {
     case_when(
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr == 16 ~ "S",
-    n_chr == 13 ~ "M",
-    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")}
+      (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+      n_chr == 16 ~ "S",
+      n_chr == 13 ~ "M",
+      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")}
 
 }
 
@@ -642,6 +644,7 @@ derive_vars_dt <- function(dataset,
 #'
 #'
 #' @inheritParams impute_dtc
+#' @inheritParams compute_tmf
 #'
 #' @details
 #' The presence of a `'--DTF'` variable is checked and the variable is not derived
@@ -695,6 +698,30 @@ derive_vars_dt <- function(dataset,
 #'   time_imputation = "last",
 #'   max_dates = vars(DTHDT, DCUTDT)
 #' )
+#'
+#' # Seconds has been removed from the input dataset.  Function now uses
+#' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
+#' mhdt <- tibble::tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "FIRST",
+#'   time_imputation = "FIRST",
+#'   ignore_seconds = TRUE
+#')
+#'
+#'
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
@@ -703,7 +730,7 @@ derive_vars_dtm <- function(dataset,
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL,
-                            ignore_seconds = FALSE) {
+                            ignore_seconds_flag = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -752,9 +779,12 @@ derive_vars_dtm <- function(dataset,
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
+
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), !!ignore_seconds))
+      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), !!ignore_seconds_flag))
+
   }
+
 
   dataset
 }
