@@ -58,7 +58,13 @@ squote <- function(x) {
 
 #' Wrap a String in Double Quotes
 #'
-#' @param x A `character` vector
+#' Wrap a string in double quotes, e.g., for displaying character values in
+#' messages.
+#'
+#' @param x A character vector
+#'
+#' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
+#'   input in double quotes is returned.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -483,8 +489,25 @@ valid_time_units <- function() {
 #' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
 #'   of a symbol named auto.
 #'
-#' @noRd
+#' @author Stefan Bundfuss
 #'
+#' @keywords check
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   }
+#'   else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
 is_auto <- function(arg) {
   is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }

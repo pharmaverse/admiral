@@ -1,4 +1,12 @@
-# admiral development version
+# admiral 0.6.x
+
+## New Features
+
+- `create_query_data()` is provided to create the [queries
+dataset](../articles/queries_dataset.html) required as input for
+`derive_vars_query()` (#606)
+
+## Updates of Existing Functions
 
 - `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
 

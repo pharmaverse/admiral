@@ -229,7 +229,12 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #'
-#' @author Thomas Neitmann
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
+#' `NULL` is considered as valid value.
+#'
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
@@ -813,6 +818,42 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+#' Is Argument a Function?
+#'
+#' Checks if the argument is a function and if all expected parameters are
+#' provided by the function.
+#'
+#' @param arg A function argument to be checked
+#'
+#' @param params A character vector of expected parameter names
+#'
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error
+#'
+#'  - if the argument is not a function or
+#'
+#'  - if the function does not provide all parameters as specified for the
+#'  `params` parameter.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(fun) {
+#'   assert_function(fun, params = c("x"))
+#' }
+#'
+#' example_fun(mean)
+#'
+#' try(example_fun(1))
+
+#' try(example_fun(sum))
 assert_function <- function(arg, params = NULL, optional = FALSE) {
   assert_character_vector(params, optional = TRUE)
   assert_logical_scalar(optional)

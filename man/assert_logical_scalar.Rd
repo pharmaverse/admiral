@@ -8,6 +8,11 @@ assert_logical_scalar(arg, optional = FALSE)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
+
+\item{optional}{Is the checked parameter optional?
+
+If set to \code{FALSE} and \code{arg} is \code{NULL} then an error is thrown. Otherwise,
+\code{NULL} is considered as valid value.}
 }
 \value{
 The function throws an error if \code{arg} is neither \code{TRUE} or \code{FALSE}. Otherwise,
@@ -30,6 +35,6 @@ try(example_fun(c(TRUE, FALSE, FALSE)))
 try(example_fun(1:10))
 }
 \author{
-Thomas Neitmann
+Thomas Neitmann, Stefan Bundfuss
 }
 \keyword{assertion}
