@@ -156,30 +156,6 @@ derive_vars_dtm(
   time_imputation = "last",
   max_dates = vars(DTHDT, DCUTDT)
 )
-
-# Seconds has been removed from the input dataset.  Function now uses
-# ignore_seconds_flag to remove the 'S' from the --TMF variable.
-mhdt <- tibble::tribble(
-  ~MHSTDTC,
-  "2019-07-18T15:25",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07",
-  ""
-)
-
-derive_vars_dtm(
-  mhdt,
-  new_vars_prefix = "AST",
-  dtc = MHSTDTC,
-  date_imputation = "FIRST",
-  time_imputation = "FIRST",
-  ignore_seconds = TRUE
-)
-
-
 }
 \author{
 Samia Kabi

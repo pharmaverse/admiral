@@ -718,10 +718,8 @@ derive_vars_dt <- function(dataset,
 #'   dtc = MHSTDTC,
 #'   date_imputation = "FIRST",
 #'   time_imputation = "FIRST",
-#'   ignore_seconds = TRUE
-#')
-#'
-#'
+#'   ignore_seconds_flag = TRUE
+#' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
@@ -781,7 +779,10 @@ derive_vars_dtm <- function(dataset,
     warn_if_vars_exist(dataset, tmf)
 
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm), !!ignore_seconds_flag))
+      mutate(!!sym(tmf) := compute_tmf(
+        dtc = !!dtc,
+        dtm = !!sym(dtm),
+        ignore_seconds_flag = !!ignore_seconds_flag))
 
   }
 
