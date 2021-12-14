@@ -2,14 +2,17 @@
 #'
 #' Add EX source variables from last dose to the input dataset.
 #' @param dataset Input dataset.
+#' The variables specified by the `by_vars` and `analysis_date` parameters are expected.
 #' @param dataset_ex Input EX dataset.
+#' The variables specified by the `by_vars`, `dose_date`, `new_vars` parameters,
+#' and source variables from `traceability_vars` parameter are expected.
 #' @param filter_ex Filtering condition applied to EX dataset.
 #' For example, it can be used to filter for valid dose.
 #' Defaults to NULL.
 #' @param by_vars Variables to join by (created by `dplyr::vars`).
 #' @param dose_id Variables to identify unique dose (created by `dplyr::vars`).
 #' Defaults to empty `vars()`.
-#' @param ex_keep_vars Variables to keep from `dataset_ex`, with the option to rename. Can either
+#' @param new_vars Variables to keep from `dataset_ex`, with the option to rename. Can either
 #' be variables created by `dplyr::vars` (e.g. `vars(VISIT)`), or named list returned by [`vars()`]
 #' (e.g. `vars(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from `dataset_ex` are
 #' kept without renaming.
@@ -45,7 +48,7 @@
 #' needs to be supplied (e.g. `dose_id = vars(EXSEQ)`) to identify unique records,
 #' or an error is issued. When `dose_id` is supplied, the last EX record from the same `dose_date`
 #' sorted by `dose_id` will be used to identify last dose.
-#' 4. The EX source variables (as specified in `ex_keep_vars`) from last dose are appended to the
+#' 4. The EX source variables (as specified in `new_vars`) from last dose are appended to the
 #' `dataset` and returned to the user.
 #'
 #' This function only works correctly for EX dataset with a structure of single dose per row.
@@ -54,8 +57,8 @@
 #'
 #' If variables (other than those specified in `by_vars`) exist in both `dataset` and `dataset_ex`,
 #' then join cannot be performed properly and an error is issued. To resolve the error, use
-#' `ex_keep_vars` to either keep variables unique to `dataset_ex`, or use this option to rename
-#' variables from `dataset_ex` (e.g. `ex_keep_vars = vars(LSTEXVIS = VISIT)`).
+#' `new_vars` to either keep variables unique to `dataset_ex`, or use this option to rename
+#' variables from `dataset_ex` (e.g. `new_vars = vars(LSTEXVIS = VISIT)`).
 #'
 #' @return Input dataset with EX source variables from last dose added.
 #'
@@ -77,7 +80,7 @@
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
-#'     ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
+#'     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
 #'     single_dose_condition = (EXSTDTC == EXENDTC)
@@ -91,7 +94,7 @@
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
-#'     ex_keep_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
+#'     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
@@ -107,7 +110,7 @@ derive_last_dose <- function(dataset,
                              dose_date,
                              analysis_date,
                              single_dose_condition = (EXDOSFRQ == "ONCE"),
-                             ex_keep_vars = NULL,
+                             new_vars = NULL,
                              traceability_vars = NULL) {
 
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
@@ -116,10 +119,10 @@ derive_last_dose <- function(dataset,
   dose_date <- assert_symbol(enquo(dose_date))
   analysis_date <- assert_symbol(enquo(analysis_date))
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
-  assert_varval_list(ex_keep_vars, optional = TRUE, accept_var = TRUE)
+  assert_varval_list(new_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
-  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, ex_keep_vars,
+  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, new_vars,
                                       get_source_vars(traceability_vars)))
 
   # vars converted to string
@@ -137,7 +140,7 @@ derive_last_dose <- function(dataset,
 
   # check if doses are unique based on dose_date and dose_id
   signal_duplicate_records(dataset_ex, c(by_vars, dose_date, dose_id),
-  "Multiple doses exists for the same dose_date. Update dose_id to identify unique doses.")
+  "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses.")
 
   # filter EX based on user-specified condition
   if (!is.null(quo_get_expr(filter_ex))) {
@@ -154,15 +157,15 @@ derive_last_dose <- function(dataset,
   }
 
   # keep user-specified variables from EX, if no variables specified all EX variables are kept
-  if (!is.null(ex_keep_vars)) {
+  if (!is.null(new_vars)) {
     dataset_ex <- dataset_ex  %>%
       select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
-             !!!ex_keep_vars, !!!syms(trace_vars_str))
+             !!!new_vars, !!!syms(trace_vars_str))
 
-    ex_keep_vars <- replace_values_by_names(ex_keep_vars)
+    new_vars <- replace_values_by_names(new_vars)
   }
   else {
-    ex_keep_vars <- syms(colnames(dataset_ex)[!colnames(dataset_ex) %in% by_vars_str])
+    new_vars <- syms(colnames(dataset_ex)[!colnames(dataset_ex) %in% by_vars_str])
   }
 
   # check if any variable exist in both dataset and dataset_ex (except for by_vars) before join
@@ -208,7 +211,7 @@ derive_last_dose <- function(dataset,
     filter_extreme(by_vars =  vars(tmp_seq_var),
                    order = c(vars(tmp_dose_date), dose_id),
                    mode = "last") %>%
-    select(tmp_seq_var, !!!ex_keep_vars, !!!syms(trace_vars_str))
+    select(tmp_seq_var, !!!new_vars, !!!syms(trace_vars_str))
 
   # return observations from original dataset with last dose variables added
   left_join(dataset, res, by = "tmp_seq_var") %>% select(-starts_with("tmp_"))

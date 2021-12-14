@@ -62,8 +62,6 @@ derive_last_dose_date <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(output_datetime)
 
-  trace_vars_str <- names(traceability_vars)
-
   res <- derive_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
@@ -72,17 +70,17 @@ derive_last_dose_date <- function(dataset,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
                 single_dose_condition = !!single_dose_condition,
-                ex_keep_vars = vars(!!dose_date),
-                traceability_vars = traceability_vars) %>%
-  select(colnames(dataset), !!new_var := !!dose_date, !!!syms(trace_vars_str))
+                new_vars = vars(!!dose_date),
+                traceability_vars = traceability_vars)
 
   # return either date or date-time variable
   if (!output_datetime) {
-    res <- res %>%  mutate(!!new_var := as.Date(!!new_var))
-    }
+    res <- res %>%  mutate(!!new_var := as.Date(!!dose_date))
+  }
   else {
-    res <- res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))
-    }
+    res <- res %>% mutate(!!new_var := as.POSIXct(as.character(!!dose_date), tz = "UTC"))
+  }
 
-return(res)
+  res %>% select(-!!dose_date, !!new_var)
+
 }

@@ -77,8 +77,6 @@ derive_last_dose_amt <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
 
-  trace_vars_str <- names(traceability_vars)
-
   derive_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
@@ -87,7 +85,6 @@ derive_last_dose_amt <- function(dataset,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
                 single_dose_condition = !!single_dose_condition,
-                ex_keep_vars = vars(!!dose_var),
-                traceability_vars = traceability_vars) %>%
-    select(colnames(dataset), !!!syms(trace_vars_str), !!new_var := !!dose_var)
+                new_vars = vars(!!new_var := !!dose_var),
+                traceability_vars = traceability_vars)
 }

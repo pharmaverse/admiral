@@ -81,8 +81,6 @@ derive_last_dose_grp <- function(dataset,
   single_dose_condition <- assert_filter_cond(enquo(single_dose_condition))
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
-  trace_vars_str <- names(traceability_vars)
-
 
   derive_last_dose(dataset = dataset,
                    dataset_ex = dataset_ex,
@@ -92,7 +90,7 @@ derive_last_dose_grp <- function(dataset,
                    dose_date = !!dose_date,
                    analysis_date = !!analysis_date,
                    single_dose_condition = !!single_dose_condition,
-                   ex_keep_vars = vars(!!dose_var),
+                   new_vars = vars(!!dose_var),
                    traceability_vars = traceability_vars) %>%
     mutate(!!new_var :=
              as.character(
@@ -101,6 +99,6 @@ derive_last_dose_grp <- function(dataset,
                    breaks = !!grp_brks,
                    include.lowest = include_lowest,
                    right = right,
-                   labels = !!grp_lbls)))  %>%
-    select(colnames(dataset), !!!syms(trace_vars_str), !!new_var)
+                   labels = !!grp_lbls))) %>%
+    select(-!!dose_var, !!new_var)
 }
