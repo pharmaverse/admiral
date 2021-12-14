@@ -194,3 +194,44 @@ test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
     fixed = TRUE
   )
 })
+
+test_that("a warning is issued when using `derive_var_basec()", {
+  dataset <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVALC,   ~AVISIT,    ~ABLFL,
+    "TEST01", "PAT01",  "PARAM03", NA,    "LOW",    "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM03", NA,    "LOW",    "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM03", NA,    "MEDIUM", "Day 14",   "N",
+    "TEST01", "PAT01",  "PARAM04", NA,    "HIGH",   "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM04", NA,    "HIGH",   "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM04", NA,    "MEDIUM", "Day 14",   "N"
+  )
+
+  expect_warning(
+    derive_var_basec(dataset, by_vars = vars(STUDYID, USUBJID, PARAMCD)),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_baseline()", {
+  dataset <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~AVALC, ~AVISIT,    ~ABLFL,
+    "TEST01", "PAT01",  "PARAM01", 10.12,  NA,     "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM01",  9.7,   NA,     "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM01", 15.01,  NA,     "Day 14",   "N",
+    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM02", NA,     NA,     "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Day 14",   "N"
+  )
+
+  expect_warning(
+    derive_baseline(
+      dataset,
+      by_vars = vars(STUDYID, USUBJID, PARAMCD),
+      source_var = AVAL,
+      new_var = BASE
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
