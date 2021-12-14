@@ -368,7 +368,6 @@ convert_dtc_to_dtm <- function(dtc,
 #' @param dt The date to convert.
 #'
 #'   A date or character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
-#'   Note: you can use [impute_dtc()] function to build a complete datetime.
 #'
 #' @inheritParams convert_dtc_to_dtm
 #'
@@ -392,22 +391,23 @@ convert_date_to_dtm <- function(dt,
                                 min_dates = NULL,
                                 max_dates = NULL) {
 
-  # if input is date then convert into dtc, do not add time in this step if time is not in input
-  if (is_date(dt)) {
-    dt <- case_when(
-      lubridate::is.POSIXct(dt) ~ convert_dtm_to_dtc(dt),
-      TRUE ~ format(dt, "%Y-%m-%d")
-    )
+  if (lubridate::is.POSIXct(dt)) {
+    return(dt)
   }
+  else {
+    if (is_date(dt)) {
+      dt <- format(dt, "%Y-%m-%d")
+    }
 
-  # convert dtc to dtm
-  dt %>%
-    convert_dtc_to_dtm(
-      date_imputation = date_imputation,
-      time_imputation = time_imputation,
-      min_dates = min_dates,
-      max_dates = max_dates
-    )
+    # convert dtc to dtm
+    dt %>%
+      convert_dtc_to_dtm(
+        date_imputation = date_imputation,
+        time_imputation = time_imputation,
+        min_dates = min_dates,
+        max_dates = max_dates
+      )
+  }
 }
 
 #' Derive the Date Imputation Flag
