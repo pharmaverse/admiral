@@ -15,8 +15,7 @@ convert_date_to_dtm(
 \arguments{
 \item{dt}{The date to convert.
 
-A date or character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss}.
-Note: you can use \code{\link[=impute_dtc]{impute_dtc()}} function to build a complete datetime.}
+A date or character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss}.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.

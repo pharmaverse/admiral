@@ -231,7 +231,7 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_last_dose_date()` can be used to derive the last dose date before the start of the event. 
+The function `derive_var_last_dose_date()` can be used to derive the last dose date before the start of the event. 
 Additionally, this function can also provide the traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
@@ -239,7 +239,7 @@ Additionally, this function can also provide the traceability variables
 ```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
-  derive_last_dose_date(
+  derive_var_last_dose_date(
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,

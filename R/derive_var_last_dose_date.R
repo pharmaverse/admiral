@@ -2,7 +2,7 @@
 #'
 #' Add a variable for the dose date or datetime of the last dose to the input dataset.
 #'
-#' @inheritParams derive_last_dose
+#' @inheritParams derive_vars_last_dose
 #' @param new_var The new date or datetime variable added to `dataset`.
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
 #'
@@ -19,7 +19,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_last_dose()]
+#' @seealso [derive_vars_last_dose()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -29,7 +29,7 @@
 #'
 #' ae %>%
 #'   head(100) %>%
-#'   derive_last_dose_date(
+#'   derive_var_last_dose_date(
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
@@ -41,7 +41,7 @@
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 
-derive_last_dose_date <- function(dataset,
+derive_var_last_dose_date <- function(dataset,
                                   dataset_ex,
                                   filter_ex = NULL,
                                   by_vars = vars(STUDYID, USUBJID),
@@ -62,7 +62,7 @@ derive_last_dose_date <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(output_datetime)
 
-  res <- derive_last_dose(dataset = dataset,
+  res <- derive_vars_last_dose(dataset = dataset,
                 dataset_ex = dataset_ex,
                 filter_ex = !!filter_ex,
                 by_vars = by_vars,

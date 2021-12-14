@@ -2,7 +2,7 @@
 #'
 #' Add a variable for user-defined dose grouping of the last dose to the input dataset.
 #'
-#' @inheritParams derive_last_dose
+#' @inheritParams derive_vars_last_dose
 #' @param new_var The output variable defined by the user.
 #' @param grp_brks User supplied breaks to apply to groups.
 #' Refer to `breaks` parameter in `cut()` for details.
@@ -29,7 +29,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_last_dose()], [cut()]
+#' @seealso [derive_vars_last_dose()], [cut()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -39,7 +39,7 @@
 #'
 #' ae %>%
 #'    head(100) %>%
-#'    derive_last_dose_grp(
+#'    derive_var_last_dose_grp(
 #'    head(ex_single, 100),
 #'    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'    nchar(EXENDTC) >= 10,
@@ -58,7 +58,7 @@
 #'    select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 
 
-derive_last_dose_grp <- function(dataset,
+derive_var_last_dose_grp <- function(dataset,
                                  dataset_ex,
                                  filter_ex = NULL,
                                  by_vars = vars(STUDYID, USUBJID),
@@ -82,7 +82,7 @@ derive_last_dose_grp <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   dose_var <- assert_symbol(enquo(dose_var))
 
-  derive_last_dose(dataset = dataset,
+  derive_vars_last_dose(dataset = dataset,
                    dataset_ex = dataset_ex,
                    filter_ex = !!filter_ex,
                    by_vars = by_vars,

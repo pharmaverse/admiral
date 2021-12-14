@@ -1,4 +1,4 @@
-context("test-derive_last_dose_amt")
+context("test-derive_var_last_dose_amt")
 
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
@@ -24,14 +24,14 @@ input_ex <- tibble::tribble(
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
-test_that("derive_last_dose_amt works as expected", {
+test_that("derive_var_last_dose_amt works as expected", {
 
   expected_output <- mutate(
     input_ae,
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
   )
 
-  res <- derive_last_dose_amt(
+  res <- derive_var_last_dose_amt(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -48,7 +48,7 @@ test_that("derive_last_dose_amt works as expected", {
 
 })
 
-test_that("derive_last_dose_amt returns traceability vars", {
+test_that("derive_var_last_dose_amt returns traceability vars", {
 
   expected_output <- mutate(
     input_ae,
@@ -58,7 +58,7 @@ test_that("derive_last_dose_amt returns traceability vars", {
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
   )
 
-  res <- derive_last_dose_amt(
+  res <- derive_var_last_dose_amt(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),

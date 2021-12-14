@@ -1,4 +1,4 @@
-context("test-derive_last_dose_date.R")
+context("test-derive_var_last_dose_date.R")
 
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
@@ -24,7 +24,7 @@ input_ex <- tibble::tribble(
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
-test_that("derive_last_dose_date works as expected output_datetime = FALSE", {
+test_that("derive_var_last_dose_date works as expected output_datetime = FALSE", {
 
   expected_output <-  tibble::tribble(
   ~STUDYID,        ~USUBJID,  ~AESEQ,    ~AESTDTC,      ~LDOSEDTM,
@@ -37,7 +37,7 @@ test_that("derive_last_dose_date works as expected output_datetime = FALSE", {
     "my_study",   "subject4",  1,        "2020-11-02",   NA_character_) %>%
     mutate(LDOSEDTM = as.Date(LDOSEDTM))
 
-  res <- derive_last_dose_date(
+  res <- derive_var_last_dose_date(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -54,7 +54,7 @@ test_that("derive_last_dose_date works as expected output_datetime = FALSE", {
 
 })
 
-test_that("derive_last_dose_date works as expected with output_datetime = TRUE", {
+test_that("derive_var_last_dose_date works as expected with output_datetime = TRUE", {
 
   expected_output <-  tibble::tribble(
     ~STUDYID,        ~USUBJID,  ~AESEQ,    ~AESTDTC,      ~LDOSEDTM,
@@ -67,7 +67,7 @@ test_that("derive_last_dose_date works as expected with output_datetime = TRUE",
     "my_study",   "subject4",  1,        "2020-11-02",   NA_character_) %>%
     mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"))
 
-  res <- derive_last_dose_date(
+  res <- derive_var_last_dose_date(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -84,7 +84,7 @@ test_that("derive_last_dose_date works as expected with output_datetime = TRUE",
 
 })
 
-test_that("derive_last_dose_date returns traceability vars", {
+test_that("derive_var_last_dose_date returns traceability vars", {
 
   expected_output <-  tibble::tribble(
     ~STUDYID,    ~USUBJID,   ~AESEQ,  ~AESTDTC,      ~LDOSEDTM,
@@ -100,7 +100,7 @@ test_that("derive_last_dose_date returns traceability vars", {
           LDOSESEQ = c(1, 2, 3, NA, 2, NA, NA),
           LDOSEVAR = c("EXENDTC", "EXENDTC", "EXENDTC", NA, "EXENDTC", NA, NA))
 
-  res <- derive_last_dose_date(
+  res <- derive_var_last_dose_date(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),

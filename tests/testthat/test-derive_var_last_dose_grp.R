@@ -1,4 +1,4 @@
-context("test-derive_last_dose_grp.R")
+context("test-derive_var_last_dose_grp.R")
 
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
@@ -35,7 +35,7 @@ test_that("derive_last_dose_date works as expected", {
   "my_study", "subject4",     1, "2020-11-02", "G3")
 
 
-  res <- derive_last_dose_grp(input_ae,
+  res <- derive_var_last_dose_grp(input_ae,
                      input_ex,
                      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
                      by_vars = vars(STUDYID, USUBJID),

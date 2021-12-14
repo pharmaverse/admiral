@@ -53,7 +53,7 @@
 #'
 #' This function only works correctly for EX dataset with a structure of single dose per row.
 #' If your study EX dataset has multiple doses per row, use `expansion_function_name??` to
-#' transform the EX dataset into single dose per row structure before calling `derive_last_dose`.
+#' transform the EX dataset into single dose per row structure before calling `derive_vars_last_dose`.
 #'
 #' If variables (other than those specified in `by_vars`) exist in both `dataset` and `dataset_ex`,
 #' then join cannot be performed properly and an error is issued. To resolve the error, use
@@ -76,7 +76,7 @@
 #'
 #' ae %>%
 #'   head(100) %>%
-#'   derive_last_dose(
+#'   derive_vars_last_dose(
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
@@ -90,7 +90,7 @@
 #' # or with traceability variables
 #' ae %>%
 #'   head(100) %>%
-#'   derive_last_dose(
+#'   derive_vars_last_dose(
 #'     head(ex_single, 100),
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
 #'       nchar(EXENDTC) >= 10,
@@ -102,7 +102,7 @@
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 #'
-derive_last_dose <- function(dataset,
+derive_vars_last_dose <- function(dataset,
                              dataset_ex,
                              filter_ex = NULL,
                              by_vars = vars(STUDYID, USUBJID),
