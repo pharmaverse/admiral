@@ -334,3 +334,4 @@ test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds
 
 })
 
+
