@@ -1,0 +1,87 @@
+#' Derive Analysis Relative Day
+#'
+#' Adds the analysis relative day (`--DY`) to the dataset, i.e., study
+#' day of analysis date.
+#'
+#' @param dataset Input dataset
+#'
+#'   The columns specified by the `reference_date` and the `source_vars` parameter are
+#'   expected.
+#'
+#' @param reference_date The start date column, e.g., date of first treatment
+#'
+#'   A date or date-time object column is expected.
+#'
+#' @param source_vars A list of datetime or date variables created using `vars()` from
+#'   which dates are to be extracted.
+#'
+#' @author Teckla Akinyi
+#'
+#' @details The study day is derived as number of days from the reference date
+#'   to the end date. If it is nonnegative, one is added. I.e., the study day of the
+#'   reference date is 1.
+#'
+#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
+#'     source variable(s) added
+#'
+#' @keywords derivation bds occds timing
+#'
+#' @export
+#'
+#' @examples
+#' datain <- tibble::tribble(
+#'  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
+#'  "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#' ) %>%
+#'  mutate(TRTSDTM=lubridate::as_datetime(TRTSDTM),
+#'         ASTDT=lubridate::as_datetime(ASTDTM),
+#'         AENDT=lubridate::ymd(AENDT))
+#'
+#' derive_vars_dy(datain, reference_date = TRTSDTM,source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+#'
+#'  datain <- tibble::tribble(
+#'  ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,
+#'  "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
+#'  ) %>%
+#'  mutate(TRTSDTM=lubridate::ymd(TRTSDT),
+#'         ASTDT=lubridate::as_datetime(ASTDTM),
+#'         AENDT=lubridate::ymd(AENDT))
+#'
+#'  derive_vars_dy(datain, reference_date = TRTSDT, source_vars = vars(TRTSDT, ASTDTM, AENDT))
+derive_vars_dy <- function(dataset,
+                           reference_date,
+                           source_vars) {
+  #assertions
+  reference_date <- assert_symbol(enquo(reference_date))
+  assert_data_frame(dataset, required_vars = quo_c(source_vars, reference_date))
+
+  #Warn if `--DY` variables already exist
+  dtm_vars <- vars2chr(source_vars)
+  n_vars <- length(source_vars)
+
+  dy_vars <- sub("DTM$", "DY", sub("DT$", "DY", dtm_vars))
+  warn_if_vars_exist(dataset, dy_vars)
+
+  #call date part of reference date if --DTM is parsed
+
+  if (n_vars > 1L) {
+    dataset %>%
+      mutate_at(source_vars,
+                .funs = list(temp = ~ ceiling(as.numeric(
+                                              difftime(., `!!`(reference_date), unit = "days")))
+                             )
+                ) %>%
+      # if ge to 0 then add 1
+      mutate_at(vars(ends_with("temp")), ~ ifelse(.x >= 0, .x + 1, .x)) %>%
+      rename_at(vars(ends_with("temp")),
+                .funs = ~ stringr::str_replace_all(., c(DTM_temp = "DY", DT_temp = "DY")))
+  } else {
+    dataset <-   dataset %>%
+      mutate(!!sym(dy_vars) := ceiling(as.numeric(
+                                       difftime(!!!source_vars, !!reference_date), unit = "days")),
+             # if ge to 0 then add 1
+             !!sym(dy_vars) := ifelse(!!sym(dy_vars) >= 0, !!sym(dy_vars) + 1, !!sym(dy_vars))
+             )
+  }
+
+}
