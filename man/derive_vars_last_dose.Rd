@@ -90,7 +90,8 @@ sorted by \code{dose_id} will be used to identify last dose.
 
 This function only works correctly for EX dataset with a structure of single dose per row.
 If your study EX dataset has multiple doses per row, use \verb{expansion_function_name??} to
-transform the EX dataset into single dose per row structure before calling \code{derive_vars_last_dose}.
+transform the EX dataset into single dose per row structure before calling
+\code{derive_vars_last_dose}.
 
 If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{dataset_ex},
 then join cannot be performed properly and an error is issued. To resolve the error, use

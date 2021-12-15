@@ -53,7 +53,8 @@
 #'
 #' This function only works correctly for EX dataset with a structure of single dose per row.
 #' If your study EX dataset has multiple doses per row, use `expansion_function_name??` to
-#' transform the EX dataset into single dose per row structure before calling `derive_vars_last_dose`.
+#' transform the EX dataset into single dose per row structure before calling
+#' `derive_vars_last_dose`.
 #'
 #' If variables (other than those specified in `by_vars`) exist in both `dataset` and `dataset_ex`,
 #' then join cannot be performed properly and an error is issued. To resolve the error, use
@@ -158,14 +159,12 @@ derive_vars_last_dose <- function(dataset,
 
   # keep user-specified variables from EX, if no variables specified all EX variables are kept
   if (!is.null(new_vars)) {
-    dataset_ex <- dataset_ex  %>%
+    new_vars_name <- replace_values_by_names(new_vars)
+    dataset_ex <- dataset_ex %>% mutate(!!!new_vars) %>%
       select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
-             !!!new_vars, !!!syms(trace_vars_str))
-
-    new_vars <- replace_values_by_names(new_vars)
-  }
-  else {
-    new_vars <- syms(colnames(dataset_ex)[!colnames(dataset_ex) %in% by_vars_str])
+             !!!new_vars_name, !!!syms(trace_vars_str))
+  } else {
+    new_vars_name <- syms(colnames(dataset_ex))
   }
 
   # check if any variable exist in both dataset and dataset_ex (except for by_vars) before join
@@ -211,7 +210,7 @@ derive_vars_last_dose <- function(dataset,
     filter_extreme(by_vars =  vars(tmp_seq_var),
                    order = c(vars(tmp_dose_date), dose_id),
                    mode = "last") %>%
-    select(tmp_seq_var, !!!new_vars, !!!syms(trace_vars_str))
+    select(tmp_seq_var, !!!new_vars_name, !!!syms(trace_vars_str), -by_vars_str)
 
   # return observations from original dataset with last dose variables added
   left_join(dataset, res, by = "tmp_seq_var") %>% select(-starts_with("tmp_"))

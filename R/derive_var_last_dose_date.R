@@ -70,17 +70,15 @@ derive_var_last_dose_date <- function(dataset,
                 dose_date = !!dose_date,
                 analysis_date = !!analysis_date,
                 single_dose_condition = !!single_dose_condition,
-                new_vars = vars(!!dose_date),
+                new_vars = vars(!!new_var := !!dose_date),
                 traceability_vars = traceability_vars)
 
   # return either date or date-time variable
   if (!output_datetime) {
-    res <- res %>%  mutate(!!new_var := as.Date(!!dose_date))
+    res %>%  mutate(!!new_var := as.Date(!!new_var))
   }
   else {
-    res <- res %>% mutate(!!new_var := as.POSIXct(as.character(!!dose_date), tz = "UTC"))
+    res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))
   }
-
-  res %>% select(-!!dose_date, !!new_var)
 
 }
