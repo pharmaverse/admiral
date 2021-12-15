@@ -1,10 +1,10 @@
 #' Derive a Disposition Status at a Specific Timepoint
 #'
-#' @description
+#' @description *Deprecated*, please use `derive_var_disposition_status()` instead.
 #'
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'
-#' @param dataset Input dataset.*Deprecated*, please use `derive_var_disposition_status()` instead.
+#' @param dataset Input dataset.
 #'
 #' @param dataset_ds Dataset containing the disposition information (e.g.: ds).
 #'
