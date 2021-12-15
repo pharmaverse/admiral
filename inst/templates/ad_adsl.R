@@ -90,14 +90,14 @@ adsl <- dm %>%
 
   # Disposition dates, status
   # Screen fail date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
     filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
@@ -105,7 +105,7 @@ adsl <- dm %>%
   ) %>%
 
   # EOS status
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
@@ -114,7 +114,7 @@ adsl <- dm %>%
   ) %>%
 
   # Last retrieval date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,

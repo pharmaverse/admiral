@@ -239,7 +239,7 @@ Additionally, this function can also provide the traceability variables
 ```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
-  derive_last_dose(
+  derive_var_last_dose(
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
@@ -354,7 +354,7 @@ maximum toxicity grade.
 
 ```{r, eval=FALSE}
 adae <- adae %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ATOXGR), ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -372,7 +372,7 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ASEVN), ASTDTM, AESEQ),
     new_var = AOCCIFL,
