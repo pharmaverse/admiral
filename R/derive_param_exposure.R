@@ -47,11 +47,11 @@
 #'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'   More general expression are not allowed.
 #'
+#'   *Permitted Values:* List of variable-value pairs
+#'
 #' @details For each group (with respect to the variables specified for the `by_vars` parameter),
 #' an observation is added to the output dataset and the defined values are set to the defined
 #' variables
-#'
-#'   *Permitted Values:* List of variable-value pairs
 #'
 #'
 #' @author Samia Kabi
@@ -227,6 +227,7 @@ derive_params_exposure <- function(dataset,
                                    summary_fun,
                                    filter = NULL,
                                    set_values_to = NULL) {
+  deprecate_warn("0.6.0", "derive_params_exposure()", "derive_param_exposure()")
   by_vars <- assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
 
