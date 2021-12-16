@@ -452,12 +452,17 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
+
   if (ignore_seconds_flag)  {
+    if ((any(n_chr >= 17)))
+    {abort("Seconds detected in data while ignore_seconds_flag is invoked")
+    }
+    else {
       case_when(
         (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
         n_chr == 13 ~ "M",
         n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-      )
+      )}
   } else {
     case_when(
       (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,

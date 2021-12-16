@@ -318,6 +318,20 @@ input_secs <- tibble::tribble(
   "2019---07"
 )
 
+test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds is present in the data ", { # nolint
 
+
+  expect_error(
+    derive_vars_dtm(
+      input_secs,
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      date_imputation = "FIRST",
+      time_imputation = "FIRST",
+      ignore_seconds_flag = TRUE
+    ),
+    regexp =  "Seconds detected in data while ignore_seconds_flag is invoked")
+
+})
 
 
