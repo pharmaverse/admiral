@@ -195,7 +195,7 @@ derive_extreme_flag <- function(dataset,
 
   # Create flag
   data <- data %>%
-    derive_obs_number(
+    derive_var_obs_number(
       new_var = temp_obs_nr,
       order = order,
       by_vars = by_vars,
@@ -597,7 +597,7 @@ derive_var_extreme_flag <- function(dataset,
 
   # Create flag
   data <- data %>%
-    derive_obs_number(
+    derive_var_obs_number(
       new_var = temp_obs_nr,
       order = order,
       by_vars = by_vars,

@@ -319,7 +319,7 @@ test_that("a warning is issued when using `derive_extreme_flag()`", {
   )
 
   expect_warning(
-    derive_var_extreme_flag(
+    derive_extreme_flag(
       input,
       by_vars = vars(USUBJID),
       order = vars(AVISITN, desc(AVAL)),
