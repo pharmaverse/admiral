@@ -253,8 +253,7 @@ test_that("Ignore Seconds Flag is not used when set to FALSE in function call", 
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
-    select(XXSTDTC, ASTDTF, everything())
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
 
   actual_output <- derive_vars_dtm(
     input_secs,
