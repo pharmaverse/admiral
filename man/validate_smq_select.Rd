@@ -15,6 +15,9 @@ The original object.
 \description{
 Validate an object is indeed a \code{smq_select} object
 }
+\seealso{
+\code{\link[=smq_select]{smq_select()}}
+}
 \author{
 Stefan Bundfuss
 }

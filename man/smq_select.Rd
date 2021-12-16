@@ -24,6 +24,9 @@ Create an \code{smq_select} object
 \details{
 Exactly one of \code{name} or \code{id} must be specified.
 }
+\seealso{
+\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}
+}
 \author{
 Stefan Bundfuss
 }

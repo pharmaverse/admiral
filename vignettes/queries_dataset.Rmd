@@ -26,7 +26,11 @@ This function takes as input the dataset (`dataset`) where the grouping must occ
 a dataset containing the required information to perform the derivation of the grouping variables 
 (`dataset_queries`).
 
-Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the `dataset_queries` argument of the `derive_vars_query()` function should be created outside of admiral in a specific format so that it can be passed in the function.
+Because the definition, collection and storage of the medical concepts is
+company specific, the dataset passed to the `dataset_queries` argument of the
+`derive_vars_query()` function should be created outside of admiral in a
+specific format so that it can be passed in the function. The admiral function
+`create_query_data()` can be used to create queries datasets.
 
 This vignette describes the expected structure and content of the dataset passed to the
 `dataset_queries` argument in the `derive_vars_query()` function. 

@@ -112,7 +112,7 @@ database by calling the function specified for the \code{get_sdg_fun} parameter.
 \item If it is a data frame, the terms stored in the data frame are used.
 \item If it is a list of data frames and \code{smq_select()} objects, all terms from
 the dataframes and all terms read from the SMQ database referrenced by the
-\code{smq_select} objects are collated.
+\code{smq_select()} objects are collated.
 }
 
 The following variables are created:
@@ -130,8 +130,8 @@ object, the variable is set to \code{NA}. If none of the queries is defined by a
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
 scope is broad. Otherwise it is set to '2'. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} of none of the queries is a SMQ , the variable is not
-created.
+equals \code{FALSE} for all SMQs or none of the queries is a SMQ , the variable
+is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
 \item \code{TERM_ID}: Value of the term variable if it is a numeric variable.
@@ -191,7 +191,7 @@ create_query_data(queries = list(pregsmq, cqterms),
 }
 }
 \seealso{
-\code{\link[=derive_vars_query]{derive_vars_query()}}
+\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}
 }
 \author{
 Stefan Bundfuss

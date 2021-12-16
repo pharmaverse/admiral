@@ -389,15 +389,15 @@ dataset_vignette(adae,
 
 ## Derive Query Variables {#query}
 
-It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in `derive_vars_query()` to an ADaM. 
+For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, or
+`CQzzNAM` the `derive_vars_query()` function can be used. As input it expects a
+queries dataset, which provides the definition of the queries. See [Queries
+dataset documentation](queries_dataset.html) for a detailed description ot the
+queries dataset. The `create_query_data()` function can be used to create
+queries datasets.
 
-For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be needed. 
-
-This function expects the dictionary and/or lookup information to be provided as input in a standard structure.
-
-The expected result is the input dataset with query variables added: See also [Queries dataset documentation](queries_dataset.html).
-
-
+The following example shows how to derive query variables for Standardized MedDRA
+Queries (SMQs) in ADAE.
 ```{r, eval=TRUE}
 data("queries")
 ```

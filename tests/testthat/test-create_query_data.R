@@ -306,7 +306,12 @@ test_that("query: error: definition is list with non dataframe or smq_select ele
       prefix = "CQ01",
       definition = list(sdg_select(name = "5-aminosalicylates for ulcerative colitis"))
     ),
-    regexp = "^Each element of the list in the definition field must be a data frame or an object of class `smq_select` but the following are not:.*")
+    regexp =
+      paste0(
+        "^Each element of the list in the definition field must be a data frame or",
+        " an object of class `smq_select` but the following are not:.*"
+      )
+  )
 })
 
 # query: error: invalid definition ----
@@ -317,7 +322,12 @@ test_that("query: error: invalid definition", {
       prefix = "CQ01",
       definition = 1
     ),
-    regexp = "^`definition` expects a `smq_select` or `sdg_select` object, a data frame, or a list of data frames and `smq_select` objects.*")
+    regexp =
+      paste0(
+        "^`definition` expects a `smq_select` or `sdg_select` object,",
+        " a data frame, or a list of data frames and `smq_select` objects.*"
+      )
+  )
 })
 
 # assert_terms: error: TERM_LEVEL missing ----
@@ -334,7 +344,10 @@ test_that("assert_terms: error: TERM_NAME and TERM_ID missing", {
   expect_error(
     assert_terms(terms = select(cqterms, TERM_LEVEL),
                  source_text = "my test data"),
-    regexp = "Variable `TERM_NAME` or `TERM_ID` is required.\nNone of them is in my test data.\nProvided variables: `TERM_LEVEL`",
+    regexp = paste0(
+      "Variable `TERM_NAME` or `TERM_ID` is required.\n",
+      "None of them is in my test data.\nProvided variables: `TERM_LEVEL`"
+    ),
     fixed = TRUE)
 })
 
@@ -423,4 +436,3 @@ test_that("format.sdg_select: formatting is correct", {
   expect_equal(format(sdg_select(name = "My SDG")),
                "sdg_select(name = \"My SDG\", id = NULL)")
 })
-

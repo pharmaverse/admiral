@@ -15,6 +15,9 @@ The original object.
 \description{
 Validate an object is indeed a \code{sdg_select} object
 }
+\seealso{
+\code{\link[=sdg_select]{sdg_select()}}
+}
 \author{
 Stefan Bundfuss
 }

@@ -15,6 +15,9 @@ The original object.
 \description{
 Validate an object is indeed a \code{query} object
 }
+\seealso{
+\code{\link[=query]{query()}}
+}
 \author{
 Stefan Bundfuss
 }

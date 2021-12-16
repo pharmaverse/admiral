@@ -25,9 +25,9 @@ the variable is set to the id of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
 keyword is permitted only for queries which are defined by a \code{smq_select()}
-or \code{sdg_select()} object.
+or \code{sdg_select()} object.}
 
-@param add_scope_num The variable \verb{<prefix>SCN} is added to the output
+\item{add_scope_num}{The variable \verb{<prefix>SCN} is added to the output
 dataset if the parameter is specified. Otherwise the variable is not
 created.
 
@@ -37,16 +37,17 @@ If the parameter is set to \code{TRUE}, the definition must be a \code{smq_selec
 object.
 
 \emph{Default}: \code{FALSE}
+
 \emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 
 \item{definition}{Definition of terms belonging to the query
 
-There are three different ways to define the terms:
+There are four different ways to define the terms:
 \itemize{
-\item A \code{smq_select()} object is specified to select a query from the SMQ
+\item A \code{smq_select} object is specified to select a query from the SMQ
 database. The database contains Standard MedDRA Queries (SMQs) and AE
 Grouping Terms (AEGTs).
-\item A \code{sdg_select()} object is specified to select a query from the SDG
+\item A \code{sdg_select} object is specified to select a query from the SDG
 database.
 \item A data frame with columns \code{TERM_LEVEL} and \code{TERM_NAME} or \code{TERM_ID} can
 be specified to define the terms of the query. The \code{TERM_LEVEL} should be
@@ -60,14 +61,21 @@ to the value the variable. If it refers to a numeric variable, \code{TERM_ID}
 should be set to the value of the variable. If only character variables
 or only numeric variables are used, \code{TERM_ID} or \code{TERM_NAME} respectively
 can be omitted.
-}}
+\item A list of data frames and \code{smq_select} objects can be specified to define
+a customized query based on custom terms and SMQs. The data frames must
+have the same structure as described for the previous item.
+}
+
+\emph{Permitted Values}: a \code{smq_select} object, a \code{sdg_select} object, a data
+frame, or a list of data frames and \code{smq_select} objects.}
 }
 \value{
 An object of class "query".
 }
 \description{
-An \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-Standardised Drug Grouping (SDG), or a customized query (CQ).
+A \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
+Standardised Drug Grouping (SDG), or a customized query (CQ). It can be used
+as input to \code{create_query_data()}.
 }
 \details{
 The definition includes
@@ -77,6 +85,9 @@ The definition includes
 \item the values which should be assigned to the variables, and
 \item which terms belong to the query.
 }
+}
+\seealso{
+\code{\link[=create_query_data]{create_query_data()}}
 }
 \author{
 Stefan Bundfuss

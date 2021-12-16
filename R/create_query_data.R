@@ -89,7 +89,7 @@
 #'   * If it is a data frame, the terms stored in the data frame are used.
 #'   * If it is a list of data frames and `smq_select()` objects, all terms from
 #'   the dataframes and all terms read from the SMQ database referrenced by the
-#'   `smq_select` objects are collated.
+#'   `smq_select()` objects are collated.
 #'
 #'   The following variables are created:
 #'
@@ -106,8 +106,8 @@
 #'   * `QUERY_SCOPE_NUM`: numeric scope of the query. It is set to `1` if the
 #'   scope is broad. Otherwise it is set to '2'. If the `add_scope_num` element
 #'   equals `FALSE`, the variable is set to `NA`. If the `add_scope_num` element
-#'   equals `FALSE` of none of the queries is a SMQ , the variable is not
-#'   created.
+#'   equals `FALSE` for all SMQs or none of the queries is a SMQ , the variable
+#'   is not created.
 #'   * `TERM_LEVEL`: Name of the variable used to identify the terms.
 #'   * `TERM_NAME`: Value of the term variable if it is a character variable.
 #'   * `TERM_ID`: Value of the term variable if it is a numeric variable.
@@ -118,7 +118,7 @@
 #'
 #' @keywords adae adcm user_utility
 #'
-#' @seealso [derive_vars_query()]
+#' @seealso [derive_vars_query()], [query()]
 #'
 #' @export
 #'
@@ -222,7 +222,8 @@ create_query_data <- function(queries,
           format(queries[[i]]$definition),
           ", version = ",
           dquote(meddra_version),
-          ", keep_id = ",!is.null(queries[[i]]$id),
+          ", keep_id = ",
+          !is.null(queries[[i]]$id),
           ")"
         )
       )
@@ -258,7 +259,8 @@ create_query_data <- function(queries,
           format(queries[[i]]$definition),
           ", version = ",
           dquote(whodd_version),
-          ", keep_id = ",!is.null(queries[[i]]$id),
+          ", keep_id = ",
+          !is.null(queries[[i]]$id),
           ")"
         )
       )
@@ -323,6 +325,26 @@ create_query_data <- function(queries,
   bind_rows(query_data)
 }
 
+#' Check required parameters for SMQ/SDG
+#'
+#' If SMQs or SDGs are requested, the version and a function to access the
+#' database must be provided. The function checks these requirements.
+#'
+#' @param version Version provided by user
+#'
+#' @param fun Function provided by user
+#'
+#' @param queries Queries provide by user
+#'
+#' @param i Index of query being checked
+#'
+#' @param type Type of query
+#'
+#' Should be `"SMQ`" or `"SDG"`.
+#'
+#' @return An error is issued if `version` or `fun` is null.
+#'
+#' @author Stefan Bundfuss
 assert_db_requirements <- function(version, fun, queries, i, type) {
   if (is.null(fun)) {
     msg <-
@@ -360,8 +382,9 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 
 #' Create an `query` object
 #'
-#' An `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-#' Standardised Drug Grouping (SDG), or a customized query (CQ).
+#' A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
+#' Standardised Drug Grouping (SDG), or a customized query (CQ). It can be used
+#' as input to `create_query_data()`.
 #'
 #' @param prefix Prefix of the new variables, e.g., `"SMQ03"`
 #'
@@ -383,7 +406,7 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'   keyword is permitted only for queries which are defined by a `smq_select()`
 #'   or `sdg_select()` object.
 #'
-#'  @param add_scope_num The variable `<prefix>SCN` is added to the output
+#' @param add_scope_num The variable `<prefix>SCN` is added to the output
 #'   dataset if the parameter is specified. Otherwise the variable is not
 #'   created.
 #'
@@ -393,17 +416,18 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'   object.
 #'
 #'   *Default*: `FALSE`
+#'
 #'   *Permitted Values*: `TRUE`, `FALSE`
 #'
 #' @param definition Definition of terms belonging to the query
 #'
-#'   There are three different ways to define the terms:
+#'   There are four different ways to define the terms:
 #'
-#'   * A `smq_select()` object is specified to select a query from the SMQ
+#'   * A `smq_select` object is specified to select a query from the SMQ
 #'     database. The database contains Standard MedDRA Queries (SMQs) and AE
 #'     Grouping Terms (AEGTs).
 #'
-#'   * A `sdg_select()` object is specified to select a query from the SDG
+#'   * A `sdg_select` object is specified to select a query from the SDG
 #'     database.
 #'
 #'   * A data frame with columns `TERM_LEVEL` and `TERM_NAME` or `TERM_ID` can
@@ -419,6 +443,13 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'     or only numeric variables are used, `TERM_ID` or `TERM_NAME` respectively
 #'     can be omitted.
 #'
+#'   * A list of data frames and `smq_select` objects can be specified to define
+#'     a customized query based on custom terms and SMQs. The data frames must
+#'     have the same structure as described for the previous item.
+#'
+#'   *Permitted Values*: a `smq_select` object, a `sdg_select` object, a data
+#'   frame, or a list of data frames and `smq_select` objects.
+#'
 #' @details
 #'
 #' The definition includes
@@ -432,6 +463,8 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'
 #'
 #' @author Stefan Bundfuss
+#'
+#' @seealso [create_query_data()]
 #'
 #' @keywords source_specifications
 #'
@@ -468,6 +501,8 @@ query <- function(prefix,
 #' @param obj An object to be validated.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @seealso [query()]
 #'
 #' @export
 #'
@@ -525,14 +560,21 @@ validate_query <- function(obj) {
                    source_text = "the data frame provided for the `definition` element")
     }
     else {
-      is_valid <- map_lgl(values$definition, is.data.frame) | map_lgl(values$definition, inherits, "smq_select")
+      is_valid <-
+        map_lgl(values$definition, is.data.frame) |
+        map_lgl(values$definition, inherits, "smq_select")
       if (!all(is_valid)) {
-        info_msg <- paste(
-          sprintf("\u2716 Element %s is %s", which(!is_valid), map_chr(values$definition[!is_valid], what_is_it)),
-          collapse = "\n"
-        )
+        info_msg <- paste(sprintf(
+          "\u2716 Element %s is %s",
+          which(!is_valid),
+          map_chr(values$definition[!is_valid], what_is_it)
+        ),
+        collapse = "\n")
         err_msg <- sprintf(
-          "Each element of the list in the definition field must be a data frame or an object of class `smq_select` but the following are not:\n%s",
+          paste(
+            "Each element of the list in the definition field must be a data frame",
+            "or an object of class `smq_select` but the following are not:\n%s"
+          ),
           info_msg
         )
         abort(err_msg)
@@ -551,7 +593,8 @@ validate_query <- function(obj) {
   else {
     abort(
       paste0(
-        "`definition` expects a `smq_select` or `sdg_select` object, a data frame, or a list of data frames and `smq_select` objects.\n",
+        "`definition` expects a `smq_select` or `sdg_select` object, a data frame,",
+        " or a list of data frames and `smq_select` objects.\n",
         "An object of the following class was provided: ",
         class(values$definition)
       )
@@ -560,6 +603,45 @@ validate_query <- function(obj) {
   obj
 }
 
+#' Asserts Requirements for Terms for Queries
+#'
+#' The function checks the requirements for terms for queries provided by the
+#' user. The terms could have been provided directly in the query definition or
+#' via a user provided function for accessing a SMQ or SDG database.
+#'
+#' @param terms Terms provided by user
+#'
+#' @param expect_query_name Is the `QUERY_NAME` column expected?
+#'
+#' @param expect_query_id Is the `QUERY_ID` column expected?
+#'
+#' @param source_text Text describing the source of the terms, e.g., `"the data
+#'   frame provided for the `definition` element"`.
+#'
+#' @return An error is issued if
+#'
+#' - `terms` is not a data frame,
+#' - `terms` has zero observations,
+#' - the `TERM_LEVEL` variable is not in `terms`,
+#' - neither the `TERM_NAME` nor the `TERM_ID` variable is in `terms`,
+#' - `expect_query_name == TRUE` and the `QUERY_NAME` variable is not in `terms`,
+#' - `expect_query_id == TRUE` and the `QUERY_ID` variable is not in `terms`,
+#'
+#' @examples
+#'
+#' try(
+#'   assert_terms(
+#'     terms = 42,
+#'     source_text = "object provided by the `definition` element")
+#' )
+#'
+#' @export
+#'
+#' @seealso [create_query_data()], [query()]
+#'
+#' @keywords assertion
+#'
+#' @author Stefan Bundfuss
 assert_terms <- function(terms,
                          expect_query_name = FALSE,
                          expect_query_id = FALSE,
@@ -631,6 +713,8 @@ assert_terms <- function(terms,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @seealso [create_query_data()], [query()]
+#'
 #' @keywords source_specifications
 #'
 #' @export
@@ -651,6 +735,8 @@ smq_select <- function(name = NULL,
 #' Validate an object is indeed a `smq_select` object
 #'
 #' @param obj An object to be validated.
+#'
+#' @seealso [smq_select()]
 #'
 #' @author Stefan Bundfuss
 #'
@@ -679,6 +765,28 @@ validate_smq_select <- function(obj) {
   obj
 }
 
+#' Returns a Character Representation of a `smq_select()` Object
+#'
+#' The function returns a character representation of a `smq_select()` object.
+#' It can be used for error messages for example.
+#'
+#' @param x A `smq_select()` object
+#'
+#' @param ... Not used
+#'
+#' @return A character representation of the `smq_select()` object
+#'
+#' @author Stefan Bundfuss
+#'
+#' @seealso [smq_select()]
+#'
+#' @keywords dev_utility
+#'
+#' @export
+#'
+#' @examples
+#'
+#' format(smq_select(id = 42, scope = "NARROW"))
 format.smq_select <- function(x, ...) {
   paste0("smq_select(name = ",
          dquote(x$name),
@@ -705,6 +813,8 @@ format.smq_select <- function(x, ...) {
 #'
 #' @author Stefan Bundfuss
 #'
+#' @seealso [create_query_data()], [query()]
+#'
 #' @keywords source_specifications
 #'
 #' @export
@@ -725,6 +835,8 @@ sdg_select <- function(name=NULL,
 #' @param obj An object to be validated.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @seealso [sdg_select()]
 #'
 #' @export
 #'
@@ -747,6 +859,32 @@ validate_sdg_select <- function(obj) {
   obj
 }
 
+#' Returns a Character Representation of a `sdg_select()` Object
+#'
+#' The function returns a character representation of a `sdg_select()` object.
+#' It can be used for error messages for example.
+#'
+#' @param x A `sdg_select()` object
+#'
+#' @param ... Not used
+#'
+#' @return A character representation of the `sdg_select()` object
+#'
+#' @author Stefan Bundfuss
+#'
+#' @seealso [sdg_select()]
+#'
+#' @keywords dev_utility
+#'
+#' @export
+#'
+#' @examples
+#'
+#' format(
+#'   sdg_select(
+#'     name = "5-aminosalicylates for ulcerative colitis"
+#'   )
+#' )
 format.sdg_select <- function(x, ...) {
   paste0("sdg_select(name = ",
          dquote(x$name),

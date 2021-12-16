@@ -12,7 +12,7 @@
 #'             quo_get_expr quo_is_call quo_is_missing quo_is_null quo_is_symbol
 #'             quos quo_squash quo_text set_names sym syms type_of warn
 #'             quo_set_env quo_get_env
-#' @importFrom utils capture.output
+#' @importFrom utils capture.output str
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
 #'             flatten every modify_at modify_if reduce compose
 #' @importFrom stringr str_c str_detect str_extract str_remove str_remove_all
