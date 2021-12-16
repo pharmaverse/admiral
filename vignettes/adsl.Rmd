@@ -75,8 +75,10 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, 
-                 display_vars = vars(USUBJID, RFSTDTC,COUNTRY ,AGE,SEX , RACE ,ETHNIC,ARM, ACTARM))
+dataset_vignette(
+  adsl, 
+  display_vars = vars(USUBJID, RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
+)
 ```
 
 ## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvar}
@@ -107,7 +109,7 @@ function.
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_vars_dtm_to_dt( source_vars = vars(TRTSDTM, TRTEDTM))
+  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
 ```
 
 
@@ -120,7 +122,10 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, RFSTDTC, TRTSDTM ,  TRTSDT, TRTEDTM,   TRTEDT, TRTDURD))
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, RFSTDTC, TRTSDTM, TRTSDT, TRTEDTM, TRTEDT, TRTDURD)
+)
 ```
 
 
@@ -148,16 +153,17 @@ With `DS`:
 <a id="link_ds"></a>
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(ds , 
-                 display_vars = vars(USUBJID, DSCAT, DSDECOD,DSTERM,  DSSTDTC),
-                 filter =DSDECOD != "SCREEN FAILURE")
-
+dataset_vignette(
+  ds, 
+  display_vars = vars(USUBJID, DSCAT, DSDECOD,DSTERM, DSSTDTC),
+  filter = DSDECOD != "SCREEN FAILURE"
+)
 ```
 
 We would get :
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, EOSDT))
+dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT))
 ```
 
 
@@ -185,7 +191,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, EOSDT, EOSSTT))
+dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT))
 ```
 [Link](#link_ds) to `DS`.
 
@@ -255,7 +261,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
+dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT, DCSREAS, DCSREASP))
 ```
 
 [Link](#link_ds) to `DS`.
@@ -317,7 +323,7 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
+dataset_vignette(adsl, display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
 
 ```
 
@@ -355,7 +361,7 @@ study requirement.
 
 `dthcause_source()` specifications:
 
-- `dataset`: the dataset to search for death information,
+- `dataset_name`: the name of the dataset where to search for death information,
 - `filter`: the condition to define death,
 - `date`: the date of death,
 - `mode`: `first` or `last` to select the first/last date of death if multiple dates are collected,
@@ -367,7 +373,7 @@ An example call to define the sources would be:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -376,13 +382,16 @@ src_ae <- dthcaus_source(
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(ae , display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
-                 filter =  AEOUT == "FATAL")
+dataset_vignette(
+  ae,
+  display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
+  filter =  AEOUT == "FATAL"
+)
 ```
 
 ```{r eval=TRUE}
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -391,20 +400,26 @@ src_ds <- dthcaus_source(
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(ds , display_vars = vars(USUBJID, DSDECOD, DSTERM, DSSTDTC),
-                 filter = DSDECOD == "DEATH")
+dataset_vignette(
+  ds,
+  display_vars = vars(USUBJID, DSDECOD, DSTERM, DSSTDTC),
+  filter = DSDECOD == "DEATH"
+)
 ```
 
 Once the sources are defined, the function `derive_var_dthcaus()` can be used to derive `DTHCAUS`:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds)
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, EOSDT, DTHDTC, DTHDT, DTHCAUS),
-                 filter = DTHFL == "Y")
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, EOSDT, DTHDTC, DTHDT, DTHCAUS),
+  filter = DTHFL == "Y"
+)
 ```
 
 The function also offers the option to add some traceability variables (e.g. `DTHDOM` would 
@@ -414,7 +429,7 @@ arguments:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -423,7 +438,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -432,13 +447,16 @@ src_ds <- dthcaus_source(
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds)
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ),
-                 filter = DTHFL == "Y")
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHDOM, DTHSEQ),
+  filter = DTHFL == "Y"
+)
 ```
 
 ### Duration Relative to Death {#death_other}
@@ -470,8 +488,11 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD),
-                 filter = DTHFL == "Y")
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHCAUS, DTHADY, LDDTHELD),
+  filter = DTHFL == "Y"
+)
 ```
 
 ## Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
@@ -482,7 +503,7 @@ correctly defined.
 
 `lstalvdt_source()` specifications:
 
-- `dataset`: the dataset to search for date information,
+- `dataset_name`: the name of the dataset where to search for date information,
 - `filter`: the filter to apply on the datasets,
 - `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
@@ -493,22 +514,22 @@ An example could be :
 
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST"
 )
 ae_src2 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST"
 )
 lb_src <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
 adsl_src <- lstalvdt_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = TRTEDT
 )
 ```
@@ -517,14 +538,18 @@ Once the sources are defined, the function `derive_var_lstalvdt()` can be used t
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_lstalvdt(ae_src1, ae_src2, lb_src, adsl_src)
-
+  derive_var_lstalvdt(
+    ae_src1, ae_src2, lb_src, adsl_src,
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT), 
-                 filter =  !is.na(TRTSDT))
-
+dataset_vignette(
+  adsl,
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT), 
+  filter = !is.na(TRTSDT)
+)
 ```
 
 Similarly to `dthcaus_source()`, the traceability variables can be added by specifying the 
@@ -532,38 +557,43 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 
 ```{r eval=TRUE}
 ae_src1 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_src2 <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_src <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
 adsl_src <- lstalvdt_source(
-  dataset = adsl,
+  dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
 )
 
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
-  derive_var_lstalvdt(ae_src1, ae_src2, lb_src, adsl_src)
+  derive_var_lstalvdt(
+    ae_src1, ae_src2, lb_src, adsl_src,
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , 
-                 display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR), 
-                 filter =  !is.na(TRTSDT))
+dataset_vignette(
+  adsl, 
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR), 
+  filter =  !is.na(TRTSDT)
+)
 ```
  
 
@@ -614,9 +644,10 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , 
-                 display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1))
-
+dataset_vignette(
+  adsl, 
+  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
+)
 ```
 
 ### Population Flags (e.g. `SAFFL`) {#popflag}
@@ -635,8 +666,10 @@ adsl <- adsl %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl , 
-                 display_vars = vars(USUBJID, TRTSDT, ARM, ACTARM, SAFFL))
+dataset_vignette(
+  adsl , 
+  display_vars = vars(USUBJID, TRTSDT, ARM, ACTARM, SAFFL)
+)
 ```
 
 
