@@ -78,24 +78,24 @@
 #' library(stringr, warn.conflicts = FALSE)
 #' adex <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
-#'   "01-701-1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-#'   "01-701-1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-#'   "01-701-1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-#'   "01-701-1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-#'   "01-701-1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-#'   "01-701-1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
-#'   "01-701-1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-#'   "01-701-1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-#'   "01-701-1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
+#'   "1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
+#'   "1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
 #' ) %>%
 #'   mutate(ASTDTM = ymd_hms(paste(ASTDT, "00:00:00")), AENDTM = ymd_hms(paste(AENDT, "00:00:00")))
 #'
 #' # Cumulative dose
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
@@ -105,9 +105,9 @@
 #'
 #' # average dose in w2-24
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
-#'     filter = VISIT %in% c("WEEK2", "WEEK 24"),
+#'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
 #'     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
@@ -116,14 +116,14 @@
 #'
 #' # Any dose adjustement?
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
 #'   )
-derive_params_exposure <- function(dataset,
+derive_param_exposure <- function(dataset,
                                    by_vars,
                                    input_code,
                                    analysis_var,
