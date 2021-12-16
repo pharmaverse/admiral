@@ -1,10 +1,10 @@
 library(admiral.test)
 
-test_that("a warning is issued when specifying `derive_extreme_flag(flag_filter = )`", {
+test_that("a warning is issued when specifying `derive_var_extreme_flag(flag_filter = )`", {
   data(advs)
 
   expect_warning(
-    derive_extreme_flag(
+    derive_var_extreme_flag(
       advs[1:100, ],
       by_vars = vars(USUBJID, PARAMCD),
       order = vars(ADT),
