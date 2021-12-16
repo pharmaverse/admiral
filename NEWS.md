@@ -1,3 +1,12 @@
+# admiral development version
+
+- `derive_vars_dtm` now has `ignore_seconds` argument so users can suppress `S` flag if seconds
+are not recorded in the data. (#589)
+
+- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
+
+- `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
