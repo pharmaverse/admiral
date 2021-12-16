@@ -2,7 +2,7 @@ context("test-derive_dthcaus")
 
 test_that("error on a dthcaus_source object with invalid mode", {
   expect_error(dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "blah",
@@ -38,7 +38,7 @@ test_that("DTHCAUS is added from AE and DS", {
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -46,7 +46,7 @@ test_that("DTHCAUS is added from AE and DS", {
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDTC,
     mode = "first",
@@ -60,7 +60,11 @@ test_that("DTHCAUS is added from AE and DS", {
     "TEST01", "PAT03", "SUDDEN DEATH"
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -89,7 +93,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -97,7 +101,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDTC,
     mode = "first",
@@ -110,7 +114,11 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
     "TEST01", "PAT02", "DEATH DUE TO PROGRESSION OF DISEASE"
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -143,7 +151,7 @@ test_that("DTHCAUS and traceability variables are added from AE and DS", {
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -152,7 +160,7 @@ test_that("DTHCAUS and traceability variables are added from AE and DS", {
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDTC,
     mode = "first",
@@ -167,7 +175,11 @@ test_that("DTHCAUS and traceability variables are added from AE and DS", {
     "TEST01", "PAT03", "SUDDEN DEATH", "AE", 12
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -201,7 +213,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -210,7 +222,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDTC,
     mode = "first",
@@ -225,7 +237,11 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
     "TEST01", "PAT03", "SUDDEN DEATH", "AE", 12
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -259,7 +275,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -268,7 +284,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
     date = DSSTDTC,
     mode = "first",
@@ -283,7 +299,11 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
     "TEST01", "PAT03", "SUDDEN DEATH", "AE", 12
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
@@ -318,7 +338,7 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
   )
 
   src_ae <- dthcaus_source(
-    dataset = ae,
+    dataset_name = "ae",
     filter = AEOUT == "FATAL",
     date = AEDTHDTC,
     mode = "first",
@@ -326,7 +346,7 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
   )
 
   src_ds <- dthcaus_source(
-    dataset = ds,
+    dataset_name = "ds",
     filter = NULL,
     date = DSSTDTC,
     mode = "first",
@@ -340,7 +360,11 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
     "TEST01", "PAT03", "INFORMED CONSENT OBTAINED"
   )
 
-  actual_output <- derive_var_dthcaus(dataset = adsl, src_ae, src_ds)
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
