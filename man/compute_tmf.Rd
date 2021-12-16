@@ -35,7 +35,6 @@ Derive the time imputation flag (\code{'--TMF'}) comparing a date character vect
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"), ignore_seconds_flag = TRUE)
 }
 \author{
 Samia Kabi
