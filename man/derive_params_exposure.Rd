@@ -60,7 +60,9 @@ Set a list of variables to some specified value for the new observation(s)
 value or NA.
 (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
-}}
+}
+
+\emph{Permitted Values:} List of variable-value pairs}
 }
 \description{
 This function is \emph{deprecated}. Please use \code{\link[=derive_param_exposure]{derive_param_exposure()}} instead.

@@ -60,7 +60,9 @@ Set a list of variables to some specified value for the new observation(s)
 value or NA.
 (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
-}}
+}
+
+\emph{Permitted Values:} List of variable-value pairs}
 }
 \value{
 The input dataset with a new record added for each group (with respect to the variables
@@ -87,8 +89,6 @@ start (\code{ASTDT(M)})and end date (\code{AENDT(M)}) as the minimum and maximum
 For each group (with respect to the variables specified for the \code{by_vars} parameter),
 an observation is added to the output dataset and the defined values are set to the defined
 variables
-
-\emph{Permitted Values:} List of variable-value pairs
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
