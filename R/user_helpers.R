@@ -1,5 +1,7 @@
 #' Open an ADaM Template Script
 #'
+#' Uses list_all_templates() to discover which templates are available
+#'
 #' @param adam_name An ADaM dataset name.
 #' @param save_path Path to save the script.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
