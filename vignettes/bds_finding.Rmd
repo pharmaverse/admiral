@@ -540,22 +540,25 @@ dataset_vignette(
 Note: Additional examples of the `derive_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
-Lastly, the `BASE` and `BASEC` columns can be derived using the admiral function
-`derive_var_base()` and `derive_var_basec()`.  In addition, `BNRIND` can be derived
-using the low-level function `derive_baseline()`.  Example calls are:
+Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the admiral function
+`derive_var_base()`. Example calls are:
 
 ```{r eval=TRUE}
 advs <- derive_var_base(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  source_var = AVAL, 
+  new_var = BASE
 )
 
-advs <- derive_var_basec(
+advs <- derive_var_base(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  source_var = AVALC, 
+  new_var = BASEC
 )
 
-advs <- derive_baseline(
+advs <- derive_var_base(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
   source_var = ANRIND, 

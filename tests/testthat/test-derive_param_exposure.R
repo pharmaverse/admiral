@@ -1,4 +1,4 @@
-context("test-derive_params_exposure")
+context("test-derive_param_exposure")
 
 input <- tibble::tribble(
   ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
@@ -58,21 +58,21 @@ test_that("new observations are derived correctly for AVAL", {
   expected_output <- bind_rows(input, new_obs1, new_obs2, new_obs3)
 
   actual_output <- input %>%
-    derive_params_exposure(
+    derive_param_exposure(
       by_vars = vars(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) sum(x, na.rm = TRUE),
        set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
-    derive_params_exposure(
+    derive_param_exposure(
       by_vars = vars(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) mean(x, na.rm = TRUE),
       set_values_to = vars(PARAMCD = "AVDOSE", PARCAT1 = "OVERALL")
     ) %>%
-    derive_params_exposure(
+    derive_param_exposure(
       by_vars = vars(USUBJID),
       input_code = "ADJ",
       analysis_var = AVALC,
@@ -91,7 +91,7 @@ test_that("Errors", {
   # PARAMCD must be specified
   expect_error(
     input <- input %>%
-      derive_params_exposure(
+      derive_param_exposure(
         by_vars = vars(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,
@@ -103,7 +103,7 @@ test_that("Errors", {
   # input code must be present
   expect_error(
     input <- input %>%
-      derive_params_exposure(
+      derive_param_exposure(
         by_vars = vars(USUBJID),
         input_code = "DOSED",
         analysis_var = AVAL,
@@ -118,7 +118,7 @@ test_that("Errors", {
   expect_error(
     input <- input %>%
       select(-starts_with("AST"), -starts_with("AEN")) %>%
-      derive_params_exposure(
+      derive_param_exposure(
         by_vars = vars(USUBJID),
         input_code = "DOSE",
         analysis_var = AVAL,

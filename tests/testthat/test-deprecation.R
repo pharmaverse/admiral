@@ -194,3 +194,84 @@ test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
     fixed = TRUE
   )
 })
+
+test_that("a warning is issued when using `derive_var_basec()", {
+  dataset <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVALC,   ~AVISIT,    ~ABLFL,
+    "TEST01", "PAT01",  "PARAM03", NA,    "LOW",    "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM03", NA,    "LOW",    "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM03", NA,    "MEDIUM", "Day 14",   "N",
+    "TEST01", "PAT01",  "PARAM04", NA,    "HIGH",   "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM04", NA,    "HIGH",   "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM04", NA,    "MEDIUM", "Day 14",   "N"
+  )
+
+  expect_warning(
+    derive_var_basec(dataset, by_vars = vars(STUDYID, USUBJID, PARAMCD)),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_baseline()", {
+  dataset <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~AVALC, ~AVISIT,    ~ABLFL,
+    "TEST01", "PAT01",  "PARAM01", 10.12,  NA,     "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM01",  9.7,   NA,     "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM01", 15.01,  NA,     "Day 14",   "N",
+    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Baseline", "Y",
+    "TEST01", "PAT01",  "PARAM02", NA,     NA,     "Day 7",    "N",
+    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Day 14",   "N"
+  )
+
+  expect_warning(
+    derive_baseline(
+      dataset,
+      by_vars = vars(STUDYID, USUBJID, PARAMCD),
+      source_var = AVAL,
+      new_var = BASE
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_params_exposure()", {
+  dataset <- tibble::tribble(
+  ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
+  "01-701-1015", "BASELINE", "DOSE",   80,    NA,     "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12",  "DOSE",   65,    NA,     "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24",  "DOSE",   65,    NA,     "2020-12-17", "2021-06-02",
+  "01-701-1015", "BASELINE", "ADJ",    NA,    NA,     "2020-07-01", "2020-07-14",
+  "01-701-1015", "WEEK 2",   "ADJ",    NA,    "Y",    "2020-07-15", "2020-09-23",
+  "01-701-1015", "WEEK 12",  "ADJ",    NA,    "Y",    "2020-09-24", "2020-12-16",
+  "01-701-1015", "WEEK 24",  "ADJ",    NA,    NA,     "2020-12-17", "2021-06-02",
+  "01-701-1281", "BASELINE", "DOSE",   80,    NA,     "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12",  "DOSE",   82,    NA,     "2020-10-02", "2020-12-01",
+  "01-701-1281", "BASELINE", "ADJ",    NA,    NA,     "2020-07-03", "2020-07-18",
+  "01-701-1281", "WEEK 2",   "ADJ",    NA,    NA,     "2020-07-19", "2020-10-01",
+  "01-701-1281", "WEEK 12",  "ADJ",    NA,    NA,     "2020-10-02", "2020-12-01"
+  ) %>%
+  mutate(
+    ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
+    ASTDT = date(ASTDTM),
+    AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
+    AENDT = date(AENDTM)
+  )
+
+  expect_warning(
+    derive_params_exposure(
+      dataset,
+      by_vars = vars(USUBJID),
+      input_code = "DOSE",
+      analysis_var = AVAL,
+      summary_fun = function(x) sum(x, na.rm = TRUE),
+      filter = NULL,
+      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
