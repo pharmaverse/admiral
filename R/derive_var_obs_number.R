@@ -68,60 +68,12 @@ derive_obs_number <- function(dataset,
                               new_var = ASEQ,
                               check_type = "none") {
   deprecate_warn("0.6.0", "derive_obs_number()", "derive_var_obs_number()")
-  # checks and quoting
-  new_var <- assert_symbol(enquo(new_var))
-  assert_vars(by_vars, optional = TRUE)
-  assert_order_vars(order, optional = TRUE)
-  if (!is.null(by_vars)) {
-    required_vars <- by_vars
-  }
-  else {
-    required_vars <- NULL
-  }
-  if (!is.null(order)) {
-    required_vars <- vars(!!!required_vars, !!!extract_vars(order))
-  }
-  assert_data_frame(dataset, required_vars = required_vars)
-  check_type <-
-    assert_character_scalar(
-      check_type,
-      values = c("none", "warning", "error"),
-      case_sensitive = FALSE)
-
-  # derivation
-  data <- dataset
-
-  if (!is.null(by_vars) | !is.null(order)) {
-    # group and sort input dataset
-    if (!is.null(by_vars)) {
-      data <- data %>%
-        group_by(!!!by_vars) %>%
-        arrange(!!!order, .by_group = TRUE)
-
-      if (check_type != "none") {
-        signal_duplicate_records(
-          data,
-          by_vars = required_vars,
-          cnd_type = check_type
-        )
-      }
-    } else {
-      data <- data %>%
-        arrange(!!!order)
-
-      if (check_type != "none") {
-        signal_duplicate_records(
-          data,
-          by_vars = extract_vars(order),
-          cnd_type = check_type
-        )
-      }
-    }
-  }
-
-  data %>%
-    mutate(!!enquo(new_var) := row_number()) %>%
-    ungroup()
+  derive_var_obs_number(dataset = dataset,
+                        by_vars = by_vars,
+                        order = order,
+                        new_var = !!enquo(new_var),
+                        check_type = check_type
+  )
 }
 
 #' Adds a Variable Numbering the Observations Within Each By Group
