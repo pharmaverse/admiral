@@ -4,6 +4,11 @@
 
 - `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
 
+- The `derive_last_dose()` function has been split into a general function 
+`derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
+`derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
+
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
@@ -13,6 +18,7 @@
 - New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
+
 
 # admiral 0.4.0
 
@@ -210,7 +216,7 @@ to specify the unit of the input age (#569)
 
 ### OCCDS
 
-- Last Dose Date(time) can be derived using `derive_var_last_dose_date()`
+- Last Dose Date(time) can be derived using `derive_last_dose()`
 
 ## Breaking Changes
 
@@ -248,9 +254,6 @@ to specify the unit of the input age (#569)
 
 - The `start_date` and `end_date` parameters of `derive_var_ady()`, `derive_var_aendy()` and `derive_var_astdy()` have been renamed to `reference_date` and `date`, respectively (#121)
 
-- The `derive_last_dose()` function has been split into a general function `derive_vars_last_dose()`,
-and three wrapper functions `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`, and 
-`derive_var_last_dose_grp()` (#385)
 
 ## Bug Fixes
 
