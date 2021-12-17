@@ -98,7 +98,7 @@ For the different calls of your function, consider how the user might apply your
 function and test a variety of possible calls, whilst still remembering the tips
 above that tests should be fast and simple. 
 This is only needed in cases where the complexity and level of flexibility of 
-your function justifies it, e.g. see the test script: https://github.com/Roche-GSK/admiral/blob/master/tests/testthat/test-derive_extreme_flag.R.
+your function justifies it, e.g. see the test script: https://github.com/Roche-GSK/admiral/blob/master/tests/testthat/test-derive_var_extreme_flag.R.
 
 ## Exported Functions
 Don’t forget to add a unit test for each exported function.

@@ -166,59 +166,20 @@ derive_extreme_flag <- function(dataset,
   if (!missing(flag_filter)) {
     deprecate_warn(
       "0.3.0",
-      "derive_extreme_flag(flag_filter = )",
-      "derive_extreme_flag(filter = )"
+      "derive_var_extreme_flag(flag_filter = )",
+      "derive_var_extreme_flag(filter = )"
     )
-    filter <- enquo(flag_filter)
+    filter <- enquo(!!enquo(flag_filter))
   }
+  derive_var_extreme_flag(dataset = dataset,
+                          by_vars = by_vars,
+                          order = order,
+                          new_var = !!enquo(new_var),
+                          mode = mode,
+                          filter = !!enquo(filter),
+                          check_type = check_type
 
-  new_var <- assert_symbol(enquo(new_var))
-  assert_vars(by_vars)
-  assert_order_vars(order)
-  assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
-  mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-  check_type <- assert_character_scalar(
-    check_type,
-    values = c("none", "warning", "error"),
-    case_sensitive = FALSE
   )
-
-  # Select data to consider for flagging
-  if (!quo_is_null(filter)) {
-    data <- dataset %>% filter(!!filter)
-    data_ignore <- dataset %>%
-      filter(!(!!filter) | is.na(!!filter))
-  } else {
-    data <- dataset
-  }
-
-  # Create flag
-  data <- data %>%
-    derive_var_obs_number(
-      new_var = temp_obs_nr,
-      order = order,
-      by_vars = by_vars,
-      check_type = check_type
-    )
-
-  if (mode == "first") {
-    data <- data %>%
-      mutate(!!new_var := if_else(temp_obs_nr == 1, "Y", NA_character_))
-  } else {
-    data <- data %>%
-      group_by(!!!by_vars) %>%
-      mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
-      ungroup()
-  }
-
-  # Add ignored data
-  if (!quo_is_null(filter)) {
-    data <- data %>% bind_rows(data_ignore)
-  }
-
-  # Remove temporary variable
-  data %>% select(-temp_obs_nr)
 }
 
 #' Adds a Variable Flagging the maximal / minimal value within a group of observations
@@ -330,76 +291,16 @@ derive_worst_flag <- function(dataset,
                               worst_low,
                               filter = NULL,
                               check_type = "warning") {
-
-  # perform argument checks
-  new_var <- assert_symbol(enquo(new_var))
-  param_var <- assert_symbol(enquo(param_var))
-  analysis_var <- assert_symbol(enquo(analysis_var))
-  assert_vars(by_vars)
-  assert_order_vars(order)
-  assert_data_frame(
-    dataset,
-    required_vars = quo_c(by_vars, extract_vars(order), param_var, analysis_var)
-  )
-  assert_character_vector(worst_high)
-  assert_character_vector(worst_low)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
-
-  # additional checks for worstflag - parameters overlap
-  if (length(intersect(worst_high, worst_low)) > 0) {
-    err_msg <- paste(
-      "The following parameter(-s) are both assigned to `worst_high` and `worst_low` flags:",
-      paste0(intersect(worst_high, worst_low), collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  param_var_str <- as_string(quo_get_expr(param_var))
-  if (length(worst_high) > 0 &&
-      !all(worst_high %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_high` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_high[!worst_high %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # additional checks for worstflag - parameters not available
-  if (length(worst_low) > 0 &&
-      !all(worst_low %in% dataset[[param_var_str]])) {
-    err_msg <- paste0(
-      "The following parameter(-s) in `worst_low` are not available in column ",
-      param_var_str,
-      ": ",
-      paste0(worst_low[!worst_low %in% dataset[[param_var_str]]], collapse = ", ")
-    )
-    abort(err_msg)
-  }
-
-  # derive worst-flag
-  bind_rows(
-    derive_extreme_flag(
-      dataset = filter(dataset, !!param_var %in% worst_low),
-      by_vars = by_vars,
-      order = quo_c(analysis_var, order),
-      new_var = !!new_var,
-      mode = "first",
-      filter = !!filter,
-      check_type = check_type
-    ),
-    derive_extreme_flag(
-      dataset = filter(dataset, !!param_var %in% worst_high),
-      by_vars = by_vars,
-      order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
-      new_var = !!new_var,
-      mode = "first",
-      filter = !!filter,
-      check_type = check_type
-    ),
-    filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+  deprecate_warn("0.6.0", "derive_worst_flag()", "derive_var_worst_flag()")
+  derive_var_worst_flag(dataset = dataset,
+                        by_vars=by_vars,
+                        order=order,
+                        new_var=!!enquo(new_var),
+                        param_var=!!enquo(param_var),
+                        analysis_var=!!enquo(analysis_var),
+                        worst_high=worst_high,
+                        worst_low=worst_low,
+                        filter=!!enquo(filter)
   )
 }
 

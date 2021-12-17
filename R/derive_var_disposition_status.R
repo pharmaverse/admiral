@@ -113,32 +113,13 @@ derive_disposition_status <- function(dataset,
                                       filter_ds,
                                       subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_status()", "derive_var_disposition_status()")
-  new_var <- assert_symbol(enquo(new_var))
-  status_var <- assert_symbol(enquo(status_var))
-  filter_ds <- assert_filter_cond(enquo(filter_ds))
-  assert_that(is.function(format_new_var))
-  assert_data_frame(dataset)
-  assert_data_frame(dataset_ds, quo_c(status_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
-  assert_vars(subject_keys)
-
-  # Process the disposition data
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    select(!!!subject_keys, !!enquo(status_var))
-
-  # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
-  signal_duplicate_records(
-    ds_subset,
-    by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
-  # Add the status variable and derive the new dispo status in the input dataset
-  dataset %>%
-    left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-    mutate(!!enquo(new_var) := format_new_var(!!enquo(status_var))) %>%
-    select(-!!enquo(status_var))
+  derive_var_disposition_status(dataset = dataset,
+                                dataset_ds = dataset_ds,
+                                new_var = !!enquo(new_var),
+                                status_var = !!enquo(status_var),
+                                format_new_var=format_new_var,
+                                filter_ds=!!enquo(filter_ds),
+                                subject_keys = subject_keys)
 }
 
 #' Default Format for Disposition Status

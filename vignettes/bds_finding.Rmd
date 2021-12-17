@@ -537,7 +537,7 @@ dataset_vignette(
 )
 ```
 
-Note: Additional examples of the `derive_extreme_flag()` function can be 
+Note: Additional examples of the `derive_var_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
 Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the admiral function
