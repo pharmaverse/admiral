@@ -181,7 +181,8 @@ impute_dtc <- function(dtc,
       # dates like 2021---14 - use only year part
       n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       n_chr == 7 ~ paste0(dtc, "-", d),
-      n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
+      n_chr == 4 & date_imputation != "MID" ~ paste0(dtc, "-", mo, "-", d),
+      n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")
     )
 
     if (date_imputation == "LAST") {
