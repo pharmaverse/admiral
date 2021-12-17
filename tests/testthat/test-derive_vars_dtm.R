@@ -1,5 +1,3 @@
-context("test-derive_vars_dtm")
-
 input <- tibble::tribble(
   ~XXSTDTC,
   "2019-07-18T15:25:40",

@@ -1,5 +1,3 @@
-context("test_derive_baseline")
-
 test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE,

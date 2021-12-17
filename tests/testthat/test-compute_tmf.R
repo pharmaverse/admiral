@@ -1,5 +1,3 @@
-context("test-compute_tmf")
-
 test_that("compute TMF", {
   input_dtc <- c(
     "2019-07-18T15:25:52",
