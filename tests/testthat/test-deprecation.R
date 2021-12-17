@@ -263,6 +263,7 @@ test_that("a warning is issued when using `derive_params_exposure()", {
 
   expect_warning(
     derive_params_exposure(
+      dataset,
       by_vars = vars(USUBJID),
       input_code = "DOSE",
       analysis_var = AVAL,
