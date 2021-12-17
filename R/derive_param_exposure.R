@@ -228,11 +228,13 @@ derive_params_exposure <- function(dataset,
                                    filter = NULL,
                                    set_values_to = NULL) {
   deprecate_warn("0.6.0", "derive_params_exposure()", "derive_param_exposure()")
-  derive_param_exposure(dataset, 
-                        by_vars = by_vars, 
-                        input_code = input_code,
-                        analysis_var = !!enquo(analysis_var),
-                        summary_fun = summary_fun,
-                        filter = !!enquo(filter),
-                        set_values_to = set_values_to) 
+  derive_param_exposure(
+    dataset,
+    by_vars = by_vars,
+    input_code = input_code,
+    analysis_var = !!enquo(analysis_var),
+    summary_fun = summary_fun,
+    filter = !!enquo(filter),
+    set_values_to = set_values_to
+  )
 }
