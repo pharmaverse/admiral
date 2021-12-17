@@ -25,7 +25,7 @@ License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Depends: R (>= 3.5)
 Imports:
     admiral.test,
@@ -71,8 +71,8 @@ Collate:
     'derive_date_vars.R'
     'derive_derived_param.R'
     'derive_param_doseint.R'
+    'derive_param_exposure.R'
     'derive_param_tte.R'
-    'derive_params_exposure.R'
     'derive_summary_records.R'
     'derive_var_ady.R'
     'derive_var_aendy.R'
