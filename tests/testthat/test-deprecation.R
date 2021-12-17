@@ -268,6 +268,7 @@ test_that("a warning is issued when using `derive_params_exposure()", {
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) sum(x, na.rm = TRUE),
+      filter = NULL,
       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ),
     "deprecated",
