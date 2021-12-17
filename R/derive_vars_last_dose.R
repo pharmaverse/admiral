@@ -160,7 +160,8 @@ derive_vars_last_dose <- function(dataset,
   # keep user-specified variables from EX, if no variables specified all EX variables are kept
   if (!is.null(new_vars)) {
     new_vars_name <- replace_values_by_names(new_vars)
-    dataset_ex <- dataset_ex %>% mutate(!!!new_vars) %>%
+    dataset_ex <- dataset_ex %>%
+      mutate(!!!new_vars) %>%
       select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
              !!!new_vars_name, !!!syms(trace_vars_str))
   } else {
