@@ -1,5 +1,3 @@
-context("test-derive_var_lstalvdt")
-
 adsl <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
   "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,

@@ -1,5 +1,3 @@
-context("test-compute_duration")
-
 test_that("default duration, i.e., relative day", {
   expect_equal(compute_duration(
     ymd_hms("2020-12-06T15:00:00"),
