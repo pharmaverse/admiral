@@ -443,7 +443,8 @@ compute_tmf <- function(dtc,
                         dtm,
                         ignore_seconds_flag = FALSE) {
 
-  assert_that(is.character(dtc), is_date(dtm))
+  assert_that(is_date(dtm))
+  assert_character_vector(dtc)
   assert_logical_scalar(ignore_seconds_flag)
 
   is_na <- is.na(dtm)
