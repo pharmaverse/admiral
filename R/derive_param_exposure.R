@@ -233,6 +233,6 @@ derive_params_exposure <- function(dataset,
                         input_code = input_code,
                         analysis_var = !!enquo(analysis_var),
                         summary_fun = summary_fun,
-                        filter = filter,
+                        filter = !!enquo(filter),
                         set_values_to = set_values_to) 
 }
