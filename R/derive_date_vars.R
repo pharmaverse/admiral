@@ -420,8 +420,8 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
 #' if only hours and minutes are ever collected, and seconds are imputed in
-#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`.  A user can set this
-#' to `TRUE` so the  `'S'` Flag is dropped from (`'--TMF'`).
+#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
+#' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
 #'
 #'  A logical value
 #'
@@ -453,21 +453,21 @@ compute_tmf <- function(dtc,
 
 
   if (ignore_seconds_flag)  {
-    if ((any(n_chr >= 17)))
-    {abort("Seconds detected in data while ignore_seconds_flag is invoked")
-    }
-    else {
+    if ((any(n_chr >= 17))) {
+      abort("Seconds detected in data while ignore_seconds_flag is invoked")
+    } else {
       case_when(
         (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
         n_chr == 13 ~ "M",
-        n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-      )}
+        n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+      }
   } else {
     case_when(
       (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
       n_chr == 16 ~ "S",
       n_chr == 13 ~ "M",
-      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")}
+      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+     }
 }
 
 #' Derive/Impute a Date from a Date Character Vector
@@ -782,7 +782,8 @@ derive_vars_dtm <- function(dataset,
       mutate(!!sym(tmf) := compute_tmf(
         dtc = !!dtc,
         dtm = !!sym(dtm),
-        ignore_seconds_flag = ignore_seconds_flag))
+        ignore_seconds_flag = ignore_seconds_flag)
+        )
 
   }
 

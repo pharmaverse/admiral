@@ -17,8 +17,8 @@ A datetime object is expected.}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
-(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}.  A user can set this
-to \code{TRUE} so the  \code{'S'} Flag is dropped from (\code{'--TMF'}).
+(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
 
 A logical value
 
