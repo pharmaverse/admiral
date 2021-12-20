@@ -1238,12 +1238,11 @@ on_failure(is_valid_month) <- function(call, env) {
 #' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
 #' try(example_fun(vars("AE", DTSEQ = AESEQ)))
-assert_varval_list <- function(arg,
+assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
                                accept_var = FALSE,
                                optional =  FALSE) {
-
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
@@ -1255,11 +1254,9 @@ assert_varval_list <- function(arg,
 
   if (accept_expr) {
     valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
-  }
-  else if (accept_var) {
+  } else if (accept_var) {
     valid_vals <- "a symbol, character scalar, numeric scalar, variable names or `NA`"
-  }
-  else {
+  } else {
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
@@ -1313,8 +1310,7 @@ assert_varval_list <- function(arg,
         is.language(.x) ||
         is.atomic(.x) && is.na(.x)
     )]
-  }
-  else{
+  } else {
     invalids <- expr_list[!map_lgl(
       expr_list,
       ~ is.symbol(.x) ||

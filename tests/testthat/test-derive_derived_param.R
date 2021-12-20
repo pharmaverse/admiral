@@ -1,6 +1,3 @@
-context("test-derive_derived_param")
-
-
 test_that("new observations are derived correctly", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,

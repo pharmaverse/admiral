@@ -1,5 +1,3 @@
-context("test-derive_var_last_dose_date.R")
-
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",

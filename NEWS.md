@@ -8,6 +8,8 @@
 `derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
 
+- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+
 
 # admiral 0.5.0
 
