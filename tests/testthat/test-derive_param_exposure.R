@@ -1,5 +1,3 @@
-context("test-derive_param_exposure")
-
 input <- tibble::tribble(
   ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
   "01-701-1015", "BASELINE", "DOSE",   80,    NA,     "2020-07-01", "2020-07-14",
