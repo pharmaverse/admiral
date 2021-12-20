@@ -4,6 +4,8 @@
 
 - `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
 
+- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
