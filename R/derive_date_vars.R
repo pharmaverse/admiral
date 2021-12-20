@@ -361,6 +361,55 @@ convert_dtc_to_dtm <- function(dtc,
     as_iso_dtm()
 }
 
+#' Convert a Date into a Datetime Object
+#'
+#' Convert a date (datetime, date, or date character) into a Date vector (usually `'--DTM'`).
+#'
+#' @param dt The date to convert.
+#'
+#'   A date or character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
+#'
+#' @inheritParams convert_dtc_to_dtm
+#'
+#' @author Samia Kabi
+#'
+#' @return A datetime object
+#'
+#' @keywords computation timing
+#'
+#' @export
+#'
+#' @examples
+#' convert_date_to_dtm("2019-07-18T15:25:00")
+#' convert_date_to_dtm(Sys.time())
+#' convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18")
+convert_date_to_dtm <- function(dt,
+                                date_imputation = NULL,
+                                time_imputation = NULL,
+                                min_dates = NULL,
+                                max_dates = NULL) {
+
+  if (lubridate::is.POSIXct(dt)) {
+    return(dt)
+  }
+  else {
+    if (is_date(dt)) {
+      dt <- format(dt, "%Y-%m-%d")
+    }
+
+    # convert dtc to dtm
+    dt %>%
+      convert_dtc_to_dtm(
+        date_imputation = date_imputation,
+        time_imputation = time_imputation,
+        min_dates = min_dates,
+        max_dates = max_dates
+      )
+  }
+}
+
 #' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag (`'--DTF'`) comparing a date character vector
