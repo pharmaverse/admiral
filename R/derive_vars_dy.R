@@ -19,12 +19,12 @@
 #'
 #' @details The study day is derived as number of days from the reference date
 #'   to the end date. If it is nonnegative, one is added. I.e., the study day of the
-#'   reference date is 1.
+#'   reference date is 1. The input ---DT(M) is converted to ---DY
 #'
 #' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
 #'     source variable(s) added
 #'
-#' @keywords derivation bds occds timing
+#' @keywords derivation ADaM timing
 #'
 #' @export
 #'
@@ -53,13 +53,15 @@ derive_vars_dy <- function(dataset,
                            source_vars) {
   #assertions
   reference_date <- assert_symbol(enquo(reference_date))
+  assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = quo_c(source_vars, reference_date))
 
   #Warn if `--DY` variables already exist
   dtm_vars <- vars2chr(source_vars)
   n_vars <- length(source_vars)
 
-  dy_vars <- sub("DTM$", "DY", sub("DT$", "DY", dtm_vars))
+  dy_vars <- stringr::str_replace_all(dtm_vars,"(DT|DTM)$","DY")
+  #dy_vars <- sub("DTM$", "DY", sub("DT$", "DY", dtm_vars))
   warn_if_vars_exist(dataset, dy_vars)
 
   #call date part of reference date if --DTM is parsed

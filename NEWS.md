@@ -14,6 +14,8 @@
 
 ### General
 
+- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables 
+
 - `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551)
 
 - `derive_var_age_years()` derives age in years from a variable providing the

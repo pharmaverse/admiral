@@ -1,6 +1,4 @@
 #----test 1----
-# nolint start
-
   test_that("Test1::Single --DT input when ref date is --DTM", {
     datain <- tibble::tribble(
       ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,
@@ -33,7 +31,9 @@
 test_that("Test2::Multiple --DT input when ref date is --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,
-    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20"
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20",
+    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20",
+    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20"
 
   ) %>%
     mutate(TRTSDTM=lubridate::as_datetime(TRTSDTM),
@@ -42,7 +42,9 @@ test_that("Test2::Multiple --DT input when ref date is --DTM", {
 
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,  ~TRTSDY, ~ASTDY, ~AENDY,
-    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", 1, 2, 4
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", 1, 2, 4,
+    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20", 1, 1, 4,
+    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", 1, -2, 4,
 
   ) %>%
     mutate(TRTSDTM=lubridate::as_datetime(TRTSDTM),
@@ -211,6 +213,4 @@ test_that("Test7:All dates as --DTM", {
     actual_output,
     keys = c("STUDYID", "USUBJID")
   )
-  # nolint end
-
 })
