@@ -429,6 +429,8 @@ The documentation will be updated at:
 When a function or parameter is deprecated, the function must be updated to issue an error or a 
 warning to inform the user.
 
+There should be a test case added in `tests/testthat/test-deprecation.R` that checks whether this warning/error is issued as appropriate when using the deprecated function or parameter.
+
 ### Function
 
 If the deprecated function still exists in the package besides the new function, a **warning** must be
@@ -443,6 +445,9 @@ deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
 deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 ### END DEPRECATION
 ```
+
+For the former case above, please pass any input arguments into a call to the new function so that it still runs and pushes users towards adopting the new function.
+Consult `R/derive_var_base.R` as an example where you can see at the bottom the functions that were deprecated as a result of this new function.
 
 ### Parameter
 
