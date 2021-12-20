@@ -130,7 +130,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' test_fun2 <- function(something) {
 #'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
-arg_name <- function(expr) {
+arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
