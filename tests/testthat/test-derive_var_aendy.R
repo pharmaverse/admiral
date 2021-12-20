@@ -1,6 +1,3 @@
-context("test-derive_var_aendy")
-
-
 test_that("AENDY is added", {
   input <- tibble::tribble(
     ~TRTSDT, ~AENDT,

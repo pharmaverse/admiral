@@ -1,5 +1,3 @@
-context("test-derive_var_chg")
-
 test_that("`CHG` is calculated as `AVAL - BASE`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
