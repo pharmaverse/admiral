@@ -331,5 +331,3 @@ test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds
     regexp =  "Seconds detected in data while ignore_seconds_flag is invoked")
 
 })
-
-

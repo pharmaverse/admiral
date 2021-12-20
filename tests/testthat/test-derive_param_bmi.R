@@ -1,7 +1,7 @@
 test_that("BMI is calculated correctly", {
   # Expected values are taken from the Center of Disease Control and Prevention's
   # (CDC) 'Adult BMI Calculator' at
-  # https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/metric_bmi_calculator/bmi_calculator.html
+  # https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/metric_bmi_calculator/bmi_calculator.html #nolint
   expect_equal(round(compute_bmi(180.3, 74.3), 1L), 22.9)
   expect_equal(round(compute_bmi(169, 51.3), 1L), 18)
   expect_equal(round(compute_bmi(175.9, 94.5), 1L), 30.5)
