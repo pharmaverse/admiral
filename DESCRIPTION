@@ -100,6 +100,7 @@ Collate:
     'derive_vars_dtm_to_tm.R'
     'derive_vars_duration.R'
     'derive_vars_query.R'
+    'derive_vars_single_dose.R'
     'derive_vars_suppqual.R'
     'derive_vars_transposed.R'
     'duplicates.R'
