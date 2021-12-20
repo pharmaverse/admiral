@@ -171,13 +171,13 @@ data(vs)
     Note: The call to get the formatted dataset would be: 
  
 
-       ```{r, eval=FALSE, echo=TRUE}
-       dataset_vignette(
-          vs1, 
-          display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-          filter = VSTESTCD == "WEIGHT"
-        )
-       ```
+      ```{r, eval=FALSE, echo=TRUE}
+      dataset_vignette(
+        vs1, 
+        display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+        filter = VSTESTCD == "WEIGHT"
+      )
+      ```
       
     Displaying many big datasets on a vignette, may require a long time to load
     the page and may cause messages from the browser that the page is not
