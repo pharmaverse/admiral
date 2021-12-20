@@ -164,6 +164,8 @@ dataset_vignette(
 )
 ```
 
+Note that in practice for efficacy parameters you might use randomization date as the time to event origin date, but this variable is not in the CDISC Pilot `ADSL` dataset so we used `TRTSDT` for these examples.
+
 ### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
 
 To add additional information like event or censoring description (`EVNTDESC`)
