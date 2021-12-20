@@ -98,7 +98,7 @@ adex <- bind_rows(
 adex <- adex %>%
   # Overall exposure
   call_derivation(
-    derivation = derive_params_exposure,
+    derivation = derive_param_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
@@ -136,7 +136,7 @@ adex <- adex %>%
 
   # W2-W24 exposure
   call_derivation(
-    derivation = derive_params_exposure,
+    derivation = derive_param_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "PDOSE", PARCAT1 = "WEEK 2-24"),
