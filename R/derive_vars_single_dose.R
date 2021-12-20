@@ -70,19 +70,19 @@ derive_vars_single_dose <- function(dataset,
            temp_new_dose_no = str_extract(!!dose_freq, paste(c("D", "W"), collapse = "|")),
            temp_new_dose_no = case_when(temp_new_dose_no == "D" ~ 1,
                                         temp_new_dose_no == "W" ~ 7),
-           temp_dose_freq = temp_dose_freq*temp_new_dose_no,
-           temp_num_of_doses = floor(as.numeric(!!end_date - !!start_date)/
+           temp_dose_freq = temp_dose_freq * temp_new_dose_no,
+           temp_num_of_doses = floor(as.numeric(!!end_date - !!start_date) /
                                   (temp_dose_freq)) + 1
     )
 
 
-  dataset <- dataset[rep(row.names(dataset), dataset$temp_num_of_doses),]
+  dataset <- dataset[rep(row.names(dataset), dataset$temp_num_of_doses), ]
 
   dataset <- dataset %>%
     group_by(!!!by_vars, !!dose_freq, !!start_date, !!end_date) %>%
     mutate(temp_dose_multiplier = (row_number() - 1)) %>%
     ungroup() %>%
-    mutate(temp_day_difference = days(temp_dose_multiplier*temp_dose_freq))
+    mutate(temp_day_difference = days(temp_dose_multiplier * temp_dose_freq))
 
   dataset <- dataset %>%
     mutate(!!dose_freq := "ONCE",
@@ -92,4 +92,3 @@ derive_vars_single_dose <- function(dataset,
     select(!!!vars(col_names))
   return(dataset)
 }
-
