@@ -12,9 +12,9 @@ derive_vars_merged_dtm(
   new_vars_prefix,
   filter_add,
   mode,
-  date,
-  date_imputation,
-  time_imputation,
+  dtc,
+  date_imputation = NULL,
+  time_imputation = "00:00:00",
   flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL

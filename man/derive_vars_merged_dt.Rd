@@ -12,8 +12,8 @@ derive_vars_merged_dt(
   new_vars_prefix,
   filter_add,
   mode,
-  date,
-  date_imputation,
+  dtc,
+  date_imputation = NULL,
   flag_imputation = TRUE,
   min_dates = NULL,
   max_dates = NULL
@@ -31,7 +31,7 @@ derive_vars_merged_dt(
   dataset_add = ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTS",
-  date = EXSTDTC,
+  dtc = EXSTDTC,
   date_imputation = "first",
   order = vars(TRTSDT),
   mode = "first"
@@ -42,7 +42,7 @@ derive_vars_merged_dt(
   dataset_add = ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTE",
-  date = EXENDTC,
+  dtc = EXENDTC,
   date_imputation = "last",
   order = vars(TRTEDT),
   mode = "last"

@@ -8,12 +8,12 @@ derive_var_merged_cat(
   dataset,
   dataset_add,
   by_vars,
-  order,
+  order = NULL,
   new_var,
   source_var,
   cat_fun,
   filter_add = NULL,
-  mode
+  mode = NULL
 )
 }
 \description{
