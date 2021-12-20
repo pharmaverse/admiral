@@ -45,3 +45,5 @@ Meta
 
 # Documentation
 man/*.Rd
+
+NAMESPACE
