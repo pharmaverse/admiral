@@ -45,11 +45,16 @@ jobs:
           renv::restore()
         shell: Rscript {0}
 
+      - name: Extract branch name
+        id: extract_branch
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
       - name: Update documentation
         run: |
           Rscript -e "devtools::document()"
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
+          git checkout ${{ steps.extract_branch.outputs.branch }}
           git add --force NAMESPACE man/*.Rd
           git commit --allow-empty -m "Update documentation"
           git push
