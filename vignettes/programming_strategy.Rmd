@@ -448,7 +448,7 @@ deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 
 For the former case above, please pass any input arguments into a call to the new function so that it still runs and pushes users towards adopting the new function.
 
-```{r}
+```{r, eval=F}
 fun_xxx <- function(dataset, new_var) {
   deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
   new_fun_xxx(dataset, new_var = new_var)
