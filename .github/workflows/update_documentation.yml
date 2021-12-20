@@ -51,6 +51,6 @@ jobs:
           Rscript -e "devtools::document()"
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add NAMESPACE man/*.Rd
+          git add --force NAMESPACE man/*.Rd
           git commit --allow-empty -m "Update documentation"
           git push
