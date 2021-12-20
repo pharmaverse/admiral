@@ -1,5 +1,3 @@
-context("test-derive_dthcaus")
-
 test_that("error on a dthcaus_source object with invalid mode", {
   expect_error(dthcaus_source(
     dataset_name = "ae",

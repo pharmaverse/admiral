@@ -1,5 +1,3 @@
-context("test-derive_var_ontrtfl")
-
 test_that("`target` is set to NA when ` start_date` < `ref_start_date`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~ADT, ~TRTSDT,
