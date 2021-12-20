@@ -1,14 +1,11 @@
 ---
 title: "Creating an OCCDS ADaM"
 output: 
-  rmarkdown::html_vignette:
-    toc: false
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating an OCCDS ADaM}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -18,34 +15,37 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+# Introduction
 
 This article describes creating an OCCDS ADaM. Examples are currently 
 presented and tested in the context of ADAE.
 However, the examples could be applied to other OCCDS ADaMs such as 
 ADCM, ADMH, ADDV, etc.
 
-**Note:** 
-*All examples assume CDISC SDTM and/or ADaM format as input unless otherwise specified.*
+**Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
+otherwise specified.*
 
-## Programming Workflow
+# Programming Workflow
 
 * [Read in Data](#readdata)
 * [Derive/Impute End and Start Analysis Date/time and Relative Day](#datetime)
 * [Derive Durations](#duration)
 * [Derive ATC variables](#atc)
-* [Derive Time Relative to Reference](#atirel)
-* [Derive Analysis Phase and Period](#phase_period)
 * [Derive Planned and Actual Treatment](#trtpa)
 * [Derive Date/Date-time of Last Dose](#last_dose)
 * [Derive Severity, Causality, and Toxicity Grade](#severity)
-* [Derive Treatement Emergent Flag](#trtfag)
+* [Derive Treatment Emergent Flag](#trtflag)
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
+* [Add ADSL variables](#adsl_vars)
 
-### Read in Data {#readdata}
+## Read in Data {#readdata}
 
-Let's start by attaching packages and loading some example datasets:
+To start, all data frames needed for the creation of `ADAE` should be read into
+the environment. This will be a company specific process. Some of the data
+frames needed may be `AE`, `ADSL`, `SUPPAE`, 'SUPPDM`.
+
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -53,42 +53,60 @@ library(dplyr)
 library(admiral.test)
 library(lubridate)
 
-data(ae)
-data(adsl)
+data("ae")
+data("suppae")
+data("adsl")
 ```
 
+The `SUPPAE` domain can be joined to the 'AE` domain using the function `derive_vars_suppqual()`.
 
-To start, all data frames needed for the creation of `ADAE` should be read into
-the environment. This will be a company specific process. Some of the data
-frames needed may be:
+This function will transpose the supplemental SDTM domain (e.g. `SUPPAE`) and
+join the transposed data to the parent domain (e.g. `ae`) by `STUDYID`, 
+`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
 
-  * `AE`, `SUPPAE`
-  * `SUPPDM`
-  * `ADSL`
-  
+Example call:
+
 To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
 
 ```{r eval=TRUE}
 ae <- derive_vars_suppqual(ae, suppae)
-head(suppae)
-head(select(ae, USUBJID, AEDECOD, AETRTEM))
 ```
 
-Now start creating ADAE by joining the required data sets together. 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(ae, 
+                 display_vars = vars(USUBJID, AETERM, AEDECOD,AESTDTC, AETRTEM),
+                 filter = USUBJID == "01-701-1015")
+```
+
+At this step, it may be useful to join `ADSL` to your `AE` domain. Only the 
+`ADSL` variables used for derivations are selected at this step. The rest of the
+relevant `ADSL` would be added later.
 
 ```{r eval=TRUE}
-adae <- left_join(ae, adsl, by = c("STUDYID", "USUBJID")) 
+
+adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
+
+adae <- left_join(
+  ae,
+  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
+  by = c("STUDYID", "USUBJID")
+)
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
+                                     TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT))
+```
+## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
-
-### Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
-
-This part includes variables `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
+This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
 The function `derive_vars_dtm()` can be used to derive `ASTDTM` and `AENDTM` 
 where `ASTDTM` could be company-specific. 
-`ASTADT` and `AENDT` can be created with a simple `dplyr::mutate()`. 
-`derive_var_astdy()` and `derive_var_aendy()` can be used to create `ASTDY` and `AENDY`, respectively.
+`ASTDT` and `AENDT` can be derived from `ASTDTM` and `AENDTM`, respectively using
+function `derive_vars_dtm_to_dt`. 
+`derive_var_astdy()` and `derive_var_aendy()` can be used to create `ASTDY` and 
+`AENDY`, respectively.
 
 ```{r eval=TRUE}
 adae <- adae %>% 
@@ -105,10 +123,8 @@ adae <- adae %>%
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
-  ) %>% 
-  mutate(
-    ASTDT = date(ASTDTM),
-    AENDT = date(AENDTM) 
+  ) %>%
+  derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)
   ) %>% 
   derive_var_astdy(
     reference_date = TRTSDT, 
@@ -120,9 +136,15 @@ adae <- adae %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, AESTDTC, AEENDTC, ASTDTM, ASTDT,
+                                     ASTDY, AENDTM, AENDT, AENDY))
+```
+
 See also [Date and Time Imputation](imputation.html).
 
-### Derive Durations {#duration}
+## Derive Durations {#duration}
 
 The function `derive_vars_duration()` can be used to create the variables 
 `ADURN` and `ADURU`. 
@@ -137,7 +159,13 @@ adae <- adae %>%
   )
 ```
 
-### Derive ATC variables {#atc}
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, AESTDTC, AEENDTC, ASTDT, AENDT, 
+                                     ADURN, ADURU))
+```
+
+## Derive ATC variables {#atc}
 
 The function `derive_vars_atc()` can be used to derive 
 ATC Class Variables.
@@ -183,45 +211,25 @@ cm <- tibble::tribble(
 derive_vars_atc(cm, facm)
 ```
 
-### Derive Time Relative to Reference {#atirel}
+## Derive Planned and Actual Treatment {#trtpa}
 
-The function `derive_var_atirel()` can be used to derive the variable `ATIREL` to `"CONCOMITANT"`, `"PRIOR"`, `"PRIOR_CONCOMITANT"` or `NULL` based on the 
-relationship 
-of CM Analysis start/end date/times to treatment start date/time.
+`TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
+The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
+specific.  admiral does not currently have functionality to assist with `TRTA` 
+and `TRTP` assignment.
 
-The expected result is a dataset containing all observations and variables of the input dataset 
-and additionally the variable specified by the `new_var` parameter.
+However, an example of a simple implementation could be:
 
 ```{r eval=TRUE}
-adcm <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
-  "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28    19:00:00", "2012-02-25 23:00:00", "",
-  "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
-  "TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25    19:00:00", "2014-02-25 19:00:00", "",
-  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25    14:00:00", "2017-03-25 23:00:00", "m",
-  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25    14:00:00", "2017-04-29 14:00:00", ""
-) %>% mutate(
-  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-  ASTDTM = lubridate::as_datetime(ASTDTM),
-  AENDTM = lubridate::as_datetime(AENDTM)
- )
+adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
 
-adcm %>% 
-  derive_var_atirel(flag_var = ASTTMF, new_var = ATIREL) %>% 
-  select(STUDYID, USUBJID, ATIREL, everything())
+count(adae, TRTP, TRTA, TRT01P, TRT01A)
+
 ```
 
-### Derive Analysis Phase and Period {#phase_period}
-
-*These functionalities are in progress.*
 
 
-### Derive Planned and Actual Treatment {#trtpa}
-
-*These functionalities are in progress.*
-
-
-### Derive Date/Date-time of Last Dose {#last_dose}
+## Derive Date/Date-time of Last Dose {#last_dose}
 
 The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
 Additionally, this function can also provide the traceability variables 
@@ -245,8 +253,14 @@ adae <- adae %>%
   )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, AEDECOD, AESEQ, AESTDTC, AEENDTC, 
+                                     ASTDT, AENDT, LDOSEDTM
+                                     ))
+```
 
-### Derive Severity, Causality, and Toxicity Grade {#severity}
+## Derive Severity, Causality, and Toxicity Grade {#severity}
 
 The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
 `mutate()` if no imputation is required.
@@ -259,7 +273,7 @@ adae <- adae %>%
   )
 ```
 
-### Derive Treatment Emergent Flag {#trtflag}
+## Derive Treatment Emergent Flag {#trtflag}
 
 To derive the treatment emergent flag `TRTEMFL`, one can use simple
 `dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
@@ -267,14 +281,20 @@ To derive the treatment emergent flag `TRTEMFL`, one can use simple
 ```{r eval=TRUE}
 adae <- adae %>% 
   mutate(
-    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", "")
+    TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, TRTSDT, TRTEDT, AESTDTC, ASTDT,
+                                     TRTEMFL))
 ```
 
 To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single assessment date, we
 use `derive_var_ontrtfl()`.
 
-The expected result is The input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
 
 ```{r eval=TRUE}
 bds1 <- tibble::tribble(
@@ -285,7 +305,7 @@ bds1 <- tibble::tribble(
 )
 derive_var_ontrtfl(
   bds1,
-  date = ADT,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT
 )
@@ -298,17 +318,17 @@ bds2 <- tibble::tribble(
 )
 derive_var_ontrtfl(
   bds2,
-  date = ADT,
+  start_date = ADT,
   ref_start_date = TRTSDT,
   ref_end_date = TRTEDT,
   ref_end_window = 60
 )
 
 bds3 <- tibble::tribble(
-  ~USUBJID, ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
-  "P01",    "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
-  "P02",    "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
-  "P03",    "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
+  ~ADTM,              ~TRTSDTM,           ~TRTEDTM,           ~TPT,
+  "2020-01-02T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA,
+  "2020-01-01T12:00", "2020-01-01T12:00", "2020-03-01T12:00", "PRE",
+  "2019-12-31T12:00", "2020-01-01T12:00", "2020-03-01T12:00", NA
 ) %>%
  mutate(
   ADTM = ymd_hm(ADTM),
@@ -317,52 +337,57 @@ bds3 <- tibble::tribble(
  )
 derive_var_ontrtfl(
   bds3,
-  date = ADTM,
+  start_date = ADTM,
   ref_start_date = TRTSDTM,
   ref_end_date = TRTEDTM,
   filter_pre_timepoint = TPT == "PRE"
 )
 ```
 
-### Derive Occurrence Flags {#occflag}
+## Derive Occurrence Flags {#occflag}
 
 The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
-If grades were collected, the following can be used.
+If grades were collected, the following can be used to flag first occurrence of
+maximum toxicity grade.
 
 ```{r, eval=FALSE}
 adae <- adae %>% 
   derive_extreme_flag(
     by_vars = vars(USUBJID),
-    order = vars(ASTDTM, ATOXGR, AESEQ),
+    order = vars(desc(ATOXGR), ASTDTM, AESEQ),
     new_var = AOCCIFL,
     filter = TRTEMFL == "Y", 
-    mode = "last"
+    mode = "first"
   )
 ```
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
-numeric one:
+numeric one. Flag first occurence of most severe adverse event:
 
 ```{r, eval=TRUE}
-adae %>% 
+adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
   derive_extreme_flag(
     by_vars = vars(USUBJID),
-    order = vars(ASTDTM, ASEVN, AESEQ),
+    order = vars(desc(ASEVN), ASTDTM, AESEQ),
     new_var = AOCCIFL,
     filter = TRTEMFL == "Y", 
-    mode = "last"
-  ) %>% 
-  select(STUDYID, USUBJID, AOCCIFL, ASTDTM, ASEVN, AESEQ, TRTEMFL)
+    mode = "first"
+  )
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, ASTDTM, ASEV, ASEVN, AESEQ, TRTEMFL,
+                                     AOCCIFL))
+```
 
-### Derive Query Variables {#query}
+## Derive Query Variables {#query}
 
 It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in `derive_vars_query()` to an ADaM. 
 
@@ -375,9 +400,15 @@ The expected result is the input dataset with query variables added: See also [Q
 
 ```{r, eval=TRUE}
 data("queries")
-head(queries)
+```
 
-adae <- tibble::tribble(
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(queries)
+```
+
+
+```{r, eval=TRUE}
+adae1 <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
     3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
@@ -389,12 +420,15 @@ adae <- tibble::tribble(
     7, "Alveolar proteinosis", NA_character_,  NA_integer_
 )
   
-adae <- derive_vars_query(dataset = adae , dataset_queries = queries)
-head(select(adae, USUBJID, ASTDTM, AETERM, AESEQ, AEDECOD, starts_with("SMQ05"), starts_with("CQ06")))
+adae_query <- derive_vars_query(dataset = adae1 , dataset_queries = queries)
 ```
 
-Similarly to SMQ, the `derive_vars_query()` function can be used to derive Standardized 
-Drug Groupings (SDQ).
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae_query)
+```
+
+Similarly to SMQ, the `derive_vars_query()` function can be used to derive
+Standardized Drug Groupings (SDG).
 
 ```{r, eval=TRUE}
 sdg <- tibble::tribble(
@@ -412,5 +446,34 @@ adcm <- tibble::tribble(
   "03",     "2020-06-07 23:59:59", "Costicosteroid 2",
   "05",     "2020-06-09 23:59:59", "Diuretic 2"
 )
-derive_vars_query(adcm, sdg)
+adcm_query <- derive_vars_query(adcm, sdg)
 ```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adcm_query)
+```
+
+## Add the `ADSL` variables  {#adsl_vars}
+
+If needed, the other `ADSL` variables can now be added:
+
+```{r eval=TRUE, echo=TRUE}
+adae <- adae %>%
+  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+            by = c("STUDYID", "USUBJID")
+  )
+
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adae, 
+                 display_vars = vars(USUBJID, AEDECOD, ASTDTM, DTHDT, RFSTDTC,
+                                     RFENDTC, AGE, AGEU, SEX))
+```
+
+# Example Scripts
+
+ADaM | Sample Code
+---- | --------------
+ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R){target="_blank"}

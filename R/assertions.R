@@ -1037,7 +1037,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
-#' or as a keyword: "FISRT", "MID", "LAST"
+#' or as a keyword: "FIRST", "MID", "LAST"
 #'
 #' @param arg The argument to check
 #'
@@ -1069,7 +1069,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-#' or as a keyword: "FISRT", "LAST"
+#' or as a keyword: "FIRST", "LAST"
 #'
 #' @param arg The argument to check
 #'
@@ -1236,11 +1236,10 @@ on_failure(is_valid_month) <- function(call, env) {
 #' example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 #'
 #' try(example_fun(vars("AE", DTSEQ = AESEQ)))
-assert_varval_list <- function(arg,
+assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
                                optional =  FALSE) {
-
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(optional)
   assert_character_vector(required_elements, optional = TRUE)
@@ -1251,8 +1250,7 @@ assert_varval_list <- function(arg,
 
   if (accept_expr) {
     valid_vals <- "a symbol, character scalar, numeric scalar, an expression, or `NA`"
-  }
-  else {
+  } else {
     valid_vals <- "a symbol, character scalar, numeric scalar, or `NA`"
   }
 
@@ -1292,8 +1290,7 @@ assert_varval_list <- function(arg,
         is.language(.x) ||
         is.atomic(.x) && is.na(.x)
     )]
-  }
-  else{
+  } else {
     invalids <- expr_list[!map_lgl(
       expr_list,
       ~ is.symbol(.x) ||
@@ -1446,39 +1443,38 @@ on_failure(quo_not_missing) <- function(call, env) {
 #' @export
 #'
 #' @examples
-#' death <- tte_source(
+#' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",
 #'   date = DTHDT,
-#'   set_values_to =vars(
-#'     EVENTDESC = "DEATH",
+#'   set_values_to = vars(
+#'     EVNTDESC = "DEATH",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "DTHDT"))
+#'     SRCVAR = "DTHDT"
+#'   )
+#' )
 #'
-#' lstalv <- tte_source(
+#' lstalv <- censor_source(
 #'   dataset_name = "adsl",
 #'   date = LSTALVDT,
-#'   censor = 1,
 #'   set_values_to = vars(
-#'     EVENTDESC = "LAST KNOWN ALIVE DATE",
+#'     EVNTDESC = "LAST KNOWN ALIVE DATE",
 #'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"))
-#'
-#' events = list(death, lstalv)
+#'     SRCVAR = "LSTALVDT"
+#'   )
+#' )
 #'
 #' try(assert_list_element(
-#'   list = events,
+#'   list = list(death, lstalv),
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
 #' ))
 #'
-#' valid_datasets = c("adrs", "adae")
-#'
 #' try(assert_list_element(
 #'   list = events,
 #'   element = "dataset_name",
-#'   condition = dataset_name %in% valid_datasets,
+#'   condition = dataset_name %in% c("adrs", "adae"),
 #'   valid_datasets = valid_datasets,
 #'   message_text = paste0("The dataset name must be one of the following:\n",
 #'                         paste(valid_datasets, collapse = ", "))

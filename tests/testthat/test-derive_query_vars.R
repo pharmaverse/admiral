@@ -1,5 +1,3 @@
-context("test-derive_vars_query")
-
 test_that("Derive CQ and SMQ variables with two term levels", {
   # nolint start
   queries <- tibble::tribble(

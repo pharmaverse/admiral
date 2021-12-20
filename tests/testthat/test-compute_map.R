@@ -1,5 +1,3 @@
-context("test-compute_map")
-
 test_that("MAP based on diastolic and systolic blood pressure", {
   expect_equal(compute_map(
     diabp = 51,

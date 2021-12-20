@@ -1,6 +1,3 @@
-context("test-derive_param_doseint")
-
-
 test_that("new observations are derived correctly when zero_doses is NULL", {
   # nolint start
   input <- tibble::tribble(

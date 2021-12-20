@@ -4,13 +4,22 @@
 \alias{derive_var_dthcaus}
 \title{Derive Death Cause}
 \usage{
-derive_var_dthcaus(dataset, ..., subject_keys = vars(STUDYID, USUBJID))
+derive_var_dthcaus(
+  dataset,
+  ...,
+  source_datasets,
+  subject_keys = vars(STUDYID, USUBJID)
+)
 }
 \arguments{
 \item{dataset}{Input dataset.
-The variables specified by the \code{subject_keys} parameter are expected.}
+
+The variables specified by \code{subject_keys} are required.}
 
 \item{...}{Objects of class "dthcaus_source" created by \code{\link[=dthcaus_source]{dthcaus_source()}}.}
+
+\item{source_datasets}{A named \code{list} containing datasets in which to search for the
+death cause}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -49,7 +58,7 @@ ds <- tibble::tribble(
 
 # Derive `DTHCAUS` only
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AEDTHDTC,
   mode = "first",
@@ -57,18 +66,18 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
   dthcaus = DSTERM
 )
 
-derive_var_dthcaus(adsl, src_ae, src_ds)
+derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 
 # Derive `DTHCAUS` and add traceability variables
 src_ae <- dthcaus_source(
-  dataset = ae,
+  dataset_name = "ae",
   filter = AEOUT == "FATAL",
   date = AEDTHDTC,
   mode = "first",
@@ -77,7 +86,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset = ds,
+  dataset_name = "ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -85,14 +94,13 @@ src_ds <- dthcaus_source(
   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
 )
 
-derive_var_dthcaus(adsl, src_ae, src_ds)
+derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 }
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}
 }
 \author{
-Shimeng Huang
-Samia Kabi
+Shimeng Huang, Samia Kabi, Thomas Neitmann
 }
 \keyword{adsl}
 \keyword{derivation}

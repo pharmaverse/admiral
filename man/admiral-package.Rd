@@ -27,6 +27,13 @@ Authors:
   \item Eric Simms \email{eric.m.simms@gsk.com}
   \item Michael Thorpe \email{michael.thorpe.mt1@roche.com}
   \item Pavan Kumar \email{pavan.10.kumar@gsk.com}
+  \item Hamza Rahal
+}
+
+Other contributors:
+\itemize{
+  \item F. Hoffmann-La Roche AG [copyright holder, funder]
+  \item GlaxoSmithKline LLC [copyright holder, funder]
 }
 
 }

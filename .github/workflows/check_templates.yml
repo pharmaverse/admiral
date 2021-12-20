@@ -1,0 +1,70 @@
+on:
+  workflow_dispatch:
+  pull_request_review:
+    types: [submitted]
+
+name: Check Templates
+
+jobs:
+  check_templates:
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Install system dependencies
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install dependencies
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+        shell: Rscript {0}
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Run Template Scripts
+        run: |
+          templates <- list.files(
+            system.file("templates", package = "admiral"),
+            full.names = TRUE
+          )
+          exit_codes <- purrr::map_chr(templates, function(file) {
+            cmd <- sprintf("Rscript --vanilla %s", file)
+            system(cmd)
+          })
+          if (any(exit_codes == 1L)) {
+            failed_scripts <- basename(templates)[which(exit_codes == 1L)]
+            err_msg <- sprintf(
+              "Executing the following template scripts failed:\n%s",
+              paste("-", failed_scripts, collapse = "\n")
+            )
+            stop(err_msg, call. = FALSE)
+          }
+        shell: Rscript {0}

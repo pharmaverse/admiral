@@ -130,7 +130,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' test_fun2 <- function(something) {
 #'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
-arg_name <- function(expr) {
+arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
@@ -379,6 +379,8 @@ get_duplicates <- function(x) {
 #'
 #' @export
 #'
+#' @keywords user_utility
+#'
 #' @examples
 #' extract_unit("Height (cm)")
 #'
@@ -405,6 +407,8 @@ extract_unit <- function(x) {
 #' all attributes such as labels are preserved.
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords user_utility
 #'
 #' @export
 #'

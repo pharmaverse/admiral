@@ -25,7 +25,7 @@ Check if the dataset has the following columns
 \item \code{QUERY_ID}, could be NA, must be unique per each \code{VAR_PREFIX}
 \item \code{QUERY_SCOPE}, 'BROAD', 'NARROW', or NA
 \item \code{QUERY_SCOPE_NUM}, 1, 2, or NA
-\item \code{TERM_LEVEL}, e.g., AEDECOD, AELLT, AELLTCD, ...
+\item \code{TERM_LEVEL}, e.g., \code{"AEDECOD"}, \code{"AELLT"}, \code{"AELLTCD"}, ...
 \item \code{TERM_NAME}, character, could be NA only at those observations
 where \code{TERM_ID} is non-NA
 \item \code{TERM_ID}, integer, could be NA only at those observations

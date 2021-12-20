@@ -59,5 +59,9 @@ jobs:
         run: R CMD INSTALL .
 
       - name: Lint
-        run: lintr::lint_package()
+        run: |
+          lints <- lintr::lint_package()
+          if (length(lints) > 0L) {
+            stop("lintr detected issues.", call. = FALSE)
+          }
         shell: Rscript {0}
