@@ -146,7 +146,8 @@ impute_dtc <- function(dtc,
                        date_imputation = NULL,
                        time_imputation = "00:00:00",
                        min_dates = NULL,
-                       max_dates = NULL) {
+                       max_dates = NULL,
+                       preserve = FALSE) {
   # Issue a warning if incorrect  DTC is present
   n_chr <- nchar(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -179,10 +180,16 @@ impute_dtc <- function(dtc,
       !valid_dtc ~ NA_character_,
       n_chr >= 10 ~ substr(dtc, 1, 10),
       # dates like 2021---14 - use only year part
-      n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      n_chr == 9 & date_imputation != "MID" & !preserve ~
+        paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+      # dates like 2021---14 - use year and day part and impute month
+      n_chr == 9 & date_imputation == "MID" & preserve ~
+        paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
+
       n_chr == 7 ~ paste0(dtc, "-", d),
       n_chr == 4 & date_imputation != "MID" ~ paste0(dtc, "-", mo, "-", d),
       n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")
+    )
     )
 
     if (date_imputation == "LAST") {
