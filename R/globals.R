@@ -82,5 +82,10 @@ globalVariables(c(
   "order1",
   "order2",
   "order3",
-  "_unit"
+  "_unit",
+  "temp_dose_freq",
+  "temp_new_dose_no",
+  "temp_num_of_doses",
+  "temp_dose_multiplier",
+  "temp_day_difference"
 ))

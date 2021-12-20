@@ -65,34 +65,31 @@ derive_vars_single_dose <- function(dataset,
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, required_vars = quo_c(by_vars, dose_freq, start_date, end_date))
 
-  pattern = c("D", "W")
-
   dataset <- dataset %>%
-    mutate(temp_freq = as.numeric(str_extract(!!dose_freq, "[:digit:]")),
-           temp_unit = str_extract(!!dose_freq, paste(pattern, collapse = "|")),
-           time_gap = as.numeric(!!end_date - !!start_date),
-           new_dose_no = case_when(temp_unit == "D" ~ 1,
-                                   temp_unit == "W" ~ 7),
-           dose_freq = temp_freq*new_dose_no,
-           num_of_doses = floor(time_gap/(dose_freq)) + 1
+    mutate(temp_dose_freq = as.numeric(str_extract(!!dose_freq, "[:digit:]")),
+           temp_new_dose_no = str_extract(!!dose_freq, paste(c("D", "W"), collapse = "|")),
+           temp_new_dose_no = case_when(temp_new_dose_no == "D" ~ 1,
+                                        temp_new_dose_no == "W" ~ 7),
+           temp_dose_freq = temp_dose_freq*temp_new_dose_no,
+           temp_num_of_doses = floor(as.numeric(!!end_date - !!start_date)/
+                                  (temp_dose_freq)) + 1
     )
 
 
-  dataset <- dataset[rep(row.names(dataset), dataset$num_of_doses),]
+  dataset <- dataset[rep(row.names(dataset), dataset$temp_num_of_doses),]
 
   dataset <- dataset %>%
     group_by(!!!by_vars, !!dose_freq, !!start_date, !!end_date) %>%
-    mutate(temp_multiplier = (row_number() - 1)) %>%
+    mutate(temp_dose_multiplier = (row_number() - 1)) %>%
     ungroup() %>%
-    mutate(day_difference = days(temp_multiplier*dose_freq))
+    mutate(temp_day_difference = days(temp_dose_multiplier*temp_dose_freq))
 
   dataset <- dataset %>%
     mutate(!!dose_freq := "ONCE",
-           !!end_date := !!start_date + day_difference,
-           !!start_date := !!start_date + day_difference
+           !!end_date := !!start_date + temp_day_difference,
+           !!start_date := !!start_date + temp_day_difference
     ) %>%
-    select(all_of(col_names))
-
+    select(!!!vars(col_names))
   return(dataset)
 }
 
