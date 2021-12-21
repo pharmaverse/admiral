@@ -60,6 +60,17 @@ jobs:
 
       - name: Lint
         run: |
-          options(lintr.error_on_lint = TRUE)
-          lintr::lint_package()
+          (lints <- lintr::lint_package())
+          if (length(lints > 0L)) {
+            system("export LINTS_DETECTED=true")
+          } else {
+            system("export LINTS_DETECTED=false")
+          }
         shell: Rscript {0}
+
+      - name: Error if lints detected
+        run: |
+          echo $LINTS_DETECTED
+          if [$LINTS_DETECTED == "true"]
+            exit 99
+          fi
