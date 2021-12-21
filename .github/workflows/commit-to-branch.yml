@@ -20,16 +20,16 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
+      - uses: actions/checkout@v2
+
       - name: Commit and push to branches
         run: |
           echo GITHUB_REF=$GITHUB_REF
           echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
           echo GITHUB_BASE_REF=$GITHUB_BASE_REF
           echo "Test" >> test.txt
-          pwd
-          ls
-          cd ..
-          ls
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com
           git checkout {{ $GITHUB_HEAD_REF }}
           git add test.txt
           git commit -m "Add file"
