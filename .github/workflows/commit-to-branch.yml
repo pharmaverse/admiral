@@ -35,7 +35,7 @@ jobs:
           git add test.txt
           git commit -m "Add file"
 
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ GITHUB_HEAD_REF }}
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ GITHUB_HEAD_REF }}
