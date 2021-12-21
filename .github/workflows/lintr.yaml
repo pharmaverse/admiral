@@ -60,6 +60,6 @@ jobs:
 
       - name: Lint
         run: |
-          optiones(lintr.error_on_lint = TRUE)
+          options(lintr.error_on_lint = TRUE)
           lintr::lint_package()
         shell: Rscript {0}
