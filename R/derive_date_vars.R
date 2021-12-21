@@ -191,7 +191,7 @@ impute_dtc <- function(dtc,
       n_chr == 4 & date_imputation != "MID" ~ paste0(dtc, "-", mo, "-", d),
       n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")
     )
-    )
+
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
