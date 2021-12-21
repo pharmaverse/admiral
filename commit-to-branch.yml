@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - devel
+  pull_request:
+    branches:
+      - main
+      - master
+      - devel
+
+name: test
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Commit and push to branches
+        run: |
+          echo GITHUB_REF=$GITHUB_REF
+          echo GITHUB_HEAD_REF=GITHUB_HEAD_REF
+          echo GITHUB_BASE_REF=$GITHUB_BASE_REF
