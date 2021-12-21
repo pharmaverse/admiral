@@ -374,25 +374,8 @@ where the labels are stored.
 
 # Unit Testing
 
-A function requires a set of unit tests to verify it produces the expected result. 
-If a function is defined in a file named `R/derive_baseline.R` then its accompanying unit tests should be stored in `tests/testthat/test-derive_baseline.R`.
-
-The testing framework to be used is [testthat](https://testthat.r-lib.org/).
-
-Unit tests should cover the functionality of the function.
-If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
-This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
-
-The input and expected output for the unit tests must follow the following rules:
-
-* Input and output should be as simple as possible.
-* Values should be hard-coded whenever possible.
-* If values need to be derived, only unit tested functions can be used.
-
-If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
-Make sure to align columns as well. This ensures quick code readability. 
-
-If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+A function requires a set of unit tests to verify it produces the expected result.
+See [Writing Unit Tests in {admiral}](unit_test_guidance.html#Writing Unit Tests in {admiral}) for details.
 
 # Deprecation
 

@@ -111,7 +111,7 @@ the unit test script can be created from the console also, as follows:
 ```
 usethis::use_test("<script_containing_function>")
 ```
-and use the following format:
+the testing framework used is testthat and has the following format :
 
 ```
 test_that("<function_name> Test 1: <Explanation of the test>", {
@@ -150,6 +150,15 @@ test_that("my_new_func Test 1: <Explanation of the test>", {
 })
 ```
 **Note**: When comparing datasets in {admiral} we use function `expect_dfs_equal()`. 
+
+The input and expected output for the unit tests must follow the following rules:
+
+* Input and output should be as simple as possible.
+* Values should be hard-coded whenever possible.
+* If values need to be derived, only unit tested functions can be used.
+
+If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
+Make sure to align columns as well. This ensures quick code readability.
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
 these will be compiled in the package validation report. Having the name of the
