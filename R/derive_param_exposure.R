@@ -101,7 +101,8 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    )
+#'    ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
 #' adex %>%
@@ -112,7 +113,8 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) mean(x, na.rm = TRUE)
-#'   )
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
 #' # Any dose adjustment?
 #' adex %>%
@@ -122,7 +124,8 @@
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
-#'   )
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
                                    by_vars,
                                    input_code,
