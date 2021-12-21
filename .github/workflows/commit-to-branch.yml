@@ -25,3 +25,8 @@ jobs:
           echo GITHUB_REF=$GITHUB_REF
           echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
           echo GITHUB_BASE_REF=$GITHUB_BASE_REF
+          echo "Test" >> test.txt
+          git checkout {{ $GITHUB_HEAD_REF }}
+          git add test.txt
+          git commit -m "Add file"
+          git push
