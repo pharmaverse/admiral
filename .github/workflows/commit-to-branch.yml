@@ -27,6 +27,9 @@ jobs:
           echo GITHUB_BASE_REF=$GITHUB_BASE_REF
           echo "Test" >> test.txt
           pwd
+          ls
+          cd ..
+          ls
           git checkout {{ $GITHUB_HEAD_REF }}
           git add test.txt
           git commit -m "Add file"
