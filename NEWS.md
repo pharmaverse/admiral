@@ -1,5 +1,8 @@
 # admiral development version
 
+- `derive_vars_dtm()` now has `preserve` argument so users can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07`.  A user can also not use `preserve` and do full date imputation, e.g. 
+`2019---07` would become `2019-06-15` and dates with just year `2019` would become `2019-06-30`.  (#592)
+
 - `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
 are not recorded in the data. (#589)
 
