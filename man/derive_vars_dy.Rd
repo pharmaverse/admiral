@@ -17,7 +17,9 @@ expected.}
 A date or date-time object column is expected.}
 
 \item{source_vars}{A list of datetime or date variables created using \code{vars()} from
-which dates are to be extracted.}
+which dates are to be extracted. This can either be a list of date(time) variables
+or named \code{--DY} variables and corresponding --DT(M) variables e.g.
+vars(TRTSDTM, ASTDTM, AENDT) or vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT)}
 }
 \value{
 The input dataset with \code{--DY} corresponding to the \code{--DTM} or \code{--DT}
@@ -44,14 +46,17 @@ datain <- tibble::tribble(
 derive_vars_dy(datain, reference_date = TRTSDTM,source_vars = vars(TRTSDTM, ASTDTM, AENDT))
 
  datain <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,
- "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
+ ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,~DTHDT,
+ "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20","2014-02-01"
  ) \%>\%
  mutate(TRTSDTM=lubridate::ymd(TRTSDT),
         ASTDT=lubridate::as_datetime(ASTDTM),
-        AENDT=lubridate::ymd(AENDT))
+        AENDT=lubridate::ymd(AENDT),
+        DTHDT=lubridate::ymd(DTHDT))
 
- derive_vars_dy(datain, reference_date = TRTSDT, source_vars = vars(TRTSDT, ASTDTM, AENDT))
+ derive_vars_dy(datain,
+                reference_date = TRTSDT,
+                source_vars = vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT))
 }
 \author{
 Teckla Akinyi

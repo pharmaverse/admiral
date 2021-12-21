@@ -13,7 +13,9 @@
 #'   A date or date-time object column is expected.
 #'
 #' @param source_vars A list of datetime or date variables created using `vars()` from
-#'   which dates are to be extracted.
+#'   which dates are to be extracted. This can either be a list of date(time) variables
+#'   or named `--DY` variables and corresponding --DT(M) variables e.g.
+#'    vars(TRTSDTM, ASTDTM, AENDT) or vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT)
 #'
 #' @author Teckla Akinyi
 #'
@@ -40,14 +42,17 @@
 #' derive_vars_dy(datain, reference_date = TRTSDTM,source_vars = vars(TRTSDTM, ASTDTM, AENDT))
 #'
 #'  datain <- tibble::tribble(
-#'  ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,
-#'  "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
+#'  ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,~DTHDT,
+#'  "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20","2014-02-01"
 #'  ) %>%
 #'  mutate(TRTSDTM=lubridate::ymd(TRTSDT),
 #'         ASTDT=lubridate::as_datetime(ASTDTM),
-#'         AENDT=lubridate::ymd(AENDT))
+#'         AENDT=lubridate::ymd(AENDT),
+#'         DTHDT=lubridate::ymd(DTHDT))
 #'
-#'  derive_vars_dy(datain, reference_date = TRTSDT, source_vars = vars(TRTSDT, ASTDTM, AENDT))
+#'  derive_vars_dy(datain,
+#'                 reference_date = TRTSDT,
+#'                 source_vars = vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT))
 derive_vars_dy <- function(dataset,
                            reference_date,
                            source_vars) {
@@ -57,14 +62,12 @@ derive_vars_dy <- function(dataset,
   assert_data_frame(dataset, required_vars = quo_c(source_vars, reference_date))
 
   #Warn if `--DY` variables already exist
-  dtm_vars <- vars2chr(source_vars)
   n_vars <- length(source_vars)
-
-  dy_vars <- stringr::str_replace_all(dtm_vars,"(DT|DTM)$","DY")
-  #dy_vars <- sub("DTM$", "DY", sub("DT$", "DY", dtm_vars))
+  source_names <- names(source_vars)
+  dy_vars <- if_else(source_names == "",
+                    stringr::str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
+                    source_names)
   warn_if_vars_exist(dataset, dy_vars)
-
-  #call date part of reference date if --DTM is parsed
 
   if (n_vars > 1L) {
     dataset %>%
@@ -76,7 +79,9 @@ derive_vars_dy <- function(dataset,
       # if ge to 0 then add 1
       mutate_at(vars(ends_with("temp")), ~ ifelse(.x >= 0, .x + 1, .x)) %>%
       rename_at(vars(ends_with("temp")),
-                .funs = ~ stringr::str_replace_all(., c(DTM_temp = "DY", DT_temp = "DY")))
+                .funs = ~ stringr::str_replace_all(., c(DTM_temp = "DY",
+                                                        DT_temp = "DY",
+                                                        DY_temp = "DY")))
   } else {
     dataset <-   dataset %>%
       mutate(!!sym(dy_vars) := ceiling(as.numeric(

@@ -28,32 +28,35 @@
           })
 
 #----test 2----
-test_that("Test2::Multiple --DT input when ref date is --DTM", {
+test_that("Test2::Multiple --DT input when ref date is --DTM,
+          with name of --DY var specified in par call", {
   datain <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,
-    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20",
-    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20",
-    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20"
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,~DTHDT,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", "2014-02-01",
+    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20", "2014-03-01",
+    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", "2014-05-01"
 
   ) %>%
     mutate(TRTSDTM=lubridate::as_datetime(TRTSDTM),
            ASTDT=lubridate::ymd(ASTDT),
-           AENDT=lubridate::ymd(AENDT))
+           AENDT=lubridate::ymd(AENDT),
+           DTHDT=lubridate::ymd(DTHDT))
 
   expected_output <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,  ~TRTSDY, ~ASTDY, ~AENDY,
-    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", 1, 2, 4,
-    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20", 1, 1, 4,
-    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", 1, -2, 4,
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT,  ~DTHDT, ~TRTSDY, ~ASTDY, ~AENDY, ~DEATHDY,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", "2014-02-01", 1, 2, 4, 16,
+    "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20", "2014-03-01", 1, 1, 4, 44,
+    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", "2014-05-01", 1, -2, 4, 105,
 
   ) %>%
     mutate(TRTSDTM=lubridate::as_datetime(TRTSDTM),
            ASTDT=lubridate::ymd(ASTDT),
-           AENDT=lubridate::ymd(AENDT))
+           AENDT=lubridate::ymd(AENDT),
+           DTHDT=lubridate::ymd(DTHDT))
 
   actual_output <- derive_vars_dy(datain,
                                   reference_date = TRTSDTM,
-                                  source_vars = vars(TRTSDTM, ASTDT, AENDT))
+                                  source_vars = vars(TRTSDTM, ASTDT, AENDT,DEATHDY=DTHDT))
 
   expect_dfs_equal(
     expected_output,
