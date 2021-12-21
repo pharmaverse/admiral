@@ -61,15 +61,16 @@ jobs:
 
       - name: Lint
         run: |
+          print(Sys.getenv("LINTS_DETECTED"))
           (lints <- lintr::lint_package())
           if (length(lints) > 0L) {
-            system("export LINTS_DETECTED=true")
+            Sys.setenv(LINTS_DETECTED = "true")
           }
         shell: Rscript {0}
 
       - name: Error if lints detected
         run: |
-          echo $LINTS_DETECTED
+          echo LINTS_DETECTED=$LINTS_DETECTED
           if [ $LINTS_DETECTED=="true" ]
           then
             exit 99
