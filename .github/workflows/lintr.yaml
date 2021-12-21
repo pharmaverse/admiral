@@ -61,7 +61,8 @@ jobs:
       - name: Lint
         run: |
           lints <- lintr::lint_package()
+          print(lints)
           if (length(lints) > 0L) {
-            stop("lintr detected issues.", call. = FALSE)
+            stop("lintr detected issues. Please review", call. = FALSE)
           }
         shell: Rscript {0}

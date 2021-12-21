@@ -17,8 +17,8 @@ NULL
 #'
 #' @rdname tte_source_objects
 #'
-death_event <- event_source(
-  dataset_name = "adsl",
+death_event<-event_source(
+  dataset_name='adsl',
   filter = DTHFL == "Y",
   date = DTHDT,
   set_values_to = vars(
