@@ -2,16 +2,16 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_vars_merged_dtm}
 \alias{derive_vars_merged_dtm}
-\title{Merge a (imputed) Datetime Variable}
+\title{Merge a (Imputed) Datetime Variable}
 \usage{
 derive_vars_merged_dtm(
   dataset,
   dataset_add,
   by_vars,
-  order,
+  order = NULL,
   new_vars_prefix,
-  filter_add,
-  mode,
+  filter_add = NULL,
+  mode = NULL,
   dtc,
   date_imputation = NULL,
   time_imputation = "00:00:00",
@@ -20,34 +20,176 @@ derive_vars_merged_dtm(
   max_dates = NULL
 )
 }
+\arguments{
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars}, the \code{dtc}, and the \code{order}
+parameter are expected.}
+
+\item{by_vars}{Grouping variables
+
+The input dataset and the selected observations from the additional dataset
+are merged by the specified by variables. The by variables must be a unique
+key of the selected observations.
+
+\emph{Permitted Values}: list of variables}
+
+\item{order}{Sort order
+
+The first or last observation from the addtional dataset is selected with
+respect to the specified order.
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+
+\item{new_vars_prefix}{Prefix used for the output variable(s).
+
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix, for the date imputation flag "DTF", and for the time
+imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
+
+\item{filter_add}{Filter for additional data
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Permitted Values}: a condition}
+
+\item{mode}{Selection mode
+
+Determines if the first or last observation is selected.
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+
+\item{dtc}{The \code{'--DTC'} date to impute
+
+A character date is expected in a format like \code{yyyy-mm-dd} or
+\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
+imputation is performed.}
+
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
+
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
+
+Otherwise, a character value is expected, either as a
+\itemize{
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
+of June,
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+day/month.
+}
+
+Default is \code{NULL}.}
+
+\item{time_imputation}{The value to impute the time when a timepart is
+missing.
+
+A character value is expected, either as a
+\itemize{
+\item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
+for the start of the day,
+\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
+}
+
+Default is \code{"00:00:00"}.}
+
+\item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
+
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null and the time imputation flag is
+derived if the \code{time_imputation} parameter is not null
+
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the \code{dtc} value are considered. The possible dates
+are defined by the missing parts of the \code{dtc} date (see example below). This
+ensures that the non-missing parts of the \code{dtc} date are not changed. For
+example\preformatted{impute_dtc(
+  "2020-11",
+  min_dates = list(
+    ymd_hms("2020-12-06T12:12:12"),
+    ymd_hms("2020-11-11T11:11:11")
+   ),
+  date_imputation = "first"
+)
+}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the \code{dtc} date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered.}
+}
 \description{
-Merge a (imputed) Datetime Variable
+Merge a imputed datetime variable, date imputation  flag, and time imputation
+flag from a dataset to the input dataset. The observations to merge can be
+selected by a condition and/or selecting the first or last observation for
+each by group.
+}
+\details{
+\enumerate{
+\item The additional dataset is restricted to the observations matching the
+\code{filter_add} condition.
+\item The datetime variable and if requested, the date imputation flag and
+time imputation flag is added to the additional dataset.
+\item If \code{order} is specified, for each by group the first or last observation
+(depending on \code{mode}) is selected.
+\item The date and flag variables are merged to the input dataset.
+}
 }
 \examples{
 library(admiral.test)
 data("dm")
 data("ex")
+
+# derive treatment start datetime (TRTSDTM)
 derive_vars_merged_dtm(
   select(dm, STUDYID, USUBJID),
   dataset_add = ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTS",
-  date = EXSTDTC,
+  dtc = EXSTDTC,
   date_imputation = "first",
   time_imputation = "first",
   order = vars(TRTSDTM),
   mode = "first"
 )
 
+# derive treatment end datetime (TRTEDTM) (without date imputation)
 derive_vars_merged_dtm(
   select(dm, STUDYID, USUBJID),
   dataset_add = ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTE",
-  date = EXENDTC,
-  date_imputation = "last",
+  dtc = EXENDTC,
   time_imputation = "last",
   order = vars(TRTEDTM),
   mode = "last"
 )
 }
+\author{
+Stefan Bundfuss
+}
+\keyword{adam}
+\keyword{derivation}
+\keyword{timing}

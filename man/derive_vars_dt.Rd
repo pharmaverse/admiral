@@ -21,7 +21,9 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix and for the date imputation flag "DTF". I.e., for
+\code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 

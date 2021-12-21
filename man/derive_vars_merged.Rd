@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_vars_merged}
 \alias{derive_vars_merged}
-\title{Merge Variables}
+\title{Merge Variables from a Dataset to the Input Dataset}
 \usage{
 derive_vars_merged(
   dataset,
@@ -15,15 +15,105 @@ derive_vars_merged(
   check_type = "warning"
 )
 }
+\arguments{
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars}, the \code{new_vars}, and the \code{order}
+parameter are expected.}
+
+\item{by_vars}{Grouping variables
+
+The input dataset and the selected observations from the additional dataset
+are merged by the specified by variables. The by variables must be a unique
+key of the selected observations.
+
+\emph{Permitted Values}: list of variables}
+
+\item{order}{Sort order
+
+The first or last observation from the addtional dataset is selected with
+respect to the specified order.
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+
+\item{new_vars}{Variables to add
+
+The specified variables are added to the output dataset. Variables can be
+renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+
+If the parameter is not specified or set to \code{NULL}, all variables from the
+additional dataset are added.
+
+\emph{Permitted Values}: list of variables created by \code{vars()}}
+
+\item{mode}{Selection mode
+
+Determines if the first or last observation is selected.
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+
+\item{filter_add}{Filter for additional data
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Permitted Values}: a condition}
+
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"} or \code{"error"} is specified, the specified message is issued
+if the observations of the (restricted) additional dataset are not unique
+with respect to the by variables and the order.
+
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+}
 \description{
-Merge Variables
+Merge variables from a dataset to the input dataset. The observations to
+merge can be selected by a condition and/or selecting the first or last
+observation for each by group.
+}
+\details{
+\enumerate{
+\item The additional dataset is restricted to the observations matching the
+\code{filter_add} condition.
+\item If \code{order} is specified, for each by group the first or last observation
+(depending on \code{mode}) is selected.
+\item The variables specified for \code{new_vars} are merged to the input dataset.
+}
 }
 \examples{
 library(admiral.test)
+library(dplyr)
 data("vs")
 data("dm")
 
-derive_vars_merged(vs,
-                   dataset_add = select(dm, -DOMAIN),
-                   by_vars = vars(STUDYID, USUBJID))
+# merging all dm variables to vs
+derive_vars_merged(
+  vs,
+  dataset_add = select(dm, -DOMAIN),
+  by_vars = vars(STUDYID, USUBJID)) \%>\%
+select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+
+# merge last weight to adsl
+data("adsl")
+derive_vars_merged(
+  adsl,
+  dataset_add = vs,
+  by_vars = vars(STUDYID, USUBJID),
+  order = vars(VSDTC),
+  mode = "last",
+  new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
+  filter_add = VSTESTCD == "WEIGHT"
+) \%>\%
+select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU)
 }
+\author{
+Stefan Bundfuss
+}
+\keyword{adam}
+\keyword{derivation}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_var_merged_cat}
 \alias{derive_var_merged_cat}
-\title{Merge a Categorized Variable}
+\title{Merge a Categorization Variable}
 \usage{
 derive_var_merged_cat(
   dataset,
@@ -16,8 +16,71 @@ derive_var_merged_cat(
   mode = NULL
 )
 }
+\arguments{
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars}, the \code{source_var}, and the \code{order}
+parameter are expected.}
+
+\item{by_vars}{Grouping variables
+
+The input dataset and the selected observations from the additional dataset
+are merged by the specified by variables. The by variables must be a unique
+key of the selected observations.
+
+\emph{Permitted Values}: list of variables}
+
+\item{order}{Sort order
+
+The first or last observation from the addtional dataset is selected with
+respect to the specified order.
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+
+\item{new_var}{New variable
+
+The specified variable is added to the additional dataset and set to the
+categorized values, i.e., \verb{cat_fun(<source variable>)}.}
+
+\item{source_var}{Source variable}
+
+\item{cat_fun}{Categorization function
+
+A function must be specified for this parameter which expects the values of
+the source variable as input and returns the categorized values.}
+
+\item{filter_add}{Filter for additional data
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Permitted Values}: a condition}
+
+\item{mode}{Selection mode
+
+Determines if the first or last observation is selected.
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+}
 \description{
-Merge a Categorized Variable
+Merge a categorization variable from a dataset to the input dataset. The
+observations to merge can be selected by a condition and/or selecting the
+first or last observation for each by group.
+}
+\details{
+\enumerate{
+\item The additional dataset is restricted to the observations matching the
+\code{filter_add} condition.
+\item The categorization variable is added to the additional dataset.
+\item If \code{order} is specified, for each by group the first or last observation
+(depending on \code{mode}) is selected.
+\item The categorization variable is merged to the input dataset.
+}
 }
 \examples{
 library(admiral.test)
@@ -41,3 +104,8 @@ derive_var_merged_cat(
   mode = "last"
 )
 }
+\author{
+Stefan Bundfuss
+}
+\keyword{adam}
+\keyword{derivation}

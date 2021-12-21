@@ -1,15 +1,107 @@
-#' Merge Variables
+#' Merge Variables from a Dataset to the Input Dataset
+#'
+#' Merge variables from a dataset to the input dataset. The observations to
+#' merge can be selected by a condition and/or selecting the first or last
+#' observation for each by group.
+#'
+#' @param dataset Input dataset
+#'
+#'   The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `new_vars`, and the `order`
+#'   parameter are expected.
+#'
+#' @param order Sort order
+#'
+#'   The first or last observation from the addtional dataset is selected with
+#'   respect to the specified order.
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'
+#' @param new_vars Variables to add
+#'
+#'   The specified variables are added to the output dataset. Variables can be
+#'   renamed by naming the element, i.e., `new_vars = vars(<new name> = <old
+#'   name>)`.
+#'
+#'   If the parameter is not specified or set to `NULL`, all variables from the
+#'   additional dataset are added.
+#'
+#'   *Permitted Values*: list of variables created by `vars()`
+#'
+#' @param mode Selection mode
+#'
+#'   Determines if the first or last observation is selected.
+#'
+#'   *Permitted Values*: `"first"`, `"last"`
+#'
+#' @param by_vars Grouping variables
+#'
+#'   The input dataset and the selected observations from the additional dataset
+#'   are merged by the specified by variables. The by variables must be a unique
+#'   key of the selected observations.
+#'
+#'   *Permitted Values*: list of variables
+#'
+#' @param filter_add Filter for additional data
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for merging. If the parameter is not specified, all observations are
+#'   considered.
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @param check_type Check uniqueness?
+#'
+#'   If `"warning"` or `"error"` is specified, the specified message is issued
+#'   if the observations of the (restricted) additional dataset are not unique
+#'   with respect to the by variables and the order.
+#'
+#'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The variables specified for `new_vars` are merged to the input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam
 #'
 #' @export
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
 #' data("vs")
 #' data("dm")
 #'
-#' derive_vars_merged(vs,
-#'                    dataset_add = select(dm, -DOMAIN),
-#'                    by_vars = vars(STUDYID, USUBJID))
+#' # merging all dm variables to vs
+#' derive_vars_merged(
+#'   vs,
+#'   dataset_add = select(dm, -DOMAIN),
+#'   by_vars = vars(STUDYID, USUBJID)) %>%
+#' select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+#'
+#' # merge last weight to adsl
+#' data("adsl")
+#' derive_vars_merged(
+#'   adsl,
+#'   dataset_add = vs,
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   order = vars(VSDTC),
+#'   mode = "last",
+#'   new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
+#'   filter_add = VSTESTCD == "WEIGHT"
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU)
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -69,7 +161,36 @@ derive_vars_merged <- function(dataset,
   left_join(dataset, add_data, by = vars2chr(by_vars))
 }
 
-#' Merge a (imputed) Date Variable
+#' Merge a (Imputed) Date Variable
+#'
+#' Merge a imputed date variable and date imputation  flag from a dataset to the
+#' input dataset. The observations to merge can be selected by a condition
+#' and/or selecting the first or last observation for each by group.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `dtc`, and the `order`
+#'   parameter are expected.
+#'
+#' @inheritParams derive_vars_merged
+#' @inheritParams derive_vars_dt
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. The date variable and if requested, the date imputation flag is added to
+#'   the additional dataset.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The date and flag variables are merged to the input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam timing
 #'
 #' @export
 #'
@@ -77,6 +198,8 @@ derive_vars_merged <- function(dataset,
 #' library(admiral.test)
 #' data("dm")
 #' data("ex")
+#'
+#' # derive treatment start date (TRTSDT)
 #' derive_vars_merged_dt(
 #'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex,
@@ -88,41 +211,42 @@ derive_vars_merged <- function(dataset,
 #'   mode = "first"
 #' )
 #'
+#' # derive treatment end date (TRTEDT) (without imputation)
 #' derive_vars_merged_dt(
 #'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTE",
 #'   dtc = EXENDTC,
-#'   date_imputation = "last",
 #'   order = vars(TRTEDT),
 #'   mode = "last"
 #' )
 derive_vars_merged_dt <- function(dataset,
                                   dataset_add,
                                   by_vars,
-                                  order,
+                                  order = NULL,
                                   new_vars_prefix,
-                                  filter_add,
-                                  mode,
+                                  filter_add = NULL,
+                                  mode = NULL,
                                   dtc,
                                   date_imputation = NULL,
                                   flag_imputation = TRUE,
                                   min_dates = NULL,
                                   max_dates = NULL) {
   dtc <- assert_symbol(enquo(dtc))
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
   old_vars <- names(dataset_add)
-  add_data <- derive_vars_dt(
-    dataset_add,
-    new_vars_prefix = new_vars_prefix,
-    dtc = !!dtc,
-    date_imputation = date_imputation,
-    flag_imputation = flag_imputation,
-    min_dates = min_dates,
-    max_dates = max_dates
-  )
+  add_data <- filter_if(dataset_add, filter_add) %>%
+    derive_vars_dt(
+      new_vars_prefix = new_vars_prefix,
+      dtc = !!dtc,
+      date_imputation = date_imputation,
+      flag_imputation = flag_imputation,
+      min_dates = min_dates,
+      max_dates = max_dates
+    )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
                      dataset_add = add_data,
@@ -132,7 +256,37 @@ derive_vars_merged_dt <- function(dataset,
                      mode = mode)
 }
 
-#' Merge a (imputed) Datetime Variable
+#' Merge a (Imputed) Datetime Variable
+#'
+#' Merge a imputed datetime variable, date imputation  flag, and time imputation
+#' flag from a dataset to the input dataset. The observations to merge can be
+#' selected by a condition and/or selecting the first or last observation for
+#' each by group.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `dtc`, and the `order`
+#'   parameter are expected.
+#'
+#' @inheritParams derive_vars_merged
+#' @inheritParams derive_vars_dtm
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. The datetime variable and if requested, the date imputation flag and
+#'   time imputation flag is added to the additional dataset.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The date and flag variables are merged to the input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam timing
 #'
 #' @export
 #'
@@ -140,57 +294,60 @@ derive_vars_merged_dt <- function(dataset,
 #' library(admiral.test)
 #' data("dm")
 #' data("ex")
+#'
+#' # derive treatment start datetime (TRTSDTM)
 #' derive_vars_merged_dtm(
 #'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTS",
-#'   date = EXSTDTC,
+#'   dtc = EXSTDTC,
 #'   date_imputation = "first",
 #'   time_imputation = "first",
 #'   order = vars(TRTSDTM),
 #'   mode = "first"
 #' )
 #'
+#' # derive treatment end datetime (TRTEDTM) (without date imputation)
 #' derive_vars_merged_dtm(
 #'   select(dm, STUDYID, USUBJID),
 #'   dataset_add = ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTE",
-#'   date = EXENDTC,
-#'   date_imputation = "last",
+#'   dtc = EXENDTC,
 #'   time_imputation = "last",
 #'   order = vars(TRTEDTM),
 #'   mode = "last"
 #' )
-
 derive_vars_merged_dtm <- function(dataset,
-                                  dataset_add,
-                                  by_vars,
-                                  order,
-                                  new_vars_prefix,
-                                  filter_add,
-                                  mode,
-                                  dtc,
-                                  date_imputation = NULL,
-                                  time_imputation = "00:00:00",
-                                  flag_imputation = "auto",
-                                  min_dates = NULL,
-                                  max_dates = NULL) {
+                                   dataset_add,
+                                   by_vars,
+                                   order = NULL,
+                                   new_vars_prefix,
+                                   filter_add = NULL,
+                                   mode = NULL,
+                                   dtc,
+                                   date_imputation = NULL,
+                                   time_imputation = "00:00:00",
+                                   flag_imputation = "auto",
+                                   min_dates = NULL,
+                                   max_dates = NULL) {
   dtc <- assert_symbol(enquo(dtc))
+
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
   old_vars <- names(dataset_add)
-  add_data <- derive_vars_dtm(
-    dataset_add,
-    new_vars_prefix = new_vars_prefix,
-    dtc = !!dtc,
-    date_imputation = date_imputation,
-    time_imputation = time_imputation,
-    flag_imputation = flag_imputation,
-    min_dates = min_dates,
-    max_dates = max_dates
-  )
+  add_data <- filter_if(dataset_add, filter = filter_add) %>%
+    derive_vars_dtm(
+      new_vars_prefix = new_vars_prefix,
+      dtc = !!dtc,
+      date_imputation = date_imputation,
+      time_imputation = time_imputation,
+      flag_imputation = flag_imputation,
+      min_dates = min_dates,
+      max_dates = max_dates
+    )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
                      dataset_add = add_data,
@@ -200,7 +357,46 @@ derive_vars_merged_dtm <- function(dataset,
                      mode = mode)
 }
 
-#' Merge a Categorized Variable
+#' Merge a Categorization Variable
+#'
+#' Merge a categorization variable from a dataset to the input dataset. The
+#' observations to merge can be selected by a condition and/or selecting the
+#' first or last observation for each by group.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `source_var`, and the `order`
+#'   parameter are expected.
+#'
+#' @param new_var New variable
+#'
+#'   The specified variable is added to the additional dataset and set to the
+#'   categorized values, i.e., `cat_fun(<source variable>)`.
+#'
+#' @param source_var Source variable
+#'
+#' @param cat_fun Categorization function
+#'
+#'   A function must be specified for this parameter which expects the values of
+#'   the source variable as input and returns the categorized values.
+#'
+#' @inheritParams derive_vars_merged
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. The categorization variable is added to the additional dataset.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The categorization variable is merged to the input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam
 #'
 #' @export
 #'
@@ -239,14 +435,13 @@ derive_var_merged_cat <- function(dataset,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, quo_c(by_vars, source_var))
 
-  add_data <- mutate(dataset_add,
-                     !!new_var := cat_fun(!!source_var))
+  add_data <- filter_if(dataset_add, filter_add) %>%
+    mutate(!!new_var := cat_fun(!!source_var))
   derive_vars_merged(dataset,
                      dataset_add = add_data,
                      by_vars = by_vars,
                      order = order,
                      new_vars = vars(!!new_var),
-                     filter_add = !!filter_add,
                      mode = mode)
 }
 

@@ -78,15 +78,20 @@ test_that("derive_vars_merged: error if variable in both datasets", {
 # derive_vars_merged_dt ----
 ## derive_vars_merged_dt: merge first date ----
 test_that("derive_vars_merged_dt: merge first date", {
-  actual <- derive_vars_merged_dt(adsl,
-                               dataset_add = ex,
-                               order = vars(TRTSDT),
-                               by_vars = vars(STUDYID, USUBJID),
-                               dtc = EXSTDTC,
-                               new_vars_prefix = "TRTS",
-                               mode = "first")
-  expected <- adsl %>% mutate(TRTSDT = ymd(c("2020-12-07", "2021-01-12", "2021-03-02", NA)),
-                              TRTSDTF = NA_character_)
+  actual <- derive_vars_merged_dt(
+    adsl,
+    dataset_add = ex,
+    order = vars(TRTSDT),
+    by_vars = vars(STUDYID, USUBJID),
+    dtc = EXSTDTC,
+    new_vars_prefix = "TRTS",
+    mode = "first"
+  )
+  expected <-
+    adsl %>% mutate(TRTSDT = ymd(c(
+      "2020-12-07", "2021-01-12", "2021-03-02", NA
+    )),
+    TRTSDTF = NA_character_)
 
   expect_dfs_equal(base = expected,
                    compare = actual,
