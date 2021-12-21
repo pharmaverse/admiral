@@ -61,7 +61,7 @@ jobs:
       - name: Lint
         run: |
           (lints <- lintr::lint_package())
-          saveRdS(lints, file = "lints.rds")
+          saveRDS(lints, file = "lints.rds")
         shell: Rscript {0}
 
       - name: Error if lints detected
