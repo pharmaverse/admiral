@@ -17,10 +17,14 @@ library(lubridate)
 data("dm")
 data("ds")
 data("ex")
+data("ae")
+data("lb")
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
 ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 
 # ---- User defined functions ----
 
@@ -28,14 +32,6 @@ ex <- convert_blanks_to_na(ex)
 #  operates on vectors, which can be used in `mutate`.
 
 # Grouping
-format_agegr1 <- function(x) {
-  case_when(
-    !is.na(x) & x < 18 ~ "< 18",
-    x >= 18 & x < 65 ~ "18 - 65",
-    x >= 65 ~ ">= 65"
-  )
-}
-
 format_racegr1 <- function(x) {
   case_when(
     !is.na(x) & x == "WHITE" ~ "White",
@@ -168,9 +164,14 @@ adsl <- adsl %>%
     source_datasets = list(ae = ae, lb = lb, adsl = adsl)
   ) %>%
 
+  # Age group
+  derive_agegr_fda(
+    age_var = AGE,
+    new_var = AGEGR1
+  ) %>%
+
   # Groupings, populations and others variables
   mutate(
-    AGEGR1 = format_agegr1(AGE),
     RACEGR1 = format_racegr1(RACE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
