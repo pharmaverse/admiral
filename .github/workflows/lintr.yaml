@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      LINTS_DETECTED: "false"
     steps:
       - uses: actions/checkout@v2
 
@@ -61,17 +60,14 @@ jobs:
 
       - name: Lint
         run: |
-          print(Sys.getenv("LINTS_DETECTED"))
           (lints <- lintr::lint_package())
-          if (length(lints) > 0L) {
-            Sys.setenv(LINTS_DETECTED = "true")
-          }
+          saveRdS(lints, file = "lints.rds")
         shell: Rscript {0}
 
       - name: Error if lints detected
         run: |
-          echo LINTS_DETECTED=$LINTS_DETECTED
-          if [ $LINTS_DETECTED=="true" ]
-          then
-            exit 99
-          fi
+          lints <- readRDS("lints.rds")
+          if (length(lints) > 0L) {
+            stop("Lints detected. Please review and adjust code according to the comments provided.", call. = FALSE)
+          }
+        shell: Rscript {0}
