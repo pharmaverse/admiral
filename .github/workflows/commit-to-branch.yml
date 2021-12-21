@@ -14,7 +14,7 @@ on:
 name: test
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -23,5 +23,5 @@ jobs:
       - name: Commit and push to branches
         run: |
           echo GITHUB_REF=$GITHUB_REF
-          echo GITHUB_HEAD_REF=GITHUB_HEAD_REF
+          echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
           echo GITHUB_BASE_REF=$GITHUB_BASE_REF
