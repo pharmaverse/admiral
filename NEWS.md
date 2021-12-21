@@ -1,20 +1,90 @@
+# admiral development version
+
+- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
+
+- `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
+
+- The `derive_last_dose()` function has been split into a general function 
+`derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
+`derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
+
+- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+
+
+# admiral 0.5.0
+
+- The first truly open source release licensed under Apache 2.0 (#680)
+
+- New vignette [Contributing to admiral](../articles/contribution_model.html) (#679)
+
+- New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
+
+- Broken links in README have been fixed (#564)
+
+
 # admiral 0.4.0
 
 ## New Features
 
 ### General
 
-- `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551).
+- `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551)
+
+- `derive_var_age_years()` derives age in years from a variable providing the
+age in different units (#569)
 
 ### BDS
 
+- `derive_param_tte()` derives time-to-event-parameters (#546)
+
+- For common time-to-event endpoints [event and censoring source
+objects](../reference/index.html#section-pre-defined-time-to-event-sources) are
+provided (#612)
+
 ### Developer
+
+- `assert_list_element()` checks if an element of a list of lists/classes
+fulfills a condition
+
+- `assert_one_to_one()` checks if there is a one to one mapping between two
+lists of variables
+
+- `negate_vars()` negates a list of variables to remove them from a dataset with
+`select()`
+
+## Updates of Existing Functions
+
+- Unit checks in `derive_param_*()` functions are no longer case sensitive (#631)
+
+- `derive_agegr_ema()` and `derive_agegr_fda()` gain a `age_unit` parameter used
+to specify the unit of the input age (#569)
 
 ## Breaking Changes
 
+- All SDTM datasets have been moved to the {admiral.test} package (#639)
+
+- The `min_dates` and `max_dates` parameters of `derive_vars_dt()` and `derive_vars_dtm()` no longer expect a `list()` but `vars()` as input (#405)
+
 ## Bug Fixes
 
+- `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
+
 ## Documentation
+
+- New vignette [Creating a BDS Time-to-Event ADaM](../articles/bds_tte.html) (#549)
+
+- New vignette [Queries Dataset Documentation](../articles/queries_dataset.html) (#561)
+
+- New vignette [Writing Vignettes](../articles/writing_vignettes.html) (#334)
+
+- New vignette [Pull Request Review Guidance](../articles/pr_review_guidance.html) (#554)
+
+- A section on handling missing values when working with {admiral} has been added to the "Get Started" vignette (#577)
+
+- Package installation instructions have been added to the README (#558)
+
+- The documentation of `derive_vars_dtm()` falsely stated that the `flag_imputation` parameter should be either `TRUE` or `FALSE`. It now correctly states that the possible values are `"time"`, `"date"` or `"auto"` (#539).
+
 
 # admiral 0.3.0
 
@@ -185,6 +255,7 @@
 - `read_dap_m3()` and `initialize()` have been migrated to {admiral.roche} (#272)
 
 - The `start_date` and `end_date` parameters of `derive_var_ady()`, `derive_var_aendy()` and `derive_var_astdy()` have been renamed to `reference_date` and `date`, respectively (#121)
+
 
 ## Bug Fixes
 

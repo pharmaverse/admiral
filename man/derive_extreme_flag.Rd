@@ -82,6 +82,7 @@ Otherwise, \code{new_var} is set to \code{NA}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -164,7 +165,6 @@ derive_extreme_flag(
   mode = "last",
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
-
 }
 \author{
 Stefan Bundfuss

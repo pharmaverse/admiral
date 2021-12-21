@@ -25,7 +25,9 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data(vs)
+#'
 #' ref_ranges <- tibble::tribble(
 #'   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
 #'   "DIABP",  60,      80,    40,     90,

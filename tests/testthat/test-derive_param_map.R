@@ -1,6 +1,3 @@
-context("test-derive_param_map")
-
-
 test_that("new observations for MAP based on DIABP and SYSBP are derived correctly", {
   input <- tibble::tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU, ~VISIT,

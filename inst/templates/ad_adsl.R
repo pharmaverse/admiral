@@ -4,6 +4,7 @@
 #
 # Input: dm, ex, ds
 library(admiral)
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -16,6 +17,10 @@ library(lubridate)
 data("dm")
 data("ds")
 data("ex")
+
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
 
 # ---- User defined functions ----
 
@@ -71,13 +76,14 @@ adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
   mutate(TRT01P = ARMCD, TRT01A = ARMCD) %>%
 
-  # derive treatment start date (TRTSDTM, TRTSDT)
+  # derive treatment start date (TRTSDTM)
   derive_var_trtsdtm(dataset_ex = ex) %>%
-  mutate(TRTSDT = date(TRTSDTM)) %>%
 
-  # derive treatment end date (TRTEDTM, TRTEDT)
+  # derive treatment end date (TRTEDTM)
   derive_var_trtedtm(dataset_ex = ex) %>%
-  mutate(TRTEDT = date(TRTEDTM)) %>%
+
+  # Derive treatment end/start date TRTSDT/TRTEDT
+  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
 
   # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%
@@ -135,6 +141,31 @@ adsl <- dm %>%
     start_date = TRTEDT,
     end_date = DTHDT,
     add_one = FALSE
+  )
+
+# Last known alive date
+ae_start <- lstalvdt_source(
+  dataset_name = "ae",
+  date = AESTDTC,
+  date_imputation = "first"
+)
+ae_end <- lstalvdt_source(
+  dataset_name = "ae",
+  date = AEENDTC,
+  date_imputation = "first"
+)
+lb_date <- lstalvdt_source(
+  dataset_name = "lb",
+  date = LBDTC,
+  filter = nchar(LBDTC) >= 10
+)
+adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
+
+adsl <- adsl %>%
+
+  derive_var_lstalvdt(
+    ae_start, ae_end, lb_date, adsl_date,
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl)
   ) %>%
 
   # Groupings, populations and others variables
@@ -153,4 +184,4 @@ adsl <- dm %>%
 
 # ---- Save output ----
 
-saveRDS(adsl, file = "./ADSL.rds", compress = TRUE)
+save(adsl, file = "data/adsl.rda", compress = "bzip2")

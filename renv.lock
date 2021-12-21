@@ -72,6 +72,18 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
+    "admiral.test": {
+      "Package": "admiral.test",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "Roche-GSK",
+      "RemoteRepo": "admiral.test",
+      "RemoteRef": "main",
+      "RemoteSha": "660224bfeb8450f6ef69769e6982aa921dc8130a",
+      "Hash": "869b5006c7e15f0364d09695c461471c"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",

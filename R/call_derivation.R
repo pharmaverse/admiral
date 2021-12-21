@@ -25,6 +25,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data(ae)
 #' data(adsl)
 #'
@@ -41,8 +42,8 @@
 #'     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
 #'     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
 #'   ),
-#'   min_dates = list(TRTSDT),
-#'   max_dates = list(TRTEDT)
+#'   min_dates = vars(TRTSDT),
+#'   max_dates = vars(TRTEDT)
 #' )
 #'
 #' ## The above call using `call_derivation()` is equivalent to the following
@@ -51,18 +52,18 @@
 #'     new_vars_prefix = "AST",
 #'     dtc = AESTDTC,
 #'     date_imputation = "first",
-#'     min_dates = list(TRTSDT),
-#'     max_dates = list(TRTEDT)
+#'     min_dates = vars(TRTSDT),
+#'     max_dates = vars(TRTEDT)
 #'   ) %>%
 #'   derive_vars_dt(
 #'     new_vars_prefix = "AEN",
 #'     dtc = AEENDTC,
 #'     date_imputation = "last",
-#'     min_dates = list(TRTSDT),
-#'     max_dates = list(TRTEDT)
+#'     min_dates = vars(TRTSDT),
+#'     max_dates = vars(TRTEDT)
 #'   )
-call_derivation <- function(dataset, derivation, variable_params, ...) {
-  assert_data_frame(dataset)
+call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
+  assert_data_frame(dataset, optional = TRUE)
   assert_s3_class(derivation, "function")
   assert_list_of(variable_params, "params")
 

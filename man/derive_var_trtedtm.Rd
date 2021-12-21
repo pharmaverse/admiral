@@ -22,7 +22,7 @@ The variables specified by the \code{by_vars} parameter are expected.}
 The variables \code{EXENDTC}, \code{EXSEQ}, and those specified by the \code{filter_ex}
 parameter are expected.}
 
-\item{filter_ex}{Fiter condition for the ex dataset
+\item{filter_ex}{Filter condition for the ex dataset
 
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
@@ -49,6 +49,7 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("ex")
 data("dm")
 

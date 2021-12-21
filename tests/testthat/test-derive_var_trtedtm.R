@@ -1,5 +1,3 @@
-context("test-derive_var_trtedtm")
-
 test_that("TRTEDTM variable is added", {
   adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
   ex <- tibble::tribble(

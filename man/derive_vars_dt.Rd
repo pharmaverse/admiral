@@ -64,7 +64,7 @@ example\preformatted{impute_dtc(
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
     ymd_hms("2020-11-11T11:11:11")
-  ),
+   ),
   date_imputation = "first"
 )
 }
@@ -82,12 +82,17 @@ cut off date. Only dates which are in the range of possible dates are
 considered.}
 }
 \value{
-The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'} if requested) added.
+The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
+if requested) added.
 }
 \description{
 Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
 The date can be imputed (see \code{date_imputation} parameter)
 and the date imputation flag ('\verb{--DTF'}) can be added.
+}
+\details{
+The presence of a \code{'--DTF'} variable is checked and if it already exists in the input dataset,
+a warning is issued and \code{'--DTF'} will be overwritten.
 }
 \examples{
 library(lubridate)
@@ -160,7 +165,7 @@ derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AST",
   date_imputation = "first",
-  min_dates = list(TRTSDTM)
+  min_dates = vars(TRTSDTM)
 )
 }
 \author{

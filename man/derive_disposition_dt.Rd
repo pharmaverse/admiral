@@ -68,8 +68,10 @@ Derive a disposition status date from the the relevant records in the dispositio
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
 data("dm")
 data("ds")
+
 dm \%>\%
   derive_disposition_dt(
     dataset_ds = ds,

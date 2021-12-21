@@ -1,23 +1,25 @@
 #' Derive Date Variables from Datetime Variables
 #'
-#' This function creates date(s) as output from datetime variable(S)
+#' This function creates date(s) as output from datetime variable(s)
 #'
 #' @param dataset Input dataset
 #'
-#' @param source_vars A list of datetime variables from which dates are to be extracted
+#' @param source_vars A list of datetime variables created using `vars()` from
+#'   which dates are to be extracted
 #'
 #' @author Teckla Akinyi
 #'
-#' @return A data frame containing the input dataset with the corresponding date (--DT)
-#'          variable(s) of all datetime variables (--DTM) specified in source_vars.
+#' @return
+#' A data frame containing the input dataset with the corresponding date (`--DT`)
+#' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
 #'
-#' @keywords ADaM Timing Date
+#' @keywords adam timing
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #'
 #' adcm <- tibble::tribble(
 #'   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
@@ -33,13 +35,14 @@
 #'     AENDTM = as_datetime(AENDTM)
 #'   )
 #'
-#' derive_vars_dtm_to_dt(adcm, vars(TRTSDTM, ASTDTM, AENDTM))
-
+#' adcm %>%
+#'   derive_vars_dtm_to_dt(vars(TRTSDTM, ASTDTM, AENDTM)) %>%
+#'   select(USUBJID, starts_with("TRT"), starts_with("AST"), starts_with("AEN"))
 derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = source_vars)
 
-  #Warn if --TM variables already exist
+  # Warn if `--TM` variables already exist
   dtm_vars <- quo_c(source_vars)
   dtm_vars2 <- vars2chr(dtm_vars)
   n_vars <- length(dtm_vars)
@@ -49,12 +52,11 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
     warn_if_vars_exist(dataset, dt_vars)
   }
 
-  if (n_vars > 1) {
+  if (n_vars > 1L) {
     dataset %>%
       mutate_at(source_vars, .funs = list(new = lubridate::date)) %>%
       rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "DT"))
-  }
-  else{
+  } else {
     dataset %>%
       mutate(!!sym(dt_vars) := lubridate::date(!!sym(dtm_vars2)))
   }

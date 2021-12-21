@@ -15,6 +15,7 @@ warn_if_vars_exist(dataset, vars)
 Warn if a variable already exists inside a dataset
 }
 \examples{
+library(admiral.test)
 data(dm)
 
 ## No warning as `AAGE` doesn't exist in `dm`

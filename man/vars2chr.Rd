@@ -13,9 +13,9 @@ vars2chr(quosures)
 Turn a List of Quosures into a Character Vector
 }
 \examples{
-admiral:::vars2chr(vars(USUBJID, AVAL))
+vars2chr(vars(USUBJID, AVAL))
 }
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\keyword{user_utility}

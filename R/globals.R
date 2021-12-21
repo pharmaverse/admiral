@@ -47,7 +47,9 @@ globalVariables(c(
   "QVAL",
   "RDOMAIN",
   "USUBJID",
+  "censor",
   "Dataset",
+  "dataset_name",
   "datedtc___",
   "Derivation",
   "Derivation / Comment",
@@ -55,6 +57,9 @@ globalVariables(c(
   "ex",
   "idtc__",
   "Source",
+  "temp_age",
+  "temp_dummy",
+  "temp_event",
   "temp_obs_nr",
   "temp_source_nr",
   "temp_date",
@@ -77,5 +82,11 @@ globalVariables(c(
   "order1",
   "order2",
   "order3",
-  "_unit"
+  "_unit",
+  "tmp_analysis_date",
+  "tmp_dose_date",
+  "tmp_seq_var",
+  "EXDOSFRQ",
+  "tmp_ldose_dt"
+
 ))

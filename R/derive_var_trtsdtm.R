@@ -11,7 +11,7 @@
 #'   The variables `EXSTDTC`, `EXSEQ`, and those specified by the `filter_ex`
 #'   parameter are expected.
 #'
-#' @param filter_ex Fiter condition for the ex dataset
+#' @param filter_ex Filter condition for the ex dataset
 #'
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
@@ -39,6 +39,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("ex")
 #' data("dm")
 #'
@@ -59,11 +60,13 @@ derive_var_trtsdtm <- function(dataset,
       order = vars(EXSTDTC, EXSEQ),
       by_vars = subject_keys,
       mode = "first"
-    ) %>%
-    transmute(
-      !!!subject_keys,
-      TRTSDTM = convert_dtc_to_dtm(EXSTDTC, date_imputation = "first", time_imputation = "first")
     )
 
-  left_join(dataset, add, by = vars2chr(subject_keys))
+  add[["TRTSDTM"]] <- convert_dtc_to_dtm(
+    dtc = add$EXSTDTC,
+    date_imputation = "first",
+    time_imputation = "first"
+  )
+
+  left_join(dataset, select(add, !!!subject_keys, TRTSDTM), by = vars2chr(subject_keys))
 }

@@ -81,10 +81,12 @@ squote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
-#' admiral:::vars2chr(vars(USUBJID, AVAL))
+#' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
     map_chr(quosures, ~as_string(quo_get_expr(.x))),
@@ -128,7 +130,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' test_fun2 <- function(something) {
 #'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
-arg_name <- function(expr) {
+arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
@@ -194,6 +196,32 @@ quo_c <- function(...) {
   rlang::as_quosures(inputs[!is_null])
 }
 
+#' Negate List of Variables
+#'
+#' The function adds a minus sign as prefix to each variable.
+#'
+#' This is useful if a list of variables should be removed from a dataset,
+#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
+#'
+#' @param vars List of variables created by `vars()`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' negate_vars(vars(USUBJID, STUDYID))
+negate_vars <- function(vars = NULL) {
+  assert_vars(vars, optional = TRUE)
+  if (is.null(vars)) {
+    NULL
+  } else {
+    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+  }
+}
+
 #' What Kind of Object is This?
 #'
 #' Returns a string describing what kind of object the input is.
@@ -243,12 +271,16 @@ what_is_it <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
+#' library(admiral.test)
 #' data(vs)
-#' admiral:::filter_if(vs, rlang::quo(NULL))
-#' admiral:::filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+#'
+#' filter_if(vs, rlang::quo(NULL))
+#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)
@@ -279,8 +311,9 @@ filter_if <- function(dataset, filter) {
 #' @return Variable vector.
 #'
 #' @examples
-#'
+#' library(admiral.test)
 #' data(vs)
+#'
 #' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
 #' admiral:::get_constant_vars(
@@ -321,6 +354,18 @@ is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
 
+#' Replace quosure value with name
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {
@@ -345,6 +390,8 @@ get_duplicates <- function(x) {
 #' @param x A parameter description
 #'
 #' @export
+#'
+#' @keywords user_utility
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -372,6 +419,8 @@ extract_unit <- function(x) {
 #' all attributes such as labels are preserved.
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords user_utility
 #'
 #' @export
 #'
@@ -417,4 +466,20 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
+}
+
+#' Get source variables from a list of quosures
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+get_source_vars <- function(quosures) {
+  quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }

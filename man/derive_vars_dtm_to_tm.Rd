@@ -9,27 +9,33 @@ derive_vars_dtm_to_tm(dataset, source_vars)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{source_vars}{A list of datetime variables from which time are to be extracted}
+\item{source_vars}{A list of datetime variables created using \code{vars()} from
+which time is to be extracted}
 }
 \value{
-A data frame containing the input dataset with the datetime (--DTM)variable(s) and
-the corresponding time (--TM) variable(s) of all specified datetime variables from
-the source_vars option with the correct name.
+A data frame containing the input dataset with the corresponding time
+(\code{--TM}) variable(s) of all datetime variables (\code{--DTM}) specified in
+\code{source_vars} with the correct name.
 }
 \description{
-This function creates time variable(S) as output from a datetime variable(s)
+This function creates time variable(s) as output from datetime variable(s)
+}
+\details{
+The names of the newly added variables are automatically set by replacing the
+\code{--DTM} suffix of the \code{source_vars} with \code{--TM}. The \code{--TM} variables are created
+using the {hms} package.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
+library(lubridate)
 
 adcm <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
- "TEST01", "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
- "TEST01", "PAT01",  "",                    "2012-02-28 19:00:00", "",
- "TEST01", "PAT01",  "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56",
- "TEST01", "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
- "TEST01", "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
+ ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
+ "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
+ "PAT01",  "",                    "2012-02-28 19:00:00", "",
+ "PAT01",  "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56",
+ "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
+ "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
  ) \%>\%
  mutate(
    TRTSDTM = as_datetime(TRTSDTM),
@@ -37,13 +43,16 @@ adcm <- tibble::tribble(
    AENDTM = as_datetime(AENDTM)
  )
 
-derive_vars_dtm_to_tm(adcm, vars(TRTSDTM, ASTDTM, AENDTM))
+adcm \%>\%
+  derive_vars_dtm_to_tm(vars(TRTSDTM)) \%>\%
+  select(USUBJID, starts_with("TRT"), everything())
 
-derive_vars_dtm_to_tm(adcm, vars(TRTSDTM))
+adcm \%>\%
+  derive_vars_dtm_to_tm(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
+  select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 }
 \author{
 Teckla Akinyi
 }
-\keyword{ADaM}
-\keyword{Date}
-\keyword{Timing}
+\keyword{adam}
+\keyword{timing}

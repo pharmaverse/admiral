@@ -53,8 +53,10 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
 #' data("dm")
 #' data("ds")
+#'
 #' dm %>%
 #'   derive_disposition_dt(
 #'     dataset_ds = ds,

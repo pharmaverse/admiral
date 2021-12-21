@@ -49,7 +49,8 @@
 #'   min_dates = list(
 #'     ymd_hms("2020-12-06T12:12:12"),
 #'     ymd_hms("2020-11-11T11:11:11")
-#'   ),
+#'    ),
+
 #'   date_imputation = "first"
 #' )
 #' ```
@@ -158,7 +159,7 @@ impute_dtc <- function(dtc,
     # check input for date_imputation
     assert_that(is_valid_date_entry(date_imputation))
 
-    # Specific setup for FISRT/MID/LAST
+    # Specific setup for FIRST/MID/LAST
     # make keywords case-insensitive
     date_imputation <- str_to_upper(date_imputation)
     if (date_imputation %in% c("FIRST", "MID", "LAST")) {
@@ -368,6 +369,55 @@ convert_dtc_to_dtm <- function(dtc,
     as_iso_dtm()
 }
 
+#' Convert a Date into a Datetime Object
+#'
+#' Convert a date (datetime, date, or date character) into a Date vector (usually `'--DTM'`).
+#'
+#' @param dt The date to convert.
+#'
+#'   A date or character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
+#'
+#' @inheritParams convert_dtc_to_dtm
+#'
+#' @author Samia Kabi
+#'
+#' @return A datetime object
+#'
+#' @keywords computation timing
+#'
+#' @export
+#'
+#' @examples
+#' convert_date_to_dtm("2019-07-18T15:25:00")
+#' convert_date_to_dtm(Sys.time())
+#' convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18")
+convert_date_to_dtm <- function(dt,
+                                date_imputation = NULL,
+                                time_imputation = NULL,
+                                min_dates = NULL,
+                                max_dates = NULL) {
+
+  if (lubridate::is.POSIXct(dt)) {
+    return(dt)
+  }
+  else {
+    if (is_date(dt)) {
+      dt <- format(dt, "%Y-%m-%d")
+    }
+
+    # convert dtc to dtm
+    dt %>%
+      convert_dtc_to_dtm(
+        date_imputation = date_imputation,
+        time_imputation = time_imputation,
+        min_dates = min_dates,
+        max_dates = max_dates
+      )
+  }
+}
+
 #' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag (`'--DTF'`) comparing a date character vector
@@ -472,7 +522,13 @@ compute_tmf <- function(dtc, dtm) {
 #'
 #' @inheritParams impute_dtc
 #'
-#' @return The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'` if requested) added.
+#' @return
+#' The input dataset with the date `'--DT'` (and the date imputation flag `'--DTF'`
+#' if requested) added.
+#'
+#' @details
+#' The presence of a `'--DTF'` variable is checked and if it already exists in the input dataset,
+#' a warning is issued and `'--DTF'` will be overwritten.
 #'
 #' @author Samia Kabi
 #'
@@ -551,7 +607,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AST",
 #'   date_imputation = "first",
-#'   min_dates = list(TRTSDTM)
+#'   min_dates = vars(TRTSDTM)
 #' )
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
@@ -563,6 +619,8 @@ derive_vars_dt <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
+  assert_vars(max_dates, optional = TRUE)
+  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_logical_scalar(flag_imputation)
@@ -577,8 +635,8 @@ derive_vars_dt <- function(dataset,
       !!sym(dt) := convert_dtc_to_dt(
         dtc = !!dtc,
         date_imputation = date_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
+        min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
       )
     )
 
@@ -609,9 +667,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
-#' A logical value
+#' One of "auto", "date" or "both"
 #'
-#' Default: TRUE
+#' Default: "auto"
 #'
 #' @inheritParams impute_dtc
 #'
@@ -620,7 +678,7 @@ derive_vars_dt <- function(dataset,
 #' if it already exists in the input dataset. However, if `'--TMF'` already exists
 #' in the input dataset, a warning is issued and `'--TMF'` will be overwritten.
 #'
-#' @return  the input dataset with the datetime `'--DTM'` (and the date/time imputation
+#' @return  The input dataset with the datetime `'--DTM'` (and the date/time imputation
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
 #' @author Samia Kabi
@@ -665,7 +723,7 @@ derive_vars_dt <- function(dataset,
 #'   new_vars_prefix = "AEN",
 #'   date_imputation = "last",
 #'   time_imputation = "last",
-#'   max_dates = list(DTHDT, DCUTDT)
+#'   max_dates = vars(DTHDT, DCUTDT)
 #' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
@@ -678,6 +736,8 @@ derive_vars_dtm <- function(dataset,
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
+  assert_vars(max_dates, optional = TRUE)
+  assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
   assert_character_scalar(
@@ -690,17 +750,14 @@ derive_vars_dtm <- function(dataset,
 
   # Issue a warning if --DTM already exists
   warn_if_vars_exist(dataset, dtm)
-
-  dataset <- dataset %>%
-    mutate(
-      !!sym(dtm) := convert_dtc_to_dtm(
-        dtc = !!dtc,
-        date_imputation = date_imputation,
-        time_imputation = time_imputation,
-        min_dates = !!enquo(min_dates),
-        max_dates = !!enquo(max_dates)
-      )
-    )
+  mask <- rlang::as_data_mask(dataset)
+  dataset[[dtm]] <- convert_dtc_to_dtm(
+    dtc = eval_tidy(dtc, mask),
+    date_imputation = date_imputation,
+    time_imputation = time_imputation,
+    min_dates = lapply(min_dates, eval_tidy, data = mask),
+    max_dates = lapply(min_dates, eval_tidy, data = mask)
+  )
 
   if (flag_imputation %in% c("both", "date") ||
       flag_imputation == "auto" && !is.null(date_imputation)) {
