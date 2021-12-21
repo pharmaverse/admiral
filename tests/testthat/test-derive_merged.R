@@ -10,10 +10,10 @@ adsl <- tibble::tribble(
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
   "ST42-1", "WEIGHT", "BASELINE", 66,
-  "ST42-1", "WEIGHT", "WEEK 2",   68,
+  "ST42-1", "WEIGHT", "Week 2",   68,
   "ST42-2", "WEIGHT", "BASELINE", 88,
-  "ST42-2", "WEIGHT", "WEEK 2",   85,
-  "ST42-3", "WEIGHT", "WEEK 2",   55
+  "ST42-3", "WEIGHT", "Week 2",   55,
+  "ST42-3", "WEIGHT", "Week 4",   50
 ) %>% mutate(STUDYID = "ST42")
 
 ex <- tibble::tribble(
@@ -106,8 +106,16 @@ test_that("derive_vars_merged_dt: merge first date", {
     time_imputation = "first",
     mode = "first"
   )
-  expected <- adsl %>% mutate(TRTSDTM = as_iso_dtm(ymd_hms(c("2020-12-07T00:00:00", "2021-01-12T12:00:00", "2021-03-02T00:00:00", NA))),
-                              TRTSTMF = c("H", NA, "H", NA))
+  expected <-
+    adsl %>% mutate(TRTSDTM = as_iso_dtm(ymd_hms(
+      c(
+        "2020-12-07T00:00:00",
+        "2021-01-12T12:00:00",
+        "2021-03-02T00:00:00",
+        NA
+      )
+    )),
+    TRTSTMF = c("H", NA, "H", NA))
 
   expect_dfs_equal(base = expected,
                    compare = actual,
@@ -148,11 +156,99 @@ test_that("derive_vars_merged_cat: merge existence flag", {
     dataset_add = advs,
     by_vars = vars(USUBJID),
     new_var = VSEVALFL,
-    condition = AVISIT == 'BASELINE'
+    condition = AVISIT == "BASELINE"
   )
 
   expected <-
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
+
+
+  expect_dfs_equal(base = expected,
+                   compare = actual,
+                   keys = "USUBJID")
+})
+
+# derive_var_merged_character ----
+## derive_var_merged_character: merge character variable, no transformation ----
+test_that("derive_var_merged_character: merge character variable, no transformation", {
+  actual <- derive_var_merged_character(
+    adsl,
+    dataset_add = advs,
+    by_vars = vars(USUBJID),
+    order = vars(AVISIT),
+    new_var = LASTVIS,
+    source_var = AVISIT,
+    mode = "last"
+  )
+
+  expected <-
+    mutate(adsl, LASTVIS = c("Week 2", "BASELINE", "Week 4", NA_character_))
+
+
+  expect_dfs_equal(base = expected,
+                   compare = actual,
+                   keys = "USUBJID")
+})
+
+## derive_var_merged_character: merge character variable, upper case ----
+test_that("derive_var_merged_character: merge character variable, upper case", {
+  actual <- derive_var_merged_character(
+    adsl,
+    dataset_add = advs,
+    by_vars = vars(USUBJID),
+    order = vars(AVISIT),
+    new_var = LASTVIS,
+    source_var = AVISIT,
+    mode = "last",
+    case = "upper"
+  )
+
+  expected <-
+    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", NA_character_))
+
+
+  expect_dfs_equal(base = expected,
+                   compare = actual,
+                   keys = "USUBJID")
+})
+
+## derive_var_merged_character: merge character variable, lower case ----
+test_that("derive_var_merged_character: merge character variable, lower case", {
+  actual <- derive_var_merged_character(
+    adsl,
+    dataset_add = advs,
+    by_vars = vars(USUBJID),
+    order = vars(AVISIT),
+    new_var = LASTVIS,
+    source_var = AVISIT,
+    mode = "last",
+    case = "lower"
+  )
+
+  expected <-
+    mutate(adsl, LASTVIS = c("week 2", "baseline", "week 4", NA_character_))
+
+
+  expect_dfs_equal(base = expected,
+                   compare = actual,
+                   keys = "USUBJID")
+})
+
+## derive_var_merged_character: merge character variable, title case ----
+test_that("derive_var_merged_character: merge character variable, title case", {
+  actual <- derive_var_merged_character(
+    adsl,
+    dataset_add = advs,
+    by_vars = vars(USUBJID),
+    order = vars(AVISIT),
+    new_var = LASTVIS,
+    source_var = AVISIT,
+    mode = "last",
+    case = "title"
+  )
+
+  expected <-
+    mutate(adsl, LASTVIS = c("Week 2", "Baseline", "Week 4", NA_character_))
 
 
   expect_dfs_equal(base = expected,

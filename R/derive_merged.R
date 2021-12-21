@@ -32,6 +32,15 @@ derive_vars_merged <- function(dataset,
                                order = order,
                                mode = mode,
                                check_type = check_type)
+  } else {
+    signal_duplicate_records(
+      add_data,
+      by_vars = by_vars,
+      msg = paste(
+        "Dataset `dataset_add` contains duplicate records with respect to",
+        enumerate(vars2chr(by_vars))
+      )
+    )
   }
   if (!is.null(new_vars)) {
     add_data <- select(add_data, !!!by_vars, !!!new_vars)
@@ -114,7 +123,7 @@ derive_vars_merged_dt <- function(dataset,
     min_dates = min_dates,
     max_dates = max_dates
   )
-  new_vars = quos(!!!syms(setdiff(names(add_data), old_vars)))
+  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
                      dataset_add = add_data,
                      by_vars = by_vars,
@@ -182,7 +191,7 @@ derive_vars_merged_dtm <- function(dataset,
     min_dates = min_dates,
     max_dates = max_dates
   )
-  new_vars = quos(!!!syms(setdiff(names(add_data), old_vars)))
+  new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
                      dataset_add = add_data,
                      by_vars = by_vars,
@@ -263,7 +272,7 @@ derive_var_merged_exist_flag <- function(
   by_vars,
   new_var,
   condition,
-  true_value = 'Y',
+  true_value = "Y",
   false_value = NA_character_,
   filter_add
 ) {
@@ -322,18 +331,19 @@ derive_var_merged_character <- function(dataset,
       optional = TRUE
     )
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, source_var))
 
   if (is.null(case)) {
     trans <- expr(!!source_var)
   }
   else if (case == "lower") {
-    trans <- expr(stringr::str_to_lower(!!source_var))
+    trans <- expr(str_to_lower(!!source_var))
   }
   else if (case == "upper") {
     trans <- expr(str_to_upper(!!source_var))
   }
   else if (case == "title") {
-    trans <- expr(stringr::str_to_title(!!source_var))
+    trans <- expr(str_to_title(!!source_var))
   }
   add_data <- mutate(dataset_add, !!new_var := !!trans)
   derive_vars_merged(dataset,
