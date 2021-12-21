@@ -20,6 +20,9 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+          fetch-depth: 0
 
       - name: Commit and push to branches
         run: |
@@ -29,8 +32,10 @@ jobs:
           echo "Test" >> test.txt
           git config --local user.name github-actions
           git config --local user.email github-actions@github.com
-          git remote
-          git checkout origin/$GITHUB_HEAD_REF
           git add test.txt
           git commit -m "Add file"
-          git push
+
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ GITHUB_HEAD_REF }}
