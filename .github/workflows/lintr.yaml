@@ -71,6 +71,6 @@ jobs:
       - name: Error if lints detected
         run: |
           echo $LINTS_DETECTED
-          if [$LINTS_DETECTED == "true"]
+          if [$LINTS_DETECTED="true"]
             exit 99
           fi
