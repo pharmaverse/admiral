@@ -1,5 +1,3 @@
-context("test-derive_reference_ranges")
-
 test_that("two-sided reference ranges work", {
   expected_output <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,

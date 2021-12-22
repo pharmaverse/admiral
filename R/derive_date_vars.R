@@ -33,6 +33,9 @@
 #'
 #'   Default is `"00:00:00"`.
 #'
+#'
+#'
+#'
 #' @param min_dates Minimum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not
@@ -361,6 +364,55 @@ convert_dtc_to_dtm <- function(dtc,
     as_iso_dtm()
 }
 
+#' Convert a Date into a Datetime Object
+#'
+#' Convert a date (datetime, date, or date character) into a Date vector (usually `'--DTM'`).
+#'
+#' @param dt The date to convert.
+#'
+#'   A date or character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
+#'
+#' @inheritParams convert_dtc_to_dtm
+#'
+#' @author Samia Kabi
+#'
+#' @return A datetime object
+#'
+#' @keywords computation timing
+#'
+#' @export
+#'
+#' @examples
+#' convert_date_to_dtm("2019-07-18T15:25:00")
+#' convert_date_to_dtm(Sys.time())
+#' convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18")
+convert_date_to_dtm <- function(dt,
+                                date_imputation = NULL,
+                                time_imputation = NULL,
+                                min_dates = NULL,
+                                max_dates = NULL) {
+
+  if (lubridate::is.POSIXct(dt)) {
+    return(dt)
+  }
+  else {
+    if (is_date(dt)) {
+      dt <- format(dt, "%Y-%m-%d")
+    }
+
+    # convert dtc to dtm
+    dt %>%
+      convert_dtc_to_dtm(
+        date_imputation = date_imputation,
+        time_imputation = time_imputation,
+        min_dates = min_dates,
+        max_dates = max_dates
+      )
+  }
+}
+
 #' Derive the Date Imputation Flag
 #'
 #' Derive the date imputation flag (`'--DTF'`) comparing a date character vector
@@ -415,6 +467,15 @@ compute_dtf <- function(dtc, dt) {
 #'
 #'   A datetime object is expected.
 #'
+#' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
+#' if only hours and minutes are ever collected, and seconds are imputed in
+#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
+#' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
+#'
+#'  A logical value
+#'
+#'   Default: `FALSE`
+#'
 #' @author Samia Kabi
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
@@ -427,20 +488,36 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-compute_tmf <- function(dtc, dtm) {
-  assert_that(is.character(dtc), is_date(dtm))
+compute_tmf <- function(dtc,
+                        dtm,
+                        ignore_seconds_flag = FALSE) {
+
+  assert_that(is_date(dtm))
+  assert_character_vector(dtc)
+  assert_logical_scalar(ignore_seconds_flag)
 
   is_na <- is.na(dtm)
   n_chr <- nchar(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  case_when(
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr == 16 ~ "S",
-    n_chr == 13 ~ "M",
-    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-  )
+
+  if (ignore_seconds_flag)  {
+    if ((any(n_chr >= 17))) {
+      abort("Seconds detected in data while ignore_seconds_flag is invoked")
+    } else {
+      case_when(
+        (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+        n_chr == 13 ~ "M",
+        n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+      }
+  } else {
+    case_when(
+      (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+      n_chr == 16 ~ "S",
+      n_chr == 13 ~ "M",
+      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+     }
 }
 
 #' Derive/Impute a Date from a Date Character Vector
@@ -462,6 +539,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   A logical value
 #'
 #'   Default: `TRUE`
+#'
 #'
 #' @inheritParams impute_dtc
 #'
@@ -614,7 +692,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' Default: "auto"
 #'
+#'
 #' @inheritParams impute_dtc
+#' @inheritParams compute_tmf
 #'
 #' @details
 #' The presence of a `'--DTF'` variable is checked and the variable is not derived
@@ -668,6 +748,28 @@ derive_vars_dt <- function(dataset,
 #'   time_imputation = "last",
 #'   max_dates = vars(DTHDT, DCUTDT)
 #' )
+#'
+#' # Seconds has been removed from the input dataset.  Function now uses
+#' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
+#' mhdt <- tibble::tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "FIRST",
+#'   time_imputation = "FIRST",
+#'   ignore_seconds_flag = TRUE
+#' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
@@ -675,7 +777,8 @@ derive_vars_dtm <- function(dataset,
                             time_imputation = "00:00:00",
                             flag_imputation = "auto",
                             min_dates = NULL,
-                            max_dates = NULL) {
+                            max_dates = NULL,
+                            ignore_seconds_flag = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -724,9 +827,16 @@ derive_vars_dtm <- function(dataset,
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
+
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm)))
+      mutate(!!sym(tmf) := compute_tmf(
+        dtc = !!dtc,
+        dtm = !!sym(dtm),
+        ignore_seconds_flag = ignore_seconds_flag)
+        )
+
   }
+
 
   dataset
 }

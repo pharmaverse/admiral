@@ -25,7 +25,7 @@ License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Depends: R (>= 3.5)
 Imports:
     admiral.test,
@@ -68,27 +68,29 @@ Collate:
     'dataset_vignette.R'
     'derive_adeg_params.R'
     'derive_advs_params.R'
-    'derive_baseline.R'
     'derive_date_vars.R'
     'derive_derived_param.R'
     'derive_disposition_dt.R'
     'derive_disposition_reason.R'
     'derive_disposition_status.R'
     'derive_extreme_flag.R'
-    'derive_last_dose.R'
     'derive_obs_number.R'
     'derive_param_doseint.R'
+    'derive_param_exposure.R'
     'derive_param_tte.R'
-    'derive_params_exposure.R'
     'derive_summary_records.R'
     'derive_var_ady.R'
     'derive_var_aendy.R'
     'derive_var_anrind.R'
     'derive_var_astdy.R'
     'derive_var_atirel.R'
+    'derive_var_base.R'
     'derive_var_basetype.R'
     'derive_var_chg.R'
     'derive_var_dthcaus.R'
+    'derive_var_last_dose_amt.R'
+    'derive_var_last_dose_date.R'
+    'derive_var_last_dose_grp.R'
     'derive_var_lstalvdt.R'
     'derive_var_ontrtfl.R'
     'derive_var_pchg.R'
@@ -100,6 +102,7 @@ Collate:
     'derive_vars_dtm_to_tm.R'
     'derive_vars_duration.R'
     'derive_vars_dy.R'
+    'derive_vars_last_dose.R'
     'derive_vars_query.R'
     'derive_vars_suppqual.R'
     'derive_vars_transposed.R'

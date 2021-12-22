@@ -204,16 +204,20 @@ advs <- advs %>%
 
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVAL,
+    new_var = BASE
   ) %>%
 
   # Calculate BASEC
-  derive_var_basec(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVALC,
+    new_var = BASEC
   ) %>%
 
   # Calculate BNRIND
-  derive_baseline(
+  derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND

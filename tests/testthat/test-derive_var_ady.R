@@ -1,6 +1,3 @@
-context("test-derive_var_ady")
-
-
 test_that("ADY is added", {
   input <- tibble::tribble(
     ~TRTSDT, ~ADT,

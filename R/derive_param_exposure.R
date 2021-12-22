@@ -47,11 +47,11 @@
 #'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'   More general expression are not allowed.
 #'
+#'   *Permitted Values:* List of variable-value pairs
+#'
 #' @details For each group (with respect to the variables specified for the `by_vars` parameter),
 #' an observation is added to the output dataset and the defined values are set to the defined
 #' variables
-#'
-#'   *Permitted Values:* List of variable-value pairs
 #'
 #'
 #' @author Samia Kabi
@@ -78,52 +78,55 @@
 #' library(stringr, warn.conflicts = FALSE)
 #' adex <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
-#'   "01-701-1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-#'   "01-701-1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-#'   "01-701-1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
-#'   "01-701-1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
-#'   "01-701-1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-#'   "01-701-1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-#'   "01-701-1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
-#'   "01-701-1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
-#'   "01-701-1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
-#'   "01-701-1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
+#'   "1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "1015", "DOSE", 82, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "1015", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
+#'   "1015", "ADJ", NA, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),
+#'   "1015", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-06-19"), ymd("2014-07-02"),
+#'   "1017", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "1017", "DOSE", 50, NA_character_, "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "1017", "DOSE", 65, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02"),
+#'   "1017", "ADJ", NA, NA_character_, "BASELINE", ymd("2014-01-05"), ymd("2014-01-19"),
+#'   "1017", "ADJ", NA, "ADVERSE EVENT", "WEEK 2", ymd("2014-01-20"), ymd("2014-05-10"),
+#'   "1017", "ADJ", NA, NA_character_, "WEEK 24", ymd("2014-05-10"), ymd("2014-07-02")
 #' ) %>%
 #'   mutate(ASTDTM = ymd_hms(paste(ASTDT, "00:00:00")), AENDTM = ymd_hms(paste(AENDT, "00:00:00")))
 #'
 #' # Cumulative dose
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    )
+#'    ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
-#'     filter = VISIT %in% c("WEEK2", "WEEK 24"),
+#'     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
 #'     set_values_to = vars(PARAMCD = "AVDW224", PARCAT1 = "WEEK2-24"),
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) mean(x, na.rm = TRUE)
-#'   )
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
-#' # Any dose adjustement?
+#' # Any dose adjustment?
 #' adex %>%
-#'   derive_params_exposure(
+#'   derive_param_exposure(
 #'     by_vars = vars(USUBJID),
 #'     set_values_to = vars(PARAMCD = "TADJ", PARCAT1 = "OVERALL"),
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
-#'   )
-derive_params_exposure <- function(dataset,
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
+derive_param_exposure <- function(dataset,
                                    by_vars,
                                    input_code,
                                    analysis_var,
@@ -205,4 +208,36 @@ derive_params_exposure <- function(dataset,
   }
 
   bind_rows(dataset, expo_data)
+}
+
+#' Add an Aggregated Parameter and Derive the Associated Start and End Dates
+#'
+#' This function is *deprecated*. Please use [derive_param_exposure()] instead.
+#'
+#' @inheritParams derive_param_exposure
+#'
+#' @export
+#'
+#' @seealso [derive_param_exposure()]
+#'
+#' @author Samia Kabi
+#'
+#' @keywords derivation bds adex
+derive_params_exposure <- function(dataset,
+                                   by_vars,
+                                   input_code,
+                                   analysis_var,
+                                   summary_fun,
+                                   filter = NULL,
+                                   set_values_to = NULL) {
+  deprecate_warn("0.6.0", "derive_params_exposure()", "derive_param_exposure()")
+  derive_param_exposure(
+    dataset,
+    by_vars = by_vars,
+    input_code = input_code,
+    analysis_var = !!enquo(analysis_var),
+    summary_fun = summary_fun,
+    filter = !!enquo(filter),
+    set_values_to = set_values_to
+  )
 }
