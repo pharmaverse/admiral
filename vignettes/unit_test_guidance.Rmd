@@ -128,7 +128,8 @@ test_that("<function_name> Test 1: <Explanation of the test>", {
 
   expected_output <- mutate(input, outputvar = c(<Add Expected Outputs>))
 
-  expect_equal(<function name>(input), expected_output)
+  expect_dfs_equal(<function name>(input), expected_output)
+  
 })
 ```
 
@@ -151,7 +152,7 @@ test_that("my_new_func Test 1: <Explanation of the test>", {
 
   expected_output <- mutate(input, outputvar = c(<Add Expected Outputs>))
 
-  expect_equal(<function name>(input), expected_output)
+  expect_dfs_equal(<function name>(input), expected_output)
 })
 ```
 **Note**: When comparing datasets in {admiral} we use function `expect_dfs_equal()`. 
