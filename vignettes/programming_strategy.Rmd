@@ -375,7 +375,7 @@ where the labels are stored.
 # Unit Testing
 
 A function requires a set of unit tests to verify it produces the expected result.
-See [Writing Unit Tests in {admiral}](unit_test_guidance.html#Writing Unit Tests in {admiral}) for details.
+See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral-) for details.
 
 # Deprecation
 

@@ -84,6 +84,11 @@ arguments/flexibilities of your function code. Then plan which scenarios you wil
 test. These can either involve generating different input test cases or feeding 
 them into different calls of your function.
 
+## Test coverage
+Unit tests should cover the functionality of the function.
+If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
+This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
+
 ## Tests Should be Robust to Cover Realistic Data Scenarios
 For generating input test cases, it can be helpful to consider regular cases 
 (expected common data scenarios), boundary cases (where data points are close or
