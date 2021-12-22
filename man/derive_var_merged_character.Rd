@@ -16,13 +16,79 @@ derive_var_merged_character(
   mode = NULL
 )
 }
+\arguments{
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars}, the \code{source_var}, and the \code{order}
+parameter are expected.}
+
+\item{by_vars}{Grouping variables
+
+The input dataset and the selected observations from the additional dataset
+are merged by the specified by variables. The by variables must be a unique
+key of the selected observations.
+
+\emph{Permitted Values}: list of variables}
+
+\item{order}{Sort order
+
+The first or last observation from the addtional dataset is selected with
+respect to the specified order.
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+
+\item{new_var}{New variable
+
+The specified variable is added to the additional dataset and set to the
+transformed value with respect to the \code{case} parameter.}
+
+\item{source_var}{Source variable}
+
+\item{case}{Change case
+
+Changes the case of the values of the new variable.
+
+\emph{Permitted Values}: \code{NULL}, \code{"lower"}, \code{"upper"}, \code{"title"}}
+
+\item{filter_add}{Filter for additional data
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Permitted Values}: a condition}
+
+\item{mode}{Selection mode
+
+Determines if the first or last observation is selected.
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+}
 \description{
-Merge a Character Variable
+Merge a character variable from a dataset to the input dataset. The
+observations to merge can be selected by a condition and/or selecting the
+first or last observation for each by group.
+}
+\details{
+\enumerate{
+\item The additional dataset is restricted to the observations matching the
+\code{filter_add} condition.
+\item The (transformed) character variable is added to the additional dataset.
+\item If \code{order} is specified, for each by group the first or last observation
+(depending on \code{mode}) is selected.
+\item The character variable is merged to the input dataset.
+}
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")
+
 derive_var_merged_character(
   dm,
   dataset_add = ds,
@@ -31,5 +97,11 @@ derive_var_merged_character(
   filter_add = DSCAT == "DISPOSITION EVENT",
   source_var = DSDECOD,
   case = "title"
-)
+) \%>\%
+select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 }
+\author{
+Stefan Bundfuss
+}
+\keyword{adam}
+\keyword{derivation}

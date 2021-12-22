@@ -84,8 +84,10 @@ first or last observation for each by group.
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("vs")
+
 wgt_cat <- function(wgt) {
   case_when(wgt < 50 ~ "low",
             wgt > 90 ~ "high",
@@ -102,7 +104,8 @@ derive_var_merged_cat(
   source_var = VSSTRESN,
   cat_fun = wgt_cat,
   mode = "last"
-)
+) \%>\%
+select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 }
 \author{
 Stefan Bundfuss

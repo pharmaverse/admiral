@@ -79,7 +79,7 @@
 #'
 #' @examples
 #' library(admiral.test)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #' data("dm")
 #'
@@ -196,6 +196,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
 #'
@@ -292,6 +293,7 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
 #'
@@ -402,8 +404,10 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("vs")
+#'
 #' wgt_cat <- function(wgt) {
 #'   case_when(wgt < 50 ~ "low",
 #'             wgt > 90 ~ "high",
@@ -420,7 +424,8 @@ derive_vars_merged_dtm <- function(dataset,
 #'   source_var = VSSTRESN,
 #'   cat_fun = wgt_cat,
 #'   mode = "last"
-#' )
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -447,20 +452,67 @@ derive_var_merged_cat <- function(dataset,
 
 #' Merge a Existence Flag
 #'
+#' Adds a flag variable to the input dataset which indicates if there exists at
+#' least one observation in another dataset fulfilling a certain condition.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param by_vars Grouping variables
+#'
+#'   *Permitted Values*: list of variables
+#'
+#' @param new_var New variable
+#'
+#'   The specified variable is added to the input dataset.
+#'
+#' @param condition Condition
+#'
+#' @param true_value True value
+#'
+#' @param false_value False value
+#'
+#' @param filter_add Filter for additional data
+#'
+#'   Only observations fulfilling the specified condition are taken into account
+#'   for flagging. If the parameter is not specified, all observations are
+#'   considered.
+#'
+#'   *Permitted Values*: a condition
+#'
+#' @inheritParams derive_vars_merged
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. The new variable is added to the input dataset and set to the true value
+#'   if for the by group at least one observation exists in the (restricted)
+#'   additional dataset where the condition evaluates to `TRUE`. Otherwise, it
+#'   is set to the false value.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam
+#'
 #' @export
 #'
 #' @examples
 #'
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ae")
 #' derive_var_merged_exist_flag(
 #'   dm,
 #'   dataset_add = ae,
 #'   by_vars = vars(STUDYID, USUBJID),
-#'   new_var = AESERFL,
-#'   condition = AESER == "Y"
-#' )
+#'   new_var = AERELFL,
+#'   condition = AEREL == "PROBABLE"
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 derive_var_merged_exist_flag <- function(
   dataset,
   dataset_add,
@@ -469,34 +521,78 @@ derive_var_merged_exist_flag <- function(
   condition,
   true_value = "Y",
   false_value = NA_character_,
-  filter_add
+  filter_add = NULL
 ) {
   new_var <- assert_symbol(enquo(new_var))
-  condition <- assert_filter_cond(enquo(condition), optional = TRUE)
+  condition <- assert_filter_cond(enquo(condition))
+  filter_add <-
+    assert_filter_cond(enquo(filter_add), optional = TRUE)
 
-  add_data <- mutate(dataset_add, cond_flag := if_else(!!condition, 1, 0, 0))
+  add_data <- filter_if(dataset_add, filter_add) %>%
+    mutate(!!new_var := if_else(!!condition, 1, 0, 0))
 
   derive_vars_merged(
     dataset,
     dataset_add = add_data,
     by_vars = by_vars,
-    new_vars = vars(cond_flag),
-    order = vars(cond_flag),
+    new_vars = vars(!!new_var),
+    order = vars(!!new_var),
     check_type = "none",
     mode = "last"
   ) %>%
-    mutate(!!new_var := if_else(cond_flag == 1, true_value, false_value, false_value)) %>%
-    select(-cond_flag)
+    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, false_value))
 }
 
 #' Merge a Character Variable
+#'
+#' Merge a character variable from a dataset to the input dataset. The
+#' observations to merge can be selected by a condition and/or selecting the
+#' first or last observation for each by group.
+#'
+#' @param dataset_add Additional dataset
+#'
+#'   The variables specified by the `by_vars`, the `source_var`, and the `order`
+#'   parameter are expected.
+#'
+#' @param new_var New variable
+#'
+#'   The specified variable is added to the additional dataset and set to the
+#'   transformed value with respect to the `case` parameter.
+#'
+#' @param source_var Source variable
+#'
+#' @param case Change case
+#'
+#'   Changes the case of the values of the new variable.
+#'
+#'   *Permitted Values*: `NULL`, `"lower"`, `"upper"`, `"title"`
+#'
+#' @inheritParams derive_vars_merged
+#'
+#' @details
+#'
+#'   1. The additional dataset is restricted to the observations matching the
+#'   `filter_add` condition.
+#'
+#'   1. The (transformed) character variable is added to the additional dataset.
+#'
+#'   1. If `order` is specified, for each by group the first or last observation
+#'   (depending on `mode`) is selected.
+#'
+#'   1. The character variable is merged to the input dataset.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords derivation adam
 #'
 #' @export
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")
+#'
 #' derive_var_merged_character(
 #'   dm,
 #'   dataset_add = ds,
@@ -505,7 +601,8 @@ derive_var_merged_exist_flag <- function(
 #'   filter_add = DSCAT == "DISPOSITION EVENT",
 #'   source_var = DSDECOD,
 #'   case = "title"
-#' )
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 derive_var_merged_character <- function(dataset,
                                         dataset_add,
                                         by_vars,
@@ -540,12 +637,12 @@ derive_var_merged_character <- function(dataset,
   else if (case == "title") {
     trans <- expr(str_to_title(!!source_var))
   }
-  add_data <- mutate(dataset_add, !!new_var := !!trans)
+  add_data <- filter_if(dataset_add, filter_add) %>%
+    mutate(!!new_var := !!trans)
   derive_vars_merged(dataset,
                      dataset_add = add_data,
                      by_vars = by_vars,
                      order = order,
                      new_vars = vars(!!new_var),
-                     filter_add = !!filter_add,
                      mode = mode)
 }

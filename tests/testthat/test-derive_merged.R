@@ -155,7 +155,7 @@ test_that("derive_vars_merged_cat: merge categorized variable", {
 
 # derive_var_merged_exist_flag ----
 ## derive_var_merged_exist_flag: merge existence flag ----
-test_that("derive_vars_merged_cat: merge existence flag", {
+test_that("derive_vars_merged_exist_flag: merge existence flag", {
   actual <- derive_var_merged_exist_flag(
     adsl,
     dataset_add = advs,

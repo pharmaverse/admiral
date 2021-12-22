@@ -12,22 +12,71 @@ derive_var_merged_exist_flag(
   condition,
   true_value = "Y",
   false_value = NA_character_,
-  filter_add
+  filter_add = NULL
 )
 }
+\arguments{
+\item{dataset}{Input dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{dataset_add}{Additional dataset
+
+The variables specified by the \code{by_vars} parameter are expected.}
+
+\item{by_vars}{Grouping variables
+
+\emph{Permitted Values}: list of variables}
+
+\item{new_var}{New variable
+
+The specified variable is added to the input dataset.}
+
+\item{condition}{Condition}
+
+\item{true_value}{True value}
+
+\item{false_value}{False value}
+
+\item{filter_add}{Filter for additional data
+
+Only observations fulfilling the specified condition are taken into account
+for flagging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Permitted Values}: a condition}
+}
 \description{
-Merge a Existence Flag
+Adds a flag variable to the input dataset which indicates if there exists at
+least one observation in another dataset fulfilling a certain condition.
+}
+\details{
+\enumerate{
+\item The additional dataset is restricted to the observations matching the
+\code{filter_add} condition.
+\item The new variable is added to the input dataset and set to the true value
+if for the by group at least one observation exists in the (restricted)
+additional dataset where the condition evaluates to \code{TRUE}. Otherwise, it
+is set to the false value.
+}
 }
 \examples{
 
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ae")
 derive_var_merged_exist_flag(
   dm,
   dataset_add = ae,
   by_vars = vars(STUDYID, USUBJID),
-  new_var = AESERFL,
-  condition = AESER == "Y"
-)
+  new_var = AERELFL,
+  condition = AEREL == "PROBABLE"
+) \%>\%
+select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 }
+\author{
+Stefan Bundfuss
+}
+\keyword{adam}
+\keyword{derivation}

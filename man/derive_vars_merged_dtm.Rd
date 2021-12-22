@@ -159,6 +159,7 @@ time imputation flag is added to the additional dataset.
 }
 \examples{
 library(admiral.test)
+library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ex")
 
