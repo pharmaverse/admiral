@@ -9,7 +9,8 @@ input <- tibble::tribble(
   "2019---07"
 )
 
-test_that("default: no date imputation, time part set o 00:00:00, add DTF, TMF", {
+
+test_that("default: no date imputation, time part set to 00:00:00, add DTF, TMF", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),  NA_character_,
@@ -199,5 +200,134 @@ test_that("No re-derivation is done if --DTF variable already exists", {
   )
 
   expect_equal(expected_output, actual_output)
+
+})
+
+
+input_secs <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("Ignore Seconds Flag is not used when not present in the function call", {
+
+expected_output <- tibble::tribble(
+  ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+  "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+  "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+  "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+  "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+  "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
+  "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
+  "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+) %>%
+  mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+actual_output <- derive_vars_dtm(
+  input_secs,
+  new_vars_prefix = "AST",
+  dtc = XXSTDTC,
+  date_imputation = "FIRST",
+  time_imputation = "FIRST"
+)
+
+expect_equal(expected_output, actual_output)
+})
+
+test_that("Ignore Seconds Flag is not used when set to FALSE in function call", {
+
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+  actual_output <- derive_vars_dtm(
+    input_secs,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "FIRST",
+    time_imputation = "FIRST",
+    ignore_seconds_flag = FALSE
+  )
+
+  expect_equal(expected_output, actual_output)
+})
+
+
+input_no_s <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+
+test_that("Ignore Seconds Flag remove the Seconds Flag, S, from XXDTF variable when set to TRUE", { # nolint
+
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, NA_character_,
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+  actual_output <- derive_vars_dtm(
+    input_no_s,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "FIRST",
+    time_imputation = "FIRST",
+    ignore_seconds_flag = TRUE
+  )
+
+  expect_equal(expected_output, actual_output)
+})
+
+input_secs <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds is present in the data ", { # nolint
+
+
+  expect_error(
+    derive_vars_dtm(
+      input_secs,
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      date_imputation = "FIRST",
+      time_imputation = "FIRST",
+      ignore_seconds_flag = TRUE
+    ),
+    regexp =  "Seconds detected in data while ignore_seconds_flag is invoked")
 
 })

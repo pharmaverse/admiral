@@ -12,7 +12,8 @@ derive_vars_dtm(
   time_imputation = "00:00:00",
   flag_imputation = "auto",
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  ignore_seconds_flag = FALSE
 )
 }
 \arguments{
@@ -100,6 +101,15 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+if only hours and minutes are ever collected, and seconds are imputed in
+(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
+
+A logical value
+
+Default: \code{FALSE}}
 }
 \value{
 The input dataset with the datetime \code{'--DTM'} (and the date/time imputation
@@ -152,6 +162,28 @@ derive_vars_dtm(
   date_imputation = "last",
   time_imputation = "last",
   max_dates = vars(DTHDT, DCUTDT)
+)
+
+# Seconds has been removed from the input dataset.  Function now uses
+# ignore_seconds_flag to remove the 'S' from the --TMF variable.
+mhdt <- tibble::tribble(
+  ~MHSTDTC,
+  "2019-07-18T15:25",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "FIRST",
+  time_imputation = "FIRST",
+  ignore_seconds_flag = TRUE
 )
 }
 \author{
