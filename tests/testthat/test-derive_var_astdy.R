@@ -1,6 +1,3 @@
-context("test-derive_var_astdy")
-
-
 test_that("ASTDY is added", {
   input <- tibble::tribble(
     ~TRTSDT, ~ASTDT,

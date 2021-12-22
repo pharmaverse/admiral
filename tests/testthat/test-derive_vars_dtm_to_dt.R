@@ -1,5 +1,3 @@
-context("test-derive_vars_dt")
-
 #test 1 - multiple vars
 test_that("Convert a complete -- DTM into a date object", {
   input <- tibble::tribble(

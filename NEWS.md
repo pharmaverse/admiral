@@ -1,3 +1,19 @@
+# admiral development version
+
+- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
+are not recorded in the data. (#589)
+
+- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
+
+- `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
+
+- The `derive_last_dose()` function has been split into a general function 
+`derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
+`derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
+
+- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
@@ -7,6 +23,7 @@
 - New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
+
 
 # admiral 0.4.0
 
@@ -243,6 +260,7 @@ to specify the unit of the input age (#569)
 - `read_dap_m3()` and `initialize()` have been migrated to {admiral.roche} (#272)
 
 - The `start_date` and `end_date` parameters of `derive_var_ady()`, `derive_var_aendy()` and `derive_var_astdy()` have been renamed to `reference_date` and `date`, respectively (#121)
+
 
 ## Bug Fixes
 
