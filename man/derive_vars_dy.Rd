@@ -35,6 +35,9 @@ to the end date. If it is nonnegative, one is added. I.e., the study day of the
 reference date is 1. The input ---DT(M) is converted to ---DY
 }
 \examples{
+library(lubridate)
+library(dplyr)
+
 datain <- tibble::tribble(
  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
  "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"

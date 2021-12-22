@@ -31,6 +31,9 @@
 #' @export
 #'
 #' @examples
+#' library(lubridate)
+#' library(dplyr)
+#'
 #' datain <- tibble::tribble(
 #'  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
 #'  "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
