@@ -1,0 +1,15 @@
+
+Thank you for your Pull Request!  We have developed this simple task checklist from the [Development Process Guide](https://roche-gsk.github.io/admiral/articles/development_process.html) to help with the final steps of the process.  Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.   
+
+- [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/) 
+- [ ] Update unit tests or write new unit tests - See [Unit Test Guide](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html)
+- [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
+- [ ] Update to all relevant roxygen headers and examples 
+- [ ] Run `devtools::documents() ` so all `.Rd, NAMESPACE and DESCRIPTION` files are updated appropriately
+- [ ] Address any updates needed for vignettes and/or templates
+- [ ] Update `NEWS.md`
+- [ ] Build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://roche-gsk.github.io/admiral/reference/index.html)" page. 
+- [ ] Address or fix all lintr warnings and errors - `lintr::lint_package()`
+- [ ] Run Check Package locally and address all errors and warnings - ` devtools::check()`
+- [ ] Link the issue so that it closes after successful merging. 
+- [ ] Address all merge conflicts and resolve appropriately 
