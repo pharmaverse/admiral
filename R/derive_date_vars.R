@@ -190,13 +190,21 @@ impute_dtc <- function(dtc,
 
     imputed_date <- case_when(
       !valid_dtc ~ NA_character_,
+
       n_chr >= 10 ~ substr(dtc, 1, 10),
+
+      # dates like 2021---14 - use only year part
+      n_chr == 9 & date_imputation == "MID" & !preserve ~
+        paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+
       # dates like 2021---14 - use only year part
       n_chr == 9 & date_imputation != "MID" & !preserve ~
         paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+
       # dates like 2021---14 - use year and day part and impute month
       n_chr == 9 & date_imputation == "MID" & preserve ~
         paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
+
       n_chr == 7 ~ paste0(dtc, "-", d),
       n_chr == 4 & date_imputation != "MID" ~ paste0(dtc, "-", mo, "-", d),
       n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")

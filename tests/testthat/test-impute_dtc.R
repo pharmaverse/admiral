@@ -95,6 +95,8 @@ test_that("impute to last day/month if date is partial,Missing time part imputed
   )
 })
 
+
+
 test_that("impute to MID day/month if date is partial,Missing time part imputed with 00:00:00 portion", { # nolint
   expected_output <- c(
     "2019-07-18T15:25:40",
@@ -102,7 +104,7 @@ test_that("impute to MID day/month if date is partial,Missing time part imputed 
     "2019-07-18T15:25:00",
     "2019-07-18T00:00:00",
     "2019-02-15T00:00:00",
-    "2019-06-15T00:00:00",
+    "2019-06-30T00:00:00",
     "2019-06-15T00:00:00"
   )
   expect_equal(
@@ -133,3 +135,4 @@ test_that("max_dates parameter works", {
                          "2020-12-06T12:12:12"
             )
           })
+

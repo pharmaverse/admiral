@@ -82,39 +82,8 @@ test_that("Partial date imputed to the last day/month", {
   )
 })
 
-test_that("Partial date imputed to the mid day/month", {
-  expected_output <- tibble::tribble(
-    ~XXSTDTC, ~ASTDT, ~ASTDTF,
-    "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
-    "2019-07-18", as.Date("2019-07-18"), NA_character_,
-    "2019-02", as.Date("2019-02-15"), "D",
-    "2019", as.Date("2019-06-15"), "M",
-    "2019---07", as.Date("2019-06-15"), "M"
-  )
 
-  actual_output <- derive_vars_dt(date,
-    new_vars_prefix = "AST",
-    dtc = XXSTDTC,
-    date_imputation = "MID"
-  )
-  actual_output1 <- derive_vars_dt(date,
-    new_vars_prefix = "AST",
-    dtc = XXSTDTC,
-    date_imputation = "06-15"
-  )
-
-  expect_equal(
-    expected_output,
-    actual_output
-  )
-  expect_equal(
-    expected_output,
-    actual_output1
-  )
-})
-
-
-test_that("Partial date imputed to the last day/month", {
+test_that("Partial date imputed to the LAST day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDT, ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
@@ -136,34 +105,61 @@ test_that("Partial date imputed to the last day/month", {
   )
 })
 
-test_that("Partial date imputed to the mid day/month", {
+
+date <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("Partial date imputation as MID to the mid day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDT, ~ASTDTF,
     "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
     "2019-07-18", as.Date("2019-07-18"), NA_character_,
     "2019-02", as.Date("2019-02-15"), "D",
-    "2019", as.Date("2019-06-15"), "M",
+    "2019", as.Date("2019-06-30"), "M",
     "2019---07", as.Date("2019-06-15"), "M"
   )
 
-  actual_output <- derive_vars_dt(date,
+  actual_output <- derive_vars_dt(
+    date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     date_imputation = "MID"
   )
-  actual_output1 <- derive_vars_dt(date,
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("XXSTDTC")
+  )
+})
+
+test_that("Partial date imputation as 6-15 to the mid day/month", {
+    expected_output <- tibble::tribble(
+      ~XXSTDTC, ~ASTDT, ~ASTDTF,
+      "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
+      "2019-07-18", as.Date("2019-07-18"), NA_character_,
+      "2019-02", as.Date("2019-02-15"), "D",
+      "2019", as.Date("2019-06-15"), "M",
+      "2019---07", as.Date("2019-06-15"), "M"
+    )
+
+  actual_output <- derive_vars_dt(
+    date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     date_imputation = "06-15"
   )
 
-  expect_equal(
+  expect_dfs_equal(
     expected_output,
-    actual_output
-  )
-  expect_equal(
-    expected_output,
-    actual_output1
+    actual_output,
+    keys = c("XXSTDTC")
   )
 })
 
