@@ -4,7 +4,7 @@ Thank you for your Pull Request!  We have developed this task checklist from the
 Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request.  This checklist is part of the Github Action workflows and the Pull Request will not be merged into the devel branch until you have checked off each task.
 
 - [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/) 
-- [ ] Update unit tests or write new unit tests - See [Unit Test Guide](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html)
+- [ ] Updated relevant unit tests or have written new unit tests - See [Unit Test Guide](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html)
 - [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
 - [ ] Update to all relevant roxygen headers and examples 
 - [ ] Run `devtools::documents() ` so all `.Rd, NAMESPACE and DESCRIPTION` files are updated appropriately
@@ -15,5 +15,5 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Run Check Package locally and address all errors and warnings - ` devtools::check()`
 - [ ] Link the issue so that it closes after successful merging. 
 - [ ] Address all merge conflicts and resolve appropriately 
-- [ ] I will delete branch and close issue once merging is successful
+- [ ] I will delete branch and close issue(s), if not linked, once merging is successful
 - [ ] Pat yourself on the back for a job well done!  Much love to your accomplishment!
