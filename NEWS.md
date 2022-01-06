@@ -10,6 +10,8 @@
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
+- `derive_vars_single_dose` has been added which converts aggregate dose rows into single rows for each dose.
+
 
 # admiral 0.5.0
 
