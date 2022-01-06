@@ -9,7 +9,8 @@ impute_dtc(
   date_imputation = NULL,
   time_imputation = "00:00:00",
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  preserve = FALSE
 )
 }
 \arguments{
@@ -76,6 +77,16 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{preserve}{Preserve partial dates when doing date imputation
+
+A user wishing to preserve partial dates when doing date imputation can invoke this
+argument.  For example \code{"2019---07"} would return \verb{"2019-06-07} if date_imputation = "MID"
+and preserve = TRUE.
+
+A logical value
+
+Default: \code{FALSE}}
 }
 \value{
 A character vector

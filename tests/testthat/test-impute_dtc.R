@@ -116,6 +116,36 @@ test_that("impute to MID day/month if date is partial,Missing time part imputed 
   )
 })
 
+input <- c(
+  "2019-07-18T15:25:40.243",
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("impute to MID day/month if date is partial and preserve argument works as expected", { # nolint
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:00",
+    "2019-07-18T00:00:00",
+    "2019-02-15T00:00:00",
+    "2019-06-30T00:00:00",
+    "2019-06-07T00:00:00"
+  )
+  expect_equal(
+    impute_dtc(
+      dtc = input,
+      date_imputation = "MID",
+      preserve = TRUE
+    ),
+    expected_output
+  )
+})
+
 test_that("min_dates parameter works", {
             expect_equal(impute_dtc(c("2020-12", "2020-11"),
                                     min_dates = list(c(lubridate::ymd_hms("2020-12-06T12:12:12"),

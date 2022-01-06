@@ -75,6 +75,10 @@
 #' argument.  For example `"2019---07"` would return `"2019-06-07` if date_imputation = "MID"
 #' and preserve = TRUE.
 #'
+#'  A logical value
+#'
+#'  Default: `FALSE`
+#'
 #'
 #' @author Samia Kabi
 #'
@@ -659,7 +663,8 @@ derive_vars_dt <- function(dataset,
                            date_imputation = NULL,
                            flag_imputation = TRUE,
                            min_dates = NULL,
-                           max_dates = NULL) {
+                           max_dates = NULL,
+                           preserve = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -801,6 +806,7 @@ derive_vars_dtm <- function(dataset,
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL,
+                            preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
 
   # check and quote parameters
