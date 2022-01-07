@@ -136,12 +136,15 @@ test_that("impute to MID day/month if date is partial and preserve argument work
     "2019-06-30T00:00:00",
     "2019-06-07T00:00:00"
   )
+
+  actual_output <- impute_dtc(
+    dtc = input,
+    date_imputation = "MID",
+    preserve = TRUE
+  )
+
   expect_equal(
-    impute_dtc(
-      dtc = input,
-      date_imputation = "MID",
-      preserve = TRUE
-    ),
+    actual_output,
     expected_output
   )
 })

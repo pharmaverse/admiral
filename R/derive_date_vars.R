@@ -69,9 +69,9 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered.
 #'
-#' @param preserve Preserve partial dates when doing date imputation
+#' @param preserve Preserve partial dates when doing date imputation for middle day and month
 #'
-#' A user wishing to preserve partial dates when doing date imputation can invoke this
+#' A user wishing to preserve partial dates when doing middle day and month date imputation can invoke this
 #' argument.  For example `"2019---07"` would return `"2019-06-07` if date_imputation = "MID"
 #' and preserve = TRUE.
 #'
@@ -330,7 +330,8 @@ impute_dtc <- function(dtc,
 convert_dtc_to_dt <- function(dtc,
                               date_imputation = NULL,
                               min_dates = NULL,
-                              max_dates = NULL) {
+                              max_dates = NULL,
+                              preserve = FALSE) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
@@ -339,7 +340,8 @@ convert_dtc_to_dt <- function(dtc,
     date_imputation = date_imputation,
     time_imputation = "first",
     min_dates = min_dates,
-    max_dates = max_dates
+    max_dates = max_dates,
+    preserve = preserve
   )
 
   if_else(
@@ -377,7 +379,8 @@ convert_dtc_to_dtm <- function(dtc,
                                date_imputation = NULL,
                                time_imputation = NULL,
                                min_dates = NULL,
-                               max_dates = NULL) {
+                               max_dates = NULL,
+                               preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
@@ -386,7 +389,8 @@ convert_dtc_to_dtm <- function(dtc,
       date_imputation = date_imputation,
       time_imputation = time_imputation,
       min_dates = min_dates,
-      max_dates = max_dates
+      max_dates = max_dates,
+      preserve = preserve
     ) %>%
     as_iso_dtm()
 }
@@ -419,7 +423,8 @@ convert_date_to_dtm <- function(dt,
                                 date_imputation = NULL,
                                 time_imputation = NULL,
                                 min_dates = NULL,
-                                max_dates = NULL) {
+                                max_dates = NULL,
+                                preserve = FALSE) {
 
   if (lubridate::is.POSIXct(dt)) {
     return(dt)
@@ -435,7 +440,8 @@ convert_date_to_dtm <- function(dt,
         date_imputation = date_imputation,
         time_imputation = time_imputation,
         min_dates = min_dates,
-        max_dates = max_dates
+        max_dates = max_dates,
+        preserve = preserve
       )
   }
 }
@@ -685,7 +691,8 @@ derive_vars_dt <- function(dataset,
         dtc = !!dtc,
         date_imputation = date_imputation,
         min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
-        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
+        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        preserve = preserve
       )
     )
 
