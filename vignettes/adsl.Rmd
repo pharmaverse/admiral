@@ -71,7 +71,7 @@ The `DM` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
 adsl <- dm %>% 
-  mutate(DOMAIN = NULL)
+  select(-DOMAIN)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
