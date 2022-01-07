@@ -24,10 +24,11 @@ Once you’ve familiarised yourself with the admiral [contribution model](https:
   a. Is all your code formatted according to the [tidyverse](https://style.tidyverse.org/) style guide?
   b. Did you create/add appropriate [unit tests](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)?
   c. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
-  d. Did you update the [documentation](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `DESCRIPTION`, `NAMESPACE`, and files in `man/` 
+  d. Did you update the [documentation](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
   e. Does your code update have any impact on the [ADaM template](https://roche-gsk.github.io/admiral/articles/admiral.html#starting-a-script-1) R scripts stored in `inst/templates`?
   f. Does your code update have any impact on the vignettes stored in vignettes?
   g. Did you update the Changelog `NEWS.md`?
+  h. Did you build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://roche-gsk.github.io/admiral/reference/index.html)" page?
 5. Once happy with all the updates, make a [pull request](https://roche-gsk.github.io/admiral/articles/git_usage.html#working-with-feature-branches-1) to merge to the development branch `devel` and link the issue so that it closes after successful merging.
 6. Check that there are no merge conflicts. If there are any, fix them before requesting review. See [solving merge conflicts](https://roche-gsk.github.io/admiral/articles/git_usage.html#solving-merge-conflicts) guidance.
 7. Check the results of the automated `R-CMD check` and `lintr` checks and if any issues consult this [guide](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html#common-r-cmd-check-issues-1).
