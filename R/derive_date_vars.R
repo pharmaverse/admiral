@@ -663,6 +663,18 @@ compute_tmf <- function(dtc,
 #'   date_imputation = "first",
 #'   min_dates = vars(TRTSDTM)
 #' )
+#'
+#' # A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
+#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "MID",
+#'   preserve = TRUE
+#' )
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
@@ -805,6 +817,18 @@ derive_vars_dt <- function(dataset,
 #'   time_imputation = "FIRST",
 #'   ignore_seconds_flag = TRUE
 #' )
+#'
+#' # A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
+#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "MID",
+#'   preserve = TRUE
+#' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
@@ -838,7 +862,8 @@ derive_vars_dtm <- function(dataset,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
-    max_dates = lapply(min_dates, eval_tidy, data = mask)
+    max_dates = lapply(min_dates, eval_tidy, data = mask),
+    preserve = preserve
   )
 
   if (flag_imputation %in% c("both", "date") ||

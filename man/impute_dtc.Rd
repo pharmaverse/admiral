@@ -78,9 +78,9 @@ any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
 
-\item{preserve}{Preserve partial dates when doing date imputation
+\item{preserve}{Preserve partial dates when doing date imputation for middle day and month
 
-A user wishing to preserve partial dates when doing date imputation can invoke this
+A user wishing to preserve partial dates when doing middle day and month date imputation can invoke this
 argument.  For example \code{"2019---07"} would return \verb{"2019-06-07} if date_imputation = "MID"
 and preserve = TRUE.
 
