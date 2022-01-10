@@ -1,3 +1,5 @@
+context("test-derive_var_extreme_flag")
+
 input_worst_flag <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
@@ -43,7 +45,7 @@ test_that("first observation for each group is flagged", {
 
   expected_output <- input %>% mutate(firstfl = c("Y", NA, "Y", "Y", NA))
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID),
     order = vars(AVISITN, desc(AVAL)),
@@ -70,7 +72,7 @@ test_that("last observation for each group is flagged, filter works", {
 
   expected_output <- input %>% mutate(lastfl = c(NA, "Y", NA, NA, "Y"))
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID),
     order = vars(AVISITN, desc(AVAL)),
@@ -141,7 +143,7 @@ test_that("ABLFL = Y using last observation within a subset", {
     "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, "Y"
   )
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT),
@@ -212,7 +214,7 @@ test_that("ABLFL = Y worst observation = HI within a subset", {
     "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
   )
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(AVAL, ADT),
@@ -283,7 +285,7 @@ test_that("ABLFL = Y worst observation = LO within a subset", {
     "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, "Y"
   )
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(desc(AVAL), ADT),
@@ -354,7 +356,7 @@ test_that("ABLFL = Y average records within a subset", {
     "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA,        NA
   )
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT, desc(AVAL)),
@@ -426,7 +428,7 @@ test_that("ABLFL = Y using last observation within a subset and multiple baselin
     "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, "Y"
   )
 
-  actual_output <- derive_extreme_flag(
+  actual_output <- derive_var_extreme_flag(
     input,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(ADT),
@@ -449,7 +451,7 @@ test_that("Derive worst flag works correctly", {
                        "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", "Y", "Y",
                        "Y", NA, NA))
 
-  actual_output <- derive_worst_flag(
+  actual_output <- derive_var_worst_flag(
     input_worst_flag,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(desc(ADT)),
@@ -472,7 +474,7 @@ test_that("Derive worst flag works correctly with no worst_high option", {
                        "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", NA, NA,
                        NA, NA, NA))
 
-  actual_output <- derive_worst_flag(
+  actual_output <- derive_var_worst_flag(
     input_worst_flag,
     by_vars = vars(USUBJID, PARAMCD, AVISIT),
     order = vars(ADT),
@@ -491,7 +493,7 @@ test_that("Derive worst flag works correctly with no worst_high option", {
 test_that("Derive worst flag catches invalid parameters", {
 
   expect_error(
-    derive_worst_flag(
+    derive_var_worst_flag(
       input_worst_flag,
       by_vars = vars(USUBJID, PARAMCD, AVISIT),
       order = vars(ADT),
@@ -508,7 +510,7 @@ test_that("Derive worst flag catches invalid parameters", {
   )
 
   expect_error(
-    derive_worst_flag(
+    derive_var_worst_flag(
       input_worst_flag,
       new_var = WORSTFL,
       by_vars = vars(USUBJID, PARAMCD, AVISIT),
@@ -525,7 +527,7 @@ test_that("Derive worst flag catches invalid parameters", {
   )
 
   expect_error(
-    derive_worst_flag(
+    derive_var_worst_flag(
       input_worst_flag,
       by_vars = vars(USUBJID, PARAMCD, AVISIT),
       order = vars(ADT),

@@ -600,10 +600,10 @@ dataset_vignette(
 
 ## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`:
+The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`:
 
 ```{r eval=TRUE}
-adtte <- derive_obs_number(
+adtte <- derive_var_obs_number(
   adtte,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(PARAMCD),
