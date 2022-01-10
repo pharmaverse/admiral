@@ -371,25 +371,8 @@ where the labels are stored.
 
 # Unit Testing
 
-A function requires a set of unit tests to verify it produces the expected result. 
-If a function is defined in a file named `R/derive_var_baseline.R` then its accompanying unit tests should be stored in `tests/testthat/test-derive_var_baseline.R`.
-
-The testing framework to be used is [testthat](https://testthat.r-lib.org/).
-
-Unit tests should cover the functionality of the function.
-If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
-This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
-
-The input and expected output for the unit tests must follow the following rules:
-
-* Input and output should be as simple as possible.
-* Values should be hard-coded whenever possible.
-* If values need to be derived, only unit tested functions can be used.
-
-If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
-Make sure to align columns as well. This ensures quick code readability. 
-
-If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+A function requires a set of unit tests to verify it produces the expected result.
+See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral-) for details.
 
 # Deprecation
 
@@ -426,6 +409,8 @@ The documentation will be updated at:
 When a function or parameter is deprecated, the function must be updated to issue an error or a 
 warning to inform the user.
 
+There should be a test case added in `tests/testthat/test-deprecation.R` that checks whether this warning/error is issued as appropriate when using the deprecated function or parameter.
+
 ### Function
 
 If the deprecated function still exists in the package besides the new function, a **warning** must be
@@ -439,6 +424,15 @@ deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
 # Error if the deprecated function does not exist anymore
 deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 ### END DEPRECATION
+```
+
+For the former case above, please pass any input arguments into a call to the new function so that it still runs and pushes users towards adopting the new function.
+
+```{r, eval=F}
+fun_xxx <- function(dataset, new_var) {
+  deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
+  new_fun_xxx(dataset, new_var = new_var)
+}
 ```
 
 ### Parameter

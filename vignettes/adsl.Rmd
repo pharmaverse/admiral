@@ -71,7 +71,7 @@ The `DM` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
 adsl <- dm %>% 
-  mutate(DOMAIN = NULL)
+  select(-DOMAIN)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -284,7 +284,7 @@ Example function `format_dcsreas()`:
 format_dcsreas <- function(dsdecod, dsterm = NULL) {
   out <- if (is.null(dsterm)) dsdecod else dsterm
   case_when(
-    dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
+    !dsdecod %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
     TRUE ~ NA_character_
   )
 }
@@ -599,26 +599,33 @@ dataset_vignette(
 
 ## Derive Groupings and Populations {#groupings}
 
-### Grouping (e.g. `AGEGR1`) {#groupings_ex}
+### Grouping (e.g. `AGEGR1` or `REGION1`) {#groupings_ex}
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-admiral does not **currently** have functionality to assist with grouping. Instead, the user can 
-create his/her own function to meet his/her study requirement.
+admiral does not **currently** have functionality to assist with all required groupings. Some functions exist for age grouping according to FDA or EMA conventions. For others, the user can create his/her own function to meet his/her study requirement.
 
-For example, if 
+To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA convention):
 
-- `AGEGR1` would categorize `AGE` in `< 18 `, `18-65`, `>= 65`, 
-- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`, 
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_agegr_fda(
+    age_var = AGE,
+    new_var = AGEGR1
+  )
+```
+
+However for example if
+
+- `AGEGR2` would categorize `AGE` in `< 65`, `>= 65`,
+- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`,
 
 the user defined function(s) would be like:
 
-
 ```{r eval=TRUE}
-format_agegr1 <- function(x) {
+format_agegr2 <- function(x) {
   case_when(
-    !is.na(x) & x < 18 ~ "< 18",
-    x >= 18 & x < 65 ~ "18 - 65",
+    !is.na(x) & x < 65 ~ "< 65",
     x >= 65 ~ ">= 65",
     TRUE ~ NA_character_
   )
@@ -638,7 +645,7 @@ These functions are then used in a `mutate()` statement to derive the required g
 ```{r eval=TRUE}
 adsl <- adsl %>%
   mutate(
-    AGEGR1 = format_agegr1(AGE),
+    AGEGR2 = format_agegr2(AGE),
     REGION1 = format_region1(COUNTRY)
   )
 ```
@@ -646,7 +653,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl, 
-  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
+  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, AGEGR2, REGION1)
 )
 ```
 

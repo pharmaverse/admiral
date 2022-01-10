@@ -122,6 +122,7 @@ articles:
   navbar: Developer Guides
   contents:
   - contribution_model
+  - development_process
   - programming_strategy
   - git_usage
   - writing_vignettes

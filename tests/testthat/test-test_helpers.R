@@ -1,5 +1,3 @@
-context("test-test_helpers")
-
 test_that("expect_dfs_equal works", {
 
   a <- data.frame(x = 1:3, y = 4:6)
