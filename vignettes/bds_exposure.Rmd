@@ -520,11 +520,11 @@ adex %>%
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An
+The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`. An
 example call is:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_obs_number(
+adex <- derive_var_obs_number(
   adex,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),

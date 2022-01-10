@@ -104,10 +104,7 @@ variables must start with `temp_` and must be removed from the output dataset
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
 
-Please note that *var* prefix should be used only if the function name includes the name of the variable 
-(e.g. `derive_var_ady()`). 
-It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline()`, which has a `new_var` argument).
-
+Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` parameter in the function call. 
 
 ## Function Parameters
 
@@ -325,9 +322,9 @@ easier to maintain the headers.
 Variable names, expressions, functions, and any other code must be enclosed
 which backticks. This will render it as code.
 
-For functions which derive a specific CDISC variable (i.e. those starting with
-`derive_var_`), the title must state the label of the variable without the
-variable name. The variable should be stated in the description.
+For functions which derive a specific CDISC variable, the title must state the 
+label of the variable without the variable name. The variable should be stated 
+in the description.
 
 # Missing values
 

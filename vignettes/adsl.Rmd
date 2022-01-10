@@ -133,14 +133,14 @@ dataset_vignette(
 
 ### Disposition Dates (e.g. `EOSDT`) {#disposition_date}
 
-The function `derive_disposition_dt()` can be used to derive a disposition date. 
+The function `derive_var_disposition_dt()` can be used to derive a disposition date. 
 The relevant disposition date (`DS.DSSTDTC`) is selected by adjusting the filter parameter. 
 
 To derive the End of Study date (`EOSDT`), a call could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
@@ -174,7 +174,7 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSTT`) {#disposition_status}
 
-The function `derive_disposition_status()` can be used to derive a disposition status at a specific
+The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
@@ -182,7 +182,7 @@ To derive the End of Study status (`EOSSTT`), a call could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
@@ -225,7 +225,7 @@ The customized mapping function `format_eosstt()` can now be passed to the main 
 ```{r eval=FALSE}
 
 adsl <- adsl %>%
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
@@ -241,7 +241,7 @@ This call would return the input dataset with the column `EOSSTT` added.
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The function `derive_disposition_reason()` can be used to derive a disposition reason (along with 
+The function `derive_vars_disposition_reason()` can be used to derive a disposition reason (along with 
 the details, if  required) at a specific timepoint. 
 The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the 
 filter parameter and used to derive the main reason (and details).
@@ -250,7 +250,7 @@ To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would 
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_reason(
+  derive_vars_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
@@ -294,7 +294,7 @@ The customized mapping function `format_dcsreas()` can now be passed to the main
 
 ```{r eval=FALSE}
 adsl <- adsl %>%
-  derive_disposition_reason(
+  derive_var_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,

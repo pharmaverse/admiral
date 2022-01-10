@@ -104,7 +104,7 @@ adcm <- adcm %>%
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
 
   # Derive 1st Occurrence of Preferred Term Flag
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     new_var = AOCCPFL,
     by_vars = vars(USUBJID, CMDECOD),
     order = vars(ASTDTM, CMSEQ),

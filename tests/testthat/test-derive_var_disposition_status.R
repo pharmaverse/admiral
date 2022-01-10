@@ -1,3 +1,5 @@
+context("test-derive_var_disposition_status")
+
 dm <- tibble::tribble(
   ~STUDYID, ~USUBJID,
   "TEST01", "PAT01",
@@ -34,7 +36,7 @@ test_that("Derive EOSSTT using default mapping", {
     "TEST01", "PAT04", "ONGOING"
   )
 
-  actual_output <- derive_disposition_status(
+  actual_output <- derive_var_disposition_status(
     dataset = dm,
     dataset_ds = ds,
     new_var = EOSSTT,
@@ -66,7 +68,7 @@ test_that("Derive EOTSTT using a study specific mapping", {
     "TEST01", "PAT04", "ONGOING"
   )
 
-  actual_output <- derive_disposition_status(
+  actual_output <- derive_var_disposition_status(
     dataset = dm,
     dataset_ds = ds,
     new_var = EOSSTT,
