@@ -410,4 +410,3 @@ derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
   }
   out
 }
-

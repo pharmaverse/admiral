@@ -77,11 +77,11 @@ derive_disposition_dt <- function(dataset,
   deprecate_warn("0.6.0", "derive_disposition_dt()", "derive_var_disposition_dt()")
   derive_var_disposition_dt(dataset = dataset,
                             dataset_ds = dataset_ds,
-                            new_var=!!enquo(new_var),
-                            dtc=!!enquo(dtc),
-                            filter_ds=!!enquo(filter_ds),
+                            new_var = !!enquo(new_var),
+                            dtc = !!enquo(dtc),
+                            filter_ds = !!enquo(filter_ds),
                             date_imputation = date_imputation,
-                            subject_keys= subject_keys)
+                            subject_keys = subject_keys)
 }
 
 #' Derive a Disposition Date

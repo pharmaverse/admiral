@@ -117,8 +117,8 @@ derive_disposition_status <- function(dataset,
                                 dataset_ds = dataset_ds,
                                 new_var = !!enquo(new_var),
                                 status_var = !!enquo(status_var),
-                                format_new_var=format_new_var,
-                                filter_ds=!!enquo(filter_ds),
+                                format_new_var = format_new_var,
+                                filter_ds = !!enquo(filter_ds),
                                 subject_keys = subject_keys)
 }
 

@@ -149,11 +149,11 @@ derive_disposition_reason <- function(dataset,
   derive_vars_disposition_reason(dataset = dataset,
                                  dataset_ds = dataset_ds,
                                  new_var = !!enquo(new_var),
-                                 reason_var=!!enquo(reason_var),
+                                 reason_var= !!enquo(reason_var),
                                  new_var_spe = !!enquo(new_var_spe),
                                  reason_var_spe = !!enquo(reason_var_spe),
                                  format_new_vars = format_new_vars,
-                                 filter_ds=!!enquo(filter_ds),
+                                 filter_ds = !!enquo(filter_ds),
                                  subject_keys=subject_keys)
 }
 

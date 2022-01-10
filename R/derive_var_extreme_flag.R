@@ -293,14 +293,14 @@ derive_worst_flag <- function(dataset,
                               check_type = "warning") {
   deprecate_warn("0.6.0", "derive_worst_flag()", "derive_var_worst_flag()")
   derive_var_worst_flag(dataset = dataset,
-                        by_vars=by_vars,
-                        order=order,
-                        new_var=!!enquo(new_var),
-                        param_var=!!enquo(param_var),
-                        analysis_var=!!enquo(analysis_var),
-                        worst_high=worst_high,
-                        worst_low=worst_low,
-                        filter=!!enquo(filter)
+                        by_vars = by_vars,
+                        order = order,
+                        new_var = !!enquo(new_var),
+                        param_var = !!enquo(param_var),
+                        analysis_var = !!enquo(analysis_var),
+                        worst_high = worst_high,
+                        worst_low = worst_low,
+                        filter = !!enquo(filter)
   )
 }
 
