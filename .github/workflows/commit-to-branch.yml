@@ -24,36 +24,15 @@ jobs:
         with:
           r-version: 3.6
 
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Install system dependencies
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-
-      - name: Install dependencies
-        run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::restore()
-        shell: Rscript {0}
-
-      - name: Update documentation
-        run: devtools::document()
-        shell: Rscript {0}
-
       - name: Push to branch
         run: |
+          echo $(git status)
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           echo "Setting Remote"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          echo "CHeck out remote branch"
+          git checkout origin/$GITHUB_HEAD_REF
           echo "Pulling branch"
           git pull origin $GITHUB_HEAD_REF
           echo "Checking out branch"
