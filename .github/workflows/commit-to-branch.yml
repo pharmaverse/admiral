@@ -25,11 +25,12 @@ jobs:
           echo GITHUB_HEAD_REF=$GITHUB_HEAD_REF
           echo GITHUB_BASE_REF=$GITHUB_BASE_REF
           echo "Test" >> test.txt
-          git config --local user.name github-actions
-          git config --local user.email github-actions@github.com
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git pull origin $GITHUB_HEAD_REF
-          git checkout "${GITHUB_HEAD_REF}"
-          git add test.txt
-          git commit -m "Add file"
-          git push
+          echo $(git status)
+          echo $(git config --local user.name github-actions)
+          echo $(git config --local user.email github-actions@github.com)
+          echo $(git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY)
+          echo $(git pull origin $GITHUB_HEAD_REF)
+          echo $(git checkout "${GITHUB_HEAD_REF}")
+          echo $(git add test.txt)
+          echo $(git commit -m "Add file")
+          echo $(git push)
