@@ -7,7 +7,7 @@ template:
 repo:
   url:
     home: https://github.com/Roche-GSK/admiral/
-    source: https://github.com/Roche-GSK/admiral/blob/master/
+    source: https://github.com/Roche-GSK/admiral/blob/main/
     issue: https://github.com/Roche-GSK/admiral/issues/
     user: https://github.com/
 news:

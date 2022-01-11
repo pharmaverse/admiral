@@ -219,7 +219,7 @@ but use `(#this_action)`)
 # Example Script
 ADaM | Sample Code
 ---- | --------------
-ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adxx.R){target="_blank"}
+ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adxx.R){target="_blank"}
 
 ```
 
