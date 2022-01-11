@@ -27,6 +27,8 @@ jobs:
           echo "Test" >> test.txt
           git config --local user.name github-actions
           git config --local user.email github-actions@github.com
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout "${GITHUB_HEAD_REF}"
           git add test.txt
           git commit -m "Add file"
           git push
