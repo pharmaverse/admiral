@@ -69,11 +69,12 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered.
 #'
-#' @param preserve Preserve partial dates when doing date imputation for middle day and month
+#' @param preserve Preserve partial dates when doing date imputation for middle
+#' day and month
 #'
-#' A user wishing to preserve partial dates when doing middle day and month date imputation can invoke this
-#' argument.  For example `"2019---07"` would return `"2019-06-07` if date_imputation = "MID"
-#' and preserve = TRUE.
+#' A user wishing to preserve partial dates when doing middle day and month date
+#' imputation can invoke this argument.  For example `"2019---07"` would return
+#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
 #'
 #'  A logical value
 #'

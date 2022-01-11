@@ -191,9 +191,6 @@ test_that("Partial date imputation as MID and preserve = TRUE to the mid day/mon
   )
 })
 
-substr("2019---07", 8 ,9)
-
-
 
 test_that("Partial date imputed to the last day/month, no DTF", {
   expected_output <- tibble::tribble(
