@@ -50,11 +50,11 @@ jobs:
 
       - name: Push to branch
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git pull origin $GITHUB_HEAD_REF
-          git checkout "${GITHUB_HEAD_REF}"
-          git add --force NAMESPACE man/*.Rd
-          git commit --allow-empty -m "Update documentation"
-          git push
+          echo $(git config --local user.email "actions@github.com")
+          echo $(git config --local user.name "GitHub Actions")
+          echo $(git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY)
+          echo $(git pull origin $GITHUB_HEAD_REF)
+          echo $(git checkout "${GITHUB_HEAD_REF}")
+          echo $(git add --force NAMESPACE man/*.Rd)
+          echo $(git commit --allow-empty -m "Update documentation")
+          echo $(git push)
