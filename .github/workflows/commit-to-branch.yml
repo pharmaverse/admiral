@@ -6,7 +6,7 @@ on:
 name: update_documentation
 
 jobs:
-  update_documentation:
+  commit-to-branch:
     if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     env:
