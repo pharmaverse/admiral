@@ -102,9 +102,9 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 + Any variable name, dataset name, function, argument name must be quoted with backticks: e.g.
 
 
-  ```
+```
   The `date` parameter of the `derive_my_var()` function expects a date variable, e.g., `ADT`.
-  ```
+```
 
 + Functions must also end with `()`.
 
@@ -138,7 +138,7 @@ library(admiral)
 data(vs)
 ```
 
-      ```{r, eval=FALSE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE}
       vs1 <- vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
@@ -146,13 +146,13 @@ data(vs)
         date_imputation = "FIRST"
       )
 
-      ```
+```
 
 
   + Output dataset formatted using `dataset_vignette()`...
 
 
-      ```{r, echo=FALSE}
+```{r, echo=FALSE}
       vs1 <- vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
@@ -165,26 +165,26 @@ data(vs)
         display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
         filter = VSTESTCD == "WEIGHT"
       )
-      ```
+```
 
 
-    Note: The call to get the formatted dataset would be: 
+Note: The call to get the formatted dataset would be: 
  
 
-       ```{r, eval=FALSE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE}
        dataset_vignette(
           vs1, 
           display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
           filter = VSTESTCD == "WEIGHT"
         )
-      ```
+```
       
-    Displaying many big datasets on a vignette, may require a long time to load
-    the page and may cause messages from the browser that the page is not
-    responsive. In this case the number of displayed observations should be
-    restricted either by restricting the source datasets at the beginning of the
-    vignette or in the call of `dataset_vignette()` if only some calls are
-    affected.
+Displaying many big datasets on a vignette, may require a long time to load
+the page and may cause messages from the browser that the page is not
+responsive. In this case the number of displayed observations should be
+restricted either by restricting the source datasets at the beginning of the
+vignette or in the call of `dataset_vignette()` if only some calls are
+affected.
 
 #### Conventions for ADaM Workflow
 
