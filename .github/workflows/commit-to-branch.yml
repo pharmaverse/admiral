@@ -27,12 +27,13 @@ jobs:
       - name: Push to branch
         run: |
           echo $(git status)
+          echo $(git branch --list)
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           echo "Setting Remote"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           echo "CHeck out remote branch"
-          git checkout origin/$GITHUB_HEAD_REF
+          git checkout $GITHUB_HEAD_REF
           echo "Pulling branch"
           git pull origin $GITHUB_HEAD_REF
           echo "Checking out branch"
