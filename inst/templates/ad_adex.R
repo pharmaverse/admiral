@@ -256,7 +256,7 @@ adex <- adex %>%
   mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
 
   # Calculate ASEQ
-  derive_obs_number(
+  derive_var_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),

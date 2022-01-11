@@ -1,10 +1,11 @@
 # admiral development version
 
+- `derive_disposition_dt()`, `derive_disposition_status()`, `derive_extreme_flag`, `derive_worst_flag`, `derive_last_dose`, `derive_obs_number`, `derive_disposition_reason` have been deprecated and renamed in favor of `derive_var_disposition_dt()`, `derive_var_disposition_status()`, `derive_var_extreme_flag`, `derive_var_worst_flag`, `derive_var_last_dose`, `derive_var_obs_number`, and `derive_vars_disposition_reason` respectively (#738)
+
 - `derive_vars_dtm()` now has `preserve` argument so users can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07`.  A user can also not use `preserve` and do full date imputation, e.g. 
 `2019---07` would become `2019-06-15` and dates with just year `2019` would become `2019-06-30`.  (#592)
 
-- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
-are not recorded in the data. (#589)
+- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds are not recorded in the data. (#589)
 
 - `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
 

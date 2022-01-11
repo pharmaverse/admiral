@@ -1,3 +1,5 @@
+context("test-derive_vars_disposition_reason")
+
 dm <- tibble::tribble(
   ~STUDYID, ~USUBJID,
   "TEST01", "PAT01",
@@ -35,7 +37,7 @@ test_that("Derive DCSREAS using default mapping", {
     "TEST01", "PAT04", NA_character_
   )
 
-  actual_output <- derive_disposition_reason(
+  actual_output <- derive_vars_disposition_reason(
     dataset = dm,
     dataset_ds = ds,
     new_var = DCSREAS,
@@ -66,7 +68,7 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
     "TEST01", "PAT04", NA_character_, NA_character_
   )
 
-  actual_output <- derive_disposition_reason(
+  actual_output <- derive_vars_disposition_reason(
     dataset = dm,
     dataset_ds = ds,
     new_var = DCTREAS,
@@ -84,10 +86,10 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
   )
 })
 
-test_that("derive_disposition_reason checks new_var_spe and reason_var_spe", {
+test_that("derive_vars_disposition_reason checks new_var_spe and reason_var_spe", {
 
   expect_error(
-    derive_disposition_reason(
+    derive_vars_disposition_reason(
       dataset = dm,
       dataset_ds = ds,
       new_var = DCSREAS,
