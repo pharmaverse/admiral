@@ -33,9 +33,9 @@ jobs:
           echo "Setting Remote"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           echo "CHeck out remote branch"
-          git checkout $GITHUB_HEAD_REF
+          git checkout "${GITHUB_HEAD_REF}"
           echo "Pulling branch"
-          git pull origin $GITHUB_HEAD_REF
+          git pull origin "${GITHUB_HEAD_REF}"
           echo "Checking out branch"
           git checkout "${GITHUB_HEAD_REF}"
           echo "Staging files"
