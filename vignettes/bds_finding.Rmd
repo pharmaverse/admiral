@@ -523,11 +523,11 @@ subsequent derivations. This will be important if the data frame contains
 multiple values for `BASETYPE`.
 
 Next, the analysis baseline flag `ABLFL` can be derived using the admiral
-function `derive_extreme_flag()`.  For example, if baseline is defined as the last 
+function `derive_var_extreme_flag()`.  For example, if baseline is defined as the last 
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
 ```{r eval=TRUE}
-advs <- derive_extreme_flag(
+advs <- derive_var_extreme_flag(
   advs,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT, ATPTN, VISITNUM),
@@ -545,7 +545,7 @@ dataset_vignette(
 )
 ```
 
-Note: Additional examples of the `derive_extreme_flag()` function can be 
+Note: Additional examples of the `derive_var_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
 Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the admiral function
@@ -612,12 +612,12 @@ observations within a particular timing period.
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
 appropriate record for analysis.
 
-This flag may be derived using the admiral function `derive_extreme_flag()`. 
+This flag may be derived using the admiral function `derive_var_extreme_flag()`. 
 For this example, we will assume we would like to choose the latest and 
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
 ```{r eval=TRUE}
-advs <- derive_extreme_flag(
+advs <- derive_var_extreme_flag(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN, AVAL),
@@ -641,7 +641,7 @@ values (`SYSBP`, `DIABP`, and `RESP`).  We will also assume high is worst for `S
 and `DIABP` and low is worst for `RESP`.
 
 ```{r eval=TRUE}
-advs <- derive_worst_flag(
+advs <- derive_var_worst_flag(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN),
@@ -679,11 +679,11 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
+The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
 ```{r eval=TRUE}
-advs <- derive_obs_number(
+advs <- derive_var_obs_number(
   advs,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
@@ -770,7 +770,7 @@ assign a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(ADT, AVISITN, ATPTN, AVAL),
     new_var = EOTFL,
@@ -850,5 +850,5 @@ dataset_vignette(
 
 ADaM | Sample Code 
 ---- | --------------
-ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R){target="_blank"}
-ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R){target="_blank"}
+ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adeg.R){target="_blank"}
+ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_advs.R){target="_blank"}

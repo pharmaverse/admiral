@@ -116,7 +116,7 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
     new_var = AOCCIFL,
