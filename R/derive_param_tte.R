@@ -38,16 +38,6 @@
 #'   If the specified variable is imputed, the corresponding date imputation
 #'   flag must specified for `start_imputation_flag`.
 #'
-#' @param start_date_imputation_flag Date imputation flag for start date
-#'
-#'   If the start date is imputed, the corresponding date imputation flag must
-#'   be specified. The variable `STARTDTF` is set to the specified variable.
-#'
-#' @param start_time_imputation_flag Time imputation flag for start date
-#'
-#'   If the start time is imputed, the corresponding time imputation flag must
-#'   be specified. The variable `STARTTMF` is set to the specified variable.
-#'
 #' @param event_conditions Sources and conditions defining events
 #'
 #'   A list of `event_source()` objects is expected.
@@ -237,8 +227,6 @@ derive_param_tte <- function(dataset = NULL,
                              source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
-                             start_date_imputation_flag = NULL,
-                             start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
                              create_datetime = FALSE,
@@ -248,22 +236,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
-  start_date_imputation_flag <- assert_symbol(
-    enquo(start_date_imputation_flag),
-    optional = TRUE
-  )
-  start_time_imputation_flag <- assert_symbol(
-    enquo(start_time_imputation_flag),
-    optional = TRUE
-  )
-  assert_data_frame(
-    dataset_adsl,
-    required_vars = quo_c(
-      start_date,
-      start_date_imputation_flag,
-      start_time_imputation_flag
-    )
-  )
+  assert_data_frame(dataset_adsl, required_vars = vars(!!start_date))
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -299,11 +272,10 @@ derive_param_tte <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   }
   if (!is.null(by_vars)) {
-    source_datasets <-
-      extend_source_datasets(
-        source_datasets = source_datasets,
-        by_vars = by_vars
-      )
+    source_datasets <- extend_source_datasets(
+      source_datasets = source_datasets,
+      by_vars = by_vars
+    )
   }
 
   # determine events #
@@ -332,8 +304,7 @@ derive_param_tte <- function(dataset = NULL,
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")
-  }
-  else {
+  } else {
     date_var <- sym("ADT")
     start_var <- sym("STARTDT")
   }
@@ -341,18 +312,23 @@ derive_param_tte <- function(dataset = NULL,
     !!!subject_keys,
     !!start_var := !!start_date
   )
-  if (!quo_is_null(start_date_imputation_flag)) {
+
+  start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
+  if (start_date_imputation_flag %in% colnames(dataset_adsl)) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTDTF = !!start_date_imputation_flag
+      STARTDTF = !!sym(start_date_imputation_flag)
     )
   }
-  if (!quo_is_null(start_time_imputation_flag)) {
+
+  start_time_imputation_flag <- gsub("(DT|DTM)$", "TMF", as_name(start_date))
+  if (start_time_imputation_flag %in% colnames(dataset_adsl)) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTTMF = !!start_time_imputation_flag
+      STARTTMF = !!sym(start_time_imputation_flag)
     )
   }
+
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
@@ -388,8 +364,8 @@ derive_param_tte <- function(dataset = NULL,
     }
   )
 
-  new_param <-
-    mutate(new_param, !!date_var := pmax(!!date_var, !!start_var)) %>%
+  new_param <- new_param %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
     select(-starts_with("temp_"))
 
   if (!is.null(by_vars)) {

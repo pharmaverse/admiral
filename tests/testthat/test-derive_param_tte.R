@@ -40,19 +40,20 @@ test_that("new observations with analysis date are derived correctly", {
     ) %>%
     left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF), by = "USUBJID")
 
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(death),
+    censor_conditions = list(lstalv),
+    source_datasets = list(adsl = adsl),
+    set_values_to = vars(
+      PARAMCD = "OS",
+      PARAM = "Overall Survival"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_tte(
-      dataset_adsl = adsl,
-      start_date = TRTSDT,
-      start_date_imputation_flag = TRTSDTF,
-      event_conditions = list(death),
-      censor_conditions = list(lstalv),
-      source_datasets = list(adsl = adsl),
-      set_values_to = vars(
-        PARAMCD = "OS",
-        PARAM = "Overall Survival"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
@@ -146,21 +147,21 @@ test_that("new observations with analysis datetime are derived correctly", {
       by = "USUBJID"
     )
 
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDTM,
+    event_conditions = list(pd, death),
+    censor_conditions = list(lastvisit, start),
+    source_datasets = list(adsl = adsl, adrs = adrs),
+    create_datetime = TRUE,
+    set_values_to = vars(
+      PARAMCD = "PFS",
+      PARAM = "Progression Free Survival"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_tte(
-      dataset_adsl = adsl,
-      start_date = TRTSDTM,
-      start_date_imputation_flag = TRTSDTF,
-      start_time_imputation_flag = TRTSTMF,
-      event_conditions = list(pd, death),
-      censor_conditions = list(lastvisit, start),
-      source_datasets = list(adsl = adsl, adrs = adrs),
-      create_datetime = TRUE,
-      set_values_to = vars(
-        PARAMCD = "PFS",
-        PARAM = "Progression Free Survival"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
