@@ -15,6 +15,8 @@ are not recorded in the data. (#589)
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
+- GitHub repo moved to pharmaverse org and associated broken site links fixed
+
 
 # admiral 0.5.0
 
