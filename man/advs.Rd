@@ -4,7 +4,7 @@
 \name{advs}
 \alias{advs}
 \title{Vital Signs Analysis Dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 57763 rows and 103 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 57763 rows and 102 columns.}
 \source{
 Derived from the \link{adsl} and \link{vs} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_advs.R})
 }

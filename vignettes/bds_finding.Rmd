@@ -472,13 +472,15 @@ This function requires the reference range boundaries to exist on the data frame
 ```{r include=FALSE}
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "SYSBP", 90, 130, 70, 140,
-  "DIABP", 60, 80, 40, 90,
-  "PULSE", 60, 100, 40, 110,
-  "TEMP", 36.5, 37.5, 35, 38
+  "SYSBP",    90,    130,      70,   140,
+  "DIABP",    60,     80,      40,    90,
+  "PULSE",    60,    100,      40,   110,
+  "TEMP",     36.5,   37.5,    35,    38
 )
 
-advs <- left_join(advs, range_lookup, by = "PARAMCD")
+advs <- derive_vars_merged(advs,
+                           dataset_add = range_lookup,
+                           by_vars = vars(PARAMCD))
 ```
 
 The function is called as:
@@ -742,7 +744,7 @@ List of ADSL variables already merged held in vector `adsl_vars`
 ```{r eval=TRUE}
 advs <- advs %>%
   derive_vars_merged(
-    dataset_add = select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 ```

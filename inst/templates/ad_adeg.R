@@ -314,13 +314,13 @@ adeg <- adeg %>%
   derive_vars_merged(dataset_add = chgcat_lookup, by_vars = vars(CHGCAT1N)) %>%
 
   # Derive PARAM and PARAMN
-  derive_vars_merged(dataset_add = select(param_lookup,-EGTESTCD),
+  derive_vars_merged(dataset_add = select(param_lookup, -EGTESTCD),
                      by_vars = vars(PARAMCD))
 
 # Add all ADSL variables
 adeg <- adeg %>%
   derive_vars_merged(
-    dataset_add = select(adsl,!!!admiral:::negate_vars(adsl_vars)),
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 

@@ -127,7 +127,7 @@ adae <- adae %>%
 # Join all ADSL with AE
 adae <- adae %>%
   derive_vars_merged(
-    dataset_add = select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 

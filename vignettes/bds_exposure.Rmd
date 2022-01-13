@@ -88,11 +88,12 @@ At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only 
 
 adsl_vars<-vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM )
 
-adex <- left_join(
-  ex,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
-)
+adex <- derive_vars_merged(
+    ex,
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -483,7 +484,9 @@ param_lookup <- tribble(
 
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- left_join(adex, param_lookup, by = "PARAMCD")
+adex <- derive_vars_merged(adex,
+                           dataset_add = param_lookup,
+                           by_vars = vars(PARAMCD))
 
 count(adex, PARAMCD, PARAM, PARAMN)
 ```
@@ -545,10 +548,10 @@ If needed, the other `ADSL` variables can now be added:
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
-  left_join(select(adsl, !!!negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
-
 ```
 # Example Scripts {#example}
 
