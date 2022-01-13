@@ -433,7 +433,7 @@ advs <- derive_var_ontrtfl(
 )
 ```
 
-Lastly, the function does allow you to filter out pre-treatment observations
+In addition, the function does allow you to filter out pre-treatment observations
 that occurred on the start date.  For example, if observations with `VSTPT == PRE`
 should not be considered on-treatment when the observation date falls between 
 the treatment start and end date, the user may specify this using the 
@@ -452,6 +452,30 @@ advs <- derive_var_ontrtfl(
   filter_pre_timepoint = ATPT == "AFTER LYING DOWN FOR 5 MINUTES"
 )
 ```
+
+Lastly, the function does allow you to create any on-treatment 
+flag based on the analysis needs.  For example, if variable 
+`ONTR01FL` is needed, showing the on-treatment flag during Period 01, 
+you need to set `new var = "ONTR01FL"`. In addition, for Period 01 
+Start Date and Period 01 End Date, you need `ref_start_date = AP01SDT` 
+and `ref_end_date = AP01EDT`.
+
+```{r include=FALSE}
+advs <- select(advs, -ONTRTFL)
+```
+
+```{r eval=TRUE}
+advs <- derive_var_ontrtfl(
+ advs,
+ new_var = "ONTR01FL",
+ start_date = ASTDT,
+ end_date = AENDT,
+ ref_start_date = AP01SDT,
+ ref_end_date = AP01EDT,
+ span_period = "Y"
+)
+```
+
 
 ## Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
