@@ -157,6 +157,7 @@ derive_var_disposition_dt <- function(dataset,
                                   dtc,
                                   filter_ds,
                                   date_imputation = NULL,
+                                  preserve = FALSE,
                                   subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
@@ -177,6 +178,7 @@ derive_var_disposition_dt <- function(dataset,
       new_vars_prefix = prefix,
       dtc = datedtc___,
       date_imputation = date_imputation,
+      preserve = preserve,
       flag_imputation = FALSE
     ) %>%
     select(!!!subject_keys, !!enquo(new_var) := !!sym(newvar))
