@@ -1,6 +1,7 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
+[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
 [![Codecov test coverage](https://codecov.io/gh/pharmaverse/admiral/branch/main/graph/badge.svg)](https://codecov.io/gh/pharmaverse/admiral?branch=main)
 <!-- badges: end -->
 
