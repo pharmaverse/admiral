@@ -1,5 +1,9 @@
 # admiral development version
 
+## New Features
+
+### General
+
 - `derive_disposition_dt()`, `derive_disposition_status()`, `derive_extreme_flag`, `derive_worst_flag`, `derive_last_dose`, `derive_obs_number`, `derive_disposition_reason` have been deprecated and renamed in favor of `derive_var_disposition_dt()`, `derive_var_disposition_status()`, `derive_var_extreme_flag`, `derive_var_worst_flag`, `derive_var_last_dose`, `derive_var_obs_number`, and `derive_vars_disposition_reason` respectively (#738)
 
 - `derive_vars_dtm()` now has `preserve` argument so users can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07`.  A user can also not use `preserve` and do full date imputation, e.g. 
@@ -15,7 +19,13 @@
 `derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
 
+## Documentation
+
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+
+## Breaking Changes
+
+- Behavior of `derive_vars_dtm()` and `derive_vars_dt()` has changed with regards to `date_imputation`. 
 
 
 # admiral 0.5.0
