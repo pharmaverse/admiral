@@ -218,7 +218,18 @@ impute_dtc <- function(dtc,
 
     if (date_imputation == "LAST") {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & n_chr < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
+        nchar(imputed_date) > 0 & n_chr < 9 ~
+          as.character(
+            ceiling_date(
+              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        !preserve ~
+          as.character(
+            ceiling_date(
+              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        # Preserve dates with partial days 2019---07 is imputed to 2019-12-07
+        # instead of 2019-12-31
+        n_chr ==  9 & preserve  ~
+          paste0(substr(dtc, 1, 4), "-", "12", "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
       )
     }
