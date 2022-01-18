@@ -170,6 +170,7 @@ derive_var_disposition_dt <- function(dataset,
                                   date_imputation = NULL,
                                   preserve = FALSE,
                                   subject_keys = vars(STUDYID, USUBJID)) {
+
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -178,6 +179,7 @@ derive_var_disposition_dt <- function(dataset,
   assert_data_frame(dataset_ds, quo_c(dtc))
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
+  assert_logical_scalar(preserve)
 
   # Process the disposition data
   prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
