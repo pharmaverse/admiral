@@ -150,7 +150,7 @@
 #' )
 #' derive_var_ontrtfl(
 #'  advs,
-#'  new_var = "ONTR01FL",
+#'  new_var = ONTR01FL,
 #'  start_date = ASTDT,
 #'  end_date = AENDT,
 #'  ref_start_date = AP01SDT,
@@ -158,7 +158,7 @@
 #'  span_period = "Y"
 #' )
 derive_var_ontrtfl <- function(dataset,
-                               new_var = "ONTRTFL",
+                               new_var = ONTRTFL,
                                start_date,
                                end_date = NULL,
                                ref_start_date,
@@ -171,6 +171,7 @@ derive_var_ontrtfl <- function(dataset,
     deprecate_warn("0.3.0", "derive_var_ontrtfl(date = )", "derive_var_ontrtfl(start_date = )")
     start_date <- enquo(date)
   }
+  new_var <- assert_symbol(enquo(new_var))
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date), optional = TRUE)
   ref_start_date <- assert_symbol(enquo(ref_start_date))
@@ -179,15 +180,15 @@ derive_var_ontrtfl <- function(dataset,
     dataset,
     required_vars = quo_c(start_date, end_date, ref_start_date, ref_end_date)
   )
+  warn_if_vars_exist(dataset, quo_text(new_var))
+
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
   assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
-  new_var_col <- new_var
-
   dataset <- mutate(
     dataset,
-    new_var_col = if_else(
+    new_var = if_else(
       is.na(!!start_date) & !is.na(!!ref_start_date) | !!ref_start_date == !!start_date,
       "Y",
       NA_character_,
@@ -198,7 +199,8 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(filter_pre_timepoint)) {
     dataset <- mutate(
       dataset,
-      new_var_col = if_else(!!filter_pre_timepoint, NA_character_, new_var_col, missing = new_var_col)
+      new_var = if_else(!!filter_pre_timepoint, NA_character_, new_var,
+                            missing = new_var)
     )
   }
 
@@ -206,23 +208,23 @@ derive_var_ontrtfl <- function(dataset,
     # Scenario 1: No treatment end date is passed
     dataset <- mutate(
       dataset,
-      new_var_col = if_else(
+      new_var = if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date,
         "Y",
-        new_var_col,
-        missing = new_var_col
+        new_var,
+        missing = new_var
       )
     )
   } else {
     # Scenario 2: Treatment end date is passed, window added above
     dataset <- mutate(
       dataset,
-      new_var_col = if_else(
+      new_var = if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date &
           !is.na(!!ref_end_date) & !!start_date <= (!!ref_end_date + days(!!ref_end_window)),
         "Y",
-        new_var_col,
-        missing = new_var_col
+        new_var,
+        missing = new_var
       )
     )
   }
@@ -231,11 +233,11 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
-      new_var_col = if_else(
+      new_var = if_else(
         !!end_date < !!ref_start_date,
         NA_character_,
-        new_var_col,
-        missing = new_var_col
+        new_var,
+        missing = new_var
       )
     )
   }
@@ -244,17 +246,18 @@ derive_var_ontrtfl <- function(dataset,
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
-      new_var_col = if_else(
+      new_var = if_else(
           !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
           (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
-        new_var_col,
-        missing = new_var_col
+        new_var,
+        missing = new_var
       )
     )
   }
 
-  names(dataset)[names(dataset) == 'new_var_col'] <- new_var
+  names(dataset)[names(dataset) == 'new_var'] <- sub("~", "", deparse(substitute(new_var)))
 
   dataset
+
 }
