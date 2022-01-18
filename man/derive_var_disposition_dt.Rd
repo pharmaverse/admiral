@@ -11,6 +11,7 @@ derive_var_disposition_dt(
   dtc,
   filter_ds,
   date_imputation = NULL,
+  preserve = FALSE,
   subject_keys = vars(STUDYID, USUBJID)
 )
 }
