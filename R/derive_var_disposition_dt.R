@@ -124,6 +124,17 @@ derive_disposition_dt <- function(dataset,
 #'
 #'   Default is NULL
 #'
+#' @param preserve Preserve partial dates when doing date imputation for middle
+#' day and month
+#'
+#' A user wishing to preserve partial dates when doing middle day and month date
+#' imputation can invoke this argument.  For example `"2019---07"` would return
+#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#'
+#'  A logical value
+#'
+#'  Default: `FALSE`
+#'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
 #' A list of quosures where the expressions are symbols as returned by
