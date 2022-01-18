@@ -6,7 +6,7 @@
 \usage{
 derive_var_ontrtfl(
   dataset,
-  new_var = "ONTRTFL",
+  new_var = ONTRTFL,
   start_date,
   end_date = NULL,
   ref_start_date,
@@ -165,7 +165,7 @@ advs <- tibble::tribble(
 )
 derive_var_ontrtfl(
  advs,
- new_var = "ONTR01FL",
+ new_var = ONTR01FL,
  start_date = ASTDT,
  end_date = AENDT,
  ref_start_date = AP01SDT,
