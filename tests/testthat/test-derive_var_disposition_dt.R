@@ -90,7 +90,7 @@ adsl <- tibble::tribble(
   "TEST01", "PAT02"
 )
 
-ds <- tibble::tribble(
+ds_partial <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
@@ -110,11 +110,35 @@ test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates
   )
   actual_output <- adsl %>%
     derive_var_disposition_dt(
-      dataset_ds = ds,
+      dataset_ds = ds_partial,
       new_var = DTHDT,
       dtc = DSSTDTC,
       filter = DSCAT == "OTHER EVENT" & DSDECOD == "DEATH",
       date_imputation = "MID",
+      preserve = TRUE
+    )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})
+
+
+test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with last day/last year and use preserve argument", { # nolint
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHDT,
+    "TEST01", "PAT01", as.Date("2022-12-01"),
+    "TEST01", "PAT02", as.Date("2022-12-31")
+  )
+  actual_output <- adsl %>%
+    derive_var_disposition_dt(
+      dataset_ds = ds_partial,
+      new_var = DTHDT,
+      dtc = DSSTDTC,
+      filter = DSCAT == "OTHER EVENT" & DSDECOD == "DEATH",
+      date_imputation = "LAST",
       preserve = TRUE
     )
 
