@@ -9,6 +9,7 @@ lstalvdt_source(
   filter = NULL,
   date,
   date_imputation = NULL,
+  preserve = FALSE,
   traceability_vars = NULL,
   dataset = deprecated(),
   date_var = deprecated()

@@ -17,6 +17,17 @@
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
+#' @param preserve Preserve partial dates when doing date imputation for middle
+#' day and month
+#'
+#' A user wishing to preserve partial dates when doing middle day and month date
+#' imputation can invoke this argument.  For example `"2019---07"` would return
+#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#'
+#'  A logical value
+#'
+#'  Default: `FALSE`
+#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
