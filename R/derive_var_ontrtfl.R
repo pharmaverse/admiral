@@ -256,7 +256,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-  names(dataset)[names(dataset) == 'new_var'] <- sub("~", "", deparse(substitute(new_var)))
+  names(dataset)[names(dataset) == "new_var"] <- sub("~", "", deparse(substitute(new_var)))
 
   dataset
 
