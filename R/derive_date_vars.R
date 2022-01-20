@@ -216,24 +216,35 @@ impute_dtc <- function(dtc,
     )
 
 
-    if (date_imputation == "LAST") {
+    if (date_imputation == "LAST" & !preserve) {
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & n_chr < 9 ~
+        nchar(imputed_date) > 0 & n_chr < 10 ~
           as.character(
             ceiling_date(
               as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
-        !preserve ~
+        TRUE ~ imputed_date
+      )
+    } else if(date_imputation == "LAST" & preserve) {
+      imputed_date <- case_when(
+        nchar(imputed_date) > 0 & n_chr < 10 ~
           as.character(
             ceiling_date(
               as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
-        # Preserve dates with partial days 2019---07 is imputed to 2019-12-07
-        # instead of 2019-12-31
-        n_chr ==  9 & preserve  ~
-          paste0(substr(dtc, 1, 4), "-", "12", "-", substr(dtc, 8, 9)),
+      n_chr == 9 ~
+          paste0(substr(dtc, 1, 4), "-", 12, "-", substr(dtc, 8, 9)),
+        TRUE ~ imputed_date
+      )
+    } else if (date_imputation == "FIRST" & !preserve) {
+      imputed_date <- case_when(
+        TRUE ~ imputed_date
+      )
+    } else if(date_imputation == "FIRST" & preserve) {
+      imputed_date <- case_when(n_chr == 9 ~
+          paste0(substr(dtc, 1, 4), "-", 01, "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
       )
     }
-  } else {
+  } else  {
     # no imputation
     imputed_date <- if_else(n_chr >= 10 & valid_dtc, substr(dtc, 1, 10), NA_character_)
   }

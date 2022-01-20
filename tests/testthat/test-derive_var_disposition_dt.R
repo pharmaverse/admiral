@@ -148,3 +148,49 @@ test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates
     keys = c("STUDYID", "USUBJID")
   )
 })
+
+test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with first day/year and use preserve argument", { # nolint
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHDT,
+    "TEST01", "PAT01", as.Date("2022-01-01"),
+    "TEST01", "PAT02", as.Date("2022-01-01")
+  )
+  actual_output <- adsl %>%
+    derive_var_disposition_dt(
+      dataset_ds = ds_partial,
+      new_var = DTHDT,
+      dtc = DSSTDTC,
+      filter = DSCAT == "OTHER EVENT" & DSDECOD == "DEATH",
+      date_imputation = "FIRST",
+      preserve = FALSE
+    )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})
+
+test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates with first day/year and use preserve argument", { # nolint
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHDT,
+    "TEST01", "PAT01", as.Date("2022-01-01"),
+    "TEST01", "PAT02", as.Date("2022-01-01")
+  )
+  actual_output <- adsl %>%
+    derive_var_disposition_dt(
+      dataset_ds = ds_partial,
+      new_var = DTHDT,
+      dtc = DSSTDTC,
+      filter = DSCAT == "OTHER EVENT" & DSDECOD == "DEATH",
+      date_imputation = "FIRST",
+      preserve = TRUE
+    )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})

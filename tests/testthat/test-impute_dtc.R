@@ -75,7 +75,17 @@ test_that("impute to first day/month if date is partial,Missing time part impute
   )
 })
 
-test_that("impute to last day/month if date is partial,Missing time part imputed with 23:59:59 portion", { # nolint
+input <- c(
+  "2019-07-18T15:25:40.243",
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("impute to last day/month if date is partial,Missing time part imputed with 23:59:59 portion and preserve equals FALSE", { # nolint
   expected_output <- c(
     "2019-07-18T15:25:40",
     "2019-07-18T15:25:40",
@@ -89,12 +99,43 @@ test_that("impute to last day/month if date is partial,Missing time part imputed
     impute_dtc(
       dtc = input,
       date_imputation = "LAST",
-      time_imputation = "LAST"
+      time_imputation = "LAST",
+      preserve = FALSE
     ),
     expected_output
   )
 })
 
+input <- c(
+  "2019-07-18T15:25:40.243",
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("impute to last day/month if date is partial,Missing time part imputed with 23:59:59 portion and preserve equals TRUE", { # nolint
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:59",
+    "2019-07-18T23:59:59",
+    "2019-02-28T23:59:59",
+    "2019-12-31T23:59:59",
+    "2019-12-07T23:59:59"
+  )
+  expect_equal(
+    imputes <- impute_dtc(
+      dtc = input,
+      date_imputation = "LAST",
+      time_imputation = "LAST",
+      preserve = TRUE
+    ),
+    expected_output
+  )
+})
 
 
 test_that("impute to MID day/month if date is partial,Missing time part imputed with 00:00:00 portion", { # nolint
@@ -116,15 +157,28 @@ test_that("impute to MID day/month if date is partial,Missing time part imputed 
   )
 })
 
-input <- c(
-  "2019-07-18T15:25:40.243",
-  "2019-07-18T15:25:40",
-  "2019-07-18T15:25",
-  "2019-07-18",
-  "2019-02",
-  "2019",
-  "2019---07"
-)
+test_that("impute to MID day/month if date is partial and preserve argument works as expected", { # nolint
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:00",
+    "2019-07-18T00:00:00",
+    "2019-02-15T00:00:00",
+    "2019-06-30T00:00:00",
+    "2019-06-07T00:00:00"
+  )
+
+  actual_output <- impute_dtc(
+    dtc = input,
+    date_imputation = "MID",
+    preserve = TRUE
+  )
+
+  expect_equal(
+    actual_output,
+    expected_output
+  )
+})
 
 test_that("impute to MID day/month if date is partial and preserve argument works as expected", { # nolint
   expected_output <- c(
