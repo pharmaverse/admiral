@@ -199,7 +199,8 @@ derive_var_lstalvdt <- function(dataset,
         !!!sources[[i]]$traceability_vars,
         LSTALVDT = convert_dtc_to_dt(
           !!date,
-          date_imputation = sources[[i]]$date_imputation
+          date_imputation = sources[[i]]$date_imputation,
+          preserve = sources[[i]]$preserve
         )
       )
     }
@@ -251,6 +252,7 @@ lstalvdt_source <- function(dataset_name,
                             filter = NULL,
                             date,
                             date_imputation = NULL,
+                            preserve = FALSE,
                             traceability_vars = NULL,
                             dataset = deprecated(),
                             date_var = deprecated()) {
@@ -271,6 +273,7 @@ lstalvdt_source <- function(dataset_name,
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,
+    preserve = preserve,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("lstalvdt_source", "list")

@@ -224,7 +224,7 @@ impute_dtc <- function(dtc,
               as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
         TRUE ~ imputed_date
       )
-    } else if(date_imputation == "LAST" & preserve) {
+    } else if (date_imputation == "LAST" & preserve) {
       imputed_date <- case_when(
         nchar(imputed_date) > 0 & n_chr < 10 ~
           as.character(
@@ -238,7 +238,7 @@ impute_dtc <- function(dtc,
       imputed_date <- case_when(
         TRUE ~ imputed_date
       )
-    } else if(date_imputation == "FIRST" & preserve) {
+    } else if (date_imputation == "FIRST" & preserve) {
       imputed_date <- case_when(n_chr == 9 ~
           paste0(substr(dtc, 1, 4), "-", 01, "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
