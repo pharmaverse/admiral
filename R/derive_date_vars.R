@@ -215,26 +215,26 @@ impute_dtc <- function(dtc,
       n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")
     )
 
+    imputed_date <- case_when(
+      nchar(imputed_date) > 0 & n_chr < 10 & date_imputation == "LAST" & !preserve ~
+        as.character(
+          ceiling_date(
+            as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+      n_chr == 9 & date_imputation == "LAST" & preserve ~
+        paste0(substr(dtc, 1, 4), "-", 12, "-", substr(dtc, 8, 9)),
+      n_chr == 7 & date_imputation == "LAST" & preserve ~
+        as.character(
+          ceiling_date(
+            as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+      n_chr == 4 & date_imputation == "LAST" & preserve ~
+        as.character(
+          ceiling_date(
+            as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+      TRUE ~ imputed_date)
 
-    if (date_imputation == "LAST" & !preserve) {
-      imputed_date <- case_when(
-        nchar(imputed_date) > 0 & n_chr < 10 ~
-          as.character(
-            ceiling_date(
-              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
-        TRUE ~ imputed_date
-      )
-    } else if (date_imputation == "LAST" & preserve) {
-      imputed_date <- case_when(
-        nchar(imputed_date) > 0 & n_chr < 10 ~
-          as.character(
-            ceiling_date(
-              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
-      n_chr == 9 ~
-          paste0(substr(dtc, 1, 4), "-", 12, "-", substr(dtc, 8, 9)),
-        TRUE ~ imputed_date
-      )
-    } else if (date_imputation == "FIRST" & !preserve) {
+
+
+    if (date_imputation == "FIRST" & !preserve) {
       imputed_date <- case_when(
         TRUE ~ imputed_date
       )

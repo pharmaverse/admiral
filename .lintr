@@ -1,2 +1,2 @@
 linters: with_defaults(line_length_linter(100), object_usage_linter=NULL)
-exclusions: list("R/data.R", "derive_date_vars.R")
+exclusions: list("R/data.R")
