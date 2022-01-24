@@ -8,17 +8,13 @@ sdg_select(name = NULL, id = NULL)
 }
 \arguments{
 \item{name}{Name of the query used to select the definition of the query
-from the central database.
-
-The query with \code{GROUP_NAME == "<specified value>"} is selected.}
+from the company database.}
 
 \item{id}{Identifier of the query used to select the definition of the query
-from the central database.
-
-The query with \verb{GROUP_ID == <specified value>} is selected.}
+from the company database.}
 }
 \value{
-An object of class "sdg_select".
+An object of class \code{sdg_select}.
 }
 \description{
 Create an \code{sdg_select} object

@@ -18,7 +18,10 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping. 
+To support the safety analysis, it is quite common to define specific grouping
+of events. One of the most common ways is to group events or medications by a
+specific medical concept such as a Standard MedDRA Queries (SMQs) or WHO-Drug
+Standardized Drug Groupings (SDGs).
 
 
 To help with the derivation of these variables, the admiral function `derive_vars_query()` can be used.
@@ -26,11 +29,11 @@ This function takes as input the dataset (`dataset`) where the grouping must occ
 a dataset containing the required information to perform the derivation of the grouping variables 
 (`dataset_queries`).
 
-Because the definition, collection and storage of the medical concepts is
-company specific, the dataset passed to the `dataset_queries` argument of the
-`derive_vars_query()` function should be created outside of admiral in a
-specific format so that it can be passed in the function. The admiral function
-`create_query_data()` can be used to create queries datasets.
+The dataset passed to the `dataset_queries` argument of the
+`derive_vars_query()` function can be created by the `create_query_data()`
+function. For SMQs and SDGs company-specific functions for accessing the SMQ and
+SDG database need to be passed to the `create_query_data()` function (see the
+description of the `get_smq_fun` and `get_sdq_fun` parameter for details).
 
 This vignette describes the expected structure and content of the dataset passed to the
 `dataset_queries` argument in the `derive_vars_query()` function. 

@@ -1,8 +1,9 @@
-#' Creates queries dataset from SMQ and SDG database or custom definitions as
-#' input dataset for `derive_vars_query()`
+#' Creates a queries dataset as input dataset to the `dataset_queries` argument in
+#' `derive_vars_query()`
 #'
-#' Creates queries dataset from definitions in SMQ and SDG database or custom
-#' definitions as input dataset for `derive_vars_query()`.
+#' Creates a queries dataset as input dataset to the `dataset_queries` argument
+#' in the `derive_vars_query()` function as defined in the [Queries Dataset
+#' Documentation](../articles/queries_dataset.html).
 #'
 #' @param queries List of queries
 #'
@@ -24,18 +25,26 @@
 #'
 #'   *Permitted Values*: A character string
 #'
-#' @param get_smq_fun Function which returns the terms of a SMQ
+#' @param get_smq_fun Function which returns the terms of an SMQ
 #'
-#'   For each query specified for the `queries` parameter which refers to a SMQ
-#'   the specified function is called to retrieve the terms defining the query.
+#'   For each query specified for the `queries` parameter which refers to an SMQ
+#'   (i.e., those where the `definition` field is set to a `smq_select()` object
+#'   or a list which contains at least one `smq_select()` object) the specified
+#'   function is called to retrieve the terms defining the query. This function
+#'   is not provided by admiral as it is company specific, i.e., it has to be
+#'   implemented at company level.
 #'
 #'   The function must return a dataset with all the terms defining the SMQ. The
 #'   output dataset must contain the following variables.
 #'
-#'   - `TERM_LEVEL`
-#'   - `TERM_NAME` if the variable `TERM_LEVEL` is referring to is character
-#'   - `TERM_ID` if the variable `TERM_LEVEL` is referring to is numeric
-#'   - `QUERY_NAME`
+#'   - `TERM_LEVEL`: the variable to be used for defining a term of the SMQ, e.g.,
+#'   `AEDECOD`
+#'   - `TERM_NAME`: the name of the term if the variable `TERM_LEVEL` is
+#'   referring to is character
+#'   - `TERM_ID` the numeric id of the term if the variable `TERM_LEVEL` is
+#'   referring to is numeric
+#'   - `QUERY_NAME`: the name of the SMQ. The values must be the same for all
+#'   observations.
 #'
 #'   The function must provide the following parameters
 #'
@@ -44,7 +53,7 @@
 #'   `meddra_version` in the `create_query_data()` call is passed to this
 #'   parameter.
 #'   - `keep_id`: If set to `TRUE`, the output dataset must contain the
-#'   `QUERY_ID` variable
+#'   `QUERY_ID` variable. The variable must be set to the numeric id of the SMQ.
 #'   - `temp_env`: A temporary environment is passed to this parameter. It can
 #'   be used to store data which is used for all SMQs in the
 #'   `create_query_data()` call. For example if the SMQs need to be read from a
@@ -52,18 +61,24 @@
 #'   SMQ is handled. For the other SMQs the terms can be retrieved from the
 #'   environment instead of accessing the database again.
 #'
-#' @param get_sdg_fun Function which returns the terms of a SDG
+#' @param get_sdg_fun Function which returns the terms of an SDG
 #'
-#'   For each query specified for the `queries` parameter which refers to a SDG
+#'   For each query specified for the `queries` parameter which refers to an SDG
 #'   the specified function is called to retrieve the terms defining the query.
+#'   This function is not provided by admiral as it is company specific, i.e.,
+#'   it has to be implemented at company level.
 #'
 #'   The function must return a dataset with all the terms defining the SDG. The
 #'   output dataset must contain the following variables.
 #'
-#'   - `TERM_LEVEL`
-#'   - `TERM_NAME` if the variable `TERM_LEVEL` is referring to is character
-#'   - `TERM_ID` if the variable `TERM_LEVEL` is referring to is numeric
-#'   - `QUERY_NAME`
+#'   - `TERM_LEVEL`: the variable to be used for defining a term of the SDG, e.g.,
+#'   `CMDECOD`
+#'   - `TERM_NAME`: the name of the term if the variable `TERM_LEVEL` is
+#'   referring to is character
+#'   - `TERM_ID` the numeric id of the term if the variable `TERM_LEVEL` is
+#'   referring to is numeric
+#'   - `QUERY_NAME`: the name of the SDG. The values must be the same for all
+#'   observations.
 #'
 #'   The function must provide the following parameters
 #'
@@ -72,7 +87,7 @@
 #'   `whodd_version` in the `create_query_data()` call is passed to this
 #'   parameter.
 #'   - `keep_id`: If set to `TRUE`, the output dataset must contain the
-#'   `QUERY_ID` variable
+#'   `QUERY_ID` variable. The variable must be set to the numeric id of the SDG.
 #'   - `temp_env`: A temporary environment is passed to this parameter. It can
 #'   be used to store data which is used for all SDGs in the
 #'   `create_query_data()` call. For example if the SDGs need to be read from a
@@ -80,18 +95,24 @@
 #'   SDG is handled. For the other SDGs the terms can be retrieved from the
 #'   environment instead of accessing the database again.
 #'
-#' @details For each query the terms belonging to the query are determined with
-#'   respect to the `definition` element.
-#'   * If it is a `smq_select()` object, the terms are read from the SMQ
+#' @details
+#'
+#'   For each `query()` object listed in the `queries` argument, the terms belonging
+#'   to the query (`TERM_LEVEL`, `TERM_NAME`, `TERM_ID`) are determined with respect
+#'   to the `definition` field of the query: if the definition field of the
+#'   `query()` object is
+#'
+#'   * an `smq_select()` object, the terms are read from the SMQ
 #'   database by calling the function specified for the `get_smq_fun` parameter.
-#'   * If it is a `sdg_select()` object, the terms are read from the SDG
+#'   * an `sdg_select()` object, the terms are read from the SDG
 #'   database by calling the function specified for the `get_sdg_fun` parameter.
-#'   * If it is a data frame, the terms stored in the data frame are used.
-#'   * If it is a list of data frames and `smq_select()` objects, all terms from
-#'   the dataframes and all terms read from the SMQ database referrenced by the
+#'   * a data frame, the terms stored in the data frame are used.
+#'   * a list of data frames and `smq_select()` objects, all terms from
+#'   the data frames and all terms read from the SMQ database referenced by the
 #'   `smq_select()` objects are collated.
 #'
-#'   The following variables are created:
+#' The following variables (as described in [Queries Dataset
+#' Documentation](../articles/queries_dataset.html)) are created:
 #'
 #'   * `VAR_PREFIX`: Prefix of the variables to be created by
 #'   `derive_vars_query()` as specified by the `prefix` element.
@@ -106,7 +127,7 @@
 #'   * `QUERY_SCOPE_NUM`: numeric scope of the query. It is set to `1` if the
 #'   scope is broad. Otherwise it is set to '2'. If the `add_scope_num` element
 #'   equals `FALSE`, the variable is set to `NA`. If the `add_scope_num` element
-#'   equals `FALSE` for all SMQs or none of the queries is a SMQ , the variable
+#'   equals `FALSE` for all SMQs or none of the queries is an SMQ , the variable
 #'   is not created.
 #'   * `TERM_LEVEL`: Name of the variable used to identify the terms.
 #'   * `TERM_NAME`: Value of the term variable if it is a character variable.
@@ -114,18 +135,22 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return A dataset to be used as input for `derive_vars_query()`
+#' @return A dataset to be used as input dataset to the `dataset_queries`
+#'   argument in `derive_vars_query()`
 #'
 #' @keywords adae adcm user_utility
 #'
-#' @seealso [derive_vars_query()], [query()]
+#' @seealso [derive_vars_query()], [query()], [smq_select()], [sdg_select()], [Queries Dataset
+#' Documentation](../articles/queries_dataset.html)
 #'
 #' @export
 #'
 #' @examples
 #' library(tibble)
-#' library(magrittr)
-#' library(dplyr)
+#' library(magrittr, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' library(admiral)
 #'
 #' # creating a query dataset for a customized query
 #' cqterms <- tribble(
@@ -147,14 +172,15 @@
 #'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
 #'                           scope = "NARROW"))
 #'
-#' pneusmq <- query(prefix = "SMQ04",
-#'                  definition = smq_select(id = 8050L,
+#' bilismq <- query(prefix = "SMQ04",
+#'                  definition = smq_select(id = 20000121L,
 #'                                          scope = "BROAD"))
 #'
-#' \dontrun{
-#' create_query_data(queries = list(pregsmq, pneusmq),
+#' # The get_smq_terms function from admiral.test is used for this example.
+#' # In a real application a company-specific function must be used.
+#' create_query_data(queries = list(pregsmq, bilismq),
+#'                   get_smq_fun = admiral.test:::get_smq_terms,
 #'                   meddra_version = "20.1")
-#' }
 #'
 #' # create a query dataset for SDGs
 #' sdg <- query(
@@ -164,17 +190,31 @@
 #'     name = "5-aminosalicylates for ulcerative colitis"
 #'   )
 #' )
-#' \dontrun{
+#'
+#' # The get_sdg_terms function from admiral.test is used for this example.
+#' # In a real application a company-specific function must be used.
 #' create_query_data(queries = list(sdg),
-#'                   whodd_version = "2019_09")
-#' }
+#'                   get_sdg_fun = admiral.test:::get_sdg_terms,
+#'                   whodd_version = "2019-09")
 #'
 #' # creating a query dataset for a customized query including SMQs
-#' \dontrun{
-#' create_query_data(queries = list(pregsmq, cqterms),
-#'                   meddra_version = "20.1")
-#' }
-
+#' # The get_smq_terms function from admiral.test is used for this example.
+#' # In a real application a company-specific function must be used.
+#' create_query_data(
+#'   queries = list(
+#'     query(
+#'       prefix = "CQ03",
+#'       name = "Special issues of interest",
+#'       definition = list(
+#'         smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+#'                    scope = "NARROW"),
+#'         cqterms
+#'       )
+#'     )
+#'   ),
+#'   get_smq_fun = admiral.test:::get_smq_terms,
+#'   meddra_version = "20.1"
+#' )
 create_query_data <- function(queries,
                               meddra_version = NULL,
                               whodd_version = NULL,
@@ -199,34 +239,16 @@ create_query_data <- function(queries,
     # get term names and term variable
     if (inherits(queries[[i]]$definition, "smq_select")) {
       # query is a SMQ
-      assert_db_requirements(version = meddra_version,
-                             fun = get_smq_fun,
-                             queries = queries,
-                             i = i,
-                             type = "SMQ")
-
-      query_data[[i]] <- call_user_fun(
-        get_smq_fun(
-          smq_select = queries[[i]]$definition,
-          version = meddra_version,
-          keep_id = !is.null(queries[[i]]$id),
-          temp_env = temp_env
-        )
-      )
-      assert_terms(
-        query_data[[i]],
+      query_data[[i]] <- get_terms_from_db(
+        version = meddra_version,
+        fun = get_smq_fun,
+        queries = queries,
+        definition = queries[[i]]$definition,
         expect_query_name = TRUE,
         expect_query_id = !is.null(queries[[i]]$id),
-        source_text = paste0(
-          "object returned by calling get_smq_fun(smq_select = ",
-          format(queries[[i]]$definition),
-          ", version = ",
-          dquote(meddra_version),
-          ", keep_id = ",
-          !is.null(queries[[i]]$id),
-          ")"
-        )
-      )
+        i = i,
+        temp_env = temp_env,
+        type = "SMQ")
       query_data[[i]] <- mutate(query_data[[i]],
                                 QUERY_SCOPE = queries[[i]]$definition$scope)
       if (queries[[i]]$add_scope_num) {
@@ -237,33 +259,16 @@ create_query_data <- function(queries,
     }
     else if (inherits(queries[[i]]$definition, "sdg_select")) {
       # query is a SDG
-      assert_db_requirements(version = whodd_version,
-                             fun = get_sdg_fun,
-                             queries = queries,
-                             i = i,
-                             type = "SDG")
-      query_data[[i]] <- call_user_fun(
-        get_sdg_fun(
-          sdg_select = queries[[i]]$definition,
-          version = whodd_version,
-          keep_id = !is.null(queries[[i]]$id),
-          temp_env = temp_env
-        )
-      )
-      assert_terms(
-        query_data[[i]],
+      query_data[[i]] <- get_terms_from_db(
+        version = whodd_version,
+        fun = get_sdg_fun,
+        queries = queries,
+        definition = queries[[i]]$definition,
         expect_query_name = TRUE,
         expect_query_id = !is.null(queries[[i]]$id),
-        source_text = paste0(
-          "object returned by calling get_sdg_fun(sdg_select = ",
-          format(queries[[i]]$definition),
-          ", version = ",
-          dquote(whodd_version),
-          ", keep_id = ",
-          !is.null(queries[[i]]$id),
-          ")"
-        )
-      )
+        i = i,
+        temp_env = temp_env,
+        type = "SDG")
     }
     else if (is.data.frame(queries[[i]]$definition)) {
       # query is a customized query
@@ -278,30 +283,14 @@ create_query_data <- function(queries,
           terms[[j]] <- definition[[j]]
         }
         else {
-          assert_db_requirements(
+          terms[[j]] <- get_terms_from_db(
             version = meddra_version,
             fun = get_smq_fun,
             queries = queries,
+            definition = definition[[j]],
             i = i,
-            type = "SMQ"
-          )
-          terms[[j]] <-
-            call_user_fun(get_smq_fun(
-              smq_select = definition[[j]],
-              version = meddra_version,
-              temp_env = temp_env
-            ))
-          assert_terms(
-            terms[[j]],
-            source_text = paste0(
-              "object returned by calling get_smq_fun(smq_select = ",
-              format(definition[[j]]),
-              ", version = ",
-              dquote(meddra_version),
-              ")"
-            )
-          )
-
+            temp_env = temp_env,
+            type = "SMQ")
         }
       }
       query_data[[i]] <- bind_rows(terms)
@@ -325,6 +314,52 @@ create_query_data <- function(queries,
   bind_rows(query_data)
 }
 
+get_terms_from_db <- function(
+  version,
+  fun,
+  queries,
+  definition,
+  expect_query_name = FALSE,
+  expect_query_id = FALSE,
+  i,
+  temp_env,
+  type){
+  assert_db_requirements(version = version,
+                         version_arg_name = arg_name(substitute(version)),
+                         fun = fun,
+                         fun_arg_name = arg_name(substitute(fun)),
+                         queries = queries,
+                         i = i,
+                         type = type)
+  select <- rlang::parse_expr(paste0(str_to_lower(type), "_select = definition"))
+  fun_call <- quo(fun(
+    !!select,
+    version = version,
+    keep_id = expect_query_id,
+    temp_env = temp_env
+  ))
+  terms <- call_user_fun(fun_call)
+  assert_terms(
+    terms,
+    expect_query_name = expect_query_name,
+    expect_query_id = expect_query_id,
+    source_text = paste0(
+      "object returned by calling get_",
+      str_to_lower(type),
+      "_fun(",
+      str_to_lower(type),
+      "_select = ",
+      format(definition),
+      ", version = ",
+      dquote(version),
+      ", keep_id = ",
+      expect_query_id,
+      ")"
+    )
+  )
+  terms
+}
+
 #' Check required parameters for SMQ/SDG
 #'
 #' If SMQs or SDGs are requested, the version and a function to access the
@@ -333,6 +368,8 @@ create_query_data <- function(queries,
 #' @param version Version provided by user
 #'
 #' @param fun Function provided by user
+#'
+#' @param fun_arg_name Name of the argument providing the function
 #'
 #' @param queries Queries provide by user
 #'
@@ -345,11 +382,11 @@ create_query_data <- function(queries,
 #' @return An error is issued if `version` or `fun` is null.
 #'
 #' @author Stefan Bundfuss
-assert_db_requirements <- function(version, fun, queries, i, type) {
+assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name, queries, i, type) {
   if (is.null(fun)) {
     msg <-
       paste0(
-        arg_name(substitute(fun)),
+        fun_arg_name,
         " is not specified. This is expected for ",
         type,
         "s.\n",
@@ -364,7 +401,7 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
   if (is.null(version)) {
     msg <-
       paste0(
-        arg_name(substitute(version)),
+        version_arg_name,
         " is not specified. This is expected for ",
         type,
         "s.\n",
@@ -383,36 +420,32 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #' Create an `query` object
 #'
 #' A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-#' Standardised Drug Grouping (SDG), or a customized query (CQ). It can be used
+#' Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
 #' as input to `create_query_data()`.
 #'
-#' @param prefix Prefix of the new variables, e.g., `"SMQ03"`
+#' @param prefix The value is used to populate `VAR_PREFIX` in the output
+#'   dataset of `create_query_data()`, e.g., `"SMQ03"`
 #'
-#' @param name The variable `<prefix>NAM` is set to the specified value for
-#'   observations matching the query definition. If the `auto` keyword is
-#'   specified, the variable is set to the name of the query in the SMQ/SDG
-#'   database.
+#' @param name The values is used to populate `QUERY_NAME` in the output dataset
+#'   of `create_query_data()`. If the `auto` keyword is specified, the variable
+#'   is set to the name of the query in the SMQ/SDG database.
 #'
 #'   *Permitted Values*: A character scalar or the `auto` keyword. The `auto`
-#'   keyword is permitted only for queries which are defined by a `smq_select()`
-#'   or `sdg_select()` object.
+#'   keyword is permitted only for queries which are defined by an
+#'   `smq_select()` or `sdg_select()` object.
 #'
-#' @param id The variable `<prefix>CD` is set to the specified value for
-#'   observations matching the query definition if the parameter is specified.
-#'   Otherwise the variable is not created. If the `auto` keyword is specified,
-#'   the variable is set to the id of the query in the SMQ/SDG database.
+#' @param id The values is used to populate `QUERY_ID` in the output dataset of
+#'   `create_query_data()`. If the `auto` keyword is specified, the variable is
+#'   set to the id of the query in the SMQ/SDG database.
 #'
 #'   *Permitted Values*: A integer scalar or the `auto` keyword. The `auto`
-#'   keyword is permitted only for queries which are defined by a `smq_select()`
-#'   or `sdg_select()` object.
+#'   keyword is permitted only for queries which are defined by an
+#'   `smq_select()` or `sdg_select()` object.
 #'
-#' @param add_scope_num The variable `<prefix>SCN` is added to the output
-#'   dataset if the parameter is specified. Otherwise the variable is not
-#'   created.
+#' @param add_scope_num Determines if  `QUERY_SCOPE_NUM` in the output dataset
+#'   of `create_query_data()` is populated
 #'
-#'   The value is set to `1` if the scope is broad. Otherwise, it is set to `2`.
-#'
-#'   If the parameter is set to `TRUE`, the definition must be a `smq_select()`
+#'   If the parameter is set to `TRUE`, the definition must be an `smq_select()`
 #'   object.
 #'
 #'   *Default*: `FALSE`
@@ -423,19 +456,18 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'
 #'   There are four different ways to define the terms:
 #'
-#'   * A `smq_select` object is specified to select a query from the SMQ
-#'     database. The database contains Standard MedDRA Queries (SMQs) and AE
-#'     Grouping Terms (AEGTs).
+#'   * An `smq_select()` object is specified to select a query from the SMQ
+#'     database.
 #'
-#'   * A `sdg_select` object is specified to select a query from the SDG
+#'   * An `sdg_select()` object is specified to select a query from the SDG
 #'     database.
 #'
 #'   * A data frame with columns `TERM_LEVEL` and `TERM_NAME` or `TERM_ID` can
-#'     be specified to define the terms of the query. The `TERM_LEVEL` should be
-#'     set to the name of the variable which should be used to select the terms,
-#'     e.g., `"AEDECOD"` or `"AELLTCD"`. `TERM_LEVEL` does not need to be
-#'     constant within a query. For example a query can be based on `AEDECOD`
-#'     and `AELLT`.
+#'     be specified to define the terms of a customized query. The `TERM_LEVEL`
+#'     should be set to the name of the variable which should be used to select
+#'     the terms, e.g., `"AEDECOD"` or `"AELLTCD"`. `TERM_LEVEL` does not need
+#'     to be constant within a query. For example a query can be based on
+#'     `AEDECOD` and `AELLT`.
 #'
 #'     If `TERM_LEVEL` refers to a character variable, `TERM_NAME` should be set
 #'     to the value the variable. If it refers to a numeric variable, `TERM_ID`
@@ -443,34 +475,62 @@ assert_db_requirements <- function(version, fun, queries, i, type) {
 #'     or only numeric variables are used, `TERM_ID` or `TERM_NAME` respectively
 #'     can be omitted.
 #'
-#'   * A list of data frames and `smq_select` objects can be specified to define
-#'     a customized query based on custom terms and SMQs. The data frames must
-#'     have the same structure as described for the previous item.
+#'   * A list of data frames and `smq_select()` objects can be specified to
+#'   define a customized query based on custom terms and SMQs. The data frames
+#'   must have the same structure as described for the previous item.
 #'
-#'   *Permitted Values*: a `smq_select` object, a `sdg_select` object, a data
-#'   frame, or a list of data frames and `smq_select` objects.
-#'
-#' @details
-#'
-#' The definition includes
-#'
-#' * the variables which should be created for the query, e.g., `SMQ02NAM` and
-#' `SMQ02SC`,
-#'
-#' * the values which should be assigned to the variables, and
-#'
-#' * which terms belong to the query.
-#'
+#'   *Permitted Values*: an `smq_select()` object, an `sdg_select()` object, a
+#'   data frame, or a list of data frames and `smq_select()` objects.
 #'
 #' @author Stefan Bundfuss
 #'
-#' @seealso [create_query_data()]
+#' @seealso [create_query_data()], [smq_select()], [sdg_select()], [Queries Dataset
+#' Documentation](../articles/queries_dataset.html)
 #'
 #' @keywords source_specifications
 #'
 #' @export
 #'
-#' @return An object of class "query".
+#' @return An object of class `query`.
+#'
+#' @examples
+#'
+#' # create a query for an SMQ
+#' query(
+#'   prefix = "SMQ02",
+#'   id = auto,
+#'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+#'                           scope = "NARROW"))
+#'
+#' # create a query for an SDG
+#' query(
+#'   prefix = "SDG01",
+#'   id = auto,
+#'   definition = sdg_select(
+#'     name = "5-aminosalicylates for ulcerative colitis"
+#'   )
+#' )
+#'
+#' # creating a query for a customized query
+#' cqterms <- tribble(
+#'   ~TERM_NAME, ~TERM_ID,
+#'   "APPLICATION SITE ERYTHEMA", 10003041L,
+#'   "APPLICATION SITE PRURITUS", 10003053L) %>%
+#'   mutate(TERM_LEVEL = "AEDECOD")
+#'
+#' query(prefix = "CQ01",
+#'       name = "Application Site Issues",
+#'       definition = cqterms)
+#'
+#' # creating a customized query based on SMQs and additional terms
+#' query(prefix = "CQ03",
+#'       name = "Special issues of interest",
+#'       definition = list(
+#'         cqterms,
+#'         smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+#'                           scope = "NARROW"),
+#'         smq_select(id = 8050L,
+#'                    scope = "BROAD")))
 query <- function(prefix,
                   name = auto,
                   id = NULL,
@@ -701,15 +761,20 @@ assert_terms <- function(terms,
 
 #' Create an `smq_select` object
 #'
-#' @param name Name of the query used to select the definition of the query.
+#' @param name Name of the query used to select the definition of the query from
+#'   the company database.
 #'
-#' @param id Identifier of the query used to select the definition of the query.
+#' @param id Identifier of the query used to select the definition of the query
+#'   from the company database.
 #'
-#' @param scope Scope of the query used to select the definition of the query.
+#' @param scope Scope of the query used to select the definition of the query
+#'   from the company database.
 #'
 #'   *Permitted Values*: `"BROAD"`, `"NARROW"`
 #'
 #' @details Exactly one of `name` or `id` must be specified.
+#'
+#' @return An object of class `smq_select`.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -718,8 +783,6 @@ assert_terms <- function(terms,
 #' @keywords source_specifications
 #'
 #' @export
-#'
-#' @return An object of class "smq_select".
 smq_select <- function(name = NULL,
                        id = NULL,
                        scope = NULL) {
@@ -800,16 +863,14 @@ format.smq_select <- function(x, ...) {
 #' Create an `sdg_select` object
 #'
 #' @param name Name of the query used to select the definition of the query
-#'   from the central database.
-#'
-#'   The query with `GROUP_NAME == "<specified value>"` is selected.
+#'   from the company database.
 #'
 #' @param id Identifier of the query used to select the definition of the query
-#'   from the central database.
-#'
-#'   The query with `GROUP_ID == <specified value>` is selected.
+#'   from the company database.
 #'
 #' @details Exactly one `name` or `id` must be specified.
+#'
+#' @return An object of class `sdg_select`.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -818,8 +879,6 @@ format.smq_select <- function(x, ...) {
 #' @keywords source_specifications
 #'
 #' @export
-#'
-#' @return An object of class "sdg_select".
 sdg_select <- function(name=NULL,
                        id = NULL) {
   out <- list(

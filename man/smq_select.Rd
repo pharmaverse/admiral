@@ -7,16 +7,19 @@
 smq_select(name = NULL, id = NULL, scope = NULL)
 }
 \arguments{
-\item{name}{Name of the query used to select the definition of the query.}
+\item{name}{Name of the query used to select the definition of the query from
+the company database.}
 
-\item{id}{Identifier of the query used to select the definition of the query.}
+\item{id}{Identifier of the query used to select the definition of the query
+from the company database.}
 
-\item{scope}{Scope of the query used to select the definition of the query.
+\item{scope}{Scope of the query used to select the definition of the query
+from the company database.
 
 \emph{Permitted Values}: \code{"BROAD"}, \code{"NARROW"}}
 }
 \value{
-An object of class "smq_select".
+An object of class \code{smq_select}.
 }
 \description{
 Create an \code{smq_select} object

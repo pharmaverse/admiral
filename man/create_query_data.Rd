@@ -2,8 +2,8 @@
 % Please edit documentation in R/create_query_data.R
 \name{create_query_data}
 \alias{create_query_data}
-\title{Creates queries dataset from SMQ and SDG database or custom definitions as
-input dataset for \code{derive_vars_query()}}
+\title{Creates a queries dataset as input dataset to the \code{dataset_queries} argument in
+\code{derive_vars_query()}}
 \usage{
 create_query_data(
   queries,
@@ -34,18 +34,26 @@ needs to be specified.
 
 \emph{Permitted Values}: A character string}
 
-\item{get_smq_fun}{Function which returns the terms of a SMQ
+\item{get_smq_fun}{Function which returns the terms of an SMQ
 
-For each query specified for the \code{queries} parameter which refers to a SMQ
-the specified function is called to retrieve the terms defining the query.
+For each query specified for the \code{queries} parameter which refers to an SMQ
+(i.e., those where the \code{definition} field is set to a \code{smq_select()} object
+or a list which contains at least one \code{smq_select()} object) the specified
+function is called to retrieve the terms defining the query. This function
+is not provided by admiral as it is company specific, i.e., it has to be
+implemented at company level.
 
 The function must return a dataset with all the terms defining the SMQ. The
 output dataset must contain the following variables.
 \itemize{
-\item \code{TERM_LEVEL}
-\item \code{TERM_NAME} if the variable \code{TERM_LEVEL} is referring to is character
-\item \code{TERM_ID} if the variable \code{TERM_LEVEL} is referring to is numeric
-\item \code{QUERY_NAME}
+\item \code{TERM_LEVEL}: the variable to be used for defining a term of the SMQ, e.g.,
+\code{AEDECOD}
+\item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
+referring to is character
+\item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
+referring to is numeric
+\item \code{QUERY_NAME}: the name of the SMQ. The values must be the same for all
+observations.
 }
 
 The function must provide the following parameters
@@ -55,7 +63,7 @@ The function must provide the following parameters
 \code{meddra_version} in the \code{create_query_data()} call is passed to this
 parameter.
 \item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable
+\code{QUERY_ID} variable. The variable must be set to the numeric id of the SMQ.
 \item \code{temp_env}: A temporary environment is passed to this parameter. It can
 be used to store data which is used for all SMQs in the
 \code{create_query_data()} call. For example if the SMQs need to be read from a
@@ -64,18 +72,24 @@ SMQ is handled. For the other SMQs the terms can be retrieved from the
 environment instead of accessing the database again.
 }}
 
-\item{get_sdg_fun}{Function which returns the terms of a SDG
+\item{get_sdg_fun}{Function which returns the terms of an SDG
 
-For each query specified for the \code{queries} parameter which refers to a SDG
+For each query specified for the \code{queries} parameter which refers to an SDG
 the specified function is called to retrieve the terms defining the query.
+This function is not provided by admiral as it is company specific, i.e.,
+it has to be implemented at company level.
 
 The function must return a dataset with all the terms defining the SDG. The
 output dataset must contain the following variables.
 \itemize{
-\item \code{TERM_LEVEL}
-\item \code{TERM_NAME} if the variable \code{TERM_LEVEL} is referring to is character
-\item \code{TERM_ID} if the variable \code{TERM_LEVEL} is referring to is numeric
-\item \code{QUERY_NAME}
+\item \code{TERM_LEVEL}: the variable to be used for defining a term of the SDG, e.g.,
+\code{CMDECOD}
+\item \code{TERM_NAME}: the name of the term if the variable \code{TERM_LEVEL} is
+referring to is character
+\item \code{TERM_ID} the numeric id of the term if the variable \code{TERM_LEVEL} is
+referring to is numeric
+\item \code{QUERY_NAME}: the name of the SDG. The values must be the same for all
+observations.
 }
 
 The function must provide the following parameters
@@ -85,7 +99,7 @@ The function must provide the following parameters
 \code{whodd_version} in the \code{create_query_data()} call is passed to this
 parameter.
 \item \code{keep_id}: If set to \code{TRUE}, the output dataset must contain the
-\code{QUERY_ID} variable
+\code{QUERY_ID} variable. The variable must be set to the numeric id of the SDG.
 \item \code{temp_env}: A temporary environment is passed to this parameter. It can
 be used to store data which is used for all SDGs in the
 \code{create_query_data()} call. For example if the SDGs need to be read from a
@@ -95,27 +109,30 @@ environment instead of accessing the database again.
 }}
 }
 \value{
-A dataset to be used as input for \code{derive_vars_query()}
+A dataset to be used as input dataset to the \code{dataset_queries}
+argument in \code{derive_vars_query()}
 }
 \description{
-Creates queries dataset from definitions in SMQ and SDG database or custom
-definitions as input dataset for \code{derive_vars_query()}.
+Creates a queries dataset as input dataset to the \code{dataset_queries} argument
+in the \code{derive_vars_query()} function as defined in the \href{../articles/queries_dataset.html}{Queries Dataset Documentation}.
 }
 \details{
-For each query the terms belonging to the query are determined with
-respect to the \code{definition} element.
+For each \code{query()} object listed in the \code{queries} argument, the terms belonging
+to the query (\code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}) are determined with respect
+to the \code{definition} field of the query: if the definition field of the
+\code{query()} object is
 \itemize{
-\item If it is a \code{smq_select()} object, the terms are read from the SMQ
+\item an \code{smq_select()} object, the terms are read from the SMQ
 database by calling the function specified for the \code{get_smq_fun} parameter.
-\item If it is a \code{sdg_select()} object, the terms are read from the SDG
+\item an \code{sdg_select()} object, the terms are read from the SDG
 database by calling the function specified for the \code{get_sdg_fun} parameter.
-\item If it is a data frame, the terms stored in the data frame are used.
-\item If it is a list of data frames and \code{smq_select()} objects, all terms from
-the dataframes and all terms read from the SMQ database referrenced by the
+\item a data frame, the terms stored in the data frame are used.
+\item a list of data frames and \code{smq_select()} objects, all terms from
+the data frames and all terms read from the SMQ database referenced by the
 \code{smq_select()} objects are collated.
 }
 
-The following variables are created:
+The following variables (as described in \href{../articles/queries_dataset.html}{Queries Dataset Documentation}) are created:
 \itemize{
 \item \code{VAR_PREFIX}: Prefix of the variables to be created by
 \code{derive_vars_query()} as specified by the \code{prefix} element.
@@ -130,7 +147,7 @@ object, the variable is set to \code{NA}. If none of the queries is defined by a
 \item \code{QUERY_SCOPE_NUM}: numeric scope of the query. It is set to \code{1} if the
 scope is broad. Otherwise it is set to '2'. If the \code{add_scope_num} element
 equals \code{FALSE}, the variable is set to \code{NA}. If the \code{add_scope_num} element
-equals \code{FALSE} for all SMQs or none of the queries is a SMQ , the variable
+equals \code{FALSE} for all SMQs or none of the queries is an SMQ , the variable
 is not created.
 \item \code{TERM_LEVEL}: Name of the variable used to identify the terms.
 \item \code{TERM_NAME}: Value of the term variable if it is a character variable.
@@ -139,8 +156,10 @@ is not created.
 }
 \examples{
 library(tibble)
-library(magrittr)
-library(dplyr)
+library(magrittr, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
+library(admiral)
 
 # creating a query dataset for a customized query
 cqterms <- tribble(
@@ -162,14 +181,15 @@ pregsmq <- query(
   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
                           scope = "NARROW"))
 
-pneusmq <- query(prefix = "SMQ04",
-                 definition = smq_select(id = 8050L,
+bilismq <- query(prefix = "SMQ04",
+                 definition = smq_select(id = 20000121L,
                                          scope = "BROAD"))
 
-\dontrun{
-create_query_data(queries = list(pregsmq, pneusmq),
+# The get_smq_terms function from admiral.test is used for this example.
+# In a real application a company-specific function must be used.
+create_query_data(queries = list(pregsmq, bilismq),
+                  get_smq_fun = admiral.test:::get_smq_terms,
                   meddra_version = "20.1")
-}
 
 # create a query dataset for SDGs
 sdg <- query(
@@ -179,19 +199,34 @@ sdg <- query(
     name = "5-aminosalicylates for ulcerative colitis"
   )
 )
-\dontrun{
+
+# The get_sdg_terms function from admiral.test is used for this example.
+# In a real application a company-specific function must be used.
 create_query_data(queries = list(sdg),
-                  whodd_version = "2019_09")
-}
+                  get_sdg_fun = admiral.test:::get_sdg_terms,
+                  whodd_version = "2019-09")
 
 # creating a query dataset for a customized query including SMQs
-\dontrun{
-create_query_data(queries = list(pregsmq, cqterms),
-                  meddra_version = "20.1")
-}
+# The get_smq_terms function from admiral.test is used for this example.
+# In a real application a company-specific function must be used.
+create_query_data(
+  queries = list(
+    query(
+      prefix = "CQ03",
+      name = "Special issues of interest",
+      definition = list(
+        smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+                   scope = "NARROW"),
+        cqterms
+      )
+    )
+  ),
+  get_smq_fun = admiral.test:::get_smq_terms,
+  meddra_version = "20.1"
+)
 }
 \seealso{
-\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}
+\code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 }
 \author{
 Stefan Bundfuss

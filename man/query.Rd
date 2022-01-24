@@ -7,33 +7,29 @@
 query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 }
 \arguments{
-\item{prefix}{Prefix of the new variables, e.g., \code{"SMQ03"}}
+\item{prefix}{The value is used to populate \code{VAR_PREFIX} in the output
+dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}}
 
-\item{name}{The variable \verb{<prefix>NAM} is set to the specified value for
-observations matching the query definition. If the \code{auto} keyword is
-specified, the variable is set to the name of the query in the SMQ/SDG
-database.
+\item{name}{The values is used to populate \code{QUERY_NAME} in the output dataset
+of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
+is set to the name of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A character scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by a \code{smq_select()}
-or \code{sdg_select()} object.}
+keyword is permitted only for queries which are defined by an
+\code{smq_select()} or \code{sdg_select()} object.}
 
-\item{id}{The variable \verb{<prefix>CD} is set to the specified value for
-observations matching the query definition if the parameter is specified.
-Otherwise the variable is not created. If the \code{auto} keyword is specified,
-the variable is set to the id of the query in the SMQ/SDG database.
+\item{id}{The values is used to populate \code{QUERY_ID} in the output dataset of
+\code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
+set to the id of the query in the SMQ/SDG database.
 
 \emph{Permitted Values}: A integer scalar or the \code{auto} keyword. The \code{auto}
-keyword is permitted only for queries which are defined by a \code{smq_select()}
-or \code{sdg_select()} object.}
+keyword is permitted only for queries which are defined by an
+\code{smq_select()} or \code{sdg_select()} object.}
 
-\item{add_scope_num}{The variable \verb{<prefix>SCN} is added to the output
-dataset if the parameter is specified. Otherwise the variable is not
-created.
+\item{add_scope_num}{Determines if  \code{QUERY_SCOPE_NUM} in the output dataset
+of \code{create_query_data()} is populated
 
-The value is set to \code{1} if the scope is broad. Otherwise, it is set to \code{2}.
-
-If the parameter is set to \code{TRUE}, the definition must be a \code{smq_select()}
+If the parameter is set to \code{TRUE}, the definition must be an \code{smq_select()}
 object.
 
 \emph{Default}: \code{FALSE}
@@ -44,50 +40,79 @@ object.
 
 There are four different ways to define the terms:
 \itemize{
-\item A \code{smq_select} object is specified to select a query from the SMQ
-database. The database contains Standard MedDRA Queries (SMQs) and AE
-Grouping Terms (AEGTs).
-\item A \code{sdg_select} object is specified to select a query from the SDG
+\item An \code{smq_select()} object is specified to select a query from the SMQ
+database.
+\item An \code{sdg_select()} object is specified to select a query from the SDG
 database.
 \item A data frame with columns \code{TERM_LEVEL} and \code{TERM_NAME} or \code{TERM_ID} can
-be specified to define the terms of the query. The \code{TERM_LEVEL} should be
-set to the name of the variable which should be used to select the terms,
-e.g., \code{"AEDECOD"} or \code{"AELLTCD"}. \code{TERM_LEVEL} does not need to be
-constant within a query. For example a query can be based on \code{AEDECOD}
-and \code{AELLT}.
+be specified to define the terms of a customized query. The \code{TERM_LEVEL}
+should be set to the name of the variable which should be used to select
+the terms, e.g., \code{"AEDECOD"} or \code{"AELLTCD"}. \code{TERM_LEVEL} does not need
+to be constant within a query. For example a query can be based on
+\code{AEDECOD} and \code{AELLT}.
 
 If \code{TERM_LEVEL} refers to a character variable, \code{TERM_NAME} should be set
 to the value the variable. If it refers to a numeric variable, \code{TERM_ID}
 should be set to the value of the variable. If only character variables
 or only numeric variables are used, \code{TERM_ID} or \code{TERM_NAME} respectively
 can be omitted.
-\item A list of data frames and \code{smq_select} objects can be specified to define
-a customized query based on custom terms and SMQs. The data frames must
-have the same structure as described for the previous item.
+\item A list of data frames and \code{smq_select()} objects can be specified to
+define a customized query based on custom terms and SMQs. The data frames
+must have the same structure as described for the previous item.
 }
 
-\emph{Permitted Values}: a \code{smq_select} object, a \code{sdg_select} object, a data
-frame, or a list of data frames and \code{smq_select} objects.}
+\emph{Permitted Values}: an \code{smq_select()} object, an \code{sdg_select()} object, a
+data frame, or a list of data frames and \code{smq_select()} objects.}
 }
 \value{
-An object of class "query".
+An object of class \code{query}.
 }
 \description{
 A \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-Standardised Drug Grouping (SDG), or a customized query (CQ). It can be used
+Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to \code{create_query_data()}.
 }
-\details{
-The definition includes
-\itemize{
-\item the variables which should be created for the query, e.g., \code{SMQ02NAM} and
-\code{SMQ02SC},
-\item the values which should be assigned to the variables, and
-\item which terms belong to the query.
-}
+\examples{
+
+# create a query for an SMQ
+query(
+  prefix = "SMQ02",
+  id = auto,
+  definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+                          scope = "NARROW"))
+
+# create a query for an SDG
+query(
+  prefix = "SDG01",
+  id = auto,
+  definition = sdg_select(
+    name = "5-aminosalicylates for ulcerative colitis"
+  )
+)
+
+# creating a query for a customized query
+cqterms <- tribble(
+  ~TERM_NAME, ~TERM_ID,
+  "APPLICATION SITE ERYTHEMA", 10003041L,
+  "APPLICATION SITE PRURITUS", 10003053L) \%>\%
+  mutate(TERM_LEVEL = "AEDECOD")
+
+query(prefix = "CQ01",
+      name = "Application Site Issues",
+      definition = cqterms)
+
+# creating a customized query based on SMQs and additional terms
+query(prefix = "CQ03",
+      name = "Special issues of interest",
+      definition = list(
+        cqterms,
+        smq_select(name = "Pregnancy and neonatal topics (SMQ)",
+                          scope = "NARROW"),
+        smq_select(id = 8050L,
+                   scope = "BROAD")))
 }
 \seealso{
-\code{\link[=create_query_data]{create_query_data()}}
+\code{\link[=create_query_data]{create_query_data()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 }
 \author{
 Stefan Bundfuss

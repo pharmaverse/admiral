@@ -4,12 +4,22 @@
 \alias{assert_db_requirements}
 \title{Check required parameters for SMQ/SDG}
 \usage{
-assert_db_requirements(version, fun, queries, i, type)
+assert_db_requirements(
+  version,
+  version_arg_name,
+  fun,
+  fun_arg_name,
+  queries,
+  i,
+  type
+)
 }
 \arguments{
 \item{version}{Version provided by user}
 
 \item{fun}{Function provided by user}
+
+\item{fun_arg_name}{Name of the argument providing the function}
 
 \item{queries}{Queries provide by user}
 
