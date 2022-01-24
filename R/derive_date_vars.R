@@ -193,6 +193,7 @@ impute_dtc <- function(dtc,
       mo <- sprintf("%02d", mo__)
     }
 
+    # This section is focused on date_imputation wth "MID" and preserve
     imputed_date <- case_when(
       !valid_dtc ~ NA_character_,
 
@@ -215,8 +216,9 @@ impute_dtc <- function(dtc,
       n_chr == 4 & date_imputation == "MID" ~ paste0(dtc, "-", "06", "-", "30")
     )
 
+    # This section is focused on date_imputation wth "LAST" and preserve
     imputed_date <- case_when(
-      nchar(imputed_date) > 0 & n_chr < 10 & date_imputation == "LAST" & !preserve ~
+       n_chr < 10 & date_imputation == "LAST" & !preserve ~
         as.character(
           ceiling_date(
             as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
@@ -233,17 +235,12 @@ impute_dtc <- function(dtc,
       TRUE ~ imputed_date)
 
 
-
-    if (date_imputation == "FIRST" & !preserve) {
-      imputed_date <- case_when(
-        TRUE ~ imputed_date
-      )
-    } else if (date_imputation == "FIRST" & preserve) {
-      imputed_date <- case_when(n_chr == 9 ~
+    imputed_date <- case_when(
+      n_chr == 9 & date_imputation == "FIRST" & preserve ~
           paste0(substr(dtc, 1, 4), "-", 01, "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
       )
-    }
+
   } else  {
     # no imputation
     imputed_date <- if_else(n_chr >= 10 & valid_dtc, substr(dtc, 1, 10), NA_character_)
