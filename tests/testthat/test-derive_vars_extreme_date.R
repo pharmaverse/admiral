@@ -14,24 +14,24 @@ ae <- tibble::tribble(
 )
 
 test_that("LSTALVDT is derived", {
-  ae_start <- lstalvdt_source(
+  ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
     date_imputation = "first"
   )
 
-  ae_end <- lstalvdt_source(
+  ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTC,
     date_imputation = "first"
   )
 
-  adsl_trtdate <- lstalvdt_source(
+  adsl_trtdate <- date_source(
     dataset_name = "adsl",
     date = TRTEDTM
   )
 
-  adsl_dthdate <- lstalvdt_source(
+  adsl_dthdate <- date_source(
     dataset_name = "adsl",
     date = DTHDTC,
     filter = nchar(DTHDTC) >= 10
@@ -39,10 +39,12 @@ test_that("LSTALVDT is derived", {
 
   expected_output <- adsl %>% mutate(LSTALVDT = c(ymd("2020-02-01"), NA, ymd("2020-04-12")))
 
-  actual_output <- derive_var_lstalvdt(
+  actual_output <- derive_vars_extreme_dt(
     adsl,
+    new_var = LSTALVDT,
     source_datasets = list(ae = ae, adsl = adsl),
-    ae_start, ae_end, adsl_trtdate, adsl_dthdate
+    ae_start, ae_end, adsl_trtdate, adsl_dthdate,
+    mode = "last"
   )
 
   expect_dfs_equal(
@@ -52,11 +54,12 @@ test_that("LSTALVDT is derived", {
   )
 })
 
-test_that("LSTALVDT and traceability variables are derived", {
-  ae_start <- lstalvdt_source(
+test_that("LSTALVDTM and traceability variables are derived", {
+  ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
     date_imputation = "first",
+    time_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
@@ -64,10 +67,11 @@ test_that("LSTALVDT and traceability variables are derived", {
     )
   )
 
-  ae_end <- lstalvdt_source(
+  ae_end <- date_source(
     dataset_name = "ae",
     date = AEENDTC,
     date_imputation = "first",
+    time_imputation = "first",
     traceability_vars = vars(
       LALVDOM = "AE",
       LALVSEQ = AESEQ,
@@ -75,7 +79,7 @@ test_that("LSTALVDT and traceability variables are derived", {
     )
   )
 
-  adsl_trtdate <- lstalvdt_source(
+  adsl_trtdate <- date_source(
     dataset_name = "adsl",
     date = TRTEDTM,
     traceability_vars = vars(
@@ -85,7 +89,7 @@ test_that("LSTALVDT and traceability variables are derived", {
     )
   )
 
-  adsl_dthdate <- lstalvdt_source(
+  adsl_dthdate <- date_source(
     dataset_name = "adsl",
     date = DTHDTC,
     filter = nchar(DTHDTC) >= 10,
@@ -98,16 +102,18 @@ test_that("LSTALVDT and traceability variables are derived", {
 
   expected_output <- adsl %>%
     mutate(
-      LSTALVDT = c(ymd("2020-02-01"), NA, ymd("2020-04-12")),
+      LSTALVDTM = c(ymd_hms("2020-02-01T00:00:00"), NA, ymd_hms("2020-04-12T00:00:00")),
       LALVDOM = c("AE", NA_character_, "ADSL"),
       LALVSEQ = c(2, NA_integer_, NA_integer_),
       LALVVAR = c("AEENDTC", NA_character_, "TRTEDTM")
     )
 
-  actual_output <- derive_var_lstalvdt(
+  actual_output <- derive_vars_extreme_dtm(
     adsl,
+    new_var = LSTALVDTM,
     source_datasets = list(ae = ae, adsl = adsl),
-    ae_start, ae_end, adsl_trtdate, adsl_dthdate
+    ae_start, ae_end, adsl_trtdate, adsl_dthdate,
+    mode = "last"
   )
 
   expect_dfs_equal(
@@ -126,7 +132,7 @@ test_that("LSTALVDT is derived for Date class as well", {
   ) %>%
     mutate(TRTEDTM = as.Date(TRTEDTM))
 
-  adsl_trtdate <- lstalvdt_source(
+  adsl_trtdate <- date_source(
     dataset_name = "adsl",
     date = TRTEDTM
   )
@@ -134,10 +140,12 @@ test_that("LSTALVDT is derived for Date class as well", {
   expected_output <- adsl %>%
     mutate(LSTALVDT = c(ymd("2020-01-01"), ymd("2020-02-03"), ymd("2020-04-12")))
 
-  actual_output <- derive_var_lstalvdt(
+  actual_output <- derive_vars_extreme_dt(
     adsl,
+    new_var = LSTALVDT,
     source_datasets = list(adsl = adsl),
-    adsl_trtdate
+    adsl_trtdate,
+    mode = "last"
   )
 
   expect_dfs_equal(

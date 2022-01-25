@@ -195,6 +195,40 @@ test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
   )
 })
 
+test_that("a warning is issued when using `derive_var_lstalvdt()`", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
+    "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01",  "2", NA, "2020-06",
+    "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
+  )
+
+  adsl_trtdate <- lstalvdt_source(
+    dataset_name = "adsl",
+    date = TRTEDTM
+  )
+
+  adsl_dthdate <- lstalvdt_source(
+    dataset_name = "adsl",
+    date = DTHDTC,
+    filter = nchar(DTHDTC) >= 10
+  )
+
+  expect_warning(
+    derive_var_lstalvdt(
+      adsl,
+      source_datasets = list(adsl = adsl),
+      ae_start,
+      ae_end,
+      adsl_trtdate,
+      adsl_dthdate
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+
 test_that("a warning is issued when using `derive_var_basec()", {
   dataset <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVALC,   ~AVISIT,    ~ABLFL,
