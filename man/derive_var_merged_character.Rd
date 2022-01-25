@@ -13,7 +13,8 @@ derive_var_merged_character(
   source_var,
   case = NULL,
   filter_add = NULL,
-  mode = NULL
+  mode = NULL,
+  missing_value = NA_character_
 )
 }
 \arguments{
@@ -67,6 +68,13 @@ considered.
 Determines if the first or last observation is selected.
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}}
+
+\item{missing_value}{Values used for missing information
+
+The new variable is set to the specified value for all by groups without
+observations in the additional dataset.
+
+\emph{Permitted Value}: A character scalar}
 }
 \description{
 Merge a character variable from a dataset to the input dataset. The

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_var_merged_exist_flag}
 \alias{derive_var_merged_exist_flag}
-\title{Merge a Existence Flag}
+\title{Merge an Existence Flag}
 \usage{
 derive_var_merged_exist_flag(
   dataset,

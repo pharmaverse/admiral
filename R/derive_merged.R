@@ -53,6 +53,14 @@
 #'
 #'   *Permitted Values*: a condition
 #'
+#' @param match_flag Match flag
+#'
+#'   If the parameter is specified, the specified variable is added to the
+#'   output dataset and set to `TRUE` for all by groups with an observation in
+#'   the additional dataset. For all other by groups it is set to `NA`.
+#'
+#'   *Permitted Values*: Variable name
+#'
 #' @param check_type Check uniqueness?
 #'
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
@@ -109,6 +117,7 @@ derive_vars_merged <- function(dataset,
                                new_vars = NULL,
                                mode = NULL,
                                filter_add = NULL,
+                               match_flag = NULL,
                                check_type = "warning") {
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_vars(by_vars)
@@ -116,6 +125,7 @@ derive_vars_merged <- function(dataset,
   assert_vars(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, extract_vars(order)))
+  match_flag <- assert_symbol(enquo(match_flag), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
@@ -136,6 +146,10 @@ derive_vars_merged <- function(dataset,
   }
   if (!is.null(new_vars)) {
     add_data <- select(add_data, !!!by_vars, !!!new_vars)
+  }
+  if (!quo_is_null(match_flag)) {
+    add_data <- mutate(add_data,
+                       !!match_flag := TRUE)
   }
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
@@ -382,6 +396,11 @@ derive_vars_merged_dtm <- function(dataset,
 #'   A function must be specified for this parameter which expects the values of
 #'   the source variable as input and returns the categorized values.
 #'
+#' @param missing_value Values used for missing information
+#'
+#'   The new variable is set to the specified value for all by groups without
+#'   observations in the additional dataset.
+#'
 #' @inheritParams derive_vars_merged
 #'
 #' @details
@@ -434,23 +453,29 @@ derive_var_merged_cat <- function(dataset,
                                   source_var,
                                   cat_fun,
                                   filter_add = NULL,
-                                  mode = NULL) {
+                                  mode = NULL,
+                                  missing_value = NA_character_) {
   new_var <- assert_symbol(enquo(new_var))
   source_var <- assert_symbol(enquo(source_var))
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
-  assert_data_frame(dataset_add, quo_c(by_vars, source_var))
+  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, source_var))
 
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := cat_fun(!!source_var))
-  derive_vars_merged(dataset,
-                     dataset_add = add_data,
-                     by_vars = by_vars,
-                     order = order,
-                     new_vars = vars(!!new_var),
-                     mode = mode)
+  derive_vars_merged(
+    dataset,
+    dataset_add = add_data,
+    by_vars = by_vars,
+    order = order,
+    new_vars = vars(!!new_var),
+    match_flag = temp_match_flag,
+    mode = mode
+  ) %>%
+    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
+    select(-temp_match_flag)
 }
 
-#' Merge a Existence Flag
+#' Merge an Existence Flag
 #'
 #' Adds a flag variable to the input dataset which indicates if there exists at
 #' least one observation in another dataset fulfilling a certain condition.
@@ -567,6 +592,13 @@ derive_var_merged_exist_flag <- function(
 #'
 #'   *Permitted Values*: `NULL`, `"lower"`, `"upper"`, `"title"`
 #'
+#' @param missing_value Values used for missing information
+#'
+#'   The new variable is set to the specified value for all by groups without
+#'   observations in the additional dataset.
+#'
+#'   *Permitted Value*: A character scalar
+#'
 #' @inheritParams derive_vars_merged
 #'
 #' @details
@@ -611,7 +643,8 @@ derive_var_merged_character <- function(dataset,
                                         source_var,
                                         case = NULL,
                                         filter_add = NULL,
-                                        mode = NULL) {
+                                        mode = NULL,
+                                        missing_value = NA_character_) {
 
   new_var <- assert_symbol(enquo(new_var))
   source_var <- assert_symbol(enquo(source_var))
@@ -624,6 +657,7 @@ derive_var_merged_character <- function(dataset,
     )
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, source_var))
+  assert_character_scalar(missing_value)
 
   if (is.null(case)) {
     trans <- expr(!!source_var)
@@ -644,5 +678,8 @@ derive_var_merged_character <- function(dataset,
                      by_vars = by_vars,
                      order = order,
                      new_vars = vars(!!new_var),
-                     mode = mode)
+                     match_flag = temp_match_flag,
+                     mode = mode) %>%
+    mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
+    select(-temp_match_flag)
 }

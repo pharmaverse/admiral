@@ -1,4 +1,17 @@
-# admiral development version
+# admiral 0.6.x
+
+## New Features
+
+- New functions for merging variables (#607):
+
+  - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
+  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
+  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
+  - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_character()` - Merge a Character Variable
+
+## Updates of Existing Functions
 
 - `derive_disposition_dt()`, `derive_disposition_status()`, `derive_extreme_flag`, `derive_worst_flag`, `derive_last_dose`, `derive_obs_number`, `derive_disposition_reason` have been deprecated and renamed in favor of `derive_var_disposition_dt()`, `derive_var_disposition_status()`, `derive_var_extreme_flag`, `derive_var_worst_flag`, `derive_var_last_dose`, `derive_var_obs_number`, and `derive_vars_disposition_reason` respectively (#738)
 
@@ -12,6 +25,8 @@ are not recorded in the data. (#589)
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
+
+## Documentation
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 

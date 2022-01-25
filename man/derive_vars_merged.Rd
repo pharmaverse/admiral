@@ -12,6 +12,7 @@ derive_vars_merged(
   new_vars = NULL,
   mode = NULL,
   filter_add = NULL,
+  match_flag = NULL,
   check_type = "warning"
 )
 }
@@ -63,6 +64,14 @@ for merging. If the parameter is not specified, all observations are
 considered.
 
 \emph{Permitted Values}: a condition}
+
+\item{match_flag}{Match flag
+
+If the parameter is specified, the specified variable is added to the
+output dataset and set to \code{TRUE} for all by groups with an observation in
+the additional dataset. For all other by groups it is set to \code{NA}.
+
+\emph{Permitted Values}: Variable name}
 
 \item{check_type}{Check uniqueness?
 

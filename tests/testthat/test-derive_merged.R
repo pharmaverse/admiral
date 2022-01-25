@@ -52,15 +52,17 @@ test_that("derive_vars_merged: merge selected variables", {
                    keys = c("USUBJID", "AVISIT"))
 })
 
-## derive_vars_merged: merge last value ----
-test_that("derive_vars_merged: merge last value", {
+## derive_vars_merged: merge last value and flag matched by groups ----
+test_that("derive_vars_merged: merge last value and flag matched by groups", {
   actual <- derive_vars_merged(adsl,
                                dataset_add = advs,
                                order = vars(AVAL),
                                by_vars = vars(STUDYID, USUBJID),
                                new_vars = vars(WEIGHTBL = AVAL),
-                               mode = "last")
-  expected <- adsl %>% mutate(WEIGHTBL = c(68, 88, 55, NA))
+                               mode = "last",
+                               match_flag = matched)
+  expected <- adsl %>% mutate(WEIGHTBL = c(68, 88, 55, NA),
+                              matched = c(TRUE, TRUE, TRUE, NA))
 
   expect_dfs_equal(base = expected,
                    compare = actual,
@@ -153,6 +155,33 @@ test_that("derive_vars_merged_cat: merge categorized variable", {
                    keys = c("USUBJID", "AVISIT"))
 })
 
+## derive_var_merged_cat: merge categorized variable and define value for non-matched by groups ----
+test_that("derive_vars_merged_cat: merge categorized variable and define value for non-matched by groups", {
+  get_vscat <- function(x) {
+    if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
+  }
+
+  actual <- derive_var_merged_cat(
+    adsl,
+    dataset_add = advs,
+    by_vars = vars(USUBJID),
+    new_var = LSTVSCAT,
+    source_var = AVISIT,
+    cat_fun = get_vscat,
+    order = vars(AVISIT),
+    mode = "last",
+    missing_value = "MISSING"
+  )
+
+  expected <-
+    mutate(adsl,
+           LSTVSCAT = c("POST-BASELINE", "BASELINE", "POST-BASELINE", "MISSING"))
+
+  expect_dfs_equal(base = expected,
+                   compare = actual,
+                   keys = c("USUBJID"))
+})
+
 # derive_var_merged_exist_flag ----
 ## derive_var_merged_exist_flag: merge existence flag ----
 test_that("derive_vars_merged_exist_flag: merge existence flag", {
@@ -205,11 +234,12 @@ test_that("derive_var_merged_character: merge character variable, upper case", {
     new_var = LASTVIS,
     source_var = AVISIT,
     mode = "last",
-    case = "upper"
+    case = "upper",
+    missing_value = "UNKNOWN"
   )
 
   expected <-
-    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", NA_character_))
+    mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
 
 
   expect_dfs_equal(base = expected,
