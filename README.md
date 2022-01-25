@@ -4,7 +4,7 @@
 [![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/main/graph/badge.svg)](https://codecov.io/gh/Roche-GSK/admiral?branch=main)
 <!-- badges: end -->
 
-ADaM in R Asset Library
+E ADaM in R Asset Library
 
 ## Purpose
 
