@@ -188,7 +188,7 @@ derive_var_ontrtfl <- function(dataset,
 
   dataset <- mutate(
     dataset,
-    new_var = if_else(
+    !!new_var := if_else(
       is.na(!!start_date) & !is.na(!!ref_start_date) | !!ref_start_date == !!start_date,
       "Y",
       NA_character_,
@@ -199,8 +199,8 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(filter_pre_timepoint)) {
     dataset <- mutate(
       dataset,
-      new_var = if_else(!!filter_pre_timepoint, NA_character_, new_var,
-                            missing = new_var)
+      !!new_var := if_else(!!filter_pre_timepoint, NA_character_, !!new_var,
+                            missing = !!new_var)
     )
   }
 
@@ -208,23 +208,23 @@ derive_var_ontrtfl <- function(dataset,
     # Scenario 1: No treatment end date is passed
     dataset <- mutate(
       dataset,
-      new_var = if_else(
+      !!new_var := if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date,
         "Y",
-        new_var,
-        missing = new_var
+        !!new_var,
+        missing = !!new_var
       )
     )
   } else {
     # Scenario 2: Treatment end date is passed, window added above
     dataset <- mutate(
       dataset,
-      new_var = if_else(
+      !!new_var := if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date &
           !is.na(!!ref_end_date) & !!start_date <= (!!ref_end_date + days(!!ref_end_window)),
         "Y",
-        new_var,
-        missing = new_var
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
@@ -233,11 +233,11 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
-      new_var = if_else(
+      !!new_var := if_else(
         !!end_date < !!ref_start_date,
         NA_character_,
-        new_var,
-        missing = new_var
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
@@ -246,17 +246,15 @@ derive_var_ontrtfl <- function(dataset,
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
-      new_var = if_else(
+      !!new_var := if_else(
           !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
           (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
-        new_var,
-        missing = new_var
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
-
-  names(dataset)[names(dataset) == "new_var"] <- sub("~", "", deparse(substitute(new_var)))
 
   dataset
 
