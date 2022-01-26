@@ -30,6 +30,7 @@ are not recorded in the data. (#589)
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
+- `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
 # admiral 0.5.0
 
