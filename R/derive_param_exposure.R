@@ -176,7 +176,8 @@ derive_param_exposure <- function(dataset,
       summarise(
         temp_start = min(ASTDTM, na.rm = TRUE),
         temp_end = max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
-      )
+      ) %>%
+      ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
@@ -196,7 +197,8 @@ derive_param_exposure <- function(dataset,
       summarise(
         temp_start = min(ASTDT, na.rm = TRUE),
         temp_end = max(coalesce(AENDT, ASTDT), na.rm = TRUE)
-      )
+      ) %>%
+      ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by = by_vars) %>%
       mutate(ASTDT = coalesce(ASTDT, temp_start),
