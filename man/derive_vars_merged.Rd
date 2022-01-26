@@ -13,7 +13,8 @@ derive_vars_merged(
   mode = NULL,
   filter_add = NULL,
   match_flag = NULL,
-  check_type = "warning"
+  check_type = "warning",
+  duplicate_msg = NULL
 )
 }
 \arguments{
@@ -80,6 +81,14 @@ if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{duplicate_msg}{Message of unique check
+
+If the uniqueness check fails, the specified message is displayed.
+
+\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+      enumerate(vars2chr(by_vars))
+}}
 }
 \description{
 Merge variables from a dataset to the input dataset. The observations to

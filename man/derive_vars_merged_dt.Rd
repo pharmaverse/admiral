@@ -16,7 +16,9 @@ derive_vars_merged_dt(
   date_imputation = NULL,
   flag_imputation = TRUE,
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  check_type = "warning",
+  duplicate_msg = NULL
 )
 }
 \arguments{
@@ -121,6 +123,22 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"} or \code{"error"} is specified, the specified message is issued
+if the observations of the (restricted) additional dataset are not unique
+with respect to the by variables and the order.
+
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{duplicate_msg}{Message of unique check
+
+If the uniqueness check fails, the specified message is displayed.
+
+\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+      enumerate(vars2chr(by_vars))
+}}
 }
 \description{
 Merge a imputed date variable and date imputation  flag from a dataset to the

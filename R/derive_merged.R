@@ -69,6 +69,17 @@
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
+#' @param duplicate_msg Message of unique check
+#'
+#'   If the uniqueness check fails, the specified message is displayed.
+#'
+#'   *Default*:
+#'
+#'   ```
+#'   paste("Dataset `dataset_add` contains duplicate records with respect to",
+#'         enumerate(vars2chr(by_vars))
+#'   ```
+#'
 #' @details
 #'
 #'   1. The additional dataset is restricted to the observations matching the
@@ -118,7 +129,8 @@ derive_vars_merged <- function(dataset,
                                mode = NULL,
                                filter_add = NULL,
                                match_flag = NULL,
-                               check_type = "warning") {
+                               check_type = "warning",
+                               duplicate_msg = NULL) {
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_vars(by_vars)
   assert_order_vars(order, optional = TRUE)
@@ -135,13 +147,16 @@ derive_vars_merged <- function(dataset,
                                mode = mode,
                                check_type = check_type)
   } else {
-    signal_duplicate_records(
-      add_data,
-      by_vars = by_vars,
-      msg = paste(
+    if (is.null(duplicate_msg)) {
+      duplicate_msg <- paste(
         "Dataset `dataset_add` contains duplicate records with respect to",
         enumerate(vars2chr(by_vars))
       )
+    }
+    signal_duplicate_records(
+      add_data,
+      by_vars = by_vars,
+      msg = duplicate_msg
     )
   }
   if (!is.null(new_vars)) {
@@ -247,7 +262,9 @@ derive_vars_merged_dt <- function(dataset,
                                   date_imputation = NULL,
                                   flag_imputation = TRUE,
                                   min_dates = NULL,
-                                  max_dates = NULL) {
+                                  max_dates = NULL,
+                                  check_type = "warning",
+                                  duplicate_msg = NULL) {
   dtc <- assert_symbol(enquo(dtc))
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
@@ -268,7 +285,9 @@ derive_vars_merged_dt <- function(dataset,
                      by_vars = by_vars,
                      order = order,
                      new_vars = new_vars,
-                     mode = mode)
+                     mode = mode,
+                     check_type = check_type,
+                     duplicate_msg = duplicate_msg)
 }
 
 #' Merge a (Imputed) Datetime Variable
@@ -347,7 +366,9 @@ derive_vars_merged_dtm <- function(dataset,
                                    time_imputation = "00:00:00",
                                    flag_imputation = "auto",
                                    min_dates = NULL,
-                                   max_dates = NULL) {
+                                   max_dates = NULL,
+                                   check_type = "warning",
+                                   duplicate_msg = NULL) {
   dtc <- assert_symbol(enquo(dtc))
 
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
@@ -370,7 +391,9 @@ derive_vars_merged_dtm <- function(dataset,
                      by_vars = by_vars,
                      order = order,
                      new_vars = new_vars,
-                     mode = mode)
+                     mode = mode,
+                     check_type = check_type,
+                     duplicate_msg = duplicate_msg)
 }
 
 #' Merge a Categorization Variable

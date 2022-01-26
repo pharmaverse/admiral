@@ -363,9 +363,9 @@ derive_param_tte <- function(dataset = NULL,
     order = vars(temp_event),
     mode = "last"
   ) %>%
-    left_join(
-      adsl,
-      by = vars2chr(subject_keys)
+    derive_vars_merged(
+      dataset_add = adsl,
+      by_vars = subject_keys
     )
   tryCatch(
     new_param <- mutate(new_param, !!!set_values_to),

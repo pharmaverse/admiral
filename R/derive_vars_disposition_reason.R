@@ -323,24 +323,25 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'   ) %>%
 #'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_vars_disposition_reason <- function(dataset,
-                                      dataset_ds,
-                                      new_var,
-                                      reason_var,
-                                      new_var_spe = NULL,
-                                      reason_var_spe = NULL,
-                                      format_new_vars = format_reason_default,
-                                      filter_ds,
-                                      subject_keys = vars(STUDYID, USUBJID)) {
+                                           dataset_ds,
+                                           new_var,
+                                           reason_var,
+                                           new_var_spe = NULL,
+                                           reason_var_spe = NULL,
+                                           format_new_vars = format_reason_default,
+                                           filter_ds,
+                                           subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   reason_var <- assert_symbol(enquo(reason_var))
   new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
   reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
   assert_that(is.function(format_new_vars))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
-  assert_data_frame(dataset)
-  assert_data_frame(dataset_ds)
-  warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
+  assert_data_frame(dataset, required_vars = subject_keys)
+  assert_data_frame(dataset_ds,
+                    required_vars = quo_c(subject_keys, reason_var, reason_var_spe))
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Additional checks
   if (!quo_is_null(new_var_spe)) {
@@ -357,31 +358,17 @@ derive_vars_disposition_reason <- function(dataset,
   } else {
     statusvar <- quo_text(reason_var)
   }
-  assert_has_variables(dataset_ds, statusvar)
 
-  # Process the disposition data
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    select(!!!subject_keys, !!reason_var, !!reason_var_spe)
+  dataset <- dataset %>%
+    derive_vars_merged(dataset_add = dataset_ds,
+                       filter_add = !!filter_ds,
+                       new_vars = quo_c(reason_var, reason_var_spe),
+                       by_vars = subject_keys) %>%
+    mutate(!!new_var := format_new_vars(!!reason_var))
 
-  # Expect 1 record per subject in the subsetted DS - issue an error otherwise
-  signal_duplicate_records(
-    ds_subset,
-    by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
-  # Add the status variable and derive the new dispo reason(s) in the input dataset
   if (!quo_is_null(new_var_spe)) {
-    dataset %>%
-      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-      mutate(!!new_var := format_new_vars(!!reason_var)) %>%
-      mutate(!!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)) %>%
-      select(-statusvar)
-  } else {
-    dataset %>%
-      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-      mutate(!!new_var := format_new_vars(!!reason_var)) %>%
-      select(-statusvar)
+    dataset <- mutate(dataset,
+                      !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe))
   }
+  select(dataset, -statusvar)
 }

@@ -155,8 +155,8 @@ test_that("derive_vars_merged_cat: merge categorized variable", {
                    keys = c("USUBJID", "AVISIT"))
 })
 
-## derive_var_merged_cat: merge categorized variable and define value for non-matched by groups ----
-test_that("derive_vars_merged_cat: merge categorized variable and define value for non-matched by groups", {
+## derive_var_merged_cat: define value for non-matched by groups ----
+test_that("derive_vars_merged_cat: define value for non-matched by groups", {
   get_vscat <- function(x) {
     if_else(x == "BASELINE", "BASELINE", "POST-BASELINE")
   }
