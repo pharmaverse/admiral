@@ -433,7 +433,7 @@ advs <- derive_var_ontrtfl(
 )
 ```
 
-Lastly, the function does allow you to filter out pre-treatment observations
+In addition, the function does allow you to filter out pre-treatment observations
 that occurred on the start date.  For example, if observations with `VSTPT == PRE`
 should not be considered on-treatment when the observation date falls between 
 the treatment start and end date, the user may specify this using the 
@@ -453,6 +453,43 @@ advs <- derive_var_ontrtfl(
 )
 ```
 
+Lastly, the function does allow you to create any on-treatment 
+flag based on the analysis needs.  For example, if variable 
+`ONTR01FL` is needed, showing the on-treatment flag during Period 01, 
+you need to set `new var = ONTR01FL`. In addition, for Period 01 
+Start Date and Period 01 End Date, you need `ref_start_date = AP01SDT` 
+and `ref_end_date = AP01EDT`.
+
+```{r include=FALSE}
+advs_pre <- select(advs, -ONTRTFL)
+
+advs <- tibble::tribble(
+  ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+)
+```
+
+```{r eval=TRUE}
+advs <- derive_var_ontrtfl(
+ advs,
+ new_var = ONTR01FL,
+ start_date = ASTDT,
+ end_date = AENDT,
+ ref_start_date = AP01SDT,
+ ref_end_date = AP01EDT,
+ span_period = "Y"
+)
+```
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs, 
+  display_vars = vars(USUBJID, ASTDT, AENDT, AP01SDT, AP01EDT, ONTR01FL)
+)
+```
+
+
 ## Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
 The admiral function `derive_var_anrind()` may be used to derive the reference
@@ -470,7 +507,7 @@ range_lookup <- tibble::tribble(
   "TEMP", 36.5, 37.5, 35, 38
 )
 
-advs <- left_join(advs, range_lookup, by = "PARAMCD")
+advs <- left_join(advs_pre, range_lookup, by = "PARAMCD")
 ```
 
 The function is called as:
