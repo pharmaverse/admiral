@@ -27,6 +27,7 @@
 
 - Behavior of `derive_vars_dtm()` and `derive_vars_dt()` has changed with regards to `date_imputation`. 
 
+- `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
 # admiral 0.5.0
 
