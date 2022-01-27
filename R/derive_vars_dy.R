@@ -78,7 +78,11 @@ derive_vars_dy <- function(dataset,
                 .funs = list(temp = ~ compute_duration(start_date = eval(reference_date), end_date = .))
                 ) %>%
       rename_at(vars(ends_with("temp")),
+<<<<<<< HEAD
                ~ dy_vars)
+=======
+               ~dy_vars)
+>>>>>>> 684901bbf0cf55a60767582a7742932cc58eafde
   } else {
     dataset <-   dataset %>%
       mutate(!!sym(dy_vars) := compute_duration(!!reference_date, !!!source_vars)
