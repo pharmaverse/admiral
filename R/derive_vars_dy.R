@@ -48,8 +48,8 @@
 #'  ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT, ~DTHDT,
 #'  "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", "2014-02-01"
 #'  ) %>%
-#'  mutate(TRTSDTM = lubridate::ymd(TRTSDT),
-#'         ASTDT = lubridate::as_datetime(ASTDTM),
+#'  mutate(TRTSDT = lubridate::ymd(TRTSDT),
+#'         ASTDTM = lubridate::as_datetime(ASTDTM),
 #'         AENDT = lubridate::ymd(AENDT),
 #'         DTHDT = lubridate::ymd(DTHDT))
 #'
