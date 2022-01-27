@@ -75,12 +75,10 @@ derive_vars_dy <- function(dataset,
   if (n_vars > 1L) {
     dataset %>%
       mutate_at(.vars = source_vars,
-                .funs = list(temp = ~ compute_duration(start_date = !!reference_date, end_date = .))
+                .funs = list(temp = ~ compute_duration(start_date = eval(reference_date), end_date = .))
                 ) %>%
       rename_at(vars(ends_with("temp")),
-                .funs = ~ stringr::str_replace_all(., c(DTM_temp = "DY",
-                                                        DT_temp = "DY",
-                                                        DY_temp = "DY")))
+               ~ dy_vars)
   } else {
     dataset <-   dataset %>%
       mutate(!!sym(dy_vars) := compute_duration(!!reference_date, !!!source_vars)
