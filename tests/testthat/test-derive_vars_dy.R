@@ -73,7 +73,7 @@ test_that("Test3::Combo of --DT/--DTM input when ref date is --DTM", {
 
   ) %>%
     mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
-           ASTDT = lubridate::as_datetime(ASTDTM),
+           ASTDTM = lubridate::as_datetime(ASTDTM),
            AENDT = lubridate::ymd(AENDT))
 
   expected_output <- tibble::tribble(
@@ -82,7 +82,7 @@ test_that("Test3::Combo of --DT/--DTM input when ref date is --DTM", {
 
   ) %>%
     mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
-           ASTDT = lubridate::as_datetime(ASTDTM),
+           ASTDTM = lubridate::as_datetime(ASTDTM),
            AENDT = lubridate::ymd(AENDT))
 
   actual_output <- derive_vars_dy(datain,
@@ -103,7 +103,7 @@ test_that("Test4::Single --DT input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18",
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
            ASTDT = lubridate::ymd(ASTDT))
 
   expected_output <- tibble::tribble(
@@ -111,7 +111,7 @@ test_that("Test4::Single --DT input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18", 2
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
            ASTDT = lubridate::ymd(ASTDT))
 
   actual_output <- derive_vars_dy(datain,
@@ -132,7 +132,7 @@ test_that("Test5::Multiple --DT input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18", "2014-01-20"
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
            ASTDT = lubridate::ymd(ASTDT),
            AENDT = lubridate::ymd(AENDT))
 
@@ -141,7 +141,7 @@ test_that("Test5::Multiple --DT input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18", "2014-01-20", 1, 2, 4
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
            ASTDT = lubridate::ymd(ASTDT),
            AENDT = lubridate::ymd(AENDT))
 
@@ -163,8 +163,8 @@ test_that("Test6::Combo of --DT/--DTM input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
-           ASTDT = lubridate::as_datetime(ASTDTM),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
+           ASTDTM = lubridate::as_datetime(ASTDTM),
            AENDT = lubridate::ymd(AENDT))
 
   expected_output <- tibble::tribble(
@@ -172,8 +172,8 @@ test_that("Test6::Combo of --DT/--DTM input when ref date is --DT", {
     "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", 1, 2, 4
 
   ) %>%
-    mutate(TRTSDTM = lubridate::ymd(TRTSDT),
-           ASTDT = lubridate::as_datetime(ASTDTM),
+    mutate(TRTSDT = lubridate::ymd(TRTSDT),
+           ASTDTM = lubridate::as_datetime(ASTDTM),
            AENDT = lubridate::ymd(AENDT))
 
   actual_output <- derive_vars_dy(datain,

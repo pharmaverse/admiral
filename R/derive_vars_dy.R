@@ -74,23 +74,16 @@ derive_vars_dy <- function(dataset,
 
   if (n_vars > 1L) {
     dataset %>%
-      mutate_at(source_vars,
-                .funs = list(temp = ~ ceiling(as.numeric(
-                                              difftime(., `!!`(reference_date), unit = "days")))
-                             )
+      mutate_at(.vars=source_vars,
+                .funs=list(temp=~compute_duration(start_date=!!reference_date, .))
                 ) %>%
-      # if ge to 0 then add 1
-      mutate_at(vars(ends_with("temp")), ~ ifelse(.x >= 0, .x + 1, .x)) %>%
       rename_at(vars(ends_with("temp")),
                 .funs = ~ stringr::str_replace_all(., c(DTM_temp = "DY",
                                                         DT_temp = "DY",
                                                         DY_temp = "DY")))
   } else {
     dataset <-   dataset %>%
-      mutate(!!sym(dy_vars) := ceiling(as.numeric(
-                                       difftime(!!!source_vars, !!reference_date), unit = "days")),
-             # if ge to 0 then add 1
-             !!sym(dy_vars) := ifelse(!!sym(dy_vars) >= 0, !!sym(dy_vars) + 1, !!sym(dy_vars))
+      mutate(!!sym(dy_vars) := compute_duration(!!reference_date, !!!source_vars)
              )
   }
 
