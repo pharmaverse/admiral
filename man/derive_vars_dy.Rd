@@ -43,7 +43,7 @@ datain <- tibble::tribble(
  "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 ) \%>\%
  mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
-        ASTDT = lubridate::as_datetime(ASTDTM),
+        ASTDTM = lubridate::as_datetime(ASTDTM),
         AENDT = lubridate::ymd(AENDT))
 
 derive_vars_dy(datain, reference_date = TRTSDTM, source_vars = vars(TRTSDTM, ASTDTM, AENDT))
@@ -52,8 +52,8 @@ derive_vars_dy(datain, reference_date = TRTSDTM, source_vars = vars(TRTSDTM, AST
  ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT, ~DTHDT,
  "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", "2014-02-01"
  ) \%>\%
- mutate(TRTSDTM = lubridate::ymd(TRTSDT),
-        ASTDT = lubridate::as_datetime(ASTDTM),
+ mutate(TRTSDT = lubridate::ymd(TRTSDT),
+        ASTDTM = lubridate::as_datetime(ASTDTM),
         AENDT = lubridate::ymd(AENDT),
         DTHDT = lubridate::ymd(DTHDT))
 
