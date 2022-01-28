@@ -2,7 +2,8 @@
 % Please edit documentation in R/derive_merged.R
 \name{derive_vars_merged}
 \alias{derive_vars_merged}
-\title{Merge Variables from a Dataset to the Input Dataset}
+\title{Add New Variable(s) to the Input Dataset Based on Variables from Another
+Dataset}
 \usage{
 derive_vars_merged(
   dataset,
@@ -33,44 +34,67 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables}
+\emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{order}{Sort order
 
-The first or last observation from the addtional dataset is selected with
-respect to the specified order.
+If the parameter is set to a non-null value, for each by group the first or
+last observation from the additional dataset is selected with respect to the
+specified order.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 
-The specified variables are added to the output dataset. Variables can be
-renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+The specified variables from the additional dataset are added to the output
+dataset. Variables can be renamed by naming the element, i.e., \verb{new_vars = vars(<new name> = <old name>)}.
+
+For example \code{new_vars = vars(var1, var2)} adds variables \code{var1} and \code{var2}
+from \code{dataset_add} to the input dataset.
+
+And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
+\code{old_var2} from \code{dataset_add} and adds them to the input dataset renmaming
+\code{old_var2} to \code{new_var2}.
 
 If the parameter is not specified or set to \code{NULL}, all variables from the
-additional dataset are added.
+additional dataset (\code{dataset_add}) are added.
+
+\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{mode}{Selection mode
 
-Determines if the first or last observation is selected.
+Determines if the first or last observation is selected. If the \code{order}
+parameter is specified, \code{mode} must be non-null.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
 
-\item{filter_add}{Filter for additional data
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
+
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
 for merging. If the parameter is not specified, all observations are
 considered.
 
+\emph{Default}: \code{NULL}
+
 \emph{Permitted Values}: a condition}
 
 \item{match_flag}{Match flag
 
-If the parameter is specified, the specified variable is added to the
-output dataset and set to \code{TRUE} for all by groups with an observation in
-the additional dataset. For all other by groups it is set to \code{NA}.
+If the parameter is specified (e.g., \code{match_flag = FLAG}), the specified
+variable (e.g., \code{FLAG}) is added to the input dataset. This variable will
+be \code{TRUE} for all selected records from \code{dataset_add} which are merged into
+the input dataset, and \code{NA} otherwise.
+
+\emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: Variable name}
 
@@ -79,6 +103,8 @@ the additional dataset. For all other by groups it is set to \code{NA}.
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
+
+\emph{Default}: \code{"warning"}
 
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
@@ -90,18 +116,29 @@ If the uniqueness check fails, the specified message is displayed.
       enumerate(vars2chr(by_vars))
 }}
 }
+\value{
+The output dataset contains all observations and variables of the
+input dataset and additionally the variables specified for \code{new_vars} from
+the additional dataset (\code{dataset_add}).
+}
 \description{
-Merge variables from a dataset to the input dataset. The observations to
-merge can be selected by a condition and/or selecting the first or last
-observation for each by group.
+Add new variable(s) to the input dataset based on variables from another
+dataset. The observations to merge can be selected by a condition
+(\code{filter_add} argument) and/or selecting the first or last observation for
+each by group (\code{order} and \code{mode} argument).
 }
 \details{
 \enumerate{
-\item The additional dataset is restricted to the observations matching the
-\code{filter_add} condition.
+\item The records from the additional dataset (\code{dataset_add}) are restricted
+to those matching the \code{filter_add} condition.
 \item If \code{order} is specified, for each by group the first or last observation
 (depending on \code{mode}) is selected.
-\item The variables specified for \code{new_vars} are merged to the input dataset.
+\item The variables specified for \code{new_vars} are renamed (if requested) and
+merged to the input dataset using \code{left_join()}. I.e., the output dataset
+contains all observations from the input dataset. For observations without
+a matching observation in the additional dataset the new variables are set
+to \code{NA}. Observations in the additional dataset which have no matching
+observation in the input dataset are ignored.
 }
 }
 \examples{
@@ -126,9 +163,10 @@ derive_vars_merged(
   order = vars(VSDTC),
   mode = "last",
   new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
-  filter_add = VSTESTCD == "WEIGHT"
+  filter_add = VSTESTCD == "WEIGHT",
+  match_flag = vsdatafl
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU)
+select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 }
 \author{
 Stefan Bundfuss

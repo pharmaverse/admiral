@@ -33,14 +33,18 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables}
+\emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{order}{Sort order
 
-The first or last observation from the addtional dataset is selected with
-respect to the specified order.
+If the parameter is set to a non-null value, for each by group the first or
+last observation from the additional dataset is selected with respect to the
+specified order.
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
 
 \item{new_var}{New variable
 
@@ -53,28 +57,44 @@ transformed value with respect to the \code{case} parameter.}
 
 Changes the case of the values of the new variable.
 
+\emph{Default}: \code{NULL}
+
 \emph{Permitted Values}: \code{NULL}, \code{"lower"}, \code{"upper"}, \code{"title"}}
 
-\item{filter_add}{Filter for additional data
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
 for merging. If the parameter is not specified, all observations are
 considered.
 
+\emph{Default}: \code{NULL}
+
 \emph{Permitted Values}: a condition}
 
 \item{mode}{Selection mode
 
-Determines if the first or last observation is selected.
+Determines if the first or last observation is selected. If the \code{order}
+parameter is specified, \code{mode} must be non-null.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
 \item{missing_value}{Values used for missing information
 
 The new variable is set to the specified value for all by groups without
 observations in the additional dataset.
 
+\emph{Default}: \code{NA_character_}
+
 \emph{Permitted Value}: A character scalar}
+}
+\value{
+The output dataset contains all observations and variables of the
+input dataset and additionally the variable specified for \code{new_var} derived
+from the additional dataset (\code{dataset_add}).
 }
 \description{
 Merge a character variable from a dataset to the input dataset. The

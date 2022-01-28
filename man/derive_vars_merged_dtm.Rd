@@ -38,14 +38,19 @@ The input dataset and the selected observations from the additional dataset
 are merged by the specified by variables. The by variables must be a unique
 key of the selected observations.
 
-\emph{Permitted Values}: list of variables}
+\emph{Permitted Values}: list of variables created by \code{vars()}}
 
 \item{order}{Sort order
 
-The first or last observation from the addtional dataset is selected with
-respect to the specified order.
+If the parameter is set to a non-null value, for each by group the first or
+last observation from the additional dataset is selected with respect to
+the specified order. The imputed datetime variable can be specified as well
+(see examples below).
 
-\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls}
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
@@ -54,19 +59,26 @@ the specified prefix, for the date imputation flag "DTF", and for the time
 imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
 \code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
-\item{filter_add}{Filter for additional data
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
 
 Only observations fulfilling the specified condition are taken into account
 for merging. If the parameter is not specified, all observations are
 considered.
 
+\emph{Default}: \code{NULL}
+
 \emph{Permitted Values}: a condition}
 
 \item{mode}{Selection mode
 
-Determines if the first or last observation is selected.
+Determines if the first or last observation is selected. If the \code{order}
+parameter is specified, \code{mode} must be non-null.
 
-\emph{Permitted Values}: \code{"first"}, \code{"last"}}
+If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -148,6 +160,8 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the (restricted) additional dataset are not unique
 with respect to the by variables and the order.
 
+\emph{Default}: \code{"warning"}
+
 \emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
 
 \item{duplicate_msg}{Message of unique check
@@ -157,6 +171,12 @@ If the uniqueness check fails, the specified message is displayed.
 \emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
       enumerate(vars2chr(by_vars))
 }}
+}
+\value{
+The output dataset contains all observations and variables of the
+input dataset and additionally the variable \verb{<new_vars_prefix>DT} and
+optionally the variables \verb{<new_vars_prefix>DTF} and \verb{<new_vars_prefix>TMF}
+derived from the additional dataset (\code{dataset_add}).
 }
 \description{
 Merge a imputed datetime variable, date imputation  flag, and time imputation

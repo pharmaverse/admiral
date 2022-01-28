@@ -12,6 +12,7 @@ derive_var_merged_exist_flag(
   condition,
   true_value = "Y",
   false_value = NA_character_,
+  missing_value = NA_character_,
   filter_add = NULL
 )
 }
@@ -34,9 +35,22 @@ The specified variable is added to the input dataset.}
 
 \item{condition}{Condition}
 
-\item{true_value}{True value}
+\item{true_value}{True value
 
-\item{false_value}{False value}
+\emph{Default}: \code{"Y"}}
+
+\item{false_value}{False value
+
+\emph{Default}: \code{NA_character_}}
+
+\item{missing_value}{Values used for missing information
+
+The new variable is set to the specified value for all by groups without
+observations in the additional dataset.
+
+\emph{Default}: \code{NA_character_}
+
+\emph{Permitted Value}: A character scalar}
 
 \item{filter_add}{Filter for additional data
 
@@ -45,6 +59,11 @@ for flagging. If the parameter is not specified, all observations are
 considered.
 
 \emph{Permitted Values}: a condition}
+}
+\value{
+The output dataset contains all observations and variables of the
+input dataset and additionally the variable specified for \code{new_var} derived
+from the additional dataset (\code{dataset_add}).
 }
 \description{
 Adds a flag variable to the input dataset which indicates if there exists at
@@ -74,6 +93,19 @@ derive_var_merged_exist_flag(
   condition = AEREL == "PROBABLE"
 ) \%>\%
 select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+
+data("vs")
+derive_var_merged_exist_flag(
+  dm,
+  dataset_add = vs,
+  by_vars = vars(STUDYID, USUBJID),
+  filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y" ,
+  new_var = WTBLHIFL,
+  condition = VSSTRESN > 90 ,
+  false_value = "N",
+  missing_value = "M"
+) \%>\%
+select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
 }
 \author{
 Stefan Bundfuss

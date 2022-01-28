@@ -1,8 +1,10 @@
-#' Merge Variables from a Dataset to the Input Dataset
+#' Add New Variable(s) to the Input Dataset Based on Variables from Another
+#' Dataset
 #'
-#' Merge variables from a dataset to the input dataset. The observations to
-#' merge can be selected by a condition and/or selecting the first or last
-#' observation for each by group.
+#' Add new variable(s) to the input dataset based on variables from another
+#' dataset. The observations to merge can be selected by a condition
+#' (`filter_add` argument) and/or selecting the first or last observation for
+#' each by group (`order` and `mode` argument).
 #'
 #' @param dataset Input dataset
 #'
@@ -15,27 +17,45 @@
 #'
 #' @param order Sort order
 #'
-#'   The first or last observation from the addtional dataset is selected with
-#'   respect to the specified order.
+#'   If the parameter is set to a non-null value, for each by group the first or
+#'   last observation from the additional dataset is selected with respect to the
+#'   specified order.
+#'
+#'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
-#'   The specified variables are added to the output dataset. Variables can be
-#'   renamed by naming the element, i.e., `new_vars = vars(<new name> = <old
-#'   name>)`.
+#'   The specified variables from the additional dataset are added to the output
+#'   dataset. Variables can be renamed by naming the element, i.e., `new_vars =
+#'   vars(<new name> = <old name>)`.
+#'
+#'   For example `new_vars = vars(var1, var2)` adds variables `var1` and `var2`
+#'   from `dataset_add` to the input dataset.
+#'
+#'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
+#'   `old_var2` from `dataset_add` and adds them to the input dataset renmaming
+#'   `old_var2` to `new_var2`.
 #'
 #'   If the parameter is not specified or set to `NULL`, all variables from the
-#'   additional dataset are added.
+#'   additional dataset (`dataset_add`) are added.
+#'
+#'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables created by `vars()`
 #'
 #' @param mode Selection mode
 #'
-#'   Determines if the first or last observation is selected.
+#'   Determines if the first or last observation is selected. If the `order`
+#'   parameter is specified, `mode` must be non-null.
 #'
-#'   *Permitted Values*: `"first"`, `"last"`
+#'   If the `order` parameter is not specified, the `mode` parameter is ignored.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: `"first"`, `"last"`, `NULL`
 #'
 #' @param by_vars Grouping variables
 #'
@@ -43,21 +63,26 @@
 #'   are merged by the specified by variables. The by variables must be a unique
 #'   key of the selected observations.
 #'
-#'   *Permitted Values*: list of variables
+#'   *Permitted Values*: list of variables created by `vars()`
 #'
-#' @param filter_add Filter for additional data
+#' @param filter_add Filter for additional dataset (`dataset_add`)
 #'
 #'   Only observations fulfilling the specified condition are taken into account
 #'   for merging. If the parameter is not specified, all observations are
 #'   considered.
 #'
+#'   *Default*: `NULL`
+#'
 #'   *Permitted Values*: a condition
 #'
 #' @param match_flag Match flag
 #'
-#'   If the parameter is specified, the specified variable is added to the
-#'   output dataset and set to `TRUE` for all by groups with an observation in
-#'   the additional dataset. For all other by groups it is set to `NA`.
+#'   If the parameter is specified (e.g., `match_flag = FLAG`), the specified
+#'   variable (e.g., `FLAG`) is added to the input dataset. This variable will
+#'   be `TRUE` for all selected records from `dataset_add` which are merged into
+#'   the input dataset, and `NA` otherwise.
+#'
+#'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: Variable name
 #'
@@ -66,6 +91,8 @@
 #'   If `"warning"` or `"error"` is specified, the specified message is issued
 #'   if the observations of the (restricted) additional dataset are not unique
 #'   with respect to the by variables and the order.
+#'
+#'   *Default*: `"warning"`
 #'
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
@@ -80,15 +107,24 @@
 #'         enumerate(vars2chr(by_vars))
 #'   ```
 #'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variables specified for `new_vars` from
+#'   the additional dataset (`dataset_add`).
+#'
 #' @details
 #'
-#'   1. The additional dataset is restricted to the observations matching the
-#'   `filter_add` condition.
+#'   1. The records from the additional dataset (`dataset_add`) are restricted
+#'   to those matching the `filter_add` condition.
 #'
 #'   1. If `order` is specified, for each by group the first or last observation
 #'   (depending on `mode`) is selected.
 #'
-#'   1. The variables specified for `new_vars` are merged to the input dataset.
+#'   1. The variables specified for `new_vars` are renamed (if requested) and
+#'   merged to the input dataset using `left_join()`. I.e., the output dataset
+#'   contains all observations from the input dataset. For observations without
+#'   a matching observation in the additional dataset the new variables are set
+#'   to `NA`. Observations in the additional dataset which have no matching
+#'   observation in the input dataset are ignored.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -118,9 +154,10 @@
 #'   order = vars(VSDTC),
 #'   mode = "last",
 #'   new_vars = vars(LASTWGT = VSSTRESN, LASTWGTU = VSSTRESU),
-#'   filter_add = VSTESTCD == "WEIGHT"
+#'   filter_add = VSTESTCD == "WEIGHT",
+#'   match_flag = vsdatafl
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU)
+#' select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -136,7 +173,7 @@ derive_vars_merged <- function(dataset,
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = by_vars)
-  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, extract_vars(order)))
+  assert_data_frame(dataset_add, required_vars = quo_c(by_vars, extract_vars(order), new_vars))
   match_flag <- assert_symbol(enquo(match_flag), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add)
@@ -201,8 +238,30 @@ derive_vars_merged <- function(dataset,
 #'   The variables specified by the `by_vars`, the `dtc`, and the `order`
 #'   parameter are expected.
 #'
+#' @param order Sort order
+#'
+#'   If the parameter is set to a non-null value, for each by group the first or
+#'   last observation from the additional dataset is selected with respect to
+#'   the specified order. The imputed date variable can be specified as well
+#'   (see examples below).
+#'
+#'   Please note that `NA` is considered as the last value. I.e., if a order
+#'   variable is `NA` and `mode = "last"`, this observation is chosen while for
+#'   `mode = "first"` the observation is chosen only if there are no
+#'   observations where the variable is not 'NA'.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
+#'
 #' @inheritParams derive_vars_merged
 #' @inheritParams derive_vars_dt
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable `<new_vars_prefix>DT` and
+#'   optionally the variable `<new_vars_prefix>DTF` derived from the additional
+#'   dataset (`dataset_add`).
 #'
 #' @details
 #'
@@ -302,8 +361,25 @@ derive_vars_merged_dt <- function(dataset,
 #'   The variables specified by the `by_vars`, the `dtc`, and the `order`
 #'   parameter are expected.
 #'
+#' @param order Sort order
+#'
+#'   If the parameter is set to a non-null value, for each by group the first or
+#'   last observation from the additional dataset is selected with respect to
+#'   the specified order. The imputed datetime variable can be specified as well
+#'   (see examples below).
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
+#'
 #' @inheritParams derive_vars_merged
 #' @inheritParams derive_vars_dtm
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable `<new_vars_prefix>DT` and
+#'   optionally the variables `<new_vars_prefix>DTF` and `<new_vars_prefix>TMF`
+#'   derived from the additional dataset (`dataset_add`).
 #'
 #' @details
 #'
@@ -424,7 +500,13 @@ derive_vars_merged_dtm <- function(dataset,
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
 #'
+#'   *Default*: `NA_character_`
+#'
 #' @inheritParams derive_vars_merged
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable specified for `new_var` derived
+#'   from the additional dataset (`dataset_add`).
 #'
 #' @details
 #'
@@ -466,6 +548,21 @@ derive_vars_merged_dtm <- function(dataset,
 #'   source_var = VSSTRESN,
 #'   cat_fun = wgt_cat,
 #'   mode = "last"
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
+#'
+#' # defining a value for missing VS data
+#' derive_var_merged_cat(
+#'   dm,
+#'   dataset_add = vs,
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   order = vars(VSDTC, VSSEQ),
+#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
+#'   new_var = WGTBLCAT,
+#'   source_var = VSSTRESN,
+#'   cat_fun = wgt_cat,
+#'   mode = "last",
+#'   missing_value = "MISSING"
 #' ) %>%
 #' select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
@@ -519,7 +616,20 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @param true_value True value
 #'
+#'   *Default*: `"Y"`
+#'
 #' @param false_value False value
+#'
+#'   *Default*: `NA_character_`
+#'
+#' @param missing_value Values used for missing information
+#'
+#'   The new variable is set to the specified value for all by groups without
+#'   observations in the additional dataset.
+#'
+#'   *Default*: `NA_character_`
+#'
+#'   *Permitted Value*: A character scalar
 #'
 #' @param filter_add Filter for additional data
 #'
@@ -530,6 +640,10 @@ derive_var_merged_cat <- function(dataset,
 #'   *Permitted Values*: a condition
 #'
 #' @inheritParams derive_vars_merged
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable specified for `new_var` derived
+#'   from the additional dataset (`dataset_add`).
 #'
 #' @details
 #'
@@ -561,6 +675,19 @@ derive_var_merged_cat <- function(dataset,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
 #' select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+#'
+#' data("vs")
+#' derive_var_merged_exist_flag(
+#'   dm,
+#'   dataset_add = vs,
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y" ,
+#'   new_var = WTBLHIFL,
+#'   condition = VSSTRESN > 90 ,
+#'   false_value = "N",
+#'   missing_value = "M"
+#' ) %>%
+#' select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
 derive_var_merged_exist_flag <- function(
   dataset,
   dataset_add,
@@ -569,6 +696,7 @@ derive_var_merged_exist_flag <- function(
   condition,
   true_value = "Y",
   false_value = NA_character_,
+  missing_value = NA_character_,
   filter_add = NULL
 ) {
   new_var <- assert_symbol(enquo(new_var))
@@ -588,7 +716,7 @@ derive_var_merged_exist_flag <- function(
     check_type = "none",
     mode = "last"
   ) %>%
-    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, false_value))
+    mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value))
 }
 
 #' Merge a Character Variable
@@ -613,6 +741,8 @@ derive_var_merged_exist_flag <- function(
 #'
 #'   Changes the case of the values of the new variable.
 #'
+#'   *Default*: `NULL`
+#'
 #'   *Permitted Values*: `NULL`, `"lower"`, `"upper"`, `"title"`
 #'
 #' @param missing_value Values used for missing information
@@ -620,9 +750,15 @@ derive_var_merged_exist_flag <- function(
 #'   The new variable is set to the specified value for all by groups without
 #'   observations in the additional dataset.
 #'
+#'   *Default*: `NA_character_`
+#'
 #'   *Permitted Value*: A character scalar
 #'
 #' @inheritParams derive_vars_merged
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variable specified for `new_var` derived
+#'   from the additional dataset (`dataset_add`).
 #'
 #' @details
 #'
