@@ -323,7 +323,7 @@ get_terms_from_db <- function(
   expect_query_id = FALSE,
   i,
   temp_env,
-  type){
+  type) {
   assert_db_requirements(version = version,
                          version_arg_name = arg_name(substitute(version)),
                          fun = fun,
@@ -366,6 +366,8 @@ get_terms_from_db <- function(
 #' database must be provided. The function checks these requirements.
 #'
 #' @param version Version provided by user
+#'
+#' @param version_arg_name Name of the argument providing the version
 #'
 #' @param fun Function provided by user
 #'
@@ -496,6 +498,10 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' @examples
 #'
 #' # create a query for an SMQ
+#' library(tibble)
+#' library(magrittr, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
 #' query(
 #'   prefix = "SMQ02",
 #'   id = auto,

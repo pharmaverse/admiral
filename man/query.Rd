@@ -75,6 +75,10 @@ as input to \code{create_query_data()}.
 \examples{
 
 # create a query for an SMQ
+library(tibble)
+library(magrittr, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+
 query(
   prefix = "SMQ02",
   id = auto,

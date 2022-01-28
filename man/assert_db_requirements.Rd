@@ -17,6 +17,8 @@ assert_db_requirements(
 \arguments{
 \item{version}{Version provided by user}
 
+\item{version_arg_name}{Name of the argument providing the version}
+
 \item{fun}{Function provided by user}
 
 \item{fun_arg_name}{Name of the argument providing the function}
