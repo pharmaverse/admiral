@@ -24,10 +24,10 @@ This article will give you an overview of how the admiral project is utilizing t
 
 # Branches
 
--	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/Roche-GSK/admiral/releases) 
+-	The `main` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/Roche-GSK/admiral/releases) 
 -	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `master`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+- The `main`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
 
@@ -100,7 +100,7 @@ Once you have completed the Pull Request you will see all committed changes are 
 - The reviewer must ensure that the function follows the programming strategy recommendations. 
 - Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
 
-Once the review is completed, and the Pull Request is merged, the branch must be removed: click **Delete branch** in the Pull Request.
+Once the review is completed, the reviewer will merge the Pull Request and click **Delete branch** in the Pull Request.
 
 ```{r, echo = FALSE}
     knitr::include_graphics("github_delete_branch.png", dpi = 144)

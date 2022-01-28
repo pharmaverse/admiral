@@ -88,17 +88,15 @@ adae <- ae %>%
 adae <- adae %>%
 
   # derive last dose date/time
-  derive_last_dose(
+  derive_var_last_dose_date(
     ex,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXSTDTC,
     analysis_date = ASTDT,
-    dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    check_dates_only = FALSE
+    single_dose_condition = (EXSTDTC == EXENDTC),
+    output_datetime = TRUE
   ) %>%
 
   # derive severity / causality / ...
@@ -117,7 +115,7 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
     new_var = AOCCIFL,

@@ -1,4 +1,4 @@
-context("test-derive_disposition_dt")
+context("test-derive_var_disposition_dt")
 
 adsl <- tibble::tribble(
   ~STUDYID, ~USUBJID,
@@ -25,7 +25,7 @@ test_that("Derive RFICDT", {
     "TEST01", "PAT02", as.Date("2021-04-02")
   )
   actual_output <- adsl %>%
-    derive_disposition_dt(
+    derive_var_disposition_dt(
       dataset_ds = ds,
       new_var = RFICDT,
       dtc = DSSTDTC,
@@ -48,7 +48,7 @@ test_that("Derive RANDDT from the relevant ds.DSSTDTC", {
     "TEST01", "PAT02", as.Date("2021-04-11")
   )
   actual_output <- adsl %>%
-    derive_disposition_dt(
+    derive_var_disposition_dt(
       dataset_ds = ds,
       new_var = RANDDT,
       dtc = DSSTDTC,
@@ -70,7 +70,7 @@ test_that("Derive DTHDT from the relevant ds.DSSTDTC, impute partial death dates
     "TEST01", "PAT02", as.Date("2022-04-01")
   )
   actual_output <- adsl %>%
-    derive_disposition_dt(
+    derive_var_disposition_dt(
       dataset_ds = ds,
       new_var = DTHDT,
       dtc = DSSTDTC,

@@ -207,6 +207,7 @@ use_ad_template(
 ```
 
 A list of all available templates can be obtained by `list_all_templates()`:
+
 ```{r}
 list_all_templates()
 ```
@@ -215,6 +216,6 @@ list_all_templates()
 
 # See also
 
-- [Template scripts](https://github.com/Roche-GSK/admiral/tree/master/inst/templates)
+- [Template scripts](https://github.com/Roche-GSK/admiral/tree/main/inst/templates)
 
 - [Programming Strategy](programming_strategy.html)

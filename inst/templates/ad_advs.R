@@ -191,7 +191,7 @@ advs <- advs %>%
   ) %>%
 
   # Calculate ABLFL
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
     order = vars(ADT, VISITNUM, VSSEQ),
     new_var = ABLFL,
@@ -232,7 +232,7 @@ advs <- advs %>%
 
 # ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
 advs <- advs %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     new_var = ANL01FL,
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
@@ -250,7 +250,7 @@ advs <- advs %>%
   ) %>%
 
   # Create End of Treatment Record
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
     order = vars(ADT),
     new_var = EOTFL,
@@ -268,7 +268,7 @@ advs <- advs %>%
 # Get ASEQ and AVALCATx and add PARAM/PARAMN
 advs <- advs %>%
   # Calculate ASEQ
-  derive_obs_number(
+  derive_var_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),

@@ -231,7 +231,9 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
+
+The function `derive_var_last_dose_date()` can be used to derive the last dose date before the start of the event. 
+
 Additionally, this function can also provide the traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
@@ -239,17 +241,15 @@ Additionally, this function can also provide the traceability variables
 ```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
-  derive_last_dose(
+  derive_var_last_dose_date(
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXSTDTC,
     analysis_date = ASTDT,
-    dataset_seq_var = AESEQ,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    check_dates_only = FALSE
+    output_datetime = TRUE
   )
 ```
 
@@ -346,7 +346,7 @@ derive_var_ontrtfl(
 
 ## Derive Occurrence Flags {#occflag}
 
-The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
+The function `derive_var_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
 If grades were collected, the following can be used to flag first occurrence of
@@ -354,7 +354,7 @@ maximum toxicity grade.
 
 ```{r, eval=FALSE}
 adae <- adae %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ATOXGR), ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -372,7 +372,7 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ASEVN), ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -475,5 +475,5 @@ dataset_vignette(adae,
 
 ADaM | Sample Code
 ---- | --------------
-ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R){target="_blank"}
-ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R){target="_blank"}
+ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/main/inst/example_scripts/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/main/inst/example_scripts/ad_adcm.R){target="_blank"}

@@ -59,6 +59,7 @@ in `{admiral}`---are used.
 
 ```{r}
 data("adsl")
+data("adae")
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -102,6 +103,25 @@ The table below shows all pre-defined `tte_source` objects which should cover th
 knitr::kable(admiral:::list_tte_source_objects())
 ```
 
+These pre-defined objects can be passed directly to `derive_param_tte()` to create a new time-to-event parameter.
+
+```{r}
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  event_conditions = list(ae_ser_event),
+  censor_conditions = list(lastalive_censor),
+  source_datasets = list(adsl = adsl, adae = adae),
+  set_values_to = vars(PARAMCD = "TTAESER", PARAM = "Time to First Serious AE")
+)
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
+)
+```
+
 
 ### Single Event
 
@@ -143,6 +163,8 @@ dataset_vignette(
   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
+
+Note that in practice for efficacy parameters you might use randomization date as the time to event origin date, but this variable is not in the CDISC Pilot `ADSL` dataset so we used `TRTSDT` for these examples.
 
 ### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
 
@@ -578,10 +600,10 @@ dataset_vignette(
 
 ## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`:
+The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`:
 
 ```{r eval=TRUE}
-adtte <- derive_obs_number(
+adtte <- derive_var_obs_number(
   adtte,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(PARAMCD),

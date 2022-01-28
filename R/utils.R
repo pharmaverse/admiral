@@ -156,7 +156,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' test_fun2 <- function(something) {
 #'   admiral:::arg_name(substitute(inner_function(something)))
 #' }
-arg_name <- function(expr) {
+arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
@@ -380,6 +380,18 @@ is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
 
+#' Replace quosure value with name
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {
@@ -510,4 +522,20 @@ valid_time_units <- function() {
 #' example_fun(auto)
 is_auto <- function(arg) {
   is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
+}
+
+#' Get source variables from a list of quosures
+#'
+#' @param quosures A list of quosures
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @return A list of quosures
+#'
+#' @examples
+#' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+get_source_vars <- function(quosures) {
+  quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }
