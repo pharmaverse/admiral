@@ -1,0 +1,27 @@
+name: User Support
+description: Do you need assistance with admiral?
+title: "Guidance and support on how to use admiral"
+labels: ["user support"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: To get immediate help check out and join our slack channel - [admiral](https://app.slack.com/client/T028PB489D3/C02M8KN8269/thread/C028SJ83KM1-1643222485.137579)
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: How can we support you?  Let us know!
+      description: 
+      placeholder: Tell us what you see!
+      value: 
+    validations:
+      required: true

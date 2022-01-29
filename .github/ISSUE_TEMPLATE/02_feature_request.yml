@@ -1,0 +1,57 @@
+name: Feature Request
+description: Enchancement to admiral functionality
+title: "Feature Request:  <Insert Issue Title Here>"
+labels: ["enhancement", "programming"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!  We love keeping admiral fresh!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: feature
+    attributes:
+      label: Feature Idea (Succint)?
+      description: Tell us your idea in as few words as possible
+      placeholder: Tell us what you see!
+      value: "`derive_var_dtm` should do x, y and z "
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant Output
+      description: Can you provide what the final output should look like?
+      placeholder: Tell us!
+      value: "What should the output look like?"
+    validations:
+      required: false
+  - type: textarea
+    id: code
+    attributes:
+      label: Reproducible Example/Pseudo Code
+      description: Can you provide a working example or a sketch of how the code should work?
+      placeholder: Tell us see!
+      value: "We love example code and it will speed up the process"
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Please select a category this issue is focused on?
+      multiple: true
+      options:
+        - Function
+        - Documentation
+        - New Feature
+        - General
+        
