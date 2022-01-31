@@ -27,6 +27,7 @@ are not recorded in the data. (#589)
 
 - Broken links in README have been fixed (#564)
 
+- `derive_var_agegr_fda` has been updated to use ranges <18, 18-64, >=65 (#829)
 
 # admiral 0.4.0
 
