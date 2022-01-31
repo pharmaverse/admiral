@@ -181,6 +181,20 @@ derive_disposition_reason <- function(dataset,
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @examples
+#' ds <- tibble::tribble(
+#' ~USUBJID,      ~DSTERM,              ~DSDECOD,
+#' "01-701-1015", "PROTOCOL COMPLETED", "COMPLETED",
+#' "01-701-1028",  NA_character_,       "SCREEN FAILURE",
+#' "01-701-1111", "ADVERSE EVENT",      "ADVERSE EVENT",
+#' "01-701-1203",  NA_character_,        NA_character_
+#' )
+#'
+#' ds %>%
+#'   mutate(
+#'     SCSREAS  = format_reason_default(reason = DSDECOD),
+#'     SCREASSP = format_reason_default(reason = DSDECOD, reason_spe = DSTERM)
+#'   )
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
