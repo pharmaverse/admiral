@@ -89,10 +89,11 @@ adpp <- adpp %>%
   select(-PPSTRESN, -PPSTRESC) %>%
 
   # Add ASEQ
-  mutate(SRCDOM = DOMAIN,
-         SRCVAR = "SEQ",
-         SRCSEQ = PPSEQ
-         ) %>%
+  mutate(
+    SRCDOM = DOMAIN,
+    SRCVAR = "SEQ",
+    SRCSEQ = PPSEQ
+  ) %>%
   select(-DOMAIN, -PPSEQ)
 
 # get visit info
@@ -126,7 +127,7 @@ adpp <- adpp %>%
 adpp <- adpp %>%
 
   left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+    by = c("STUDYID", "USUBJID")
   )
 
 # Final Steps, Select final variables and Add labels
