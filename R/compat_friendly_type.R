@@ -88,7 +88,7 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) {
     type,
     logical = "a logical %s",
     integer = "an integer %s",
-    numeric = ,
+    numeric = , # nolint
     double = "a double %s",
     complex = "a complex %s",
     character = "a character %s",
@@ -118,7 +118,7 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) {
     weakref = "a weak reference",
     S4 = "an S4 object",
 
-    name = ,
+    name = , # nolint
     symbol = "a symbol",
     language = "a call",
     pairlist = "a pairlist node",
@@ -130,8 +130,8 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) {
     any = "an internal `any` object",
     bytecode = "an internal bytecode object",
 
-    primitive = ,
-    builtin = ,
+    primitive = , # nolint
+    builtin = , # nolint
     special = "a primitive function",
     closure = "a function",
 
