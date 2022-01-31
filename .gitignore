@@ -45,3 +45,7 @@ Meta
 admiral.Rcheck/
 admiral*.tar.gz
 admiral*.tgz
+
+# MacOS
+.DS_Store
+._.DS*
