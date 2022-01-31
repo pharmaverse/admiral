@@ -78,11 +78,11 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "Roche-GSK",
+      "RemoteUsername": "pharmaverse",
       "RemoteRepo": "admiral.test",
       "RemoteRef": "main",
-      "RemoteSha": "660224bfeb8450f6ef69769e6982aa921dc8130a",
-      "Hash": "869b5006c7e15f0364d09695c461471c"
+      "RemoteSha": "bdae26a24aa2c1a2b4b12c1a0ab44308c6dc6ac9",
+      "Hash": "4edded9ff67ab05c59ffab7dfa73977a"
     },
     "askpass": {
       "Package": "askpass",
