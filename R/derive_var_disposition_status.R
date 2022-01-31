@@ -136,6 +136,19 @@ derive_disposition_status <- function(dataset,
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @examples
+#' ds <- tibble::tribble(
+#' ~USUBJID,      ~DSDECOD,
+#' "01-701-1015", "COMPLETED",
+#' "01-701-1028", "SCREEN FAILURE",
+#' "01-701-1111", "ADVERSE EVENT",
+#' "01-701-1203",  NA_character_
+#' )
+#'
+#' ds %>%
+#'   mutate(
+#'     SCSTAT = format_eoxxstt_default(DSDECOD)
+#'   )
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
