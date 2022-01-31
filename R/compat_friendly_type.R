@@ -5,7 +5,7 @@
 #' @return A string describing the type. Starts with an indefinite
 #'   article, e.g. "an integer vector".
 #' @noRd
-friendly_type_of <- function(x, value = TRUE, length = FALSE) {
+friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   if (rlang::is_missing(x)) {
     return("absent")
   }
