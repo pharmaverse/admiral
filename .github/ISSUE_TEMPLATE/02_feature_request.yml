@@ -44,14 +44,5 @@ body:
       value: "We love example code and it will speed up the process"
     validations:
       required: false
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: Please select a category this issue is focused on?
-      multiple: true
-      options:
-        - Function
-        - Documentation
-        - New Feature
-        - General
+
         
