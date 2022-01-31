@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-As admiral is intended to be contributed by the user community, 
-this article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
+As admiral is intended to be contributed by the user community, this 
+article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
 In order to keep the framework robust across the whole community, 
 we have defined a programming strategy that should be followed in such cases.
 These contributions could include, for example, company specific derivations of ADaM datasets. 
