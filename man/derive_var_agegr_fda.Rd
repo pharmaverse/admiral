@@ -32,9 +32,7 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 Functions for deriving standardized age groups.
 }
 \details{
-\code{derive_var_agegr_fda} Derive age groups according to FDA
-(\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
-Baseline Measure Information).
+\code{derive_var_agegr_fda} Derive age groups according to FDA.
 
 \code{derive_var_agegr_ema} Derive age groups according to EMA
 (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
