@@ -20,7 +20,7 @@ body:
   - type: textarea
     id: feature
     attributes:
-      label: Feature Idea (Succinct)?
+      label: Feature Idea (Succinct!)
       description: Tell us your idea in as few words as possible
       placeholder: Tell us what you see!
       value: "`derive_var_dtm` should do x, y and z "
