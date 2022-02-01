@@ -31,13 +31,12 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
     "TEST01", "PAT02",  "PARAM02", 2,      9,    "",     "LAST",      8.9,
     "TEST01", "PAT02",  "PARAM02", 3,      5.35, "",     "LAST",      8.9
   )
-  actual_output <- derive_baseline(
+  actual_output <- derive_var_base(
     input,
     by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   )
-
 
   expect_dfs_equal(
     expected_output,
@@ -65,7 +64,7 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
     "TEST01", "PAT01",  "PARAM02", 2,      7.1,  "",     "LAST",    NA,
     "TEST01", "PAT01",  "PARAM02", 3,      8.35, "",     "LAST",    NA
   )
-  actual_output <- derive_baseline(
+  actual_output <- derive_var_base(
     input,
     by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
@@ -98,7 +97,7 @@ test_that("only the `target` variable is added to the input dataset", {
     "TEST01", "PAT01",  "PARAM02", 2,     NA,    "",     "LAST",    "Y",       8.35,
     "TEST01", "PAT01",  "PARAM02", 3,      8.35, "",     "LAST",    "Y",       8.35
   )
-  actual_output <- derive_baseline(
+  actual_output <- derive_var_base(
     input,
     by_vars = vars(USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
@@ -125,7 +124,7 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
   )
 
   expect_error(
-    derive_baseline(
+    derive_var_base(
       input,
       by_vars = vars(USUBJID, PARAMCD, BASETYPE),
       source_var = AVALC,
@@ -133,37 +132,4 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
     ),
     "Dataset contains multiple baseline records."
   )
-})
-
-test_that("a `BASEC` column of type `character` is added to the input dataset", {
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01", "LOW",    "",     "LAST",
-    "TEST01", "PAT01",  "PARAM01", "MEDIUM", "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM02", "HIGH",   "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02", "MEDIUM", "",     "LAST",
-  )
-  output <- derive_var_basec(input, by_vars = vars(USUBJID, PARAMCD, BASETYPE))
-
-  expect_true("BASEC" %in% colnames(output))
-  expect_true(is.character(output$BASEC))
-})
-
-test_that("a `BASE` column of type `numeric` is added to the input dataset", {
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,   ~ABLFL, ~BASETYPE,
-    "TEST01", "PAT01",  "PARAM01",  1,      "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM01",  1,      "",     "LAST",
-    "TEST01", "PAT01",  "PARAM01",  2.5,    "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02", 32.1,    "Y",    "LAST",
-    "TEST01", "PAT01",  "PARAM02", 35.9,    "",     "LAST",
-    "TEST01", "PAT01",  "PARAM02", 34.45,   "",     "LAST",
-
-  )
-  output <- derive_var_base(input, by_vars = vars(USUBJID, PARAMCD, BASETYPE))
-
-  expect_true("BASE" %in% colnames(output))
-  expect_true(is.numeric(output$BASE))
 })

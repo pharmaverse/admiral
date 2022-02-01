@@ -1,7 +1,9 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/master/graph/badge.svg)](https://codecov.io/gh/Roche-GSK/admiral?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
+[![R-CMD-check](https://github.com/pharmaverse/admiral/workflows/R-CMD-check/badge.svg)](https://github.com/pharmaverse/admiral/actions)
+[![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/main/graph/badge.svg)](https://codecov.io/gh/Roche-GSK/admiral?branch=main)
 <!-- badges: end -->
 
 ADaM in R Asset Library
@@ -47,7 +49,10 @@ remotes::install_github("Roche-GSK/admiral")
 * Please go to [Get Started](https://roche-gsk.github.io/admiral/articles/admiral.html) section to start using admiral
 * Please see the [Programming Strategy](https://roche-gsk.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://roche-gsk.github.io/admiral/articles/faq.html) for the most frequent questions
+* Please see the [Contribution Model](https://roche-gsk.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
 
 ## Contact 
 
-In case your questions are not answered please contact us on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+We use the following for support and communications between user and developer community:
+* [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) - for informal discussions, Q&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
+* [GitHub Issues](https://github.com/Roche-GSK/admiral/issues) - for direct feedback, enhancement requests or raising bugs

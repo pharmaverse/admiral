@@ -1,3 +1,5 @@
+context("test-derive_var_last_dose.R")
+
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
@@ -22,7 +24,7 @@ input_ex <- tibble::tribble(
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
-test_that("derive_last_dose works as expected", {
+test_that("derive_var_last_dose works as expected", {
 
   expected_output <- mutate(
     input_ae,
@@ -31,7 +33,7 @@ test_that("derive_last_dose works as expected", {
     )
   )
 
-  res <- derive_last_dose(
+  res <- derive_var_last_dose(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -50,7 +52,7 @@ test_that("derive_last_dose works as expected", {
 
 })
 
-test_that("derive_last_dose works as expected with dates only", {
+test_that("derive_var_last_dose works as expected with dates only", {
 
   expected_output <- mutate(
     input_ae,
@@ -59,7 +61,7 @@ test_that("derive_last_dose works as expected with dates only", {
     )
   )
 
-  res <- derive_last_dose(
+  res <- derive_var_last_dose(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -78,7 +80,7 @@ test_that("derive_last_dose works as expected with dates only", {
 
 })
 
-test_that("derive_last_dose checks validity of start and end dose inputs", {
+test_that("derive_var_last_dose checks validity of start and end dose inputs", {
 
   input_ex_wrong <- dplyr::bind_rows(
     input_ex,
@@ -88,7 +90,7 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
   )
 
   expect_error(
-    derive_last_dose(
+    derive_var_last_dose(
       input_ae,
       input_ex_wrong,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -107,7 +109,7 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
 
 })
 
-test_that(paste("derive_last_dose checks validity of start and end dose inputs",
+test_that(paste("derive_var_last_dose checks validity of start and end dose inputs",
                 "- time component (check_dates_only = FALSE)"), {
 
   input_ex_wrong <- dplyr::bind_rows(
@@ -119,7 +121,7 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
   )
 
   expect_error(
-    derive_last_dose(
+    derive_var_last_dose(
       input_ae,
       input_ex_wrong,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -139,7 +141,7 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
 })
 
 test_that(
-  paste("derive_last_dose checks validity of start and end dose inputs",
+  paste("derive_var_last_dose checks validity of start and end dose inputs",
         "- time component (check_dates_only = TRUE)"), {
 
   input_ex_wrong <- dplyr::bind_rows(
@@ -157,7 +159,7 @@ test_that(
     )
   )
 
-  res <- derive_last_dose(
+  res <- derive_var_last_dose(
     input_ae,
     input_ex_wrong,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
@@ -176,7 +178,7 @@ test_that(
 
 })
 
-test_that("derive_last_dose returns traceability vars", {
+test_that("derive_var_last_dose returns traceability vars", {
 
   expected_output <- mutate(
     input_ae,
@@ -188,7 +190,7 @@ test_that("derive_last_dose returns traceability vars", {
     )
   )
 
-  res <- derive_last_dose(
+  res <- derive_var_last_dose(
     input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),

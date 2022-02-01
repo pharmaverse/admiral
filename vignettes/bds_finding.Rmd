@@ -433,7 +433,7 @@ advs <- derive_var_ontrtfl(
 )
 ```
 
-Lastly, the function does allow you to filter out pre-treatment observations
+In addition, the function does allow you to filter out pre-treatment observations
 that occurred on the start date.  For example, if observations with `VSTPT == PRE`
 should not be considered on-treatment when the observation date falls between 
 the treatment start and end date, the user may specify this using the 
@@ -453,6 +453,43 @@ advs <- derive_var_ontrtfl(
 )
 ```
 
+Lastly, the function does allow you to create any on-treatment 
+flag based on the analysis needs.  For example, if variable 
+`ONTR01FL` is needed, showing the on-treatment flag during Period 01, 
+you need to set `new var = ONTR01FL`. In addition, for Period 01 
+Start Date and Period 01 End Date, you need `ref_start_date = AP01SDT` 
+and `ref_end_date = AP01EDT`.
+
+```{r include=FALSE}
+advs_pre <- select(advs, -ONTRTFL)
+
+advs <- tibble::tribble(
+  ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+)
+```
+
+```{r eval=TRUE}
+advs <- derive_var_ontrtfl(
+ advs,
+ new_var = ONTR01FL,
+ start_date = ASTDT,
+ end_date = AENDT,
+ ref_start_date = AP01SDT,
+ ref_end_date = AP01EDT,
+ span_period = "Y"
+)
+```
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs, 
+  display_vars = vars(USUBJID, ASTDT, AENDT, AP01SDT, AP01EDT, ONTR01FL)
+)
+```
+
+
 ## Assign Reference Range Indicator (`ANRIND`) {#referencerange}
 
 The admiral function `derive_var_anrind()` may be used to derive the reference
@@ -470,7 +507,7 @@ range_lookup <- tibble::tribble(
   "TEMP", 36.5, 37.5, 35, 38
 )
 
-advs <- left_join(advs, range_lookup, by = "PARAMCD")
+advs <- left_join(advs_pre, range_lookup, by = "PARAMCD")
 ```
 
 The function is called as:
@@ -515,11 +552,11 @@ subsequent derivations. This will be important if the data frame contains
 multiple values for `BASETYPE`.
 
 Next, the analysis baseline flag `ABLFL` can be derived using the admiral
-function `derive_extreme_flag()`.  For example, if baseline is defined as the last 
+function `derive_var_extreme_flag()`.  For example, if baseline is defined as the last 
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
 ```{r eval=TRUE}
-advs <- derive_extreme_flag(
+advs <- derive_var_extreme_flag(
   advs,
   by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
   order = vars(ADT, ATPTN, VISITNUM),
@@ -537,25 +574,28 @@ dataset_vignette(
 )
 ```
 
-Note: Additional examples of the `derive_extreme_flag()` function can be 
+Note: Additional examples of the `derive_var_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
-Lastly, the `BASE` and `BASEC` columns can be derived using the admiral function
-`derive_var_base()` and `derive_var_basec()`.  In addition, `BNRIND` can be derived
-using the low-level function `derive_baseline()`.  Example calls are:
+Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the admiral function
+`derive_var_base()`. Example calls are:
 
 ```{r eval=TRUE}
 advs <- derive_var_base(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  source_var = AVAL, 
+  new_var = BASE
 )
 
-advs <- derive_var_basec(
+advs <- derive_var_base(
   advs,
-  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+  source_var = AVALC, 
+  new_var = BASEC
 )
 
-advs <- derive_baseline(
+advs <- derive_var_base(
   advs,
   by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
   source_var = ANRIND, 
@@ -601,12 +641,12 @@ observations within a particular timing period.
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
 appropriate record for analysis.
 
-This flag may be derived using the admiral function `derive_extreme_flag()`. 
+This flag may be derived using the admiral function `derive_var_extreme_flag()`. 
 For this example, we will assume we would like to choose the latest and 
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
 ```{r eval=TRUE}
-advs <- derive_extreme_flag(
+advs <- derive_var_extreme_flag(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN, AVAL),
@@ -630,7 +670,7 @@ values (`SYSBP`, `DIABP`, and `RESP`).  We will also assume high is worst for `S
 and `DIABP` and low is worst for `RESP`.
 
 ```{r eval=TRUE}
-advs <- derive_worst_flag(
+advs <- derive_var_worst_flag(
   advs,
   by_vars = vars(USUBJID, PARAMCD, AVISIT),
   order = vars(ADT, ATPTN),
@@ -668,11 +708,11 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An 
+The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
 ```{r eval=TRUE}
-advs <- derive_obs_number(
+advs <- derive_var_obs_number(
   advs,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
@@ -757,7 +797,7 @@ assign a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(ADT, AVISITN, ATPTN, AVAL),
     new_var = EOTFL,
@@ -837,5 +877,5 @@ dataset_vignette(
 
 ADaM | Sample Code 
 ---- | --------------
-ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adeg.R){target="_blank"}
-ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_advs.R){target="_blank"}
+ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adeg.R){target="_blank"}
+ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_advs.R){target="_blank"}

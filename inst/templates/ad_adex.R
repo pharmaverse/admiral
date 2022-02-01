@@ -98,7 +98,7 @@ adex <- bind_rows(
 adex <- adex %>%
   # Overall exposure
   call_derivation(
-    derivation = derive_params_exposure,
+    derivation = derive_param_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
@@ -136,7 +136,7 @@ adex <- adex %>%
 
   # W2-W24 exposure
   call_derivation(
-    derivation = derive_params_exposure,
+    derivation = derive_param_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "PDOSE", PARCAT1 = "WEEK 2-24"),
@@ -256,7 +256,7 @@ adex <- adex %>%
   mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
 
   # Calculate ASEQ
-  derive_obs_number(
+  derive_var_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),

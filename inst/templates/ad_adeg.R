@@ -233,7 +233,7 @@ adeg <- adeg %>%
   ) %>%
 
   # Calculate ABLFL
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
     order = vars(ADT, VISITNUM, EGSEQ),
     new_var = ABLFL,
@@ -248,16 +248,20 @@ adeg <- adeg %>%
 
   # Calculate BASE
   derive_var_base(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVAL,
+    new_var = BASE
   ) %>%
 
   # Calculate BASEC
-  derive_var_basec(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE)
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = AVALC,
+    new_var = BASEC
   ) %>%
 
   # Calculate BNRIND
-  derive_baseline(
+  derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
@@ -272,7 +276,7 @@ adeg <- adeg %>%
 # ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
 adeg <- adeg %>%
 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
     order = vars(ADT, AVAL),
     new_var = ANL01FL,
@@ -291,7 +295,7 @@ adeg <- adeg %>%
 adeg <- adeg %>%
 
   # Calculate ASEQ
-  derive_obs_number(
+  derive_var_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
