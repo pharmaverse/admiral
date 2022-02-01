@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        The admiral team loves documentation!  Help us keep it up to date and fresh!  
+        The admiral team loves documentation!  Help us keep it up to date and fresh!
   - type: input
     id: contact
     attributes:
@@ -28,12 +28,16 @@ body:
         - Get Started Document
         - Developer Guides
         - User Guides
+        - Changelog
+        - Home
+        - Reference
+        - Other
         - I have a new documentation idea! Yay!
   - type: textarea
     id: docs-out-if-sync
     attributes:
       label: Let us know where something needs a refresh or put your idea here!
-      description: Screen shots are super helpful here!  You can do a screen grab and cut and paste it here right in here.
+      description: Screen shots are super helpful here!  You can do a screenshot and cut and paste it here right in here.
       placeholder: Tell us what you see!
       value: "Something is out of sync or needs a refresh"
     validations:

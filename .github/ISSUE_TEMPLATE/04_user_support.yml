@@ -1,5 +1,5 @@
 name: User Support
-description: Do you need assistance with admiral?
+description: Do you need assistance with admiral? If you found a bug, documentation issue or have a feature request please use other forms?
 title: "Guidance and support on how to use admiral"
 labels: ["user support"]
 assignees:
@@ -7,7 +7,7 @@ assignees:
 body:
   - type: markdown
     attributes:
-      value: To get immediate help check out and join our slack channel - [admiral](https://app.slack.com/client/T028PB489D3/C02M8KN8269/thread/C028SJ83KM1-1643222485.137579)
+      value: To get immediate help check out and join our slack channel - [admiral](https://app.slack.com/client/T028PB489D3/C02M8KN8269)
   - type: input
     id: contact
     attributes:
@@ -20,8 +20,8 @@ body:
     id: what-happened
     attributes:
       label: How can we support you?  Let us know!
-      description: 
+      description:
       placeholder: Tell us what you see!
-      value: 
+      value:
     validations:
       required: true

@@ -1,5 +1,5 @@
 name: Onboarding Tasks
-description: Bringing a Core or non-Core member onto the admiral team
+description: Bringing a Core or non-Core member onto the admiral team [for admiral team only]
 title: "Onboaring:  <Insert Issue Title Here>"
 labels: ["onboarding"]
 assignees:
@@ -13,7 +13,7 @@ body:
     id: core
     attributes:
       label: Onboarding tasks for Core (Roche-GSK) Team Members
-      description: 
+      description:
       options:
         - label: Given a tour of Github from a Core member.
         - label: Understand how to do a Create Issues and do a Pull Request
@@ -23,12 +23,12 @@ body:
         - label: Given write access to Github Repository
         - label: Slack channel invites to admiral and admiral_dev
         - label: Introduction to Teams ways of working
-        
+
   - type: checkboxes
     id: non-core
     attributes:
       label: Onboarding tasks for non-Core Team Members
-      description: 
+      description:
       options:
         - label: Given a tour of Github from a Core member.
         - label: Understand how to do a Create Issues and do a Pull Request
