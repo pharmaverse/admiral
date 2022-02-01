@@ -15,7 +15,8 @@
 #'   specified. If any of the queries is a SMQ or a customized query including a
 #'   SMQ, the parameter needs to be specified.
 #'
-#'   *Permitted Values*: A character string
+#'   *Permitted Values*: A character string (the expected format is
+#'   company-specific)
 #'
 #' @param whodd_version WHO Drug Dictionary version
 #'
@@ -23,7 +24,8 @@
 #'   dataset should be specified. If any of the queries is a SDG, the parameter
 #'   needs to be specified.
 #'
-#'   *Permitted Values*: A character string
+#'   *Permitted Values*: A character string (the expected format is
+#'   company-specific)
 #'
 #' @param get_smq_fun Function which returns the terms of an SMQ
 #'

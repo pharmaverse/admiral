@@ -24,7 +24,8 @@ The MedDRA version used for coding the terms in the AE dataset should be
 specified. If any of the queries is a SMQ or a customized query including a
 SMQ, the parameter needs to be specified.
 
-\emph{Permitted Values}: A character string}
+\emph{Permitted Values}: A character string (the expected format is
+company-specific)}
 
 \item{whodd_version}{WHO Drug Dictionary version
 
@@ -32,7 +33,8 @@ The version of the WHO Drug Dictionary used for coding the terms in the CM
 dataset should be specified. If any of the queries is a SDG, the parameter
 needs to be specified.
 
-\emph{Permitted Values}: A character string}
+\emph{Permitted Values}: A character string (the expected format is
+company-specific)}
 
 \item{get_smq_fun}{Function which returns the terms of an SMQ
 
