@@ -6,7 +6,7 @@ Please check off each taskbox as an acknowledgment that you completed the task o
 - [ ] Updated relevant unit tests or have written new unit tests - See [Unit Test Guide](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)
 - [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
 - [ ] Update to all relevant roxygen headers and examples 
-- [ ] Run `devtools::documents()` so all `.Rd` files in the `man` folder and the `NAMESPACE` file in the project root are updated appropriately
+- [ ] Run `devtools::document()` so all `.Rd` files in the `man` folder and the `NAMESPACE` file in the project root are updated appropriately
 - [ ] Address any updates needed for vignettes and/or templates
 - [ ] Update `NEWS.md`
 - [ ] Build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://roche-gsk.github.io/admiral/reference/index.html)" page. 
