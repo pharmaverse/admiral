@@ -43,13 +43,17 @@ remotes::install_github("Roche-GSK/admiral")
 
 * Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions
 
-
 ## References and Documentation
 
 * Please go to [Get Started](https://roche-gsk.github.io/admiral/articles/admiral.html) section to start using admiral
 * Please see the [Programming Strategy](https://roche-gsk.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://roche-gsk.github.io/admiral/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://roche-gsk.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
+
+## Conference Presentations
+
+* [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
+* [PHUSE EU Connect 2021 workshop](https://github.com/pharmaverse/admiral.phuse.workshop) (slides and materials)
 
 ## Contact 
 
