@@ -281,7 +281,7 @@ derive_vars_extreme_dtm <- function(dataset,
   assert_data_frame(dataset, required_vars = subject_keys)
   new_var <- assert_symbol(enquo(new_var))
   assert_list_of(source_datasets, "data.frame")
-  sources <- list(...)
+  sources <- rlang::list2(...)
   assert_list_of(sources, "date_source")
   mode <-
     assert_character_scalar(mode,
@@ -385,7 +385,7 @@ derive_vars_extreme_dt <- function(dataset,
 
   derive_vars_extreme_dtm(dataset,
                           new_var = !!new_var,
-                          ... = sources,
+                          !!!sources,
                           source_datasets = source_datasets,
                           mode = mode,
                           subject_keys = subject_keys) %>%

@@ -31,7 +31,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with the \code{LSTALVDT} variable added.
 }
 \description{
-Add the last known alive date (\code{LSTALVDT}) to the dataset.
+\emph{Deprecated}, please use \code{derive_vars_extreme_dt()} instead. Add the last known alive date (\code{LSTALVDT}) to the dataset.
 }
 \details{
 The following steps are performed to create the output dataset:

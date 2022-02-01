@@ -109,7 +109,6 @@ Collate:
     'derive_vars_transposed.R'
     'duplicates.R'
     'filter_extreme.R'
-    'get_terms.R'
     'globals.R'
     'hms.R'
     'iso_dtm.R'

@@ -38,7 +38,7 @@ traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 An object of class "lstalvdt_source".
 }
 \description{
-Create an \code{lstalvdt_source} object
+\emph{Deprecated}, please use \code{date_source()} instead.
 }
 \author{
 Stefan Bundfuss

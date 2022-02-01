@@ -13,7 +13,9 @@ ae <- tibble::tribble(
   "STUDY01",  "3", "2020-04-11", NA_character_, 2
 )
 
-test_that("LSTALVDT is derived", {
+# derive_vars_extreme_dt ----
+## derive_vars_extreme_dt: LSTALVDT is derived ----
+test_that("derive_vars_extreme_dt: LSTALVDT is derived", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
@@ -54,7 +56,42 @@ test_that("LSTALVDT is derived", {
   )
 })
 
-test_that("LSTALVDTM and traceability variables are derived", {
+## derive_vars_extreme_dt: LSTALVDT is derived for Date class as well ----
+test_that("derive_vars_extreme_dt: LSTALVDT is derived for Date class as well", {
+  adsl <- tibble::tribble(
+    ~STUDYID,  ~USUBJID, ~TRTEDTM,
+    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"),
+    "STUDY01", "2",      as.POSIXct(ymd("2020-02-03")),
+    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00")
+  ) %>%
+    mutate(TRTEDTM = as.Date(TRTEDTM))
+
+  adsl_trtdate <- date_source(
+    dataset_name = "adsl",
+    date = TRTEDTM
+  )
+
+  expected_output <- adsl %>%
+    mutate(LSTALVDT = c(ymd("2020-01-01"), ymd("2020-02-03"), ymd("2020-04-12")))
+
+  actual_output <- derive_vars_extreme_dt(
+    adsl,
+    new_var = LSTALVDT,
+    source_datasets = list(adsl = adsl),
+    adsl_trtdate,
+    mode = "last"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("USUBJID")
+  )
+})
+
+# derive_vars_extreme_dtm ----
+## derive_vars_extreme_dtm: LSTALVDTM and traceability variables are derived ----
+test_that("derive_vars_extreme_dtm: LSTALVDTM and traceability variables are derived", {
   ae_start <- date_source(
     dataset_name = "ae",
     date = AESTDTC,
@@ -123,34 +160,3 @@ test_that("LSTALVDTM and traceability variables are derived", {
   )
 })
 
-test_that("LSTALVDT is derived for Date class as well", {
-  adsl <- tibble::tribble(
-    ~STUDYID,  ~USUBJID, ~TRTEDTM,
-    "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"),
-    "STUDY01", "2",      as.POSIXct(ymd("2020-02-03")),
-    "STUDY01", "3",      ymd_hms("2020-04-12T13:15:00")
-  ) %>%
-    mutate(TRTEDTM = as.Date(TRTEDTM))
-
-  adsl_trtdate <- date_source(
-    dataset_name = "adsl",
-    date = TRTEDTM
-  )
-
-  expected_output <- adsl %>%
-    mutate(LSTALVDT = c(ymd("2020-01-01"), ymd("2020-02-03"), ymd("2020-04-12")))
-
-  actual_output <- derive_vars_extreme_dt(
-    adsl,
-    new_var = LSTALVDT,
-    source_datasets = list(adsl = adsl),
-    adsl_trtdate,
-    mode = "last"
-  )
-
-  expect_dfs_equal(
-    base = expected_output,
-    compare = actual_output,
-    keys = c("USUBJID")
-  )
-})
