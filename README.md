@@ -1,6 +1,8 @@
 # admiral <img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
+[![R-CMD-check](https://github.com/pharmaverse/admiral/workflows/R-CMD-check/badge.svg)](https://github.com/pharmaverse/admiral/actions)
 [![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/main/graph/badge.svg)](https://codecov.io/gh/Roche-GSK/admiral?branch=main)
 <!-- badges: end -->
 
