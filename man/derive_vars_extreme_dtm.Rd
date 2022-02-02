@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_extreme_date.R
 \name{derive_vars_extreme_dtm}
 \alias{derive_vars_extreme_dtm}
-\title{Derive Last Known Alive Date}
+\title{Derive First or Last Datetime from Multiple Sources}
 \usage{
 derive_vars_extreme_dtm(
   dataset,
@@ -18,11 +18,20 @@ derive_vars_extreme_dtm(
 
 The variables specified by \code{subject_keys} are required.}
 
-\item{...}{Source(s) of known alive dates. One or more \code{lstalvdt_source()} objects are
+\item{new_var}{Name of variable to create}
+
+\item{...}{Source(s) of dates. One or more \code{date_source()} objects are
 expected.}
 
-\item{source_datasets}{A named \code{list} containing datasets in which to search for the
-last known alive date}
+\item{source_datasets}{A named \code{list} containing datasets in which to search
+for the first or last date}
+
+\item{mode}{Selection mode (first or last)
+
+If \code{"first"} is specified, the first date for each subject is selected. If
+\code{"last"} is specified, the last date for each subject is selected.
+
+Permitted Values:  \code{"first"}, \code{"last"}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -30,33 +39,31 @@ A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
 }
 \value{
-The input dataset with the \code{LSTALVDT} variable added.
+The input dataset with the new variable added.
 }
 \description{
-Add the last known alive date (\code{LSTALVDT}) to the dataset.
+Add the first or last datetime from multiple sources to the dataset, e.g.,
+the last known alive date (\code{LSTALVDT}).
 }
 \details{
 The following steps are performed to create the output dataset:
-
-\enumerate{ \item For each source dataset the observations as specified by
-the \code{filter} element are selected. Then for each patient the last
-observation (with respect to \code{date}) is selected.
-
-\item The \code{LSTALVDT} variable is set to the variable specified by the
-\code{date} element. If the date variable is a datetime variable, only
-the datepart is copied. If the source variable is a character variable, it
-is converted to a date. If the date is incomplete, it is imputed as
-specified by the \code{date_imputation} element.
-
-\item The variables specified by the \code{traceability_vars} element are
-added.
-
+\enumerate{
+\item For each source dataset the observations as specified by the \code{filter}
+element are selected. Then for each patient the first or last observation
+(with respect to \code{date} and \code{mode}) is selected.
+\item The new variable is set to the variable specified by the \code{date} element.
+If the date variable is a date variable, the time is imputed as specified
+by the \code{time_imputation} element. If the source variable is a character
+variable, it is converted to a datetime. If the date is incomplete, it is
+imputed as specified by the \code{date_imputation} and \code{time_imputation}
+element.
+\item The variables specified by the \code{traceability_vars} element are added.
 \item The selected observations of all source datasets are combined into a
 single dataset.
-
-\item For each patient the last observation (with respect to the \code{LSTALVDT}
-variable) from the single dataset is selected and the new variable is
-merged to the input dataset. }
+\item For each patient the first or last observation (with respect to the new
+variable and \code{mode}) from the single dataset is selected and the new
+variable is merged to the input dataset.
+}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -66,35 +73,42 @@ data("ae")
 data("lb")
 data("adsl")
 
-ae_start <- lstalvdt_source(
-  dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "first"
-)
-ae_end <- lstalvdt_source(
-  dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "first"
-)
-lb_date <- lstalvdt_source(
-  dataset_name = "lb",
-  date = LBDTC,
-  filter = nchar(LBDTC) >= 10
-)
-adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
-
-dm \%>\%
-  derive_var_lstalvdt(
-    ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb)
-  ) \%>\%
-  select(USUBJID, LSTALVDT)
-
-# derive last alive date and traceability variables
-ae_start <- lstalvdt_source(
+# derive last known alive datetime (LSTALVDTM)
+ae_start <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first",
+  time_imputation = "first"
+)
+ae_end <- date_source(
+  dataset_name = "ae",
+  date = AEENDTC,
+  date_imputation = "first",
+  time_imputation = "first"
+)
+lb_date <- date_source(
+  dataset_name = "lb",
+  date = LBDTC,
+  filter = nchar(LBDTC) >= 10,
+  time_imputation = "first"
+)
+adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
+
+dm \%>\%
+  derive_vars_extreme_dtm(
+    new_var = LSTALVDTM,
+    ae_start, ae_end, lb_date, adsl_date,
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    mode = "last"
+  ) \%>\%
+  select(USUBJID, LSTALVDTM)
+
+# derive last alive datetime and traceability variables
+ae_start <- date_source(
+  dataset_name = "ae",
+  date = AESTDTC,
+  date_imputation = "first",
+  time_imputation = "first",
   traceability_vars = vars(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
@@ -102,20 +116,22 @@ ae_start <- lstalvdt_source(
   )
 )
 
-ae_end <- lstalvdt_source(
+ae_end <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first",
+  time_imputation = "first",
   traceability_vars = vars(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
     LALVVAR = "AEENDTC"
   )
 )
-lb_date <- lstalvdt_source(
+lb_date <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
+  time_imputation = "first",
   traceability_vars = vars(
     LALVDOM = "LB",
     LALVSEQ = LBSEQ,
@@ -123,9 +139,9 @@ lb_date <- lstalvdt_source(
   )
 )
 
-adsl_date <- lstalvdt_source(
+adsl_date <- date_source(
   dataset_name = "adsl",
-  date = TRTEDT,
+  date = TRTEDTM,
   traceability_vars = vars(
     LALVDOM = "ADSL",
     LALVSEQ = NA_integer_,
@@ -134,11 +150,13 @@ adsl_date <- lstalvdt_source(
 )
 
 dm \%>\%
-  derive_var_lstalvdt(
+  derive_vars_extreme_dtm(
+    new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb)
+    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    mode = "last"
   ) \%>\%
-  select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
+  select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann

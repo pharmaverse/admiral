@@ -50,7 +50,7 @@ test_that("derive_agegr_fda works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
+  expect_dfs_equal(derive_var_agegr_fda(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
                    keys = "AGE")
 
 })
@@ -70,7 +70,7 @@ test_that("derive_agegr_fda works with age_unit missing and multiple units in AG
     )
   )
 
-  expect_dfs_equal(derive_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output,
+  expect_dfs_equal(derive_var_agegr_fda(input, AGE, age_unit = NULL, AGEGR_EXP), expected_output,
                    keys = "AGE")
 
 })
@@ -89,7 +89,7 @@ test_that("derive_agegr_ema works as expected", {
     )
   )
 
-  expect_dfs_equal(derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
+  expect_dfs_equal(derive_var_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP), expected_output,
                    keys = "AGE")
 
 })
@@ -111,7 +111,7 @@ test_that("derive_agegr_ema - works as expected", {
   )
 
   expect_dfs_equal(
-    derive_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP),
+    derive_var_agegr_ema(input, AGE, age_unit = "years", AGEGR_EXP),
     expected_output,
     keys = "AGE"
   )
@@ -135,7 +135,7 @@ test_that("derive_agegr_ema works with age_unit missing and multiple units in AG
     )
   )
 
-  expect_dfs_equal(derive_agegr_ema(input, AGE, new_var = AGEGR_EXP), expected_output,
+  expect_dfs_equal(derive_var_agegr_ema(input, AGE, new_var = AGEGR_EXP), expected_output,
                    keys = "AGE")
 
 })
@@ -159,7 +159,7 @@ test_that("derive_agegr_ema - works with age_unit missing and multiple units in 
   )
 
   expect_dfs_equal(
-    derive_agegr_ema(input, AGE, new_var = AGEGR_EXP),
+    derive_var_agegr_ema(input, AGE, new_var = AGEGR_EXP),
     expected_output,
     keys = "AGE"
   )

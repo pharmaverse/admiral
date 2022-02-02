@@ -141,19 +141,29 @@ derive_var_lstalvdt <- function(dataset,
                          subject_keys = subject_keys)
 }
 
-#' Derive Last Known Alive Date
+#' Derive First or Last Datetime from Multiple Sources
 #'
-#' Add the last known alive date (`LSTALVDT`) to the dataset.
+#' Add the first or last datetime from multiple sources to the dataset, e.g.,
+#' the last known alive date (`LSTALVDT`).
 #'
 #' @param dataset Input dataset
 #'
 #'   The variables specified by `subject_keys` are required.
 #'
-#' @param source_datasets A named `list` containing datasets in which to search for the
-#'   last known alive date
+#' @param new_var Name of variable to create
 #'
-#' @param ... Source(s) of known alive dates. One or more `lstalvdt_source()` objects are
+#' @param source_datasets A named `list` containing datasets in which to search
+#'   for the first or last date
+#'
+#' @param ... Source(s) of dates. One or more `date_source()` objects are
 #'   expected.
+#'
+#' @param mode Selection mode (first or last)
+#'
+#'   If `"first"` is specified, the first date for each subject is selected. If
+#'   `"last"` is specified, the last date for each subject is selected.
+#'
+#'   Permitted Values:  `"first"`, `"last"`
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -162,29 +172,29 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @details The following steps are performed to create the output dataset:
 #'
-#'   \enumerate{ \item For each source dataset the observations as specified by
-#'   the `filter` element are selected. Then for each patient the last
-#'   observation (with respect to `date`) is selected.
+#'   1. For each source dataset the observations as specified by the `filter`
+#'   element are selected. Then for each patient the first or last observation
+#'   (with respect to `date` and `mode`) is selected.
 #'
-#'   \item The `LSTALVDT` variable is set to the variable specified by the
-#'   \code{date} element. If the date variable is a datetime variable, only
-#'   the datepart is copied. If the source variable is a character variable, it
-#'   is converted to a date. If the date is incomplete, it is imputed as
-#'   specified by the \code{date_imputation} element.
+#'   1. The new variable is set to the variable specified by the `date` element.
+#'   If the date variable is a date variable, the time is imputed as specified
+#'   by the `time_imputation` element. If the source variable is a character
+#'   variable, it is converted to a datetime. If the date is incomplete, it is
+#'   imputed as specified by the `date_imputation` and `time_imputation`
+#'   element.
 #'
-#'   \item The variables specified by the \code{traceability_vars} element are
-#'   added.
+#'   1. The variables specified by the `traceability_vars` element are added.
 #'
-#'   \item The selected observations of all source datasets are combined into a
+#'   1. The selected observations of all source datasets are combined into a
 #'   single dataset.
 #'
-#'   \item For each patient the last observation (with respect to the `LSTALVDT`
-#'   variable) from the single dataset is selected and the new variable is
-#'   merged to the input dataset. }
+#'   1. For each patient the first or last observation (with respect to the new
+#'   variable and `mode`) from the single dataset is selected and the new
+#'   variable is merged to the input dataset.
+#'
+#' @return The input dataset with the new variable added.
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
-#'
-#' @return The input dataset with the `LSTALVDT` variable added.
 #'
 #' @keywords derivation adsl
 #'
@@ -198,35 +208,42 @@ derive_var_lstalvdt <- function(dataset,
 #' data("lb")
 #' data("adsl")
 #'
-#' ae_start <- lstalvdt_source(
-#'   dataset_name = "ae",
-#'   date = AESTDTC,
-#'   date_imputation = "first"
-#' )
-#' ae_end <- lstalvdt_source(
-#'   dataset_name = "ae",
-#'   date = AEENDTC,
-#'   date_imputation = "first"
-#' )
-#' lb_date <- lstalvdt_source(
-#'   dataset_name = "lb",
-#'   date = LBDTC,
-#'   filter = nchar(LBDTC) >= 10
-#' )
-#' adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
-#'
-#' dm %>%
-#'   derive_var_lstalvdt(
-#'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb)
-#'   ) %>%
-#'   select(USUBJID, LSTALVDT)
-#'
-#' # derive last alive date and traceability variables
-#' ae_start <- lstalvdt_source(
+#' # derive last known alive datetime (LSTALVDTM)
+#' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   date_imputation = "first",
+#'   time_imputation = "first"
+#' )
+#' ae_end <- date_source(
+#'   dataset_name = "ae",
+#'   date = AEENDTC,
+#'   date_imputation = "first",
+#'   time_imputation = "first"
+#' )
+#' lb_date <- date_source(
+#'   dataset_name = "lb",
+#'   date = LBDTC,
+#'   filter = nchar(LBDTC) >= 10,
+#'   time_imputation = "first"
+#' )
+#' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
+#'
+#' dm %>%
+#'   derive_vars_extreme_dtm(
+#'     new_var = LSTALVDTM,
+#'     ae_start, ae_end, lb_date, adsl_date,
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     mode = "last"
+#'   ) %>%
+#'   select(USUBJID, LSTALVDTM)
+#'
+#' # derive last alive datetime and traceability variables
+#' ae_start <- date_source(
+#'   dataset_name = "ae",
+#'   date = AESTDTC,
+#'   date_imputation = "first",
+#'   time_imputation = "first",
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -234,20 +251,22 @@ derive_var_lstalvdt <- function(dataset,
 #'   )
 #' )
 #'
-#' ae_end <- lstalvdt_source(
+#' ae_end <- date_source(
 #'   dataset_name = "ae",
 #'   date = AEENDTC,
 #'   date_imputation = "first",
+#'   time_imputation = "first",
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
 #'     LALVVAR = "AEENDTC"
 #'   )
 #' )
-#' lb_date <- lstalvdt_source(
+#' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
+#'   time_imputation = "first",
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -255,9 +274,9 @@ derive_var_lstalvdt <- function(dataset,
 #'   )
 #' )
 #'
-#' adsl_date <- lstalvdt_source(
+#' adsl_date <- date_source(
 #'   dataset_name = "adsl",
-#'   date = TRTEDT,
+#'   date = TRTEDTM,
 #'   traceability_vars = vars(
 #'     LALVDOM = "ADSL",
 #'     LALVSEQ = NA_integer_,
@@ -266,11 +285,13 @@ derive_var_lstalvdt <- function(dataset,
 #' )
 #'
 #' dm %>%
-#'   derive_var_lstalvdt(
+#'   derive_vars_extreme_dtm(
+#'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb)
+#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     mode = "last"
 #'   ) %>%
-#'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
+#'   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
 derive_vars_extreme_dtm <- function(dataset,
                                     new_var,
                                     ...,
@@ -328,31 +349,16 @@ derive_vars_extreme_dtm <- function(dataset,
         check_type = "none"
       )
 
-    if (is.Date(add_data[[i]][[as_string(date)]])) {
-      add_data[[i]] <- transmute(
-        add_data[[i]],
-        !!!subject_keys,
-        !!!sources[[i]]$traceability_vars,
-        !!new_var := !!date
+    add_data[[i]] <- transmute(
+      add_data[[i]],
+      !!!subject_keys,
+      !!!sources[[i]]$traceability_vars,
+      !!new_var := convert_date_to_dtm(
+        !!date,
+        date_imputation = sources[[i]]$date_imputation,
+        time_imputation = sources[[i]]$time_imputation
       )
-    } else if (is.instant(add_data[[i]][[as_string(date)]])) {
-      add_data[[i]] <- transmute(
-        add_data[[i]],
-        !!!subject_keys,
-        !!!sources[[i]]$traceability_vars,
-        !!new_var := date(!!date)
-      )
-    } else {
-      add_data[[i]] <- transmute(
-        add_data[[i]],
-        !!!subject_keys,
-        !!!sources[[i]]$traceability_vars,
-        !!new_var := convert_dtc_to_dt(
-          !!date,
-          date_imputation = sources[[i]]$date_imputation
-        )
-      )
-    }
+    )
   }
 
   all_data <- add_data %>%

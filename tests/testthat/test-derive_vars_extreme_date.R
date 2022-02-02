@@ -129,6 +129,7 @@ test_that("derive_vars_extreme_dtm: LSTALVDTM and traceability variables are der
   adsl_dthdate <- date_source(
     dataset_name = "adsl",
     date = DTHDTC,
+    time_imputation = "first",
     filter = nchar(DTHDTC) >= 10,
     traceability_vars = vars(
       LALVDOM = "ADSL",
@@ -139,7 +140,7 @@ test_that("derive_vars_extreme_dtm: LSTALVDTM and traceability variables are der
 
   expected_output <- adsl %>%
     mutate(
-      LSTALVDTM = c(ymd_hms("2020-02-01T00:00:00"), NA, ymd_hms("2020-04-12T00:00:00")),
+      LSTALVDTM = c(ymd_hms("2020-02-01T00:00:00"), NA, ymd_hms("2020-04-12T13:15:00")),
       LALVDOM = c("AE", NA_character_, "ADSL"),
       LALVSEQ = c(2, NA_integer_, NA_integer_),
       LALVVAR = c("AEENDTC", NA_character_, "TRTEDTM")

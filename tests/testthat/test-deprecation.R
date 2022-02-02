@@ -203,23 +203,27 @@ test_that("a warning is issued when using `derive_var_lstalvdt()`", {
     "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
   )
 
-  adsl_trtdate <- lstalvdt_source(
-    dataset_name = "adsl",
-    date = TRTEDTM
+  expect_warning(
+    adsl_trtdate <- lstalvdt_source(dataset_name = "adsl",
+                                    date = TRTEDTM),
+    "deprecated",
+    fixed = TRUE
   )
 
-  adsl_dthdate <- lstalvdt_source(
-    dataset_name = "adsl",
-    date = DTHDTC,
-    filter = nchar(DTHDTC) >= 10
+  expect_warning(
+    adsl_dthdate <- lstalvdt_source(
+      dataset_name = "adsl",
+      date = DTHDTC,
+      filter = nchar(DTHDTC) >= 10
+    ),
+    "deprecated",
+    fixed = TRUE
   )
 
   expect_warning(
     derive_var_lstalvdt(
       adsl,
       source_datasets = list(adsl = adsl),
-      ae_start,
-      ae_end,
       adsl_trtdate,
       adsl_dthdate
     ),
