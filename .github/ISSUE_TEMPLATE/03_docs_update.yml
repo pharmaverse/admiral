@@ -23,14 +23,9 @@ body:
       label: Please select a category the issue is focused on?
       multiple: true
       options:
-        - Function Examples in Documentation
-        - Function Documentation/Roxygen Headers
-        - Get Started Document
-        - Developer Guides
+        - Function Documentation
         - User Guides
-        - Changelog
-        - Home
-        - Reference
+        - Developer Guides
         - Other
         - I have a new documentation idea! Yay!
   - type: textarea
