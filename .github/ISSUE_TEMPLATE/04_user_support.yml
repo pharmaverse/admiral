@@ -7,7 +7,7 @@ assignees:
 body:
   - type: markdown
     attributes:
-      value: To get immediate help check out and join our slack channel - [admiral](https://app.slack.com/client/T028PB489D3/C02M8KN8269) support can come from anyone in our user community, not only our core developers
+      value: To get immediate help check out and join our slack channel - [admiral](https://app.slack.com/client/T028PB489D3/C02M8KN8269). Support can come from anyone in our user community, not only our core developers
   - type: input
     id: contact
     attributes:
