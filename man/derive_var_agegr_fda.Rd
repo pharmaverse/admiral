@@ -32,10 +32,10 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 Functions for deriving standardized age groups.
 }
 \details{
-\code{derive_var_agegr_fda} Derive age groups according to FDA. \code{age_var}
+\code{derive_var_agegr_fda()} Derive age groups according to FDA. \code{age_var}
 will be split in categories: <18, 18-64, >=65.
 
-\code{derive_var_agegr_ema} Derive age groups according to EMA
+\code{derive_var_agegr_ema()} Derive age groups according to EMA
 (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
 \code{age_var} will be split into categories: 0-27 days (Newborns), 28 days to
 23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
