@@ -201,6 +201,9 @@ impute_dtc <- function(dtc,
       n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
     )
 
+    # 3 blocks of  if/else statements that deal with date imputation and
+    # preserving partial dates.
+    # Ex: 2019---07 with MID and preserve = TRUE gives 2019-06-07
     if (date_imputation == "MID" & preserve) {
 
       imputed_date <- case_when(
@@ -222,6 +225,7 @@ impute_dtc <- function(dtc,
         TRUE ~ imputed_date)
     }
 
+    # Ex: 2019---07 with LAST and preserve = TRUE gives 2019-12-07
     if (date_imputation == "LAST" & !preserve) {
 
       imputed_date <- case_when(
@@ -235,7 +239,7 @@ impute_dtc <- function(dtc,
     } else if (date_imputation == "LAST" & preserve) {
 
       imputed_date <- case_when(
-        n_chr == 9 ~  paste0(substr(dtc, 1, 4), "-", 12, "-", substr(dtc, 8, 9)),
+        n_chr == 9 ~  paste0(substr(dtc, 1, 4), "-", "12", "-", substr(dtc, 8, 9)),
         n_chr %in% c(4, 7) ~
           as.character(
             ceiling_date(
@@ -243,12 +247,14 @@ impute_dtc <- function(dtc,
         TRUE ~ imputed_date)
     }
 
+    # Ex: 2019---07 with FIRST and preserve = TRUE gives 2019-01-07
+    if (date_imputation == "FIRST" & preserve) {
 
-    imputed_date <- case_when(
-      n_chr == 9 & date_imputation == "FIRST" & preserve ~
-          paste0(substr(dtc, 1, 4), "-", 01, "-", substr(dtc, 8, 9)),
-      TRUE ~ imputed_date
-      )
+       imputed_date <- case_when(
+        n_chr == 9 & date_imputation == "FIRST" & preserve ~
+          paste0(substr(dtc, 1, 4), "-", "01", "-", substr(dtc, 8, 9)),
+        TRUE ~ imputed_date)
+    }
 
   } else  {
     # no imputation

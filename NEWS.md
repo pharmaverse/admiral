@@ -10,7 +10,6 @@
 
 - `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds are not recorded in the data. (#589)
 
-
 - `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
 
 - `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
@@ -25,7 +24,8 @@
 
 ## Breaking Changes
 
-- Behavior of `derive_vars_dtm()` and `derive_vars_dt()` has changed with regards to `date_imputation`. 
+- Behavior of `derive_vars_dtm()` and `derive_vars_dt()` has changed with regards to `date_imputation` 
+when used in conjunction with new `preserve` argument. Partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE` when doing `date_imputation`. (#592). 
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
