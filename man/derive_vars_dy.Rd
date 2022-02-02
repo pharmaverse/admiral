@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_dy.R
 \name{derive_vars_dy}
 \alias{derive_vars_dy}
-\title{Derive Analysis Relative Day}
+\title{Derive Relative Day Variables}
 \usage{
 derive_vars_dy(dataset, reference_date, source_vars)
 }
@@ -19,28 +19,32 @@ A date or date-time object column is expected.}
 \item{source_vars}{A list of datetime or date variables created using \code{vars()} from
 which dates are to be extracted. This can either be a list of date(time) variables
 or named \code{--DY} variables and corresponding --DT(M) variables e.g.
-vars(TRTSDTM, ASTDTM, AENDT) or vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT)}
+vars(TRTSDTM, ASTDTM, AENDT) or vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT).
+If the source variable does not end in --DT(M), a name for the resulting
+\code{--DY} variable must be provided.}
 }
 \value{
 The input dataset with \code{--DY} corresponding to the \code{--DTM} or \code{--DT}
 source variable(s) added
 }
 \description{
-Adds the analysis relative day (\code{--DY}) to the dataset, i.e., study
-day of analysis date.
+Adds relative day variables (\code{--DY}) to the dataset, e.g., \code{ASTDY} and
+\code{AENDY}.
 }
 \details{
-The study day is derived as number of days from the reference date
-to the end date. If it is nonnegative, one is added. I.e., the study day of the
-reference date is 1. The input ---DT(M) is converted to ---DY
+The relative day is derived as number of days from the reference date
+to the end date. If it is nonnegative, one is added. I.e., the relative day
+of the reference date is 1. Unless a name is explicitly specified, the name
+of the resulting relative day variable is generated from the source variable
+name by replacing DT (or DTM as appropriate) with DY.
 }
 \examples{
 library(lubridate)
 library(dplyr)
 
 datain <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
- "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+  ~TRTSDTM, ~ASTDTM, ~AENDT,
+ "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 ) \%>\%
  mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
         ASTDTM = lubridate::as_datetime(ASTDTM),
@@ -49,8 +53,8 @@ datain <- tibble::tribble(
 derive_vars_dy(datain, reference_date = TRTSDTM, source_vars = vars(TRTSDTM, ASTDTM, AENDT))
 
  datain <- tibble::tribble(
- ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT, ~DTHDT,
- "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", "2014-02-01"
+  ~TRTSDT, ~ASTDTM, ~AENDT, ~DTHDT,
+ "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", "2014-02-01"
  ) \%>\%
  mutate(TRTSDT = lubridate::ymd(TRTSDT),
         ASTDTM = lubridate::as_datetime(ASTDTM),
