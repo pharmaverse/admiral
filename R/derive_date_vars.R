@@ -201,7 +201,7 @@ impute_dtc <- function(dtc,
       n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
     )
 
-    if (date_imputation == "MID" & preserve){
+    if (date_imputation == "MID" & preserve) {
 
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
@@ -222,7 +222,7 @@ impute_dtc <- function(dtc,
         TRUE ~ imputed_date)
     }
 
-    if (date_imputation == "LAST" & !preserve){
+    if (date_imputation == "LAST" & !preserve) {
 
       imputed_date <- case_when(
         n_chr < 10 & date_imputation == "LAST" & !preserve ~
@@ -232,7 +232,7 @@ impute_dtc <- function(dtc,
         TRUE ~ imputed_date)
 
 
-    } else if (date_imputation == "LAST" & preserve){
+    } else if (date_imputation == "LAST" & preserve) {
 
       imputed_date <- case_when(
         n_chr == 9 ~  paste0(substr(dtc, 1, 4), "-", 12, "-", substr(dtc, 8, 9)),
