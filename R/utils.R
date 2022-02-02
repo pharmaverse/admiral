@@ -254,7 +254,7 @@ what_is_it <- function(x) {
       paste0("`", x, "`")
     }
   } else if (is.atomic(x) || class(x)[1L] == "list") {
-    rlang::friendly_type(typeof(x))
+    friendly_type_of(x)
   } else if (is.data.frame(x)) {
     "a data frame"
   } else {

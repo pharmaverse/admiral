@@ -6,7 +6,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_string call2 caller_env
 #'             call_name current_env .data enexpr enquo eval_bare eval_tidy expr
-#'             expr_interp expr_label exprs f_lhs f_rhs friendly_type inform
+#'             expr_interp expr_label exprs f_lhs f_rhs inform
 #'             is_bare_formula is_call is_character is_formula is_integerish
 #'             is_quosure is_quosures is_symbol new_formula parse_exprs quo
 #'             quo_get_expr quo_is_call quo_is_missing quo_is_null quo_is_symbol

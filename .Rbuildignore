@@ -14,6 +14,5 @@
 ^vignettes/git_usage\.Rmd$
 ^vignettes/faq\.Rmd$
 ^LICENSE\.md$
-^admiral\.Rcheck$
-^admiral.*\.tar\.gz$
-^admiral.*\.tgz$
+^\.github$
+

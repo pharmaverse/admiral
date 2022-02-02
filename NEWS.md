@@ -39,6 +39,7 @@ when used in conjunction with new `preserve` argument. Partial dates when doing 
 
 - Broken links in README have been fixed (#564)
 
+- `derive_var_agegr_fda()` has been updated to use ranges <18, 18-64, >=65 (#829)
 
 # admiral 0.4.0
 
