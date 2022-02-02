@@ -39,13 +39,13 @@ test_that("derive_var_age_years works as expected", {
 
 test_that("derive_agegr_fda works as expected", {
 
-  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80))
+  input <- tibble::tibble(AGE = c(10, 17, 18, 50, 64, 65, 80))
 
   expected_output <- mutate(
     input,
     AGEGR_EXP = factor(
-      c("<=18", "<=18", "19-64", "19-64", "19-64", ">=65", ">=65"),
-      levels = c("<=18", "19-64", ">=65"),
+      c("<18", "<18", "18-64", "18-64", "18-64", ">=65", ">=65"),
+      levels = c("<18", "18-64", ">=65"),
       exclude = NULL
     )
   )
@@ -57,15 +57,15 @@ test_that("derive_agegr_fda works as expected", {
 
 test_that("derive_agegr_fda works with age_unit missing and multiple units in AGEU", {
 
-  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
+  input <- tibble::tibble(AGE = c(10, 17, 18, 50, 64, 65, 80, 85),
                           AGEU = c("years", "years", "years", "years", "years", "years", "months",
                                    "months"))
 
   expected_output <- mutate(
     input,
     AGEGR_EXP = factor(
-      c("<=18", "<=18", "19-64", "19-64", "19-64", ">=65", "<=18", "<=18"),
-      levels = c("<=18", "19-64", ">=65"),
+      c("<18", "<18", "18-64", "18-64", "18-64", ">=65", "<18", "<18"),
+      levels = c("<18", "18-64", ">=65"),
       exclude = NULL
     )
   )
