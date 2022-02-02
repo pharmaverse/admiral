@@ -207,6 +207,9 @@ impute_dtc <- function(dtc,
       n_chr == 9 & date_imputation != "MID" & !preserve ~
         paste0(substr(dtc, 1, 4), "-", mo, "-", d),
 
+      n_chr == 9 & date_imputation != "MID" & preserve ~
+        paste0(substr(dtc, 1, 4), "-", mo, "-", substr(dtc, 8, 9)),
+
       # dates like 2021---14 - use year and day part and impute month
       n_chr == 9 & date_imputation == "MID" & preserve ~
         paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),

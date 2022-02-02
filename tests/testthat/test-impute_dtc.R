@@ -8,6 +8,7 @@ input <- c(
   "2019---07"
 )
 
+
 test_that("default: no date imputation, time part set o 00:00:00", {
   expected_output <- c(
     "2019-07-18T15:25:40",
@@ -202,6 +203,32 @@ test_that("impute to MID day/month if date is partial and preserve argument work
     expected_output
   )
 })
+
+
+test_that("impute to 01-01 day/month if date is partial and preserve argument works as expected", { # nolint
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:00",
+    "2019-07-18T00:00:00",
+    "2019-02-01T00:00:00",
+    "2019-01-01T00:00:00",
+    "2019-01-07T00:00:00"
+  )
+
+  actual_output <- impute_dtc(
+    dtc = input,
+    date_imputation = "01-01",
+    preserve = TRUE
+  )
+
+  expect_equal(
+    actual_output,
+    expected_output
+  )
+})
+
+
 
 test_that("min_dates parameter works", {
             expect_equal(impute_dtc(c("2020-12", "2020-11"),
