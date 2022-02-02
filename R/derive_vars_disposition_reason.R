@@ -159,7 +159,8 @@ derive_disposition_reason <- function(dataset,
 
 #' Default format for the disposition reason
 #'
-#' Define a function to map the disposition reason
+#' Define a function to map the disposition reason, to be used as a parameter in
+#' `derive_disposition_reason()`.
 #'
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
@@ -170,31 +171,29 @@ derive_disposition_reason <- function(dataset,
 #' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
 #' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
 #'
-#' For example:
-#' ```
-#' DCSREAS = format_reason_default(DSDECOD)
-#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
-#' ```
-#'
 #' @return A `character` vector
 #'
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @seealso [derive_disposition_reason()]
 #' @examples
-#' ds <- tibble::tribble(
-#' ~USUBJID,      ~DSTERM,              ~DSDECOD,
-#' "01-701-1015", "PROTOCOL COMPLETED", "COMPLETED",
-#' "01-701-1028",  NA_character_,       "SCREEN FAILURE",
-#' "01-701-1111", "ADVERSE EVENT",      "ADVERSE EVENT",
-#' "01-701-1203",  NA_character_,        NA_character_
-#' )
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data("dm")
+#' data("ds")
 #'
-#' ds %>%
-#'   mutate(
-#'     SCSREAS  = format_reason_default(reason = DSDECOD),
-#'     SCREASSP = format_reason_default(reason = DSDECOD, reason_spe = DSTERM)
-#'   )
+#' # Derive DCSREAS using format_reason_default
+#' dm %>%
+#'   derive_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     format_new_vars = format_reason_default,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS)
+#'
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
