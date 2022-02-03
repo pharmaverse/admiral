@@ -96,26 +96,23 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
       "my_study", "subject4", as.Date("2020-11-05"), as.Date("2020-11-06"), 1, 10, "treatment")
   )
 
-  expect_warning(
-    expect_error(
-      derive_last_dose(
-        input_ae,
-        input_ex_wrong,
-        filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-        by_vars = vars(STUDYID, USUBJID),
-        dose_start = EXSTDTC,
-        dose_end = EXENDTC,
-        analysis_date = AESTDTC,
-        dataset_seq_var = AESEQ,
-        new_var = LDOSEDTM,
-        output_datetime = FALSE,
-        check_dates_only = FALSE,
-        traceability_vars = NULL
-      ),
-      regexp = "Specified single_dose_condition is not satisfied."
+  expect_error(
+    derive_last_dose(
+      input_ae,
+      input_ex_wrong,
+      filter_ex = (EXDOSE > 0) |
+        (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = vars(STUDYID, USUBJID),
+      dose_start = EXSTDTC,
+      dose_end = EXENDTC,
+      analysis_date = AESTDTC,
+      dataset_seq_var = AESEQ,
+      new_var = LDOSEDTM,
+      output_datetime = FALSE,
+      check_dates_only = FALSE,
+      traceability_vars = NULL
     ),
-    "deprecated",
-    fixed = TRUE
+    regexp = "Specified single_dose_condition is not satisfied."
   )
 
 })
@@ -131,28 +128,24 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
       as.POSIXct("2020-11-06 00:00:01"), 1, 10, "treatment")
   )
 
-  expect_warning(
-    expect_error(
-      derive_last_dose(
-        input_ae,
-        input_ex_wrong,
-        filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
-        by_vars = vars(STUDYID, USUBJID),
-        dose_start = EXSTDTC,
-        dose_end = EXENDTC,
-        analysis_date = AESTDTC,
-        dataset_seq_var = AESEQ,
-        new_var = LDOSEDTM,
-        output_datetime = FALSE,
-        check_dates_only = FALSE,
-        traceability_vars = NULL
-      ),
-      regexp = "Specified single_dose_condition is not satisfied."
+  expect_error(
+    derive_last_dose(
+      input_ae,
+      input_ex_wrong,
+      filter_ex = (EXDOSE > 0) |
+        (EXDOSE == 0 & EXTRT == "placebo"),
+      by_vars = vars(STUDYID, USUBJID),
+      dose_start = EXSTDTC,
+      dose_end = EXENDTC,
+      analysis_date = AESTDTC,
+      dataset_seq_var = AESEQ,
+      new_var = LDOSEDTM,
+      output_datetime = FALSE,
+      check_dates_only = FALSE,
+      traceability_vars = NULL
     ),
-    "deprecated",
-    fixed = TRUE
+    regexp = "Specified single_dose_condition is not satisfied."
   )
-
 })
 
 test_that(

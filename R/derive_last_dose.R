@@ -111,7 +111,8 @@ derive_last_dose <- function(dataset,
   deprecate_warn("0.6.0", "derive_last_dose()", "derive_var_last_dose_date()")
   assert_logical_scalar(check_dates_only)
   if (check_dates_only) {
-    cond <- expr(substr(!!quo_get_expr(enquo(dose_start)), 1, 10) == substr(!!quo_get_expr(enquo(dose_end)), 1, 10))
+    cond <- expr(substr(!!quo_get_expr(enquo(dose_start)), 1, 10)
+                 == substr(!!quo_get_expr(enquo(dose_end)), 1, 10))
   } else {
     cond <- expr(!!quo_get_expr(enquo(dose_start)) == !!quo_get_expr(enquo(dose_end)))
   }
