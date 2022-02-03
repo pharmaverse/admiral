@@ -1,21 +1,44 @@
-# admiral development version
+# admiral 0.6.0
 
-- `derive_disposition_dt()`, `derive_disposition_status()`, `derive_extreme_flag`, `derive_worst_flag`, `derive_last_dose`, `derive_obs_number`, `derive_disposition_reason` have been deprecated and renamed in favor of `derive_var_disposition_dt()`, `derive_var_disposition_status()`, `derive_var_extreme_flag`, `derive_var_worst_flag`, `derive_var_last_dose`, `derive_var_obs_number`, and `derive_vars_disposition_reason` respectively (#738)
+## New Features
 
-- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
-are not recorded in the data. (#589)
-
-- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
-
-- `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
+### General
 
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()`, and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
 
-- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+## Updates of Existing Functions
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
+
+- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
+are not recorded in the data. (#589)
+
+## Breaking Changes
+
+- `derive_disposition_dt()`, `derive_disposition_status()`, `derive_extreme_flag`, `derive_worst_flag`, `derive_last_dose`, `derive_obs_number`, `derive_disposition_reason` have been deprecated and renamed in favor of `derive_var_disposition_dt()`, `derive_var_disposition_status()`, `derive_var_extreme_flag`, `derive_var_worst_flag`, `derive_var_last_dose`, `derive_var_obs_number`, and `derive_vars_disposition_reason` respectively (#738)
+
+- `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
+
+- `derive_params_exposure()` has been deprecated and renamed as `derive_param_exposure()` (#722)
+
+- The following functions and parameters, which were deprecated in previous admiral versions, were removed:
+  
+  - `derive_aage()` function
+  - `derive_duration()` function
+  - `derive_query_vars()` function
+  - `derive_suppqual_vars()` function
+  - `fns` and `filter_rows` parameter in `derive_summary_records()`
+  - `date_var` and `traceabilty_vars` parameter in `dthcaus_source()`
+  - `flag_filter` parameter in `derive_extreme_flag()`
+  - `flag_filter` parameter in `derive_var_extreme_flag()`
+  - `date_var` parameter in `lstalvdt_source()`
+  - `date` parameter in `derive_var_ontrtfl()`
+  
+## Documentation
+
+- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
 # admiral 0.5.0
 
