@@ -76,6 +76,9 @@ single dataset.
 \code{ADT} variable) from the single dataset is selected. }
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
+
 adsl <- tibble::tribble(
 ~USUBJID, ~TRTSDT,           ~EOSDT,
 "01",     ymd("2020-12-06"), ymd("2021-03-06"),
