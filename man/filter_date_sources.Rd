@@ -75,6 +75,43 @@ single dataset.
 \item For each patient the first or last observation (with respect to the
 \code{ADT} variable) from the single dataset is selected. }
 }
+\examples{
+adsl <- tibble::tribble(
+~USUBJID, ~TRTSDT,           ~EOSDT,
+"01",     ymd("2020-12-06"), ymd("2021-03-06"),
+"02",     ymd("2021-01-16"), ymd("2021-02-03")
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+ae <- tibble::tribble(
+  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+  "01",     "2021-01-03T10:56", 1,      "Flu",
+  "01",     "2021-03-04",       2,      "Cough",
+  "01",     "2021",             3,      "Flu"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+ttae <- event_source(
+  dataset_name = "ae",
+  date = AESTDTC,
+  set_values_to = vars(
+    EVNTDESC = "AE",
+    SRCDOM = "AE",
+    SRCVAR = "AESTDTC",
+    SRCSEQ = AESEQ
+  )
+)
+
+filter_date_sources(
+  sources = list(ttae),
+  source_datasets = list(adsl = adsl, ae = ae),
+  by_vars = vars(AEDECOD),
+  create_datetime = FALSE,
+  subject_keys = vars(STUDYID, USUBJID),
+  mode = "first"
+)
+
+}
 \author{
 Stefan Bundfuss
 }

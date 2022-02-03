@@ -469,7 +469,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @keywords dev_utility
 #'
-#' @example
+#' @examples
 #' adsl <- tibble::tribble(
 #' ~USUBJID, ~TRTSDT,           ~EOSDT,
 #' "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -612,7 +612,7 @@ filter_date_sources <- function(sources,
 #'
 #' @keywords dev_utility
 #'
-#' @example
+#' @examples
 #' adsl <- tibble::tribble(
 #' ~USUBJID, ~TRTSDT,           ~EOSDT,
 #' "01",     ymd("2020-12-06"), ymd("2021-03-06"),
