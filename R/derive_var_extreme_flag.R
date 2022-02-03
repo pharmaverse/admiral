@@ -342,10 +342,6 @@ derive_worst_flag <- function(dataset,
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
-#' @param flag_filter Filter for flag data
-#'
-#'   **Deprecated**: Please use the `filter` parameter instead.
-#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
