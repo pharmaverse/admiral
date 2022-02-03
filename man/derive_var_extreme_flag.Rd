@@ -11,8 +11,7 @@ derive_var_extreme_flag(
   new_var,
   mode,
   filter = NULL,
-  check_type = "warning",
-  flag_filter = deprecated()
+  check_type = "warning"
 )
 }
 \arguments{
