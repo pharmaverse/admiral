@@ -285,16 +285,3 @@ assert_valid_queries <- function(queries, queries_name) {
   }
 
 }
-
-#' Derive Query Variables
-#'
-#' `derive_query_vars()` was renamed to `derive_vars_query()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_query_vars <- function(dataset, dataset_queries) {
-  deprecate_warn("0.3.0", "derive_query_vars()", "derive_vars_query()")
-  derive_vars_query(dataset, dataset_queries)
-}
