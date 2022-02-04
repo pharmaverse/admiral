@@ -50,10 +50,6 @@
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
-#' @param flag_filter Filter for flag data
-#'
-#'   **Deprecated**: Please use the `filter` parameter instead.
-#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
@@ -160,17 +156,9 @@ derive_extreme_flag <- function(dataset,
                                 new_var,
                                 mode,
                                 filter = NULL,
-                                check_type = "warning",
-                                flag_filter = deprecated()) {
+                                check_type = "warning") {
   deprecate_warn("0.6.0", "derive_extreme_flag()", "derive_var_extreme_flag()")
-  if (!missing(flag_filter)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_var_extreme_flag(flag_filter = )",
-      "derive_var_extreme_flag(filter = )"
-    )
-    filter <- enquo(!!enquo(flag_filter))
-  }
+
   derive_var_extreme_flag(dataset = dataset,
                           by_vars = by_vars,
                           order = order,
@@ -354,10 +342,6 @@ derive_worst_flag <- function(dataset,
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
-#' @param flag_filter Filter for flag data
-#'
-#'   **Deprecated**: Please use the `filter` parameter instead.
-#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
@@ -464,17 +448,7 @@ derive_var_extreme_flag <- function(dataset,
                                 new_var,
                                 mode,
                                 filter = NULL,
-                                check_type = "warning",
-                                flag_filter = deprecated()) {
-  if (!missing(flag_filter)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_var_extreme_flag(flag_filter = )",
-      "derive_var_extreme_flag(filter = )"
-    )
-    filter <- enquo(flag_filter)
-  }
-
+                                check_type = "warning") {
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
