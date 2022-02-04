@@ -11,8 +11,7 @@ lstalvdt_source(
   date_imputation = NULL,
   preserve = FALSE,
   traceability_vars = NULL,
-  dataset = deprecated(),
-  date_var = deprecated()
+  dataset = deprecated()
 )
 }
 \arguments{
@@ -39,8 +38,6 @@ imputation can invoke this argument.  For example \code{"2019---07"} would retur
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
 
 \item{dataset}{Deprecated, please use \code{dataset_name} instead.}
-
-\item{date_var}{Deprecated, please use \code{date} instead.}
 }
 \value{
 An object of class "lstalvdt_source".
