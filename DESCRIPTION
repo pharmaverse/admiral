@@ -103,6 +103,7 @@ Collate:
     'derive_vars_dtm_to_dt.R'
     'derive_vars_dtm_to_tm.R'
     'derive_vars_duration.R'
+    'derive_vars_dy.R'
     'derive_vars_last_dose.R'
     'derive_vars_query.R'
     'derive_vars_suppqual.R'
