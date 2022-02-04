@@ -111,12 +111,8 @@ recommendations.
 - Any comment/question/discussion must be addressed and documented in GitHub
 before the Pull Request is merged
 
-Once the review is completed, the reviewer will merge the Pull Request and click
-**Delete branch** in the Pull Request.
-
-```{r, echo = FALSE}
-    knitr::include_graphics("github_delete_branch.png", dpi = 144)
-```
+Once the review is completed, the reviewer will merge the Pull Request and the
+feature branch will automatically be deleted.
 
 After merging the Pull Request the corresponding issue must be moved to the
 "Sprint Done" column on the "admiral scrum board" by the developer. The issue
