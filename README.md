@@ -40,9 +40,17 @@ remotes::install_github("Roche-GSK/admiral")
 * Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations
     * Each block has a stand alone purpose, i.e. each function provides a specific functionality
     * Data Scientists can create their own blocks, i.e. create own R functions
-
 * Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions
 
+## Expectations
+
+* admiral will never cover 100% of eventualities that could be needed to produce ADaMs across each and every company/disease area/study - ADaM is infinite
+* Some flexibility can be added to the functions, but only where there is an agreed common need across the industry as this has to balance vs ease of usage and testing
+* One of our principle design decisions in creating admiral was to prioritise transparency and simplicity for our users - and not to let this ever become a "black-box" toolkit
+* We hope admiral offers a chance for users to be programmers - this is not a "run 1 line and an ADaM appears" solution or an attempt to automate ADaM
+* It is expected for companies to adopt admiral that a company-specific extension package would likely be needed (e.g. `{admiral.roche}` or `{admiral.gsk}`)
+    * Consider this an opportunity to influence company-specific standards, as admiral offers a bridge towards a more industry-aligned implementation of ADaM
+* From the core `{admiral}` package covering common functions and mostly safety templates, there will be further package extensions dedicated to certain disease area endpoints (e.g. `{admiral.onco}` or `{admiral.hiv}`)
 
 ## References and Documentation
 
