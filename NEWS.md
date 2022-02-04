@@ -4,6 +4,9 @@
 
 ### General
 
+- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables
+(#700)
+
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()` and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
@@ -36,8 +39,8 @@ are not recorded in the data. (#589)
   
   - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and
   `derive_suppqual_vars()` function
-  - `fns` and `filter_rows` parameter in `derive_summary_records()`
-  - `date_var` and `traceabilty_vars` parameter in `dthcaus_source()`
+  - `fns` and `filter_rows` parameters in `derive_summary_records()`
+  - `date_var` and `traceabilty_vars` parameters in `dthcaus_source()`
   - `flag_filter` parameter in `derive_extreme_flag()`
   - `flag_filter` parameter in `derive_var_extreme_flag()`
   - `date_var` parameter in `lstalvdt_source()`
@@ -64,8 +67,6 @@ are not recorded in the data. (#589)
 ## New Features
 
 ### General
-
-- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables 
 
 - `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551)
 
