@@ -59,6 +59,11 @@ remotes::install_github("Roche-GSK/admiral")
 * Please see the [FAQ](https://roche-gsk.github.io/admiral/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://roche-gsk.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
 
+## Conference Presentations
+
+* [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
+* [PHUSE EU Connect 2021 workshop](https://github.com/pharmaverse/admiral.phuse.workshop) (slides and materials)
+
 ## Contact 
 
 We use the following for support and communications between user and developer community:
