@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
@@ -73,6 +73,7 @@ Collate:
     'derive_advs_params.R'
     'derive_date_vars.R'
     'derive_derived_param.R'
+    'derive_last_dose.R'
     'derive_param_doseint.R'
     'derive_param_exposure.R'
     'derive_param_tte.R'
@@ -89,7 +90,6 @@ Collate:
     'derive_var_disposition_status.R'
     'derive_var_dthcaus.R'
     'derive_var_extreme_flag.R'
-    'derive_var_last_dose.R'
     'derive_var_last_dose_amt.R'
     'derive_var_last_dose_date.R'
     'derive_var_last_dose_grp.R'
@@ -105,6 +105,7 @@ Collate:
     'derive_vars_dtm_to_dt.R'
     'derive_vars_dtm_to_tm.R'
     'derive_vars_duration.R'
+    'derive_vars_dy.R'
     'derive_vars_last_dose.R'
     'derive_vars_query.R'
     'derive_vars_suppqual.R'
