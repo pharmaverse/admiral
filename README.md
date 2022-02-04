@@ -28,7 +28,7 @@ remotes::install_github("Roche-GSK/admiral")
 
 ## Scope
 
-* Build a toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner
+* A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner (an "opinionated" design strategy)
 * Pharmaceutical communities and companies are encouraged to contribute to admiral following the provided programming strategy and modular approach
 * All functions are documented, tested, include examples and are listed in the
 [Reference section](https://roche-gsk.github.io/admiral/reference/index.html)
