@@ -4,6 +4,8 @@
 
 ### General
 
+- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
+
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()` and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
@@ -16,8 +18,6 @@
 are not recorded in the data. (#589)
 
 ## Breaking Changes
-
-- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
 
 - `derive_disposition_dt()`, `derive_disposition_status()`,
 `derive_extreme_flag()`, `derive_worst_flag()`, `derive_obs_number()`,
