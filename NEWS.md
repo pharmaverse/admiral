@@ -1,6 +1,6 @@
 # admiral development version
 
-- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks
+- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
 
 - `derive_disposition_dt()`, `derive_disposition_status()`,
 `derive_extreme_flag()`, `derive_worst_flag()`, `derive_obs_number()`,
