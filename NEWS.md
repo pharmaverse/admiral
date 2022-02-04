@@ -30,8 +30,11 @@
 - The `derive_last_dose()` function has been deprecated in favor of
 `derive_var_last_dose_date()`. (#385)
 
-- Behavior of `derive_vars_dtm()` and `derive_vars_dt()` has changed with regards to `date_imputation` 
-when used in conjunction with new `preserve` argument. For example, if `date_imputation="MID"` then a date like  `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE`.  However, if only using `date_imputation="MID"` with preserve set to `FALSE` or not invoked, then partial date, `2019---07`, will become `2019-06-15.` Similar behavior will happen for `"FIRST"` and `"LAST"` in `date_imputation` (#592). 
+- The behavior of all functions providing the `date_imputation` parameter, e.g., `derive_vars_dtm()` and
+`derive_vars_dt()` has changed for `date_imputation = "mid"`. Before the date was imputed as June 15th
+if both month and day were missing. Now it is imputed as June 30th. For the old behavior please specify
+`date_imputation = "06-15"`. Please note the the behavior has not changed if only the day is missing. In
+this case the day is imputed as `15`. (#592). 
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
