@@ -124,6 +124,17 @@ derive_disposition_dt <- function(dataset,
 #'
 #'   Default is NULL
 #'
+#' @param preserve Preserve partial dates when doing date imputation for middle
+#' day and month
+#'
+#' A user wishing to preserve partial dates when doing middle day and month date
+#' imputation can invoke this argument.  For example `"2019---07"` would return
+#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#'
+#'  A logical value
+#'
+#'  Default: `FALSE`
+#'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
 #' A list of quosures where the expressions are symbols as returned by
@@ -157,7 +168,9 @@ derive_var_disposition_dt <- function(dataset,
                                   dtc,
                                   filter_ds,
                                   date_imputation = NULL,
+                                  preserve = FALSE,
                                   subject_keys = vars(STUDYID, USUBJID)) {
+
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -166,6 +179,7 @@ derive_var_disposition_dt <- function(dataset,
   assert_data_frame(dataset_ds, quo_c(dtc))
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
+  assert_logical_scalar(preserve)
 
   # Process the disposition data
   prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
@@ -177,6 +191,7 @@ derive_var_disposition_dt <- function(dataset,
       new_vars_prefix = prefix,
       dtc = datedtc___,
       date_imputation = date_imputation,
+      preserve = preserve,
       flag_imputation = FALSE
     ) %>%
     select(!!!subject_keys, !!enquo(new_var) := !!sym(newvar))

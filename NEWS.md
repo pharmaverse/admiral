@@ -12,17 +12,15 @@
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
-- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds
-are not recorded in the data. (#589)
+- `derive_vars_dtm()`, `derive_var_disposition` and `derive_var_lstalvdt` now have `preserve` argument.  A can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE` when doing date_imputation. (#592)
+
+- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds are not recorded in the data. (#589)
 
 ## Breaking Changes
 
-- `derive_disposition_dt()`, `derive_disposition_status()`,
-`derive_extreme_flag()`, `derive_worst_flag()`, `derive_obs_number()`,
-`derive_disposition_reason()` have been deprecated and renamed in favor of
-`derive_var_disposition_dt()`, `derive_var_disposition_status()`,
-`derive_var_extreme_flag()`, `derive_var_worst_flag()`,
-`derive_var_last_dose()`, `derive_var_obs_number()`, and
+- `derive_disposition_dt()`, `derive_disposition_status()`,`derive_extreme_flag()`, `derive_worst_flag()`, `derive_obs_number()`,
+`derive_disposition_reason()` have been deprecated and renamed in favor of`derive_var_disposition_dt()`, `derive_var_disposition_status()`,
+`derive_var_extreme_flag()`, `derive_var_worst_flag()`, `derive_var_last_dose()`, `derive_var_obs_number()`, and
 `derive_vars_disposition_reason()` respectively (#738)
 
 - `derive_var_basec()` and `derive_baseline()` have been deprecated in favor of the extended `derive_var_base()` function (#695)
@@ -32,10 +30,17 @@ are not recorded in the data. (#589)
 - The `derive_last_dose()` function has been deprecated in favor of
 `derive_var_last_dose_date()`. (#385)
 
+- The behavior of all functions providing the `date_imputation` parameter, e.g., `derive_vars_dtm()` and
+`derive_vars_dt()` has changed for `date_imputation = "mid"`. Before the date was imputed as June 15th
+if both month and day were missing. Now it is imputed as June 30th. For the old behavior please specify
+`date_imputation = "06-15"`. Please note the the behavior has not changed if only the day is missing. In
+this case the day is imputed as `15`. (#592). 
+
+- `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
+
 - The following functions and parameters, which were deprecated in previous admiral versions, were removed:
   
-  - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and
-  `derive_suppqual_vars()` function
+  - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and `derive_suppqual_vars()` function
   - `fns` and `filter_rows` parameter in `derive_summary_records()`
   - `date_var` and `traceabilty_vars` parameter in `dthcaus_source()`
   - `flag_filter` parameter in `derive_extreme_flag()`
