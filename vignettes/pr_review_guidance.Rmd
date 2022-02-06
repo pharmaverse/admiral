@@ -16,14 +16,16 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This document is intended to be a guidance for reviewers of pull requests (PRs) in the {admiral} package. PR authors will benefit from shorter review times by closely following the guidance provided here.
+This document is intended to be a guidance for creators and reviewers of pull requests (PRs) in the {admiral} package. PR authors will benefit from shorter review times by closely following the guidance provided here.
 
 
 # Review Criteria
 
-For a pull request to be merged it needs to pass the automated `R CMD check` and `lintr` workflows on GitHub at a minimum. These checks can also be run locally using the `devtools::check()` and `lintr::lint_package()` commands, respectively. In addition the PR reviewer should make sure that
+For a pull request to be merged it needs to pass the automated `R CMD check`, `lintr`, and `task-list-completed` workflows on GitHub at a minimum. The first two checks can  be run locally using the `devtools::check()` and `lintr::lint_package()` commands, respectively. The `task-list-completed` workflow is exclusive to GitHub and will be discussed later. In addition the PR creator and reviewer should make sure that
 
 - the [Programming Strategy](programming_strategy.html) is followed
+
+- the [Development Process](development_process.html) is followed
 
 - the function is ADaM IG compliant
 
@@ -48,6 +50,15 @@ For a pull request to be merged it needs to pass the automated `R CMD check` and
 - the author of a function is listed in the `DESCRIPTION` file
 
 - all files affected by the implemented changes, e.g. vignettes and templates, are updated
+
+
+The {admiral} development team is aware and sympathetic to the great many checks, processes and
+documents needed to work through in order to do a compliant Pull Request.  The `task-list-completed` GitHub
+workflow was created to help reduce this burden on contributors by providing a standardized checklist that compiles information from the Pull Request Guidance, Development Process and Programming Strategy Vignettes. 
+
+When a contributor intitiates a Pull Request a standard text will be inserted into the comment 
+
+
 
 
 # Common R CMD Check Issues
