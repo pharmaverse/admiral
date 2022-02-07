@@ -70,27 +70,6 @@ derive_vars_aage <- function(dataset,
   )
 }
 
-#' Derive Analysis Age
-#'
-#' `derive_aage()` was renamed to `derive_vars_aage()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_aage <- function(dataset,
-                        start_date = BRTHDT,
-                        end_date = RANDDT,
-                        unit = "years") {
-  deprecate_warn("0.3.0", "derive_aage()", "derive_vars_aage()")
-  derive_vars_aage(
-    dataset,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date),
-    unit = unit
-  )
-}
-
 #' Derive Age in Years
 #'
 #' @details This function is used to convert age variables into years.

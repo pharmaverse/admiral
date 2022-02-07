@@ -475,5 +475,5 @@ dataset_vignette(adae,
 
 ADaM | Sample Code
 ---- | --------------
-ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/main/inst/example_scripts/ad_adae.R){target="_blank"}
-ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/main/inst/example_scripts/ad_adcm.R){target="_blank"}
+ADAE | [ad_adae.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}

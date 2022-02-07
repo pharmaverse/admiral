@@ -140,36 +140,3 @@ derive_vars_duration <- function(dataset,
 
   dataset
 }
-
-#' Derive Duration
-#'
-#' `derive_duration()` was renamed to `derive_vars_duration()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_duration <- function(dataset,
-                            new_var,
-                            new_var_unit = NULL,
-                            start_date,
-                            end_date,
-                            in_unit = "days",
-                            out_unit = "days",
-                            floor_in = TRUE,
-                            add_one = TRUE,
-                            trunc_out = FALSE) {
-  deprecate_warn("0.3.0", "derive_duration()", "derive_vars_duration()")
-  derive_vars_duration(
-    dataset,
-    new_var = !!enquo(new_var),
-    new_var_unit = !!enquo(new_var_unit),
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date),
-    in_unit = in_unit,
-    out_unit = out_unit,
-    floor_in = floor_in,
-    add_one = add_one,
-    trunc_out = trunc_out
-  )
-}

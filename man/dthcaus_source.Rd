@@ -11,9 +11,7 @@ dthcaus_source(
   mode = "first",
   dthcaus,
   traceability_vars = NULL,
-  dataset = deprecated(),
-  date_var = deprecated(),
-  traceabilty_vars = deprecated()
+  dataset = deprecated()
 )
 }
 \arguments{
@@ -42,10 +40,6 @@ in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
 
 \item{dataset}{Deprecated, please use \code{dataset_name} instead.}
-
-\item{date_var}{Deprecated, please use \code{date} instead.}
-
-\item{traceabilty_vars}{Deprecated, please use \code{traceability_vars} instead.}
 }
 \value{
 An object of class "dthcaus_source".

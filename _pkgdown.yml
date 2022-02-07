@@ -3,12 +3,12 @@ template:
     bootswatch: flatly
     docsearch:
       api_key: 2d4895759f79e89d6eb1c3b990bca6d8
-      index_name: roche-gsk
+      index_name: pharmaverse
 repo:
   url:
-    home: https://github.com/Roche-GSK/admiral/
-    source: https://github.com/Roche-GSK/admiral/blob/main/
-    issue: https://github.com/Roche-GSK/admiral/issues/
+    home: https://github.com/pharmaverse/admiral/
+    source: https://github.com/pharmaverse/admiral/blob/main/
+    issue: https://github.com/pharmaverse/admiral/issues/
     user: https://github.com/
 news:
   cran_dates: false

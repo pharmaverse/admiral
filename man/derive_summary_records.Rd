@@ -10,9 +10,7 @@ derive_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to = NULL,
-  fns = deprecated(),
-  filter_rows = deprecated()
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -53,10 +51,6 @@ value or NA.
 (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
 }}
-
-\item{fns}{\emph{Deprecated}, please use \code{analysis_var} and \code{summary_fun} instead.}
-
-\item{filter_rows}{\emph{Deprecated}, please use \code{filter} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.
