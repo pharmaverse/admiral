@@ -9,14 +9,6 @@ body:
     attributes:
       value: |
         **Example:** Bug: derive_vars_dtm() is returning NA values when using preserve argument
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info or to let you know when the bug has been fixed?
-      placeholder: email@example.com
-    validations:
-      required: false
   - type: textarea
     id: what-happened
     attributes:
@@ -44,4 +36,3 @@ body:
       value: "Please give us as many details as you can! The faster we can recreate the bug, the faster we can get a fix in the works.  Warning, Error Messages and Screenshots are also great."
     validations:
       required: false
-
