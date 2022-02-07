@@ -54,6 +54,8 @@ this case the day is imputed as `15`. (#592).
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
+- Updated [Pull Request Review Guidance](../articles/pr_review_guidance.html) on using `task-list-completed` workflow. (#817)
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
