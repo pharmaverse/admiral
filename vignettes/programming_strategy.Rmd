@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-As admiral is intended to be contributed by the user community, 
-this article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
+As admiral is intended to be contributed by the user community, this 
+article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
 In order to keep the framework robust across the whole community, 
 we have defined a programming strategy that should be followed in such cases.
 These contributions could include, for example, company specific derivations of ADaM datasets. 
@@ -85,9 +85,8 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, these
-variables must start with `temp_` and must be removed from the output dataset
-(link to remove function).
-* If the input dataset includes variables starting with `temp_`, an error must be issued (link to check function).
+variables must start with `temp_` and must be removed from the output dataset.
+* If the input dataset includes variables starting with `temp_`, an error must be issued.
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
 
@@ -414,7 +413,7 @@ There should be a test case added in `tests/testthat/test-deprecation.R` that ch
 ### Function
 
 If the deprecated function still exists in the package besides the new function, a **warning** must be
-issued. If if it has been removed, an **error** must be generated.
+issued. If it has been removed, an **error** must be generated.
 
 ```
 ### BEGIN DEPRECATION
