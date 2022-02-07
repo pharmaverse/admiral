@@ -13,8 +13,7 @@ derive_var_ontrtfl(
   ref_end_date = NULL,
   ref_end_window = 0,
   filter_pre_timepoint = NULL,
-  span_period = NULL,
-  date = deprecated()
+  span_period = NULL
 )
 }
 \arguments{
@@ -60,8 +59,6 @@ Optional; default is \code{NULL}.}
 \item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started prior
 to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{"Y"}.
 Optional; default is \code{NULL}.}
-
-\item{date}{\strong{Deprecated}. Please use \code{start_date} instead.}
 }
 \value{
 The input dataset with an additional column named

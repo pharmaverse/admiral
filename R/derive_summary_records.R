@@ -46,10 +46,6 @@
 #'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
 #'   More general expression are not allowed.
 #'
-#' @param fns *Deprecated*, please use `analysis_var` and `summary_fun` instead.
-#'
-#' @param filter_rows *Deprecated*, please use `filter` instead.
-#'
 #' @author Vignesh Thanikachalam, Ondrej Slama
 #'
 #' @return A data frame with derived records appended to original dataset.
@@ -151,26 +147,7 @@ derive_summary_records <- function(dataset,
                                    filter = NULL,
                                    analysis_var,
                                    summary_fun,
-                                   set_values_to = NULL,
-                                   fns = deprecated(),
-                                   filter_rows = deprecated()) {
-  if (!missing(fns)) {
-    err_msg <- paste(
-      "The `fns` argument of `derive_summary_records()` is deprecated",
-      "as of admiral 0.3.0.",
-      "Please use the `analysis_var` and `summary_fun` arguments instead."
-    )
-    abort(err_msg)
-  }
-  if (!missing(filter_rows)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_summary_records(filter_rows = )",
-      "derive_summary_records(filter = )"
-    )
-    filter <- enquo(filter_rows)
-  }
-
+                                   set_values_to = NULL) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)

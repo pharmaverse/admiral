@@ -17,6 +17,7 @@
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
+#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -199,7 +200,8 @@ derive_var_lstalvdt <- function(dataset,
         !!!sources[[i]]$traceability_vars,
         LSTALVDT = convert_dtc_to_dt(
           !!date,
-          date_imputation = sources[[i]]$date_imputation
+          date_imputation = sources[[i]]$date_imputation,
+          preserve = sources[[i]]$preserve
         )
       )
     }
@@ -232,13 +234,18 @@ derive_var_lstalvdt <- function(dataset,
 #' @param date_imputation A string defining the date imputation for `date`.
 #'   See `date_imputation` parameter of `impute_dtc()` for valid values.
 #'
+#' @param preserve Preserve partial dates when doing date imputation for middle
+#' day and month
+#'
+#' A user wishing to preserve partial dates when doing middle day and month date
+#' imputation can invoke this argument.  For example `"2019---07"` would return
+#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
-#'
-#' @param date_var Deprecated, please use `date` instead.
 #'
 #' @author Stefan Bundfuss
 #'
@@ -251,13 +258,9 @@ lstalvdt_source <- function(dataset_name,
                             filter = NULL,
                             date,
                             date_imputation = NULL,
+                            preserve = FALSE,
                             traceability_vars = NULL,
-                            dataset = deprecated(),
-                            date_var = deprecated()) {
-  if (!missing(date_var)) {
-    deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
-    date <- enquo(date_var)
-  }
+                            dataset = deprecated()) {
   if (!missing(dataset)) {
     deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
     dataset_name <- deparse(substitute(dataset))
@@ -271,6 +274,7 @@ lstalvdt_source <- function(dataset_name,
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,
+    preserve = preserve,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("lstalvdt_source", "list")
