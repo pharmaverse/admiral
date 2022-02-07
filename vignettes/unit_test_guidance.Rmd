@@ -103,13 +103,13 @@ For the different calls of your function, consider how the user might apply your
 function and test a variety of possible calls, whilst still remembering the tips
 above that tests should be fast and simple. 
 This is only needed in cases where the complexity and level of flexibility of 
-your function justifies it, e.g. see the test script: https://github.com/Roche-GSK/admiral/blob/main/tests/testthat/test-derive_var_extreme_flag.R.
+your function justifies it, e.g. see the test script: https://github.com/pharmaverse/admiral/blob/main/tests/testthat/test-derive_var_extreme_flag.R.
 
 ## Exported Functions
 Don’t forget to add a unit test for each exported function.
 
 ## Set up the Test Script
-Within {admiral} folder https://github.com/Roche-GSK/admiral/tree/main/tests/testthat, 
+Within {admiral} folder https://github.com/pharmaverse/admiral/tree/main/tests/testthat, 
 add a script with the naming convention “test-\<script_containing_function\>.R”.,
 the unit test script can be created from the console also, as follows: 
 

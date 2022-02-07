@@ -4,6 +4,8 @@
 
 ### General
 
+- GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
+
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()` and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)

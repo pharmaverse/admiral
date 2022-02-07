@@ -78,7 +78,7 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "Roche-GSK",
+      "RemoteUsername": "pharmaverse",
       "RemoteRepo": "admiral.test",
       "RemoteRef": "main",
       "RemoteSha": "660224bfeb8450f6ef69769e6982aa921dc8130a",

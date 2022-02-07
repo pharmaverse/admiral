@@ -15,24 +15,24 @@ knitr::opts_chunk$set(
 )
 ```
 
-Once you’ve familiarised yourself with the admiral [contribution model](https://roche-gsk.github.io/admiral/articles/contribution_model.html) and you’re ready to make your first code contribution, this development process step-by-step guide will help tie all the other detailed vignettes together to give you the simplest experience of helping to grow and enhance our codebase.
+Once you’ve familiarised yourself with the admiral [contribution model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) and you’re ready to make your first code contribution, this development process step-by-step guide will help tie all the other detailed vignettes together to give you the simplest experience of helping to grow and enhance our codebase.
 
 1. To start, you will have either created an issue or commented on an existing issue to notify that you’d like to contribute code. Then one of the admiral core team will assign you to the issue.
-2. Create a new feature branch from the development branch `devel` following the naming convention and pull the latest changes - as detailed on the [github usage](https://roche-gsk.github.io/admiral/articles/git_usage.html#working-with-feature-branches-1) guide.
-3. Familiarise yourself with the admiral [programming strategy](https://roche-gsk.github.io/admiral/articles/programming_strategy.html), and then make the required code updates.
-4. Before making a pull request, check the [Pull Request Review Guidance](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html) & the following checklist of common things developers miss:
+2. Create a new feature branch from the development branch `devel` following the naming convention and pull the latest changes - as detailed on the [github usage](https://pharmaverse.github.io/admiral/articles/git_usage.html#working-with-feature-branches-1) guide.
+3. Familiarise yourself with the admiral [programming strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html), and then make the required code updates.
+4. Before making a pull request, check the [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) & the following checklist of common things developers miss:
   a. Is all your code formatted according to the [tidyverse](https://style.tidyverse.org/) style guide?
-  b. Did you create/add appropriate [unit tests](https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)?
-  c. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
-  d. Did you update the [documentation](https://roche-gsk.github.io/admiral/articles/programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
-  e. Does your code update have any impact on the [ADaM template](https://roche-gsk.github.io/admiral/articles/admiral.html#starting-a-script-1) R scripts stored in `inst/templates`?
+  b. Did you create/add appropriate [unit tests](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)?
+  c. If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
+  d. Did you update the [documentation](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#function-header-documentation-)? If so, remember to run `devtools::document()` and include the updated `NAMESPACE` and `.Rd` files in `man/` 
+  e. Does your code update have any impact on the [ADaM template](https://pharmaverse.github.io/admiral/articles/admiral.html#starting-a-script-1) R scripts stored in `inst/templates`?
   f. Does your code update have any impact on the vignettes stored in vignettes?
   g. Did you update the Changelog `NEWS.md`?
-  h. Did you build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://roche-gsk.github.io/admiral/reference/index.html)" page?
-5. Once happy with all the updates, make a [pull request](https://roche-gsk.github.io/admiral/articles/git_usage.html#working-with-feature-branches-1) to merge to the development branch `devel` and link the issue so that it closes after successful merging.
-6. Check that there are no merge conflicts. If there are any, fix them before requesting review. See [solving merge conflicts](https://roche-gsk.github.io/admiral/articles/git_usage.html#solving-merge-conflicts) guidance.
-7. Check the results of the automated `R-CMD check` and `lintr` checks and if any issues consult this [guide](https://roche-gsk.github.io/admiral/articles/pr_review_guidance.html#common-r-cmd-check-issues-1).
-8. Assign a reviewer from the admiral core development team – this could be anyone you discussed the issue with previously via Slack or GitHub. If unsure, add a comment that the pull request is ready for review and add the `@Roche-GSK/admiral-devs` tag to it.
+  h. Did you build admiral site `pkgdown::build_site()` and check that all affected examples are displayed correctly and that all new functions occur on the "[Reference](https://pharmaverse.github.io/admiral/reference/index.html)" page?
+5. Once happy with all the updates, make a [pull request](https://pharmaverse.github.io/admiral/articles/git_usage.html#working-with-feature-branches-1) to merge to the development branch `devel` and link the issue so that it closes after successful merging.
+6. Check that there are no merge conflicts. If there are any, fix them before requesting review. See [solving merge conflicts](https://pharmaverse.github.io/admiral/articles/git_usage.html#solving-merge-conflicts) guidance.
+7. Check the results of the automated `R-CMD check` and `lintr` checks and if any issues consult this [guide](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html#common-r-cmd-check-issues-1).
+8. Assign a reviewer from the admiral core development team – this could be anyone you discussed the issue with previously via Slack or GitHub. If unsure, add a comment that the pull request is ready for review and add the `@pharmaverse/admiral-devs` tag to it.
 9. Once the review is completed, the reviewer will merge the PR and this will then automatically delete the feature branch.
 
 _Finally, just a note to say from the core developers that we hugely appreciate you taking the time to contribute to admiral. Don’t be offended if during review we send requests back to you, as the expectations are high so that we can ensure the admiral codebase remains robust and consistent. The best way to learn here is always to jump in and get involved, so please don’t be afraid you’ll make mistakes along the way – we all have and continue to do so, and that’s what the reviews are for. Also if ever you get stuck don't hesitate to reach out for support via the Slack channel. **Welcome to our admiral community!**_
