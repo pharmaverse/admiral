@@ -83,7 +83,7 @@ The check boxes are linked to the `task-list-completed` workflow.  You need to c
 knitr::include_graphics('./pr_review_actions.png')
 ```
 
-Please don't hesitate to reach out to the admiral team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/Roche-GSK/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item. 
+Please don't hesitate to reach out to the admiral team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/pharmaverse/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item. 
 
 
 # Common R CMD Check Issues
