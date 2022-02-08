@@ -1,5 +1,8 @@
 #' Derive Analysis Study Day
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Adds the analysis study day (`ADY`) to the dataset, i.e., study day of analysis date.
 #'
 #' @param dataset Input dataset

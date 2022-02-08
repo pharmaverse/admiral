@@ -65,6 +65,8 @@ More general expression are not allowed.
 \emph{Permitted Values:} List of variable-value pairs}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 This function is \emph{deprecated}. Please use \code{\link[=derive_param_exposure]{derive_param_exposure()}} instead.
 }
 \seealso{

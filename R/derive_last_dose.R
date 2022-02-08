@@ -1,5 +1,7 @@
 #' Derive Last Dose Date(-time)
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #' *Deprecated*, please use `derive_var_last_dose_date()` instead.
 #'
 #' @param dataset Input dataset.
