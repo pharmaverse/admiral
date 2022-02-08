@@ -45,7 +45,7 @@ specified order.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
-created by \code{vars()}, e.g., \verb{vars(ADT, desc(AVAL)} or \code{NULL}}
+created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{new_vars}{Variables to add
 

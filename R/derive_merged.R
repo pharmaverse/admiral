@@ -24,7 +24,7 @@
 #'   *Default*: `NULL`
 #'
 #'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL)` or `NULL`
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param new_vars Variables to add
 #'
@@ -618,6 +618,14 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @param condition Condition
 #'
+#'   The condition is evaluated at the additional dataset (`dataset_add`). For
+#'   all by groups where it evaluates as `TRUE` at least once the new variable
+#'   is set to the true value (`true_value`). For all by groups where it
+#'   evaluates as `FALSE` or `NA` for all observations the new variable is set
+#'   to the false value (`false_value`). The new variable is set to the missing
+#'   value (`missing_value`) for by groups not present in the additional
+#'   dataset.
+#'
 #' @param true_value True value
 #'
 #'   *Default*: `"Y"`
@@ -655,9 +663,12 @@ derive_var_merged_cat <- function(dataset,
 #'   `filter_add` condition.
 #'
 #'   1. The new variable is added to the input dataset and set to the true value
-#'   if for the by group at least one observation exists in the (restricted)
-#'   additional dataset where the condition evaluates to `TRUE`. Otherwise, it
-#'   is set to the false value.
+#'   (`true_value`) if for the by group at least one observation exists in the
+#'   (restricted) additional dataset where the condition evaluates to `TRUE`. It
+#'   is set to the false value (`false_value`) if for the by group at least one
+#'   observation exists and for all observations the condition evaluates to
+#'   `FALSE` or `NA`. Otherwise, it is set to the missing value
+#'   (`missing_value`).
 #'
 #' @author Stefan Bundfuss
 #'

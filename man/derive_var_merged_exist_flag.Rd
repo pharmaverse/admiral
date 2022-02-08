@@ -33,7 +33,15 @@ The variables specified by the \code{by_vars} parameter are expected.}
 
 The specified variable is added to the input dataset.}
 
-\item{condition}{Condition}
+\item{condition}{Condition
+
+The condition is evaluated at the additional dataset (\code{dataset_add}). For
+all by groups where it evaluates as \code{TRUE} at least once the new variable
+is set to the true value (\code{true_value}). For all by groups where it
+evaluates as \code{FALSE} or \code{NA} for all observations the new variable is set
+to the false value (\code{false_value}). The new variable is set to the missing
+value (\code{missing_value}) for by groups not present in the additional
+dataset.}
 
 \item{true_value}{True value
 
@@ -74,9 +82,12 @@ least one observation in another dataset fulfilling a certain condition.
 \item The additional dataset is restricted to the observations matching the
 \code{filter_add} condition.
 \item The new variable is added to the input dataset and set to the true value
-if for the by group at least one observation exists in the (restricted)
-additional dataset where the condition evaluates to \code{TRUE}. Otherwise, it
-is set to the false value.
+(\code{true_value}) if for the by group at least one observation exists in the
+(restricted) additional dataset where the condition evaluates to \code{TRUE}. It
+is set to the false value (\code{false_value}) if for the by group at least one
+observation exists and for all observations the condition evaluates to
+\code{FALSE} or \code{NA}. Otherwise, it is set to the missing value
+(\code{missing_value}).
 }
 }
 \examples{
