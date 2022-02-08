@@ -100,6 +100,9 @@ derive_var_base <- function(dataset,
 
 #' Derive BASEC Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
 #' This function is *deprecated*. Please use [derive_var_base()] instead.
 #'
 #' @inheritParams derive_var_base
@@ -117,6 +120,9 @@ derive_var_basec <- function(dataset, by_vars) {
 }
 
 #' Derive Baseline
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #'
 #' This function is *deprecated*. Please use [derive_var_base()] instead.
 #'

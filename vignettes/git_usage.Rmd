@@ -28,6 +28,7 @@ This article will give you an overview of how the admiral project is utilizing t
 -	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
 - The `main`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
 
@@ -118,6 +119,7 @@ After merging the Pull Request the corresponding issue must be moved to the
 "Sprint Done" column on the "admiral scrum board" by the developer. The issue
 must not be closed. It will be closed automatically once the `devel` branch is
 merged into the `main` branch.
+
 
 ```{r, echo = FALSE}
     knitr::include_graphics("github_sprint_done.png", dpi = 144)

@@ -1,6 +1,9 @@
 #' Derive a Disposition Status at a Specific Timepoint
 #'
-#' @description *Deprecated*, please use `derive_var_disposition_status()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_disposition_status()` instead.
 #'
 #' Derive a disposition status from the the relevant records in the disposition domain.
 #'
