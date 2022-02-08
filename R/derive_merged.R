@@ -322,6 +322,7 @@ derive_vars_merged_dt <- function(dataset,
                                   flag_imputation = TRUE,
                                   min_dates = NULL,
                                   max_dates = NULL,
+                                  preserve = FALSE,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
   dtc <- assert_symbol(enquo(dtc))
@@ -336,7 +337,8 @@ derive_vars_merged_dt <- function(dataset,
       date_imputation = date_imputation,
       flag_imputation = flag_imputation,
       min_dates = min_dates,
-      max_dates = max_dates
+      max_dates = max_dates,
+      preserve = preserve
     )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
@@ -443,6 +445,7 @@ derive_vars_merged_dtm <- function(dataset,
                                    flag_imputation = "auto",
                                    min_dates = NULL,
                                    max_dates = NULL,
+                                   preserve = FALSE,
                                    check_type = "warning",
                                    duplicate_msg = NULL) {
   dtc <- assert_symbol(enquo(dtc))
@@ -459,7 +462,8 @@ derive_vars_merged_dtm <- function(dataset,
       time_imputation = time_imputation,
       flag_imputation = flag_imputation,
       min_dates = min_dates,
-      max_dates = max_dates
+      max_dates = max_dates,
+      preserve = preserve
     )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
   derive_vars_merged(dataset,
