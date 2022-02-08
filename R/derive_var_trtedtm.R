@@ -1,5 +1,8 @@
 #' Derive Datetime of Last Exposure to Treatment
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Derives datetime of last exposure to treatment (`TRTEDTM`)
 #'
 #' @param dataset Input dataset
