@@ -1,5 +1,8 @@
 #' Derive Last Known Alive Date
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Add the last known alive date (`LSTALVDT`) to the dataset.
 #'
 #' @param dataset Input dataset

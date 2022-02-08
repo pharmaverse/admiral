@@ -211,6 +211,9 @@ derive_param_exposure <- function(dataset,
 
 #' Add an Aggregated Parameter and Derive the Associated Start and End Dates
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
 #' This function is *deprecated*. Please use [derive_param_exposure()] instead.
 #'
 #' @inheritParams derive_param_exposure

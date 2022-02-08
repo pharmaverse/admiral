@@ -65,6 +65,8 @@ Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 The input dataset with the new flag variable added
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 \emph{Deprecated}, please use \code{derive_var_extreme_flag()} instead.
 
 Add a variable flagging the first or last observation within each by group
