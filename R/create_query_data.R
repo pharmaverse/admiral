@@ -316,6 +316,52 @@ create_query_data <- function(queries,
   bind_rows(query_data)
 }
 
+#' Get Terms from the Queries Database
+#'
+#' The function checks if all requirements to access the database are fulfilled
+#' (version and access function are available, see `assert_db_requirements()`),
+#' reads the terms from the database, and checks if the dataset with the terms
+#' is in the expected format (see `assert_terms()`).
+#'
+#' @param version Version
+#'
+#'   The version must be non null. Otherwise, an error is issued. The value is
+#'   passed to the access function (`fun`).
+#'
+#' @param fun Access function
+#'
+#'   The access function nust be non null. Otherwise, an error is issued. The
+#'   function is called to retrieve the terms.
+#'
+#' @param queries Queries
+#'
+#'   List of all queries passed to `create_query_data()`. It is used for error
+#'   messages.
+#'
+#' @param definition Definition of the query
+#'
+#'   The definition is passed to the access function. It defines which terms are
+#'   returned.
+#'
+#' @param expect_query_name Is `QUERY_NAME` expected in the output dataset?
+#'
+#' @param expect_query_id Is `QUERY_ID` expected in the output dataset?
+#'
+#' @param i Index of `definition` in `queries`
+#'
+#'   The value is used for error messages.
+#'
+#' @param temp_env Temporary environment
+#'
+#'   The value is passed to the access function.
+#'
+#' @param type Type of query
+#'
+#'   *Permitted Values*: `"smq"`, `"sdg"`
+#'
+#' @return Output dataset of the access function
+#'
+#' @author Stefan Bundfuss
 get_terms_from_db <- function(
   version,
   fun,
