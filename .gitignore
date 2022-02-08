@@ -42,3 +42,6 @@ vignettes/*.pdf
 docs
 doc
 Meta
+admiral.Rcheck/
+admiral*.tar.gz
+admiral*.tgz

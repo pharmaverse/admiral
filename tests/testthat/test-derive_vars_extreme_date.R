@@ -160,4 +160,3 @@ test_that("derive_vars_extreme_dtm: LSTALVDTM and traceability variables are der
     keys = c("USUBJID")
   )
 })
-

@@ -25,7 +25,6 @@ knitr::opts_chunk$set(
 
 * Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions. 
 
-
 ##### **Why** did we decide to start **admiral**?
 
   * Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets? 
@@ -38,8 +37,6 @@ knitr::opts_chunk$set(
   * Contributors: An option to make a name for yourself in the Pharma open-source community & an avenue to collaborate with other like-minded people across the industry
   * Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
 
-
-
 ##### Why did we use **R as a programming language**?
 
  * R is not an isolated software product, everyone can contribute (open source principal)
@@ -49,7 +46,6 @@ knitr::opts_chunk$set(
  * Top of the line visualization/graphics - R-Shiny for interactive data displays and also R Markdown offers great report writing functionality
  * R is very popular among statisticians so new statistical methods are likely implemented in R before any other language
  * There might be equally suited programming languages out there - however at some stage we had to make a decision :)
-
 
 ##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
@@ -79,8 +75,9 @@ knitr::opts_chunk$set(
 
  * All functions  are reviewed and tested (see [What will be provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
  * Test  cases for each function  will  be part of the R package.
- * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
  * Users can add to the  tests or provide additional feedback.
+ * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
+ * A [GitHub action](https://github.com/marketplace/actions/r-package-validation-report) (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of admiral exists [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf) as an illustration.
 
 ##### What will be provided around **function testing**?
 
@@ -110,10 +107,15 @@ knitr::opts_chunk$set(
 
 ##### Will there be a user/**contribution** guide?
 
- 
  * Our [programming strategy](programming_strategy.html) serves as a framework
- for users how to create their own functions.
- 
+ for users how to create their own functions. 
  * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
+##### How has admiral been **tested externally** to Roche/GSK?
 
+* During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and >50 individuals) in order to assess compatibility of the admiral toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.
+* This foundational version of admiral achieved a 7.9 / 10 average score from all the survey respondents and >75% said they'd advocate using admiral for ADaM transformations in R.
+* Some tester quotes:
+  * _"Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large "jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."_
+  * _"It is a huge advantage for all pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs."_
+  * _"I am a huge proponent of shared solutions within pharma. Overall I was VERY impressed with the admiral project -- both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn't able to see a strong need to shift to R. This project has shown me a reason to consider making the shift."_

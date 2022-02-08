@@ -46,8 +46,6 @@
 #' to the `ref_start_date`and are ongoing or end after the `ref_start_date` are flagged as `"Y"`.
 #'  Optional; default is `NULL`.
 #'
-#' @param date **Deprecated**. Please use `start_date` instead.
-#'
 #' @details
 #' On-Treatment is calculated by determining whether the assessment date or
 #' start/stop dates fall between 2 dates. The following logic is used to
@@ -165,12 +163,7 @@ derive_var_ontrtfl <- function(dataset,
                                ref_end_date = NULL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL,
-                               span_period = NULL,
-                               date = deprecated()) {
-  if (!missing(date)) {
-    deprecate_warn("0.3.0", "derive_var_ontrtfl(date = )", "derive_var_ontrtfl(start_date = )")
-    start_date <- enquo(date)
-  }
+                               span_period = NULL) {
   new_var <- assert_symbol(enquo(new_var))
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date), optional = TRUE)
