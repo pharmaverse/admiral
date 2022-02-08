@@ -158,6 +158,9 @@ dm \%>\%
   ) \%>\%
   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
 }
+\seealso{
+\code{\link[=date_source]{date_source()}}
+}
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }

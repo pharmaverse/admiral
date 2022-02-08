@@ -198,6 +198,8 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @keywords derivation adsl
 #'
+#' @seealso [date_source()]
+#'
 #' @export
 #'
 #' @examples
@@ -356,7 +358,8 @@ derive_vars_extreme_dtm <- function(dataset,
       !!new_var := convert_date_to_dtm(
         !!date,
         date_imputation = sources[[i]]$date_imputation,
-        time_imputation = sources[[i]]$time_imputation
+        time_imputation = sources[[i]]$time_imputation,
+        preserve = sources[[i]]$preserve
       )
     )
   }
@@ -420,8 +423,6 @@ derive_vars_extreme_dt <- function(dataset,
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
 #'
-#' @param date_var Deprecated, please use `date` instead.
-#'
 #' @author Stefan Bundfuss
 #'
 #' @keywords source_specifications
@@ -434,12 +435,7 @@ lstalvdt_source <- function(dataset_name,
                             date,
                             date_imputation = NULL,
                             traceability_vars = NULL,
-                            dataset = deprecated(),
-                            date_var = deprecated()) {
-  if (!missing(date_var)) {
-    deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
-    date <- enquo(date_var)
-  }
+                            dataset = deprecated()) {
   if (!missing(dataset)) {
     deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
     dataset_name <- deparse(substitute(dataset))
@@ -471,26 +467,28 @@ lstalvdt_source <- function(dataset_name,
 #' @param time_imputation A string defining the time imputation for `date`.
 #'   See `time_imputation` parameter of `impute_dtc()` for valid values.
 #'
+#' @param preserve Should day be preserved if month is imputed for `date`.
+#'   See `preserve` parameter of `impute_dtc()` for details.
+#'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
-#' @param dataset Deprecated, please use `dataset_name` instead.
-#'
-#' @param date_var Deprecated, please use `date` instead.
-#'
 #' @author Stefan Bundfuss
+#'
+#' @seealso [derive_vars_extreme_dtm()], [derive_vars_extreme_dt()]
 #'
 #' @keywords source_specifications
 #'
 #' @export
 #'
-#' @return An object of class "date_source".
+#' @return An object of class `date_source`.
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
                         date_imputation = NULL,
                         time_imputation = NULL,
+                        preserve = FALSE,
                         traceability_vars = NULL) {
 
   if (!is.null(date_imputation)) {
@@ -505,6 +503,7 @@ date_source <- function(dataset_name,
     date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,
     time_imputation = time_imputation,
+    preserve = preserve,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("date_source", "list")

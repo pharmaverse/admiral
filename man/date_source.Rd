@@ -10,6 +10,7 @@ date_source(
   date,
   date_imputation = NULL,
   time_imputation = NULL,
+  preserve = FALSE,
   traceability_vars = NULL
 )
 }
@@ -29,18 +30,20 @@ See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 \item{time_imputation}{A string defining the time imputation for \code{date}.
 See \code{time_imputation} parameter of \code{impute_dtc()} for valid values.}
 
+\item{preserve}{Should day be preserved if month is imputed for \code{date}.
+See \code{preserve} parameter of \code{impute_dtc()} for details.}
+
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
-
-\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
-
-\item{date_var}{Deprecated, please use \code{date} instead.}
 }
 \value{
-An object of class "date_source".
+An object of class \code{date_source}.
 }
 \description{
 Create an \code{date_source} object
+}
+\seealso{
+\code{\link[=derive_vars_extreme_dtm]{derive_vars_extreme_dtm()}}, \code{\link[=derive_vars_extreme_dt]{derive_vars_extreme_dt()}}
 }
 \author{
 Stefan Bundfuss
