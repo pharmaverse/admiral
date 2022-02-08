@@ -690,5 +690,5 @@ admiral does not **currently** support metadata integration, but the team is wor
 
 ADaM | Sample Code
 ---- | --------------
-ADSL | [ad_adsl.R](https://github.com/Roche-GSK/admiral/blob/main/inst/example_scripts/ad_adsl.R){target="_blank"} 
+ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
 

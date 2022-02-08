@@ -75,8 +75,9 @@ knitr::opts_chunk$set(
 
  * All functions  are reviewed and tested (see [What will be provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
  * Test  cases for each function  will  be part of the R package.
- * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
  * Users can add to the  tests or provide additional feedback.
+ * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
+ * A [GitHub action](https://github.com/marketplace/actions/r-package-validation-report) (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of admiral exists [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf) as an illustration.
 
 ##### What will be provided around **function testing**?
 

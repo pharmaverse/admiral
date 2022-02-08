@@ -24,7 +24,7 @@ Our contribution model is still in a testing phase so we advise you to contact u
 
 
 # Basics
- * For each new contribution, the user or Data Scientist creates an issue on the issue tab on [GitHub](https://github.com/Roche-GSK/admiral/issues) to put it in our backlog. 
+ * For each new contribution, the user or Data Scientist creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. 
  
  * Familiarize yourself with our [programming strategy](programming_strategy.html), guidance for [GitHub usage](git_usage.html) and unit testing and the overall [goal of admiral](index.html).
  
