@@ -1,5 +1,8 @@
 #' Derive Analysis End Relative Day
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Adds the analysis end relative day (`AENDY`) to the dataset, i.e. study day
 #' of analysis end date
 #'

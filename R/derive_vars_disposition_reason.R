@@ -1,6 +1,9 @@
 #' Derive a Disposition Reason at a Specific Timepoint
 #'
-#' @description *Deprecated*, please use `derive_vars_disposition()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_vars_disposition()` instead.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'

@@ -1,6 +1,9 @@
 #' Add a Variable Flagging the First or Last Observation Within Each By Group
 #'
-#' @description *Deprecated*, please use `derive_var_extreme_flag()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_extreme_flag()` instead.
 #'
 #' Add a variable flagging the first or last observation within each by group
 #'
@@ -171,28 +174,42 @@ derive_extreme_flag <- function(dataset,
 }
 
 #' Adds a Variable Flagging the maximal / minimal value within a group of observations
-#' @description *Deprecated*, please use `derive_var_worst_flag()` instead.
+#'
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_worst_flag()` instead.
+#'
 #' @inheritParams derive_extreme_flag
+#'
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
+#'
 #' @param order Sort order.
 #' Used to determine maximal / minimal observation if they are not unique,
 #' see Details section for more information.
+#'
 #' @param new_var Variable to add to the `dataset`.
 #' It is set `"Y"` for the maximal / minimal observation of each group,
 #' see Details section for more information.
+#'
 #' @param param_var Variable with the parameter values for which the maximal / minimal
 #' value is calculated.
+#'
 #' @param analysis_var Variable with the measurement values for which the maximal / minimal
 #' value is calculated.
+#'
 #' @param worst_high Character with `param_var` values specifying the parameters
 #' referring to "high".
 #' Use `character(0)` if not required.
+#'
 #' @param worst_low Character with `param_var` values specifying the parameters
 #' referring to "low".
 #' Use `character(0)` if not required.
 #'
-#' @details For each group with respect to the variables specified by the `by_vars` parameter,
+#' @details
+#' For each group with respect to the variables specified by the `by_vars` parameter,
 #' the maximal / minimal observation of `analysis_var`
 #' is labelled in the `new_var` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
