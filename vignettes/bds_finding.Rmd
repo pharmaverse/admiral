@@ -889,5 +889,5 @@ dataset_vignette(
 
 ADaM | Sample Code 
 ---- | --------------
-ADEG | [ad_adeg.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adeg.R){target="_blank"}
-ADVS | [ad_advs.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_advs.R){target="_blank"}
+ADEG | [ad_adeg.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R){target="_blank"}
+ADVS | [ad_advs.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R){target="_blank"}

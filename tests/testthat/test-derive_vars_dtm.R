@@ -138,7 +138,34 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
   )
 })
 
-test_that("Partial date imputed to the mid day/month", {
+test_that("Partial date imputed to the MID day/month", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-06-30T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "MID"
+  )
+
+  expect_equal(
+    expected_output,
+    actual_output
+  )
+
+})
+
+test_that("Partial date imputed to the 6-15 day/month", {
   expected_output <- tibble::tribble(
     ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
     "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
@@ -155,22 +182,12 @@ test_that("Partial date imputed to the mid day/month", {
     input,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "MID"
-  )
-  actual_output1 <- derive_vars_dtm(
-    input,
-    new_vars_prefix = "AST",
-    dtc = XXSTDTC,
     date_imputation = "06-15"
   )
 
   expect_equal(
     expected_output,
     actual_output
-  )
-  expect_equal(
-    expected_output,
-    actual_output1
   )
 })
 
@@ -331,3 +348,43 @@ test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds
     regexp =  "Seconds detected in data while ignore_seconds_flag is invoked")
 
 })
+
+input <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+test_that("Partial date imputation as MID and preserve = TRUE to the mid day/month", { # nolint
+
+  expected_output <- tibble::tribble(
+      ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+      "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+      "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+      "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+      "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+      "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
+      "2019", ymd_hms("2019-06-30T00:00:00"), "M", "H",
+      "2019---07", ymd_hms("2019-06-07T00:00:00"), "M", "H"
+    ) %>%
+      mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+    actual_output <- derive_vars_dtm(
+      input,
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      date_imputation = "MID",
+      preserve = TRUE
+    )
+
+    expect_equal(
+      expected_output,
+      actual_output
+    )
+
+  })

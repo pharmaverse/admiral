@@ -557,4 +557,4 @@ adex <- adex %>%
 
 ADaM | Sample Code
 ---- | --------------
-ADEX | [ad_adex.R](https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adex.R){target="_blank"}
+ADEX | [ad_adex.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R){target="_blank"}

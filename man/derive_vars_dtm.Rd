@@ -13,6 +13,7 @@ derive_vars_dtm(
   flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
+  preserve = FALSE,
   ignore_seconds_flag = FALSE
 )
 }
@@ -102,6 +103,17 @@ any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
 
+\item{preserve}{Preserve partial dates when doing date imputation for middle
+day and month
+
+A user wishing to preserve partial dates when doing middle day and month date
+imputation can invoke this argument.  For example \code{"2019---07"} would return
+\verb{"2019-06-07} if date_imputation = "MID" and preserve = TRUE.
+
+A logical value
+
+Default: \code{FALSE}}
+
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
 (\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
@@ -184,6 +196,18 @@ derive_vars_dtm(
   date_imputation = "FIRST",
   time_imputation = "FIRST",
   ignore_seconds_flag = TRUE
+)
+
+# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+# use preserve argument to "preserve" partial dates.  For example, "2019---07",
+# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "MID",
+  preserve = TRUE
 )
 }
 \author{
