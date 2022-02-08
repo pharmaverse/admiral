@@ -1,6 +1,9 @@
 #' Adds a Variable Numbering the Observations Within Each By Group
 #'
-#' @description *Deprecated*, please use `derive_var_obs_number()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_obs_number()` instead.
 #'
 #' Adds a variable numbering the observations within each by group
 #'

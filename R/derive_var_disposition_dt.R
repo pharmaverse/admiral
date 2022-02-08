@@ -1,6 +1,9 @@
 #' Derive a Disposition Date
 #'
-#' @description *Deprecated*, please use `derive_var_disposition_dt()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_disposition_dt()` instead.
 #'
 #' Derive a disposition status date from the the relevant records in the disposition domain.
 #'
