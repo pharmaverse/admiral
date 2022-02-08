@@ -86,6 +86,9 @@ derive_disposition_dt <- function(dataset,
 
 #' Derive a Disposition Date
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Derive a disposition status date from the the relevant records in the disposition domain.
 #'
 #' @param dataset Input dataset
