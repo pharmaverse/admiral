@@ -34,7 +34,7 @@ messages.}
 
 \item{definition}{Definition of the query
 
-The definition is passed to the access function. It defined which terms are
+The definition is passed to the access function. It defines which terms are
 returned.}
 
 \item{expect_query_name}{Is \code{QUERY_NAME} expected in the output dataset?}
@@ -60,7 +60,7 @@ Output dataset of the access function
 The function checks if all requirements to access the database are fulfilled
 (version and access function are available, see \code{assert_db_requirements()}),
 reads the terms from the database, and checks if the dataset with the terms
-are in the expected format (see \code{assert_terms()}).
+is in the expected format (see \code{assert_terms()}).
 }
 \author{
 Stefan Bundfuss
