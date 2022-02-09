@@ -9,11 +9,13 @@
 
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
 
+- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
+
+## Updates of Existing Functions
+
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()` and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
-
-## Updates of Existing Functions
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
