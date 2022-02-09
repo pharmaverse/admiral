@@ -476,7 +476,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' @param prefix The value is used to populate `VAR_PREFIX` in the output
 #'   dataset of `create_query_data()`, e.g., `"SMQ03"`
 #'
-#' @param name The values is used to populate `QUERY_NAME` in the output dataset
+#' @param name The value is used to populate `QUERY_NAME` in the output dataset
 #'   of `create_query_data()`. If the `auto` keyword is specified, the variable
 #'   is set to the name of the query in the SMQ/SDG database.
 #'
@@ -484,7 +484,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #'   keyword is permitted only for queries which are defined by an
 #'   `smq_select()` or `sdg_select()` object.
 #'
-#' @param id The values is used to populate `QUERY_ID` in the output dataset of
+#' @param id The value is used to populate `QUERY_ID` in the output dataset of
 #'   `create_query_data()`. If the `auto` keyword is specified, the variable is
 #'   set to the id of the query in the SMQ/SDG database.
 #'

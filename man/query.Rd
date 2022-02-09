@@ -10,7 +10,7 @@ query(prefix, name = auto, id = NULL, add_scope_num = FALSE, definition = NULL)
 \item{prefix}{The value is used to populate \code{VAR_PREFIX} in the output
 dataset of \code{create_query_data()}, e.g., \code{"SMQ03"}}
 
-\item{name}{The values is used to populate \code{QUERY_NAME} in the output dataset
+\item{name}{The value is used to populate \code{QUERY_NAME} in the output dataset
 of \code{create_query_data()}. If the \code{auto} keyword is specified, the variable
 is set to the name of the query in the SMQ/SDG database.
 
@@ -18,7 +18,7 @@ is set to the name of the query in the SMQ/SDG database.
 keyword is permitted only for queries which are defined by an
 \code{smq_select()} or \code{sdg_select()} object.}
 
-\item{id}{The values is used to populate \code{QUERY_ID} in the output dataset of
+\item{id}{The value is used to populate \code{QUERY_ID} in the output dataset of
 \code{create_query_data()}. If the \code{auto} keyword is specified, the variable is
 set to the id of the query in the SMQ/SDG database.
 
