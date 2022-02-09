@@ -54,6 +54,8 @@ this case the day is imputed as `15`. (#592).
   - `date_var` parameter in `lstalvdt_source()`
   - `date` parameter in `derive_var_ontrtfl()`
   
+- `derive_var_agegr_fda()` has been updated to use ranges <18, 18-64, >=65 (#829)
+
 ## Documentation
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
@@ -69,8 +71,6 @@ this case the day is imputed as `15`. (#592).
 - New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
-
-- `derive_var_agegr_fda()` has been updated to use ranges <18, 18-64, >=65 (#829)
 
 # admiral 0.4.0
 
