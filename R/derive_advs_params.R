@@ -210,7 +210,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @param method Derivation method to use:
 #'
-#'   Mosteller: `sqrt(height(cm) * weight(kg)) / 3600`
+#'   Mosteller: `sqrt(height(cm) * weight(kg) / 3600)`
 #'
 #'   DuBois-DuBois: `0.20247 * (height/100) ^ 0.725 * weight ^ 0.425`
 #'
@@ -352,7 +352,7 @@ derive_param_bsa <- function(dataset,
 #'
 #' @param method Derivation method to use:
 #'
-#'   Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+#'   Mosteller: sqrt(height(cm) * weight(kg) / 3600)
 #'
 #'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
 #'
