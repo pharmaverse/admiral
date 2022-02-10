@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 This article describes creating a BDS time-to-event ADaM.
 
 The main part in programming a time-to-event dataset is the definition of the
-events and censoring times. admiral supports single events like death or
+events and censoring times. {admiral} supports single events like death or
 composite events like disease progression or death. More than one source dataset
 can be used for the definition of the event and censoring times.
 
@@ -55,7 +55,7 @@ To start, all datasets needed for the creation of the time-to-event dataset
 should be read into the environment. This will be a company specific process.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
-in `{admiral}`---are used.
+in `{admiral.test}`---are used.
 
 ```{r}
 data("adsl")
@@ -85,7 +85,7 @@ The date can be provided as date (`--DT` variable), datetime (`--DTM` variable),
 or character ISO-8601 date (`--DTC` variable).
 
 CDISC strongly recommends `CNSR = 0` for events and positive integers for
-censorings. admiral enforces this recommendation. Therefore the `censor`
+censorings. {admiral} enforces this recommendation. Therefore the `censor`
 parameter is available for `censor_source()` only. It is defaulted to `1`.
 
 The `dataset_name` parameter expects a character value which is used as an
@@ -600,7 +600,7 @@ dataset_vignette(
 
 ## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
 
-The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`:
+The {admiral} function `derive_var_obs_number()` can be used to derive `ASEQ`:
 
 ```{r eval=TRUE}
 adtte <- derive_var_obs_number(

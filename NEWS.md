@@ -9,7 +9,7 @@
 
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
 
-- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
+- README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
 ## Updates of Existing Functions
 
@@ -40,12 +40,12 @@
 - The behavior of all functions providing the `date_imputation` parameter, e.g., `derive_vars_dtm()` and
 `derive_vars_dt()` has changed for `date_imputation = "mid"`. Before the date was imputed as June 15th
 if both month and day were missing. Now it is imputed as June 30th. For the old behavior please specify
-`date_imputation = "06-15"`. Please note the the behavior has not changed if only the day is missing. In
+`date_imputation = "06-15"`. Please note the behavior has not changed if only the day is missing. In
 this case the day is imputed as `15` (#592)
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
-- The following functions and parameters, which were deprecated in previous admiral versions, were removed:
+- The following functions and parameters, which were deprecated in previous {admiral} versions, were removed:
   
   - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and
   `derive_suppqual_vars()` function
