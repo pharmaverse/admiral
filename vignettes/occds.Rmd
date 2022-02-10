@@ -98,6 +98,7 @@ dataset_vignette(adae,
                  display_vars = vars(USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
                                      TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT))
 ```
+
 ## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 

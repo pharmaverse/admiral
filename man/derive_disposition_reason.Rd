@@ -103,7 +103,7 @@ if required \code{new_var_spe}) added.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\emph{Deprecated}, please use \code{derive_vars_disposition()} instead.
+\emph{Deprecated}, please use \code{derive_vars_disposition_reason()} instead.
 
 Derive a disposition reason from the the relevant records in the disposition domain.
 }
