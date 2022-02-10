@@ -138,7 +138,7 @@ expected, e.g. `order = vars(AVISIT, desc(AESEV))`
 
 # Handling of Missing Values
 
-When using the {haven} package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.
+When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.
 
 ```r
 dm <- haven::read_sas("dm.sas7bdat") %>% 
