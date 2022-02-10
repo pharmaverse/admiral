@@ -61,7 +61,7 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\verb{r lifecycle::badge("deprecated")}
 \emph{Deprecated}, please use \code{derive_var_last_dose_date()} instead.
 }
 \details{

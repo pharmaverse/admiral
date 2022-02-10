@@ -19,11 +19,11 @@ knitr::opts_chunk$set(
 
 ##### **What is admiral**?
 
-* Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations:
+* Think of `{admiral}` as a toolbox of modular blocks (R functions) to create analysis derivations:
   * each block has a stand alone purpose (each function provides a specific functionality)
   * Data Scientists can create their own blocks (create own R functions)
 
-* Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions. 
+* Constructing ADaM dataset should become like building out of blocks that are based on `{admiral}` modular functions and user created modular functions. 
 
 ##### **Why** did we decide to start **admiral**?
 
@@ -53,31 +53,31 @@ knitr::opts_chunk$set(
     * e.g. the `derive_vars_aage` has a parameterized start and end-date and a unit.
     * Depending on the parameters results may vary as does the specification.
     * Functions serve as a toolbox so the user can create their ADaM according to the requirements.
-    * The principles, programming strategy and documentation of admiral are considered as a framework for users to contribute.
+    * The principles, programming strategy and documentation of `{admiral}` are considered as a framework for users to contribute.
 
 ##### How does a user **know what a function does** exactly?
 
 * Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.
-* Complex functions potentially have a vignette on the admiral homepage to provide more details. 
-* admiral does not provide a link to an explicit specification in the define.xml.
+* Complex functions potentially have a vignette on the `{admiral}` homepage to provide more details. 
+* `{admiral}` does not provide a link to an explicit specification in the define.xml.
 
-##### Would admiral **create a whole** ADaM  dataset?
+##### Would `{admiral}` **create a whole** ADaM  dataset?
 
- * admiral is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs
- * admiral is not meant as a "click a button, out comes your ADaM" tool
- * on the admiral webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)  
+ * `{admiral}` is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs
+ * `{admiral}` is not meant as a "click a button, out comes your ADaM" tool
+ * on the `{admiral}` webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)  
 
 ##### In **which order** does a user need to execute the functions?
 
 * Guidance will be provided for ADSL, BDS and OCCDS ADaM structure including template scripts.
 
-##### Is the admiral  package **validated**?
+##### Is the `{admiral}`  package **validated**?
 
  * All functions  are reviewed and tested (see [What will be provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
  * Test  cases for each function  will  be part of the R package.
  * Users can add to the  tests or provide additional feedback.
- * The  testing the  admiral team will do for each function does **not replace the QC and validation process at each company**.
- * A [GitHub action](https://github.com/marketplace/actions/r-package-validation-report) (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of admiral exists [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf) as an illustration.
+ * The  testing the  `{admiral}` team will do for each function does **not replace the QC and validation process at each company**.
+ * A [GitHub action](https://github.com/marketplace/actions/r-package-validation-report) (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of `{admiral}` exists [here](https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf) as an illustration.
 
 ##### What will be provided around **function testing**?
 
@@ -85,7 +85,7 @@ knitr::opts_chunk$set(
  * Some integration testing will be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)
  * Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
    * validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence 
-   * strategy of how the use of admiral fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)
+   * strategy of how the use of `{admiral}` fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)
    * see our guidance on [unit testing](unit_testing_guidance.html)
 
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
@@ -94,14 +94,14 @@ knitr::opts_chunk$set(
  * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?])
  * The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml
 
-##### Will admiral provide ADaM IG **CDISC compliant** datasets?
+##### Will `{admiral}` provide ADaM IG **CDISC compliant** datasets?
 
-* Although admiral follows CDISC standards it does not claim that the dataset resulting from calling admiral functions is ADaM compliant. This has to be ensured by the user.
+* Although `{admiral}` follows CDISC standards it does not claim that the dataset resulting from calling `{admiral}` functions is ADaM compliant. This has to be ensured by the user.
 
-##### How much of the **ADaM IG is covered  by admiral?**
+##### How much of the **ADaM IG is covered by admiral?**
 
  * ADaM  IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.
- * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see [In **which order** does a user need to execute the functions?])
+ * We will provide guidance for each ADaM  dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality `{admiral}` covers. (see [In **which order** does a user need to execute the functions?])
  * The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).
  * For standard ADaM datasets (ADAE, ADCM, ...) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation
 
@@ -111,11 +111,11 @@ knitr::opts_chunk$set(
  for users how to create their own functions. 
  * Please see the [contribution model website](contribution_model.html) for a detailed description how to contribute
 
-##### How has admiral been **tested externally** to Roche/GSK?
+##### How has `{admiral}` been **tested externally** to Roche/GSK?
 
-* During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and >50 individuals) in order to assess compatibility of the admiral toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.
-* This foundational version of admiral achieved a 7.9 / 10 average score from all the survey respondents and >75% said they'd advocate using admiral for ADaM transformations in R.
+* During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and >50 individuals) in order to assess compatibility of the `{admiral}` toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.
+* This foundational version of `{admiral}` achieved a 7.9 / 10 average score from all the survey respondents and >75% said they'd advocate using `{admiral}` for ADaM transformations in R.
 * Some tester quotes:
   * _"Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large "jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."_
-  * _"It is a huge advantage for all pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs."_
-  * _"I am a huge proponent of shared solutions within pharma. Overall I was VERY impressed with the admiral project -- both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn't able to see a strong need to shift to R. This project has shown me a reason to consider making the shift."_
+  * _"It is a huge advantage for all Pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs."_
+  * _"I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the `{admiral}` project -- both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn't able to see a strong need to shift to R. This project has shown me a reason to consider making the shift."_

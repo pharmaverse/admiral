@@ -64,7 +64,7 @@ A list of quosures where the expressions are symbols as returned by
 the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_disposition_dt()} instead.
 
