@@ -474,9 +474,9 @@ derive_param_tte <- function(dataset = NULL,
 #' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adsl <- tibble::tribble(
-#' ~USUBJID, ~TRTSDT,           ~EOSDT,
-#' "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-#' "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
@@ -621,8 +621,8 @@ filter_date_sources <- function(sources,
 #'
 #' adsl <- tibble::tribble(
 #' ~USUBJID, ~TRTSDT,           ~EOSDT,
-#' "01",     ymd("2020-12-06"), ymd("2021-03-06"),
-#' "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
