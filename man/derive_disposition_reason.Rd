@@ -103,7 +103,7 @@ if required \code{new_var_spe}) added.
 \description{
 \verb{r lifecycle::badge("deprecated")}
 
-\emph{Deprecated}, please use \code{derive_vars_disposition()} instead.
+\emph{Deprecated}, please use \code{derive_vars_disposition_reason()} instead.
 
 Derive a disposition reason from the the relevant records in the disposition domain.
 }
