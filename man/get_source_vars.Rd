@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_source_vars}
 \alias{get_source_vars}
-\title{Get source variables from a list of quosures}
+\title{Get Source Variables from a List of Quosures}
 \usage{
 get_source_vars(quosures)
 }
@@ -13,7 +13,7 @@ get_source_vars(quosures)
 A list of quosures
 }
 \description{
-Get source variables from a list of quosures
+Get Source Variables from a List of Quosures
 }
 \examples{
 admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))

@@ -1,4 +1,4 @@
-#' Derive Last Dose with user-defined groupings
+#' Derive Last Dose with User-Defined Groupings
 #'
 #' Add a variable for user-defined dose grouping of the last dose to the input dataset.
 #'

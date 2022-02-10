@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_extreme_flag.R
 \name{derive_worst_flag}
 \alias{derive_worst_flag}
-\title{Adds a Variable Flagging the maximal / minimal value within a group of observations}
+\title{Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations}
 \usage{
 derive_worst_flag(
   dataset,

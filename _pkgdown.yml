@@ -14,7 +14,7 @@ news:
   cran_dates: false
 reference:
 - title: Derivations
-  desc: Derivations add one ore more variables or parameters to the input
+  desc: Derivations add one or more variables or parameters to the input
         dataset and return the extended dataset.
 - contents:
   - starts_with("derive")

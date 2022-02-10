@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_constant_vars}
 \alias{get_constant_vars}
-\title{Get constant variables}
+\title{Get Constant Variables}
 \usage{
 get_constant_vars(dataset, by_vars, ignore_vars = NULL)
 }
@@ -24,7 +24,7 @@ like \code{starts_with("EX")}}
 Variable vector.
 }
 \description{
-Get constant variables
+Get Constant Variables
 }
 \examples{
 library(admiral.test)

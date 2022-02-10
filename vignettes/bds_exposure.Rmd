@@ -49,7 +49,7 @@ To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
@@ -493,7 +493,7 @@ the join depending on your lookup/metadata table.
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-admiral does not currently have a generic function to aid in assigning `AVALCATx`/
+`{admiral}` does not currently have a generic function to aid in assigning `AVALCATx`/
 `AVALCAxN` values. Below is a simple example of how these values may be
 assigned using the `dplyr::mutate` function:
 
@@ -520,7 +520,7 @@ adex %>%
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`. An
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An
 example call is:
 
 ```{r eval=TRUE, echo=TRUE}

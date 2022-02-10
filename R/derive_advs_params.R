@@ -194,7 +194,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
   }
 }
 
-#' Adds a parameter for BSA (Body Surface Area) using the specified method
+#' Adds a Parameter for BSA (Body Surface Area) Using the Specified Method
 #'
 #' Adds a record for BSA (Body Surface Area) using the specified derivation method
 #' for each by group (e.g., subject and visit) where the source parameters are available.
