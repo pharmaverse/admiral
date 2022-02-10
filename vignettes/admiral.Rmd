@@ -65,7 +65,7 @@ Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 
 Functions which derive a dedicated parameter start with `derive_param_` followed by
-the parameter name, e.g., `derive_param_bmi()` derives the `OS` parameter.
+the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 
 # Input and Output
 

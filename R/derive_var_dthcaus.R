@@ -178,7 +178,7 @@ derive_var_dthcaus <- function(dataset,
   left_join(dataset, dataset_add, by = vars2chr(subject_keys))
 }
 
-#' Create an `dthcaus_source` Object
+#' Create a `dthcaus_source` Object
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.

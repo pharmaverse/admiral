@@ -23,7 +23,7 @@ missing, e.g., `"2019-10"` if the day and the time is unknown.
 
 The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY` (Analysis
 Relative Day) are numeric variables. They can be derived only if the date or
-datetime is complete. Therefore `{admiral}`provides imputation functions which fill
+datetime is complete. Therefore `{admiral}` provides imputation functions which fill
 in missing date or time parts according to certain imputation rules.
 
 ## Required Packages
@@ -75,7 +75,7 @@ impute_dtc(
 
 In some scenarios the imputed date should not be before or after certain dates.
 For example an imputed date after data cut off date or death date is not
-desirable. The `{admiral}`imputation functions provide the `min_dates` and
+desirable. The `{admiral}` imputation functions provide the `min_dates` and
 `max_dates` parameter to specify those dates. For example:
 
 ```{r}
@@ -100,12 +100,12 @@ ADaM requires that date or datetime variables for which imputation was used are
 accompanied by date and/or time imputation flag variables (`*DTF` and `*TMF`,
 e.g., `ADTF` and `ATMF` for `ADTM`). These variables indicate the highest level
 that was imputed, e.g., if minutes and seconds were imputed, the imputation flag
-is set to `"M"`. The `{admiral}`functions which derive imputed variables are also
+is set to `"M"`. The `{admiral}` functions which derive imputed variables are also
 adding the corresponding imputation flag variables.
 
 # Imputation Functions
 
-admiral provides the following functions for imputation:
+`{admiral}` provides the following functions for imputation:
 
 - `derive_vars_dt()`: Adds a date variable and a date imputation flag variable
 (optional) based on a --DTC variable and imputation rules.
