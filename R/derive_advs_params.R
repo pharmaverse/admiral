@@ -208,8 +208,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `HEIGHT` and `WEIGHT`.
 #'
-#' @param method Derivation method to use. Note that HEIGHT is expected
-#'    in cm and WEIGHT is expected in kg:
+#' @param method Derivation method to use. Note that `HEIGHT` is expected
+#'    in cm and `WEIGHT` is expected in kg:
 #'
 #'   Mosteller: `sqrt(height * weight / 3600)`
 #'
