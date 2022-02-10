@@ -33,7 +33,7 @@ remotes::install_github("pharmaverse/admiral", ref = "main")
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following the provided programming strategy and modular approach
 * All functions are documented, tested, include examples and are listed in the
 [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
-* Vignettes how to create ADSL, BDS and OCCUR datasets, including example scripts
+* Vignettes on how to create ADSL, BDS and OCCUR datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs ...)
 
 ## Usage

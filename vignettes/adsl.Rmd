@@ -684,7 +684,18 @@ dataset_vignette(
 The users can add specific code to cover their need for the analysis.
 
 ## Add Labels and Attributes {#attributes}
-admiral does not **currently** support metadata integration, but the team is working on it!
+
+Adding labels and attributes for SAS transport files is supported by the
+following packages:
+
+- [metatools](https://pharmaverse.github.io/metatools/):
+[metacore](https://atorus-research.github.io/metacore/) objects are used to add
+labels based on a specification file.
+
+- [xportr](https://atorus-research.github.io/xportr/):
+[metacore](https://atorus-research.github.io/metacore/) objects are used to add
+labels and attributes based on a specification file. It also provides
+functionality to create SAS transport files.
 
 # Example Script 
 

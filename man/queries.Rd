@@ -4,7 +4,9 @@
 \name{queries}
 \alias{queries}
 \title{Queries Dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 15 rows and 8 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 15 rows and 8 columns.
+}
 \usage{
 queries
 }

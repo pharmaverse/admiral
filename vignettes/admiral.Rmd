@@ -214,6 +214,9 @@ list_all_templates()
 
 # Support
 
+Support is provided via the [admiral Slack
+channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
+
 # See also
 
 - [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)

@@ -397,7 +397,6 @@ This function expects the dictionary and/or lookup information to be provided as
 
 The expected result is the input dataset with query variables added: See also [Queries dataset documentation](queries_dataset.html).
 
-
 ```{r, eval=TRUE}
 data("queries")
 ```
@@ -405,7 +404,6 @@ data("queries")
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(queries)
 ```
-
 
 ```{r, eval=TRUE}
 adae1 <- tibble::tribble(

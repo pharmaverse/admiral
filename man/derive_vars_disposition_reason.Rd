@@ -17,18 +17,18 @@ derive_vars_disposition_reason(
 )
 }
 \arguments{
-\item{dataset}{Input dataset.}
+\item{dataset}{Input dataset}
 
-\item{dataset_ds}{Dataset containing the disposition information (e.g.: \code{ds}).
+\item{dataset_ds}{Dataset containing the disposition information (e.g. \code{ds})
 
-It must contain:
+The dataset must contain:
 \itemize{
 \item \code{STUDYID}, \code{USUBJID},
 \item The variable(s) specified in the \code{reason_var} (and \code{reason_var_spe}, if required)
 \item The variables used in \code{filter_ds}.
 }}
 
-\item{new_var}{Name of the disposition reason variable.
+\item{new_var}{Name of the disposition reason variable
 
 A variable name is expected (e.g. \code{DCSREAS}).}
 
@@ -36,7 +36,7 @@ A variable name is expected (e.g. \code{DCSREAS}).}
 
 A variable name is expected (e.g. \code{DSDECOD}).}
 
-\item{new_var_spe}{Name of the disposition reason detail variable.
+\item{new_var_spe}{Name of the disposition reason detail variable
 
 A variable name is expected (e.g. \code{DCSREASP}).
 If \code{new_var_spe} is specified, it is expected that \code{reason_var_spe} is also specified,
