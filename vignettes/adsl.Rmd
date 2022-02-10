@@ -51,7 +51,7 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -603,7 +603,7 @@ dataset_vignette(
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-admiral does not **currently** have functionality to assist with all required groupings. Some functions exist for age grouping according to FDA or EMA conventions. For others, the user can create his/her own function to meet his/her study requirement.
+`{admiral}` does not **currently** have functionality to assist with all required groupings. Some functions exist for age grouping according to FDA or EMA conventions. For others, the user can create his/her own function to meet his/her study requirement.
 
 To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA convention):
 
@@ -660,7 +660,7 @@ dataset_vignette(
 ### Population Flags (e.g. `SAFFL`) {#popflag}
 
 Since the populations flags are mainly company/study specific and that it can easily be derived
-using an `if_else()` statement, admiral did not implement a functionality to assist with 
+using an `if_else()` statement, `{admiral}` did not implement a functionality to assist with 
 populations flags.
 
 An example of a simple implementation could be:
@@ -684,7 +684,7 @@ dataset_vignette(
 The users can add specific code to cover their need for the analysis.
 
 ## Add Labels and Attributes {#attributes}
-admiral does not **currently** support metadata integration, but the team is working on it!
+`{admiral}` does not **currently** support metadata integration, but the team is working on it!
 
 # Example Script 
 
