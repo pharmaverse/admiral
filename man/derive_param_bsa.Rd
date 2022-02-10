@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_advs_params.R
 \name{derive_param_bsa}
 \alias{derive_param_bsa}
-\title{Adds a parameter for BSA (Body Surface Area) using the specified method}
+\title{Adds a Parameter for BSA (Body Surface Area) Using the Specified Method}
 \usage{
 derive_param_bsa(
   dataset,

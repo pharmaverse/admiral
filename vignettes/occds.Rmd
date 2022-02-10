@@ -216,7 +216,7 @@ derive_vars_atc(cm, facm)
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
 The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
-specific.  admiral does not currently have functionality to assist with `TRTA` 
+specific.  `{admiral}`does not currently have functionality to assist with `TRTA` 
 and `TRTP` assignment.
 
 However, an example of a simple implementation could be:
@@ -366,7 +366,7 @@ adae <- adae %>%
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
-numeric one. Flag first occurence of most severe adverse event:
+numeric one. Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%

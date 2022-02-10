@@ -173,7 +173,7 @@ derive_extreme_flag <- function(dataset,
   )
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
 #'
 #'
 #' @description
@@ -515,7 +515,7 @@ derive_var_extreme_flag <- function(dataset,
   data %>% select(-temp_obs_nr)
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
 #' @inheritParams derive_var_extreme_flag
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.

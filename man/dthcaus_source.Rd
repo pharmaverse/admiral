@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_dthcaus.R
 \name{dthcaus_source}
 \alias{dthcaus_source}
-\title{Create an \code{dthcaus_source} object}
+\title{Create an \code{dthcaus_source} Object}
 \usage{
 dthcaus_source(
   dataset_name,
@@ -45,7 +45,7 @@ These can be either strings or symbols referring to existing variables.}
 An object of class "dthcaus_source".
 }
 \description{
-Create an \code{dthcaus_source} object
+Create an \code{dthcaus_source} Object
 }
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}

@@ -160,7 +160,7 @@ derive_disposition_reason <- function(dataset,
                                  subject_keys = subject_keys)
 }
 
-#' Default format for the disposition reason
+#' Default Format for the Disposition Reason
 #'
 #' Define a function to map the disposition reason
 #'

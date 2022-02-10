@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This article will give you an overview of how the admiral project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
+This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
 
 # Branches
 

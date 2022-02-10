@@ -168,7 +168,7 @@ Make sure to align columns as well. This ensures quick code readability.
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
 these will be compiled in the package validation report. Having the name of the
-function and test ID included in title will also help with tracability.
+function and test ID included in title will also help with traceability.
 
 Once you have tested your unit test program, you can run all unit tests from
 the console, as follows.

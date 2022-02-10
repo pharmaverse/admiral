@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{convert_dtm_to_dtc}
 \alias{convert_dtm_to_dtc}
-\title{Helper function to convert date (or date-time) objects to characters of dtc format
+\title{Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
 (-DTC type of variable)}
 \usage{
 convert_dtm_to_dtc(dtm)
@@ -14,7 +14,7 @@ convert_dtm_to_dtc(dtm)
 character
 }
 \description{
-Helper function to convert date (or date-time) objects to characters of dtc format
+Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
 (-DTC type of variable)
 }
 \examples{
