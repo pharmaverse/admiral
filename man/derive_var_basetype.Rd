@@ -11,7 +11,7 @@ derive_var_basetype(dataset, basetypes)
 
 The columns specified in the expressions inside \code{basetypes} are required.}
 
-\item{basetypes}{A \emph{named} list of expressions created using \code{exprs()}
+\item{basetypes}{A \emph{named} list of expressions created using \href{https://rlang.r-lib.org/reference/defusing-advanced.html}{\code{exprs()}}
 
 The names corresponds to the values of the newly created \code{BASETYPE} variables
 and the expressions are used to subset the input dataset.}

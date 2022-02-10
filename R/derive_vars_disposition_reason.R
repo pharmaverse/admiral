@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' *Deprecated*, please use `derive_vars_disposition()` instead.
+#' *Deprecated*, please use `derive_vars_disposition_reason()` instead.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'

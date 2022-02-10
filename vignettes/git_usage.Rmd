@@ -172,7 +172,7 @@ For simple merge conflicts, developers can make use of the GitHub interface to s
 
 # Resources on using `git`, GitHub and RStudio {#github_resources}
 
-* [GitHub and RStudio](https://resources.GitHub.com/whitepapers/GitHub-and-rstudio/)
+* [GitHub and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
 * [Git and GitHub from the R Package Manual](https://r-pkgs.org/git.html)
 
