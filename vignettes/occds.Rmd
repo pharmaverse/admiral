@@ -365,7 +365,7 @@ adae <- adae %>%
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
-numeric one. Flag first occurence of most severe adverse event:
+numeric one. Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%
