@@ -7,8 +7,8 @@
 #'
 #'   The columns specified in the expressions inside `basetypes` are required.
 #'
-#' @param basetypes A *named* list of expressions created using
-#' [`exprs()`](https://rlang.r-lib.org/reference/defusing-advanced.html)
+#' @param basetypes A *named* list of expressions created using the
+#' `exprs` function
 #'
 #'   The names corresponds to the values of the newly created `BASETYPE` variables
 #'   and the expressions are used to subset the input dataset.
