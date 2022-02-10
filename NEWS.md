@@ -4,13 +4,18 @@
 
 ### General
 
+- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables
+(#700)
+
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
+
+- README and site homepage has been updated with important new section around expectations of admiral, as well as other useful references such as links to conference talks (#868 & #802)
+
+## Updates of Existing Functions
 
 - The `derive_last_dose()` function has been split into a general function 
 `derive_vars_last_dose()` and three wrapper functions `derive_var_last_dose_amt()`, 
 `derive_var_last_dose_date()`, and `derive_var_last_dose_grp()` (#385)
-
-## Updates of Existing Functions
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
@@ -42,14 +47,17 @@ this case the day is imputed as `15`. (#592).
 
 - The following functions and parameters, which were deprecated in previous admiral versions, were removed:
   
-  - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and `derive_suppqual_vars()` function
-  - `fns` and `filter_rows` parameter in `derive_summary_records()`
-  - `date_var` and `traceabilty_vars` parameter in `dthcaus_source()`
+  - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and
+  `derive_suppqual_vars()` function
+  - `fns` and `filter_rows` parameters in `derive_summary_records()`
+  - `date_var` and `traceabilty_vars` parameters in `dthcaus_source()`
   - `flag_filter` parameter in `derive_extreme_flag()`
   - `flag_filter` parameter in `derive_var_extreme_flag()`
   - `date_var` parameter in `lstalvdt_source()`
   - `date` parameter in `derive_var_ontrtfl()`
   
+- `derive_var_agegr_fda()` has been updated to use ranges <18, 18-64, >=65 (#829)
+
 ## Documentation
 
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
@@ -66,15 +74,11 @@ this case the day is imputed as `15`. (#592).
 
 - Broken links in README have been fixed (#564)
 
-- `derive_var_agegr_fda()` has been updated to use ranges <18, 18-64, >=65 (#829)
-
 # admiral 0.4.0
 
 ## New Features
 
 ### General
-
-- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables 
 
 - `derive_vars_dtm_to_tm()` enables the easy conversion of datetime to time variables (#551)
 

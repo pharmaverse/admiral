@@ -6,13 +6,15 @@
 ^_pkgdown\.yml$
 ^.github$
 ^.lintr$
-^doc$
+^docs$
 ^Meta$
 ^codecov\.yml$
+^vignettes/contribution_model\.Rmd$
 ^vignettes/pr_review_guidance\.Rmd$
 ^vignettes/programming_strategy\.Rmd$
 ^vignettes/git_usage\.Rmd$
 ^vignettes/faq\.Rmd$
+^vignettes/writing_vignettes\.Rmd$
+^vignettes/*.png$
 ^LICENSE\.md$
 ^\.github$
-
