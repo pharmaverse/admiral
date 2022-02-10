@@ -215,7 +215,7 @@ derive_vars_atc(cm, facm)
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
 The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
-specific.  admiral does not currently have functionality to assist with `TRTA` 
+specific.  `{admiral}`does not currently have functionality to assist with `TRTA` 
 and `TRTP` assignment.
 
 However, an example of a simple implementation could be:
