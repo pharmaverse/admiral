@@ -11,6 +11,8 @@
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
+- Addressed typos and appearance of `{admiral}` where identified (#899)
+
 ## Updates of Existing Functions
 
 - The `derive_last_dose()` function has been split into a general function 
