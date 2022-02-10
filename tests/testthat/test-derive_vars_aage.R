@@ -138,7 +138,7 @@ test_that("derive_var_agegr_ema works with age_unit missing and multiple units i
                    keys = "AGE")
 })
 
-test_that("derive_var_agegr_ema - works with age_unit missing and multiple units in AGEU (pediatric)", {
+test_that("derive_var_agegr_ema - works with age_unit missing and multiple units in AGEU (all)", {
 
   input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18, 36, 72, 3),
                           AGEU = c("years", "years", "years", "years", "years", "years", "months",
