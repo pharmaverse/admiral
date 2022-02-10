@@ -881,7 +881,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   }
 }
 
-#' Asserts That a Parameter Does not Exist in the Dataset
+#' Asserts That a Parameter Does Not Exist in the Dataset
 #'
 #' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
 #'
@@ -916,7 +916,7 @@ assert_param_does_not_exist <- function(dataset, param) {
   }
 }
 
-#' Helper function to checks IDVAR per QNAM
+#' Helper Function to Check IDVAR per QNAM
 #'
 #' @param x A Supplemental Qualifier (SUPPQUAL) data set.
 #'
@@ -938,7 +938,7 @@ assert_supp_idvar <- function(x) {
   }
 }
 
-#' Helper function to check DOAMIN and RDOMAIN
+#' Helper Function to Check DOAMIN and RDOMAIN
 #'
 #' @param dataset A SDTM domain data set.
 #' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
@@ -1406,7 +1406,7 @@ on_failure(is_expr) <- function(call, env) {
   )
 }
 
-#' Check whether an argument is not a quosure of a missing argument
+#' Check Whether an Argument Is Not a Quosure of a Missing Argument
 #'
 #' @param x Test object
 #'

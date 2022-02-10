@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_last_dose_grp.R
 \name{derive_var_last_dose_grp}
 \alias{derive_var_last_dose_grp}
-\title{Derive Last Dose with user-defined groupings}
+\title{Derive Last Dose with User-Defined Groupings}
 \usage{
 derive_var_last_dose_grp(
   dataset,
