@@ -64,6 +64,8 @@ this case the day is imputed as `15`. (#592).
 
 - Updated [Pull Request Review Guidance](../articles/pr_review_guidance.html) on using `task-list-completed` workflow. (#817)
 
+- Examples have been added for `format_reason_default`, `format_eoxxstt_default`, `extend_source_datasets` and `filter_date_sources` (#745)
+
 # admiral 0.5.0
 
 - The first truly open source release licensed under Apache 2.0 (#680)
