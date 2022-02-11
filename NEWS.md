@@ -15,6 +15,10 @@
 ## Various
 
 
+# admiral 0.6.1
+
+Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raised after submitting v0.6.0 (#918)
+
 # admiral 0.6.0
 
 ## New Features
@@ -77,9 +81,9 @@ this case the day is imputed as `15` (#592)
 
 - README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
 
-- New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
+- New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
-- Updated [Pull Request Review Guidance](../articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
+- Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
 ## Various
 
@@ -89,9 +93,9 @@ this case the day is imputed as `15` (#592)
 
 - The first truly open source release licensed under Apache 2.0 (#680)
 
-- New vignette [Contributing to admiral](../articles/contribution_model.html) (#679)
+- New vignette [Contributing to admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) (#679)
 
-- New vignette [Unit Test Guidance](../articles/unit_test_guidance.html) (#679)
+- New vignette [Unit Test Guidance](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html) (#679)
 
 - Broken links in README have been fixed (#564)
 
@@ -111,7 +115,7 @@ age in different units (#569)
 - `derive_param_tte()` derives time-to-event-parameters (#546)
 
 - For common time-to-event endpoints [event and censoring source
-objects](../reference/index.html#section-pre-defined-time-to-event-sources) are
+objects](https://pharmaverse.github.io/admiral/reference/index.html#section-pre-defined-time-to-event-sources) are
 provided (#612)
 
 ### Developer
@@ -144,13 +148,13 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- New vignette [Creating a BDS Time-to-Event ADaM](../articles/bds_tte.html) (#549)
+- New vignette [Creating a BDS Time-to-Event ADaM](https://pharmaverse.github.io/admiral/articles/bds_tte.html) (#549)
 
-- New vignette [Queries Dataset Documentation](../articles/queries_dataset.html) (#561)
+- New vignette [Queries Dataset Documentation](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) (#561)
 
-- New vignette [Writing Vignettes](../articles/writing_vignettes.html) (#334)
+- New vignette [Writing Vignettes](https://pharmaverse.github.io/admiral/articles/writing_vignettes.html) (#334)
 
-- New vignette [Pull Request Review Guidance](../articles/pr_review_guidance.html) (#554)
+- New vignette [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) (#554)
 
 - A section on handling missing values when working with {admiral} has been added to the "Get Started" vignette (#577)
 
@@ -341,10 +345,10 @@ to specify the unit of the input age (#569)
 
 ## Documentation
 
-- [Frequently Asked Questions](../articles/faq.html)
+- [Frequently Asked Questions](https://pharmaverse.github.io/admiral/articles/faq.html)
 
-- [Creating ADSL](../articles/adsl.html)
+- [Creating ADSL](https://pharmaverse.github.io/admiral/articles/adsl.html)
 
-- [Creating a BDS Finding ADaM](../articles/bds_finding.html)
+- [Creating a BDS Finding ADaM](https://pharmaverse.github.io/admiral/articles/bds_finding.html)
 
-- [Creating an OCCDS ADaM](../articles/occds.html)
+- [Creating an OCCDS ADaM](https://pharmaverse.github.io/admiral/articles/occds.html)

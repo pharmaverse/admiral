@@ -296,9 +296,13 @@ derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
 NULL
 
 #' @rdname derive_var_agegr_fda
+#'
 #' @export
-#' @details `derive_var_agegr_fda()` Derive age groups according to FDA. `age_var`
+#'
+#' @details
+#' `derive_var_agegr_fda()` derives age groups according to FDA guidance. `age_var`
 #' will be split in categories: <18, 18-64, >=65.
+#'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -347,12 +351,15 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 }
 
 #' @rdname derive_var_agegr_fda
+#'
 #' @export
-#' @details `derive_var_agegr_ema()` Derive age groups according to EMA
-#' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
+#'
+#' @details
+#' `derive_var_agegr_ema()` derives age groups according to EMA guidance.
 #' `age_var` will be split into categories: 0-27 days (Newborns), 28 days to
 #' 23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
-#'  65-84, >=85.
+#' 65-84, >=85.
+#'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
