@@ -128,7 +128,7 @@ derive_disposition_status <- function(dataset,
 #' Default Format for Disposition Status
 #'
 #' Define a function to map the disposition status. To be used as an input for
-#' `derive_disposition_status()`.
+#' `derive_var_disposition_status()`.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
@@ -140,7 +140,7 @@ derive_disposition_status <- function(dataset,
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
-#' @seealso [derive_disposition_status()]
+#' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -148,7 +148,7 @@ derive_disposition_status <- function(dataset,
 #' data("ds")
 #'
 #' dm %>%
-#'   derive_disposition_status(
+#'   derive_var_disposition_status(
 #'     dataset_ds = ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
