@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Derive BASE Variable — derive_var_base • admiral</title>
+<title>Derive Baseline Variables — derive_var_base • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Derive BASE Variable — derive_var_base" />
-<meta property="og:description" content="Derive the BASE variable in a BDS dataset" />
+<meta property="og:title" content="Derive Baseline Variables — derive_var_base" />
+<meta property="og:description" content="Derive baseline variables, e.g. BASE or BNRIND, in a BDS dataset" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +143,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +168,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -189,16 +192,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Derive BASE Variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_baseline.R'><code>R/derive_baseline.R</code></a></small>
+    <h1>Derive Baseline Variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_var_base.R'><code>R/derive_var_base.R</code></a></small>
     <div class="hidden name"><code>derive_var_base.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Derive the <code>BASE</code> variable in a BDS dataset</p>
+    <p>Derive baseline variables, e.g. <code>BASE</code> or <code>BNRIND</code>, in a BDS dataset</p>
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>, <span class='no'>by_vars</span>)</pre>
+    <pre class="usage"><span class='fu'>derive_var_base</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>by_vars</span>,
+  <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BASE</span>,
+  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>ABLFL</span> <span class='kw'>==</span> <span class='st'>"Y"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,43 +219,103 @@
     <tr>
       <th>by_vars</th>
       <td><p>Grouping variables uniquely identifying a set
-of records for which to calculate <code>BASE</code></p></td>
+of records for which to calculate <code>new_var</code></p></td>
+    </tr>
+    <tr>
+      <th>source_var</th>
+      <td><p>The column from which to extract the baseline value, e.g. <code>AVAL</code></p></td>
+    </tr>
+    <tr>
+      <th>new_var</th>
+      <td><p>The name of the newly created baseline column, e.g. <code>BASE</code></p></td>
+    </tr>
+    <tr>
+      <th>filter</th>
+      <td><p>The condition used to filter <code>dataset</code> for baseline records.</p>
+<p>By default <code>ABLFL == "Y"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A new <code>data.frame</code> containing all records and variables of the input
-dataset plus the <code>BASE</code> variable</p>
+dataset plus the <code>new_var</code> variable</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For each <code>by_vars</code> group the baseline record is identified by filtering using the
-condition <code>ABLFL == "Y"</code>. Subsequently, every value of the <code>BASE</code> variable for the <code>by_vars</code>
-group is set to the value of the <code>AVAL</code> variable of the baseline record. In case there
-are multiple baseline records within <code>by_vars</code> an error is issued.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='derive_var_basec.html'>derive_var_basec()</a></code>, <code><a href='derive_baseline.html'>derive_baseline()</a></code></p></div>
+condition specified by <code>filter</code> which defaults to <code>ABLFL == "Y"</code>. Subsequently,
+every value of the <code>new_var</code> variable for the <code>by_vars</code> group is set to the
+value of the <code>source_var</code> variable of the baseline record. In case there are
+multiple baseline records within <code>by_vars</code> an error is issued.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dataset</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVAL</span>, ~<span class='no'>AVISIT</span>,    ~<span class='no'>ABLFL</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>10.12</span>, <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>,  <span class='fl'>9.7</span>,  <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>15.01</span>, <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='fl'>NA</span>,    <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
-  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>, <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>
+  ~<span class='no'>STUDYID</span>, ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>,  ~<span class='no'>AVAL</span>,  ~<span class='no'>AVALC</span>,   ~<span class='no'>AVISIT</span>,    ~<span class='no'>ABLFL</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>10.12</span>,  <span class='fl'>NA</span>,       <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>,  <span class='fl'>9.7</span>,   <span class='fl'>NA</span>,       <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM01"</span>, <span class='fl'>15.01</span>,  <span class='fl'>NA</span>,       <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>,  <span class='fl'>NA</span>,       <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>, <span class='fl'>NA</span>,     <span class='fl'>NA</span>,       <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM02"</span>,  <span class='fl'>8.35</span>,  <span class='fl'>NA</span>,       <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM03"</span>, <span class='fl'>NA</span>,     <span class='st'>"LOW"</span>,    <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM03"</span>, <span class='fl'>NA</span>,     <span class='st'>"LOW"</span>,    <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM03"</span>, <span class='fl'>NA</span>,     <span class='st'>"MEDIUM"</span>, <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM04"</span>, <span class='fl'>NA</span>,     <span class='st'>"HIGH"</span>,   <span class='st'>"Baseline"</span>, <span class='st'>"Y"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM04"</span>, <span class='fl'>NA</span>,     <span class='st'>"HIGH"</span>,   <span class='st'>"Day 7"</span>,    <span class='st'>"N"</span>,
+  <span class='st'>"TEST01"</span>, <span class='st'>"PAT01"</span>,  <span class='st'>"PARAM04"</span>, <span class='fl'>NA</span>,     <span class='st'>"MEDIUM"</span>, <span class='st'>"Day 14"</span>,   <span class='st'>"N"</span>
 )
-<span class='fu'>derive_var_base</span>(<span class='no'>dataset</span>, <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 7
-#&gt;   STUDYID USUBJID PARAMCD  AVAL AVISIT   ABLFL  BASE
-#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
-#&gt; 1 TEST01  PAT01   PARAM01 10.1  Baseline Y     10.1 
-#&gt; 2 TEST01  PAT01   PARAM01  9.7  Day 7    N     10.1 
-#&gt; 3 TEST01  PAT01   PARAM01 15.0  Day 14   N     10.1 
-#&gt; 4 TEST01  PAT01   PARAM02  8.35 Baseline Y      8.35
-#&gt; 5 TEST01  PAT01   PARAM02 NA    Day 7    N      8.35
-#&gt; 6 TEST01  PAT01   PARAM02  8.35 Day 14   N      8.35</div></pre>
+
+<span class='co'>## Derive `BASE` variable from `AVAL`</span>
+<span class='fu'>derive_var_base</span>(
+  <span class='no'>dataset</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BASE</span>
+)</div><div class='output co'>#&gt; # A tibble: 12 x 8
+#&gt;    STUDYID USUBJID PARAMCD  AVAL AVALC  AVISIT   ABLFL  BASE
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 10.1  &lt;NA&gt;   Baseline Y     10.1 
+#&gt;  2 TEST01  PAT01   PARAM01  9.7  &lt;NA&gt;   Day 7    N     10.1 
+#&gt;  3 TEST01  PAT01   PARAM01 15.0  &lt;NA&gt;   Day 14   N     10.1 
+#&gt;  4 TEST01  PAT01   PARAM02  8.35 &lt;NA&gt;   Baseline Y      8.35
+#&gt;  5 TEST01  PAT01   PARAM02 NA    &lt;NA&gt;   Day 7    N      8.35
+#&gt;  6 TEST01  PAT01   PARAM02  8.35 &lt;NA&gt;   Day 14   N      8.35
+#&gt;  7 TEST01  PAT01   PARAM03 NA    LOW    Baseline Y     NA   
+#&gt;  8 TEST01  PAT01   PARAM03 NA    LOW    Day 7    N     NA   
+#&gt;  9 TEST01  PAT01   PARAM03 NA    MEDIUM Day 14   N     NA   
+#&gt; 10 TEST01  PAT01   PARAM04 NA    HIGH   Baseline Y     NA   
+#&gt; 11 TEST01  PAT01   PARAM04 NA    HIGH   Day 7    N     NA   
+#&gt; 12 TEST01  PAT01   PARAM04 NA    MEDIUM Day 14   N     NA   </div><div class='input'>
+<span class='co'>## Derive `BASEC` variable from `AVALC`</span>
+<span class='fu'>derive_var_base</span>(
+  <span class='no'>dataset</span>,
+  <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+  <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>AVALC</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BASEC</span>
+)</div><div class='output co'>#&gt; # A tibble: 12 x 8
+#&gt;    STUDYID USUBJID PARAMCD  AVAL AVALC  AVISIT   ABLFL BASEC
+#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;
+#&gt;  1 TEST01  PAT01   PARAM01 10.1  &lt;NA&gt;   Baseline Y     &lt;NA&gt; 
+#&gt;  2 TEST01  PAT01   PARAM01  9.7  &lt;NA&gt;   Day 7    N     &lt;NA&gt; 
+#&gt;  3 TEST01  PAT01   PARAM01 15.0  &lt;NA&gt;   Day 14   N     &lt;NA&gt; 
+#&gt;  4 TEST01  PAT01   PARAM02  8.35 &lt;NA&gt;   Baseline Y     &lt;NA&gt; 
+#&gt;  5 TEST01  PAT01   PARAM02 NA    &lt;NA&gt;   Day 7    N     &lt;NA&gt; 
+#&gt;  6 TEST01  PAT01   PARAM02  8.35 &lt;NA&gt;   Day 14   N     &lt;NA&gt; 
+#&gt;  7 TEST01  PAT01   PARAM03 NA    LOW    Baseline Y     LOW  
+#&gt;  8 TEST01  PAT01   PARAM03 NA    LOW    Day 7    N     LOW  
+#&gt;  9 TEST01  PAT01   PARAM03 NA    MEDIUM Day 14   N     LOW  
+#&gt; 10 TEST01  PAT01   PARAM04 NA    HIGH   Baseline Y     HIGH 
+#&gt; 11 TEST01  PAT01   PARAM04 NA    HIGH   Day 7    N     HIGH 
+#&gt; 12 TEST01  PAT01   PARAM04 NA    MEDIUM Day 14   N     HIGH </div><div class='input'>
+<span class='co'>## Derive `BNRIND` variable from `ANRIND`</span>
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='fu'>derive_var_base</span>(
+    <span class='no'>dataset</span>,
+    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>, <span class='no'>PARAMCD</span>),
+    <span class='kw'>source_var</span> <span class='kw'>=</span> <span class='no'>ANRIND</span>,
+    <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>BNRIND</span>
+  )
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -258,7 +327,7 @@ are multiple baseline records within <code>by_vars</code> an error is issued.</p
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -275,7 +344,7 @@ are multiple baseline records within <code>by_vars</code> an error is issued.</p
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

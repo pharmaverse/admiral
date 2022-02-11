@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -144,6 +144,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -166,7 +169,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -191,7 +194,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive the Time Imputation Flag</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_date_vars.R'><code>R/derive_date_vars.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_date_vars.R'><code>R/derive_date_vars.R</code></a></small>
     <div class="hidden name"><code>compute_tmf.Rd</code></div>
     </div>
 
@@ -200,7 +203,7 @@
 (<code>'--DTC'</code>) with a Datetime vector (<code>'--DTM'</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>compute_tmf</span>(<span class='no'>dtc</span>, <span class='no'>dtm</span>)</pre>
+    <pre class="usage"><span class='fu'>compute_tmf</span>(<span class='no'>dtc</span>, <span class='no'>dtm</span>, <span class='kw'>ignore_seconds_flag</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,6 +217,15 @@
       <th>dtm</th>
       <td><p>The Date vector to compare (<code>'--DTM'</code>).</p>
 <p>A datetime object is expected.</p></td>
+    </tr>
+    <tr>
+      <th>ignore_seconds_flag</th>
+      <td><p>ADaM IG states that given SDTM (<code>'--DTC'</code>) variable,
+if only hours and minutes are ever collected, and seconds are imputed in
+(<code>'--DTM'</code>) as 00, then it is not necessary to set (<code>'--TMF'</code>) to <code>'S'</code>. A user can set this
+to <code>TRUE</code> so the <code>'S'</code> Flag is dropped from (<code>'--TMF'</code>).</p>
+<p>A logical value</p>
+<p>Default: <code>FALSE</code></p></td>
     </tr>
     </table>
 
@@ -234,7 +246,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -251,7 +263,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

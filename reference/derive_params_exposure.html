@@ -53,8 +53,8 @@
 
 
 <meta property="og:title" content="Add an Aggregated Parameter and Derive the Associated Start and End Dates — derive_params_exposure" />
-<meta property="og:description" content="Add a record computed from the aggregated analysis value of another parameter and compute the
-start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_vars." />
+<meta property="og:description" content="
+This function is deprecated. Please use derive_param_exposure() instead." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -87,7 +87,7 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -144,6 +144,9 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -166,7 +169,7 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -191,13 +194,13 @@ start (ASTDT(M))and end date (AENDT(M)) as the minimum and maximum date by by_va
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add an Aggregated Parameter and Derive the Associated Start and End Dates</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_params_exposure.R'><code>R/derive_params_exposure.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_param_exposure.R'><code>R/derive_param_exposure.R</code></a></small>
     <div class="hidden name"><code>derive_params_exposure.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add a record computed from the aggregated analysis value of another parameter and compute the
-start (<code>ASTDT(M)</code>)and end date (<code>AENDT(M)</code>) as the minimum and maximum date by <code>by_vars</code>.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a></p>
+<p>This function is <em>deprecated</em>. Please use <code><a href='derive_param_exposure.html'>derive_param_exposure()</a></code> instead.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_params_exposure</span>(
@@ -263,133 +266,16 @@ into account.</p>
 value or NA.
 (e.g.  <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</a></code>).
 More general expression are not allowed.</p></li>
-</ul></td>
+</ul>
+
+<p><em>Permitted Values:</em> List of variable-value pairs</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>The input dataset with a new record added for each group (with respect to the variables
-specified for the <code>by_vars</code> parameter).
-For each new record,</p><ul>
-<li><p>the variable specified <code>analysis_var</code> is computed as defined by <code>summary_fun</code>,</p></li>
-<li><p>the variable(s) specified on the LHS of <code>set_values_to</code> are set to their paired value (RHS).
-In addition, the start and end date are computed as the minimum/maximum dates by <code>by_vars</code>.</p></li>
-</ul>
+    <div class='dont-index'><p><code><a href='derive_param_exposure.html'>derive_param_exposure()</a></code></p></div>
 
-<p>If the input datasets contains</p><ul>
-<li><p>both <code>AxxDTM</code> and <code>AxxDT</code> then all <code>ASTDTM</code>,<code>AENDTM</code>, <code>ASTDT</code>, <code>AENDT</code> are computed</p></li>
-<li><p>only <code>AxxDTM</code> then <code>ASTDTM</code>,<code>AENDTM</code> are computed</p></li>
-<li><p>only <code>AxxDT</code> then <code>ASTDT</code>,<code>AENDT</code> are computed.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For each group (with respect to the variables specified for the <code>by_vars</code> parameter),
-an observation is added to the output dataset and the defined values are set to the defined
-variables</p>
-<p><em>Permitted Values:</em> List of variable-value pairs</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>stringr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>adex</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>USUBJID</span>, ~<span class='no'>PARAMCD</span>, ~<span class='no'>AVAL</span>, ~<span class='no'>AVALC</span>, ~<span class='no'>VISIT</span>, ~<span class='no'>ASTDT</span>, ~<span class='no'>AENDT</span>,
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>85</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>82</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-02"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-16"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-17"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-18"</span>),
-  <span class='st'>"01-701-1015"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-06-19"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>80</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>50</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"DOSE"</span>, <span class='fl'>65</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"BASELINE"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-05"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-19"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='st'>"ADVERSE EVENT"</span>, <span class='st'>"WEEK 2"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-01-20"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>),
-  <span class='st'>"01-701-1017"</span>, <span class='st'>"ADJ"</span>, <span class='fl'>NA</span>, <span class='fl'>NA_character_</span>, <span class='st'>"WEEK 24"</span>, <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-05-10"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2014-07-02"</span>)
-) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>ASTDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>ASTDT</span>, <span class='st'>"00:00:00"</span>)), <span class='kw'>AENDTM</span> <span class='kw'>=</span> <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd_hms.html'>ymd_hms</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>AENDT</span>, <span class='st'>"00:00:00"</span>)))
-
-<span class='co'># Cumulative dose</span>
-<span class='no'>adex</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_params_exposure</span>(
-    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>),
-    <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>PARAMCD</span> <span class='kw'>=</span> <span class='st'>"TDOSE"</span>, <span class='kw'>PARCAT1</span> <span class='kw'>=</span> <span class='st'>"OVERALL"</span>),
-    <span class='kw'>input_code</span> <span class='kw'>=</span> <span class='st'>"DOSE"</span>,
-    <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
-    <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-   )</div><div class='output co'>#&gt; # A tibble: 14 x 10
-#&gt;    USUBJID PARAMCD  AVAL AVALC VISIT ASTDT      AENDT      ASTDTM             
-#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;             
-#&gt;  1 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  2 01-701… DOSE       85 &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  3 01-701… DOSE       82 &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  4 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  5 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  6 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  7 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt;  8 01-701… DOSE       50 &lt;NA&gt;  WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt;  9 01-701… DOSE       65 &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 10 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt; 11 01-701… ADJ        NA ADVE… WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt; 12 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 13 01-701… TDOSE     247 &lt;NA&gt;  &lt;NA&gt;  2014-01-02 2014-07-02 2014-01-02 00:00:00
-#&gt; 14 01-701… TDOSE     195 &lt;NA&gt;  &lt;NA&gt;  2014-01-05 2014-07-02 2014-01-05 00:00:00
-#&gt; # … with 2 more variables: AENDTM &lt;dttm&gt;, PARCAT1 &lt;chr&gt;</div><div class='input'>
-<span class='co'># average dose in w2-24</span>
-<span class='no'>adex</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_params_exposure</span>(
-    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>),
-    <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>VISIT</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"WEEK2"</span>, <span class='st'>"WEEK 24"</span>),
-    <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>PARAMCD</span> <span class='kw'>=</span> <span class='st'>"AVDW224"</span>, <span class='kw'>PARCAT1</span> <span class='kw'>=</span> <span class='st'>"WEEK2-24"</span>),
-    <span class='kw'>input_code</span> <span class='kw'>=</span> <span class='st'>"DOSE"</span>,
-    <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVAL</span>,
-    <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  )</div><div class='output co'>#&gt; # A tibble: 14 x 10
-#&gt;    USUBJID PARAMCD  AVAL AVALC VISIT ASTDT      AENDT      ASTDTM             
-#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;             
-#&gt;  1 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  2 01-701… DOSE       85 &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  3 01-701… DOSE       82 &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  4 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  5 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  6 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  7 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt;  8 01-701… DOSE       50 &lt;NA&gt;  WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt;  9 01-701… DOSE       65 &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 10 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt; 11 01-701… ADJ        NA ADVE… WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt; 12 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 13 01-701… AVDW224    82 &lt;NA&gt;  &lt;NA&gt;  2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt; 14 01-701… AVDW224    65 &lt;NA&gt;  &lt;NA&gt;  2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; # … with 2 more variables: AENDTM &lt;dttm&gt;, PARCAT1 &lt;chr&gt;</div><div class='input'>
-<span class='co'># Any dose adjustement?</span>
-<span class='no'>adex</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_params_exposure</span>(
-    <span class='kw'>by_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>USUBJID</span>),
-    <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>PARAMCD</span> <span class='kw'>=</span> <span class='st'>"TADJ"</span>, <span class='kw'>PARCAT1</span> <span class='kw'>=</span> <span class='st'>"OVERALL"</span>),
-    <span class='kw'>input_code</span> <span class='kw'>=</span> <span class='st'>"ADJ"</span>,
-    <span class='kw'>analysis_var</span> <span class='kw'>=</span> <span class='no'>AVALC</span>,
-    <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(!<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>, <span class='st'>"Y"</span>, <span class='fl'>NA_character_</span>)
-  )</div><div class='output co'>#&gt; # A tibble: 14 x 10
-#&gt;    USUBJID PARAMCD  AVAL AVALC VISIT ASTDT      AENDT      ASTDTM             
-#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;date&gt;     &lt;date&gt;     &lt;dttm&gt;             
-#&gt;  1 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  2 01-701… DOSE       85 &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  3 01-701… DOSE       82 &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  4 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-02 2014-01-16 2014-01-02 00:00:00
-#&gt;  5 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-01-17 2014-06-18 2014-01-17 00:00:00
-#&gt;  6 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-06-19 2014-07-02 2014-06-19 00:00:00
-#&gt;  7 01-701… DOSE       80 &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt;  8 01-701… DOSE       50 &lt;NA&gt;  WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt;  9 01-701… DOSE       65 &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 10 01-701… ADJ        NA &lt;NA&gt;  BASE… 2014-01-05 2014-01-19 2014-01-05 00:00:00
-#&gt; 11 01-701… ADJ        NA ADVE… WEEK… 2014-01-20 2014-05-10 2014-01-20 00:00:00
-#&gt; 12 01-701… ADJ        NA &lt;NA&gt;  WEEK… 2014-05-10 2014-07-02 2014-05-10 00:00:00
-#&gt; 13 01-701… TADJ       NA &lt;NA&gt;  &lt;NA&gt;  2014-01-02 2014-07-02 2014-01-02 00:00:00
-#&gt; 14 01-701… TADJ       NA Y     &lt;NA&gt;  2014-01-05 2014-07-02 2014-01-05 00:00:00
-#&gt; # … with 2 more variables: AENDTM &lt;dttm&gt;, PARCAT1 &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -401,7 +287,7 @@ variables</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -418,7 +304,7 @@ variables</p>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

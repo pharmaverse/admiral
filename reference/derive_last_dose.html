@@ -53,7 +53,8 @@
 
 
 <meta property="og:title" content="Derive Last Dose Date(-time) — derive_last_dose" />
-<meta property="og:description" content="Derive Last Dose Date(-time)" />
+<meta property="og:description" content="
+Deprecated, please use derive_var_last_dose_date() instead." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +144,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +169,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,12 +194,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive Last Dose Date(-time)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_last_dose.R'><code>R/derive_last_dose.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_last_dose.R'><code>R/derive_last_dose.R</code></a></small>
     <div class="hidden name"><code>derive_last_dose.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Derive Last Dose Date(-time)</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a></p>
+<p><em>Deprecated</em>, please use <code><a href='derive_var_last_dose_date.html'>derive_var_last_dose_date()</a></code> instead.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_last_dose</span>(
@@ -326,7 +331,8 @@ Use <code>check_dates_only</code> to control whether only dates or whole date-ti
     <span class='kw'>output_datetime</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>check_dates_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
   ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>AESEQ</span>, <span class='no'>AESTDTC</span>, <span class='no'>LDOSEDTM</span>)</div><div class='output co'>#&gt; # A tibble: 100 x 5
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>AESEQ</span>, <span class='no'>AESTDTC</span>, <span class='no'>LDOSEDTM</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `derive_last_dose()` was deprecated in admiral 0.6.0.</span>
+#&gt; <span class='warning'>Please use `derive_var_last_dose_date()` instead.</span></div><div class='output co'>#&gt; # A tibble: 100 x 5
 #&gt;    STUDYID      USUBJID     AESEQ AESTDTC    LDOSEDTM           
 #&gt;    &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;      &lt;dttm&gt;             
 #&gt;  1 CDISCPILOT01 01-701-1015     1 2014-01-03 NA                 
@@ -382,7 +388,7 @@ Use <code>check_dates_only</code> to control whether only dates or whole date-ti
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -399,7 +405,7 @@ Use <code>check_dates_only</code> to control whether only dates or whole date-ti
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

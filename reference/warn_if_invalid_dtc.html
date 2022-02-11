@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Warn If a vector contains unknown datetime format — warn_if_invalid_dtc • admiral</title>
+<title>Warn If a Vector Contains Unknown Datetime Format — warn_if_invalid_dtc • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,7 +52,7 @@
 
 
 
-<meta property="og:title" content="Warn If a vector contains unknown datetime format — warn_if_invalid_dtc" />
+<meta property="og:title" content="Warn If a Vector Contains Unknown Datetime Format — warn_if_invalid_dtc" />
 <meta property="og:description" content="Warn if the vector contains unknown datetime format such as
 &quot;2003-12-15T-:15:18&quot;, &quot;2003-12-15T13:-:19&quot;,&quot;--12-15&quot;,&quot;-----T07:15&quot;" />
 <meta property="og:image" content="/logo.png" />
@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -144,6 +144,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -166,7 +169,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,8 +193,8 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Warn If a vector contains unknown datetime format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/warnings.R'><code>R/warnings.R</code></a></small>
+    <h1>Warn If a Vector Contains Unknown Datetime Format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/warnings.R'><code>R/warnings.R</code></a></small>
     <div class="hidden name"><code>warn_if_invalid_dtc.Rd</code></div>
     </div>
 
@@ -250,7 +253,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -267,7 +270,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

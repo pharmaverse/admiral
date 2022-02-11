@@ -53,7 +53,9 @@
 
 
 <meta property="og:title" content="Derive a Disposition Date — derive_disposition_dt" />
-<meta property="og:description" content="Derive a disposition status date from the the relevant records in the disposition domain." />
+<meta property="og:description" content="
+Deprecated, please use derive_var_disposition_dt() instead.
+Derive a disposition status date from the the relevant records in the disposition domain." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +145,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +170,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,12 +195,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive a Disposition Date</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_disposition_dt.R'><code>R/derive_disposition_dt.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_var_disposition_dt.R'><code>R/derive_var_disposition_dt.R</code></a></small>
     <div class="hidden name"><code>derive_disposition_dt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Derive a disposition status date from the the relevant records in the disposition domain.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a></p>
+<p><em>Deprecated</em>, please use <code><a href='derive_var_disposition_dt.html'>derive_var_disposition_dt()</a></code> instead.</p>
+<p>Derive a disposition status date from the the relevant records in the disposition domain.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_disposition_dt</span>(
@@ -246,13 +253,14 @@ one observation per patient. An error is issued otherwise.</p>
     <tr>
       <th>date_imputation</th>
       <td><p>The value to impute the day/month when a datepart is missing.</p>
-<p>If NULL: no date imputation is performed and partial dates are returned as missing.</p>
+<p>If <code>NULL</code>: no date imputation is performed and partial dates are returned as missing.</p>
 <p>Otherwise, a character value is expected, either as a</p><ul>
-<li><p>format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June</p></li>
-<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month</p></li>
+<li><p>format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+of June</p></li>
+<li><p>or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.</p></li>
 </ul>
 
-<p>Default is NULL</p></td>
+<p>Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>subject_keys</th>
@@ -279,7 +287,8 @@ one observation per patient. An error is issued otherwise.</p>
     <span class='kw'>dtc</span> <span class='kw'>=</span> <span class='no'>DSSTDTC</span>,
     <span class='kw'>filter_ds</span> <span class='kw'>=</span> <span class='no'>DSCAT</span> <span class='kw'>==</span> <span class='st'>"OTHER EVENT"</span> <span class='kw'>&amp;</span> <span class='no'>DSDECOD</span> <span class='kw'>==</span> <span class='st'>"FINAL RETRIEVAL VISIT"</span>
   ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>FRVDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 3
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>FRVDT</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `derive_disposition_dt()` was deprecated in admiral 0.6.0.</span>
+#&gt; <span class='warning'>Please use `derive_var_disposition_dt()` instead.</span></div><div class='output co'>#&gt; # A tibble: 306 x 3
 #&gt;    STUDYID      USUBJID     FRVDT     
 #&gt;    &lt;chr&gt;        &lt;chr&gt;       &lt;date&gt;    
 #&gt;  1 CDISCPILOT01 01-701-1015 NA        
@@ -304,7 +313,7 @@ one observation per patient. An error is issued otherwise.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -321,7 +330,7 @@ one observation per patient. An error is issued otherwise.</p>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

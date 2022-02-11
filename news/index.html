@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -142,6 +142,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -164,7 +167,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -189,39 +192,115 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/pharmaverse/admiral/blob/main/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="admiral-060" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#admiral-060" class="anchor"></a>admiral 0.6.0</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h2>
+<ul>
+<li>
+<code><a href="../reference/derive_vars_dy.html">derive_vars_dy()</a></code> derives the analysis day from one or more <code>--DT(M)</code> variables (<a href='https://github.com/pharmaverse/admiral/issues/700'>#700</a>)</li>
+</ul>
+</div>
+<div id="updates-of-existing-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#updates-of-existing-functions" class="anchor"></a>Updates of Existing Functions</h2>
+<ul>
+<li><p>The <code><a href="../reference/derive_last_dose.html">derive_last_dose()</a></code> function has been split into a general function <code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code> and three wrapper functions <code><a href="../reference/derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code>, <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code>, and <code><a href="../reference/derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/385'>#385</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> now has a <code>new_var</code> parameter to support the derivation of <code>ONTRxxFL</code> and <code>ONTRTwFL</code> variables (<a href='https://github.com/pharmaverse/admiral/issues/721'>#721</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code>, <code>derive_var_disposition</code> and <code>derive_var_lstalvdt</code> now have <code>preserve</code> argument. A user can preserve partial dates when doing date imputation, e.g. <code>2019---07</code> would become <code>2019-06-07</code> by setting <code>preserve</code> to <code>TRUE</code> when doing date_imputation (<a href='https://github.com/pharmaverse/admiral/issues/592'>#592</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> now has <code>ignore_seconds_flag</code> argument so users can suppress <code>"S"</code> flag if seconds are not recorded in the data (<a href='https://github.com/pharmaverse/admiral/issues/589'>#589</a>)</p></li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<ul>
+<li><p><code><a href="../reference/derive_agegr_fda.html">derive_agegr_ema()</a></code>, <code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code>, <code><a href="../reference/derive_disposition_dt.html">derive_disposition_dt()</a></code>, <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code>,<code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code>, <code><a href="../reference/derive_worst_flag.html">derive_worst_flag()</a></code>, <code><a href="../reference/derive_obs_number.html">derive_obs_number()</a></code>, <code><a href="../reference/derive_disposition_reason.html">derive_disposition_reason()</a></code> have been deprecated and renamed in favor of <code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_ema()</a></code>, <code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code>, <code><a href="../reference/derive_var_disposition_dt.html">derive_var_disposition_dt()</a></code>, <code><a href="../reference/derive_var_disposition_status.html">derive_var_disposition_status()</a></code>, <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>, <code><a href="../reference/derive_var_worst_flag.html">derive_var_worst_flag()</a></code>, <code>derive_var_last_dose()</code>, <code><a href="../reference/derive_var_obs_number.html">derive_var_obs_number()</a></code>, and <code><a href="../reference/derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> respectively (<a href='https://github.com/pharmaverse/admiral/issues/738'>#738</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_basec.html">derive_var_basec()</a></code> and <code><a href="../reference/derive_baseline.html">derive_baseline()</a></code> have been deprecated in favor of the extended <code><a href="../reference/derive_var_base.html">derive_var_base()</a></code> function (<a href='https://github.com/pharmaverse/admiral/issues/695'>#695</a>)</p></li>
+<li><p><code><a href="../reference/derive_params_exposure.html">derive_params_exposure()</a></code> has been deprecated and renamed as <code><a href="../reference/derive_param_exposure.html">derive_param_exposure()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/722'>#722</a>)</p></li>
+<li><p>The <code><a href="../reference/derive_last_dose.html">derive_last_dose()</a></code> function has been deprecated in favor of <code><a href="../reference/derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/385'>#385</a>)</p></li>
+<li><p>The behavior of all functions providing the <code>date_imputation</code> parameter, e.g., <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> and <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code>, has changed for <code>date_imputation = "mid"</code>. Before the date was imputed as June 15th if both month and day were missing. Now it is imputed as June 30th. For the old behavior please specify <code>date_imputation = "06-15"</code>. Please note the behavior has not changed if only the day is missing. In this case the day is imputed as <code>15</code> (<a href='https://github.com/pharmaverse/admiral/issues/592'>#592</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> now has a <code>new_var</code> parameter to support the derivation of <code>ONTRxxFL</code> and <code>ONTRTwFL</code> variables (<a href='https://github.com/pharmaverse/admiral/issues/721'>#721</a>)</p></li>
+<li>
+<p>The following functions and parameters, which were deprecated in previous {admiral} versions, were removed (<a href='https://github.com/pharmaverse/admiral/issues/513'>#513</a>):</p>
+<ul>
+<li>
+<code>derive_aage()</code>, <code>derive_duration()</code>, <code>derive_query_vars()</code>, and <code>derive_suppqual_vars()</code> function</li>
+<li>
+<code>fns</code> and <code>filter_rows</code> parameters in <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code>
+</li>
+<li>
+<code>date_var</code> and <code>traceabilty_vars</code> parameters in <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code>
+</li>
+<li>
+<code>flag_filter</code> parameter in <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code>
+</li>
+<li>
+<code>flag_filter</code> parameter in <code><a href="../reference/derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code>
+</li>
+<li>
+<code>date_var</code> parameter in <code><a href="../reference/lstalvdt_source.html">lstalvdt_source()</a></code>
+</li>
+<li>
+<code>date</code> parameter in <code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code>
+</li>
+</ul>
+</li>
+<li><p><code><a href="../reference/derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code> has been updated to use ranges &lt;18, 18-64, &gt;=65 (<a href='https://github.com/pharmaverse/admiral/issues/829'>#829</a>)</p></li>
+</ul>
+</div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<ul>
+<li><p>README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (<a href='https://github.com/pharmaverse/admiral/issues/868'>#868</a> &amp; <a href='https://github.com/pharmaverse/admiral/issues/802'>#802</a>)</p></li>
+<li><p>New vignette <a href="../articles/development_process.html">Development Process</a> and improvements made to contribution vignettes (<a href='https://github.com/pharmaverse/admiral/issues/765'>#765</a> &amp; <a href='https://github.com/pharmaverse/admiral/issues/758'>#758</a>)</p></li>
+<li><p>Updated <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a> on using <code>task-list-completed</code> workflow (<a href='https://github.com/pharmaverse/admiral/issues/817'>#817</a>)</p></li>
+</ul>
+</div>
+<div id="various" class="section level2">
+<h2 class="hasAnchor">
+<a href="#various" class="anchor"></a>Various</h2>
+<ul>
+<li>GitHub repo moved to pharmaverse org and associated broken site links fixed (<a href='https://github.com/pharmaverse/admiral/issues/803'>#803</a> &amp; <a href='https://github.com/pharmaverse/admiral/issues/820'>#820</a>)</li>
+</ul>
+</div>
+</div>
     <div id="admiral-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#admiral-050" class="anchor"></a>admiral 0.5.0</h1>
 <ul>
-<li><p>The first truly open source release licensed under Apache 2.0 (<a href='https://github.com/Roche-GSK/admiral/issues/680'>#680</a>)</p></li>
-<li><p>New vignette <a href="../articles/contribution_model.html">Contributing to admiral</a> (<a href='https://github.com/Roche-GSK/admiral/issues/679'>#679</a>)</p></li>
-<li><p>New vignette <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a> (<a href='https://github.com/Roche-GSK/admiral/issues/679'>#679</a>)</p></li>
-<li><p>Broken links in README have been fixed (<a href='https://github.com/Roche-GSK/admiral/issues/564'>#564</a>)</p></li>
+<li><p>The first truly open source release licensed under Apache 2.0 (<a href='https://github.com/pharmaverse/admiral/issues/680'>#680</a>)</p></li>
+<li><p>New vignette <a href="../articles/contribution_model.html">Contributing to admiral</a> (<a href='https://github.com/pharmaverse/admiral/issues/679'>#679</a>)</p></li>
+<li><p>New vignette <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a> (<a href='https://github.com/pharmaverse/admiral/issues/679'>#679</a>)</p></li>
+<li><p>Broken links in README have been fixed (<a href='https://github.com/pharmaverse/admiral/issues/564'>#564</a>)</p></li>
 </ul>
 </div>
     <div id="admiral-040" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.0">
 <a href="#admiral-040" class="anchor"></a>admiral 0.4.0</h1>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New Features</h2>
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
 <div id="general" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h3>
 <ul>
-<li><p><code><a href="../reference/derive_vars_dtm_to_tm.html">derive_vars_dtm_to_tm()</a></code> enables the easy conversion of datetime to time variables (<a href='https://github.com/Roche-GSK/admiral/issues/551'>#551</a>)</p></li>
-<li><p><code><a href="../reference/derive_var_age_years.html">derive_var_age_years()</a></code> derives age in years from a variable providing the age in different units (<a href='https://github.com/Roche-GSK/admiral/issues/569'>#569</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dtm_to_tm.html">derive_vars_dtm_to_tm()</a></code> enables the easy conversion of datetime to time variables (<a href='https://github.com/pharmaverse/admiral/issues/551'>#551</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_age_years.html">derive_var_age_years()</a></code> derives age in years from a variable providing the age in different units (<a href='https://github.com/pharmaverse/admiral/issues/569'>#569</a>)</p></li>
 </ul>
 </div>
 <div id="bds" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bds" class="anchor"></a>BDS</h3>
 <ul>
-<li><p><code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> derives time-to-event-parameters (<a href='https://github.com/Roche-GSK/admiral/issues/546'>#546</a>)</p></li>
-<li><p>For common time-to-event endpoints <a href="../reference/index.html#section-pre-defined-time-to-event-sources">event and censoring source objects</a> are provided (<a href='https://github.com/Roche-GSK/admiral/issues/612'>#612</a>)</p></li>
+<li><p><code><a href="../reference/derive_param_tte.html">derive_param_tte()</a></code> derives time-to-event-parameters (<a href='https://github.com/pharmaverse/admiral/issues/546'>#546</a>)</p></li>
+<li><p>For common time-to-event endpoints <a href="../reference/index.html#section-pre-defined-time-to-event-sources">event and censoring source objects</a> are provided (<a href='https://github.com/pharmaverse/admiral/issues/612'>#612</a>)</p></li>
 </ul>
 </div>
 <div id="developer" class="section level3">
@@ -234,20 +313,20 @@
 </ul>
 </div>
 </div>
-<div id="updates-of-existing-functions" class="section level2">
+<div id="updates-of-existing-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#updates-of-existing-functions" class="anchor"></a>Updates of Existing Functions</h2>
+<a href="#updates-of-existing-functions-1" class="anchor"></a>Updates of Existing Functions</h2>
 <ul>
-<li><p>Unit checks in <code>derive_param_*()</code> functions are no longer case sensitive (<a href='https://github.com/Roche-GSK/admiral/issues/631'>#631</a>)</p></li>
-<li><p><code><a href="../reference/derive_agegr_fda.html">derive_agegr_ema()</a></code> and <code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code> gain a <code>age_unit</code> parameter used to specify the unit of the input age (<a href='https://github.com/Roche-GSK/admiral/issues/569'>#569</a>)</p></li>
+<li><p>Unit checks in <code>derive_param_*()</code> functions are no longer case sensitive (<a href='https://github.com/pharmaverse/admiral/issues/631'>#631</a>)</p></li>
+<li><p><code><a href="../reference/derive_agegr_fda.html">derive_agegr_ema()</a></code> and <code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code> gain a <code>age_unit</code> parameter used to specify the unit of the input age (<a href='https://github.com/pharmaverse/admiral/issues/569'>#569</a>)</p></li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking Changes</h2>
 <ul>
-<li><p>All SDTM datasets have been moved to the {admiral.test} package (<a href='https://github.com/Roche-GSK/admiral/issues/639'>#639</a>)</p></li>
-<li><p>The <code>min_dates</code> and <code>max_dates</code> parameters of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer expect a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> but <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> as input (<a href='https://github.com/Roche-GSK/admiral/issues/405'>#405</a>)</p></li>
+<li><p>All SDTM datasets have been moved to the {admiral.test} package (<a href='https://github.com/pharmaverse/admiral/issues/639'>#639</a>)</p></li>
+<li><p>The <code>min_dates</code> and <code>max_dates</code> parameters of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer expect a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> but <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> as input (<a href='https://github.com/pharmaverse/admiral/issues/405'>#405</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -255,98 +334,98 @@
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
-<code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer shifts the time of the input <code>--DTC</code> variable (<a href='https://github.com/Roche-GSK/admiral/issues/436'>#436</a>)</li>
+<code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> no longer shifts the time of the input <code>--DTC</code> variable (<a href='https://github.com/pharmaverse/admiral/issues/436'>#436</a>)</li>
 </ul>
 </div>
-<div id="documentation" class="section level2">
+<div id="documentation-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<a href="#documentation-1" class="anchor"></a>Documentation</h2>
 <ul>
-<li><p>New vignette <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a> (<a href='https://github.com/Roche-GSK/admiral/issues/549'>#549</a>)</p></li>
-<li><p>New vignette <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a> (<a href='https://github.com/Roche-GSK/admiral/issues/561'>#561</a>)</p></li>
-<li><p>New vignette <a href="../articles/writing_vignettes.html">Writing Vignettes</a> (<a href='https://github.com/Roche-GSK/admiral/issues/334'>#334</a>)</p></li>
-<li><p>New vignette <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a> (<a href='https://github.com/Roche-GSK/admiral/issues/554'>#554</a>)</p></li>
-<li><p>A section on handling missing values when working with {admiral} has been added to the “Get Started” vignette (<a href='https://github.com/Roche-GSK/admiral/issues/577'>#577</a>)</p></li>
-<li><p>Package installation instructions have been added to the README (<a href='https://github.com/Roche-GSK/admiral/issues/558'>#558</a>)</p></li>
-<li><p>The documentation of <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> falsely stated that the <code>flag_imputation</code> parameter should be either <code>TRUE</code> or <code>FALSE</code>. It now correctly states that the possible values are <code>"time"</code>, <code>"date"</code> or <code>"auto"</code> (<a href='https://github.com/Roche-GSK/admiral/issues/539'>#539</a>).</p></li>
+<li><p>New vignette <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a> (<a href='https://github.com/pharmaverse/admiral/issues/549'>#549</a>)</p></li>
+<li><p>New vignette <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a> (<a href='https://github.com/pharmaverse/admiral/issues/561'>#561</a>)</p></li>
+<li><p>New vignette <a href="../articles/writing_vignettes.html">Writing Vignettes</a> (<a href='https://github.com/pharmaverse/admiral/issues/334'>#334</a>)</p></li>
+<li><p>New vignette <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a> (<a href='https://github.com/pharmaverse/admiral/issues/554'>#554</a>)</p></li>
+<li><p>A section on handling missing values when working with {admiral} has been added to the “Get Started” vignette (<a href='https://github.com/pharmaverse/admiral/issues/577'>#577</a>)</p></li>
+<li><p>Package installation instructions have been added to the README (<a href='https://github.com/pharmaverse/admiral/issues/558'>#558</a>)</p></li>
+<li><p>The documentation of <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> falsely stated that the <code>flag_imputation</code> parameter should be either <code>TRUE</code> or <code>FALSE</code>. It now correctly states that the possible values are <code>"time"</code>, <code>"date"</code> or <code>"auto"</code> (<a href='https://github.com/pharmaverse/admiral/issues/539'>#539</a>)</p></li>
 </ul>
 </div>
 </div>
     <div id="admiral-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
 <a href="#admiral-030" class="anchor"></a>admiral 0.3.0</h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<a href="#new-features-2" class="anchor"></a>New Features</h2>
 <div id="general-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general-1" class="anchor"></a>General</h3>
 <ul>
-<li><p><code><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na()</a></code> can be used to convert SAS blanks, i.e. <code>""</code>, into proper R <code>NA</code> values (<a href='https://github.com/Roche-GSK/admiral/issues/482'>#482</a>).</p></li>
-<li><p><code><a href="../reference/call_derivation.html">call_derivation()</a></code> enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (<a href='https://github.com/Roche-GSK/admiral/issues/403'>#403</a>)</p></li>
-<li><p><code><a href="../reference/derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt()</a></code> enables the easy conversion of datetime to date variables (<a href='https://github.com/Roche-GSK/admiral/issues/376'>#376</a>).</p></li>
-<li><p><code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> can now handle events with a start and end date rather than just a single assessment date (<a href='https://github.com/Roche-GSK/admiral/issues/395'>#395</a>).</p></li>
-<li><p><code><a href="../reference/derive_worst_flag.html">derive_worst_flag()</a></code> enables the flagging of worst records (<a href='https://github.com/Roche-GSK/admiral/issues/300'>#300</a>)</p></li>
+<li><p><code><a href="../reference/convert_blanks_to_na.html">convert_blanks_to_na()</a></code> can be used to convert SAS blanks, i.e. <code>""</code>, into proper R <code>NA</code> values (<a href='https://github.com/pharmaverse/admiral/issues/482'>#482</a>)</p></li>
+<li><p><code><a href="../reference/call_derivation.html">call_derivation()</a></code> enables users to call the same function multiple times with some parameters being fixed across iterations and others varying (<a href='https://github.com/pharmaverse/admiral/issues/403'>#403</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dtm_to_dt.html">derive_vars_dtm_to_dt()</a></code> enables the easy conversion of datetime to date variables (<a href='https://github.com/pharmaverse/admiral/issues/376'>#376</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_ontrtfl.html">derive_var_ontrtfl()</a></code> can now handle events with a start and end date rather than just a single assessment date (<a href='https://github.com/pharmaverse/admiral/issues/395'>#395</a>)</p></li>
+<li><p><code><a href="../reference/derive_worst_flag.html">derive_worst_flag()</a></code> enables the flagging of worst records (<a href='https://github.com/pharmaverse/admiral/issues/300'>#300</a>)</p></li>
 </ul>
 </div>
 <div id="bds-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bds-1" class="anchor"></a>BDS</h3>
 <ul>
-<li><p><code><a href="../reference/derive_derived_param.html">derive_derived_param()</a></code> can be used to derive a new parameter from existing parameters in a BDS dataset (<a href='https://github.com/Roche-GSK/admiral/issues/325'>#325</a>)</p></li>
-<li><p><code><a href="../reference/derive_param_bmi.html">derive_param_bmi()</a></code>, <code><a href="../reference/derive_param_bsa.html">derive_param_bsa()</a></code> and <code><a href="../reference/derive_param_map.html">derive_param_map()</a></code> enables the derivation of the body mass index, body surface area and mean arterial pressure parameters respectively (<a href='https://github.com/Roche-GSK/admiral/issues/368'>#368</a>).</p></li>
-<li><p><code><a href="../reference/derive_param_qtc.html">derive_param_qtc()</a></code> enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (<a href='https://github.com/Roche-GSK/admiral/issues/325'>#325</a>).</p></li>
-<li><p><code><a href="../reference/derive_param_rr.html">derive_param_rr()</a></code> enables the derivation of the RR interval (<a href='https://github.com/Roche-GSK/admiral/issues/325'>#325</a>)</p></li>
-<li><p><code><a href="../reference/derive_params_exposure.html">derive_params_exposure()</a></code> enables the derivation of summary exposure parameters (<a href='https://github.com/Roche-GSK/admiral/issues/400'>#400</a>)</p></li>
-<li><p><code><a href="../reference/derive_param_doseint.html">derive_param_doseint()</a></code> enables the derivation of dose intensity (<a href='https://github.com/Roche-GSK/admiral/issues/179'>#179</a>)</p></li>
+<li><p><code><a href="../reference/derive_derived_param.html">derive_derived_param()</a></code> can be used to derive a new parameter from existing parameters in a BDS dataset (<a href='https://github.com/pharmaverse/admiral/issues/325'>#325</a>)</p></li>
+<li><p><code><a href="../reference/derive_param_bmi.html">derive_param_bmi()</a></code>, <code><a href="../reference/derive_param_bsa.html">derive_param_bsa()</a></code> and <code><a href="../reference/derive_param_map.html">derive_param_map()</a></code> enables the derivation of the body mass index, body surface area and mean arterial pressure parameters respectively (<a href='https://github.com/pharmaverse/admiral/issues/368'>#368</a>)</p></li>
+<li><p><code><a href="../reference/derive_param_qtc.html">derive_param_qtc()</a></code> enables the derivation of corrected QT intervals according to the formula of Bazett, Fridericia or Sagie (<a href='https://github.com/pharmaverse/admiral/issues/325'>#325</a>)</p></li>
+<li><p><code><a href="../reference/derive_param_rr.html">derive_param_rr()</a></code> enables the derivation of the RR interval (<a href='https://github.com/pharmaverse/admiral/issues/325'>#325</a>)</p></li>
+<li><p><code><a href="../reference/derive_params_exposure.html">derive_params_exposure()</a></code> enables the derivation of summary exposure parameters (<a href='https://github.com/pharmaverse/admiral/issues/400'>#400</a>)</p></li>
+<li><p><code><a href="../reference/derive_param_doseint.html">derive_param_doseint()</a></code> enables the derivation of dose intensity (<a href='https://github.com/pharmaverse/admiral/issues/179'>#179</a>)</p></li>
 </ul>
 </div>
 <div id="occds" class="section level3">
 <h3 class="hasAnchor">
 <a href="#occds" class="anchor"></a>OCCDS</h3>
 <ul>
-<li><p><code><a href="../reference/derive_var_atirel.html">derive_var_atirel()</a></code> enables the derivation of the “Analysis Time Relative to Reference” (<a href='https://github.com/Roche-GSK/admiral/issues/397'>#397</a>).</p></li>
-<li><p><code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> can be used to add ATC variables from FACM to ADCM (<a href='https://github.com/Roche-GSK/admiral/issues/396'>#396</a>).</p></li>
+<li><p><code><a href="../reference/derive_var_atirel.html">derive_var_atirel()</a></code> enables the derivation of the “Analysis Time Relative to Reference” (<a href='https://github.com/pharmaverse/admiral/issues/397'>#397</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_atc.html">derive_vars_atc()</a></code> can be used to add ATC variables from FACM to ADCM (<a href='https://github.com/pharmaverse/admiral/issues/396'>#396</a>)</p></li>
 </ul>
 </div>
 </div>
-<div id="updates-of-existing-functions-1" class="section level2">
+<div id="updates-of-existing-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#updates-of-existing-functions-1" class="anchor"></a>Updates of Existing Functions</h2>
+<a href="#updates-of-existing-functions-2" class="anchor"></a>Updates of Existing Functions</h2>
 <ul>
-<li><p><code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code> now checks whether the <code>AVAL</code> variable is present in the input dataset (<a href='https://github.com/Roche-GSK/admiral/issues/486'>#486</a>).</p></li>
-<li><p>All derivation functions check whether the input dataset is grouped and throw an error if it is (<a href='https://github.com/Roche-GSK/admiral/issues/408'>#408</a>).</p></li>
-<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (<a href='https://github.com/Roche-GSK/admiral/issues/433'>#433</a>).</p></li>
-<li><p>A performance issue in <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> has been resolved (<a href='https://github.com/Roche-GSK/admiral/issues/384'>#384</a>).</p></li>
+<li><p><code><a href="../reference/derive_var_anrind.html">derive_var_anrind()</a></code> now checks whether the <code>AVAL</code> variable is present in the input dataset (<a href='https://github.com/pharmaverse/admiral/issues/486'>#486</a>)</p></li>
+<li><p>All derivation functions check whether the input dataset is grouped and throw an error if it is (<a href='https://github.com/pharmaverse/admiral/issues/408'>#408</a>)</p></li>
+<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> has been refactored to no longer make use of the {usethis} package which is no longer a dependency of {admiral} (<a href='https://github.com/pharmaverse/admiral/issues/433'>#433</a>)</p></li>
+<li><p>A performance issue in <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> has been resolved (<a href='https://github.com/pharmaverse/admiral/issues/384'>#384</a>)</p></li>
 </ul>
 </div>
-<div id="breaking-changes-1" class="section level2">
+<div id="breaking-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-1" class="anchor"></a>Breaking Changes</h2>
+<a href="#breaking-changes-2" class="anchor"></a>Breaking Changes</h2>
 <ul>
-<li><p>The <code>drop_values_from</code> parameter has been removed from <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/425'>#425</a>).</p></li>
-<li><p>The format of the <code>date_imputation</code> parameter of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> has been changed from “dd-mm” to “mm-dd”. Thus, “01-12” now refers to January 12th rather than December 1st (<a href='https://github.com/Roche-GSK/admiral/issues/492'>#492</a>).</p></li>
+<li><p>The <code>drop_values_from</code> parameter has been removed from <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/425'>#425</a>)</p></li>
+<li><p>The format of the <code>date_imputation</code> parameter of <code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> has been changed from “dd-mm” to “mm-dd”. Thus, “01-12” now refers to January 12th rather than December 1st (<a href='https://github.com/pharmaverse/admiral/issues/492'>#492</a>)</p></li>
 <li>
-<p>Several functions have been renamed. The old names are now deprecated. They can still be used but a warning will be issued (<a href='https://github.com/Roche-GSK/admiral/issues/507'>#507</a>).</p>
+<p>Several functions have been renamed. The old names are now deprecated. They can still be used but a warning will be issued (<a href='https://github.com/pharmaverse/admiral/issues/507'>#507</a>)</p>
 <ul>
 <li>
-<code><a href="../reference/derive_aage.html">derive_aage()</a></code> -&gt; <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code>
+<code>derive_aage()</code> -&gt; <code><a href="../reference/derive_vars_aage.html">derive_vars_aage()</a></code>
 </li>
 <li>
-<code><a href="../reference/derive_duration.html">derive_duration()</a></code> -&gt; <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code>
+<code>derive_duration()</code> -&gt; <code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code>
 </li>
 <li>
-<code><a href="../reference/derive_query_vars.html">derive_query_vars()</a></code> -&gt; <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code>
+<code>derive_query_vars()</code> -&gt; <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code>
 </li>
 <li>
-<code><a href="../reference/derive_suppqual_vars.html">derive_suppqual_vars()</a></code> -&gt; <code><a href="../reference/derive_vars_suppqual.html">derive_vars_suppqual()</a></code>
+<code>derive_suppqual_vars()</code> -&gt; <code><a href="../reference/derive_vars_suppqual.html">derive_vars_suppqual()</a></code>
 </li>
 </ul>
 </li>
 <li><p>The <code>date_var</code> parameter of <code><a href="../reference/lstalvdt_source.html">lstalvdt_source()</a></code> has been renamed to <code>date</code></p></li>
-<li><p>The <code>filter_rows</code> parameter of <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> has been renamed to <code>filter</code>. The <code>fns</code> parameter has been deprecated in favor of <code>analysis_var</code> and <code>summary_fun</code> (<a href='https://github.com/Roche-GSK/admiral/issues/491'>#491</a>).</p></li>
-<li><p>The <code>date_var</code> and <code>traceabilty_vars</code> parameters of <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> have been renamed to <code>date</code> and <code>traceability_vars</code>, respectively (<a href='https://github.com/Roche-GSK/admiral/issues/493'>#493</a>).</p></li>
-<li><p>The <code>flag_filter</code> parameter of <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code> has been renamed to <code>filter</code> (<a href='https://github.com/Roche-GSK/admiral/issues/487'>#487</a>).</p></li>
+<li><p>The <code>filter_rows</code> parameter of <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> has been renamed to <code>filter</code>. The <code>fns</code> parameter has been deprecated in favor of <code>analysis_var</code> and <code>summary_fun</code> (<a href='https://github.com/pharmaverse/admiral/issues/491'>#491</a>)</p></li>
+<li><p>The <code>date_var</code> and <code>traceabilty_vars</code> parameters of <code><a href="../reference/dthcaus_source.html">dthcaus_source()</a></code> have been renamed to <code>date</code> and <code>traceability_vars</code>, respectively (<a href='https://github.com/pharmaverse/admiral/issues/493'>#493</a>)</p></li>
+<li><p>The <code>flag_filter</code> parameter of <code><a href="../reference/derive_extreme_flag.html">derive_extreme_flag()</a></code> has been renamed to <code>filter</code> (<a href='https://github.com/pharmaverse/admiral/issues/487'>#487</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
@@ -354,22 +433,22 @@
 <a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
-<code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code> used to return <code>NA</code> for ages less than or equal 18. It now returns <code>&lt;=18</code> (<a href='https://github.com/Roche-GSK/admiral/issues/441'>#441</a>).</li>
+<code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code> used to return <code>NA</code> for ages less than or equal 18. It now returns <code>&lt;=18</code> (<a href='https://github.com/pharmaverse/admiral/issues/441'>#441</a>)</li>
 </ul>
 </div>
-<div id="documentation-1" class="section level2">
+<div id="documentation-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-1" class="anchor"></a>Documentation</h2>
+<a href="#documentation-2" class="anchor"></a>Documentation</h2>
 <ul>
-<li><p>New vignette on “Date and Time Imputation” has been created (<a href='https://github.com/Roche-GSK/admiral/issues/198'>#198</a>)</p></li>
-<li><p>A “Guidance for git Usage” has been created (<a href='https://github.com/Roche-GSK/admiral/issues/266'>#266</a>)</p></li>
-<li><p>“OCCDS” has been added as a new section on the reference page on the package website (<a href='https://github.com/Roche-GSK/admiral/issues/485'>#485</a>)</p></li>
-<li><p>The Programming Strategy has been updated (<a href='https://github.com/Roche-GSK/admiral/issues/495'>#495</a>)</p></li>
-<li><p>A search feature has been added to the package website (<a href='https://github.com/Roche-GSK/admiral/issues/438'>#438</a>).</p></li>
-<li><p>New template scripts for ADEX (<a href='https://github.com/Roche-GSK/admiral/issues/181'>#181</a>), ADCM (<a href='https://github.com/Roche-GSK/admiral/issues/268'>#268</a>) and ADEG (<a href='https://github.com/Roche-GSK/admiral/issues/258'>#258</a>) have been created</p></li>
-<li><p>New vignette for programming ADEX has been created (<a href='https://github.com/Roche-GSK/admiral/issues/372'>#372</a>)</p></li>
-<li><p>A section on how to create query variables (e.g. SMQs in ADAE) has been added to the Occurrence datasets vignette (<a href='https://github.com/Roche-GSK/admiral/issues/370'>#370</a>)</p></li>
-<li><p>The BDS vignette has been updated to incorporate examples of ADVS and ADEG specific functions (<a href='https://github.com/Roche-GSK/admiral/issues/371'>#371</a>)</p></li>
+<li><p>New vignette on “Date and Time Imputation” has been created (<a href='https://github.com/pharmaverse/admiral/issues/198'>#198</a>)</p></li>
+<li><p>A “Guidance for git Usage” has been created (<a href='https://github.com/pharmaverse/admiral/issues/266'>#266</a>)</p></li>
+<li><p>“OCCDS” has been added as a new section on the reference page on the package website (<a href='https://github.com/pharmaverse/admiral/issues/485'>#485</a>)</p></li>
+<li><p>The Programming Strategy has been updated (<a href='https://github.com/pharmaverse/admiral/issues/495'>#495</a>)</p></li>
+<li><p>A search feature has been added to the package website (<a href='https://github.com/pharmaverse/admiral/issues/438'>#438</a>)</p></li>
+<li><p>New template scripts for ADEX (<a href='https://github.com/pharmaverse/admiral/issues/181'>#181</a>), ADCM (<a href='https://github.com/pharmaverse/admiral/issues/268'>#268</a>) and ADEG (<a href='https://github.com/pharmaverse/admiral/issues/258'>#258</a>) have been created</p></li>
+<li><p>New vignette for programming ADEX has been created (<a href='https://github.com/pharmaverse/admiral/issues/372'>#372</a>)</p></li>
+<li><p>A section on how to create query variables (e.g. SMQs in ADAE) has been added to the Occurrence datasets vignette (<a href='https://github.com/pharmaverse/admiral/issues/370'>#370</a>)</p></li>
+<li><p>The BDS vignette has been updated to incorporate examples of ADVS and ADEG specific functions (<a href='https://github.com/pharmaverse/admiral/issues/371'>#371</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -377,24 +456,24 @@
 <h1 class="page-header" data-toc-text="0.2.1">
 <a href="#admiral-021" class="anchor"></a>admiral 0.2.1</h1>
 <ul>
-<li>Fixed a critical bug in <code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> that prevented the function from being usable at all (<a href='https://github.com/Roche-GSK/admiral/issues/326'>#326</a>)</li>
+<li>Fixed a critical bug in <code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> that prevented the function from being usable at all (<a href='https://github.com/pharmaverse/admiral/issues/326'>#326</a>)</li>
 </ul>
 </div>
     <div id="admiral-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
 <a href="#admiral-020" class="anchor"></a>admiral 0.2.0</h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New Features</h2>
+<a href="#new-features-3" class="anchor"></a>New Features</h2>
 <div id="general-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general-2" class="anchor"></a>General</h3>
 <ul>
-<li><p>Function argument checks have been completely re-written to provide clearer error messages to users (<a href='https://github.com/Roche-GSK/admiral/issues/263'>#263</a>, <a href='https://github.com/Roche-GSK/admiral/issues/288'>#288</a>)</p></li>
-<li><p>SDTM <code>SUPP--</code> datasets can be merged onto their parent domain using <code><a href="../reference/derive_suppqual_vars.html">derive_suppqual_vars()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/145'>#145</a>)</p></li>
-<li><p>In case a derivation detects duplicate records after applying a <code>filter</code>, the dataset of duplicate records is made available to users via <code><a href="../reference/get_duplicates_dataset.html">get_duplicates_dataset()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/202'>#202</a>)</p></li>
-<li><p><code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> gain a <code>min_dates</code> and <code>max_dates</code> parameter which can be used to ensure that the imputed date(time) is not before the <code>min_dates</code> nor after the <code>max_dates</code>, e.g. avoid that <code>AENDT</code> is after the data cut date or <code>ASTDT</code> is before the first treatment date (<a href='https://github.com/Roche-GSK/admiral/issues/158'>#158</a>)</p></li>
-<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> can be used to open a template script for an ADaM dataset; all available templates can be displayed using <code><a href="../reference/list_all_templates.html">list_all_templates()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/110'>#110</a>)</p></li>
+<li><p>Function argument checks have been completely re-written to provide clearer error messages to users (<a href='https://github.com/pharmaverse/admiral/issues/263'>#263</a>, <a href='https://github.com/pharmaverse/admiral/issues/288'>#288</a>)</p></li>
+<li><p>SDTM <code>SUPP--</code> datasets can be merged onto their parent domain using <code>derive_suppqual_vars()</code> (<a href='https://github.com/pharmaverse/admiral/issues/145'>#145</a>)</p></li>
+<li><p>In case a derivation detects duplicate records after applying a <code>filter</code>, the dataset of duplicate records is made available to users via <code><a href="../reference/get_duplicates_dataset.html">get_duplicates_dataset()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/202'>#202</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_dt.html">derive_vars_dt()</a></code> and <code><a href="../reference/derive_vars_dtm.html">derive_vars_dtm()</a></code> gain a <code>min_dates</code> and <code>max_dates</code> parameter which can be used to ensure that the imputed date(time) is not before the <code>min_dates</code> nor after the <code>max_dates</code>, e.g. avoid that <code>AENDT</code> is after the data cut date or <code>ASTDT</code> is before the first treatment date (<a href='https://github.com/pharmaverse/admiral/issues/158'>#158</a>)</p></li>
+<li><p><code><a href="../reference/use_ad_template.html">use_ad_template()</a></code> can be used to open a template script for an ADaM dataset; all available templates can be displayed using <code><a href="../reference/list_all_templates.html">list_all_templates()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/110'>#110</a>)</p></li>
 </ul>
 </div>
 <div id="adsl" class="section level3">
@@ -402,18 +481,18 @@
 <a href="#adsl" class="anchor"></a>ADSL</h3>
 <ul>
 <li><p>EMA and FDA defined age groupings can be derived using <code><a href="../reference/derive_agegr_fda.html">derive_agegr_ema()</a></code> and <code><a href="../reference/derive_agegr_fda.html">derive_agegr_fda()</a></code>, respectively</p></li>
-<li><p>Disposition Status can be derived using <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/92'>#92</a>)</p></li>
+<li><p>Disposition Status can be derived using <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/92'>#92</a>)</p></li>
 <li><p>Disposition Reason can be derived using <code><a href="../reference/derive_disposition_reason.html">derive_disposition_reason()</a></code></p></li>
-<li><p>Disposition Dates can be derived using <code><a href="../reference/derive_disposition_dt.html">derive_disposition_dt()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/91'>#91</a>)</p></li>
-<li><p>Date Last Known Alive can be derived using <code><a href="../reference/derive_var_lstalvdt.html">derive_var_lstalvdt()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/94'>#94</a>)</p></li>
-<li><p>Cause of Death can be derived using <code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/93'>#93</a>)</p></li>
+<li><p>Disposition Dates can be derived using <code><a href="../reference/derive_disposition_dt.html">derive_disposition_dt()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/91'>#91</a>)</p></li>
+<li><p>Date Last Known Alive can be derived using <code><a href="../reference/derive_var_lstalvdt.html">derive_var_lstalvdt()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/94'>#94</a>)</p></li>
+<li><p>Cause of Death can be derived using <code><a href="../reference/derive_var_dthcaus.html">derive_var_dthcaus()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/93'>#93</a>)</p></li>
 </ul>
 </div>
 <div id="bds-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bds-2" class="anchor"></a>BDS</h3>
 <ul>
-<li>Summary records for BDS datasets, e.g. with <code>DTYPE == "AVERAGE"</code>, can be derived using <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/177'>#177</a>)</li>
+<li>Summary records for BDS datasets, e.g. with <code>DTYPE == "AVERAGE"</code>, can be derived using <code><a href="../reference/derive_summary_records.html">derive_summary_records()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/177'>#177</a>)</li>
 </ul>
 </div>
 <div id="occds-1" class="section level3">
@@ -425,13 +504,13 @@
 </ul>
 </div>
 </div>
-<div id="breaking-changes-2" class="section level2">
+<div id="breaking-changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-2" class="anchor"></a>Breaking Changes</h2>
+<a href="#breaking-changes-3" class="anchor"></a>Breaking Changes</h2>
 <ul>
-<li><p><code>derive_merged_vars()</code> has been removed from {admiral} in favor of smaller special purpose functions, e.g. <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/167'>#167</a>)</p></li>
+<li><p><code>derive_merged_vars()</code> has been removed from {admiral} in favor of smaller special purpose functions, e.g. <code><a href="../reference/derive_disposition_status.html">derive_disposition_status()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/167'>#167</a>)</p></li>
 <li>
-<p>Function arguments no longer accept expressions created with <code>expr()</code> or <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> (<a href='https://github.com/Roche-GSK/admiral/issues/187'>#187</a>)</p>
+<p>Function arguments no longer accept expressions created with <code>expr()</code> or <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">exprs()</a></code> as inputs; instead filter expressions can be passed “as is” and multiple variables have to be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> (<a href='https://github.com/pharmaverse/admiral/issues/187'>#187</a>)</p>
 <p><strong>Old:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="../reference/derive_extreme_flag.html">derive_extreme_flag</a></span>(
   <span class="no">vs</span>,
@@ -451,22 +530,22 @@
   <span class="kw">flag_filter</span> <span class="kw">=</span> <span class="no">VISIT</span> <span class="kw">!=</span> <span class="st">"BASELINE"</span>
 )</pre></div>
 </li>
-<li><p><code>read_dap_m3()</code> and <code>initialize()</code> have been migrated to {admiral.roche} (<a href='https://github.com/Roche-GSK/admiral/issues/272'>#272</a>)</p></li>
-<li><p>The <code>start_date</code> and <code>end_date</code> parameters of <code><a href="../reference/derive_var_ady.html">derive_var_ady()</a></code>, <code><a href="../reference/derive_var_aendy.html">derive_var_aendy()</a></code> and <code><a href="../reference/derive_var_astdy.html">derive_var_astdy()</a></code> have been renamed to <code>reference_date</code> and <code>date</code>, respectively (<a href='https://github.com/Roche-GSK/admiral/issues/121'>#121</a>)</p></li>
+<li><p><code>read_dap_m3()</code> and <code>initialize()</code> have been migrated to {admiral.roche} (<a href='https://github.com/pharmaverse/admiral/issues/272'>#272</a>)</p></li>
+<li><p>The <code>start_date</code> and <code>end_date</code> parameters of <code><a href="../reference/derive_var_ady.html">derive_var_ady()</a></code>, <code><a href="../reference/derive_var_aendy.html">derive_var_aendy()</a></code> and <code><a href="../reference/derive_var_astdy.html">derive_var_astdy()</a></code> have been renamed to <code>reference_date</code> and <code>date</code>, respectively (<a href='https://github.com/pharmaverse/admiral/issues/121'>#121</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h2>
 <ul>
-<li><p><code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> no longer drops records which do not match any condition defined in the <code>basetype</code> argument (<a href='https://github.com/Roche-GSK/admiral/issues/226'>#226</a>)</p></li>
-<li><p>Join warnings like “Column <code>USUBJID</code> has different attributes on LHS and RHS of join when using left_join()” are no longer displayed (<a href='https://github.com/Roche-GSK/admiral/issues/271'>#271</a>)</p></li>
-<li><p>For datetimes with time imputed to “00:00:00” the time part is now displayed (<a href='https://github.com/Roche-GSK/admiral/issues/206'>#206</a>)</p></li>
+<li><p><code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> no longer drops records which do not match any condition defined in the <code>basetype</code> argument (<a href='https://github.com/pharmaverse/admiral/issues/226'>#226</a>)</p></li>
+<li><p>Join warnings like “Column <code>USUBJID</code> has different attributes on LHS and RHS of join when using left_join()” are no longer displayed (<a href='https://github.com/pharmaverse/admiral/issues/271'>#271</a>)</p></li>
+<li><p>For datetimes with time imputed to “00:00:00” the time part is now displayed (<a href='https://github.com/pharmaverse/admiral/issues/206'>#206</a>)</p></li>
 </ul>
 </div>
-<div id="documentation-2" class="section level2">
+<div id="documentation-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-2" class="anchor"></a>Documentation</h2>
+<a href="#documentation-3" class="anchor"></a>Documentation</h2>
 <ul>
 <li><p><a href="../articles/faq.html">Frequently Asked Questions</a></p></li>
 <li><p><a href="../articles/adsl.html">Creating ADSL</a></p></li>
@@ -488,7 +567,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -505,7 +584,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

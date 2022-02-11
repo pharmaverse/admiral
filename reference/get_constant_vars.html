@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get constant variables — get_constant_vars • admiral</title>
+<title>Get Constant Variables — get_constant_vars • admiral</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Get constant variables — get_constant_vars" />
-<meta property="og:description" content="Get constant variables" />
+<meta property="og:title" content="Get Constant Variables — get_constant_vars" />
+<meta property="og:description" content="Get Constant Variables" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +143,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +168,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -189,13 +192,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get constant variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <h1>Get Constant Variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/utils.R'><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>get_constant_vars.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get constant variables</p>
+    <p>Get Constant Variables</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_constant_vars</span>(<span class='no'>dataset</span>, <span class='no'>by_vars</span>, <span class='kw'>ignore_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -236,27 +239,27 @@ like <code>starts_with("EX")</code></p></td>
 #&gt; [[1]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^USUBJID
-#&gt; env:  0x55a2ce961c88
+#&gt; env:  0x561317e6d8e8
 #&gt; 
 #&gt; [[2]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTESTCD
-#&gt; env:  0x55a2ce961c88
+#&gt; env:  0x561317e6d8e8
 #&gt; 
 #&gt; [[3]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^STUDYID
-#&gt; env:  0x55a2ce77ede8
+#&gt; env:  0x561317c63288
 #&gt; 
 #&gt; [[4]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^DOMAIN
-#&gt; env:  0x55a2ce77ede8
+#&gt; env:  0x561317c63288
 #&gt; 
 #&gt; [[5]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTEST
-#&gt; env:  0x55a2ce77ede8
+#&gt; env:  0x561317c63288
 #&gt; </div><div class='input'>
 <span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>get_constant_vars</span>(
   <span class='no'>vs</span>,
@@ -267,17 +270,17 @@ like <code>starts_with("EX")</code></p></td>
 #&gt; [[1]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^USUBJID
-#&gt; env:  0x55a2ce961c88
+#&gt; env:  0x561317e6d8e8
 #&gt; 
 #&gt; [[2]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^VSTESTCD
-#&gt; env:  0x55a2ce961c88
+#&gt; env:  0x561317e6d8e8
 #&gt; 
 #&gt; [[3]]
 #&gt; &lt;quosure&gt;
 #&gt; expr: ^STUDYID
-#&gt; env:  0x55a2cbb75d68
+#&gt; env:  0x561316217a68
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -290,7 +293,7 @@ like <code>starts_with("EX")</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -307,7 +310,7 @@ like <code>starts_with("EX")</code></p></td>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

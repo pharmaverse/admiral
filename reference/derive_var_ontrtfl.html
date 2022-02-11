@@ -87,7 +87,7 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -144,6 +144,9 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -166,7 +169,7 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -191,7 +194,7 @@ assessment date (e.g ADT) or event start and end dates (e.g. ASTDT/AENDT)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive On-Treatment Flag Variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_var_ontrtfl.R'><code>R/derive_var_ontrtfl.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_var_ontrtfl.R'><code>R/derive_var_ontrtfl.R</code></a></small>
     <div class="hidden name"><code>derive_var_ontrtfl.Rd</code></div>
     </div>
 
@@ -202,14 +205,14 @@ assessment date (e.g <code>ADT</code>) or event start and end dates (e.g. <code>
 
     <pre class="usage"><span class='fu'>derive_var_ontrtfl</span>(
   <span class='no'>dataset</span>,
+  <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ONTRTFL</span>,
   <span class='no'>start_date</span>,
   <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>ref_start_date</span>,
   <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ref_end_window</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>filter_pre_timepoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>span_period</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
+  <span class='kw'>span_period</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -219,6 +222,11 @@ assessment date (e.g <code>ADT</code>) or event start and end dates (e.g. <code>
       <th>dataset</th>
       <td><p>Input dataset.</p>
 <p>Required columns are <code>start_date</code>, <code>end_date</code>, <code>ref_start_date</code> and <code>ref_end_date</code>.</p></td>
+    </tr>
+    <tr>
+      <th>new_var</th>
+      <td><p>On-treatment flag variable name to be created.</p>
+<p>Default is <code>ONTRTFL</code>.</p></td>
     </tr>
     <tr>
       <th>start_date</th>
@@ -267,10 +275,6 @@ Optional; default is <code>NULL</code>.</p></td>
       <td><p>A <code>"Y"</code> scalar character. If <code>"Y"</code>, events that started prior
 to the <code>ref_start_date</code>and are ongoing or end after the <code>ref_start_date</code> are flagged as <code>"Y"</code>.
 Optional; default is <code>NULL</code>.</p></td>
-    </tr>
-    <tr>
-      <th>date</th>
-      <td><p><strong>Deprecated</strong>. Please use <code>start_date</code> instead.</p></td>
     </tr>
     </table>
 
@@ -376,7 +380,27 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 #&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;  
 #&gt; 1 P01     2020-03-15 2020-01-01 2020-03-01 2020-12-01 Y      
 #&gt; 2 P02     2019-04-30 2020-01-01 2020-03-01 2020-03-15 Y      
-#&gt; 3 P03     2019-04-30 2020-01-01 2020-03-01 NA         Y      </div></pre>
+#&gt; 3 P03     2019-04-30 2020-01-01 2020-03-01 NA         Y      </div><div class='input'>
+<span class='no'>advs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~<span class='no'>USUBJID</span>, ~<span class='no'>ASTDT</span>,              ~<span class='no'>AP01SDT</span>,           ~<span class='no'>AP01EDT</span>,           ~<span class='no'>AENDT</span>,
+  <span class='st'>"P01"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-12-01"</span>),
+  <span class='st'>"P02"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-15"</span>),
+  <span class='st'>"P03"</span>,    <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2019-04-30"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-01-01"</span>), <span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-03-01"</span>), <span class='fl'>NA</span>,
+)
+<span class='fu'>derive_var_ontrtfl</span>(
+ <span class='no'>advs</span>,
+ <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>ONTR01FL</span>,
+ <span class='kw'>start_date</span> <span class='kw'>=</span> <span class='no'>ASTDT</span>,
+ <span class='kw'>end_date</span> <span class='kw'>=</span> <span class='no'>AENDT</span>,
+ <span class='kw'>ref_start_date</span> <span class='kw'>=</span> <span class='no'>AP01SDT</span>,
+ <span class='kw'>ref_end_date</span> <span class='kw'>=</span> <span class='no'>AP01EDT</span>,
+ <span class='kw'>span_period</span> <span class='kw'>=</span> <span class='st'>"Y"</span>
+)</div><div class='output co'>#&gt; # A tibble: 3 x 6
+#&gt;   USUBJID ASTDT      AP01SDT    AP01EDT    AENDT      ONTR01FL
+#&gt;   &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;   
+#&gt; 1 P01     2020-03-15 2020-01-01 2020-03-01 2020-12-01 &lt;NA&gt;    
+#&gt; 2 P02     2019-04-30 2020-01-01 2020-03-01 2020-03-15 Y       
+#&gt; 3 P03     2019-04-30 2020-01-01 2020-03-01 NA         Y       </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -388,7 +412,7 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -405,7 +429,7 @@ cases where the record started prior to the 'ref_start_date<code>and was ongoing
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

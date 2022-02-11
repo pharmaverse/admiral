@@ -53,7 +53,8 @@
 
 
 <meta property="og:title" content="Derive Last Known Alive Date — derive_var_lstalvdt" />
-<meta property="og:description" content="Add the last known alive date (LSTALVDT) to the dataset." />
+<meta property="og:description" content="
+Add the last known alive date (LSTALVDT) to the dataset." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +144,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +169,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,15 +194,21 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Derive Last Known Alive Date</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_var_lstalvdt.R'><code>R/derive_var_lstalvdt.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_var_lstalvdt.R'><code>R/derive_var_lstalvdt.R</code></a></small>
     <div class="hidden name"><code>derive_var_lstalvdt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add the last known alive date (<code>LSTALVDT</code>) to the dataset.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#questioning'><img src='figures/lifecycle-questioning.svg' alt='[Questioning]' /></a></p>
+<p>Add the last known alive date (<code>LSTALVDT</code>) to the dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>derive_var_lstalvdt</span>(<span class='no'>dataset</span>, <span class='no'>...</span>, <span class='kw'>subject_keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>))</pre>
+    <pre class="usage"><span class='fu'>derive_var_lstalvdt</span>(
+  <span class='no'>dataset</span>,
+  <span class='no'>...</span>,
+  <span class='no'>source_datasets</span>,
+  <span class='kw'>subject_keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,12 +216,17 @@
     <tr>
       <th>dataset</th>
       <td><p>Input dataset</p>
-<p>The <code>USUBJID</code> variable is expected.</p></td>
+<p>The variables specified by <code>subject_keys</code> are required.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Source of known alive dates. A <code><a href='lstalvdt_source.html'>lstalvdt_source()</a></code> object is
+      <td><p>Source(s) of known alive dates. One or more <code><a href='lstalvdt_source.html'>lstalvdt_source()</a></code> objects are
 expected.</p></td>
+    </tr>
+    <tr>
+      <th>source_datasets</th>
+      <td><p>A named <code>list</code> containing datasets in which to search for the
+last known alive date</p></td>
     </tr>
     <tr>
       <th>subject_keys</th>
@@ -255,24 +270,27 @@ merged to the input dataset.</p></li>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"adsl"</span>)
 
 <span class='no'>ae_start</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"ae"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
 )
 <span class='no'>ae_end</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"ae"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>
 )
 <span class='no'>lb_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>lb</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"lb"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>LBDTC</span>,
   <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>
 )
-<span class='no'>adsl_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>adsl</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>)
+<span class='no'>adsl_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(<span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"adsl"</span>, <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>)
 
 <span class='no'>dm</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_var_lstalvdt</span>(<span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_var_lstalvdt</span>(
+    <span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>,
+    <span class='kw'>source_datasets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>adsl</span> <span class='kw'>=</span> <span class='no'>adsl</span>, <span class='kw'>ae</span> <span class='kw'>=</span> <span class='no'>ae</span>, <span class='kw'>lb</span> <span class='kw'>=</span> <span class='no'>lb</span>)
+  ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>LSTALVDT</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 2
 #&gt;    USUBJID     LSTALVDT  
 #&gt;    &lt;chr&gt;       &lt;date&gt;    
@@ -289,7 +307,7 @@ merged to the input dataset.</p></li>
 #&gt; # … with 296 more rows</div><div class='input'>
 <span class='co'># derive last alive date and traceability variables</span>
 <span class='no'>ae_start</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"ae"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>AESTDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
@@ -300,7 +318,7 @@ merged to the input dataset.</p></li>
 )
 
 <span class='no'>ae_end</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>ae</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"ae"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>AEENDTC</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='st'>"first"</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
@@ -310,7 +328,7 @@ merged to the input dataset.</p></li>
   )
 )
 <span class='no'>lb_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>lb</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"lb"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>LBDTC</span>,
   <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='no'>LBDTC</span>) <span class='kw'>&gt;=</span> <span class='fl'>10</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
@@ -321,7 +339,7 @@ merged to the input dataset.</p></li>
 )
 
 <span class='no'>adsl_date</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='lstalvdt_source.html'>lstalvdt_source</a></span>(
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='no'>adsl</span>,
+  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"adsl"</span>,
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>TRTEDT</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
     <span class='kw'>LALVDOM</span> <span class='kw'>=</span> <span class='st'>"ADSL"</span>,
@@ -331,7 +349,10 @@ merged to the input dataset.</p></li>
 )
 
 <span class='no'>dm</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_var_lstalvdt</span>(<span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>derive_var_lstalvdt</span>(
+    <span class='no'>ae_start</span>, <span class='no'>ae_end</span>, <span class='no'>lb_date</span>, <span class='no'>adsl_date</span>,
+    <span class='kw'>source_datasets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>adsl</span> <span class='kw'>=</span> <span class='no'>adsl</span>, <span class='kw'>ae</span> <span class='kw'>=</span> <span class='no'>ae</span>, <span class='kw'>lb</span> <span class='kw'>=</span> <span class='no'>lb</span>)
+  ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>LSTALVDT</span>, <span class='no'>LALVDOM</span>, <span class='no'>LALVSEQ</span>, <span class='no'>LALVVAR</span>)</div><div class='output co'>#&gt; # A tibble: 306 x 5
 #&gt;    USUBJID     LSTALVDT   LALVDOM LALVSEQ LALVVAR
 #&gt;    &lt;chr&gt;       &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  
@@ -357,7 +378,7 @@ merged to the input dataset.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -374,7 +395,7 @@ merged to the input dataset.</p></li>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

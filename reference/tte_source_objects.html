@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +143,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +168,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,7 +193,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Pre-Defined Time-to-Event Source Objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/tte_sources.R'><code>R/tte_sources.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/tte_sources.R'><code>R/tte_sources.R</code></a></small>
     <div class="hidden name"><code>tte_source_objects.Rd</code></div>
     </div>
 
@@ -226,6 +229,17 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>censor_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
+<p>An object of class <code>event_source</code> (inherits from <code>tte_source</code>, <code>source</code>, <code>list</code>) of length 5.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>To see the definition of the various objects simply print the object in the
@@ -245,7 +259,7 @@ R console, e.g. <code><a href='https://rdrr.io/r/base/print.html'>print(death_ev
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -262,7 +276,7 @@ R console, e.g. <code><a href='https://rdrr.io/r/base/print.html'>print(death_ev
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

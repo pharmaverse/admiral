@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -142,6 +142,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -164,7 +167,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -203,7 +206,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-derivations" class="hasAnchor"><a href="#section-derivations" class="anchor"></a>Derivations</h2>
-          <p class="section-desc"><p>Derivations add one ore more variables or parameters to the input dataset and return the extended dataset.</p></p>
+          <p class="section-desc"><p>Derivations add one or more variables or parameters to the input dataset and return the extended dataset.</p></p>
         </th>
       </tr>
       
@@ -276,13 +279,19 @@
         <td>
           <p><code><a href="derive_param_bsa.html">derive_param_bsa()</a></code> </p>
         </td>
-        <td><p>Adds a parameter for BSA (Body Surface Area) using the specified method</p></td>
+        <td><p>Adds a Parameter for BSA (Body Surface Area) Using the Specified Method</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="derive_param_doseint.html">derive_param_doseint()</a></code> </p>
         </td>
         <td><p>Adds a Parameter for Dose Intensity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_exposure.html">derive_param_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
       </tr><tr>
         
         <td>
@@ -300,7 +309,7 @@
         <td>
           <p><code><a href="derive_param_rr.html">derive_param_rr()</a></code> </p>
         </td>
-        <td><p>Adds a parameter for derived RR</p></td>
+        <td><p>Adds a Parameter for Derived RR</p></td>
       </tr><tr>
         
         <td>
@@ -340,6 +349,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_agegr_fda.html">derive_var_agegr_fda()</a></code> <code><a href="derive_var_agegr_fda.html">derive_var_agegr_ema()</a></code> </p>
+        </td>
+        <td><p>Derive Age Groups</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_anrind.html">derive_var_anrind()</a></code> </p>
         </td>
         <td><p>Derive Reference Range Indicator</p></td>
@@ -360,7 +375,7 @@
         <td>
           <p><code><a href="derive_var_base.html">derive_var_base()</a></code> </p>
         </td>
-        <td><p>Derive BASE Variable</p></td>
+        <td><p>Derive Baseline Variables</p></td>
       </tr><tr>
         
         <td>
@@ -382,15 +397,57 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_disposition_dt.html">derive_var_disposition_dt()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_disposition_status.html">derive_var_disposition_status()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Status at a Specific Timepoint</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_dthcaus.html">derive_var_dthcaus()</a></code> </p>
         </td>
         <td><p>Derive Death Cause</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> </p>
+        </td>
+        <td><p>Add a Variable Flagging the First or Last Observation Within Each By Group</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose Amount</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose Date-Time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose with User-Defined Groupings</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_lstalvdt.html">derive_var_lstalvdt()</a></code> </p>
         </td>
         <td><p>Derive Last Known Alive Date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_obs_number.html">derive_var_obs_number()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Numbering the Observations Within Each By Group</p></td>
       </tr><tr>
         
         <td>
@@ -424,6 +481,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_worst_flag.html">derive_var_worst_flag()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_vars_aage.html">derive_vars_aage()</a></code> </p>
         </td>
         <td><p>Derive Analysis Age</p></td>
@@ -433,6 +496,12 @@
           <p><code><a href="derive_vars_atc.html">derive_vars_atc()</a></code> </p>
         </td>
         <td><p>Derive ATC Class Variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Reason at a Specific Timepoint</p></td>
       </tr><tr>
         
         <td>
@@ -466,6 +535,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_dy.html">derive_vars_dy()</a></code> </p>
+        </td>
+        <td><p>Derive Relative Day Variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_vars_last_dose.html">derive_vars_last_dose()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_vars_query.html">derive_vars_query()</a></code> </p>
         </td>
         <td><p>Derive Query Variables</p></td>
@@ -486,7 +567,7 @@
         <td>
           <p><code><a href="derive_worst_flag.html">derive_worst_flag()</a></code> </p>
         </td>
-        <td><p>Adds a Variable Flagging the maximal / minimal value within a group of observations</p></td>
+        <td><p>Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -551,6 +632,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="convert_date_to_dtm.html">convert_date_to_dtm()</a></code> </p>
+        </td>
+        <td><p>Convert a Date into a Datetime Object</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> </p>
         </td>
         <td><p>Convert a Date Character Vector into a Date Object</p></td>
@@ -571,7 +658,7 @@
         <td>
           <p><code><a href="format_reason_default.html">format_reason_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition reason</p></td>
+        <td><p>Default Format for the Disposition Reason</p></td>
       </tr><tr>
         
         <td>
@@ -633,6 +720,42 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_extreme_flag.html">derive_var_extreme_flag()</a></code> </p>
+        </td>
+        <td><p>Add a Variable Flagging the First or Last Observation Within Each By Group</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_amt.html">derive_var_last_dose_amt()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose Amount</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_date.html">derive_var_last_dose_date()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose Date-Time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_last_dose_grp.html">derive_var_last_dose_grp()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose with User-Defined Groupings</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_obs_number.html">derive_var_obs_number()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Numbering the Observations Within Each By Group</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_worst_flag.html">derive_var_worst_flag()</a></code> </p>
+        </td>
+        <td><p>Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_vars_dt.html">derive_vars_dt()</a></code> </p>
         </td>
         <td><p>Derive/Impute a Date from a Date Character Vector</p></td>
@@ -663,6 +786,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_last_dose.html">derive_vars_last_dose()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_vars_transposed.html">derive_vars_transposed()</a></code> </p>
         </td>
         <td><p>Derive Variables by Transposing and Merging a Second Dataset</p></td>
@@ -671,7 +800,7 @@
         <td>
           <p><code><a href="derive_worst_flag.html">derive_worst_flag()</a></code> </p>
         </td>
-        <td><p>Adds a Variable Flagging the maximal / minimal value within a group of observations</p></td>
+        <td><p>Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations</p></td>
       </tr><tr>
         
         <td>
@@ -703,6 +832,12 @@
           <p><code><a href="derive_derived_param.html">derive_derived_param()</a></code> </p>
         </td>
         <td><p>Adds a Parameter Computed from the Analysis Value of Other Parameters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_exposure.html">derive_param_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
       </tr><tr>
         
         <td>
@@ -750,7 +885,7 @@
         <td>
           <p><code><a href="derive_var_base.html">derive_var_base()</a></code> </p>
         </td>
-        <td><p>Derive BASE Variable</p></td>
+        <td><p>Derive Baseline Variables</p></td>
       </tr><tr>
         
         <td>
@@ -840,6 +975,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_var_disposition_dt.html">derive_var_disposition_dt()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Date</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_disposition_status.html">derive_var_disposition_status()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Status at a Specific Timepoint</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="derive_var_dthcaus.html">derive_var_dthcaus()</a></code> </p>
         </td>
         <td><p>Derive Death Cause</p></td>
@@ -870,6 +1017,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_disposition_reason.html">derive_vars_disposition_reason()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Reason at a Specific Timepoint</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="format_eoxxstt_default.html">format_eoxxstt_default()</a></code> </p>
         </td>
         <td><p>Default Format for Disposition Status</p></td>
@@ -878,7 +1031,7 @@
         <td>
           <p><code><a href="format_reason_default.html">format_reason_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition reason</p></td>
+        <td><p>Default Format for the Disposition Reason</p></td>
       </tr>
     </tbody><tbody>
       
@@ -915,7 +1068,7 @@
         <td>
           <p><code><a href="derive_param_rr.html">derive_param_rr()</a></code> </p>
         </td>
-        <td><p>Adds a parameter for derived RR</p></td>
+        <td><p>Adds a Parameter for Derived RR</p></td>
       </tr>
     </tbody><tbody>
       
@@ -946,7 +1099,7 @@
         <td>
           <p><code><a href="derive_param_bsa.html">derive_param_bsa()</a></code> </p>
         </td>
-        <td><p>Adds a parameter for BSA (Body Surface Area) using the specified method</p></td>
+        <td><p>Adds a Parameter for BSA (Body Surface Area) Using the Specified Method</p></td>
       </tr><tr>
         
         <td>
@@ -972,6 +1125,12 @@
           <p><code><a href="derive_param_doseint.html">derive_param_doseint()</a></code> </p>
         </td>
         <td><p>Adds a Parameter for Dose Intensity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_param_exposure.html">derive_param_exposure()</a></code> </p>
+        </td>
+        <td><p>Add an Aggregated Parameter and Derive the Associated Start and End Dates</p></td>
       </tr><tr>
         
         <td>
@@ -1071,6 +1230,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="convert_date_to_dtm.html">convert_date_to_dtm()</a></code> </p>
+        </td>
+        <td><p>Convert a Date into a Datetime Object</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="convert_dtc_to_dt.html">convert_dtc_to_dt()</a></code> </p>
         </td>
         <td><p>Convert a Date Character Vector into a Date Object</p></td>
@@ -1104,6 +1269,12 @@
           <p><code><a href="derive_var_astdy.html">derive_var_astdy()</a></code> </p>
         </td>
         <td><p>Derive Analysis Start Relative Day</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="derive_var_disposition_dt.html">derive_var_disposition_dt()</a></code> </p>
+        </td>
+        <td><p>Derive a Disposition Date</p></td>
       </tr><tr>
         
         <td>
@@ -1155,6 +1326,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_dy.html">derive_vars_dy()</a></code> </p>
+        </td>
+        <td><p>Derive Relative Day Variables</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="impute_dtc.html">impute_dtc()</a></code> </p>
         </td>
         <td><p>Impute Partial Date(-time) Portion of a <code>'--DTC'</code> Variable</p></td>
@@ -1182,7 +1359,7 @@
         <td>
           <p><code><a href="dthcaus_source.html">dthcaus_source()</a></code> </p>
         </td>
-        <td><p>Create an <code>dthcaus_source</code> object</p></td>
+        <td><p>Create a <code>dthcaus_source</code> Object</p></td>
       </tr><tr>
         
         <td>
@@ -1297,6 +1474,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="derive_vars_last_dose.html">derive_vars_last_dose()</a></code> </p>
+        </td>
+        <td><p>Derive Last Dose</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="extract_unit.html">extract_unit()</a></code> </p>
         </td>
         <td><p>Extract Unit From Parameter Description</p></td>
@@ -1317,7 +1500,7 @@
         <td>
           <p><code><a href="format_reason_default.html">format_reason_default()</a></code> </p>
         </td>
-        <td><p>Default format for the disposition reason</p></td>
+        <td><p>Default Format for the Disposition Reason</p></td>
       </tr><tr>
         
         <td>
@@ -1459,7 +1642,7 @@
         <td>
           <p><code><a href="assert_param_does_not_exist.html">assert_param_does_not_exist()</a></code> </p>
         </td>
-        <td><p>Asserts That a Parameter Does not Exist in the Dataset</p></td>
+        <td><p>Asserts That a Parameter Does Not Exist in the Dataset</p></td>
       </tr><tr>
         
         <td>
@@ -1483,7 +1666,7 @@
         <td>
           <p><code><a href="assert_valid_queries.html">assert_valid_queries()</a></code> </p>
         </td>
-        <td><p>Verify if a dataset has the required format as queries dataset.</p></td>
+        <td><p>Verify if a Dataset Has the Required Format as Queries Dataset.</p></td>
       </tr><tr>
         
         <td>
@@ -1587,7 +1770,7 @@
         <td>
           <p><code><a href="warn_if_invalid_dtc.html">warn_if_invalid_dtc()</a></code> </p>
         </td>
-        <td><p>Warn If a vector contains unknown datetime format</p></td>
+        <td><p>Warn If a Vector Contains Unknown Datetime Format</p></td>
       </tr><tr>
         
         <td>
@@ -1624,7 +1807,7 @@
         <td>
           <p><code><a href="convert_dtm_to_dtc.html">convert_dtm_to_dtc()</a></code> </p>
         </td>
-        <td><p>Helper function to convert date (or date-time) objects to characters of dtc format
+        <td><p>Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
 (-DTC type of variable)</p></td>
       </tr><tr>
         
@@ -1649,7 +1832,7 @@
         <td>
           <p><code><a href="extend_source_datasets.html">extend_source_datasets()</a></code> </p>
         </td>
-        <td><p>Add By Groups to all Datasets if Necessary</p></td>
+        <td><p>Add By Groups to All Datasets if Necessary</p></td>
       </tr><tr>
         
         <td>
@@ -1673,7 +1856,13 @@
         <td>
           <p><code><a href="get_constant_vars.html">get_constant_vars()</a></code> </p>
         </td>
-        <td><p>Get constant variables</p></td>
+        <td><p>Get Constant Variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_source_vars.html">get_source_vars()</a></code> </p>
+        </td>
+        <td><p>Get Source Variables from a List of Quosures</p></td>
       </tr><tr>
         
         <td>
@@ -1686,6 +1875,12 @@
           <p><code><a href="quo_c.html">quo_c()</a></code> </p>
         </td>
         <td><p>Concatenate One or More Quosure(s)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="replace_values_by_names.html">replace_values_by_names()</a></code> </p>
+        </td>
+        <td><p>Replace Quosure Value with Name</p></td>
       </tr><tr>
         
         <td>
@@ -1725,7 +1920,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -1742,7 +1937,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

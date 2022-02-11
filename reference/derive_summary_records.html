@@ -89,7 +89,7 @@ records has been added to a dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -146,6 +146,9 @@ records has been added to a dataset." />
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -168,7 +171,7 @@ records has been added to a dataset." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -193,7 +196,7 @@ records has been added to a dataset." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add New Records Within By Groups Using Aggregation Functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_summary_records.R'><code>R/derive_summary_records.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_summary_records.R'><code>R/derive_summary_records.R</code></a></small>
     <div class="hidden name"><code>derive_summary_records.Rd</code></div>
     </div>
 
@@ -210,9 +213,7 @@ records has been added to a dataset.</p>
   <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>analysis_var</span>,
   <span class='no'>summary_fun</span>,
-  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>(),
-  <span class='kw'>filter_rows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
+  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -235,9 +236,9 @@ summary calculation. By default, filtering expressions are computed within
 <code>by_vars</code> as this will help when an aggregating, lagging, or ranking
 function is involved.</p>
 <p>For example,</p><ul>
-<li><p><code>filter_rows = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all AVAL
+<li><p><code>filter = (AVAL &gt; mean(AVAL, na.rm = TRUE))</code> will filter all AVAL
 values greater than mean of AVAL with in <code>by_vars</code>.</p></li>
-<li><p><code>filter_rows = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
+<li><p><code>filter = (dplyr::n() &gt; 2)</code> will filter n count of <code>by_vars</code> greater
 than 2.</p></li>
 </ul></td>
     </tr>
@@ -263,14 +264,6 @@ value or NA.
 (e.g.  <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")</a></code>).
 More general expression are not allowed.</p></li>
 </ul></td>
-    </tr>
-    <tr>
-      <th>fns</th>
-      <td><p><em>Deprecated</em>, please use <code>analysis_var</code> and <code>summary_fun</code> instead.</p></td>
-    </tr>
-    <tr>
-      <th>filter_rows</th>
-      <td><p><em>Deprecated</em>, please use <code>filter</code> instead.</p></td>
     </tr>
     </table>
 
@@ -421,7 +414,7 @@ will be set to <code>NA</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -438,7 +431,7 @@ will be set to <code>NA</code>.</p>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

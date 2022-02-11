@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -143,6 +143,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -165,7 +168,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -190,7 +193,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create an <code>lstalvdt_source</code> object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/derive_var_lstalvdt.R'><code>R/derive_var_lstalvdt.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/derive_var_lstalvdt.R'><code>R/derive_var_lstalvdt.R</code></a></small>
     <div class="hidden name"><code>lstalvdt_source.Rd</code></div>
     </div>
 
@@ -199,20 +202,22 @@
     </div>
 
     <pre class="usage"><span class='fu'>lstalvdt_source</span>(
-  <span class='no'>dataset</span>,
+  <span class='no'>dataset_name</span>,
   <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>date</span>,
   <span class='kw'>date_imputation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>preserve</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>traceability_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>date_var</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
+  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dataset</th>
-      <td><p>A data.frame containing a source dataset.</p></td>
+      <th>dataset_name</th>
+      <td><p>The name of the dataset, i.e. a string, used to search for
+the last known alive date.</p></td>
     </tr>
     <tr>
       <th>filter</th>
@@ -230,13 +235,21 @@ dates can be specified. An unquoted symbol is expected.</p></td>
 See <code>date_imputation</code> parameter of <code><a href='impute_dtc.html'>impute_dtc()</a></code> for valid values.</p></td>
     </tr>
     <tr>
+      <th>preserve</th>
+      <td><p>Preserve day if month is missing and day is present</p>
+<p>For example <code>"2019---07"</code> would return <code>"2019-06-07</code> if <code>preserve = TRUE</code>
+(and <code>date_imputation = "MID"</code>).</p>
+<p>Permitted Values: <code>TRUE</code>, <code>FALSE</code></p>
+<p>Default: <code>FALSE</code></p></td>
+    </tr>
+    <tr>
       <th>traceability_vars</th>
       <td><p>A named list returned by <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code> defining the
 traceability variables, e.g. <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")</a></code>. The values must be a symbol, a character string, or <code>NA</code>.</p></td>
     </tr>
     <tr>
-      <th>date_var</th>
-      <td><p>Deprecated, please use <code>date</code> instead.</p></td>
+      <th>dataset</th>
+      <td><p>Deprecated, please use <code>dataset_name</code> instead.</p></td>
     </tr>
     </table>
 
@@ -255,7 +268,7 @@ traceability variables, e.g. <code><a href='https://dplyr.tidyverse.org/referenc
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -272,7 +285,7 @@ traceability variables, e.g. <code><a href='https://dplyr.tidyverse.org/referenc
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

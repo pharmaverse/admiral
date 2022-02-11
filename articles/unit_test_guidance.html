@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -119,7 +122,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -146,7 +149,7 @@
       <h1 data-toc-skip>Unit Test Guidance</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/unit_test_guidance.Rmd"><code>vignettes/unit_test_guidance.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/unit_test_guidance.Rmd"><code>vignettes/unit_test_guidance.Rmd</code></a></small>
       <div class="hidden name"><code>unit_test_guidance.Rmd</code></div>
 
     </div>
@@ -218,6 +221,11 @@
 <a href="#plan-your-unit-tests" class="anchor"></a>Plan your Unit Tests</h2>
 <p>Start by considering the derivation rule you are testing and the possible arguments/flexibilities of your function code. Then plan which scenarios you will test. These can either involve generating different input test cases or feeding them into different calls of your function.</p>
 </div>
+<div id="test-coverage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#test-coverage" class="anchor"></a>Test coverage</h2>
+<p>Unit tests should cover the functionality of the function. If another function g is called within a function f, the unit tests of f should not test the functionality of g. This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.</p>
+</div>
 <div id="tests-should-be-robust-to-cover-realistic-data-scenarios" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tests-should-be-robust-to-cover-realistic-data-scenarios" class="anchor"></a>Tests Should be Robust to Cover Realistic Data Scenarios</h2>
@@ -226,7 +234,7 @@
 <div id="testing-should-cover-possible-arguments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#testing-should-cover-possible-arguments" class="anchor"></a>Testing Should Cover Possible Arguments</h2>
-<p>For the different calls of your function, consider how the user might apply your function and test a variety of possible calls, whilst still remembering the tips above that tests should be fast and simple. This is only needed in cases where the complexity and level of flexibility of your function justifies it, e.g. see the test script: <a href="https://github.com/Roche-GSK/admiral/blob/master/tests/testthat/test-derive_extreme_flag.R" class="uri">https://github.com/Roche-GSK/admiral/blob/master/tests/testthat/test-derive_extreme_flag.R</a>.</p>
+<p>For the different calls of your function, consider how the user might apply your function and test a variety of possible calls, whilst still remembering the tips above that tests should be fast and simple. This is only needed in cases where the complexity and level of flexibility of your function justifies it, e.g. see the test script: <a href="https://github.com/pharmaverse/admiral/blob/main/tests/testthat/test-derive_var_extreme_flag.R" class="uri">https://github.com/pharmaverse/admiral/blob/main/tests/testthat/test-derive_var_extreme_flag.R</a>.</p>
 </div>
 <div id="exported-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -236,9 +244,9 @@
 <div id="set-up-the-test-script" class="section level2">
 <h2 class="hasAnchor">
 <a href="#set-up-the-test-script" class="anchor"></a>Set up the Test Script</h2>
-<p>Within {admiral} folder <a href="https://github.com/Roche-GSK/admiral/tree/master/tests/testthat" class="uri">https://github.com/Roche-GSK/admiral/tree/master/tests/testthat</a>, add a script with the naming convention “test-&lt;script_containing_function&gt;.R”., the unit test script can be created from the console also, as follows:</p>
-<pre><code><a href="https://usethis.r-lib.org/reference/use_testthat.html">usethis::use_test("&lt;script_containing_function&gt;")</a></code></pre>
-<p>and use the following format:</p>
+<p>Within {admiral} folder <a href="https://github.com/pharmaverse/admiral/tree/main/tests/testthat" class="uri">https://github.com/pharmaverse/admiral/tree/main/tests/testthat</a>, add a script with the naming convention “test-&lt;script_containing_function&gt;.R”., the unit test script can be created from the console also, as follows:</p>
+<pre><code><a href="https://usethis.r-lib.org/reference/use_r.html">usethis::use_test("&lt;script_containing_function&gt;")</a></code></pre>
+<p>the testing framework used is testthat and has the following format :</p>
 <pre><code>test_that("&lt;function_name&gt; Test 1: &lt;Explanation of the test&gt;", {
   input &lt;- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
@@ -248,10 +256,11 @@
 
   expected_output &lt;- mutate(input, outputvar = c(&lt;Add Expected Outputs&gt;))
 
-  expect_equal(&lt;function name&gt;(input), expected_output)
+  expect_dfs_equal(&lt;function name&gt;(input), expected_output)
+  
 })</code></pre>
 <p>For example, if you are testing a function called my_new_func that is contained in script all_funcs.R then from console use:</p>
-<pre><code><a href="https://usethis.r-lib.org/reference/use_testthat.html">usethis::use_test("all_funcs")</a></code></pre>
+<pre><code><a href="https://usethis.r-lib.org/reference/use_r.html">usethis::use_test("all_funcs")</a></code></pre>
 <p>Open the newly created file “test-all_funcs.R” and use the following format:</p>
 <pre><code>test_that("my_new_func Test 1: &lt;Explanation of the test&gt;", {
   input &lt;- tibble::tribble(
@@ -262,10 +271,17 @@
 
   expected_output &lt;- mutate(input, outputvar = c(&lt;Add Expected Outputs&gt;))
 
-  expect_equal(&lt;function name&gt;(input), expected_output)
+  expect_dfs_equal(&lt;function name&gt;(input), expected_output)
 })</code></pre>
 <p><strong>Note</strong>: When comparing datasets in {admiral} we use function <code><a href="../reference/expect_dfs_equal.html">expect_dfs_equal()</a></code>.</p>
-<p>Ensure you give a meaningful explanation of the test in the testthat call, as these will be compiled in the package validation report. Having the name of the function and test ID included in title will also help with tracability.</p>
+<p>The input and expected output for the unit tests must follow the following rules:</p>
+<ul>
+<li>Input and output should be as simple as possible.</li>
+<li>Values should be hard-coded whenever possible.</li>
+<li>If values need to be derived, only unit tested functions can be used.</li>
+</ul>
+<p>If a dataset needs to be created for testing purpose, it should be done so using the function <code><a href="https://tibble.tidyverse.org/reference/tribble.html">tibble::tribble()</a></code>. Make sure to align columns as well. This ensures quick code readability.</p>
+<p>Ensure you give a meaningful explanation of the test in the testthat call, as these will be compiled in the package validation report. Having the name of the function and test ID included in title will also help with traceability.</p>
 <p>Once you have tested your unit test program, you can run all unit tests from the console, as follows.</p>
 <pre><code><a href="https://devtools.r-lib.org/reference/test.html">devtools::test()</a></code></pre>
 </div>
@@ -293,7 +309,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -309,7 +325,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

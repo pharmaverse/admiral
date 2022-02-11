@@ -88,7 +88,7 @@ NA. More general expression are not allowed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -145,6 +145,9 @@ NA. More general expression are not allowed." />
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -167,7 +170,7 @@ NA. More general expression are not allowed." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -192,7 +195,7 @@ NA. More general expression are not allowed." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Is an Argument a Variable-Value List?</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Roche-GSK/admiral/blob/master/R/assertions.R'><code>R/assertions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/pharmaverse/admiral/blob/main/R/assertions.R'><code>R/assertions.R</code></a></small>
     <div class="hidden name"><code>assert_varval_list.Rd</code></div>
     </div>
 
@@ -206,6 +209,7 @@ variable-value pairs. The value can be a symbol, a string, a numeric, or
   <span class='no'>arg</span>,
   <span class='kw'>required_elements</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>accept_expr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>accept_var</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>optional</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
@@ -223,6 +227,11 @@ variable-value pairs. The value can be a symbol, a string, a numeric, or
     <tr>
       <th>accept_expr</th>
       <td><p>Should expressions on the right hand side be accepted?</p></td>
+    </tr>
+    <tr>
+      <th>accept_var</th>
+      <td><p>Should unnamed variable names (e.g. <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars(USUBJID)</a></code>) on the
+right hand side be accepted?</p></td>
     </tr>
     <tr>
       <th>optional</th>
@@ -251,7 +260,7 @@ is <code>NULL</code> then an error is thrown.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -268,7 +277,7 @@ is <code>NULL</code> then an error is thrown.</p></td>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

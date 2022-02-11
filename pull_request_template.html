@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -142,6 +142,9 @@
       <a href="articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -164,7 +167,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -192,7 +195,7 @@
     </div>
 
 
-<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://roche-gsk.github.io/admiral/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
+<p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiral/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
 <ul>
 <li>
@@ -201,17 +204,17 @@ Code is formatted according to the <a href="https://style.tidyverse.org/">tidyve
 </li>
 <li>
 <input type="checkbox" disabled>
-Updated relevant unit tests or have written new unit tests - See <a href="https://roche-gsk.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-">Unit Test Guide</a>
+Updated relevant unit tests or have written new unit tests - See <a href="https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-">Unit Test Guide</a>
 </li>
 <li>
 <input type="checkbox" disabled>
-If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://roche-gsk.github.io/admiral/articles/programming_strategy.html#deprecation-1">deprecation guidance</a>?</li>
+If you removed/replaced any function and/or function parameters, did you fully follow the <a href="https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation-1">deprecation guidance</a>?</li>
 <li>
 <input type="checkbox" disabled>
 Update to all relevant roxygen headers and examples</li>
 <li>
 <input type="checkbox" disabled>
-Run <code>devtools::documents()</code> so all <code>.Rd</code> files in the <code>man</code> folder and the <code>NAMESPACE</code> file in the project root are updated appropriately</li>
+Run <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> so all <code>.Rd</code> files in the <code>man</code> folder and the <code>NAMESPACE</code> file in the project root are updated appropriately</li>
 <li>
 <input type="checkbox" disabled>
 Address any updates needed for vignettes and/or templates</li>
@@ -221,7 +224,7 @@ Update <code>NEWS.md</code>
 </li>
 <li>
 <input type="checkbox" disabled>
-Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://roche-gsk.github.io/admiral/reference/index.html">Reference</a>” page.</li>
+Build admiral site <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code> and check that all affected examples are displayed correctly and that all new functions occur on the “<a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference</a>” page.</li>
 <li>
 <input type="checkbox" disabled>
 Address or fix all lintr warnings and errors - <code><a href="https://rdrr.io/pkg/lintr/man/lint_package.html">lintr::lint_package()</a></code>
@@ -256,7 +259,7 @@ Pat yourself on the back for a job well done! Much love to your accomplishment!<
 
       <footer>
       <div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -273,7 +276,7 @@ Pat yourself on the back for a job well done! Much love to your accomplishment!<
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -119,7 +122,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -146,7 +149,7 @@
       <h1 data-toc-skip>Queries Dataset Documentation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/queries_dataset.Rmd"><code>vignettes/queries_dataset.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/queries_dataset.Rmd"><code>vignettes/queries_dataset.Rmd</code></a></small>
       <div class="hidden name"><code>queries_dataset.Rmd</code></div>
 
     </div>
@@ -157,8 +160,8 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping.</p>
-<p>To help with the derivation of these variables, the admiral function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> can be used. This function takes as input the dataset (<code>dataset</code>) where the grouping must occur (e.g <code>ADAE</code>) and a dataset containing the required information to perform the derivation of the grouping variables (<code>dataset_queries</code>).</p>
-<p>Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the <code>dataset_queries</code> argument of the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function should be created outside of admiral in a specific format so that it can be passed in the function.</p>
+<p>To help with the derivation of these variables, the {admiral} function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> can be used. This function takes as input the dataset (<code>dataset</code>) where the grouping must occur (e.g <code>ADAE</code>) and a dataset containing the required information to perform the derivation of the grouping variables (<code>dataset_queries</code>).</p>
+<p>Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the <code>dataset_queries</code> argument of the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function should be created outside of {admiral} in a specific format so that it can be passed in the function.</p>
 <p>This vignette describes the expected structure and content of the dataset passed to the <code>dataset_queries</code> argument in the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function.</p>
 </div>
 <div id="structure-of-the-query-dataset" class="section level1">
@@ -246,8 +249,11 @@
 <li><p><code>QUERY_NAME</code> must be a non missing character string and it must be unique within <code>VAR_PREFIX</code>.</p></li>
 <li>
 <p><code>TERM_LEVEL</code> must be a non missing character string.</p>
-<p>Each value in <code>TERM_LEVEL</code> represents a variable from <code>dataset</code> used to define the grouping variables (e.g. <code>AEDECOD</code>,<code>AEBODSYS</code>, <code>AELLTCD</code>). The function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> will check that each value given in <code>TERM_LEVEL</code> has a corresponding variable in the input <code>dataset</code> and issue an error otherwise.</p>
-<p>Different <code>TERM_LEVEL</code> variables may be specified within a <code>VAR_PREFIX</code>.</p>
+<ul>
+<li><p>Each value in <code>TERM_LEVEL</code> represents a variable from <code>dataset</code> used to define the grouping variables (e.g. <code>AEDECOD</code>,<code>AEBODSYS</code>, <code>AELLTCD</code>).</p></li>
+<li><p>The function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> will check that each value given in <code>TERM_LEVEL</code> has a corresponding variable in the input <code>dataset</code> and issue an error otherwise.</p></li>
+<li><p>Different <code>TERM_LEVEL</code> variables may be specified within a <code>VAR_PREFIX</code>.</p></li>
+</ul>
 </li>
 <li><p><code>TERM_NAME</code> must be a character string. This <strong>must</strong> be populated if <code>TERM_ID</code> is missing.</p></li>
 <li><p><code>TERM_ID</code> must be an integer. This <strong>must</strong> be populated if <code>TERM_NAME</code> is missing.</p></li>
@@ -259,16 +265,20 @@
 <ul>
 <li>
 <p><code>VAR_PREFIX</code> will be used to create the grouping variable appending the suffix “NAM”. This variable will now be referred to as <code>ABCzzNAM</code>: the name of the grouping variable.</p>
-<p>E.g. <code>VAR_PREFIX == "SMQ01"</code> will create the <code>SMQ01NAM</code> variable.</p>
-<p>For each <code>VAR_PREFIX</code>, a new <code>ABCzzNAM</code> variable is created in <code>dataset</code>.</p>
+<ul>
+<li><p>E.g. <code>VAR_PREFIX == "SMQ01"</code> will create the <code>SMQ01NAM</code> variable.</p></li>
+<li><p>For each <code>VAR_PREFIX</code>, a new <code>ABCzzNAM</code> variable is created in <code>dataset</code>.</p></li>
+</ul>
 </li>
 <li><p><span id="query_name"><code>QUERY_NAME</code></span> will be used to populate the corresponding <code>ABCzzNAM</code> variable.</p></li>
 <li><p><code>TERM_LEVEL</code> will be used to identify the variables from <code>dataset</code> used to perform the grouping (e.g. <code>AEDECOD</code>,<code>AEBODSYS</code>, <code>AELLTCD</code>).</p></li>
 <li><p><code>TERM_NAME</code> (for character variables), <code>TERM_ID</code> (for numeric variables) will be used to identify the records meeting the criteria in <code>dataset</code> based on the variable defined in <code>TERM_LEVEL</code>.</p></li>
 <li>
 <p><strong>Result:</strong></p>
-<p>For each record in <code>dataset</code>, where the variable defined by <code>TERM_LEVEL</code> match a term from the <code>TERM_NAME</code> (for character variables) or <code>TERM_ID</code> (for numeric variables) in the <code>datasets_queries</code>, <code>ABCzzNAM</code> is populated with <code>QUERY_NAME</code>.</p>
-<p>Note: The type (numeric or character) of the variable defined in <code>TERM_LEVEL</code> is checked in <code>dataset</code>. If the variable is a character variable (e.g. <code>AEDECOD</code>), it is expected that <code>TERM_NAME</code> is populated, if it is a numeric variable (e.g. <code>AEBDSYCD</code>), it is expected that <code>TERM_ID</code> is populated, otherwise an error is issued.</p>
+<ul>
+<li><p>For each record in <code>dataset</code>, where the variable defined by <code>TERM_LEVEL</code> match a term from the <code>TERM_NAME</code> (for character variables) or <code>TERM_ID</code> (for numeric variables) in the <code>datasets_queries</code>, <code>ABCzzNAM</code> is populated with <code>QUERY_NAME</code>.</p></li>
+<li><p>Note: The type (numeric or character) of the variable defined in <code>TERM_LEVEL</code> is checked in <code>dataset</code>. If the variable is a character variable (e.g. <code>AEDECOD</code>), it is expected that <code>TERM_NAME</code> is populated, if it is a numeric variable (e.g. <code>AEBDSYCD</code>), it is expected that <code>TERM_ID</code> is populated, otherwise an error is issued.</p></li>
+</ul>
 </li>
 </ul>
 </div>
@@ -510,7 +520,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -526,7 +536,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

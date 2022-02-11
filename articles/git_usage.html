@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -119,7 +122,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -146,7 +149,7 @@
       <h1 data-toc-skip>Guidance for git and GitHub Usage</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/git_usage.Rmd"><code>vignettes/git_usage.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/git_usage.Rmd"><code>vignettes/git_usage.Rmd</code></a></small>
       <div class="hidden name"><code>git_usage.Rmd</code></div>
 
     </div>
@@ -156,19 +159,17 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This article will give you an overview of how the admiral project is utilizing the version-control software <code>git</code> and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the admiral project as well as how we use <strong>Feature</strong> branches to address <strong>Issues</strong>. Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of <code>git</code> commands needed to get up and running. Please refer to the <a href="#github_resources">Resource</a> section for more in-depth guidance on using <code>git</code> and GitHub.</p>
+<p>This article will give you an overview of how the <code>{admiral}</code> project is utilizing the version-control software <code>git</code> and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the <code>{admiral}</code> project as well as how we use <strong>Feature</strong> branches to address <strong>Issues</strong>. Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of <code>git</code> commands needed to get up and running. Please refer to the <a href="#github_resources">Resource</a> section for more in-depth guidance on using <code>git</code> and GitHub.</p>
 </div>
 <div id="branches" class="section level1">
 <h1 class="hasAnchor">
 <a href="#branches" class="anchor"></a>Branches</h1>
 <ul>
-<li>The <code>master</code> branch contains the latest <strong>released</strong> version and should not be used for development. You can find the released versions <a href="https://GitHub.com/Roche-GSK/admiral/releases">here</a>
-</li>
-<li>The <code>devel</code> branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the <code>devel</code> branch.</li>
-<li>The <code>gh-pages</code> branches contains the code used to render this website you are looking at right now!</li>
-<li>The <code>master</code>, <code>devel</code> and <code>gh-pages</code> branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator.</li>
-<li>
-<strong>Feature</strong> branches are where actual development related to a specific issue happens. Feature branches are merged into <code>devel</code> once a pull request is merged. Check out the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>.</li>
+<li><p>The <code>main</code> branch contains the latest <strong>released</strong> version and should not be used for development. You can find the released versions <a href="https://GitHub.com/pharmaverse/admiral/releases">here</a></p></li>
+<li><p>The <code>devel</code> branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the <code>devel</code> branch.</p></li>
+<li><p>The <code>gh-pages</code> branches contains the code used to render this website you are looking at right now!</p></li>
+<li><p>The <code>main</code>, <code>devel</code> and <code>gh-pages</code> branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator.</p></li>
+<li><p><strong>Feature</strong> branches are where actual development related to a specific issue happens. Feature branches are merged into <code>devel</code> once a pull request is merged. Check out the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>.</p></li>
 </ul>
 </div>
 <div id="working-with-feature-branches" class="section level1">
@@ -226,6 +227,8 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 <p>We recommend a thorough read through of the articles, <a href="pr_review_guidance.html">Pull Request Review Guidance</a> and the <a href="programming_strategy.html">Programming Strategy</a> for in-depth discussions on a doing a proper Pull Request. Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple <code>git</code> commands in the terminal and on GitHub for doing a Pull Request. We recommend doing the Pull Request in GitHub only and not through the terminal.</p>
 <p>Once all changes are committed, push the updated branch to GitHub:<br><code>git push -u origin &lt;branch_name&gt;</code></p>
 <p>In GitHub, under <strong>Pull requests</strong>, the user will either have a “Compare and pull request” button and/or a “Create Pull Request”. The first button will be created for you if GitHub detects recent changes you have made. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge - as shown in the below picture. Please <strong>pay close attention</strong> to the branch you are merging into!</p>
+<p>The issue must be linked to the pull request in the “Linked issues” field of the Pull Request.</p>
+<p><img src="github_linked_issues.png"><!-- --></p>
 <p>Once you have completed the Pull Request you will see all committed changes are then available for the reviewer. A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request. Pictures are nice too, which are easy to do in GitHub! Use any Screen Capture software and Copy and Paste into your summary.</p>
 <p><img src="github_create_pr.png"><!-- --></p>
 <div id="reviewingclosing-an-issue" class="section level3">
@@ -234,10 +237,11 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 <ul>
 <li>At least one reviewer must approve the Pull Request. Please review the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>, which provides in depth guidance on doing a proper Pull Request.</li>
 <li>The reviewer must ensure that the function follows the programming strategy recommendations.</li>
-<li>Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.</li>
+<li>Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged</li>
 </ul>
-<p>Once the review is completed, and the Pull Request is merged, the branch must be removed: click <strong>Delete branch</strong> in the Pull Request.</p>
-<p><img src="github_delete_branch.png"><!-- --></p>
+<p>Once the review is completed, the reviewer will merge the Pull Request and the feature branch will automatically be deleted.</p>
+<p>After merging the Pull Request the corresponding issue must be moved to the “Sprint Done” column on the “admiral scrum board” by the developer. The issue must not be closed. It will be closed automatically once the <code>devel</code> branch is merged into the <code>main</code> branch.</p>
+<p><img src="github_sprint_done.png"><!-- --></p>
 </div>
 <div id="solving-merge-conflicts-in-the-terminal-on-rstudio" class="section level3">
 <h3 class="hasAnchor">
@@ -293,7 +297,7 @@ git push</code></pre>
 <h1 class="hasAnchor">
 <a href="#github_resources" class="anchor"></a>Resources on using <code>git</code>, GitHub and RStudio</h1>
 <ul>
-<li><a href="https://resources.GitHub.com/whitepapers/GitHub-and-rstudio/">GitHub and RStudio</a></li>
+<li><a href="https://resources.github.com/whitepapers/github-and-rstudio/">GitHub and RStudio</a></li>
 <li><a href="https://happygitwithr.com/">Happy Git and GitHub for the useR</a></li>
 <li><a href="https://r-pkgs.org/git.html">Git and GitHub from the R Package Manual</a></li>
 </ul>
@@ -311,7 +315,7 @@ git push</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -327,7 +331,7 @@ git push</code></pre>
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {

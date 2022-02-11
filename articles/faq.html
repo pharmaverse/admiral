@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -97,6 +97,9 @@
       <a href="../articles/contribution_model.html">Contribution to admiral</a>
     </li>
     <li>
+      <a href="../articles/development_process.html">Development Process</a>
+    </li>
+    <li>
       <a href="../articles/programming_strategy.html">Programming Strategy</a>
     </li>
     <li>
@@ -119,7 +122,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Roche-GSK/admiral/">
+  <a href="https://github.com/pharmaverse/admiral/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -146,7 +149,7 @@
       <h1 data-toc-skip>FAQ</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Roche-GSK/admiral/blob/master/vignettes/faq.Rmd"><code>vignettes/faq.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/faq.Rmd"><code>vignettes/faq.Rmd</code></a></small>
       <div class="hidden name"><code>faq.Rmd</code></div>
 
     </div>
@@ -157,13 +160,13 @@
 <h5 class="hasAnchor">
 <a href="#what-is-admiral" class="anchor"></a><strong>What is admiral</strong>?</h5>
 <ul>
-<li>Think of admiral as a toolbox of modular blocks (R functions) to create analysis derivations:
+<li>Think of <code>{admiral}</code> as a toolbox of modular blocks (R functions) to create analysis derivations:
 <ul>
 <li>each block has a stand alone purpose (each function provides a specific functionality)</li>
 <li>Data Scientists can create their own blocks (create own R functions)</li>
 </ul>
 </li>
-<li>Constructing ADaM dataset should become like building out of blocks that are based on admiral modular functions and user created modular functions.</li>
+<li>Constructing ADaM dataset should become like building out of blocks that are based on <code>{admiral}</code> modular functions and user created modular functions.</li>
 </ul>
 </div>
 <div id="why-did-we-decide-to-start-admiral" class="section level5">
@@ -203,7 +206,7 @@
 <li>e.g. the <code>derive_vars_aage</code> has a parameterized start and end-date and a unit.</li>
 <li>Depending on the parameters results may vary as does the specification.</li>
 <li>Functions serve as a toolbox so the user can create their ADaM according to the requirements.</li>
-<li>The principles, programming strategy and documentation of admiral are considered as a framework for users to contribute.</li>
+<li>The principles, programming strategy and documentation of <code>{admiral}</code> are considered as a framework for users to contribute.</li>
 </ul>
 </li>
 </ul>
@@ -213,17 +216,20 @@
 <a href="#how-does-a-user-know-what-a-function-does-exactly" class="anchor"></a>How does a user <strong>know what a function does</strong> exactly?</h5>
 <ul>
 <li>Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.</li>
-<li>Complex functions potentially have a vignette on the admiral homepage to provide more details.</li>
-<li>admiral does not provide a link to an explicit specification in the define.xml.</li>
+<li>Complex functions potentially have a vignette on the <code>{admiral}</code> homepage to provide more details.</li>
+<li>
+<code>{admiral}</code> does not provide a link to an explicit specification in the define.xml.</li>
 </ul>
 </div>
 <div id="would-admiral-create-a-whole-adam-dataset" class="section level5">
 <h5 class="hasAnchor">
-<a href="#would-admiral-create-a-whole-adam-dataset" class="anchor"></a>Would admiral <strong>create a whole</strong> ADaM dataset?</h5>
+<a href="#would-admiral-create-a-whole-adam-dataset" class="anchor"></a>Would <code>{admiral}</code> <strong>create a whole</strong> ADaM dataset?</h5>
 <ul>
-<li>admiral is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs</li>
-<li>admiral is not meant as a “click a button, out comes your ADaM” tool</li>
-<li>on the admiral webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
+<li>
+<code>{admiral}</code> is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs</li>
+<li>
+<code>{admiral}</code> is not meant as a “click a button, out comes your ADaM” tool</li>
+<li>on the <code>{admiral}</code> webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
 </ul>
 </div>
 <div id="in-which-order-does-a-user-need-to-execute-the-functions" class="section level5">
@@ -235,12 +241,13 @@
 </div>
 <div id="is-the-admiral-package-validated" class="section level5">
 <h5 class="hasAnchor">
-<a href="#is-the-admiral-package-validated" class="anchor"></a>Is the admiral package <strong>validated</strong>?</h5>
+<a href="#is-the-admiral-package-validated" class="anchor"></a>Is the <code>{admiral}</code> package <strong>validated</strong>?</h5>
 <ul>
 <li>All functions are reviewed and tested (see <a href="#what-will-be-provided-around-function-testing">What will be provided around <strong>function testing</strong>?</a>) to ensure that they work as described in the documentation.</li>
 <li>Test cases for each function will be part of the R package.</li>
-<li>The testing the admiral team will do for each function does <strong>not replace the QC and validation process at each company</strong>.</li>
 <li>Users can add to the tests or provide additional feedback.</li>
+<li>The testing the <code>{admiral}</code> team will do for each function does <strong>not replace the QC and validation process at each company</strong>.</li>
+<li>A <a href="https://github.com/marketplace/actions/r-package-validation-report">GitHub action</a> (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of <code>{admiral}</code> exists <a href="https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf">here</a> as an illustration.</li>
 </ul>
 </div>
 <div id="what-will-be-provided-around-function-testing" class="section level5">
@@ -252,8 +259,8 @@
 <li>Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
 <ul>
 <li>validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence</li>
-<li>strategy of how the use of admiral fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)</li>
-<li>see our guidance on <a href="unit_testing_guidance.html">unit testing</a>
+<li>strategy of how the use of <code>{admiral}</code> fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)</li>
+<li>see our guidance on <a href="unit_test_guidance.html">unit testing</a>
 </li>
 </ul>
 </li>
@@ -270,9 +277,9 @@
 </div>
 <div id="will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="section level5">
 <h5 class="hasAnchor">
-<a href="#will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="anchor"></a>Will admiral provide ADaM IG <strong>CDISC compliant</strong> datasets?</h5>
+<a href="#will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="anchor"></a>Will <code>{admiral}</code> provide ADaM IG <strong>CDISC compliant</strong> datasets?</h5>
 <ul>
-<li>Although admiral follows CDISC standards it does not claim that the dataset resulting from calling admiral functions is ADaM compliant. This has to be ensured by the user.</li>
+<li>Although <code>{admiral}</code> follows CDISC standards it does not claim that the dataset resulting from calling <code>{admiral}</code> functions is ADaM compliant. This has to be ensured by the user.</li>
 </ul>
 </div>
 <div id="how-much-of-the-adam-ig-is-covered-by-admiral" class="section level5">
@@ -281,7 +288,7 @@
 </h5>
 <ul>
 <li>ADaM IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.</li>
-<li>We will provide guidance for each ADaM dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality admiral covers. (see <a href="#in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?</a>)</li>
+<li>We will provide guidance for each ADaM dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality <code>{admiral}</code> covers. (see <a href="#in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?</a>)</li>
 <li>The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).</li>
 <li>For standard ADaM datasets (ADAE, ADCM, …) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation</li>
 </ul>
@@ -290,8 +297,23 @@
 <h5 class="hasAnchor">
 <a href="#will-there-be-a-usercontribution-guide" class="anchor"></a>Will there be a user/<strong>contribution</strong> guide?</h5>
 <ul>
-<li><p>Our <a href="programming_strategy.html">programming strategy</a> serves as a framework for users how to create their own functions.</p></li>
-<li><p>Please see the <a href="contribution_model.html">contribution model website</a> for a detailed description how to contribute</p></li>
+<li>Our <a href="programming_strategy.html">programming strategy</a> serves as a framework for users how to create their own functions.</li>
+<li>Please see the <a href="contribution_model.html">contribution model website</a> for a detailed description how to contribute</li>
+</ul>
+</div>
+<div id="how-has-admiral-been-tested-externally-to-rochegsk" class="section level5">
+<h5 class="hasAnchor">
+<a href="#how-has-admiral-been-tested-externally-to-rochegsk" class="anchor"></a>How has <code>{admiral}</code> been <strong>tested externally</strong> to Roche/GSK?</h5>
+<ul>
+<li>During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and &gt;50 individuals) in order to assess compatibility of the <code>{admiral}</code> toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.</li>
+<li>This foundational version of <code>{admiral}</code> achieved a 7.9 / 10 average score from all the survey respondents and &gt;75% said they’d advocate using <code>{admiral}</code> for ADaM transformations in R.</li>
+<li>Some tester quotes:
+<ul>
+<li><em>“Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large”jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."</em></li>
+<li><em>“It is a huge advantage for all Pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs.”</em></li>
+<li><em>“I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the <code>{admiral}</code> project – both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn’t able to see a strong need to shift to R. This project has shown me a reason to consider making the shift.”</em></li>
+</ul>
+</li>
 </ul>
 </div>
   </div>
@@ -305,7 +327,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Robin Koeger, Gordon Miller, Teckla Akinyi, Eric Simms, Michael Thorpe, Pavan Kumar, Hamza Rahal, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
 <div class="pkgdown">
@@ -321,7 +343,7 @@
     
     
     apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'roche-gsk',
+    indexName: 'pharmaverse',
     inputSelector: 'input#search-input.form-control',
     transformData: function(hits) {
       return hits.map(function (hit) {
