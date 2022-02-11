@@ -9,12 +9,15 @@
 ^docs$
 ^Meta$
 ^codecov\.yml$
+^vignettes/admiral\.Rmd$
+^vignettes/development_process\.Rmd$
 ^vignettes/contribution_model\.Rmd$
 ^vignettes/pr_review_guidance\.Rmd$
 ^vignettes/programming_strategy\.Rmd$
 ^vignettes/git_usage\.Rmd$
 ^vignettes/faq\.Rmd$
 ^vignettes/writing_vignettes\.Rmd$
-^vignettes/*.png$
+^vignettes/unit_test_guidance.Rmd$
+^vignettes/.+png$
 ^LICENSE\.md$
 ^\.github$
