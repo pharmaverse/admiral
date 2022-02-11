@@ -163,7 +163,7 @@ derive_disposition_reason <- function(dataset,
 #' Default Format for the Disposition Reason
 #'
 #' Define a function to map the disposition reason, to be used as a parameter in
-#' `derive_disposition_reason()`.
+#' `derive_vars_disposition_reason()`.
 #'
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
@@ -179,7 +179,7 @@ derive_disposition_reason <- function(dataset,
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
-#' @seealso [derive_disposition_reason()]
+#' @seealso [derive_vars_disposition_reason()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -188,7 +188,7 @@ derive_disposition_reason <- function(dataset,
 #'
 #' # Derive DCSREAS using format_reason_default
 #' dm %>%
-#'   derive_disposition_reason(
+#'   derive_vars_disposition_reason(
 #'     dataset_ds = ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
