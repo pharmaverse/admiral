@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_param_does_not_exist}
 \alias{assert_param_does_not_exist}
-\title{Asserts That a Parameter Does not Exist in the Dataset}
+\title{Asserts That a Parameter Does Not Exist in the Dataset}
 \usage{
 assert_param_does_not_exist(dataset, param)
 }

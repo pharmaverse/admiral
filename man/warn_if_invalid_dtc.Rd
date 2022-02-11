@@ -2,7 +2,7 @@
 % Please edit documentation in R/warnings.R
 \name{warn_if_invalid_dtc}
 \alias{warn_if_invalid_dtc}
-\title{Warn If a vector contains unknown datetime format}
+\title{Warn If a Vector Contains Unknown Datetime Format}
 \usage{
 warn_if_invalid_dtc(dtc, is_valid = is_valid_dtc(dtc))
 }

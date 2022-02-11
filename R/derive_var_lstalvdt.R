@@ -20,7 +20,6 @@
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
-#'
 #' @details The following steps are performed to create the output dataset:
 #'
 #'   \enumerate{ \item For each source dataset the observations as specified by
@@ -237,18 +236,13 @@ derive_var_lstalvdt <- function(dataset,
 #' @param date_imputation A string defining the date imputation for `date`.
 #'   See `date_imputation` parameter of `impute_dtc()` for valid values.
 #'
-#' @param preserve Preserve partial dates when doing date imputation for middle
-#' day and month
-#'
-#' A user wishing to preserve partial dates when doing middle day and month date
-#' imputation can invoke this argument.  For example `"2019---07"` would return
-#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
-#'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
+#'
+#' @inheritParams impute_dtc
 #'
 #' @author Stefan Bundfuss
 #'

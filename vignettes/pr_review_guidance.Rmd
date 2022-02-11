@@ -33,7 +33,7 @@ For a pull request to be merged into `devel` it needs to pass the automated `R C
 
 - the function has an accompanying set of unit tests; for derivations these unit test should have a code coverage of at least 90%; the whole package should have a coverage of >= 80%
 
-- the implemented derivation is in the scope of admiral, e.g. does not expect company specific input or hard-code company-specific rules
+- the implemented derivation is in the scope of `{admiral}`, e.g. does not expect company specific input or hard-code company-specific rules
 
 - meaningful error or warning messages are issued if the input is invalid
 
@@ -83,7 +83,7 @@ The check boxes are linked to the `task-list-completed` workflow.  You need to c
 knitr::include_graphics('./pr_review_actions.png')
 ```
 
-Please don't hesitate to reach out to the admiral team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/pharmaverse/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item. 
+Please don't hesitate to reach out to the `{admiral}` team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/pharmaverse/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item. 
 
 
 # Common R CMD Check Issues
@@ -94,7 +94,7 @@ Please don't hesitate to reach out to the admiral team on [Slack](https://app.sl
 
 If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally. The test environment for R version 3.6 is the same we use for development.
 
-To reproduce the R version 3.5 environment open the admiral project in R version 3.5.x, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+To reproduce the R version 3.5 environment open the `{admiral}` project in R version 3.5.x, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
 
 ```r
 install.packages("remotes")
@@ -103,7 +103,7 @@ remotes::install_deps(dependencies = TRUE)
 devtools::check()
 ```
 
-To reproduce the R release version environment open the admiral project in the latest available R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+To reproduce the R release version environment open the `{admiral}` project in the latest available R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
 
 ```r
 install.packages("remotes")
@@ -119,7 +119,7 @@ devtools::check()
   Namespace dependency not required: ‘pkg’
 ```
 
-Add `pkg` to the `Imports` or `Suggests` field in the `DESCRIPTION` file. In general, dependencies should be listed in the `Imports` field. However, if a package is only used inside vignettes or unit tests it should be listed in `Suggests` because all {admiral} functions would work without these "soft" dependencies being installed.
+Add `pkg` to the `Imports` or `Suggests` field in the `DESCRIPTION` file. In general, dependencies should be listed in the `Imports` field. However, if a package is only used inside vignettes or unit tests it should be listed in `Suggests` because all `{admiral}` functions would work without these "soft" dependencies being installed.
 
 ## Global Variables
 

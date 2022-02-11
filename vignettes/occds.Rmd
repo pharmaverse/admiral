@@ -98,6 +98,7 @@ dataset_vignette(adae,
                  display_vars = vars(USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
                                      TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT))
 ```
+
 ## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
@@ -215,7 +216,7 @@ derive_vars_atc(cm, facm)
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
 The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
-specific.  admiral does not currently have functionality to assist with `TRTA` 
+specific.  `{admiral}`does not currently have functionality to assist with `TRTA` 
 and `TRTP` assignment.
 
 However, an example of a simple implementation could be:
@@ -365,7 +366,7 @@ adae <- adae %>%
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
-numeric one. Flag first occurence of most severe adverse event:
+numeric one. Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%
@@ -398,6 +399,7 @@ queries datasets.
 
 The following example shows how to derive query variables for Standardized MedDRA
 Queries (SMQs) in ADAE.
+
 ```{r, eval=TRUE}
 data("queries")
 ```
@@ -405,7 +407,6 @@ data("queries")
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(queries)
 ```
-
 
 ```{r, eval=TRUE}
 adae1 <- tibble::tribble(
