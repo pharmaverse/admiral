@@ -8,8 +8,7 @@
 #'   Required columns are `start_date`, `end_date`, `ref_start_date` and `ref_end_date`.
 #'
 #' @param new_var On-treatment flag variable name to be created.
-#'   Permitted Values: `ONTRTFL`, `ONTRxxFL` and `ONTRTwFL`.
-#'   `xx` and `w` could be replaced based on analysis needs.
+#'
 #'   Default is `ONTRTFL`.
 #'
 #' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g. `ADT`)

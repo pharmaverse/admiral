@@ -1,5 +1,5 @@
-#----test 1----
-  test_that("Test1::Single --DT input when ref date is --DTM", {
+# derive_vars_dy Test 1----
+  test_that("derive_vars_dy Test1: Single --DT input when ref date is --DTM", {
     datain <- tibble::tribble(
       ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,
       "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18",
@@ -27,8 +27,8 @@
             )
           })
 
-#----test 2----
-test_that("Test2::Multiple --DT input when ref date is --DTM,
+# derive_vars_dy Test 2----
+test_that("derive_vars_dy Test2: Multiple --DT input when ref date is --DTM,
           with name of --DY var specified in par call", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT, ~DTHDT,
@@ -65,8 +65,8 @@ test_that("Test2::Multiple --DT input when ref date is --DTM,
   )
 })
 
-#----test 3----
-test_that("Test3::Combo of --DT/--DTM input when ref date is --DTM", {
+# derive_vars_dy Test 3----
+test_that("derive_vars_dy Test3: Combo of --DT/--DTM input when ref date is --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDT,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
@@ -96,8 +96,8 @@ test_that("Test3::Combo of --DT/--DTM input when ref date is --DTM", {
   )
 })
 
-#----test 4----
-test_that("Test4::Single --DT input when ref date is --DT", {
+#derive_vars_dy Test 4----
+test_that("derive_vars_dy Test4: Single --DT input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18",
@@ -125,8 +125,8 @@ test_that("Test4::Single --DT input when ref date is --DT", {
   )
 })
 
-#----test 5----
-test_that("Test5::Multiple --DT input when ref date is --DT", {
+# derive_vars_dy Test 5----
+test_that("derive_vars_dy Test5: Multiple --DT input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDT, ~AENDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18", "2014-01-20"
@@ -156,8 +156,8 @@ test_that("Test5::Multiple --DT input when ref date is --DT", {
   )
 })
 
-#----test 6----
-test_that("Test6::Combo of --DT/--DTM input when ref date is --DT", {
+# derive_vars_dy Test 6----
+test_that("derive_vars_dy Test6: Combo of --DT/--DTM input when ref date is --DT", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDT, ~ASTDTM, ~AENDT,
     "TEST01", "PAT01", "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20"
@@ -187,8 +187,8 @@ test_that("Test6::Combo of --DT/--DTM input when ref date is --DT", {
   )
 })
 
-#----test 7----
-test_that("Test7:All dates as --DTM", {
+# derive_vars_dy Test 7----
+test_that("derive_vars_dy Test7: All dates as --DTM", {
   datain <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"

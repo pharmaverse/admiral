@@ -13,7 +13,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}, \code{\link[dplyr]{vars}}}
+  \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
 
   \item{rlang}{\code{\link[rlang]{exprs}}}
 }}

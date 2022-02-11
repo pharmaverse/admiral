@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-As admiral is intended to be contributed by the user community, this 
-article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
+As `{admiral}` is intended to be contributed by the user community, this 
+article is meant for developers that want to either expand `{admiral}` functionalities or build on top of `{admiral}`. 
 In order to keep the framework robust across the whole community, 
 we have defined a programming strategy that should be followed in such cases.
 These contributions could include, for example, company specific derivations of ADaM datasets. 
@@ -30,7 +30,7 @@ These contributions could include, for example, company specific derivations of 
 * Overall programming will follow a functional approach.
 * Each ADaM dataset is built with a set of functions and not with free flow code.
 * Each ADaM dataset has a specific programming workflow.
-* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an admiral function or a company specific function.
+* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
 * Admiral functions can be re-used for company specific functions.
 * Each function belongs to a category or multiple categories.
 * Each function that is used to derive one or multiple variable(s) is required to be unit tested.
@@ -65,7 +65,7 @@ case-sensitive. Thus they must be in lower case.
 
 # Functions in R
 
-Functions in admiral must follow the modular approach, i.e. functions which add
+Functions in `{admiral}` must follow the modular approach, i.e. functions which add
 variables should add only a single variable except if other variables are
 closely related to the derived variable and can not be derived without it. For
 example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
@@ -156,7 +156,7 @@ Separate parameters for the imputation must be provided, e.g.:
 Each function parameter needs to be tested with `assert_` type of function. 
 
 Each expression needs to be tested for the following 
-(there are many utility functions in admiral available to the contributor):
+(there are many utility functions in `{admiral}` available to the contributor):
 
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
@@ -224,7 +224,7 @@ The `assert_character_scalar()` function helps with handling parameters in a
 case-insensitive manner.
 
 A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. 
-This rule is applicable only if both functions are part of admiral.
+This rule is applicable only if both functions are part of `{admiral}`.
 
 
 ## Function Header (Documentation)
@@ -375,7 +375,7 @@ See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests
 
 # Deprecation
 
-As admiral is still evolving, functions or parameters may need to be removed or replaced with more 
+As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more 
 efficient options from one release to another. In such cases, the relevant function or parameter 
 must be marked as deprecated. A warning will be issued until the next release and an error will be 
 generated thereafter. Information about deprecation timelines must be added to the warning/error message.

@@ -24,9 +24,9 @@
 #'
 #'   For example,
 #'
-#'   + `filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all AVAL
+#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all AVAL
 #'   values greater than mean of AVAL with in `by_vars`.
-#'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
 #' @param analysis_var Analysis variable.

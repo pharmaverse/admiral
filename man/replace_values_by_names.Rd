@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{replace_values_by_names}
 \alias{replace_values_by_names}
-\title{Replace quosure value with name}
+\title{Replace Quosure Value with Name}
 \usage{
 replace_values_by_names(quosures)
 }
@@ -13,7 +13,7 @@ replace_values_by_names(quosures)
 A list of quosures
 }
 \description{
-Replace quosure value with name
+Replace Quosure Value with Name
 }
 \examples{
 admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))

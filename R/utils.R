@@ -94,7 +94,7 @@ vars2chr <- function(quosures) {
   )
 }
 
-#' Helper function to convert date (or date-time) objects to characters of dtc format
+#' Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
 #' (-DTC type of variable)
 #'
 #' @param dtm date or date-time
@@ -294,7 +294,7 @@ filter_if <- function(dataset, filter) {
   }
 }
 
-#' Get constant variables
+#' Get Constant Variables
 #'
 #' @param dataset A data frame.
 #' @param by_vars By variables
@@ -356,7 +356,7 @@ is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
 
-#' Replace quosure value with name
+#' Replace Quosure Value with Name
 #'
 #' @param quosures A list of quosures
 #'
@@ -470,7 +470,7 @@ valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
-#' Get source variables from a list of quosures
+#' Get Source Variables from a List of Quosures
 #'
 #' @param quosures A list of quosures
 #'

@@ -550,7 +550,7 @@ filter_date_sources <- function(sources,
     )
 }
 
-#' Add By Groups to all Datasets if Necessary
+#' Add By Groups to All Datasets if Necessary
 #'
 #' The function ensures that the by variables are contained in all source
 #' datasets.

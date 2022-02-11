@@ -35,13 +35,14 @@
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
+#'   If `NULL`: no date imputation is performed and partial dates are returned as missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+#'   of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 #'
-#'   Default is NULL
+#'   Default is `NULL`
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
@@ -122,29 +123,22 @@ derive_disposition_dt <- function(dataset,
 #'
 #' @param date_imputation The value to impute the day/month when a datepart is missing.
 #'
-#'   If NULL: no date imputation is performed and partial dates are returned as missing.
+#'   If `NULL`: no date imputation is performed and partial dates are returned
+#'   as missing.
 #'
 #'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+#'   of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 #'
-#'   Default is NULL
-#'
-#' @param preserve Preserve partial dates when doing date imputation for middle
-#' day and month
-#'
-#' A user wishing to preserve partial dates when doing middle day and month date
-#' imputation can invoke this argument.  For example `"2019---07"` would return
-#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
-#'
-#'  A logical value
-#'
-#'  Default: `FALSE`
+#'   Default is `NULL`
 #'
 #' @param subject_keys Variables to uniquely identify a subject
 #'
 #' A list of quosures where the expressions are symbols as returned by
 #' `vars()` is expected.
+#'
+#' @inheritParams impute_dtc
 #'
 #' @return the input dataset with the disposition date (`new_var`) added
 #'

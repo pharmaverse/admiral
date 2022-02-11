@@ -33,9 +33,6 @@
 #'
 #'   Default is `"00:00:00"`.
 #'
-#'
-#'
-#'
 #' @param min_dates Minimum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not
@@ -69,17 +66,14 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered.
 #'
-#' @param preserve Preserve partial dates when doing date imputation for middle
-#' day and month
+#' @param preserve Preserve day if month is missing and day is present
 #'
-#' A user wishing to preserve partial dates when doing middle day and month date
-#' imputation can invoke this argument.  For example `"2019---07"` would return
-#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
+#' (and `date_imputation = "MID"`).
 #'
-#'  A logical value
+#' Permitted Values: `TRUE`, `FALSE`
 #'
-#'  Default: `FALSE`
-#'
+#' Default: `FALSE`
 #'
 #' @author Samia Kabi
 #'

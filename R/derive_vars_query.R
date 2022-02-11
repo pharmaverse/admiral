@@ -153,7 +153,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     select(-starts_with("temp_"))
 }
 
-#' Verify if a dataset has the required format as queries dataset.
+#' Verify if a Dataset Has the Required Format as Queries Dataset.
 #'
 #' @details Check if the dataset has the following columns
 #' - `VAR_PREFIX`, e.g., SMQ01, CQ12
