@@ -32,9 +32,10 @@ dataset.
 
 \emph{Permitted Values:} list of variables}
 
-\item{method}{Derivation method to use:
+\item{method}{Derivation method to use. Note that \code{HEIGHT} is expected
+in cm and \code{WEIGHT} is expected in kg:
 
-Mosteller: \code{sqrt(height(cm) * weight(kg)) / 3600}
+Mosteller: \code{sqrt(height * weight / 3600)}
 
 DuBois-DuBois: \code{0.20247 * (height/100) ^ 0.725 * weight ^ 0.425}
 

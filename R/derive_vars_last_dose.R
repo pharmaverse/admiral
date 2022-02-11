@@ -179,7 +179,7 @@ derive_vars_last_dose <- function(dataset,
 
   # create temporary observation number and temporary numeric date to identify last dose
   dataset <- dataset %>%
-    derive_obs_number(
+    derive_var_obs_number(
       order = vars(USUBJID),
       new_var = tmp_seq_var
       ) %>%

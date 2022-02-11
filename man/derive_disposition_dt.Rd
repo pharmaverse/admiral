@@ -45,15 +45,16 @@ Permitted Values: logical expression.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is performed and partial dates are returned as missing.
+If \code{NULL}: no date imputation is performed and partial dates are returned as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+of June
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is \code{NULL}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -64,7 +65,7 @@ A list of quosures where the expressions are symbols as returned by
 the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
-\verb{r lifecycle::badge("deprecated")}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 \emph{Deprecated}, please use \code{derive_var_disposition_dt()} instead.
 

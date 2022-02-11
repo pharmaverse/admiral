@@ -193,16 +193,16 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
-#' @param dataset Input dataset.
+#' @param dataset Input dataset
 #'
-#' @param dataset_ds Dataset containing the disposition information (e.g.: `ds`).
+#' @param dataset_ds Dataset containing the disposition information (e.g. `ds`)
 #'
-#' It must contain:
+#' The dataset must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
 #'
-#' @param new_var Name of the disposition reason variable.
+#' @param new_var Name of the disposition reason variable
 #'
 #' A variable name is expected (e.g. `DCSREAS`).
 #'
@@ -210,7 +210,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' A variable name is expected (e.g. `DSDECOD`).
 #'
-#' @param new_var_spe Name of the disposition reason detail variable.
+#' @param new_var_spe Name of the disposition reason detail variable
 #'
 #' A variable name is expected (e.g. `DCSREASP`).
 #' If `new_var_spe` is specified, it is expected that `reason_var_spe` is also specified,

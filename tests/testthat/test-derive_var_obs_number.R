@@ -1,5 +1,3 @@
-context("test-derive_var_obs_number")
-
 test_that("first observation for each group are selected", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
