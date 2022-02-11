@@ -98,6 +98,7 @@ dataset_vignette(adae,
                  display_vars = vars(USUBJID, AESEQ, AETERM, AESTDTC, TRTSDT,
                                      TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT))
 ```
+
 ## Derive/Impute End and Start Analysis Date/time and Relative Day {#datetime}
 
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`. 
@@ -215,7 +216,7 @@ derive_vars_atc(cm, facm)
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL.
 The derivation of `TRTA` and `TRTP` for a record are protocol and analysis 
-specific.  admiral does not currently have functionality to assist with `TRTA` 
+specific.  `{admiral}`does not currently have functionality to assist with `TRTA` 
 and `TRTP` assignment.
 
 However, an example of a simple implementation could be:
@@ -231,7 +232,9 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Derive Date/Date-time of Last Dose {#last_dose}
 
-The function `derive_last_dose()` can be used to derive the last dose date before the start of the event. 
+
+The function `derive_var_last_dose_date()` can be used to derive the last dose date before the start of the event. 
+
 Additionally, this function can also provide the traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
@@ -239,17 +242,15 @@ Additionally, this function can also provide the traceability variables
 ```{r eval=TRUE}
 data(ex_single)
 adae <- adae %>% 
-  derive_last_dose(
+  derive_var_last_dose_date(
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXSTDTC,
     analysis_date = ASTDT,
-    dataset_seq_var = AESEQ,
+    single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    check_dates_only = FALSE
+    output_datetime = TRUE
   )
 ```
 
@@ -346,7 +347,7 @@ derive_var_ontrtfl(
 
 ## Derive Occurrence Flags {#occflag}
 
-The function `derive_extreme_flag()` can help derive variables such as `AOCCIFL`, 
+The function `derive_var_extreme_flag()` can help derive variables such as `AOCCIFL`, 
 `AOCCPIFL`, `AOCCSIFL`, `AOCXIFL`, `AOCXPIFL`, and `AOCXSIFL`.
 
 If grades were collected, the following can be used to flag first occurrence of
@@ -354,7 +355,7 @@ maximum toxicity grade.
 
 ```{r, eval=FALSE}
 adae <- adae %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ATOXGR), ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -365,14 +366,14 @@ adae <- adae %>%
 
 Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
 collected. In this case, the variable may need to be firstly recorded into a
-numeric one. Flag first occurence of most severe adverse event:
+numeric one. Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>% 
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(desc(ASEVN), ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -397,7 +398,6 @@ This function expects the dictionary and/or lookup information to be provided as
 
 The expected result is the input dataset with query variables added: See also [Queries dataset documentation](queries_dataset.html).
 
-
 ```{r, eval=TRUE}
 data("queries")
 ```
@@ -405,7 +405,6 @@ data("queries")
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(queries)
 ```
-
 
 ```{r, eval=TRUE}
 adae1 <- tibble::tribble(
@@ -475,5 +474,5 @@ dataset_vignette(adae,
 
 ADaM | Sample Code
 ---- | --------------
-ADAE | [ad_adae.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adae.R){target="_blank"}
-ADCM | [ad_adcm.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adcm.R){target="_blank"}
+ADAE | [ad_adae.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
+ADCM | [ad_adcm.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}

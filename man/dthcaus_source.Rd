@@ -2,21 +2,21 @@
 % Please edit documentation in R/derive_var_dthcaus.R
 \name{dthcaus_source}
 \alias{dthcaus_source}
-\title{Create an \code{dthcaus_source} object}
+\title{Create a \code{dthcaus_source} Object}
 \usage{
 dthcaus_source(
-  dataset,
+  dataset_name,
   filter,
   date,
   mode = "first",
   dthcaus,
   traceability_vars = NULL,
-  date_var = deprecated(),
-  traceabilty_vars = deprecated()
+  dataset = deprecated()
 )
 }
 \arguments{
-\item{dataset}{A data.frame containing a source dataset.}
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the death cause.}
 
 \item{filter}{An expression used for filtering \code{dataset}.}
 
@@ -39,15 +39,13 @@ The right-hand side (values of the list elements) gives the values of the tracea
 in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
 
-\item{date_var}{Deprecated, please use \code{date} instead.}
-
-\item{traceabilty_vars}{Deprecated, please use \code{traceability_vars} instead.}
+\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 }
 \value{
 An object of class "dthcaus_source".
 }
 \description{
-Create an \code{dthcaus_source} object
+Create a \code{dthcaus_source} Object
 }
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}

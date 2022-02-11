@@ -153,7 +153,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     select(-starts_with("temp_"))
 }
 
-#' Verify if a dataset has the required format as queries dataset.
+#' Verify if a Dataset Has the Required Format as Queries Dataset.
 #'
 #' @details Check if the dataset has the following columns
 #' - `VAR_PREFIX`, e.g., SMQ01, CQ12
@@ -284,17 +284,4 @@ assert_valid_queries <- function(queries, queries_name) {
                  "' is not unique."))
   }
 
-}
-
-#' Derive Query Variables
-#'
-#' `derive_query_vars()` was renamed to `derive_vars_query()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_query_vars <- function(dataset, dataset_queries) {
-  deprecate_warn("0.3.0", "derive_query_vars()", "derive_vars_query()")
-  derive_vars_query(dataset, dataset_queries)
 }

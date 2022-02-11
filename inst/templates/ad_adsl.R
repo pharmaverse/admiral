@@ -17,10 +17,14 @@ library(lubridate)
 data("dm")
 data("ds")
 data("ex")
+data("ae")
+data("lb")
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
 ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 
 # ---- User defined functions ----
 
@@ -28,14 +32,6 @@ ex <- convert_blanks_to_na(ex)
 #  operates on vectors, which can be used in `mutate`.
 
 # Grouping
-format_agegr1 <- function(x) {
-  case_when(
-    !is.na(x) & x < 18 ~ "< 18",
-    x >= 18 & x < 65 ~ "18 - 65",
-    x >= 65 ~ ">= 65"
-  )
-}
-
 format_racegr1 <- function(x) {
   case_when(
     !is.na(x) & x == "WHITE" ~ "White",
@@ -90,14 +86,14 @@ adsl <- dm %>%
 
   # Disposition dates, status
   # Screen fail date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
     filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
@@ -105,7 +101,7 @@ adsl <- dm %>%
   ) %>%
 
   # EOS status
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
@@ -114,7 +110,7 @@ adsl <- dm %>%
   ) %>%
 
   # Last retrieval date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
@@ -145,29 +141,37 @@ adsl <- dm %>%
 
 # Last known alive date
 ae_start <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first"
 )
 ae_end <- lstalvdt_source(
-  dataset = ae,
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first"
 )
 lb_date <- lstalvdt_source(
-  dataset = lb,
+  dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10
 )
-adsl_date <- lstalvdt_source(dataset = adsl, date = TRTEDT)
+adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
 
 adsl <- adsl %>%
 
-  derive_var_lstalvdt(ae_start, ae_end, lb_date, adsl_date) %>%
+  derive_var_lstalvdt(
+    ae_start, ae_end, lb_date, adsl_date,
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl)
+  ) %>%
+
+  # Age group
+  derive_agegr_fda(
+    age_var = AGE,
+    new_var = AGEGR1
+  ) %>%
 
   # Groupings, populations and others variables
   mutate(
-    AGEGR1 = format_agegr1(AGE),
     RACEGR1 = format_racegr1(RACE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),

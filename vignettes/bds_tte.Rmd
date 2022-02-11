@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 This article describes creating a BDS time-to-event ADaM.
 
 The main part in programming a time-to-event dataset is the definition of the
-events and censoring times. admiral supports single events like death or
+events and censoring times. `{admiral}` supports single events like death or
 composite events like disease progression or death. More than one source dataset
 can be used for the definition of the event and censoring times.
 
@@ -54,11 +54,12 @@ library(lubridate)
 To start, all datasets needed for the creation of the time-to-event dataset
 should be read into the environment. This will be a company specific process.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
+For example purpose, the ADaM datasets---which are included
 in `{admiral}`---are used.
 
 ```{r}
 data("adsl")
+data("adae")
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -84,7 +85,7 @@ The date can be provided as date (`--DT` variable), datetime (`--DTM` variable),
 or character ISO-8601 date (`--DTC` variable).
 
 CDISC strongly recommends `CNSR = 0` for events and positive integers for
-censorings. admiral enforces this recommendation. Therefore the `censor`
+censorings. `{admiral}` enforces this recommendation. Therefore the `censor`
 parameter is available for `censor_source()` only. It is defaulted to `1`.
 
 The `dataset_name` parameter expects a character value which is used as an
@@ -100,6 +101,25 @@ The table below shows all pre-defined `tte_source` objects which should cover th
 
 ```{r echo=FALSE}
 knitr::kable(admiral:::list_tte_source_objects())
+```
+
+These pre-defined objects can be passed directly to `derive_param_tte()` to create a new time-to-event parameter.
+
+```{r}
+adtte <- derive_param_tte(
+  dataset_adsl = adsl,
+  start_date = TRTSDT,
+  event_conditions = list(ae_ser_event),
+  censor_conditions = list(lastalive_censor),
+  source_datasets = list(adsl = adsl, adae = adae),
+  set_values_to = vars(PARAMCD = "TTAESER", PARAM = "Time to First Serious AE")
+)
+```
+```{r, echo=FALSE}
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
+)
 ```
 
 
@@ -143,6 +163,8 @@ dataset_vignette(
   display_vars = vars(USUBJID, PARAMCD, PARAM, STARTDT, ADT, CNSR)
 )
 ```
+
+Note that in practice for efficacy parameters you might use randomization date as the time to event origin date, but this variable is not in the CDISC Pilot `ADSL` dataset so we used `TRTSDT` for these examples.
 
 ### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
 
@@ -578,10 +600,10 @@ dataset_vignette(
 
 ## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`:
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`:
 
 ```{r eval=TRUE}
-adtte <- derive_obs_number(
+adtte <- derive_var_obs_number(
   adtte,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(PARAMCD),

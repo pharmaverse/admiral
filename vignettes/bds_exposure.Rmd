@@ -49,7 +49,7 @@ To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
@@ -322,14 +322,14 @@ adex %>%
 ## Create Summary Records {#summaryrec}
 
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`, `APERIOD`,
-`AVISIT`, etc.). For these types of calculations, the `derive_params_exposure()`
+`AVISIT`, etc.). For these types of calculations, the `derive_param_exposure()`
 function may be used. In addition to creating a summarized `AVAL`, the function
 will also compute minimum and maximum dates for the record.
 
 For example, to calculate the total dose by subject and treatment,
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_params_exposure(
+adex <- derive_param_exposure(
   adex,
   by_vars = vars(STUDYID, USUBJID, !!!adsl_vars),
   input_code = "DOSE",
@@ -363,7 +363,7 @@ Multiple parameters (records) may be created at one time using the
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
   call_derivation(
-    derivation = derive_params_exposure,
+    derivation = derive_param_exposure,
     variable_params = list(
       params(
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL"),
@@ -493,7 +493,7 @@ the join depending on your lookup/metadata table.
 
 ## Derive Categorization Variables (`AVALCATx`) {#cat}
 
-admiral does not currently have a generic function to aid in assigning `AVALCATx`/
+`{admiral}` does not currently have a generic function to aid in assigning `AVALCATx`/
 `AVALCAxN` values. Below is a simple example of how these values may be
 assigned using the `dplyr::mutate` function:
 
@@ -520,11 +520,11 @@ adex %>%
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_obs_number()` can be used to derive `ASEQ`. An
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An
 example call is:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_obs_number(
+adex <- derive_var_obs_number(
   adex,
   new_var = ASEQ,
   by_vars = vars(STUDYID, USUBJID),
@@ -554,4 +554,4 @@ adex <- adex %>%
 
 ADaM | Sample Code
 ---- | --------------
-ADEX | [ad_adex.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adex.R){target="_blank"}
+ADEX | [ad_adex.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R){target="_blank"}

@@ -10,9 +10,7 @@ derive_summary_records(
   filter = NULL,
   analysis_var,
   summary_fun,
-  set_values_to = NULL,
-  fns = deprecated(),
-  filter_rows = deprecated()
+  set_values_to = NULL
 )
 }
 \arguments{
@@ -29,9 +27,9 @@ function is involved.
 
 For example,
 \itemize{
-\item \code{filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all AVAL
+\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all AVAL
 values greater than mean of AVAL with in \code{by_vars}.
-\item \code{filter_rows = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
+\item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
 }}
 
@@ -53,10 +51,6 @@ value or NA.
 (e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
 More general expression are not allowed.
 }}
-
-\item{fns}{\emph{Deprecated}, please use \code{analysis_var} and \code{summary_fun} instead.}
-
-\item{filter_rows}{\emph{Deprecated}, please use \code{filter} instead.}
 }
 \value{
 A data frame with derived records appended to original dataset.

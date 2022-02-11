@@ -66,6 +66,15 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered.
 #'
+#' @param preserve Preserve day if month is missing and day is present
+#'
+#' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
+#' (and `date_imputation = "MID"`).
+#'
+#' Permitted Values: `TRUE`, `FALSE`
+#'
+#' Default: `FALSE`
+#'
 #' @author Samia Kabi
 #'
 #' @return A character vector
@@ -147,11 +156,13 @@ impute_dtc <- function(dtc,
                        date_imputation = NULL,
                        time_imputation = "00:00:00",
                        min_dates = NULL,
-                       max_dates = NULL) {
+                       max_dates = NULL,
+                       preserve = FALSE) {
   # Issue a warning if incorrect  DTC is present
   n_chr <- nchar(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
+  assert_logical_scalar(preserve)
 
   # date imputation
   if (!is.null(date_imputation)) {
@@ -179,19 +190,67 @@ impute_dtc <- function(dtc,
     imputed_date <- case_when(
       !valid_dtc ~ NA_character_,
       n_chr >= 10 ~ substr(dtc, 1, 10),
-      # dates like 2021---14 - use only year part
       n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
       n_chr == 7 ~ paste0(dtc, "-", d),
       n_chr == 4 ~ paste0(dtc, "-", mo, "-", d)
     )
 
-    if (date_imputation == "LAST") {
+    # 3 blocks of  if/else statements that deal with date imputation and
+    # preserving partial dates.
+    # Ex: 2019---07 with MID and preserve = TRUE gives 2019-06-07
+    if (date_imputation == "MID" & preserve) {
+
       imputed_date <- case_when(
-        nchar(imputed_date) > 0 & n_chr < 10 ~ as.character(ceiling_date(as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)), # nolint
-        TRUE ~ imputed_date
-      )
+        n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
+        n_chr == 4  ~ paste0(dtc, "-", "06", "-", "30"),
+        TRUE ~ imputed_date)
+
+    } else if (date_imputation == "MID" & !preserve) {
+
+      imputed_date <- case_when(
+        n_chr == 9  ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
+        n_chr == 4  ~ paste0(dtc, "-", "06", "-", "30"),
+        TRUE ~ imputed_date)
+
+    } else if (date_imputation != "MID" & preserve) {
+
+      imputed_date <- case_when(
+        n_chr == 9  ~ paste0(substr(dtc, 1, 4), "-", mo, "-", substr(dtc, 8, 9)),
+        TRUE ~ imputed_date)
     }
-  } else {
+
+    # Ex: 2019---07 with LAST and preserve = TRUE gives 2019-12-07
+    if (date_imputation == "LAST" & !preserve) {
+
+      imputed_date <- case_when(
+        n_chr < 10 & date_imputation == "LAST" & !preserve ~
+          as.character(
+            ceiling_date(
+              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        TRUE ~ imputed_date)
+
+
+    } else if (date_imputation == "LAST" & preserve) {
+
+      imputed_date <- case_when(
+        n_chr == 9 ~  paste0(substr(dtc, 1, 4), "-", "12", "-", substr(dtc, 8, 9)),
+        n_chr %in% c(4, 7) ~
+          as.character(
+            ceiling_date(
+              as.Date(imputed_date, format = "%Y-%m-%d"), "month") - days(1)),
+        TRUE ~ imputed_date)
+    }
+
+    # Ex: 2019---07 with FIRST and preserve = TRUE gives 2019-01-07
+    if (date_imputation == "FIRST" & preserve) {
+
+       imputed_date <- case_when(
+        n_chr == 9 & date_imputation == "FIRST" & preserve ~
+          paste0(substr(dtc, 1, 4), "-", "01", "-", substr(dtc, 8, 9)),
+        TRUE ~ imputed_date)
+    }
+
+  } else  {
     # no imputation
     imputed_date <- if_else(n_chr >= 10 & valid_dtc, substr(dtc, 1, 10), NA_character_)
   }
@@ -300,7 +359,8 @@ impute_dtc <- function(dtc,
 convert_dtc_to_dt <- function(dtc,
                               date_imputation = NULL,
                               min_dates = NULL,
-                              max_dates = NULL) {
+                              max_dates = NULL,
+                              preserve = FALSE) {
   assert_that(is.character(dtc))
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
@@ -309,7 +369,8 @@ convert_dtc_to_dt <- function(dtc,
     date_imputation = date_imputation,
     time_imputation = "first",
     min_dates = min_dates,
-    max_dates = max_dates
+    max_dates = max_dates,
+    preserve = preserve
   )
 
   if_else(
@@ -347,7 +408,8 @@ convert_dtc_to_dtm <- function(dtc,
                                date_imputation = NULL,
                                time_imputation = NULL,
                                min_dates = NULL,
-                               max_dates = NULL) {
+                               max_dates = NULL,
+                               preserve = FALSE) {
   assert_character_vector(dtc)
   warn_if_invalid_dtc(dtc, is_valid_dtc(dtc))
 
@@ -356,9 +418,61 @@ convert_dtc_to_dtm <- function(dtc,
       date_imputation = date_imputation,
       time_imputation = time_imputation,
       min_dates = min_dates,
-      max_dates = max_dates
+      max_dates = max_dates,
+      preserve = preserve
     ) %>%
     as_iso_dtm()
+}
+
+#' Convert a Date into a Datetime Object
+#'
+#' Convert a date (datetime, date, or date character) into a Date vector (usually `'--DTM'`).
+#'
+#' @param dt The date to convert.
+#'
+#'   A date or character date is expected in a format like `yyyy-mm-ddThh:mm:ss`.
+#'
+#' @inheritParams convert_dtc_to_dtm
+#'
+#' @author Samia Kabi
+#'
+#' @return A datetime object
+#'
+#' @keywords computation timing
+#'
+#' @export
+#'
+#' @examples
+#' convert_date_to_dtm("2019-07-18T15:25:00")
+#' convert_date_to_dtm(Sys.time())
+#' convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
+#' convert_date_to_dtm("2019-07-18")
+convert_date_to_dtm <- function(dt,
+                                date_imputation = NULL,
+                                time_imputation = NULL,
+                                min_dates = NULL,
+                                max_dates = NULL,
+                                preserve = FALSE) {
+
+  if (lubridate::is.POSIXct(dt)) {
+    return(dt)
+  }
+  else {
+    if (is_date(dt)) {
+      dt <- format(dt, "%Y-%m-%d")
+    }
+
+    # convert dtc to dtm
+    dt %>%
+      convert_dtc_to_dtm(
+        date_imputation = date_imputation,
+        time_imputation = time_imputation,
+        min_dates = min_dates,
+        max_dates = max_dates,
+        preserve = preserve
+      )
+  }
 }
 
 #' Derive the Date Imputation Flag
@@ -415,6 +529,15 @@ compute_dtf <- function(dtc, dt) {
 #'
 #'   A datetime object is expected.
 #'
+#' @param ignore_seconds_flag  ADaM IG states that given SDTM (`'--DTC'`) variable,
+#' if only hours and minutes are ever collected, and seconds are imputed in
+#' (`'--DTM'`) as 00, then it is not necessary to set (`'--TMF'`) to `'S'`. A user can set this
+#' to `TRUE` so the `'S'` Flag is dropped from (`'--TMF'`).
+#'
+#'  A logical value
+#'
+#'   Default: `FALSE`
+#'
 #' @author Samia Kabi
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
@@ -427,20 +550,36 @@ compute_dtf <- function(dtc, dt) {
 #' compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 #' compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
-compute_tmf <- function(dtc, dtm) {
-  assert_that(is.character(dtc), is_date(dtm))
+compute_tmf <- function(dtc,
+                        dtm,
+                        ignore_seconds_flag = FALSE) {
+
+  assert_that(is_date(dtm))
+  assert_character_vector(dtc)
+  assert_logical_scalar(ignore_seconds_flag)
 
   is_na <- is.na(dtm)
   n_chr <- nchar(dtc)
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  case_when(
-    (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
-    n_chr == 16 ~ "S",
-    n_chr == 13 ~ "M",
-    n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H"
-  )
+
+  if (ignore_seconds_flag)  {
+    if ((any(n_chr >= 17))) {
+      abort("Seconds detected in data while ignore_seconds_flag is invoked")
+    } else {
+      case_when(
+        (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+        n_chr == 13 ~ "M",
+        n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+      }
+  } else {
+    case_when(
+      (!is_na & n_chr >= 19 & valid_dtc) | is_na | !valid_dtc ~ NA_character_,
+      n_chr == 16 ~ "S",
+      n_chr == 13 ~ "M",
+      n_chr == 10 | (n_chr > 0 & n_chr < 10) ~ "H")
+     }
 }
 
 #' Derive/Impute a Date from a Date Character Vector
@@ -462,6 +601,7 @@ compute_tmf <- function(dtc, dtm) {
 #'   A logical value
 #'
 #'   Default: `TRUE`
+#'
 #'
 #' @inheritParams impute_dtc
 #'
@@ -552,13 +692,26 @@ compute_tmf <- function(dtc, dtm) {
 #'   date_imputation = "first",
 #'   min_dates = vars(TRTSDTM)
 #' )
+#'
+#' # A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
+#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "MID",
+#'   preserve = TRUE
+#' )
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            date_imputation = NULL,
                            flag_imputation = TRUE,
                            min_dates = NULL,
-                           max_dates = NULL) {
+                           max_dates = NULL,
+                           preserve = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -579,7 +732,8 @@ derive_vars_dt <- function(dataset,
         dtc = !!dtc,
         date_imputation = date_imputation,
         min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
-        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.))
+        max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.)),
+        preserve = preserve
       )
     )
 
@@ -614,7 +768,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' Default: "auto"
 #'
+#'
 #' @inheritParams impute_dtc
+#' @inheritParams compute_tmf
 #'
 #' @details
 #' The presence of a `'--DTF'` variable is checked and the variable is not derived
@@ -668,6 +824,40 @@ derive_vars_dt <- function(dataset,
 #'   time_imputation = "last",
 #'   max_dates = vars(DTHDT, DCUTDT)
 #' )
+#'
+#' # Seconds has been removed from the input dataset.  Function now uses
+#' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
+#' mhdt <- tibble::tribble(
+#'   ~MHSTDTC,
+#'   "2019-07-18T15:25",
+#'   "2019-07-18T15:25",
+#'   "2019-07-18",
+#'   "2019-02",
+#'   "2019",
+#'   "2019---07",
+#'   ""
+#' )
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "FIRST",
+#'   time_imputation = "FIRST",
+#'   ignore_seconds_flag = TRUE
+#' )
+#'
+#' # A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+#' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
+#' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+#'
+#' derive_vars_dtm(
+#'   mhdt,
+#'   new_vars_prefix = "AST",
+#'   dtc = MHSTDTC,
+#'   date_imputation = "MID",
+#'   preserve = TRUE
+#' )
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
@@ -675,7 +865,9 @@ derive_vars_dtm <- function(dataset,
                             time_imputation = "00:00:00",
                             flag_imputation = "auto",
                             min_dates = NULL,
-                            max_dates = NULL) {
+                            max_dates = NULL,
+                            preserve = FALSE,
+                            ignore_seconds_flag = FALSE) {
 
   # check and quote parameters
   assert_character_scalar(new_vars_prefix)
@@ -699,7 +891,8 @@ derive_vars_dtm <- function(dataset,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
-    max_dates = lapply(min_dates, eval_tidy, data = mask)
+    max_dates = lapply(min_dates, eval_tidy, data = mask),
+    preserve = preserve
   )
 
   if (flag_imputation %in% c("both", "date") ||
@@ -724,9 +917,16 @@ derive_vars_dtm <- function(dataset,
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)
+
     dataset <- dataset %>%
-      mutate(!!sym(tmf) := compute_tmf(dtc = !!dtc, dtm = !!sym(dtm)))
+      mutate(!!sym(tmf) := compute_tmf(
+        dtc = !!dtc,
+        dtm = !!sym(dtm),
+        ignore_seconds_flag = ignore_seconds_flag)
+        )
+
   }
+
 
   dataset
 }

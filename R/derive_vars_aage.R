@@ -70,27 +70,6 @@ derive_vars_aage <- function(dataset,
   )
 }
 
-#' Derive Analysis Age
-#'
-#' `derive_aage()` was renamed to `derive_vars_aage()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_aage <- function(dataset,
-                        start_date = BRTHDT,
-                        end_date = RANDDT,
-                        unit = "years") {
-  deprecate_warn("0.3.0", "derive_aage()", "derive_vars_aage()")
-  derive_vars_aage(
-    dataset,
-    start_date = !!enquo(start_date),
-    end_date = !!enquo(end_date),
-    unit = unit
-  )
-}
-
 #' Derive Age in Years
 #'
 #' @details This function is used to convert age variables into years.
@@ -232,9 +211,8 @@ NULL
 
 #' @rdname derive_agegr_fda
 #' @export
-#' @details `derive_agegr_fda` Derive age groups according to FDA
-#' (\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
-#' Baseline Measure Information).
+#' @details `derive_agegr_fda()` Derive age groups according to FDA. `age_var` will
+#'  be split in categories: <18, 18-64, >=65.
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -257,35 +235,20 @@ NULL
 #'   derive_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 #'
 derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-
-  age_var <- assert_symbol(enquo(age_var))
-  new_var <- assert_symbol(enquo(new_var))
-  warn_if_vars_exist(dataset, quo_text(new_var))
-
-  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
-
-  out <- ds %>%
-    mutate(
-      !!new_var := cut(
-        x = temp_age,
-        breaks = c(0, 19, 65, Inf),
-        labels = c("<=18", "19-64", ">=65"),
-        include.lowest = TRUE,
-        right = FALSE
-      )
-    ) %>%
-    select(-temp_age)
-
-  if (anyNA(dplyr::pull(out, !!new_var))) {
-    out <- mutate(out, !!new_var := addNA(!!new_var))
-  }
-  out
+  deprecate_warn("0.6.0", "derive_agegr_fda()", "derive_var_agegr_fda()")
+  derive_var_agegr_fda(dataset = dataset,
+                       age_var = !!enquo(age_var),
+                       age_unit = age_unit,
+                       new_var = !!enquo(new_var))
 }
 
 #' @rdname derive_agegr_fda
 #' @export
-#' @details `derive_agegr_ema` Derive age groups according to EMA
+#' @details `derive_agegr_ema()` Derive age groups according to EMA
 #' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
+#' `age_var` will be split into categories: 0-27 days (Newborns), 28 days to
+#' 23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
+#'  65-84, >=85.
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
@@ -301,6 +264,110 @@ derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' data.frame(AGE = 1:20) %>%
 #'   derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
+  deprecate_warn("0.6.0", "derive_agegr_ema()", "derive_var_agegr_ema()")
+  derive_var_agegr_ema(dataset = dataset,
+                       age_var = !!enquo(age_var),
+                       age_unit = age_unit,
+                       new_var = !!enquo(new_var))
+}
+
+#' Derive Age Groups
+#'
+#' Functions for deriving standardized age groups.
+#'
+#' @param dataset Input dataset.
+#' @param age_var AGE variable.
+#' @param age_unit AGE unit variable.
+#'
+#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
+#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
+#'
+#'   Default: NULL
+#'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'
+#' @param new_var New variable to be created.
+#'
+#' @return `dataset` with new column `new_var` of class factor.
+#'
+#' @author Ondrej Slama
+#'
+#' @name derive_var_agegr_fda
+NULL
+
+#' @rdname derive_var_agegr_fda
+#' @export
+#' @details `derive_var_agegr_fda()` Derive age groups according to FDA. `age_var`
+#' will be split in categories: <18, 18-64, >=65.
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data(dm)
+#'
+#' dm %>%
+#'   derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
+#'
+#' data <- tibble::tribble(
+#'   ~BRTHDT, ~RANDDT,
+#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#'   )
+#'
+#' data %>%
+#'   derive_vars_aage(unit = "months") %>%
+#'   derive_var_agegr_fda(AAGE, age_unit = NULL, AGEGR1)
+#'
+#' data.frame(AGE = 1:100) %>%
+#'   derive_var_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
+#'
+derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
+
+  age_var <- assert_symbol(enquo(age_var))
+  new_var <- assert_symbol(enquo(new_var))
+  warn_if_vars_exist(dataset, quo_text(new_var))
+
+  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
+
+  out <- ds %>%
+    mutate(
+      !!new_var := cut(
+        x = temp_age,
+        breaks = c(0, 18, 65, Inf),
+        labels = c("<18", "18-64", ">=65"),
+        include.lowest = TRUE,
+        right = FALSE
+      )
+    ) %>%
+    select(-temp_age)
+
+  if (anyNA(dplyr::pull(out, !!new_var))) {
+    out <- mutate(out, !!new_var := addNA(!!new_var))
+  }
+  out
+}
+
+#' @rdname derive_var_agegr_fda
+#' @export
+#' @details `derive_var_agegr_ema()` Derive age groups according to EMA
+#' (\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
+#' `age_var` will be split into categories: 0-27 days (Newborns), 28 days to
+#' 23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
+#'  65-84, >=85.
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data(dm)
+#'
+#' dm %>%
+#'   derive_var_agegr_ema(age_var = AGE, new_var = AGEGR1) %>%
+#'   select(SUBJID, AGE, AGEGR1)
+#'
+#' data.frame(AGE = 1:100) %>%
+#'   derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
+#'
+#' data.frame(AGE = 1:20) %>%
+#'   derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
+derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
 
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
@@ -317,8 +384,8 @@ derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
                  "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"),
       include.lowest = FALSE,
       right = FALSE
-      )
-    ) %>%
+    )
+  ) %>%
     select(-temp_age)
 
   if (anyNA(dplyr::pull(out, !!new_var))) {
