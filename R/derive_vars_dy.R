@@ -12,12 +12,12 @@
 #'
 #'   A date or date-time object column is expected.
 #'
-#' @param source_vars A list of datetime or date variables created using `vars()` from
-#'   which dates are to be extracted. This can either be a list of date(time) variables
-#'   or named `--DY` variables and corresponding --DT(M) variables e.g.
-#'   vars(TRTSDTM, ASTDTM, AENDT) or vars(TRTSDT, ASTDTM, AENDT,DEATHDY=DTHDT).
-#'   If the source variable does not end in --DT(M), a name for the resulting
-#'   `--DY` variable must be provided.
+#' @param source_vars A list of datetime or date variables created using
+#'   `vars()` from which dates are to be extracted. This can either be a list of
+#'   date(time) variables or named `--DY` variables and corresponding --DT(M)
+#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
+#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
+#'   name for the resulting `--DY` variable must be provided.
 #'
 #' @author Teckla Akinyi
 #'
@@ -42,24 +42,26 @@
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
 #'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
-#'  mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
-#'         ASTDTM = lubridate::as_datetime(ASTDTM),
-#'         AENDT = lubridate::ymd(AENDT))
+#'  mutate(TRTSDTM = as_datetime(TRTSDTM),
+#'         ASTDTM = as_datetime(ASTDTM),
+#'         AENDT = ymd(AENDT))
 #'
-#' derive_vars_dy(datain, reference_date = TRTSDTM, source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+#' derive_vars_dy(
+#'   datain,
+#'   reference_date = TRTSDTM,
+#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT))
 #'
-#'  datain <- tibble::tribble(
-#'   ~TRTSDT, ~ASTDTM, ~AENDT, ~DTHDT,
-#'  "2014-01-17", "2014-01-18T13:09:O9", "2014-01-20", "2014-02-01"
-#'  ) %>%
-#'  mutate(TRTSDT = lubridate::ymd(TRTSDT),
-#'         ASTDTM = lubridate::as_datetime(ASTDTM),
-#'         AENDT = lubridate::ymd(AENDT),
-#'         DTHDT = lubridate::ymd(DTHDT))
+#' # specifying name of new variables
+#' datain <- tibble::tribble(
+#'   ~TRTSDT, ~DTHDT,
+#'  "2014-01-17", "2014-02-01"
+#' ) %>%
+#'  mutate(TRTSDT = ymd(TRTSDT),
+#'         DTHDT = ymd(DTHDT))
 #'
-#'  derive_vars_dy(datain,
-#'                 reference_date = TRTSDT,
-#'                 source_vars = vars(TRTSDT, ASTDTM, AENDT, DEATHDY = DTHDT))
+#' derive_vars_dy(datain,
+#'                reference_date = TRTSDT,
+#'                source_vars = vars(TRTSDT, DEATHDY = DTHDT))
 derive_vars_dy <- function(dataset,
                            reference_date,
                            source_vars) {

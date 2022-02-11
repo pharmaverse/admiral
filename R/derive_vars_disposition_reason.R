@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' *Deprecated*, please use `derive_vars_disposition()` instead.
+#' *Deprecated*, please use `derive_vars_disposition_reason()` instead.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
@@ -160,7 +160,7 @@ derive_disposition_reason <- function(dataset,
                                  subject_keys = subject_keys)
 }
 
-#' Default format for the disposition reason
+#' Default Format for the Disposition Reason
 #'
 #' Define a function to map the disposition reason, to be used as a parameter in
 #' `derive_disposition_reason()`.
@@ -206,16 +206,16 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
-#' @param dataset Input dataset.
+#' @param dataset Input dataset
 #'
-#' @param dataset_ds Dataset containing the disposition information (e.g.: `ds`).
+#' @param dataset_ds Dataset containing the disposition information (e.g. `ds`)
 #'
-#' It must contain:
+#' The dataset must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
 #'
-#' @param new_var Name of the disposition reason variable.
+#' @param new_var Name of the disposition reason variable
 #'
 #' A variable name is expected (e.g. `DCSREAS`).
 #'
@@ -223,7 +223,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' A variable name is expected (e.g. `DSDECOD`).
 #'
-#' @param new_var_spe Name of the disposition reason detail variable.
+#' @param new_var_spe Name of the disposition reason detail variable
 #'
 #' A variable name is expected (e.g. `DCSREASP`).
 #' If `new_var_spe` is specified, it is expected that `reason_var_spe` is also specified,

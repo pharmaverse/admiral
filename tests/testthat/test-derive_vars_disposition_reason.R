@@ -1,5 +1,3 @@
-context("test-derive_vars_disposition_reason")
-
 dm <- tibble::tribble(
   ~STUDYID, ~USUBJID,
   "TEST01", "PAT01",

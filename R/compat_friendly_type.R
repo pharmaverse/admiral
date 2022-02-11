@@ -1,4 +1,4 @@
-#' Return English-friendly type
+#' Return English-friendly Type
 #' @param x Any R object.
 #' @param value Whether to describe the value of `x`.
 #' @param length Whether to mention the length of vectors and lists.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_disposition_reason.R
 \name{format_reason_default}
 \alias{format_reason_default}
-\title{Default format for the disposition reason}
+\title{Default Format for the Disposition Reason}
 \usage{
 format_reason_default(reason, reason_spe = NULL)
 }

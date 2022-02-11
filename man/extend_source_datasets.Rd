@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_param_tte.R
 \name{extend_source_datasets}
 \alias{extend_source_datasets}
-\title{Add By Groups to all Datasets if Necessary}
+\title{Add By Groups to All Datasets if Necessary}
 \usage{
 extend_source_datasets(source_datasets, by_vars)
 }

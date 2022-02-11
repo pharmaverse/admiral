@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Main Idea
 
-The main idea of admiral is that an ADaM dataset is built by a sequence of
+The main idea of `{admiral}` is that an ADaM dataset is built by a sequence of
 derivations. Each derivation adds one or more variables or parameters to the
 processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
@@ -55,7 +55,7 @@ dataset_vignette(adsl,
 
 # Derivations
 
-The most important functions in admiral are the
+The most important functions in `{admiral}` are the
 [derivations](../reference/index.html#section-derivations). These functions
 start with `derive_`. The first parameter of these functions expects the
 input dataset. This allows us to string together derivations using the `%>%`
@@ -65,7 +65,7 @@ Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 
 Functions which derive a dedicated parameter start with `derive_param_` followed by
-the parameter name, e.g., `derive_param_os()` derives the `OS` parameter.
+the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
 
 # Input and Output
 
@@ -138,7 +138,7 @@ expected, e.g. `order = vars(AVISIT, desc(AESEV))`
 
 # Handling of Missing Values
 
-When using the {haven} package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using {admiral}'s `convert_blanks_to_na()` function, e.g.
+When using the `{haven}` package to read SAS datasets into R, SAS-style character missing values, i.e. `""`, are *not* converted into proper R `NA` values. Rather they are kept as is. This is problematic for any downstream data processing as R handles `""` just as any other string. Thus, before any data manipulation is being performed SAS blanks should be converted to R `NA`s using `{admiral}`'s `convert_blanks_to_na()` function, e.g.
 
 ```r
 dm <- haven::read_sas("dm.sas7bdat") %>% 
@@ -176,15 +176,15 @@ To avoid this behavior one has to explicitly set `na.rm = TRUE`.
 mean(c(1, NA, 2), na.rm = TRUE)
 ```
 
-This is very important to keep in mind when using {admiral}'s aggregation functions such as `derive_summary_records()`.
+This is very important to keep in mind when using `{admiral}`'s aggregation functions such as `derive_summary_records()`.
 
 # Validation
 
 All functions are reviewed and tested to ensure that they work as described in
 the documentation. They are **not validated** yet.
 
-Although admiral follows CDISC standards, it does not claim that the dataset
-resulting from calling admiral functions is ADaM compliant. This has to be
+Although `{admiral}` follows CDISC standards, it does not claim that the dataset
+resulting from calling `{admiral}` functions is ADaM compliant. This has to be
 ensured by the user.
 
 # Starting a Script
@@ -196,7 +196,7 @@ for the most common steps are provided by the following vignettes:
 - [Creating an OCCDS ADaM](occds.html)
 - [Creating a BDS Finding ADaM](bds_finding.html)
 
-admiral also provides template R scripts as a starting point. They can be
+`{admiral}` also provides template R scripts as a starting point. They can be
 created by calling `use_ad_template()`, e.g.,
 
 ```r
@@ -213,6 +213,9 @@ list_all_templates()
 ```
 
 # Support
+
+Support is provided via the [admiral Slack
+channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
 
 # See also
 
