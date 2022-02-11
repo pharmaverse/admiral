@@ -26,7 +26,7 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming ADaM datasets in R.
+Description: A toolbox for programming CDISC compliant ADaM datasets in R.
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -63,7 +63,6 @@ Suggests:
     usethis,
     covr,
     DT
-Remotes: pharmaverse/admiral.test
 VignetteBuilder: knitr
 Collate: 
     'admiral-package.R'
