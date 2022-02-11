@@ -1,3 +1,12 @@
+
+# admiral 0.7.0
+
+## New Features
+
+- `create_query_data()` is provided to create the [queries
+dataset](../articles/queries_dataset.html) required as input for
+`derive_vars_query()` (#606)
+
 # admiral 0.6.1
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raised after submitting v0.6.0 (#918)
