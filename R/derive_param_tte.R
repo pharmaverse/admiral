@@ -143,7 +143,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #' data("adsl")
 #'
 #' death <- event_source(
@@ -471,7 +471,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #'
 #' adsl <- tibble::tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
@@ -617,7 +617,7 @@ filter_date_sources <- function(sources,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #'
 #' adsl <- tibble::tribble(
 #' ~USUBJID, ~TRTSDT,           ~EOSDT,
