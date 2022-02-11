@@ -2,16 +2,8 @@
 
 ## New Features
 
-### General
-
-- `derive_vars_dy()` derives the analysis day from one or more --DT(M) variables
+- `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
-
-- GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
-
-- README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
-
-- Addressed typos and appearance of `{admiral}` where identified (#899)
 
 ## Updates of Existing Functions
 
@@ -23,7 +15,7 @@
 
 - `derive_vars_dtm()`, `derive_var_disposition` and `derive_var_lstalvdt` now have `preserve` argument.  A user can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE` when doing date_imputation (#592)
 
-- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `S` flag if seconds are not recorded in the data (#589)
+- `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `"S"` flag if seconds are not recorded in the data (#589)
 
 ## Breaking Changes
 
@@ -40,14 +32,14 @@
 `derive_var_last_dose_date()` (#385)
 
 - The behavior of all functions providing the `date_imputation` parameter, e.g., `derive_vars_dtm()` and
-`derive_vars_dt()` has changed for `date_imputation = "mid"`. Before the date was imputed as June 15th
+`derive_vars_dt()`, has changed for `date_imputation = "mid"`. Before the date was imputed as June 15th
 if both month and day were missing. Now it is imputed as June 30th. For the old behavior please specify
 `date_imputation = "06-15"`. Please note the behavior has not changed if only the day is missing. In
 this case the day is imputed as `15` (#592)
 
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
-- The following functions and parameters, which were deprecated in previous {admiral} versions, were removed:
+- The following functions and parameters, which were deprecated in previous {admiral} versions, were removed (#513):
   
   - `derive_aage()`, `derive_duration()`, `derive_query_vars()`, and
   `derive_suppqual_vars()` function
@@ -62,9 +54,15 @@ this case the day is imputed as `15` (#592)
 
 ## Documentation
 
+- README and site homepage has been updated with important new section around expectations of {admiral}, as well as other useful references such as links to conference talks (#868 & #802)
+
 - New vignette [Development Process](../articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
 - Updated [Pull Request Review Guidance](../articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
+
+## Various
+
+- GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
 
 # admiral 0.5.0
 
