@@ -126,3 +126,4 @@ Collate:
     'tte_sources.R'
     'user_helpers.R'
     'warnings.R'
+Remotes: pharmaverse/admiral.test
