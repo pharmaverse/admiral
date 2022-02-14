@@ -323,4 +323,5 @@ adeg <- adeg %>%
 
 # ---- Save output ----
 
-save(adeg, file = "data/adeg.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")

@@ -132,4 +132,5 @@ adae <- adae %>%
 
 # ---- Save output ----
 
-save(adae, file = "data/adae.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")
