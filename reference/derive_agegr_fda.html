@@ -53,7 +53,8 @@
 
 
 <meta property="og:title" content="Derive Age Groups — derive_agegr_fda" />
-<meta property="og:description" content="Functions for deriving standardized age groups." />
+<meta property="og:description" content="
+Deprecated, please use derive_var_agegr_fda() and derive_var_agegr_ema() instead." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
       </span>
     </div>
 
@@ -198,7 +199,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Functions for deriving standardized age groups.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a></p>
+<p><em>Deprecated</em>, please use <code><a href='derive_var_agegr_fda.html'>derive_var_agegr_fda()</a></code> and <code><a href='derive_var_agegr_fda.html'>derive_var_agegr_ema()</a></code> instead.</p>
     </div>
 
     <pre class="usage"><span class='fu'>derive_agegr_fda</span>(<span class='no'>dataset</span>, <span class='no'>age_var</span>, <span class='kw'>age_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>new_var</span>)
@@ -233,296 +235,7 @@ This is only used when the age_var variable does not have a corresponding unit i
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>dataset</code> with new column <code>new_var</code> of class factor.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>derive_agegr_fda()</code> Derive age groups according to FDA. <code>age_var</code> will
-be split in categories: &lt;18, 18-64, &gt;=65.</p>
-<p><code>derive_agegr_ema()</code> Derive age groups according to EMA
-(<a href='https://eudract.ema.europa.eu/result.html'>https://eudract.ema.europa.eu/result.html</a> -&gt; Results - Data Dictionary -&gt; Age range).
-<code>age_var</code> will be split into categories: 0-27 days (Newborns), 28 days to
-23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
-65-84, &gt;=85.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dm</span>)
-
-<span class='no'>dm</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_fda</span>(<span class='kw'>age_var</span> <span class='kw'>=</span> <span class='no'>AGE</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AGEGR1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SUBJID</span>, <span class='no'>AGE</span>, <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `derive_agegr_fda()` was deprecated in admiral 0.6.0.</span>
-#&gt; <span class='warning'>Please use `derive_var_agegr_fda()` instead.</span></div><div class='output co'>#&gt; # A tibble: 306 x 3
-#&gt;    SUBJID   AGE AGEGR1
-#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; 
-#&gt;  1 1015      63 18-64 
-#&gt;  2 1023      64 18-64 
-#&gt;  3 1028      71 &gt;=65  
-#&gt;  4 1033      74 &gt;=65  
-#&gt;  5 1034      77 &gt;=65  
-#&gt;  6 1047      85 &gt;=65  
-#&gt;  7 1057      59 18-64 
-#&gt;  8 1097      68 &gt;=65  
-#&gt;  9 1111      81 &gt;=65  
-#&gt; 10 1115      84 &gt;=65  
-#&gt; # … with 296 more rows</div><div class='input'>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
-  ~<span class='no'>BRTHDT</span>, ~<span class='no'>RANDDT</span>,
-  <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"1984-09-06"</span>), <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span>(<span class='st'>"2020-02-24"</span>)
-  )
-
-<span class='no'>data</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='derive_vars_aage.html'>derive_vars_aage</a></span>(<span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"months"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_fda</span>(<span class='no'>AAGE</span>, <span class='kw'>age_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 5
-#&gt;   BRTHDT     RANDDT      AAGE AAGEU  AGEGR1
-#&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;fct&gt; 
-#&gt; 1 1984-09-06 2020-02-24   425 MONTHS 18-64 </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>AGE</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_fda</span>(<span class='kw'>age_var</span> <span class='kw'>=</span> <span class='no'>AGE</span>, <span class='kw'>age_unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt;     AGE AGEGR1
-#&gt; 1     1    &lt;18
-#&gt; 2     2    &lt;18
-#&gt; 3     3    &lt;18
-#&gt; 4     4    &lt;18
-#&gt; 5     5    &lt;18
-#&gt; 6     6    &lt;18
-#&gt; 7     7    &lt;18
-#&gt; 8     8    &lt;18
-#&gt; 9     9    &lt;18
-#&gt; 10   10    &lt;18
-#&gt; 11   11    &lt;18
-#&gt; 12   12    &lt;18
-#&gt; 13   13    &lt;18
-#&gt; 14   14    &lt;18
-#&gt; 15   15    &lt;18
-#&gt; 16   16    &lt;18
-#&gt; 17   17    &lt;18
-#&gt; 18   18  18-64
-#&gt; 19   19  18-64
-#&gt; 20   20  18-64
-#&gt; 21   21  18-64
-#&gt; 22   22  18-64
-#&gt; 23   23  18-64
-#&gt; 24   24  18-64
-#&gt; 25   25  18-64
-#&gt; 26   26  18-64
-#&gt; 27   27  18-64
-#&gt; 28   28  18-64
-#&gt; 29   29  18-64
-#&gt; 30   30  18-64
-#&gt; 31   31  18-64
-#&gt; 32   32  18-64
-#&gt; 33   33  18-64
-#&gt; 34   34  18-64
-#&gt; 35   35  18-64
-#&gt; 36   36  18-64
-#&gt; 37   37  18-64
-#&gt; 38   38  18-64
-#&gt; 39   39  18-64
-#&gt; 40   40  18-64
-#&gt; 41   41  18-64
-#&gt; 42   42  18-64
-#&gt; 43   43  18-64
-#&gt; 44   44  18-64
-#&gt; 45   45  18-64
-#&gt; 46   46  18-64
-#&gt; 47   47  18-64
-#&gt; 48   48  18-64
-#&gt; 49   49  18-64
-#&gt; 50   50  18-64
-#&gt; 51   51  18-64
-#&gt; 52   52  18-64
-#&gt; 53   53  18-64
-#&gt; 54   54  18-64
-#&gt; 55   55  18-64
-#&gt; 56   56  18-64
-#&gt; 57   57  18-64
-#&gt; 58   58  18-64
-#&gt; 59   59  18-64
-#&gt; 60   60  18-64
-#&gt; 61   61  18-64
-#&gt; 62   62  18-64
-#&gt; 63   63  18-64
-#&gt; 64   64  18-64
-#&gt; 65   65   &gt;=65
-#&gt; 66   66   &gt;=65
-#&gt; 67   67   &gt;=65
-#&gt; 68   68   &gt;=65
-#&gt; 69   69   &gt;=65
-#&gt; 70   70   &gt;=65
-#&gt; 71   71   &gt;=65
-#&gt; 72   72   &gt;=65
-#&gt; 73   73   &gt;=65
-#&gt; 74   74   &gt;=65
-#&gt; 75   75   &gt;=65
-#&gt; 76   76   &gt;=65
-#&gt; 77   77   &gt;=65
-#&gt; 78   78   &gt;=65
-#&gt; 79   79   &gt;=65
-#&gt; 80   80   &gt;=65
-#&gt; 81   81   &gt;=65
-#&gt; 82   82   &gt;=65
-#&gt; 83   83   &gt;=65
-#&gt; 84   84   &gt;=65
-#&gt; 85   85   &gt;=65
-#&gt; 86   86   &gt;=65
-#&gt; 87   87   &gt;=65
-#&gt; 88   88   &gt;=65
-#&gt; 89   89   &gt;=65
-#&gt; 90   90   &gt;=65
-#&gt; 91   91   &gt;=65
-#&gt; 92   92   &gt;=65
-#&gt; 93   93   &gt;=65
-#&gt; 94   94   &gt;=65
-#&gt; 95   95   &gt;=65
-#&gt; 96   96   &gt;=65
-#&gt; 97   97   &gt;=65
-#&gt; 98   98   &gt;=65
-#&gt; 99   99   &gt;=65
-#&gt; 100 100   &gt;=65</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>admiral.test</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dm</span>)
-
-<span class='no'>dm</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_ema</span>(<span class='kw'>age_var</span> <span class='kw'>=</span> <span class='no'>AGE</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AGEGR1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SUBJID</span>, <span class='no'>AGE</span>, <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `derive_agegr_ema()` was deprecated in admiral 0.6.0.</span>
-#&gt; <span class='warning'>Please use `derive_var_agegr_ema()` instead.</span></div><div class='output co'>#&gt; # A tibble: 306 x 3
-#&gt;    SUBJID   AGE AGEGR1
-#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; 
-#&gt;  1 1015      63 18-64 
-#&gt;  2 1023      64 18-64 
-#&gt;  3 1028      71 65-84 
-#&gt;  4 1033      74 65-84 
-#&gt;  5 1034      77 65-84 
-#&gt;  6 1047      85 &gt;=85  
-#&gt;  7 1057      59 18-64 
-#&gt;  8 1097      68 65-84 
-#&gt;  9 1111      81 65-84 
-#&gt; 10 1115      84 65-84 
-#&gt; # … with 296 more rows</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>AGE</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_ema</span>(<span class='kw'>age_var</span> <span class='kw'>=</span> <span class='no'>AGE</span>, <span class='kw'>age_unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt;     AGE                                      AGEGR1
-#&gt; 1     1 28 days to 23 months (Infants and Toddlers)
-#&gt; 2     2                             2-11 (Children)
-#&gt; 3     3                             2-11 (Children)
-#&gt; 4     4                             2-11 (Children)
-#&gt; 5     5                             2-11 (Children)
-#&gt; 6     6                             2-11 (Children)
-#&gt; 7     7                             2-11 (Children)
-#&gt; 8     8                             2-11 (Children)
-#&gt; 9     9                             2-11 (Children)
-#&gt; 10   10                             2-11 (Children)
-#&gt; 11   11                             2-11 (Children)
-#&gt; 12   12                         12-17 (Adolescents)
-#&gt; 13   13                         12-17 (Adolescents)
-#&gt; 14   14                         12-17 (Adolescents)
-#&gt; 15   15                         12-17 (Adolescents)
-#&gt; 16   16                         12-17 (Adolescents)
-#&gt; 17   17                         12-17 (Adolescents)
-#&gt; 18   18                                       18-64
-#&gt; 19   19                                       18-64
-#&gt; 20   20                                       18-64
-#&gt; 21   21                                       18-64
-#&gt; 22   22                                       18-64
-#&gt; 23   23                                       18-64
-#&gt; 24   24                                       18-64
-#&gt; 25   25                                       18-64
-#&gt; 26   26                                       18-64
-#&gt; 27   27                                       18-64
-#&gt; 28   28                                       18-64
-#&gt; 29   29                                       18-64
-#&gt; 30   30                                       18-64
-#&gt; 31   31                                       18-64
-#&gt; 32   32                                       18-64
-#&gt; 33   33                                       18-64
-#&gt; 34   34                                       18-64
-#&gt; 35   35                                       18-64
-#&gt; 36   36                                       18-64
-#&gt; 37   37                                       18-64
-#&gt; 38   38                                       18-64
-#&gt; 39   39                                       18-64
-#&gt; 40   40                                       18-64
-#&gt; 41   41                                       18-64
-#&gt; 42   42                                       18-64
-#&gt; 43   43                                       18-64
-#&gt; 44   44                                       18-64
-#&gt; 45   45                                       18-64
-#&gt; 46   46                                       18-64
-#&gt; 47   47                                       18-64
-#&gt; 48   48                                       18-64
-#&gt; 49   49                                       18-64
-#&gt; 50   50                                       18-64
-#&gt; 51   51                                       18-64
-#&gt; 52   52                                       18-64
-#&gt; 53   53                                       18-64
-#&gt; 54   54                                       18-64
-#&gt; 55   55                                       18-64
-#&gt; 56   56                                       18-64
-#&gt; 57   57                                       18-64
-#&gt; 58   58                                       18-64
-#&gt; 59   59                                       18-64
-#&gt; 60   60                                       18-64
-#&gt; 61   61                                       18-64
-#&gt; 62   62                                       18-64
-#&gt; 63   63                                       18-64
-#&gt; 64   64                                       18-64
-#&gt; 65   65                                       65-84
-#&gt; 66   66                                       65-84
-#&gt; 67   67                                       65-84
-#&gt; 68   68                                       65-84
-#&gt; 69   69                                       65-84
-#&gt; 70   70                                       65-84
-#&gt; 71   71                                       65-84
-#&gt; 72   72                                       65-84
-#&gt; 73   73                                       65-84
-#&gt; 74   74                                       65-84
-#&gt; 75   75                                       65-84
-#&gt; 76   76                                       65-84
-#&gt; 77   77                                       65-84
-#&gt; 78   78                                       65-84
-#&gt; 79   79                                       65-84
-#&gt; 80   80                                       65-84
-#&gt; 81   81                                       65-84
-#&gt; 82   82                                       65-84
-#&gt; 83   83                                       65-84
-#&gt; 84   84                                       65-84
-#&gt; 85   85                                        &gt;=85
-#&gt; 86   86                                        &gt;=85
-#&gt; 87   87                                        &gt;=85
-#&gt; 88   88                                        &gt;=85
-#&gt; 89   89                                        &gt;=85
-#&gt; 90   90                                        &gt;=85
-#&gt; 91   91                                        &gt;=85
-#&gt; 92   92                                        &gt;=85
-#&gt; 93   93                                        &gt;=85
-#&gt; 94   94                                        &gt;=85
-#&gt; 95   95                                        &gt;=85
-#&gt; 96   96                                        &gt;=85
-#&gt; 97   97                                        &gt;=85
-#&gt; 98   98                                        &gt;=85
-#&gt; 99   99                                        &gt;=85
-#&gt; 100 100                                        &gt;=85</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>AGE</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>20</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>derive_agegr_ema</span>(<span class='kw'>age_var</span> <span class='kw'>=</span> <span class='no'>AGE</span>, <span class='kw'>age_unit</span> <span class='kw'>=</span> <span class='st'>"years"</span>, <span class='kw'>new_var</span> <span class='kw'>=</span> <span class='no'>AGEGR1</span>)</div><div class='output co'>#&gt;    AGE                                      AGEGR1
-#&gt; 1    1 28 days to 23 months (Infants and Toddlers)
-#&gt; 2    2                             2-11 (Children)
-#&gt; 3    3                             2-11 (Children)
-#&gt; 4    4                             2-11 (Children)
-#&gt; 5    5                             2-11 (Children)
-#&gt; 6    6                             2-11 (Children)
-#&gt; 7    7                             2-11 (Children)
-#&gt; 8    8                             2-11 (Children)
-#&gt; 9    9                             2-11 (Children)
-#&gt; 10  10                             2-11 (Children)
-#&gt; 11  11                             2-11 (Children)
-#&gt; 12  12                         12-17 (Adolescents)
-#&gt; 13  13                         12-17 (Adolescents)
-#&gt; 14  14                         12-17 (Adolescents)
-#&gt; 15  15                         12-17 (Adolescents)
-#&gt; 16  16                         12-17 (Adolescents)
-#&gt; 17  17                         12-17 (Adolescents)
-#&gt; 18  18                                       18-64
-#&gt; 19  19                                       18-64
-#&gt; 20  20                                       18-64</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
