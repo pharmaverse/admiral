@@ -13,11 +13,6 @@
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `qt_code` and `rr_code`.
 #'
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
 #' @param method Method used to QT correction
 #'
 #'   Permitted Values: `"Bazett"`, `"Fridericia"`, `"Sagie"`
