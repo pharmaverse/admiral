@@ -56,6 +56,32 @@ squote <- function(x) {
   paste0("'", x, "'")
 }
 
+#' Wrap a String in Double Quotes
+#'
+#' Wrap a string in double quotes, e.g., for displaying character values in
+#' messages.
+#'
+#' @param x A character vector
+#'
+#' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
+#'   input in double quotes is returned.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::dquote("foo")
+#' admiral:::dquote(NULL)
+dquote <- function(x) {
+  if (is.null(x)) {
+    "NULL"
+  }
+  else {
+    paste0("\"", x, "\"")
+  }
+}
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
@@ -158,7 +184,9 @@ arg_name <- function(expr) { # nolint
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
-  if (is.list(x)) {
+  if (is.null(x)) {
+    NULL
+  } else if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)
@@ -466,6 +494,36 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
+}
+
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords check
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- rlang::enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   }
+#'   else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }
 
 #' Get Source Variables from a List of Quosures
