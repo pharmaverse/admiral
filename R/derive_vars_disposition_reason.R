@@ -162,7 +162,8 @@ derive_disposition_reason <- function(dataset,
 
 #' Default Format for the Disposition Reason
 #'
-#' Define a function to map the disposition reason
+#' Define a function to map the disposition reason, to be used as a parameter in
+#' `derive_vars_disposition_reason()`.
 #'
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
@@ -173,17 +174,29 @@ derive_disposition_reason <- function(dataset,
 #' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
 #' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
 #'
-#' For example:
-#' ```
-#' DCSREAS = format_reason_default(DSDECOD)
-#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
-#' ```
-#'
 #' @return A `character` vector
 #'
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @seealso [derive_vars_disposition_reason()]
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data("dm")
+#' data("ds")
+#'
+#' # Derive DCSREAS using format_reason_default
+#' dm %>%
+#'   derive_vars_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     format_new_vars = format_reason_default,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS)
+#'
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)

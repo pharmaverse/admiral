@@ -127,7 +127,8 @@ derive_disposition_status <- function(dataset,
 
 #' Default Format for Disposition Status
 #'
-#' Define a function to map the disposition status.
+#' Define a function to map the disposition status. To be used as an input for
+#' `derive_var_disposition_status()`.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
@@ -139,6 +140,22 @@ derive_disposition_status <- function(dataset,
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @seealso [derive_var_disposition_status()]
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data("dm")
+#' data("ds")
+#'
+#' dm %>%
+#'   derive_var_disposition_status(
+#'     dataset_ds = ds,
+#'     new_var = EOSSTT,
+#'     status_var = DSDECOD,
+#'     format_new_var = format_eoxxstt_default,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, EOSSTT)
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",

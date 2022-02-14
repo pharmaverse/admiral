@@ -143,7 +143,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #' data("adsl")
 #'
 #' death <- event_source(
@@ -469,6 +469,45 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @keywords dev_utility
 #'
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' adsl <- tibble::tribble(
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ae <- tibble::tribble(
+#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03T10:56", 1,      "Flu",
+#'   "01",     "2021-03-04",       2,      "Cough",
+#'   "01",     "2021",             3,      "Flu"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ttae <- event_source(
+#'   dataset_name = "ae",
+#'   date = AESTDTC,
+#'   set_values_to = vars(
+#'     EVNTDESC = "AE",
+#'     SRCDOM = "AE",
+#'     SRCVAR = "AESTDTC",
+#'     SRCSEQ = AESEQ
+#'   )
+#' )
+#'
+#' filter_date_sources(
+#'   sources = list(ttae),
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   by_vars = vars(AEDECOD),
+#'   create_datetime = FALSE,
+#'   subject_keys = vars(STUDYID, USUBJID),
+#'   mode = "first"
+#' )
+#'
 #' @export
 filter_date_sources <- function(sources,
                                 source_datasets,
@@ -575,6 +614,30 @@ filter_date_sources <- function(sources,
 #' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
+#'
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' adsl <- tibble::tribble(
+#' ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ae <- tibble::tribble(
+#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03T10:56", 1,      "Flu",
+#'   "01",     "2021-03-04",       2,      "Cough",
+#'   "01",     "2021",             3,      "Flu"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' extend_source_datasets(
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   by_vars = vars(AEDECOD)
+#' )
 #'
 #' @export
 extend_source_datasets <- function(source_datasets,

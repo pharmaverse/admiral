@@ -86,9 +86,13 @@ this case the day is imputed as `15` (#592)
 
 - Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
 
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
+
 ## Various
 
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
+
+- Examples have been added for `format_reason_default`, `format_eoxxstt_default`, `extend_source_datasets` and `filter_date_sources` (#745)
 
 # admiral 0.5.0
 
