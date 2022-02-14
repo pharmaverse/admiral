@@ -268,21 +268,12 @@ derive_var_disposition_status <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
 
-  # Process the disposition data
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    select(!!!subject_keys, !!enquo(status_var))
-
-  # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
-  signal_duplicate_records(
-    ds_subset,
-    by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
   # Add the status variable and derive the new dispo status in the input dataset
   dataset %>%
-    left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-    mutate(!!enquo(new_var) := format_new_var(!!enquo(status_var))) %>%
-    select(-!!enquo(status_var))
+    derive_vars_merged(dataset_add = dataset_ds,
+                       filter_add = !!filter_ds,
+                       new_vars = vars(!!status_var),
+                       by_vars = subject_keys) %>%
+    mutate(!!new_var := format_new_var(!!status_var)) %>%
+    select(-!!status_var)
 }

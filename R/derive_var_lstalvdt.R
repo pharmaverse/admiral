@@ -219,7 +219,7 @@ derive_var_lstalvdt <- function(dataset,
       check_type = "none"
     )
 
-  left_join(dataset, all_data, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset, dataset_add = all_data, by_vars = subject_keys)
 }
 
 #' Create an `lstalvdt_source` object

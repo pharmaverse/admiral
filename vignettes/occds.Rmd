@@ -86,10 +86,11 @@ relevant `ADSL` would be added later.
 
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
 
-adae <- left_join(
+adae <- derive_vars_merged(
   ae,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by = vars(STUDYID, USUBJID)
 )
 ```
 
@@ -460,8 +461,9 @@ If needed, the other `ADSL` variables can now be added:
 
 ```{r eval=TRUE, echo=TRUE}
 adae <- adae %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 ```

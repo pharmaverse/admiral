@@ -184,7 +184,9 @@ arg_name <- function(expr) { # nolint
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
-  if (is.list(x)) {
+  if (is.null(x)) {
+    NULL
+  } else if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)

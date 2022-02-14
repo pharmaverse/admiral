@@ -151,7 +151,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     ungroup()
 
   # join queries to input dataset
-  left_join(dataset, joined, by = static_cols) %>%
+  derive_vars_merged(dataset, dataset_add = joined, by_vars = vars(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
 }
 

@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.6.1
+Version: 0.7.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", role = "aut"),
@@ -79,6 +79,7 @@ Collate:
     'derive_date_vars.R'
     'derive_derived_param.R'
     'derive_last_dose.R'
+    'derive_merged.R'
     'derive_param_doseint.R'
     'derive_param_exposure.R'
     'derive_param_tte.R'
