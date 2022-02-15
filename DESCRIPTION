@@ -45,7 +45,6 @@ Imports:
     purrr,
     rlang,
     stringr,
-    hms,
     tidyr,
     tidyselect
 Suggests:
