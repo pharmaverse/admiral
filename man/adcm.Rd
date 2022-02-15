@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 7510 rows and 90 columns.
 }
 \source{
-Derived from the \link{adsl} and \link{cm} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R})
+Derived from the \code{adsl} and \code{cm} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R})
 }
 \usage{
 adcm
