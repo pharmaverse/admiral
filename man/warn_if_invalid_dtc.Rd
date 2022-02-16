@@ -11,6 +11,9 @@ warn_if_invalid_dtc(dtc, is_valid = is_valid_dtc(dtc))
 
 \item{is_valid}{a logical vector indicating whether elements in \code{dtc} are valid}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Warn if the vector contains unknown datetime format such as
 "2003-12-15T-:15:18", "2003-12-15T13:-:19","--12-15","-----T07:15"

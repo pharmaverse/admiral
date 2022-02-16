@@ -17,6 +17,8 @@
 #' has been thrown, the dataset of the first error can no longer be accessed (unless
 #' it has been saved in a variable).
 #'
+#' @return A `data.frame` or `NULL`
+#'
 #' @keywords user_utility
 #'
 #' @examples
@@ -38,6 +40,8 @@ get_duplicates_dataset <- function() {
 #' @param by_vars A list of variables created using `vars()` identifying groups of
 #'   records in which to look for duplicates
 #'
+#' @return A `data.frame` of duplicate records within `dataset`
+#'
 #' @export
 #' @keywords dev_utility
 #' @author Thomas Neitmann
@@ -50,10 +54,8 @@ get_duplicates_dataset <- function() {
 #'
 #' extract_duplicate_records(adsl, vars(USUBJID))
 extract_duplicate_records <- function(dataset, by_vars) {
-  assert_that(
-    is.data.frame(dataset),
-    is_vars(by_vars)
-  )
+  assert_vars(by_vars)
+  assert_data_frame(dataset, required_vars = by_vars, check_is_grouped = FALSE)
 
   data_by <- dataset %>%
     ungroup() %>%
@@ -77,6 +79,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
 #'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
 #'
+#' @return No return value, called for side effects
+#'
 #' @export
 #' @keywords dev_utility
 #' @author Thomas Neitmann
@@ -92,14 +96,12 @@ signal_duplicate_records <- function(dataset,
                                      by_vars,
                                      msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))), # nolint
                                      cnd_type = "error") {
-  assert_that(
-    is.data.frame(dataset),
-    is_vars(by_vars),
-    rlang::is_scalar_character(msg),
-    rlang::is_scalar_character(cnd_type)
-  )
+  assert_vars(by_vars)
+  assert_data_frame(dataset, required_vars = by_vars, check_is_grouped = FALSE)
+  assert_character_scalar(msg)
+  assert_character_scalar(cnd_type, values = c("message", "warning", "error"))
+
   cnd_funs <- list(message = inform, warning = warn, error = abort)
-  arg_match(cnd_type, names(cnd_funs))
 
   duplicate_records <- extract_duplicate_records(dataset, by_vars)
   if (nrow(duplicate_records) >= 1L) {

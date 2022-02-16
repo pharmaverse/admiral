@@ -9,6 +9,7 @@
 ^docs$
 ^Meta$
 ^codecov\.yml$
+^man/dev_util_.+\.Rd$
 ^vignettes/admiral\.Rmd$
 ^vignettes/development_process\.Rmd$
 ^vignettes/contribution_model\.Rmd$

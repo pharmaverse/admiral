@@ -1,3 +1,12 @@
+# admiral 0.6.3
+
+Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raised after submitting v0.6.2 (#946)
+
+# admiral 0.6.2
+
+Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/925) raised after submitting v0.6.1 (#925)
+
+
 # admiral 0.6.1
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raised after submitting v0.6.0 (#918)

@@ -12,6 +12,9 @@ derive_var_basec(dataset, by_vars)
 \item{by_vars}{Grouping variables uniquely identifying a set
 of records for which to calculate \code{new_var}}
 }
+\value{
+The input dataset with variable \code{BASEC} added
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 

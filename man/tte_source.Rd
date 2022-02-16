@@ -34,32 +34,6 @@ An object of class \code{tte_source}
 \description{
 The \code{tte_source} object is used to define events and possible censorings.
 }
-\examples{
-# Death event
-admiral:::tte_source(
-  dataset_name = "adsl",
-  filter = DTHFL == "Y",
-  date = DTHDT,
-  censor = 0,
-  set_values_to = vars(
-    EVNTDESC = "DEATH",
-    SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"
-  )
-)
-
-# Last study date known alive censor
-admiral:::tte_source(
-  dataset_name = "adsl",
-  date = LSTALVDT,
-  censor = 1,
-  set_values_to = vars(
-    EVNTDESC = "ALIVE",
-    SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"
-  )
-)
-}
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}, \code{\link[=event_source]{event_source()}}
 }
