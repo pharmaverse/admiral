@@ -31,7 +31,7 @@ Description: A toolbox for programming Clinical Data Standards Interchange Conso
     mandatory part of any New Drug or Biologics License Application submitted to the
     United States Food and Drug Administration (FDA). Analysis derivations are
     implemented in accordance with the "Analysis Data Model Implementation Guide"
-    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>)
+    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
