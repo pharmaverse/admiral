@@ -669,32 +669,6 @@ extend_source_datasets <- function(source_datasets,
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
 #' @return An object of class `tte_source`
-#'
-#' @examples
-#' # Death event
-#' admiral:::tte_source(
-#'   dataset_name = "adsl",
-#'   filter = DTHFL == "Y",
-#'   date = DTHDT,
-#'   censor = 0,
-#'   set_values_to = vars(
-#'     EVNTDESC = "DEATH",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "DTHDT"
-#'   )
-#' )
-#'
-#' # Last study date known alive censor
-#' admiral:::tte_source(
-#'   dataset_name = "adsl",
-#'   date = LSTALVDT,
-#'   censor = 1,
-#'   set_values_to = vars(
-#'     EVNTDESC = "ALIVE",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
-#'   )
-#' )
 tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
