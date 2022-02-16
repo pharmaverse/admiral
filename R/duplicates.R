@@ -55,7 +55,7 @@ get_duplicates_dataset <- function() {
 #' extract_duplicate_records(adsl, vars(USUBJID))
 extract_duplicate_records <- function(dataset, by_vars) {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset, required_vars = by_vars, check_is_grouped = FALSE)
 
   data_by <- dataset %>%
     ungroup() %>%
@@ -97,7 +97,7 @@ signal_duplicate_records <- function(dataset,
                                      msg = paste("Dataset contains duplicate records with respect to", enumerate(vars2chr(by_vars))), # nolint
                                      cnd_type = "error") {
   assert_vars(by_vars)
-  assert_data_frame(dataset, required_vars = by_vars)
+  assert_data_frame(dataset, required_vars = by_vars, check_is_grouped = FALSE)
   assert_character_scalar(msg)
   assert_character_scalar(cnd_type, values = c("message", "warning", "error"))
 

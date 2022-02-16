@@ -5,6 +5,7 @@
 #'
 #' @param arg A function argument to be checked
 #' @param required_vars A list of variables created using `vars()`
+#' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -32,8 +33,9 @@
 #' try(example_fun(dplyr::select(dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
-assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+assert_data_frame <- function(arg, required_vars = NULL, check_is_grouped = TRUE, optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
+  assert_logical_scalar(check_is_grouped)
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -49,7 +51,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (dplyr::is_grouped_df(arg)) {
+  if (check_is_grouped && dplyr::is_grouped_df(arg)) {
     err_msg <- sprintf(
       "`%s` is a grouped data frame, please `ungroup()` it first",
       arg_name(substitute(arg))
