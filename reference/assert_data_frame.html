@@ -87,7 +87,7 @@ a set of required variables" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -203,7 +203,12 @@ a set of required variables" />
 a set of required variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'>assert_data_frame</span>(<span class='no'>arg</span>, <span class='kw'>required_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>optional</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>assert_data_frame</span>(
+  <span class='no'>arg</span>,
+  <span class='kw'>required_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>check_is_grouped</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>optional</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -215,6 +220,10 @@ a set of required variables</p>
     <tr>
       <th>required_vars</th>
       <td><p>A list of variables created using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>check_is_grouped</th>
+      <td><p>Throw an error is <code>dataset</code> is grouped? Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>optional</th>

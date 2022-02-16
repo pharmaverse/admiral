@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -291,7 +291,7 @@ considered.</p></td>
     <p>A datetime object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18T15:25:00"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 15:25:00</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>())</div><div class='output co'>#&gt; [1] "2022-02-14 14:34:22 UTC"</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>), <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"23:59:59"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 23:59:59</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18"</span>, <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"23:59:59"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 23:59:59</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18"</span>)</div><div class='output co'>#&gt; [1]  &lt;NA&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18T15:25:00"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 15:25:00</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>())</div><div class='output co'>#&gt; [1] "2022-02-16 17:16:47 UTC"</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-07-18"</span>), <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"23:59:59"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 23:59:59</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18"</span>, <span class='kw'>time_imputation</span> <span class='kw'>=</span> <span class='st'>"23:59:59"</span>)</div><div class='output co'>#&gt; [1]  2019-07-18 23:59:59</div><div class='input'><span class='fu'>convert_date_to_dtm</span>(<span class='st'>"2019-07-18"</span>)</div><div class='output co'>#&gt; [1]  &lt;NA&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

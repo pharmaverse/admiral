@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -244,46 +244,6 @@ character string, a numeric value, or <code>NA</code>.</p></td>
 
     <div class='dont-index'><p><code><a href='derive_param_tte.html'>derive_param_tte()</a></code>, <code><a href='censor_source.html'>censor_source()</a></code>, <code><a href='event_source.html'>event_source()</a></code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Death event</span>
-<span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>tte_source</span>(
-  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"adsl"</span>,
-  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>DTHFL</span> <span class='kw'>==</span> <span class='st'>"Y"</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>DTHDT</span>,
-  <span class='kw'>censor</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
-    <span class='kw'>EVNTDESC</span> <span class='kw'>=</span> <span class='st'>"DEATH"</span>,
-    <span class='kw'>SRCDOM</span> <span class='kw'>=</span> <span class='st'>"ADSL"</span>,
-    <span class='kw'>SRCVAR</span> <span class='kw'>=</span> <span class='st'>"DTHDT"</span>
-  )
-)</div><div class='output co'>#&gt; &lt;tte_source&gt; object
-#&gt; dataset_name: "adsl"
-#&gt; filter: DTHFL == "Y"
-#&gt; date: DTHDT
-#&gt; censor: 0
-#&gt; set_values_to:
-#&gt;   EVNTDESC: "DEATH"
-#&gt;   SRCDOM: "ADSL"
-#&gt;   SRCVAR: "DTHDT"</div><div class='input'>
-<span class='co'># Last study date known alive censor</span>
-<span class='kw pkg'>admiral</span><span class='kw ns'>:::</span><span class='fu'>tte_source</span>(
-  <span class='kw'>dataset_name</span> <span class='kw'>=</span> <span class='st'>"adsl"</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='no'>LSTALVDT</span>,
-  <span class='kw'>censor</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>set_values_to</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(
-    <span class='kw'>EVNTDESC</span> <span class='kw'>=</span> <span class='st'>"ALIVE"</span>,
-    <span class='kw'>SRCDOM</span> <span class='kw'>=</span> <span class='st'>"ADSL"</span>,
-    <span class='kw'>SRCVAR</span> <span class='kw'>=</span> <span class='st'>"LSTALVDT"</span>
-  )
-)</div><div class='output co'>#&gt; &lt;tte_source&gt; object
-#&gt; dataset_name: "adsl"
-#&gt; filter: NULL
-#&gt; date: LSTALVDT
-#&gt; censor: 1
-#&gt; set_values_to:
-#&gt;   EVNTDESC: "ALIVE"
-#&gt;   SRCDOM: "ADSL"
-#&gt;   SRCVAR: "LSTALVDT"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

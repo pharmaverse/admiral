@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -224,7 +224,8 @@ is <code>NULL</code> then an error is thrown</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The function throws an error if <code>arg</code> is not a list or if <code>arg</code> is a list but its
-elements are not objects inheriting from <code>class</code></p>
+elements are not objects inheriting from <code>class</code>. Otherwise, the input is returned
+invisibly.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>example_fun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>list</span>) {
