@@ -294,31 +294,6 @@ on_failure(is_order_vars) <- function(call, env) {
   )
 }
 
-is_unnamed_exprs <- function(arg) {
-  is.list(arg) &&
-    all(map_lgl(arg, is.language)) &&
-    all(names(arg) == "")
-}
-on_failure(is_unnamed_exprs) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a unnamed list of expressions created using `exprs()`"
-  )
-}
-
-is_expr <- function(arg) {
-  # Note: is.language allows both symbol and language
-  !is.list(arg) & is.language(arg)
-}
-on_failure(is_expr) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not an expression created using `expr()`"
-  )
-}
-
 #' Check Whether an Argument Is Not a Quosure of a Missing Argument
 #'
 #' @param x Test object
