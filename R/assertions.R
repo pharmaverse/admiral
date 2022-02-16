@@ -978,6 +978,8 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
 #'
 #' @keywords check
 #'
+#' @noRd
+#'
 #' @examples
 #' refdate <- lubridate::ymd("2020-01-02")
 #' date <- lubridate::ymd("2020-02-03")
@@ -1017,6 +1019,8 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @keywords check
 #'
+#' @noRd
+#'
 #' @examples
 #' unit <- "days"
 #' assertthat::assert_that(admiral:::is_timeunit(unit))
@@ -1046,6 +1050,8 @@ on_failure(is_timeunit) <- function(call, env) {
 #' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
 #'
 #' @keywords check
+#'
+#' @noRd
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
@@ -1079,6 +1085,8 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
+#' @noRd
+#'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
 #' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
@@ -1110,6 +1118,8 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @keywords check
 #'
+#' @noRd
+#'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_sec_min(59))
 is_valid_sec_min <- function(arg) {
@@ -1137,6 +1147,8 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #' @return `TRUE` if the argument is a valid hour input, `FALSE` otherwise
 #'
 #' @keywords check
+#'
+#' @noRd
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_hour(20))
@@ -1166,6 +1178,8 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @keywords check
 #'
+#' @noRd
+#'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_day(20))
 is_valid_day <- function(arg) {
@@ -1193,6 +1207,8 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @return `TRUE` if the argument is a month input, `FALSE` otherwise
 #'
 #' @keywords check
+#'
+#' @noRd
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_month(12))
