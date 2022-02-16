@@ -144,6 +144,8 @@ arg_name <- function(expr) { # nolint
 #' @param x An `R` object
 #' @param side One of `"lhs"` (the default) or `"rhs"`
 #'
+#' @return A list of `quosures`
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
@@ -174,6 +176,8 @@ extract_vars <- function(x, side = "lhs") {
 #' Concatenate One or More Quosure(s)
 #'
 #' @param ... One or more objects of class `quosure` or `quosures`
+#'
+#' @return An object of class `quosures`
 #'
 #' @author Thomas Neitmann
 #'

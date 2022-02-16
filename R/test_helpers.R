@@ -8,6 +8,9 @@
 #'        `base` and `compare` datasets
 #' @param ... Additional arguments passed onto [diffdf::diffdf()]
 #'
+#' @return
+#' An error if `base` and `compare` do not match of `NULL` invisiblly if they do
+#'
 #' @author Thomas Neitmann
 #' @keywords test_helper dev_utility
 #' @export

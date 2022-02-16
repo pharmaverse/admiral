@@ -9,6 +9,9 @@ extract_unit(x)
 \arguments{
 \item{x}{A parameter description}
 }
+\value{
+A string
+}
 \description{
 Extract the unit of a parameter from a description like "Param (unit)".
 }

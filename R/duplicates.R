@@ -17,6 +17,8 @@
 #' has been thrown, the dataset of the first error can no longer be accessed (unless
 #' it has been saved in a variable).
 #'
+#' @return A `data.frame` or `NULL`
+#'
 #' @keywords user_utility
 #'
 #' @examples
@@ -37,6 +39,8 @@ get_duplicates_dataset <- function() {
 #' @param dataset A data frame
 #' @param by_vars A list of variables created using `vars()` identifying groups of
 #'   records in which to look for duplicates
+#'
+#' @return A `data.frame` of duplicate records within `dataset`
 #'
 #' @export
 #' @keywords dev_utility
@@ -76,6 +80,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @param msg The condition message
 #' @param cnd_type Type of condition to signal when detecting duplicate records.
 #'   One of `"message"`, `"warning"` or `"error"`. Default is `"error"`.
+#'
+#' @return No return value, called for side effects
 #'
 #' @export
 #' @keywords dev_utility

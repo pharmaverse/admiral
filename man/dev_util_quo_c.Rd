@@ -9,6 +9,9 @@ quo_c(...)
 \arguments{
 \item{...}{One or more objects of class \code{quosure} or \code{quosures}}
 }
+\value{
+An object of class \code{quosures}
+}
 \description{
 Concatenate One or More Quosure(s)
 }

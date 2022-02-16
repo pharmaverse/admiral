@@ -21,6 +21,9 @@ convert_blanks_to_na(x)
 \arguments{
 \item{x}{Any R object}
 }
+\value{
+An object of the same class as the input
+}
 \description{
 Turn SAS blank strings into proper R \code{NA}s.
 }

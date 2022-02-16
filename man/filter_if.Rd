@@ -11,6 +11,10 @@ filter_if(dataset, filter)
 
 \item{filter}{A filter condition. Must be a quosure.}
 }
+\value{
+A \code{data.frame} containing all rows in \code{dataset} matching \code{filter} or
+just \code{dataset} if \code{filter} is \code{NULL}
+}
 \description{
 Filters the input dataset if the provided expression is not \code{NULL}
 }

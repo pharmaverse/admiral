@@ -6,6 +6,9 @@
 \usage{
 get_duplicates_dataset()
 }
+\value{
+A \code{data.frame} or \code{NULL}
+}
 \description{
 Get Duplicate Records that Lead to a Prior Error
 }

@@ -9,6 +9,9 @@ negate_vars(vars = NULL)
 \arguments{
 \item{vars}{List of variables created by \code{vars()}}
 }
+\value{
+A list of \code{quosures}
+}
 \description{
 The function adds a minus sign as prefix to each variable.
 }

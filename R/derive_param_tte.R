@@ -781,6 +781,8 @@ censor_source <- function(dataset_name,
 #' @param x A `tte_source` object
 #' @param ... Not used
 #'
+#' @return No return value, called for side effects
+#'
 #' @export
 #'
 #' @seealso [tte_source()], [censor_source()], [event_source()]

@@ -2,6 +2,8 @@
 #'
 #' @param quosures A `list` of `quosures` created using [`vars()`]
 #'
+#' @return A character vector
+#'
 #' @author Thomas Neitmann
 #'
 #' @export
@@ -26,6 +28,8 @@ vars2chr <- function(quosures) {
 #'
 #' @param vars List of variables created by `vars()`
 #'
+#' @return A list of `quosures`
+#'
 #' @author Stefan Bundfuss
 #'
 #' @export
@@ -49,6 +53,9 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @param dataset Input dataset
 #' @param filter A filter condition. Must be a quosure.
+#'
+#' @return A `data.frame` containing all rows in `dataset` matching `filter` or
+#' just `dataset` if `filter` is `NULL`
 #'
 #' @author Thomas Neitmann
 #'
@@ -79,6 +86,8 @@ filter_if <- function(dataset, filter) {
 #'
 #' @param x A parameter description
 #'
+#' @return A string
+#'
 #' @export
 #'
 #' @keywords user_utility
@@ -107,6 +116,8 @@ extract_unit <- function(x) {
 #' When given a data frame as input the function keeps all non-character columns
 #' as is and applies the just described logic to `character` columns. Once again
 #' all attributes such as labels are preserved.
+#'
+#' @return An object of the same class as the input
 #'
 #' @author Thomas Neitmann
 #'

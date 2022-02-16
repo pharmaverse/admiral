@@ -11,6 +11,9 @@ extract_vars(x, side = "lhs")
 
 \item{side}{One of \code{"lhs"} (the default) or \code{"rhs"}}
 }
+\value{
+A list of \code{quosures}
+}
 \description{
 Extract All Symbols from a List of Quosures
 }

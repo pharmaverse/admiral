@@ -9,6 +9,9 @@ vars2chr(quosures)
 \arguments{
 \item{quosures}{A \code{list} of \code{quosures} created using \code{\link[=vars]{vars()}}}
 }
+\value{
+A character vector
+}
 \description{
 Turn a List of Quosures into a Character Vector
 }
