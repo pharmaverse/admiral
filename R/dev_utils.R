@@ -8,6 +8,8 @@
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_enumerate
+#'
 #' @examples
 #' admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
 #' admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
@@ -36,6 +38,8 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_backquote
+#'
 #' @examples
 #' admiral:::backquote("USUBJID")
 backquote <- function(x) {
@@ -49,6 +53,8 @@ backquote <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_squote
 #'
 #' @examples
 #' admiral:::squote("foo")
@@ -68,6 +74,8 @@ squote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_notin
+#'
 #' @examples
 #' `%notin%` <- admiral:::`%notin%`
 #' "a" %notin% c("b", "v", "k")
@@ -86,6 +94,8 @@ squote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_convert_dtm_to_dtc
+#'
 #' @examples
 #' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
 #' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
@@ -101,6 +111,8 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_arg_name
 #'
 #' @examples
 #' test_fun <- function(something) {
@@ -136,6 +148,8 @@ arg_name <- function(expr) { # nolint
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_extract_vars
+#'
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
@@ -165,6 +179,8 @@ extract_vars <- function(x, side = "lhs") {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_quo_c
+#'
 #' @examples
 #' admiral:::quo_c(rlang::quo(USUBJID))
 #' admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
@@ -186,6 +202,8 @@ quo_c <- function(...) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_what_is_it
 #'
 #' @examples
 #' admiral:::what_is_it(mtcars)
@@ -232,6 +250,8 @@ what_is_it <- function(x) {
 #'   like `starts_with("EX")`
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_get_constant_vars
 #'
 #' @return Variable vector.
 #'
@@ -287,6 +307,8 @@ is_named <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_replace_values_by_names
+#'
 #' @return A list of quosures
 #'
 #' @examples
@@ -315,6 +337,8 @@ get_duplicates <- function(x) {
 #' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_get_source_vars
 #'
 #' @return A list of quosures
 #'
