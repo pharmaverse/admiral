@@ -33,7 +33,10 @@
 #' try(example_fun(dplyr::select(dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
-assert_data_frame <- function(arg, required_vars = NULL, check_is_grouped = TRUE, optional = FALSE) {
+assert_data_frame <- function(arg,
+                              required_vars = NULL,
+                              check_is_grouped = TRUE,
+                              optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
   assert_logical_scalar(check_is_grouped)
   assert_logical_scalar(optional)
