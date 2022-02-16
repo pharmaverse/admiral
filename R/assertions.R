@@ -177,7 +177,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @author Thomas Neitmann
 #'
-#' @return The function throws an error if `arg` is not a character vector or if
+#' @return
+#' The function throws an error if `arg` is not a character vector or if
 #' any element is not included in the list of valid values. Otherwise, the input
 #' is returned invisibly.
 #'
@@ -533,7 +534,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #'
 #' @return
 #' The function throws an error if `arg` is not an integer belonging to the
-#' specified `subset`.
+#' specified `subset`. Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -589,8 +590,9 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if `arg` is not a numeric vector.
-#'   Otherwise, the input is returned invisibly.
+#' @return
+#' The function throws an error if `arg` is not a numeric vector.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -633,7 +635,8 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' @author Thomas Neitmann
 #'
 #' @return
-#' The function throws an error if `arg` is an object which does *not* inherit from `class`
+#' The function throws an error if `arg` is an object which does *not* inherit from `class`.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -683,7 +686,8 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @return
 #' The function throws an error if `arg` is not a list or if `arg` is a list but its
-#' elements are not objects inheriting from `class`
+#' elements are not objects inheriting from `class`. Otherwise, the input is returned
+#' invisibly.
 #'
 #' @export
 #'
@@ -777,7 +781,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @author Thomas Neitmann
 #'
 #' @return The function throws an error if any of the required variables are
-#' missing in the input dataset
+#' missing in the input dataset. Otherwise, the dataset is returned invisibly.
 #'
 #' @export
 #'
@@ -806,6 +810,7 @@ assert_has_variables <- function(dataset, required_vars) {
     }
     abort(err_msg)
   }
+  invisible(dataset)
 }
 
 assert_function_param <- function(arg, params) {
@@ -839,8 +844,10 @@ assert_function_param <- function(arg, params) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if the unit variable differs from the
-#'   unit for any observation of the parameter in the input dataset
+#' @return
+#' The function throws an error if the unit variable differs from the
+#' unit for any observation of the parameter in the input dataset. Otherwise, the
+#' dataset is returned invisibly.
 #'
 #' @export
 #'
@@ -878,6 +885,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+  invisible(dataset)
 }
 
 #' Asserts That a Parameter Does Not Exist in the Dataset
@@ -889,8 +897,9 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if the parameter exists in the input
-#'   dataset
+#' @return
+#' The function throws an error if the parameter exists in the input
+#' dataset. Otherwise, the dataset is returned invisibly.
 #'
 #' @export
 #'
@@ -913,6 +922,7 @@ assert_param_does_not_exist <- function(dataset, param) {
       )
     )
   }
+  invisible(dataset)
 }
 
 #' Helper Function to Check IDVAR per QNAM
@@ -979,6 +989,10 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
 #' is `NULL` then an error is thrown.
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variable-value expressions.
+#' Otherwise, the input it returned invisibly.
 #'
 #' @keywords assertion
 #'
@@ -1127,6 +1141,9 @@ assert_varval_list <- function(arg, # nolint
 #'
 #' @author Stefan Bundfuss
 #'
+#' @return
+#' An error if the condition is not meet. The input otherwise.
+#'
 #' @keywords assertion
 #'
 #' @export
@@ -1194,6 +1211,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
       )
     )
   }
+  invisible(list)
 }
 
 
@@ -1210,6 +1228,9 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @param vars2 Second list of variables
 #'
 #' @author Stefan Bundfuss
+#'
+#' @return
+#' An error if the condition is not meet. The input otherwise.
 #'
 #' @keywords assertion
 #'
@@ -1276,6 +1297,8 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
 #' second error has been thrown, the dataset of the first error can no longer be
 #' accessed (unless it has been saved in a variable).
 #'
+#' @return A `data.frame` or `NULL`
+#'
 #' @keywords user_utility
 #'
 #' @examples
@@ -1305,6 +1328,8 @@ get_one_to_many_dataset <- function() {
 #' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
 #' second error has been thrown, the dataset of the first error can no longer be
 #' accessed (unless it has been saved in a variable).
+#'
+#' @return A `data.frame` or `NULL`
 #'
 #' @keywords user_utility
 #'
