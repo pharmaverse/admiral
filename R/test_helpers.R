@@ -9,7 +9,7 @@
 #' @param ... Additional arguments passed onto [diffdf::diffdf()]
 #'
 #' @return
-#' An error if `base` and `compare` do not match of `NULL` invisiblly if they do
+#' An error if `base` and `compare` do not match or `NULL` invisibly if they do
 #'
 #' @author Thomas Neitmann
 #' @keywords test_helper dev_utility
