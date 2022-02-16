@@ -351,3 +351,7 @@ get_source_vars <- function(quosures) {
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
+
+contains_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
+}
