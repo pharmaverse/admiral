@@ -31,7 +31,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with the \code{LSTALVDT} variable added.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\verb{r lifecycle::badge("questioning")}
 
 Add the last known alive date (\code{LSTALVDT}) to the dataset.
 }

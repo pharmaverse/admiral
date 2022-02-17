@@ -23,6 +23,7 @@ dataset](../articles/queries_dataset.html) required as input for
 
 ## Documentation
 
+- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 
 ## Various
 
