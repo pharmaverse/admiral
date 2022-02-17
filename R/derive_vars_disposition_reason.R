@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' *Deprecated*, please use `derive_vars_disposition()` instead.
+#' *Deprecated*, please use `derive_vars_disposition_reason()` instead.
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
@@ -160,9 +160,10 @@ derive_disposition_reason <- function(dataset,
                                  subject_keys = subject_keys)
 }
 
-#' Default format for the disposition reason
+#' Default Format for the Disposition Reason
 #'
-#' Define a function to map the disposition reason
+#' Define a function to map the disposition reason, to be used as a parameter in
+#' `derive_vars_disposition_reason()`.
 #'
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
 #' @param reason_spe the disposition variable used for the mapping of the details
@@ -173,17 +174,29 @@ derive_disposition_reason <- function(dataset,
 #' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
 #' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
 #'
-#' For example:
-#' ```
-#' DCSREAS = format_reason_default(DSDECOD)
-#' DCSREASP = format_reason_default(DSDECOD, DSTERM)
-#' ```
-#'
 #' @return A `character` vector
 #'
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @seealso [derive_vars_disposition_reason()]
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data("dm")
+#' data("ds")
+#'
+#' # Derive DCSREAS using format_reason_default
+#' dm %>%
+#'   derive_vars_disposition_reason(
+#'     dataset_ds = ds,
+#'     new_var = DCSREAS,
+#'     reason_var = DSDECOD,
+#'     format_new_vars = format_reason_default,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, DCSREAS)
+#'
 format_reason_default <- function(reason, reason_spe = NULL) {
   out <- if (is.null(reason_spe)) reason else reason_spe
   if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
@@ -193,16 +206,16 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' Derive a disposition reason from the the relevant records in the disposition domain.
 #'
-#' @param dataset Input dataset.
+#' @param dataset Input dataset
 #'
-#' @param dataset_ds Dataset containing the disposition information (e.g.: `ds`).
+#' @param dataset_ds Dataset containing the disposition information (e.g. `ds`)
 #'
-#' It must contain:
+#' The dataset must contain:
 #' - `STUDYID`, `USUBJID`,
 #' - The variable(s) specified in the `reason_var` (and `reason_var_spe`, if required)
 #' - The variables used in `filter_ds`.
 #'
-#' @param new_var Name of the disposition reason variable.
+#' @param new_var Name of the disposition reason variable
 #'
 #' A variable name is expected (e.g. `DCSREAS`).
 #'
@@ -210,7 +223,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' A variable name is expected (e.g. `DSDECOD`).
 #'
-#' @param new_var_spe Name of the disposition reason detail variable.
+#' @param new_var_spe Name of the disposition reason detail variable
 #'
 #' A variable name is expected (e.g. `DCSREASP`).
 #' If `new_var_spe` is specified, it is expected that `reason_var_spe` is also specified,
@@ -326,24 +339,25 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'   ) %>%
 #'   select(STUDYID, USUBJID, DCSREAS, DCSREASP)
 derive_vars_disposition_reason <- function(dataset,
-                                      dataset_ds,
-                                      new_var,
-                                      reason_var,
-                                      new_var_spe = NULL,
-                                      reason_var_spe = NULL,
-                                      format_new_vars = format_reason_default,
-                                      filter_ds,
-                                      subject_keys = vars(STUDYID, USUBJID)) {
+                                           dataset_ds,
+                                           new_var,
+                                           reason_var,
+                                           new_var_spe = NULL,
+                                           reason_var_spe = NULL,
+                                           format_new_vars = format_reason_default,
+                                           filter_ds,
+                                           subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   reason_var <- assert_symbol(enquo(reason_var))
   new_var_spe <- assert_symbol(enquo(new_var_spe), optional = T)
   reason_var_spe <- assert_symbol(enquo(reason_var_spe), optional = T)
   assert_that(is.function(format_new_vars))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
-  assert_data_frame(dataset)
-  assert_data_frame(dataset_ds)
-  warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
+  assert_data_frame(dataset, required_vars = subject_keys)
+  assert_data_frame(dataset_ds,
+                    required_vars = quo_c(subject_keys, reason_var, reason_var_spe))
+  warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Additional checks
   if (!quo_is_null(new_var_spe)) {
@@ -360,31 +374,17 @@ derive_vars_disposition_reason <- function(dataset,
   } else {
     statusvar <- quo_text(reason_var)
   }
-  assert_has_variables(dataset_ds, statusvar)
 
-  # Process the disposition data
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    select(!!!subject_keys, !!reason_var, !!reason_var_spe)
+  dataset <- dataset %>%
+    derive_vars_merged(dataset_add = dataset_ds,
+                       filter_add = !!filter_ds,
+                       new_vars = quo_c(reason_var, reason_var_spe),
+                       by_vars = subject_keys) %>%
+    mutate(!!new_var := format_new_vars(!!reason_var))
 
-  # Expect 1 record per subject in the subsetted DS - issue an error otherwise
-  signal_duplicate_records(
-    ds_subset,
-    by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
-  # Add the status variable and derive the new dispo reason(s) in the input dataset
   if (!quo_is_null(new_var_spe)) {
-    dataset %>%
-      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-      mutate(!!new_var := format_new_vars(!!reason_var)) %>%
-      mutate(!!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)) %>%
-      select(-statusvar)
-  } else {
-    dataset %>%
-      left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-      mutate(!!new_var := format_new_vars(!!reason_var)) %>%
-      select(-statusvar)
+    dataset <- mutate(dataset,
+                      !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe))
   }
+  select(dataset, -statusvar)
 }

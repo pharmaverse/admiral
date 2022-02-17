@@ -29,9 +29,13 @@
 #' data(ae)
 #' data(adsl)
 #'
-#' adae <- ae[sample(1:nrow(ae), 1000), ] %>%
-#'   left_join(adsl, by = "USUBJID") %>%
-#'   select(USUBJID, AESTDTC, AEENDTC, TRTSDT, TRTEDT)
+#' adae <-
+#'   select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     new_vars = vars(TRTSDT, TRTEDT),
+#'     by_vars = vars(USUBJID)
+#'   )
 #'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
 #' ## one can add multiple variables in one go

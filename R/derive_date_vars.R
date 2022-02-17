@@ -33,9 +33,6 @@
 #'
 #'   Default is `"00:00:00"`.
 #'
-#'
-#'
-#'
 #' @param min_dates Minimum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not
@@ -69,17 +66,14 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered.
 #'
-#' @param preserve Preserve partial dates when doing date imputation for middle
-#' day and month
+#' @param preserve Preserve day if month is missing and day is present
 #'
-#' A user wishing to preserve partial dates when doing middle day and month date
-#' imputation can invoke this argument.  For example `"2019---07"` would return
-#' `"2019-06-07` if date_imputation = "MID" and preserve = TRUE.
+#' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
+#' (and `date_imputation = "MID"`).
 #'
-#'  A logical value
+#' Permitted Values: `TRUE`, `FALSE`
 #'
-#'  Default: `FALSE`
-#'
+#' Default: `FALSE`
 #'
 #' @author Samia Kabi
 #'
@@ -600,7 +594,9 @@ compute_tmf <- function(dtc,
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#'   A character is expected: e.g. `new_vars_prefix = "AST"`.
+#'   A character scalar is expected. For the date variable "DT" is appended to
+#'   the specified prefix and for the date imputation flag "DTF". I.e., for
+#'   `new_vars_prefix = "AST"` the variables `ASTDT` and `ASTDTF` are created.
 #'
 #' @param flag_imputation Whether the date imputation flag should also be derived.
 #'
@@ -766,13 +762,21 @@ derive_vars_dt <- function(dataset,
 #'
 #' @param new_vars_prefix Prefix used for the output variable(s).
 #'
-#' a character is expected: e.g. `new_vars_prefix = "AST"`.
+#'   A character scalar is expected. For the date variable "DT" is appended to
+#'   the specified prefix, for the date imputation flag "DTF", and for the time
+#'   imputation flag "TMF". I.e., for `new_vars_prefix = "AST"` the variables
+#'   `ASTDT`, `ASTDTF`, and `ASTTMF` are created.
+#'
 #'
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
-#' One of "auto", "date" or "both"
+#'   If `"auto"` is specified, the date imputation flag is derived if the
+#'   `date_imputation` parameter is not null and the time imputation flag is
+#'   derived if the `time_imputation` parameter is not null
 #'
-#' Default: "auto"
+#'   *Default*: `"auto"`
+#'
+#'   *Permitted Values*: `"auto"`, `"date"`, `"time"`, `"both"`, or `"none"`
 #'
 #'
 #' @inheritParams impute_dtc

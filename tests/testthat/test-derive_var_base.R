@@ -130,6 +130,6 @@ test_that("An error is thrown if a subject has multiple records per `PARAMCD` an
       source_var = AVALC,
       new_var = BASEC
     ),
-    "Dataset contains multiple baseline records."
+    "Input dataset contains multiple baseline records with respect to .*"
   )
 })

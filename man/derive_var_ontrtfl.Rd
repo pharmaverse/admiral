@@ -22,8 +22,7 @@ derive_var_ontrtfl(
 Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date}.}
 
 \item{new_var}{On-treatment flag variable name to be created.
-Permitted Values: \code{ONTRTFL}, \code{ONTRxxFL} and \code{ONTRTwFL}.
-\code{xx} and \code{w} could be replaced based on analysis needs.
+
 Default is \code{ONTRTFL}.}
 
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})

@@ -19,8 +19,8 @@ assert_varval_list(
 
 \item{accept_expr}{Should expressions on the right hand side be accepted?}
 
-\item{accept_var}{Should unnamed variable names (e.g. vars(USUBJID)) on the right hand
-side be accepted?}
+\item{accept_var}{Should unnamed variable names (e.g. \code{vars(USUBJID)}) on the
+right hand side be accepted?}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown.}

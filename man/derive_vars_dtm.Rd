@@ -24,7 +24,10 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix, for the date imputation flag "DTF", and for the time
+imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -62,9 +65,13 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-One of "auto", "date" or "both"
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null and the time imputation flag is
+derived if the \code{time_imputation} parameter is not null
 
-Default: "auto"}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
@@ -96,14 +103,12 @@ any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
 
-\item{preserve}{Preserve partial dates when doing date imputation for middle
-day and month
+\item{preserve}{Preserve day if month is missing and day is present
 
-A user wishing to preserve partial dates when doing middle day and month date
-imputation can invoke this argument.  For example \code{"2019---07"} would return
-\verb{"2019-06-07} if date_imputation = "MID" and preserve = TRUE.
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
 
-A logical value
+Permitted Values: \code{TRUE}, \code{FALSE}
 
 Default: \code{FALSE}}
 

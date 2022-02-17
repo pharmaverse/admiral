@@ -229,7 +229,12 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #'
-#' @author Thomas Neitmann
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
+#' `NULL` is considered as valid value.
+#'
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
@@ -251,7 +256,11 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #' try(example_fun(c(TRUE, FALSE, FALSE)))
 #'
 #' try(example_fun(1:10))
-assert_logical_scalar <- function(arg) {
+assert_logical_scalar <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
@@ -809,6 +818,79 @@ assert_has_variables <- function(dataset, required_vars) {
   }
 }
 
+#' Is Argument a Function?
+#'
+#' Checks if the argument is a function and if all expected parameters are
+#' provided by the function.
+#'
+#' @param arg A function argument to be checked
+#'
+#' @param params A character vector of expected parameter names
+#'
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error
+#'
+#'  - if the argument is not a function or
+#'
+#'  - if the function does not provide all parameters as specified for the
+#'  `params` parameter.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(fun) {
+#'   assert_function(fun, params = c("x"))
+#' }
+#'
+#' example_fun(mean)
+#'
+#' try(example_fun(1))
+
+#' try(example_fun(sum))
+assert_function <- function(arg, params = NULL, optional = FALSE) {
+  assert_character_vector(params, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default",
+                       arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!is.function(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a function but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+  if (!is.null(params)) {
+    is_param <- params %in% names(formals(arg))
+    if (!all(is_param)) {
+      txt <- if (sum(!is_param) == 1L) {
+        "%s is not a parameter of the function specified for `%s`"
+      } else {
+        "%s are not parameters of the function specified for `%s`"
+      }
+      err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
+      abort(err_msg)
+    }
+  }
+  invisible(arg)
+}
+
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)
@@ -881,7 +963,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   }
 }
 
-#' Asserts That a Parameter Does not Exist in the Dataset
+#' Asserts That a Parameter Does Not Exist in the Dataset
 #'
 #' Checks if a parameter (`PARAMCD`) does not exist in a dataset.
 #'
@@ -916,7 +998,7 @@ assert_param_does_not_exist <- function(dataset, param) {
   }
 }
 
-#' Helper function to checks IDVAR per QNAM
+#' Helper Function to Check IDVAR per QNAM
 #'
 #' @param x A Supplemental Qualifier (SUPPQUAL) data set.
 #'
@@ -938,7 +1020,7 @@ assert_supp_idvar <- function(x) {
   }
 }
 
-#' Helper function to check DOAMIN and RDOMAIN
+#' Helper Function to Check DOAMIN and RDOMAIN
 #'
 #' @param dataset A SDTM domain data set.
 #' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
@@ -1220,8 +1302,8 @@ on_failure(is_valid_month) <- function(call, env) {
 #' @param arg A function argument to be checked
 #' @param required_elements A `character` vector of names that must be present in `arg`
 #' @param accept_expr Should expressions on the right hand side be accepted?
-#' @param accept_var Should unnamed variable names (e.g. vars(USUBJID)) on the right hand
-#' side be accepted?
+#' @param accept_var Should unnamed variable names (e.g. `vars(USUBJID)`) on the
+#'   right hand side be accepted?
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown.
 #'
@@ -1406,7 +1488,7 @@ on_failure(is_expr) <- function(call, env) {
   )
 }
 
-#' Check whether an argument is not a quosure of a missing argument
+#' Check Whether an Argument Is Not a Quosure of a Missing Argument
 #'
 #' @param x Test object
 #'

@@ -16,18 +16,18 @@
 #'   The first or last observation is determined with respect to the specified
 #'   order.
 #'
-#'   Permitted Values: list of variables or functions of variables
+#'   Permitted Values: list of variables or `desc(<variable>)` function calls
 #'
 #' @param new_var Variable to add
 #'
 #'   The specified variable is added to the output dataset. It is set to `"Y"`
 #'   for the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: list of name-value pairs
+#'   Permitted Values: variable name
 #'
 #' @param mode Flag mode
 #'
-#'   Determines of the first or last observation is flagged.
+#'   Determines if the first or last observation is flagged.
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
@@ -173,7 +173,7 @@ derive_extreme_flag <- function(dataset,
   )
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
 #'
 #'
 #' @description
@@ -515,7 +515,7 @@ derive_var_extreme_flag <- function(dataset,
   data %>% select(-temp_obs_nr)
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
 #' @inheritParams derive_var_extreme_flag
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.

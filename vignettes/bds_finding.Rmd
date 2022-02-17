@@ -50,7 +50,7 @@ To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
@@ -91,10 +91,11 @@ relevant `ADSL` would be added later.
 
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
-advs <- left_join(
+advs <- derive_vars_merged(
   vs,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = vars(STUDYID, USUBJID)
 )
 ```
 
@@ -242,7 +243,11 @@ this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`,
 will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}
-advs <- left_join(advs, select(param_lookup, VSTESTCD, PARAMCD), by = "VSTESTCD")
+advs <- derive_vars_merged(
+  advs,
+  dataset_add = param_lookup,
+  new_vars = vars(PARAMCD),
+  by_vars = vars(VSTESTCD))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -349,7 +354,10 @@ from the look-up table (`PARAM`, `PARAMCAT1`,...) should be added.
 ```{r eval=TRUE}
 
 # Derive PARAM and PARAMN
-advs <- left_join(advs, select(param_lookup, -VSTESTCD), by = "PARAMCD")
+advs <- derive_vars_merged(
+  advs,
+  dataset_add = select(param_lookup, -VSTESTCD),
+  by_vars = vars(PARAMCD))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -501,13 +509,15 @@ This function requires the reference range boundaries to exist on the data frame
 ```{r include=FALSE}
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "SYSBP", 90, 130, 70, 140,
-  "DIABP", 60, 80, 40, 90,
-  "PULSE", 60, 100, 40, 110,
-  "TEMP", 36.5, 37.5, 35, 38
+  "SYSBP",    90,    130,      70,   140,
+  "DIABP",    60,     80,      40,    90,
+  "PULSE",    60,    100,      40,   110,
+  "TEMP",     36.5,   37.5,    35,    38
 )
 
-advs <- left_join(advs_pre, range_lookup, by = "PARAMCD")
+advs <- derive_vars_merged(advs_pre,
+                           dataset_add = range_lookup,
+                           by_vars = vars(PARAMCD))
 ```
 
 The function is called as:
@@ -551,7 +561,7 @@ It is important to derive `BASETYPE` first so that it can be utilized in
 subsequent derivations. This will be important if the data frame contains
 multiple values for `BASETYPE`.
 
-Next, the analysis baseline flag `ABLFL` can be derived using the admiral
+Next, the analysis baseline flag `ABLFL` can be derived using the `{admiral}`
 function `derive_var_extreme_flag()`.  For example, if baseline is defined as the last 
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
@@ -577,7 +587,7 @@ dataset_vignette(
 Note: Additional examples of the `derive_var_extreme_flag()` function can be 
 found [above.](#analysisrec)
 
-Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the admiral function
+Lastly, the `BASE`, `BASEC` and  `BNRIND` columns can be derived using the `{admiral}` function
 `derive_var_base()`. Example calls are:
 
 ```{r eval=TRUE}
@@ -613,7 +623,7 @@ dataset_vignette(
 
 ## Derive Change from Baseline (`CHG`, `PCHG`) {#bchange}
 
-Change and percent change from baseline can be derived using the admiral 
+Change and percent change from baseline can be derived using the `{admiral}` 
 functions `derive_var_chg()` and `derive_var_pchg()`.  These functions expect `AVAL` 
 and `BASE` to exist in the data frame.  The `CHG` is simply `AVAL - BASE` and the
 `PCHG` is `(AVAL - BASE) / absolute value (BASE) * 100`.  Examples calls are:
@@ -641,7 +651,7 @@ observations within a particular timing period.
 In this situation, an analysis flag (e.g. `ANLxxFL`) may be used to choose the
 appropriate record for analysis.
 
-This flag may be derived using the admiral function `derive_var_extreme_flag()`. 
+This flag may be derived using the `{admiral}` function `derive_var_extreme_flag()`. 
 For this example, we will assume we would like to choose the latest and 
 highest value by `USUBJID`, `PARAMCD`, `AVISIT`, and `ATPT`.
 
@@ -695,7 +705,7 @@ dataset_vignette(
 
 `TRTA` and `TRTP` must correlate to treatment `TRTxxP` and/or `TRTxxA` in ADSL. The 
 derivation of `TRTA` and `TRTP` for a record are protocol and analysis specific.  
-admiral does not currently have functionality to assist with `TRTA` and `TRTP` 
+`{admiral}` does not currently have functionality to assist with `TRTA` and `TRTP` 
 assignment.
 
 However, an example of a simple implementation could be:
@@ -708,7 +718,7 @@ count(advs, TRTP, TRTA, TRT01P, TRT01A)
 
 ## Assign `ASEQ` {#aseq}
 
-The admiral function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
+The `{admiral}` function `derive_var_obs_number()` can be used to derive `ASEQ`. An 
 example call is:
 
 ```{r eval=TRUE}
@@ -751,7 +761,9 @@ format_avalcat1n <- function(param, aval) {
 
 advs <- advs %>% 
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N"))
+  derive_vars_merged(
+    avalcat_lookup,
+    by = vars(PARAMCD, AVALCA1N))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -768,9 +780,9 @@ List of ADSL variables already merged held in vector `adsl_vars`
 
 ```{r eval=TRUE}
 advs <- advs %>%
-  left_join(
-    select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 ```
 
