@@ -11,6 +11,10 @@ default_qtc_paramcd(method)
 
 Permitted Values: \code{"Bazett"}, \code{"Fridericia"}, \code{"Sagie"}}
 }
+\value{
+\code{"QTCBR"} if \code{method} is \code{"Bazett"}, \code{"QTCFR"} if it's \code{"Fridericia"} or
+\code{"QTLCR"} if it's \code{"Sagie"}. An error otherwise.
+}
 \description{
 Get Default Parameter Code for Corrected QT
 }

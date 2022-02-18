@@ -111,6 +111,8 @@ derive_var_base <- function(dataset,
 #'
 #' @inheritParams derive_var_base
 #'
+#' @return The input dataset with variable `BASEC` added
+#'
 #' @export
 #'
 #' @seealso [derive_var_base()]
@@ -131,6 +133,8 @@ derive_var_basec <- function(dataset, by_vars) {
 #' This function is *deprecated*. Please use [derive_var_base()] instead.
 #'
 #' @inheritParams derive_var_base
+#'
+#' @return The input dataset with variable `new_var` added
 #'
 #' @export
 #'

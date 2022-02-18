@@ -20,6 +20,8 @@
 #'
 #' Permitted Values: a condition
 #'
+#' @return A HTML table
+#'
 #' @keywords dev_utility
 #'
 #' @export
