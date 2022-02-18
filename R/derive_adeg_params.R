@@ -1,4 +1,4 @@
-#' Adds a Parameter for Corrected QT
+#' Adds a Parameter for Corrected QT (an ECG measurement)
 #'
 #' Adds a record for corrected QT using either Bazett's, Fridericia's or Sagie's
 #' formula for each by group (e.g., subject and visit) where the source parameters
@@ -226,7 +226,7 @@ compute_qtc <- function(qt, rr, method) {
   eval(formulae[[method]])
 }
 
-#' Adds a Parameter for Derived RR
+#' Adds a Parameter for Derived RR (an ECG measurement)
 #'
 #' Adds a record for derived RR based on heart rate for each by group (e.g.,
 #' subject and visit) where the source parameters are available.
