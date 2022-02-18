@@ -273,6 +273,10 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   method = "Mosteller",
+#'     set_values_to = vars(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'     ),
 #'   get_unit_expr = AVALU
 #' )
 #'
@@ -280,6 +284,10 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   method = "Fujimoto",
+#'     set_values_to = vars(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'     ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_bsa <- function(dataset,
