@@ -48,6 +48,15 @@
 #'
 "adex"
 
+#' ECG Analysis Dataset
+#'
+#' An example ECG analysis dataset
+#'
+#' @source
+#' Derived from the [adsl] and [eg] datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
+#'
+"adeg"
+
 #' Vital Signs Analysis Dataset
 #'
 #' An example vital signs analysis dataset

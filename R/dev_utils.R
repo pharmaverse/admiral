@@ -62,6 +62,32 @@ squote <- function(x) {
   paste0("'", x, "'")
 }
 
+#' Wrap a String in Double Quotes
+#'
+#' Wrap a string in double quotes, e.g., for displaying character values in
+#' messages.
+#'
+#' @param x A character vector
+#'
+#' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
+#'   input in double quotes is returned.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::dquote("foo")
+#' admiral:::dquote(NULL)
+dquote <- function(x) {
+  if (is.null(x)) {
+    "NULL"
+  }
+  else {
+    paste0("\"", x, "\"")
+  }
+}
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
@@ -155,7 +181,9 @@ arg_name <- function(expr) { # nolint
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
-  if (is.list(x)) {
+  if (is.null(x)) {
+    NULL
+  } else if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)
@@ -332,6 +360,117 @@ replace_values_by_names <- function(quosures) {
 
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
+}
+
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#'
+#' @export
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' extract_unit("Height (cm)")
+#'
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}
+
+#' Convert Blank Strings Into NAs
+#'
+#' Turn SAS blank strings into proper R `NA`s.
+#'
+#' @param x Any R object
+#'
+#' @details
+#' The default methods simply returns its input unchanged. The `character` method
+#' turns every instance of `""` into `NA_character_` while preserving *all* attributes.
+#' When given a data frame as input the function keeps all non-character columns
+#' as is and applies the just described logic to `character` columns. Once again
+#' all attributes such as labels are preserved.
+#'
+#' @author Thomas Neitmann
+#'
+#' @keywords user_utility
+#'
+#' @export
+#'
+#' @examples
+#' convert_blanks_to_na(c("a", "b", "", "d", ""))
+#'
+#' df <- tibble::tibble(
+#'   a = structure(c("a", "b", "", "c"), label = "A"),
+#'   b = structure(c(1, NA, 21, 9), label = "B"),
+#'   c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
+#'   d = structure(c("", "", "s", "q"), label = "D")
+#' )
+#' print(df)
+#' convert_blanks_to_na(df)
+convert_blanks_to_na <- function(x) {
+  UseMethod("convert_blanks_to_na")
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.default <- function(x) {
+  x
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.character <- function(x) {
+  do.call(structure, c(list(if_else(x == "", NA_character_, x)), attributes(x)))
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.list <- function(x) {
+  lapply(x, convert_blanks_to_na)
+}
+
+#' @export
+#' @rdname convert_blanks_to_na
+convert_blanks_to_na.data.frame <- function(x) { # nolint
+  x[] <- lapply(x, convert_blanks_to_na)
+  x
+}
+
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords check
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- rlang::enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   }
+#'   else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }
 
 #' Get Source Variables from a List of Quosures

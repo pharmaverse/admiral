@@ -78,9 +78,10 @@ adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 advs <- vs %>%
 
   # Join ADSL with VS (need TRTSDT for ADY derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
 
   # Calculate ADT, ADY
@@ -94,9 +95,10 @@ advs <- vs %>%
 
 advs <- advs %>%
   # Add PARAMCD only - add PARAM etc later
-  left_join(
-    select(param_lookup, VSTESTCD, PARAMCD),
-    by = "VSTESTCD"
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = vars(PARAMCD),
+    by_vars = vars(VSTESTCD)
   ) %>%
 
   # Calculate AVAL and AVALC
@@ -174,7 +176,7 @@ advs <- advs %>%
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
 advs <- advs %>%
-  left_join(range_lookup, by = "PARAMCD") %>%
+  derive_vars_merged(dataset_add = range_lookup, by_vars = vars(PARAMCD)) %>%
   # Calculate ANRIND
   derive_var_anrind()
 
@@ -277,17 +279,17 @@ advs <- advs %>%
 
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N")) %>%
+  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N)) %>%
 
   # Derive PARAM and PARAMN
-  left_join(select(param_lookup, -VSTESTCD), by = "PARAMCD")
+  derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = vars(PARAMCD))
 
 
 # Add all ADSL variables
 advs <- advs %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels
