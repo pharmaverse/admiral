@@ -12,7 +12,7 @@
   - `derive_var_merged_character()` - Merge a Character Variable
 
 - `create_query_data()` is provided to create the [queries
-dataset](../articles/queries_dataset.html) required as input for
+dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
 - New functions for deriving first or last dates from multiple source datasets (#753):
@@ -32,6 +32,13 @@ dataset](../articles/queries_dataset.html) required as input for
 
 ## Various
 
+# admiral 0.6.3
+
+Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raised after submitting v0.6.2 (#946)
+
+# admiral 0.6.2
+
+Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/925) raised after submitting v0.6.1 (#925)
 
 # admiral 0.6.1
 

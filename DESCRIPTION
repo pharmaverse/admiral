@@ -26,7 +26,12 @@ Authors@R: c(
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming CDISC compliant ADaM datasets in R.
+Description: A toolbox for programming Clinical Data Standards Interchange Consortium
+    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
+    mandatory part of any New Drug or Biologics License Application submitted to the
+    United States Food and Drug Administration (FDA). Analysis derivations are
+    implemented in accordance with the "Analysis Data Model Implementation Guide"
+    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -64,68 +69,3 @@ Suggests:
     covr,
     DT
 VignetteBuilder: knitr
-Collate: 
-    'admiral-package.R'
-    'assertions.R'
-    'call_derivation.R'
-    'call_user_fun.R'
-    'compat_friendly_type.R'
-    'compute_duration.R'
-    'create_query_data.R'
-    'data.R'
-    'dataset_vignette.R'
-    'derive_adeg_params.R'
-    'derive_advs_params.R'
-    'derive_date_vars.R'
-    'derive_derived_param.R'
-    'derive_last_dose.R'
-    'derive_merged.R'
-    'derive_param_doseint.R'
-    'derive_param_exposure.R'
-    'derive_param_tte.R'
-    'derive_summary_records.R'
-    'derive_var_ady.R'
-    'derive_var_aendy.R'
-    'derive_var_anrind.R'
-    'derive_var_astdy.R'
-    'derive_var_atirel.R'
-    'derive_var_base.R'
-    'derive_var_basetype.R'
-    'derive_var_chg.R'
-    'derive_var_disposition_dt.R'
-    'derive_var_disposition_status.R'
-    'derive_var_dthcaus.R'
-    'derive_var_extreme_date.R'
-    'derive_var_extreme_flag.R'
-    'derive_var_last_dose_amt.R'
-    'derive_var_last_dose_date.R'
-    'derive_var_last_dose_grp.R'
-    'derive_var_obs_number.R'
-    'derive_var_ontrtfl.R'
-    'derive_var_pchg.R'
-    'derive_var_trtdurd.R'
-    'derive_var_trtedtm.R'
-    'derive_var_trtsdtm.R'
-    'derive_vars_aage.R'
-    'derive_vars_disposition_reason.R'
-    'derive_vars_dtm_to_dt.R'
-    'derive_vars_dtm_to_tm.R'
-    'derive_vars_duration.R'
-    'derive_vars_dy.R'
-    'derive_vars_last_dose.R'
-    'derive_vars_query.R'
-    'derive_vars_suppqual.R'
-    'derive_vars_transposed.R'
-    'duplicates.R'
-    'filter_extreme.R'
-    'globals.R'
-    'hms.R'
-    'iso_dtm.R'
-    'joins.R'
-    'lifecycle.R'
-    'reexports.R'
-    'test_helpers.R'
-    'utils.R'
-    'tte_sources.R'
-    'user_helpers.R'
-    'warnings.R'

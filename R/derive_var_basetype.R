@@ -19,6 +19,8 @@
 #' expression. Then, all subsets are stacked. Records which do not match any
 #' condition are kept and `BASETYPE` is set to `NA`.
 #'
+#' @return The input dataset with variable `BASETYPE` added
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords bds derivation

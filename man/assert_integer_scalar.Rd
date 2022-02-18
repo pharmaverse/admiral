@@ -17,7 +17,7 @@ is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not an integer belonging to the
-specified \code{subset}.
+specified \code{subset}. Otherwise, the input is returned invisibly.
 }
 \description{
 Checks if an argument is an integer scalar

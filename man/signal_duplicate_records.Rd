@@ -23,6 +23,9 @@ records in which to look for duplicates}
 \item{cnd_type}{Type of condition to signal when detecting duplicate records.
 One of \code{"message"}, \code{"warning"} or \code{"error"}. Default is \code{"error"}.}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Signal Duplicate Records
 }

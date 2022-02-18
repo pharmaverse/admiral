@@ -15,7 +15,8 @@ assert_s3_class(arg, class, optional = TRUE)
 is \code{NULL} then an error is thrown}
 }
 \value{
-The function throws an error if \code{arg} is an object which does \emph{not} inherit from \code{class}
+The function throws an error if \code{arg} is an object which does \emph{not} inherit from \code{class}.
+Otherwise, the input is returned invisibly.
 }
 \description{
 Checks if an argument is an object inheriting from the S3 class specified.
