@@ -24,7 +24,7 @@ passed to the access function (\code{fun}).}
 
 \item{fun}{Access function
 
-The access function nust be non null. Otherwise, an error is issued. The
+The access function must be non null. Otherwise, an error is issued. The
 function is called to retrieve the terms.}
 
 \item{queries}{Queries
