@@ -305,3 +305,69 @@ test_that("a warning is issued when using `derive_params_exposure()", {
     fixed = TRUE
   )
 })
+
+test_that("a warning is issued when using `derive_agegr_fda()`", {
+  expect_warning(
+    derive_agegr_fda(adsl, age_var = AGE, new_var = AGEGR2),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_agegr_ema()`", {
+  expect_warning(
+    derive_agegr_ema(adsl, age_var = AGE, new_var = AGEGR2),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_worst_flag()`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+  )
+
+  expect_warning(
+    derive_worst_flag(
+      input,
+      by_vars = vars(USUBJID, PARAMCD, AVISIT),
+      order = vars(desc(ADT)),
+      new_var = WORSTFL,
+      param_var = PARAMCD,
+      analysis_var = AVAL,
+      worst_high = c("PARAM01", "PARAM03"),
+      worst_low = "PARAM02"
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
