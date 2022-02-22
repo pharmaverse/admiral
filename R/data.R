@@ -53,7 +53,7 @@
 #' An example ECG analysis dataset
 #'
 #' @source
-#' Derived from the [adsl] and [eg] datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
+#' Derived from the `adsl` and `eg` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
 #'
 "adeg"
 
