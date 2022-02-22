@@ -41,6 +41,7 @@ Depends: R (>= 3.5)
 Imports:
     assertthat,
     dplyr,
+    hms,
     lubridate,
     magrittr,
     purrr,
