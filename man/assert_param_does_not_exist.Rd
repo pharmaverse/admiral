@@ -13,7 +13,7 @@ assert_param_does_not_exist(dataset, param)
 }
 \value{
 The function throws an error if the parameter exists in the input
-dataset
+dataset. Otherwise, the dataset is returned invisibly.
 }
 \description{
 Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.

@@ -175,7 +175,7 @@ derive_var_dthcaus <- function(dataset,
     ) %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys)
 }
 
 #' Create a `dthcaus_source` Object

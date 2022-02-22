@@ -157,6 +157,10 @@ derive_param_qtc <- function(dataset,
 #'
 #'   Permitted Values: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
+#' @return
+#' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
+#' `"QTLCR"` if it's `"Sagie"`. An error otherwise.
+#'
 #' @author Thomas Neitmann
 #'
 #' @export

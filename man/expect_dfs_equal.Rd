@@ -16,6 +16,9 @@ expect_dfs_equal(base, compare, keys, ...)
 
 \item{...}{Additional arguments passed onto \code{\link[diffdf:diffdf]{diffdf::diffdf()}}}
 }
+\value{
+An error if \code{base} and \code{compare} do not match or \code{NULL} invisibly if they do
+}
 \description{
 Uses \code{\link[diffdf:diffdf]{diffdf::diffdf()}} to compares 2 datasets for any differences
 }

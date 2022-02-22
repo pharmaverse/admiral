@@ -24,6 +24,9 @@ The specified condition is applied to the dataset before it is displayed.
 
 Permitted Values: a condition}
 }
+\value{
+A HTML table
+}
 \description{
 Output a dataset in a vignette with the pre-specified admiral format.
 }

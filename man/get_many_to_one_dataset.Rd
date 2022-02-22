@@ -6,6 +6,9 @@
 \usage{
 get_many_to_one_dataset()
 }
+\value{
+A \code{data.frame} or \code{NULL}
+}
 \description{
 Get Many to One Values that Led to a Prior Error
 }

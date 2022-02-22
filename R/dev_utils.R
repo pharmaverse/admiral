@@ -8,6 +8,8 @@
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_enumerate
+#'
 #' @examples
 #' admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
 #' admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
@@ -36,6 +38,8 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_backquote
+#'
 #' @examples
 #' admiral:::backquote("USUBJID")
 backquote <- function(x) {
@@ -50,10 +54,38 @@ backquote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_squote
+#'
 #' @examples
 #' admiral:::squote("foo")
 squote <- function(x) {
   paste0("'", x, "'")
+}
+
+#' Wrap a String in Double Quotes
+#'
+#' Wrap a string in double quotes, e.g., for displaying character values in
+#' messages.
+#'
+#' @param x A character vector
+#'
+#' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
+#'   input in double quotes is returned.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::dquote("foo")
+#' admiral:::dquote(NULL)
+dquote <- function(x) {
+  if (is.null(x)) {
+    "NULL"
+  }
+  else {
+    paste0("\"", x, "\"")
+  }
 }
 
 #' Negated Value Matching
@@ -68,30 +100,13 @@ squote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_notin
+#'
 #' @examples
 #' `%notin%` <- admiral:::`%notin%`
 #' "a" %notin% c("b", "v", "k")
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
-}
-
-#' Turn a List of Quosures into a Character Vector
-#'
-#' @param quosures A `list` of `quosures` created using [`vars()`]
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' vars2chr(vars(USUBJID, AVAL))
-vars2chr <- function(quosures) {
-  rlang::set_names(
-    map_chr(quosures, ~as_string(quo_get_expr(.x))),
-    names(quosures)
-  )
 }
 
 #' Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
@@ -104,6 +119,8 @@ vars2chr <- function(quosures) {
 #' @author Ondrej Slama
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_convert_dtm_to_dtc
 #'
 #' @examples
 #' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
@@ -120,6 +137,8 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_arg_name
 #'
 #' @examples
 #' test_fun <- function(something) {
@@ -151,14 +170,20 @@ arg_name <- function(expr) { # nolint
 #' @param x An `R` object
 #' @param side One of `"lhs"` (the default) or `"rhs"`
 #'
+#' @return A list of `quosures`
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_extract_vars
+#'
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
-  if (is.list(x)) {
+  if (is.null(x)) {
+    NULL
+  } else if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)
@@ -180,9 +205,13 @@ extract_vars <- function(x, side = "lhs") {
 #'
 #' @param ... One or more objects of class `quosure` or `quosures`
 #'
+#' @return An object of class `quosures`
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_quo_c
 #'
 #' @examples
 #' admiral:::quo_c(rlang::quo(USUBJID))
@@ -196,32 +225,6 @@ quo_c <- function(...) {
   rlang::as_quosures(inputs[!is_null])
 }
 
-#' Negate List of Variables
-#'
-#' The function adds a minus sign as prefix to each variable.
-#'
-#' This is useful if a list of variables should be removed from a dataset,
-#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
-#'
-#' @param vars List of variables created by `vars()`
-#'
-#' @author Stefan Bundfuss
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' negate_vars(vars(USUBJID, STUDYID))
-negate_vars <- function(vars = NULL) {
-  assert_vars(vars, optional = TRUE)
-  if (is.null(vars)) {
-    NULL
-  } else {
-    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
-  }
-}
-
 #' What Kind of Object is This?
 #'
 #' Returns a string describing what kind of object the input is.
@@ -231,6 +234,8 @@ negate_vars <- function(vars = NULL) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_what_is_it
 #'
 #' @examples
 #' admiral:::what_is_it(mtcars)
@@ -262,36 +267,6 @@ what_is_it <- function(x) {
   }
 }
 
-#' Optional Filter
-#'
-#' Filters the input dataset if the provided expression is not `NULL`
-#'
-#' @param dataset Input dataset
-#' @param filter A filter condition. Must be a quosure.
-#'
-#' @author Thomas Neitmann
-#'
-#' @export
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' library(admiral.test)
-#' data(vs)
-#'
-#' filter_if(vs, rlang::quo(NULL))
-#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
-filter_if <- function(dataset, filter) {
-  assert_data_frame(dataset)
-  assert_filter_cond(filter, optional = TRUE)
-
-  if (quo_is_null(filter)) {
-    dataset
-  } else {
-    filter(dataset, !!filter)
-  }
-}
-
 #' Get Constant Variables
 #'
 #' @param dataset A data frame.
@@ -307,6 +282,8 @@ filter_if <- function(dataset, filter) {
 #'   like `starts_with("EX")`
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_get_constant_vars
 #'
 #' @return Variable vector.
 #'
@@ -361,6 +338,8 @@ is_named <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#'
+#' @rdname dev_util_replace_values_by_names
 #'
 #' @return A list of quosures
 #'
@@ -464,8 +443,34 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
   x
 }
 
-valid_time_units <- function() {
-  c("years", "months", "days", "hours", "minutes", "seconds")
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords check
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- rlang::enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   }
+#'   else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }
 
 #' Get Source Variables from a List of Quosures
@@ -476,10 +481,20 @@ valid_time_units <- function() {
 #'
 #' @keywords dev_utility
 #'
+#' @rdname dev_util_get_source_vars
+#'
 #' @return A list of quosures
 #'
 #' @examples
 #' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
+}
+
+valid_time_units <- function() {
+  c("years", "months", "days", "hours", "minutes", "seconds")
+}
+
+contains_vars <- function(arg) {
+  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }

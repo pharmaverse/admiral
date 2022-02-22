@@ -17,6 +17,9 @@ The columns specified in the expressions inside \code{basetypes} are required.}
 The names corresponds to the values of the newly created \code{BASETYPE} variables
 and the expressions are used to subset the input dataset.}
 }
+\value{
+The input dataset with variable \code{BASETYPE} added
+}
 \description{
 Adds the \code{BASETYPE} variable to a dataset and duplicates records based upon
 the provided conditions

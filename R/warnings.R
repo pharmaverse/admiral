@@ -5,6 +5,8 @@
 #' @param dataset A `data.frame`
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
+#' @return No return value, called for side effects
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords warning
@@ -56,6 +58,8 @@ is_valid_dtc <- function(arg) {
 #'
 #' @param dtc a character vector containing the dates
 #' @param is_valid a logical vector indicating whether elements in `dtc` are valid
+#'
+#' @return No return value, called for side effects
 #'
 #' @author Samia Kabi
 #'
