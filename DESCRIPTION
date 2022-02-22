@@ -37,7 +37,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: R (>= 3.5)
 Imports:
-    admiral.test,
     assertthat,
     dplyr,
     lubridate,
@@ -48,6 +47,7 @@ Imports:
     tidyr,
     tidyselect
 Suggests:
+    admiral.test,
     devtools,
     diffdf,
     lifecycle,
