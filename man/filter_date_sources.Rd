@@ -77,12 +77,12 @@ single dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
+library(lubridate)
 
 adsl <- tibble::tribble(
-~USUBJID, ~TRTSDT,           ~EOSDT,
-"01",     ymd("2020-12-06"), ymd("2021-03-06"),
-"02",     ymd("2021-01-16"), ymd("2021-02-03")
+  ~USUBJID, ~TRTSDT,           ~EOSDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",     ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\%
   mutate(STUDYID = "AB42")
 
