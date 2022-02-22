@@ -40,7 +40,7 @@
 #'     AVAL = VSSTRESN
 #'   ) %>%
 #'   filter(PARAMCD %in% c("PULSE", "DIABP")) %>%
-#'   left_join(ref_ranges, by = "PARAMCD") %>%
+#'   derive_vars_merged(ref_ranges, by_vars = vars(PARAMCD)) %>%
 #'   derive_var_anrind() %>%
 #'   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 derive_var_anrind <- function(dataset) {

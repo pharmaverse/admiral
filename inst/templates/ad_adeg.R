@@ -95,9 +95,10 @@ adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 adeg <- eg %>%
 
   # Join ADSL & EG (need TRTSDT for ADY derivation)
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
 
   # Calculate ADTM, ADY
@@ -112,10 +113,11 @@ adeg <- eg %>%
 adeg <- adeg %>%
 
   # Add PARAMCD only (add PARAM, etc later)
-  left_join(
-    param_lookup %>% select(EGTESTCD, PARAMCD),
-    by = "EGTESTCD"
-    ) %>%
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = vars(PARAMCD),
+    by_vars = vars(EGTESTCD)
+  ) %>%
 
   # Calculate AVAL and AVALC
   mutate(
@@ -213,8 +215,8 @@ adeg <- adeg %>%
 # Calculate ANRIND: requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
 adeg <- adeg %>%
-
-  left_join(range_lookup, by = "PARAMCD") %>%
+  derive_vars_merged(dataset_add = range_lookup,
+                     by_vars = vars(PARAMCD)) %>%
 
   # Calculate ANRIND
   derive_var_anrind()
@@ -304,23 +306,26 @@ adeg <- adeg %>%
 
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalca1n(param = PARAMCD, aval = AVAL)) %>%
-  left_join(avalcat_lookup, by = "AVALCA1N") %>%
+  derive_vars_merged(dataset_add = avalcat_lookup,
+                     by_vars = vars(AVALCA1N)) %>%
 
   # Derive CHGCAT1N and CHGCAT1
   mutate(CHGCAT1N = format_chgcat1n(param = PARAMCD, chg = CHG)) %>%
-  left_join(chgcat_lookup, by = "CHGCAT1N") %>%
+  derive_vars_merged(dataset_add = chgcat_lookup, by_vars = vars(CHGCAT1N)) %>%
 
   # Derive PARAM and PARAMN
-  left_join(select(param_lookup, -EGTESTCD), by = "PARAMCD")
+  derive_vars_merged(dataset_add = select(param_lookup, -EGTESTCD),
+                     by_vars = vars(PARAMCD))
 
 # Add all ADSL variables
 adeg <- adeg %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 
 # ---- Save output ----
 
-save(adeg, file = "data/adeg.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")

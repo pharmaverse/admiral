@@ -1,6 +1,9 @@
 #' Add a Variable Flagging the First or Last Observation Within Each By Group
 #'
-#' @description *Deprecated*, please use `derive_var_extreme_flag()` instead.
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_extreme_flag()` instead.
 #'
 #' Add a variable flagging the first or last observation within each by group
 #'
@@ -13,18 +16,18 @@
 #'   The first or last observation is determined with respect to the specified
 #'   order.
 #'
-#'   Permitted Values: list of variables or functions of variables
+#'   Permitted Values: list of variables or `desc(<variable>)` function calls
 #'
 #' @param new_var Variable to add
 #'
 #'   The specified variable is added to the output dataset. It is set to `"Y"`
 #'   for the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: list of name-value pairs
+#'   Permitted Values: variable name
 #'
 #' @param mode Flag mode
 #'
-#'   Determines of the first or last observation is flagged.
+#'   Determines if the first or last observation is flagged.
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
@@ -49,10 +52,6 @@
 #'   Default: `"warning"`
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
-#'
-#' @param flag_filter Filter for flag data
-#'
-#'   **Deprecated**: Please use the `filter` parameter instead.
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
@@ -160,17 +159,9 @@ derive_extreme_flag <- function(dataset,
                                 new_var,
                                 mode,
                                 filter = NULL,
-                                check_type = "warning",
-                                flag_filter = deprecated()) {
+                                check_type = "warning") {
   deprecate_warn("0.6.0", "derive_extreme_flag()", "derive_var_extreme_flag()")
-  if (!missing(flag_filter)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_var_extreme_flag(flag_filter = )",
-      "derive_var_extreme_flag(filter = )"
-    )
-    filter <- enquo(!!enquo(flag_filter))
-  }
+
   derive_var_extreme_flag(dataset = dataset,
                           by_vars = by_vars,
                           order = order,
@@ -182,29 +173,43 @@ derive_extreme_flag <- function(dataset,
   )
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
-#' @description *Deprecated*, please use `derive_var_worst_flag()` instead.
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
+#'
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' *Deprecated*, please use `derive_var_worst_flag()` instead.
+#'
 #' @inheritParams derive_extreme_flag
+#'
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
+#'
 #' @param order Sort order.
 #' Used to determine maximal / minimal observation if they are not unique,
 #' see Details section for more information.
+#'
 #' @param new_var Variable to add to the `dataset`.
 #' It is set `"Y"` for the maximal / minimal observation of each group,
 #' see Details section for more information.
+#'
 #' @param param_var Variable with the parameter values for which the maximal / minimal
 #' value is calculated.
+#'
 #' @param analysis_var Variable with the measurement values for which the maximal / minimal
 #' value is calculated.
+#'
 #' @param worst_high Character with `param_var` values specifying the parameters
 #' referring to "high".
 #' Use `character(0)` if not required.
+#'
 #' @param worst_low Character with `param_var` values specifying the parameters
 #' referring to "low".
 #' Use `character(0)` if not required.
 #'
-#' @details For each group with respect to the variables specified by the `by_vars` parameter,
+#' @details
+#' For each group with respect to the variables specified by the `by_vars` parameter,
 #' the maximal / minimal observation of `analysis_var`
 #' is labelled in the `new_var` column as `"Y"`
 #' if its `param_var` is in `worst_high` / `worst_low`,
@@ -354,10 +359,6 @@ derive_worst_flag <- function(dataset,
 #'
 #'   Permitted Values: `"none"`, `"warning"`, `"error"`
 #'
-#' @param flag_filter Filter for flag data
-#'
-#'   **Deprecated**: Please use the `filter` parameter instead.
-#'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
 #'   (with respect to the order specified for the `order` parameter and the flag mode
@@ -464,17 +465,7 @@ derive_var_extreme_flag <- function(dataset,
                                 new_var,
                                 mode,
                                 filter = NULL,
-                                check_type = "warning",
-                                flag_filter = deprecated()) {
-  if (!missing(flag_filter)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_var_extreme_flag(flag_filter = )",
-      "derive_var_extreme_flag(filter = )"
-    )
-    filter <- enquo(flag_filter)
-  }
-
+                                check_type = "warning") {
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -524,7 +515,7 @@ derive_var_extreme_flag <- function(dataset,
   data %>% select(-temp_obs_nr)
 }
 
-#' Adds a Variable Flagging the maximal / minimal value within a group of observations
+#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
 #' @inheritParams derive_var_extreme_flag
 #' @param dataset Input dataset.
 #' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.

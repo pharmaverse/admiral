@@ -11,6 +11,7 @@ derive_var_disposition_dt(
   dtc,
   filter_ds,
   date_imputation = NULL,
+  preserve = FALSE,
   subject_keys = vars(STUDYID, USUBJID)
 )
 }
@@ -45,15 +46,26 @@ Permitted Values: logical expression.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is missing.
 
-If NULL: no date imputation is performed and partial dates are returned as missing.
+If \code{NULL}: no date imputation is performed and partial dates are returned
+as missing.
 
 Otherwise, a character value is expected, either as a
 \itemize{
-\item format with day and month specified as 'dd-mm': e.g. '15-06' for the 15th of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month
+\item format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+of June
+\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
 }
 
-Default is NULL}
+Default is \code{NULL}}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -64,6 +76,8 @@ A list of quosures where the expressions are symbols as returned by
 the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+
 Derive a disposition status date from the the relevant records in the disposition domain.
 }
 \examples{

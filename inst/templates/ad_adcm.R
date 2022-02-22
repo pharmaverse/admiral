@@ -31,9 +31,10 @@ adcm <- cm %>%
   # derive_vars_suppqual(suppcm) %>%
 
   # Join ADSL with CM (only ADSL vars required for derivations)
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by = vars(STUDYID, USUBJID)
   ) %>%
 
   # Derive analysis start time
@@ -138,13 +139,13 @@ adcm <- adcm %>%
 
 # Join all ADSL with CM
 adcm <- adcm %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
-
 
 
 # ---- Save output ----
 
-save(adcm, file = "data/adcm.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")

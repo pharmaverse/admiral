@@ -175,10 +175,10 @@ derive_var_dthcaus <- function(dataset,
     ) %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys)
 }
 
-#' Create an `dthcaus_source` object
+#' Create a `dthcaus_source` Object
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.
@@ -206,10 +206,6 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
 #'
-#' @param date_var Deprecated, please use `date` instead.
-#'
-#' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
-#'
 #' @author Shimeng Huang
 #'
 #' @keywords source_specifications
@@ -225,21 +221,7 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL,
-                           dataset = deprecated(),
-                           date_var = deprecated(),
-                           traceabilty_vars = deprecated()) {
-  if (!missing(date_var)) {
-    deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
-    date <- enquo(date_var)
-  }
-  if (!missing(traceabilty_vars)) {
-    deprecate_warn(
-      "0.3.0",
-      "dthcaus_source(traceabilty_vars = )",
-      "dthcaus_source(traceability_vars = )"
-    )
-    traceability_vars <- traceabilty_vars
-  }
+                           dataset = deprecated()) {
   if (!missing(dataset)) {
     deprecate_warn("0.6.0", "dthcaus_source(dataset = )", "dthcaus_source(dataset_name = )")
     dataset_name <- deparse(substitute(dataset))

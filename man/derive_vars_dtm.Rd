@@ -13,6 +13,7 @@ derive_vars_dtm(
   flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
+  preserve = FALSE,
   ignore_seconds_flag = FALSE
 )
 }
@@ -23,7 +24,10 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix, for the date imputation flag "DTF", and for the time
+imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -61,9 +65,13 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-One of "auto", "date" or "both"
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null and the time imputation flag is
+derived if the \code{time_imputation} parameter is not null
 
-Default: "auto"}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
@@ -94,6 +102,15 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 
 \item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
 if only hours and minutes are ever collected, and seconds are imputed in
@@ -177,6 +194,18 @@ derive_vars_dtm(
   date_imputation = "FIRST",
   time_imputation = "FIRST",
   ignore_seconds_flag = TRUE
+)
+
+# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+# use preserve argument to "preserve" partial dates.  For example, "2019---07",
+# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "MID",
+  preserve = TRUE
 )
 }
 \author{

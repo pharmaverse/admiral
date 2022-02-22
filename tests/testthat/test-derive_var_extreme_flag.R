@@ -1,5 +1,3 @@
-context("test-derive_var_extreme_flag")
-
 input_worst_flag <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,

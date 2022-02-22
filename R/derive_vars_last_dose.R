@@ -179,7 +179,7 @@ derive_vars_last_dose <- function(dataset,
 
   # create temporary observation number and temporary numeric date to identify last dose
   dataset <- dataset %>%
-    derive_obs_number(
+    derive_var_obs_number(
       order = vars(USUBJID),
       new_var = tmp_seq_var
       ) %>%
@@ -214,6 +214,7 @@ derive_vars_last_dose <- function(dataset,
     select(tmp_seq_var, !!!new_vars_name, !!!syms(trace_vars_str), -by_vars_str)
 
   # return observations from original dataset with last dose variables added
-  left_join(dataset, res, by = "tmp_seq_var") %>% select(-starts_with("tmp_"))
-
+  derive_vars_merged(dataset,
+                     dataset_add = res,
+                     by_vars = vars(tmp_seq_var)) %>% select(-starts_with("tmp_"))
 }

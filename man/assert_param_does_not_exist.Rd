@@ -2,7 +2,7 @@
 % Please edit documentation in R/assertions.R
 \name{assert_param_does_not_exist}
 \alias{assert_param_does_not_exist}
-\title{Asserts That a Parameter Does not Exist in the Dataset}
+\title{Asserts That a Parameter Does Not Exist in the Dataset}
 \usage{
 assert_param_does_not_exist(dataset, param)
 }
@@ -13,7 +13,7 @@ assert_param_does_not_exist(dataset, param)
 }
 \value{
 The function throws an error if the parameter exists in the input
-dataset
+dataset. Otherwise, the dataset is returned invisibly.
 }
 \description{
 Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.

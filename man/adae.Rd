@@ -4,9 +4,11 @@
 \name{adae}
 \alias{adae}
 \title{Adverse Event Analysis Dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1191 rows and 101 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1191 rows and 101 columns.
+}
 \source{
-Derived from the \link{adsl} and \link{ae} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adae.R})
+Derived from the \link{adsl} and \link{ae} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R})
 }
 \usage{
 adae

@@ -18,15 +18,22 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping. 
+To support the safety analysis, it is quite common to define specific grouping
+of events. One of the most common ways is to group events or medications by a
+specific medical concept such as a Standard MedDRA Queries (SMQs) or WHO-Drug
+Standardized Drug Groupings (SDGs).
 
 
-To help with the derivation of these variables, the admiral function `derive_vars_query()` can be used.
+To help with the derivation of these variables, the {admiral} function `derive_vars_query()` can be used.
 This function takes as input the dataset (`dataset`) where the grouping must occur (e.g `ADAE`) and
 a dataset containing the required information to perform the derivation of the grouping variables 
 (`dataset_queries`).
 
-Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the `dataset_queries` argument of the `derive_vars_query()` function should be created outside of admiral in a specific format so that it can be passed in the function.
+The dataset passed to the `dataset_queries` argument of the
+`derive_vars_query()` function can be created by the `create_query_data()`
+function. For SMQs and SDGs company-specific functions for accessing the SMQ and
+SDG database need to be passed to the `create_query_data()` function (see the
+description of the `get_smq_fun` and `get_sdq_fun` parameter for details).
 
 This vignette describes the expected structure and content of the dataset passed to the
 `dataset_queries` argument in the `derive_vars_query()` function. 
@@ -63,10 +70,10 @@ The combination of these variables will allow the creation of the grouping varia
 
   + `TERM_LEVEL` must be a non missing character string. 
   
-      Each value in `TERM_LEVEL` represents a variable from `dataset` used to define the grouping variables (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
-    The function `derive_vars_query()` will check that each value given in `TERM_LEVEL` has a corresponding variable in the input  `dataset` and issue an error otherwise.
+    + Each value in `TERM_LEVEL` represents a variable from `dataset` used to define the grouping variables (e.g. `AEDECOD`,`AEBODSYS`, `AELLTCD`).
+    + The function `derive_vars_query()` will check that each value given in `TERM_LEVEL` has a corresponding variable in the input  `dataset` and issue an error otherwise.
     
-    Different `TERM_LEVEL` variables may be specified within a `VAR_PREFIX`.
+    + Different `TERM_LEVEL` variables may be specified within a `VAR_PREFIX`.
 
   + `TERM_NAME` must be a character string. 
   This **must** be populated if `TERM_ID` is missing.
@@ -80,10 +87,10 @@ The combination of these variables will allow the creation of the grouping varia
 
   + `VAR_PREFIX` will be used to create the grouping variable appending the suffix "NAM". This variable will now be referred to as `ABCzzNAM`: the name of the grouping variable.
 
-    E.g. `VAR_PREFIX == "SMQ01"` will create the `SMQ01NAM` variable.
+    + E.g. `VAR_PREFIX == "SMQ01"` will create the `SMQ01NAM` variable.
 
 
-    For each `VAR_PREFIX`, a new `ABCzzNAM` variable is created in `dataset`.
+    + For each `VAR_PREFIX`, a new `ABCzzNAM` variable is created in `dataset`.
 
 
   + [`QUERY_NAME`]{#query_name} will be used to populate the corresponding `ABCzzNAM` variable.
@@ -95,10 +102,10 @@ The combination of these variables will allow the creation of the grouping varia
   
   + **Result:**
   
-    For each record in `dataset`, where the variable defined by `TERM_LEVEL` match a term from the `TERM_NAME` (for character variables) or `TERM_ID` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `QUERY_NAME`.
+    + For each record in `dataset`, where the variable defined by `TERM_LEVEL` match a term from the `TERM_NAME` (for character variables) or `TERM_ID` (for numeric variables) in the `datasets_queries`, `ABCzzNAM` is populated with `QUERY_NAME`.
     
     
-    Note: The type (numeric or character) of the variable defined in `TERM_LEVEL` is checked in `dataset`. If the variable is a character variable (e.g. `AEDECOD`), it is expected that `TERM_NAME` is populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is expected that `TERM_ID` is populated, otherwise an error is issued.
+    + Note: The type (numeric or character) of the variable defined in `TERM_LEVEL` is checked in `dataset`. If the variable is a character variable (e.g. `AEDECOD`), it is expected that `TERM_NAME` is populated, if it is a numeric variable (e.g. `AEBDSYCD`), it is expected that `TERM_ID` is populated, otherwise an error is issued.
     
 
 ### Example

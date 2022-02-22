@@ -11,6 +11,9 @@ warn_if_vars_exist(dataset, vars)
 
 \item{vars}{\code{character} vector of columns to check for in \code{dataset}}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Warn if a variable already exists inside a dataset
 }

@@ -11,8 +11,7 @@ derive_var_extreme_flag(
   new_var,
   mode,
   filter = NULL,
-  check_type = "warning",
-  flag_filter = deprecated()
+  check_type = "warning"
 )
 }
 \arguments{
@@ -61,10 +60,6 @@ by variables and the order.
 Default: \code{"warning"}
 
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
-
-\item{flag_filter}{Filter for flag data
-
-\strong{Deprecated}: Please use the \code{filter} parameter instead.}
 }
 \value{
 The input dataset with the new flag variable added

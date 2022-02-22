@@ -6,10 +6,11 @@
 #' @param new_var The new date or datetime variable added to `dataset`.
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
 #'
-#' @details The last dose date is derived as the maximum dose date where the `dose_date` is lower
-#' to or equal to the `analysis_date` per `by_vars` for each observation in `dataset`.
-#' When `output_datetime` is `TRUE`, the last dose date time is imputed to `00:00:00` if time
-#' is missing, and no imputation is done if date is missing.
+#' @details The last dose date is derived as the maximum dose date where the
+#'   `dose_date` is lower to or equal to the `analysis_date` per `by_vars` for
+#'   each observation in `dataset`. When `output_datetime` is `TRUE` and time is
+#'   missing, then the last dose date time is imputed to `00:00:00`. However, if
+#'   date is missing, then no imputation is done.
 #'
 #' @return Input dataset with additional column `new_var`.
 #'

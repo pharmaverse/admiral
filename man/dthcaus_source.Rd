@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_dthcaus.R
 \name{dthcaus_source}
 \alias{dthcaus_source}
-\title{Create an \code{dthcaus_source} object}
+\title{Create a \code{dthcaus_source} Object}
 \usage{
 dthcaus_source(
   dataset_name,
@@ -11,9 +11,7 @@ dthcaus_source(
   mode = "first",
   dthcaus,
   traceability_vars = NULL,
-  dataset = deprecated(),
-  date_var = deprecated(),
-  traceabilty_vars = deprecated()
+  dataset = deprecated()
 )
 }
 \arguments{
@@ -42,16 +40,12 @@ in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
 
 \item{dataset}{Deprecated, please use \code{dataset_name} instead.}
-
-\item{date_var}{Deprecated, please use \code{date} instead.}
-
-\item{traceabilty_vars}{Deprecated, please use \code{traceability_vars} instead.}
 }
 \value{
 An object of class "dthcaus_source".
 }
 \description{
-Create an \code{dthcaus_source} object
+Create a \code{dthcaus_source} Object
 }
 \seealso{
 \code{\link[=derive_var_dthcaus]{derive_var_dthcaus()}}

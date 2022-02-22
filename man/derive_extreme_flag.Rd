@@ -11,8 +11,7 @@ derive_extreme_flag(
   new_var,
   mode,
   filter = NULL,
-  check_type = "warning",
-  flag_filter = deprecated()
+  check_type = "warning"
 )
 }
 \arguments{
@@ -29,18 +28,18 @@ Permitted Values: list of variables}
 The first or last observation is determined with respect to the specified
 order.
 
-Permitted Values: list of variables or functions of variables}
+Permitted Values: list of variables or \verb{desc(<variable>)} function calls}
 
 \item{new_var}{Variable to add
 
 The specified variable is added to the output dataset. It is set to \code{"Y"}
 for the first or last observation (depending on the mode) of each by group.
 
-Permitted Values: list of name-value pairs}
+Permitted Values: variable name}
 
 \item{mode}{Flag mode
 
-Determines of the first or last observation is flagged.
+Determines if the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
@@ -61,15 +60,13 @@ by variables and the order.
 Default: \code{"warning"}
 
 Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
-
-\item{flag_filter}{Filter for flag data
-
-\strong{Deprecated}: Please use the \code{filter} parameter instead.}
 }
 \value{
 The input dataset with the new flag variable added
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
 \emph{Deprecated}, please use \code{derive_var_extreme_flag()} instead.
 
 Add a variable flagging the first or last observation within each by group

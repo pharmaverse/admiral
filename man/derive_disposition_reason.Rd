@@ -101,7 +101,9 @@ the input dataset with the disposition reason(s) (\code{new_var} and
 if required \code{new_var_spe}) added.
 }
 \description{
-\emph{Deprecated}, please use \code{derive_vars_disposition()} instead.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\emph{Deprecated}, please use \code{derive_vars_disposition_reason()} instead.
 
 Derive a disposition reason from the the relevant records in the disposition domain.
 }

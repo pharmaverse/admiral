@@ -29,50 +29,9 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 \code{dataset} with new column \code{new_var} of class factor.
 }
 \description{
-Functions for deriving standardized age groups.
-}
-\details{
-\code{derive_agegr_fda} Derive age groups according to FDA
-(\url{https://prsinfo.clinicaltrials.gov/results_definitions.html} ->
-Baseline Measure Information).
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\code{derive_agegr_ema} Derive age groups according to EMA
-(\url{https://eudract.ema.europa.eu/result.html} -> Results - Data Dictionary -> Age range).
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(dm)
-
-dm \%>\%
-  derive_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
-  select(SUBJID, AGE, AGEGR1)
-
-data <- tibble::tribble(
-  ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
-  )
-
-data \%>\%
-  derive_vars_aage(unit = "months") \%>\%
-  derive_agegr_fda(AAGE, age_unit = NULL, AGEGR1)
-
-data.frame(AGE = 1:100) \%>\%
-  derive_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(dm)
-
-dm \%>\%
-  derive_agegr_ema(age_var = AGE, new_var = AGEGR1) \%>\%
-  select(SUBJID, AGE, AGEGR1)
-
-data.frame(AGE = 1:100) \%>\%
-  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-
-data.frame(AGE = 1:20) \%>\%
-  derive_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
+\emph{Deprecated}, please use \code{derive_var_agegr_fda()} and \code{derive_var_agegr_ema()} instead.
 }
 \author{
 Ondrej Slama

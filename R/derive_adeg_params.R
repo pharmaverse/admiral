@@ -157,6 +157,10 @@ derive_param_qtc <- function(dataset,
 #'
 #'   Permitted Values: `"Bazett"`, `"Fridericia"`, `"Sagie"`
 #'
+#' @return
+#' `"QTCBR"` if `method` is `"Bazett"`, `"QTCFR"` if it's `"Fridericia"` or
+#' `"QTLCR"` if it's `"Sagie"`. An error otherwise.
+#'
 #' @author Thomas Neitmann
 #'
 #' @export
@@ -222,7 +226,7 @@ compute_qtc <- function(qt, rr, method) {
   eval(formulae[[method]])
 }
 
-#' Adds a parameter for derived RR
+#' Adds a Parameter for Derived RR
 #'
 #' Adds a record for derived RR based on heart rate for each by group (e.g.,
 #' subject and visit) where the source parameters are available.

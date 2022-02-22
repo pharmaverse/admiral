@@ -61,10 +61,11 @@ Input dataset with additional column \code{new_var}.
 Add a variable for the dose date or datetime of the last dose to the input dataset.
 }
 \details{
-The last dose date is derived as the maximum dose date where the \code{dose_date} is lower
-to or equal to the \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
-When \code{output_datetime} is \code{TRUE}, the last dose date time is imputed to \code{00:00:00} if time
-is missing, and no imputation is done if date is missing.
+The last dose date is derived as the maximum dose date where the
+\code{dose_date} is lower to or equal to the \code{analysis_date} per \code{by_vars} for
+each observation in \code{dataset}. When \code{output_datetime} is \code{TRUE} and time is
+missing, then the last dose date time is imputed to \code{00:00:00}. However, if
+date is missing, then no imputation is done.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
