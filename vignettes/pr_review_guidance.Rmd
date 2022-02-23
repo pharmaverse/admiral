@@ -77,7 +77,7 @@ knitr::include_graphics('./pr_review_checkbox.png')
 
 ## Complete all checks
 
-The check boxes are linked to the `task-list-completed` workflow.  You need to check off each box in acknowledgement that you have done you due diligence in creating a compliant Pull Request. GitHub will refresh the Pull Request and trigger `task-list-completed` workflow that you have completed the task.  The PR can not be merged into `devel` until the contributor has checked off each of the check box items.  
+The check boxes are linked to the `task-list-completed` workflow.  You need to check off each box in acknowledgment that you have done you due diligence in creating a compliant Pull Request. GitHub will refresh the Pull Request and trigger `task-list-completed` workflow that you have completed the task.  The PR can not be merged into `devel` until the contributor has checked off each of the check box items.  
 
 ```{r echo=FALSE, out.width='120%'}
 knitr::include_graphics('./pr_review_actions.png')

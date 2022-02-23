@@ -9,7 +9,7 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
+#' @param dataset_ds Datasets containing the disposition information (e.g.: `ds`)
 #'
 #' It must contain:
 #' - `STUDYID`, `USUBJID`,
