@@ -556,7 +556,7 @@ filter_date_sources <- function(sources,
 #' datasets.
 #'
 #' @details
-#'   1. The by groups are determined as the union of the by groups occuring in
+#'   1. The by groups are determined as the union of the by groups occurring in
 #'   the source datasets.
 #'   1. For all source datasets which do not contain the by variables the source
 #'   dataset is replaced by the cartesian product of the source dataset and the
