@@ -91,6 +91,14 @@ mutate(
 #'
 #'   Example: vars(STUDYID, USUBJID, EXTRT)
 #'
+#' @param dose_freq The dose frequency
+#'
+#'   The aggregate dosing frequency used for multiple doses in a row.
+#'
+#'   Default: EXDOSFRQ
+#'
+#'   Permitted Values: defined by lookup table.
+#'
 #' @param start_date The start date
 #'
 #'   A date or date-time object is expected.
@@ -103,19 +111,31 @@ mutate(
 #'
 #'   Default: `AENDT`
 #'
-#' @param dose_freq The dose frequency
+#' @param lookup_table The dose frequency value lookup table
 #'
-#'   The aggregate dosing frequency used for multiple doses in a row.
+#'   The table used to look up `dose_freq` values and determine the appropriate
+#'   multiplier to be used for row generation. If a lookup table other than the
+#'   default is used, it must have columns `DoseWindow`, `DoseCount`, and
+#'   `DayConversionFactor`
 #'
-#'   Default: EXDOSFRQ
+#'   Default: `dose_freq_lookup`
 #'
-#'   Permitted Values: 'QxD', 'QxW', 'EVERY x DAYS', 'EVERY x WEEKS'
-#'   where x is a positive integer
+#'  Permitted Values for `DoseWindow`: "DAY", "WEEK", "MONTH", "YEAR"
+#'
+#' @param lookup_column The dose frequency value column in the lookup table
+#'
+#'   The column of `lookup_table`.
+#'
+#'   Default: `CDISCSubmissionValue` (column of `dose_freq_lookup`)
+#'
 #'
 #' @details Each aggregate dose row is split into multiple rows which each represent
-#' a single dose.
+#' a single dose.The number of completed dose periods between `start_date` and
+#' `end_date` is calculated with `compute_duration` and multiplied by the count
+#' of doses per period. `start_date` and `end_date` are then adjusted by an
+#' appropriate increment using `DayConversionFactor`.
 #'
-#' @author Michael Thorpe
+#' @author Michael Thorpe, Andrew Smith
 #'
 #' @return The input dataset with a single dose per row.
 #'
@@ -134,42 +154,57 @@ create_single_dose_dataset <- function(dataset,
                                        by_vars,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
-                                       end_date = AENDT) {
+                                       end_date = AENDT,
+                                       lookup_table = dose_freq_lookup,
+                                       lookup_column = CDISCSubmissionValue) {
 
   col_names <- colnames(dataset)
   by_vars <- assert_vars(by_vars)
   dose_freq <- assert_symbol(enquo(dose_freq))
+  lookup_column <- assert_symbol(enquo(lookup_column))
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, required_vars = quo_c(by_vars, dose_freq, start_date, end_date))
-  lookup <- dose_freq_lookup %>%
-    rename(!!dose_freq := CDISCSubmissionValue)
+  assert_data_frame(lookup_table, required_vars = vars(DoseWindow, DoseCount, DayConversionFactor))
 
-  dataset <- dataset %>%
-    left_join(lookup, by = as.character(dose_freq)[2]) %>%
-    mutate(dose_windows = case_when(
-      DoseWindow == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
-      DoseWindow == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
-      DoseWindow == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
-      DoseWindow == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
-    )) %>%
-    mutate(dose_count = floor(dose_windows*DoseCount) + (floor(dose_windows*DoseCount)==0))
+    # Set up lookup table to be joined to dataset
 
+    lookup <- lookup_table %>%
+      rename(!!dose_freq := !!lookup_column)
 
-  dataset <- dataset[rep(row.names(dataset), dataset$dose_count), ]
+    # Use compute_duration to determine the number of completed dose periods
 
-  dataset <- dataset %>%
-    group_by(!!!by_vars, !!dose_freq, !!start_date, !!end_date) %>%
-    mutate(time_increment = (row_number() - 1)/(DoseCount*(DayConversionFactor))) %>%
-    ungroup() %>%
-    mutate(day_differential = days(floor(time_increment)))
+    dataset <- dataset %>%
+      left_join(lookup, by = as.character(dose_freq)[2]) %>%
+      mutate(dose_periods = case_when(
+        DoseWindow == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
+        DoseWindow == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
+        DoseWindow == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
+        DoseWindow == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
+      )) %>%
+      mutate(dose_count = floor(dose_periods*DoseCount) +
+               (floor(dose_periods*DoseCount) == 0))
 
+    # Generate a row for each completed dose
 
-  dataset <- dataset %>%
-    mutate(!!dose_freq := "ONCE",
-           !!end_date := !!start_date + day_differential,
-           !!start_date := !!start_date + day_differential
-    ) %>%
-    select(all_of(!!!vars(col_names)))
+    dataset <- dataset[rep(row.names(dataset), dataset$dose_count), ]
+
+    # Determine amount of days to adjust start_date and end_date
+
+    dataset <- dataset %>%
+      group_by(!!!by_vars, !!dose_freq, !!start_date, !!end_date) %>%
+      mutate(time_increment = (row_number() - 1) / (DoseCount * (DayConversionFactor))) %>%
+      ungroup() %>%
+      mutate(day_differential = days(floor(time_increment)))
+
+    # Adjust start_date and end_date, drop calculation columns
+
+    dataset <- dataset %>%
+      mutate(!!dose_freq := "ONCE",
+             !!end_date := !!start_date + day_differential,
+             !!start_date := !!start_date + day_differential
+      ) %>%
+      select(all_of(!!!vars(col_names)))
+
   return(dataset)
 }
