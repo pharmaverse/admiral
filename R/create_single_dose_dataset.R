@@ -18,43 +18,53 @@
 #' @rdname dose_freq_lookup
 #'
 dose_freq_lookup <- tibble::tribble(
-~NCICode, ~CDISCSubmissionValue,  ~DFFactor, ~DFUnit,
-'C64526','1 TIME PER WEEK',1,'Week',
-'C139179','10 DAYS PER MONTH',10,'Month',
-'C176288','2 TIMES PER CYCLE',2,'Cycle',
-'C64497','2 TIMES PER WEEK',2,'Week',
-'C98861','2 TIMES PER YEAR',2,'Year',
-'C176289','3 TIMES PER CYCLE',2,'Cycle',
-'C98859','3 TIMES PER MONTH',3,'Month',
-'C64528','3 TIMES PER WEEK',3,'Month',
-'C98860','3 TIMES PER YEAR',3,'Year',
-'C98852','4 TIMES PER MONTH',4,'Month',
-'C64531','4 TIMES PER WEEK',4,'Week',
-'C98853','4 TIMES PER YEAR',4,'Year',
-'C98849','5 TIMES PER DAY',5,'Day',
-'C98850','5 TIMES PER MONTH',5,'Month',
-'C85552','5 TIMES PER WEEK',5,'Week',
-'C98851','5 TIMES PER YEAR',5,'Year',
-'C98855','6 TIMES PER DAY',6,'Day',
-'C98856','6 TIMES PER MONTH',6,'Month',
-'C98857','6 TIMES PER WEEK',6,'Week',
-'C98858','6 TIMES PER YEAR',6,'Year',
-'C139180','7 TIMES PER DAY',7,'Day',
-'C98854','7 TIMES PER WEEK',7,'Week',
-'C139181','8 TIMES PER DAY',8,'Day',
-'C139182','9 TIMES PER DAY',9,'Day',
-'C64496','BID',2,'Day',
-'C71129','BIM',2,'Month',
-'C161332','EVERY 12 WEEKS',0.0833333333333333,'Week',
-'C161336','EVERY 16 WEEKS',0.0625,'Week',
-'C71127','EVERY 2 WEEKS',0.5,'Week',
-'C64535','EVERY 3 WEEKS',0.333333333333333,'Week',
-'C161333','EVERY 3 YEARS',0.333333333333333,'Year',
-'C64529','EVERY 4 WEEKS',0.25,'Week',
-'C103390','EVERY 5 WEEKS',0.2,'Week',
-'C161334','EVERY 5 YEARS',0.2,'Year',
-'C89788','EVERY 6 WEEKS',0.166666666666667,'Week'
-)
+~NCICode, ~CDISCSubmissionValue
+"C64526","1 TIME PER WEEK",
+"C139179","10 DAYS PER MONTH",
+"C176288","2 TIMES PER CYCLE",
+"C64497","2 TIMES PER WEEK",
+"C98861","2 TIMES PER YEAR",
+"C176289","3 TIMES PER CYCLE",
+"C98859","3 TIMES PER MONTH",
+"C64528","3 TIMES PER WEEK",
+"C98860","3 TIMES PER YEAR",
+"C98852","4 TIMES PER MONTH",
+"C64531","4 TIMES PER WEEK",
+"C98853","4 TIMES PER YEAR",
+"C98849","5 TIMES PER DAY",
+"C98850","5 TIMES PER MONTH",
+"C85552","5 TIMES PER WEEK",
+"C98851","5 TIMES PER YEAR",
+"C98855","6 TIMES PER DAY",
+"C98856","6 TIMES PER MONTH",
+"C98857","6 TIMES PER WEEK",
+"C98858","6 TIMES PER YEAR",
+"C139180","7 TIMES PER DAY",
+"C98854","7 TIMES PER WEEK",
+"C139181","8 TIMES PER DAY",
+"C139182","9 TIMES PER DAY",
+"C64496","BID",
+"C71129","BIM",
+"C161332","EVERY 12 WEEKS",
+"C161336","EVERY 16 WEEKS",
+"C71127","EVERY 2 WEEKS",
+"C64535","EVERY 3 WEEKS",
+"C161333","EVERY 3 YEARS",
+"C64529","EVERY 4 WEEKS",
+"C103390","EVERY 5 WEEKS",
+"C161334","EVERY 5 YEARS",
+"C89788","EVERY 6 WEEKS"
+) %>%
+mutate(DoseCount = case_when(
+  str_detect(CDISCSubmissionValue, "PER") ~ as.numeric(str_remove_all(CDISCSubmissionValue,"[\\D]")),
+  str_detect(CDISCSubmissionValue, "EVERY") ~ 1/as.numeric(str_remove_all(CDISCSubmissionValue,"[\\D]")),
+  str_detect(CDISCSubmissionValue, "BID|BIM") ~ 2),
+  DoseWindow = case_when(
+    str_detect(CDISCSubmissionValue, "EVERY|PER") ~ str_remove_all(sub(".* (\\w+)$", "\\1", x),"S"),
+    CDISCSubmissionValue=="BID" ~ str_remove_all(sub(".* (\\w+)$", "\\1", x),"S"),
+
+  )
+       )
 
 #' Create dataset of single doses
 #'
@@ -133,14 +143,14 @@ create_single_dose_dataset <- function(dataset,
       DFUnit == "Month" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
       DFUnit == "Year" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
     )) %>%
-    mutate(dose_count = floor(dose_windows*DFFactor)+1)
+    mutate(dose_count = floor(dose_windows*DFFactor) + (floor(dose_windows*DFFactor)==0))
 
 
   dataset <- dataset[rep(row.names(dataset), dataset$dose_count), ]
 
   dataset <- dataset %>%
     group_by(!!!by_vars, !!dose_freq, !!start_date, !!end_date) %>%
-    mutate(temp_dose_multiplier = (row_number() - 1)) %>%
+    mutate(temp_dose_multiplier = (row_number() - 1)/DFFactor) %>%
     ungroup() %>%
     mutate(time_differential = case_when(
       DFUnit == "Day" ~ days(temp_dose_multiplier),
@@ -154,6 +164,6 @@ create_single_dose_dataset <- function(dataset,
            !!end_date := !!start_date + time_differential,
            !!start_date := !!start_date + time_differential
     ) %>%
-    select(!!!vars(col_names))
+    select(all_of(!!!vars(col_names)))
   return(dataset)
 }
