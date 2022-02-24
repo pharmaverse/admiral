@@ -165,13 +165,12 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Once the package is available from CRAN you’ll be able to install it using <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("admiral")</a></code>.</p>
-<p>In the meantime you can install the latest release of the package directly from GitHub.</p>
+<p>The package is available from CRAN and can be installed by running <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("admiral")</a></code>.</p>
+<p>To install the latest development version of the package directly from GitHub use the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"remotes"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) {
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 }
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"pharmaverse/admiral.test"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"main"</span>) <span class="co"># This is a required dependency of {admiral}</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"pharmaverse/admiral"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"main"</span>)</pre></div>
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"pharmaverse/admiral"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"devel"</span>)</pre></div>
 </div>
 <div id="scope" class="section level2">
 <h2 class="hasAnchor">
@@ -254,6 +253,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=admiral">https://​cloud.r-project.org/​package=admiral</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/pharmaverse/admiral/">https://​github.com/​pharmaverse/​admiral/​</a>
 </li>
 </ul>
