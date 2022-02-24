@@ -116,8 +116,8 @@ Once the review is completed, the reviewer will merge the Pull Request and the
 feature branch will automatically be deleted.
 
 After merging the Pull Request the corresponding issue must be moved to the
-"Sprint Done" column on the "admiral scrum board" by the developer. The issue
-must not be closed. It will be closed automatically once the `devel` branch is
+"Sprint Done" column on the "admiral scrum board" by the developer. **The issue
+must not be closed**. It will be closed automatically once the `devel` branch is
 merged into the `main` branch.
 
 
