@@ -15,16 +15,15 @@ To provide an open source, modularized toolbox that enables the pharmaceutical p
 
 ## Installation
 
-Once the package is available from CRAN you'll be able to install it using `install.packages("admiral")`.
+The package is available from CRAN and can be installed by running `install.packages("admiral")`.
 
-In the meantime you can install the latest release of the package directly from GitHub.
+To install the latest development version of the package directly from GitHub use the following code:
 
 ```r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
-remotes::install_github("pharmaverse/admiral.test", ref = "main") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiral", ref = "main")
+remotes::install_github("pharmaverse/admiral", ref = "devel")
 ```
 
 ## Scope
