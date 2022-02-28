@@ -8,7 +8,8 @@ convert_dtc_to_dt(
   dtc,
   date_imputation = NULL,
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  preserve = FALSE
 )
 }
 \arguments{
@@ -64,6 +65,15 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 }
 \value{
 a date object

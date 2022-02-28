@@ -7,7 +7,8 @@
 #'
 #'   The columns specified in the expressions inside `basetypes` are required.
 #'
-#' @param basetypes A *named* list of expressions created using `exprs()`
+#' @param basetypes A *named* list of expressions created using the
+#' `exprs` function
 #'
 #'   The names corresponds to the values of the newly created `BASETYPE` variables
 #'   and the expressions are used to subset the input dataset.
@@ -17,6 +18,8 @@
 #' the provided expression and the `BASETYPE` variable is set to the name of the
 #' expression. Then, all subsets are stacked. Records which do not match any
 #' condition are kept and `BASETYPE` is set to `NA`.
+#'
+#' @return The input dataset with variable `BASETYPE` added
 #'
 #' @author Thomas Neitmann
 #'

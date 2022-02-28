@@ -7,6 +7,10 @@
 #'
 #'   Required columns are `start_date`, `end_date`, `ref_start_date` and `ref_end_date`.
 #'
+#' @param new_var On-treatment flag variable name to be created.
+#'
+#'   Default is `ONTRTFL`.
+#'
 #' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g. `ADT`)
 #'   Required; A date or date-time object column is expected
 #'
@@ -40,8 +44,6 @@
 #' @param span_period A `"Y"` scalar character. If `"Y"`, events that started prior
 #' to the `ref_start_date`and are ongoing or end after the `ref_start_date` are flagged as `"Y"`.
 #'  Optional; default is `NULL`.
-#'
-#' @param date **Deprecated**. Please use `start_date` instead.
 #'
 #' @details
 #' On-Treatment is calculated by determining whether the assessment date or
@@ -136,19 +138,32 @@
 #'  ref_end_window = 60,
 #'  span_period = "Y"
 #' )
+#'
+#' advs <- tibble::tribble(
+#'   ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+#'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+#'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+#'   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+#' )
+#' derive_var_ontrtfl(
+#'  advs,
+#'  new_var = ONTR01FL,
+#'  start_date = ASTDT,
+#'  end_date = AENDT,
+#'  ref_start_date = AP01SDT,
+#'  ref_end_date = AP01EDT,
+#'  span_period = "Y"
+#' )
 derive_var_ontrtfl <- function(dataset,
+                               new_var = ONTRTFL,
                                start_date,
                                end_date = NULL,
                                ref_start_date,
                                ref_end_date = NULL,
                                ref_end_window = 0,
                                filter_pre_timepoint = NULL,
-                               span_period = NULL,
-                               date = deprecated()) {
-  if (!missing(date)) {
-    deprecate_warn("0.3.0", "derive_var_ontrtfl(date = )", "derive_var_ontrtfl(start_date = )")
-    start_date <- enquo(date)
-  }
+                               span_period = NULL) {
+  new_var <- assert_symbol(enquo(new_var))
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date), optional = TRUE)
   ref_start_date <- assert_symbol(enquo(ref_start_date))
@@ -157,13 +172,15 @@ derive_var_ontrtfl <- function(dataset,
     dataset,
     required_vars = quo_c(start_date, end_date, ref_start_date, ref_end_date)
   )
+  warn_if_vars_exist(dataset, quo_text(new_var))
+
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
   assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
   dataset <- mutate(
     dataset,
-    ONTRTFL = if_else(
+    !!new_var := if_else(
       is.na(!!start_date) & !is.na(!!ref_start_date) | !!ref_start_date == !!start_date,
       "Y",
       NA_character_,
@@ -174,7 +191,8 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(filter_pre_timepoint)) {
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(!!filter_pre_timepoint, NA_character_, ONTRTFL, missing = ONTRTFL)
+      !!new_var := if_else(!!filter_pre_timepoint, NA_character_, !!new_var,
+                            missing = !!new_var)
     )
   }
 
@@ -182,23 +200,23 @@ derive_var_ontrtfl <- function(dataset,
     # Scenario 1: No treatment end date is passed
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(
+      !!new_var := if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date,
         "Y",
-        ONTRTFL,
-        missing = ONTRTFL
+        !!new_var,
+        missing = !!new_var
       )
     )
   } else {
     # Scenario 2: Treatment end date is passed, window added above
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(
+      !!new_var := if_else(
         !is.na(!!ref_start_date) & !is.na(!!start_date) & !!ref_start_date < !!start_date &
           !is.na(!!ref_end_date) & !!start_date <= (!!ref_end_date + days(!!ref_end_window)),
         "Y",
-        ONTRTFL,
-        missing = ONTRTFL
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
@@ -207,11 +225,11 @@ derive_var_ontrtfl <- function(dataset,
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(
+      !!new_var := if_else(
         !!end_date < !!ref_start_date,
         NA_character_,
-        ONTRTFL,
-        missing = ONTRTFL
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
@@ -220,15 +238,16 @@ derive_var_ontrtfl <- function(dataset,
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
-      ONTRTFL = if_else(
+      !!new_var := if_else(
           !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
           (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
-        ONTRTFL,
-        missing = ONTRTFL
+        !!new_var,
+        missing = !!new_var
       )
     )
   }
 
   dataset
+
 }

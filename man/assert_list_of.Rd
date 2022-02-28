@@ -16,7 +16,8 @@ is \code{NULL} then an error is thrown}
 }
 \value{
 The function throws an error if \code{arg} is not a list or if \code{arg} is a list but its
-elements are not objects inheriting from \code{class}
+elements are not objects inheriting from \code{class}. Otherwise, the input is returned
+invisibly.
 }
 \description{
 Checks if an argument is a \code{list} of objects inheriting from the S3 class specified.

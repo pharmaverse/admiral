@@ -60,8 +60,14 @@ jobs:
 
       - name: Lint
         run: |
-          lints <- lintr::lint_package()
+          (lints <- lintr::lint_package())
+          saveRDS(lints, file = "lints.rds")
+        shell: Rscript {0}
+
+      - name: Error if lints are detected
+        run: |
+          lints <- readRDS("lints.rds")
           if (length(lints) > 0L) {
-            stop("lintr detected issues.", call. = FALSE)
+            stop("Lints detected. Please review and adjust code according to the comments provided.", call. = FALSE)
           }
         shell: Rscript {0}

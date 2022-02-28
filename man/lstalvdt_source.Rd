@@ -9,9 +9,9 @@ lstalvdt_source(
   filter = NULL,
   date,
   date_imputation = NULL,
+  preserve = FALSE,
   traceability_vars = NULL,
-  dataset = deprecated(),
-  date_var = deprecated()
+  dataset = deprecated()
 )
 }
 \arguments{
@@ -27,12 +27,19 @@ dates can be specified. An unquoted symbol is expected.}
 \item{date_imputation}{A string defining the date imputation for \code{date}.
 See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
+
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
 
 \item{dataset}{Deprecated, please use \code{dataset_name} instead.}
-
-\item{date_var}{Deprecated, please use \code{date} instead.}
 }
 \value{
 An object of class "lstalvdt_source".

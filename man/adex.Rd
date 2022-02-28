@@ -5,10 +5,10 @@
 \alias{adex}
 \title{Exposure Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 6315 rows and 88 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 6315 rows and 87 columns.
 }
 \source{
-Derived from the \link{adsl} and \link{ex} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adex.R})
+Derived from the \code{adsl} and \code{ex} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R})
 }
 \usage{
 adex

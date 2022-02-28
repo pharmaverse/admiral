@@ -11,7 +11,8 @@ derive_vars_dt(
   date_imputation = NULL,
   flag_imputation = TRUE,
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  preserve = FALSE
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-A character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix and for the date imputation flag "DTF". I.e., for
+\code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -80,6 +83,15 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 }
 \value{
 The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
@@ -166,6 +178,18 @@ derive_vars_dt(
   new_vars_prefix = "AST",
   date_imputation = "first",
   min_dates = vars(TRTSDTM)
+)
+
+# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+# use preserve argument to "preserve" partial dates.  For example, "2019---07",
+# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "MID",
+  preserve = TRUE
 )
 }
 \author{

@@ -34,9 +34,10 @@ adae <- ae %>%
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by = vars(STUDYID, USUBJID)
   ) %>%
 
   # derive analysis start time
@@ -115,7 +116,7 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_extreme_flag(
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -125,11 +126,13 @@ adae <- adae %>%
 
 # Join all ADSL with AE
 adae <- adae %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 
 # ---- Save output ----
 
-save(adae, file = "data/adae.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")

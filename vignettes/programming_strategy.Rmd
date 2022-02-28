@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-As admiral is intended to be contributed by the user community, 
-this article is meant for developers that want to either expand admiral functionalities or build on top of admiral. 
+As `{admiral}` is intended to be contributed by the user community, this 
+article is meant for developers that want to either expand `{admiral}` functionalities or build on top of `{admiral}`. 
 In order to keep the framework robust across the whole community, 
 we have defined a programming strategy that should be followed in such cases.
 These contributions could include, for example, company specific derivations of ADaM datasets. 
@@ -30,7 +30,7 @@ These contributions could include, for example, company specific derivations of 
 * Overall programming will follow a functional approach.
 * Each ADaM dataset is built with a set of functions and not with free flow code.
 * Each ADaM dataset has a specific programming workflow.
-* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an admiral function or a company specific function.
+* Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
 * Admiral functions can be re-used for company specific functions.
 * Each function belongs to a category or multiple categories.
 * Each function that is used to derive one or multiple variable(s) is required to be unit tested.
@@ -65,7 +65,7 @@ case-sensitive. Thus they must be in lower case.
 
 # Functions in R
 
-Functions in admiral must follow the modular approach, i.e. functions which add
+Functions in `{admiral}` must follow the modular approach, i.e. functions which add
 variables should add only a single variable except if other variables are
 closely related to the derived variable and can not be derived without it. For
 example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
@@ -85,9 +85,8 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, these
-variables must start with `temp_` and must be removed from the output dataset
-(link to remove function).
-* If the input dataset includes variables starting with `temp_`, an error must be issued (link to check function).
+variables must start with `temp_` and must be removed from the output dataset.
+* If the input dataset includes variables starting with `temp_`, an error must be issued.
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
 
@@ -104,10 +103,7 @@ variables must start with `temp_` and must be removed from the output dataset
 | `derive_param_` (e.g. `derive_param_os`)     | Functions which add a single parameter                                                              |
 | `compute_` /  `calculate_` / ...             | Functions that take vectors as input and return a vector                                            |
 
-Please note that *var* prefix should be used only if the function name includes the name of the variable 
-(e.g. `derive_var_ady()`). 
-It should not be used if the variable name is supplied as an argument (e.g. `derive_baseline()`, which has a `new_var` argument).
-
+Please note that the appropriate *var*/*vars* prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a `new_var` parameter in the function call. 
 
 ## Function Parameters
 
@@ -160,7 +156,7 @@ Separate parameters for the imputation must be provided, e.g.:
 Each function parameter needs to be tested with `assert_` type of function. 
 
 Each expression needs to be tested for the following 
-(there are many utility functions in admiral available to the contributor):
+(there are many utility functions in `{admiral}` available to the contributor):
 
 * whether it is an expression (or a list of expressions, depending on the function)
 * whether it is a valid expression (i.e. whether it evaluates without error)
@@ -228,7 +224,7 @@ The `assert_character_scalar()` function helps with handling parameters in a
 case-insensitive manner.
 
 A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. 
-This rule is applicable only if both functions are part of admiral.
+This rule is applicable only if both functions are part of `{admiral}`.
 
 
 ## Function Header (Documentation)
@@ -325,9 +321,9 @@ easier to maintain the headers.
 Variable names, expressions, functions, and any other code must be enclosed
 which backticks. This will render it as code.
 
-For functions which derive a specific CDISC variable (i.e. those starting with
-`derive_var_`), the title must state the label of the variable without the
-variable name. The variable should be stated in the description.
+For functions which derive a specific CDISC variable, the title must state the 
+label of the variable without the variable name. The variable should be stated 
+in the description.
 
 # Missing values
 
@@ -374,29 +370,12 @@ where the labels are stored.
 
 # Unit Testing
 
-A function requires a set of unit tests to verify it produces the expected result. 
-If a function is defined in a file named `R/derive_baseline.R` then its accompanying unit tests should be stored in `tests/testthat/test-derive_baseline.R`.
-
-The testing framework to be used is [testthat](https://testthat.r-lib.org/).
-
-Unit tests should cover the functionality of the function.
-If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
-This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
-
-The input and expected output for the unit tests must follow the following rules:
-
-* Input and output should be as simple as possible.
-* Values should be hard-coded whenever possible.
-* If values need to be derived, only unit tested functions can be used.
-
-If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
-Make sure to align columns as well. This ensures quick code readability. 
-
-If a unit test fails, it must provide a helpful error message, e.g., if the output dataset is not as expected, the observations, variables, and values which differ should be provided. See also test helper function (link to be added).
+A function requires a set of unit tests to verify it produces the expected result.
+See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests-in-admiral-) for details.
 
 # Deprecation
 
-As admiral is still evolving, functions or parameters may need to be removed or replaced with more 
+As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more 
 efficient options from one release to another. In such cases, the relevant function or parameter 
 must be marked as deprecated. A warning will be issued until the next release and an error will be 
 generated thereafter. Information about deprecation timelines must be added to the warning/error message.
@@ -434,7 +413,7 @@ There should be a test case added in `tests/testthat/test-deprecation.R` that ch
 ### Function
 
 If the deprecated function still exists in the package besides the new function, a **warning** must be
-issued. If if it has been removed, an **error** must be generated.
+issued. If it has been removed, an **error** must be generated.
 
 ```
 ### BEGIN DEPRECATION

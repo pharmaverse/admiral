@@ -31,6 +31,9 @@ the censor values must be zero.".}
 If the condition contains objects apart from the element, they have to be
 passed to the function. See the second example below.}
 }
+\value{
+An error if the condition is not meet. The input otherwise.
+}
 \description{
 Checks if the elements of a list of named lists/classes fulfill a certain
 condition. If not, an error is issued and all elements of the list not
