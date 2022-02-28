@@ -1,7 +1,7 @@
 context("test-create_single_dose_dataset")
 
 
-test_that("derive_vars_single_dose works as expected", {
+test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
     "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"),
@@ -21,11 +21,47 @@ test_that("derive_vars_single_dose works as expected", {
   expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID)), expected_output)
 })
 
-test_that("derive_vars_single_dose works for different treatments", {
+
+test_that("create_single_dose_dataset works as expected for # TIMES PER cases", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "P01", "2 TIMES PER YEAR", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-07-01"),
+    "P02", "2 TIMES PER YEAR", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-12-31"),
+    "P03", "4 TIMES PER MONTH", lubridate::ymd("2021-02-01"), lubridate::ymd("2021-03-01"),
+    "P04", "4 TIMES PER MONTH", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-20"),
+    "P05", "5 TIMES PER WEEK", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-17"),
+    "P06", "5 TIMES PER WEEK", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-21")
+  )
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"),
+    "P02", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"),
+    "P02", "ONCE", lubridate::ymd("2021-07-02"), lubridate::ymd("2021-07-02"),
+    "P03", "ONCE", lubridate::ymd("2021-02-01"), lubridate::ymd("2021-02-01"),
+    "P03", "ONCE", lubridate::ymd("2021-02-08"), lubridate::ymd("2021-02-08"),
+    "P03", "ONCE", lubridate::ymd("2021-02-16"), lubridate::ymd("2021-02-16"),
+    "P03", "ONCE", lubridate::ymd("2021-02-23"), lubridate::ymd("2021-02-23"),
+    "P04", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"),
+    "P04", "ONCE", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-08"),
+    "P04", "ONCE", lubridate::ymd("2021-01-16"), lubridate::ymd("2021-01-16"),
+    "P05", "ONCE", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-15"),
+    "P05", "ONCE", lubridate::ymd("2021-01-16"), lubridate::ymd("2021-01-16"),
+    "P05", "ONCE", lubridate::ymd("2021-01-17"), lubridate::ymd("2021-01-17"),
+    "P06", "ONCE", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-15"),
+    "P06", "ONCE", lubridate::ymd("2021-01-16"), lubridate::ymd("2021-01-16"),
+    "P06", "ONCE", lubridate::ymd("2021-01-17"), lubridate::ymd("2021-01-17"),
+    "P06", "ONCE", lubridate::ymd("2021-01-19"), lubridate::ymd("2021-01-19"),
+    "P06", "ONCE", lubridate::ymd("2021-01-20"), lubridate::ymd("2021-01-20"),
+  )
+
+  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID)), expected_output)
+})
+
+test_that("create_single_dose_dataset works for different treatments", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT, ~EXTRT,
     "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"), "XANOMELINE",
-    "P01", "EVERY 2 DAYS", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-05"), "PLACEBO"
+    "P01", "QOD", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-05"), "PLACEBO"
   )
   expected_output <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT, ~EXTRT,

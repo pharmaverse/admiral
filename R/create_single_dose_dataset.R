@@ -242,14 +242,10 @@ create_single_dose_dataset <- function(dataset,
 
     dataset <- dataset %>%
       left_join(lookup, by = as_name(dose_freq)) %>%
-      mutate(dose_periods = case_when(
-        DoseWindow == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
-        DoseWindow == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
-        DoseWindow == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
-        DoseWindow == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
-      )) %>%
-      mutate(dose_count = ceiling(dose_periods*DoseCount) +
-               (floor(dose_periods*DoseCount) == 0))
+      mutate(dose_periods =
+               compute_duration(!!start_date, !!end_date, out_unit = "days") * DayConversionFactor
+      ) %>%
+      mutate(dose_count = ceiling(dose_periods*DoseCount))
 
     # Generate a row for each completed dose
 
