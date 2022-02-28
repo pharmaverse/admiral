@@ -47,6 +47,7 @@ globalVariables(c(
   "QVAL",
   "RDOMAIN",
   "USUBJID",
+  "auto",
   "censor",
   "Dataset",
   "dataset_name",

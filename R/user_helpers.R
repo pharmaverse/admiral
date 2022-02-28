@@ -5,6 +5,8 @@
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
 #' @param open Whether to open the script right away.
 #'
+#' @return No return values, called for side effects
+#'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @keywords user_utility
@@ -62,6 +64,8 @@ use_ad_template <- function(adam_name = "adsl",
 #' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @keywords user_utility
+#'
+#' @return A `character` vector of all available templates
 #'
 #' @export
 #'

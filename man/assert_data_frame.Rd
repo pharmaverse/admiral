@@ -4,12 +4,19 @@
 \alias{assert_data_frame}
 \title{Is an Argument a Data Frame?}
 \usage{
-assert_data_frame(arg, required_vars = NULL, optional = FALSE)
+assert_data_frame(
+  arg,
+  required_vars = NULL,
+  check_is_grouped = TRUE,
+  optional = FALSE
+)
 }
 \arguments{
 \item{arg}{A function argument to be checked}
 
 \item{required_vars}{A list of variables created using \code{vars()}}
+
+\item{check_is_grouped}{Throw an error is \code{dataset} is grouped? Defaults to \code{TRUE}.}
 
 \item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
 is \code{NULL} then an error is thrown}

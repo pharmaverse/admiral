@@ -11,10 +11,14 @@ derive_var_basetype(dataset, basetypes)
 
 The columns specified in the expressions inside \code{basetypes} are required.}
 
-\item{basetypes}{A \emph{named} list of expressions created using \code{exprs()}
+\item{basetypes}{A \emph{named} list of expressions created using the
+\code{exprs} function
 
 The names corresponds to the values of the newly created \code{BASETYPE} variables
 and the expressions are used to subset the input dataset.}
+}
+\value{
+The input dataset with variable \code{BASETYPE} added
 }
 \description{
 Adds the \code{BASETYPE} variable to a dataset and duplicates records based upon

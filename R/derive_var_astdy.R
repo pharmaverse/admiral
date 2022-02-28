@@ -1,5 +1,8 @@
 #' Derive Analysis Start Relative Day
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Adds the analysis start relative day (`ASTDY`) to the dataset, i.e., study
 #' day of analysis start date.
 #'

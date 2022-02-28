@@ -172,6 +172,8 @@ derive_param_map <- function(dataset,
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
+#' @return A numeric vector of MAP values
+#'
 #' @keywords computation advs
 #'
 #' @export
@@ -194,7 +196,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
   }
 }
 
-#' Adds a parameter for BSA (Body Surface Area) using the specified method
+#' Adds a Parameter for BSA (Body Surface Area) Using the Specified Method
 #'
 #' Adds a record for BSA (Body Surface Area) using the specified derivation method
 #' for each by group (e.g., subject and visit) where the source parameters are available.
@@ -208,9 +210,10 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'   the input dataset after restricting it by the filter condition (`filter`
 #'   parameter) and to the parameters specified by `HEIGHT` and `WEIGHT`.
 #'
-#' @param method Derivation method to use:
+#' @param method Derivation method to use. Note that `HEIGHT` is expected
+#'    in cm and `WEIGHT` is expected in kg:
 #'
-#'   Mosteller: `sqrt(height(cm) * weight(kg)) / 3600`
+#'   Mosteller: `sqrt(height * weight / 3600)`
 #'
 #'   DuBois-DuBois: `0.20247 * (height/100) ^ 0.725 * weight ^ 0.425`
 #'
@@ -352,7 +355,7 @@ derive_param_bsa <- function(dataset,
 #'
 #' @param method Derivation method to use:
 #'
-#'   Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+#'   Mosteller: sqrt(height * weight / 3600)
 #'
 #'   DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
 #'

@@ -1,0 +1,40 @@
+name: Onboarding Tasks
+description: Bringing a Core or non-Core member onto the admiral team [for admiral team only]
+title: "Onboarding:  <Insert Issue Title Here>"
+labels: ["onboarding"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to the Team!  We love contributors!
+  - type: checkboxes
+    id: core
+    attributes:
+      label: Onboarding tasks for Core (Roche-GSK) Team Members
+      description:
+      options:
+        - label: Given a tour of Github from a Core member
+        - label: Understand how to Create Issues and do a Pull Request
+        - label: Understand the Programming Strategy
+        - label: Read and understand [Developer Guides Articles](https://pharmaverse.github.io/admiral/index.html)
+        - label: Invited to all relevant meetings - Stand Ups, Retrospective, Sprint Planning, Question/Comments, Backlog, Community Meeting
+        - label: Given access to Box and relevant documents
+        - label: Given write access to Github Repository
+        - label: Slack channel invites to admiral and admiral_dev
+        - label: Introduction to Teams ways of working
+  - type: checkboxes
+    id: non-core
+    attributes:
+      label: Onboarding tasks for non-Core Team Members
+      description:
+      options:
+        - label: Given a tour of Github from a Core member
+        - label: Understand how to Create Issues and do a Pull Request
+        - label: Understand the Programming Strategy
+        - label: Read and understand [Developer Guides Articles](https://pharmaverse.github.io/admiral/index.html)
+        - label: Invited to all relevant meetings - Question/Comments, Community Meeting
+        - label: Given write access to Github Repository
+        - label: Slack channel invites to admiral
+        - label: Introduction to Teams ways of working

@@ -21,7 +21,7 @@ Permitted Values: numeric vector}
 
 \item{method}{Derivation method to use:
 
-Mosteller: sqrt(height(cm) * weight(kg)) / 3600
+Mosteller: sqrt(height * weight / 3600)
 
 DuBois-DuBois: 0.20247 * (height/100) ^ 0.725 * weight ^ 0.425
 

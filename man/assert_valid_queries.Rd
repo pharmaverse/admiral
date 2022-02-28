@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_vars_query.R
 \name{assert_valid_queries}
 \alias{assert_valid_queries}
-\title{Verify if a dataset has the required format as queries dataset.}
+\title{Verify if a Dataset Has the Required Format as Queries Dataset.}
 \usage{
 assert_valid_queries(queries, queries_name)
 }
@@ -15,7 +15,7 @@ assert_valid_queries(queries, queries_name)
 The function throws an error if any of the requirements not met.
 }
 \description{
-Verify if a dataset has the required format as queries dataset.
+Verify if a Dataset Has the Required Format as Queries Dataset.
 }
 \details{
 Check if the dataset has the following columns

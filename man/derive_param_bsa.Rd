@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_advs_params.R
 \name{derive_param_bsa}
 \alias{derive_param_bsa}
-\title{Adds a parameter for BSA (Body Surface Area) using the specified method}
+\title{Adds a Parameter for BSA (Body Surface Area) Using the Specified Method}
 \usage{
 derive_param_bsa(
   dataset,
@@ -32,9 +32,10 @@ dataset.
 
 \emph{Permitted Values:} list of variables}
 
-\item{method}{Derivation method to use:
+\item{method}{Derivation method to use. Note that \code{HEIGHT} is expected
+in cm and \code{WEIGHT} is expected in kg:
 
-Mosteller: \code{sqrt(height(cm) * weight(kg)) / 3600}
+Mosteller: \code{sqrt(height * weight / 3600)}
 
 DuBois-DuBois: \code{0.20247 * (height/100) ^ 0.725 * weight ^ 0.425}
 

@@ -1,4 +1,4 @@
-name: R Package Validation Report
+name: R Package Validation report
 
 on: # Run this action when a release is published
   release:
@@ -8,6 +8,8 @@ jobs:
   r-pkg-validation:
     name: Create report 📃
     runs-on: ubuntu-latest
+    container:
+      image: rocker/verse:4.1.1
     # Set Github token permissions
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -20,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build report 🏗
-        uses: insightsengineering/r-pkg-validation@main
+        uses: insightsengineering/thevalidatoR@v1.1.2
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼

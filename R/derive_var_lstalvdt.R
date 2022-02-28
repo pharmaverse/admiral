@@ -1,5 +1,8 @@
 #' Derive Last Known Alive Date
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Add the last known alive date (`LSTALVDT`) to the dataset.
 #'
 #' @param dataset Input dataset
@@ -199,7 +202,8 @@ derive_var_lstalvdt <- function(dataset,
         !!!sources[[i]]$traceability_vars,
         LSTALVDT = convert_dtc_to_dt(
           !!date,
-          date_imputation = sources[[i]]$date_imputation
+          date_imputation = sources[[i]]$date_imputation,
+          preserve = sources[[i]]$preserve
         )
       )
     }
@@ -215,7 +219,7 @@ derive_var_lstalvdt <- function(dataset,
       check_type = "none"
     )
 
-  left_join(dataset, all_data, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset, dataset_add = all_data, by_vars = subject_keys)
 }
 
 #' Create an `lstalvdt_source` object
@@ -238,7 +242,7 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
 #'
-#' @param date_var Deprecated, please use `date` instead.
+#' @inheritParams impute_dtc
 #'
 #' @author Stefan Bundfuss
 #'
@@ -251,13 +255,9 @@ lstalvdt_source <- function(dataset_name,
                             filter = NULL,
                             date,
                             date_imputation = NULL,
+                            preserve = FALSE,
                             traceability_vars = NULL,
-                            dataset = deprecated(),
-                            date_var = deprecated()) {
-  if (!missing(date_var)) {
-    deprecate_warn("0.3.0", "lstalvdt_source(date_var = )", "lstalvdt_source(date = )")
-    date <- enquo(date_var)
-  }
+                            dataset = deprecated()) {
   if (!missing(dataset)) {
     deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
     dataset_name <- deparse(substitute(dataset))
@@ -271,6 +271,7 @@ lstalvdt_source <- function(dataset_name,
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
     date_imputation = date_imputation,
+    preserve = preserve,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("lstalvdt_source", "list")

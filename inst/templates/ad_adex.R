@@ -52,9 +52,10 @@ adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
 # Join ADSL with ex and derive required dates, variables
 adex0 <- ex %>%
   # Join ADSL with EX (only ADSL vars required for derivations)
-  left_join(
-    adsl %>% select(STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
 
   # Calculate ASTDTM, AENDTM using derive_vars_dtm
@@ -250,13 +251,14 @@ format_avalcat1 <- function(param, aval) {
 
 adex <- adex %>%
   # Add PARAMN and PARAM, AVALU
-  left_join(param_lookup, by = "PARAMCD") %>%
+  derive_vars_merged(dataset_add = param_lookup,
+                     by_vars = vars(PARAMCD)) %>%
 
   # Derive AVALCATx
   mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
 
   # Calculate ASEQ
-  derive_obs_number(
+  derive_var_obs_number(
     new_var = ASEQ,
     by_vars = vars(STUDYID, USUBJID),
     order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
@@ -265,9 +267,9 @@ adex <- adex %>%
 
 # Join all ADSL with EX
 adex <- adex %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels
@@ -276,4 +278,5 @@ adex <- adex %>%
 
 # ---- Save output ----
 
-save(adex, file = "data/adex.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

@@ -15,13 +15,13 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This guidance ensures consistency across the vignettes in the admiral package in terms of content, structure and code execution. 
+This guidance ensures consistency across the vignettes in the `{admiral}` package in terms of content, structure and code execution. 
 As a general rule, the vignette workflow defined in [r-pkgs.org](https://r-pkgs.org/vignettes.html) is followed.
 
 
 # Metadata
 
-Each vignette in admiral should start with the following metadata.
+Each vignette in `{admiral}` should start with the following metadata.
 
 ```
 ---
@@ -69,8 +69,8 @@ This is the description of my second sub-section within my first section.
 ```
 
 The first section gives a brief introduction of the vignette. The last sub-section 
-of the introduction should describe the packages required to run the admiral functions. 
-The admiral package should be described first.
+of the introduction should describe the packages required to run the `{admiral}` functions. 
+The `{admiral}` package should be described first.
 
 ```
 # Introduction
@@ -102,9 +102,9 @@ The `warning = FALSE` and `message = FALSE` options are there to prevent the usu
 + Any variable name, dataset name, function, argument name must be quoted with backticks: e.g.
 
 
-  ```
+```
   The `date` parameter of the `derive_my_var()` function expects a date variable, e.g., `ADT`.
-  ```
+```
 
 + Functions must also end with `()`.
 
@@ -138,7 +138,7 @@ library(admiral)
 data(vs)
 ```
 
-      ```{r, eval=FALSE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE}
       vs1 <- vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
@@ -146,13 +146,13 @@ data(vs)
         date_imputation = "FIRST"
       )
 
-      ```
+```
 
 
   + Output dataset formatted using `dataset_vignette()`...
 
 
-      ```{r, echo=FALSE}
+```{r, echo=FALSE}
       vs1 <- vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
@@ -165,10 +165,10 @@ data(vs)
         display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
         filter = VSTESTCD == "WEIGHT"
       )
-      ```
+```
 
 
-    Note: The call to get the formatted dataset would be: 
+Note: The call to get the formatted dataset would be: 
  
 
       ```{r, eval=FALSE, echo=TRUE}
@@ -179,19 +179,19 @@ data(vs)
       )
       ```
       
-    Displaying many big datasets on a vignette, may require a long time to load
-    the page and may cause messages from the browser that the page is not
-    responsive. In this case the number of displayed observations should be
-    restricted either by restricting the source datasets at the beginning of the
-    vignette or in the call of `dataset_vignette()` if only some calls are
-    affected.
+Displaying many big datasets on a vignette, may require a long time to load
+the page and may cause messages from the browser that the page is not
+responsive. In this case the number of displayed observations should be
+restricted either by restricting the source datasets at the beginning of the
+vignette or in the call of `dataset_vignette()` if only some calls are
+affected.
 
 #### Conventions for ADaM Workflow
 
 For vignettes describing an ADaM workflow, 
 
 + the second section will summarize the programming workflow. The first sub-section within this 
-workflow will always describe the data read to demonstrate the use of the admiral functions,
+workflow will always describe the data read to demonstrate the use of the `{admiral}` functions,
 
 + Each sub-section within the programming workflow should be tagged (e.g. [Step1] (#step)), so that 
 the user can go on the relevant section from the programming workflow (in addition to the Table of
@@ -219,7 +219,7 @@ but use `(#this_action)`)
 # Example Script
 ADaM | Sample Code
 ---- | --------------
-ADxx | [ad_adxx.R](https://github.com/Roche-GSK/admiral/blob/master/inst/templates/ad_adxx.R){target="_blank"}
+ADxx | [ad_adxx.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adxx.R){target="_blank"}
 
 ```
 

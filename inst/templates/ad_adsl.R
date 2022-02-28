@@ -17,10 +17,14 @@ library(lubridate)
 data("dm")
 data("ds")
 data("ex")
+data("ae")
+data("lb")
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
 ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 
 # ---- User defined functions ----
 
@@ -28,14 +32,6 @@ ex <- convert_blanks_to_na(ex)
 #  operates on vectors, which can be used in `mutate`.
 
 # Grouping
-format_agegr1 <- function(x) {
-  case_when(
-    !is.na(x) & x < 18 ~ "< 18",
-    x >= 18 & x < 65 ~ "18 - 65",
-    x >= 65 ~ ">= 65"
-  )
-}
-
 format_racegr1 <- function(x) {
   case_when(
     !is.na(x) & x == "WHITE" ~ "White",
@@ -90,14 +86,14 @@ adsl <- dm %>%
 
   # Disposition dates, status
   # Screen fail date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
     filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
@@ -105,7 +101,7 @@ adsl <- dm %>%
   ) %>%
 
   # EOS status
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
@@ -114,7 +110,7 @@ adsl <- dm %>%
   ) %>%
 
   # Last retrieval date
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
@@ -168,9 +164,14 @@ adsl <- adsl %>%
     source_datasets = list(ae = ae, lb = lb, adsl = adsl)
   ) %>%
 
+  # Age group
+  derive_agegr_fda(
+    age_var = AGE,
+    new_var = AGEGR1
+  ) %>%
+
   # Groupings, populations and others variables
   mutate(
-    AGEGR1 = format_agegr1(AGE),
     RACEGR1 = format_racegr1(RACE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
@@ -184,4 +185,5 @@ adsl <- adsl %>%
 
 # ---- Save output ----
 
-save(adsl, file = "data/adsl.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")
