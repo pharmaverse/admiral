@@ -4,14 +4,29 @@
 \alias{derive_var_shift}
 \title{Derive Shift}
 \usage{
-derive_var_shift(dataset, new_var, from_var, to_var)
+derive_var_shift(
+  dataset,
+  new_var,
+  from_var,
+  to_var,
+  post_baseline_condition = NULL
+)
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by \code{from_var}, and the \code{to_var}parameters are expected.}
+The columns specified by \code{from_var} and the \code{to_var}parameters are expected.}
 
-\item{new_var}{Name of the character shift variable to create}
+\item{new_var}{Name of the character shift variable to create.}
+
+\item{from_var}{Variable containing value to shift from.}
+
+\item{to_var}{Variable containing value to shift to.}
+
+\item{post_baseline_condition}{Condition to identify post-baseline records. If not
+specified, \code{new_var} is populated for all records.
+
+Default: \code{NULL}}
 }
 \value{
 The input dataset with the character shift variable added
@@ -24,24 +39,37 @@ analysis value, shift from baseline grade to analysis grade, ...
 \details{
 \code{new_var} is derived by concatenating the values of \code{from_var} to values of \code{to_var}
 (e.g. "NORMAL to HIGH"). When \code{from_var} or \code{to_var} has missing value, the
-missing value is replaced by \code{NULL} (e.g. "NORMAL to NULL"), if both are missing \code{new_var} is
-set to missing.
+missing value is replaced by \code{NULL} (e.g. "NORMAL to NULL"). If \code{post_baseline_condition} is
+specified, \code{new_var} is populated only for post-baseline records. If \code{post_baseline_condition}
+is \code{NULL} (default), \code{new_var} is populated for all records.
 }
 \examples{
 data <- tibble::tribble(
 ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
 "P01",    "ALB",     33,    "Y",    "LOW",   "LOW",
 "P01",    "ALB",     38,    "",     "LOW",   "NORMAL",
+"P01",    "ALB",     NA,    "",     "LOW",   "",
 "P02",    "ALB",     37,    "Y",    "NORMAL","NORMAL",
 "P02",    "ALB",     49,    "",     "NORMAL","HIGH",
 "P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
 )
 
+data \%>\%
+convert_blanks_to_na \%>\%
 derive_var_shift(
-   data,
    new_var = SHIFT1,
    from_var = BNRIND,
    to_var = ANRIND
+)
+
+# or only populate post-baseline records
+data \%>\%
+convert_blanks_to_na \%>\%
+derive_var_shift(
+    new_var = SHIFT1,
+    from_var = BNRIND,
+    to_var = ANRIND,
+    post_baseline_condition = (ABLFL != "Y")
 )
 
 }
