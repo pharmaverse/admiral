@@ -1,6 +1,6 @@
 name: Onboarding Tasks
 description: Bringing a Core or non-Core member onto the admiral team [for admiral team only]
-title: "Onboaring:  <Insert Issue Title Here>"
+title: "Onboarding:  <Insert Issue Title Here>"
 labels: ["onboarding"]
 assignees:
   - octocat

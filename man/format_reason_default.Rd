@@ -17,7 +17,7 @@ A \code{character} vector
 }
 \description{
 Define a function to map the disposition reason, to be used as a parameter in
-\code{derive_disposition_reason()}.
+\code{derive_vars_disposition_reason()}.
 }
 \details{
 \code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not
@@ -32,7 +32,7 @@ data("ds")
 
 # Derive DCSREAS using format_reason_default
 dm \%>\%
-  derive_disposition_reason(
+  derive_vars_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
@@ -43,7 +43,7 @@ dm \%>\%
 
 }
 \seealso{
-\code{\link[=derive_disposition_reason]{derive_disposition_reason()}}
+\code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
 }
 \author{
 Samia Kabi
