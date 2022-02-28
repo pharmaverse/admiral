@@ -15,6 +15,9 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
 ## Updates of Existing Functions
 
 
