@@ -9,7 +9,9 @@ create_single_dose_dataset(
   by_vars,
   dose_freq = EXDOSFRQ,
   start_date = ASTDT,
-  end_date = AENDT
+  end_date = AENDT,
+  lookup_table = dose_freq_lookup,
+  lookup_column = CDISCSubmissionValue
 )
 }
 \arguments{
@@ -30,8 +32,7 @@ The aggregate dosing frequency used for multiple doses in a row.
 
 Default: EXDOSFRQ
 
-Permitted Values: 'QxD', 'QxW', 'EVERY x DAYS', 'EVERY x WEEKS'
-where x is a positive integer}
+Permitted Values: defined by lookup table.}
 
 \item{start_date}{The start date
 
@@ -44,6 +45,23 @@ Default: \code{ASTDT}}
 A date or date-time object is expected.
 
 Default: \code{AENDT}}
+
+\item{lookup_table}{The dose frequency value lookup table
+
+The table used to look up \code{dose_freq} values and determine the appropriate
+multiplier to be used for row generation. If a lookup table other than the
+default is used, it must have columns \code{DoseWindow}, \code{DoseCount}, and
+\code{DayConversionFactor}
+
+Default: \code{dose_freq_lookup}
+
+Permitted Values for \code{DoseWindow}: "DAY", "WEEK", "MONTH", "YEAR"}
+
+\item{lookup_column}{The dose frequency value column in the lookup table
+
+The column of \code{lookup_table}.
+
+Default: \code{CDISCSubmissionValue} (column of \code{dose_freq_lookup})}
 }
 \value{
 The input dataset with a single dose per row.
@@ -53,7 +71,10 @@ Derives dataset of single dose from aggregate dose information
 }
 \details{
 Each aggregate dose row is split into multiple rows which each represent
-a single dose.
+a single dose.The number of completed dose periods between \code{start_date} and
+\code{end_date} is calculated with \code{compute_duration} and multiplied by the count
+of doses per period. \code{start_date} and \code{end_date} are then adjusted by an
+appropriate increment using \code{DayConversionFactor}.
 }
 \examples{
 data <- tibble::tribble(
@@ -66,5 +87,5 @@ data <- tibble::tribble(
 create_single_dose_dataset(data, by_vars = vars(USUBJID))
 }
 \author{
-Michael Thorpe
+Michael Thorpe, Andrew Smith
 }

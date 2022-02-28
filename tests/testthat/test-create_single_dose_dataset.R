@@ -1,4 +1,4 @@
-context("test-derive_vars_single_dose")
+context("test-create_single_dose_dataset")
 
 
 test_that("derive_vars_single_dose works as expected", {
@@ -18,7 +18,7 @@ test_that("derive_vars_single_dose works as expected", {
     "P01", "ONCE", lubridate::ymd("2021-01-29"), lubridate::ymd("2021-01-29")
   )
 
-  expect_equal(derive_vars_single_dose(input, by_vars = vars(USUBJID)), expected_output)
+  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID)), expected_output)
 })
 
 test_that("derive_vars_single_dose works for different treatments", {
@@ -36,5 +36,5 @@ test_that("derive_vars_single_dose works for different treatments", {
     "P01", "ONCE", lubridate::ymd("2021-01-05"), lubridate::ymd("2021-01-05"), "PLACEBO"
   )
 
-  expect_equal(derive_vars_single_dose(input, by_vars = vars(USUBJID, EXTRT)), expected_output)
+  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID, EXTRT)), expected_output)
 })

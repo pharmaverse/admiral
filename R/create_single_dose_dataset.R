@@ -115,22 +115,22 @@ mutate(DoseCount = case_when(
     str_detect(CDISCSubmissionValue, "^(Q|EVERY)\\s?\\d{1,2}") ~
       1/as.numeric(str_remove_all(CDISCSubmissionValue,"[\\D]")),
     str_detect(CDISCSubmissionValue, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
-    str_detect(CDISCSubmissionValue, "^Q(AM|PM|N|D|HS)|^PA$") ~ 1,
+    str_detect(CDISCSubmissionValue, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
     str_detect(CDISCSubmissionValue, "BI[DM]") ~ 2,
     str_detect(CDISCSubmissionValue, "TID") ~ 3,
     str_detect(CDISCSubmissionValue, "QID") ~ 4,
-
+    str_detect(CDISCSubmissionValue, "QOD") ~ 0.5,
     ),
   DoseWindow = case_when(
     str_detect(CDISCSubmissionValue, "EVERY \\d{1,2}|PER") ~
       str_remove_all(sub(".* (\\w+)$", "\\1", CDISCSubmissionValue),"S"),
     str_detect(CDISCSubmissionValue, '^Q\\d{1,2}D$') ~ "DAY",
     str_detect(CDISCSubmissionValue, '^Q\\d{1,2}M$') ~ "MONTH",
-    CDISCSubmissionValue %in% c("EVERY AFTERNOON" "EVERY EVENING") ~ "DAY",
+    CDISCSubmissionValue %in% c("EVERY AFTERNOON","EVERY EVENING") ~ "DAY",
     CDISCSubmissionValue %in% c("EVERY WEEK") ~ "WEEK",
     CDISCSubmissionValue %in% c("BID", "TID", "QAM", "QPM", "QHS",
-                                "QD", "QN", "QID") ~ "DAY",
-    CDISCSubmissionValue %in% "BIM" ~ "MONTH",
+                                "QD", "QN", "QID", "QOD") ~ "DAY",
+    CDISCSubmissionValue %in% c("QM","BIM") ~ "MONTH",
     CDISCSubmissionValue == "PA" ~ "YEAR",
   )) %>%
 mutate(
@@ -241,14 +241,14 @@ create_single_dose_dataset <- function(dataset,
     # Use compute_duration to determine the number of completed dose periods
 
     dataset <- dataset %>%
-      left_join(lookup, by = as.character(dose_freq)[2]) %>%
+      left_join(lookup, by = as_name(dose_freq)) %>%
       mutate(dose_periods = case_when(
         DoseWindow == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
         DoseWindow == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
         DoseWindow == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
         DoseWindow == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
       )) %>%
-      mutate(dose_count = floor(dose_periods*DoseCount) +
+      mutate(dose_count = ceiling(dose_periods*DoseCount) +
                (floor(dose_periods*DoseCount) == 0))
 
     # Generate a row for each completed dose

@@ -5,7 +5,7 @@
 \alias{dose_freq_lookup}
 \title{Pre-Defined Dose Frequencies}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 33 rows and 5 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 58 rows and 5 columns.
 }
 \usage{
 dose_freq_lookup
