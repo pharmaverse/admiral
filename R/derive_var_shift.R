@@ -46,23 +46,24 @@
 #' "P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
 #' )
 #'
+#' library(dplyr, warn.conflicts = FALSE)
 #' data %>%
-#' convert_blanks_to_na %>%
-#' derive_var_shift(
+#'   convert_blanks_to_na() %>%
+#'   derive_var_shift(
 #'    new_var = SHIFT1,
 #'    from_var = BNRIND,
 #'    to_var = ANRIND
-#' )
+#'   )
 #'
 #' # or only populate post-baseline records
 #' data %>%
-#' convert_blanks_to_na %>%
-#' derive_var_shift(
+#'   convert_blanks_to_na() %>%
+#'   derive_var_shift(
 #'     new_var = SHIFT1,
 #'     from_var = BNRIND,
 #'     to_var = ANRIND,
 #'     post_baseline_condition = (ABLFL != "Y")
-#' )
+#'   )
 #'
 derive_var_shift <- function(dataset,
                              new_var,
