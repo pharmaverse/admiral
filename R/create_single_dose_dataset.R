@@ -241,7 +241,7 @@ create_single_dose_dataset <- function(dataset,
     # Use compute_duration to determine the number of completed dose periods
 
     dataset <- dataset %>%
-      left_join(lookup, by = as_name(dose_freq)) %>%
+      left_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
       mutate(dose_periods =
                compute_duration(!!start_date, !!end_date, out_unit = "days") * DayConversionFactor
       ) %>%
