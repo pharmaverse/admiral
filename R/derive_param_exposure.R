@@ -200,7 +200,7 @@ derive_param_exposure <- function(dataset,
       ) %>%
       ungroup()
     expo_data <- add_data %>%
-      derive_vars_merged(dataset_add = dates, by = by_vars) %>%
+      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(ASTDT = coalesce(ASTDT, temp_start),
              AENDT = coalesce(AENDT, temp_end)) %>%
       select(-starts_with("temp_"))
