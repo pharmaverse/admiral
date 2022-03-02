@@ -9,13 +9,15 @@ derive_var_shift(
   new_var,
   from_var,
   to_var,
-  post_baseline_condition = NULL
+  na_val = "NULL",
+  sep_val = " to ",
+  filter_post_baseline = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by \code{from_var} and the \code{to_var}parameters are expected.}
+The columns specified by \code{from_var} and the \code{to_var} parameters are expected.}
 
 \item{new_var}{Name of the character shift variable to create.}
 
@@ -23,7 +25,15 @@ The columns specified by \code{from_var} and the \code{to_var}parameters are exp
 
 \item{to_var}{Variable containing value to shift to.}
 
-\item{post_baseline_condition}{Condition to identify post-baseline records. If not
+\item{na_val}{Character string to replace missing values in \code{from_var} or \code{to_var}.
+
+Default: "NULL"}
+
+\item{sep_val}{Character string to concatenate values of \code{from_var} and \code{to_var}.
+
+Default: " to "}
+
+\item{filter_post_baseline}{Condition to identify post-baseline records. If not
 specified, \code{new_var} is populated for all records.
 
 Default: \code{NULL}}
@@ -39,28 +49,29 @@ analysis value, shift from baseline grade to analysis grade, ...
 \details{
 \code{new_var} is derived by concatenating the values of \code{from_var} to values of \code{to_var}
 (e.g. "NORMAL to HIGH"). When \code{from_var} or \code{to_var} has missing value, the
-missing value is replaced by \code{NULL} (e.g. "NORMAL to NULL"). If \code{post_baseline_condition} is
-specified, \code{new_var} is populated only for post-baseline records. If \code{post_baseline_condition}
+missing value is replaced by \code{na_val} (e.g. "NORMAL to NULL"). If \code{filter_post_baseline} is
+specified, \code{new_var} is populated only for post-baseline records. If \code{filter_post_baseline}
 is \code{NULL} (default), \code{new_var} is populated for all records.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 data <- tibble::tribble(
-~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
-"P01",    "ALB",     33,    "Y",    "LOW",   "LOW",
-"P01",    "ALB",     38,    "",     "LOW",   "NORMAL",
-"P01",    "ALB",     NA,    "",     "LOW",   "",
-"P02",    "ALB",     37,    "Y",    "NORMAL","NORMAL",
-"P02",    "ALB",     49,    "",     "NORMAL","HIGH",
-"P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
+  ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
+  "P01",    "ALB",     33,    "Y",    "LOW",   "LOW",
+  "P01",    "ALB",     38,    NA,     "LOW",   "NORMAL",
+  "P01",    "ALB",     NA,    NA,     "LOW",   NA,
+  "P02",    "ALB",     37,    "Y",    "NORMAL","NORMAL",
+  "P02",    "ALB",     49,    NA,     "NORMAL","HIGH",
+  "P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
 )
 
-library(dplyr, warn.conflicts = FALSE)
 data \%>\%
   convert_blanks_to_na() \%>\%
   derive_var_shift(
-   new_var = SHIFT1,
-   from_var = BNRIND,
-   to_var = ANRIND
+    new_var = SHIFT1,
+    from_var = BNRIND,
+    to_var = ANRIND
   )
 
 # or only populate post-baseline records
@@ -70,7 +81,7 @@ data \%>\%
     new_var = SHIFT1,
     from_var = BNRIND,
     to_var = ANRIND,
-    post_baseline_condition = (ABLFL != "Y")
+    filter_post_baseline = ABLFL != "Y"
   )
 
 }
