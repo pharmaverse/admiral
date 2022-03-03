@@ -221,7 +221,7 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 })
 
 input_maxed <- input %>%
-  filter(!str_detect(XXSTDTC, '18')) %>%
+  filter(!str_detect(XXSTDTC, "18")) %>%
   mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
 
 test_that("max_dates parameter works as expected", {
@@ -232,7 +232,7 @@ test_that("max_dates parameter works as expected", {
     "2019---07", ymd_hms("2019-02-10T00:00:00"), "M", "H"
   ) %>%
     mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
-    mutate(DCUTDT = ASTDTM)
+    mutate(DCUTDT = as_iso_dtm(ymd_hms("2019-02-10T00:00:00")))
 
   actual_output <- derive_vars_dtm(
     input_maxed,
