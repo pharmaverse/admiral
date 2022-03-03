@@ -55,8 +55,8 @@ adlb <- adlb %>%
   # Calculate AVAL and AVALC
   mutate(
     PARCAT2 = "SI",
-    PARAMCD = paste0(LBTESTCD,PARCAT2),
-    PARAM = paste0(LBTEST, ' (',LBSTRESU,')'),
+    PARAMCD = paste0(LBTESTCD, PARCAT2),
+    PARAM = paste0(LBTEST, " (", LBSTRESU, ")"),
     AVAL  = LBSTRESN,
     AVALC = LBSTRESC,
     ANRLO = LBSTNRLO,
@@ -162,13 +162,13 @@ adlb <- adlb %>%
 adlb <- adlb %>%
   mutate(
     R2BASE = if_else(
-      !is.na(AVAL) & !is.na(BASE) & BASE != 0, AVAL/BASE, NA_real_
+      !is.na(AVAL) & !is.na(BASE) & BASE != 0, AVAL / BASE, NA_real_
     ),
     R2ANRLO = if_else(
-      !is.na(AVAL) & !is.na(ANRLO) & ANRLO != 0, AVAL/ANRLO, NA_real_
+      !is.na(AVAL) & !is.na(ANRLO) & ANRLO != 0, AVAL / ANRLO, NA_real_
     ),
     R2ANRHI = if_else(
-      !is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL/ANRLO, NA_real_
+      !is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL / ANRLO, NA_real_
     )
   )
 
@@ -217,3 +217,19 @@ adlb <- adlb %>%
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   )
+
+# Add all ADSL variables
+adlb <- adlb %>%
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
+  )
+
+# Final Steps, Select final variables and Add labels
+# This process will be based on your metadata, no example given for this reason
+# ...
+
+# ---- Save output ----
+
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")
