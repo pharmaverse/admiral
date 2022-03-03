@@ -901,7 +901,7 @@ derive_vars_dtm <- function(dataset,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
-    max_dates = lapply(max_dates, eval_tidy, data = mask)
+    max_dates = lapply(max_dates, eval_tidy, data = mask),
     preserve = preserve
 
   )

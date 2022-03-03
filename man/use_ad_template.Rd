@@ -24,7 +24,7 @@ use_ad_template(
 No return values, called for side effects
 }
 \description{
-Open an ADaM Template Script
+Uses list_all_templates() to discover which templates are available
 }
 \examples{
 if (interactive()) {

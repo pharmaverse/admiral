@@ -220,9 +220,6 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
 })
 
-
-test_that("Issue a warning if --DTM already exists", {
-
 input_secs <- tibble::tribble(
   ~XXSTDTC,
   "2019-07-18T15:25:40",
@@ -392,4 +389,3 @@ test_that("Partial date imputation as MID and preserve = TRUE to the mid day/mon
     )
 
   })
-
