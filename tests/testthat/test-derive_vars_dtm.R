@@ -220,6 +220,32 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
 })
 
+input_maxed <- input %>%
+  filter(!str_detect(XXSTDTC, '18')) %>%
+  mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
+
+test_that("max_dates parameter works as expected", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-02", ymd_hms("2019-02-10T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-02-10T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-02-10T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
+    mutate(DCUTDT = ASTDTM)
+
+  actual_output <- derive_vars_dtm(
+    input_maxed,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "LAST",
+    max_dates = vars(DCUTDT)
+  )
+
+  expect_equal(expected_output, actual_output)
+
+})
+
 input_secs <- tibble::tribble(
   ~XXSTDTC,
   "2019-07-18T15:25:40",
