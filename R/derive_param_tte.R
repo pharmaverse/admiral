@@ -314,7 +314,8 @@ derive_param_tte <- function(dataset = NULL,
   )
 
   start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
-  if (start_date_imputation_flag %in% colnames(dataset_adsl)) {
+  if (start_date_imputation_flag %in% colnames(dataset_adsl) &
+      as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- vars(
       !!!adsl_vars,
       STARTDTF = !!sym(start_date_imputation_flag)
