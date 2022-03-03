@@ -222,7 +222,7 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
 input_maxed <- input %>%
   filter(!str_detect(XXSTDTC, "18")) %>%
-  mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
+  mutate(DCUTDT = as_iso_dtm(ymd_hms("2019-02-10T00:00:00")))
 
 test_that("max_dates parameter works as expected", {
   expected_output <- tibble::tribble(
