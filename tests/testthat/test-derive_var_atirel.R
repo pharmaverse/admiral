@@ -1,5 +1,3 @@
-context("test-derive_var_atirel")
-
 test_that("Derive ATIREL", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,             ~ASTTMF,

@@ -34,9 +34,10 @@ adae <- ae %>%
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by = vars(STUDYID, USUBJID)
   ) %>%
 
   # derive analysis start time
@@ -88,17 +89,15 @@ adae <- ae %>%
 adae <- adae %>%
 
   # derive last dose date/time
-  derive_last_dose(
+  derive_var_last_dose_date(
     ex,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
       nchar(EXENDTC) >= 10,
-    dose_start = EXSTDTC,
-    dose_end = EXENDTC,
+    dose_date = EXSTDTC,
     analysis_date = ASTDT,
-    dataset_seq_var = AESEQ,
     new_var = LDOSEDTM,
-    output_datetime = TRUE,
-    check_dates_only = FALSE
+    single_dose_condition = (EXSTDTC == EXENDTC),
+    output_datetime = TRUE
   ) %>%
 
   # derive severity / causality / ...
@@ -112,8 +111,12 @@ adae <- adae %>%
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
 
-  # derive occurrence flags
-  derive_extreme_flag(
+  # derive occurrence flags: first occurence of most severe AE
+  # create numeric value ASEVN for severity
+  mutate(
+    ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
+  ) %>%
+  derive_var_extreme_flag(
     by_vars = vars(USUBJID),
     order = vars(ASTDTM, AESEQ),
     new_var = AOCCIFL,
@@ -123,11 +126,13 @@ adae <- adae %>%
 
 # Join all ADSL with AE
 adae <- adae %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 
 # ---- Save output ----
 
-save(adae, file = "data/adae.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")

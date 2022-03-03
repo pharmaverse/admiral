@@ -47,6 +47,7 @@ globalVariables(c(
   "QVAL",
   "RDOMAIN",
   "USUBJID",
+  "auto",
   "censor",
   "Dataset",
   "dataset_name",
@@ -82,5 +83,11 @@ globalVariables(c(
   "order1",
   "order2",
   "order3",
-  "_unit"
+  "_unit",
+  "tmp_analysis_date",
+  "tmp_dose_date",
+  "tmp_seq_var",
+  "EXDOSFRQ",
+  "tmp_ldose_dt"
+
 ))

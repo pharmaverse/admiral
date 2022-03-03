@@ -1,5 +1,3 @@
-context("test-derive_var_ontrtfl")
-
 test_that("`target` is set to NA when ` start_date` < `ref_start_date`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~ADT, ~TRTSDT,
@@ -12,6 +10,7 @@ test_that("`target` is set to NA when ` start_date` < `ref_start_date`", {
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT
   )
@@ -35,6 +34,7 @@ test_that("`target` is set to NA when `ref_start_date` is NA", {
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT
   )
@@ -60,6 +60,7 @@ test_that("`target` is set to `Y` when ` start_date` is NA", {
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT
   )
@@ -86,6 +87,7 @@ test_that("`target` is set to `Y` when ` start_date` >= `ref_start_date` and
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT
   )
@@ -112,6 +114,7 @@ test_that("`target` is set to 'Y' when `filter_pre_timepoint` is not 'PRE' and
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT,
     filter_pre_timepoint = TPT == "PRE"
@@ -145,6 +148,7 @@ test_that("`target` is set to `Y` when ` start_date` >= `ref_start_date` and ` s
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
@@ -174,6 +178,7 @@ test_that("`target` is set to `Y` when ` start_date` >= `ref_start_date` and ` s
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ADT,
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT,
@@ -204,6 +209,7 @@ test_that("`target` is set to  NA when `end_date`<`ref_start_date`
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ASTDT,
     end_date = AENDT,
     ref_start_date = TRTSDT,
@@ -230,6 +236,7 @@ test_that("`target` is set to  `Y` when `end_date`>`ref_start_date` when `start_
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ASTDT,
     end_date = AENDT,
     ref_start_date = TRTSDT,
@@ -257,6 +264,7 @@ test_that("`target` is set to  NA when `end_date` is missing and
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ASTDT,
     end_date = AENDT,
     ref_start_date = TRTSDT,
@@ -284,6 +292,7 @@ test_that("`target` is set to  Y when `end_date` is missing and
 
   actual_output <- derive_var_ontrtfl(
     input,
+    new_var = ONTRTFL,
     start_date = ASTDT,
     end_date = AENDT,
     ref_start_date = TRTSDT,
@@ -298,3 +307,62 @@ test_that("`target` is set to  Y when `end_date` is missing and
     keys = c("STUDYID", "USUBJID", "ASTDT")
   )
 })
+
+test_that("`target` is set to  Y when `end_date` is missing and
+            `start_date` is before `ref_start_date`  a la GSK", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
+    "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+  )
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT, ~ONTRTFL,
+    "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA, "Y",
+  )
+
+  actual_output <- derive_var_ontrtfl(
+    input,
+    new_var = ONTRTFL,
+    start_date = ASTDT,
+    end_date = AENDT,
+    ref_start_date = TRTSDT,
+    ref_end_date = TRTEDT,
+    ref_end_window = 60,
+    span_period = "Y"
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "ASTDT")
+  )
+})
+
+test_that("`target` is set to Y when `start_date` is before `ref_start_date` and
+            `end_date` is before `ref_end_date` for Period 01", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+    "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15")
+    )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT, ~ONTR01FL,
+    "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"),
+    ymd("2020-03-01"), ymd("2020-03-15"), "Y",
+    )
+
+  actual_output <- derive_var_ontrtfl(
+    input,
+    new_var = ONTR01FL,
+    start_date = ASTDT,
+    end_date = AENDT,
+    ref_start_date = AP01SDT,
+    ref_end_date = AP01EDT,
+    span_period = "Y"
+    )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "ASTDT")
+    )
+  })

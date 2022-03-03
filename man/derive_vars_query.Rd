@@ -9,11 +9,13 @@ derive_vars_query(dataset, dataset_queries)
 \arguments{
 \item{dataset}{Input dataset.}
 
-\item{dataset_queries}{A data.frame containing required columns \code{VAR_PREFIX},
+\item{dataset_queries}{A dataset containing required columns \code{VAR_PREFIX},
 \code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}, and optional columns
 \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
 
-The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
+The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
+
+\code{create_query_data()} can be used to create the dataset.}
 }
 \value{
 The input dataset with query variables derived.
@@ -54,7 +56,7 @@ adae <- tibble::tribble(
 derive_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=assert_valid_queries]{assert_valid_queries()}}
+\code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
 }
 \author{
 Ondrej Slama, Shimeng Huang

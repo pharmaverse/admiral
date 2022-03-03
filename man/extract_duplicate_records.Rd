@@ -12,6 +12,9 @@ extract_duplicate_records(dataset, by_vars)
 \item{by_vars}{A list of variables created using \code{vars()} identifying groups of
 records in which to look for duplicates}
 }
+\value{
+A \code{data.frame} of duplicate records within \code{dataset}
+}
 \description{
 Extract Duplicate Records
 }

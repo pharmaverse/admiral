@@ -15,6 +15,9 @@ The variables specified for \code{vars1} and \code{vars2} are expected.}
 
 \item{vars2}{Second list of variables}
 }
+\value{
+An error if the condition is not meet. The input otherwise.
+}
 \description{
 Checks if there is a one to one mapping between two lists of variables.
 }

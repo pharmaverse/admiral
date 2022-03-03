@@ -4,7 +4,7 @@
 \alias{compute_tmf}
 \title{Derive the Time Imputation Flag}
 \usage{
-compute_tmf(dtc, dtm)
+compute_tmf(dtc, dtm, ignore_seconds_flag = FALSE)
 }
 \arguments{
 \item{dtc}{The date character vector (\code{'--DTC'}).
@@ -14,6 +14,15 @@ A character date is expected in a format like \code{yyyy-mm-ddThh:mm:ss} (partia
 \item{dtm}{The Date vector to compare (\code{'--DTM'}).
 
 A datetime object is expected.}
+
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+if only hours and minutes are ever collected, and seconds are imputed in
+(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
+
+A logical value
+
+Default: \code{FALSE}}
 }
 \value{
 The time imputation flag (\code{'--TMF'}) (character value of \code{'H'}, \code{'M'} , \code{'S'} or \code{NA})

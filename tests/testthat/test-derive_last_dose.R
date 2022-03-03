@@ -1,4 +1,3 @@
-context("test-derive_last_dose.R")
 
 input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
@@ -93,7 +92,8 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
     derive_last_dose(
       input_ae,
       input_ex_wrong,
-      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      filter_ex = (EXDOSE > 0) |
+        (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
       dose_start = EXSTDTC,
       dose_end = EXENDTC,
@@ -104,7 +104,7 @@ test_that("derive_last_dose checks validity of start and end dose inputs", {
       check_dates_only = FALSE,
       traceability_vars = NULL
     ),
-    regexp = "Not all values of EXSTDTC are equal to EXENDTC"
+    regexp = "Specified single_dose_condition is not satisfied."
   )
 
 })
@@ -124,7 +124,8 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
     derive_last_dose(
       input_ae,
       input_ex_wrong,
-      filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
+      filter_ex = (EXDOSE > 0) |
+        (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
       dose_start = EXSTDTC,
       dose_end = EXENDTC,
@@ -135,9 +136,8 @@ test_that(paste("derive_last_dose checks validity of start and end dose inputs",
       check_dates_only = FALSE,
       traceability_vars = NULL
     ),
-    regexp = "Not all values of EXSTDTC are equal to EXENDTC"
+    regexp = "Specified single_dose_condition is not satisfied."
   )
-
 })
 
 test_that(
@@ -202,7 +202,11 @@ test_that("derive_last_dose returns traceability vars", {
     new_var = LDOSEDTM,
     output_datetime = FALSE,
     check_dates_only = FALSE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = dplyr::vars(
+      LDOSEDOM = "EX",
+      LDOSESEQ = EXSEQ,
+      LDOSEVAR = "EXSTDTC"
+    )
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))

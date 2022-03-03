@@ -20,6 +20,9 @@ use_ad_template(
 
 \item{open}{Whether to open the script right away.}
 }
+\value{
+No return values, called for side effects
+}
 \description{
 Open an ADaM Template Script
 }

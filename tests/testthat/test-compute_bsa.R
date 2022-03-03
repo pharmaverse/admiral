@@ -1,5 +1,3 @@
-context("test-compute_bsa")
-
 test_that("Mosteller method - single height and weight values", {
   expect_equal(
     compute_bsa(

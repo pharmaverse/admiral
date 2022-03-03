@@ -6,20 +6,24 @@
 \usage{
 derive_var_ontrtfl(
   dataset,
+  new_var = ONTRTFL,
   start_date,
   end_date = NULL,
   ref_start_date,
   ref_end_date = NULL,
   ref_end_window = 0,
   filter_pre_timepoint = NULL,
-  span_period = NULL,
-  date = deprecated()
+  span_period = NULL
 )
 }
 \arguments{
 \item{dataset}{Input dataset.
 
 Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date}.}
+
+\item{new_var}{On-treatment flag variable name to be created.
+
+Default is \code{ONTRTFL}.}
 
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})
 Required; A date or date-time object column is expected}
@@ -54,8 +58,6 @@ Optional; default is \code{NULL}.}
 \item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started prior
 to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{"Y"}.
 Optional; default is \code{NULL}.}
-
-\item{date}{\strong{Deprecated}. Please use \code{start_date} instead.}
 }
 \value{
 The input dataset with an additional column named
@@ -148,6 +150,22 @@ derive_var_ontrtfl(
  ref_start_date = TRTSDT,
  ref_end_date = TRTEDT,
  ref_end_window = 60,
+ span_period = "Y"
+)
+
+advs <- tibble::tribble(
+  ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
+)
+derive_var_ontrtfl(
+ advs,
+ new_var = ONTR01FL,
+ start_date = ASTDT,
+ end_date = AENDT,
+ ref_start_date = AP01SDT,
+ ref_end_date = AP01EDT,
  span_period = "Y"
 )
 }

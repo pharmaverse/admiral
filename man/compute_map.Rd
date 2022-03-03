@@ -19,6 +19,9 @@ A numeric vector is expected.}
 
 A numeric vector or \code{NULL} is expected.}
 }
+\value{
+A numeric vector of MAP values
+}
 \description{
 Computes mean arterial pressure (MAP) based on diastolic and systolic blood
 pressure. Optionally heart rate can be used as well.

@@ -23,7 +23,7 @@ missing, e.g., `"2019-10"` if the day and the time is unknown.
 
 The ADaM timing variables like `ADTM` (Analysis Datetime) or `ADY` (Analysis
 Relative Day) are numeric variables. They can be derived only if the date or
-datetime is complete. Therefore admiral provides imputation functions which fill
+datetime is complete. Therefore `{admiral}` provides imputation functions which fill
 in missing date or time parts according to certain imputation rules.
 
 ## Required Packages
@@ -75,7 +75,7 @@ impute_dtc(
 
 In some scenarios the imputed date should not be before or after certain dates.
 For example an imputed date after data cut off date or death date is not
-desirable. The admiral imputation functions provide the `min_dates` and
+desirable. The `{admiral}` imputation functions provide the `min_dates` and
 `max_dates` parameter to specify those dates. For example:
 
 ```{r}
@@ -100,12 +100,12 @@ ADaM requires that date or datetime variables for which imputation was used are
 accompanied by date and/or time imputation flag variables (`*DTF` and `*TMF`,
 e.g., `ADTF` and `ATMF` for `ADTM`). These variables indicate the highest level
 that was imputed, e.g., if minutes and seconds were imputed, the imputation flag
-is set to `"M"`. The admiral functions which derive imputed variables are also
+is set to `"M"`. The `{admiral}` functions which derive imputed variables are also
 adding the corresponding imputation flag variables.
 
 # Imputation Functions
 
-admiral provides the following functions for imputation:
+`{admiral}` provides the following functions for imputation:
 
 - `derive_vars_dt()`: Adds a date variable and a date imputation flag variable
 (optional) based on a --DTC variable and imputation rules.
@@ -134,14 +134,11 @@ representation of the same date. Thus the imputation must be the same and the
 imputation flags are valid for both the datetime and the date variable.
 
 ```{r}
-ae <- tribble(
-  ~AESTDTC,
-  "2019-08-09T12:34:56",
-  "2019-04-12",
-  "2010-09",
-  NA_character_
-) 
-ae %>%
+ae <- tribble(~ AESTDTC,
+              "2019-08-09T12:34:56",
+              "2019-04-12",
+              "2010-09",
+              NA_character_) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
@@ -150,6 +147,9 @@ ae %>%
   ) %>%
   mutate(ASTDT = date(ASTDTM))
 ```
+```{r, echo=FALSE}
+dataset_vignette(ae)
+```
 
 ## Create an Imputed Date Variable and Imputation Flag Variable
 
@@ -157,19 +157,17 @@ If an imputed date variable without a corresponding datetime variable is
 required, it can be derived by the `derive_vars_dt()` function.
 
 ```{r}
-ae <- tribble(
-  ~AESTDTC,
-  "2019-08-09T12:34:56",
-  "2019-04-12",
-  "2010-09",
-  NA_character_
-)
-derive_vars_dt(
-  ae,
-  dtc = AESTDTC,
-  new_vars_prefix = "AST",
-  date_imputation = "first"
-)
+ae <- tribble(~ AESTDTC,
+              "2019-08-09T12:34:56",
+              "2019-04-12",
+              "2010-09",
+              NA_character_) %>%
+  derive_vars_dt(dtc = AESTDTC,
+                 new_vars_prefix = "AST",
+                 date_imputation = "first")
+```
+```{r, echo=FALSE}
+dataset_vignette(ae)
 ```
 
 ## Impute Time without Imputing Date
@@ -179,20 +177,20 @@ should be set to `NULL`. This results in `NA` if the date is partial. As
 no date is imputed the date imputation flag is not created.
 
 ```{r}
-ae <- tribble(
-  ~AESTDTC,
-  "2019-08-09T12:34:56",
-  "2019-04-12",
-  "2010-09",
-  NA_character_
-)
-derive_vars_dtm(
-  ae,
-  dtc = AESTDTC,
-  new_vars_prefix = "AST",
-  date_imputation = NULL,
-  time_imputation = "first"
-)
+ae <- tribble(~ AESTDTC,
+              "2019-08-09T12:34:56",
+              "2019-04-12",
+              "2010-09",
+              NA_character_) %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    date_imputation = NULL,
+    time_imputation = "first"
+  )
+```
+```{r, echo=FALSE}
+dataset_vignette(ae)
 ```
 
 ## Avoid Imputed Dates Before a Particular Date
@@ -215,15 +213,17 @@ ae <- tribble(
   "2019-10",             ymd_hms("2019-11-11T12:34:56"),
   "2019-11",             ymd_hms("2019-11-11T12:34:56"),
   "2019-12-04",          ymd_hms("2019-11-11T12:34:56")
-)
-derive_vars_dtm(
-  ae,
-  dtc = AESTDTC,
-  new_vars_prefix = "AST",
-  date_imputation = "first",
-  time_imputation = "first",
-  min_dates = vars(TRTSDTM)
-)
+) %>%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    date_imputation = "first",
+    time_imputation = "first",
+    min_dates = vars(TRTSDTM)
+  )
+```
+```{r, echo=FALSE}
+dataset_vignette(ae)
 ```
 
 ## Avoid Imputed Dates After a Particular Date
@@ -244,15 +244,17 @@ ae <- tribble(
   "2019-11",             ymd("2019-11-11"), ymd("2019-12-02"),
   "2019-12",             NA,                ymd("2019-12-02"),
   "2019-12-04",          NA,                ymd("2019-12-02")
-)
-derive_vars_dtm(
-  ae,
-  dtc = AEENDTC,
-  new_vars_prefix = "AEN",
-  date_imputation = "last",
-  time_imputation = "last",
-  max_dates = vars(DTHDT, DCUTDT)
-)
+) %>%
+  derive_vars_dtm(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEN",
+    date_imputation = "last",
+    time_imputation = "last",
+    max_dates = vars(DTHDT, DCUTDT)
+  )
+```
+```{r, echo=FALSE}
+dataset_vignette(ae)
 ```
 
 ## Imputation Without Creating a New Variable
@@ -268,11 +270,13 @@ mh <- tribble(
   "2019-04-01", ymd("2019-04-15"),
   "2019-05",    ymd("2019-04-15"),
   "2019-06-21", ymd("2019-04-15")
-)
+) %>% 
 filter(
-  mh,
   convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
 )
+```
+```{r, echo=FALSE}
+dataset_vignette(mh)
 ```
 
 ## Using More Than One Imputation Rule for a Variable
@@ -290,9 +294,8 @@ vs <- tribble(
   "2019-10-12",          "PRE-DOSE",
   "2019-11-10",          NA,
   "2019-12-04",          NA
-)
+) %>% 
 mutate(
-  vs,
   ADTM = if_else(
     VSTPT == "PRE-DOSE",
     convert_dtc_to_dtm(
@@ -311,4 +314,7 @@ mutate(
     dtm = ADTM
   )
 )
+```
+```{r, echo=FALSE}
+dataset_vignette(vs)
 ```

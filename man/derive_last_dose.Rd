@@ -61,7 +61,9 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-Derive Last Dose Date(-time)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\emph{Deprecated}, please use \code{derive_var_last_dose_date()} instead.
 }
 \details{
 All date (date-time) variables can be characters in standard ISO format or

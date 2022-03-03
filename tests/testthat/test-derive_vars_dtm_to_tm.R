@@ -1,5 +1,3 @@
-context("test-derive_vars_dtm_to_tm")
-
 input <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
   "TEST01", "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",

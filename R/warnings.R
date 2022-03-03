@@ -5,6 +5,8 @@
 #' @param dataset A `data.frame`
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
+#' @return No return value, called for side effects
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords warning
@@ -49,13 +51,15 @@ is_valid_dtc <- function(arg) {
   grepl(pattern, arg) | arg == "" | is.na(arg)
 }
 
-#' Warn If a vector contains unknown datetime format
+#' Warn If a Vector Contains Unknown Datetime Format
 #'
 #' Warn if the vector contains unknown datetime format such as
 #' "2003-12-15T-:15:18", "2003-12-15T13:-:19","--12-15","-----T07:15"
 #'
 #' @param dtc a character vector containing the dates
 #' @param is_valid a logical vector indicating whether elements in `dtc` are valid
+#'
+#' @return No return value, called for side effects
 #'
 #' @author Samia Kabi
 #'
