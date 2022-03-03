@@ -233,3 +233,36 @@ test_that("Issue a warning if --DTM already exists", {
   )
 
 })
+
+test_that("max_dates and min_dates are working as expected", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC, ~ASTDTM, ~ASTDTF, ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02", ymd_hms("2019-02-20T00:00:00"), "D", "H",
+    "2019", ymd_hms("2019-06-10T00:00:00"), "M", "H",
+    "2019---07", ymd_hms("2019-06-10T00:00:00"), "M", "H"
+  ) %>%
+    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+
+  input1 <- input %>%
+    mutate(MAX = ymd("2019-06-10"),
+           MIN = ymd('2019-02-20'))
+
+  actual_output <- derive_vars_dtm(
+    input1,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    date_imputation = "MID",
+    max_dates = vars(MAX),
+    min_dates = vars(MIN)
+  )
+
+  expect_equal(
+    expected_output,
+    actual_output %>% select(-c(MAX, MIN))
+  )
+
+})
