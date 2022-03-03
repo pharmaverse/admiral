@@ -242,7 +242,7 @@ test_that("max_dates parameter works as expected", {
     max_dates = vars(DCUTDT)
   )
 
-  expect_equal(expected_output, actual_output)
+  expect_dfs_equal(expected_output, actual_output, keys = c("XXSTDTC"))
 
 })
 
