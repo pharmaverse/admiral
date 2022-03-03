@@ -275,7 +275,6 @@ test_that("Ignore Seconds Flag is not used when set to FALSE in function call", 
     input_secs,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    max_dates = vars(ASTDTM),
     date_imputation = "FIRST",
     time_imputation = "FIRST",
     ignore_seconds_flag = FALSE
