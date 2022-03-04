@@ -89,11 +89,11 @@ Once all changes are committed, push the updated branch to GitHub:
   
 In GitHub, under **Pull requests**, the user will either have a "Compare and pull request" button and/or a "Create Pull Request".  The first button will be created for you if GitHub detects recent changes you have made. The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge - as shown in the below picture. Please **pay close attention** to the branch you are merging into!  
 
-The issue must be linked to the pull request in the "Linked issues" field of the
+The issue must be linked to the pull request in the "Development" field of the
 Pull Request.
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_linked_issues.png", dpi = 144)
+    knitr::include_graphics("github_linked_issues_dark.png", dpi = 144)
 ```
 
 Once you have completed the Pull Request you will see all committed changes are then available for the reviewer.  A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request.  Pictures are nice too, which are easy to do in GitHub!  Use any Screen Capture software and Copy and Paste into your summary. 
