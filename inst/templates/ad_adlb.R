@@ -25,6 +25,60 @@ lb <- convert_blanks_to_na(lb)
 
 # lb <- derive_vars_suppqual(lb, supplb) %>%
 
+# ---- Lookup tables ----
+adlb_dis <- adlb %>%
+  distinct(LBTESTCD, LBSTRESU, LBTEST) %>%
+  arrange(LBTESTCD)
+
+# Assign PARAMCD, PARAM, and PARAMN
+param_lookup <- tibble::tribble(
+  ~LBTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
+  "ALB",     "ALB",    "Albumin (g/L)", 1,
+  "ALP",     "ALKPH",  "Alkaline Phosphatase (U/L)", 2,
+  "ALT",     "ALT",    "Alanine Aminotransferase (U/L)", 3,
+  "ANISO",   "ANISO",  "Anisocytes", 4,
+  "AST",     "AST",    "Aspartate Aminotransferase (U/L)", 5,
+  "BASO",    "BASO",   "Basophils (GI/L)", 6,
+  "BILI",    "BILI",   "Bilirubin (umol/L)", 7,
+  "BUN",     "BUN",    "Blood Urea Nitrogen (mmol/L)", 8,
+  "CA",      "CA",     "Calcium (mmol/L)", 9,
+  "CHOLES",  "CHOLES", "Cholesterol (mmol/L)", 10,
+  "CK",      "CK",     "Creatinine Kinase (U/L)", 11,
+  "CL",      "CL",     "Chloride (mmol/L)", 12,
+  "COLOR",   "COLOR",  "Color", 13,
+  "CREAT",   "CREAT",  "Creatinine (umol/L)", 14,
+  "EOS",     "EOS",    "Eosinophils (GI/L)", 15,
+  "GGT",     "GGT",    "Gamma Glutamyl Transferase (U/L)", 16,
+  "GLUC",    "GLUC",   "Glucose (mmol/L)", 17,
+  "HBA1C",   "HBA1C",  "Hemoglobin A1C (1)", 18,
+  "HCT",     "HCT",    "Hematocrit (1)", 19,
+  "HGB",     "HGB",    "Hemoglobin (mmol/L)", 20,
+  "K",       "POTAS",  "Potassium (mmol/L)", 21,
+  "KETONES", "KETON",  "Ketones", 22,
+  "LYM",     "LYMPH",  "Lymphocytes (GI/L)", 23,
+  "MACROCY", "MACROC", "Macrocytes", 24,
+  "MCH",     "MCH",    "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 25,
+  "MCHC",    "MCHC",   "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 26,
+  "MCV",     "MCV",    "Ery. Mean Corpuscular Volume (f/L)", 27,
+  "MICROCY", "MICROC", "Microcytes", 28,
+  "MONO",    "MONO",   "Monocytes (GI/L)", 29,
+  "PH",      "PH",     "pH", 30,
+  "PHOS",    "PHOS",   "Phosphate (mmol/L)", 31,
+  "PLAT",    "PLAT",   "Platelet (GI/L)", 32,
+  "POIKILO", "POIKIL", "Poikilocytes", 33,
+  "POLYCHR", "POLYCH", "Polychromasia", 34,
+  "PROT",    "PROT",   "Protein (g/L)", 35,
+  "RBC",     "RBC",    "Erythrocytes (TI/L)", 36,
+  "SODIUM",  "SODIUM", "Sodium (mmol/L)", 37,
+  "SPGRAV",  "SPGRAV", "Specific Gravity", 38,
+  "TSH",     "TSH",    "Thyrotropin (mU/L)", 39,
+  "URATE",   "URATE",  "Urate (umol/L)", 40,
+  "UROBIL",  "UROBIL", "Urobilinogen", 41,
+  "VITB12",  "VITB12", "Vitamin B12 (pmol/L)", 42,
+  "WBC",     "WBC",    "Leukocytes (GI/L)", 43
+)
+
+
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
@@ -49,35 +103,23 @@ adlb <- lb %>%
   derive_var_ady(reference_date = TRTSDT, date = ADT)
 
 adlb <- adlb %>%
-  # For labs in SI units
-  # Add PARAMCD only - can create LOOK-UP table
-  # PARAMCD currently only 8 chars
-  # Calculate AVAL and AVALC
+
+  # Add PARAMCD PARAM and PARAMN - from LOOK-UP table
+  # Replace with PARAMCD lookup function
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    new_vars = vars(PARAMCD, PARAM, PARAMN),
+    by_vars = vars(LBTESTCD)
+  ) %>%
+
+  # Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
   mutate(
-    PARCAT2 = "SI",
-    PARAMCD = paste0(LBTESTCD, PARCAT2),
-    PARAM = paste0(LBTEST, " (", LBSTRESU, ")"),
+    PARCAT1 = LBCAT,
     AVAL  = LBSTRESN,
     AVALC = LBSTRESC,
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
   )
-
-# CSDISC data does not hold CV unit variables
-# adlb_cv <- adlb %>%
-#   For labs in CV (or US) units
-#   Add PARAMCD only - can create LOOK-UP table later
-#   PARAMCD currently only 8 chars
-#   Calculate AVAL and AVALC
-#  mutate(
-#    PARCAT2 = "CV",
-#    PARAMCD = paste0(LBTESTCD,PARCAT2),
-#    PARAM = paste0(LBTEST, ' (',LBCVRESU,')'),
-#    AVAL = LBCVRESN,
-#    AVALC = LBCVRESC,
-#    ANRLO = LBCVNRLO,
-#    ANRHI = LBCVNRHI
-#  )
 
 # get visit info
 adlb <- adlb %>%
@@ -106,7 +148,6 @@ adlb <- adlb %>%
   )
 
 # Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
-# Also accommodates the ranges A1LO, A1HI
 adlb <- adlb %>%
   derive_var_anrind()
 
