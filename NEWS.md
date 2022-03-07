@@ -15,7 +15,12 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
-- `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information
+
+- `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
+
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
 
 ## Updates of Existing Functions
 
