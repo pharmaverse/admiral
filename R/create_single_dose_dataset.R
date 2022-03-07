@@ -266,7 +266,7 @@ create_single_dose_dataset <- function(dataset,
              !!end_date := !!start_date + day_differential,
              !!start_date := !!start_date + day_differential
       ) %>%
-      select(all_of(!!!vars(col_names)))
+      select(!!!vars(col_names))
 
   return(dataset)
 }
