@@ -150,7 +150,7 @@ joined from the ADSL dataset,
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
+library(lubridate)
 data("adsl")
 
 death <- event_source(

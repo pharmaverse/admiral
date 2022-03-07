@@ -110,13 +110,21 @@ test_that("blank strings are turned into `NA` inside data frames", {
 })
 
 test_that("negate_vars returns list of negated variables", {
-  expect_identical(negate_vars(vars(var1, var2)),
-                   exprs(-var1, -var2))
-}
-)
+  expect_identical(negate_vars(vars(var1, var2)), exprs(-var1, -var2))
+})
 
 test_that("negate_vars returns NULL if input is NULL", {
-  expect_identical(negate_vars(NULL),
-                   NULL)
-}
-)
+  expect_identical(negate_vars(NULL), NULL)
+})
+
+test_that("`get_one_to_many_dataset()` returns a data frame after a previous error", {
+  try(assert_one_to_one(adsl, vars(STUDYID), vars(SITEID)), silent = TRUE)
+
+  expect_true(is.data.frame(get_one_to_many_dataset()))
+})
+
+test_that("`get_many_to_one_dataset()` returns a data frame after a previous error", {
+  try(assert_one_to_one(adsl, vars(SITEID), vars(STUDYID)), silent = TRUE)
+
+  expect_true(is.data.frame(get_many_to_one_dataset()))
+})
