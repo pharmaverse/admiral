@@ -3,8 +3,8 @@
 #' These pre-defined dose frequencies are sourced from
 #' [CDISC](https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM%20Terminology.pdf). The
 #' number of rows to generate using `create_single_dose_dataset()` arguments
-#' `start_date` and `end_date` is derived from `DFFactor` and `DFUnit` with
-#' appropriate functions from `lubridate`.
+#' `start_date` and `end_date` is derived from `DoseCount`, `DoseWindow`, and
+#' `DayConversionFactor` with appropriate functions from `lubridate`.
 #'
 #' @details
 #' To see the entire table in the console, run `print(dose_freq_lookup)`.
@@ -13,7 +13,7 @@
 #'
 #' @export
 #'
-#' @keywords dose_freq
+#' @keywords metadata
 #'
 #' @rdname dose_freq_lookup
 #'
@@ -21,10 +21,8 @@ dose_freq_lookup <- tibble::tribble(
   ~NCICode, ~CDISCSubmissionValue,
   "C64526", "1 TIME PER WEEK",
   "C139179", "10 DAYS PER MONTH",
-#  "C176288", "2 TIMES PER CYCLE",
   "C64497", "2 TIMES PER WEEK",
   "C98861", "2 TIMES PER YEAR",
-#  "C176289", "3 TIMES PER CYCLE",
   "C98859", "3 TIMES PER MONTH",
   "C64528", "3 TIMES PER WEEK",
   "C98860", "3 TIMES PER YEAR",
@@ -60,7 +58,6 @@ dose_freq_lookup <- tibble::tribble(
   "C160957",  "EVERY EVENING",
   "C67069",  "EVERY WEEK",
   "C74924",  "PA",
-  #"C64499",  "PRN",
   # "C64500",  "Q10H",
   # "C64501",  "Q11H",
   # "C64502",  "Q12H",
@@ -155,13 +152,13 @@ mutate(
 #'
 #'   These variables are used to identify unique rows for each aggregate dose.
 #'
-#'   Example: vars(STUDYID, USUBJID, EXTRT)
+#'   Example: `vars(STUDYID, USUBJID, EXTRT)`
 #'
 #' @param dose_freq The dose frequency
 #'
 #'   The aggregate dosing frequency used for multiple doses in a row.
 #'
-#'   Default: EXDOSFRQ
+#'   Default: `EXDOSFRQ`
 #'
 #'   Permitted Values: defined by lookup table.
 #'
@@ -186,7 +183,7 @@ mutate(
 #'
 #'   Default: `dose_freq_lookup`
 #'
-#'  Permitted Values for `DoseWindow`: "DAY", "WEEK", "MONTH", "YEAR"
+#'  Permitted Values for `DoseWindow`: `"DAY"`, `"WEEK"`, `"MONTH"`, `"YEAR"`
 #'
 #' @param lookup_column The dose frequency value column in the lookup table
 #'
@@ -202,6 +199,8 @@ mutate(
 #' appropriate increment using `DayConversionFactor`.
 #'
 #' @author Michael Thorpe, Andrew Smith
+#'
+#' @keywords adae adex user_utility
 #'
 #' @return The input dataset with a single dose per row.
 #'
