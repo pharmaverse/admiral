@@ -74,7 +74,7 @@ data("ae")
 data("lb")
 data("adsl")
 
-# derive last known alive datetime (LSTALVDT)
+# derive last known alive date (LSTALVDT)
 ae_start <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
@@ -101,7 +101,7 @@ dm \%>\%
   ) \%>\%
   select(USUBJID, LSTALVDT)
 
-# derive last alive datetime and traceability variables
+# derive last alive date and traceability variables
 ae_start <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
@@ -154,7 +154,9 @@ dm \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \seealso{
-\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
+\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}},
+\code{\link[=derive_vars_merged_dt]{derive_vars_merged_dt()}}, \code{\link[=derive_vars_merged_dtm]{derive_vars_merged_dtm()}},
+\code{\link[=derive_vars_merged]{derive_vars_merged()}}
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann

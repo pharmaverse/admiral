@@ -99,7 +99,9 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @keywords derivation adsl
 #'
-#' @seealso [date_source()], [derive_var_extreme_dt()]
+#' @seealso [date_source()], [derive_var_extreme_dt()],
+#'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
+#'   [derive_vars_merged()]
 #'
 #' @export
 #'
@@ -275,7 +277,9 @@ derive_var_extreme_dtm <- function(dataset,
       check_type = "none"
     )
 
-  left_join(dataset, all_data, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset,
+                     dataset_add = all_data,
+                     by_vars = subject_keys)
 }
 
 #' Derive First or Last Date from Multiple Sources
@@ -315,7 +319,9 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @keywords derivation adsl
 #'
-#' @seealso [date_source()], [derive_var_extreme_dt()]
+#' @seealso [date_source()], [derive_var_extreme_dtm()],
+#'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
+#'   [derive_vars_merged()]
 #'
 #' @export
 #'
@@ -327,7 +333,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' data("lb")
 #' data("adsl")
 #'
-#' # derive last known alive datetime (LSTALVDT)
+#' # derive last known alive date (LSTALVDT)
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
@@ -354,7 +360,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
-#' # derive last alive datetime and traceability variables
+#' # derive last alive date and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
 #'   date = AESTDTC,
