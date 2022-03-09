@@ -39,18 +39,18 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: R (>= 3.5)
 Imports:
-    admiral.test,
     assertthat,
     dplyr,
+    hms,
     lubridate,
     magrittr,
     purrr,
     rlang,
     stringr,
-    hms,
     tidyr,
     tidyselect
 Suggests:
+    admiral.test,
     devtools,
     diffdf,
     lifecycle,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_adeg_params.R
 \name{derive_param_rr}
 \alias{derive_param_rr}
-\title{Adds a Parameter for Derived RR}
+\title{Adds a Parameter for Derived RR (an ECG measurement)}
 \usage{
 derive_param_rr(
   dataset,
