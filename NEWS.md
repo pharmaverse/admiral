@@ -26,6 +26,7 @@ values based on user-defined pairing (#944)
 
 ## Documentation
 
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
 
@@ -106,8 +107,6 @@ this case the day is imputed as `15` (#592)
 - New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
 - Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
-
-- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
 
