@@ -250,8 +250,10 @@ mutate(
 #'
 #' data <- tibble::tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-#'   "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T07:00:00"),
-#'   "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T09:00:00"),
+#'   "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"),
+#'   lubridate::ymd_hms("2021-01-01T07:00:00"),
+#'   "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"),
+#'   lubridate::ymd_hms("2021-01-01T09:00:00"),
 #' )
 #'
 #' create_single_dose_dataset(data,
