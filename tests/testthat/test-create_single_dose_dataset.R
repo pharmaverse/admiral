@@ -98,7 +98,7 @@ test_that("custom lookup works", {
     "P02", "ONCE", ymd_hms("2021-01-01T09:00:00"), ymd_hms("2021-01-01T09:00:00")
   )
 
-  expect_equal(create_single_dose_dataset(data,
+  expect_equal(create_single_dose_dataset(input,
                              lookup_table = custom_lookup,
                              lookup_column = Value,
                              start_date = ASTDTM,
