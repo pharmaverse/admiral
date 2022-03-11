@@ -75,9 +75,9 @@ is used to convert into days the time object to be added to \code{start_date}.
 \examples{
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-  "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
-  "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
-  "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
+  "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-07"),
+  "P01", "Q3D", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-15"),
+  "P01", "EVERY 2 WEEKS", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
 )
 
 create_single_dose_dataset(data)
@@ -89,8 +89,8 @@ custom_lookup <- tibble::tribble(
 
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-  "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
-  "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00"),
+  "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T07:00:00"),
+  "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T09:00:00"),
 )
 
 create_single_dose_dataset(data,
