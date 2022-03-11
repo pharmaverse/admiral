@@ -7,6 +7,26 @@
 #' `ConversionFactor` with appropriate functions from `lubridate`.
 #'
 #' @details
+#' `NCICode` and `CDISCSubmissionValue` are included from the CDISC source for
+#' traceability.
+#'
+#' `DoseCount` represents the number of doses received in one single unit of
+#' `DoseWindow`. For example, for `CDISCSubmissionValue=="10 DAYS PER MONTH`,
+#' `DoseWindow=="MONTH"` and `DoseCount==10`. Similarly, for
+#' `CDISCSubmissionValue=="EVERY 2 WEEKS`, `DoseWindow=="WEEK"` and
+#' `DoseCount==0.5` (to yield one dose every two weeks).
+#'
+#' `ConversionFactor` is used to convert `DoseWindow` units to smaller subunits
+#' when necessary.
+#'
+#' For example, for `CDISCSubmissionValue=="10 DAYS PER MONTH`, `ConversionFactor`
+#' is `0.0329`, because one day of a month is assumed to be (1 / 30.4375) of a month.
+#' Supposing that the time between `start_date` and `end_date` in the aggregate
+#' dataset does not comprise an entire month, `ConversionFactor` gets used to
+#' accurately calculate `start_date` and `end_date` in the single dose dataset for
+#' the doses that do occur.
+#'
+#'
 #' To see the entire table in the console, run `print(dose_freq_lookup)`.
 #'
 #' @seealso [create_single_dose_dataset()]
@@ -107,11 +127,11 @@ dose_freq_lookup <- tibble::tribble(
   "C64527",  "TID"
   ) %>%
 mutate(DoseCount = case_when(
-    str_detect(CDISCSubmissionValue, "PER") ~
+    str_detect(CDISCSubmissionValue, "PER [WMY]") ~
       as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
-    str_detect(CDISCSubmissionValue, "^Q\\d{1,2}H") ~
-      1 / as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
-    str_detect(CDISCSubmissionValue, "^Q\\d{1,2}MIN") ~
+    str_detect(CDISCSubmissionValue, "PER [D]") ~
+      24/as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
+    str_detect(CDISCSubmissionValue, "^Q\\d{1,2}(H|MIN)") ~
       1 / as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
     str_detect(CDISCSubmissionValue, "^(Q|EVERY)\\s?\\d{1,2}") ~
       1 / as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
@@ -124,11 +144,11 @@ mutate(DoseCount = case_when(
     str_detect(CDISCSubmissionValue, "QOD") ~ 0.5,
     ),
   DoseWindow = case_when(
-    str_detect(CDISCSubmissionValue, "EVERY \\d{1,2}|PER") ~
+    str_detect(CDISCSubmissionValue, "EVERY \\d{1,2}|PER [WMY]") ~
       str_remove_all(sub(".* (\\w+)$", "\\1", CDISCSubmissionValue), "S"),
     str_detect(CDISCSubmissionValue, "^Q\\d{1,2}D$") ~ "DAY",
     str_detect(CDISCSubmissionValue, "^Q\\d{1,2}M$") ~ "MONTH",
-    str_detect(CDISCSubmissionValue, "^Q\\d{0,2}H$") ~ "HOUR",
+    str_detect(CDISCSubmissionValue, "^Q\\d{0,2}H$|PER D") ~ "HOUR",
     str_detect(CDISCSubmissionValue, "^Q\\d{1,2}MIN$") ~ "MINUTE",
     CDISCSubmissionValue %in% c("EVERY AFTERNOON", "EVERY EVENING") ~ "DAY",
     CDISCSubmissionValue %in% c("EVERY WEEK") ~ "WEEK",
@@ -278,6 +298,11 @@ create_single_dose_dataset <- function(dataset,
       mutate(dose_count = ceiling(dose_periods * DoseCount)) %>%
       derive_var_obs_number(new_var = grpseq)
 
+    # Flag to determine if date or datetime must be returned
+
+    time_flag <- nrow(dataset_part_2 %>%
+                         filter(!!dose_freq %in% c("MINUTE", "HOUR"))) > 0
+
     # Generate a row for each completed dose
 
     dataset_part_2 <- dataset_part_2[rep(row.names(dataset_part_2), dataset_part_2$dose_count), ]
@@ -291,17 +316,21 @@ create_single_dose_dataset <- function(dataset,
       mutate(time_differential = case_when(
         DoseWindow == "MINUTE" ~ minutes(floor(time_increment)),
         DoseWindow == "HOUR" ~ hours(floor(time_increment)),
-        DoseWindow %in% c("DAY", "WEEK", "MONTH", "YEAR") ~ days(floor(time_increment / ConversionFactor))
+        DoseWindow %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
+          days(floor(time_increment / ConversionFactor))
              )
       )
-    # Adjust start_date and end_date, drop calculation columns
+
+    # Adjust start_date and end_date, drop calculation columns, make sure nothing
+    # later than end_date shows up in output
 
     dataset_part_2 <- dataset_part_2 %>%
       mutate(!!dose_freq := "ONCE" ) %>%
-      {if(any(class(eval_tidy(start_date, data = dataset)) == "Date"))
+      {if(!time_flag)
         mutate(., !!start_date := as.Date(!!start_date + time_differential)) else .} %>%
-      {if(any(class(eval_tidy(start_date, data = dataset)) %in% c("POSIXct", "POSIXt")))
-        mutate(., !!start_date := as.POSIXct(!!start_date + time_differential)) else .} %>%
+      {if(time_flag)
+        mutate(., !!start_date := as.POSIXct(as_datetime(!!start_date) +
+                                               time_differential)) else .} %>%
       filter(!(!!start_date > !!end_date)) %>%
       mutate(!!end_date := !!start_date) %>%
       select(!!!vars(all_of(col_names)))
