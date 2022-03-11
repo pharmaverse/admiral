@@ -7,7 +7,7 @@
 #' @param derivation The derivation function to call
 #' @param variable_params A `list` of arguments that are different across iterations.
 #'   Each set of arguments must be created using [`params()`].
-#' @param ... Any number of *named* arguments that are fixed across iterations.
+#' @param ... Any number of *named* arguments that stay the same across iterations.
 #'   If a parameter is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
@@ -94,7 +94,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 
 #' Create a Set of Parameters
 #'
-#' Create a set of variable parameters to be used in an iteration of [`call_derivation()`]
+#' Create a set of variable parameters to be used in [`call_derivation()`].
 #'
 #' @param ... One or more named arguments
 #'
@@ -107,9 +107,34 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' @export
 #'
 #' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data(ae)
+#' data(adsl)
+#'
+#' adae <-
+#'   select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%
+#'   derive_vars_merged(
+#'     dataset_add = adsl,
+#'     new_vars = vars(TRTSDT, TRTEDT),
+#'     by_vars = vars(USUBJID)
+#'   )
+#'
+#' ## `params()` specifies the sets of arguments that are different for creating
+#' ## each new variables
+#' call_derivation(
+#'   dataset = adae,
+#'   derivation = derive_vars_dt,
+#'   variable_params = list(
+#'     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+#'     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+#'   ),
+#'   min_dates = vars(TRTSDT),
+#'   max_dates = vars(TRTEDT)
+#' )
+#'
 #' params(
-#'   fns = list(VSSTRESN ~ mean(., na.rm = TRUE)),
-#'   set_values_to = vars(DTYPE = "AVERAGE")
+#'   dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"
 #' )
 params <- function(...) {
   args <- eval(substitute(alist(...)))
