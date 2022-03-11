@@ -85,7 +85,7 @@ test_that("custom lookup works", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
     "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
-    "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00"),
+    "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00")
   )
 
   expected_output <- tibble::tribble(
@@ -95,7 +95,7 @@ test_that("custom lookup works", {
     "P01", "ONCE", ymd_hms("2021-01-01T07:00:00"), ymd_hms("2021-01-01T07:00:00"),
     "P02", "ONCE", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T06:00:00"),
     "P02", "ONCE", ymd_hms("2021-01-01T07:30:00"), ymd_hms("2021-01-01T07:30:00"),
-    "P02", "ONCE", ymd_hms("2021-01-01T09:00:00"), ymd_hms("2021-01-01T09:00:00"),
+    "P02", "ONCE", ymd_hms("2021-01-01T09:00:00"), ymd_hms("2021-01-01T09:00:00")
   )
 
   expect_equal(create_single_dose_dataset(data,
