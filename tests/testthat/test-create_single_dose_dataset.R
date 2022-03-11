@@ -18,7 +18,7 @@ test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
     "P01", "ONCE", lubridate::ymd("2021-01-29"), lubridate::ymd("2021-01-29")
   )
 
-  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID)), expected_output)
+  expect_equal(create_single_dose_dataset(input), expected_output)
 })
 
 
@@ -54,7 +54,7 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
     "P06", "ONCE", lubridate::ymd("2021-01-20"), lubridate::ymd("2021-01-20"),
   )
 
-  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID)), expected_output)
+  expect_equal(create_single_dose_dataset(input), expected_output)
 })
 
 test_that("create_single_dose_dataset works for different treatments", {
@@ -72,5 +72,5 @@ test_that("create_single_dose_dataset works for different treatments", {
     "P01", "ONCE", lubridate::ymd("2021-01-05"), lubridate::ymd("2021-01-05"), "PLACEBO"
   )
 
-  expect_equal(create_single_dose_dataset(input, by_vars = vars(USUBJID, EXTRT)), expected_output)
+  expect_equal(create_single_dose_dataset(input), expected_output)
 })
