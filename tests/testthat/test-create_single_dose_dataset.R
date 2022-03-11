@@ -60,17 +60,50 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
 test_that("create_single_dose_dataset works for different treatments", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT, ~EXTRT,
-    "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"), "XANOMELINE",
-    "P01", "QOD", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-05"), "PLACEBO"
+    "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-03"), "XANOMELINE",
+    "P01", "QOD", ymd("2021-01-01"), ymd("2021-01-05"), "PLACEBO"
   )
   expected_output <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT, ~EXTRT,
-    "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"), "XANOMELINE",
-    "P01", "ONCE", lubridate::ymd("2021-01-03"), lubridate::ymd("2021-01-03"), "XANOMELINE",
-    "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"), "PLACEBO",
-    "P01", "ONCE", lubridate::ymd("2021-01-03"), lubridate::ymd("2021-01-03"), "PLACEBO",
-    "P01", "ONCE", lubridate::ymd("2021-01-05"), lubridate::ymd("2021-01-05"), "PLACEBO"
+    "P01", "ONCE", ymd("2021-01-01"), ymd("2021-01-01"), "XANOMELINE",
+    "P01", "ONCE", ymd("2021-01-03"), ymd("2021-01-03"), "XANOMELINE",
+    "P01", "ONCE", ymd("2021-01-01"), ymd("2021-01-01"), "PLACEBO",
+    "P01", "ONCE", ymd("2021-01-03"), ymd("2021-01-03"), "PLACEBO",
+    "P01", "ONCE", ymd("2021-01-05"), ymd("2021-01-05"), "PLACEBO"
   )
 
   expect_equal(create_single_dose_dataset(input), expected_output)
+})
+
+test_that("custom lookup works", {
+  custom_lookup <- tibble::tribble(
+    ~Value,  ~DoseCount, ~DoseWindow, ~ConversionFactor,
+    "Q30MIN", (1 / 30), "MINUTE", 1,
+    "Q90MIN", (1 / 90), "MINUTE", 1
+  )
+
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
+    "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
+    "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00"),
+  )
+
+  expected_output <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
+    "P01", "ONCE", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T06:00:00"),
+    "P01", "ONCE", ymd_hms("2021-01-01T06:30:00"), ymd_hms("2021-01-01T06:30:00"),
+    "P01", "ONCE", ymd_hms("2021-01-01T07:00:00"), ymd_hms("2021-01-01T07:00:00"),
+    "P02", "ONCE", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T06:00:00"),
+    "P02", "ONCE", ymd_hms("2021-01-01T07:30:00"), ymd_hms("2021-01-01T07:30:00"),
+    "P02", "ONCE", ymd_hms("2021-01-01T09:00:00"), ymd_hms("2021-01-01T09:00:00"),
+  )
+
+  expect_equal(create_single_dose_dataset(data,
+                             lookup_table = custom_lookup,
+                             lookup_column = Value,
+                             start_date = ASTDTM,
+                             end_date = AENDTM),
+               expected_output)
+
+
 })
