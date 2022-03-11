@@ -65,11 +65,16 @@ test_that("create_single_dose_dataset works for different treatments", {
   )
   expected_output <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT, ~EXTRT,
-    "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"), "XANOMELINE",
-    "P01", "ONCE", lubridate::ymd("2021-01-03"), lubridate::ymd("2021-01-03"), "XANOMELINE",
-    "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-01"), "PLACEBO",
-    "P01", "ONCE", lubridate::ymd("2021-01-03"), lubridate::ymd("2021-01-03"), "PLACEBO",
-    "P01", "ONCE", lubridate::ymd("2021-01-05"), lubridate::ymd("2021-01-05"), "PLACEBO"
+    "P01", "ONCE", lubridate::ymd("2021-01-01"),
+    lubridate::ymd("2021-01-01"), "XANOMELINE",
+    "P01", "ONCE", lubridate::ymd("2021-01-03"),
+    lubridate::ymd("2021-01-03"), "XANOMELINE",
+    "P01", "ONCE", lubridate::ymd("2021-01-01"),
+    lubridate::ymd("2021-01-01"), "PLACEBO",
+    "P01", "ONCE", lubridate::ymd("2021-01-03"),
+    lubridate::ymd("2021-01-03"), "PLACEBO",
+    "P01", "ONCE", lubridate::ymd("2021-01-05"),
+    lubridate::ymd("2021-01-05"), "PLACEBO"
   )
 
   expect_equal(create_single_dose_dataset(input), expected_output)
@@ -84,18 +89,26 @@ test_that("custom lookup works", {
 
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-    "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T07:00:00"),
-    "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T09:00:00")
+    "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"),
+    lubridate::ymd_hms("2021-01-01T07:00:00"),
+    "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"),
+    lubridate::ymd_hms("2021-01-01T09:00:00")
   )
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T06:00:00"),
-    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T06:30:00"), lubridate::ymd_hms("2021-01-01T06:30:00"),
-    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T07:00:00"), lubridate::ymd_hms("2021-01-01T07:00:00"),
-    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T06:00:00"),
-    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T07:30:00"), lubridate::ymd_hms("2021-01-01T07:30:00"),
-    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T09:00:00"), lubridate::ymd_hms("2021-01-01T09:00:00")
+    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T06:00:00"),
+    lubridate::ymd_hms("2021-01-01T06:00:00"),
+    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T06:30:00"),
+    lubridate::ymd_hms("2021-01-01T06:30:00"),
+    "P01", "ONCE", lubridate::ymd_hms("2021-01-01T07:00:00"),
+    lubridate::ymd_hms("2021-01-01T07:00:00"),
+    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T06:00:00"),
+    lubridate::ymd_hms("2021-01-01T06:00:00"),
+    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T07:30:00"),
+    lubridate::ymd_hms("2021-01-01T07:30:00"),
+    "P02", "ONCE", lubridate::ymd_hms("2021-01-01T09:00:00"),
+    lubridate::ymd_hms("2021-01-01T09:00:00")
   )
 
   expect_equal(create_single_dose_dataset(input,
