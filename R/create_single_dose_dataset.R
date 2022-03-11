@@ -16,15 +16,16 @@
 #' `CDISCSubmissionValue=="EVERY 2 WEEKS`, `DoseWindow=="WEEK"` and
 #' `DoseCount==0.5` (to yield one dose every two weeks).
 #'
-#' `ConversionFactor` is used to convert `DoseWindow` units to smaller subunits
-#' when necessary.
+#' `ConversionFactor` is used to convert `DoseWindow` units `"WEEK"`,
+#'  `"MONTH"`, and `"YEAR"` to the unit `"DAY"`.
 #'
 #' For example, for `CDISCSubmissionValue=="10 DAYS PER MONTH`, `ConversionFactor`
-#' is `0.0329`, because one day of a month is assumed to be (1 / 30.4375) of a month.
-#' Supposing that the time between `start_date` and `end_date` in the aggregate
-#' dataset does not comprise an entire month, `ConversionFactor` gets used to
-#' accurately calculate `start_date` and `end_date` in the single dose dataset for
-#' the doses that do occur.
+#' is `0.0329`. One day of a month is assumed to be `1 / 30.4375` of a month (one
+#' day is assumed to be `1/365.25` of a year).
+#' Given only `start_date` and `end_date` in the aggregate dataset, `ConversionFactor`
+#' is used to calculate specific dates for`start_date` and `end_date` in the
+#' resulting single dose dataset for the doses that occur. In such cases, doses
+#' are assumed to occur at evenly spaced increments over the interval.
 #'
 #'
 #' To see the entire table in the console, run `print(dose_freq_lookup)`.
@@ -130,7 +131,7 @@ mutate(DoseCount = case_when(
     str_detect(CDISCSubmissionValue, "PER [WMY]") ~
       as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
     str_detect(CDISCSubmissionValue, "PER [D]") ~
-      24/as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
+      24 / as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
     str_detect(CDISCSubmissionValue, "^Q\\d{1,2}(H|MIN)") ~
       1 / as.numeric(str_remove_all(CDISCSubmissionValue, "[\\D]")),
     str_detect(CDISCSubmissionValue, "^(Q|EVERY)\\s?\\d{1,2}") ~
@@ -170,7 +171,9 @@ mutate(
 
 #' Create dataset of single doses
 #'
-#' Derives dataset of single dose from aggregate dose information
+#' Derives dataset of single dose from aggregate dose information. This may be
+#' necessary when e.g. calculating last dose before an adverse event in `ADAE` or
+#' deriving a total dose parameter in `ADEX` when `EXDOSFRQ != ONCE`.
 #'
 #' @param dataset Input dataset
 #'
@@ -218,9 +221,9 @@ mutate(
 #'
 #' @details Each aggregate dose row is split into multiple rows which each represent
 #' a single dose.The number of completed dose periods between `start_date` and
-#' `end_date` is calculated with `compute_duration` and multiplied by the count
-#' of doses per period. `start_date` and `end_date` are then adjusted by an
-#' appropriate increment using `ConversionFactor`.
+#' `end_date` is calculated with `compute_duration` and multiplied by `DoseCount`.
+#' For `DoseWindow` values of `"WEEK"`, `"MONTH"`, and `"YEAR"`, `ConversionFactor`
+#' is used to convert into days the time object to be added to `start_date`.
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'
@@ -238,7 +241,7 @@ mutate(
 #'   "P01", "EVERY 2 WEEKS", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
 #' )
 #'
-#' create_single_dose_dataset(data, by_vars = vars(USUBJID))
+#' create_single_dose_dataset(data)
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
@@ -266,7 +269,7 @@ create_single_dose_dataset <- function(dataset,
       anti_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
       unique()
 
-    if (nrow(value_check)>0){
+    if (nrow(value_check) > 0) {
       values_not_found <- str_c(value_check %>% select(!!dose_freq), collapse = ", ")
 
       err_msg <- paste0(
@@ -301,7 +304,14 @@ create_single_dose_dataset <- function(dataset,
     # Flag to determine if date or datetime must be returned
 
     time_flag <- nrow(dataset_part_2 %>%
-                         filter(!!dose_freq %in% c("MINUTE", "HOUR"))) > 0
+                         filter(DoseWindow %in% c("MINUTE", "HOUR"))) > 0
+
+    if (time_flag) {
+      dataset_part_1 <- dataset_part_1 %>%
+        mutate(!!start_date := as_datetime(!!start_date),
+               !!end_date := as_datetime(!!end_date),
+               )
+    }
 
     # Generate a row for each completed dose
 
@@ -324,18 +334,25 @@ create_single_dose_dataset <- function(dataset,
     # Adjust start_date and end_date, drop calculation columns, make sure nothing
     # later than end_date shows up in output
 
+    if (!time_flag) {
+       dataset_part_2 <- dataset_part_2 %>%
+        mutate(!!dose_freq := "ONCE",
+        !!start_date := as.Date(!!start_date + time_differential))
+    }
+    if (time_flag) {
+      dataset_part_2 <- dataset_part_2 %>%
+        mutate(!!dose_freq := "ONCE",
+        !!start_date := as.POSIXct(as_datetime(!!start_date) + time_differential))
+    }
+
     dataset_part_2 <- dataset_part_2 %>%
-      mutate(!!dose_freq := "ONCE" ) %>%
-      {if(!time_flag)
-        mutate(., !!start_date := as.Date(!!start_date + time_differential)) else .} %>%
-      {if(time_flag)
-        mutate(., !!start_date := as.POSIXct(as_datetime(!!start_date) +
-                                               time_differential)) else .} %>%
       filter(!(!!start_date > !!end_date)) %>%
       mutate(!!end_date := !!start_date) %>%
       select(!!!vars(all_of(col_names)))
 
+    #Stitch back together
+
     dataset <- bind_rows(dataset_part_1, dataset_part_2)
 
-  return(dataset)
+    return(dataset)
 }

@@ -6,7 +6,6 @@
 \usage{
 create_single_dose_dataset(
   dataset,
-  by_vars,
   dose_freq = EXDOSFRQ,
   start_date = ASTDT,
   end_date = AENDT,
@@ -17,20 +16,14 @@ create_single_dose_dataset(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by \code{by_vars}, \code{dose_freq}, \code{start_date} and the \code{end_date}
+The columns specified by \code{dose_freq}, \code{start_date} and the \code{end_date}
 parameters are expected.}
-
-\item{by_vars}{Variables to group by (created by \code{dplyr::vars}).
-
-These variables are used to identify unique rows for each aggregate dose.
-
-Example: vars(STUDYID, USUBJID, EXTRT)}
 
 \item{dose_freq}{The dose frequency
 
 The aggregate dosing frequency used for multiple doses in a row.
 
-Default: EXDOSFRQ
+Default: \code{EXDOSFRQ}
 
 Permitted Values: defined by lookup table.}
 
@@ -51,11 +44,12 @@ Default: \code{AENDT}}
 The table used to look up \code{dose_freq} values and determine the appropriate
 multiplier to be used for row generation. If a lookup table other than the
 default is used, it must have columns \code{DoseWindow}, \code{DoseCount}, and
-\code{DayConversionFactor}
+\code{ConversionFactor}
 
 Default: \code{dose_freq_lookup}
 
-Permitted Values for \code{DoseWindow}: "DAY", "WEEK", "MONTH", "YEAR"}
+Permitted Values for \code{DoseWindow}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"}, \code{"WEEK"},
+\code{"MONTH"}, \code{"YEAR"}}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
 
@@ -67,14 +61,16 @@ Default: \code{CDISCSubmissionValue} (column of \code{dose_freq_lookup})}
 The input dataset with a single dose per row.
 }
 \description{
-Derives dataset of single dose from aggregate dose information
+Derives dataset of single dose from aggregate dose information. This may be
+necessary when e.g. calculating last dose before an adverse event in \code{ADAE} or
+deriving a total dose parameter in \code{ADEX} when \code{EXDOSFRQ != ONCE}.
 }
 \details{
 Each aggregate dose row is split into multiple rows which each represent
 a single dose.The number of completed dose periods between \code{start_date} and
-\code{end_date} is calculated with \code{compute_duration} and multiplied by the count
-of doses per period. \code{start_date} and \code{end_date} are then adjusted by an
-appropriate increment using \code{DayConversionFactor}.
+\code{end_date} is calculated with \code{compute_duration} and multiplied by \code{DoseCount}.
+For \code{DoseWindow} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"}, \code{ConversionFactor}
+is used to convert into days the time object to be added to \code{start_date}.
 }
 \examples{
 data <- tibble::tribble(
@@ -84,8 +80,11 @@ data <- tibble::tribble(
   "P01", "EVERY 2 WEEKS", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
 )
 
-create_single_dose_dataset(data, by_vars = vars(USUBJID))
+create_single_dose_dataset(data)
 }
 \author{
 Michael Thorpe, Andrew Smith
 }
+\keyword{adae}
+\keyword{adex}
+\keyword{user_utility}
