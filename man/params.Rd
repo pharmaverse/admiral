@@ -13,12 +13,37 @@ params(...)
 An object of class \code{params}
 }
 \description{
-Create a set of variable parameters to be used in an iteration of \code{\link[=call_derivation]{call_derivation()}}
+Create a set of variable parameters to be used in \code{\link[=call_derivation]{call_derivation()}}.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
+data(ae)
+data(adsl)
+
+adae <-
+  select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = vars(TRTSDT, TRTEDT),
+    by_vars = vars(USUBJID)
+  )
+
+## `params()` specifies the sets of arguments that are different for creating
+## each new variables
+call_derivation(
+  dataset = adae,
+  derivation = derive_vars_dt,
+  variable_params = list(
+    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+  ),
+  min_dates = vars(TRTSDT),
+  max_dates = vars(TRTEDT)
+)
+
 params(
-  fns = list(VSSTRESN ~ mean(., na.rm = TRUE)),
-  set_values_to = vars(DTYPE = "AVERAGE")
+  dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"
 )
 }
 \author{
