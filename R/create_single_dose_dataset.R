@@ -267,12 +267,12 @@ create_single_dose_dataset <- function(dataset,
     dataset_part_2 <- dataset_part_2 %>%
       left_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
       mutate(dose_periods = case_when(
-          DoseWindow=="MINUTE" ~ compute_duration(!!start_date, !!end_date, out_unit="minutes"),
-          DoseWindow=="HOUR" ~ compute_duration(!!start_date, !!end_date, out_unit="hours"),
-          DoseWindow=="DAY" ~ compute_duration(!!start_date, !!end_date, out_unit="days"),
-          DoseWindow=="WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit="weeks"),
-          DoseWindow=="MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit="months"),
-          DoseWindow=="YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit="years")
+          DoseWindow == "MINUTE" ~ compute_duration(!!start_date, !!end_date, out_unit = "minutes"),
+          DoseWindow == "HOUR" ~ compute_duration(!!start_date, !!end_date, out_unit = "hours"),
+          DoseWindow == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
+          DoseWindow == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
+          DoseWindow == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
+          DoseWindow == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
       )
         ) %>%
       mutate(dose_count = ceiling(dose_periods * DoseCount)) %>%
@@ -289,18 +289,21 @@ create_single_dose_dataset <- function(dataset,
       mutate(time_increment = (row_number() - 1) / (DoseCount)) %>%
       ungroup() %>%
       mutate(time_differential = case_when(
-        DoseWindow=="MINUTE" ~ minutes(floor(time_increment)),
-        DoseWindow=="HOUR" ~ hours(floor(time_increment)),
-        DoseWindow %in% c("DAY", "WEEK", "MONTH", "YEAR") ~ days(floor(time_increment/ConversionFactor))
+        DoseWindow == "MINUTE" ~ minutes(floor(time_increment)),
+        DoseWindow == "HOUR" ~ hours(floor(time_increment)),
+        DoseWindow %in% c("DAY", "WEEK", "MONTH", "YEAR") ~ days(floor(time_increment / ConversionFactor))
              )
       )
     # Adjust start_date and end_date, drop calculation columns
 
     dataset_part_2 <- dataset_part_2 %>%
-      mutate(!!dose_freq := "ONCE",
-             !!end_date := as.POSIXct(!!start_date + time_differential),
-             !!start_date := as.POSIXct(!!start_date + time_differential)
-      ) %>%
+      mutate(!!dose_freq := "ONCE" ) %>%
+      {if(any(class(eval_tidy(start_date, data = dataset)) == "Date"))
+        mutate(., !!start_date := as.Date(!!start_date + time_differential)) else .} %>%
+      {if(any(class(eval_tidy(start_date, data = dataset)) %in% c("POSIXct", "POSIXt")))
+        mutate(., !!start_date := as.POSIXct(!!start_date + time_differential)) else .} %>%
+      filter(!(!!start_date > !!end_date)) %>%
+      mutate(!!end_date := !!start_date) %>%
       select(!!!vars(all_of(col_names)))
 
     dataset <- bind_rows(dataset_part_1, dataset_part_2)
