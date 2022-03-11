@@ -73,6 +73,11 @@
 #'   )
 #'
 derive_vars_analysis_ratio <- function(dataset) {
+  AVAL <- assert_symbol(enquo(AVAL))
+  BASE <- assert_symbol(enquo(BASE))
+  ANRLO <- assert_symbol(enquo(ANRLO))
+  ANRHI <- assert_symbol(enquo(ANRHI))
+
   assert_data_frame(dataset, required_vars = quo_c(AVAL, BASE, ANRLO, ANRHI))
 
   dataset %>%
