@@ -19,7 +19,7 @@
 #'             str_replace str_trim str_to_lower str_to_title str_to_upper str_glue
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
-#'             time_length %--% ymd ymd_hms weeks years minutes
+#'             time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect contains vars_select
 "_PACKAGE"
