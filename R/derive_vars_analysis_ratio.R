@@ -6,30 +6,25 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param new_var Name of the character shift variable to create.
+#' @param
 #'
-#' @param from_var Variable containing value to shift from.
+#' @param
 #'
-#' @param to_var Variable containing value to shift to.
+#' @param
 #'
-#' @param na_val Character string to replace missing values in `from_var` or `to_var`.
+#' @param
 #'
 #'  Default: "NULL"
 #'
-#' @param sep_val Character string to concatenate values of `from_var` and `to_var`.
+#' @param
 #'
 #'  Default: " to "
 #'
-#' @param filter_post_baseline Condition to identify post-baseline records. If not
-#' specified, `new_var` is populated for all records.
+#' @param
 #'
 #'  Default: `NULL`
 #'
-#' @details `new_var` is derived by concatenating the values of `from_var` to values of `to_var`
-#' (e.g. "NORMAL to HIGH"). When `from_var` or `to_var` has missing value, the
-#' missing value is replaced by `na_val` (e.g. "NORMAL to NULL"). If `filter_post_baseline` is
-#' specified, `new_var` is populated only for post-baseline records. If `filter_post_baseline`
-#' is `NULL` (default), `new_var` is populated for all records.
+#' @details
 #'
 #'
 #' @author Ben Straub
@@ -72,19 +67,35 @@
 #'     filter_post_baseline = ABLFL != "Y"
 #'   )
 #'
-derive_vars_analysis_ratio <- function(dataset) {
-  AVAL <- assert_symbol(enquo(AVAL))
-  BASE <- assert_symbol(enquo(BASE))
-  ANRLO <- assert_symbol(enquo(ANRLO))
-  ANRHI <- assert_symbol(enquo(ANRHI))
+derive_vars_analysis_ratio <- function(dataset,
+                                       soure_vars = vars(AVAL, BASE, ANRLO, ANRHI),
+                                       ratio_vars = "all") {
 
-  assert_data_frame(dataset, required_vars = quo_c(AVAL, BASE, ANRLO, ANRHI))
+  soure_vars <- assert_vars(soure_vars)
+  ratio_vars <- assert_character_scalar(ratio_vars)
 
-  dataset %>%
+  assert_data_frame(dataset, required_vars = quo_c(soure_vars))
+
+  dataset  <- dataset %>%
     mutate(
       R2BASE = if_else(!is.na(AVAL) & !is.na(BASE) & BASE != 0, AVAL / BASE, NA_real_),
       R2ANRLO = if_else(!is.na(AVAL) & !is.na(ANRLO) & ANRLO != 0, AVAL / ANRLO, NA_real_),
       R2ANRHI = if_else(!is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL / ANRHI, NA_real_)
     )
+
+  # Remove High/Low Variables based on user-input
+  switch(ratio_vars,
+           all  = {dataset <- dataset %>%
+             select(everything(), R2BASE, R2ANRLO, R2ANRHI)},
+
+           low  = {dataset <- dataset %>%
+             select(everything(), R2BASE, R2ANRLO, -R2ANRHI)},
+
+           high = {dataset <- dataset %>%
+             select(everything(), R2BASE, -R2ANRLO, R2ANRHI)}
+  )
+
+    dataset
+
 }
 
