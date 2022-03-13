@@ -4,12 +4,14 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param soure_vars
+#' @param soure_vars Columns `AVAL`, `BASE`, `ANRLO` and `ANRHI` are expected.
 #'
-#' @param ratio_vars
+#' @param ratio_vars Users can select from three values: "all", "low" and "high".
+#' Selecting all will append `R2BASE`, `R2ANRLO`, `R2ANRHI` to the dataset.
+#' Selecting "low" will append only `R2BASE`, `R2ANRLO` and "high" only
+#' `R2BASE`, `R2ANRHI`.
 #'
 #'  Default: "all"
-#'
 #'
 #' @details
 #'
