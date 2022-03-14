@@ -50,7 +50,7 @@ and treated for hypertension flag.
 }
 \details{
 The predicted probability of having cardiovascular disease (CVD)
-within 10-years according to Framingham formula \link{D'Agostino, 2008} is:
+within 10-years according to Framingham formula D'Agostino, 2008 is:
 
 For women:
 Age Factor = 2.32888;

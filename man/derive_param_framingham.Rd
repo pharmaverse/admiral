@@ -82,7 +82,7 @@ Permitted Values: Y, N}
 
 \item{diabetfl}{Diabetic flag
 
-A flag indicating diabeti status: Y=diabetic, N=otherwise
+A flag indicating diabetic status: Y=diabetic, N=otherwise
 Permitted Values: Y, N}
 
 \item{trthypfl}{Treated with hypertension medication flag
@@ -196,7 +196,6 @@ adcvrisk \%>\%
 derive_param_framingham(
   adcvrisk,
   by_vars = vars(USUBJID, VISIT),
-  hr_code = "PULSE",
   set_values_to = vars(
     PARAMCD = "FCVD101",
     PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (\%)"
