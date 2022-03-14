@@ -91,6 +91,12 @@ A flag indicating if a subject was treated with hypertension medication:
 Y=treated for high blood pressure, N=Not treated for high blood pressure
 Permitted Values: Y, N}
 
+\item{get_unit_expr}{An expression providing the unit of the parameter
+
+The result is used to check the units of the input parameters.
+
+Permitted Values: A variable of the input dataset or a function call}
+
 \item{filter}{Filter condition
 
 The specified condition is applied to the input dataset before deriving the
@@ -111,7 +117,7 @@ The values of \code{age}, \code{sex}, \code{smokefl}, \code{diabetfl}, and \code
 added to the \code{by_vars} list.
 
 The predicted probability of having cardiovascular disease (CVD)
-within 10-years according to Framingham formula \link{D'Agostino, 2008} is:
+within 10-years according to Framingham formula D'Agostino, 2008 is:
 
 For women:
 Age Factor = 2.32888;
@@ -136,8 +142,10 @@ Avg Risk = 23.9802;
 Risk Period Factor = 0.88936;
 
 Equation:
-\deqn{RiskFactors = (log(Age) * AgeFactor) + (log(TotalChol) * TotalCholFactor)
-+ (log(CholHDL) * CholHDLFactor) + (log(SysBP) * SysBPFactor) + Smoker
+\deqn{RiskFactors = (log(Age) * AgeFactor)
++ (log(TotalChol) * TotalCholFactor)
++ (log(CholHDL) * CholHDLFactor)
++ (log(SysBP) * SysBPFactor) + Smoker
 + Diabetes Present - AvgRisk}
 
 \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
@@ -146,19 +154,32 @@ Equation:
 library(dplyr, warn.conflicts = FALSE)
 
 adcvrisk <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD,  ~PARAM,                                ~AVAL, ~AVALU,       ~VISIT,    ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
-  "01-701-1015", "SYSBP",   "Systolic Blood Pressure (mmHg)",      121,   "mmHg",      "BASELINE", 44,   "F",  "N",      "N",       "N",
-  "01-701-1015", "SYSBP",   "Systolic Blood Pressure (mmHg)",      115,   "mmHg",      "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-  "01-701-1015", "CHOL",    "Total Cholesterol (mg/dL)",           216.16,"mg/dL",     "BASELINE", 44,   "F",  "N",      "N",       "N",
-  "01-701-1015", "CHOL",    "Total Cholesterol (mg/dL)",           210.78,"mg/dL",     "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-  "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 54.91, "mg/dL",     "BASELINE", 44,   "F",  "N",      "N",       "N",
-  "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 26.72, "mg/dL",     "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-  "01-701-1028", "SYSBP",   "Systolic Blood Pressure (mmHg)",      119,   "mmHg",      "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-  "01-701-1028", "SYSBP",   "Systolic Blood Pressure (mmHg)",      101,   "mmHg",      "WEEK 2",   55,   "M",  "Y",      "Y",       "Y",
-  "01-701-1028", "CHOL",    "Total Cholesterol (mg/dL)",           292.01,"mg/dL",     "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-  "01-701-1028", "CHOL",    "Total Cholesterol (mg/dL)",           246.73,"mg/dL",     "WEEK 2",   55,   "M",  "Y",      "Y",       "Y",
-  "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 65.55, "mg/dL",     "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-  "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 44.62, "mg/dL",     "WEEK 2",   55,   "M",  "Y",      "Y",       "Y"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
+  ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121,
+  "mmHg", "BASELINE", 44, "F", "N", "N", "N",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 115,
+  "mmHg", "WEEK 2", 44, "F", "N", "N", "Y",
+  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 216.16,
+  "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
+  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 210.78,
+  "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
+  "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 54.91,
+  "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
+  "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 26.72,
+  "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 119,
+  "mmHg", "BASELINE", 55, "M", "Y", "Y", "Y",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 101,
+  "mmHg", "WEEK 2", 55, "M", "Y", "Y", "Y",
+  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 292.01,
+  "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
+  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 246.73,
+  "mg/dL", "WEEK 2", 55,  "M", "Y", "Y", "Y",
+  "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 65.55,
+  "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
+  "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 44.62,
+  "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y"
 )
 
 

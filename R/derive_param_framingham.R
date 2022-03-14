@@ -60,14 +60,14 @@
 #'
 #' @inheritParams derive_derived_param
 #'
-#' @inheritParams compute_framingham
+#' @inheritParams derive_param_qtc
 #'
 #' @details
 #' The values of `age`, `sex`, `smokefl`, `diabetfl`, and `trthypfl` will be
 #' added to the `by_vars` list.
 #'
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula [D'Agostino, 2008] is:
+#' within 10-years according to Framingham formula D'Agostino, 2008 is:
 #'
 #' For women:
 #'   Age Factor = 2.32888;
@@ -92,8 +92,10 @@
 #'   Risk Period Factor = 0.88936;
 #'
 #' Equation:
-#' \deqn{RiskFactors = (log(Age) * AgeFactor) + (log(TotalChol) * TotalCholFactor)
-#' + (log(CholHDL) * CholHDLFactor) + (log(SysBP) * SysBPFactor) + Smoker
+#' \deqn{RiskFactors = (log(Age) * AgeFactor)
+#' + (log(TotalChol) * TotalCholFactor)
+#' + (log(CholHDL) * CholHDLFactor)
+#' + (log(SysBP) * SysBPFactor) + Smoker
 #' + Diabetes Present - AvgRisk}
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
@@ -110,19 +112,32 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' adcvrisk <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD,  ~PARAM,                                ~AVAL, ~AVALU,       ~VISIT,    ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
-#'   "01-701-1015", "SYSBP",   "Systolic Blood Pressure (mmHg)",      121,   "mmHg",      "BASELINE", 44,   "F",  "N",      "N",       "N",
-#'   "01-701-1015", "SYSBP",   "Systolic Blood Pressure (mmHg)",      115,   "mmHg",      "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-#'   "01-701-1015", "CHOL",    "Total Cholesterol (mg/dL)",           216.16,"mg/dL",     "BASELINE", 44,   "F",  "N",      "N",       "N",
-#'   "01-701-1015", "CHOL",    "Total Cholesterol (mg/dL)",           210.78,"mg/dL",     "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-#'   "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 54.91, "mg/dL",     "BASELINE", 44,   "F",  "N",      "N",       "N",
-#'   "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 26.72, "mg/dL",     "WEEK 2",   44,   "F",  "N",      "N",       "Y",
-#'   "01-701-1028", "SYSBP",   "Systolic Blood Pressure (mmHg)",      119,   "mmHg",      "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-#'   "01-701-1028", "SYSBP",   "Systolic Blood Pressure (mmHg)",      101,   "mmHg",      "WEEK 2",   55,   "M",  "Y",      "Y",       "Y",
-#'   "01-701-1028", "CHOL",    "Total Cholesterol (mg/dL)",           292.01,"mg/dL",     "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-#'   "01-701-1028", "CHOL",    "Total Cholesterol (mg/dL)",           246.73,"mg/dL",     "WEEK 2",   55,   "M",  "Y",      "Y",       "Y",
-#'   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 65.55, "mg/dL",     "BASELINE", 55,   "M",  "Y",      "Y",       "Y",
-#'   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 44.62, "mg/dL",     "WEEK 2",   55,   "M",  "Y",      "Y",       "Y"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU,
+#'   ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121,
+#'   "mmHg", "BASELINE", 44, "F", "N", "N", "N",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 115,
+#'   "mmHg", "WEEK 2", 44, "F", "N", "N", "Y",
+#'   "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 216.16,
+#'   "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
+#'   "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 210.78,
+#'   "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
+#'   "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 54.91,
+#'   "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
+#'   "01-701-1015", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 26.72,
+#'   "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 119,
+#'   "mmHg", "BASELINE", 55, "M", "Y", "Y", "Y",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 101,
+#'   "mmHg", "WEEK 2", 55, "M", "Y", "Y", "Y",
+#'   "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 292.01,
+#'   "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
+#'   "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 246.73,
+#'   "mg/dL", "WEEK 2", 55,  "M", "Y", "Y", "Y",
+#'   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 65.55,
+#'   "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
+#'   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 44.62,
+#'   "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y"
 #' )
 #'
 #'
@@ -161,9 +176,10 @@ derive_param_framingham <- function(dataset,
                                     filter = NULL) {
 
   assert_data_frame(dataset,
-                    required_vars = quo_c(vars(!!!by_vars, PARAMCD, AVAL),
-                                          enquo(age), enquo(sex), enquo(smokefl),
-                                          enquo(diabetfl), enquo(trthypfl)))
+                    required_vars =
+                      quo_c(vars(!!!by_vars, PARAMCD, AVAL),
+                            enquo(age), enquo(sex), enquo(smokefl),
+                            enquo(diabetfl), enquo(trthypfl)))
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -173,9 +189,18 @@ derive_param_framingham <- function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  assert_unit(dataset, sysbp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
-  assert_unit(dataset, chol_code, required_unit = "mg/dL", get_unit_expr = !!get_unit_expr)
-  assert_unit(dataset, cholhdl_code, required_unit = "mg/dL", get_unit_expr = !!get_unit_expr)
+  assert_unit(dataset,
+              sysbp_code,
+              required_unit = "mmHg",
+              get_unit_expr = !!get_unit_expr)
+  assert_unit(dataset,
+              chol_code,
+              required_unit = "mg/dL",
+              get_unit_expr = !!get_unit_expr)
+  assert_unit(dataset,
+              cholhdl_code,
+              required_unit = "mg/dL",
+              get_unit_expr = !!get_unit_expr)
 
   analysis_value <- expr(
     compute_framingham(
@@ -271,8 +296,10 @@ derive_param_framingham <- function(dataset,
 #'   Risk Period Factor = 0.88936;
 #'
 #' Equation:
-#' \deqn{RiskFactors = (log(Age) * AgeFactor) + (log(TotalChol) * TotalCholFactor)
-#' + (log(CholHDL) * CholHDLFactor) + (log(SysBP) * SysBPFactor) + Smoker
+#' \deqn{RiskFactors = (log(Age) * AgeFactor)
+#' + (log(TotalChol) * TotalCholFactor)
+#' + (log(CholHDL) * CholHDLFactor)
+#' + (log(SysBP) * SysBPFactor) + Smoker
 #' + Diabetes Present - AvgRisk}
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
@@ -303,22 +330,24 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
   assert_character_vector(trthypfl, values=c("Y","N"))
 
   aval <- case_when(
-    sex == "F" ~ 1 - (0.95012 ^ exp((2.32888 * log(age))
-                                    + (1.20904 * log(chol))
-                                    - (0.70833 * log(cholhdl))
-                                    + (2.76157 * log(if_else(trthypfl == "N", sysbp, 1)))
-                                    + (2.82263 * log(if_else(trthypfl == "Y", sysbp, 1)))
-                                    + (0.52873 * (if_else(smokefl == "Y", 1, 0)))
-                                    + (0.69154 * (if_else(diabetfl == "Y", 1, 0)))
-                                    - 26.1931)),
-    sex == "M" ~ 1 - (0.88936 ^ exp((3.06117 * log(age))
-                                    + (1.12370 * log(chol))
-                                    - (0.93263 * log(cholhdl))
-                                    + (1.93303 * log(if_else(trthypfl == "N", sysbp, 1)))
-                                    + (1.99881 * log(if_else(trthypfl == "Y", sysbp, 1)))
-                                    + (0.65451 * (if_else(smokefl == "Y", 1, 0)))
-                                    + (0.57367 * (if_else(diabetfl == "Y", 1, 0)))
-                                    - 23.9802)))
+    sex == "F" ~
+      1 - (0.95012 ^ exp((2.32888 * log(age))
+                         + (1.20904 * log(chol))
+                         - (0.70833 * log(cholhdl))
+                         + (2.76157 * log(if_else(trthypfl == "N", sysbp, 1)))
+                         + (2.82263 * log(if_else(trthypfl == "Y", sysbp, 1)))
+                         + (0.52873 * (if_else(smokefl == "Y", 1, 0)))
+                         + (0.69154 * (if_else(diabetfl == "Y", 1, 0)))
+                         - 26.1931)),
+    sex == "M" ~
+      1 - (0.88936 ^ exp((3.06117 * log(age))
+                         + (1.12370 * log(chol))
+                         - (0.93263 * log(cholhdl))
+                         + (1.93303 * log(if_else(trthypfl == "N", sysbp, 1)))
+                         + (1.99881 * log(if_else(trthypfl == "Y", sysbp, 1)))
+                         + (0.65451 * (if_else(smokefl == "Y", 1, 0)))
+                         + (0.57367 * (if_else(diabetfl == "Y", 1, 0)))
+                         - 23.9802)))
 
 
   aval <- aval * 100

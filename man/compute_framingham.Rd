@@ -75,8 +75,10 @@ Avg Risk = 23.9802;
 Risk Period Factor = 0.88936;
 
 Equation:
-\deqn{RiskFactors = (log(Age) * AgeFactor) + (log(TotalChol) * TotalCholFactor)
-+ (log(CholHDL) * CholHDLFactor) + (log(SysBP) * SysBPFactor) + Smoker
+\deqn{RiskFactors = (log(Age) * AgeFactor)
++ (log(TotalChol) * TotalCholFactor)
++ (log(CholHDL) * CholHDLFactor)
++ (log(SysBP) * SysBPFactor) + Smoker
 + Diabetes Present - AvgRisk}
 
 \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
