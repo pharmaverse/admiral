@@ -49,7 +49,7 @@
 #'
 #' @param diabetfl Diabetic flag
 #'
-#'   A flag indicating diabeti status: Y=diabetic, N=otherwise
+#'   A flag indicating diabetic status: Y=diabetic, N=otherwise
 #'   Permitted Values: Y, N
 #'
 #' @param trthypfl Treated with hypertension medication flag
@@ -154,7 +154,6 @@
 #' derive_param_framingham(
 #'   adcvrisk,
 #'   by_vars = vars(USUBJID, VISIT),
-#'   hr_code = "PULSE",
 #'   set_values_to = vars(
 #'     PARAMCD = "FCVD101",
 #'     PARAM = "FCVD1-Framingham CVD 10-Year Risk Score (%)"
@@ -271,7 +270,7 @@ derive_param_framingham <- function(dataset,
 #'
 #' @details
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula [D'Agostino, 2008] is:
+#' within 10-years according to Framingham formula D'Agostino, 2008 is:
 #'
 #' For women:
 #'   Age Factor = 2.32888;
