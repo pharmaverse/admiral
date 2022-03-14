@@ -176,9 +176,14 @@ derive_param_framingham <- function(dataset,
 
   assert_data_frame(dataset,
                     required_vars =
-                      quo_c(vars(!!!by_vars, PARAMCD, AVAL),
-                            enquo(age), enquo(sex), enquo(smokefl),
-                            enquo(diabetfl), enquo(trthypfl)))
+                      quo_c(
+                        vars(!!!by_vars, PARAMCD, AVAL),
+                        enquo(age),
+                        enquo(sex),
+                        enquo(smokefl),
+                        enquo(diabetfl),
+                        enquo(trthypfl)
+                      ))
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -188,18 +193,24 @@ derive_param_framingham <- function(dataset,
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   get_unit_expr <- assert_expr(enquo(get_unit_expr))
-  assert_unit(dataset,
-              sysbp_code,
-              required_unit = "mmHg",
-              get_unit_expr = !!get_unit_expr)
-  assert_unit(dataset,
-              chol_code,
-              required_unit = "mg/dL",
-              get_unit_expr = !!get_unit_expr)
-  assert_unit(dataset,
-              cholhdl_code,
-              required_unit = "mg/dL",
-              get_unit_expr = !!get_unit_expr)
+  assert_unit(
+    dataset,
+    sysbp_code,
+    required_unit = "mmHg",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    chol_code,
+    required_unit = "mg/dL",
+    get_unit_expr = !!get_unit_expr
+  )
+  assert_unit(
+    dataset,
+    cholhdl_code,
+    required_unit = "mg/dL",
+    get_unit_expr = !!get_unit_expr
+  )
 
   analysis_value <- expr(
     compute_framingham(
@@ -218,9 +229,14 @@ derive_param_framingham <- function(dataset,
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
-    by_vars = quo_c(vars(!!!by_vars, PARAMCD, AVAL),
-                    enquo(age), enquo(sex), enquo(smokefl),
-                    enquo(diabetfl), enquo(trthypfl)),
+    by_vars = quo_c(
+      vars(!!!by_vars, PARAMCD, AVAL),
+      enquo(age),
+      enquo(sex),
+      enquo(smokefl),
+      enquo(diabetfl),
+      enquo(trthypfl)
+    ),
     analysis_value = !!analysis_value,
     set_values_to = set_values_to
   )
@@ -323,10 +339,10 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
   assert_numeric_vector(chol)
   assert_numeric_vector(cholhdl)
   assert_numeric_vector(age)
-  assert_character_vector(sex, values=c("M","F"))
-  assert_character_vector(smokefl, values=c("Y","N"))
-  assert_character_vector(diabetfl, values=c("Y","N"))
-  assert_character_vector(trthypfl, values=c("Y","N"))
+  assert_character_vector(sex, values = c("M", "F"))
+  assert_character_vector(smokefl, values = c("Y", "N"))
+  assert_character_vector(diabetfl, values = c("Y", "N"))
+  assert_character_vector(trthypfl, values = c("Y", "N"))
 
   aval <- case_when(
     sex == "F" ~

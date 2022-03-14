@@ -14,7 +14,7 @@ input <- tibble::tribble(
     "01-701-1028", "CHOLHDL","Cholesteral/HDL-Cholesterol (mg/dL)",44.62, "mg/dL",     "WEEK 2",   55,   "M",  "Y",      "Y",       "Y"
   )
 
-test_that("new observations are derived correctly", {
+test_that("New observations are derived correctly", {
   new_obs <- select(filter(input, PARAMCD == "SYSBP"), USUBJID, VISIT, AVAL, AVALU, AGE, SEX, SMOKEFL, DIABETFL, TRTHYPFL) %>%
     rename(AVAL_SYSBP = AVAL) %>%
     left_join(select(filter(input, PARAMCD == "CHOL"), USUBJID, VISIT, AVAL), by = c("USUBJID", "VISIT")) %>%
