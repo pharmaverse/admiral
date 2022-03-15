@@ -256,6 +256,25 @@ dataset_vignette(adex,
                  display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO))
 ```
 
+It may be of additional interest to turn a single record containing dosing
+summary information into a set of multiple single records, each representing a
+single dose over the interval specified by the summary record. This is another
+approach to deriving a total dose parameter when `EXDOSFRQ != ONCE`.
+
+The function `create_single_dose_dataset()` can 
+be used to expand a record containing a start date, an end date, and a dosing
+frequency to a corresponding set of records each representing one dose (i.e.
+`EXDOSFRQ == "ONCE"`).
+
+```{r eval=TRUE, echo=TRUE}
+single_dose <- adex %>%
+  filter(USUBJID=="01-701-1015" & PARAMCD=="DOSE" & EXSTDY==1) %>%
+  create_single_dose_dataset()
+
+dataset_vignette(single_dose, 
+                 display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
+
+```
 
 ## Create 1:1 mapping records {#onetoone}
 
