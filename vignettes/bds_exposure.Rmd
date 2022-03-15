@@ -268,7 +268,7 @@ frequency to a corresponding set of records each representing one dose (i.e.
 
 ```{r eval=TRUE, echo=TRUE}
 single_dose <- adex %>%
-  filter(USUBJID=="01-701-1015" & PARAMCD=="DOSE" & EXSTDY==1) %>%
+  filter(USUBJID=="01-701-1015" & EXSTDY==1) %>%
   create_single_dose_dataset()
 
 dataset_vignette(single_dose, 
