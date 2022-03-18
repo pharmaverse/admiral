@@ -20,7 +20,7 @@
 #'
 #' A variable name is expected (e.g. `DCSREAS`).
 #'
-#' @param reason_var The variable used to derive the disposition reason
+#' @param reason_var The variable used to derive the disposition reasons
 #'
 #' A variable name is expected (e.g. `DSDECOD`).
 #'
