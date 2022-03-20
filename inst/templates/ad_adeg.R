@@ -125,7 +125,9 @@ adeg <- adeg %>%
     AVALC = EGSTRESC
   ) %>%
 
-  # Derive new parameters based on existing records.
+  # Derive new parameters based on existing records. Note that, for the following
+  # four derive_param_* functions, only the variables specified in `by_vars` will
+  # be populated in the newly created records.
   # Derive RRR
   derive_param_rr(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),

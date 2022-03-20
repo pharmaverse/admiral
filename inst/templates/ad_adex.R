@@ -95,7 +95,9 @@ adex <- bind_rows(
   mutate(PARCAT1 = "INDIVIDUAL")
 
   # Part 3
-  # Derive summary parameters
+  # Derive summary parameters. Note that, for the functions `derive_param_exposure`,
+  # `derive_param_doseint` and `derive_derived_param`, only the variables specified
+  # in `by_vars` will be populated in the newly created records.
 adex <- adex %>%
   # Overall exposure
   call_derivation(
