@@ -34,7 +34,8 @@
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` an observation is added to the output
-#'   dataset.
+#'   dataset. Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
 #'
 #'   *Permitted Values:* list of variables
 #'

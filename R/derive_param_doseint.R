@@ -17,6 +17,9 @@
 #'
 #' @param by_vars Grouping variables
 #'
+#'   Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
+#'
 #'   Permitted Values: list of variables
 #'
 #' @param tadm_code Total Doses Administered parameter code
