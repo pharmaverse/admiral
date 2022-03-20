@@ -283,11 +283,13 @@ dataset_vignette(
 
 ## Derive Additional Parameters (e.g. `BSA`, `BMI` or `MAP` for `ADVS`) {#derive_param}
 
-Optionally derive new parameters creating `PARAMCD` and `AVAL`. Below is an
-example of creating `Mean Arterial Pressure` for `ADVS`, see also Example 3 in 
-section below [Derive New Rows](#additional) for alternative way of creating new
-parameters.
+Optionally derive new parameters creating `PARAMCD` and `AVAL`. Note that only
+variables specified in the `by_vars` argument will be populated in the newly 
+created records. This is relevant to the functions `derive_param_map`, 
+`derive_param_bsa`, `derive_param_bmi`, and `derive_param_qtc`. 
 
+Below is an example of creating `Mean Arterial Pressure` for `ADVS`, see also 
+Example 3 in section below [Derive New Rows](#additional) for alternative way of creating new parameters.
 
 ```{r eval=TRUE}
 advs <- derive_param_map(
@@ -860,9 +862,12 @@ dataset_vignette(
 
 ### Example 3 (Deriving a New `PARAMCD`)
 
-Use function `derive_derived_param()` to create a new `PARAMCD`. Below is an
-example of creating `Mean Arterial Pressure` (`PARAMCD = MAP2`) with an 
-alternative formula.
+Use function `derive_derived_param()` to create a new `PARAMCD`. Note that only
+variables specified in the `by_vars` argument will be populated in the newly 
+created records. 
+
+Below is an example of creating `Mean Arterial Pressure` 
+(`PARAMCD = MAP2`) with an alternative formula.
 
 ```{r eval=TRUE}
 advs_ex3 <- derive_derived_param(

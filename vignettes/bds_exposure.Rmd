@@ -237,8 +237,8 @@ dataset_vignette(adex,
 ```
 
 
-Please refer to the `derive_vars_duration()` documentation for detailed information on 
-the input parameters.
+Please refer to the `derive_vars_duration()` documentation for detailed information 
+on the input parameters.
 
 It may be necessary to calculate additional intermediate values.  For example, 
 the cumulative doses received and cumulative planned doses may be calculated as:
@@ -325,7 +325,7 @@ adex %>%
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`, `APERIOD`,
 `AVISIT`, etc.). For these types of calculations, the `derive_param_exposure()`
 function may be used. In addition to creating a summarized `AVAL`, the function
-will also compute minimum and maximum dates for the record.
+will also compute minimum and maximum dates for the record. 
 
 For example, to calculate the total dose by subject and treatment,
 
@@ -356,7 +356,8 @@ adex <- filter(adex, PARAMCD != "TDOSE")
 A record with `PARAMCD == "TDOSE"` is created with `PARCAT1` set to `"OVERALL"` using
 the records in `ADEX` where `PARAMCD == "DOSE"` by summing `AVAL`. In addition,
 the `ASTDT`, and `AENDT` are created as the minimum and
-maximum date/times associated with each `by_vars` grouping.
+maximum date/times associated with each `by_vars` grouping. Note that, in addition
+to `PARAMCD`, `PARCAT1`, `AVAL`, `ASTDT` and `AENDT`, only those variables specified in the `by_vars` argument will be populated in the new records.
 
 Multiple parameters (records) may be created at one time using the 
 `call_derivation()` function:
@@ -415,7 +416,8 @@ adex %>%
 
 Dose intensity can be calculated using the function `derive_param_doseint()`. The
 planned dose and administered dose are passed into the function and a new record
-is created with the dose intensity calculation.
+is created with the dose intensity calculation. Again, only those variables 
+specified in the `by_vars` argument will be populated in this new record.
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%

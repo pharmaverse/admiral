@@ -27,6 +27,9 @@ parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 
 \item{by_vars}{Grouping variables
 
+Only variables specified in \code{by_vars} will be populated
+in the newly created records.
+
 Permitted Values: list of variables}
 
 \item{method}{Method used to QT correction

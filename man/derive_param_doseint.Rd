@@ -26,6 +26,9 @@ parameter) and to the parameters specified by \code{tadm_code} and \code{padm_co
 
 \item{by_vars}{Grouping variables
 
+Only variables specified in \code{by_vars} will be populated
+in the newly created records.
+
 Permitted Values: list of variables}
 
 \item{set_values_to}{Variables to be set
