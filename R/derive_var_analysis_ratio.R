@@ -1,27 +1,28 @@
-#' Ratio Derivations
+#' Derive Ratio Variable
 #'
-#' Derives a ratio variable for the adlb dataset, e.g Ratio to Baseline, Ratio
-#' to Analysis Range y Lower Limit or Ratio to Analysis Range y Upper Limit.
+#' Derives a ratio variable for a BDS dataset, e.g Ratio to Baseline `"AVAL / BASE"`,
+#'  Ratio to Analysis Range y Lower Limit `"AVAL / AyLO"`,  or Ratio to Analysis
+#'  Range y Upper Limit `"AVAL / AyHI"`.
 #'
 #' @param dataset Input dataset
 #'
 #' @param numer_var Variable containing values to be used in the numerator of
 #'  the ratio calculation.
 #'
-#' @param denom_var Variable containing values to be used in the numerator of the of
+#' @param denom_var Variable containing values to be used in the denominator of
 #'  the ratio calculation.
 #'
 #' @param ratio_var_suffix User supplied suffix to be concatenated with `"R2"`
 #'
-#' @param override_prefix A user wishing to remove the default prefix and supply
-#'  their own complete new variable can set this to TRUE.
+#' @param override A user wishing to remove the default prefix and supply
+#'  their own completely new variable can set this to TRUE.
 #'
 #'  Default is `"FALSE"`.
 #'
 #' @param new_var Name of the new ratio variable being created.
 #'
-#' @details
-#'
+#' @details Reference CDISC ADaM Implementation Guide Version 1.1
+#' Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
 #' @author Ben Straub
 #'
@@ -46,15 +47,15 @@
 #')
 #'
 #' data %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, ratio_var = BASE) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, ratio_var = ANR1LO) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, ratio_var = ANR1HI)
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, ratio_var_suffix = "BASE") %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, ratio_var_suffix = "ANR1LO") %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, ratio_var_suffix = "ANR1HI")
 #'
 derive_var_analysis_ratio <- function(dataset,
                                       numer_var,
                                       denom_var,
                                       ratio_var_suffix,
-                                      override_prefix = FALSE,
+                                      override = FALSE,
                                       new_var
                                       ) {
   numer_var <- assert_symbol(enquo(numer_var))
@@ -63,7 +64,7 @@ derive_var_analysis_ratio <- function(dataset,
 
   assert_data_frame(dataset, required_vars = quo_c(numer_var, denom_var))
 
-  if(!override_prefix){
+  if(!override){
   r2 <- paste0("R2", ratio_var_suffix)
   dataset <- dataset %>%
     mutate(
