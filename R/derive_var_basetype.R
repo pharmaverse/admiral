@@ -1,6 +1,6 @@
 #' Derive BASETYPE Variable
 #'
-#' Baseline Type (BASETYPE) is needed when there is more than 1 definition of
+#' Baseline Type (BASETYPE) is needed when there is more than one definition of
 #' baseline for a given Analysis Parameter (PARAM) in the same dataset.  For a
 #' given parameter, if Baseline Value (BASE) is populated, and there is more than
 #' one definition of baseline, then BASETYPE must be non-null on all records of
