@@ -19,7 +19,7 @@ derive_var_analysis_ratio(
 \item{numer_var}{Variable containing values to be used in the numerator of
 the ratio calculation.}
 
-\item{denom_var}{Variable containing values to be used in the numerator of the of
+\item{denom_var}{Variable containing values to be used in the denominator of
 the ratio calculation.}
 
 \item{ratio_var_suffix}{User supplied suffix to be concatenated with \code{"R2"}}
@@ -41,7 +41,7 @@ Range y Upper Limit \code{"AVAL / AyHI"}.
 }
 \details{
 Reference CDISC ADaM Implementation Guide Version 1.1
-See section 3.3.4 Analysis Parameter Variables for BDS Datasets
+Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
