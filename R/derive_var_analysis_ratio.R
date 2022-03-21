@@ -39,40 +39,27 @@
 #')
 #'
 #' data %>%
-#'   derive_vars_analysis_ratio(ratio_vars = "high")
+#'   derive_var_analysis_ratio()
 #'
-derive_vars_analysis_ratio <- function(dataset,
-                                       soure_vars = vars(AVAL, BASE, ANRLO, ANRHI),
-                                       ratio_vars = "all") {
-  soure_vars <- assert_vars(soure_vars)
-  ratio_vars <- assert_character_scalar(ratio_vars)
+derive_var_analysis_ratio <- function(dataset,
+                                      numer_var,
+                                      denom_var,
+                                      ratio_var
+                                      ) {
+  numer_var <- assert_symbol(enquo(numer_var))
+  denom_var <- assert_symbol(enquo(denom_var))
+  ratio_var <- assert_symbol(enquo(ratio_var))
 
-  assert_data_frame(dataset, required_vars = quo_c(soure_vars))
+  assert_data_frame(dataset, required_vars = quo_c(numer_var, denom_var))
 
   dataset <- dataset %>%
     mutate(
-      R2BASE = if_else(!is.na(AVAL) & !is.na(BASE) & BASE != 0, AVAL / BASE, NA_real_),
-      R2ANRLO = if_else(!is.na(AVAL) & !is.na(ANRLO) & ANRLO != 0, AVAL / ANRLO, NA_real_),
-      R2ANRHI = if_else(!is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL / ANRHI, NA_real_)
-    )
-
-  # Remove High/Low Variables based on user-input
-  switch(ratio_vars,
-    all = {
-      dataset <- dataset %>%
-        select(everything(), R2BASE, R2ANRLO, R2ANRHI)
-    },
-
-    low = {
-      dataset <- dataset %>%
-        select(everything(), R2BASE, R2ANRLO, -R2ANRHI)
-    },
-
-    high = {
-      dataset <- dataset %>%
-        select(everything(), R2BASE, -R2ANRLO, R2ANRHI)
-    }
-  )
+      !!ratio_var := if_else(!is.na(!!numer_var) &
+                            !is.na(!!denom_var) &
+                            !!denom_var != 0,
+                            !!numer_var / !!denom_var,
+                            NA_real_),
+      )
 
   dataset
 }
