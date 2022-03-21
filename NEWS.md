@@ -15,6 +15,11 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
+- New functions for deriving first or last dates from multiple source datasets (#753):
+
+  - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
+  - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
@@ -23,6 +28,7 @@ values based on user-defined pairing (#944)
 
 ## Breaking Changes
 
+- `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 
 ## Documentation
 
