@@ -21,18 +21,18 @@ and the expressions are used to subset the input dataset.}
 The input dataset with variable \code{BASETYPE} added
 }
 \description{
-Baseline Type (BASETYPE) is needed when there is more than 1 definition of
-baseline for a given Analysis Parameter #'(PARAM) in the same dataset.  For a
-given parameter, if Baseline Value (BASE) is populated, and there is more than
-one definition of baseline, then BASETYPE must be non-null on all records of
-any type for that parameter. Each value of BASETYPE refers to a definition of
-baseline that characterizes the value of BASE on that row.  Please see
+Baseline Type \code{BASETYPE} is needed when there is more than one definition of
+baseline for a given Analysis Parameter \code{PARAM} in the same dataset.  For a
+given parameter, if Baseline Value \code{BASE} is populated, and there is more than
+one definition of baseline, then \code{BASETYPE} must be non-null on all records of
+any type for that parameter. Each value of \code{BASETYPE} refers to a definition of
+baseline that characterizes the value of \code{BASE} on that row.  Please see
 section 4.2.1.6 of the ADaM Implementation Guide, version 1.3 for further
 background.
 }
 \details{
 Adds the \code{BASETYPE} variable to a dataset and duplicates records based upon
-the provided conditions PLEASE ERASE PLEASE!
+the provided conditions.
 
 For each element of \code{basetypes} the input dataset is subset based upon
 the provided expression and the \code{BASETYPE} variable is set to the name of the
