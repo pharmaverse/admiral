@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.6.3
+Version: 0.7.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Alice", "Ehmann", role = "aut"),
@@ -40,18 +40,18 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: R (>= 3.5)
 Imports:
-    admiral.test,
     assertthat,
     dplyr,
+    hms,
     lubridate,
     magrittr,
     purrr,
     rlang,
     stringr,
-    hms,
     tidyr,
     tidyselect
 Suggests:
+    admiral.test,
     devtools,
     diffdf,
     lifecycle,

@@ -294,7 +294,7 @@ The customized mapping function `format_dcsreas()` can now be passed to the main
 
 ```{r eval=FALSE}
 adsl <- adsl %>%
-  derive_var_disposition_reason(
+  derive_vars_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
@@ -497,50 +497,53 @@ dataset_vignette(
 
 ## Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
 
-Similarly as for the cause of death (`DTHCAUS`), the last known alive date (`LSTALVDT`) can be
-derived from multiples sources and the user must ensure the sources (`lstalvdt_source`) are 
-correctly defined.
+Similarly as for the cause of death (`DTHCAUS`), the last known alive date
+(`LSTALVDT`) can be derived from multiples sources and the user must ensure the
+sources (`date_source()`) are correctly defined.
 
-`lstalvdt_source()` specifications:
+`date_source()` specifications:
 
 - `dataset_name`: the name of the dataset where to search for date information,
 - `filter`: the filter to apply on the datasets,
 - `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
-- `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
-sequence, variable)
+- `traceability_vars`: whether the traceability variables need to be added (e.g
+source domain, sequence, variable)
 
 An example could be :
 
 ```{r eval=TRUE}
-ae_src1 <- lstalvdt_source(
+ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST"
 )
-ae_src2 <- lstalvdt_source(
+ae_src2 <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST"
 )
-lb_src <- lstalvdt_source(
+lb_src <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
-adsl_src <- lstalvdt_source(
+adsl_src <- date_source(
   dataset_name = "adsl",
   date = TRTEDT
 )
 ```
 
-Once the sources are defined, the function `derive_var_lstalvdt()` can be used to derive `LSTALVDT`:
+Once the sources are defined, the function `derive_var_extreme_dt()` can be used
+to derive `LSTALVDT`:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_lstalvdt(
+  derive_var_extreme_dt(
+    new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    mode = "last"
   )
 ```
 
@@ -553,28 +556,28 @@ dataset_vignette(
 ```
 
 Similarly to `dthcaus_source()`, the traceability variables can be added by specifying the 
-`traceability_vars` argument in `lstalvdt_source()`.
+`traceability_vars` argument in `date_source()`.
 
 ```{r eval=TRUE}
-ae_src1 <- lstalvdt_source(
+ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
-ae_src2 <- lstalvdt_source(
+ae_src2 <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
-lb_src <- lstalvdt_source(
+lb_src <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
-adsl_src <- lstalvdt_source(
+adsl_src <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
@@ -582,9 +585,11 @@ adsl_src <- lstalvdt_source(
 
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
-  derive_var_lstalvdt(
+  derive_var_extreme_dt(
+    new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    mode = "last"
   )
 ```
 
@@ -682,6 +687,15 @@ dataset_vignette(
 
 ## Derive Other Variables  {#other}
 The users can add specific code to cover their need for the analysis.
+
+The following functions are helpful for many ADSL derivations:
+
+  - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
+  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
+  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
+  - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_character()` - Merge a Character Variable
 
 ## Add Labels and Attributes {#attributes}
 

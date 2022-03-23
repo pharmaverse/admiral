@@ -170,16 +170,16 @@ derive_param_exposure <- function(dataset,
     filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
 
   # add the dates for the derived parameters
-  by_vars <- vars2chr(by_vars)
   if (all(dtm)) {
     dates <- subset_ds %>%
-      group_by(!!!syms(by_vars)) %>%
+      group_by(!!!by_vars) %>%
       summarise(
         temp_start = min(ASTDTM, na.rm = TRUE),
         temp_end = max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
-      )
+      ) %>%
+      ungroup()
     expo_data <- add_data %>%
-      left_join(dates, by = by_vars) %>%
+      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
         ASTDTM = coalesce(as_iso_dtm(ASTDTM), as_iso_dtm(temp_start)),
         AENDTM = coalesce(as_iso_dtm(AENDTM), as_iso_dtm(temp_end))
@@ -193,17 +193,16 @@ derive_param_exposure <- function(dataset,
   }
   else {
     dates <- subset_ds %>%
-      group_by(!!!syms(by_vars)) %>%
+      group_by(!!!by_vars) %>%
       summarise(
         temp_start = min(ASTDT, na.rm = TRUE),
         temp_end = max(coalesce(AENDT, ASTDT), na.rm = TRUE)
-      )
-    expo_data <- add_data %>%
-      left_join(dates, by = by_vars) %>%
-      mutate(
-        ASTDT = coalesce(ASTDT, temp_start),
-        AENDT = coalesce(AENDT, temp_end)
       ) %>%
+      ungroup()
+    expo_data <- add_data %>%
+      derive_vars_merged(dataset_add = dates, by = by_vars) %>%
+      mutate(ASTDT = coalesce(ASTDT, temp_start),
+             AENDT = coalesce(AENDT, temp_end)) %>%
       select(-starts_with("temp_"))
   }
 

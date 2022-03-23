@@ -18,11 +18,13 @@
 #'
 #' @param dataset Input dataset.
 #'
-#' @param dataset_queries A data.frame containing required columns `VAR_PREFIX`,
+#' @param dataset_queries A dataset containing required columns `VAR_PREFIX`,
 #' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns
 #' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
 #'
 #'   The content of the dataset will be verified by [assert_valid_queries()].
+#'
+#'   `create_query_data()` can be used to create the dataset.
 #'
 #' @author Ondrej Slama, Shimeng Huang
 #'
@@ -30,7 +32,7 @@
 #'
 #' @keywords adae adcm derivation
 #'
-#' @seealso [assert_valid_queries()]
+#' @seealso [create_query_data()] [assert_valid_queries()]
 #'
 #' @export
 #'
@@ -149,7 +151,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     ungroup()
 
   # join queries to input dataset
-  left_join(dataset, joined, by = static_cols) %>%
+  derive_vars_merged(dataset, dataset_add = joined, by_vars = vars(!!!syms(static_cols))) %>%
     select(-starts_with("temp_"))
 }
 

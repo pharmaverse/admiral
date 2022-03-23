@@ -16,16 +16,34 @@ if required (e.g. \code{DSTERM}).}
 A \code{character} vector
 }
 \description{
-Define a function to map the disposition reason
+Define a function to map the disposition reason, to be used as a parameter in
+\code{derive_vars_disposition_reason()}.
 }
 \details{
 \code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not
 'COMPLETED' nor \code{NA}. \code{format_reason_default(DSDECOD, DSTERM)} returns
 \code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' nor \code{NA}.
-
-For example:\preformatted{DCSREAS = format_reason_default(DSDECOD)
-DCSREASP = format_reason_default(DSDECOD, DSTERM)
 }
+\examples{
+library(dplyr, warn.conflicts = FALSE)
+library(admiral.test)
+data("dm")
+data("ds")
+
+# Derive DCSREAS using format_reason_default
+dm \%>\%
+  derive_vars_disposition_reason(
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    format_new_vars = format_reason_default,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  ) \%>\%
+  select(STUDYID, USUBJID, DCSREAS)
+
+}
+\seealso{
+\code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
 }
 \author{
 Samia Kabi

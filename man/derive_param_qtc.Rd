@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_adeg_params.R
 \name{derive_param_qtc}
 \alias{derive_param_qtc}
-\title{Adds a Parameter for Corrected QT}
+\title{Adds a Parameter for Corrected QT (an ECG measurement)}
 \usage{
 derive_param_qtc(
   dataset,

@@ -1,3 +1,41 @@
+# admiral 0.7.0
+
+## New Features
+
+- New functions for merging variables (#607):
+
+  - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
+  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
+  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
+  - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_character()` - Merge a Character Variable
+
+- `create_query_data()` is provided to create the [queries
+dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
+`derive_vars_query()` (#606)
+
+- New functions for deriving first or last dates from multiple source datasets (#753):
+
+  - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
+  - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
+## Updates of Existing Functions
+
+
+## Breaking Changes
+
+- `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+
+## Documentation
+
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
+
+## Various
+
 # admiral 0.6.3
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raised after submitting v0.6.2 (#946)
@@ -5,7 +43,6 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raise
 # admiral 0.6.2
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/925) raised after submitting v0.6.1 (#925)
-
 
 # admiral 0.6.1
 
@@ -80,6 +117,8 @@ this case the day is imputed as `15` (#592)
 ## Various
 
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
+
+- Examples have been added for `format_reason_default`, `format_eoxxstt_default`, `extend_source_datasets` and `filter_date_sources` (#745)
 
 # admiral 0.5.0
 

@@ -30,6 +30,31 @@ dataset is replaced by the cartesian product of the source dataset and the
 by groups.
 }
 }
+\examples{
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate)
+
+adsl <- tibble::tribble(
+~USUBJID, ~TRTSDT,           ~EOSDT,
+  "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+  "02",     ymd("2021-01-16"), ymd("2021-02-03")
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+ae <- tibble::tribble(
+  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+  "01",     "2021-01-03T10:56", 1,      "Flu",
+  "01",     "2021-03-04",       2,      "Cough",
+  "01",     "2021",             3,      "Flu"
+) \%>\%
+  mutate(STUDYID = "AB42")
+
+extend_source_datasets(
+  source_datasets = list(adsl = adsl, ae = ae),
+  by_vars = vars(AEDECOD)
+)
+
+}
 \author{
 Stefan Bundfuss
 }

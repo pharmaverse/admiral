@@ -86,10 +86,11 @@ relevant `ADSL` would be added later.
 
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
 
-adae <- left_join(
+adae <- derive_vars_merged(
   ae,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by = vars(STUDYID, USUBJID)
 )
 ```
 
@@ -292,10 +293,14 @@ dataset_vignette(adae,
                                      TRTEMFL))
 ```
 
-To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single assessment date, we
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single occurrence date, we
 use `derive_var_ontrtfl()`.
 
 The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+
+If you wanted to additionally check an end date you could add the `end_date` argument.
+Note that in this case you could set `span_period = "Y"` if you wanted occurrences that started
+prior to drug intake and ongoing or ended after this time to be considered as on-treatment.
 
 ```{r eval=TRUE}
 bds1 <- tibble::tribble(
@@ -390,13 +395,15 @@ dataset_vignette(adae,
 
 ## Derive Query Variables {#query}
 
-It is necessary for the dictionary query information to be passed into this function in a particular format which is detailed in `derive_vars_query()` to an ADaM. 
+For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, or
+`CQzzNAM` the `derive_vars_query()` function can be used. As input it expects a
+queries dataset, which provides the definition of the queries. See [Queries
+dataset documentation](queries_dataset.html) for a detailed description ot the
+queries dataset. The `create_query_data()` function can be used to create
+queries datasets.
 
-For example, in ADAE, MedDRA SMQs and/or Customized Query variables may be needed. 
-
-This function expects the dictionary and/or lookup information to be provided as input in a standard structure.
-
-The expected result is the input dataset with query variables added: See also [Queries dataset documentation](queries_dataset.html).
+The following example shows how to derive query variables for Standardized MedDRA
+Queries (SMQs) in ADAE.
 
 ```{r, eval=TRUE}
 data("queries")
@@ -458,8 +465,9 @@ If needed, the other `ADSL` variables can now be added:
 
 ```{r eval=TRUE, echo=TRUE}
 adae <- adae %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 ```
