@@ -23,6 +23,7 @@ Authors@R: c(
     person("Andrew", "Smith", role = "aut"),
     person("Konstantina", "Koukourikou", role = "ctb"),
     person("Tom", "Ratford", role = "ctb"),
+    person("James", "Kim", email = "james.j.kim@pfizer.com", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
