@@ -14,26 +14,26 @@ dose_freq_lookup
 These pre-defined dose frequencies are sourced from
 \href{https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM\%20Terminology.pdf}{CDISC}. The
 number of rows to generate using \code{create_single_dose_dataset()} arguments
-\code{start_date} and \code{end_date} is derived from \code{DoseCount}, \code{DoseWindow}, and
-\code{ConversionFactor} with appropriate functions from \code{lubridate}.
+\code{start_date} and \code{end_date} is derived from \code{DOSE_COUNT}, \code{DOSE_WINDOW}, and
+\code{CONVERSION_FACTOR} with appropriate functions from \code{lubridate}.
 }
 \details{
-\code{NCICode} and \code{CDISCSubmissionValue} are included from the CDISC source for
+\code{NCI_CODE} and \code{CDISC_VALUE} are included from the CDISC source for
 traceability.
 
-\code{DoseCount} represents the number of doses received in one single unit of
-\code{DoseWindow}. For example, for \verb{CDISCSubmissionValue=="10 DAYS PER MONTH},
-\code{DoseWindow=="MONTH"} and \code{DoseCount==10}. Similarly, for
-\verb{CDISCSubmissionValue=="EVERY 2 WEEKS}, \code{DoseWindow=="WEEK"} and
-\code{DoseCount==0.5} (to yield one dose every two weeks).
+\code{DOSE_COUNT} represents the number of doses received in one single unit of
+\code{DOSE_WINDOW}. For example, for \verb{CDISC_VALUE=="10 DAYS PER MONTH},
+\code{DOSE_WINDOW=="MONTH"} and \code{DOSE_COUNT==10}. Similarly, for
+\verb{CDISC_VALUE=="EVERY 2 WEEKS}, \code{DOSE_WINDOW=="WEEK"} and
+\code{DOSE_COUNT==0.5} (to yield one dose every two weeks).
 
-\code{ConversionFactor} is used to convert \code{DoseWindow} units \code{"WEEK"},
+\code{CONVERSION_FACTOR} is used to convert \code{DOSE_WINDOW} units \code{"WEEK"},
 \code{"MONTH"}, and \code{"YEAR"} to the unit \code{"DAY"}.
 
-For example, for \verb{CDISCSubmissionValue=="10 DAYS PER MONTH}, \code{ConversionFactor}
+For example, for \verb{CDISC_VALUE=="10 DAYS PER MONTH}, \code{CONVERSION_FACTOR}
 is \code{0.0329}. One day of a month is assumed to be \code{1 / 30.4375} of a month (one
 day is assumed to be \code{1/365.25} of a year).
-Given only \code{start_date} and \code{end_date} in the aggregate dataset, \code{ConversionFactor}
+Given only \code{start_date} and \code{end_date} in the aggregate dataset, \code{CONVERSION_FACTOR}
 is used to calculate specific dates for\code{start_date} and \code{end_date} in the
 resulting single dose dataset for the doses that occur. In such cases, doses
 are assumed to occur at evenly spaced increments over the interval.

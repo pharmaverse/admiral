@@ -10,7 +10,7 @@ create_single_dose_dataset(
   start_date = ASTDT,
   end_date = AENDT,
   lookup_table = dose_freq_lookup,
-  lookup_column = CDISCSubmissionValue
+  lookup_column = CDISC_VALUE
 )
 }
 \arguments{
@@ -43,19 +43,20 @@ Default: \code{AENDT}}
 
 The table used to look up \code{dose_freq} values and determine the appropriate
 multiplier to be used for row generation. If a lookup table other than the
-default is used, it must have columns \code{DoseWindow}, \code{DoseCount}, and
-\code{ConversionFactor}
+default is used, it must have columns \code{DOSE_WINDOW}, \code{DOSE_COUNT}, and
+\code{CONVERSION_FACTOR}. The default table \code{dose_freq_lookup} is described in
+detail \link[=dose_freq_lookup]{here}.
 
 Default: \code{dose_freq_lookup}
 
-Permitted Values for \code{DoseWindow}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"}, \code{"WEEK"},
+Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"}, \code{"WEEK"},
 \code{"MONTH"}, \code{"YEAR"}}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
 
 The column of \code{lookup_table}.
 
-Default: \code{CDISCSubmissionValue} (column of \code{dose_freq_lookup})}
+Default: \code{CDISC_VALUE} (column of \code{dose_freq_lookup})}
 }
 \value{
 The input dataset with a single dose per row.
@@ -68,29 +69,34 @@ deriving a total dose parameter in \code{ADEX} when \code{EXDOSFRQ != ONCE}.
 \details{
 Each aggregate dose row is split into multiple rows which each represent
 a single dose.The number of completed dose periods between \code{start_date} and
-\code{end_date} is calculated with \code{compute_duration} and multiplied by \code{DoseCount}.
-For \code{DoseWindow} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"}, \code{ConversionFactor}
+\code{end_date} is calculated with \code{compute_duration} and multiplied by \code{DOSE_COUNT}.
+For \code{DOSE_WINDOW} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"}, \code{CONVERSION_FACTOR}
 is used to convert into days the time object to be added to \code{start_date}.
 }
 \examples{
+# Example with default lookup
+
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-  "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-07"),
-  "P01", "Q3D", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-15"),
-  "P01", "EVERY 2 WEEKS", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
+  "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
+  "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
+  "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
 )
 
 create_single_dose_dataset(data)
+
+# Example with custom lookup
+
 custom_lookup <- tibble::tribble(
-~Value,  ~DoseCount, ~DoseWindow, ~ConversionFactor,
-"Q30MIN", (1 / 30), "MINUTE", 1,
-"Q90MIN", (1 / 90), "MINUTE", 1
+  ~Value,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+  "Q30MIN", (1 / 30), "MINUTE", 1,
+  "Q90MIN", (1 / 90), "MINUTE", 1
 )
 
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-  "P01", "Q30MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T07:00:00"),
-  "P02", "Q90MIN", lubridate::ymd_hms("2021-01-01T06:00:00"), lubridate::ymd_hms("2021-01-01T09:00:00"),
+  "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
+  "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00")
 )
 
 create_single_dose_dataset(data,

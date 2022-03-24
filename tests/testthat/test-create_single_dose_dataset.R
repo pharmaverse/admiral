@@ -82,7 +82,7 @@ test_that("create_single_dose_dataset works for different treatments", {
 
 test_that("custom lookup works", {
   custom_lookup <- tibble::tribble(
-    ~Value,  ~DoseCount, ~DoseWindow, ~ConversionFactor,
+    ~VALUE,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
     "Q30MIN", (1 / 30), "MINUTE", 1,
     "Q90MIN", (1 / 90), "MINUTE", 1
   )
@@ -113,7 +113,7 @@ test_that("custom lookup works", {
 
   expect_equal(create_single_dose_dataset(input,
                              lookup_table = custom_lookup,
-                             lookup_column = Value,
+                             lookup_column = VALUE,
                              start_date = ASTDTM,
                              end_date = AENDTM),
                expected_output)
