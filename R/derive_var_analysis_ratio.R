@@ -54,25 +54,28 @@
 derive_var_analysis_ratio <- function(dataset,
                                       numer_var,
                                       denom_var,
-                                      ratio_var_suffix,
-                                      override = FALSE,
-                                      new_var) {
+                                      #ratio_var_suffix,
+                                      #override = FALSE,
+                                      new_var = NULL) {
   numer_var <- assert_symbol(enquo(numer_var))
   denom_var <- assert_symbol(enquo(denom_var))
 
   assert_data_frame(dataset, required_vars = quo_c(numer_var, denom_var))
 
-  if (!override) {
-    r2 <- paste0("R2", ratio_var_suffix)
-    dataset <- dataset %>%
-      mutate(
-        !!sym(r2) := if_else(!is.na(!!numer_var) &
-          !is.na(!!denom_var) &
-          !!denom_var != 0,
-        !!numer_var / !!denom_var,
-        NA_real_
+  if (is.null(new_var)) {
+
+    std_var_list <- list(BASE = "R2BASE", ANRLO = "R2ANRLO", ANRHI = "R2ANRHI")
+    std_var <-unlist(std_var_list[denom_var])
+
+      dataset <- dataset %>%
+        mutate(
+          !!sym(std_var) := if_else(!is.na(!!numer_var) &
+            !is.na(!!denom_var) &
+            !!denom_var != 0,
+          !!numer_var / !!denom_var,
+          NA_real_
+          )
         )
-      )
   } else {
     dataset <- dataset %>%
       mutate(
