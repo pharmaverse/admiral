@@ -13,7 +13,7 @@ params(...)
 An object of class \code{params}
 }
 \description{
-Create a set of variable parameters to be used in \code{\link[=call_derivation]{call_derivation()}}.
+Create a set of variable parameters/function arguments to be used in \code{\link[=call_derivation]{call_derivation()}}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -29,8 +29,32 @@ adae <-
     by_vars = vars(USUBJID)
   )
 
-## `params()` specifies the sets of arguments that are different for creating
-## each new variables
+## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
+adae \%>\%
+  derive_vars_dt(
+    new_vars_prefix = "AST",
+    dtc = AESTDTC,
+    date_imputation = "first",
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
+  ) \%>\%
+  derive_vars_dt(
+    new_vars_prefix = "AEN",
+    dtc = AEENDTC,
+    date_imputation = "last",
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
+  )
+
+## As shown above, the same values were assigned to arguments `min_dates` and `max_dates`,
+## whereas arguments `new_vars_prefix`, `dtc`, and `date_imputation` were assigned
+## with different values to derive variables `ASTDT` and `AENDT`.
+
+## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
+## one can add multiple variables in one go. `params()` is used to create a set of arguments
+## that are different from one another for each variable to be derived and form a `list` of
+## arguments for `variable_params` in `call_derivation()`. The function arguments that stay the
+## same among variables to be derived are specified outside `variable_params`.
 call_derivation(
   dataset = adae,
   derivation = derive_vars_dt,
@@ -42,11 +66,13 @@ call_derivation(
   max_dates = vars(TRTEDT)
 )
 
-params(
-  dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"
-)
+## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`
+## to derive variables `ASTDT` and `AENDT` separately at the beginning.
+}
+\seealso{
+\code{\link[=call_derivation]{call_derivation()}}
 }
 \author{
-Thomas Neitmann
+Thomas Neitmann, Tracey Wang
 }
 \keyword{source_specifications}
