@@ -20,6 +20,9 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
   - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
   - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
 
+- New function `derive_extreme_records()` for adding the first or last
+observation within each by group to the dataset (#1042)
+
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
