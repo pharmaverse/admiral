@@ -89,7 +89,8 @@ then the \code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases 
 the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{"Y"} above.
 
 If the \code{span_period} is specified as \code{"Y"}, this allows the user to assign \code{ONTRTFL} as \code{"Y"} to
-cases where the record started prior to the 'ref_start_date\verb{and was ongoing or ended after the}ref_end_date`.
+cases where the record started prior to the \code{ref_start_date} and
+was ongoing or ended after the \code{ref_start_date}.
 
 Any date imputations needed should be done prior to calling this function.
 }
