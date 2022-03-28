@@ -237,6 +237,8 @@ mutate(
 #' @examples
 #' # Example with default lookup
 #'
+#' library(lubridate)
+#'
 #' data <- tibble::tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
 #'   "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
@@ -332,11 +334,16 @@ create_single_dose_dataset <- function(dataset,
   time_flag <- nrow(dataset_part_2 %>%
                        filter(DOSE_WINDOW %in% c("MINUTE", "HOUR"))) > 0
 
-  if (time_flag) {
-    dataset_part_1 <- dataset_part_1 %>%
-      mutate(!!start_date := as_datetime(!!start_date),
-             !!end_date := as_datetime(!!end_date)
-             )
+
+  if (time_flag &
+      (is.Date(eval_tidy(start_date, dataset)) | is.Date(eval_tidy(end_date, dataset)))) {
+    err_msg <- paste0(
+      sprintf("%s involves hours or minutes but one of %s or %s is a date variable. ",
+              as.character(quo_get_expr(dose_freq)),
+              as.character(quo_get_expr(start_date)),
+              as.character(quo_get_expr(end_date))),
+      "\nPlease provide datetime variables for start_date and end_date arguments.")
+    abort(err_msg)
   }
 
   # Generate a row for each completed dose
@@ -360,16 +367,9 @@ create_single_dose_dataset <- function(dataset,
   # Adjust start_date and end_date, drop calculation columns, make sure nothing
   # later than end_date shows up in output
 
-  if (!time_flag) {
-     dataset_part_2 <- dataset_part_2 %>%
-      mutate(!!dose_freq := "ONCE",
-      !!start_date := as.Date(!!start_date + time_differential))
-  }
-  if (time_flag) {
-    dataset_part_2 <- dataset_part_2 %>%
-      mutate(!!dose_freq := "ONCE",
-      !!start_date := as.POSIXct(as_datetime(!!start_date) + time_differential))
-  }
+  dataset_part_2 <- dataset_part_2 %>%
+    mutate(!!dose_freq := "ONCE",
+    !!start_date := !!start_date + time_differential)
 
   dataset_part_2 <- dataset_part_2 %>%
     filter(!(!!start_date > !!end_date)) %>%

@@ -76,6 +76,8 @@ is used to convert into days the time object to be added to \code{start_date}.
 \examples{
 # Example with default lookup
 
+library(lubridate)
+
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
   "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
