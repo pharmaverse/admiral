@@ -296,10 +296,10 @@ create_single_dose_dataset <- function(dataset,
     unique()
 
   if (nrow(value_check) > 0) {
-    values_not_found <- str_c(value_check %>% select(!!dose_freq), collapse = ", ")
+    values_not_found <- paste0(value_check %>% select(!!dose_freq), collapse = ", ")
 
     err_msg <- paste0(
-      sprintf("The following values of %s in %s do not appear in %s:\\n",
+      sprintf("The following values of %s in %s do not appear in %s:\n",
               as.character(quo_get_expr(dose_freq)),
               arg_name(substitute(dataset)),
               arg_name(substitute(lookup_table))
