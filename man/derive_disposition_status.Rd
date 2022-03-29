@@ -68,7 +68,7 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 "ONGOING" otherwise).
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 \emph{Deprecated}, please use \code{derive_var_disposition_status()} instead.
 
