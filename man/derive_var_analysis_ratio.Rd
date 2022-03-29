@@ -4,14 +4,7 @@
 \alias{derive_var_analysis_ratio}
 \title{Derive Ratio Variable}
 \usage{
-derive_var_analysis_ratio(
-  dataset,
-  numer_var,
-  denom_var,
-  ratio_var_suffix,
-  override = FALSE,
-  new_var
-)
+derive_var_analysis_ratio(dataset, numer_var, denom_var, new_var = NULL)
 }
 \arguments{
 \item{dataset}{Input dataset}
@@ -22,22 +15,22 @@ the ratio calculation.}
 \item{denom_var}{Variable containing values to be used in the denominator of
 the ratio calculation.}
 
-\item{ratio_var_suffix}{User supplied suffix to be concatenated with \code{"R2"}}
+\item{new_var}{A new user-defined variable that will be appended to the dataset
+This will override the default variable  \code{"R2----"}.
 
-\item{override}{A user wishing to remove the default prefix and supply
-their own completely new variable can set this to TRUE.
-
-Default is \code{"FALSE"}.}
-
-\item{new_var}{Name of the new ratio variable being created.}
+Default is \code{"NULL"}.}
 }
 \value{
 The input dataset with a ratio variable appended
 }
 \description{
-Derives a ratio variable for a BDS dataset, e.g Ratio to Baseline \code{"AVAL / BASE"},
-Ratio to Analysis Range y Lower Limit \code{"AVAL / AyLO"},  or Ratio to Analysis
-Range y Upper Limit \code{"AVAL / AyHI"}.
+Derives a ratio variable for a BDS dataset.  The default behavior will take
+denominator variable and prefix it with \code{"R2"}.  For example, a user wishing to
+calculate a Ratio to Baseline, \code{"AVAL / BASE"} will have returned a new
+variable \verb{"R2BASE}. Ratio to Analysis Range Lower Limit \code{"AVAL / ANRLO"}
+will return a new variable \code{"R2ANRLO"}, and Ratio to Analysis Range  Upper
+Limit \code{"AVAL / ANRHI"} will return a new variable \code{"R2ANRLO"}. However, a user
+can override the default returned variables by using the \code{new_var} argument.
 }
 \details{
 Reference CDISC ADaM Implementation Guide Version 1.1
@@ -56,11 +49,17 @@ data <-tibble::tribble(
  "P02",    "ALB",     3,     37,    38,    33,     49
 )
 
+# Returns "R2" prefixed variables
 data \%>\%
- derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, ratio_var_suffix = "BASE") \%>\%
- derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, ratio_var_suffix = "ANR1LO") \%>\%
- derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, ratio_var_suffix = "ANR1HI")
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE) \%>\%
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO) \%>\%
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI)
 
+# Returns user-defined variables
+data \%>\%
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, new_var = R01BASE) \%>\%
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, new_var = R01ANRLO) \%>\%
+ derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, new_var = R01ANRHI)
 }
 \author{
 Ben Straub
