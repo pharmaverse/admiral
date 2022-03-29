@@ -85,6 +85,8 @@ globalVariables(c(
   "order3",
   "_unit",
   "temp_DT",
+  "temp_from_var",
+  "temp_to_var",
   "temp_match_flag",
   "tmp_analysis_date",
   "tmp_dose_date",
