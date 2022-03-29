@@ -23,7 +23,7 @@ datasets.
 }
 \details{
 \enumerate{
-\item The by groups are determined as the union of the by groups occuring in
+\item The by groups are determined as the union of the by groups occurring in
 the source datasets.
 \item For all source datasets which do not contain the by variables the source
 dataset is replaced by the cartesian product of the source dataset and the
