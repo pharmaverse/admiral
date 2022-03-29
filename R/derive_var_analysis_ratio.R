@@ -1,7 +1,7 @@
 #' Derive Ratio Variable
 #'
-#' Derives a ratio variable for a BDS dataset.  The default behavior will take
-#' denominator variable and prefix it with `"R2"`.  For example, a user wishing to
+#' Derives a ratio variable for a BDS dataset. The default behavior will take
+#' denominator variable and prefix it with `"R2"`. For example, a user wishing to
 #' calculate a Ratio to Baseline, `"AVAL / BASE"` will have returned a new
 #' variable `"R2BASE`. Ratio to Analysis Range Lower Limit `"AVAL / ANRLO"`
 #' will return a new variable `"R2ANRLO"`, and Ratio to Analysis Range  Upper
