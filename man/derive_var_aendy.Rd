@@ -28,7 +28,7 @@ The default is \code{AENDT}}
 The input dataset with \code{AENDY} column added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>}}{\strong{Questioning}}
 
 Adds the analysis end relative day (\code{AENDY}) to the dataset, i.e. study day
 of analysis end date

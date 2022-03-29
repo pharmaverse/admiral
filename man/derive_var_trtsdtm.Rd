@@ -27,7 +27,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
+Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXSTDTC) >= 10}
 
 Permitted Values: logical expression}
 
@@ -40,7 +40,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>}}{\strong{Questioning}}
 
 Derives datetime of first exposure to treatment (\code{TRTSDTM})
 }
