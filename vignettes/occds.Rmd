@@ -293,10 +293,14 @@ dataset_vignette(adae,
                                      TRTEMFL))
 ```
 
-To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single assessment date, we
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single occurrence date, we
 use `derive_var_ontrtfl()`.
 
 The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+
+If you wanted to additionally check an end date you could add the `end_date` argument.
+Note that in this case you could set `span_period = "Y"` if you wanted occurrences that started
+prior to drug intake and ongoing or ended after this time to be considered as on-treatment.
 
 ```{r eval=TRUE}
 bds1 <- tibble::tribble(
@@ -478,5 +482,5 @@ dataset_vignette(adae,
 
 ADaM | Sample Code
 ---- | --------------
-ADAE | [ad_adae.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
-ADCM | [ad_adcm.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}
+ADAE | [`ad_adae.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
+ADCM | [`ad_adcm.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}

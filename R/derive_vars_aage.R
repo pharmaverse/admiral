@@ -90,7 +90,7 @@ derive_vars_aage <- function(dataset,
 #'
 #' @author Michael Thorpe
 #'
-#' @return The input dataset with new_var paramater added in years.
+#' @return The input dataset with new_var parameter added in years.
 #'
 #' @export
 #'

@@ -27,8 +27,8 @@ function is involved.
 
 For example,
 \itemize{
-\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all AVAL
-values greater than mean of AVAL with in \code{by_vars}.
+\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
+values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
 }}

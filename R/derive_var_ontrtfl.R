@@ -65,8 +65,8 @@
 #' the `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
 #'
 #' If the `span_period` is specified as `"Y"`, this allows the user to assign `ONTRTFL` as `"Y"` to
-#' cases where the record started prior to the 'ref_start_date` and
-#' was ongoing or ended after the `ref_end_date`.
+#' cases where the record started prior to the `ref_start_date` and
+#' was ongoing or ended after the `ref_start_date`.
 #'
 #' Any date imputations needed should be done prior to calling this function.
 #'

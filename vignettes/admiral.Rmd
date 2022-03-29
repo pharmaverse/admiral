@@ -37,7 +37,7 @@ data("ex")
 ```{r, eval=TRUE}
 # derive treatment variables
 adsl <- dm %>%
-  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
+  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
   derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%

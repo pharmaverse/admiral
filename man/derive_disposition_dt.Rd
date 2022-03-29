@@ -17,7 +17,7 @@ derive_disposition_dt(
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{dataset_ds}{Datasets containing the disposition information (e.g.: ds)
+\item{dataset_ds}{Datasets containing the disposition information (e.g.: \code{ds})
 
 It must contain:
 \itemize{

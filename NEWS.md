@@ -15,14 +15,24 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
+- New functions for deriving first or last dates from multiple source datasets (#753):
+
+  - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
+  - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
 ## Updates of Existing Functions
 
 
 ## Breaking Changes
 
+- `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 
 ## Documentation
 
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
 
@@ -103,8 +113,6 @@ this case the day is imputed as `15` (#592)
 - New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
 - Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
-
-- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
 
