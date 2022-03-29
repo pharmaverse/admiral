@@ -45,8 +45,8 @@ test_that("Test 2: All Ratio Variables are Created while NAs present", {
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI, ~R2BASE, ~R2ANRLO, ~R2ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34, 1, 4.5, 0.794,
     "P01", "ALT", 2, 41, 27, 6, 34, 1.52, 6.83, 1.21,
-    "P01", "ALT", 3, NA_real_, 27, 6, 34, NA_real_, NA_real_, NA_real_,
-    "P02", "ALB", 1, 38, 38, 33, 49, 1, 1.15, 0.776,
+    "P01", "ALT", 3, NA_real_, 0, 0, 0, NA_real_, NA_real_, NA_real_,
+    "P02", "ALB", 1, 0, 0, 0, 0, NA_real_, NA_real_, NA_real_,
     "P02", "ALB", 2, 39, 38, 33, 49, 1.03, 1.18, 0.796,
     "P02", "ALB", 3, 37, 38, 33, 49, 0.974, 1.12, 0.755
   )
@@ -55,8 +55,8 @@ test_that("Test 2: All Ratio Variables are Created while NAs present", {
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34,
     "P01", "ALT", 2, 41, 27, 6, 34,
-    "P01", "ALT", 3, NA_real_, 27, 6, 34,
-    "P02", "ALB", 1, 38, 38, 33, 49,
+    "P01", "ALT", 3, NA_real_, 0, 0, 0,
+    "P02", "ALB", 1, 0, 0, 0, 0,
     "P02", "ALB", 2, 39, 38, 33, 49,
     "P02", "ALB", 3, 37, 38, 33, 49
   )
