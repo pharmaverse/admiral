@@ -22,18 +22,15 @@ test_that("Test 1: All Ratio Variables are Created", {
   actual_data <- data %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = BASE,
-      ratio_var_suffix = "BASE"
+      denom_var = BASE
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = ANRLO,
-      ratio_var_suffix = "ANRLO"
+      denom_var = ANRLO
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = ANRHI,
-      ratio_var_suffix = "ANRHI"
+      denom_var = ANRHI
     )
 
   expect_dfs_equal(expected_data,
@@ -67,18 +64,15 @@ test_that("Test 2: All Ratio Variables are Created while NAs present", {
   actual_data <- data %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = BASE,
-      ratio_var_suffix = "BASE"
+      denom_var = BASE
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = ANRLO,
-      ratio_var_suffix = "ANRLO"
+      denom_var = ANRLO
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
-      denom_var = ANRHI,
-      ratio_var_suffix = "ANRHI"
+      denom_var = ANRHI
     )
 
   expect_dfs_equal(expected_data,
@@ -114,20 +108,17 @@ test_that("Test 3: User can supply custom variable by invoking override = TRUE
     derive_var_analysis_ratio(
       numer_var = AVAL,
       denom_var = BASE,
-      override = TRUE,
-      new_var = "custom1"
+      new_var = custom1
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
       denom_var = ANRLO,
-      override = TRUE,
-      new_var = "custom2"
+      new_var = custom2
     ) %>%
     derive_var_analysis_ratio(
       numer_var = AVAL,
       denom_var = ANRHI,
-      override = TRUE,
-      new_var = "custom3"
+      new_var = custom3
     )
 
   expect_dfs_equal(expected_data,

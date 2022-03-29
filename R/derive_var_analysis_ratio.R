@@ -1,8 +1,12 @@
 #' Derive Ratio Variable
 #'
-#' Derives a ratio variable for a BDS dataset, e.g Ratio to Baseline `"AVAL / BASE"`,
-#'  Ratio to Analysis Range y Lower Limit `"AVAL / AyLO"`,  or Ratio to Analysis
-#'  Range y Upper Limit `"AVAL / AyHI"`.
+#' Derives a ratio variable for a BDS dataset.  The default behavior will take
+#' denominator variable and prefix it with `"R2"`.  For example, a user wishing to
+#' calculate a Ratio to Baseline, `"AVAL / BASE"` will have returned a new
+#' variable `"R2BASE`. Ratio to Analysis Range Lower Limit `"AVAL / ANRLO"`
+#' will return a new variable `"R2ANRLO"`, and Ratio to Analysis Range  Upper
+#' Limit `"AVAL / ANRHI"` will return a new variable `"R2ANRLO"`. However, a user
+#' can override the default returned variables by using the `new_var` argument.
 #'
 #' @param dataset Input dataset
 #'
@@ -12,14 +16,10 @@
 #' @param denom_var Variable containing values to be used in the denominator of
 #'  the ratio calculation.
 #'
-#' @param ratio_var_suffix User supplied suffix to be concatenated with `"R2"`
+#' @param new_var A new user-defined variable that will be appended to the dataset
+#' This will override the default variable  `"R2----"`.
 #'
-#' @param override A user wishing to remove the default prefix and supply
-#'  their own completely new variable can set this to TRUE.
-#'
-#'  Default is `"FALSE"`.
-#'
-#' @param new_var Name of the new ratio variable being created.
+#'  Default is `"NULL"`.
 #'
 #' @details Reference CDISC ADaM Implementation Guide Version 1.1
 #' Section 3.3.4 Analysis Parameter Variables for BDS Datasets
@@ -46,11 +46,17 @@
 #'  "P02",    "ALB",     3,     37,    38,    33,     49
 #')
 #'
+#' # Returns "R2" prefixed variables
 #' data %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, ratio_var_suffix = "BASE") %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, ratio_var_suffix = "ANR1LO") %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, ratio_var_suffix = "ANR1HI")
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE) %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO) %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI)
 #'
+#' # Returns user-defined variables
+#' data %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, new_var = R01BASE) %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, new_var = R01ANRLO) %>%
+#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, new_var = R01ANRHI)
 derive_var_analysis_ratio <- function(dataset,
                                       numer_var,
                                       denom_var,
