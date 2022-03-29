@@ -69,22 +69,13 @@ derive_var_analysis_ratio <- function(dataset,
 
   if (quo_is_null(new_var)) {
     new_var <- sym(paste0("R2", rlang::as_name(denom_var)))
-    dataset <- dataset %>%
-      mutate(
-        !!sym(new_var) := if_else(!!denom_var == 0,
-                                  NA_real_,
-                                  !!numer_var / !!denom_var
-        )
-      )
-  } else {
-    dataset <- dataset %>%
-      mutate(
-        !!new_var := if_else(!!denom_var == 0,
-                             NA_real_,
-                             !!numer_var / !!denom_var
-        )
-      )
-
   }
+  dataset <- dataset %>%
+    mutate(
+      !!new_var := if_else(!!denom_var == 0,
+        NA_real_,
+        !!numer_var / !!denom_var
+      )
+    )
   dataset
 }
