@@ -3,7 +3,7 @@ as_iso_dtm <- function(x, time_zone = "UTC") {
     dtm <- ymd_hms(x, tz = time_zone)
   } else {
     dtm <- x
-    if (is.null(attr(dtm, "tzone"))) {
+    if (is.null(attr(dtm, "tzone")) || attr(dtm, "tzone") == "") {
       attr(dtm, "tzone") <- time_zone
     }
   }

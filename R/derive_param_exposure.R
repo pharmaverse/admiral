@@ -181,8 +181,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = as_iso_dtm(coalesce(ASTDTM, temp_start)),
-        AENDTM = as_iso_dtm(coalesce(AENDTM, temp_end))
+        ASTDTM = coalesce(ASTDTM, temp_start),
+        AENDTM = coalesce(AENDTM, temp_end)
       ) %>%
       select(-starts_with("temp_"))
 
@@ -205,7 +205,16 @@ derive_param_exposure <- function(dataset,
       select(-starts_with("temp_"))
   }
 
-  bind_rows(dataset, expo_data)
+  all_data <- bind_rows(dataset, expo_data)
+  if (all(dtm)) {
+    mutate(
+      all_data,
+      ASTDTM = as_iso_dtm(ASTDTM),
+      AENDTM = as_iso_dtm(AENDTM)
+    )
+  } else {
+    all_data
+  }
 }
 
 #' Add an Aggregated Parameter and Derive the Associated Start and End Dates
