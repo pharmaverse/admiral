@@ -139,15 +139,12 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'     max_dates = vars(TRTEDT)
 #'   )
 #'
-#' ## As shown above, the same values were assigned to arguments `min_dates` and `max_dates`,
-#' ## whereas arguments `new_vars_prefix`, `dtc`, and `date_imputation` were assigned
-#' ## with different values to derive variables `ASTDT` and `AENDT`.
-#'
 #' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
-#' ## one can add multiple variables in one go. `params()` is used to create a set of arguments
-#' ## that are different from one another for each variable to be derived and form a `list` of
-#' ## arguments for `variable_params` in `call_derivation()`. The function arguments that stay the
-#' ## same among variables to be derived are specified outside `variable_params`.
+#' ## one can add multiple variables in one go.
+#' ## The function arguments which are different from a variable to another (e.g. `new_vars_prefix`,
+#' ## `dtc`, and `date_imputation`) are specified as a list of `params()` in the `variable_params`
+#' ## argument of `call_derivation()`. All other arguments which are common to all variables
+#' ## (e.g. `ASTDT` and `AENDT`) are specified outside of `variable_params` (i.e. in `...`).
 #' call_derivation(
 #'   dataset = adae,
 #'   derivation = derive_vars_dt,
