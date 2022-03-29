@@ -140,8 +140,7 @@ derive_param_exposure <- function(dataset,
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
   if (all(dtm)) {
     dates <- vars(ASTDTM, AENDTM)
-  }
-  else {
+  } else {
     dates <- vars(ASTDT, AENDT)
   }
 
