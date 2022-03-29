@@ -51,7 +51,7 @@ adae \%>\%
 ## The function arguments which are different from a variable to another (e.g. `new_vars_prefix`,
 ## `dtc`, and `date_imputation`) are specified as a list of `params()` in the `variable_params`
 ## argument of `call_derivation()`. All other arguments which are common to all variables
-## (e.g. `ASTDT` and `AENDT`) are specified outside of `variable_params` (i.e. in `...`).
+## (e.g. `min_dates` and `max_dates`) are specified outside of `variable_params` (i.e. in `...`).
 call_derivation(
   dataset = adae,
   derivation = derive_vars_dt,
