@@ -88,6 +88,11 @@ globalVariables(c(
   "temp_from_var",
   "temp_to_var",
   "temp_match_flag",
+  "temp_dose_freq",
+  "temp_new_dose_no",
+  "temp_num_of_doses",
+  "temp_dose_multiplier",
+  "temp_day_difference",
   "tmp_analysis_date",
   "tmp_dose_date",
   "tmp_seq_var",
@@ -99,10 +104,5 @@ globalVariables(c(
   "CONVERSION_FACTOR",
   "dose_periods",
   "grpseq",
-  "time_differential",
-  "temp_dose_freq",
-  "temp_new_dose_no",
-  "temp_num_of_doses",
-  "temp_dose_multiplier",
-  "temp_day_difference"
+  "time_differential"
 ))
