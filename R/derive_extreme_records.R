@@ -1,24 +1,10 @@
 #' Add the First or Last Observation for Each By Group as New Records
 #'
-#' Adds the first or last observation for each by group as new observations. It
+#' Add the first or last observation for each by group as new observations. It
 #' can be used for example for adding the maximum or minimum value as a separate
-#' visit.
-#'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `order` and the `by_vars` parameter are
-#'   expected.
-#'
-#' @param by_vars Grouping variables
-#'
-#'   *Permitted Values:* list of variables created by `vars()`
-#'
-#' @param order Sort order
-#'
-#'   Within each by group the observations are ordered by the specified order.
-#'
-#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
-#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
+#' visit. All variables of the selected observation are kept. This distinguish
+#' `derive_extreme_records()` from `derive_summary_records()`, where only the by
+#' variables are populated for the new records.
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -27,16 +13,6 @@
 #'   each by group is added to the input dataset.
 #'
 #'   *Permitted Values:* `"first"`, `"last"`
-#'
-#' @param check_type Check uniqueness?
-#'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the filtered input dataset are not unique with
-#'   respect to the by variables and the order.
-#'
-#'   *Default:* `"warning"`
-#'
-#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
 #' @param filter Filter for observations to consider
 #'
@@ -48,13 +24,8 @@
 #'
 #'   *Permitted Values*: a condition
 #'
-#' @param set_values_to Variables to be set
-#'
-#'   The specified variables are set to the specified values for the new
-#'   observations. For example `vars(DTYPE = "MINIMUM")` defines the derivation
-#'   type for the new observations.
-#'
-#'   *Permitted Values:* List of variable-value pairs
+#' @inheritParams filter_extreme
+#' @inheritParams derive_summary_records
 #'
 #' @details
 #'   1. The input dataset is restricted as specified by the `filter` parameter.
@@ -86,31 +57,38 @@
 #'   "2",      3,         95,   3
 #' )
 #'
-#' # Add a new visit for the minium value (first observation if not unique)
+#' # Add a new record for each USUBJID storing the minimum value (first AVAL).
+#' # If multiple records meet the minimum criterion, take the first value by
+#' # AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   by_vars = vars(USUBJID),
 #'   order = vars(AVAL, AVISITN),
 #'   mode = "first",
+#'   filter = !is.na(AVAL),
 #'   set_values_to = vars(
 #'     AVISITN = 97,
 #'     DTYPE = "MINIMUM"
 #'   )
 #' )
 #'
-#' # Add a new visit for the maxium value (first observation used if not unique)
+#' # Add a new record for each USUBJID storing the maximum value (last AVAL).
+#' # If multiple records meet the maximum criterion, take the first value by
+#' # AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   by_vars = vars(USUBJID),
 #'   order = vars(desc(AVAL), AVISITN),
 #'   mode = "first",
+#'   filter = !is.na(AVAL),
 #'   set_values_to = vars(
 #'     AVISITN = 98,
 #'     DTYPE = "MAXIMUM"
 #'   )
 #' )
 #'
-#' # Add a new visit for the last value
+#' # Add a new record for each USUBJID storing for the last value.
+#' # Set AVISITN = 99 and DTYPE = LOV for these new records.
 #' derive_extreme_records(
 #'   adlb,
 #'   by_vars = vars(USUBJID),

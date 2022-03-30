@@ -22,6 +22,8 @@ expected.}
 
 \item{by_vars}{Grouping variables
 
+\emph{Default}: \code{NULL}
+
 \emph{Permitted Values:} list of variables created by \code{vars()}}
 
 \item{order}{Sort order
@@ -42,10 +44,10 @@ each by group is added to the input dataset.
 \item{check_type}{Check uniqueness?
 
 If \code{"warning"} or \code{"error"} is specified, the specified message is issued
-if the observations of the filtered input dataset are not unique with
-respect to the by variables and the order.
+if the observations of the input dataset are not unique with respect to the
+by variables and the order.
 
-\emph{Default:} \code{"warning"}
+\emph{Default:} \code{"none"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 
@@ -62,19 +64,25 @@ specified, all observations are considered.
 \item{set_values_to}{Variables to be set
 
 The specified variables are set to the specified values for the new
-observations. For example \code{vars(DTYPE = "MINIMUM")} defines the derivation
-type for the new observations.
+observations.
 
-\emph{Permitted Values:} List of variable-value pairs}
+A list of variable name-value pairs is expected.
+\itemize{
+\item LHS refers to a variable.
+\item RHS refers to the values to set to the variable. This can be a string, a
+symbol, a numeric value or \code{NA}, e.g., \code{vars(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
+}}
 }
 \value{
 The input dataset with the first or last observation of each by group
 added as new observations.
 }
 \description{
-Adds the first or last observation for each by group as new observations. It
+Add the first or last observation for each by group as new observations. It
 can be used for example for adding the maximum or minimum value as a separate
-visit.
+visit. All variables of the selected observation are kept. This distinguish
+\code{derive_extreme_records()} from \code{derive_summary_records()}, where only the by
+variables are populated for the new records.
 }
 \details{
 \enumerate{
@@ -99,31 +107,38 @@ adlb <- tibble::tribble(
   "2",      3,         95,   3
 )
 
-# Add a new visit for the minium value (first observation if not unique)
+# Add a new record for each USUBJID storing the minimum value (first AVAL).
+# If multiple records meet the minimum criterion, take the first value by
+# AVISITN. Set AVISITN = 97 and DTYPE = MINIMUM for these new records.
 derive_extreme_records(
   adlb,
   by_vars = vars(USUBJID),
   order = vars(AVAL, AVISITN),
   mode = "first",
+  filter = !is.na(AVAL),
   set_values_to = vars(
     AVISITN = 97,
     DTYPE = "MINIMUM"
   )
 )
 
-# Add a new visit for the maxium value (first observation used if not unique)
+# Add a new record for each USUBJID storing the maximum value (last AVAL).
+# If multiple records meet the maximum criterion, take the first value by
+# AVISITN. Set AVISITN = 98 and DTYPE = MAXIMUM for these new records.
 derive_extreme_records(
   adlb,
   by_vars = vars(USUBJID),
   order = vars(desc(AVAL), AVISITN),
   mode = "first",
+  filter = !is.na(AVAL),
   set_values_to = vars(
     AVISITN = 98,
     DTYPE = "MAXIMUM"
   )
 )
 
-# Add a new visit for the last value
+# Add a new record for each USUBJID storing for the last value.
+# Set AVISITN = 99 and DTYPE = LOV for these new records.
 derive_extreme_records(
   adlb,
   by_vars = vars(USUBJID),

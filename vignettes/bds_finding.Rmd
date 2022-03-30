@@ -803,9 +803,9 @@ record and what computations must be done with the new records.
 
 ### Example 1 (Creating a New Record):
 
-For adding new records based on selecting a certain record
-`derive_extreme_records()` can be used. The new records include all variables of
-the selected records.
+To add a new record based on the selection of a certain criterion (e.g. minimum,
+maximum) `derive_extreme_records()` can be used. The new records include all
+variables of the selected records.
 
 #### Adding a New Record for the Last Value
 For each subject and Vital Signs parameter, add a record holding last valid
@@ -847,7 +847,7 @@ advs_ex1 <- advs %>%
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(AVAL, ADT, AVISITN, ATPTN),
     mode = "first",
-    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
     set_values_to = vars(
       AVISIT = "Minimum on Treatment",
       AVISITN = 98,
