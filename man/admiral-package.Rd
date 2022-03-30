@@ -38,6 +38,7 @@ Other contributors:
   \item Ross Farrugia [contributor]
   \item Konstantina Koukourikou [contributor]
   \item Tom Ratford [contributor]
+  \item James Kim \email{james.j.kim@pfizer.com} [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }
