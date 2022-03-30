@@ -1,28 +1,32 @@
 #' Derive Ratio Variable
 #'
-#' Derives a ratio variable for a BDS dataset. The default behavior will take
-#' denominator variable and prefix it with `"R2"`. For example, a user wishing to
-#' calculate a Ratio to Baseline, `"AVAL / BASE"` will have returned a new
-#' variable `"R2BASE`. Ratio to Analysis Range Lower Limit `"AVAL / ANRLO"`
-#' will return a new variable `"R2ANRLO"`, and Ratio to Analysis Range  Upper
-#' Limit `"AVAL / ANRHI"` will return a new variable `"R2ANRLO"`. However, a user
-#' can override the default returned variables by using the `new_var` argument.
+#' Derives a ratio variable for a BDS dataset based on user specified variables.
 #'
 #' @param dataset Input dataset
 #'
-#' @param numer_var Variable containing values to be used in the numerator of
+#' @param numer_var Variable containing numeric values to be used in the numerator of
 #'  the ratio calculation.
 #'
-#' @param denom_var Variable containing values to be used in the denominator of
+#' @param denom_var Variable containing numeric values to be used in the denominator of
 #'  the ratio calculation.
 #'
-#' @param new_var A new user-defined variable that will be appended to the dataset
-#' This will override the default variable  `"R2----"`.
+#' @param new_var A user-defined variable that will be appended to the dataset.
+#' The default behavior will take the denominator variable and prefix it with `R2`
+#' and append to the dataset. Using this argument will override this default behavior.
 #'
-#'  Default is `"NULL"`.
+#' Default is `NULL`.
 #'
-#' @details Reference CDISC ADaM Implementation Guide Version 1.1
-#' Section 3.3.4 Analysis Parameter Variables for BDS Datasets
+#' @details A user wishing to calculate a Ratio to Baseline, `AVAL / BASE` will
+#' have returned a new variable `R2BASE` that will be appended to the input dataset.
+#' Ratio to Analysis Range Lower Limit `AVAL / ANRLO` will return a new variable
+#' `"R2ANRLO"`, and Ratio to Analysis Range  Upper Limit `AVAL / ANRHI` will return
+#' a new variable `R2ANRLO`. Please note how the denominator variable has the prefix
+#' `R2----`. A user can override the default returned variables by using the
+#' `new_var` argument. Also, values of 0 in the denominator will return `NA` in
+#' the derivation.
+#'
+#' Reference CDISC ADaM Implementation Guide
+#' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
 #' @author Ben Straub
 #'
@@ -31,7 +35,6 @@
 #' @keywords adam bds adlb derivation
 #'
 #' @export
-#'
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

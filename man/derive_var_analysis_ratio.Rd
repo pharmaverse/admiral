@@ -9,32 +9,36 @@ derive_var_analysis_ratio(dataset, numer_var, denom_var, new_var = NULL)
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{numer_var}{Variable containing values to be used in the numerator of
+\item{numer_var}{Variable containing numeric values to be used in the numerator of
 the ratio calculation.}
 
-\item{denom_var}{Variable containing values to be used in the denominator of
+\item{denom_var}{Variable containing numeric values to be used in the denominator of
 the ratio calculation.}
 
-\item{new_var}{A new user-defined variable that will be appended to the dataset
-This will override the default variable  \code{"R2----"}.
+\item{new_var}{A user-defined variable that will be appended to the dataset.
+The default behavior will take the denominator variable and prefix it with \code{R2}
+and append to the dataset. Using this argument will override this default behavior.
 
-Default is \code{"NULL"}.}
+Default is \code{NULL}.}
 }
 \value{
 The input dataset with a ratio variable appended
 }
 \description{
-Derives a ratio variable for a BDS dataset.  The default behavior will take
-denominator variable and prefix it with \code{"R2"}.  For example, a user wishing to
-calculate a Ratio to Baseline, \code{"AVAL / BASE"} will have returned a new
-variable \verb{"R2BASE}. Ratio to Analysis Range Lower Limit \code{"AVAL / ANRLO"}
-will return a new variable \code{"R2ANRLO"}, and Ratio to Analysis Range  Upper
-Limit \code{"AVAL / ANRHI"} will return a new variable \code{"R2ANRLO"}. However, a user
-can override the default returned variables by using the \code{new_var} argument.
+Derives a ratio variable for a BDS dataset based on user specified variables.
 }
 \details{
-Reference CDISC ADaM Implementation Guide Version 1.1
-Section 3.3.4 Analysis Parameter Variables for BDS Datasets
+A user wishing to calculate a Ratio to Baseline, \code{AVAL / BASE} will
+have returned a new variable \code{R2BASE} that will be appended to the input dataset.
+Ratio to Analysis Range Lower Limit \code{AVAL / ANRLO} will return a new variable
+\code{"R2ANRLO"}, and Ratio to Analysis Range  Upper Limit \code{AVAL / ANRHI} will return
+a new variable \code{R2ANRLO}. Please note how the denominator variable has the prefix
+\verb{R2----}. A user can override the default returned variables by using the
+\code{new_var} argument. Also, values of 0 in the denominator will return \code{NA} in
+the derivation.
+
+Reference CDISC ADaM Implementation Guide
+Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
