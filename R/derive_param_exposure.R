@@ -205,15 +205,13 @@ derive_param_exposure <- function(dataset,
   }
 
   all_data <- bind_rows(dataset, expo_data)
+
   if (all(dtm)) {
-    mutate(
-      all_data,
-      ASTDTM = as_iso_dtm(ASTDTM),
-      AENDTM = as_iso_dtm(AENDTM)
-    )
-  } else {
-    all_data
+    attr(all_data$ASTDTM, "tzone") <- "UTC"
+    attr(all_data$AENDTM, "tzone") <- "UTC"
   }
+
+  all_data
 }
 
 #' Add an Aggregated Parameter and Derive the Associated Start and End Dates

@@ -53,8 +53,7 @@ test_that("new observations are derived correctly for AVAL", {
     ) %>%
     mutate(PARAMCD = "TADJ", PARCAT1 = "OVERALL", ASTDT = date(ASTDTM), AENDT = date(AENDTM))
 
-  expected_output <- bind_rows(input, new_obs1, new_obs2, new_obs3) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM), AENDTM = as_iso_dtm(AENDTM))
+  expected_output <- bind_rows(input, new_obs1, new_obs2, new_obs3)
 
   actual_output <- input %>%
     derive_param_exposure(
