@@ -332,8 +332,7 @@ derive_param_tte <- function(dataset = NULL,
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")
-  }
-  else {
+  } else {
     date_var <- sym("ADT")
     start_var <- sym("STARTDT")
   }
@@ -388,8 +387,8 @@ derive_param_tte <- function(dataset = NULL,
     }
   )
 
-  new_param <-
-    mutate(new_param, !!date_var := pmax(!!date_var, !!start_var)) %>%
+  new_param <- new_param %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
     select(-starts_with("temp_"))
 
   if (!is.null(by_vars)) {
@@ -402,7 +401,13 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   # add new parameter to input dataset #
-  bind_rows(dataset, new_param)
+  all_data <- bind_rows(dataset, new_param)
+
+  if (create_datetime) {
+    mutate(all_data, !!date_var := as_iso_dtm(!!date_var))
+  } else {
+    all_data
+  }
 }
 
 #' Select the First or Last Date from Several Sources
