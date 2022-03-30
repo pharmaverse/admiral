@@ -537,7 +537,7 @@ dataset_vignette(
 ## Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
-The parameter basetypes of this function requires a named list of expression 
+The parameter `basetypes` of this function requires a named list of expression 
 detailing how the `BASETYPE` should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
