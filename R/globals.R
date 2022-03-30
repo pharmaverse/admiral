@@ -92,6 +92,12 @@ globalVariables(c(
   "tmp_dose_date",
   "tmp_seq_var",
   "EXDOSFRQ",
-  "tmp_ldose_dt"
-
+  "tmp_ldose_dt",
+  "CDISC_VALUE",
+  "DOSE_WINDOW",
+  "DOSE_COUNT",
+  "CONVERSION_FACTOR",
+  "dose_periods",
+  "grpseq",
+  "time_differential"
 ))
