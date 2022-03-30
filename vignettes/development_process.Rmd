@@ -42,7 +42,7 @@ strategy](programming_strategy.html), and then make the required code updates.
 1. Assign a reviewer from the `{admiral}` core development team – this could be
 anyone you discussed the issue with previously via Slack or GitHub. If unsure,
 add a comment that the pull request is ready for review and add the
-`@pharmaverse/admiral-devs` tag to it.
+`@pharmaverse/admiral` tag to it.
 1. Once the review is completed, the reviewer will merge the PR and this will then automatically delete the feature branch.
 
 _Finally, just a note to say from the core developers that we hugely appreciate
