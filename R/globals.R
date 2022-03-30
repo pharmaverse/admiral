@@ -88,6 +88,10 @@ globalVariables(c(
   "tmp_dose_date",
   "tmp_seq_var",
   "EXDOSFRQ",
-  "tmp_ldose_dt"
-
+  "tmp_ldose_dt",
+  "temp_dose_freq",
+  "temp_new_dose_no",
+  "temp_num_of_doses",
+  "temp_dose_multiplier",
+  "temp_day_difference"
 ))
