@@ -1,13 +1,13 @@
 #' Open an ADaM Template Script
 #'
-#' Uses list_all_templates() to discover which templates are available
-#'
 #' @param adam_name An ADaM dataset name.
 #' @param save_path Path to save the script.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
 #' @param open Whether to open the script right away.
 #'
 #' @return No return values, called for side effects
+#'
+#' @details Use `list_all_templates()` to discover which templates are available
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
