@@ -78,6 +78,11 @@ reference:
   contents:
   - has_keyword('tte_source')
 
+- subtitle: Metadata
+  desc: Functions related to expanding or providing further context for other data
+  contents:
+  - has_keyword('metadata')
+
 - title: ADaM Datasets
 - contents:
   - adae

@@ -27,7 +27,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
+Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXSTDTC) >= 10}
 
 Permitted Values: logical expression}
 
