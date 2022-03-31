@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Once you’ve familiarised yourself with the `{admiral}` [contribution
+Once you’ve familiarized yourself with the `{admiral}` [contribution
 model](contribution_model.html) and you’re ready to make your first code
 contribution, this development process step-by-step guide will help tie all the
 other detailed vignettes together to give you the simplest experience of helping
@@ -25,7 +25,7 @@ to grow and enhance our codebase.
 issue to notify that you’d like to contribute code. Then one of the `{admiral}`
 core team will assign you to the issue.
 1. Create a new feature branch from the development branch `devel` following the naming convention and pull the latest changes - as detailed on the [github usage](git_usage.html#working-with-feature-branches-1) guide.
-1. Familiarise yourself with the `{admiral}` [programming
+1. Familiarize yourself with the `{admiral}` [programming
 strategy](programming_strategy.html), and then make the required code updates.
 1. Before making a pull request, check the [Pull Request Review Guidance](pr_review_guidance.html) & the following checklist of common things developers miss:
     a. Is all your code formatted according to the [tidyverse](https://style.tidyverse.org/) style guide?
@@ -42,7 +42,7 @@ strategy](programming_strategy.html), and then make the required code updates.
 1. Assign a reviewer from the `{admiral}` core development team – this could be
 anyone you discussed the issue with previously via Slack or GitHub. If unsure,
 add a comment that the pull request is ready for review and add the
-`@pharmaverse/admiral-devs` tag to it.
+`@pharmaverse/admiral` tag to it.
 1. Once the review is completed, the reviewer will merge the PR and this will then automatically delete the feature branch.
 
 _Finally, just a note to say from the core developers that we hugely appreciate

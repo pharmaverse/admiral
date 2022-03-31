@@ -26,6 +26,9 @@ No return values, called for side effects
 \description{
 Open an ADaM Template Script
 }
+\details{
+Use \code{list_all_templates()} to discover which templates are available
+}
 \examples{
 if (interactive()) {
   use_ad_template("adsl")

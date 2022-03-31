@@ -36,7 +36,7 @@
 #'   from `dataset_add` to the input dataset.
 #'
 #'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
-#'   `old_var2` from `dataset_add` and adds them to the input dataset renmaming
+#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
 #'   If the parameter is not specified or set to `NULL`, all variables from the

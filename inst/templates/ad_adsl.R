@@ -70,7 +70,7 @@ format_eoxxstt <- function(x) {
 
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
-  mutate(TRT01P = ARMCD, TRT01A = ARMCD) %>%
+  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
 
   # derive treatment start date (TRTSDTM)
   derive_var_trtsdtm(dataset_ex = ex) %>%
@@ -165,7 +165,7 @@ adsl <- adsl %>%
   ) %>%
 
   # Age group
-  derive_agegr_fda(
+  derive_var_agegr_fda(
     age_var = AGE,
     new_var = AGEGR1
   ) %>%

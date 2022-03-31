@@ -19,7 +19,7 @@
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
-#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')`
+#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXENDTC) >= 10`
 #'
 #'   Permitted Values: logical expression
 #'
