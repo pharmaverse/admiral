@@ -28,6 +28,8 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
+- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+from a BDS dataset, e.g. ADLB. (#943)
 
 ## Updates of Existing Functions
 
