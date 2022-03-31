@@ -23,4 +23,5 @@
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom lifecycle deprecate_warn deprecated
+#' @importFrom hms as_hms
 "_PACKAGE"
