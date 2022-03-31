@@ -31,7 +31,7 @@ Derives a ratio variable for a BDS dataset based on user specified variables.
 A user wishing to calculate a Ratio to Baseline, \code{AVAL / BASE} will
 have returned a new variable \code{R2BASE} that will be appended to the input dataset.
 Ratio to Analysis Range Lower Limit \code{AVAL / ANRLO} will return a new variable
-\code{"R2ANRLO"}, and Ratio to Analysis Range  Upper Limit \code{AVAL / ANRHI} will return
+\code{R2ANRLO}, and Ratio to Analysis Range  Upper Limit \code{AVAL / ANRHI} will return
 a new variable \code{R2ANRLO}. Please note how the denominator variable has the prefix
 \verb{R2----}. A user can override the default returned variables by using the
 \code{new_var} argument. Also, values of 0 in the denominator will return \code{NA} in

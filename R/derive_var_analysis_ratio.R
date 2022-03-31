@@ -19,7 +19,7 @@
 #' @details A user wishing to calculate a Ratio to Baseline, `AVAL / BASE` will
 #' have returned a new variable `R2BASE` that will be appended to the input dataset.
 #' Ratio to Analysis Range Lower Limit `AVAL / ANRLO` will return a new variable
-#' `"R2ANRLO"`, and Ratio to Analysis Range  Upper Limit `AVAL / ANRHI` will return
+#' `R2ANRLO`, and Ratio to Analysis Range  Upper Limit `AVAL / ANRHI` will return
 #' a new variable `R2ANRLO`. Please note how the denominator variable has the prefix
 #' `R2----`. A user can override the default returned variables by using the
 #' `new_var` argument. Also, values of 0 in the denominator will return `NA` in
