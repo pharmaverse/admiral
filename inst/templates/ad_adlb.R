@@ -200,6 +200,7 @@ adlb <- adlb %>%
 
 # Add RATIO derivations with new function??
 # R2BASE, R2ANRLO R2ANRHI
+# Needs to be deleted when derive_var_analysis_ratio() is merged (PR #1011)
 adlb <- adlb %>%
   mutate(
     R2BASE = if_else(
@@ -212,6 +213,21 @@ adlb <- adlb %>%
       !is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL / ANRLO, NA_real_
     )
   )
+
+# Uncomment when derive_var_analysis_ratio() is merged (PR #1011)
+# adlb <- adlb %>%
+#   derive_var_analysis_ratio(
+#     numer_var = AVAL,
+#     denom_var = BASE
+#   ) %>%
+#   derive_var_analysis_ratio(
+#     numer_var = AVAL,
+#     denom_var = ANRLO
+#   ) %>%
+#   derive_var_analysis_ratio(
+#     numer_var = AVAL,
+#     denom_var = ANRHI
+#   )
 
 # SHIFT derivation
 adlb <- adlb %>%
@@ -258,6 +274,46 @@ adlb <- adlb %>%
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   )
+
+# Get WBC
+# Uncomment when derive_param_wbc_abs() is merged (PR #1035)
+# adlb <- adlb %>%
+#   derive_param_wbc_abs(#dataset = input,
+#                        by_vars = vars(USUBJID, VISIT),
+#                        set_values_to = vars(PARAMCD = "LYMPHSI",
+#                                           DTYPE = "CALCULATION"),
+#                        filter_diff = LBSTRESU == "fraction of 1",
+#                        wbc_code = "WBC",
+#                        diff_code = "LYMLE")
+
+# Get extreme values
+# Uncomment when derive_extreme_records() is merged (PR #1044)
+# adlb <- adlb %>%
+#   derive_extreme_records(
+#   #input,
+#   order = vars(AVISITN, LBSEQ),
+#   by_vars = vars(USUBJID),
+#   mode = "last",
+#   set_values_to = vars(DTYPE = "MINIMUM")
+# )
+#
+# adlb <- adlb %>%
+#   derive_extreme_records(
+#     #input,
+#     order = vars(AVISITN, LBSEQ),
+#     by_vars = vars(USUBJID),
+#     mode = "last",
+#     set_values_to = vars(DTYPE = "MAXIMUM")
+#   )
+#
+# adlb <- adlb %>%
+#   derive_extreme_records(
+#     #input,
+#     order = vars(AVISITN, LBSEQ),
+#     by_vars = vars(USUBJID),
+#     mode = "last",
+#     set_values_to = vars(DTYPE = "LOV")
+#   )
 
 # Add all ADSL variables
 adlb <- adlb %>%
