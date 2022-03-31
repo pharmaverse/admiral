@@ -140,28 +140,33 @@ adsl <- dm %>%
   )
 
 # Last known alive date
-ae_start <- lstalvdt_source(
+ae_start <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first"
 )
-ae_end <- lstalvdt_source(
+ae_end <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first"
 )
-lb_date <- lstalvdt_source(
+lb_date <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10
 )
-adsl_date <- lstalvdt_source(dataset_name = "adsl", date = TRTEDT)
+adsl_date <- date_source(
+  dataset_name = "adsl",
+  date = TRTEDT
+)
 
 adsl <- adsl %>%
 
-  derive_var_lstalvdt(
+  derive_var_extreme_dt(
+    new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(ae = ae, lb = lb, adsl = adsl)
+    source_datasets = list(ae = ae, lb = lb, adsl = adsl),
+    mode = "last"
   ) %>%
 
   # Age group
