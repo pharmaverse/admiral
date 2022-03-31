@@ -20,7 +20,7 @@
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
-#' @importFrom tidyr spread gather drop_na
+#' @importFrom tidyr gather drop_na pivot_wider
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom lifecycle deprecate_warn deprecated
 #' @importFrom hms as_hms

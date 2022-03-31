@@ -96,13 +96,13 @@ derive_vars_query <- function(dataset, dataset_queries) {
   queries_wide <- dataset_queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
-    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_NAM, values_from = .data$QUERY_NAME) %>%
     mutate(VAR_PREFIX_CD = paste0(.data$VAR_PREFIX, "CD")) %>%
-    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_CD, values_from = .data$QUERY_ID) %>%
     mutate(VAR_PREFIX_SC = paste0(.data$VAR_PREFIX, "SC")) %>%
-    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)  %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_SC, values_from = .data$QUERY_SCOPE)  %>%
     mutate(VAR_PREFIX_SCN = paste0(.data$VAR_PREFIX, "SCN")) %>%
-    spread(.data$VAR_PREFIX_SCN, .data$QUERY_SCOPE_NUM) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_SCN, values_from = .data$QUERY_SCOPE_NUM) %>%
     select(-VAR_PREFIX) %>%
     # determine join column based on type of TERM_LEVEL
     # numeric -> TERM_ID, character -> TERM_NAME, otherwise -> error
@@ -111,7 +111,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
       TERM_NAME_ID = case_when(
         .data$tmp_col_type == "character" ~ .data$TERM_NAME,
         .data$tmp_col_type %in% c("double", "integer") ~ as.character(.data$TERM_ID),
-        TRUE ~ NA_character_)
+        TRUE ~ NA_character_
+      )
     )
 
   # throw error if any type of column is not character or numeric
