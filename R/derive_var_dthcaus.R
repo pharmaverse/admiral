@@ -93,7 +93,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 #'
-#' # Derive `DTHCAUS` and add traceability variables - including post-study deaths with different `DTHCAUS`
+#' # Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
