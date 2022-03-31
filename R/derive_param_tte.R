@@ -380,7 +380,13 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   # add new parameter to input dataset #
-  bind_rows(dataset, new_param)
+  all_data <- bind_rows(dataset, new_param)
+
+  if (create_datetime) {
+    mutate(all_data, !!date_var := as_iso_dtm(!!date_var))
+  } else {
+    all_data
+  }
 }
 
 #' Select the First or Last Date from Several Sources
@@ -573,7 +579,7 @@ filter_date_sources <- function(sources,
 #' datasets.
 #'
 #' @details
-#'   1. The by groups are determined as the union of the by groups occuring in
+#'   1. The by groups are determined as the union of the by groups occurring in
 #'   the source datasets.
 #'   1. For all source datasets which do not contain the by variables the source
 #'   dataset is replaced by the cartesian product of the source dataset and the

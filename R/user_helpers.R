@@ -7,6 +7,8 @@
 #'
 #' @return No return values, called for side effects
 #'
+#' @details Use `list_all_templates()` to discover which templates are available
+#'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
 #' @keywords user_utility

@@ -50,7 +50,7 @@ work as the safety net if they’re not run often.
 
 ### Tests Should Be Simple
 There are several techniques we can apply to have a high degree of confidence in
-the correctitude of our tests. One of those is to keep your tests with low 
+the correctness of our tests. One of those is to keep your tests with low 
 cyclomatic complexity. Cyclomatic complexity is a code metric that indicates the
 number of possible execution paths a given method can follow. A piece of code 
 with lower complexity is easier to understand and maintain, which means developers 

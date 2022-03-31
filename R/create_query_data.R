@@ -330,7 +330,7 @@ create_query_data <- function(queries,
 #'
 #' @param fun Access function
 #'
-#'   The access function nust be non null. Otherwise, an error is issued. The
+#'   The access function must be non null. Otherwise, an error is issued. The
 #'   function is called to retrieve the terms.
 #'
 #' @param queries Queries
