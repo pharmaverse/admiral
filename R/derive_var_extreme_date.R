@@ -39,7 +39,8 @@ derive_var_lstalvdt <- function(dataset,
     ...,
     source_datasets = source_datasets,
     mode = "last",
-    subject_keys = subject_keys)
+    subject_keys = subject_keys
+  )
 }
 
 #' Derive First or Last Datetime from Multiple Sources
@@ -209,10 +210,11 @@ derive_var_extreme_dtm <- function(dataset,
   assert_list_of(source_datasets, "data.frame")
   sources <- rlang::list2(...)
   assert_list_of(sources, "date_source")
-  mode <-
-    assert_character_scalar(mode,
-                            values = c("first", "last"),
-                            case_sensitive = FALSE)
+  mode <- assert_character_scalar(
+    mode,
+    values = c("first", "last"),
+    case_sensitive = FALSE
+  )
 
   source_names <- names(source_datasets)
   assert_list_element(
@@ -275,7 +277,8 @@ derive_var_extreme_dtm <- function(dataset,
       order = vars(!!new_var),
       mode = mode,
       check_type = "none"
-    )
+    ) %>%
+    mutate(!!new_var := as_iso_dtm(!!new_var))
 
   derive_vars_merged(dataset,
                      dataset_add = all_data,
