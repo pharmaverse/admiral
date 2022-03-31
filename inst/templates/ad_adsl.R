@@ -90,14 +90,14 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = SCRFDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
 
   derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
 
   # EOS status
@@ -106,7 +106,7 @@ adsl <- dm %>%
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   ) %>%
 
   # Last retrieval date
@@ -114,7 +114,7 @@ adsl <- dm %>%
     dataset_ds = ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+    filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
 
   # Death date - impute partial date to first day/month
@@ -170,13 +170,19 @@ adsl <- adsl %>%
     new_var = AGEGR1
   ) %>%
 
-  # Groupings, populations and others variables
+  # Safety population
+  derive_var_merged_exist_flag(
+    dataset_add = ex,
+    by_vars = vars(STUDYID, USUBJID),
+    new_var = SAFFL,
+    condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
+  ) %>%
+
+  # Groupings and others variables
   mutate(
     RACEGR1 = format_racegr1(RACE),
     REGION1 = format_region1(COUNTRY),
     LDDTHGR1 = format_lddthgr1(LDDTHELD),
-    FASFL = if_else(is.na(SCRFDT), "Y", "N"),
-    SAFFL = if_else(!is.na(TRTSDTM), "Y", "N"),
     DTH30FL = if_else(LDDTHGR1 == "<= 30", "Y", NA_character_),
     DTHA30FL = if_else(LDDTHGR1 == "> 30", "Y", NA_character_),
     DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
