@@ -22,4 +22,5 @@
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr spread gather drop_na
 #' @importFrom tidyselect all_of contains vars_select
+#' @importFrom lifecycle deprecate_warn deprecated
 "_PACKAGE"

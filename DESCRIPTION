@@ -43,6 +43,7 @@ Imports:
     assertthat,
     dplyr,
     hms,
+    lifecycle,
     lubridate,
     magrittr,
     purrr,
