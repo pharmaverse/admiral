@@ -343,7 +343,7 @@ Similarly, for `ADEG` domain, the parameters `QTCBF` `QTCBS` and `QTCL` can be
 created with a function call. See example below for `PARAMCD` = `QTCF`.
 
 ```{r eval=FALSE}
-adeg <- derive_param_qtcf(
+adeg <- derive_param_qtc(
   adeg,
   by_vars = vars(USUBJID, VISIT, ADT),
   set_values_to = vars(PARAMCD = "QTCFR")
