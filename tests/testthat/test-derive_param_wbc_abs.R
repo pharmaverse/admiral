@@ -43,7 +43,7 @@ test_that("Test when only one of WBC/differential is present", {
     "P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1", NA_character_,
     "P01",    "LYMLE",   70,   "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1", NA_character_,
     "P01",    "LYMLE",   80,   "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1", NA_character_,
-    "P01",    "LYMPH" , 26.6,  "Lymphocytes Abs (10^9/L)", "CYCLE 2 DAY 1", "CALCULATION"
+    "P01",    "LYMPH", 26.6,  "Lymphocytes Abs (10^9/L)", "CYCLE 2 DAY 1", "CALCULATION"
   )
 
   expect_equal(
