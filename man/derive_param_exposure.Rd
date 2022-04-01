@@ -67,7 +67,8 @@ More general expression are not allowed.
 }
 \value{
 The input dataset with a new record added for each group (with respect to the variables
-specified for the \code{by_vars} parameter).
+specified for the \code{by_vars} parameter). That is, a variable will only
+be populated in this new record if it is specified in \code{by_vars}.
 For each new record,
 \itemize{
 \item the variable specified \code{analysis_var} is computed as defined by \code{summary_fun},

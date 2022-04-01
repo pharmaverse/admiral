@@ -51,7 +51,8 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation adeg
 #'
@@ -259,7 +260,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation adeg
 #'

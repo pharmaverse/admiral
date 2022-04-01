@@ -91,7 +91,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter rows added
+The input dataset with the new parameter rows added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for the dose intensity for each by group

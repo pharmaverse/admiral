@@ -48,7 +48,8 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation advs
 #'
@@ -250,7 +251,8 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @author Eric Simms
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation advs
 #'
@@ -468,7 +470,8 @@ compute_bsa <- function(height = height,
 #'
 #' @author Pavan Kumar
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation advs
 #'

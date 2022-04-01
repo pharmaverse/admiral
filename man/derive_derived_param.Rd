@@ -84,7 +84,8 @@ derive the new parameter are specified for this parameter or the
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a parameter computed from the analysis value of other parameters. It is
