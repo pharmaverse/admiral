@@ -104,5 +104,7 @@ globalVariables(c(
   "CONVERSION_FACTOR",
   "dose_periods",
   "grpseq",
-  "time_differential"
+  "time_differential",
+  "temp_flag",
+  "temp_var"
 ))
