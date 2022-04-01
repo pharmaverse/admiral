@@ -8,7 +8,9 @@ derive_param_wbc_abs(
   dataset,
   by_vars,
   set_values_to,
-  filter_diff = LBSTRESU == "fraction of 1",
+  get_unit_expr,
+  wbc_unit = "10^9/L",
+  diff_unit = "fraction of 1",
   wbc_code = "WBC",
   diff_code
 )
@@ -16,11 +18,11 @@ derive_param_wbc_abs(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables specified by the \code{by_vars} argument are expected to be present.
+The variables specified by the \code{by_vars} argument, \code{PARAMCD}, and \code{AVAL}
+are expected to be present.
 
-The variable specified by \code{by_vars} and \code{LBTESTCD} must be a unique key of
-the input dataset after restricting it by the \code{filter_diff} condition,
-and to the parameters specified by \code{wbc_code} and \code{diff_code}.}
+The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
+the input dataset, and to the parameters specified by \code{wbc_code} and \code{diff_code}.}
 
 \item{by_vars}{Grouping variables
 
@@ -29,20 +31,27 @@ Permitted Values: list of variables}
 \item{set_values_to}{Variables to set
 
 A named list returned by \code{vars()} defining the variables to be set for the
-new parameter, e.g. \code{vars(PARAMCD = "LYMPHSI", PARAM = "Lymphocytes Abs (10^9/L) (SI Result)")} is
+new parameter, e.g. \code{vars(PARAMCD = "LYMPH", PARAM = "Lymphocytes Abs (10^9/L)")} is
 expected.}
 
-\item{filter_diff}{Filter condition to identify differential records
+\item{get_unit_expr}{An expression providing the unit of the parameter
 
-The specified condition is applied to the input dataset before deriving the
-new parameter, only the differential records specified by \code{diff_code} and satisfy the
-\code{filter_diff} condition are kept.
+The result is used to check the units of the input parameters.
 
-Default: \code{LBSTRESU == "fraction of 1"}}
+Permitted Values: a variable containing unit from the input dataset, or a function call
+(for example, \code{get_unit_expr = extract_unit(PARAM)}).}
+
+\item{wbc_unit}{A string containing the required unit of the WBC parameter.
+
+Default: \code{"10^9/L"}}
+
+\item{diff_unit}{A string containing the required unit of the lab differential parameter.
+
+Default: \code{"fraction of 1"}}
 
 \item{wbc_code}{White Blood Cell (WBC) parameter
 
-The observations where \code{LBTESTCD} equals the specified value are considered
+The observations where \code{PARAMCD} equals the specified value are considered
 as the WBC absolute results to use for converting the differentials.
 
 Default: \code{"WBC"}
@@ -51,9 +60,9 @@ Permitted Values: character value}
 
 \item{diff_code}{white blood differential parameter
 
-The observations where \code{LBTESTCD} equals the specified value are considered
-as the white blood differential lab results in percentage value (i.e. \code{LBSTRESU}
-is "fraction of 1") to be converted into absolute value.}
+The observations where \code{PARAMCD} equals the specified value are considered
+as the white blood differential lab results in percentage value to be converted
+into absolute value.}
 }
 \value{
 The input dataset with the new parameter added
@@ -63,7 +72,7 @@ Add a parameter by converting lab differentials from percentage to absolute valu
 }
 \details{
 The analysis value of the new parameter is derived as
-\deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}.
+\deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}
 New records are created for each group of records (grouped by \code{by_vars}) if 1) the white blood
 cell component in absolute value is not already available from the input dataset, and 2) the
 white blood cell absolute value (identified by \code{wbc_code}) and the white blood cell differential
@@ -72,25 +81,26 @@ white blood cell absolute value (identified by \code{wbc_code}) and the white bl
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 test_lb <- tibble::tribble(
-~USUBJID, ~LBTESTCD, ~LBSTRESN, ~LBSTRESU, ~VISIT,
-"P01",    "WBC",     33,   "10^9/L",       "CYCLE 1 DAY 1",
-"P01",    "WBC",     38,   "10^9/L",       "CYCLE 2 DAY 1",
-"P01",    "LYMLE",   90,   "fraction of 1", "CYCLE 1 DAY 1",
-"P01",    "LYMLE",   70,   "fraction of 1", "CYCLE 2 DAY 1",
-"P01",    "ALB",     36,   "g/L",           "CYCLE 2 DAY 1",
-"P02",    "WBC",     33,   "10^9/L",        "CYCLE 1 DAY 1",
-"P02",    "LYMPHSI", 29,   "10^9/L",        "CYCLE 1 DAY 1",
-"P02",    "LYMLE",   87,   "fraction of 1", "CYCLE 1 DAY 1",
-"P03",    "LYMLE",   89,   "fraction of 1", "CYCLE 1 DAY 1"
+~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
+"P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
+"P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1",
+"P01",    "LYMLE",   90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
+"P01",    "LYMLE",   70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
+"P01",    "ALB",     36,   "Albumin (g/dL)",                 "CYCLE 2 DAY 1",
+"P02",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
+"P02",    "LYMPH",   29,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
+"P02",    "LYMLE",   87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
+"P03",    "LYMLE",   89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
 )
 
 derive_param_wbc_abs (dataset = test_lb,
                       by_vars = vars(USUBJID, VISIT),
-                      set_values_to = vars(PARAMCD = "LYMPHSI",
-                                           PARAM = "Lymphocytes Abs (10^9/L) (SI Result)",
-                                           DTYPE = "CALCULATION",
-                                           AVALU = "10^9/L"),
-                      filter_diff = LBSTRESU == "fraction of 1",
+                      set_values_to = vars(
+                        PARAMCD = "LYMPH",
+                        PARAM = "Lymphocytes Abs (10^9/L)",
+                        DTYPE = "CALCULATION"
+                      ),
+                      get_unit_expr = extract_unit(PARAM),
                       wbc_code = "WBC",
                       diff_code = "LYMLE")
 }
