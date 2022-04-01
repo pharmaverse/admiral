@@ -144,7 +144,7 @@ adsl <- adsl %>%
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
     date_imputation = NULL
   )
 ```
@@ -186,7 +186,7 @@ adsl <- adsl %>%
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
 
@@ -230,7 +230,7 @@ adsl <- adsl %>%
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eosstt,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
 
@@ -256,7 +256,7 @@ adsl <- adsl %>%
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,
     reason_var_spe = DSTERM,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   )
 ```
 
@@ -614,7 +614,7 @@ To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA conven
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_agegr_fda(
+  derive_var_agegr_fda(
     age_var = AGE,
     new_var = AGEGR1
   )
@@ -664,16 +664,19 @@ dataset_vignette(
 
 ### Population Flags (e.g. `SAFFL`) {#popflag}
 
-Since the populations flags are mainly company/study specific and that it can easily be derived
-using an `if_else()` statement, `{admiral}` did not implement a functionality to assist with 
-populations flags.
+Since the populations flags are mainly company/study specific no dedicated functions are
+provided, but in most cases they can easily be derived using `derive_var_merged_exist_flag`.
 
-An example of a simple implementation could be:
+An example of an implementation could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  mutate(
-    SAFFL = if_else(!is.na(TRTSDT), "Y", NA_character_)
+
+  derive_var_merged_exist_flag(
+    dataset_add = ex,
+    by_vars = vars(STUDYID, USUBJID),
+    new_var = SAFFL,
+    condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   )
 ```
 
