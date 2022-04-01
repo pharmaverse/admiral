@@ -359,7 +359,7 @@ collected in  the `DS` form, the cause of death would be set to the disposition 
 To achieve this, the `dthcaus_source()` objects must be specified and defined such as it fits the 
 study requirement. 
 
-`dthcause_source()` specifications:
+`dthcaus_source()` specifications:
 
 - `dataset_name`: the name of the dataset where to search for death information,
 - `filter`: the condition to define death,
