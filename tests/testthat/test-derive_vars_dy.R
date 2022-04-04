@@ -218,7 +218,8 @@ test_that("derive_vars_dy Test7: All dates as --DTM", {
   )
 })
 
-test_that("An error is issued if source variables do not end in DT or DTM", {
+# derive_vars_dy Test 8----
+test_that("derive_vars_dy Test8: An error is issued if source variables do not end in DT or DTM", { # nolint
     datain <- tibble::tribble(
       ~STUDYID, ~USUBJID, ~TRTSDTW, ~ASTDTW, ~AENDTW,
       "TEST01", "PAT01", "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
