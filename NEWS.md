@@ -15,8 +15,6 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
-
-
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
 - New functions for deriving first or last dates from multiple source datasets (#753):
@@ -24,6 +22,8 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
   - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
   - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
 
+- New function `derive_extreme_records()` for adding the first or last
+observation within each by group to the dataset (#1042)
 
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
