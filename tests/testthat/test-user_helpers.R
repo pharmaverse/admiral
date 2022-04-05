@@ -16,3 +16,13 @@ test_that("package templates can be used", {
     readLines(file)
   )
 })
+
+test_that("Error Message is returned if no ADaM template is available", {
+  dir <- tempdir()
+  file <- file.path(dir, "adxx.R")
+  expect_error(
+    use_ad_template("adxx", save_path = file, open = FALSE),
+    "No template for 'ADXX' available."
+  )
+})
+
