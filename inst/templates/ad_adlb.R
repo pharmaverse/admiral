@@ -102,6 +102,17 @@ adlb <- lb %>%
 
   derive_var_ady(reference_date = TRTSDT, date = ADT)
 
+# Get WBC
+# Uncomment when derive_param_wbc_abs() is merged (PR #1035)
+# adlb <- adlb %>%
+#   derive_param_wbc_abs(#dataset = input,
+#                        by_vars = vars(USUBJID, VISIT),
+#                        set_values_to = vars(PARAMCD = "LYMPHSI",
+#                                           DTYPE = "CALCULATION"),
+#                        filter_diff = LBSTRESU == "fraction of 1",
+#                        wbc_code = "WBC",
+#                        diff_code = "LYMLE")
+
 adlb <- adlb %>%
 
   # Add PARAMCD PARAM and PARAMN - from LOOK-UP table
@@ -200,34 +211,19 @@ adlb <- adlb %>%
 
 # Add RATIO derivations with new function??
 # R2BASE, R2ANRLO R2ANRHI
-# Needs to be deleted when derive_var_analysis_ratio() is merged (PR #1011)
 adlb <- adlb %>%
-  mutate(
-    R2BASE = if_else(
-      !is.na(AVAL) & !is.na(BASE) & BASE != 0, AVAL / BASE, NA_real_
-    ),
-    R2ANRLO = if_else(
-      !is.na(AVAL) & !is.na(ANRLO) & ANRLO != 0, AVAL / ANRLO, NA_real_
-    ),
-    R2ANRHI = if_else(
-      !is.na(AVAL) & !is.na(ANRHI) & ANRHI != 0, AVAL / ANRLO, NA_real_
-    )
+  derive_var_analysis_ratio(
+    numer_var = AVAL,
+    denom_var = BASE
+  ) %>%
+  derive_var_analysis_ratio(
+    numer_var = AVAL,
+    denom_var = ANRLO
+  ) %>%
+  derive_var_analysis_ratio(
+    numer_var = AVAL,
+    denom_var = ANRHI
   )
-
-# Uncomment when derive_var_analysis_ratio() is merged (PR #1011)
-# adlb <- adlb %>%
-#   derive_var_analysis_ratio(
-#     numer_var = AVAL,
-#     denom_var = BASE
-#   ) %>%
-#   derive_var_analysis_ratio(
-#     numer_var = AVAL,
-#     denom_var = ANRLO
-#   ) %>%
-#   derive_var_analysis_ratio(
-#     numer_var = AVAL,
-#     denom_var = ANRHI
-#   )
 
 # SHIFT derivation
 adlb <- adlb %>%
@@ -265,6 +261,46 @@ adlb <- adlb %>%
     TRTA = TRT01A
   )
 
+# Get extreme values
+adlb <- adlb %>%
+  derive_extreme_records(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = vars(AVAL, ADT, AVISITN),
+    mode = "first",
+    filter = (!is.na(AVAL) & ONTRTFL == "Y"),
+    set_values_to = vars(
+      AVISITN = 9997,
+      AVISIT = "POST-BASELINE MINIMUM",
+      DTYPE = "MINIMUM"
+    )
+  )
+
+adlb <- adlb %>%
+  derive_extreme_records(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = vars(desc(AVAL), ADT, AVISITN),
+    mode = "first",
+    filter = (!is.na(AVAL) & ONTRTFL == "Y"),
+    set_values_to = vars(
+      AVISITN = 9998,
+      AVISIT = "POST-BASELINE MAXIMUM",
+      DTYPE = "MAXIMUM"
+    )
+  )
+
+adlb <- adlb %>%
+  derive_extreme_records(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    order = vars(ADT, AVISITN),
+    mode = "last",
+    filter = ONTRTFL == "Y",
+    set_values_to = vars(
+      AVISITN = 9999,
+      AVISIT = "POST-BASELINE LAST",
+      DTYPE = "LOV"
+    )
+  )
+
 # Get ASEQ
 adlb <- adlb %>%
   # Calculate ASEQ
@@ -274,46 +310,6 @@ adlb <- adlb %>%
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM),
     check_type = "error"
   )
-
-# Get WBC
-# Uncomment when derive_param_wbc_abs() is merged (PR #1035)
-# adlb <- adlb %>%
-#   derive_param_wbc_abs(#dataset = input,
-#                        by_vars = vars(USUBJID, VISIT),
-#                        set_values_to = vars(PARAMCD = "LYMPHSI",
-#                                           DTYPE = "CALCULATION"),
-#                        filter_diff = LBSTRESU == "fraction of 1",
-#                        wbc_code = "WBC",
-#                        diff_code = "LYMLE")
-
-# Get extreme values
-# Uncomment when derive_extreme_records() is merged (PR #1044)
-# adlb <- adlb %>%
-#   derive_extreme_records(
-#   #input,
-#   order = vars(AVISITN, LBSEQ),
-#   by_vars = vars(USUBJID),
-#   mode = "last",
-#   set_values_to = vars(DTYPE = "MINIMUM")
-# )
-#
-# adlb <- adlb %>%
-#   derive_extreme_records(
-#     #input,
-#     order = vars(AVISITN, LBSEQ),
-#     by_vars = vars(USUBJID),
-#     mode = "last",
-#     set_values_to = vars(DTYPE = "MAXIMUM")
-#   )
-#
-# adlb <- adlb %>%
-#   derive_extreme_records(
-#     #input,
-#     order = vars(AVISITN, LBSEQ),
-#     by_vars = vars(USUBJID),
-#     mode = "last",
-#     set_values_to = vars(DTYPE = "LOV")
-#   )
 
 # Add all ADSL variables
 adlb <- adlb %>%
