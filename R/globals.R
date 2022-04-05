@@ -105,6 +105,5 @@ globalVariables(c(
   "dose_periods",
   "grpseq",
   "time_differential",
-  "temp_flag",
-  "temp_var"
+  "temp_flag"
 ))

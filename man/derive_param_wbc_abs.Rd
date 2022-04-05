@@ -10,9 +10,9 @@ derive_param_wbc_abs(
   set_values_to,
   get_unit_expr,
   wbc_unit = "10^9/L",
-  diff_unit = "fraction of 1",
   wbc_code = "WBC",
-  diff_code
+  diff_code,
+  diff_type
 )
 }
 \arguments{
@@ -38,16 +38,12 @@ expected.}
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: a variable containing unit from the input dataset, or a function call
-(for example, \code{get_unit_expr = extract_unit(PARAM)}).}
+Permitted Values: a variable containing unit from the input dataset, or a function call,
+for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 
-\item{wbc_unit}{A string containing the required unit of the WBC parameter.
+\item{wbc_unit}{A string containing the required unit of the WBC parameter
 
 Default: \code{"10^9/L"}}
-
-\item{diff_unit}{A string containing the required unit of the lab differential parameter.
-
-Default: \code{"fraction of 1"}}
 
 \item{wbc_code}{White Blood Cell (WBC) parameter
 
@@ -63,6 +59,10 @@ Permitted Values: character value}
 The observations where \code{PARAMCD} equals the specified value are considered
 as the white blood differential lab results in percentage value to be converted
 into absolute value.}
+
+\item{diff_type}{A string specifying the type of differential
+
+Permitted Values: \code{"percent"}, \code{"fraction"}}
 }
 \value{
 The input dataset with the new parameter added
@@ -71,8 +71,12 @@ The input dataset with the new parameter added
 Add a parameter by converting lab differentials from percentage to absolute values
 }
 \details{
-The analysis value of the new parameter is derived as
+If \code{diff_type} is \code{"percent"}, the analysis value of the new parameter is derived as
 \deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}
+
+If \code{diff_type} is \code{"fraction"}, the analysis value of the new parameter is derived as
+\deqn{White Blood Cell Count  * Percentage Value}
+
 New records are created for each group of records (grouped by \code{by_vars}) if 1) the white blood
 cell component in absolute value is not already available from the input dataset, and 2) the
 white blood cell absolute value (identified by \code{wbc_code}) and the white blood cell differential
@@ -84,13 +88,13 @@ test_lb <- tibble::tribble(
 ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
 "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
 "P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1",
-"P01",    "LYMLE",   90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-"P01",    "LYMLE",   70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
+"P01",    "LYMLE",   0.90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
+"P01",    "LYMLE",   0.70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
 "P01",    "ALB",     36,   "Albumin (g/dL)",                 "CYCLE 2 DAY 1",
 "P02",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
 "P02",    "LYMPH",   29,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-"P02",    "LYMLE",   87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-"P03",    "LYMLE",   89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
+"P02",    "LYMLE",   0.87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
+"P03",    "LYMLE",   0.89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
 )
 
 derive_param_wbc_abs (dataset = test_lb,
@@ -102,7 +106,8 @@ derive_param_wbc_abs (dataset = test_lb,
                       ),
                       get_unit_expr = extract_unit(PARAM),
                       wbc_code = "WBC",
-                      diff_code = "LYMLE")
+                      diff_code = "LYMLE",
+                      diff_type = "fraction")
 }
 \author{
 Annie Yang
