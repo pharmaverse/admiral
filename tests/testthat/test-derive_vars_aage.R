@@ -162,3 +162,35 @@ test_that("derive_var_agegr_ema - works with age_unit missing and multiple units
     keys = "AGE"
   )
 })
+
+test_that("derive_var_age_years - Error is thrown when age_unit is not proper unit ", {
+  input <- data.frame(AGE = c(12, 24, 36, 48))
+  expect_error(
+    derive_var_age_years(input, AGE, age_unit = "month", new_var = AAGE),
+  "`age_unit` must be one of 'years', 'months', 'weeks', 'days', 'hours', 'minutes' or 'seconds' but is 'month'" # nolint
+  )
+})
+
+test_that("An Error is issued age_unit is missing", {
+  input <- data.frame(AGE = c(12, 24, 36, 48))
+  expect_error(
+    derive_var_age_years(input, AGE, new_var = AAGE)
+  )
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

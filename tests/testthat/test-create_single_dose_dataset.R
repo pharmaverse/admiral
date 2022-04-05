@@ -1,6 +1,3 @@
-context("test-create_single_dose_dataset")
-
-
 test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
   input <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
@@ -120,3 +117,16 @@ test_that("custom lookup works", {
 
 
 })
+
+test_that("Warning is returned when values in EXDOSFRQ do not appear in lookup table", {
+input <- tibble::tribble(
+  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+  "P01", "1", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"),
+  "P01", "1", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-12"),
+  "P01", "1", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
+)
+  expect_error(
+    create_single_dose_dataset(input))
+})
+
+

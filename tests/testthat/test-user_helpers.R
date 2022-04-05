@@ -26,3 +26,12 @@ test_that("Error Message is returned if no ADaM template is available", {
   )
 })
 
+test_that("Error Message is returned if ADaM template file already exists", {
+  dir <- tempdir()
+  file <- file.path(dir, "adsl.R")
+  use_ad_template("adsl", save_path = file, open = FALSE)
+
+  expect_error(
+    use_ad_template("adsl", save_path = file, open = FALSE)
+  )
+})

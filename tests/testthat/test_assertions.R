@@ -39,3 +39,62 @@ test_that("assert_filter_cond works as expected", {
     "`fc` must be a filter condition but is `\"string\"`"
   )
 })
+
+test_that("is_valid_sec_min works as expected", {
+  expect_true(is_valid_sec_min(59))
+})
+
+test_that("is_valid_hour  works as expected", {
+  expect_true(is_valid_hour(23))
+})
+
+test_that("`assert_data_frame` throws an error if not a dataframe", {
+  example_fun <- function(dataset) {
+    assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+  }
+  expect_error(
+    example_fun(c(1, 2, 3))
+  )
+})
+
+test_that("`assert_data_frame` throws an error if dataframe is grouped", {
+  example_fun <- function(dataset) {
+    assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
+  }
+
+  dm <- dm %>% group_by(ARMCD)
+
+  expect_error(
+    example_fun(dm)
+  )
+})
+
+test_that("`assert_character_scalar` throws an error if not a character scaler string", {
+example_fun2 <- function(msg_type) {
+  msg_type <- assert_character_scalar(msg_type,
+    values = c("warning", "error"), case_sensitive = FALSE
+  )
+
+  if (msg_type == "warning") {
+    print("A warning was requested.")
+  }
+}
+  expect_error(example_fun2(2))
+
+})
+
+test_that("`assert_character_scalar` throws an error if input is a vector", {
+
+  example_fun2 <- function(msg_type) {
+    msg_type <- assert_character_scalar(msg_type,
+                                        values = c("warning", "error"), case_sensitive = FALSE
+    )
+
+    if (msg_type == "warning") {
+      print("A warning was requested.")
+    }
+  }
+  expect_error(example_fun2(c("admiral", "admiralonco")))
+
+})
+
