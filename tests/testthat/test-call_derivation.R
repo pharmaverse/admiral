@@ -90,3 +90,94 @@ test_that("call_derivation works", {
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "AESEQ"))
 })
+
+
+test_that("Error is thrown if ... has no arguments", {
+
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+    left_join(adsl, by = "USUBJID")
+
+  expect_error(
+    call_derivation(
+      dataset = input,
+      derivation = derive_vars_dt,
+      variable_params = list(
+        params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+        params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+      )
+    ), "At least one argument must be set inside `...`")
+  })
+
+test_that("Error is thrown if ... arguments are not properly named", {
+
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+    left_join(adsl, by = "USUBJID")
+
+  expect_error(
+    call_derivation(
+      dataset = input,
+      derivation = derive_vars_dt,
+      variable_params = list(
+        params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+        params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+      ),
+      XYZSDT,
+      XYZEDT)
+    )
+})
+
+test_that("Error is thrown params is empty", {
+
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+    left_join(adsl, by = "USUBJID")
+
+  expect_error(
+    call_derivation(
+      dataset = input,
+      derivation = derive_vars_dt,
+      variable_params = list(
+        params(),
+        params()
+      ),
+      min_dates = vars(TRTSDT),
+      max_dates = vars(TRTEDT)
+  ), "At least one argument must be provided"
+  )
+})
+
+test_that("Error is thrown if passed params are not proprely named", {
+
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+    left_join(adsl, by = "USUBJID")
+
+  expect_error(
+    call_derivation(
+      dataset = input,
+      derivation = derive_vars_dt,
+      variable_params = list(
+        params(XYZ),
+        params(XYZ)
+      ),
+      min_dates = vars(TRTSDT),
+      max_dates = vars(TRTEDT)
+    ), "All arguments passed to `params()` must be named", fixed = TRUE
+  )
+})
+
+test_that("Error is thrown if ... arguments are not properly named", {
+
+  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+    left_join(adsl, by = "USUBJID")
+
+  expect_error(
+    call_derivation(
+      dataset = input,
+      derivation = derive_vars_dt,
+      variable_params = list(
+        params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+        params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+      ),
+      XYZSDT,
+      XYZEDT)
+  )
+})
