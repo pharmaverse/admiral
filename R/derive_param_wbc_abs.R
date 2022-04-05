@@ -84,7 +84,7 @@
 #' "P01",    "LYMLE",   0.70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
 #' "P01",    "ALB",     36,   "Albumin (g/dL)",                 "CYCLE 2 DAY 1",
 #' "P02",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-#' "P02",    "LYMPH",   29,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
+#' "P02",    "LYMPH",   29,   "Lymphocytes Abs (10^9/L)",       "CYCLE 1 DAY 1",
 #' "P02",    "LYMLE",   0.87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
 #' "P03",    "LYMLE",   0.89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
 #' )
