@@ -33,6 +33,8 @@ from a BDS dataset, e.g. ADLB. (#943)
 
 ## Updates of Existing Functions
 
+- `format_eoxxstt_default()` - Updated to have a more meaningful parameter name i.e. the parameter that
+was x is now status (#911)
 
 ## Breaking Changes
 

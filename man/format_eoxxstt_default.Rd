@@ -4,15 +4,15 @@
 \alias{format_eoxxstt_default}
 \title{Default Format for Disposition Status}
 \usage{
-format_eoxxstt_default(x)
+format_eoxxstt_default(status)
 }
 \arguments{
-\item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
+\item{status}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 }
 \value{
-A \code{character} vector derived based on the values given in \code{x}:
-"COMPLETED" if \code{x} is "COMPLETED",
-"DISCONTINUED" if \code{x} is not "COMPLETED" nor NA,
+A \code{character} vector derived based on the values given in \code{status}:
+"COMPLETED" if \code{status} is "COMPLETED",
+"DISCONTINUED" if \code{status} is not "COMPLETED" nor NA,
 "ONGOING" otherwise.
 }
 \description{
