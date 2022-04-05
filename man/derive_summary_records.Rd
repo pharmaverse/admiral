@@ -40,16 +40,16 @@ performs the calculation.
 This can include built-in functions as well as user defined functions,
 for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 
-\item{set_values_to}{A list of variable name-value pairs. Use this argument
-if you need to change the values of any newly derived records.
+\item{set_values_to}{Variables to be set
 
-Set a list of variables to some specified value for the new observation(s)
+The specified variables are set to the specified values for the new
+observations.
+
+A list of variable name-value pairs is expected.
 \itemize{
-\item LHS refer to a variable.
-\item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-value or NA.
-(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
-More general expression are not allowed.
+\item LHS refers to a variable.
+\item RHS refers to the values to set to the variable. This can be a string, a
+symbol, a numeric value or \code{NA}, e.g., \code{vars(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
 }}
 }
 \value{

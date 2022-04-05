@@ -11,11 +11,11 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 
 \item{derivation}{The derivation function to call}
 
-\item{variable_params}{A \code{list} of arguments that are different across iterations.
-Each set of arguments must be created using \code{\link[=params]{params()}}.}
+\item{variable_params}{A \code{list} of function arguments that are different across iterations.
+Each set of function arguments must be created using \code{\link[=params]{params()}}.}
 
-\item{...}{Any number of \emph{named} arguments that are fixed across iterations.
-If a parameter is specified both inside \code{variable_params} and \code{...} then
+\item{...}{Any number of \emph{named} function arguments that stay the same across iterations.
+If a function argument is specified both inside \code{variable_params} and \code{...} then
 the value in \code{variable_params} overwrites the one in \code{...}}
 }
 \value{
@@ -23,7 +23,7 @@ The input dataset with additional records/variables added depending on
 which \code{derivation} has been used.
 }
 \description{
-Call a single derivation multiple times with some parameters being fixed across
+Call a single derivation multiple times with some parameters/arguments being fixed across
 iterations and others varying.
 }
 \examples{
@@ -74,6 +74,6 @@ adae \%>\%
 \code{\link[=params]{params()}}
 }
 \author{
-Thomas Neitmann, Stefan Bundfuss
+Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 }
 \keyword{user_utility}

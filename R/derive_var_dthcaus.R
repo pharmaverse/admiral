@@ -38,7 +38,8 @@
 #' adsl <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID,
 #'   "STUDY01", "PAT01",
-#'   "STUDY01", "PAT02"
+#'   "STUDY01", "PAT02",
+#'   "STUDY01", "PAT03"
 #' )
 #' ae <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
@@ -48,10 +49,11 @@
 #'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
 #'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
-#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
+#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+#'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
 #' )
 #'
-#' # Derive `DTHCAUS` only
+#' # Derive `DTHCAUS` only - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
@@ -70,7 +72,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 #'
-#' # Derive `DTHCAUS` and add traceability variables
+#' # Derive `DTHCAUS` and add traceability variables - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
@@ -90,6 +92,36 @@
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+#'
+#' # Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value
+#' src_ae <- dthcaus_source(
+#'   dataset_name = "ae",
+#'   filter = AEOUT == "FATAL",
+#'   date = AEDTHDTC,
+#'   mode = "first",
+#'   dthcaus = AEDECOD,
+#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#' )
+#'
+#' src_ds <- dthcaus_source(
+#'   dataset_name = "ds",
+#'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+#'   date = DSSTDTC,
+#'   mode = "first",
+#'   dthcaus = DSTERM,
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#' )
+#'
+#' src_ds_post <- dthcaus_source(
+#'   dataset_name = "ds",
+#'   filter = DSDECOD == "DEATH" & DSTERM == "POST STUDY REPORTING OF DEATH",
+#'   date = DSSTDTC,
+#'   mode = "first",
+#'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#' )
+#'
+#' derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
 derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,

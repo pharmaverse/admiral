@@ -36,15 +36,16 @@
 #'   This can include built-in functions as well as user defined functions,
 #'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @param set_values_to A list of variable name-value pairs. Use this argument
-#'   if you need to change the values of any newly derived records.
+#' @param set_values_to Variables to be set
 #'
-#'   Set a list of variables to some specified value for the new observation(s)
-#'   + LHS refer to a variable.
-#'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-#'   value or NA.
-#'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
-#'   More general expression are not allowed.
+#'   The specified variables are set to the specified values for the new
+#'   observations.
+#'
+#'   A list of variable name-value pairs is expected.
+#'   + LHS refers to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value or `NA`, e.g., `vars(PARAMCD = "TDOSE", PARCAT1 =
+#'   "OVERALL")`. More general expression are not allowed.
 #'
 #' @author Vignesh Thanikachalam, Ondrej Slama
 #'
