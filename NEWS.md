@@ -30,6 +30,7 @@ values based on user-defined pairing (#944)
 
 - `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
+## Updates of Existing Functions
 
 ## Breaking Changes
 
