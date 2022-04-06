@@ -31,9 +31,6 @@ values based on user-defined pairing (#944)
 - `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
 
-## Updates of Existing Functions
-- `derive_vars_dtm` - Imputation flag sets to auto as default in adeg template (#1032)
-
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
