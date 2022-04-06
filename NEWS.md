@@ -32,7 +32,7 @@ values based on user-defined pairing (#944)
 from a BDS dataset, e.g. ADLB. (#943)
 
 ## Updates of Existing Functions
-
+- `derive_vars_dtm` - Imputation flag sets to auto as default in adeg template (#1032)
 
 ## Breaking Changes
 
