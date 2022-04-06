@@ -67,6 +67,28 @@
 #' print(bds_with_basetype, n=Inf)
 #'
 #' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#'
+#' # An example where all parameter records need to be included for 2 different
+#' # baseline type derivations (such as LAST and WORST)
+#' bds <- tibble::tribble(
+#'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
+#'   "P01",    "RUN-IN",       "PARAM01", 1,     10,
+#'   "P01",    "RUN-IN",       "PARAM01", 2,      9.8,
+#'   "P01",    "DOUBLE-BLIND", "PARAM01", 3,      9.2,
+#'   "P01",    "DOUBLE-BLIND", "PARAM01", 4,     10.1
+#' )
+#'
+#' bds_with_basetype <- derive_var_basetype(
+#'   dataset = bds,
+#'   basetypes = exprs(
+#'     "LAST" = !is.na(USUBJID),
+#'     "WORST" = !is.na(USUBJID)
+#'   )
+#' )
+#'
+#' print(bds_with_basetype, n=Inf)
+#'
+#' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
 derive_var_basetype <- function(dataset, basetypes) {
   assert_data_frame(dataset)
   assert_named_exprs(basetypes)
