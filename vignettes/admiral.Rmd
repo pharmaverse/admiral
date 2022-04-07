@@ -26,7 +26,7 @@ for example the following script which creates a (very simple) ADSL dataset.
 library(dplyr)
 library(lubridate)
 library(admiral)
-library(admiral.test)
+library(admiraltest)
 
 # read in SDTM datasets
 data("dm")

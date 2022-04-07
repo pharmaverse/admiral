@@ -68,7 +68,7 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_github("pharmaverse/admiral.test@devel", dependencies = FALSE, upgrade = "never")
+          remotes::install_github("pharmaverse/admiraltest@devel", dependencies = FALSE, upgrade = "never")
         shell: Rscript {0}
 
       - name: Check

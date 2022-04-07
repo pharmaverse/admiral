@@ -26,7 +26,7 @@ Define a function to map the disposition reason, to be used as a parameter in
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ds")
 
