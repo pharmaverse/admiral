@@ -43,5 +43,3 @@ test_that("`convert_blanks_to_na.list` produces a lists", {
 
   expect_equal(expected_output, actual_output)
 })
-
-

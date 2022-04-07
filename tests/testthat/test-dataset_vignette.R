@@ -15,4 +15,3 @@ test_that("a 'datatables' object is output when run outside pkgdown", {
     dataset_vignette(head(adsl), display_vars = vars(STUDYID, USUBJID)),
     "knitr_kable")
 })
-

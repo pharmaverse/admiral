@@ -24,18 +24,21 @@ test_that("A warning is issued when a variable to be derived already exists in t
 test_that("A warning is issued when a vector contain unknown datetime format", {
   expect_warning(
     warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
-    )
+  )
 })
 
 test_that("A warning is issued when a vector contain an incomplete dtc", {
   expect_warning(
-    warn_if_incomplete_dtc("2021-04-06", n= 19)
-    )
+    warn_if_incomplete_dtc("2021-04-06", n = 19)
+  )
 })
 
 test_that("A warning is issued when two lists are inconsistent", {
-expect_warning(
-  warn_if_inconsistent_list(
-    base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
-    compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
-    list_name = "Test")) })
+  expect_warning(
+    warn_if_inconsistent_list(
+      base = vars(DTHDOM = "DM", DTHSEQ = DMSEQ, DTHVAR = "text"),
+      compare = vars(DTHDOM = "DM", DTHSEQ = DMSEQ),
+      list_name = "Test"
+    )
+  )
+})

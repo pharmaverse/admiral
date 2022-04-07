@@ -35,8 +35,8 @@ test_that("symbols", {
 test_that("input is returned as is if filter is NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
-    "P01",    "WEIGHT",  80.9,
-    "P01",    "HEIGHT",  189.2
+    "P01", "WEIGHT", 80.9,
+    "P01", "HEIGHT", 189.2
   )
 
   expect_dfs_equal(
@@ -49,8 +49,8 @@ test_that("input is returned as is if filter is NULL", {
 test_that("input is filtered if filter is not NULL", {
   input <- tibble::tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
-    "P01",    "WEIGHT",  80.9,
-    "P01",    "HEIGHT",  189.2
+    "P01", "WEIGHT", 80.9,
+    "P01", "HEIGHT", 189.2
   )
 
   expect_dfs_equal(
@@ -132,13 +132,15 @@ test_that("`get_many_to_one_dataset()` returns a data frame after a previous err
 test_that("`convert_dtm_to_dtc` is in correct format", {
   expect_equal(
     convert_dtm_to_dtc(as.POSIXct("2022-04-05 15:34:07 UTC")),
-    "2022-04-05T15:34:07")
+    "2022-04-05T15:34:07"
+  )
 })
 
 
 test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format", {
- expect_error(
-   convert_dtm_to_dtc("2022-04-05T15:26:14"),
-   "lubridate::is.instant(dtm) is not TRUE", fixed = TRUE)
+  expect_error(
+    convert_dtm_to_dtc("2022-04-05T15:26:14"),
+    "lubridate::is.instant(dtm) is not TRUE",
+    fixed = TRUE
+  )
 })
-
