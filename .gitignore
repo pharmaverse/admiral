@@ -51,4 +51,5 @@ admiral*.tgz
 
 # MacOS
 .DS_Store
-._.DS*
+._.DS_Store
+
