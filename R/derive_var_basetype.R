@@ -81,8 +81,8 @@
 #' bds_with_basetype <- derive_var_basetype(
 #'   dataset = bds,
 #'   basetypes = exprs(
-#'     "LAST" = !is.na(USUBJID),
-#'     "WORST" = !is.na(USUBJID)
+#'     "LAST" = TRUE,
+#'     "WORST" = TRUE
 #'   )
 #' )
 #'
