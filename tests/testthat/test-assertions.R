@@ -70,24 +70,22 @@ test_that("`assert_data_frame` throws an error if dataframe is grouped", {
 })
 
 test_that("`assert_character_scalar` throws an error if not a character scaler string", {
-example_fun2 <- function(msg_type) {
-  msg_type <- assert_character_scalar(msg_type,
-    values = c("warning", "error"), case_sensitive = FALSE
-  )
+  example_fun2 <- function(msg_type) {
+    msg_type <- assert_character_scalar(msg_type,
+      values = c("warning", "error"), case_sensitive = FALSE
+    )
 
-  if (msg_type == "warning") {
-    print("A warning was requested.")
+    if (msg_type == "warning") {
+      print("A warning was requested.")
+    }
   }
-}
   expect_error(example_fun2(2))
-
 })
 
 test_that("`assert_character_scalar` throws an error if input is a vector", {
-
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
-                                        values = c("warning", "error"), case_sensitive = FALSE
+      values = c("warning", "error"), case_sensitive = FALSE
     )
 
     if (msg_type == "warning") {
@@ -95,15 +93,20 @@ test_that("`assert_character_scalar` throws an error if input is a vector", {
     }
   }
   expect_error(example_fun2(c("admiral", "admiralonco")))
-
 })
 
 test_that("`quo_not_missing` returns TRUE if no missing argument", {
-  test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+  test_fun <- function(x) {
+    x <- rlang::enquo(x)
+    assertthat::assert_that(quo_not_missing(x))
+  }
   expect_true(test_fun(my_variable))
 })
 
 test_that("`quo_not_missing` throws and Error if missing argument", {
-  test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+  test_fun <- function(x) {
+    x <- rlang::enquo(x)
+    assertthat::assert_that(quo_not_missing(x))
+  }
   expect_error(test_fun()) # missing argument -> throws error
 })
