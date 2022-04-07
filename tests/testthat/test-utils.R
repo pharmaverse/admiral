@@ -141,3 +141,4 @@ test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format"
    convert_dtm_to_dtc("2022-04-05T15:26:14"),
    "lubridate::is.instant(dtm) is not TRUE", fixed = TRUE)
 })
+

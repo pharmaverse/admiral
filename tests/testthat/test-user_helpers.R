@@ -35,3 +35,13 @@ test_that("Error Message is returned if ADaM template file already exists", {
     use_ad_template("adsl", save_path = file, open = FALSE)
   )
 })
+
+test_that("`convert_blanks_to_na.list` produces a lists", {
+  x <- c("", "", "")
+  expected_output <- lapply(x, convert_blanks_to_na)
+  actual_output <- convert_blanks_to_na.list(x)
+
+  expect_equal(expected_output, actual_output)
+})
+
+
