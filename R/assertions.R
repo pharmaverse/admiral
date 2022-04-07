@@ -752,8 +752,8 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || 
-      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) || 
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
       any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `exprs()` but is %s",
