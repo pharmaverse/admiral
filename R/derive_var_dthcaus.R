@@ -174,7 +174,7 @@ derive_var_dthcaus <- function(dataset,
       )
 
     # add traceability param if required
-    # inconsitent traceability lists issue a warning
+    # inconsistent traceability lists issue a warning
     if (ii > 1) {
       warn_if_inconsistent_list(
         base = sources[[ii - 1]]$traceability,
@@ -219,6 +219,17 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param date A character vector to be used for sorting `dataset`.
 #'
+#' @param date_imputation The value to impute the day/month when a datepart is missing.
+#'
+#'   If `NULL`: no date imputation is performed and partial dates are returned as missing.
+#'
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+#'   of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
+#'
+#'   Default is `NULL`
+#'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
 #' which is ordered by `date`.
@@ -250,6 +261,7 @@ derive_var_dthcaus <- function(dataset,
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
+                           date_imputation = NULL,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL,
@@ -263,6 +275,7 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
+    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)
