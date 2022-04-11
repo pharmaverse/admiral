@@ -13,7 +13,7 @@ restrict_derivation(dataset, derivation, args = NULL, filter)
 
 \item{args}{Arguments of the derivation
 
-A \code{param()} object is expected.}
+A \code{params()} object is expected.}
 
 \item{filter}{Filter condition}
 }
@@ -66,9 +66,10 @@ restrict_derivation(
 
 }
 \seealso{
-\code{\link[=params]{params()}}
+\code{\link[=params]{params()}} \code{\link[=slice_derivation]{slice_derivation()}}
 }
 \author{
 Stefan Bundfuss
 }
+\keyword{high_order_function}
 \keyword{user_utility}

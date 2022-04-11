@@ -23,6 +23,13 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
+- New high order functions (#701):
+
+  - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
+  - `slice_derivation()` - The input dataset is split into subsets (slices) and
+  for each slice a derivation is called separately. Some or all arguments of the
+  derivation may vary depending on the slice.
+
 ## Updates of Existing Functions
 
 

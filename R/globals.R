@@ -63,6 +63,7 @@ globalVariables(c(
   "temp_event",
   "temp_obs_nr",
   "temp_source_nr",
+  "temp_slicenr",
   "temp_date",
   "VAR_PREFIX",
   "QUERY_NAME",

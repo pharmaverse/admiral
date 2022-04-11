@@ -8,15 +8,15 @@
 #'
 #' @param args Arguments of the derivation
 #'
-#'   A `param()` object is expected.
+#'   A `params()` object is expected.
 #'
 #' @param filter Filter condition
 #'
-#' @keywords user_utility
+#' @keywords user_utility high_order_function
 #'
 #' @author Stefan Bundfuss
 #'
-#' @seealso [params()]
+#' @seealso [params()] [slice_derivation()]
 #'
 #' @export
 #'

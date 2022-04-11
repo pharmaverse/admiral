@@ -76,4 +76,5 @@ adae \%>\%
 \author{
 Thomas Neitmann, Stefan Bundfuss
 }
+\keyword{high_order_function}
 \keyword{user_utility}

@@ -402,7 +402,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(arg)) {
+  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
