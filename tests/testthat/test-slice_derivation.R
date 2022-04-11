@@ -9,7 +9,7 @@ test_that("slice_derivation Test 1: slice derivation", {
 
   actual <- slice_derivation(
     advs,
-    derivation = derive_vars_dtm ,
+    derivation = derive_vars_dtm,
     args = params(dtc = VSDTC,
                   new_vars_prefix = "A"),
     derivation_slice(
@@ -38,7 +38,7 @@ test_that("slice_derivation Test 2: non matching observations", {
 
   actual <- slice_derivation(
     advs,
-    derivation = derive_vars_dtm ,
+    derivation = derive_vars_dtm,
     args = params(dtc = VSDTC,
                   new_vars_prefix = "A"),
     derivation_slice(
