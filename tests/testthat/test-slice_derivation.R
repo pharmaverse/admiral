@@ -55,3 +55,22 @@ test_that("slice_derivation Test 2: non matching observations", {
                    compare = actual,
                    keys = c("USUBJID", "VSSEQ"))
 })
+
+# print.derivation_slice ----
+## print.derivation_slice Test 1: `derivation_slice` objects are printed as intended ----
+test_that("print.derivation_slice Test1: `derivation_slice` objects are printed as intended", {
+  slice <-
+    derivation_slice(filter = AVISITN > 0,
+                     args = params(new_var = CHG))
+  expected_print_output <- c(
+    "<derivation_slice> object",
+    "filter: AVISITN > 0 ",
+    "args:",
+    "$new_var",
+    "CHG",
+    "",
+    "attr(,\"class\")",
+    "[1] \"params\" \"list\"  "
+  )
+  expect_identical(capture.output(print(slice)), expected_print_output)
+})

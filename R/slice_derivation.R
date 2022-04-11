@@ -149,3 +149,23 @@ derivation_slice <- function(filter = TRUE,
   class(out) <- c("derivation_slice", "list")
   out
 }
+
+#' Print `derivation_slice` Objects
+#'
+#' @param x A `derivation_slice` object
+#' @param ... Not used
+#'
+#' @return No return value, called for side effects
+#'
+#' @export
+#'
+#' @seealso [derivation_slice()]
+#'
+#' @examples
+#' print(death_event)
+print.derivation_slice <- function(x, ...) {
+  cat("<derivation_slice> object\n")
+  cat("filter:", quo_text(x$filter), "\n")
+  cat("args:\n")
+  print(x$args)
+}
