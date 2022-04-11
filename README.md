@@ -132,7 +132,7 @@ want any module to be understandable to all, not only the `{admiral}` developers
 ## Conference Presentations
 
 * [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
-* [PHUSE EU Connect 2021 workshop](https://github.com/pharmaverse/admiral.phuse.workshop) (slides and materials)
+* [PHUSE EU Connect 2021 workshop](https://github.com/pharmaverse/admiral.phuse.workshop/tree/main/EU%202021) (slides and materials)
 
 ## Contact 
 
