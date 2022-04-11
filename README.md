@@ -41,7 +41,7 @@ harmonised approach of developing ADaMs in R across the pharmaceutical industry.
 
 To set expectations: It is not our target that `{admiral}` will ever provide all possible solutions
 for all ADaM datasets outside of study specific needs. It depends on the user's collaboration
-and contribution to help grow over time to a toolkit library that is robust, easy to use and
+and contribution to help grow over time to an asset library that is robust, easy to use and
 has an across-industry focus. We do not see a coverage of 100% of all ADaM derivations as ever
 achievable - ADaM is endless.
 
@@ -60,7 +60,7 @@ SMQs ...)
 There will be 3 foreseeable types of `{admiral}` packages:
 * Core package - one package containing all core functions required to create ADaMs,
 usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
-* TA (Therapeutic Area) package extensions - one package per disease area with functions that are
+* TA (Therapeutic Area) package extensions - one package per TA with functions that are
 specific to algorithms and requirements for that particular TA (e.g. `{admiralonco}`)
 * Company package extensions - specific needs and plug-ins for the company, such as access to metadata
 (e.g. `{admiralroche}` or `{admiralgsk}`)
@@ -77,11 +77,11 @@ We have four priority design principles to achieve the main goal as follows:
 _**Usability**_
 
 All `{admiral}` functions should be easy to use. 
-* Our documentation is an absolute priority. Each function reference page should cover the purpose,
+* Documentation is an absolute priority. Each function reference page should cover the purpose,
 descriptions of each argument with permitted values, the expected input and output, with clear real-life
 examples - so that users don’t need to dig through code to find answers.
-* Vignettes then complement the functional documentation to help users see how best they can be applied to
-achieve customary ADaM requirements.
+* Vignettes that complement the functional documentation to help users see how best the functions can be
+applied to achieve customary ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them
 for study specific purposes if needed (see Readability below).
 
@@ -107,20 +107,20 @@ In a growing codebase, across a family of packages, we make every effort to make
 * We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
 help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
 * We avoid repetitive functions that will do similar tasks (as explained above with study day example).
-* Each package extension is kept focused on the specific scope, i.e. any common need that could be raised up
-to the core package will be.
+* Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple
+extension packages will be moved to the core `{admiral}` package.
 
 _**Readability**_
 
-We have a very prescriptive Programming Strategy guide that all our developers and contributors must follow,
-so that all our code has a high degree of consistency and readability.
+We have a very prescriptive [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
+that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For the sections of any code that perform the actual derivation (e.g. besides assertions or basic utilities),
 we try to limit nesting of too many dependencies or functions.
 * Modularity is a focus - we don’t try to achieve too many steps in one, and all code has to be well commented.
-* We recognise that a user or a HA reviewer may have the wish to delve into the codebase (especially given this
-open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore
-want any module to be understandable to all, not only the `{admiral}` developers.
+* We recognise that a user or a Health Authority reviewer may have the wish to delve into the codebase (especially
+given this open source setting), or users may need to extend/adapt the code for their study specific needs. We
+therefore want any module to be understandable to all, not only the `{admiral}` developers.
 
 ## References and Documentation
 
