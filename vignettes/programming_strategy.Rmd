@@ -76,7 +76,7 @@ could be useful beyond a single purpose we also would provide a generic function
 last known alive date function, we have an extreme date function where a user could find the last date
 from a selection, or for example the first).
 
-Otherwise if we feel that a derivation rule is a unique need or sufficiently complex to justify then we
+Otherwise, if we feel that a derivation rule is a unique need or sufficiently complex to justify then we
 opt for a dedicated function for that specific variable/parameter (e.g. treatment-emergent flag for AEs).
 
 If certain variables are closely connected (e.g. an imputed date and the corresponding imputation flag)
