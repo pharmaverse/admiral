@@ -21,6 +21,10 @@
 #' The last dose group is then derived by user-defined grouping, which groups
 #' `dose_var` as specified in `grp_brks`, and returns `grp_lbls` as the values for `new_var`.
 #'
+#' If dose information is aggregated (i.e. is a dosing frequency other than `"ONCE"`
+#' over a period defined by a start and end date) the function
+#' `create_single_dose_dataset()` can be used to generate single doses from
+#' aggregate dose information and satisfy `single_dose_condition`.
 #' @return Input dataset with additional column `new_var`.
 #'
 #' @author Ben Straub
@@ -29,7 +33,7 @@
 #'
 #' @export
 #'
-#' @seealso [derive_vars_last_dose()], [cut()]
+#' @seealso [derive_vars_last_dose()], [cut()], [create_single_dose_dataset()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

@@ -66,6 +66,11 @@ The last dose date is derived as the maximum dose date where the
 each observation in \code{dataset}. When \code{output_datetime} is \code{TRUE} and time is
 missing, then the last dose date time is imputed to \code{00:00:00}. However, if
 date is missing, then no imputation is done.
+
+If dose information is aggregated (i.e. is a dosing frequency other than \code{"ONCE"}
+over a period defined by a start and end date) the function
+\code{create_single_dose_dataset()} can be used to generate single doses from
+aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -88,7 +93,7 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
 }
 \seealso{
-\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}
+\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
 \author{
 Ben Straub

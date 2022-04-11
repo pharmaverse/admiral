@@ -9,13 +9,16 @@
 #'
 #' @param by_vars Grouping variables
 #'
-#'   Permitted Values: list of variables
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values:* list of variables created by `vars()`
 #'
 #' @param order Sort order
 #'
 #'   Within each by group the observations are ordered by the specified order.
 #'
-#'   Permitted Values: list of variables or functions of variables
+#'   *Permitted Values:* list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))`
 #'
 #' @param mode Selection mode (first or last)
 #'
@@ -23,7 +26,7 @@
 #'   included in the output dataset. If `"last"` is specified, the last
 #'   observation of each by group is included in the output dataset.
 #'
-#'   Permitted Values:  `"first"`, `"last"`
+#'   *Permitted Values:*  `"first"`, `"last"`
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -31,9 +34,9 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   Default: `"none"`
+#'   *Default:* `"none"`
 #'
-#'   Permitted Values: `"none"`, `"warning"`, `"error"`
+#'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
 #' @details For each group (with respect to the variables specified for the
 #'   `by_vars` parameter) the first or last observation (with respect to the

@@ -83,6 +83,11 @@ Last dose is the dose with maximum \code{dose_date} that is lower to or equal to
 \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
 The last dose group is then derived by user-defined grouping, which groups
 \code{dose_var} as specified in \code{grp_brks}, and returns \code{grp_lbls} as the values for \code{new_var}.
+
+If dose information is aggregated (i.e. is a dosing frequency other than \code{"ONCE"}
+over a period defined by a start and end date) the function
+\code{create_single_dose_dataset()} can be used to generate single doses from
+aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -111,7 +116,7 @@ ae \%>\%
    select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
 \seealso{
-\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=cut]{cut()}}
+\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=cut]{cut()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
 \author{
 Ben Straub
