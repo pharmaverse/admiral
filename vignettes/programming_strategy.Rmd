@@ -65,16 +65,46 @@ case-sensitive. Thus they must be in lower case.
 
 # Functions in R
 
-Functions in `{admiral}` must follow the modular approach, i.e. functions which add
-variables should add only a single variable except if other variables are
-closely related to the derived variable and can not be derived without it. For
-example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
-by the same function because it does not make sense to derive `AAGEU` without
-`AAGE`.
+## Function Design
 
-Variables like `BASE` (baseline value) and `BNRIND` (baseline reference range
-indicator) must be derived by two separate function calls as it is reasonable to
-derive only one of them.
+Firstly, it is important to explain how we decide on the need for new derivation functions. 
+
+If a derivation rule or algorithm is common and highly similar across different variables/parameters
+(e.g. study day or duration) then we would provide a generic function that can be used to satisfy all
+the times this may be needed across different ADaMs. Similarly, if we feel that a certain derivation
+could be useful beyond a single purpose we also would provide a generic function (e.g. instead of a
+last known alive date function, we have an extreme date function where a user could find the last date
+from a selection, or for example the first).
+
+Otherwise if we feel that a derivation rule is a unique need or sufficiently complex to justify then we
+opt for a dedicated function for that specific variable/parameter (e.g. treatment-emergent flag for AEs).
+
+If certain variables are closely connected (e.g. an imputed date and the corresponding imputation flag)
+then a single function would provide both variables.
+
+If something needed for ADaM could be achieved simply via an existing tidyverse function, then we do not
+wrap this into an admiral function, as that would add an unnecessary extra layer for users.
+
+The following principles are key when designing a new function:
+* _**Modularity**_ - All code follows a modular approach, i.e. the steps must be clearly separated and
+have a dedicated purpose. This applies to scripts creating a dataset where each module should create a
+single variable or parameter. But also to complex derivations with several steps. Commenting on these
+steps is key for readability.
+* _**Avoid Copy and Paste**_ - If the same or very similar code is used multiple times, it should be put
+into a separate function. This improves readability and maintainability and makes unit testing easier.
+This should not be done for every simple programming step where tidyverse can be used. But rather for
+computational functions or data checks. However, also consider not to nest too many functions.
+* _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
+reference to the input which caused the failure. This should avoid the users have to dig into detailed
+code if they only want to apply a function. This supports usability.
+* _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
+For example:
+  * The source variables or newly created variables and conditions for selecting observations should not be hard-coded.
+  * It is useful if a parameter triggers optional steps, e.g. if the filter parameter is specified, the input dataset
+is restricted, otherwise this step is skipped.
+  * However, parameters should not trigger completely different algorithms. For example `BNRIND` could be derived based
+on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
+If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
 
 ## Input, Output, and Side-effects
 
@@ -88,7 +118,6 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 variables must start with `temp_` and must be removed from the output dataset.
 * If the input dataset includes variables starting with `temp_`, an error must be issued.
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
-
 
 ## Function Names
 
