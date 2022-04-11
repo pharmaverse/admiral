@@ -86,22 +86,29 @@ If something needed for ADaM could be achieved simply via an existing tidyverse 
 wrap this into an admiral function, as that would add an unnecessary extra layer for users.
 
 The following principles are key when designing a new function:
+
 * _**Modularity**_ - All code follows a modular approach, i.e. the steps must be clearly separated and
 have a dedicated purpose. This applies to scripts creating a dataset where each module should create a
 single variable or parameter. But also to complex derivations with several steps. Commenting on these
 steps is key for readability.
+
 * _**Avoid Copy and Paste**_ - If the same or very similar code is used multiple times, it should be put
 into a separate function. This improves readability and maintainability and makes unit testing easier.
 This should not be done for every simple programming step where tidyverse can be used. But rather for
 computational functions or data checks. However, also consider not to nest too many functions.
+
 * _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
 reference to the input which caused the failure. This should avoid the users have to dig into detailed
 code if they only want to apply a function. This supports usability.
+
 * _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
 For example:
+
   * The source variables or newly created variables and conditions for selecting observations should not be hard-coded.
+
   * It is useful if a parameter triggers optional steps, e.g. if the filter parameter is specified, the input dataset
 is restricted, otherwise this step is skipped.
+
   * However, parameters should not trigger completely different algorithms. For example `BNRIND` could be derived based
 on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
 If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
