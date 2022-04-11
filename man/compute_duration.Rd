@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_duration.R
 \name{compute_duration}
 \alias{compute_duration}
-\title{Derive Duration}
+\title{Compute Duration}
 \usage{
 compute_duration(
   start_date,
@@ -50,7 +50,7 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{add_one}{Add one input unit?
 
-If the duration is non-negative, one input unit is added. I.e., the
+If the duration is non-negative, one input unit is added. i.e., the
 duration can not be zero.
 
 Default: \code{TRUE}

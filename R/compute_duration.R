@@ -1,4 +1,4 @@
-#' Derive Duration
+#' Compute Duration
 #'
 #' Derives duration between two dates, e.g., duration of adverse events,
 #' relative day, age, ...
@@ -38,7 +38,7 @@
 #'
 #' @param add_one Add one input unit?
 #'
-#'   If the duration is non-negative, one input unit is added. I.e., the
+#'   If the duration is non-negative, one input unit is added. i.e., the
 #'   duration can not be zero.
 #'
 #'   Default: `TRUE`
@@ -103,7 +103,7 @@ compute_duration <- function(start_date,
 
   # Derivation
   if (floor_in) {
-    # remove information moe precise than the input unit, e.g., if input unit
+    # remove information more precise than the input unit, e.g., if input unit
     # is days, the time part of the dates is removed.
     start_date <- floor_date(start_date, unit = in_unit)
     end_date <- floor_date(end_date, unit = in_unit)

@@ -20,7 +20,7 @@ derive_vars_duration(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
+The variables specified by the \code{start_date} and the \code{end_date} parameter are
 expected.}
 
 \item{new_var}{Name of variable to create}
@@ -30,11 +30,13 @@ If the parameter is not specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
-A date or date-time object is expected.}
+A date or date-time variable is expected. This variable must be present in
+specified input dataset.}
 
 \item{end_date}{The end date
 
-A date or date-time object is expected.}
+A date or date-time variable is expected. This variable must be present in
+specified input dataset.}
 
 \item{in_unit}{Input unit
 
@@ -82,13 +84,14 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 The input dataset with the duration and unit variable added
 }
 \description{
-Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ...
+Derives duration between two dates, specified by the variables present in
+input dataset e.g., duration of adverse events, relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
 specified output unit. If the end date is before the start date, the duration
-is negative.
+is negative. The start and end date variable must be present in the specified
+input dataset.
 }
 \examples{
 data <- tibble::tribble(
