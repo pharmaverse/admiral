@@ -210,11 +210,11 @@ to a suitable `EOSSTT` value.
 Example function `format_eosstt()`:
 
 ```{r eval=TRUE}
-format_eosstt <- function(x) {
+format_eosstt <- function(DSDECOD) {
   case_when(
-    x %in% c("COMPLETED") ~ "COMPLETED",
-    x %in% c("SCREEN FAILURE") ~ NA_character_,
-    !is.na(x) ~ "DISCONTINUED",
+    DSDECOD %in% c("COMPLETED") ~ "COMPLETED",
+    DSDECOD %in% c("SCREEN FAILURE") ~ NA_character_,
+    !is.na(DSDECOD) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -281,10 +281,10 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dcsreas <- function(dsdecod, dsterm = NULL) {
-  out <- if (is.null(dsterm)) dsdecod else dsterm
+format_dcsreas <- function(DSDECOD, DSTERM = NULL) {
+  out <- if (is.null(DSTERM)) DSDECOD else DSTERM
   case_when(
-    !dsdecod %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
+    !DSDECOD %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(DSDECOD) ~ out,
     TRUE ~ NA_character_
   )
 }
@@ -628,18 +628,18 @@ However for example if
 the user defined function(s) would be like:
 
 ```{r eval=TRUE}
-format_agegr2 <- function(x) {
+format_agegr2 <- function(AGE) {
   case_when(
-    !is.na(x) & x < 65 ~ "< 65",
-    x >= 65 ~ ">= 65",
+    !is.na(AGE) & AGE < 65 ~ "< 65",
+    AGE >= 65 ~ ">= 65",
     TRUE ~ NA_character_
   )
 }
 
-format_region1 <- function(x) {
+format_region1 <- function(COUNTRY) {
   case_when(
-    x %in% c("CAN", "USA") ~ "North America",
-    !is.na(x) ~ "Rest of the World",
+    COUNTRY %in% c("CAN", "USA") ~ "North America",
+    !is.na(COUNTRY) ~ "Rest of the World",
     TRUE ~ "Missing"
   )
 }
