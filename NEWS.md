@@ -45,6 +45,10 @@ from a BDS dataset, e.g. ADLB. (#943)
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 
+- The `filter` parameter in `derive_var_extreme_flag()` and
+`derive_var_worst_flag()` has been deprecated in favor of
+`restrict_derivation()` (#701).
+
 ## Documentation
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
