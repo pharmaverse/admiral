@@ -1,5 +1,5 @@
 as_iso_dtm <- function(x, time_zone = "UTC") {
-  if (is.character(x)) {
+  if (is.character(x) | is.na(x)) {
     dtm <- ymd_hms(x, tz = time_zone)
   } else {
     dtm <- x
