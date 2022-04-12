@@ -25,8 +25,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest, r: '3.6', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
-          - {os: ubuntu-latest, r: '4.0', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
+          - {os: ubuntu-latest, r: '3.6', repos: 'https://cran.microsoft.com/snapshot/2020-02-29'}
+          - {os: ubuntu-latest, r: '4.0', repos: 'https://cran.microsoft.com/snapshot/2021-03-31/'}
           - {os: ubuntu-latest, r: 'release', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
 
     env:
@@ -68,7 +68,7 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_github("pharmaverse/admiral.test@devel", dependencies = FALSE, upgrade = "never")
+          remotes::install_github("pharmaverse/admiraltest@devel", dependencies = FALSE, upgrade = "never")
         shell: Rscript {0}
 
       - name: Check
