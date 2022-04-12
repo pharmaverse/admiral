@@ -115,7 +115,7 @@ slice_derivation <- function(dataset,
   }
 
   # put datasets together again
-  unnest(dataset_split) %>% select(-temp_slicenr)
+  unnest(dataset_split) %>% ungroup() %>% select(-temp_slicenr)
 }
 
 #' Create a `slice` Object
