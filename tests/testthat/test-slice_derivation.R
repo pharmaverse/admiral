@@ -48,7 +48,7 @@ test_that("slice_derivation Test 2: non matching observations", {
   )
 
   expected <- mutate(advs,
-                     ADTM = c(as_iso_dtm(NA), as_iso_dtm("2020-04-16 00:00:00")),
+                     ADTM = c(as_iso_dtm(ymd_hms(NA)), as_iso_dtm("2020-04-16 00:00:00")),
                      ATMF = c(NA_character_, "H"))
 
   expect_dfs_equal(base = expected,
