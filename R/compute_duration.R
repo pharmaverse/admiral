@@ -1,6 +1,6 @@
 #' Compute Duration
 #'
-#' Derives duration between two dates, e.g., duration of adverse events,
+#' Compute duration between two dates, e.g., duration of an adverse event,
 #' relative day, age, ...
 #'
 #' @param start_date The start date
@@ -54,9 +54,9 @@
 #'
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
-#' @details The duration is derived as time from start to end date in the
-#'   specified output unit. If the end date is before the start date, the duration
-#'   is negative.
+#' @details The output is a numeric vector providing the duration as time from
+#' start to end date in the specified unit. If the end date is before the start
+#' date, the duration is negative.
 #'
 #' @author Stefan Bundfuss
 #'
