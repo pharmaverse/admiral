@@ -406,7 +406,7 @@ convert_dtc_to_dt <- function(dtc,
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc,
                                date_imputation = NULL,
-                               time_imputation = NULL,
+                               time_imputation = "00:00:00",
                                min_dates = NULL,
                                max_dates = NULL,
                                preserve = FALSE) {
@@ -450,7 +450,7 @@ convert_dtc_to_dtm <- function(dtc,
 #' convert_date_to_dtm("2019-07-18")
 convert_date_to_dtm <- function(dt,
                                 date_imputation = NULL,
-                                time_imputation = NULL,
+                                time_imputation = "00:00:00",
                                 min_dates = NULL,
                                 max_dates = NULL,
                                 preserve = FALSE) {
@@ -710,7 +710,7 @@ derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            date_imputation = NULL,
-                           flag_imputation = TRUE,
+                           flag_imputation = FALSE,
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
