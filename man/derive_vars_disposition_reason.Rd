@@ -114,7 +114,7 @@ The details associated with the reason for discontinuation are derived based on
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ds")
 

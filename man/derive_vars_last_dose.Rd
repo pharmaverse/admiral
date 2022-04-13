@@ -100,7 +100,7 @@ variables from \code{dataset_ex} (e.g. \code{new_vars = vars(LSTEXVIS = VISIT)})
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(ae)
 data(ex_single)
 

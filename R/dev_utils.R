@@ -288,7 +288,7 @@ what_is_it <- function(x) {
 #' @return Variable vector.
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(vs)
 #'
 #' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
