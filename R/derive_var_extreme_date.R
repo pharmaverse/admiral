@@ -108,7 +108,7 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ae")
 #' data("lb")
@@ -330,7 +330,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ae")
 #' data("lb")
