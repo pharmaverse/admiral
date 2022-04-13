@@ -30,7 +30,7 @@ remotes::install_github("pharmaverse/admiral", ref = "devel")
 ## Main Goal
 
 Provide users with an open source, modularized toolbox with which to create ADaM datasets
-in R from. _As opposed to a “run 1 line and an ADaM appears” black-box solution or an attempt to
+in R. _As opposed to a “run 1 line and an ADaM appears” black-box solution or an attempt to
 automate ADaM._
 
 One of the key aspects of `{admiral}` is its development by the users for the users.
