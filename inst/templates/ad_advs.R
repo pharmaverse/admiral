@@ -4,7 +4,7 @@
 #
 # Input: adsl, vs
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
