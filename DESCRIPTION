@@ -51,7 +51,7 @@ Imports:
     tidyr,
     tidyselect
 Suggests:
-    admiral.test,
+    admiraltest,
     devtools,
     diffdf,
     knitr,

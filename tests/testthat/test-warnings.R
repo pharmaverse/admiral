@@ -1,4 +1,4 @@
-library(admiral.test)
+library(admiraltest)
 
 test_that("A warning is issued when a variable to be derived already exists in the input dataset", {
   data(dm)

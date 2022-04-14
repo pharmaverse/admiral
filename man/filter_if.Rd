@@ -19,7 +19,7 @@ just \code{dataset} if \code{filter} is \code{NULL}
 Filters the input dataset if the provided expression is not \code{NULL}
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 data(vs)
 
 filter_if(vs, rlang::quo(NULL))

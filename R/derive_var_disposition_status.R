@@ -66,7 +66,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -143,7 +143,7 @@ derive_disposition_status <- function(dataset,
 #' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -227,7 +227,7 @@ format_eoxxstt_default <- function(x) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'

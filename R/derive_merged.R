@@ -133,7 +133,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #' data("dm")
@@ -283,7 +283,7 @@ derive_vars_merged <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
@@ -403,7 +403,7 @@ derive_vars_merged_dt <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
@@ -531,7 +531,7 @@ derive_vars_merged_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("vs")
@@ -678,7 +678,7 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @examples
 #'
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ae")
@@ -794,7 +794,7 @@ derive_var_merged_exist_flag <- function(
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")

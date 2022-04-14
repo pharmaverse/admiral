@@ -92,7 +92,7 @@ observation exists and for all observations the condition evaluates to
 }
 \examples{
 
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ae")
