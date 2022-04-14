@@ -488,6 +488,35 @@ derive_worst_flag <- function(dataset,
 #'   mode = "last",
 #'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
+#'
+#' # OCCURDS Examples
+#' data("ae")
+#'
+#' # Most severe AE first occurrence per patient
+#' ae %>%
+#'   mutate(TEMP_AESEVN =
+#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCIFL,
+#'     by_vars = vars(USUBJID),
+#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     mode = "first"
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY, AESEQ) %>%
+#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+#'
+#' # Most severe AE first occurrence per patient per body system
+#' ae %>%
+#'   mutate(TEMP_AESEVN =
+#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCSIFL,
+#'     by_vars = vars(USUBJID, AEBODSYS),
+#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     mode = "first"
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY, AESEQ) %>%
+#'   select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
 derive_var_extreme_flag <- function(dataset,
                                 by_vars,
                                 order,
