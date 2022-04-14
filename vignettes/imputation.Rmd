@@ -71,8 +71,8 @@ impute_dtc(
 )
 ```
 
-For dates, there is also the additional option to use keyword `"mid"` to
-impute missing day to `15` or missing day and month to `06-30`, but note the
+For dates, there is the additional option to use keyword `"mid"` to impute
+missing day to `15` or missing day and month to `06-30`, but note the
 different behaviour below depending on `preserve` parameter for case when month
 only is missing:
 
@@ -93,6 +93,22 @@ impute_dtc(
   date_imputation = "mid",
   time_imputation = "00:00:00",
   preserve = TRUE
+)
+```
+
+If you wanted to replace any missing part of the date with a fixed value, this
+is also possible:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "06-15",
+  time_imputation = "00:00:00"
 )
 ```
 
