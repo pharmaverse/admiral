@@ -71,6 +71,31 @@ impute_dtc(
 )
 ```
 
+For dates, there is also the additional option to use keyword `"mid"` to
+impute missing day to `15` or missing day and month to `06-30`, but note the
+different behaviour below depending on `preserve` parameter for case when month
+only is missing:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = FALSE
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = TRUE
+)
+```
+
 ## Minimum/Maximum Dates
 
 In some scenarios the imputed date should not be before or after certain dates.
@@ -102,6 +127,12 @@ e.g., `ADTF` and `ATMF` for `ADTM`). These variables indicate the highest level
 that was imputed, e.g., if minutes and seconds were imputed, the imputation flag
 is set to `"M"`. The `{admiral}` functions which derive imputed variables are also
 adding the corresponding imputation flag variables.
+
+Note: The `{admiral}` datetime imputation function provides the `ignore_seconds_flag`
+parameter which can be set to `TRUE` in cases where seconds were never collected.
+This is due to the following from ADaM IG: For a given SDTM DTC variable, if only
+hours and minutes are ever collected, and seconds are imputed in `*DTM` as `00`,
+then it is not necessary to set `*TMF` to `"S"`.
 
 # Imputation Functions
 
