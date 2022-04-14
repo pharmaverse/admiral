@@ -19,6 +19,7 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF", {
 
   actual_output <- derive_vars_dt(date,
     new_vars_prefix = "AST",
+    flag_imputation = TRUE,
     dtc = XXSTDTC
   )
 
@@ -42,11 +43,13 @@ test_that("Partial date imputed to the first day/month", {
   actual_output <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "FIRST"
   )
   actual_output1 <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "01-01"
   )
 
@@ -73,6 +76,7 @@ test_that("Partial date imputed to the last day/month", {
   actual_output <- derive_vars_dt(date,
     new_vars_prefix = "AEN",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "LAST"
   )
 
@@ -96,6 +100,7 @@ test_that("Partial date imputed to the LAST day/month", {
   actual_output <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "LAST"
   )
 
@@ -121,6 +126,7 @@ test_that("Partial date imputation as MID to the mid day/month", {
     date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "MID"
   )
 
@@ -145,6 +151,7 @@ test_that("Partial date imputation as 6-15 to the mid day/month", {
     date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "06-15"
   )
 
@@ -180,6 +187,7 @@ test_that("Partial date imputation as MID and preserve = TRUE to the mid day/mon
     date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
+    flag_imputation = TRUE,
     date_imputation = "MID",
     preserve = TRUE
   )
@@ -205,8 +213,7 @@ test_that("Partial date imputed to the last day/month, no DTF", {
   actual_output <- derive_vars_dt(date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "LAST",
-    flag_imputation = FALSE
+    date_imputation = "LAST"
   )
 
   expect_dfs_equal(
@@ -230,7 +237,6 @@ test_that("Partial date imputed to the last day/month, no DTF and preserve=TRUE"
                                   new_vars_prefix = "AST",
                                   dtc = XXSTDTC,
                                   date_imputation = "LAST",
-                                  flag_imputation = FALSE,
                                   preserve = TRUE
   )
 
@@ -255,7 +261,6 @@ test_that("Partial date imputed to the first day/month, no DTF and preserve=TRUE
                                   new_vars_prefix = "AST",
                                   dtc = XXSTDTC,
                                   date_imputation = "FIRST",
-                                  flag_imputation = FALSE,
                                   preserve = TRUE
   )
 
