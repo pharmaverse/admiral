@@ -116,8 +116,8 @@ and imputation rules.
 ISO 8601 date and imputation rules.
 - `convert_dtc_to_dt()`: Returns a date if the input ISO 8601 date is complete.
 Otherwise, `NA` is returned.
-- `convert_dtc_to_dtm()`: Returns a datetime if the input ISO 8601 date and time
-is complete. Otherwise, `NA` is returned.
+- `convert_dtc_to_dtm()`: Returns a datetime if the input ISO 8601 date is complete 
+(with missing time replaced by `"00:00:00"` as default). Otherwise, NA is returned.
 - `compute_dtf()`: Returns the date imputation flag.
 - `compute_tmf()`: Returns the time imputation flag.
 
