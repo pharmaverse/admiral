@@ -146,11 +146,6 @@ dataset_vignette(adex,
 ```
 
 
-```{r eval=TRUE, echo=FALSE}
-adex <- select(adex, -ASTDTF, -AENDTF)
-```
-
-
 The next examples demonstrates the datetime imputation features available
 in the `derive_vars_dtm()` function, where the time is imputed as "00:00:00":
 

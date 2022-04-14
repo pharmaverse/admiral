@@ -122,7 +122,7 @@ advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs, 
-  display_vars = vars(USUBJID, VISIT, VSDTC, ADT, ADTF),
+  display_vars = vars(USUBJID, VISIT, VSDTC, ADT),
   filter = VSTESTCD == "DIABP"
 )
 ```
@@ -141,7 +141,7 @@ advs <- advs %>%
       VSDTC
     )
   ) %>% 
-  select(-ADT, -ADTF)
+  select(-ADT)
 ```
 
 ```{r eval=TRUE}
@@ -149,7 +149,8 @@ advs <- derive_vars_dt(
   advs, 
   new_vars_prefix = "A", 
   dtc = VSDTC, 
-  date_imputation = "FIRST"
+  date_imputation = "FIRST",
+  flag_imputation = TRUE
 )
 ```
 
