@@ -192,7 +192,7 @@ the additional dataset.
 }
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ex")

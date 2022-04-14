@@ -91,7 +91,7 @@ aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(ae)
 data(ex_single)
 
