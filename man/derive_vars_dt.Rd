@@ -9,7 +9,7 @@ derive_vars_dt(
   new_vars_prefix,
   dtc,
   date_imputation = NULL,
-  flag_imputation = TRUE,
+  flag_imputation = FALSE,
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
