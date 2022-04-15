@@ -12,7 +12,7 @@ derive_param_wbc_abs(
   wbc_unit = "10^9/L",
   wbc_code = "WBC",
   diff_code,
-  diff_type
+  diff_type = "fraction"
 )
 }
 \arguments{
@@ -57,25 +57,26 @@ Permitted Values: character value}
 \item{diff_code}{white blood differential parameter
 
 The observations where \code{PARAMCD} equals the specified value are considered
-as the white blood differential lab results in percentage value to be converted
+as the white blood differential lab results in fraction or percentage value to be converted
 into absolute value.}
 
 \item{diff_type}{A string specifying the type of differential
 
-Permitted Values: \code{"percent"}, \code{"fraction"}}
+Permitted Values: \code{"percent"}, \code{"fraction"}
+Default: \code{fraction}}
 }
 \value{
 The input dataset with the new parameter added
 }
 \description{
-Add a parameter by converting lab differentials from percentage to absolute values
+Add a parameter by converting lab differentials from fraction or percentage to absolute values
 }
 \details{
 If \code{diff_type} is \code{"percent"}, the analysis value of the new parameter is derived as
 \deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}
 
 If \code{diff_type} is \code{"fraction"}, the analysis value of the new parameter is derived as
-\deqn{White Blood Cell Count  * Percentage Value}
+\deqn{White Blood Cell Count  * Fraction Value}
 
 New records are created for each group of records (grouped by \code{by_vars}) if 1) the white blood
 cell component in absolute value is not already available from the input dataset, and 2) the

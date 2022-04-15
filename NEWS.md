@@ -31,6 +31,9 @@ values based on user-defined pairing (#944)
 - `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
 
+- `derive_param_wbc_abs` - Adds a parameter for lab differentials converted to absolute values. 
+(#941)
+
 ## Updates of Existing Functions
 
 

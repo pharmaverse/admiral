@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' Add a parameter by converting lab differentials from percentage to absolute values
+#' Add a parameter by converting lab differentials from fraction or percentage to absolute values
 #'
 #' @param dataset Input dataset
 #'
@@ -32,6 +32,7 @@
 #' @param diff_type A string specifying the type of differential
 #'
 #'   Permitted Values: `"percent"`, `"fraction"`
+#'   Default: `fraction`
 #'
 #' @param by_vars Grouping variables
 #'
@@ -49,7 +50,7 @@
 #' @param diff_code white blood differential parameter
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the white blood differential lab results in percentage value to be converted
+#'   as the white blood differential lab results in fraction or percentage value to be converted
 #'   into absolute value.
 #'
 #'
@@ -58,7 +59,7 @@
 #' \deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}
 #'
 #' If `diff_type` is `"fraction"`, the analysis value of the new parameter is derived as
-#' \deqn{White Blood Cell Count  * Percentage Value}
+#' \deqn{White Blood Cell Count  * Fraction Value}
 #'
 #'
 #' New records are created for each group of records (grouped by `by_vars`) if 1) the white blood
@@ -108,7 +109,7 @@ derive_param_wbc_abs <- function(dataset,
                                  wbc_unit = "10^9/L",
                                  wbc_code = "WBC",
                                  diff_code,
-                                 diff_type) {
+                                 diff_type = "fraction") {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_character_scalar(wbc_code)
@@ -125,8 +126,8 @@ derive_param_wbc_abs <- function(dataset,
   dataset_temp <- dataset %>%
     filter(
       PARAMCD == !!wbc_code |
-      PARAMCD == !!diff_code |
-      PARAMCD == !!quo_get_expr(set_values_to$PARAMCD)
+        PARAMCD == !!diff_code |
+        PARAMCD == !!quo_get_expr(set_values_to$PARAMCD)
     ) %>%
     select(!!!by_vars, PARAMCD, AVAL)
 
