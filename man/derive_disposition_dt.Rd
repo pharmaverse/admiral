@@ -17,7 +17,7 @@ derive_disposition_dt(
 \arguments{
 \item{dataset}{Input dataset}
 
-\item{dataset_ds}{Datasets containing the disposition information (e.g.: ds)
+\item{dataset_ds}{Datasets containing the disposition information (e.g.: \code{ds})
 
 It must contain:
 \itemize{
@@ -73,7 +73,7 @@ Derive a disposition status date from the the relevant records in the dispositio
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ds")
 

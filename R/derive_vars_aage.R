@@ -90,7 +90,7 @@ derive_vars_aage <- function(dataset,
 #'
 #' @author Michael Thorpe
 #'
-#' @return The input dataset with new_var paramater added in years.
+#' @return The input dataset with new_var parameter added in years.
 #'
 #' @export
 #'
@@ -272,7 +272,7 @@ NULL
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' dm %>%
@@ -329,7 +329,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' dm %>%

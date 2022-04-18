@@ -34,7 +34,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
@@ -618,16 +618,18 @@ dataset_vignette(adtte)
 ## Add ADSL Variables {#adslvars}
 
 Variables from ADSL which are required for time-to-event analyses, e.g.,
-treatment variables or covariates can be added using `left_join()`.
+treatment variables or covariates can be added using `derive_vars_merged()`.
 
 ```{r eval=TRUE}
-adtte <- left_join(
+adtte <- derive_vars_merged(
   adtte,
-  select(adsl, STUDYID, USUBJID, ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = vars(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
+  by_vars = vars(STUDYID, USUBJID)
 )
 ```
 
 ```{r, echo=FALSE}
-dataset_vignette(adtte)
+dataset_vignette(adtte,
+                 display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX))
 ```

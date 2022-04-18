@@ -50,12 +50,12 @@ To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 library(stringr)
 library(tibble)
@@ -91,10 +91,11 @@ relevant `ADSL` would be added later.
 
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
-advs <- left_join(
+advs <- derive_vars_merged(
   vs,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = vars(STUDYID, USUBJID)
 )
 ```
 
@@ -242,7 +243,11 @@ this point. All other variables related to `PARAMCD` (e.g. `PARAM`, `PARAMCAT1`,
 will be added when all `PARAMCD` are derived.
 
 ```{r eval=TRUE}
-advs <- left_join(advs, select(param_lookup, VSTESTCD, PARAMCD), by = "VSTESTCD")
+advs <- derive_vars_merged(
+  advs,
+  dataset_add = param_lookup,
+  new_vars = vars(PARAMCD),
+  by_vars = vars(VSTESTCD))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -349,7 +354,10 @@ from the look-up table (`PARAM`, `PARAMCAT1`,...) should be added.
 ```{r eval=TRUE}
 
 # Derive PARAM and PARAMN
-advs <- left_join(advs, select(param_lookup, -VSTESTCD), by = "PARAMCD")
+advs <- derive_vars_merged(
+  advs,
+  dataset_add = select(param_lookup, -VSTESTCD),
+  by_vars = vars(PARAMCD))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -501,13 +509,15 @@ This function requires the reference range boundaries to exist on the data frame
 ```{r include=FALSE}
 range_lookup <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "SYSBP", 90, 130, 70, 140,
-  "DIABP", 60, 80, 40, 90,
-  "PULSE", 60, 100, 40, 110,
-  "TEMP", 36.5, 37.5, 35, 38
+  "SYSBP",    90,    130,      70,   140,
+  "DIABP",    60,     80,      40,    90,
+  "PULSE",    60,    100,      40,   110,
+  "TEMP",     36.5,   37.5,    35,    38
 )
 
-advs <- left_join(advs_pre, range_lookup, by = "PARAMCD")
+advs <- derive_vars_merged(advs_pre,
+                           dataset_add = range_lookup,
+                           by_vars = vars(PARAMCD))
 ```
 
 The function is called as:
@@ -527,7 +537,7 @@ dataset_vignette(
 ## Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
-The parameter basetypes of this function requires a named list of expression 
+The parameter `basetypes` of this function requires a named list of expression 
 detailing how the `BASETYPE` should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
@@ -751,7 +761,9 @@ format_avalcat1n <- function(param, aval) {
 
 advs <- advs %>% 
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N"))
+  derive_vars_merged(
+    avalcat_lookup,
+    by = vars(PARAMCD, AVALCA1N))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -768,9 +780,9 @@ List of ADSL variables already merged held in vector `adsl_vars`
 
 ```{r eval=TRUE}
 advs <- advs %>%
-  left_join(
-    select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 ```
 
@@ -791,38 +803,72 @@ record and what computations must be done with the new records.
 
 ### Example 1 (Creating a New Record):
 
+To add a new record based on the selection of a certain criterion (e.g. minimum,
+maximum) `derive_extreme_records()` can be used. The new records include all
+variables of the selected records.
+
+#### Adding a New Record for the Last Value
 For each subject and Vital Signs parameter, add a record holding last valid
 observation before end of treatment. Set `AVISIT` to `"End of Treatment"` and
 assign a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
-  derive_var_extreme_flag(
+  derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(ADT, AVISITN, ATPTN, AVAL),
-    new_var = EOTFL,
     mode = "last",
-    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y")
-  ) %>%
-  filter(EOTFL == "Y") %>%
-  mutate(
-    AVISIT = "End of Treatment",
-    AVISITN = 99
-  ) %>%
-  union_all(advs) %>%
-  select(-EOTFL)
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
+    set_values_to = vars(
+      AVISIT = "End of Treatment",
+      AVISITN = 99,
+      DTYPE = "LOV"
+    )
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs_ex1, 
-  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, ANL01FL),
+  arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
+  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
   filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
 )
 ```
 
+#### Adding a New Record for the Minimum Value
+For each subject and Vital Signs parameter, add a record holding the minimum
+value before end of treatment. If the minimum is attained by multiple
+observations the first one is selected. Set `AVISIT` to `"Minimum on Treatment"`
+and assign a unique `AVISITN` value.
+
+```{r eval=TRUE}
+advs_ex1 <- advs %>%
+  derive_extreme_records(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD),
+    order = vars(AVAL, ADT, AVISITN, ATPTN),
+    mode = "first",
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
+    set_values_to = vars(
+      AVISIT = "Minimum on Treatment",
+      AVISITN = 98,
+      DTYPE = "MINIMUM"
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
+  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
+  filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
+)
+```
 
 ### Example 2 (Deriving a Summary Record)
+
+For adding new records based on aggregating records `derive_summary_records()`
+can be used. For the new records only the variables specified by `by_vars`,
+`analysis_var`, and `set_values_to` are populated.
 
 For each subject, Vital Signs parameter, visit, and date add a record holding
 the average value for observations on that date.

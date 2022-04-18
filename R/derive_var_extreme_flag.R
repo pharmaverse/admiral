@@ -16,18 +16,18 @@
 #'   The first or last observation is determined with respect to the specified
 #'   order.
 #'
-#'   Permitted Values: list of variables or functions of variables
+#'   Permitted Values: list of variables or `desc(<variable>)` function calls
 #'
 #' @param new_var Variable to add
 #'
 #'   The specified variable is added to the output dataset. It is set to `"Y"`
 #'   for the first or last observation (depending on the mode) of each by group.
 #'
-#'   Permitted Values: list of name-value pairs
+#'   Permitted Values: variable name
 #'
 #' @param mode Flag mode
 #'
-#'   Determines of the first or last observation is flagged.
+#'   Determines if the first or last observation is flagged.
 #'
 #'   Permitted Values: `"first"`, `"last"`
 #'
@@ -70,7 +70,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -376,7 +376,7 @@ derive_worst_flag <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored

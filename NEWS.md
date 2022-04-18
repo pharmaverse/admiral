@@ -1,3 +1,52 @@
+# admiral 0.7.0
+
+## New Features
+
+- New functions for merging variables (#607):
+
+  - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
+  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
+  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
+  - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_character()` - Merge a Character Variable
+
+- `create_query_data()` is provided to create the [queries
+dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
+`derive_vars_query()` (#606)
+
+- `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
+
+- New functions for deriving first or last dates from multiple source datasets (#753):
+
+  - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
+  - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
+- New function `derive_extreme_records()` for adding the first or last
+observation within each by group to the dataset (#1042)
+
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
+- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+from a BDS dataset, e.g. ADLB. (#943)
+
+## Updates of Existing Functions
+
+
+## Breaking Changes
+
+- `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+
+## Documentation
+
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
+
+## Various
+
+-  Naming convention of admiral.xxx packages change to admiralxxx from this point onwards (#968)
+ 
+
 # admiral 0.6.3
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raised after submitting v0.6.2 (#946)
@@ -5,7 +54,6 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raise
 # admiral 0.6.2
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/925) raised after submitting v0.6.1 (#925)
-
 
 # admiral 0.6.1
 
@@ -27,6 +75,7 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
 - `derive_vars_dtm()`, `derive_var_disposition` and `derive_var_lstalvdt` now have `preserve` argument.  A user can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE` when doing date_imputation (#592)
+
 
 - `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `"S"` flag if seconds are not recorded in the data (#589)
 
@@ -80,6 +129,8 @@ this case the day is imputed as `15` (#592)
 ## Various
 
 - GitHub repo moved to pharmaverse org and associated broken site links fixed (#803 & #820)
+
+- Examples have been added for `format_reason_default`, `format_eoxxstt_default`, `extend_source_datasets` and `filter_date_sources` (#745)
 
 # admiral 0.5.0
 
@@ -137,6 +188,8 @@ to specify the unit of the input age (#569)
 ## Bug Fixes
 
 - `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
+
+- `derive_vars_dtm()` Change the min_dates with max_dates in the lapply statement when computing max_dates (#687)
 
 ## Documentation
 

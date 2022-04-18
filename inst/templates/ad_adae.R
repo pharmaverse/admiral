@@ -4,7 +4,7 @@
 #
 # Input: ae, adsl, suppae, ex_single
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -34,9 +34,10 @@ adae <- ae %>%
   derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by = vars(STUDYID, USUBJID)
   ) %>%
 
   # derive analysis start time
@@ -125,8 +126,9 @@ adae <- adae %>%
 
 # Join all ADSL with AE
 adae <- adae %>%
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 

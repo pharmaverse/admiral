@@ -20,7 +20,7 @@ invisibly otherwise.
 Checks if an argument is a symbol
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 data(dm)
 
 example_fun <- function(dat, var) {

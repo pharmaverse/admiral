@@ -24,6 +24,36 @@ test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
   )
 })
 
+test_that("a warning is issued when using `derive_var_lstalvdt()`", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
+    "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01",  "2", NA, "2020-06",
+    "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
+  )
+
+  adsl_trtdate <- lstalvdt_source(dataset_name = "adsl",
+                                  date = TRTEDTM)
+
+  adsl_dthdate <- lstalvdt_source(
+    dataset_name = "adsl",
+    date = DTHDTC,
+    filter = nchar(DTHDTC) >= 10
+  )
+
+  expect_warning(
+    derive_var_lstalvdt(
+      adsl,
+      source_datasets = list(adsl = adsl),
+      adsl_trtdate,
+      adsl_dthdate
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+
 test_that("a warning is issued when using `derive_var_basec()", {
   dataset <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL, ~AVALC,   ~AVISIT,    ~ABLFL,
@@ -300,6 +330,72 @@ test_that("a warning is issued when using `derive_params_exposure()", {
       filter = NULL,
       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
 
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_agegr_fda()`", {
+  expect_warning(
+    derive_agegr_fda(adsl, age_var = AGE, new_var = AGEGR2),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_agegr_ema()`", {
+  expect_warning(
+    derive_agegr_ema(adsl, age_var = AGE, new_var = AGEGR2),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("a warning is issued when using `derive_worst_flag()`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                 ~AVAL,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"), 12.0,
+
+    "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-30"), 12.0
+  )
+
+  expect_warning(
+    derive_worst_flag(
+      input,
+      by_vars = vars(USUBJID, PARAMCD, AVISIT),
+      order = vars(desc(ADT)),
+      new_var = WORSTFL,
+      param_var = PARAMCD,
+      analysis_var = AVAL,
+      worst_high = c("PARAM01", "PARAM03"),
+      worst_low = "PARAM02"
     ),
     "deprecated",
     fixed = TRUE

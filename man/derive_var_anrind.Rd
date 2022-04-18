@@ -32,7 +32,7 @@ is less than or equal \code{A1HI}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(vs)
 
 ref_ranges <- tibble::tribble(
@@ -47,7 +47,7 @@ vs \%>\%
     AVAL = VSSTRESN
   ) \%>\%
   filter(PARAMCD \%in\% c("PULSE", "DIABP")) \%>\%
-  left_join(ref_ranges, by = "PARAMCD") \%>\%
+  derive_vars_merged(ref_ranges, by_vars = vars(PARAMCD)) \%>\%
   derive_var_anrind() \%>\%
   select(USUBJID, PARAMCD, AVAL, ANRLO:ANRIND)
 }

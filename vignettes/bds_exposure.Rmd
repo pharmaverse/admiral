@@ -49,12 +49,12 @@ To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 library(stringr)
 library(tibble)
@@ -88,11 +88,12 @@ At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only 
 
 adsl_vars<-vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM )
 
-adex <- left_join(
-  ex,
-  select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-  by = c("STUDYID", "USUBJID")
-)
+adex <- derive_vars_merged(
+    ex,
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -255,6 +256,25 @@ dataset_vignette(adex,
                  display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO))
 ```
 
+It may be of additional interest to turn a single record containing dosing
+summary information into a set of multiple single records, each representing a
+single dose over the interval specified by the summary record. This is another
+approach to deriving a total dose parameter when `EXDOSFRQ != ONCE`.
+
+The function `create_single_dose_dataset()` can 
+be used to expand a record containing a start date, an end date, and a dosing
+frequency to a corresponding set of records each representing one dose (i.e.
+`EXDOSFRQ == "ONCE"`).
+
+```{r eval=TRUE, echo=TRUE}
+single_dose <- adex %>%
+  filter(USUBJID=="01-701-1015" & EXSTDY==1) %>%
+  create_single_dose_dataset()
+
+dataset_vignette(single_dose, 
+                 display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
+
+```
 
 ## Create 1:1 mapping records {#onetoone}
 
@@ -483,7 +503,9 @@ param_lookup <- tribble(
 
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- left_join(adex, param_lookup, by = "PARAMCD")
+adex <- derive_vars_merged(adex,
+                           dataset_add = param_lookup,
+                           by_vars = vars(PARAMCD))
 
 count(adex, PARAMCD, PARAM, PARAMN)
 ```
@@ -545,10 +567,10 @@ If needed, the other `ADSL` variables can now be added:
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
-  left_join(select(adsl, !!!negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
-
 ```
 # Example Scripts {#example}
 

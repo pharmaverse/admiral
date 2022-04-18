@@ -63,10 +63,15 @@ Add a variable for dose amount from the last dose to the input dataset.
 \details{
 The last dose amount is derived as the dose amount where the maximum \code{dose_date} is
 lower to or equal to the \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
+
+If dose information is aggregated (i.e. is a dosing frequency other than \code{"ONCE"}
+over a period defined by a start and end date) the function
+\code{create_single_dose_dataset()} can be used to generate single doses from
+aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(ae)
 data(ex_single)
 
@@ -101,7 +106,7 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
 }
 \seealso{
-\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}
+\code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
 \author{
 Annie Yang
