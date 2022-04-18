@@ -130,7 +130,10 @@ dm \%>\%
 
 # Derive DCSREAS and DCSREASP using a study-specific format
 format_dcsreas <- function(x, y = NULL) {
-  out <- if (is.null(y)) x else y
+  out <- if (is.null(y)) x
+     else {
+     if_else(x == "OTHER", y, NA_character_)
+     }
   case_when(
     !(x \%in\% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
     TRUE ~ NA_character_
