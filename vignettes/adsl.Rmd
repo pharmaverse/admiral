@@ -271,7 +271,7 @@ This call would return the input dataset with the column `DCSREAS` and `DCSREASP
 By default, the function will map 
 
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
-- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
+- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"` or `NA`, and `DSDECOD` is equal to "OTHER",`NA` otherwise
 
 
 If the default derivation must be changed, the user can create his/her own function and pass it to 
@@ -282,7 +282,10 @@ Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
 format_dcsreas <- function(dsdecod, dsterm = NULL) {
-  out <- if (is.null(dsterm)) dsdecod else dsterm
+  out <- if (is.null(dsterm)) dsdecod
+  else{
+    if_else (dsdecod == "OTHER", dsterm, NA_character_)
+  }
   case_when(
     !dsdecod %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
     TRUE ~ NA_character_

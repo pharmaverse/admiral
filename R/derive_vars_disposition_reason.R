@@ -198,8 +198,7 @@ derive_disposition_reason <- function(dataset,
 #'   select(STUDYID, USUBJID, DCSREAS)
 #'
 format_reason_default <- function(reason, reason_spe = NULL) {
-  out <- if (is.null(reason_spe)) {
-    reason}
+  out <- if (is.null(reason_spe)) reason
   else{
     if_else (reason == "OTHER", reason_spe, NA_character_)
   }
@@ -266,15 +265,18 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' `reason_var` value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe,
 #' NA_character_)`).
 #' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns DCSREASP = `DSTERM` when `DSDECOD` is not
-#' 'COMPLETED' nor NA.
+#' 'COMPLETED' nor NA, and `DSDECOD` is equal to "OTHER".
 #'
 #' Default: format_reason_default defined as:
 #' format_reason_default <- function(reason, reason_spe = NULL) {
-#'   out <- if ( is.null(reason_spe) ) reason else reason_spe
+#'   out <- if ( is.null(reason_spe) ) reason
+#'     else{
+#'     if_else (reason == "OTHER", reason_spe, NA_character_)
+#'     }
 #'   if_else ( reason != "COMPLETED" & !is.na(reason), out, NA_character_)
 #' }
 #' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' nor NA.
-#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` is not 'COMPLETED' nor NA.
+#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` is not 'COMPLETED' nor NA, and `DSDECOD` is equal to "OTHER".
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'

@@ -72,16 +72,19 @@ the function must have two character vectors argument, e.g.
 Typically, the content of the function would return \code{reason_var_spe} or \code{NA} depending on the
 \code{reason_var} value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe, NA_character_)}).
 \code{DCSREASP = format_reason(DSDECOD, DSTERM)} returns DCSREASP = \code{DSTERM} when \code{DSDECOD} is not
-'COMPLETED' nor NA.
+'COMPLETED' nor NA, and \code{DSDECOD} is equal to "OTHER".
 }
 
 Default: format_reason_default defined as:
 format_reason_default <- function(reason, reason_spe = NULL) {
-out <- if ( is.null(reason_spe) ) reason else reason_spe
+out <- if ( is.null(reason_spe) ) reason
+else{
+if_else (reason == "OTHER", reason_spe, NA_character_)
+}
 if_else ( reason != "COMPLETED" & !is.na(reason), out, NA_character_)
 }
 format_reason_default(DSDECOD) returns \code{DSDECOD} when \code{DSDECOD} is not 'COMPLETED' nor NA.
-format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' nor NA.}
+format_reason_default(DSDECOD, DSTERM) returns \code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' nor NA, and \code{DSDECOD} is equal to "OTHER".}
 
 \item{filter_ds}{Filter condition for the disposition data.
 

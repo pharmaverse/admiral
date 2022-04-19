@@ -37,6 +37,7 @@ from a BDS dataset, e.g. ADLB. (#943)
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+- `derive_vars_disposition_reason()` now is updated such that the default is populating DCSREASP only when DSDECOD is equal to "OTHER", which is consistent with ADaMIG_v1.3 (#886).
 
 ## Documentation
 
