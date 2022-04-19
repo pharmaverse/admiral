@@ -13,15 +13,63 @@ params(...)
 An object of class \code{params}
 }
 \description{
-Create a set of variable parameters to be used in an iteration of \code{\link[=call_derivation]{call_derivation()}}
+Create a set of variable parameters/function arguments to be used in \code{\link[=call_derivation]{call_derivation()}}.
 }
 \examples{
-params(
-  fns = list(VSSTRESN ~ mean(., na.rm = TRUE)),
-  set_values_to = vars(DTYPE = "AVERAGE")
+library(dplyr, warn.conflicts = FALSE)
+library(admiraltest)
+data(ae)
+data(adsl)
+
+adae <-
+  select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) \%>\%
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = vars(TRTSDT, TRTEDT),
+    by_vars = vars(USUBJID)
+  )
+
+## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
+adae \%>\%
+  derive_vars_dt(
+    new_vars_prefix = "AST",
+    dtc = AESTDTC,
+    date_imputation = "first",
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
+  ) \%>\%
+  derive_vars_dt(
+    new_vars_prefix = "AEN",
+    dtc = AEENDTC,
+    date_imputation = "last",
+    min_dates = vars(TRTSDT),
+    max_dates = vars(TRTEDT)
+  )
+
+## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
+## one can add multiple variables in one go.
+## The function arguments which are different from a variable to another (e.g. `new_vars_prefix`,
+## `dtc`, and `date_imputation`) are specified as a list of `params()` in the `variable_params`
+## argument of `call_derivation()`. All other arguments which are common to all variables
+## (e.g. `min_dates` and `max_dates`) are specified outside of `variable_params` (i.e. in `...`).
+call_derivation(
+  dataset = adae,
+  derivation = derive_vars_dt,
+  variable_params = list(
+    params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+    params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+  ),
+  min_dates = vars(TRTSDT),
+  max_dates = vars(TRTEDT)
 )
+
+## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`
+## to derive variables `ASTDT` and `AENDT` separately at the beginning.
+}
+\seealso{
+\code{\link[=call_derivation]{call_derivation()}}
 }
 \author{
-Thomas Neitmann
+Thomas Neitmann, Tracey Wang
 }
 \keyword{source_specifications}

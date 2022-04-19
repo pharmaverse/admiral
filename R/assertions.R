@@ -5,6 +5,7 @@
 #'
 #' @param arg A function argument to be checked
 #' @param required_vars A list of variables created using `vars()`
+#' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
@@ -20,7 +21,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -32,8 +33,12 @@
 #' try(example_fun(dplyr::select(dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
-assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
+assert_data_frame <- function(arg,
+                              required_vars = NULL,
+                              check_is_grouped = TRUE,
+                              optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
+  assert_logical_scalar(check_is_grouped)
   assert_logical_scalar(optional)
 
   if (optional && is.null(arg)) {
@@ -49,7 +54,7 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (dplyr::is_grouped_df(arg)) {
+  if (check_is_grouped && dplyr::is_grouped_df(arg)) {
     err_msg <- sprintf(
       "`%s` is a grouped data frame, please `ungroup()` it first",
       arg_name(substitute(arg))
@@ -120,7 +125,6 @@ assert_data_frame <- function(arg, required_vars = NULL, optional = FALSE) {
 #' }
 #'
 #' example_fun2("Warning")
-
 assert_character_scalar <- function(arg,
                                     values = NULL,
                                     case_sensitive = TRUE,
@@ -178,7 +182,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @author Thomas Neitmann
 #'
-#' @return The function throws an error if `arg` is not a character vector or if
+#' @return
+#' The function throws an error if `arg` is not a character vector or if
 #' any element is not included in the list of valid values. Otherwise, the input
 #' is returned invisibly.
 #'
@@ -292,7 +297,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -371,7 +376,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -391,7 +396,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  provided <- quo_not_missing(arg)
+  provided <- !rlang::quo_is_missing(arg)
   if (!provided & !optional) {
     err_msg <- sprintf("Argument `%s` is missing, with no default", arg_name(substitute(arg)))
     abort(err_msg)
@@ -543,7 +548,7 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #'
 #' @return
 #' The function throws an error if `arg` is not an integer belonging to the
-#' specified `subset`.
+#' specified `subset`. Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -599,8 +604,9 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if `arg` is not a numeric vector.
-#'   Otherwise, the input is returned invisibly.
+#' @return
+#' The function throws an error if `arg` is not a numeric vector.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -643,7 +649,8 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' @author Thomas Neitmann
 #'
 #' @return
-#' The function throws an error if `arg` is an object which does *not* inherit from `class`
+#' The function throws an error if `arg` is an object which does *not* inherit from `class`.
+#' Otherwise, the input is returned invisibly.
 #'
 #' @export
 #'
@@ -693,7 +700,8 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @return
 #' The function throws an error if `arg` is not a list or if `arg` is a list but its
-#' elements are not objects inheriting from `class`
+#' elements are not objects inheriting from `class`. Otherwise, the input is returned
+#' invisibly.
 #'
 #' @export
 #'
@@ -744,7 +752,9 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+      any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `exprs()` but is %s",
       arg_name(substitute(arg)),
@@ -787,14 +797,14 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @author Thomas Neitmann
 #'
 #' @return The function throws an error if any of the required variables are
-#' missing in the input dataset
+#' missing in the input dataset. Otherwise, the dataset is returned invisibly.
 #'
 #' @export
 #'
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' assert_has_variables(dm, "STUDYID")
@@ -816,6 +826,7 @@ assert_has_variables <- function(dataset, required_vars) {
     }
     abort(err_msg)
   }
+  invisible(dataset)
 }
 
 #' Is Argument a Function?
@@ -922,8 +933,10 @@ assert_function_param <- function(arg, params) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if the unit variable differs from the
-#'   unit for any observation of the parameter in the input dataset
+#' @return
+#' The function throws an error if the unit variable differs from the
+#' unit for any observation of the parameter in the input dataset. Otherwise, the
+#' dataset is returned invisibly.
 #'
 #' @export
 #'
@@ -961,6 +974,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+  invisible(dataset)
 }
 
 #' Asserts That a Parameter Does Not Exist in the Dataset
@@ -972,8 +986,9 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The function throws an error if the parameter exists in the input
-#'   dataset
+#' @return
+#' The function throws an error if the parameter exists in the input
+#' dataset. Otherwise, the dataset is returned invisibly.
 #'
 #' @export
 #'
@@ -996,6 +1011,7 @@ assert_param_does_not_exist <- function(dataset, param) {
       )
     )
   }
+  invisible(dataset)
 }
 
 #' Helper Function to Check IDVAR per QNAM
@@ -1047,252 +1063,6 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
   }
 }
 
-
-#' Is Date/Date-time?
-#'
-#' Checks if a date or date-time vector was specified
-#'
-#' @param arg The argument to check
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' refdate <- lubridate::ymd("2020-01-02")
-#' date <- lubridate::ymd("2020-02-03")
-#' assertthat::assert_that(admiral:::is_date(refdate), admiral:::is_date(date))
-is_date <- function(arg) {
-  is.instant(arg)
-}
-on_failure(is_date) <- function(call, env) {
-  evld <- eval(call$arg, envir = env)
-  len <- length(evld)
-  msg <- if (len == 0) {
-    deparse(evld)
-  } else if (len == 1) {
-    evld
-  } else {
-    paste0("c(", paste(head(evld, 5), collapse = ", "), `if`(len > 5, ", ..."), ")")
-  }
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    msg,
-    " is not a lubridate date."
-  )
-}
-
-#' Is Time Unit?
-#'
-#' Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours',
-#' 'minutes', or 'seconds'.
-#'
-#' @param arg The argument to check
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return `TRUE` if the argument is a time unit, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' unit <- "days"
-#' assertthat::assert_that(admiral:::is_timeunit(unit))
-is_timeunit <- function(arg) {
-  arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
-}
-on_failure(is_timeunit) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid time unit.",
-    " Valid time units are 'years', 'months', 'days', 'hours', 'minutes', and 'seconds'."
-  )
-}
-
-#' Check Validity of the Date Imputation Input
-#'
-#' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
-#' or as a keyword: "FIRST", "MID", "LAST"
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
-#' assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
-is_valid_date_entry <- function(arg) {
-  pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
-  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
-}
-on_failure(is_valid_date_entry) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid date entry.\n",
-    "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
-    "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
-  )
-}
-
-#' Check Validity of the Time Imputation Input
-#'
-#' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-#' or as a keyword: "FIRST", "LAST"
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a valid time_imputation input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
-is_valid_time_entry <- function(arg) {
-  pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
-}
-on_failure(is_valid_time_entry) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid time entry.\n",
-    "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or ",
-    "'FIRST', 'LAST' to get the first/last time of the day"
-  )
-}
-
-#' Check Validity of the Minute/Second Portion of the Time Input
-#'
-#' Minutes and seconds are expected to range from 0 to 59
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a valid min/sec input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_sec_min(59))
-is_valid_sec_min <- function(arg) {
-  arg %in% 0:59
-}
-on_failure(is_valid_sec_min) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid min/sec.\n",
-    "Values must be between between 0-59"
-  )
-}
-
-#' Check Validity of the Hour Portion in the Time Input
-#'
-#' Hours are expected to range from 0 to 23
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a valid hour input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_hour(20))
-is_valid_hour <- function(arg) {
-  arg %in% 0:23
-}
-on_failure(is_valid_hour) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    "=",
-    eval(call$arg, envir = env),
-    " is not a valid hour.\n",
-    "Values must be between 0-23"
-  )
-}
-
-#' Check Validity of the Day Portion in the Date Input
-#'
-#' Days are expected to range from 1 to 31
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a day input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_day(20))
-is_valid_day <- function(arg) {
-  arg %in% 1:31
-}
-on_failure(is_valid_day) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid day.\n",
-    "Values must be between 1-31"
-  )
-}
-
-#' Check Validity of the Month Portion in the Date Input
-#'
-#' Days are expected to range from 1 to 12
-#'
-#' @param arg The argument to check
-#'
-#' @author Samia Kabi
-#'
-#' @return `TRUE` if the argument is a month input, `FALSE` otherwise
-#'
-#' @keywords check
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_month(12))
-is_valid_month <- function(arg) {
-  arg %in% 1:12
-}
-on_failure(is_valid_month) <- function(call, env) {
-  paste0(
-    "Argument ",
-    deparse(call$arg),
-    " = ",
-    eval(call$arg, envir = env),
-    " is not a valid month.\n",
-    "Values for month must be between 1-12. ",
-    "Please check the date_imputation input: it should be sepcified as 'dd-mm'"
-  )
-}
-
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of `quosures` where the expressions are
@@ -1308,6 +1078,10 @@ on_failure(is_valid_month) <- function(call, env) {
 #' is `NULL` then an error is thrown.
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
+#'
+#' @return
+#' The function throws an error if `arg` is not a list of variable-value expressions.
+#' Otherwise, the input it returned invisibly.
 #'
 #' @keywords assertion
 #'
@@ -1424,94 +1198,6 @@ assert_varval_list <- function(arg, # nolint
   invisible(arg)
 }
 
-contains_vars <- function(arg) {
-  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
-}
-
-is_vars <- function(arg) {
-  inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol))
-}
-on_failure(is_vars) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a list of variables created using `vars()`"
-  )
-}
-
-is_order_vars <- function(arg) {
-  quo_is_desc_call <- function(quo) {
-    expr <- quo_get_expr(quo)
-    is_call(expr) &&
-      length(expr) == 2L &&
-      deparse(expr[[1L]]) == "desc" &&
-      is_symbol(expr[[2L]])
-  }
-
-  inherits(arg, "quosures") &&
-    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
-}
-on_failure(is_order_vars) <- function(call, env) {
-  paste0(
-    backquote(deparse(call$arg)),
-    " is not a valid input for `order_vars`.",
-    " Valid inputs are created using `vars()` and may only contain symbols or calls involving `desc()`.\n\n", # nolint
-    "  # Bad:\n",
-    "  vars(ADT = impute_dtc(LBDTC), is.na(AVAL))\n\n",
-    "  # Good:\n",
-    "  vars(AVAL, desc(ADT))"
-  )
-}
-
-is_unnamed_exprs <- function(arg) {
-  is.list(arg) &&
-    all(map_lgl(arg, is.language)) &&
-    all(names(arg) == "")
-}
-on_failure(is_unnamed_exprs) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not a unnamed list of expressions created using `exprs()`"
-  )
-}
-
-is_expr <- function(arg) {
-  # Note: is.language allows both symbol and language
-  !is.list(arg) & is.language(arg)
-}
-on_failure(is_expr) <- function(call, env) {
-  paste0(
-    "Argument `",
-    deparse(call$arg),
-    "` is not an expression created using `expr()`"
-  )
-}
-
-#' Check Whether an Argument Is Not a Quosure of a Missing Argument
-#'
-#' @param x Test object
-#'
-#' @return TRUE or error.
-#'
-#' @author Thomas Neitmann, Ondrej Slama
-#'
-#' @noRd
-#'
-#' @examples
-#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
-#' test_fun(my_variable) # no missing argument -> returns TRUE
-#' \dontrun{
-#' test_fun() # missing argument -> throws error
-#' }
-quo_not_missing <- function(x) {
-  !rlang::quo_is_missing(x)
-}
-on_failure(quo_not_missing) <- function(call, env) {
-  paste0("Argument `", deparse(call$x), "` is missing, with no default")
-}
-
-
 #' Is an Element of a List of Lists/Classes Fulfilling a Condition?
 #'
 #' Checks if the elements of a list of named lists/classes fulfill a certain
@@ -1543,6 +1229,9 @@ on_failure(quo_not_missing) <- function(call, env) {
 #'   passed to the function. See the second example below.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @return
+#' An error if the condition is not meet. The input otherwise.
 #'
 #' @keywords assertion
 #'
@@ -1611,6 +1300,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
       )
     )
   }
+  invisible(list)
 }
 
 
@@ -1627,6 +1317,9 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @param vars2 Second list of variables
 #'
 #' @author Stefan Bundfuss
+#'
+#' @return
+#' An error if the condition is not meet. The input otherwise.
 #'
 #' @keywords assertion
 #'
@@ -1675,64 +1368,4 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
       )
     )
   }
-}
-
-#' Get One to Many Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the one to many values are stored
-#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
-#'
-#' Note that the function always returns the one to many values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
-#' )
-#'
-#' get_one_to_many_dataset()
-get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
-}
-
-#' Get Many to One Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the many to one values are stored
-#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
-#'
-#' Note that the function always returns the many to one values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
-#' )
-#'
-#' get_many_to_one_dataset()
-get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
 }

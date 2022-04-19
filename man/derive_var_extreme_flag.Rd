@@ -78,7 +78,7 @@ based on the \code{order} and the \code{mode}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored

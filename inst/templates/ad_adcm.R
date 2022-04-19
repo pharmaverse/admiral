@@ -4,7 +4,7 @@
 #
 # Input: cm, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -86,6 +86,8 @@ adcm <- cm %>%
 adcm <- adcm %>%
 
   # Derive On-Treatment flag
+  # Set `span_period = "Y"` if you want occurrences that started prior to drug
+  # intake and ongoing or ended after this time to be considered as on-treatment.
   derive_var_ontrtfl(
     start_date = ASTDT,
     end_date = AENDT,
@@ -147,4 +149,5 @@ adcm <- adcm %>%
 
 # ---- Save output ----
 
-save(adcm, file = "data/adcm.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")

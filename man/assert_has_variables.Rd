@@ -13,13 +13,13 @@ assert_has_variables(dataset, required_vars)
 }
 \value{
 The function throws an error if any of the required variables are
-missing in the input dataset
+missing in the input dataset. Otherwise, the dataset is returned invisibly.
 }
 \description{
 Checks if a dataset contains all required variables
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 data(dm)
 
 assert_has_variables(dm, "STUDYID")

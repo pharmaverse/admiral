@@ -17,7 +17,8 @@ assert_unit(dataset, param, required_unit, get_unit_expr)
 }
 \value{
 The function throws an error if the unit variable differs from the
-unit for any observation of the parameter in the input dataset
+unit for any observation of the parameter in the input dataset. Otherwise, the
+dataset is returned invisibly.
 }
 \description{
 Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected

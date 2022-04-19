@@ -6,6 +6,9 @@
 \usage{
 list_all_templates()
 }
+\value{
+A \code{character} vector of all available templates
+}
 \description{
 List All Available ADaM Templates
 }

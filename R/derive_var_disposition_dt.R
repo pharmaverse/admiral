@@ -9,7 +9,7 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
+#' @param dataset_ds Datasets containing the disposition information (e.g.: `ds`)
 #'
 #' It must contain:
 #' - `STUDYID`, `USUBJID`,
@@ -59,7 +59,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -150,7 +150,7 @@ derive_disposition_dt <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'

@@ -6,7 +6,7 @@
 \title{ECG Analysis Dataset}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 78614 rows and 104 columns.}
 \source{
-Derived from the \link{adsl} and \link{eg} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
+Derived from the \code{adsl} and \code{eg} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
 }
 \usage{
 adeg

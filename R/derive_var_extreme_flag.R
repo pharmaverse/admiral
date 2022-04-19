@@ -70,7 +70,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -379,7 +379,7 @@ derive_worst_flag <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored

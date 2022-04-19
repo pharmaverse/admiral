@@ -5,6 +5,8 @@
 #' @param dataset A `data.frame`
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
+#' @return No return value, called for side effects
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords warning
@@ -12,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
@@ -56,6 +58,8 @@ is_valid_dtc <- function(arg) {
 #'
 #' @param dtc a character vector containing the dates
 #' @param is_valid a logical vector indicating whether elements in `dtc` are valid
+#'
+#' @return No return value, called for side effects
 #'
 #' @author Samia Kabi
 #'
@@ -218,7 +222,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(adsl)
 #' data(vs)
 #'

@@ -6,7 +6,7 @@
 #
 # Input: adsl, eg
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -327,4 +327,5 @@ adeg <- adeg %>%
 
 # ---- Save output ----
 
-save(adeg, file = "data/adeg.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")

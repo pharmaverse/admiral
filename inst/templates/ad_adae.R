@@ -4,7 +4,7 @@
 #
 # Input: ae, adsl, suppae, ex_single
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -134,4 +134,5 @@ adae <- adae %>%
 
 # ---- Save output ----
 
-save(adae, file = "data/adae.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adae, file = file.path(dir, "adae.rda"), compress = "bzip2")

@@ -16,6 +16,9 @@ of records for which to calculate \code{new_var}}
 
 \item{new_var}{The name of the newly created baseline column, e.g. \code{BASE}}
 }
+\value{
+The input dataset with variable \code{new_var} added
+}
 \description{
 \verb{r lifecycle::badge("deprecated")}
 

@@ -42,7 +42,7 @@ will be split in categories: <18, 18-64, >=65.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(dm)
 
 dm \%>\%
@@ -62,7 +62,7 @@ data.frame(AGE = 1:100) \%>\%
   derive_var_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(dm)
 
 dm \%>\%

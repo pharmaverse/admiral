@@ -64,6 +64,10 @@ More general expression are not allowed.
 
 \emph{Permitted Values:} List of variable-value pairs}
 }
+\value{
+The input dataset with a new record added for each group (with respect to the
+variables specified for the \code{by_vars} parameter).
+}
 \description{
 \verb{r lifecycle::badge("deprecated")}
 

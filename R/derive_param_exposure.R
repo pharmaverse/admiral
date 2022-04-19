@@ -140,8 +140,7 @@ derive_param_exposure <- function(dataset,
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
   if (all(dtm)) {
     dates <- vars(ASTDTM, AENDTM)
-  }
-  else {
+  } else {
     dates <- vars(ASTDT, AENDT)
   }
 
@@ -181,8 +180,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(as_iso_dtm(ASTDTM), as_iso_dtm(temp_start)),
-        AENDTM = coalesce(as_iso_dtm(AENDTM), as_iso_dtm(temp_end))
+        ASTDTM = coalesce(ASTDTM, temp_start),
+        AENDTM = coalesce(AENDTM, temp_end)
       ) %>%
       select(-starts_with("temp_"))
 
@@ -190,8 +189,7 @@ derive_param_exposure <- function(dataset,
       expo_data <- expo_data %>%
         mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
     }
-  }
-  else {
+  } else {
     dates <- subset_ds %>%
       group_by(!!!by_vars) %>%
       summarise(
@@ -200,13 +198,20 @@ derive_param_exposure <- function(dataset,
       ) %>%
       ungroup()
     expo_data <- add_data %>%
-      derive_vars_merged(dataset_add = dates, by = by_vars) %>%
+      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(ASTDT = coalesce(ASTDT, temp_start),
              AENDT = coalesce(AENDT, temp_end)) %>%
       select(-starts_with("temp_"))
   }
 
-  bind_rows(dataset, expo_data)
+  all_data <- bind_rows(dataset, expo_data)
+
+  if (all(dtm)) {
+    attr(all_data$ASTDTM, "tzone") <- "UTC"
+    attr(all_data$AENDTM, "tzone") <- "UTC"
+  }
+
+  all_data
 }
 
 #' Add an Aggregated Parameter and Derive the Associated Start and End Dates
@@ -217,6 +222,10 @@ derive_param_exposure <- function(dataset,
 #' This function is *deprecated*. Please use [derive_param_exposure()] instead.
 #'
 #' @inheritParams derive_param_exposure
+#'
+#' @return
+#' The input dataset with a new record added for each group (with respect to the
+#' variables specified for the `by_vars` parameter).
 #'
 #' @export
 #'
