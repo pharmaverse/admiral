@@ -76,7 +76,7 @@ Derive a disposition status from the the relevant records in the disposition dom
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ds")
 

@@ -44,6 +44,9 @@ from a BDS dataset, e.g. ADLB. (#943)
 
 ## Various
 
+-  Naming convention of admiral.xxx packages change to admiralxxx from this point onwards (#968)
+ 
+
 # admiral 0.6.3
 
 Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/946) raised after submitting v0.6.2 (#946)
