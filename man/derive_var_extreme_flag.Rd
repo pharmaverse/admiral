@@ -73,8 +73,9 @@ For each group (with respect to the variables specified for the
 (with respect to the order specified for the \code{order} parameter and the flag mode
 specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
 are considered for flagging.
-Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed
-based on the \code{order} and the \code{mode}.
+Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed for
+all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every
+parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

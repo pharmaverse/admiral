@@ -79,7 +79,9 @@ if its \code{param_var} is in \code{worst_high} / \code{worst_low}.
 Otherwise, it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
 the first one with respect to the order specified by the \code{order} parameter is flagged. The
-direction of "worst" depends on the parameters specified in \code{worst_high} / \code{worst_low}.
+direction of "worst" depends on the definition of worst for a specified parameters in the
+arguments \code{worst_high} / \code{worst_low}, i.e. for some parameters the highest value is the worst
+and for others the worst is the lowest value.
 }
 \examples{
 

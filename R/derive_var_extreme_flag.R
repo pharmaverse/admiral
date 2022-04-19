@@ -364,8 +364,9 @@ derive_worst_flag <- function(dataset,
 #'   (with respect to the order specified for the `order` parameter and the flag mode
 #'   specified for the `mode` parameter). Only observations included by the `filter` parameter
 #'   are considered for flagging.
-#'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed
-#'   based on the `order` and the `mode`.
+#'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed for
+#'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
+#'   parameter the first or last record will be flagged across the whole dataset.
 #'
 #' @seealso [derive_var_worst_flag()]
 #'
@@ -546,7 +547,9 @@ derive_var_extreme_flag <- function(dataset,
 #' Otherwise, it is assigned `NA`.
 #' If there is more than one such maximal / minimal observation,
 #' the first one with respect to the order specified by the `order` parameter is flagged. The
-#' direction of "worst" depends on the parameters specified in `worst_high` / `worst_low`.
+#' direction of "worst" depends on the definition of worst for a specified parameters in the
+#' arguments `worst_high` / `worst_low`, i.e. for some parameters the highest value is the worst
+#' and for others the worst is the lowest value.
 #'
 #' @seealso [derive_var_extreme_flag()]
 #'
