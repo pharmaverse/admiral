@@ -40,11 +40,9 @@ from a BDS dataset, e.g. ADLB. (#943)
 
 ## Documentation
 
-<<<<<<< HEAD
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
-=======
+
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
->>>>>>> devel
 
 ## Various
 
