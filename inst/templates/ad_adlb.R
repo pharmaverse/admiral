@@ -26,9 +26,6 @@ lb <- convert_blanks_to_na(lb)
 # lb <- derive_vars_suppqual(lb, supplb) %>%
 
 # ---- Lookup tables ----
-adlb_dis <- adlb %>%
-  distinct(LBTESTCD, LBSTRESU, LBTEST) %>%
-  arrange(LBTESTCD)
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -132,7 +129,7 @@ adlb <- adlb %>%
     ANRHI = LBSTNRHI
   )
 
-# get visit info
+# Get Visit Info
 adlb <- adlb %>%
 
   # Derive Timing
@@ -209,7 +206,6 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
-# Add RATIO derivations with new function??
 # R2BASE, R2ANRLO R2ANRHI
 adlb <- adlb %>%
   derive_var_analysis_ratio(
@@ -263,37 +259,42 @@ adlb <- adlb %>%
 
 # Get extreme values
 adlb <- adlb %>%
+
+  #get MINIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(AVAL, ADT, AVISITN),
     mode = "first",
-    filter = (!is.na(AVAL) & ONTRTFL == "Y"),
+    #"AVISITN < 9997" to evaluate only real visits
+    filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9997,
       AVISIT = "POST-BASELINE MINIMUM",
       DTYPE = "MINIMUM"
     )
-  )
+  ) %>%
 
-adlb <- adlb %>%
+  #get MAXIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(desc(AVAL), ADT, AVISITN),
     mode = "first",
-    filter = (!is.na(AVAL) & ONTRTFL == "Y"),
+    #"AVISITN < 9997" to evaluate only real visits
+    filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9998,
       AVISIT = "POST-BASELINE MAXIMUM",
       DTYPE = "MAXIMUM"
     )
-  )
+  ) %>%
 
-adlb <- adlb %>%
+  #get LOV value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(ADT, AVISITN),
     mode = "last",
-    filter = ONTRTFL == "Y",
+    #"AVISITN < 9997" to evaluate only real visits
+    filter = (ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9999,
       AVISIT = "POST-BASELINE LAST",
@@ -303,6 +304,7 @@ adlb <- adlb %>%
 
 # Get ASEQ
 adlb <- adlb %>%
+
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
