@@ -116,7 +116,7 @@ _**Readability**_
 {All {admiral} functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
-* For the sections of any code that perform the actual derivation (e.g. besides assertions or basic utilities),
+* For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities),
 we try to limit nesting of too many dependencies or functions.
 * Modularity is a focus - we don’t try to achieve too many steps in one.
 * All code has to be well commented.
