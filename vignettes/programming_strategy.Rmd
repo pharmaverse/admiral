@@ -28,6 +28,7 @@ These contributions could include, for example, company specific derivations of 
 # Functional Workflow
 
 * Overall programming will follow a functional approach.
+* We mandate the use of tidyverse (e.g. dplyr) over similar functionality existing in base R
 * Each ADaM dataset is built with a set of functions and not with free flow code.
 * Each ADaM dataset has a specific programming workflow.
 * Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
