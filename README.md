@@ -104,6 +104,7 @@ so this needs to be considered carefully to keep the nesting of 3-4 functions an
 _**Findability**_
 
 All {admiral} functions are easily findable.
+* In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.
 * We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
 help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
 * We avoid repetitive functions that will do similar tasks (as explained above with study day example).
