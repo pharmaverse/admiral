@@ -81,7 +81,7 @@ All `{admiral}` functions should be easy to use.
 descriptions of each argument with permitted values, the expected input and output, with clear real-life
 examples - so that users don’t need to dig through code to find answers.
 * Vignettes that complement the functional documentation to help users see how best the functions can be
-applied to achieve customary ADaM requirements.
+applied to achieve ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them
 for study specific purposes if needed (see Readability below).
 
