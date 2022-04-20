@@ -88,7 +88,7 @@ for study specific purposes if needed (see Readability below).
 _**Simplicity**_
 
 All {admiral} functions have a clear purpose.
-* We try not to ever design single functions that could achieve numerous very different derivations, as for
+* We try not to ever design single functions that could achieve numerous very different derivations. For
 example if you as a user pick up a function with >10 different arguments then chances are it is going to be
 difficult to understand if this function could be applied for your specific need. The intention is that
 arguments/parameters can influence how the output of a function is calculated, but not change the purpose of
