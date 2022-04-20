@@ -99,8 +99,8 @@ This should not be done for every simple programming step where tidyverse can be
 computational functions or data checks. However, also consider not to nest too many functions.
 
 * _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
-reference to the input which caused the failure. This should avoid the users have to dig into detailed
-code if they only want to apply a function. This supports usability.
+reference to the input which caused the failure. A users should not have to dig into detailed
+code if they only want to apply a function.  A meaningful error message supports usability.
 
 * _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
 For example:
