@@ -117,7 +117,8 @@ that all our developers and contributors must follow, so that all our code has a
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For the sections of any code that perform the actual derivation (e.g. besides assertions or basic utilities),
 we try to limit nesting of too many dependencies or functions.
-* Modularity is a focus - we don’t try to achieve too many steps in one, and all code has to be well commented.
+* Modularity is a focus - we don’t try to achieve too many steps in one.
+* All code has to be well commented.
 * We recognise that a user or a Health Authority reviewer may have the wish to delve into the codebase (especially
 given this open source setting), or users may need to extend/adapt the code for their study specific needs. We
 therefore want any module to be understandable to all, not only the `{admiral}` developers.
