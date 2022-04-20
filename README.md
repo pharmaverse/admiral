@@ -72,7 +72,7 @@ our philosophy, which we try to adhere to across the `{admiral}` family of packa
 There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for admiral.
 This manifesto helps show the considerations of our developers when making decisions.
 
-We have four priority design principles to achieve the main goal as follows:
+We have four design principles to achieve the main goal:
 
 _**Usability**_
 
