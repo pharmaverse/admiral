@@ -87,7 +87,7 @@ for study specific purposes if needed (see Readability below).
 
 _**Simplicity**_
 
-Each function has a clear purpose.
+All {admiral} functions have a clear purpose.
 * We try not to ever design single functions that could achieve numerous very different derivations, as for
 example if you as a user pick up a function with >10 different arguments then chances are it is going to be
 difficult to understand if this function could be applied for your specific need. The intention is that
