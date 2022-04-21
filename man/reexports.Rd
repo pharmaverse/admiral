@@ -15,6 +15,10 @@ below to see their documentation.
 \describe{
   \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
 
+<<<<<<< HEAD
   \item{rlang}{\code{\link[rlang:defusing-advanced]{exprs}}}
+=======
+  \item{rlang}{\code{\link[rlang:nse-defuse]{exprs}}}
+>>>>>>> origin/devel
 }}
 

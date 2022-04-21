@@ -30,12 +30,26 @@
       "Repository": "CRAN",
       "Hash": "32e79b908fda56ee57fe518a8d37b864"
     },
+<<<<<<< HEAD
     "admiral.test": {
       "Package": "admiral.test",
       "Version": "0.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "27b4a6e731d16e349d0e61de38648dbe"
+=======
+    "admiraltest": {
+      "Package": "admiraltest",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "pharmaverse",
+      "RemoteRepo": "admiraltest",
+      "RemoteRef": "main",
+      "RemoteSha": "bdae26a24aa2c1a2b4b12c1a0ab44308c6dc6ac9",
+      "Hash": "4edded9ff67ab05c59ffab7dfa73977a"
+>>>>>>> origin/devel
     },
     "askpass": {
       "Package": "askpass",

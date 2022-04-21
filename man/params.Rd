@@ -17,7 +17,7 @@ Create a set of variable parameters/function arguments to be used in \code{\link
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(ae)
 data(adsl)
 
