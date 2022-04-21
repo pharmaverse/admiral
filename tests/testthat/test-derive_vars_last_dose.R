@@ -176,7 +176,7 @@ test_that("derive_vars_last_dose when multiple doses on same date - dose_id supp
 })
 
 
-test_that("derive_vars_last_dose - Error is issued if same variable is found in both input datasets ", {
+test_that("derive_vars_last_dose - Error is issued if same variable is found in both input datasets ", { #nolint
   input_ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~EXSTDTC,
   "my_study", "subject1", 1, "2020-01-02",

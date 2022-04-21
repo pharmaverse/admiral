@@ -108,7 +108,7 @@ test_that("call_derivation - Error is thrown if ... has no arguments", {
     ), "At least one argument must be set inside `...`")
   })
 
-test_that("Error is thrown if ... arguments are not properly named", {
+test_that("call_derivation - Error is thrown if ... arguments are not properly named", {
 
   input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
