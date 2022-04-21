@@ -92,7 +92,7 @@ test_that("call_derivation works", {
 })
 
 
-test_that("Error is thrown if ... has no arguments", {
+test_that("call_derivation - Error is thrown if ... has no arguments", {
 
   input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
@@ -126,7 +126,7 @@ test_that("Error is thrown if ... arguments are not properly named", {
     )
 })
 
-test_that("Error is thrown params is empty", {
+test_that("call_derivation - Error is thrown params is empty", {
 
   input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
@@ -145,7 +145,7 @@ test_that("Error is thrown params is empty", {
   )
 })
 
-test_that("Error is thrown if passed params are not proprely named", {
+test_that("call_derivation - Error is thrown if passed params are not proprely named", {
 
   input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
@@ -164,7 +164,7 @@ test_that("Error is thrown if passed params are not proprely named", {
   )
 })
 
-test_that("Error is thrown if ... arguments are not properly named", {
+test_that("call_derivation - Error is thrown if `...` arguments are not properly named", {
 
   input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")

@@ -190,7 +190,7 @@ test_that("derive_var_age_years - Error is thrown when age_unit is not proper un
   )
 })
 
-test_that("An Error is issued if age_unit is missing", {
+test_that("derive_var_age_years - Error is issued if age_unit is missing", {
   input <- data.frame(AGE = c(12, 24, 36, 48))
   expect_error(
     derive_var_age_years(input, AGE, new_var = AAGE)
