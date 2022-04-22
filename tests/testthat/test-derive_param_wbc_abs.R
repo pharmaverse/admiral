@@ -61,7 +61,7 @@ test_that("Test 2: Test when only one of WBC/differential is present", {
   )
 })
 
-test_that("TEST 3: Test when absolute record already present in source dataset 1", {
+test_that("Test 3: Test when absolute record already present in source dataset 1", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
@@ -94,7 +94,7 @@ test_that("TEST 3: Test when absolute record already present in source dataset 1
 })
 
 
-test_that("Test 3: Test when absolute record already present in source dataset 2", {
+test_that("Test 4: Test when absolute record already present in source dataset 2", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
@@ -129,7 +129,7 @@ test_that("Test 3: Test when absolute record already present in source dataset 2
 })
 
 
-test_that("Test 4: Test percent differential type", {
+test_that("Test 5: Test percent differential type", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
