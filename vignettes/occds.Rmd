@@ -38,6 +38,7 @@ otherwise specified.*
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
 * [Add ADSL variables](#adsl_vars)
+* [Derive Analysis Sequence Number](#aseq)
 
 ## Read in Data {#readdata}
 
@@ -394,7 +395,7 @@ dataset_vignette(adae,
 For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, or
 `CQzzNAM` the `derive_vars_query()` function can be used. As input it expects a
 queries dataset, which provides the definition of the queries. See [Queries
-dataset documentation](queries_dataset.html) for a detailed description ot the
+dataset documentation](queries_dataset.html) for a detailed description of the
 queries dataset. The `create_query_data()` function can be used to create
 queries datasets.
 
@@ -472,6 +473,35 @@ adae <- adae %>%
 dataset_vignette(adae, 
                  display_vars = vars(USUBJID, AEDECOD, ASTDTM, DTHDT, RFSTDTC,
                                      RFENDTC, AGE, AGEU, SEX))
+```
+
+## Derive Analysis Sequence Number  {#aseq}
+
+The function `derive_var_obs_number()` can be used for deriving `ASEQ` variable to ensure the uniqueness of subject records within the dataset.
+
+For example, there can be multiple records present in `ADCM` for a single subject with the same `ASTDTM` and `CMSEQ` variables. But these records are still differ in ATC levels:
+
+``` {r eval=TRUE, echo=TRUE}
+adcm <- tibble::tribble(
+ ~USUBJID,        ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
+  "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
+)
+
+adcm_aseq <- adcm %>%
+  derive_var_obs_number(
+    by_vars    = vars(USUBJID),
+    order      = vars(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
+    new_var    = ASEQ,
+    check_type = "error"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adcm_aseq)
 ```
 
 # Example Scripts
