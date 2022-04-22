@@ -59,7 +59,7 @@ This function is used to derive the disposition reason(s) and must follow the be
 \item If only the main reason for discontinuation needs to be derived (i.e. \code{new_var_spe} is NULL),
 the function must have at least one character vector argument, e.g.
 \verb{format_reason <- function(reason)}
-and \code{new_var} will be derived as \code{new_var = format_reason(reason_var)}
+and \code{new_var} will be derived as \code{new_var = format_reason(reason_var)}.
 Typically, the content of the function would return \code{reason_var} or \code{NA} depending on the
 value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)}).
 \code{DCSREAS = format_reason(DSDECOD)} returns \code{DCSREAS = DSDECOD} when \code{DSDECOD} is not \code{'COMPLETED'}
@@ -68,11 +68,11 @@ nor \code{NA}, \code{NA} otherwise.
 the function must have two character vectors argument, e.g.
 \verb{format_reason2 <- function(reason, reason_spe)} and
 \code{new_var} will be derived as \code{new_var = format_reason(reason_var)},
-\code{new_var_spe} will be derived as \code{new_var_spe = format_reason(reason_var, reason_var_spe)},
+\code{new_var_spe} will be derived as \code{new_var_spe = format_reason(reason_var, reason_var_spe)}.
 Typically, the content of the function would return \code{reason_var_spe} or \code{NA} depending on the
 \code{reason_var} value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe, NA_character_)}).
 \code{DCSREASP = format_reason(DSDECOD, DSTERM)} returns \code{DCSREASP = DSTERM} when \code{DSDECOD} is not
-\code{'COMPLETED'} nor NA and \code{DSDECOD} is equal to \code{'OTHER'}.
+\code{'COMPLETED'} nor \code{NA} and \code{DSDECOD} is equal to \code{'OTHER'}.
 }
 
 Default: \code{format_reason_default}, see \code{\link[=format_reason_default]{format_reason_default()}} for details.}
