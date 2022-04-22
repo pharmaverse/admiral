@@ -1,7 +1,7 @@
 #' Derive Last Dose
 #'
 #' Add EX source variables from last dose to the input dataset.
-#' @param dataset Input dataset. test
+#' @param dataset Input dataset.
 #' The variables specified by the `by_vars` and `analysis_date` parameters are expected.
 #' @param dataset_ex Input EX dataset.
 #' The variables specified by the `by_vars`, `dose_date`, `new_vars` parameters,
