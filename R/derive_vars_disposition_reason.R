@@ -170,9 +170,8 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
-#' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
-#' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
+#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not `'COMPLETED'` nor `NA` and `DSDECOD` is equal to `'OTHER'`.
 #'
 #' @return A `character` vector
 #'
@@ -250,33 +249,24 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' - If only the main reason for discontinuation needs to be derived (i.e. `new_var_spe` is NULL),
 #' the function must have at least one character vector argument, e.g.
 #' `format_reason <- function(reason)`
-#' and `new_var` will be derived as `new_var = format_reason(reason_var)`
+#' and `new_var` will be derived as `new_var = format_reason(reason_var)`.
 #' Typically, the content of the function would return `reason_var` or `NA` depending on the
 #' value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)`).
-#' `DCSREAS = format_reason(DSDECOD)` returns DCSREAS = `DSDECOD` when `DSDECOD` is not 'COMPLETED'
+#' `DCSREAS = format_reason(DSDECOD)` returns `DCSREAS = DSDECOD` when `DSDECOD` is not `'COMPLETED'`
 #'  nor `NA`, `NA` otherwise.
 #'
 #' - If both the main reason and the details needs to be derived (`new_var_spe` is specified)
 #' the function must have two character vectors argument, e.g.
 #' `format_reason2 <- function(reason, reason_spe)` and
-#' `new_var` will be derived as `new_var` = `format_reason(reason_var)`,
-#' `new_var_spe` will be derived as `new_var_spe` = `format_reason(reason_var, reason_var_spe)`,
+#' `new_var` will be derived as `new_var = format_reason(reason_var)`,
+#' `new_var_spe` will be derived as `new_var_spe = format_reason(reason_var, reason_var_spe)`.
 #' Typically, the content of the function would return `reason_var_spe` or `NA` depending on the
 #' `reason_var` value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe,
 #' NA_character_)`).
-#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns DCSREASP = `DSTERM` when `DSDECOD` is not
-#' 'COMPLETED' nor NA, and `DSDECOD` is equal to "OTHER".
+#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when `DSDECOD` is not
+#' `'COMPLETED'` nor `NA` and `DSDECOD` is equal to `'OTHER'`.
 #'
-#' Default: format_reason_default defined as:
-#' format_reason_default <- function(reason, reason_spe = NULL) {
-#'   out <- if ( is.null(reason_spe) ) reason
-#'     else{
-#'     if_else (reason == "OTHER", reason_spe, NA_character_)
-#'     }
-#'   if_else ( reason != "COMPLETED" & !is.na(reason), out, NA_character_)
-#' }
-#' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' nor NA.
-#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` is not 'COMPLETED' nor NA, and `DSDECOD` is equal to "OTHER".
+#' Default: `format_reason_default`, see [`format_reason_default()`] for details.
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
