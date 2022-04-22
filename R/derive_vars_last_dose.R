@@ -17,8 +17,8 @@
 #' (e.g. `vars(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from `dataset_ex` are
 #' kept without renaming.
 #' Defaults to `NULL`.
-#' @param dose_date The EX dose date variable.
-#' @param analysis_date The analysis date variable.
+#' @param dose_date The EX dose date variable. A date or date-time object is expected.
+#' @param analysis_date The analysis date variable. A date or date-time object is expected.
 #' @param single_dose_condition The condition for checking if `dataset_ex` is single dose. An error
 #' is issued if the condition is not true. Defaults to `(EXDOSFRQ == "ONCE")`.
 #' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
