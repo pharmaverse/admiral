@@ -34,7 +34,7 @@ from a BDS dataset, e.g. ADLB. (#943)
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
-  - `slice_derivation()` - The input dataset is split into subsets (slices) and
+  - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
 

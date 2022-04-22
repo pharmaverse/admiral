@@ -21,7 +21,8 @@ test_that("slice_derivation Test 1: slice derivation", {
 
   expected <- mutate(advs,
                      ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
-                     ATMF = "H")
+                     ATMF = "H") %>%
+    mutate(ADTM = as_iso_dtm(ADTM))
 
   expect_dfs_equal(base = expected,
                    compare = actual,

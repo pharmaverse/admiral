@@ -1,6 +1,6 @@
 #' Execute a Derivation with Different Arguments for Subsets of the Input Dataset
 #'
-#' The input dataset is split into subsets (slices) and for each slice the
+#' The input dataset is split into slices (subsets) and for each slice the
 #' derivation is called separately. Some or all arguments of the derivation
 #' may vary depending on the slice.
 #'
@@ -15,7 +15,7 @@
 #' @param ... A `derivation_slice()` object is expected
 #'
 #'   Each slice defines a subset of the input dataset and some of the parameters
-#'   or the derivation. The derivation is called on the subset with the
+#'   for the derivation. The derivation is called on the subset with the
 #'   parameters specified by the `args` parameter and the `args` field of the
 #'   `derivation_slice()` object. If a parameter is specified for both, the
 #'   value in `derivation_slice()` overwrites the one in `args`.
@@ -28,10 +28,10 @@
 #'   `derivation_slice()` object. If a parameter is specified for both, the
 #'   value in `derivation_slice()` overwrites the one in `args`.
 #'
-#'   - Observations which matches for more than one slice are considered for the
-#'   first matching slice only.
+#'   - Observations that match with more than one slice are only considered for
+#'   the first matching slice.
 #'
-#'   - Observations which matches for none of the slices are included in the
+#'   - Observations with no match to any of the slices are included in the
 #'   output dataset but the derivation is not called for them.
 #'
 #' @return The input dataset with the variables derived by the derivation added
