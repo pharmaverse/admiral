@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(ae)
 #' data(adsl)
 #'
@@ -110,7 +110,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(ae)
 #' data(adsl)
 #'

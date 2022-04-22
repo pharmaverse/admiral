@@ -21,7 +21,7 @@ Define a function to map the disposition status. To be used as an input for
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ds")
 

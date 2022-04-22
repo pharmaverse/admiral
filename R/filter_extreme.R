@@ -53,7 +53,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("ex")
 #'
 #' # Select first dose for each patient
@@ -65,15 +65,16 @@
 #'   ) %>%
 #'   select(USUBJID, EXSEQ)
 #'
-#' # Select highest dose for each patient
+#' # Select highest dose for each patient on the active drug
 #' ex %>%
+#'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
 #'     by_vars = vars(USUBJID),
 #'     order = vars(EXDOSE),
 #'     mode = "last",
 #'     check_type = "none"
 #'   ) %>%
-#'   select(USUBJID, EXDOSE)
+#'   select(USUBJID, EXTRT, EXDOSE)
 filter_extreme <- function(dataset,
                            by_vars = NULL,
                            order,

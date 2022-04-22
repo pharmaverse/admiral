@@ -51,7 +51,7 @@ specified for the \code{order} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("ex")
 data("dm")
 
