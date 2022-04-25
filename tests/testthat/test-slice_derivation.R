@@ -17,7 +17,10 @@ test_that("slice_derivation Test 1: slice derivation", {
       args = params(time_imputation = "first")
     ),
     derivation_slice(args = params(time_imputation = "last"))
-  )
+  ) %>%
+    # work-around because unnest() (called in slice_derivation()) removes the iso_dtm class
+    # should be removed when moving to R 4.0
+    mutate(ADTM = as_iso_dtm(ADTM))
 
   expected <- mutate(advs,
                      ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 00:00:00")),
@@ -46,7 +49,10 @@ test_that("slice_derivation Test 2: non matching observations", {
       filter = str_detect(VSTPT, "PRE|BEFORE"),
       args = params(time_imputation = "first")
     )
-  )
+  ) %>%
+    # work-around because unnest() (called in slice_derivation()) removes the iso_dtm class
+    # should be removed when moving to R 4.0
+    mutate(ADTM = as_iso_dtm(ADTM))
 
   expected <- mutate(advs,
                      ADTM = c(ymd_hms(NA), ymd_hms("2020-04-16 00:00:00")),
