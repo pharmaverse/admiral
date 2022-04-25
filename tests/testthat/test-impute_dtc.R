@@ -277,4 +277,3 @@ test_that("max_dates parameter works", {
                          "2020-12-06T12:12:12"
             )
           })
-
