@@ -171,7 +171,7 @@ derive_disposition_reason <- function(dataset,
 #'
 #' @details
 #' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
-#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is not `'COMPLETED'` nor `NA` and `DSDECOD` is equal to `'OTHER'`.
+#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is equal to `'OTHER'`.
 #'
 #' @return A `character` vector
 #'
@@ -197,12 +197,11 @@ derive_disposition_reason <- function(dataset,
 #'   select(STUDYID, USUBJID, DCSREAS)
 #'
 format_reason_default <- function(reason, reason_spe = NULL) {
-  out <- if (is.null(reason_spe)) reason
-  else{
+  if (is.null(reason_spe)) {
+    if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
+  } else {
     if_else (reason == "OTHER", reason_spe, NA_character_)
   }
-
-  if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
 }
 
 #' Derive a Disposition Reason at a Specific Timepoint
@@ -261,10 +260,8 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' `new_var` will be derived as `new_var = format_reason(reason_var)`,
 #' `new_var_spe` will be derived as `new_var_spe = format_reason(reason_var, reason_var_spe)`.
 #' Typically, the content of the function would return `reason_var_spe` or `NA` depending on the
-#' `reason_var` value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe,
-#' NA_character_)`).
-#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when `DSDECOD` is not
-#' `'COMPLETED'` nor `NA` and `DSDECOD` is equal to `'OTHER'`.
+#' `reason_var` value (e.g. `if_else ( reason == "OTHER", reason_spe, NA_character_)`).
+#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when `DSDECOD` is equal to `'OTHER'`.
 #'
 #' Default: `format_reason_default`, see [`format_reason_default()`] for details.
 #'
@@ -318,14 +315,11 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
-#'   out <- if (is.null(y)) x
-#'      else {
-#'      if_else(x == "OTHER", y, NA_character_)
-#'      }
-#'   case_when(
-#'     !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
-#'     TRUE ~ NA_character_
-#'   )
+#'   if (is.null(y)){
+#'     if_else(x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
+#'   } else {
+#'   if_else (x == "OTHER", y, NA_character_)
+#'   }
 #' }
 #' dm %>%
 #'   derive_vars_disposition_reason(
