@@ -78,10 +78,10 @@ test_that("Derive DCSREAS DCSREASP using default mapping", {
 
 test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
   format_dctreas <- function(x, y = NULL) {
-    if (is.null(y)){
+    if (is.null(y)) {
       if_else(x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
     } else {
-      if_else (x == "OTHER", y, NA_character_)
+      if_else(x == "OTHER", y, NA_character_)
     }
   }
   expected_output <- tibble::tribble(
