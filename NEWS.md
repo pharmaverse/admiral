@@ -46,6 +46,10 @@ from a BDS dataset, e.g. ADLB. (#943)
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 
+- Added example of ASEQ derivation in ADCM to 
+[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+(#720)
+
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
