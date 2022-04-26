@@ -34,8 +34,8 @@ from a BDS dataset, e.g. ADLB. (#943)
 ## Updates of Existing Functions
 
 - `impute_dtc()` - Fixed imputation bug. A user setting `date_imputation = MID` and 
-`preserve = FALSE` would expect the date "2019---07" to be imputed to "2019-06-30", 
-but the function was returning "2019-06-15". Now returns it correctly. This bug fix 
+`preserve = FALSE` would expect the date `2019---07` to be imputed to `2019-06-30`, 
+but the function was returning `2019-06-15`. Now returns it correctly. This bug fix 
 also addresses the issue in the downstream functions `derive_vars_dt()` and `derive_vars_dtm()`. (#1081)
 
 
