@@ -84,10 +84,26 @@ globalVariables(c(
   "order2",
   "order3",
   "_unit",
+  "temp_DT",
+  "temp_from_var",
+  "temp_to_var",
+  "temp_match_flag",
+  "temp_dose_freq",
+  "temp_new_dose_no",
+  "temp_num_of_doses",
+  "temp_dose_multiplier",
+  "temp_day_difference",
   "tmp_analysis_date",
   "tmp_dose_date",
   "tmp_seq_var",
   "EXDOSFRQ",
-  "tmp_ldose_dt"
-
+  "tmp_ldose_dt",
+  "CDISC_VALUE",
+  "DOSE_WINDOW",
+  "DOSE_COUNT",
+  "CONVERSION_FACTOR",
+  "dose_periods",
+  "grpseq",
+  "time_differential",
+  "temp_flag"
 ))

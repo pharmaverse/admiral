@@ -36,7 +36,7 @@
 #'   from `dataset_add` to the input dataset.
 #'
 #'   And `new_vars = vars(var1, new_var2 = old_var2)` takes `var1` and
-#'   `old_var2` from `dataset_add` and adds them to the input dataset renmaming
+#'   `old_var2` from `dataset_add` and adds them to the input dataset renaming
 #'   `old_var2` to `new_var2`.
 #'
 #'   If the parameter is not specified or set to `NULL`, all variables from the
@@ -133,7 +133,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("vs")
 #' data("dm")
@@ -283,7 +283,7 @@ derive_vars_merged <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
@@ -403,7 +403,7 @@ derive_vars_merged_dt <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ex")
@@ -531,7 +531,7 @@ derive_vars_merged_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("vs")
@@ -678,7 +678,7 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @examples
 #'
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ae")
@@ -794,7 +794,7 @@ derive_var_merged_exist_flag <- function(
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("dm")
 #' data("ds")

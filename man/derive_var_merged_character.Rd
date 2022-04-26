@@ -112,7 +112,7 @@ first or last observation for each by group.
 }
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
 data("dm")
 data("ds")

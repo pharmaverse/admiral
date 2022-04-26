@@ -15,19 +15,47 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
+- `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
+
+- New functions for deriving first or last dates from multiple source datasets (#753):
+
+  - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
+  - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
+- New function `derive_extreme_records()` for adding the first or last
+observation within each by group to the dataset (#1042)
+
+- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
+values based on user-defined pairing (#944)
+
+- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+from a BDS dataset, e.g. ADLB. (#943)
+
+- `derive_param_wbc_abs` - Adds a parameter for lab differentials converted to absolute values. 
+(#941)
+
 ## Updates of Existing Functions
 
 
 ## Breaking Changes
 
+- `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+- `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
 
 ## Documentation
 
-Added example of ASEQ derivation in ADCM to 
+- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
+
+- Added example of ASEQ derivation in ADCM to 
 [OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
 (#720)
 
+- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
+
 ## Various
+
+-  Naming convention of admiral.xxx packages change to admiralxxx from this point onwards (#968)
+ 
 
 # admiral 0.6.3
 
@@ -57,6 +85,7 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_var_ontrtfl()` now has a `new_var` parameter to support the derivation of `ONTRxxFL` and `ONTRTwFL` variables (#721)
 
 - `derive_vars_dtm()`, `derive_var_disposition` and `derive_var_lstalvdt` now have `preserve` argument.  A user can preserve partial dates when doing date imputation, e.g. `2019---07` would become `2019-06-07` by setting `preserve` to `TRUE` when doing date_imputation (#592)
+
 
 - `derive_vars_dtm()` now has `ignore_seconds_flag` argument so users can suppress `"S"` flag if seconds are not recorded in the data (#589)
 
@@ -106,8 +135,6 @@ this case the day is imputed as `15` (#592)
 - New vignette [Development Process](https://pharmaverse.github.io/admiral/articles/development_process.html) and improvements made to contribution vignettes (#765 & #758)
 
 - Updated [Pull Request Review Guidance](https://pharmaverse.github.io/admiral/articles/pr_review_guidance.html) on using `task-list-completed` workflow (#817)
-
-- Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
 
@@ -171,6 +198,8 @@ to specify the unit of the input age (#569)
 ## Bug Fixes
 
 - `derive_vars_dtm()` no longer shifts the time of the input `--DTC` variable (#436)
+
+- `derive_vars_dtm()` Change the min_dates with max_dates in the lapply statement when computing max_dates (#687)
 
 ## Documentation
 

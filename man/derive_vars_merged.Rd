@@ -56,7 +56,7 @@ For example \code{new_vars = vars(var1, var2)} adds variables \code{var1} and \c
 from \code{dataset_add} to the input dataset.
 
 And \code{new_vars = vars(var1, new_var2 = old_var2)} takes \code{var1} and
-\code{old_var2} from \code{dataset_add} and adds them to the input dataset renmaming
+\code{old_var2} from \code{dataset_add} and adds them to the input dataset renaming
 \code{old_var2} to \code{new_var2}.
 
 If the parameter is not specified or set to \code{NULL}, all variables from the
@@ -142,7 +142,7 @@ observation in the input dataset are ignored.
 }
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
 data("vs")
 data("dm")

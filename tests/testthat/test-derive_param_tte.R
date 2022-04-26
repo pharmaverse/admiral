@@ -139,28 +139,31 @@ test_that("new observations with analysis datetime are derived correctly", {
     mutate(
       STUDYID = "AB42",
       PARAMCD = "PFS",
-      PARAM = "Progression Free Survival"
+      PARAM = "Progression Free Survival",
+      ADTM = as_iso_dtm(ADTM)
     ) %>%
     left_join(
       select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF),
       by = "USUBJID"
     )
 
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDTM,
+    start_date_imputation_flag = TRTSDTF,
+    start_time_imputation_flag = TRTSTMF,
+    event_conditions = list(pd, death),
+    censor_conditions = list(lastvisit, start),
+    source_datasets = list(adsl = adsl, adrs = adrs),
+    create_datetime = TRUE,
+    set_values_to = vars(
+      PARAMCD = "PFS",
+      PARAM = "Progression Free Survival"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_tte(
-      dataset_adsl = adsl,
-      start_date = TRTSDTM,
-      start_date_imputation_flag = TRTSDTF,
-      start_time_imputation_flag = TRTSTMF,
-      event_conditions = list(pd, death),
-      censor_conditions = list(lastvisit, start),
-      source_datasets = list(adsl = adsl, adrs = adrs),
-      create_datetime = TRUE,
-      set_values_to = vars(
-        PARAMCD = "PFS",
-        PARAM = "Progression Free Survival"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
@@ -593,23 +596,26 @@ test_that("new observations analysis datetime based on DTC variables are derived
     mutate(
       STUDYID = "AB42",
       PARAMCD = "TTAE",
-      PARAM = "Time to First Adverse Event"
+      PARAM = "Time to First Adverse Event",
+      ADTM = as_iso_dtm(ADTM)
     ) %>%
     left_join(select(adsl, USUBJID, STARTDTM = TRTSDTM), by = "USUBJID")
 
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDTM,
+    event_conditions = list(ttae),
+    censor_conditions = list(eos),
+    source_datasets = list(adsl = adsl, ae = ae),
+    create_datetime = TRUE,
+    set_values_to = vars(
+      PARAMCD = "TTAE",
+      PARAM = "Time to First Adverse Event"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_tte(
-      dataset_adsl = adsl,
-      start_date = TRTSDTM,
-      event_conditions = list(ttae),
-      censor_conditions = list(eos),
-      source_datasets = list(adsl = adsl, ae = ae),
-      create_datetime = TRUE,
-      set_values_to = vars(
-        PARAMCD = "TTAE",
-        PARAM = "Time to First Adverse Event"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )

@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
@@ -129,22 +129,6 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 }
 
 
-warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
-  missing_ref_ranges <- dataset %>%
-    anti_join(meta_ref_ranges, by = by_var) %>%
-    pull(!!sym(by_var)) %>%
-    unique()
-
-  if (length(missing_ref_ranges) >= 1L) {
-    msg <- sprintf(
-      "Reference ranges are missing for the following `%s`: %s",
-      by_var,
-      enumerate(missing_ref_ranges, quote_fun = squote)
-    )
-    warn(msg)
-  }
-}
-
 #' Warn If Two Lists are Inconsistent
 #'
 #' Checks if two list inputs have the same names and same number of elements and
@@ -222,7 +206,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(adsl)
 #' data(vs)
 #'
