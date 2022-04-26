@@ -23,6 +23,9 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 
 ## Documentation
 
+Added example of ASEQ derivation in ADCM to 
+[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+(#720)
 
 ## Various
 
