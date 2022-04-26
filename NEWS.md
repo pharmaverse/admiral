@@ -37,14 +37,20 @@ values based on user-defined pairing (#944)
 - `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
 
+- `derive_param_wbc_abs` - Adds a parameter for lab differentials converted to absolute values. 
+(#941)
+
 ## Updates of Existing Functions
 
 
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+- `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
 
 ## Documentation
+
+- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
