@@ -28,14 +28,16 @@ observation within each by group to the dataset (#1042)
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
-- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
 
-- `derive_param_wbc_abs` - Adds a parameter for lab differentials converted to absolute values. 
+- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
 (#941)
 
 ## Updates of Existing Functions
 
+- When `derive_vars_dtm_to_tm()` was called for variables created by
+`derive_vars_dtm()` the function failed. This bug was fixed (#1097).
 
 ## Breaking Changes
 
