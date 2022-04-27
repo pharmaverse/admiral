@@ -423,7 +423,7 @@ convert_dtc_to_dtm <- function(dtc,
       max_dates = max_dates,
       preserve = preserve
     ) %>%
-    as_iso_dtm()
+    ymd_hms()
 }
 
 #' Convert a Date into a Datetime Object
