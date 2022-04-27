@@ -25,7 +25,6 @@ body:
     attributes:
       label: Let us know where something needs a refresh or put your idea here!
       description: Screen shots are super helpful here!  You can do a screenshot and cut and paste it here right in here.
-      placeholder: Tell us what you see!
-      value: "Something is out of sync or needs a refresh"
+      placeholder: "Something is out of sync or needs a refresh"
     validations:
       required: true

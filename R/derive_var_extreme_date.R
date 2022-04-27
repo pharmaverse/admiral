@@ -277,8 +277,7 @@ derive_var_extreme_dtm <- function(dataset,
       order = vars(!!new_var),
       mode = mode,
       check_type = "none"
-    ) %>%
-    mutate(!!new_var := as_iso_dtm(!!new_var))
+    )
 
   derive_vars_merged(dataset,
                      dataset_add = all_data,
