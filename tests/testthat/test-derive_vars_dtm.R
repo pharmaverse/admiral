@@ -143,7 +143,7 @@ test_that("Partial date imputed to the MID day/month", {
     "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
     "2019-02", ymd_hms("2019-06-30T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-06-30T00:00:00"), "M", "H",
-    "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
+    "2019---07", ymd_hms("2019-06-30T00:00:00"), "M", "H"
   )
 
   actual_output <- derive_vars_dtm(
@@ -153,9 +153,10 @@ test_that("Partial date imputed to the MID day/month", {
     date_imputation = "MID"
   )
 
-  expect_equal(
-    expected_output,
-    actual_output
+  expect_dfs_equal(
+    base = expected_output,
+    comp = actual_output,
+    keys = c("XXSTDTC")
   )
 
 })
