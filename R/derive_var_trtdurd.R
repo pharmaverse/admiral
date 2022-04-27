@@ -11,7 +11,8 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #'   Default: `TRTSDT`
 #'
@@ -19,12 +20,13 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #'   Default: `TRTEDT`
 #'
-#' @details The total treatment duration is derived as the number of days from start to
-#'   end date plus one.
+#' @details The total treatment duration is derived as the number of days from
+#'   start to end date plus one.
 #'
 #' @author Stefan Bundfuss
 #'
