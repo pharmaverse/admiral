@@ -12,6 +12,8 @@
 #'
 #'   A date or date-time object column is expected.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'
 #' @param source_vars A list of datetime or date variables created using
 #'   `vars()` from which dates are to be extracted. This can either be a list of
 #'   date(time) variables or named `--DY` variables and corresponding --DT(M)

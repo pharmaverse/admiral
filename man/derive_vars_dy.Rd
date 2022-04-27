@@ -14,7 +14,9 @@ expected.}
 
 \item{reference_date}{The start date column, e.g., date of first treatment
 
-A date or date-time object column is expected.}
+A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
 \code{vars()} from which dates are to be extracted. This can either be a list of

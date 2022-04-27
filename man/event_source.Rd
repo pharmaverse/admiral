@@ -17,7 +17,9 @@ of \code{derive_param_tte()}.}
 
 \item{date}{A variable providing the date of the event or censoring. A date,
 a datetime, or a character variable containing ISO 8601 dates can be
-specified. An unquoted symbol is expected.}
+specified. An unquoted symbol is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
 
 \item{set_values_to}{A named list returned by \code{vars()} defining the variables
 to be set for the event or censoring, e.g. \code{vars(EVENTDESC = "DEATH", SRCDOM = "ADSL", SRCVAR = "DTHDT")}. The values must be a symbol, a

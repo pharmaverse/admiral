@@ -26,19 +26,29 @@ Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} a
 Default is \code{ONTRTFL}.}
 
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})
-Required; A date or date-time object column is expected}
+Required; A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
 
 \item{end_date}{The end date of assessment/event (e.g. \code{AENDT})
 A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+
 Optional; Default is null. If the used and date value is missing
 on an observation, it is assumed the medication is ongoing and
 \code{ONTRTFL} is set to \code{"Y"}.}
 
 \item{ref_start_date}{The lower bound of the on-treatment period
-Required; A date or date-time object column is expected.}
+Required; A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
 
 \item{ref_end_date}{The upper bound of the on-treatment period
 A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+
 Optional; This can be null and everything after \code{ref_start_date} will be
 considered on-treatment.
 Default is \code{NULL}.}
