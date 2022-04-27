@@ -18,12 +18,11 @@ ds <- tibble::tribble(
   "TEST01", "PAT02", "OTHER EVENT", "DEATH", "DEATH", "2022-04",
   "TEST01", "PAT03", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02", # nolint
   "TEST01", "PAT03", "PROTOCOL MILESTONE", "RANDOMIZATION", "RANDOMIZED", "2021-04-11",
-  "TEST01", "PAT03", "DISPOSITION EVENT", "PROGRESSIVE DISEASE", "DISEASE PROGRESSION", "2021-05-01", # nolint
+  "TEST01", "PAT03", "DISPOSITION EVENT", "OTHER", "MISTAKE IN CALCULATION", "2021-04-29",
   "TEST01", "PAT03", "OTHER EVENT", "DEATH", "DEATH", "2022-04",
   "TEST01", "PAT04", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02", # nolint
   "TEST01", "PAT04", "PROTOCOL MILESTONE", "RANDOMIZATION", "RANDOMIZED", "2021-04-11"
 )
-
 
 
 test_that("Derive DCSREAS using default mapping", {
@@ -31,7 +30,7 @@ test_that("Derive DCSREAS using default mapping", {
     ~STUDYID, ~USUBJID, ~DCSREAS,
     "TEST01", "PAT01", "ADVERSE EVENT",
     "TEST01", "PAT02", NA_character_,
-    "TEST01", "PAT03", "PROGRESSIVE DISEASE",
+    "TEST01", "PAT03", "OTHER",
     "TEST01", "PAT04", NA_character_
   )
 
@@ -50,19 +49,46 @@ test_that("Derive DCSREAS using default mapping", {
   )
 })
 
+test_that("Derive DCSREAS DCSREASP using default mapping", {
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DCSREAS, ~DCTREASP,
+    "TEST01", "PAT01", "ADVERSE EVENT", NA_character_,
+    "TEST01", "PAT02", NA_character_, NA_character_,
+    "TEST01", "PAT03", "OTHER", "MISTAKE IN CALCULATION",
+    "TEST01", "PAT04", NA_character_, NA_character_
+  )
+
+  actual_output <- derive_vars_disposition_reason(
+    dataset = dm,
+    dataset_ds = ds,
+    new_var = DCSREAS,
+    reason_var = DSDECOD,
+    new_var_spe = DCTREASP,
+    reason_var_spe = DSTERM,
+    filter_ds = DSCAT == "DISPOSITION EVENT"
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})
+
+
 test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
   format_dctreas <- function(x, y = NULL) {
-    out <- if (is.null(y)) x else y
-    case_when(
-      x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ out,
-      TRUE ~ NA_character_
-    )
+    if (is.null(y)) {
+      if_else(x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
+    } else {
+      if_else(x == "OTHER", y, NA_character_)
+    }
   }
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~DCTREAS, ~DCTREASP,
-    "TEST01", "PAT01", "ADVERSE EVENT", "ADVERSE EVENT",
+    "TEST01", "PAT01", "ADVERSE EVENT", NA_character_,
     "TEST01", "PAT02", NA_character_, NA_character_,
-    "TEST01", "PAT03", "PROGRESSIVE DISEASE", "DISEASE PROGRESSION",
+    "TEST01", "PAT03", "OTHER", "MISTAKE IN CALCULATION",
     "TEST01", "PAT04", NA_character_, NA_character_
   )
 

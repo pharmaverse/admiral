@@ -68,11 +68,14 @@ Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observati
 \details{
 For each group with respect to the variables specified by the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-is labelled in the \code{new_var} column as \code{"Y"}
-if its \code{param_var} is in \code{worst_high} / \code{worst_low},
-otherwise it is assigned \code{NA}.
+is labelled in the \code{new_var} column as \code{"Y"},
+if its \code{param_var} is in \code{worst_high} / \code{worst_low}.
+Otherwise, it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
-the first one with respect to the order specified by the \code{order} parameter is flagged.
+the first one with respect to the order specified by the \code{order} parameter is flagged. The
+direction of "worst" depends on the definition of worst for a specified parameters in the
+arguments \code{worst_high} / \code{worst_low}, i.e. for some parameters the highest value is the worst
+and for others the worst is the lowest value.
 }
 \examples{
 
@@ -137,6 +140,9 @@ restrict_derivation(
 )
 }
 
+}
+\seealso{
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
 }
 \author{
 Ondrej Slama

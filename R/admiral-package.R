@@ -22,4 +22,5 @@
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr drop_na gather nest spread unnest
 #' @importFrom tidyselect all_of contains vars_select
+#' @importFrom hms as_hms
 "_PACKAGE"

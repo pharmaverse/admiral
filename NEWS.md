@@ -28,8 +28,11 @@ observation within each by group to the dataset (#1042)
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
-- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
+
+- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
+(#941)
 
 - New high order functions (#701):
 
@@ -44,12 +47,19 @@ from a BDS dataset, e.g. ADLB. (#943)
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+- `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
 
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
 
 ## Documentation
+
+- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
+
+- Added example of ASEQ derivation in ADCM to 
+[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+(#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
