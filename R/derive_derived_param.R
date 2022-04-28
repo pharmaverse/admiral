@@ -215,8 +215,7 @@ derive_derived_param <- function(dataset,
 
   # horizontalize data, AVAL for PARAMCD = "PARAMx" -> AVAL.PARAMx
   hori_data <- data_parameters %>%
-    spread(key = PARAMCD, value = AVAL, sep = ".")
-  names(hori_data) <- map_chr(names(hori_data), str_replace, "PARAMCD.", "AVAL.")
+    pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
 
   if (!is.null(constant_parameters)) {
     data_const_parameters <- data_filtered %>%
@@ -224,8 +223,7 @@ derive_derived_param <- function(dataset,
       select(!!!vars(!!!constant_by_vars, PARAMCD, AVAL))
 
     hori_const_data <- data_const_parameters %>%
-      spread(key = PARAMCD, value = AVAL, sep = ".")
-    names(hori_const_data) <- map_chr(names(hori_const_data), str_replace, "PARAMCD.", "AVAL.")
+      pivot_wider(names_from = PARAMCD, values_from = AVAL, names_prefix = "AVAL.")
 
     hori_data <- inner_join(hori_data, hori_const_data, by = vars2chr(constant_by_vars))
   }
