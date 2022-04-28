@@ -301,7 +301,9 @@ vs <- tribble(
       filter = VSTPT == "PRE-DOSE",
       args = params(time_imputation = "first")
     ),
-    derivation_slice(args = params(time_imputation = "last"))
+    derivation_slice(
+      filter = TRUE,
+      args = params(time_imputation = "last"))
   )
 ```
 ```{r, echo=FALSE}

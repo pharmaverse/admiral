@@ -360,7 +360,7 @@ derive_var_extreme_flag <- function(dataset,
   )
   if (!missing(filter)){
     warn(paste("`filter` is deprecated as of admiral 0.7.0.",
-               "Please use restict_derivation() instead (see examples).",
+               "Please use `restrict_derivation()` instead (see examples).",
                sep = "\n"))
     filter <- assert_filter_cond(enquo(filter), optional = TRUE)
     return(

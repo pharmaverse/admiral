@@ -24,17 +24,17 @@
 #'
 #' library(magrittr)
 #' adlb <- tibble::tribble(
-#' ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
-#' "1",      -1,       113,   NA_character_,
-#' "1",       0,       113,   "Y",
-#' "1",       3,       117,   NA_character_,
-#' "2",       0,        95,   "Y",
-#' "3",       0,       111,   "Y",
-#' "3",       1,       101,   NA_character_,
-#' "3",       2,       123,   NA_character_
+#'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
+#'   "1",      -1,       113,   NA_character_,
+#'   "1",       0,       113,   "Y",
+#'   "1",       3,       117,   NA_character_,
+#'   "2",       0,        95,   "Y",
+#'   "3",       0,       111,   "Y",
+#'   "3",       1,       101,   NA_character_,
+#'   "3",       2,       123,   NA_character_
 #' )
 #'
-#' # derive BASE for post-baseline records only (derive_var_base() can not be used in this case
+#' # Derive BASE for post-baseline records only (derive_var_base() can not be used in this case
 #' # as it requires the baseline observation to be in the input dataset)
 #' restrict_derivation(
 #'   adlb,
@@ -48,7 +48,7 @@
 #'   filter = AVISITN > 0
 #' )
 #'
-#' # derive BASE for baseline and post-baseline records only
+#' # Derive BASE for baseline and post-baseline records only
 #' restrict_derivation(
 #'   adlb,
 #'   derivation = derive_var_base,
@@ -58,7 +58,7 @@
 #'   filter = AVISITN >= 0
 #' ) %>%
 #'
-#' # derive CHG for post-baseline records only
+#' # Derive CHG for post-baseline records only
 #' restrict_derivation(
 #'   derivation = derive_var_chg,
 #'   filter = AVISITN > 0
@@ -68,7 +68,7 @@ restrict_derivation <- function(dataset,
                                 derivation,
                                 args = NULL,
                                 filter) {
-  # check input
+  # Check input
   assert_data_frame(dataset)
   assert_function(derivation, params = c("dataset"))
   assert_s3_class(args, "params", optional = TRUE)
@@ -77,16 +77,19 @@ restrict_derivation <- function(dataset,
   }
   filter <- assert_filter_cond(enquo(filter))
 
-  # split input dataset
+  # Split input dataset
   data_ignore <- dataset %>%
     filter(!(!!filter) | is.na(!!filter))
-  data <- dataset %>%
+  data_derive <- dataset %>%
     filter(!!filter)
 
-  # call derivation on subset
-  call <- as.call(c(substitute(derivation), c(quote(data), args)))
-  data <- eval(call, envir = list(data = data), enclos = parent.frame())
+  # Call derivation on subset
+  call <- as.call(c(substitute(derivation), c(quote(data_derive), args)))
+  data_derive <-
+    eval(call,
+         envir = list(data_derive = data_derive),
+         enclos = parent.frame())
 
-  # put datasets together again
-  bind_rows(data, data_ignore)
+  # Put datasets together again
+  bind_rows(data_derive, data_ignore)
 }

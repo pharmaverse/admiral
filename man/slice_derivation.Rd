@@ -53,7 +53,7 @@ output dataset but the derivation is not called for them.
   "1",      "2020-04-16", "BEFORE TREATMENT"
 )
 
-# For the second slice no filter is specified. Thus derive_vars_dtm is called
+# For the second slice filter is set to TRUE. Thus derive_vars_dtm is called
 # with time_imputation = "last" for all observations which do not match for the
 # first slice.
 slice_derivation(
@@ -65,7 +65,8 @@ slice_derivation(
   ),
   derivation_slice(filter = str_detect(VSTPT, "PRE|BEFORE"),
                    args = params(time_imputation = "first")),
-  derivation_slice(args = params(time_imputation = "last"))
+  derivation_slice(filter = TRUE,
+                   args = params(time_imputation = "last"))
 )
 }
 \seealso{

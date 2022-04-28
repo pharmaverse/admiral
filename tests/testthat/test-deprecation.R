@@ -423,7 +423,7 @@ test_that("a warning is issued when using `derive_extreme_flag()` with `filter` 
     ),
     paste(
       "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use restict_derivation() instead (see examples).",
+      "Please use `restrict_derivation()` instead (see examples).",
       sep = "\n"
     ),
     fixed = TRUE
@@ -479,7 +479,7 @@ test_that("a warning is issued when using `derive_worst_flag()` with `filter` ar
     ),
     paste(
       "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use restict_derivation() instead (see examples).",
+      "Please use `restrict_derivation()` instead (see examples).",
       sep = "\n"
     ),
     fixed = TRUE
@@ -508,7 +508,7 @@ test_that("a warning is issued when using `derive_var_extreme_flag()` with `filt
     ),
     paste(
       "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use restict_derivation() instead (see examples).",
+      "Please use `restrict_derivation()` instead (see examples).",
       sep = "\n"
     ),
     fixed = TRUE
@@ -564,7 +564,7 @@ test_that("a warning is issued when using `derive_var_worst_flag()` with `filter
     ),
     paste(
       "`filter` is deprecated as of admiral 0.7.0.",
-      "Please use restict_derivation() instead (see examples).",
+      "Please use `restrict_derivation()` instead (see examples).",
       sep = "\n"
     ),
     fixed = TRUE

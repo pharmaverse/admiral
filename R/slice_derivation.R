@@ -53,7 +53,7 @@
 #'   "1",      "2020-04-16", "BEFORE TREATMENT"
 #' )
 #'
-#' # For the second slice no filter is specified. Thus derive_vars_dtm is called
+#' # For the second slice filter is set to TRUE. Thus derive_vars_dtm is called
 #' # with time_imputation = "last" for all observations which do not match for the
 #' # first slice.
 #' slice_derivation(
@@ -65,7 +65,8 @@
 #'   ),
 #'   derivation_slice(filter = str_detect(VSTPT, "PRE|BEFORE"),
 #'                    args = params(time_imputation = "first")),
-#'   derivation_slice(args = params(time_imputation = "last"))
+#'   derivation_slice(filter = TRUE,
+#'                    args = params(time_imputation = "last"))
 #' )
 slice_derivation <- function(dataset,
                              derivation,
@@ -115,10 +116,13 @@ slice_derivation <- function(dataset,
   }
 
   # put datasets together again
-  unnest(dataset_split) %>% ungroup() %>% select(-temp_slicenr)
+  dataset_split %>%
+    unnest() %>%
+    ungroup() %>%
+    select(-temp_slicenr)
 }
 
-#' Create a `slice` Object
+#' Create a `derivation_slice` Object
 #'
 #' Create a `derivation_slice` object as input for `slice_derivation()`.
 #'
@@ -140,11 +144,11 @@ slice_derivation <- function(dataset,
 #' @export
 #'
 #' @return An object of class `slice`.
-derivation_slice <- function(filter = TRUE,
-                  args = NULL) {
+derivation_slice <- function(filter,
+                             args) {
   out <- list(
-    filter = assert_filter_cond(enquo(filter), optional = TRUE),
-    args = assert_s3_class(args, "params", optional = TRUE)
+    filter = assert_filter_cond(enquo(filter)),
+    args = assert_s3_class(args, "params")
   )
   class(out) <- c("derivation_slice", "list")
   out

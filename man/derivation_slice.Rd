@@ -2,9 +2,9 @@
 % Please edit documentation in R/slice_derivation.R
 \name{derivation_slice}
 \alias{derivation_slice}
-\title{Create a \code{slice} Object}
+\title{Create a \code{derivation_slice} Object}
 \usage{
-derivation_slice(filter = TRUE, args = NULL)
+derivation_slice(filter, args)
 }
 \arguments{
 \item{filter}{An unquoted condition for defining the observations of the

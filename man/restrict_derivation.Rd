@@ -24,17 +24,17 @@ Execute a derivation on a subset of the input dataset.
 
 library(magrittr)
 adlb <- tibble::tribble(
-~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
-"1",      -1,       113,   NA_character_,
-"1",       0,       113,   "Y",
-"1",       3,       117,   NA_character_,
-"2",       0,        95,   "Y",
-"3",       0,       111,   "Y",
-"3",       1,       101,   NA_character_,
-"3",       2,       123,   NA_character_
+  ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
+  "1",      -1,       113,   NA_character_,
+  "1",       0,       113,   "Y",
+  "1",       3,       117,   NA_character_,
+  "2",       0,        95,   "Y",
+  "3",       0,       111,   "Y",
+  "3",       1,       101,   NA_character_,
+  "3",       2,       123,   NA_character_
 )
 
-# derive BASE for post-baseline records only (derive_var_base() can not be used in this case
+# Derive BASE for post-baseline records only (derive_var_base() can not be used in this case
 # as it requires the baseline observation to be in the input dataset)
 restrict_derivation(
   adlb,
@@ -48,7 +48,7 @@ restrict_derivation(
   filter = AVISITN > 0
 )
 
-# derive BASE for baseline and post-baseline records only
+# Derive BASE for baseline and post-baseline records only
 restrict_derivation(
   adlb,
   derivation = derive_var_base,
@@ -58,7 +58,7 @@ restrict_derivation(
   filter = AVISITN >= 0
 ) \%>\%
 
-# derive CHG for post-baseline records only
+# Derive CHG for post-baseline records only
 restrict_derivation(
   derivation = derive_var_chg,
   filter = AVISITN > 0
