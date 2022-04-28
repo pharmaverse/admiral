@@ -1,0 +1,35 @@
+name: Bug Report
+description: Something is not working correctly or is not working at all!
+title: "Bug: <Insert Issue Title Here>"
+labels: ["bug", "programming"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Example:** Bug: derive_vars_dtm() is returning NA values when using preserve argument
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us what were you expecting to happen before the bug?
+      placeholder: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: session-info
+    attributes:
+      label: Session Information
+      description: Use `sessionInfo()` in the R console to gather all the details of your environment when the bug happened.
+      placeholder: "Place the console output here"
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Reproducible Example
+      description: We love code that can reproduce the example. Check out [reprex](https://reprex.tidyverse.org/articles/reprex-dos-and-donts.html)
+      placeholder: "Please give us as many details as you can! The faster we can recreate the bug, the faster we can get a fix in the works.  Warning, Error Messages and Screenshots are also great."
+    validations:
+      required: false

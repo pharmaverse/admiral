@@ -101,7 +101,8 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    )
+#'    ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
 #' adex %>%
@@ -112,7 +113,8 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) mean(x, na.rm = TRUE)
-#'   )
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
 #'
 #' # Any dose adjustment?
 #' adex %>%
@@ -122,7 +124,8 @@
 #'     input_code = "ADJ",
 #'     analysis_var = AVALC,
 #'     summary_fun = function(x) if_else(sum(!is.na(x)) > 0, "Y", NA_character_)
-#'   )
+#'   ) %>%
+#'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
                                    by_vars,
                                    input_code,
@@ -137,8 +140,7 @@ derive_param_exposure <- function(dataset,
   dt <- c("ASTDT", "AENDT") %in% colnames(dataset)
   if (all(dtm)) {
     dates <- vars(ASTDTM, AENDTM)
-  }
-  else {
+  } else {
     dates <- vars(ASTDT, AENDT)
   }
 
@@ -167,19 +169,19 @@ derive_param_exposure <- function(dataset,
     filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
 
   # add the dates for the derived parameters
-  by_vars <- vars2chr(by_vars)
   if (all(dtm)) {
     dates <- subset_ds %>%
-      group_by(!!!syms(by_vars)) %>%
+      group_by(!!!by_vars) %>%
       summarise(
         temp_start = min(ASTDTM, na.rm = TRUE),
         temp_end = max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
-      )
+      ) %>%
+      ungroup()
     expo_data <- add_data %>%
-      left_join(dates, by = by_vars) %>%
+      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(as_iso_dtm(ASTDTM), as_iso_dtm(temp_start)),
-        AENDTM = coalesce(as_iso_dtm(AENDTM), as_iso_dtm(temp_end))
+        ASTDTM = coalesce(ASTDTM, temp_start),
+        AENDTM = coalesce(AENDTM, temp_end)
       ) %>%
       select(-starts_with("temp_"))
 
@@ -187,31 +189,43 @@ derive_param_exposure <- function(dataset,
       expo_data <- expo_data %>%
         mutate(ASTDT = date(ASTDTM), AENDT = date(AENDTM))
     }
-  }
-  else {
+  } else {
     dates <- subset_ds %>%
-      group_by(!!!syms(by_vars)) %>%
+      group_by(!!!by_vars) %>%
       summarise(
         temp_start = min(ASTDT, na.rm = TRUE),
         temp_end = max(coalesce(AENDT, ASTDT), na.rm = TRUE)
-      )
-    expo_data <- add_data %>%
-      left_join(dates, by = by_vars) %>%
-      mutate(
-        ASTDT = coalesce(ASTDT, temp_start),
-        AENDT = coalesce(AENDT, temp_end)
       ) %>%
+      ungroup()
+    expo_data <- add_data %>%
+      derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
+      mutate(ASTDT = coalesce(ASTDT, temp_start),
+             AENDT = coalesce(AENDT, temp_end)) %>%
       select(-starts_with("temp_"))
   }
 
-  bind_rows(dataset, expo_data)
+  all_data <- bind_rows(dataset, expo_data)
+
+  if (all(dtm)) {
+    attr(all_data$ASTDTM, "tzone") <- "UTC"
+    attr(all_data$AENDTM, "tzone") <- "UTC"
+  }
+
+  all_data
 }
 
 #' Add an Aggregated Parameter and Derive the Associated Start and End Dates
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
 #' This function is *deprecated*. Please use [derive_param_exposure()] instead.
 #'
 #' @inheritParams derive_param_exposure
+#'
+#' @return
+#' The input dataset with a new record added for each group (with respect to the
+#' variables specified for the `by_vars` parameter).
 #'
 #' @export
 #'

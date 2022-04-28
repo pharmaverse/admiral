@@ -12,7 +12,9 @@ derive_vars_dtm(
   time_imputation = "00:00:00",
   flag_imputation = "auto",
   min_dates = NULL,
-  max_dates = NULL
+  max_dates = NULL,
+  preserve = FALSE,
+  ignore_seconds_flag = FALSE
 )
 }
 \arguments{
@@ -22,7 +24,10 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix, for the date imputation flag "DTF", and for the time
+imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -60,9 +65,13 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-One of "auto", "date" or "both"
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null and the time imputation flag is
+derived if the \code{time_imputation} parameter is not null
 
-Default: "auto"}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
@@ -71,8 +80,9 @@ before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
 range of possible dates of the \code{dtc} value are considered. The possible dates
 are defined by the missing parts of the \code{dtc} date (see example below). This
-ensures that the non-missing parts of the \code{dtc} date are not changed. For
-example\preformatted{impute_dtc(
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example\preformatted{impute_dtc(
   "2020-11",
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
@@ -92,7 +102,25 @@ have changed the month although it is not missing (in the \code{dtc} date).}
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered.}
+considered. A date or date-time object is expected.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
+
+\item{ignore_seconds_flag}{ADaM IG states that given SDTM (\code{'--DTC'}) variable,
+if only hours and minutes are ever collected, and seconds are imputed in
+(\code{'--DTM'}) as 00, then it is not necessary to set (\code{'--TMF'}) to \code{'S'}. A user can set this
+to \code{TRUE} so the \code{'S'} Flag is dropped from (\code{'--TMF'}).
+
+A logical value
+
+Default: \code{FALSE}}
 }
 \value{
 The input dataset with the datetime \code{'--DTM'} (and the date/time imputation
@@ -145,6 +173,40 @@ derive_vars_dtm(
   date_imputation = "last",
   time_imputation = "last",
   max_dates = vars(DTHDT, DCUTDT)
+)
+
+# Seconds has been removed from the input dataset.  Function now uses
+# ignore_seconds_flag to remove the 'S' from the --TMF variable.
+mhdt <- tibble::tribble(
+  ~MHSTDTC,
+  "2019-07-18T15:25",
+  "2019-07-18T15:25",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07",
+  ""
+)
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "FIRST",
+  time_imputation = "FIRST",
+  ignore_seconds_flag = TRUE
+)
+
+# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+# use preserve argument to "preserve" partial dates.  For example, "2019---07",
+# will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
+
+derive_vars_dtm(
+  mhdt,
+  new_vars_prefix = "AST",
+  dtc = MHSTDTC,
+  date_imputation = "MID",
+  preserve = TRUE
 )
 }
 \author{

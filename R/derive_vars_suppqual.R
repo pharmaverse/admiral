@@ -84,7 +84,7 @@ derive_vars_suppqual <- function(dataset, dataset_suppqual, domain = NULL) {
       supp <- dataset_suppqual %>%
         filter(.data$IDVAR == .x$IDVAR, .data$QNAM == .x$QNAM) %>%
         select(USUBJID, IDVARVAL, QNAM, QVAL) %>%
-        spread(key = QNAM, value = QVAL) %>%
+        pivot_wider(names_from = QNAM, values_from = QVAL) %>%
         rename(!! .x$IDVAR := "IDVARVAL") %>%
         # Convert IDVAR to match parent domain type
         modify_at(.x$IDVAR, function(x) {
@@ -94,7 +94,7 @@ derive_vars_suppqual <- function(dataset, dataset_suppqual, domain = NULL) {
       supp <- dataset_suppqual %>%
         filter(.data$QNAM == .x$QNAM) %>%
         select(USUBJID, QNAM, QVAL) %>%
-        spread(key = QNAM, value = QVAL)
+        pivot_wider(names_from = QNAM, values_from = QVAL)
     }
 
     # Set label
@@ -138,17 +138,4 @@ derive_vars_suppqual <- function(dataset, dataset_suppqual, domain = NULL) {
   }
 
   dataset
-}
-
-#' Join Supplementary Qualifier Variables into the Parent SDTM Domain
-#'
-#' `derive_suppqual_vars()` was renamed to `derive_vars_suppqual()` to create a
-#' more consistent API.
-#'
-#' @keywords internal
-#'
-#' @export
-derive_suppqual_vars <- function(dataset, dataset_suppqual, domain = NULL) {
-  deprecate_warn("0.3.0", "derive_suppqual_vars()", "derive_vars_suppqual()")
-  derive_vars_suppqual(dataset, dataset_suppqual, domain)
 }

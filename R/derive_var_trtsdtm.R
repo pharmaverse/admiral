@@ -1,5 +1,8 @@
 #' Derive Datetime of First Exposure to Treatment
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Derives datetime of first exposure to treatment (`TRTSDTM`)
 #'
 #' @param dataset Input dataset
@@ -16,7 +19,7 @@
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
-#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')`
+#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXSTDTC) >= 10`
 #'
 #'   Permitted Values: logical expression
 #'
@@ -39,7 +42,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("ex")
 #' data("dm")
 #'
@@ -54,19 +57,15 @@ derive_var_trtsdtm <- function(dataset,
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXSTDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
-  add <- dataset_ex %>%
-    filter_if(filter_ex) %>%
-    filter_extreme(
-      order = vars(EXSTDTC, EXSEQ),
-      by_vars = subject_keys,
-      mode = "first"
-    )
-
-  add[["TRTSDTM"]] <- convert_dtc_to_dtm(
-    dtc = add$EXSTDTC,
-    date_imputation = "first",
-    time_imputation = "first"
-  )
-
-  left_join(dataset, select(add, !!!subject_keys, TRTSDTM), by = vars2chr(subject_keys))
+  derive_vars_merged_dtm(dataset,
+                         dataset_add = dataset_ex,
+                         filter_add = !!filter_ex,
+                         new_vars_prefix = "TRTS",
+                         dtc = EXSTDTC,
+                         date_imputation = "first",
+                         time_imputation = "first",
+                         flag_imputation = "none",
+                         order = vars(TRTSDTM, EXSEQ),
+                         mode = "first",
+                         by_vars = subject_keys)
 }

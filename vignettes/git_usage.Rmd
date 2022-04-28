@@ -20,14 +20,15 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This article will give you an overview of how the admiral project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the admiral project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
+This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
 
 # Branches
 
--	The `master` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/Roche-GSK/admiral/releases) 
+-	The `main` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/pharmaverse/admiral/releases) 
 -	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `master`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+- The `main`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
 
@@ -88,6 +89,13 @@ Once all changes are committed, push the updated branch to GitHub:
   
 In GitHub, under **Pull requests**, the user will either have a "Compare and pull request" button and/or a "Create Pull Request".  The first button will be created for you if GitHub detects recent changes you have made. The branch to merge with must be the `devel` branch (base = `devel`) and the compare branch is the new branch to merge - as shown in the below picture. Please **pay close attention** to the branch you are merging into!  
 
+The issue must be linked to the pull request in the "Development" field of the
+Pull Request.
+
+```{r, echo = FALSE}
+    knitr::include_graphics("github_linked_issues_dark.png", dpi = 144)
+```
+
 Once you have completed the Pull Request you will see all committed changes are then available for the reviewer.  A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request.  Pictures are nice too, which are easy to do in GitHub!  Use any Screen Capture software and Copy and Paste into your summary. 
 
 ```{r, echo = FALSE}
@@ -96,16 +104,26 @@ Once you have completed the Pull Request you will see all committed changes are 
 
 ### Reviewing/Closing an Issue
 
-- At least one reviewer must approve the Pull Request. Please review the [Pull Request Review Guidance](pr_review_guidance.html), which provides in depth guidance on doing a proper Pull Request. 
-- The reviewer must ensure that the function follows the programming strategy recommendations. 
-- Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged and the issue closed.
+- At least one reviewer must approve the Pull Request. Please review the [Pull
+Request Review Guidance](pr_review_guidance.html), which provides in depth
+guidance on doing a proper Pull Request.
+- The reviewer must ensure that the function follows the programming strategy
+recommendations.
+- Any comment/question/discussion must be addressed and documented in GitHub
+before the Pull Request is merged
 
-Once the review is completed, and the Pull Request is merged, the branch must be removed: click **Delete branch** in the Pull Request.
+Once the review is completed, the reviewer will merge the Pull Request and the
+feature branch will automatically be deleted.
+
+After merging the Pull Request the corresponding issue must be moved to the
+"Done" column on the "admiral core board" by the developer. **The issue
+must not be closed**. It will be closed automatically once the `devel` branch is
+merged into the `main` branch.
+
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_delete_branch.png", dpi = 144)
+    knitr::include_graphics("github_done.png", dpi = 144)
 ```
-
 
 ### Solving Merge Conflicts in the Terminal on RStudio
 
@@ -130,7 +148,7 @@ git push
 
 ### Solving Merge Conflicts in GitHub
 
-For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, Github has found 3 conflicts, but we only display the first one.  Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highlight the conflicting sections.  You will need to make the decision on whether to keep the code from the base or the feature branch.  Once you have decided, go into the code and remove the section you no longer wish to keep.  Be sure to remove the `<<<<<<<`, `=======`, and `>>>>>>>` as well!  Once you work through the conflicts you will mark as **Resolved and Commit your changes**.  It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch. 
+For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, GitHub has found 3 conflicts, but we only display the first one.  Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highlight the conflicting sections.  You will need to make the decision on whether to keep the code from the base or the feature branch.  Once you have decided, go into the code and remove the section you no longer wish to keep.  Be sure to remove the `<<<<<<<`, `=======`, and `>>>>>>>` as well!  Once you work through the conflicts you will mark as **Resolved and Commit your changes**.  It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch. 
 
 ```{r, echo = FALSE}
     knitr::include_graphics("github_conflicts.png", dpi = 144)
@@ -154,7 +172,7 @@ For simple merge conflicts, developers can make use of the GitHub interface to s
 
 # Resources on using `git`, GitHub and RStudio {#github_resources}
 
-* [GitHub and RStudio](https://resources.GitHub.com/whitepapers/GitHub-and-rstudio/)
+* [GitHub and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
 * [Git and GitHub from the R Package Manual](https://r-pkgs.org/git.html)
 

@@ -1,5 +1,8 @@
 #' Derive Datetime of Last Exposure to Treatment
 #'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' Derives datetime of last exposure to treatment (`TRTEDTM`)
 #'
 #' @param dataset Input dataset
@@ -16,7 +19,7 @@
 #'   Only observations of the ex dataset which fulfill the specified condition
 #'   are considered for the treatment start date.
 #'
-#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')`
+#'   Default: `EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXENDTC) >= 10`
 #'
 #'   Permitted Values: logical expression
 #'
@@ -39,7 +42,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("ex")
 #' data("dm")
 #'
@@ -55,19 +58,15 @@ derive_var_trtedtm <- function(dataset,
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXENDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
 
-  add <- dataset_ex %>%
-    filter_if(filter_ex) %>%
-    filter_extreme(
-      order = vars(EXENDTC, EXSEQ),
-      by_vars = subject_keys,
-      mode = "last"
-    )
-
-  add[["TRTEDTM"]] <- convert_dtc_to_dtm(
-    dtc = add$EXENDTC,
-    date_imputation = "last",
-    time_imputation = "last"
-  )
-
-  left_join(dataset, select(add, !!!subject_keys, TRTEDTM), by = vars2chr(subject_keys))
+  derive_vars_merged_dtm(dataset,
+                         dataset_add = dataset_ex,
+                         filter_add = !!filter_ex,
+                         new_vars_prefix = "TRTE",
+                         dtc = EXENDTC,
+                         date_imputation = "last",
+                         time_imputation = "last",
+                         flag_imputation = "none",
+                         order = vars(TRTEDTM, EXSEQ),
+                         mode = "last",
+                         by_vars = subject_keys)
 }

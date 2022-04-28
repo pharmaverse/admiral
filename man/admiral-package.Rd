@@ -8,30 +8,42 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-A toolbox for programming ADaM datasets in R.
+A toolbox for programming Clinical Data Standards Interchange Consortium
+    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
+    mandatory part of any New Drug or Biologics License Application submitted to the
+    United States Food and Drug Administration (FDA). Analysis derivations are
+    implemented in accordance with the "Analysis Data Model Implementation Guide"
+    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
 
 Authors:
 \itemize{
-  \item Alice Ehmann \email{alice.x.ehmann@gsk.com}
-  \item Stefan Bundfuss \email{stefan.bundfuss@roche.com}
-  \item Samia Kabi \email{samia.kabi@roche.com}
+  \item Alice Ehmann
+  \item Stefan Bundfuss
+  \item Samia Kabi
   \item Vignesh Thanikachalam
-  \item Ondrej Slama \email{ondrej.slama@roche.com}
+  \item Ondrej Slama
   \item Shimeng Huang
-  \item Robin Koeger
-  \item Gordon Miller
   \item Teckla Akinyi
-  \item Eric Simms \email{eric.m.simms@gsk.com}
-  \item Michael Thorpe \email{michael.thorpe.mt1@roche.com}
-  \item Pavan Kumar \email{pavan.10.kumar@gsk.com}
-  \item Hamza Rahal
+  \item Eric Simms
+  \item Michael Thorpe
+  \item Annie Yang
+  \item Ben Straub
+  \item Andrew Smith
 }
 
 Other contributors:
 \itemize{
+  \item Robin Koeger [contributor]
+  \item Gordon Miller [contributor]
+  \item Pavan Kumar [contributor]
+  \item Hamza Rahal [contributor]
+  \item Ross Farrugia [contributor]
+  \item Konstantina Koukourikou [contributor]
+  \item Tom Ratford [contributor]
+  \item James Kim \email{james.j.kim@pfizer.com} [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

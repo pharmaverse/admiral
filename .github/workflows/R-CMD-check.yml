@@ -25,14 +25,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-20.04, r: '3.5', repos: 'https://cran.microsoft.com/snapshot/2018-12-20/'}
-          - {os: ubuntu-20.04, r: '3.6'}
-          - {os: ubuntu-20.04, r: 'release', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
+          - {os: ubuntu-latest, r: '3.6', repos: 'https://cran.microsoft.com/snapshot/2020-02-29'}
+          - {os: ubuntu-latest, r: '4.0', repos: 'https://cran.microsoft.com/snapshot/2021-03-31/'}
+          - {os: ubuntu-latest, r: 'release', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_REPOS: ${{ matrix.config.repos }}
+      R_KEEP_PKG_SOURCE: true
 
     steps:
       - uses: actions/checkout@v2
@@ -40,18 +41,10 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
-
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux') && matrix.config.r == '3.6'
-        with:
-          path: ~/.local/share/renv
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: ${{ runner.os }}-renv-
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
 
       - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux') && (matrix.config.r == '3.5' || matrix.config.r == 'release')
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
@@ -72,17 +65,10 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
-        if: matrix.config.r == '3.6'
-        run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::restore()
-        shell: Rscript {0}
-
-      - name: Install dependencies
-        if: matrix.config.r == '3.5' || matrix.config.r == 'release'
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_github("pharmaverse/admiraltest@devel", dependencies = FALSE, upgrade = "never")
         shell: Rscript {0}
 
       - name: Check
@@ -92,7 +78,7 @@ jobs:
         run: |
           if (!requireNamespace("rcmdcheck", quietly = TRUE)) install.packages("rcmdcheck")
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "note", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results

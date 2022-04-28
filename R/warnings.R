@@ -5,6 +5,8 @@
 #' @param dataset A `data.frame`
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
+#' @return No return value, called for side effects
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords warning
@@ -12,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
@@ -49,13 +51,15 @@ is_valid_dtc <- function(arg) {
   grepl(pattern, arg) | arg == "" | is.na(arg)
 }
 
-#' Warn If a vector contains unknown datetime format
+#' Warn If a Vector Contains Unknown Datetime Format
 #'
 #' Warn if the vector contains unknown datetime format such as
 #' "2003-12-15T-:15:18", "2003-12-15T13:-:19","--12-15","-----T07:15"
 #'
 #' @param dtc a character vector containing the dates
 #' @param is_valid a logical vector indicating whether elements in `dtc` are valid
+#'
+#' @return No return value, called for side effects
 #'
 #' @author Samia Kabi
 #'
@@ -124,22 +128,6 @@ warn_if_incomplete_dtc <- function(dtc, n) {
   }
 }
 
-
-warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
-  missing_ref_ranges <- dataset %>%
-    anti_join(meta_ref_ranges, by = by_var) %>%
-    pull(!!sym(by_var)) %>%
-    unique()
-
-  if (length(missing_ref_ranges) >= 1L) {
-    msg <- sprintf(
-      "Reference ranges are missing for the following `%s`: %s",
-      by_var,
-      enumerate(missing_ref_ranges, quote_fun = squote)
-    )
-    warn(msg)
-  }
-}
 
 #' Warn If Two Lists are Inconsistent
 #'
@@ -218,7 +206,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(adsl)
 #' data(vs)
 #'

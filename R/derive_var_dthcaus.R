@@ -38,7 +38,8 @@
 #' adsl <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID,
 #'   "STUDY01", "PAT01",
-#'   "STUDY01", "PAT02"
+#'   "STUDY01", "PAT02",
+#'   "STUDY01", "PAT03"
 #' )
 #' ae <- tibble::tribble(
 #'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
@@ -48,10 +49,11 @@
 #'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
 #'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
-#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01"
+#'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
+#'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
 #' )
 #'
-#' # Derive `DTHCAUS` only
+#' # Derive `DTHCAUS` only - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
@@ -70,7 +72,7 @@
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
 #'
-#' # Derive `DTHCAUS` and add traceability variables
+#' # Derive `DTHCAUS` and add traceability variables - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
@@ -90,6 +92,36 @@
 #' )
 #'
 #' derive_var_dthcaus(adsl, src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+#'
+#' # Derive `DTHCAUS` as above - now including post-study deaths with different `DTHCAUS` value
+#' src_ae <- dthcaus_source(
+#'   dataset_name = "ae",
+#'   filter = AEOUT == "FATAL",
+#'   date = AEDTHDTC,
+#'   mode = "first",
+#'   dthcaus = AEDECOD,
+#'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
+#' )
+#'
+#' src_ds <- dthcaus_source(
+#'   dataset_name = "ds",
+#'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+#'   date = DSSTDTC,
+#'   mode = "first",
+#'   dthcaus = DSTERM,
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#' )
+#'
+#' src_ds_post <- dthcaus_source(
+#'   dataset_name = "ds",
+#'   filter = DSDECOD == "DEATH" & DSTERM == "POST STUDY REPORTING OF DEATH",
+#'   date = DSSTDTC,
+#'   mode = "first",
+#'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
+#'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
+#' )
+#'
+#' derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
 derive_var_dthcaus <- function(dataset,
                                ...,
                                source_datasets,
@@ -175,10 +207,10 @@ derive_var_dthcaus <- function(dataset,
     ) %>%
     select(-starts_with("temp_"))
 
-  left_join(dataset, dataset_add, by = vars2chr(subject_keys))
+  derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys)
 }
 
-#' Create an `dthcaus_source` object
+#' Create a `dthcaus_source` Object
 #'
 #' @param dataset_name The name of the dataset, i.e. a string, used to search for
 #'   the death cause.
@@ -206,10 +238,6 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param dataset Deprecated, please use `dataset_name` instead.
 #'
-#' @param date_var Deprecated, please use `date` instead.
-#'
-#' @param traceabilty_vars Deprecated, please use `traceability_vars` instead.
-#'
 #' @author Shimeng Huang
 #'
 #' @keywords source_specifications
@@ -225,21 +253,7 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL,
-                           dataset = deprecated(),
-                           date_var = deprecated(),
-                           traceabilty_vars = deprecated()) {
-  if (!missing(date_var)) {
-    deprecate_warn("0.3.0", "dthcaus_source(date_var = )", "dthcaus_source(date = )")
-    date <- enquo(date_var)
-  }
-  if (!missing(traceabilty_vars)) {
-    deprecate_warn(
-      "0.3.0",
-      "dthcaus_source(traceabilty_vars = )",
-      "dthcaus_source(traceability_vars = )"
-    )
-    traceability_vars <- traceabilty_vars
-  }
+                           dataset = deprecated()) {
   if (!missing(dataset)) {
     deprecate_warn("0.6.0", "dthcaus_source(dataset = )", "dthcaus_source(dataset_name = )")
     dataset_name <- deparse(substitute(dataset))

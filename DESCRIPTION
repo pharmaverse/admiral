@@ -1,52 +1,64 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.5.0
+Version: 0.7.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
-    person("Alice", "Ehmann", email = "alice.x.ehmann@gsk.com", role = "aut"),
-    person("Stefan", "Bundfuss", email = "stefan.bundfuss@roche.com", role = "aut"),
-    person("Samia", "Kabi", email = "samia.kabi@roche.com", role = "aut"),
+    person("Alice", "Ehmann", role = "aut"),
+    person("Stefan", "Bundfuss", role = "aut"),
+    person("Samia", "Kabi", role = "aut"),
     person("Vignesh", "Thanikachalam", role = "aut"),
-    person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
+    person("Ondrej", "Slama", role = "aut"),
     person("Shimeng", "Huang", role = "aut"),
-    person("Robin", "Koeger", role = "aut"),
-    person("Gordon", "Miller", role = "aut"),
+    person("Robin", "Koeger", role = "ctb"),
+    person("Gordon", "Miller", role = "ctb"),
     person("Teckla", "Akinyi", role = "aut"),
-    person("Eric", "Simms", email = "eric.m.simms@gsk.com", role = "aut"),
-    person("Michael", "Thorpe", email = "michael.thorpe.mt1@roche.com", role = "aut"),
-    person("Pavan", "Kumar", email = "pavan.10.kumar@gsk.com", role = "aut"),
-    person("Hamza", "Rahal", role = "aut"),
+    person("Eric", "Simms", role = "aut"),
+    person("Michael", "Thorpe", role = "aut"),
+    person("Pavan", "Kumar", role = "ctb"),
+    person("Hamza", "Rahal", role = "ctb"),
+    person("Annie", "Yang", role = "aut"),
+    person("Ross", "Farrugia", role = "ctb"),
+    person("Ben", "Straub", role = "aut"),
+    person("Andrew", "Smith", role = "aut"),
+    person("Konstantina", "Koukourikou", role = "ctb"),
+    person("Tom", "Ratford", role = "ctb"),
+    person("James", "Kim", email = "james.j.kim@pfizer.com", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for programming ADaM datasets in R.
+Description: A toolbox for programming Clinical Data Standards Interchange Consortium
+    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
+    mandatory part of any New Drug or Biologics License Application submitted to the
+    United States Food and Drug Administration (FDA). Analysis derivations are
+    implemented in accordance with the "Analysis Data Model Implementation Guide"
+    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: R (>= 3.5)
 Imports:
-    admiral.test,
     assertthat,
     dplyr,
+    hms,
+    lifecycle,
     lubridate,
     magrittr,
     purrr,
     rlang,
     stringr,
-    hms,
     tidyr,
     tidyselect
 Suggests:
+    admiraltest,
     devtools,
     diffdf,
-    lifecycle,
+    knitr,
     lintr,
     pkgdown,
     testthat,
-    knitr,
     methods,
     miniUI,
     rmarkdown,
@@ -57,61 +69,4 @@ Suggests:
     usethis,
     covr,
     DT
-Remotes: Roche-GSK/admiral.test
 VignetteBuilder: knitr
-Collate: 
-    'admiral-package.R'
-    'assertions.R'
-    'call_derivation.R'
-    'compute_duration.R'
-    'data.R'
-    'dataset_vignette.R'
-    'derive_adeg_params.R'
-    'derive_advs_params.R'
-    'derive_date_vars.R'
-    'derive_derived_param.R'
-    'derive_disposition_dt.R'
-    'derive_disposition_reason.R'
-    'derive_disposition_status.R'
-    'derive_extreme_flag.R'
-    'derive_last_dose.R'
-    'derive_obs_number.R'
-    'derive_param_doseint.R'
-    'derive_param_exposure.R'
-    'derive_param_tte.R'
-    'derive_summary_records.R'
-    'derive_var_ady.R'
-    'derive_var_aendy.R'
-    'derive_var_anrind.R'
-    'derive_var_astdy.R'
-    'derive_var_atirel.R'
-    'derive_var_base.R'
-    'derive_var_basetype.R'
-    'derive_var_chg.R'
-    'derive_var_dthcaus.R'
-    'derive_var_lstalvdt.R'
-    'derive_var_ontrtfl.R'
-    'derive_var_pchg.R'
-    'derive_var_trtdurd.R'
-    'derive_var_trtedtm.R'
-    'derive_var_trtsdtm.R'
-    'derive_vars_aage.R'
-    'derive_vars_dtm_to_dt.R'
-    'derive_vars_dtm_to_tm.R'
-    'derive_vars_duration.R'
-    'derive_vars_query.R'
-    'derive_vars_suppqual.R'
-    'derive_vars_transposed.R'
-    'duplicates.R'
-    'filter_extreme.R'
-    'globals.R'
-    'hms.R'
-    'iso_dtm.R'
-    'joins.R'
-    'lifecycle.R'
-    'reexports.R'
-    'test_helpers.R'
-    'utils.R'
-    'tte_sources.R'
-    'user_helpers.R'
-    'warnings.R'

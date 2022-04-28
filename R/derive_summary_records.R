@@ -24,9 +24,9 @@
 #'
 #'   For example,
 #'
-#'   + `filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all AVAL
-#'   values greater than mean of AVAL with in `by_vars`.
-#'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
+#'   values greater than mean of `AVAL` with in `by_vars`.
+#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
 #' @param analysis_var Analysis variable.
@@ -36,19 +36,16 @@
 #'   This can include built-in functions as well as user defined functions,
 #'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @param set_values_to A list of variable name-value pairs. Use this argument
-#'   if you need to change the values of any newly derived records.
+#' @param set_values_to Variables to be set
 #'
-#'   Set a list of variables to some specified value for the new observation(s)
-#'   + LHS refer to a variable.
-#'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-#'   value or NA.
-#'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
-#'   More general expression are not allowed.
+#'   The specified variables are set to the specified values for the new
+#'   observations.
 #'
-#' @param fns *Deprecated*, please use `analysis_var` and `summary_fun` instead.
-#'
-#' @param filter_rows *Deprecated*, please use `filter` instead.
+#'   A list of variable name-value pairs is expected.
+#'   + LHS refers to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a
+#'   symbol, a numeric value or `NA`, e.g., `vars(PARAMCD = "TDOSE", PARCAT1 =
+#'   "OVERALL")`. More general expression are not allowed.
 #'
 #' @author Vignesh Thanikachalam, Ondrej Slama
 #'
@@ -151,26 +148,7 @@ derive_summary_records <- function(dataset,
                                    filter = NULL,
                                    analysis_var,
                                    summary_fun,
-                                   set_values_to = NULL,
-                                   fns = deprecated(),
-                                   filter_rows = deprecated()) {
-  if (!missing(fns)) {
-    err_msg <- paste(
-      "The `fns` argument of `derive_summary_records()` is deprecated",
-      "as of admiral 0.3.0.",
-      "Please use the `analysis_var` and `summary_fun` arguments instead."
-    )
-    abort(err_msg)
-  }
-  if (!missing(filter_rows)) {
-    deprecate_warn(
-      "0.3.0",
-      "derive_summary_records(filter_rows = )",
-      "derive_summary_records(filter = )"
-    )
-    filter <- enquo(filter_rows)
-  }
-
+                                   set_values_to = NULL) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)

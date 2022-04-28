@@ -143,7 +143,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
+#' library(lubridate)
 #' data("adsl")
 #'
 #' death <- event_source(
@@ -332,8 +332,7 @@ derive_param_tte <- function(dataset = NULL,
   if (create_datetime) {
     date_var <- sym("ADTM")
     start_var <- sym("STARTDTM")
-  }
-  else {
+  } else {
     date_var <- sym("ADT")
     start_var <- sym("STARTDT")
   }
@@ -363,9 +362,9 @@ derive_param_tte <- function(dataset = NULL,
     order = vars(temp_event),
     mode = "last"
   ) %>%
-    left_join(
-      adsl,
-      by = vars2chr(subject_keys)
+    derive_vars_merged(
+      dataset_add = adsl,
+      by_vars = subject_keys
     )
   tryCatch(
     new_param <- mutate(new_param, !!!set_values_to),
@@ -388,8 +387,8 @@ derive_param_tte <- function(dataset = NULL,
     }
   )
 
-  new_param <-
-    mutate(new_param, !!date_var := pmax(!!date_var, !!start_var)) %>%
+  new_param <- new_param %>%
+    mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
     select(-starts_with("temp_"))
 
   if (!is.null(by_vars)) {
@@ -402,7 +401,7 @@ derive_param_tte <- function(dataset = NULL,
   }
 
   # add new parameter to input dataset #
-  bind_rows(dataset, new_param)
+  all_data <- bind_rows(dataset, new_param)
 }
 
 #' Select the First or Last Date from Several Sources
@@ -468,6 +467,45 @@ derive_param_tte <- function(dataset = NULL,
 #' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
+#'
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' adsl <- tibble::tribble(
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ae <- tibble::tribble(
+#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03T10:56", 1,      "Flu",
+#'   "01",     "2021-03-04",       2,      "Cough",
+#'   "01",     "2021",             3,      "Flu"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ttae <- event_source(
+#'   dataset_name = "ae",
+#'   date = AESTDTC,
+#'   set_values_to = vars(
+#'     EVNTDESC = "AE",
+#'     SRCDOM = "AE",
+#'     SRCVAR = "AESTDTC",
+#'     SRCSEQ = AESEQ
+#'   )
+#' )
+#'
+#' filter_date_sources(
+#'   sources = list(ttae),
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   by_vars = vars(AEDECOD),
+#'   create_datetime = FALSE,
+#'   subject_keys = vars(STUDYID, USUBJID),
+#'   mode = "first"
+#' )
 #'
 #' @export
 filter_date_sources <- function(sources,
@@ -550,13 +588,13 @@ filter_date_sources <- function(sources,
     )
 }
 
-#' Add By Groups to all Datasets if Necessary
+#' Add By Groups to All Datasets if Necessary
 #'
 #' The function ensures that the by variables are contained in all source
 #' datasets.
 #'
 #' @details
-#'   1. The by groups are determined as the union of the by groups occuring in
+#'   1. The by groups are determined as the union of the by groups occurring in
 #'   the source datasets.
 #'   1. For all source datasets which do not contain the by variables the source
 #'   dataset is replaced by the cartesian product of the source dataset and the
@@ -575,6 +613,30 @@ filter_date_sources <- function(sources,
 #' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
+#'
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(lubridate)
+#'
+#' adsl <- tibble::tribble(
+#' ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
+#'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' ae <- tibble::tribble(
+#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03T10:56", 1,      "Flu",
+#'   "01",     "2021-03-04",       2,      "Cough",
+#'   "01",     "2021",             3,      "Flu"
+#' ) %>%
+#'   mutate(STUDYID = "AB42")
+#'
+#' extend_source_datasets(
+#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   by_vars = vars(AEDECOD)
+#' )
 #'
 #' @export
 extend_source_datasets <- function(source_datasets,
@@ -669,32 +731,6 @@ extend_source_datasets <- function(source_datasets,
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
 #' @return An object of class `tte_source`
-#'
-#' @examples
-#' # Death event
-#' admiral:::tte_source(
-#'   dataset_name = "adsl",
-#'   filter = DTHFL == "Y",
-#'   date = DTHDT,
-#'   censor = 0,
-#'   set_values_to = vars(
-#'     EVNTDESC = "DEATH",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "DTHDT"
-#'   )
-#' )
-#'
-#' # Last study date known alive censor
-#' admiral:::tte_source(
-#'   dataset_name = "adsl",
-#'   date = LSTALVDT,
-#'   censor = 1,
-#'   set_values_to = vars(
-#'     EVNTDESC = "ALIVE",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
-#'   )
-#' )
 tte_source <- function(dataset_name,
                        filter = NULL,
                        date,
@@ -806,6 +842,8 @@ censor_source <- function(dataset_name,
 #'
 #' @param x A `tte_source` object
 #' @param ... Not used
+#'
+#' @return No return value, called for side effects
 #'
 #' @export
 #'

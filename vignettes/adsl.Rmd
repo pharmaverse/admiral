@@ -51,12 +51,12 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiraltest}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 library(stringr)
 
@@ -71,7 +71,7 @@ The `DM` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
 adsl <- dm %>% 
-  mutate(DOMAIN = NULL)
+  select(-DOMAIN)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -133,18 +133,18 @@ dataset_vignette(
 
 ### Disposition Dates (e.g. `EOSDT`) {#disposition_date}
 
-The function `derive_disposition_dt()` can be used to derive a disposition date. 
+The function `derive_var_disposition_dt()` can be used to derive a disposition date. 
 The relevant disposition date (`DS.DSSTDTC`) is selected by adjusting the filter parameter. 
 
 To derive the End of Study date (`EOSDT`), a call could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_dt(
+  derive_var_disposition_dt(
     dataset_ds = ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
     date_imputation = NULL
   )
 ```
@@ -174,7 +174,7 @@ is to be imputed to the first of the month, then set `date_imputation = "FIRST"`
 
 ### Disposition Status (e.g. `EOSTT`) {#disposition_status}
 
-The function `derive_disposition_status()` can be used to derive a disposition status at a specific
+The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
 parameter and used to derive `EOSSTT`.
 
@@ -182,11 +182,11 @@ To derive the End of Study status (`EOSSTT`), a call could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
 
@@ -225,12 +225,12 @@ The customized mapping function `format_eosstt()` can now be passed to the main 
 ```{r eval=FALSE}
 
 adsl <- adsl %>%
-  derive_disposition_status(
+  derive_var_disposition_status(
     dataset_ds = ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eosstt,
-    filter = DSCAT == "DISPOSITION EVENT"
+    filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
 
@@ -241,7 +241,7 @@ This call would return the input dataset with the column `EOSSTT` added.
 The main reason for discontinuation is usually stored in `DSDECOD` while `DSTERM` provides 
 additional details regarding subject’s discontinuation (e.g., description of `"OTHER"`).
 
-The function `derive_disposition_reason()` can be used to derive a disposition reason (along with 
+The function `derive_vars_disposition_reason()` can be used to derive a disposition reason (along with 
 the details, if  required) at a specific timepoint. 
 The relevant disposition variable(s) (`DS.DSDECOD`, `DS.DSTERM`) are selected by adjusting the 
 filter parameter and used to derive the main reason (and details).
@@ -250,13 +250,13 @@ To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would 
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_disposition_reason(
+  derive_vars_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,
     reason_var_spe = DSTERM,
-    filter = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   )
 ```
 
@@ -271,7 +271,7 @@ This call would return the input dataset with the column `DCSREAS` and `DCSREASP
 By default, the function will map 
 
 - `DCSREAS` as `DSDECOD` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
-- `DCSREASP` as `DSTERM` if `DSDECOD` is not `"COMPLETED"` or `NA`, `NA` otherwise
+- `DCSREASP` as `DSTERM` if `DSDECOD` is equal to `OTHER`, `NA` otherwise
 
 
 If the default derivation must be changed, the user can create his/her own function and pass it to 
@@ -281,12 +281,12 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dcsreas <- function(dsdecod, dsterm = NULL) {
-  out <- if (is.null(dsterm)) dsdecod else dsterm
-  case_when(
-    dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod) ~ out,
-    TRUE ~ NA_character_
-  )
+format_dctreas <- function(dsdecod, dsterm = NULL) {
+  if (is.null(dsterm)){
+    if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
+  } else {
+     if_else (dsdecod == "OTHER", dsterm, NA_character_)
+  }
 }
 ```
 
@@ -294,7 +294,7 @@ The customized mapping function `format_dcsreas()` can now be passed to the main
 
 ```{r eval=FALSE}
 adsl <- adsl %>%
-  derive_disposition_reason(
+  derive_vars_disposition_reason(
     dataset_ds = ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
@@ -359,7 +359,7 @@ collected in  the `DS` form, the cause of death would be set to the disposition 
 To achieve this, the `dthcaus_source()` objects must be specified and defined such as it fits the 
 study requirement. 
 
-`dthcause_source()` specifications:
+`dthcaus_source()` specifications:
 
 - `dataset_name`: the name of the dataset where to search for death information,
 - `filter`: the condition to define death,
@@ -497,50 +497,53 @@ dataset_vignette(
 
 ## Derive the Last Date Known Alive (`LSTALVDT`) {#lstalvdt}
 
-Similarly as for the cause of death (`DTHCAUS`), the last known alive date (`LSTALVDT`) can be
-derived from multiples sources and the user must ensure the sources (`lstalvdt_source`) are 
-correctly defined.
+Similarly as for the cause of death (`DTHCAUS`), the last known alive date
+(`LSTALVDT`) can be derived from multiples sources and the user must ensure the
+sources (`date_source()`) are correctly defined.
 
-`lstalvdt_source()` specifications:
+`date_source()` specifications:
 
 - `dataset_name`: the name of the dataset where to search for date information,
 - `filter`: the filter to apply on the datasets,
 - `date`: the date of interest,
 - `date_imputation`: whether and how to impute partial dates,
-- `traceability_vars`: whether the traceability variables need to be added (e.g source domain,
-sequence, variable)
+- `traceability_vars`: whether the traceability variables need to be added (e.g
+source domain, sequence, variable)
 
 An example could be :
 
 ```{r eval=TRUE}
-ae_src1 <- lstalvdt_source(
+ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST"
 )
-ae_src2 <- lstalvdt_source(
+ae_src2 <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST"
 )
-lb_src <- lstalvdt_source(
+lb_src <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
-adsl_src <- lstalvdt_source(
+adsl_src <- date_source(
   dataset_name = "adsl",
   date = TRTEDT
 )
 ```
 
-Once the sources are defined, the function `derive_var_lstalvdt()` can be used to derive `LSTALVDT`:
+Once the sources are defined, the function `derive_var_extreme_dt()` can be used
+to derive `LSTALVDT`:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_lstalvdt(
+  derive_var_extreme_dt(
+    new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    mode = "last"
   )
 ```
 
@@ -553,28 +556,28 @@ dataset_vignette(
 ```
 
 Similarly to `dthcaus_source()`, the traceability variables can be added by specifying the 
-`traceability_vars` argument in `lstalvdt_source()`.
+`traceability_vars` argument in `date_source()`.
 
 ```{r eval=TRUE}
-ae_src1 <- lstalvdt_source(
+ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
-ae_src2 <- lstalvdt_source(
+ae_src2 <- date_source(
   dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
-lb_src <- lstalvdt_source(
+lb_src <- date_source(
   dataset_name = "lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
 )
-adsl_src <- lstalvdt_source(
+adsl_src <- date_source(
   dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(LALVDOM = "ADSL", LALVSEQ = NA_integer_, LALVVAR = "TRTEDTM")
@@ -582,9 +585,11 @@ adsl_src <- lstalvdt_source(
 
 adsl <- adsl %>%
   select(-LSTALVDT) %>% # created in the previous call
-  derive_var_lstalvdt(
+  derive_var_extreme_dt(
+    new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb)
+    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    mode = "last"
   )
 ```
 
@@ -599,26 +604,33 @@ dataset_vignette(
 
 ## Derive Groupings and Populations {#groupings}
 
-### Grouping (e.g. `AGEGR1`) {#groupings_ex}
+### Grouping (e.g. `AGEGR1` or `REGION1`) {#groupings_ex}
 
 Numeric and categorical variables (`AGE`, `RACE`, `COUNTRY`, etc.) may need to be grouped to perform
 the required analysis.
-admiral does not **currently** have functionality to assist with grouping. Instead, the user can 
-create his/her own function to meet his/her study requirement.
+`{admiral}` does not **currently** have functionality to assist with all required groupings. Some functions exist for age grouping according to FDA or EMA conventions. For others, the user can create his/her own function to meet his/her study requirement.
 
-For example, if 
+To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA convention):
 
-- `AGEGR1` would categorize `AGE` in `< 18 `, `18-65`, `>= 65`, 
-- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`, 
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_var_agegr_fda(
+    age_var = AGE,
+    new_var = AGEGR1
+  )
+```
+
+However for example if
+
+- `AGEGR2` would categorize `AGE` in `< 65`, `>= 65`,
+- `REGION1` would categorize `COUNTRY` in `North America`, `Rest of the World`,
 
 the user defined function(s) would be like:
 
-
 ```{r eval=TRUE}
-format_agegr1 <- function(x) {
+format_agegr2 <- function(x) {
   case_when(
-    !is.na(x) & x < 18 ~ "< 18",
-    x >= 18 & x < 65 ~ "18 - 65",
+    !is.na(x) & x < 65 ~ "< 65",
     x >= 65 ~ ">= 65",
     TRUE ~ NA_character_
   )
@@ -638,7 +650,7 @@ These functions are then used in a `mutate()` statement to derive the required g
 ```{r eval=TRUE}
 adsl <- adsl %>%
   mutate(
-    AGEGR1 = format_agegr1(AGE),
+    AGEGR2 = format_agegr2(AGE),
     REGION1 = format_region1(COUNTRY)
   )
 ```
@@ -646,22 +658,25 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl, 
-  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, REGION1)
+  display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, AGEGR2, REGION1)
 )
 ```
 
 ### Population Flags (e.g. `SAFFL`) {#popflag}
 
-Since the populations flags are mainly company/study specific and that it can easily be derived
-using an `if_else()` statement, admiral did not implement a functionality to assist with 
-populations flags.
+Since the populations flags are mainly company/study specific no dedicated functions are
+provided, but in most cases they can easily be derived using `derive_var_merged_exist_flag`.
 
-An example of a simple implementation could be:
+An example of an implementation could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  mutate(
-    SAFFL = if_else(!is.na(TRTSDT), "Y", NA_character_)
+
+  derive_var_merged_exist_flag(
+    dataset_add = ex,
+    by_vars = vars(STUDYID, USUBJID),
+    new_var = SAFFL,
+    condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   )
 ```
 
@@ -676,12 +691,39 @@ dataset_vignette(
 ## Derive Other Variables  {#other}
 The users can add specific code to cover their need for the analysis.
 
+The following functions are helpful for many ADSL derivations:
+
+  - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
+  - `derive_vars_merged_dt()` - Merge a (Imputed) Date Variable
+  - `derive_vars_merged_dtm()` - Merge a (Imputed) Datetime Variable
+  - `derive_var_merged_cat()` - Merge a Categorization Variable
+  - `derive_var_merged_exist_flag()` - Merge an Existence Flag
+  - `derive_var_merged_character()` - Merge a Character Variable
+
 ## Add Labels and Attributes {#attributes}
-admiral does not **currently** support metadata integration, but the team is working on it!
+
+Adding labels and attributes for SAS transport files is supported by the
+following packages:
+
+- [metacore](https://atorus-research.github.io/metacore/): establish a common
+foundation for the use of metadata within an R session.
+
+- [metatools](https://pharmaverse.github.io/metatools/): enable the use of
+metacore objects. Metatools can be used to build datasets or enhance columns in
+existing datasets as well as checking datasets against the metadata.
+
+- [xportr](https://atorus-research.github.io/xportr/): functionality to
+associate all metadata information to a local R data frame, perform data set
+level validation checks and convert into a [transport v5
+file(xpt)](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/movefile/n1xbwdre0giahfn11c99yjkpi2yb.htm).
+
+NOTE: All these packages are in the experimental phase, but the vision is to
+have them associated with an End to End pipeline under the umbrella of the
+[pharmaverse](https://github.com/pharmaverse).
 
 # Example Script 
 
 ADaM | Sample Code
 ---- | --------------
-ADSL | [ad_adsl.R](https://github.com/Roche-GSK/admiral/blob/master/inst/example_scripts/ad_adsl.R){target="_blank"} 
+ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
 

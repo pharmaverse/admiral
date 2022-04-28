@@ -1,6 +1,3 @@
-#' @include utils.R
-NULL
-
 #' Pre-Defined Time-to-Event Source Objects
 #'
 #' These pre-defined `tte_source` objects can be used as input to `derive_param_tte()`.

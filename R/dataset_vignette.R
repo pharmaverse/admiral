@@ -20,6 +20,8 @@
 #'
 #' Permitted Values: a condition
 #'
+#' @return A HTML table
+#'
 #' @keywords dev_utility
 #'
 #' @export
@@ -28,7 +30,7 @@
 #' library(admiral)
 #' library(DT)
 #' library(dplyr)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #'
 #' dataset_vignette(dm)
@@ -43,7 +45,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
     mutate_if(is.character, as.factor)
 
   # Create a short markdown table when this function is called outside {pkgdown}
-  if (!pkgdown::in_pkgdown()) {
+  if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) {
     if (is.null(display_vars)) {
       return(knitr::kable(utils::head(out, 10)))
     } else {

@@ -50,7 +50,7 @@ work as the safety net if they’re not run often.
 
 ### Tests Should Be Simple
 There are several techniques we can apply to have a high degree of confidence in
-the correctitude of our tests. One of those is to keep your tests with low 
+the correctness of our tests. One of those is to keep your tests with low 
 cyclomatic complexity. Cyclomatic complexity is a code metric that indicates the
 number of possible execution paths a given method can follow. A piece of code 
 with lower complexity is easier to understand and maintain, which means developers 
@@ -84,6 +84,11 @@ arguments/flexibilities of your function code. Then plan which scenarios you wil
 test. These can either involve generating different input test cases or feeding 
 them into different calls of your function.
 
+## Test coverage
+Unit tests should cover the functionality of the function.
+If another function g is called within a function f, the unit tests of f should not test the functionality of g. 
+This should be tested by the unit tests of g, i.e. unit tests should be added at the lowest level.
+
 ## Tests Should be Robust to Cover Realistic Data Scenarios
 For generating input test cases, it can be helpful to consider regular cases 
 (expected common data scenarios), boundary cases (where data points are close or
@@ -98,20 +103,20 @@ For the different calls of your function, consider how the user might apply your
 function and test a variety of possible calls, whilst still remembering the tips
 above that tests should be fast and simple. 
 This is only needed in cases where the complexity and level of flexibility of 
-your function justifies it, e.g. see the test script: https://github.com/Roche-GSK/admiral/blob/master/tests/testthat/test-derive_extreme_flag.R.
+your function justifies it, e.g. see the test script: https://github.com/pharmaverse/admiral/blob/main/tests/testthat/test-derive_var_extreme_flag.R.
 
 ## Exported Functions
 Don’t forget to add a unit test for each exported function.
 
 ## Set up the Test Script
-Within {admiral} folder https://github.com/Roche-GSK/admiral/tree/master/tests/testthat, 
+Within {admiral} folder https://github.com/pharmaverse/admiral/tree/main/tests/testthat, 
 add a script with the naming convention “test-\<script_containing_function\>.R”.,
 the unit test script can be created from the console also, as follows: 
 
 ```
 usethis::use_test("<script_containing_function>")
 ```
-and use the following format:
+the testing framework used is testthat and has the following format :
 
 ```
 test_that("<function_name> Test 1: <Explanation of the test>", {
@@ -123,7 +128,8 @@ test_that("<function_name> Test 1: <Explanation of the test>", {
 
   expected_output <- mutate(input, outputvar = c(<Add Expected Outputs>))
 
-  expect_equal(<function name>(input), expected_output)
+  expect_dfs_equal(<function name>(input), expected_output)
+  
 })
 ```
 
@@ -146,14 +152,23 @@ test_that("my_new_func Test 1: <Explanation of the test>", {
 
   expected_output <- mutate(input, outputvar = c(<Add Expected Outputs>))
 
-  expect_equal(<function name>(input), expected_output)
+  expect_dfs_equal(<function name>(input), expected_output)
 })
 ```
 **Note**: When comparing datasets in {admiral} we use function `expect_dfs_equal()`. 
 
+The input and expected output for the unit tests must follow the following rules:
+
+* Input and output should be as simple as possible.
+* Values should be hard-coded whenever possible.
+* If values need to be derived, only unit tested functions can be used.
+
+If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
+Make sure to align columns as well. This ensures quick code readability.
+
 Ensure you give a meaningful explanation of the test in the testthat call, as 
 these will be compiled in the package validation report. Having the name of the
-function and test ID included in title will also help with tracability.
+function and test ID included in title will also help with traceability.
 
 Once you have tested your unit test program, you can run all unit tests from
 the console, as follows.

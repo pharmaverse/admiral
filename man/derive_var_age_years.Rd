@@ -23,7 +23,7 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 \item{new_var}{New AGE variable to be created in years.}
 }
 \value{
-The input dataset with new_var paramater added in years.
+The input dataset with new_var parameter added in years.
 }
 \description{
 Derive Age in Years
