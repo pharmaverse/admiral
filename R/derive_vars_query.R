@@ -84,7 +84,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     ungroup() %>%
     select(NAM, CD, SC, SCN) %>%
     distinct() %>%
-    gather() %>%
+    pivot_longer(c(NAM, CD, SC, SCN), names_to = "key", values_to = "value") %>%
     filter(!is.na(value)) %>%
     mutate(order1 = stringr::str_extract(value, "^[a-zA-Z]{2,3}"),
            order2 = stringr::str_extract(value, "\\d{2}"),
@@ -96,13 +96,13 @@ derive_vars_query <- function(dataset, dataset_queries) {
   queries_wide <- dataset_queries %>%
     mutate(TERM_NAME = toupper(.data$TERM_NAME),
            VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
-    spread(.data$VAR_PREFIX_NAM, .data$QUERY_NAME) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_NAM, values_from = .data$QUERY_NAME) %>%
     mutate(VAR_PREFIX_CD = paste0(.data$VAR_PREFIX, "CD")) %>%
-    spread(.data$VAR_PREFIX_CD, .data$QUERY_ID) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_CD, values_from = .data$QUERY_ID) %>%
     mutate(VAR_PREFIX_SC = paste0(.data$VAR_PREFIX, "SC")) %>%
-    spread(.data$VAR_PREFIX_SC, .data$QUERY_SCOPE)  %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_SC, values_from = .data$QUERY_SCOPE)  %>%
     mutate(VAR_PREFIX_SCN = paste0(.data$VAR_PREFIX, "SCN")) %>%
-    spread(.data$VAR_PREFIX_SCN, .data$QUERY_SCOPE_NUM) %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_SCN, values_from = .data$QUERY_SCOPE_NUM) %>%
     select(-VAR_PREFIX) %>%
     # determine join column based on type of TERM_LEVEL
     # numeric -> TERM_ID, character -> TERM_NAME, otherwise -> error
@@ -111,7 +111,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
       TERM_NAME_ID = case_when(
         .data$tmp_col_type == "character" ~ .data$TERM_NAME,
         .data$tmp_col_type %in% c("double", "integer") ~ as.character(.data$TERM_ID),
-        TRUE ~ NA_character_)
+        TRUE ~ NA_character_
+      )
     )
 
   # throw error if any type of column is not character or numeric
@@ -137,8 +138,18 @@ derive_vars_query <- function(dataset, dataset_queries) {
     dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
   }
-  joined <- dataset %>%
-    gather(key = "TERM_LEVEL", value = "TERM_NAME_ID", -static_cols) %>%
+
+  # Keep static variables - will add back on once non-static vars fixed
+  df_static <- dataset %>% select(static_cols)
+
+  # Change non-static numeric vars to character
+  df_fix_numeric <- dataset %>%
+    select(-static_cols) %>%
+    mutate_if(is.numeric, as.character)
+
+
+  joined <- cbind(df_static, df_fix_numeric) %>%
+    pivot_longer(-static_cols, names_to = "TERM_LEVEL", values_to = "TERM_NAME_ID") %>%
     drop_na(.data$TERM_NAME_ID) %>%
     mutate(TERM_NAME_ID = toupper(.data$TERM_NAME_ID))
 
