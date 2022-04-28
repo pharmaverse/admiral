@@ -114,14 +114,14 @@ test_that("derive_vars_merged_dt: merge first date", {
     mode = "first"
   )
   expected <-
-    adsl %>% mutate(TRTSDTM = as_iso_dtm(ymd_hms(
+    adsl %>% mutate(TRTSDTM = ymd_hms(
       c(
         "2020-12-07T00:00:00",
         "2021-01-12T12:00:00",
         "2021-03-02T00:00:00",
         NA
       )
-    )),
+    ),
     TRTSTMF = c("H", NA, "H", NA))
 
   expect_dfs_equal(base = expected,

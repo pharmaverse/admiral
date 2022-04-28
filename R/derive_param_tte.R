@@ -402,12 +402,6 @@ derive_param_tte <- function(dataset = NULL,
 
   # add new parameter to input dataset #
   all_data <- bind_rows(dataset, new_param)
-
-  if (create_datetime) {
-    mutate(all_data, !!date_var := as_iso_dtm(!!date_var))
-  } else {
-    all_data
-  }
 }
 
 #' Select the First or Last Date from Several Sources
