@@ -81,16 +81,20 @@ assessment date (e.g \code{ADT}) or event start and end dates (e.g.
 }
 \details{
 On-Treatment is calculated by determining whether the assessment
-date or start/stop dates fall between 2 dates. The following logic is used to
-assign on-treatment = \code{"Y"}: 1. \code{start_date} is missing and
-\code{ref_start_date}is non-missing 2. No timepoint filter is provided
-(\code{filter_pre_timepoint}) and both \code{start_date} and \code{ref_start_date} are
-non-missing and \code{start_date} = \code{ref_start_date} 3. A timepoint is provided
-(\code{filter_pre_timepoint}) and both \code{start_date} and \code{ref_start_date} are
-non-missing and \code{start_date = ref_start_date} and the filter provided in
-\code{filter_pre_timepoint} is not true. 4. \code{ref_end_date} is not provided and
-\code{ref_start_date < start_date} 5. \code{ref_end_date} is provided and
-\code{ref_start_date < start_date} <= \code{ref_end_date + ref_end_window}.
+date or start/stop dates fall between 2 dates. The following logic is used
+to assign on-treatment = \code{"Y"}:
+\enumerate{
+\item \code{start_date} is missing and \code{ref_start_date}is non-missing
+\item No timepoint filter is provided (\code{filter_pre_timepoint}) and both
+\code{start_date} and \code{ref_start_date} are non-missing and \code{start_date} =
+\code{ref_start_date}
+\item A timepoint is provided (\code{filter_pre_timepoint}) and both \code{start_date}
+and \code{ref_start_date} are non-missing and \code{start_date = ref_start_date} and
+the filter provided in \code{filter_pre_timepoint} is not true.
+\item \code{ref_end_date} is not provided and \code{ref_start_date < start_date}
+\item \code{ref_end_date} is provided and \code{ref_start_date < start_date} <=
+\code{ref_end_date + ref_end_window}.
+}
 
 If the \code{end_date} is provided and the \code{end_date} < ref_start_date then the
 \code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases where the

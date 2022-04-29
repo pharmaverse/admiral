@@ -59,26 +59,28 @@
 #'   `ref_start_date` are flagged as `"Y"`. Optional; default is `NULL`.
 #'
 #' @details On-Treatment is calculated by determining whether the assessment
-#' date or start/stop dates fall between 2 dates. The following logic is used to
-#' assign on-treatment = `"Y"`: 1. `start_date` is missing and
-#' `ref_start_date`is non-missing 2. No timepoint filter is provided
-#' (`filter_pre_timepoint`) and both `start_date` and `ref_start_date` are
-#' non-missing and `start_date` = `ref_start_date` 3. A timepoint is provided
-#' (`filter_pre_timepoint`) and both `start_date` and `ref_start_date` are
-#' non-missing and `start_date = ref_start_date` and the filter provided in
-#' `filter_pre_timepoint` is not true. 4. `ref_end_date` is not provided and
-#' `ref_start_date < start_date` 5. `ref_end_date` is provided and
-#' `ref_start_date < start_date` <= `ref_end_date + ref_end_window`.
+#'   date or start/stop dates fall between 2 dates. The following logic is used
+#'   to assign on-treatment = `"Y"`:
+#'   1. `start_date` is missing and `ref_start_date`is non-missing
+#'   2. No timepoint filter is provided (`filter_pre_timepoint`) and both
+#'   `start_date` and `ref_start_date` are non-missing and `start_date` =
+#'   `ref_start_date`
+#'   3. A timepoint is provided (`filter_pre_timepoint`) and both `start_date`
+#'   and `ref_start_date` are non-missing and `start_date = ref_start_date` and
+#'   the filter provided in `filter_pre_timepoint` is not true.
+#'   4. `ref_end_date` is not provided and `ref_start_date < start_date`
+#'   5. `ref_end_date` is provided and `ref_start_date < start_date` <=
+#'   `ref_end_date + ref_end_window`.
 #'
-#' If the `end_date` is provided and the `end_date` < ref_start_date then the
-#' `ONTRTFL` is set to `NULL`.This would be applicable to cases where the
-#' `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
+#'   If the `end_date` is provided and the `end_date` < ref_start_date then the
+#'   `ONTRTFL` is set to `NULL`.This would be applicable to cases where the
+#'   `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
 #'
-#' If the `span_period` is specified as `"Y"`, this allows the user to assign
-#' `ONTRTFL` as `"Y"` to cases where the record started prior to the
-#' `ref_start_date` and was ongoing or ended after the `ref_start_date`.
+#'   If the `span_period` is specified as `"Y"`, this allows the user to assign
+#'   `ONTRTFL` as `"Y"` to cases where the record started prior to the
+#'   `ref_start_date` and was ongoing or ended after the `ref_start_date`.
 #'
-#' Any date imputations needed should be done prior to calling this function.
+#'   Any date imputations needed should be done prior to calling this function.
 #'
 #' @author Alice Ehmann, Teckla Akinyi
 #'
