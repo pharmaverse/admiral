@@ -5,7 +5,7 @@
 - Updates to date/time imputation functions (#761):
 
   - `convert_date_to_dtm()` and `convert_dtc_to_dtm()` now have time_imputation = "00:00:00" as default 
-  - `derive_vars_dt()`now has flag_imputation = FALSE as default (since default date_imputation = NULL)
+  - `derive_vars_dt()`now has flag_imputation = "auto" as default
 
 
 - New functions for merging variables (#607):
