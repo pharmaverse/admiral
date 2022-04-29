@@ -51,9 +51,8 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 
 ## Documentation
 
-<<<<<<< HEAD
 - Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
-=======
+
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 
 - Added example of ASEQ derivation in ADCM to 
@@ -61,7 +60,6 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 (#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
->>>>>>> devel
 
 ## Various
 
