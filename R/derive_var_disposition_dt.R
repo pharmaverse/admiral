@@ -189,7 +189,7 @@ derive_var_disposition_dt <- function(dataset,
     by_vars = subject_keys,
     dtc = !!dtc,
     date_imputation = date_imputation,
-    flag_imputation = FALSE,
+    flag_imputation = "none",
     preserve = preserve,
     duplicate_msg = "The filter used for DS results in multiple records per patient."
   ) %>%
