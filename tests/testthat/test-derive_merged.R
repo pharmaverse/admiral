@@ -84,6 +84,7 @@ test_that("derive_vars_merged_dt: merge first date", {
     adsl,
     dataset_add = ex,
     order = vars(TRTSDT),
+    flag_imputation = "date",
     by_vars = vars(STUDYID, USUBJID),
     dtc = EXSTDTC,
     new_vars_prefix = "TRTS",
