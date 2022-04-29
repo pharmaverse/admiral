@@ -59,7 +59,7 @@
 #'
 #' @return The input dataset with a new record added for each group (with respect to the variables
 #' specified for the `by_vars` parameter). That is, a variable will only
-#'    be populated in this new record if it is specified in `by_vars`.
+#' be populated in this new record if it is specified in `by_vars`.
 #' For each new record,
 #' + the variable specified `analysis_var` is computed as defined by `summary_fun`,
 #' + the variable(s) specified on the LHS of `set_values_to` are set to their paired value (RHS).

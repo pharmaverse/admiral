@@ -23,6 +23,7 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 
 ## Documentation
 
+- Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
 
 ## Various
 
