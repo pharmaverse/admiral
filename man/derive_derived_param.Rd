@@ -2,7 +2,8 @@
 % Please edit documentation in R/derive_derived_param.R
 \name{derive_derived_param}
 \alias{derive_derived_param}
-\title{Adds a Parameter Computed from the Analysis Value of Other Parameters}
+\title{test2
+Adds a Parameter Computed from the Analysis Value of Other Parameters}
 \usage{
 derive_derived_param(
   dataset,
