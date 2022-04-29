@@ -330,7 +330,7 @@ dataset_vignette(adsl, display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
 associated date imputation flag (`DTHDTF`) populated with the controlled terminology outlined in 
 the ADaM IG for date imputations. 
-If the imputation flag is not required, the user must set the argument `flag_imputation` to `FALSE`.
+If the imputation flag is not required, the user must set the argument `flag_imputation` to "none".
 
 If imputation is needed and the date is to be imputed to the first day of the month/year 
 the call would be:

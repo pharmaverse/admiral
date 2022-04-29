@@ -106,11 +106,14 @@ day/month.
 
 Default is \code{NULL}.}
 
-\item{flag_imputation}{Whether the date imputation flag should also be derived.
+\item{flag_imputation}{Whether the date imputation flag must also be derived.
 
-A logical value
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null.
 
-Default: \code{TRUE}}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 

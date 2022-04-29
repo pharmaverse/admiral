@@ -88,7 +88,7 @@ advs <- vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
-    flag_imputation = FALSE
+    flag_imputation = "none"
   ) %>%
 
   derive_var_ady(reference_date = TRTSDT, date = ADT)
