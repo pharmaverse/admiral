@@ -16,7 +16,8 @@ expected.}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
 Default: \code{TRTSDT}}
 
@@ -24,7 +25,8 @@ Default: \code{TRTSDT}}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
 Default: \code{TRTEDT}}
 }
@@ -35,8 +37,8 @@ The input dataset with \code{TRTDURD} added
 Derives total treatment duration (days) (\code{TRTDURD})
 }
 \details{
-The total treatment duration is derived as the number of days from start to
-end date plus one.
+The total treatment duration is derived as the number of days from
+start to end date plus one.
 }
 \examples{
 data <- tibble::tribble(

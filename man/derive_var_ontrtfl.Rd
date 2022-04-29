@@ -19,88 +19,86 @@ derive_var_ontrtfl(
 \arguments{
 \item{dataset}{Input dataset.
 
-Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and \code{ref_end_date}.}
+Required columns are \code{start_date}, \code{end_date}, \code{ref_start_date} and
+\code{ref_end_date}.}
 
 \item{new_var}{On-treatment flag variable name to be created.
 
 Default is \code{ONTRTFL}.}
 
-\item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g. \code{ADT})
-Required; A date or date-time object column is expected.
+\item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g.
+\code{ADT}) Required; A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
-\item{end_date}{The end date of assessment/event (e.g. \code{AENDT})
-A date or date-time object column is expected.
+\item{end_date}{The end date of assessment/event (e.g. \code{AENDT}) A date or
+date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
-Optional; Default is null. If the used and date value is missing
-on an observation, it is assumed the medication is ongoing and
-\code{ONTRTFL} is set to \code{"Y"}.}
+Optional; Default is null. If the used and date value is missing on an
+observation, it is assumed the medication is ongoing and \code{ONTRTFL} is set
+to \code{"Y"}.}
 
-\item{ref_start_date}{The lower bound of the on-treatment period
-Required; A date or date-time object column is expected.
+\item{ref_start_date}{The lower bound of the on-treatment period Required; A
+date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
-\item{ref_end_date}{The upper bound of the on-treatment period
-A date or date-time object column is expected.
+\item{ref_end_date}{The upper bound of the on-treatment period A date or
+date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
 Optional; This can be null and everything after \code{ref_start_date} will be
-considered on-treatment.
-Default is \code{NULL}.}
+considered on-treatment. Default is \code{NULL}.}
 
 \item{ref_end_window}{A window to add to the upper bound \code{ref_end_date}
-measured in days
-(e.g. 7 if 7 days should be added to the upper bound)
+measured in days (e.g. 7 if 7 days should be added to the upper bound)
 Optional; default is 0.}
 
 \item{filter_pre_timepoint}{An expression to filter observations as not
-on-treatment when \code{date} = \code{ref_start_date}. For example, if
-observations where \code{VSTPT = PRE} should not be considered on-treatment when
-\code{date = ref_start_date}, \code{filter_pre_timepoint} should be used
-to denote when the on-treatment flag should be set to null.
-Optional; default is \code{NULL}.}
+on-treatment when \code{date} = \code{ref_start_date}. For example, if observations
+where \code{VSTPT = PRE} should not be considered on-treatment when \code{date = ref_start_date}, \code{filter_pre_timepoint} should be used to denote when the
+on-treatment flag should be set to null. Optional; default is \code{NULL}.}
 
-\item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started prior
-to the \code{ref_start_date}and are ongoing or end after the \code{ref_start_date} are flagged as \code{"Y"}.
-Optional; default is \code{NULL}.}
+\item{span_period}{A \code{"Y"} scalar character. If \code{"Y"}, events that started
+prior to the \code{ref_start_date}and are ongoing or end after the
+\code{ref_start_date} are flagged as \code{"Y"}. Optional; default is \code{NULL}.}
 }
 \value{
-The input dataset with an additional column named
-\code{ONTRTFL} with a value of \code{"Y"} or \code{NA}
+The input dataset with an additional column named \code{ONTRTFL} with a
+value of \code{"Y"} or \code{NA}
 }
 \description{
 Derive on-treatment flag (\code{ONTRTFL}) in an ADaM dataset with a single
-assessment date (e.g \code{ADT}) or event start and end dates (e.g. \code{ASTDT}/\code{AENDT}).
+assessment date (e.g \code{ADT}) or event start and end dates (e.g.
+\code{ASTDT}/\code{AENDT}).
 }
 \details{
-On-Treatment is calculated by determining whether the assessment date or
-start/stop dates fall between 2 dates. The following logic is used to
-assign on-treatment = \code{"Y"}:
-\enumerate{
-\item \code{start_date} is missing and \code{ref_start_date}is non-missing
-\item No timepoint filter is provided (\code{filter_pre_timepoint}) and both
-\code{start_date} and \code{ref_start_date} are non-missing and \code{start_date} =
-\code{ref_start_date}
-\item A timepoint is provided (\code{filter_pre_timepoint}) and both \code{start_date}
-and \code{ref_start_date} are non-missing and \code{start_date = ref_start_date}
-and the filter provided in \code{filter_pre_timepoint} is not true.
-\item \code{ref_end_date} is not provided and \code{ref_start_date < start_date}
-\item \code{ref_end_date} is provided and \code{ref_start_date < start_date} <=
-\code{ref_end_date + ref_end_window}.
-}
+On-Treatment is calculated by determining whether the assessment
+date or start/stop dates fall between 2 dates. The following logic is used to
+assign on-treatment = \code{"Y"}: 1. \code{start_date} is missing and
+\code{ref_start_date}is non-missing 2. No timepoint filter is provided
+(\code{filter_pre_timepoint}) and both \code{start_date} and \code{ref_start_date} are
+non-missing and \code{start_date} = \code{ref_start_date} 3. A timepoint is provided
+(\code{filter_pre_timepoint}) and both \code{start_date} and \code{ref_start_date} are
+non-missing and \code{start_date = ref_start_date} and the filter provided in
+\code{filter_pre_timepoint} is not true. 4. \code{ref_end_date} is not provided and
+\code{ref_start_date < start_date} 5. \code{ref_end_date} is provided and
+\code{ref_start_date < start_date} <= \code{ref_end_date + ref_end_window}.
 
-If the \code{end_date} is provided and the \code{end_date} < ref_start_date
-then the \code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases where
-the \code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{"Y"} above.
+If the \code{end_date} is provided and the \code{end_date} < ref_start_date then the
+\code{ONTRTFL} is set to \code{NULL}.This would be applicable to cases where the
+\code{start_date} is missing and \code{ONTRTFL} has been assigned as \code{"Y"} above.
 
-If the \code{span_period} is specified as \code{"Y"}, this allows the user to assign \code{ONTRTFL} as \code{"Y"} to
-cases where the record started prior to the \code{ref_start_date} and
-was ongoing or ended after the \code{ref_start_date}.
+If the \code{span_period} is specified as \code{"Y"}, this allows the user to assign
+\code{ONTRTFL} as \code{"Y"} to cases where the record started prior to the
+\code{ref_start_date} and was ongoing or ended after the \code{ref_start_date}.
 
 Any date imputations needed should be done prior to calling this function.
 }

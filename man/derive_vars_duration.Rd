@@ -25,20 +25,22 @@ expected.}
 
 \item{new_var}{Name of variable to create}
 
-\item{new_var_unit}{Name of the unit variable
-If the parameter is not specified, no variable for the unit is created.}
+\item{new_var_unit}{Name of the unit variable If the parameter is not
+specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{in_unit}{Input unit
 
@@ -70,8 +72,7 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 If the duration is non-negative, one input unit is added. I.e., the
 duration can not be zero.
 
-Default: \code{TRUE}
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Default: \code{TRUE} Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{trunc_out}{Return integer part
 
@@ -86,13 +87,13 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 The input dataset with the duration and unit variable added
 }
 \description{
-Derives duration between two dates, e.g., duration of adverse events, relative
-day, age, ...
+Derives duration between two dates, e.g., duration of adverse events,
+relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the duration
-is negative.
+specified output unit. If the end date is before the start date, the
+duration is negative.
 }
 \examples{
 data <- tibble::tribble(

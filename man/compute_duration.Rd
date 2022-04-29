@@ -19,13 +19,15 @@ compute_duration(
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.}
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{in_unit}{Input unit
 
@@ -41,7 +43,8 @@ The duration is derived in the specified unit
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+'seconds'}
 
 \item{floor_in}{Round down input dates?
 
@@ -79,8 +82,8 @@ relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the duration
-is negative.
+specified output unit. If the end date is before the start date, the
+duration is negative.
 }
 \examples{
 # derive duration in days (integer), i.e., relative day

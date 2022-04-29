@@ -31,7 +31,8 @@ Permitted Values: defined by lookup table.}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
 Default: \code{ASTDT}}
 
@@ -39,7 +40,8 @@ Default: \code{ASTDT}}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.
 
 Default: \code{AENDT}}
 
@@ -53,8 +55,8 @@ detail \link[=dose_freq_lookup]{here}.
 
 Default: \code{dose_freq_lookup}
 
-Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"}, \code{"WEEK"},
-\code{"MONTH"}, \code{"YEAR"}}
+Permitted Values for \code{DOSE_WINDOW}: \code{"MINUTE"}, \code{"HOUR"}, \code{"DAY"},
+\code{"WEEK"}, \code{"MONTH"}, \code{"YEAR"}}
 
 \item{lookup_column}{The dose frequency value column in the lookup table
 
@@ -67,15 +69,16 @@ The input dataset with a single dose per row.
 }
 \description{
 Derives dataset of single dose from aggregate dose information. This may be
-necessary when e.g. calculating last dose before an adverse event in \code{ADAE} or
-deriving a total dose parameter in \code{ADEX} when \code{EXDOSFRQ != ONCE}.
+necessary when e.g. calculating last dose before an adverse event in \code{ADAE}
+or deriving a total dose parameter in \code{ADEX} when \code{EXDOSFRQ != ONCE}.
 }
 \details{
-Each aggregate dose row is split into multiple rows which each represent
-a single dose.The number of completed dose periods between \code{start_date} and
-\code{end_date} is calculated with \code{compute_duration} and multiplied by \code{DOSE_COUNT}.
-For \code{DOSE_WINDOW} values of \code{"WEEK"}, \code{"MONTH"}, and \code{"YEAR"}, \code{CONVERSION_FACTOR}
-is used to convert into days the time object to be added to \code{start_date}.
+Each aggregate dose row is split into multiple rows which each
+represent a single dose.The number of completed dose periods between
+\code{start_date} and \code{end_date} is calculated with \code{compute_duration} and
+multiplied by \code{DOSE_COUNT}. For \code{DOSE_WINDOW} values of \code{"WEEK"},
+\code{"MONTH"}, and \code{"YEAR"}, \code{CONVERSION_FACTOR} is used to convert into days
+the time object to be added to \code{start_date}.
 }
 \examples{
 # Example with default lookup
