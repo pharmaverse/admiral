@@ -2,8 +2,7 @@
 % Please edit documentation in R/derive_derived_param.R
 \name{derive_derived_param}
 \alias{derive_derived_param}
-\title{test2
-Adds a Parameter Computed from the Analysis Value of Other Parameters}
+\title{Adds a Parameter Computed from the Analysis Value of Other Parameters}
 \usage{
 derive_derived_param(
   dataset,
@@ -67,19 +66,18 @@ into account.
 
 \item{constant_by_vars}{By variables for constant parameters
 
-The constant parameters are merged to the other parameters using the
-specified variables. This is useful if some parameters were measured only
-once. For example if BMI should be derived and height is measured only once
-while weight is measured at each visit. Height could be specified for the
-constant parameters.
+The constant parameters (parameters that are measured only once) are merged
+to the other parameters using the specified variables. (Refer example 2)
 
 \emph{Permitted Values:} list of variables}
 
 \item{constant_parameters}{Required constant parameter codes
 
-It is expected that all parameter codes (\code{PARAMCD}) which are required to
-derive the new parameter are specified for this parameter or the
-\code{parameters} parameter.
+It is expected that all the parameter codes (\code{PARAMCD}) which are required
+to derive the new parameter and are measured only once are specified here.
+For example if BMI should be derived and height is measured only once while
+weight is measured at each visit. Height could be specified in the
+\code{constant_parameters} parameter. (Refer example 2)
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
@@ -106,7 +104,7 @@ the provided values. The values of the other variables of the input dataset
 are set to \code{NA}.
 }
 \examples{
-# derive MAP
+# Example 1: derive MAP
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -131,7 +129,7 @@ derive_derived_param(
   )
 )
 
-# derive BMI where height is measured only once
+# Example 2: derive BMI where height is measured only once
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
