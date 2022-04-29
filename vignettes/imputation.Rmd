@@ -164,7 +164,8 @@ ae <- tribble(~ AESTDTC,
               NA_character_) %>%
   derive_vars_dt(dtc = AESTDTC,
                  new_vars_prefix = "AST",
-                 date_imputation = "first")
+                 date_imputation = "first",
+                 flag_imputation = "none")
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)

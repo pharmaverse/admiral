@@ -600,11 +600,14 @@ compute_tmf <- function(dtc,
 #'   the specified prefix and for the date imputation flag "DTF". I.e., for
 #'   `new_vars_prefix = "AST"` the variables `ASTDT` and `ASTDTF` are created.
 #'
-#' @param flag_imputation Whether the date imputation flag should also be derived.
+#' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
-#'   A logical value
+#'   If `"auto"` is specified, the date imputation flag is derived if the
+#'   `date_imputation` parameter is not null.
 #'
-#'   Default: `TRUE`
+#'   *Default*: `"auto"`
+#'
+#'   *Permitted Values*: `"auto"`, `"date"` or `"none"`
 #'
 #'
 #' @inheritParams impute_dtc
@@ -678,7 +681,7 @@ compute_tmf <- function(dtc,
 #'   new_vars_prefix = "BIRTH",
 #'   dtc = MHSTDTC,
 #'   date_imputation = "MID",
-#'   flag_imputation = FALSE
+#'   flag_imputation = "none"
 #' )
 #'
 #' # Impute AE start date to the first date and ensure that the imputed date
@@ -701,7 +704,7 @@ compute_tmf <- function(dtc,
 #' # use preserve argument to "preserve" partial dates.  For example, "2019---07",
 #' # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 #'
-#' derive_vars_dtm(
+#' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
@@ -712,7 +715,7 @@ derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
                            date_imputation = NULL,
-                           flag_imputation = FALSE,
+                           flag_imputation = "auto",
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
@@ -723,7 +726,11 @@ derive_vars_dt <- function(dataset,
   assert_vars(min_dates, optional = TRUE)
   dtc <- assert_symbol(enquo(dtc))
   assert_data_frame(dataset, required_vars = vars(!!dtc))
-  assert_logical_scalar(flag_imputation)
+  assert_character_scalar(
+    flag_imputation,
+    values = c("auto", "date", "none"),
+    case_sensitive = FALSE
+  )
 
   # output varname
   dt <- paste0(new_vars_prefix, "DT")
@@ -742,11 +749,21 @@ derive_vars_dt <- function(dataset,
     )
 
   # derive DTF
-  if (flag_imputation) {
+  if (flag_imputation %in% c("both", "date") ||
+      flag_imputation == "auto" && !is.null(date_imputation)) {
+    # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
-    warn_if_vars_exist(dataset, dtf)
-    dataset <- dataset %>%
-      mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = !!sym(dt)))
+    dtf_exist <- dtf %in% colnames(dataset)
+    if (!dtf_exist) {
+      dataset <- dataset %>%
+        mutate(!!sym(dtf) := compute_dtf(dtc = !!dtc, dt = !!sym(dt)))
+    } else {
+      msg <- sprintf(
+        "The %s variable is already present in the input dataset and will not be re-derived.",
+        dtf
+      )
+      inform(msg)
+    }
   }
 
   dataset

@@ -135,8 +135,8 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC)
-adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
+adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC, flag_imputation = "none")
+adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC, flag_imputation = "none")
 
 ```
 
