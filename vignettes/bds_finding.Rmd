@@ -50,12 +50,12 @@ To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 library(stringr)
 library(tibble)
@@ -539,7 +539,7 @@ dataset_vignette(
 ## Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`) {#baseline}
 
 The `BASETYPE` should be derived using the function `derive_var_basetype()`.
-The parameter basetypes of this function requires a named list of expression 
+The parameter `basetypes` of this function requires a named list of expression 
 detailing how the `BASETYPE` should be assigned.  Note, if a record falls into
 multiple expressions within the basetypes expression, a row will be produced for 
 each `BASETYPE`.
@@ -805,38 +805,72 @@ record and what computations must be done with the new records.
 
 ### Example 1 (Creating a New Record):
 
+To add a new record based on the selection of a certain criterion (e.g. minimum,
+maximum) `derive_extreme_records()` can be used. The new records include all
+variables of the selected records.
+
+#### Adding a New Record for the Last Value
 For each subject and Vital Signs parameter, add a record holding last valid
 observation before end of treatment. Set `AVISIT` to `"End of Treatment"` and
 assign a unique `AVISITN` value.
 
 ```{r eval=TRUE}
 advs_ex1 <- advs %>%
-  derive_var_extreme_flag(
+  derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD),
     order = vars(ADT, AVISITN, ATPTN, AVAL),
-    new_var = EOTFL,
     mode = "last",
-    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y")
-  ) %>%
-  filter(EOTFL == "Y") %>%
-  mutate(
-    AVISIT = "End of Treatment",
-    AVISITN = 99
-  ) %>%
-  union_all(advs) %>%
-  select(-EOTFL)
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y"),
+    set_values_to = vars(
+      AVISIT = "End of Treatment",
+      AVISITN = 99,
+      DTYPE = "LOV"
+    )
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs_ex1, 
-  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, ANL01FL),
+  arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
+  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
   filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
 )
 ```
 
+#### Adding a New Record for the Minimum Value
+For each subject and Vital Signs parameter, add a record holding the minimum
+value before end of treatment. If the minimum is attained by multiple
+observations the first one is selected. Set `AVISIT` to `"Minimum on Treatment"`
+and assign a unique `AVISITN` value.
+
+```{r eval=TRUE}
+advs_ex1 <- advs %>%
+  derive_extreme_records(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD),
+    order = vars(AVAL, ADT, AVISITN, ATPTN),
+    mode = "first",
+    filter = (4 < AVISITN & AVISITN <= 12 & ANL01FL == "Y" & !is.na(AVAL)),
+    set_values_to = vars(
+      AVISIT = "Minimum on Treatment",
+      AVISITN = 98,
+      DTYPE = "MINIMUM"
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  arrange(advs_ex1, USUBJID, PARAMCD, desc(AVISITN), ATPTN),
+  display_vars = vars(USUBJID, PARAMCD, ADT, AVISITN, AVISIT, ATPTN, AVAL, DTYPE, ANL01FL),
+  filter = USUBJID == "01-701-1015" & ANL01FL == "Y"
+)
+```
 
 ### Example 2 (Deriving a Summary Record)
+
+For adding new records based on aggregating records `derive_summary_records()`
+can be used. For the new records only the variables specified by `by_vars`,
+`analysis_var`, and `set_values_to` are populated.
 
 For each subject, Vital Signs parameter, visit, and date add a record holding
 the average value for observations on that date.

@@ -19,7 +19,7 @@ missing in the input dataset. Otherwise, the dataset is returned invisibly.
 Checks if a dataset contains all required variables
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 data(dm)
 
 assert_has_variables(dm, "STUDYID")

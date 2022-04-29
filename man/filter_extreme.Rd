@@ -14,13 +14,16 @@ expected.}
 
 \item{by_vars}{Grouping variables
 
-Permitted Values: list of variables}
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values:} list of variables created by \code{vars()}}
 
 \item{order}{Sort order
 
 Within each by group the observations are ordered by the specified order.
 
-Permitted Values: list of variables or functions of variables}
+\emph{Permitted Values:} list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))}}
 
 \item{mode}{Selection mode (first or last)
 
@@ -28,7 +31,7 @@ If \code{"first"} is specified, the first observation of each by group is
 included in the output dataset. If \code{"last"} is specified, the last
 observation of each by group is included in the output dataset.
 
-Permitted Values:  \code{"first"}, \code{"last"}}
+\emph{Permitted Values:}  \code{"first"}, \code{"last"}}
 
 \item{check_type}{Check uniqueness?
 
@@ -36,9 +39,9 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-Default: \code{"none"}
+\emph{Default:} \code{"none"}
 
-Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
+\emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 }
 \value{
 A dataset containing the first or last observation of each by group
@@ -54,7 +57,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("ex")
 
 # Select first dose for each patient
@@ -66,15 +69,16 @@ ex \%>\%
   ) \%>\%
   select(USUBJID, EXSEQ)
 
-# Select highest dose for each patient
+# Select highest dose for each patient on the active drug
 ex \%>\%
+  filter(EXTRT != "PLACEBO") \%>\%
   filter_extreme(
     by_vars = vars(USUBJID),
     order = vars(EXDOSE),
     mode = "last",
     check_type = "none"
   ) \%>\%
-  select(USUBJID, EXDOSE)
+  select(USUBJID, EXTRT, EXDOSE)
 }
 \author{
 Stefan Bundfuss

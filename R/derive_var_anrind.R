@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(vs)
 #'
 #' ref_ranges <- tibble::tribble(

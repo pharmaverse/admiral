@@ -73,11 +73,13 @@ For each group (with respect to the variables specified for the
 (with respect to the order specified for the \code{order} parameter and the flag mode
 specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
 are considered for flagging.
-Otherwise, \code{new_var} is set to \code{NA}.
+Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed for
+all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every
+parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -160,6 +162,38 @@ derive_var_extreme_flag(
   mode = "last",
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
+
+# OCCURDS Examples
+data("ae")
+
+# Most severe AE first occurrence per patient
+ae \%>\%
+  mutate(TEMP_AESEVN =
+         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = vars(USUBJID),
+    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    mode = "first"
+  ) \%>\%
+  arrange(USUBJID, AESTDY, AESEQ) \%>\%
+  select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+
+# Most severe AE first occurrence per patient per body system
+ae \%>\%
+  mutate(TEMP_AESEVN =
+         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCSIFL,
+    by_vars = vars(USUBJID, AEBODSYS),
+    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    mode = "first"
+  ) \%>\%
+  arrange(USUBJID, AESTDY, AESEQ) \%>\%
+  select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
+}
+\seealso{
+\code{\link[=derive_var_worst_flag]{derive_var_worst_flag()}}
 }
 \author{
 Stefan Bundfuss

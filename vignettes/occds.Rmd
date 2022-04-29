@@ -38,6 +38,7 @@ otherwise specified.*
 * [Derive Occurrence Flags](#occflag)
 * [Derive Query Variables](#query)
 * [Add ADSL variables](#adsl_vars)
+* [Derive Analysis Sequence Number](#aseq)
 
 ## Read in Data {#readdata}
 
@@ -50,7 +51,7 @@ For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 
 data("ae")
@@ -293,10 +294,14 @@ dataset_vignette(adae,
                                      TRTEMFL))
 ```
 
-To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single assessment date, we
+To derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single occurrence date, we
 use `derive_var_ontrtfl()`.
 
 The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
+
+If you wanted to additionally check an end date you could add the `end_date` argument.
+Note that in this case you could set `span_period = "Y"` if you wanted occurrences that started
+prior to drug intake and ongoing or ended after this time to be considered as on-treatment.
 
 ```{r eval=TRUE}
 bds1 <- tibble::tribble(
@@ -394,7 +399,7 @@ dataset_vignette(adae,
 For deriving query variables `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, or
 `CQzzNAM` the `derive_vars_query()` function can be used. As input it expects a
 queries dataset, which provides the definition of the queries. See [Queries
-dataset documentation](queries_dataset.html) for a detailed description ot the
+dataset documentation](queries_dataset.html) for a detailed description of the
 queries dataset. The `create_query_data()` function can be used to create
 queries datasets.
 
@@ -474,9 +479,38 @@ dataset_vignette(adae,
                                      RFENDTC, AGE, AGEU, SEX))
 ```
 
+## Derive Analysis Sequence Number  {#aseq}
+
+The function `derive_var_obs_number()` can be used for deriving `ASEQ` variable to ensure the uniqueness of subject records within the dataset.
+
+For example, there can be multiple records present in `ADCM` for a single subject with the same `ASTDTM` and `CMSEQ` variables. But these records are still differ in ATC levels:
+
+``` {r eval=TRUE, echo=TRUE}
+adcm <- tibble::tribble(
+ ~USUBJID,        ~ASTDTM,          ~CMSEQ, ~CMDECOD,         ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
+  "BP40257-1001", "2013-07-05 UTC", "14",   "PARACETAMOL",    "N",     "N02",   "N02B",  "N02BE",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D10",   "D10A",  "D10AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "D",     "D07",   "D07A",  "D07AA",
+  "BP40257-1001", "2013-08-15 UTC", "18",   "SOLUMEDROL",     "H",     "H02",   "H02A",  "H02AB",
+  "BP40257-1002", "2012-12-15 UTC", "19",   "SPIRONOLACTONE", "C",     "C03",   "C03D",  "C03DA"
+)
+
+adcm_aseq <- adcm %>%
+  derive_var_obs_number(
+    by_vars    = vars(USUBJID),
+    order      = vars(ASTDTM, CMSEQ, ATC1CD, ATC2CD, ATC3CD, ATC4CD),
+    new_var    = ASEQ,
+    check_type = "error"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adcm_aseq)
+```
+
 # Example Scripts
 
 ADaM | Sample Code
 ---- | --------------
-ADAE | [ad_adae.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
-ADCM | [ad_adcm.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}
+ADAE | [`ad_adae.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R){target="_blank"}
+ADCM | [`ad_adcm.R`](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R){target="_blank"}

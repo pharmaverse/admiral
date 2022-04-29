@@ -30,7 +30,7 @@
 #' library(admiral)
 #' library(DT)
 #' library(dplyr)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #'
 #' dataset_vignette(dm)

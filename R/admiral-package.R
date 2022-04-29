@@ -19,7 +19,9 @@
 #'             str_replace str_trim str_to_lower str_to_title str_to_upper str_glue
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
-#'             time_length %--% ymd ymd_hms
-#' @importFrom tidyr spread gather drop_na
-#' @importFrom tidyselect contains vars_select
+#'             time_length %--% ymd ymd_hms weeks years hours minutes
+#' @importFrom tidyr drop_na pivot_wider pivot_longer
+#' @importFrom tidyselect all_of contains vars_select
+#' @importFrom lifecycle deprecate_warn deprecated
+#' @importFrom hms as_hms
 "_PACKAGE"

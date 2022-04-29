@@ -82,15 +82,15 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~AVISIT,
-  "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "kg",   "SCREENING",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "kg",   "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "kg",   "WEEK 2",
-  "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "kg",   "SCREENING",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "kg",   "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "kg",   "WEEK 2"
+  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
+  "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "WEEK 2",
+  "01-701-1028", "HEIGHT", "Height (cm)", 163,   "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "SCREENING",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
 )
 
 derive_param_bmi (

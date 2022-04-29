@@ -98,28 +98,36 @@ for each by group (e.g., subject and visit) where the source parameters are avai
 }
 \examples{
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-  "01-701-1015", "HEIGHT", "Height (cm)", 170,   "cm",   "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "kg",   "BASELINE",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "kg",   "MONTH 1",
-  "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "kg",   "MONTH 2",
-  "01-701-1028", "HEIGHT", "Height (cm)", 185,   "cm",   "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "kg",   "BASELINE",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
-  "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
+  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~VISIT,
+  "01-701-1015", "HEIGHT", "Height (cm)", 170,   "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "BASELINE",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "MONTH 1",
+  "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "MONTH 2",
+  "01-701-1028", "HEIGHT", "Height (cm)", 185,   "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "BASELINE",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "MONTH 1",
+  "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "MONTH 2",
 )
 
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
   method = "Mosteller",
-  get_unit_expr = AVALU
+  set_values_to = vars(
+    PARAMCD = "BSA",
+    PARAM = "Body Surface Area (m^2)"
+  ),
+  get_unit_expr = extract_unit(PARAM)
 )
 
 derive_param_bsa(
   advs,
   by_vars = vars(USUBJID, VISIT),
   method = "Fujimoto",
+  set_values_to = vars(
+    PARAMCD = "BSA",
+    PARAM = "Body Surface Area (m^2)"
+  ),
   get_unit_expr = extract_unit(PARAM)
 )
 }
