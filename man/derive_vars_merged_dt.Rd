@@ -14,7 +14,7 @@ derive_vars_merged_dt(
   mode = NULL,
   dtc,
   date_imputation = NULL,
-  flag_imputation = TRUE,
+  flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE,
