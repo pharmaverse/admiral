@@ -13,7 +13,7 @@ derive_worst_flag(
   analysis_var,
   worst_high,
   worst_low,
-  filter = NULL,
+  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -47,13 +47,8 @@ Use \code{character(0)} if not required.}
 referring to "low".
 Use \code{character(0)} if not required.}
 
-\item{filter}{Filter for flag data
-
-Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
-considered.
-
-Permitted Values: a condition}
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see
+examples for \code{derive_var_extreme_flag()}).}
 
 \item{check_type}{Check uniqueness?
 
@@ -81,68 +76,6 @@ if its \code{param_var} is in \code{worst_high} / \code{worst_low},
 otherwise it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
 the first one with respect to the order specified by the \code{order} parameter is flagged.
-}
-\examples{
-
-input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
-)
-
-derive_worst_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(desc(ADT)),
-  new_var = WORSTFL,
-  param_var = PARAMCD,
-  analysis_var = AVAL,
-  worst_high = c("PARAM01", "PARAM03"),
-  worst_low = "PARAM02"
-)
-
-\dontrun{
-# example with ADVS
-derive_worst_flag(
-  advs,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT, ATPTN),
-  new_var = WORSTFL,
-  param_var = PARAMCD,
-  analysis_var = AVAL,
-  worst_high = c("SYSBP", "DIABP"),
-  worst_low = "RESP",
-  filter = !is.na(AVISIT) & !is.na(AVAL)
-)
-}
-
 }
 \author{
 Ondrej Slama

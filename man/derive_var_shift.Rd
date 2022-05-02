@@ -10,8 +10,7 @@ derive_var_shift(
   from_var,
   to_var,
   na_val = "NULL",
-  sep_val = " to ",
-  filter_post_baseline = NULL
+  sep_val = " to "
 )
 }
 \arguments{
@@ -32,11 +31,6 @@ Default: "NULL"}
 \item{sep_val}{Character string to concatenate values of \code{from_var} and \code{to_var}.
 
 Default: " to "}
-
-\item{filter_post_baseline}{Condition to identify post-baseline records. If not
-specified, \code{new_var} is populated for all records.
-
-Default: \code{NULL}}
 }
 \value{
 The input dataset with the character shift variable added
@@ -49,9 +43,7 @@ analysis value, shift from baseline grade to analysis grade, ...
 \details{
 \code{new_var} is derived by concatenating the values of \code{from_var} to values of \code{to_var}
 (e.g. "NORMAL to HIGH"). When \code{from_var} or \code{to_var} has missing value, the
-missing value is replaced by \code{na_val} (e.g. "NORMAL to NULL"). If \code{filter_post_baseline} is
-specified, \code{new_var} is populated only for post-baseline records. If \code{filter_post_baseline}
-is \code{NULL} (default), \code{new_var} is populated for all records.
+missing value is replaced by \code{na_val} (e.g. "NORMAL to NULL").
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -77,11 +69,13 @@ data \%>\%
 # or only populate post-baseline records
 data \%>\%
   convert_blanks_to_na() \%>\%
-  derive_var_shift(
-    new_var = SHIFT1,
-    from_var = BNRIND,
-    to_var = ANRIND,
-    filter_post_baseline = ABLFL != "Y"
+  restrict_derivation(
+    derivation = derive_var_shift,
+    args = params(
+      new_var = SHIFT1,
+      from_var = BNRIND,
+      to_var = ANRIND),
+    filter = is.na(ABLFL)
   )
 
 }

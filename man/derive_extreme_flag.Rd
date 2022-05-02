@@ -10,7 +10,7 @@ derive_extreme_flag(
   order,
   new_var,
   mode,
-  filter = NULL,
+  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -43,13 +43,8 @@ Determines if the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
-\item{filter}{Filter for flag data
-
-Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
-considered.
-
-Permitted Values: a condition}
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see
+examples for \code{derive_var_extreme_flag()}).}
 
 \item{check_type}{Check uniqueness?
 
@@ -78,92 +73,6 @@ For each group (with respect to the variables specified for the
 specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
 are considered for flagging.
 Otherwise, \code{new_var} is set to \code{NA}.
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
-data("vs")
-
-# Flag last value for each patient, test, and visit, baseline observations are ignored
-vs \%>\%
-  derive_extreme_flag(
-    by_vars = vars(USUBJID, VSTESTCD, VISIT),
-    order = vars(VSTPTNUM),
-    new_var = LASTFL,
-    mode = "last",
-    filter = VISIT != "BASELINE"
-  ) \%>\%
-  arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
-  select(USUBJID, VSTESTCD, VISIT, VSTPTNUM, VSSTRESN, LASTFL)
-
-# Baseline (ABLFL) examples:
-
-input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
-)
-
-# Last observation
-derive_extreme_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(ADT),
-  new_var = ABLFL,
-  mode = "last",
-  filter = AVISIT == "BASELINE"
-)
-
-# Worst observation - Direction = High
-derive_extreme_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(AVAL, ADT),
-  new_var = ABLFL,
-  mode = "last",
-  filter = AVISIT == "BASELINE"
-)
-
-# Worst observation - Direction = Lo
-derive_extreme_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(desc(AVAL), ADT),
-  new_var = ABLFL,
-  mode = "last",
-  filter = AVISIT == "BASELINE"
-)
-
-# Average observation
-derive_extreme_flag(
-  input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(ADT, desc(AVAL)),
-  new_var = ABLFL,
-  mode = "last",
-  filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
-)
 }
 \author{
 Stefan Bundfuss

@@ -16,11 +16,15 @@ expected.}
 
 A date or date-time object column is expected.
 
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+
 The default is \code{TRTSDT}.}
 
 \item{date}{The end date column for which the study day should be derived
 
 A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
 
 The default is \code{ASTDT}}
 }

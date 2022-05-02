@@ -17,7 +17,7 @@
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
-#' @keywords user_utility
+#' @keywords user_utility high_order_function
 #'
 #' @export
 #'
