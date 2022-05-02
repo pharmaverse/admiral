@@ -93,10 +93,12 @@ example if you as a user pick up a function with >10 different arguments then ch
 difficult to understand if this function could be applied for your specific need. The intention is that
 arguments/parameters can influence how the output of a function is calculated, but not change the purpose of
 the function.
-* On the other hand, we do try to combine similar tasks and algorithms into one function to reduce the amount
-of repetitive, similar functionality (e.g. one study day calculation rather than a function per variable).
-Importantly here though, functions cannot be too general and trying to fulfil multiple, complex purposes.
-Similarly, functions should not allow expressions as arguments that are used as code snippets in function calls.
+* We try to combine similar tasks and algorithms into one function where applicable
+ - this is to reduce the amount of repetitive functions with similar algorithms
+ - this is to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
+
+* We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.
+* Functions should not allow expressions as arguments that are used as code snippets in function calls.
 * We recommend to avoid copy and paste of complex computational algorithms or repetitive code like checks
 and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting,
 so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.
