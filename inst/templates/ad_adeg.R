@@ -13,7 +13,7 @@ library(stringr)
 
 # ---- Load source datasets ----
 
-# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
@@ -67,7 +67,7 @@ chgcat_lookup <- tibble::tribble(
 )
 
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`. Info then used for
+#  operates on vectors, which can be used in `mutate()`. Info then used for
 # lookup table
 format_avalca1n <- function(paramcd, aval) {
   case_when(
@@ -126,7 +126,7 @@ adeg <- adeg %>%
   ) %>%
 
   # Derive new parameters based on existing records. Note that, for the following
-  # four derive_param_* functions, only the variables specified in `by_vars` will
+  # four `derive_param_*()` functions, only the variables specified in `by_vars` will
   # be populated in the newly created records.
   # Derive RRR
   derive_param_rr(

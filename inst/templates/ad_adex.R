@@ -58,7 +58,7 @@ adex0 <- ex %>%
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
 
-  # Calculate ASTDTM, AENDTM using derive_vars_dtm
+  # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
   derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
 
@@ -95,8 +95,8 @@ adex <- bind_rows(
   mutate(PARCAT1 = "INDIVIDUAL")
 
   # Part 3
-  # Derive summary parameters. Note that, for the functions `derive_param_exposure`,
-  # `derive_param_doseint` and `derive_derived_param`, only the variables specified
+  # Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
+  # `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
   # in `by_vars` will be populated in the newly created records.
 adex <- adex %>%
   # Overall exposure
@@ -239,7 +239,7 @@ param_lookup <- tibble::tribble(
 # ---- User defined functions ----
 # Derive AVALCAT1
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
+#  operates on vectors, which can be used in `mutate()`.
 format_avalcat1 <- function(param, aval) {
   case_when(
     param %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",
