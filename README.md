@@ -69,7 +69,7 @@ specific to algorithms and requirements for that particular TA (e.g. `{admiralon
 For `{admiral}` and all extension packages, we prioritise providing our users with a **simple to adopt** toolkit
 that enables them to produce **readable** and **easily constructible** ADaM programs. The following explains
 our philosophy, which we try to adhere to across the `{admiral}` family of packages.
-There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for admiral.
+There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
 This manifesto helps show the considerations of our developers when making decisions.
 
 We have four design principles to achieve the main goal:
