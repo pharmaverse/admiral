@@ -1,5 +1,6 @@
 #' Pre-Defined Dose Frequencies
 #'
+#' @description
 #' These pre-defined dose frequencies are sourced from
 #' [CDISC](https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM%20Terminology.pdf). The
 #' number of rows to generate using `create_single_dose_dataset()` arguments
