@@ -23,7 +23,7 @@ jobs:
 
       - name: Build report 🏗
         id: validation
-        uses: insightsengineering/thevalidatoR@v1.2.0
+        uses: insightsengineering/thevalidatoR@v1
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼
