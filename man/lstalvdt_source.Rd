@@ -37,8 +37,6 @@ Default: \code{FALSE}}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
-
-\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 }
 \value{
 An object of class "lstalvdt_source".

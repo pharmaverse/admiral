@@ -97,4 +97,3 @@ derive_var_base <- function(dataset,
 
   left_join(dataset, base, by = vars2chr(by_vars))
 }
-
