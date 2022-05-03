@@ -75,7 +75,7 @@ merged to the input dataset. }
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data("dm")
 data("ae")
 data("lb")
