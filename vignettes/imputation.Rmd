@@ -282,10 +282,7 @@ dataset_vignette(mh)
 ## Using More Than One Imputation Rule for a Variable
 
 Using different imputation rules depending on the observation can be done by
-creating the variables with `mutate()`. First the imputed datetime variable is
-created calling `if_else()` and `convert_dtc_to_dtm()`. Then the time imputation
-flag is created calling `compute_tmf()`. Here no date imputation flag is created
-because no date imputation is performed (`date_imputation = NULL`).
+using `slice_derivation()`.
 
 ```{r}
 vs <- tribble(
@@ -294,26 +291,20 @@ vs <- tribble(
   "2019-10-12",          "PRE-DOSE",
   "2019-11-10",          NA,
   "2019-12-04",          NA
-) %>% 
-mutate(
-  ADTM = if_else(
-    VSTPT == "PRE-DOSE",
-    convert_dtc_to_dtm(
-      dtc = VSDTC,
-      date_imputation = NULL,
-      time_imputation = "first"
+) %>%
+  slice_derivation(
+    derivation = derive_vars_dtm,
+    args = params(dtc = VSDTC,
+                  new_vars_prefix = "A",
+                  date_imputation = NULL),
+    derivation_slice(
+      filter = VSTPT == "PRE-DOSE",
+      args = params(time_imputation = "first")
     ),
-    convert_dtc_to_dtm(
-      dtc = VSDTC,
-      date_imputation = NULL,
-      time_imputation = "last"
-    )
-  ),
-  ADTMF = compute_tmf(
-    dtc = VSDTC,
-    dtm = ADTM
+    derivation_slice(
+      filter = TRUE,
+      args = params(time_imputation = "last"))
   )
-)
 ```
 ```{r, echo=FALSE}
 dataset_vignette(vs)

@@ -1,81 +1,93 @@
 #' Derive On-Treatment Flag Variable
 #'
 #' Derive on-treatment flag (`ONTRTFL`) in an ADaM dataset with a single
-#' assessment date (e.g `ADT`) or event start and end dates (e.g. `ASTDT`/`AENDT`).
+#' assessment date (e.g `ADT`) or event start and end dates (e.g.
+#' `ASTDT`/`AENDT`).
 #'
 #' @param dataset Input dataset.
 #'
-#'   Required columns are `start_date`, `end_date`, `ref_start_date` and `ref_end_date`.
+#'   Required columns are `start_date`, `end_date`, `ref_start_date` and
+#'   `ref_end_date`.
 #'
 #' @param new_var On-treatment flag variable name to be created.
 #'
 #'   Default is `ONTRTFL`.
 #'
-#' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g. `ADT`)
-#'   Required; A date or date-time object column is expected
+#' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g.
+#'   `ADT`) Required; A date or date-time object column is expected.
 #'
-#' @param end_date The end date of assessment/event (e.g. `AENDT`)
-#'   A date or date-time object column is expected.
-#'   Optional; Default is null. If the used and date value is missing
-#'   on an observation, it is assumed the medication is ongoing and
-#'   `ONTRTFL` is set to `"Y"`.
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
-#' @param ref_start_date The lower bound of the on-treatment period
-#'   Required; A date or date-time object column is expected.
+#' @param end_date The end date of assessment/event (e.g. `AENDT`) A date or
+#'   date-time object column is expected.
 #'
-#' @param ref_end_date The upper bound of the on-treatment period
-#'   A date or date-time object column is expected.
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
+#'   Optional; Default is null. If the used and date value is missing on an
+#'   observation, it is assumed the medication is ongoing and `ONTRTFL` is set
+#'   to `"Y"`.
+#'
+#' @param ref_start_date The lower bound of the on-treatment period Required; A
+#'   date or date-time object column is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
+#' @param ref_end_date The upper bound of the on-treatment period A date or
+#'   date-time object column is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
 #'   Optional; This can be null and everything after `ref_start_date` will be
-#'   considered on-treatment.
-#'   Default is `NULL`.
+#'   considered on-treatment. Default is `NULL`.
 #'
 #' @param ref_end_window A window to add to the upper bound `ref_end_date`
-#'   measured in days
-#'   (e.g. 7 if 7 days should be added to the upper bound)
+#'   measured in days (e.g. 7 if 7 days should be added to the upper bound)
 #'   Optional; default is 0.
 #'
 #' @param filter_pre_timepoint An expression to filter observations as not
-#' on-treatment when `date` = `ref_start_date`. For example, if
-#' observations where `VSTPT = PRE` should not be considered on-treatment when
-#' `date = ref_start_date`, `filter_pre_timepoint` should be used
-#' to denote when the on-treatment flag should be set to null.
-#' Optional; default is `NULL`.
+#'   on-treatment when `date` = `ref_start_date`. For example, if observations
+#'   where `VSTPT = PRE` should not be considered on-treatment when `date =
+#'   ref_start_date`, `filter_pre_timepoint` should be used to denote when the
+#'   on-treatment flag should be set to null. Optional; default is `NULL`.
 #'
-#' @param span_period A `"Y"` scalar character. If `"Y"`, events that started prior
-#' to the `ref_start_date`and are ongoing or end after the `ref_start_date` are flagged as `"Y"`.
-#'  Optional; default is `NULL`.
+#' @param span_period A `"Y"` scalar character. If `"Y"`, events that started
+#'   prior to the `ref_start_date`and are ongoing or end after the
+#'   `ref_start_date` are flagged as `"Y"`. Optional; default is `NULL`.
 #'
-#' @details
-#' On-Treatment is calculated by determining whether the assessment date or
-#' start/stop dates fall between 2 dates. The following logic is used to
-#' assign on-treatment = `"Y"`:
+#' @details On-Treatment is calculated by determining whether the assessment
+#'   date or start/stop dates fall between 2 dates. The following logic is used
+#'   to assign on-treatment = `"Y"`:
 #'   1. `start_date` is missing and `ref_start_date`is non-missing
 #'   2. No timepoint filter is provided (`filter_pre_timepoint`) and both
-#'      `start_date` and `ref_start_date` are non-missing and `start_date` =
-#'      `ref_start_date`
+#'   `start_date` and `ref_start_date` are non-missing and `start_date` =
+#'   `ref_start_date`
 #'   3. A timepoint is provided (`filter_pre_timepoint`) and both `start_date`
-#'      and `ref_start_date` are non-missing and `start_date = ref_start_date`
-#'      and the filter provided in `filter_pre_timepoint` is not true.
+#'   and `ref_start_date` are non-missing and `start_date = ref_start_date` and
+#'   the filter provided in `filter_pre_timepoint` is not true.
 #'   4. `ref_end_date` is not provided and `ref_start_date < start_date`
 #'   5. `ref_end_date` is provided and `ref_start_date < start_date` <=
-#'      `ref_end_date + ref_end_window`.
+#'   `ref_end_date + ref_end_window`.
 #'
-#' If the `end_date` is provided and the `end_date` < ref_start_date
-#' then the `ONTRTFL` is set to `NULL`.This would be applicable to cases where
-#' the `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
+#'   If the `end_date` is provided and the `end_date` < ref_start_date then the
+#'   `ONTRTFL` is set to `NULL`.This would be applicable to cases where the
+#'   `start_date` is missing and `ONTRTFL` has been assigned as `"Y"` above.
 #'
-#' If the `span_period` is specified as `"Y"`, this allows the user to assign `ONTRTFL` as `"Y"` to
-#' cases where the record started prior to the 'ref_start_date` and
-#' was ongoing or ended after the `ref_end_date`.
+#'   If the `span_period` is specified as `"Y"`, this allows the user to assign
+#'   `ONTRTFL` as `"Y"` to cases where the record started prior to the
+#'   `ref_start_date` and was ongoing or ended after the `ref_start_date`.
 #'
-#' Any date imputations needed should be done prior to calling this function.
+#'   Any date imputations needed should be done prior to calling this function.
 #'
 #' @author Alice Ehmann, Teckla Akinyi
 #'
 #' @keywords bds derivation
 #'
-#' @return The input dataset with an additional column named
-#' `ONTRTFL` with a value of `"Y"` or `NA`
+#' @return The input dataset with an additional column named `ONTRTFL` with a
+#'   value of `"Y"` or `NA`
 #'
 #' @export
 #'

@@ -9,6 +9,11 @@
 #' @details The last dose amount is derived as the dose amount where the maximum `dose_date` is
 #' lower to or equal to the `analysis_date` per `by_vars` for each observation in `dataset`.
 #'
+#' If dose information is aggregated (i.e. is a dosing frequency other than `"ONCE"`
+#' over a period defined by a start and end date) the function
+#' `create_single_dose_dataset()` can be used to generate single doses from
+#' aggregate dose information and satisfy `single_dose_condition`.
+#'
 #' @return Input dataset with additional column `new_var`.
 #'
 #' @author Annie Yang
@@ -17,11 +22,11 @@
 #'
 #' @export
 #'
-#' @seealso [derive_vars_last_dose()]
+#' @seealso [derive_vars_last_dose()], [create_single_dose_dataset()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(ae)
 #' data(ex_single)
 #'

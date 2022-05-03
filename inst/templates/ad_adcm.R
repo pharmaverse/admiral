@@ -4,7 +4,7 @@
 #
 # Input: cm, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -31,9 +31,10 @@ adcm <- cm %>%
   # derive_vars_suppqual(suppcm) %>%
 
   # Join ADSL with CM (only ADSL vars required for derivations)
-  left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by = vars(STUDYID, USUBJID)
   ) %>%
 
   # Derive analysis start time
@@ -85,6 +86,8 @@ adcm <- cm %>%
 adcm <- adcm %>%
 
   # Derive On-Treatment flag
+  # Set `span_period = "Y"` if you want occurrences that started prior to drug
+  # intake and ongoing or ended after this time to be considered as on-treatment.
   derive_var_ontrtfl(
     start_date = ASTDT,
     end_date = AENDT,
@@ -138,11 +141,10 @@ adcm <- adcm %>%
 
 # Join all ADSL with CM
 adcm <- adcm %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
-
 
 
 # ---- Save output ----

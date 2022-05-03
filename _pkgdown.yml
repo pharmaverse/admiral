@@ -64,9 +64,14 @@ reference:
 
 - title: Other Keywords
 - subtitle: Timing
-  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
+  desc: Function related to timing, e.g. deriving dates, imputing dates, converting dates, deriving duration, ...
   contents:
   - has_keyword('timing')
+
+- subtitle: High Order Functions
+  desc: Functions which call other derivations, e.g. on subset of input dataset or multiple times with varying parameters.
+  contents:
+  - has_keyword('high_order_function')
 
 - subtitle: Source Specifications
   desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
@@ -77,6 +82,11 @@ reference:
   desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
   contents:
   - has_keyword('tte_source')
+
+- subtitle: Metadata
+  desc: Functions related to expanding or providing further context for other data
+  contents:
+  - has_keyword('metadata')
 
 - title: ADaM Datasets
 - contents:

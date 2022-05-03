@@ -21,7 +21,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -234,7 +234,12 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #'
-#' @author Thomas Neitmann
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
+#' `NULL` is considered as valid value.
+#'
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
@@ -256,7 +261,11 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #' try(example_fun(c(TRUE, FALSE, FALSE)))
 #'
 #' try(example_fun(1:10))
-assert_logical_scalar <- function(arg) {
+assert_logical_scalar <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
@@ -288,7 +297,7 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -367,7 +376,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -393,7 +402,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(arg)) {
+  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -743,7 +752,9 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+      any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `exprs()` but is %s",
       arg_name(substitute(arg)),
@@ -793,7 +804,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' assert_has_variables(dm, "STUDYID")
@@ -816,6 +827,79 @@ assert_has_variables <- function(dataset, required_vars) {
     abort(err_msg)
   }
   invisible(dataset)
+}
+
+#' Is Argument a Function?
+#'
+#' Checks if the argument is a function and if all expected parameters are
+#' provided by the function.
+#'
+#' @param arg A function argument to be checked
+#'
+#' @param params A character vector of expected parameter names
+#'
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error
+#'
+#'  - if the argument is not a function or
+#'
+#'  - if the function does not provide all parameters as specified for the
+#'  `params` parameter.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(fun) {
+#'   assert_function(fun, params = c("x"))
+#' }
+#'
+#' example_fun(mean)
+#'
+#' try(example_fun(1))
+
+#' try(example_fun(sum))
+assert_function <- function(arg, params = NULL, optional = FALSE) {
+  assert_character_vector(params, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (missing(arg)) {
+    err_msg <- sprintf("Argument `%s` missing, with no default",
+                       arg_name(substitute(arg)))
+    abort(err_msg)
+  }
+
+  if (!is.function(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a function but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+  if (!is.null(params)) {
+    is_param <- params %in% names(formals(arg))
+    if (!all(is_param)) {
+      txt <- if (sum(!is_param) == 1L) {
+        "%s is not a parameter of the function specified for `%s`"
+      } else {
+        "%s are not parameters of the function specified for `%s`"
+      }
+      err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
+      abort(err_msg)
+    }
+  }
+  invisible(arg)
 }
 
 assert_function_param <- function(arg, params) {
@@ -876,7 +960,19 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
+  if (length(units) != 1L) {
+    abort(
+      paste0(
+        "Multiple units ",
+        enumerate(units, quote_fun = squote),
+        " found for ",
+        squote(param),
+        ".\n",
+        "Please review and update the units."
+      )
+    )
+  }
+  if (tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
@@ -890,6 +986,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+
   invisible(dataset)
 }
 
@@ -1284,68 +1381,4 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
       )
     )
   }
-}
-
-#' Get One to Many Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the one to many values are stored
-#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
-#'
-#' Note that the function always returns the one to many values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @return A `data.frame` or `NULL`
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
-#' )
-#'
-#' get_one_to_many_dataset()
-get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
-}
-
-#' Get Many to One Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the many to one values are stored
-#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
-#'
-#' Note that the function always returns the many to one values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @return A `data.frame` or `NULL`
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
-#' )
-#'
-#' get_many_to_one_dataset()
-get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
 }

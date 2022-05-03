@@ -1,4 +1,7 @@
-comment: false
+comment: 
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: true
 language: R
 sudo: false
 cache: packages

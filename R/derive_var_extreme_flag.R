@@ -30,13 +30,7 @@
 #'
 #'   Permitted Values: list of variables
 #'
-#' @param filter Filter for flag data
-#'
-#'   Only observations fulfilling the specified condition are taken into account
-#'   for flagging. If the parameter is not specified, all observations are
-#'   considered.
-#'
-#'   Permitted Values: a condition
+#' @param filter Deprecated, please use `restrict_derivation()` instead (see examples).
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -53,7 +47,11 @@
 #'   (with respect to the order specified for the `order` parameter and the flag mode
 #'   specified for the `mode` parameter). Only observations included by the `filter` parameter
 #'   are considered for flagging.
-#'   Otherwise, `new_var` is set to `NA`.
+#'   Otherwise, `new_var` is set to `NA`. Thus, the direction of "worst" is considered fixed for
+#'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
+#'   parameter the first or last record will be flagged across the whole dataset.
+#'
+#' @seealso [derive_var_worst_flag()]
 #'
 #' @author Stefan Bundfuss
 #'
@@ -65,16 +63,18 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
 #' vs %>%
-#'   derive_var_extreme_flag(
-#'     by_vars = vars(USUBJID, VSTESTCD, VISIT),
-#'     order = vars(VSTPTNUM),
-#'     new_var = LASTFL,
-#'     mode = "last",
+#'   restrict_derivation(
+#'     derivation = derive_var_extreme_flag,
+#'     args = params(
+#'       by_vars = vars(USUBJID, VSTESTCD, VISIT),
+#'       order = vars(VSTPTNUM),
+#'       new_var = LASTFL,
+#'       mode = "last"),
 #'     filter = VISIT != "BASELINE"
 #'   ) %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
@@ -110,74 +110,120 @@
 #' )
 #'
 #' # Last observation
-#' derive_var_extreme_flag(
+#' restrict_derivation(
 #'   input,
-#'   by_vars = vars(USUBJID, PARAMCD),
-#'   order = vars(ADT),
-#'   new_var = ABLFL,
-#'   mode = "last",
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = vars(USUBJID, PARAMCD),
+#'     order = vars(ADT),
+#'     new_var = ABLFL,
+#'     mode = "last"),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = High
-#' derive_var_extreme_flag(
+#' restrict_derivation(
 #'   input,
-#'   by_vars = vars(USUBJID, PARAMCD),
-#'   order = vars(AVAL, ADT),
-#'   new_var = ABLFL,
-#'   mode = "last",
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = vars(USUBJID, PARAMCD),
+#'     order = vars(AVAL, ADT),
+#'     new_var = ABLFL,
+#'     mode = "last"),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Worst observation - Direction = Lo
-#' derive_var_extreme_flag(
+#' restrict_derivation(
 #'   input,
-#'   by_vars = vars(USUBJID, PARAMCD),
-#'   order = vars(desc(AVAL), ADT),
-#'   new_var = ABLFL,
-#'   mode = "last",
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = vars(USUBJID, PARAMCD),
+#'     order = vars(desc(AVAL), ADT),
+#'     new_var = ABLFL,
+#'     mode = "last"),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
 #' # Average observation
-#' derive_var_extreme_flag(
+#' restrict_derivation(
 #'   input,
-#'   by_vars = vars(USUBJID, PARAMCD),
-#'   order = vars(ADT, desc(AVAL)),
-#'   new_var = ABLFL,
-#'   mode = "last",
+#'   derivation = derive_var_extreme_flag,
+#'   args = params(
+#'     by_vars = vars(USUBJID, PARAMCD),
+#'     order = vars(ADT, desc(AVAL)),
+#'     new_var = ABLFL,
+#'     mode = "last"),
 #'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
+#'
+#' # OCCURDS Examples
+#' data("ae")
+#'
+#' # Most severe AE first occurrence per patient
+#' ae %>%
+#'   mutate(TEMP_AESEVN =
+#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCIFL,
+#'     by_vars = vars(USUBJID),
+#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     mode = "first"
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY, AESEQ) %>%
+#'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+#'
+#' # Most severe AE first occurrence per patient per body system
+#' ae %>%
+#'   mutate(TEMP_AESEVN =
+#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#'   derive_var_extreme_flag(
+#'     new_var = AOCCSIFL,
+#'     by_vars = vars(USUBJID, AEBODSYS),
+#'     order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+#'     mode = "first"
+#'   ) %>%
+#'   arrange(USUBJID, AESTDY, AESEQ) %>%
+#'   select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
 derive_var_extreme_flag <- function(dataset,
                                 by_vars,
                                 order,
                                 new_var,
                                 mode,
-                                filter = NULL,
+                                filter = deprecated(),
                                 check_type = "warning") {
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, !!!extract_vars(order)))
   mode <- assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   check_type <- assert_character_scalar(
     check_type,
     values = c("none", "warning", "error"),
     case_sensitive = FALSE
   )
-
-  # Select data to consider for flagging
-  if (!quo_is_null(filter)) {
-    data <- dataset %>% filter(!!filter)
-    data_ignore <- dataset %>%
-      filter(!(!!filter) | is.na(!!filter))
-  } else {
-    data <- dataset
+  if (!missing(filter)){
+    warn(paste("`filter` is deprecated as of admiral 0.7.0.",
+               "Please use `restrict_derivation()` instead (see examples).",
+               sep = "\n"))
+    filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+    return(
+      restrict_derivation(
+        dataset,
+        derivation = derive_var_extreme_flag,
+        args = params(
+          by_vars = by_vars,
+          order = order,
+          new_var = !!new_var,
+          mode = mode
+        ),
+        filter = !!filter
+      )
+    )
   }
 
   # Create flag
-  data <- data %>%
+  data <- dataset %>%
     derive_var_obs_number(
       new_var = temp_obs_nr,
       order = order,
@@ -193,11 +239,6 @@ derive_var_extreme_flag <- function(dataset,
       group_by(!!!by_vars) %>%
       mutate(!!new_var := if_else(temp_obs_nr == n(), "Y", NA_character_)) %>%
       ungroup()
-  }
-
-  # Add ignored data
-  if (!quo_is_null(filter)) {
-    data <- data %>% bind_rows(data_ignore)
   }
 
   # Remove temporary variable
@@ -227,11 +268,16 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @details For each group with respect to the variables specified by the `by_vars` parameter,
 #' the maximal / minimal observation of `analysis_var`
-#' is labelled in the `new_var` column as `"Y"`
-#' if its `param_var` is in `worst_high` / `worst_low`,
-#' otherwise it is assigned `NA`.
+#' is labelled in the `new_var` column as `"Y"`,
+#' if its `param_var` is in `worst_high` / `worst_low`.
+#' Otherwise, it is assigned `NA`.
 #' If there is more than one such maximal / minimal observation,
-#' the first one with respect to the order specified by the `order` parameter is flagged.
+#' the first one with respect to the order specified by the `order` parameter is flagged. The
+#' direction of "worst" depends on the definition of worst for a specified parameters in the
+#' arguments `worst_high` / `worst_low`, i.e. for some parameters the highest value is the worst
+#' and for others the worst is the lowest value.
+#'
+#' @seealso [derive_var_extreme_flag()]
 #'
 #' @author Ondrej Slama
 #'
@@ -289,15 +335,17 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #'\dontrun{
 #' # example with ADVS
-#' derive_var_worst_flag(
+#' restrict_derivation(
 #'   advs,
-#'   by_vars = vars(USUBJID, PARAMCD, AVISIT),
-#'   order = vars(ADT, ATPTN),
-#'   new_var = WORSTFL,
-#'   param_var = PARAMCD,
-#'   analysis_var = AVAL,
-#'   worst_high = c("SYSBP", "DIABP"),
-#'   worst_low = "RESP",
+#'   derivation = derive_var_worst_flag,
+#'   args = params(
+#'     by_vars = vars(USUBJID, PARAMCD, AVISIT),
+#'     order = vars(ADT, ATPTN),
+#'     new_var = WORSTFL,
+#'     param_var = PARAMCD,
+#'     analysis_var = AVAL,
+#'     worst_high = c("SYSBP", "DIABP"),
+#'     worst_low = "RESP"),
 #'   filter = !is.na(AVISIT) & !is.na(AVAL)
 #' )
 #'}
@@ -310,7 +358,7 @@ derive_var_worst_flag <- function(dataset,
                               analysis_var,
                               worst_high,
                               worst_low,
-                              filter = NULL,
+                              filter = deprecated(),
                               check_type = "warning") {
 
   # perform argument checks
@@ -325,7 +373,32 @@ derive_var_worst_flag <- function(dataset,
   )
   assert_character_vector(worst_high)
   assert_character_vector(worst_low)
-  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+  if (!missing(filter)) {
+    filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+    return(
+      bind_rows(
+        derive_var_extreme_flag(
+          dataset = filter(dataset, !!param_var %in% worst_low),
+          by_vars = by_vars,
+          order = quo_c(analysis_var, order),
+          new_var = !!new_var,
+          mode = "first",
+          filter = !!filter,
+          check_type = check_type
+        ),
+        derive_var_extreme_flag(
+          dataset = filter(dataset, !!param_var %in% worst_high),
+          by_vars = by_vars,
+          order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
+          new_var = !!new_var,
+          mode = "first",
+          filter = !!filter,
+          check_type = check_type
+        ),
+        filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+      )
+    )
+  }
 
   # additional checks for worstflag - parameters overlap
   if (length(intersect(worst_high, worst_low)) > 0) {
@@ -364,23 +437,21 @@ derive_var_worst_flag <- function(dataset,
   # derive worst-flag
   bind_rows(
     derive_var_extreme_flag(
-      dataset = filter(dataset, !!param_var %in% worst_low),
+      dataset = dplyr::filter(dataset, !!param_var %in% worst_low),
       by_vars = by_vars,
       order = quo_c(analysis_var, order),
       new_var = !!new_var,
       mode = "first",
-      filter = !!filter,
       check_type = check_type
     ),
     derive_var_extreme_flag(
-      dataset = filter(dataset, !!param_var %in% worst_high),
+      dataset = dplyr::filter(dataset, !!param_var %in% worst_high),
       by_vars = by_vars,
       order = quo_c(quo(desc(!!quo_get_expr(analysis_var))), order),
       new_var = !!new_var,
       mode = "first",
-      filter = !!filter,
       check_type = check_type
     ),
-    filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
+    dplyr::filter(dataset, !(!!param_var %in% c(worst_low, worst_high)))
   )
 }

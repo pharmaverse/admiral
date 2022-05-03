@@ -89,11 +89,15 @@ derive_var_base <- function(dataset,
   )
   warn_if_vars_exist(dataset, quo_text(new_var))
 
-  base <- dataset %>%
-    filter(!!filter) %>%
-    select(!!!by_vars, !!new_var := !!source_var)
-
-  signal_duplicate_records(base, by_vars, "Dataset contains multiple baseline records.")
-
-  left_join(dataset, base, by = vars2chr(by_vars))
+  derive_vars_merged(
+    dataset,
+    dataset_add = dataset,
+    filter_add = !!filter,
+    new_vars = vars(!!new_var := !!source_var),
+    by_vars = by_vars,
+    duplicate_msg = paste(
+      "Input dataset contains multiple baseline records with respect to",
+      enumerate(vars2chr(by_vars))
+    )
+  )
 }

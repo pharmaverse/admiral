@@ -1,6 +1,7 @@
 #' Default Format for Disposition Status
 #'
-#' Define a function to map the disposition status.
+#' Define a function to map the disposition status. To be used as an input for
+#' `derive_var_disposition_status()`.
 #'
 #' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
@@ -12,6 +13,22 @@
 #' @author Samia Kabi
 #' @export
 #' @keywords user_utility adsl computation
+#' @seealso [derive_var_disposition_status()]
+#' @examples
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiraltest)
+#' data("dm")
+#' data("ds")
+#'
+#' dm %>%
+#'   derive_var_disposition_status(
+#'     dataset_ds = ds,
+#'     new_var = EOSSTT,
+#'     status_var = DSDECOD,
+#'     format_new_var = format_eoxxstt_default,
+#'     filter_ds = DSCAT == "DISPOSITION EVENT"
+#'   ) %>%
+#'   select(STUDYID, USUBJID, EOSSTT)
 format_eoxxstt_default <- function(x) {
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
@@ -83,7 +100,7 @@ format_eoxxstt_default <- function(x) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -141,21 +158,12 @@ derive_var_disposition_status <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
 
-  # Process the disposition data
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    select(!!!subject_keys, !!enquo(status_var))
-
-  # Expect 1 record per subject in the subsetted DS - issue a warning otherwise
-  signal_duplicate_records(
-    ds_subset,
-    by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
   # Add the status variable and derive the new dispo status in the input dataset
   dataset %>%
-    left_join(ds_subset, by = vars2chr(subject_keys)) %>%
-    mutate(!!enquo(new_var) := format_new_var(!!enquo(status_var))) %>%
-    select(-!!enquo(status_var))
+    derive_vars_merged(dataset_add = dataset_ds,
+                       filter_add = !!filter_ds,
+                       new_vars = vars(!!status_var),
+                       by_vars = subject_keys) %>%
+    mutate(!!new_var := format_new_var(!!status_var)) %>%
+    select(-!!status_var)
 }

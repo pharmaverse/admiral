@@ -58,19 +58,19 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~AVALU,      ~VISIT,
-#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "beats/min", "BASELINE",
-#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "beats/min", "WEEK 2",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "mmHg",      "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "mmHg",      "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg",      "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "mmHg",      "WEEK 2",
-#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "beats/min", "BASELINE",
-#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "beats/min", "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "mmHg",      "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "mmHg",      "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "mmHg",      "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "mmHg",      "WEEK 2"
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
+#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "BASELINE",
+#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "WEEK 2",
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "BASELINE",
+#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "WEEK 2",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "BASELINE",
+#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "WEEK 2",
+#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "BASELINE",
+#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "WEEK 2",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "BASELINE",
+#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "WEEK 2",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "BASELINE",
+#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "WEEK 2"
 #' )
 #'
 #' # Derive MAP based on diastolic and systolic blood pressure
@@ -81,7 +81,7 @@
 #'       PARAMCD = "MAP",
 #'       PARAM = "Mean Arterial Pressure (mmHg)"
 #'     ),
-#'     get_unit_expr = AVALU
+#'     get_unit_expr = extract_unit(PARAM)
 #'   ) %>%
 #'   filter(PARAMCD != "PULSE")
 #'
@@ -258,28 +258,36 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 170,   "cm",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "kg",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "kg",   "MONTH 1",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "kg",   "MONTH 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 185,   "cm",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "kg",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "kg",   "MONTH 1",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "kg",   "MONTH 2",
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 170,   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "MONTH 1",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "MONTH 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 185,   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "MONTH 1",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "MONTH 2",
 #' )
 #'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   method = "Mosteller",
-#'   get_unit_expr = AVALU
+#'   set_values_to = vars(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM)
 #' )
 #'
 #' derive_param_bsa(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   method = "Fujimoto",
+#'   set_values_to = vars(
+#'     PARAMCD = "BSA",
+#'     PARAM = "Body Surface Area (m^2)"
+#'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
 derive_param_bsa <- function(dataset,
@@ -476,15 +484,15 @@ compute_bsa <- function(height = height,
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~AVISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "cm",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "kg",   "SCREENING",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "kg",   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "kg",   "WEEK 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "cm",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "kg",   "SCREENING",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "kg",   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "kg",   "WEEK 2"
+#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 147,   "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0,  "SCREENING",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 54.4,  "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 53.1,  "WEEK 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 163,   "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 78.5,  "SCREENING",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.3,  "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
 #' )
 #'
 #' derive_param_bmi (
@@ -570,5 +578,5 @@ compute_bmi <- function(height, weight) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
 
-  weight / (height * height / 10000)
+  if_else(height == 0, NA_real_, weight / (height * height / 10000))
 }
