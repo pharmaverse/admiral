@@ -240,7 +240,6 @@ derive_var_lstalvdt <- function(dataset,
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
-#' @param dataset Deprecated, please use `dataset_name` instead.
 #'
 #' @inheritParams impute_dtc
 #'

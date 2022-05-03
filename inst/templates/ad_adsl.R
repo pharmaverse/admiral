@@ -165,7 +165,7 @@ adsl <- adsl %>%
   ) %>%
 
   # Age group
-  derive_agegr_fda(
+  derive_var_agegr_fda(
     age_var = AGE,
     new_var = AGEGR1
   ) %>%

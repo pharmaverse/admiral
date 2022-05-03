@@ -609,7 +609,7 @@ To derive `AGEGR1` as categorized `AGE` in `< 18 `, `18-65`, `>= 65` (FDA conven
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_agegr_fda(
+  derive_var_agegr_fda(
     age_var = AGE,
     new_var = AGEGR1
   )
