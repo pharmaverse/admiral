@@ -77,7 +77,6 @@ jobs:
 
       - name: Generate man pages 📄
         run: |
-          setwd("${{ github.event.repository.name }}")
           logfile <- "roxygen_${{ github.event.repository.name }}.log"
           con <- file(logfile)
           sink(con, append = TRUE, split = TRUE)

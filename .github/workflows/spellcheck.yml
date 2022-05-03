@@ -71,6 +71,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Run Spellcheck 👟
-        uses: insightsengineering/r-spellcheck-action@v2
+        uses: insightsengineering/r-spellcheck-action@v3
         with:
           exclude: data/*
+          additional_options: ""

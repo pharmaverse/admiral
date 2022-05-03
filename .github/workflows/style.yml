@@ -81,7 +81,6 @@ jobs:
 
       - name: Run styler 👟
         run: |
-          setwd("${{ github.event.repository.name }}")
           changed_files <- unlist(strsplit(
             "${{ steps.changed-files.outputs.all_changed_files }}",
             split=","
