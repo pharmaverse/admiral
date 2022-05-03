@@ -9,7 +9,8 @@
 #'
 #' @details
 #' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
-#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is equal to `'OTHER'`.
+#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD`
+#' is equal to `'OTHER'`.
 #'
 #' @return A `character` vector
 #'
@@ -38,7 +39,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
   if (is.null(reason_spe)) {
     if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
   } else {
-    if_else (reason == "OTHER", reason_spe, NA_character_)
+    if_else(reason == "OTHER", reason_spe, NA_character_)
   }
 }
 
@@ -89,8 +90,8 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' and `new_var` will be derived as `new_var = format_reason(reason_var)`.
 #' Typically, the content of the function would return `reason_var` or `NA` depending on the
 #' value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)`).
-#' `DCSREAS = format_reason(DSDECOD)` returns `DCSREAS = DSDECOD` when `DSDECOD` is not `'COMPLETED'`
-#'  nor `NA`, `NA` otherwise.
+#' `DCSREAS = format_reason(DSDECOD)` returns `DCSREAS = DSDECOD`
+#' when `DSDECOD` is not `'COMPLETED'` nor `NA`, `NA` otherwise.
 #'
 #' - If both the main reason and the details needs to be derived (`new_var_spe` is specified)
 #' the function must have two character vectors argument, e.g.
@@ -99,7 +100,8 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' `new_var_spe` will be derived as `new_var_spe = format_reason(reason_var, reason_var_spe)`.
 #' Typically, the content of the function would return `reason_var_spe` or `NA` depending on the
 #' `reason_var` value (e.g. `if_else ( reason == "OTHER", reason_spe, NA_character_)`).
-#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when `DSDECOD` is equal to `'OTHER'`.
+#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when
+#' `DSDECOD` is equal to `'OTHER'`.
 #'
 #' Default: `format_reason_default`, see [`format_reason_default()`] for details.
 #'
@@ -153,7 +155,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
-#'   if (is.null(y)){
+#'   if (is.null(y)) {
 #'     if_else(!x %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
 #'   } else {
 #'   if_else (x == "OTHER", y, NA_character_)

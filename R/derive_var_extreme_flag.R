@@ -202,7 +202,7 @@ derive_var_extreme_flag <- function(dataset,
     values = c("none", "warning", "error"),
     case_sensitive = FALSE
   )
-  if (!missing(filter)){
+  if (!missing(filter)) {
     warn(paste("`filter` is deprecated as of admiral 0.7.0.",
                "Please use `restrict_derivation()` instead (see examples).",
                sep = "\n"))
