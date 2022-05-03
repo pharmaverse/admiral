@@ -9,7 +9,11 @@
 dose_freq_lookup
 }
 \description{
-
+These pre-defined dose frequencies are sourced from
+\href{https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM\%20Terminology.pdf}{CDISC}. The
+number of rows to generate using \code{create_single_dose_dataset()} arguments
+\code{start_date} and \code{end_date} is derived from \code{DOSE_COUNT}, \code{DOSE_WINDOW}, and
+\code{CONVERSION_FACTOR} with appropriate functions from \code{lubridate}.
 }
 \details{
 \code{NCI_CODE} and \code{CDISC_VALUE} are included from the CDISC source for
