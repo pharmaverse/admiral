@@ -40,6 +40,11 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
@@ -63,11 +68,6 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-      - name: Setup R 📊
-        uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: 3.6
-      
       - name: Install roxygen2 🅾
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
