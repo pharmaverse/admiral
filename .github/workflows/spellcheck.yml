@@ -1,0 +1,58 @@
+---
+name: Spelling 🆎
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - devel
+  pull_request:
+    branches:
+      - main
+      - pre-release
+      - devel
+
+concurrency:
+  group: spelling-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roxygen:
+    name: Spellcheck 🔠
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    if: >
+      !contains(github.event.commits[0].message, '[skip spellcheck]')
+        && github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Fetch PR 🐕
+        uses: r-lib/actions/pr-fetch@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+      
+      - name: Install spelling 🎓
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+          renv::install("spelling")
+        shell: Rscript {0}
+
+      - name: Run Spellcheck 👟
+        uses: insightsengineering/r-spellcheck-action@v2
+        with:
+          exclude: data/*
