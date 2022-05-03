@@ -8,7 +8,7 @@
 #'             call_name current_env .data enexpr enquo eval_bare eval_tidy expr
 #'             expr_interp expr_label exprs f_lhs f_rhs inform
 #'             is_bare_formula is_call is_character is_formula is_integerish
-#'             is_quosure is_quosures is_symbol new_formula parse_exprs quo
+#'             is_quosure is_quosures is_symbol new_formula parse_expr parse_exprs quo
 #'             quo_get_expr quo_is_call quo_is_missing quo_is_null quo_is_symbol
 #'             quos quo_squash quo_text set_names sym syms type_of warn
 #'             quo_set_env quo_get_env

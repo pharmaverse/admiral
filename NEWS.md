@@ -34,6 +34,10 @@ from a BDS dataset, e.g. ADLB. (#943)
 - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
 (#941)
 
+- `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
+
 ## Updates of Existing Functions
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
