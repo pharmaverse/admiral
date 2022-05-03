@@ -32,7 +32,7 @@ The default is \code{ADT}}
 The input dataset with \code{ADY} column added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\verb{r lifecycle::badge("questioning")}
 
 Adds the analysis study day (\code{ADY}) to the dataset, i.e., study day of analysis date.
 }

@@ -56,7 +56,7 @@ An object of class \code{lstalvdt_source}.
 An object of class "lstalvdt_source".
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{date_source()} instead.
 }
