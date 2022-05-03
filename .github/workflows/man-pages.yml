@@ -115,7 +115,6 @@ jobs:
       - name: Roxygen check 🅾
         if: "!startsWith(github.event.comment.body, '/roxygenize')"
         run: |
-          cd ${{ github.event.repository.name }}
           git status -s
           if [[ -n `git status -s | grep man` ]]
           then {
