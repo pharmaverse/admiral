@@ -63,6 +63,7 @@ globalVariables(c(
   "temp_event",
   "temp_obs_nr",
   "temp_source_nr",
+  "temp_slicenr",
   "temp_date",
   "tmp_obs_nr_filter_relative",
   "tmp_obs_nr_match_filter_relative",
