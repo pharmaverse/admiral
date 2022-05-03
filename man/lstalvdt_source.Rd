@@ -10,8 +10,7 @@ lstalvdt_source(
   date,
   date_imputation = NULL,
   preserve = FALSE,
-  traceability_vars = NULL,
-  dataset = deprecated()
+  traceability_vars = NULL
 )
 }
 \arguments{

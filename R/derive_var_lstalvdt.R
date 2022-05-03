@@ -256,12 +256,7 @@ lstalvdt_source <- function(dataset_name,
                             date,
                             date_imputation = NULL,
                             preserve = FALSE,
-                            traceability_vars = NULL,
-                            dataset = deprecated()) {
-  if (!missing(dataset)) {
-    deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
-    dataset_name <- deparse(substitute(dataset))
-  }
+                            traceability_vars = NULL) {
 
   if (!is.null(date_imputation)) {
     assert_that(is_valid_date_entry(date_imputation))
