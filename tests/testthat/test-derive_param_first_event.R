@@ -60,4 +60,3 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
                    comp = actual,
                    keys = c("USUBJID", "PARAMCD", "ADT"))
 })
-
