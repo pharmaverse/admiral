@@ -25,8 +25,8 @@ expected.}
 
 \item{new_var}{Name of variable to create}
 
-\item{new_var_unit}{Name of the unit variable
-If the parameter is not specified, no variable for the unit is created.}
+\item{new_var_unit}{Name of the unit variable If the parameter is not
+specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
@@ -68,8 +68,7 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 If the duration is non-negative, one input unit is added. I.e., the
 duration can not be zero.
 
-Default: \code{TRUE}
-Permitted Values: \code{TRUE}, \code{FALSE}}
+Default: \code{TRUE} Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{trunc_out}{Return integer part
 

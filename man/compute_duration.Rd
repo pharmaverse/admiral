@@ -17,11 +17,17 @@ compute_duration(
 \arguments{
 \item{start_date}{The start date
 
-A date or date-time object is expected.}
+A date or date-time object is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{end_date}{The end date
 
-A date or date-time object is expected.}
+A date or date-time object is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{in_unit}{Input unit
 
@@ -37,7 +43,8 @@ The duration is derived in the specified unit
 
 Default: 'days'
 
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
+Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+'seconds'}
 
 \item{floor_in}{Round down input dates?
 

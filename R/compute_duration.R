@@ -7,9 +7,15 @@
 #'
 #'   A date or date-time object is expected.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param in_unit Input unit
 #'
@@ -25,7 +31,8 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+#'   'seconds'
 #'
 #' @param floor_in Round down input dates?
 #'

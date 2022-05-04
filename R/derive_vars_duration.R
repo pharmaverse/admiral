@@ -10,18 +10,24 @@
 #'
 #' @param new_var Name of variable to create
 #'
-#' @param new_var_unit Name of the unit variable
-#'   If the parameter is not specified, no variable for the unit is created.
+#' @param new_var_unit Name of the unit variable If the parameter is not
+#'   specified, no variable for the unit is created.
 #'
 #' @param start_date The start date
 #'
 #'   A date or date-time variable is expected. This variable must be present in
 #'   specified input dataset.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
 #' @param end_date The end date
 #'
 #'   A date or date-time variable is expected. This variable must be present in
 #'   specified input dataset.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param in_unit Input unit
 #'
@@ -53,8 +59,7 @@
 #'   If the duration is non-negative, one input unit is added. I.e., the
 #'   duration can not be zero.
 #'
-#'   Default: `TRUE`
-#'   Permitted Values: `TRUE`, `FALSE`
+#'   Default: `TRUE` Permitted Values: `TRUE`, `FALSE`
 #'
 #' @param trunc_out Return integer part
 #'
