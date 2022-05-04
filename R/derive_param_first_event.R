@@ -76,6 +76,9 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(lubridate)
+#'
 #' # Derive a new parameter for the first disease progression (PD)
 #' adsl <- tibble::tribble(
 #'   ~USUBJID,
