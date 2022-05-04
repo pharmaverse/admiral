@@ -34,6 +34,13 @@ from a BDS dataset, e.g. ADLB. (#943)
 - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
 (#941)
 
+- New high order functions (#701):
+
+  - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
+  - `slice_derivation()` - The input dataset is split into slices (subsets) and
+  for each slice a derivation is called separately. Some or all arguments of the
+  derivation may vary depending on the slice.
+
 ## Updates of Existing Functions
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
@@ -49,6 +56,10 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 - `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
 - `derive_vars_suppqual` has been removed from {admiral} as adding supplementary qualifiers is now done in another package called {metatools} in a function called `combine_supp()` (#950)
+
+- The `filter` parameter in `derive_var_extreme_flag()` and
+`derive_var_worst_flag()` has been deprecated in favor of
+`restrict_derivation()` (#701).
 
 ## Documentation
 

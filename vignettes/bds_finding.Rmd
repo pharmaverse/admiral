@@ -627,6 +627,9 @@ dataset_vignette(
 )
 ```
 
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
+
 ## Derive Analysis Flags (e.g. `ANL01FL`) {#analysisrec}
 
 In most finding ADaMs, an analysis flag is derived to identify the appropriate 

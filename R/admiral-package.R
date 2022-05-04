@@ -8,7 +8,7 @@
 #'             call_name current_env .data enexpr enquo eval_bare eval_tidy expr
 #'             expr_interp expr_label exprs f_lhs f_rhs inform
 #'             is_bare_formula is_call is_character is_formula is_integerish
-#'             is_quosure is_quosures is_symbol new_formula parse_exprs quo
+#'             is_logical is_quosure is_quosures is_symbol new_formula parse_exprs quo
 #'             quo_get_expr quo_is_call quo_is_missing quo_is_null quo_is_symbol
 #'             quos quo_squash quo_text set_names sym syms type_of warn
 #'             quo_set_env quo_get_env
@@ -20,7 +20,7 @@
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
-#' @importFrom tidyr drop_na pivot_wider pivot_longer
+#' @importFrom tidyr drop_na nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
 #' @importFrom hms as_hms
