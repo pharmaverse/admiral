@@ -1027,27 +1027,6 @@ assert_param_does_not_exist <- function(dataset, param) {
   invisible(dataset)
 }
 
-#' Helper Function to Check IDVAR per QNAM
-#'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
-#'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
-#'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-      msg <- paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n")
-    )
-    inform(msg)
-  }
-}
 
 #' Helper Function to Check DOAMIN and RDOMAIN
 #'

@@ -2,7 +2,7 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, suppae, ex_single
+# Input: ae, adsl, ex_single
 library(admiral)
 library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
@@ -15,12 +15,10 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 data("ae")
-data("suppae")
 data("adsl")
 data("ex_single")
 
 ae <- convert_blanks_to_na(ae)
-suppae <- convert_blanks_to_na(suppae)
 ex <- convert_blanks_to_na(ex_single)
 
 
@@ -30,8 +28,6 @@ ex <- convert_blanks_to_na(ex_single)
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
 
 adae <- ae %>%
-  # join supplementary qualifier variables
-  derive_vars_suppqual(suppae) %>%
 
   # join adsl to ae
   derive_vars_merged(

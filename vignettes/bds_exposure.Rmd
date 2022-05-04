@@ -47,7 +47,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
-data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
+data frames needed may be `EX` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
@@ -65,21 +65,6 @@ data("ex")
 ```{r echo=FALSE}
 ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
 ```
-
-The `SUPPEX` domain can be joined to the `EX` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPEX`) and
-join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-```{r eval=FALSE}
-ex <- derive_vars_suppqual(ex, suppex)
-```
-
-Please note, the CDISC pilot did not include a `SUPPEX` dataset and therefore this
-join is not demonstrated.
 
 At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only the `ADSL` variables used for derivations are selected at this step. The rest of the relevant `ADSL` would be added later.
 

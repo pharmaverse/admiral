@@ -401,3 +401,13 @@ test_that("a warning is issued when using `derive_worst_flag()`", {
     fixed = TRUE
   )
 })
+
+test_that("an error is thrown if `derive_vars_suppqual()` is called", {
+
+  expect_error(
+    derive_vars_suppqual(),
+    "deprecated",
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
+  )
+})
