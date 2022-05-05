@@ -41,7 +41,7 @@ from a BDS dataset, e.g. ADLB. (#943)
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
   
-- New dataset template `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
+- New dataset template `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset (#850).
 
 ## Updates of Existing Functions
 
