@@ -87,7 +87,7 @@ for study specific purposes if needed (see Readability below).
 
 _**Simplicity**_
 
-All {admiral} functions have a clear purpose.
+All `{admiral}` functions have a clear purpose.
 * We try not to ever design single functions that could achieve numerous very different derivations. For
 example if you as a user pick up a function with >10 different arguments then chances are it is going to be
 difficult to understand if this function could be applied for your specific need. The intention is that
@@ -105,7 +105,7 @@ so this needs to be considered carefully to keep the nesting of 3-4 functions an
 
 _**Findability**_
 
-All {admiral} functions are easily findable.
+All `{admiral}` functions are easily findable.
 * In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.
 * We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
 help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
@@ -115,7 +115,7 @@ extension packages will be moved to the core `{admiral}` package.
 
 _**Readability**_
 
-{All {admiral} functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
+All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities),
