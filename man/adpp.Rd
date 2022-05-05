@@ -4,9 +4,7 @@
 \name{adpp}
 \alias{adpp}
 \title{Pharmacokinetics Parameters Analysis Dataset}
-\format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 546 rows and 37 columns.
-}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 546 rows and 37 columns.}
 \source{
 Derived from the \link{adsl} and \link{pp} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adpp.R})
 }
