@@ -22,15 +22,15 @@
 #'
 #' @examples
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
 #'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
 #' }
 #'
-#' example_fun(dm)
+#' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(dm, -STUDYID)))
+#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -298,20 +298,20 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
 #'   var <- assert_symbol(rlang::enquo(var))
 #'   dplyr::select(dat, !!var)
 #' }
 #'
-#' example_fun(dm, USUBJID)
+#' example_fun(admiral_dm, USUBJID)
 #'
-#' try(example_fun(dm))
+#' try(example_fun(admiral_dm))
 #'
-#' try(example_fun(dm, "USUBJID"))
+#' try(example_fun(admiral_dm, "USUBJID"))
 #'
-#' try(example_fun(dm, toupper(PARAMCD)))
+#' try(example_fun(admiral_dm, toupper(PARAMCD)))
 assert_symbol <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -377,7 +377,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
@@ -385,9 +385,9 @@ assert_expr <- function(arg, optional = FALSE) {
 #'   dplyr::filter(dat, !!x)
 #' }
 #'
-#' example_fun(dm, AGE == 64)
+#' example_fun(admiral_dm, AGE == 64)
 #'
-#' try(example_fun(dm, USUBJID))
+#' try(example_fun(admiral_dm, USUBJID))
 assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
@@ -805,11 +805,11 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
-#' assert_has_variables(dm, "STUDYID")
+#' assert_has_variables(admiral_dm, "STUDYID")
 #' \dontrun{
-#' assert_has_variables(dm, "AVAL")
+#' assert_has_variables(admiral_dm, "AVAL")
 #' }
 assert_has_variables <- function(dataset, required_vars) {
   is_missing <- !required_vars %in% colnames(dataset)

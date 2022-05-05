@@ -65,10 +65,10 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @examples
 #' library(admiraltest)
-#' data(vs)
+#' data(admiral_vs)
 #'
-#' filter_if(vs, rlang::quo(NULL))
-#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+#' filter_if(admiral_vs, rlang::quo(NULL))
+#' filter_if(admiral_vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)

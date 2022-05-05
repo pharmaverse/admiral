@@ -18,9 +18,9 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 data("adsl")
-data("eg")
+data("admiral_eg")
 
-eg <- convert_blanks_to_na(eg)
+eg <- convert_blanks_to_na(admiral_eg)
 
 # ---- Lookup tables ----
 

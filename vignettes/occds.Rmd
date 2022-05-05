@@ -54,8 +54,8 @@ library(dplyr)
 library(admiraltest)
 library(lubridate)
 
-data("ae")
-data("suppae")
+data("admiral_ae")
+data("admiral_suppae")
 data("adsl")
 ```
 
@@ -70,7 +70,7 @@ Example call:
 To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
 
 ```{r eval=TRUE}
-ae <- derive_vars_suppqual(ae, suppae)
+ae <- derive_vars_suppqual(admiral_ae, admiral_suppae)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

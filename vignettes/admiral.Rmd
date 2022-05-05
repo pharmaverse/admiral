@@ -29,17 +29,17 @@ library(admiral)
 library(admiraltest)
 
 # read in SDTM datasets
-data("dm")
-data("ds")
-data("ex")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
 ```
 
 ```{r, eval=TRUE}
 # derive treatment variables
-adsl <- dm %>%
+adsl <- admiral_dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex) %>%
+  derive_var_trtsdtm(dataset_ex = admiral_ex) %>%
+  derive_var_trtedtm(dataset_ex = admiral_ex) %>%
   derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd()
 ```
@@ -93,12 +93,12 @@ example below:
 
 ```{r, eval=TRUE}
 # derive final lab visit date
-ds_final_lab_visit <- ds %>% 
+ds_final_lab_visit <- admiral_ds %>% 
   filter(DSDECOD == "FINAL LAB VISIT") %>% 
   transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
 
 # derive treatment variables  
-adsl <- dm %>%
+adsl <- admiral_dm %>%
    # merge on final lab visit date
   derive_vars_merged(
     dataset_add = ds_final_lab_visit,

@@ -1,9 +1,9 @@
 library(admiraltest)
-data(ae)
-data(vs)
+data(admiral_ae)
+data(admiral_vs)
 
 test_that("call_derivation works", {
-  input <- vs[sample(seq_len(nrow(vs)), 1000), ]
+  input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
 
   expected_output <- input %>%
     derive_summary_records(
@@ -58,7 +58,7 @@ test_that("call_derivation works", {
 })
 
 test_that("call_derivation works", {
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expected_output <- input %>%
@@ -94,7 +94,7 @@ test_that("call_derivation works", {
 
 test_that("call_derivation - Error is thrown if ... has no arguments", {
 
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expect_error(
@@ -110,7 +110,7 @@ test_that("call_derivation - Error is thrown if ... has no arguments", {
 
 test_that("call_derivation - Error is thrown if ... arguments are not properly named", {
 
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expect_error(
@@ -128,7 +128,7 @@ test_that("call_derivation - Error is thrown if ... arguments are not properly n
 
 test_that("call_derivation - Error is thrown params is empty", {
 
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expect_error(
@@ -147,7 +147,7 @@ test_that("call_derivation - Error is thrown params is empty", {
 
 test_that("call_derivation - Error is thrown if passed params are not proprely named", {
 
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expect_error(
@@ -166,7 +166,7 @@ test_that("call_derivation - Error is thrown if passed params are not proprely n
 
 test_that("call_derivation - Error is thrown if `...` arguments are not properly named", {
 
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
     left_join(adsl, by = "USUBJID")
 
   expect_error(

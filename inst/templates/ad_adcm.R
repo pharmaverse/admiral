@@ -14,10 +14,10 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("cm")
+data("admiral_cm")
 data("adsl")
 
-cm <- convert_blanks_to_na(cm)
+cm <- convert_blanks_to_na(admiral_cm)
 
 # ---- Derivations ----
 

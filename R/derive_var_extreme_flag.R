@@ -249,10 +249,10 @@ derive_worst_flag <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("vs")
+#' data("admiral_vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
-#' vs %>%
+#' admiral_vs %>%
 #'   restrict_derivation(
 #'     derivation = derive_var_extreme_flag,
 #'     args = params(
@@ -343,10 +343,10 @@ derive_worst_flag <- function(dataset,
 #' )
 #'
 #' # OCCURDS Examples
-#' data("ae")
+#' data("admiral_ae")
 #'
 #' # Most severe AE first occurrence per patient
-#' ae %>%
+#' admiral_ae %>%
 #'   mutate(TEMP_AESEVN =
 #'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
 #'   derive_var_extreme_flag(
@@ -359,7 +359,7 @@ derive_worst_flag <- function(dataset,
 #'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
 #' # Most severe AE first occurrence per patient per body system
-#' ae %>%
+#' admiral_ae %>%
 #'   mutate(TEMP_AESEVN =
 #'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
 #'   derive_var_extreme_flag(

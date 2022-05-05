@@ -15,9 +15,9 @@ library(stringr)
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
 data("adsl")
-data("ex")
+data("admiral_ex")
 
-ex <- convert_blanks_to_na(ex)
+ex <- convert_blanks_to_na(admiral_ex)
 
 # The CDISC pilot data does not contain EXADJ,nor a SUPPEX dataset
 # add a fake EXADJ to demonstrate the derivation for Dose adjustment flag

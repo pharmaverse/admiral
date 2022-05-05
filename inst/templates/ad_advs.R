@@ -15,10 +15,10 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("vs")
+data("admiral_vs")
 data("adsl")
 
-vs <- convert_blanks_to_na(vs)
+vs <- convert_blanks_to_na(admiral_vs)
 
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below

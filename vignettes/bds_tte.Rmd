@@ -412,7 +412,7 @@ observation_end <- censor_source(
 
 # define time to first AE #
 tt_ae <- event_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AESTDTC,
   set_values_to = vars(
     EVNTDESC = "ADVERSE EVENT",
@@ -423,7 +423,7 @@ tt_ae <- event_source(
 
 # define time to first serious AE #
 tt_ser_ae <- event_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   filter = AESER == "Y",
   date = AESTDTC,
   set_values_to = vars(
@@ -435,7 +435,7 @@ tt_ser_ae <- event_source(
 
 # define time to first related AE #
 tt_rel_ae <- event_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
   date = AESTDTC,
   set_values_to = vars(
@@ -463,7 +463,7 @@ adaette <- call_derivation(
     )
   ),
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, admiral_ae = admiral_ae),
   censor_conditions = list(observation_end)
 )
 ```

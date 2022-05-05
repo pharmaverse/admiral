@@ -60,17 +60,17 @@ library(admiraltest)
 library(lubridate)
 library(stringr)
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+data("admiral_ae")
+data("admiral_lb")
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
-adsl <- dm %>% 
+adsl <- admiral_dm %>% 
   select(-DOMAIN)
 ```
 
@@ -86,7 +86,7 @@ dataset_vignette(
 The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
 
 ```{r eval=TRUE}
-adsl <- dm %>%
+adsl <- admiral_dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM)
 ```
 
@@ -99,8 +99,8 @@ Example calls:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex)
+  derive_var_trtsdtm(dataset_ex = admiral_ex) %>%
+  derive_var_trtedtm(dataset_ex = admiral_ex)
 ```
 
 This call returns the original data frame with the column `TRTSDTM` and `TRTEDTM` added.
@@ -141,7 +141,7 @@ To derive the End of Study date (`EOSDT`), a call could be:
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_disposition_dt(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSDT,
     dtc = DSSTDTC,
     filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
@@ -154,7 +154,7 @@ With `DS`:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  ds, 
+  admiral_ds, 
   display_vars = vars(USUBJID, DSCAT, DSDECOD,DSTERM, DSSTDTC),
   filter = DSDECOD != "SCREEN FAILURE"
 )
@@ -183,7 +183,7 @@ To derive the End of Study status (`EOSSTT`), a call could be:
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -251,7 +251,7 @@ To derive the End of Study reason(s) (`DCSREAS` and `DCSREASP`), the call would 
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_vars_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,
@@ -295,7 +295,7 @@ The customized mapping function `format_dcsreas()` can now be passed to the main
 ```{r eval=FALSE}
 adsl <- adsl %>%
   derive_vars_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,
@@ -373,7 +373,7 @@ An example call to define the sources would be:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -383,7 +383,7 @@ src_ae <- dthcaus_source(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  ae,
+  admiral_ae,
   display_vars = vars(USUBJID, AESTDTC, AEENDTC, AEDECOD, AEOUT),
   filter =  AEOUT == "FATAL"
 )
@@ -391,7 +391,7 @@ dataset_vignette(
 
 ```{r eval=TRUE}
 src_ds <- dthcaus_source(
-  dataset_name = "ds",
+  dataset_name = "admiral_ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -401,7 +401,7 @@ src_ds <- dthcaus_source(
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  ds,
+  admiral_ds,
   display_vars = vars(USUBJID, DSDECOD, DSTERM, DSSTDTC),
   filter = DSDECOD == "DEATH"
 )
@@ -411,7 +411,7 @@ Once the sources are defined, the function `derive_var_dthcaus()` can be used to
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(admiral_ae = admiral_ae, admiral_ds = admiral_ds))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -429,7 +429,7 @@ arguments:
 
 ```{r eval=TRUE}
 src_ae <- dthcaus_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   filter = AEOUT == "FATAL",
   date = AESTDTC,
   mode = "first",
@@ -438,7 +438,7 @@ src_ae <- dthcaus_source(
 )
 
 src_ds <- dthcaus_source(
-  dataset_name = "ds",
+  dataset_name = "admiral_ds",
   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
   date = DSSTDTC,
   mode = "first",
@@ -447,7 +447,7 @@ src_ds <- dthcaus_source(
 )
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
-  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
+  derive_var_dthcaus(src_ae, src_ds, source_datasets = list(admiral_ae = admiral_ae, admiral_ds = admiral_ds))
 
 ```
 
@@ -514,17 +514,17 @@ An example could be :
 
 ```{r eval=TRUE}
 ae_src1 <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AESTDTC,
   date_imputation = "FIRST"
 )
 ae_src2 <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AEENDTC,
   date_imputation = "LAST"
 )
 lb_src <- date_source(
-  dataset_name = "lb",
+  dataset_name = "admiral_lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10
 )
@@ -542,7 +542,7 @@ adsl <- adsl %>%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    source_datasets = list(admiral_ae = admiral_ae, adsl = adsl, admiral_lb = admiral_lb),
     mode = "last"
   )
 ```
@@ -560,19 +560,19 @@ Similarly to `dthcaus_source()`, the traceability variables can be added by spec
 
 ```{r eval=TRUE}
 ae_src1 <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AESTDTC,
   date_imputation = "FIRST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")
 )
 ae_src2 <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AEENDTC,
   date_imputation = "LAST",
   traceability_vars = vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AEENDTC")
 )
 lb_src <- date_source(
-  dataset_name = "lb",
+  dataset_name = "admiral_lb",
   date = LBDTC,
   filter = str_length(LBDTC) >= 10,
   traceability_vars = vars(LALVDOM = "LB", LALVSEQ = LBSEQ, LALVVAR = "LBDTC")
@@ -588,7 +588,7 @@ adsl <- adsl %>%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_src1, ae_src2, lb_src, adsl_src,
-    source_datasets = list(ae = ae, adsl = adsl, lb = lb),
+    source_datasets = list(admiral_ae = admiral_ae, adsl = adsl, admiral_lb = admiral_lb),
     mode = "last"
   )
 ```
@@ -673,7 +673,7 @@ An example of an implementation could be:
 adsl <- adsl %>%
 
   derive_var_merged_exist_flag(
-    dataset_add = ex,
+    dataset_add = admiral_ex,
     by_vars = vars(STUDYID, USUBJID),
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
