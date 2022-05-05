@@ -76,19 +76,19 @@ A list of quosures where the expressions are symbols as returned by
 the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\verb{r lifecycle::badge("questioning")}
 
 Derive a disposition status date from the the relevant records in the disposition domain.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("dm")
-data("ds")
+data("admiral_dm")
+data("admiral_ds")
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_disposition_dt(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"

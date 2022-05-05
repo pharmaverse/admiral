@@ -69,41 +69,41 @@ variable is merged to the input dataset.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("dm")
-data("ae")
-data("lb")
+data("admiral_dm")
+data("admiral_ae")
+data("admiral_lb")
 data("adsl")
 
 # derive last known alive date (LSTALVDT)
 ae_start <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AESTDTC,
   date_imputation = "first",
 )
 ae_end <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AEENDTC,
   date_imputation = "first",
 )
 lb_date <- date_source(
-  dataset_name = "lb",
+  dataset_name = "admiral_lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
 )
 adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    source_datasets = list(adsl = adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDT)
 
 # derive last alive date and traceability variables
 ae_start <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AESTDTC,
   date_imputation = "first",
   traceability_vars = vars(
@@ -114,7 +114,7 @@ ae_start <- date_source(
 )
 
 ae_end <- date_source(
-  dataset_name = "ae",
+  dataset_name = "admiral_ae",
   date = AEENDTC,
   date_imputation = "first",
   traceability_vars = vars(
@@ -124,7 +124,7 @@ ae_end <- date_source(
   )
 )
 lb_date <- date_source(
-  dataset_name = "lb",
+  dataset_name = "admiral_lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
   traceability_vars = vars(
@@ -144,11 +144,11 @@ adsl_date <- date_source(
   )
 )
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    source_datasets = list(adsl = adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)

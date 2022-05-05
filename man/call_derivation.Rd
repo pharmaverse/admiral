@@ -29,11 +29,11 @@ iterations and others varying.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(ae)
+data(admiral_ae)
 data(adsl)
 
 adae <-
-  select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) \%>\%
+  select(admiral_ae[sample(1:nrow(admiral_ae), 1000),], USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = vars(TRTSDT, TRTEDT),

@@ -40,7 +40,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\verb{r lifecycle::badge("questioning")}
 
 Derives datetime of first exposure to treatment (\code{TRTSDTM})
 }
@@ -52,11 +52,11 @@ specified for the \code{order} parameter) is included in the output dataset.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("ex")
-data("dm")
+data("admiral_ex")
+data("admiral_dm")
 
-dm \%>\%
-  derive_var_trtsdtm(dataset_ex = ex) \%>\%
+admiral_dm \%>\%
+  derive_var_trtsdtm(dataset_ex = admiral_ex) \%>\%
   select(USUBJID, TRTSDTM)
 }
 \author{

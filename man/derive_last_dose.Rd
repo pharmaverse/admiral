@@ -61,7 +61,7 @@ These can be either strings or symbols referring to existing variables.}
 Input dataset with additional column \code{new_var}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_last_dose_date()} instead.
 }
@@ -93,10 +93,10 @@ Use \code{check_dates_only} to control whether only dates or whole date-times ne
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(ae)
+data(admiral_ae)
 data(ex_single)
 
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_last_dose(
     head(ex_single, 100),
@@ -113,7 +113,7 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 
 # or with traceability variables
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_last_dose(
     head(ex_single, 100),

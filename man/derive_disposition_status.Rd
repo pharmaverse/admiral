@@ -68,7 +68,7 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 "ONGOING" otherwise).
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_disposition_status()} instead.
 
@@ -77,17 +77,17 @@ Derive a disposition status from the the relevant records in the disposition dom
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("dm")
-data("ds")
+data("admiral_dm")
+data("admiral_ds")
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
 #- DISCONTINUED when status_var is not COMPLETED nor NA
 #- ONGOING otherwise
 
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -109,9 +109,9 @@ format_eoxxstt1 <- function(x) {
   )
 }
 
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt1,
