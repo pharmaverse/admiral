@@ -11,7 +11,7 @@
 #' traceability.
 #'
 #' `DOSE_COUNT` represents the number of doses received in one single unit of
-#' `DOSE_WINDOW`. For example, for `CDISC_VALUE=="10 DAYS PER MONTH`,
+#' `DOSE_WINDOW`. For example, for `CDISC_VALUE=="10 DAYS PER MONTH"`,
 #' `DOSE_WINDOW=="MONTH"` and `DOSE_COUNT==10`. Similarly, for
 #' `CDISC_VALUE=="EVERY 2 WEEKS`, `DOSE_WINDOW=="WEEK"` and
 #' `DOSE_COUNT==0.5` (to yield one dose every two weeks).

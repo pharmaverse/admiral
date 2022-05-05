@@ -40,7 +40,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>}}{\strong{Questioning}}
 
 Derives datetime of first exposure to treatment (\code{TRTSDTM})
 }
