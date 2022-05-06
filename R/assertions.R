@@ -402,7 +402,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(arg)) {
+  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -960,7 +960,19 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
+  if (length(units) != 1L) {
+    abort(
+      paste0(
+        "Multiple units ",
+        enumerate(units, quote_fun = squote),
+        " found for ",
+        squote(param),
+        ".\n",
+        "Please review and update the units."
+      )
+    )
+  }
+  if (tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
@@ -974,6 +986,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+
   invisible(dataset)
 }
 

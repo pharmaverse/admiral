@@ -402,12 +402,6 @@ derive_param_tte <- function(dataset = NULL,
 
   # add new parameter to input dataset #
   all_data <- bind_rows(dataset, new_param)
-
-  if (create_datetime) {
-    mutate(all_data, !!date_var := as_iso_dtm(!!date_var))
-  } else {
-    all_data
-  }
 }
 
 #' Select the First or Last Date from Several Sources
@@ -719,6 +713,9 @@ extend_source_datasets <- function(source_datasets,
 #' @param date A variable providing the date of the event or censoring. A date,
 #'   a datetime, or a character variable containing ISO 8601 dates can be
 #'   specified. An unquoted symbol is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param censor Censoring value
 #'
