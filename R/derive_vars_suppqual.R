@@ -1,6 +1,6 @@
 #' Join Supplementary Qualifier Variables into the Parent SDTM Domain
 #'
-#'#' @description
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #'
 #' *Deprecated*, please use `metatools::combine_supp()` instead.
