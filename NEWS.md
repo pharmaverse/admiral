@@ -60,7 +60,7 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
 
-- The following functions and parameters, which were deprecated in previous {admiral} versions, were removed (#1056):
+- The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (#1056):
 
   - `derive_agegr_ema()`
   - `derive_agegr_fda()`
