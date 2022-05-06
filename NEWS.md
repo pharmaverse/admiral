@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Added more detail on the site homepage and Programming Strategy around our manifesto and how
+we design new functions (#954)
+
 - New functions for merging variables (#607):
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
