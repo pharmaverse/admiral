@@ -24,7 +24,7 @@ are suppressed.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(adsl)
+data(admiral_adsl)
 data(admiral_vs)
 
 # Remove label

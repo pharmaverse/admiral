@@ -60,7 +60,7 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
+data("admiral_adsl")
 data("admiral_vs")
 vs <- convert_blanks_to_na(admiral_vs)
 ```

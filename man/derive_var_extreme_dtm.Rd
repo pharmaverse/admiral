@@ -71,7 +71,7 @@ library(admiraltest)
 data("admiral_dm")
 data("admiral_ae")
 data("admiral_lb")
-data("adsl")
+data("admiral_adsl")
 
 # derive last known alive datetime (LSTALVDTM)
 ae_start <- date_source(

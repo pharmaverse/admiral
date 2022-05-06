@@ -19,7 +19,7 @@ A \code{data.frame} of duplicate records within \code{dataset}
 Extract Duplicate Records
 }
 \examples{
-data(adsl)
+data(admiral_adsl)
 
 # Duplicate the first record
 adsl <- rbind(adsl[1L, ], adsl)

@@ -112,7 +112,7 @@ derive_var_lstalvdt <- function(dataset,
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' data("admiral_lb")
-#' data("adsl")
+#' data("admiral_adsl")
 #'
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
@@ -333,7 +333,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' data("admiral_lb")
-#' data("adsl")
+#' data("admiral_adsl")
 #'
 #' # derive last known alive date (LSTALVDT)
 #' ae_start <- date_source(

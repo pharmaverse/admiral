@@ -27,7 +27,7 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
 #' data(admiral_ae)
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' adae <-
 #'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%
@@ -112,7 +112,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
 #' data(admiral_ae)
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' adae <-
 #'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%

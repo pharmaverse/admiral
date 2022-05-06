@@ -30,7 +30,7 @@ No return value, called for side effects
 Signal Duplicate Records
 }
 \examples{
-data(adsl)
+data(admiral_adsl)
 
 # Duplicate the first record
 adsl <- rbind(adsl[1L, ], adsl)

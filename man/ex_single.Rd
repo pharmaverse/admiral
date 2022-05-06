@@ -4,7 +4,9 @@
 \name{ex_single}
 \alias{ex_single}
 \title{Single Dose Exposure Dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 22439 rows and 17 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 22439 rows and 17 columns.
+}
 \source{
 Derived from the \code{ex} dataset using \code{{admiral}} and \code{{dplyr}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/derive_single_dose.R})
 }

@@ -22,7 +22,7 @@
 #' @keywords user_utility
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' # Duplicate the first record
 #' adsl <- rbind(adsl[1L, ], adsl)
@@ -47,7 +47,7 @@ get_duplicates_dataset <- function() {
 #' @author Thomas Neitmann
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' # Duplicate the first record
 #' adsl <- rbind(adsl[1L, ], adsl)
@@ -86,7 +86,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @author Thomas Neitmann
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' # Duplicate the first record
 #' adsl <- rbind(adsl[1L, ], adsl)

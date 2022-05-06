@@ -186,7 +186,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #' @keywords user_utility
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' try(
 #'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
@@ -218,7 +218,7 @@ get_one_to_many_dataset <- function() {
 #' @keywords user_utility
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' try(
 #'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))

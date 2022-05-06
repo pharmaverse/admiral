@@ -146,7 +146,7 @@
 #' select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
 #' # merge last weight to adsl
-#' data("adsl")
+#' data("admiral_adsl")
 #' derive_vars_merged(
 #'   adsl,
 #'   dataset_add = admiral_vs,

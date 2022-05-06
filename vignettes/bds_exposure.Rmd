@@ -59,7 +59,7 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
+data("admiral_adsl")
 data("admiral_ex")
 ```
 ```{r echo=FALSE}

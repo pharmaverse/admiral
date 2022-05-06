@@ -19,7 +19,7 @@
 #' @source
 #' Derived from the `dm` and `ds` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
 #'
-"adsl"
+"admiral_adex"
 
 #' Adverse Event Analysis Dataset
 #'
@@ -28,7 +28,7 @@
 #' @source
 #' Derived from the `adsl` and `ae` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R})
 #'
-"adae"
+"admiral_adex"
 
 #' Concomitant Medication Analysis Dataset
 #'
@@ -37,7 +37,7 @@
 #' @source
 #' Derived from the `adsl` and `cm` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R})
 #'
-"adcm"
+"admiral_adex"
 
 #' Exposure Analysis Dataset
 #'
@@ -46,7 +46,7 @@
 #' @source
 #' Derived from the `adsl` and `ex` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R})
 #'
-"adex"
+"admiral_adex"
 
 #' ECG Analysis Dataset
 #'
@@ -55,7 +55,7 @@
 #' @source
 #' Derived from the `adsl` and `eg` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
 #'
-"adeg"
+"admiral_adex"
 
 #' Vital Signs Analysis Dataset
 #'
@@ -64,4 +64,4 @@
 #' @source
 #' Derived from the `adsl` and `vs` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R})
 #'
-"advs"
+"admiral_adex"

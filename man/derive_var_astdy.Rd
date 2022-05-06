@@ -32,7 +32,7 @@ The default is \code{ASTDT}}
 The input dataset with \code{ASTDY} column added
 }
 \description{
-\verb{r lifecycle::badge("questioning")}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
 
 Adds the analysis start relative day (\code{ASTDY}) to the dataset, i.e., study
 day of analysis start date.

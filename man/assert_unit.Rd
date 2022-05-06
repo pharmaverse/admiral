@@ -25,7 +25,7 @@ Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected
 unit.
 }
 \examples{
-data(advs)
+data(admiral_advs)
 assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 \dontrun{
 assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)

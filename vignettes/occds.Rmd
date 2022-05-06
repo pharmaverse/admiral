@@ -56,7 +56,7 @@ library(lubridate)
 
 data("admiral_ae")
 data("admiral_suppae")
-data("adsl")
+data("admiral_adsl")
 ```
 
 The `SUPPAE` domain can be joined to the 'AE` domain using the function `derive_vars_suppqual()`.
@@ -89,7 +89,7 @@ adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P, DTHDT, EOSDT)
 
 adae <- derive_vars_merged(
   ae,
-  dataset_add = adsl,
+  dataset_add = admiral_adsl,
   new_vars = adsl_vars,
   by = vars(STUDYID, USUBJID)
 )
@@ -467,7 +467,7 @@ If needed, the other `ADSL` variables can now be added:
 ```{r eval=TRUE, echo=TRUE}
 adae <- adae %>%
   derive_vars_merged(
-    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    dataset_add = select(admiral_adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 

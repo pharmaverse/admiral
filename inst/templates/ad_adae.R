@@ -16,7 +16,7 @@ library(lubridate)
 
 data("admiral_ae")
 data("admiral_suppae")
-data("adsl")
+data("admiral_adsl")
 data("ex_single")
 
 ae <- convert_blanks_to_na(admiral_ae)

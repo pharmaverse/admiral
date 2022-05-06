@@ -24,7 +24,7 @@ has been thrown, the dataset of the first error can no longer be accessed (unles
 it has been saved in a variable).
 }
 \examples{
-data(adsl)
+data(admiral_adsl)
 
 # Duplicate the first record
 adsl <- rbind(adsl[1L, ], adsl)

@@ -15,7 +15,7 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 data("admiral_cm")
-data("adsl")
+data("admiral_adsl")
 
 cm <- convert_blanks_to_na(admiral_cm)
 

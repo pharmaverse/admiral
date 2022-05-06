@@ -943,7 +943,7 @@ assert_function_param <- function(arg, params) {
 #' @keywords assertion
 #'
 #' @examples
-#' data(advs)
+#' data(admiral_advs)
 #' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 #' \dontrun{
 #' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
@@ -1008,7 +1008,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' @keywords assertion
 #'
 #' @examples
-#' data(advs)
+#' data(admiral_advs)
 #' assert_param_does_not_exist(advs, param = "HR")
 #' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
@@ -1339,7 +1339,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @export
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #' try(
 #'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 #' )

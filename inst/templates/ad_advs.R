@@ -16,7 +16,7 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 data("admiral_vs")
-data("adsl")
+data("admiral_adsl")
 
 vs <- convert_blanks_to_na(admiral_vs)
 

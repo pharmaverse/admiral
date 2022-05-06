@@ -17,7 +17,7 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("adsl")
+data("admiral_adsl")
 data("admiral_eg")
 
 eg <- convert_blanks_to_na(admiral_eg)
