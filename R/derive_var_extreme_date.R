@@ -128,7 +128,7 @@ derive_var_lstalvdt <- function(dataset,
 #'   time_imputation = "first"
 #' )
 #' lb_date <- date_source(
-#'   dataset_name = "admirallb",
+#'   dataset_name = "admiral_lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   time_imputation = "first"

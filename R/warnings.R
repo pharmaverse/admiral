@@ -211,7 +211,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #' data(admiral_vs)
 #'
 #' # Remove label
-#' attr(vs$USUBJID, "label") <- NULL
+#' attr(admiral_vs$USUBJID, "label") <- NULL
 #'
 #' left_join(adsl, admiral_vs, by = "USUBJID")
 #'

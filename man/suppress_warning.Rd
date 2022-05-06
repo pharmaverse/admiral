@@ -28,7 +28,7 @@ data(adsl)
 data(admiral_vs)
 
 # Remove label
-attr(vs$USUBJID, "label") <- NULL
+attr(admiral_vs$USUBJID, "label") <- NULL
 
 left_join(adsl, admiral_vs, by = "USUBJID")
 
