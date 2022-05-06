@@ -30,8 +30,8 @@ adrs <- tibble::tribble(
 
 # derive_param_merged_exist_flag ----
 ## derive_param_merge_exist_flag Test 1: derive parameter indicating PD ----
-test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD", {
-  actual <- derive_param_merged_exist_flag(
+test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
+  actual <- derive_param_exist_flag(
     dataset_adsl = adsl,
     dataset_add = adrs,
     filter_add = PARAMCD == "OVR",
@@ -58,10 +58,10 @@ test_that("derive_param_merged_exist_flag Test 1: derive parameter indicating PD
                    keys = c("USUBJID", "PARAMCD"))
 })
 
-## derive_param_merge_exist_flag Test 2: error is issued if aval_fun returns wrong type ----
-test_that("derive_param_merged_exist_flag Test 2: error is issued if aval_fun returns wrong type", {
+## derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type ----
+test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type", {
   expect_error(
-    derive_param_merged_exist_flag(
+    derive_param_exist_flag(
       dataset_adsl = adsl,
       dataset_add = adrs,
       filter_add = PARAMCD == "OVR",
