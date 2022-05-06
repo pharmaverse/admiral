@@ -364,9 +364,6 @@ To import the `if_else()` and `mutate()` function from `dplyr` the following lin
 
 Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
 
-The only exception is `derive_vars_suppqual()` which takes it from its argument `dataset_suppqual`, 
-where the labels are stored.
-
 
 # Unit Testing
 
