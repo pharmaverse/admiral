@@ -121,7 +121,8 @@
 #' @author Stefan Bundfuss
 #'
 #' @return The input dataset with a new parameter indicating if an event
-#'   occurred
+#'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`
+#'   and `set_value_to` are populated for the new parameter)
 #'
 #' @keywords derivation bds
 #'
@@ -131,7 +132,7 @@
 #' library(dplyr)
 #' library(lubridate)
 #'
-#' # Derive a new parameter for the first disease progression (PD)
+#' # Derive a new parameter for measurable disease at baseline
 #' adsl <- tibble::tribble(
 #'   ~USUBJID,
 #'   "1",

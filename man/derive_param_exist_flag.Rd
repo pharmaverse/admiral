@@ -109,7 +109,8 @@ numeric values, or \code{NA}.}
 }
 \value{
 The input dataset with a new parameter indicating if an event
-occurred
+occurred (\code{AVALC}, \code{AVAL}, and the variables specified by \code{subject_keys}
+and \code{set_value_to} are populated for the new parameter)
 }
 \description{
 Add a new parameter indicating that a certain event exists in a dataset.
@@ -142,7 +143,7 @@ the new observations.
 library(dplyr)
 library(lubridate)
 
-# Derive a new parameter for the first disease progression (PD)
+# Derive a new parameter for measurable disease at baseline
 adsl <- tibble::tribble(
   ~USUBJID,
   "1",
