@@ -944,9 +944,9 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' data(admiral_advs)
-#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
+#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 #' }
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
@@ -1009,8 +1009,8 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @examples
 #' data(admiral_advs)
-#' assert_param_does_not_exist(advs, param = "HR")
-#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
+#' assert_param_does_not_exist(admiral_advs, param = "HR")
+#' try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {

@@ -118,13 +118,13 @@ test_that("negate_vars returns NULL if input is NULL", {
 })
 
 test_that("`get_one_to_many_dataset()` returns a data frame after a previous error", {
-  try(assert_one_to_one(adsl, vars(STUDYID), vars(SITEID)), silent = TRUE)
+  try(assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID)), silent = TRUE)
 
   expect_true(is.data.frame(get_one_to_many_dataset()))
 })
 
 test_that("`get_many_to_one_dataset()` returns a data frame after a previous error", {
-  try(assert_one_to_one(adsl, vars(SITEID), vars(STUDYID)), silent = TRUE)
+  try(assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID)), silent = TRUE)
 
   expect_true(is.data.frame(get_many_to_one_dataset()))
 })

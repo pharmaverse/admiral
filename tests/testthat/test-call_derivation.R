@@ -59,7 +59,7 @@ test_that("call_derivation works", {
 
 test_that("call_derivation works", {
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expected_output <- input %>%
     derive_vars_dt(
@@ -95,7 +95,7 @@ test_that("call_derivation works", {
 test_that("call_derivation - Error is thrown if ... has no arguments", {
 
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -111,7 +111,7 @@ test_that("call_derivation - Error is thrown if ... has no arguments", {
 test_that("call_derivation - Error is thrown if ... arguments are not properly named", {
 
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -129,7 +129,7 @@ test_that("call_derivation - Error is thrown if ... arguments are not properly n
 test_that("call_derivation - Error is thrown params is empty", {
 
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -148,7 +148,7 @@ test_that("call_derivation - Error is thrown params is empty", {
 test_that("call_derivation - Error is thrown if passed params are not proprely named", {
 
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -167,7 +167,7 @@ test_that("call_derivation - Error is thrown if passed params are not proprely n
 test_that("call_derivation - Error is thrown if `...` arguments are not properly named", {
 
   input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(

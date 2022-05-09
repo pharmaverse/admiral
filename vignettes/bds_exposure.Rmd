@@ -61,9 +61,12 @@ library(tibble)
 
 data("admiral_adsl")
 data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 ```
 ```{r echo=FALSE}
-admiral_ex <- filter(admiral_ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
+ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
 ```
 
 The `SUPPEX` domain can be joined to the `EX` domain using the function `derive_vars_suppqual()`.
@@ -75,7 +78,7 @@ join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`,
 Example call:
 
 ```{r eval=FALSE}
-ex <- derive_vars_suppqual(admiral_ex, admiral_suppex)
+ex <- derive_vars_suppqual(ex, suppex)
 ```
 
 Please note, the CDISC pilot did not include a `SUPPEX` dataset and therefore this
@@ -89,8 +92,8 @@ At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only 
 adsl_vars<-vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM )
 
 adex <- derive_vars_merged(
-    admiral_ex,
-    dataset_add = admiral_adsl,
+    ex,
+    dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   )
@@ -568,7 +571,7 @@ If needed, the other `ADSL` variables can now be added:
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
   derive_vars_merged(
-    dataset_add = select(admiral_adsl, !!!negate_vars(adsl_vars)),
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 ```
