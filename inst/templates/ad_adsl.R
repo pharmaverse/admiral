@@ -21,11 +21,17 @@ data("admiral_ex")
 data("admiral_ae")
 data("admiral_lb")
 
-dm <- convert_blanks_to_na(admiral_dm)
-ds <- convert_blanks_to_na(admiral_ds)
-ex <- convert_blanks_to_na(admiral_ex)
-ae <- convert_blanks_to_na(admiral_ae)
-lb <- convert_blanks_to_na(admiral_lb)
+dm <- admiral_dm
+ds <- admiral_ds
+ex <- admiral_ex
+ae <- admiral_ae
+lb <- admiral_lb
+
+dm <- convert_blanks_to_na(dm)
+ds <- convert_blanks_to_na(ds)
+ex <- convert_blanks_to_na(ex)
+ae <- convert_blanks_to_na(ae)
+lb <- convert_blanks_to_na(lb)
 
 # ---- User defined functions ----
 

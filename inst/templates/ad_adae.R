@@ -19,8 +19,12 @@ data("admiral_suppae")
 data("admiral_adsl")
 data("ex_single")
 
-ae <- convert_blanks_to_na(admiral_ae)
-suppae <- convert_blanks_to_na(admiral_suppae)
+adsl <- admiral_adsl
+ae <- admiral_ae
+suppae <- admiral_suppae
+
+ae <- convert_blanks_to_na(ae)
+suppae <- convert_blanks_to_na(suppae)
 ex <- convert_blanks_to_na(ex_single)
 
 

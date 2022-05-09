@@ -18,7 +18,10 @@ library(stringr)
 data("admiral_vs")
 data("admiral_adsl")
 
-vs <- convert_blanks_to_na(admiral_vs)
+adsl <- admiral_adsl
+vs <- admiral_vs
+
+vs <- convert_blanks_to_na(vs)
 
 # The CDISC Pilot Data contains no SUPPVS data
 # If you have a SUPPVS then uncomment function below

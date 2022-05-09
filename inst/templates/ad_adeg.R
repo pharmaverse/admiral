@@ -20,7 +20,10 @@ library(stringr)
 data("admiral_adsl")
 data("admiral_eg")
 
-eg <- convert_blanks_to_na(admiral_eg)
+adsl <- admiral_adsl
+eg <- admiral_eg
+
+eg <- convert_blanks_to_na(eg)
 
 # ---- Lookup tables ----
 

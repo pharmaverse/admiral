@@ -17,7 +17,10 @@ library(lubridate)
 data("admiral_cm")
 data("admiral_adsl")
 
-cm <- convert_blanks_to_na(admiral_cm)
+adsl <- admiral_adsl
+cm <- admiral_cm
+
+cm <- convert_blanks_to_na(cm)
 
 # ---- Derivations ----
 

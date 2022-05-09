@@ -17,7 +17,10 @@ library(stringr)
 data("admiral_adsl")
 data("admiral_ex")
 
-ex <- convert_blanks_to_na(admiral_ex)
+adsl <- admiral_adsl
+ex <- admiral_ex
+
+ex <- convert_blanks_to_na(ex)
 
 # The CDISC pilot data does not contain EXADJ,nor a SUPPEX dataset
 # add a fake EXADJ to demonstrate the derivation for Dose adjustment flag
