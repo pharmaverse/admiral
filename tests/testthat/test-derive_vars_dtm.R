@@ -20,8 +20,7 @@ test_that("default: no date imputation, time part set to 00:00:00, add DTF, TMF"
     "2019-02", ymd_hms(NA), NA_character_,
     "2019", ymd_hms(NA), NA_character_,
     "2019---07", ymd_hms(NA), NA_character_
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -45,8 +44,7 @@ test_that("Partial date imputed to the first day/month", {
     "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -81,8 +79,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     "2019-02", ymd_hms("2019-02-28T23:59:59"), "D", "H",
     "2019", ymd_hms("2019-12-31T23:59:59"), "M", "H",
     "2019---07", ymd_hms("2019-12-31T23:59:59"), "M", "H"
-  ) %>%
-    mutate(AENDTM = as_iso_dtm(AENDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -120,8 +117,7 @@ test_that("Partial date imputed to the last day/month, Missing time part imputed
     "2019-02", ymd_hms("2019-02-28T23:59:59"),
     "2019", ymd_hms("2019-12-31T23:59:59"),
     "2019---07", ymd_hms("2019-12-31T23:59:59")
-  ) %>%
-    mutate(AENDTM = as_iso_dtm(AENDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -145,11 +141,10 @@ test_that("Partial date imputed to the MID day/month", {
     "2019-07-18T15:25", ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
     "2019-07-18T15", ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
     "2019-07-18", ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
-    "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
+    "2019-02", ymd_hms("2019-06-30T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-06-30T00:00:00"), "M", "H",
-    "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+    "2019---07", ymd_hms("2019-06-30T00:00:00"), "M", "H"
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -158,9 +153,10 @@ test_that("Partial date imputed to the MID day/month", {
     date_imputation = "MID"
   )
 
-  expect_equal(
-    expected_output,
-    actual_output
+  expect_dfs_equal(
+    base = expected_output,
+    comp = actual_output,
+    keys = c("XXSTDTC")
   )
 
 })
@@ -175,8 +171,7 @@ test_that("Partial date imputed to the 6-15 day/month", {
     "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-06-15T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-06-15T00:00:00"), "M", "H"
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input,
@@ -203,7 +198,6 @@ test_that("No re-derivation is done if --DTF variable already exists", {
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
     select(XXSTDTC, ASTDTF, everything())
 
   actual_output <- expect_message(
@@ -222,7 +216,7 @@ test_that("No re-derivation is done if --DTF variable already exists", {
 
 input_maxed <- input %>%
   filter(!str_detect(XXSTDTC, "18")) %>%
-  mutate(DCUTDT = as_iso_dtm(ymd_hms("2019-02-10T00:00:00")))
+  mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
 
 test_that("max_dates parameter works as expected", {
   expected_output <- tibble::tribble(
@@ -231,8 +225,7 @@ test_that("max_dates parameter works as expected", {
     "2019", ymd_hms("2019-02-10T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-02-10T00:00:00"), "M", "H"
   ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM)) %>%
-    mutate(DCUTDT = as_iso_dtm(ymd_hms("2019-02-10T00:00:00")))
+    mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
 
   actual_output <- derive_vars_dtm(
     input_maxed,
@@ -268,8 +261,7 @@ expected_output <- tibble::tribble(
   "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
   "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
   "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
-) %>%
-  mutate(ASTDTM = as_iso_dtm(ASTDTM))
+)
 
 actual_output <- derive_vars_dtm(
   input_secs,
@@ -294,8 +286,7 @@ test_that("Ignore Seconds Flag is not used when set to FALSE in function call", 
     "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input_secs,
@@ -333,8 +324,7 @@ test_that("Ignore Seconds Flag remove the Seconds Flag, S, from XXDTF variable w
     "2019-02", ymd_hms("2019-02-01T00:00:00"), "D", "H",
     "2019", ymd_hms("2019-01-01T00:00:00"), "M", "H",
     "2019---07", ymd_hms("2019-01-01T00:00:00"), "M", "H"
-  ) %>%
-    mutate(ASTDTM = as_iso_dtm(ASTDTM))
+  )
 
   actual_output <- derive_vars_dtm(
     input_no_s,
@@ -397,8 +387,7 @@ test_that("Partial date imputation as MID and preserve = TRUE to the mid day/mon
       "2019-02", ymd_hms("2019-02-15T00:00:00"), "D", "H",
       "2019", ymd_hms("2019-06-30T00:00:00"), "M", "H",
       "2019---07", ymd_hms("2019-06-07T00:00:00"), "M", "H"
-    ) %>%
-      mutate(ASTDTM = as_iso_dtm(ASTDTM))
+    )
 
     actual_output <- derive_vars_dtm(
       input,

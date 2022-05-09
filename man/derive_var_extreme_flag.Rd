@@ -10,7 +10,7 @@ derive_var_extreme_flag(
   order,
   new_var,
   mode,
-  filter = NULL,
+  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -43,13 +43,7 @@ Determines of the first or last observation is flagged.
 
 Permitted Values: \code{"first"}, \code{"last"}}
 
-\item{filter}{Filter for flag data
-
-Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
-considered.
-
-Permitted Values: a condition}
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -73,7 +67,9 @@ For each group (with respect to the variables specified for the
 (with respect to the order specified for the \code{order} parameter and the flag mode
 specified for the \code{mode} parameter). Only observations included by the \code{filter} parameter
 are considered for flagging.
-Otherwise, \code{new_var} is set to \code{NA}.
+Otherwise, \code{new_var} is set to \code{NA}. Thus, the direction of "worst" is considered fixed for
+all parameters in the dataset depending on the \code{order} and the \code{mode}, i.e. for every
+parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -82,11 +78,13 @@ data("vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
 vs \%>\%
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID, VSTESTCD, VISIT),
-    order = vars(VSTPTNUM),
-    new_var = LASTFL,
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID, VSTESTCD, VISIT),
+      order = vars(VSTPTNUM),
+      new_var = LASTFL,
+      mode = "last"),
     filter = VISIT != "BASELINE"
   ) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
@@ -122,44 +120,84 @@ input <- tibble::tribble(
 )
 
 # Last observation
-derive_var_extreme_flag(
+restrict_derivation(
   input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(ADT),
-  new_var = ABLFL,
-  mode = "last",
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(ADT),
+    new_var = ABLFL,
+    mode = "last"),
   filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = High
-derive_var_extreme_flag(
+restrict_derivation(
   input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(AVAL, ADT),
-  new_var = ABLFL,
-  mode = "last",
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(AVAL, ADT),
+    new_var = ABLFL,
+    mode = "last"),
   filter = AVISIT == "BASELINE"
 )
 
 # Worst observation - Direction = Lo
-derive_var_extreme_flag(
+restrict_derivation(
   input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(desc(AVAL), ADT),
-  new_var = ABLFL,
-  mode = "last",
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(desc(AVAL), ADT),
+    new_var = ABLFL,
+    mode = "last"),
   filter = AVISIT == "BASELINE"
 )
 
 # Average observation
-derive_var_extreme_flag(
+restrict_derivation(
   input,
-  by_vars = vars(USUBJID, PARAMCD),
-  order = vars(ADT, desc(AVAL)),
-  new_var = ABLFL,
-  mode = "last",
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD),
+    order = vars(ADT, desc(AVAL)),
+    new_var = ABLFL,
+    mode = "last"),
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
+
+# OCCURDS Examples
+data("ae")
+
+# Most severe AE first occurrence per patient
+ae \%>\%
+  mutate(TEMP_AESEVN =
+         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCIFL,
+    by_vars = vars(USUBJID),
+    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    mode = "first"
+  ) \%>\%
+  arrange(USUBJID, AESTDY, AESEQ) \%>\%
+  select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
+
+# Most severe AE first occurrence per patient per body system
+ae \%>\%
+  mutate(TEMP_AESEVN =
+         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  derive_var_extreme_flag(
+    new_var = AOCCSIFL,
+    by_vars = vars(USUBJID, AEBODSYS),
+    order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+    mode = "first"
+  ) \%>\%
+  arrange(USUBJID, AESTDY, AESEQ) \%>\%
+  select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
+}
+\seealso{
+\code{\link[=derive_var_worst_flag]{derive_var_worst_flag()}}
 }
 \author{
 Stefan Bundfuss
