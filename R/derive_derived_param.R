@@ -52,7 +52,7 @@
 #' @param constant_by_vars By variables for constant parameters
 #'
 #'   The constant parameters (parameters that are measured only once) are merged
-#'   to the other parameters using the specified variables. (Refer example 2)
+#'   to the other parameters using the specified variables. (Refer to Example 2)
 #'
 #'   *Permitted Values:* list of variables
 #'
