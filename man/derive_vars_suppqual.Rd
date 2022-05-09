@@ -18,10 +18,8 @@ common across multiple SDTM domain.}
 A data frame with SUPPQUAL variables appended to parent data set.
 }
 \description{
-#' @description
 \ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
-}
-\details{
+
 \emph{Deprecated}, please use \code{metatools::combine_supp()} instead.
 
 The SDTM does not allow any new variables beside ones assigned to each SDTM
