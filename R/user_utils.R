@@ -70,7 +70,7 @@ negate_vars <- function(vars = NULL) {
 #' filter_if(vs, rlang::quo(NULL))
 #' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
-  assert_data_frame(dataset)
+  assert_data_frame(dataset, accept_grouped = TRUE)
   assert_filter_cond(filter, optional = TRUE)
 
   if (quo_is_null(filter)) {

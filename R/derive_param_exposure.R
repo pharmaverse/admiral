@@ -159,14 +159,13 @@ derive_param_exposure <- function(dataset,
     filter_if(filter)
 
   add_data <- subset_ds %>%
-    filter(PARAMCD == input_code) %>%
-    derive_summary_records(
+    get_summary_records(
       by_vars = by_vars,
+      filter = PARAMCD == input_code,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun,
       set_values_to = set_values_to
-    ) %>%
-    filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
+    )
 
   # add the dates for the derived parameters
   if (all(dtm)) {

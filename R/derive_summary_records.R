@@ -161,22 +161,15 @@ derive_summary_records <- function(dataset,
     assert_varval_list(set_values_to, optional = TRUE)
   }
 
-  # Apply filter
-  if (!quo_is_null(filter)) {
-    subset_ds <- dataset %>%
-      group_by(!!!by_vars) %>%
-      filter(!!filter) %>%
-      ungroup()
-  } else {
-    subset_ds <- dataset
-  }
-
   # Summarise the analysis value and bind to the original dataset
   bind_rows(
     dataset,
-    subset_ds %>%
-      group_by(!!!by_vars) %>%
-      summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
-      mutate(!!!set_values_to)
+    get_summary_records(
+      dataset,
+      by_vars = by_vars,
+      filter = !!filter,
+      analysis_var = !!analysis_var,
+      summary_fun = summary_fun,
+      set_values_to = set_values_to)
   )
 }
