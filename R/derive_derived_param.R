@@ -91,7 +91,7 @@
 #' @export
 #'
 #' @examples
-#' # Example 1: derive MAP
+#' # Example 1: Derive MAP
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
