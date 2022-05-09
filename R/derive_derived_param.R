@@ -45,7 +45,7 @@
 #'   to derive the new parameter and are measured only once are specified here.
 #'   For example if BMI should be derived and height is measured only once while
 #'   weight is measured at each visit. Height could be specified in the
-#'   `constant_parameters` parameter. (Refer example 2)
+#'   `constant_parameters` parameter. (Refer to Example 2)
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values
 #'
