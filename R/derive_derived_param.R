@@ -116,7 +116,7 @@
 #'   )
 #' )
 #'
-#' # Example 2: derive BMI where height is measured only once
+#' # Example 2: Derive BMI where height is measured only once
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
