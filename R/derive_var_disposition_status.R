@@ -138,6 +138,7 @@ derive_disposition_status <- function(dataset,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
+#' @details Usually this function can not be used with %>%.
 #' @export
 #' @keywords user_utility adsl computation
 #' @seealso [derive_var_disposition_status()]
