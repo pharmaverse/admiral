@@ -77,7 +77,7 @@ join the transposed data to the parent domain (e.g. `VS`) by `STUDYID`,
 Example call:
 
 ```{r eval=FALSE}
-vs <- derive_vars_suppqual(vs, suppvs)
+vs <- derive_vars_suppqual(admiral_vs, admiral_suppvs)
 ```
 
 Please note, the CDISC pilot did not include a `SUPPVS` dataset and therefore this
@@ -93,7 +93,7 @@ adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 advs <- derive_vars_merged(
   vs,
-  dataset_add = adsl,
+  dataset_add = admiral_adsl,
   new_vars = adsl_vars,
   by_vars = vars(STUDYID, USUBJID)
 )
@@ -784,7 +784,7 @@ List of ADSL variables already merged held in vector `adsl_vars`
 ```{r eval=TRUE}
 advs <- advs %>%
   derive_vars_merged(
-    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    dataset_add = select(admiral_adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
 ```
