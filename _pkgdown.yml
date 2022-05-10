@@ -2,6 +2,8 @@ template:
   bootstrap: 5
   params:
     bootswatch: flatly
+search:
+  exclude: ['news/index.html']
 repo:
   url:
     home: https://github.com/pharmaverse/admiral/
