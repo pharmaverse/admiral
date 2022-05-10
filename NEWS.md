@@ -45,7 +45,7 @@ from a BDS dataset, e.g. ADLB. (#943)
  
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
 been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
-have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will affect examples,
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
 vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
