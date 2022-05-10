@@ -55,7 +55,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' vs %>%
@@ -131,7 +131,7 @@ derive_obs_number <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("vs")
 #'
 #' vs %>%

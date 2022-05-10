@@ -8,7 +8,12 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a mandatory part of any New Drug or Biologics License Application submitted to the United States Food and Drug Administration (FDA). Analysis derivations are implemented in accordance with the "Analysis Data Model Implementation Guide" (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
+A toolbox for programming Clinical Data Standards Interchange Consortium
+    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
+    mandatory part of any New Drug or Biologics License Application submitted to the
+    United States Food and Drug Administration (FDA). Analysis derivations are
+    implemented in accordance with the "Analysis Data Model Implementation Guide"
+    (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 }
 \author{
 \strong{Maintainer}: Thomas Neitmann \email{thomas.neitmann@roche.com}
@@ -38,6 +43,7 @@ Other contributors:
   \item Ross Farrugia [contributor]
   \item Konstantina Koukourikou [contributor]
   \item Tom Ratford [contributor]
+  \item James Kim \email{james.j.kim@pfizer.com} [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

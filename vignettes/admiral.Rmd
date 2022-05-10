@@ -26,7 +26,7 @@ for example the following script which creates a (very simple) ADSL dataset.
 library(dplyr)
 library(lubridate)
 library(admiral)
-library(admiral.test)
+library(admiraltest)
 
 # read in SDTM datasets
 data("dm")
@@ -37,7 +37,7 @@ data("ex")
 ```{r, eval=TRUE}
 # derive treatment variables
 adsl <- dm %>%
-  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
+  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   derive_var_trtsdtm(dataset_ex = ex) %>%
   derive_var_trtedtm(dataset_ex = ex) %>%
   derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
@@ -50,8 +50,6 @@ dataset_vignette(adsl,
                                      TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
                                      TRTDURD))
 ```
-
-<br><br>
 
 # Derivations
 
@@ -101,23 +99,17 @@ ds_final_lab_visit <- ds %>%
 
 # derive treatment variables  
 adsl <- dm %>%
-  mutate(TRT01P = ARMCD, TRT01A = ACTARMCD) %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex) %>%
-  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
-  derive_var_trtdurd() %>%
-  # merge on final lab visit date
-  left_join(ds_final_lab_visit, by = "USUBJID")
+   # merge on final lab visit date
+  derive_vars_merged(
+    dataset_add = ds_final_lab_visit,
+    by_vars = vars(USUBJID)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, 
-                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
-                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-                                     TRTDURD, FINLABDT))
+                 display_vars = vars(STUDYID, USUBJID, FINLABDT))
 ```
-
-<br><br>
 
 # Parameters
 

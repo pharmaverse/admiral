@@ -9,7 +9,7 @@
 #'
 #' @param dataset Input dataset
 #'
-#' @param dataset_ds Datasets containing the disposition information (e.g.: ds)
+#' @param dataset_ds Datasets containing the disposition information (e.g.: `ds`)
 #'
 #' It must contain:
 #' - `STUDYID`, `USUBJID`,
@@ -59,7 +59,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -150,7 +150,7 @@ derive_disposition_dt <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -181,29 +181,17 @@ derive_var_disposition_dt <- function(dataset,
   assert_vars(subject_keys)
   assert_logical_scalar(preserve)
 
-  # Process the disposition data
-  prefix <- sub("\\DT.*", "", deparse(substitute(new_var)))
-  newvar <- paste0(prefix, "DT")
-  ds_subset <- dataset_ds %>%
-    filter(!!filter_ds) %>%
-    mutate(datedtc___ = !!enquo(dtc)) %>%
-    derive_vars_dt(
-      new_vars_prefix = prefix,
-      dtc = datedtc___,
-      date_imputation = date_imputation,
-      preserve = preserve,
-      flag_imputation = FALSE
-    ) %>%
-    select(!!!subject_keys, !!enquo(new_var) := !!sym(newvar))
-
-  # Expect 1 record per subject - issue a warning otherwise
-  signal_duplicate_records(
-    ds_subset,
+  derive_vars_merged_dt(
+    dataset,
+    dataset_add = dataset_ds,
+    filter_add = !!filter_ds,
+    new_vars_prefix = "temp_",
     by_vars = subject_keys,
-    msg = "The filter used for DS results in multiple records per patient"
-  )
-
-  # add the new dispo date to the input dataset
-  dataset %>%
-    left_join(ds_subset, by = vars2chr(subject_keys))
+    dtc = !!dtc,
+    date_imputation = date_imputation,
+    flag_imputation = FALSE,
+    preserve = preserve,
+    duplicate_msg = "The filter used for DS results in multiple records per patient."
+  ) %>%
+    rename(!!new_var := temp_DT)
 }
