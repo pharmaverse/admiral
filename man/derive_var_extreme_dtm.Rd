@@ -75,38 +75,38 @@ data("admiral_adsl")
 
 # derive last known alive datetime (LSTALVDTM)
 ae_start <- date_source(
-  dataset_name = "admiral_ae",
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first",
   time_imputation = "first"
 )
 ae_end <- date_source(
-  dataset_name = "admiral_ae",
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first",
   time_imputation = "first"
 )
 lb_date <- date_source(
-  dataset_name = "admiral_lb",
+  dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
   time_imputation = "first"
 )
-adsl_date <- date_source(dataset_name = "admiral_adsl", date = TRTEDTM)
+adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
 
 admiral_dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(admiral_adsl = admiral_adsl,
-    admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+    source_datasets = list(adsl = admiral_adsl,
+    ae = admiral_ae, lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDTM)
 
 # derive last alive datetime and traceability variables
 ae_start <- date_source(
-  dataset_name = "admiral_ae",
+  dataset_name = "ae",
   date = AESTDTC,
   date_imputation = "first",
   time_imputation = "first",
@@ -118,7 +118,7 @@ ae_start <- date_source(
 )
 
 ae_end <- date_source(
-  dataset_name = "admiral_ae",
+  dataset_name = "ae",
   date = AEENDTC,
   date_imputation = "first",
   time_imputation = "first",
@@ -129,7 +129,7 @@ ae_end <- date_source(
   )
 )
 lb_date <- date_source(
-  dataset_name = "admiral_lb",
+  dataset_name = "lb",
   date = LBDTC,
   filter = nchar(LBDTC) >= 10,
   time_imputation = "first",
@@ -141,7 +141,7 @@ lb_date <- date_source(
 )
 
 adsl_date <- date_source(
-  dataset_name = "admiral_adsl",
+  dataset_name = "adsl",
   date = TRTEDTM,
   traceability_vars = vars(
     LALVDOM = "ADSL",
@@ -154,8 +154,8 @@ admiral_dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(admiral_adsl = admiral_adsl,
-    admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+    source_datasets = list(adsl = admiral_adsl,
+    ae = admiral_ae, lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
