@@ -38,6 +38,7 @@ library(admiraltest)
 data("admiral_dm")
 
 dataset_vignette(admiral_dm)
-dataset_vignette(admiral_dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
+dataset_vignette(admiral_dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
+filter = ARMCD == "Pbo")
 }
 \keyword{dev_utility}

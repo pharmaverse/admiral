@@ -165,6 +165,8 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 data("admiral_adsl")
 
+adsl <- admiral_adsl
+
 death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",

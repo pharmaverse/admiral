@@ -139,7 +139,8 @@ derive_var_lstalvdt <- function(dataset,
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(admiral_adsl = admiral_adsl,
+#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM)
@@ -194,7 +195,8 @@ derive_var_lstalvdt <- function(dataset,
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(admiral_adsl = admiral_adsl,
+#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
@@ -357,7 +359,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(admiral_adsl = admiral_adsl,
+#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT)
@@ -409,7 +412,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl, admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(admiral_adsl = admiral_adsl,
+#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
