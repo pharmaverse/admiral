@@ -92,6 +92,9 @@ A datetime object
 \description{
 Convert a date (datetime, date, or date character) into a Date vector (usually \code{'--DTM'}).
 }
+\details{
+Usually this computation function can not be used with \%>\%.
+}
 \examples{
 convert_date_to_dtm("2019-07-18T15:25:00")
 convert_date_to_dtm(Sys.time())

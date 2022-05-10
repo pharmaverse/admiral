@@ -19,6 +19,9 @@ RR interval in msec:
 \description{
 Computes RR interval from heart rate.
 }
+\details{
+Usually this computation function can not be used with \%>\%.
+}
 \examples{
 compute_rr(hr = 70.14)
 }

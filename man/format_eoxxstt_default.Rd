@@ -19,6 +19,9 @@ A \code{character} vector derived based on the values given in \code{x}:
 Define a function to map the disposition status. To be used as an input for
 \code{derive_var_disposition_status()}.
 }
+\details{
+Usually this function can not be used with \%>\%.
+}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)

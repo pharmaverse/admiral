@@ -34,6 +34,8 @@ Depending on the chosen \code{method} one of the following formulae is used.
 
 \emph{Sagie}: \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
 1000(QT/1000 + 0.154(1 - RR/1000))}
+
+Usually this computation function can not be used with \%>\%.
 }
 \examples{
 compute_qtc(qt = 350, rr = 56.54, method = "Bazett")

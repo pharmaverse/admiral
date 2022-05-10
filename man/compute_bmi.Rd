@@ -25,6 +25,9 @@ The BMI (Body Mass Index Area) in kg/m^2.
 \description{
 Computes BMI from height and weight
 }
+\details{
+Usually this computation function can not be used with \%>\%.
+}
 \examples{
 compute_bmi(height = 170, weight = 75)
 }

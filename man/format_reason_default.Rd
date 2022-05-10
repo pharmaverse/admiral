@@ -22,6 +22,7 @@ Define a function to map the disposition reason, to be used as a parameter in
 \details{
 \code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not \code{'COMPLETED'} nor \code{NA}.
 \cr\code{format_reason_default(DSDECOD, DSTERM)} returns \code{DSTERM} when \code{DSDECOD} is equal to \code{'OTHER'}.
+\cr Usually this function can not be used with \%>\%.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

@@ -31,6 +31,9 @@ The time imputation flag (\code{'--TMF'}) (character value of \code{'H'}, \code{
 Derive the time imputation flag (\code{'--TMF'}) comparing a date character vector
 (\code{'--DTC'}) with a Datetime vector (\code{'--DTM'}).
 }
+\details{
+Usually this computation function can not be used with \%>\%.
+}
 \examples{
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
