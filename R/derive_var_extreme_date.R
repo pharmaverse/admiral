@@ -116,38 +116,38 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   date_imputation = "first",
 #'   time_imputation = "first"
 #' )
 #' ae_end <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #'   time_imputation = "first"
 #' )
 #' lb_date <- date_source(
-#'   dataset_name = "admiral_lb",
+#'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   time_imputation = "first"
 #' )
-#' adsl_date <- date_source(dataset_name = "admiral_adsl", date = TRTEDTM)
+#' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
 #'
 #' admiral_dm %>%
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl,
-#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM)
 #'
 #' # derive last alive datetime and traceability variables
 #' ae_start <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   date_imputation = "first",
 #'   time_imputation = "first",
@@ -159,7 +159,7 @@ derive_var_lstalvdt <- function(dataset,
 #' )
 #'
 #' ae_end <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #'   time_imputation = "first",
@@ -170,7 +170,7 @@ derive_var_lstalvdt <- function(dataset,
 #'   )
 #' )
 #' lb_date <- date_source(
-#'   dataset_name = "admiral_lb",
+#'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   time_imputation = "first",
@@ -182,7 +182,7 @@ derive_var_lstalvdt <- function(dataset,
 #' )
 #'
 #' adsl_date <- date_source(
-#'   dataset_name = "admiral_adsl",
+#'   dataset_name = "adsl",
 #'   date = TRTEDTM,
 #'   traceability_vars = vars(
 #'     LALVDOM = "ADSL",
@@ -195,8 +195,8 @@ derive_var_lstalvdt <- function(dataset,
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl,
-#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
@@ -339,35 +339,35 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' # derive last known alive date (LSTALVDT)
 #' ae_start <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   date_imputation = "first",
 #' )
 #' ae_end <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #' )
 #' lb_date <- date_source(
-#'   dataset_name = "admiral_lb",
+#'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #' )
-#' adsl_date <- date_source(dataset_name = "admiral_adsl", date = TRTEDT)
+#' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 #'
 #' admiral_dm %>%
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl,
-#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT)
 #'
 #' # derive last alive date and traceability variables
 #' ae_start <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AESTDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
@@ -378,7 +378,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #'
 #' ae_end <- date_source(
-#'   dataset_name = "admiral_ae",
+#'   dataset_name = "ae",
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #'   traceability_vars = vars(
@@ -388,7 +388,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'   )
 #' )
 #' lb_date <- date_source(
-#'   dataset_name = "admiral_lb",
+#'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #'   traceability_vars = vars(
@@ -399,7 +399,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #'
 #' adsl_date <- date_source(
-#'   dataset_name = "admiral_adsl",
+#'   dataset_name = "adsl",
 #'   date = TRTEDT,
 #'   traceability_vars = vars(
 #'     LALVDOM = "ADSL",
@@ -412,8 +412,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(admiral_adsl = admiral_adsl,
-#'     admiral_ae = admiral_ae, admiral_lb = admiral_lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
