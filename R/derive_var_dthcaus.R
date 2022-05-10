@@ -153,12 +153,22 @@ derive_var_dthcaus <- function(dataset,
   for (ii in seq_along(sources)) {
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
-    if (!quo_is_null(sources[[ii]]$filter)) {
+    if (!is.null(sources[[ii]]$date_imputation)&!quo_is_null(sources[[ii]]$filter)) {
       add_data[[ii]] <- source_dataset %>%
-        filter(!!sources[[ii]]$filter)
+        filter(!!sources[[ii]]$filter) %>%
+        mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date, date_imputation = !!sources[[ii]]$date_imputation))
+    } else if (!is.null(sources[[ii]]$date_imputation)) {
+      add_data[[ii]] <- source_dataset %>%
+        mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date, date_imputation = !!sources[[ii]]$date_imputation))
+    } else if (!quo_is_null(sources[[ii]]$filter)) {
+      add_data[[ii]] <- source_dataset %>%
+        filter(!!sources[[ii]]$filter) %>%
+        mutate(temp_date = !!sources[[ii]]$date)
     } else {
-      add_data[[ii]] <- source_dataset
+      add_data[[ii]] <- source_dataset %>%
+        mutate(temp_date = !!sources[[ii]]$date)
     }
+    add_data[[ii]][6] <- add_data[[ii]][7]
 
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
@@ -219,6 +229,17 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param date A character vector to be used for sorting `dataset`.
 #'
+#' @param date_imputation The value to impute the day/month when a datepart is missing.
+#'
+#'   If `NULL`: no date imputation is performed and partial dates are returned as missing.
+#'
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+#'   of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
+#'
+#'   Default is `NULL`
+#'
 #' @param order Sort order
 #'
 #'   Additional character vector to be used for sorting `dataset` to avoid duplicate record warning.
@@ -254,6 +275,7 @@ derive_var_dthcaus <- function(dataset,
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
+                           date_imputation = NULL,
                            order = NULL,
                            mode = "first",
                            dthcaus,
@@ -268,6 +290,7 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
+    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
     order = assert_order_vars(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
