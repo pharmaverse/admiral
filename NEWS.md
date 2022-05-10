@@ -42,6 +42,11 @@ from a BDS dataset, e.g. ADLB. (#943)
   derivation may vary depending on the slice.
 
 ## Updates of Existing Functions
+ 
+- Datasets internal to the package have been renamed, e.g. `adsl` has 
+been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will affect examples,
+vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
 `derive_vars_dtm()` the function failed. This bug was fixed (#1097).
