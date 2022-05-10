@@ -1,0 +1,77 @@
+---
+name: Spelling 🆎
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - devel
+  pull_request:
+    branches:
+      - main
+      - pre-release
+      - devel
+
+concurrency:
+  group: spelling-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roxygen:
+    name: Spellcheck 🔠
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    if: >
+      !contains(github.event.commits[0].message, '[skip spellcheck]')
+        && github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+      
+      - name: Install spelling 🎓
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+          renv::install("spelling")
+        shell: Rscript {0}
+
+      - name: Run Spellcheck 👟
+        uses: insightsengineering/r-spellcheck-action@v3
+        with:
+          exclude: data/*,**/*.Rd,**/*.Rmd,**/*.md,*.md
+          additional_options: ""
