@@ -23,9 +23,8 @@ library(admiraltest)
 data(admiral_dm)
 
 assert_has_variables(admiral_dm, "STUDYID")
-\dontrun{
-assert_has_variables(admiral_dm, "AVAL")
-}
+
+try(assert_has_variables(admiral_dm, "AVAL"))
 }
 \author{
 Thomas Neitmann

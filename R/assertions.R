@@ -808,9 +808,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' data(admiral_dm)
 #'
 #' assert_has_variables(admiral_dm, "STUDYID")
-#' \dontrun{
-#' assert_has_variables(admiral_dm, "AVAL")
-#' }
+#'
+#' try(assert_has_variables(admiral_dm, "AVAL"))
 assert_has_variables <- function(dataset, required_vars) {
   is_missing <- !required_vars %in% colnames(dataset)
   if (any(is_missing)) {

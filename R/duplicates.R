@@ -25,7 +25,7 @@
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record
-#' adsl <- rbind(adsl[1L, ], adsl)
+#' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
 #' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "warning")
 #'
@@ -50,7 +50,7 @@ get_duplicates_dataset <- function() {
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record
-#' adsl <- rbind(adsl[1L, ], adsl)
+#' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
 #' extract_duplicate_records(adsl, vars(USUBJID))
 extract_duplicate_records <- function(dataset, by_vars) {
@@ -89,7 +89,7 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' data(admiral_adsl)
 #'
 #' # Duplicate the first record
-#' adsl <- rbind(adsl[1L, ], adsl)
+#' adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 #'
 #' signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
 signal_duplicate_records <- function(dataset,

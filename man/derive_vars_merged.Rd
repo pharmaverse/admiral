@@ -157,7 +157,7 @@ select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 # merge last weight to adsl
 data("admiral_adsl")
 derive_vars_merged(
-  adsl,
+  admiral_adsl,
   dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC),
