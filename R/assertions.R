@@ -439,7 +439,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -503,7 +503,7 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -756,7 +756,7 @@ assert_named_exprs <- function(arg, optional = FALSE) {
       !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
       any(names(arg) == "")) {
     err_msg <- sprintf(
-      "`%s` must be a named list of expressions created using `exprs()` but is %s",
+      "`%s` must be a named list of expressions created using `rlang::exprs()` but is %s",
       arg_name(substitute(arg)),
       what_is_it(arg)
     )
