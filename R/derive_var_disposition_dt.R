@@ -91,7 +91,9 @@ derive_disposition_dt <- function(dataset,
 #' Derive a Disposition Date
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged_dt()` instead.
 #'
 #' Derive a disposition status date from the the relevant records in the disposition domain.
 #'
@@ -148,20 +150,6 @@ derive_disposition_dt <- function(dataset,
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
-#' data("dm")
-#' data("ds")
-#'
-#' dm %>%
-#'   derive_var_disposition_dt(
-#'     dataset_ds = ds,
-#'     new_var = FRVDT,
-#'     dtc = DSSTDTC,
-#'     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, FRVDT)
 derive_var_disposition_dt <- function(dataset,
                                   dataset_ds,
                                   new_var,
@@ -180,6 +168,7 @@ derive_var_disposition_dt <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
   assert_logical_scalar(preserve)
+  deprecate_warn("0.7.0", "derive_var_disposition_dt()", "derive_vars_merged_dt()")
 
   derive_vars_merged_dt(
     dataset,

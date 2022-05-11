@@ -426,19 +426,23 @@ The documentation will be updated at:
 
 + the description level for a function, 
 
-```
-#' Title of the function
-#'
-#' @description
-#'*Deprecated*, please use `new_fun()` instead.
-#' description of the function in plain English
-``` 
+    ```{r, eval=FALSE}
+    #' Title of the function
+    #'
+    #' @description
+    #' `r lifecycle::badge("deprecated")`
+    #'
+    #' This function is *deprecated*, please use `new_fun()` instead.
+    #' description of the function in plain English
+    ``` 
+
+    The "Examples" section should be removed.
 
 + the `@param` level for a parameter.
 
-```
-@param old_param *Deprecated*, please use `new_param` instead.
-```
+    ```
+    @param old_param *Deprecated*, please use `new_param` instead.
+    ```
 
 ## Handling of warning and error
 
@@ -500,6 +504,12 @@ will need to be quoted.
 ### END DEPRECATION
 ```
 
+## Unit Testing
+
+Unit tests for deprecated functions and parameters must be added to
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+
+Other unit tests of deprecated functions must be removed.
 
 # Best Practices and Hints
 

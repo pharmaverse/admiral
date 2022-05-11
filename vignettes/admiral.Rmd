@@ -38,8 +38,32 @@ data("ex")
 # derive treatment variables
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex) %>%
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+                    (EXDOSE == 0 &
+                       str_detect(EXTRT, "PLACEBO"))) &
+      nchar(EXSTDTC) >= 10,
+    new_vars_prefix = "TRTS",
+    dtc = EXSTDTC,
+    order = vars(TRTSDTM, EXSEQ),
+    mode = "first",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+                    (EXDOSE == 0 &
+                       str_detect(EXTRT, "PLACEBO"))) &
+      nchar(EXENDTC) >= 10,
+    new_vars_prefix = "TRTE",
+    dtc = EXENDTC,
+    time_imputation = "last",
+    flag_imputation = "none",
+    order = vars(TRTEDTM, EXSEQ),
+    mode = "last",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
   derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd()
 ```

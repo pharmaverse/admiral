@@ -186,11 +186,12 @@ terminology outlined in the ADaM IG for date imputations.
 
 See also [Date and Time Imputation](imputation.html).
 
-Once `ADT` is derived, the function `derive_var_ady()` can be used to derive `ADY`.
+Once `ADT` is derived, the function `derive_vars_dy()` can be used to derive `ADY`.
 This example assumes both `ADT` and `TRTSDT` exist on the data frame.
 
 ```{r eval=TRUE}
-advs <- derive_var_ady(advs, reference_date = TRTSDT, date = ADT)
+advs <-
+  derive_vars_dy(advs, reference_date = TRTSDT, source_vars = vars(ADT))
 
 ```
 
