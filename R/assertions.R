@@ -21,7 +21,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dataset) {
@@ -297,7 +297,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -376,7 +376,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -402,7 +402,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(arg)) {
+  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -752,7 +752,9 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+  if (!is.list(arg) ||
+      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+      any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `exprs()` but is %s",
       arg_name(substitute(arg)),
@@ -802,7 +804,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(dm)
 #'
 #' assert_has_variables(dm, "STUDYID")
@@ -958,7 +960,19 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
+  if (length(units) != 1L) {
+    abort(
+      paste0(
+        "Multiple units ",
+        enumerate(units, quote_fun = squote),
+        " found for ",
+        squote(param),
+        ".\n",
+        "Please review and update the units."
+      )
+    )
+  }
+  if (tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
@@ -972,6 +986,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+
   invisible(dataset)
 }
 

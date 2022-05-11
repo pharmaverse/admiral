@@ -9,12 +9,15 @@ derive_vars_dy(dataset, reference_date, source_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{reference_date} and the \code{source_vars} parameter are
-expected.}
+The columns specified by the \code{reference_date} and the \code{source_vars}
+parameter are expected.}
 
 \item{reference_date}{The start date column, e.g., date of first treatment
 
-A date or date-time object column is expected.}
+A date or date-time object column is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
 \code{vars()} from which dates are to be extracted. This can either be a list of
@@ -31,11 +34,12 @@ Adds relative day variables (\code{--DY}) to the dataset, e.g., \code{ASTDY} and
 \code{AENDY}.
 }
 \details{
-The relative day is derived as number of days from the reference date
-to the end date. If it is nonnegative, one is added. I.e., the relative day
-of the reference date is 1. Unless a name is explicitly specified, the name
-of the resulting relative day variable is generated from the source variable
-name by replacing DT (or DTM as appropriate) with DY.
+The relative day is derived as number of days from the reference
+date to the end date. If it is nonnegative, one is added. I.e., the
+relative day of the reference date is 1. Unless a name is explicitly
+specified, the name of the resulting relative day variable is generated
+from the source variable name by replacing DT (or DTM as appropriate) with
+DY.
 }
 \examples{
 library(lubridate)

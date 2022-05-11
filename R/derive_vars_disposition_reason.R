@@ -106,7 +106,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -170,9 +170,8 @@ derive_disposition_reason <- function(dataset,
 #' if required (e.g. `DSTERM`).
 #'
 #' @details
-#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not
-#' 'COMPLETED' nor `NA`. `format_reason_default(DSDECOD, DSTERM)` returns
-#' `DSTERM` when `DSDECOD` is not 'COMPLETED' nor `NA`.
+#' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
+#' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is equal to `'OTHER'`.
 #'
 #' @return A `character` vector
 #'
@@ -182,7 +181,7 @@ derive_disposition_reason <- function(dataset,
 #' @seealso [derive_vars_disposition_reason()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -198,8 +197,11 @@ derive_disposition_reason <- function(dataset,
 #'   select(STUDYID, USUBJID, DCSREAS)
 #'
 format_reason_default <- function(reason, reason_spe = NULL) {
-  out <- if (is.null(reason_spe)) reason else reason_spe
-  if_else(reason != "COMPLETED" & !is.na(reason), out, NA_character_)
+  if (is.null(reason_spe)) {
+    if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
+  } else {
+    if_else (reason == "OTHER", reason_spe, NA_character_)
+  }
 }
 
 #' Derive a Disposition Reason at a Specific Timepoint
@@ -246,30 +248,22 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' - If only the main reason for discontinuation needs to be derived (i.e. `new_var_spe` is NULL),
 #' the function must have at least one character vector argument, e.g.
 #' `format_reason <- function(reason)`
-#' and `new_var` will be derived as `new_var = format_reason(reason_var)`
+#' and `new_var` will be derived as `new_var = format_reason(reason_var)`.
 #' Typically, the content of the function would return `reason_var` or `NA` depending on the
 #' value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)`).
-#' `DCSREAS = format_reason(DSDECOD)` returns DCSREAS = `DSDECOD` when `DSDECOD` is not 'COMPLETED'
+#' `DCSREAS = format_reason(DSDECOD)` returns `DCSREAS = DSDECOD` when `DSDECOD` is not `'COMPLETED'`
 #'  nor `NA`, `NA` otherwise.
 #'
 #' - If both the main reason and the details needs to be derived (`new_var_spe` is specified)
 #' the function must have two character vectors argument, e.g.
 #' `format_reason2 <- function(reason, reason_spe)` and
-#' `new_var` will be derived as `new_var` = `format_reason(reason_var)`,
-#' `new_var_spe` will be derived as `new_var_spe` = `format_reason(reason_var, reason_var_spe)`,
+#' `new_var` will be derived as `new_var = format_reason(reason_var)`,
+#' `new_var_spe` will be derived as `new_var_spe = format_reason(reason_var, reason_var_spe)`.
 #' Typically, the content of the function would return `reason_var_spe` or `NA` depending on the
-#' `reason_var` value (e.g. `if_else ( reason != "COMPLETED" & !is.na(reason), reason_spe,
-#' NA_character_)`).
-#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns DCSREASP = `DSTERM` when `DSDECOD` is not
-#' 'COMPLETED' nor NA.
+#' `reason_var` value (e.g. `if_else ( reason == "OTHER", reason_spe, NA_character_)`).
+#' `DCSREASP = format_reason(DSDECOD, DSTERM)` returns `DCSREASP = DSTERM` when `DSDECOD` is equal to `'OTHER'`.
 #'
-#' Default: format_reason_default defined as:
-#' format_reason_default <- function(reason, reason_spe = NULL) {
-#'   out <- if ( is.null(reason_spe) ) reason else reason_spe
-#'   if_else ( reason != "COMPLETED" & !is.na(reason), out, NA_character_)
-#' }
-#' format_reason_default(DSDECOD) returns `DSDECOD` when `DSDECOD` is not 'COMPLETED' nor NA.
-#' format_reason_default(DSDECOD, DSTERM) returns `DSTERM` when `DSDECOD` is not 'COMPLETED' nor NA.
+#' Default: `format_reason_default`, see [`format_reason_default()`] for details.
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'
@@ -305,7 +299,7 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data("dm")
 #' data("ds")
 #'
@@ -321,11 +315,11 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
-#'   out <- if (is.null(y)) x else y
-#'   case_when(
-#'     !(x %in% c("COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~ out,
-#'     TRUE ~ NA_character_
-#'   )
+#'   if (is.null(y)){
+#'     if_else(!x %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
+#'   } else {
+#'   if_else (x == "OTHER", y, NA_character_)
+#'   }
 #' }
 #' dm %>%
 #'   derive_vars_disposition_reason(

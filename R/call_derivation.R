@@ -17,7 +17,7 @@
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
-#' @keywords user_utility
+#' @keywords user_utility high_order_function
 #'
 #' @export
 #'
@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(ae)
 #' data(adsl)
 #'
@@ -110,7 +110,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
+#' library(admiraltest)
 #' data(ae)
 #' data(adsl)
 #'

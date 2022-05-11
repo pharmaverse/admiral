@@ -28,7 +28,7 @@ iterations and others varying.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
+library(admiraltest)
 data(ae)
 data(adsl)
 
@@ -76,4 +76,5 @@ adae \%>\%
 \author{
 Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 }
+\keyword{high_order_function}
 \keyword{user_utility}

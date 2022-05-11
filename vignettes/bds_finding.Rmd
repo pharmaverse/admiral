@@ -50,12 +50,12 @@ To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
 data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 library(lubridate)
 library(stringr)
 library(tibble)
@@ -641,6 +641,9 @@ dataset_vignette(
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```
+
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
 
 ## Derive Analysis Flags (e.g. `ANL01FL`) {#analysisrec}
 
