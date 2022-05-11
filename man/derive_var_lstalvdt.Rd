@@ -31,7 +31,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with the \code{LSTALVDT} variable added.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_extreme_dt()} instead. Add the last
 known alive date (\code{LSTALVDT}) to the dataset.

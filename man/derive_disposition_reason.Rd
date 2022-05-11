@@ -101,7 +101,7 @@ the input dataset with the disposition reason(s) (\code{new_var} and
 if required \code{new_var_spe}) added.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_vars_disposition_reason()} instead.
 

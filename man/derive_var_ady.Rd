@@ -32,7 +32,7 @@ The default is \code{ADT}}
 The input dataset with \code{ADY} column added
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>}}{\strong{Questioning}}
+\verb{r lifecycle::badge("questioning")}
 
 Adds the analysis study day (\code{ADY}) to the dataset, i.e., study day of analysis date.
 }

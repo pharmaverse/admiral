@@ -29,7 +29,7 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 \code{dataset} with new column \code{new_var} of class factor.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_agegr_fda()} and \code{derive_var_agegr_ema()} instead.
 }

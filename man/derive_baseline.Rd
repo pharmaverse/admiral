@@ -20,7 +20,7 @@ of records for which to calculate \code{new_var}}
 The input dataset with variable \code{new_var} added
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 This function is \emph{deprecated}. Please use \code{\link[=derive_var_base]{derive_var_base()}} instead.
 }

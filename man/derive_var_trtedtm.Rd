@@ -40,7 +40,7 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTEDTM} variable added
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>}}{\strong{Questioning}}
+\verb{r lifecycle::badge("questioning")}
 
 Derives datetime of last exposure to treatment (\code{TRTEDTM})
 }

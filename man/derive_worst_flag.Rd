@@ -64,7 +64,7 @@ Permitted Values: \code{"none"}, \code{"warning"}, \code{"error"}}
 The input dataset with the new flag variable added.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_worst_flag()} instead.
 }

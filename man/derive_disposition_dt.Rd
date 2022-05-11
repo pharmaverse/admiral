@@ -65,7 +65,7 @@ A list of quosures where the expressions are symbols as returned by
 the input dataset with the disposition date (\code{new_var}) added
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_disposition_dt()} instead.
 

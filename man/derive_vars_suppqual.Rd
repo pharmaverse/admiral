@@ -18,7 +18,7 @@ common across multiple SDTM domain.}
 A data frame with SUPPQUAL variables appended to parent data set.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{metatools::combine_supp()} instead.
 

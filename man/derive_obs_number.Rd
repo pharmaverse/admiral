@@ -50,7 +50,7 @@ A dataset containing all observations and variables of the input
 dataset and additionally the variable specified by the \code{new_var} parameter.
 }
 \description{
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\verb{r lifecycle::badge("deprecated")}
 
 \emph{Deprecated}, please use \code{derive_var_obs_number()} instead.
 
