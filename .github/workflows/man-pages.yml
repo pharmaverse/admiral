@@ -1,0 +1,140 @@
+---
+name: Man Pages 📃
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - devel
+  pull_request:
+    branches:
+      - main
+      - pre-release
+      - devel
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: roxygen-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roxygen:
+    name: Roxygen 🅾
+    runs-on: ubuntu-20.04
+    if: >
+      !contains(github.event.commits[0].message, '[skip roxygen]')
+        && github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Fetch PR 🐕
+        uses: r-lib/actions/pr-fetch@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install roxygen2 🅾
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+          renv::install("roxygen2")
+        shell: Rscript {0}
+
+      - name: Generate man pages 📄
+        run: |
+          logfile <- "roxygen_${{ github.event.repository.name }}.log"
+          con <- file(logfile)
+          sink(con, append = TRUE, split = TRUE)
+          sink(con, append = TRUE, type = "message")
+          roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))
+          sink()
+          sink(type = "message")
+          logs <- readLines(logfile)
+          error_marker <- grep("Error:", logs)
+          warnings_marker <- grep("Warning message", logs)
+          if (length(warnings_marker) > 0) {
+            cat("⚠ One or more warnings were generated during the roxygen build:\n")
+            cat(logs[warnings_marker[[1]]:length(logs)], sep = "\n")
+            stop("Please 🙏 fix the warnings shown below this message 👇")
+          }
+          if (length(error_marker) > 0) {
+            cat("☠ One or more errors were generated during the roxygen build:\n")
+            cat(logs[error_marker[[1]]:length(logs)], sep = "\n")
+            stop("Please 🙏 fix the errors shown below this message 👇")
+          }
+        shell: Rscript {0}
+
+      - name: Commit updated man pages 📌
+        if: startsWith(github.event.comment.body, '/roxygenize')
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add man/. NAMESPACE
+          git commit -m "Update man pages"
+
+      - name: Push updates ⤴
+        uses: r-lib/actions/pr-push@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Roxygen check 🅾
+        if: "!startsWith(github.event.comment.body, '/roxygenize')"
+        run: |
+          git status -s
+          if [[ -n `git status -s | grep man` ]]
+          then {
+            ROXYGEN_VERSION="$(Rscript -e 'packageVersion("roxygen2")' | awk '{print $NF}')"
+            echo "🙈 Manuals are not up-to-date with roxygen comments!"
+            echo "🔀 The following differences were noted:"
+            git diff man/*
+            echo -e "\n💻 Please rerun the following command on your workstation and push your changes"
+            echo "--------------------------------------------------------------------"
+            echo "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+            echo "--------------------------------------------------------------------"
+            echo -e "\n▶ Alternatively, if you have an open pull request, you can auto-generate the man pages by commenting the following in the PR"
+            echo "--------------------------------------------------------------------"
+            echo "/roxygenize"
+            echo "--------------------------------------------------------------------"
+            echo "ℹ roxygen2 version that was used in this workflow: $ROXYGEN_VERSION"
+            echo "🙏 Please ensure that the 'RoxygenNote' field in the DESCRIPTION file matches this version"
+            exit 1
+          } else {
+            echo "💚 Manuals are up-to-date with roxygen comments"
+          }
+          fi
+        shell: bash

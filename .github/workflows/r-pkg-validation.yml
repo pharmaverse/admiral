@@ -9,7 +9,7 @@ jobs:
     name: Create report 📃
     runs-on: ubuntu-latest
     container:
-      image: rocker/verse:4.1.1
+      image: rocker/verse:4.1.2
     # Set Github token permissions
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -22,15 +22,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build report 🏗
-        uses: insightsengineering/thevalidatoR@v1.1.2
+        id: validation
+        uses: insightsengineering/thevalidatoR@v1
 
       # Upload the validation report to the release
       - name: Upload report to release 🔼
         if: success()
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ./validation_report.pdf
-          asset_name: validation-report.pdf
+          file: ${{ steps.validation.outputs.report_output_filename }}
+          asset_name: ${{ steps.validation.outputs.report_output_filename }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           overwrite: false
