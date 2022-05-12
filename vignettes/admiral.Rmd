@@ -44,10 +44,7 @@ adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
-    filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) &
-      nchar(EXSTDTC) >= 10,
+    filter_add = nchar(EXSTDTC) >= 10,
     new_vars_prefix = "TRTS",
     dtc = EXSTDTC,
     order = vars(TRTSDTM, EXSEQ),
@@ -56,10 +53,7 @@ adsl <- dm %>%
   ) %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
-    filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) &
-      nchar(EXENDTC) >= 10,
+    filter_add = nchar(EXENDTC) >= 10,
     new_vars_prefix = "TRTE",
     dtc = EXENDTC,
     time_imputation = "last",
@@ -73,10 +67,14 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, 
-                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
-                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-                                     TRTDURD))
+dataset_vignette(
+  adsl,
+  display_vars = vars(
+    STUDYID, USUBJID, TRT01P, TRT01A,
+    TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+    TRTDURD
+  )
+)
 ```
 
 # Derivations
@@ -121,13 +119,13 @@ example below:
 
 ```{r, eval=TRUE}
 # derive final lab visit date
-ds_final_lab_visit <- ds %>% 
-  filter(DSDECOD == "FINAL LAB VISIT") %>% 
+ds_final_lab_visit <- ds %>%
+  filter(DSDECOD == "FINAL LAB VISIT") %>%
   transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
 
-# derive treatment variables  
+# derive treatment variables
 adsl <- dm %>%
-   # merge on final lab visit date
+  # merge on final lab visit date
   derive_vars_merged(
     dataset_add = ds_final_lab_visit,
     by_vars = vars(USUBJID)
@@ -135,8 +133,10 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, 
-                 display_vars = vars(STUDYID, USUBJID, FINLABDT))
+dataset_vignette(
+  adsl,
+  display_vars = vars(STUDYID, USUBJID, FINLABDT)
+)
 ```
 
 # Parameters

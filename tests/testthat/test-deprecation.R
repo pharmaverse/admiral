@@ -538,7 +538,7 @@ test_that("a warning is issued when using `derive_var_worst_flag()` with `filter
 }
 )
 
-test_that("a warning is issued when using `derive_var_ady()`", {
+test_that("derive_var_ady() Test 1: A warning is issued when using `derive_var_ady()`", {
   input <- tibble::tribble(
     ~TRTSDT, ~ADT,
     ymd("2020-01-01"), ymd("2020-02-24"),
@@ -553,7 +553,7 @@ test_that("a warning is issued when using `derive_var_ady()`", {
   )
 })
 
-test_that("a warning is issued when using `derive_var_enady()`", {
+test_that("derive_var_aendy Test 1: A warning is issued when using `derive_var_aendy()`", {
   input <- tibble::tribble(
     ~TRTSDT, ~AENDT,
     ymd("2020-01-01"), ymd("2020-02-24"),
@@ -568,7 +568,7 @@ test_that("a warning is issued when using `derive_var_enady()`", {
   )
 })
 
-test_that("a warning is issued when using `derive_var_astdy()`", {
+test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_astdy()`", {
   input <- tibble::tribble(
     ~TRTSDT, ~ASTDT,
     ymd("2020-01-01"), ymd("2020-02-24"),
@@ -583,7 +583,7 @@ test_that("a warning is issued when using `derive_var_astdy()`", {
   )
 })
 
-test_that("a warning is issued when using `derive_var_trtedtm()`", {
+test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var_trtedtm()`", {
   adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
   ex <- tibble::tribble(
     ~USUBJID, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -603,7 +603,7 @@ test_that("a warning is issued when using `derive_var_trtedtm()`", {
   fixed = TRUE)
 })
 
-test_that("a warning is issued when using `derive_var_trtsdtm()`", {
+test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var_trtsdtm()`", {
   adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
   ex <- tibble::tribble(
     ~USUBJID, ~EXSTDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -623,7 +623,7 @@ test_that("a warning is issued when using `derive_var_trtsdtm()`", {
   fixed = TRUE)
 })
 
-test_that("a warning is issued when using `derive_var_disposition_dt()`", {
+test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
