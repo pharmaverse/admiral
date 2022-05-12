@@ -43,9 +43,9 @@ will be split in categories: <18, 18-64, >=65.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(dm)
+data(admiral_dm)
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
@@ -63,9 +63,9 @@ data.frame(AGE = 1:100) \%>\%
 
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(dm)
+data(admiral_dm)
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_agegr_ema(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 

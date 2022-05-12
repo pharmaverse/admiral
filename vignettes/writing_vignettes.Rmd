@@ -135,11 +135,11 @@ library(admiraltest)
 library(DT)
 library(admiral)
 
-data(vs)
+data(admiral_vs)
 ```
 
 ```{r, eval=FALSE, echo=TRUE}
-      vs1 <- vs %>%
+      vs1 <- admiral_vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
         dtc = VSDTC,
@@ -153,7 +153,7 @@ data(vs)
 
 
 ```{r, echo=FALSE}
-      vs1 <- vs %>%
+      vs1 <- admiral_vs %>%
         derive_vars_dt(
         new_vars_prefix = "A",
         dtc = VSDTC,

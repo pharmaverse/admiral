@@ -210,7 +210,6 @@ impute_dtc <- function(dtc,
 
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", "30"),
-        n_chr == 7 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", "30"),
         n_chr == 4 ~ paste0(dtc, "-", "06", "-", "30"),
         TRUE ~ imputed_date)
 
