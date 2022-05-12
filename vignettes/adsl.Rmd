@@ -131,8 +131,9 @@ adsl <- adsl %>%
 ```
 
 This call returns the original data frame with the column `TRTSDTM` and
-`TRTEDTM` added. Exposure observations with incomplete date are ignored. Missing
-time parts are imputed as first or last for start and end date respectively.
+`TRTEDTM` added. Exposure observations with incomplete date and zero doses of
+non placebo treatments are ignored. Missing time parts are imputed as first or
+last for start and end date respectively.
 
 The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
 function.
