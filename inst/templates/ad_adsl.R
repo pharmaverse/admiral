@@ -15,11 +15,17 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+data("admiral_ae")
+data("admiral_lb")
+
+dm <- admiral_dm
+ds <- admiral_ds
+ex <- admiral_ex
+ae <- admiral_ae
+lb <- admiral_lb
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)

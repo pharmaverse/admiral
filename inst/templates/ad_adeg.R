@@ -17,8 +17,11 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("adsl")
-data("eg")
+data("admiral_adsl")
+data("admiral_eg")
+
+adsl <- admiral_adsl
+eg <- admiral_eg
 
 eg <- convert_blanks_to_na(eg)
 
@@ -226,7 +229,7 @@ adeg <- adeg %>%
 
   # Calculate BASETYPE
   derive_var_basetype(
-    basetypes = exprs(
+    basetypes = rlang::exprs(
       "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
       "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
       "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,

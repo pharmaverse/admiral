@@ -74,12 +74,12 @@ Derive a disposition status date from the the relevant records in the dispositio
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("dm")
-data("ds")
+data("admiral_dm")
+data("admiral_ds")
 
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_dt(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = FRVDT,
     dtc = DSSTDTC,
     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"

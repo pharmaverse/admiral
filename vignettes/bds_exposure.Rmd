@@ -59,8 +59,11 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
-data("ex")
+data("admiral_adsl")
+data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 ```
 ```{r echo=FALSE}
 ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))

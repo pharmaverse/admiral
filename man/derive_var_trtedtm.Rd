@@ -52,11 +52,11 @@ specified for the \code{order} parameter) is included in the output dataset.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("ex")
-data("dm")
+data("admiral_ex")
+data("admiral_dm")
 
-dm \%>\%
-  derive_var_trtedtm(dataset_ex = ex) \%>\%
+admiral_dm \%>\%
+  derive_var_trtedtm(dataset_ex = admiral_ex) \%>\%
   select(USUBJID, TRTEDTM)
 }
 \author{

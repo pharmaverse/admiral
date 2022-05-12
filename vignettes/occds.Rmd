@@ -54,8 +54,12 @@ library(dplyr)
 library(admiraltest)
 library(lubridate)
 
-data("ae")
-data("adsl")
+data("admiral_ae")
+data("admiral_adsl")
+
+ae <- admiral_ae
+adsl <- admiral_adsl
+
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain. Only the 

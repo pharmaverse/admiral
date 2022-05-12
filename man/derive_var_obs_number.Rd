@@ -61,9 +61,9 @@ order specified for the \code{order} parameter and the mode specified for the
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("vs")
+data("admiral_vs")
 
-vs \%>\%
+admiral_vs \%>\%
   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
   filter(VSTESTCD \%in\% c("HEIGHT", "WEIGHT")) \%>\%
   derive_var_obs_number(
