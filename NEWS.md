@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Added more detail on the site homepage and Programming Strategy around our manifesto and how
+we design new functions (#954)
+
 - New functions for merging variables (#607):
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
@@ -45,6 +48,11 @@ event occurring within a parameter of the input dataset. (#1063)
   derivation may vary depending on the slice.
 
 ## Updates of Existing Functions
+ 
+- Datasets internal to the package have been renamed, e.g. `adsl` has 
+been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
+vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
 `derive_vars_dtm()` the function failed. This bug was fixed (#1097).

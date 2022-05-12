@@ -26,7 +26,7 @@ example_fun <- function(by_vars) {
 
 example_fun(vars(USUBJID, PARAMCD))
 
-try(example_fun(exprs(USUBJID, PARAMCD)))
+try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 
 try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 

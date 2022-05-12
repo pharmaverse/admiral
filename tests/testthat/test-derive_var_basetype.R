@@ -41,7 +41,7 @@ test_that("records are duplicated across different `BASETYPE` values", {
   )
   actual_output <- derive_var_basetype(
     dataset = input,
-    basetypes = exprs(
+    basetypes = rlang::exprs(
       "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
       "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
       "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
@@ -98,7 +98,7 @@ test_that("records that do not match any condition are kept", {
   )
   actual_output <- derive_var_basetype(
     dataset = input,
-    basetypes = exprs(
+    basetypes = rlang::exprs(
       "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
       "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
       "OPEN-LABEL" = EPOCH == "OPEN-LABEL"

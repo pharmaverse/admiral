@@ -72,10 +72,10 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(ae)
+#' data(admiral_ae)
 #' data(ex_single)
 #'
-#' ae %>%
+#' admiral_ae %>%
 #'   head(100) %>%
 #'   derive_vars_last_dose(
 #'     head(ex_single, 100),
@@ -89,7 +89,7 @@
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 #'
 #' # or with traceability variables
-#' ae %>%
+#' admiral_ae %>%
 #'   head(100) %>%
 #'   derive_vars_last_dose(
 #'     head(ex_single, 100),
