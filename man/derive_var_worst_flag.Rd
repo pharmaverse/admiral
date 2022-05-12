@@ -13,7 +13,7 @@ derive_var_worst_flag(
   analysis_var,
   worst_high,
   worst_low,
-  filter = NULL,
+  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -47,13 +47,7 @@ Use \code{character(0)} if not required.}
 referring to "low".
 Use \code{character(0)} if not required.}
 
-\item{filter}{Filter for flag data
-
-Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
-considered.
-
-Permitted Values: a condition}
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -131,15 +125,17 @@ derive_var_worst_flag(
 
 \dontrun{
 # example with ADVS
-derive_var_worst_flag(
+restrict_derivation(
   advs,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT, ATPTN),
-  new_var = WORSTFL,
-  param_var = PARAMCD,
-  analysis_var = AVAL,
-  worst_high = c("SYSBP", "DIABP"),
-  worst_low = "RESP",
+  derivation = derive_var_worst_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD, AVISIT),
+    order = vars(ADT, ATPTN),
+    new_var = WORSTFL,
+    param_var = PARAMCD,
+    analysis_var = AVAL,
+    worst_high = c("SYSBP", "DIABP"),
+    worst_low = "RESP"),
   filter = !is.na(AVISIT) & !is.na(AVAL)
 )
 }

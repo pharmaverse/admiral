@@ -92,7 +92,7 @@ derive_vars_transposed <- function(dataset,
 
   dataset_transposed <- dataset_merge %>%
     filter_if(filter) %>%
-    spread(key = !!key_var, value = !!value_var)
+    pivot_wider(names_from = !!key_var, values_from = !!value_var)
 
   left_join(dataset, dataset_transposed, by = vars2chr(by_vars))
 }

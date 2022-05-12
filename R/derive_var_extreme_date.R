@@ -109,10 +109,10 @@ derive_var_lstalvdt <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ae")
-#' data("lb")
-#' data("adsl")
+#' data("admiral_dm")
+#' data("admiral_ae")
+#' data("admiral_lb")
+#' data("admiral_adsl")
 #'
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
@@ -135,11 +135,12 @@ derive_var_lstalvdt <- function(dataset,
 #' )
 #' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM)
@@ -190,11 +191,12 @@ derive_var_lstalvdt <- function(dataset,
 #'   )
 #' )
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_extreme_dtm(
 #'     new_var = LSTALVDTM,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)
@@ -277,8 +279,7 @@ derive_var_extreme_dtm <- function(dataset,
       order = vars(!!new_var),
       mode = mode,
       check_type = "none"
-    ) %>%
-    mutate(!!new_var := as_iso_dtm(!!new_var))
+    )
 
   derive_vars_merged(dataset,
                      dataset_add = all_data,
@@ -331,10 +332,10 @@ derive_var_extreme_dtm <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ae")
-#' data("lb")
-#' data("adsl")
+#' data("admiral_dm")
+#' data("admiral_ae")
+#' data("admiral_lb")
+#' data("admiral_adsl")
 #'
 #' # derive last known alive date (LSTALVDT)
 #' ae_start <- date_source(
@@ -354,11 +355,12 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT)
@@ -406,11 +408,12 @@ derive_var_extreme_dtm <- function(dataset,
 #'   )
 #' )
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_extreme_dt(
 #'     new_var = LSTALVDT,
 #'     ae_start, ae_end, lb_date, adsl_date,
-#'     source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+#'     source_datasets = list(adsl = admiral_adsl,
+#'     ae = admiral_ae, lb = admiral_lb),
 #'     mode = "last"
 #'   ) %>%
 #'   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)

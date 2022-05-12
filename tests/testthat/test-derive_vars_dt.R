@@ -114,7 +114,7 @@ test_that("Partial date imputation as MID to the mid day/month", {
     "2019-07-18", as.Date("2019-07-18"), NA_character_,
     "2019-02", as.Date("2019-02-15"), "D",
     "2019", as.Date("2019-06-30"), "M",
-    "2019---07", as.Date("2019-06-15"), "M"
+    "2019---07", as.Date("2019-06-30"), "M"
   )
 
   actual_output <- derive_vars_dt(

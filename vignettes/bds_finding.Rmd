@@ -60,8 +60,12 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
-data("vs")
+data("admiral_adsl")
+data("admiral_vs")
+
+adsl <- admiral_adsl
+vs <- admiral_vs
+
 vs <- convert_blanks_to_na(vs)
 ```
 ```{r echo=FALSE}
@@ -546,7 +550,7 @@ each `BASETYPE`.
 ```{r eval=TRUE}
 advs <- derive_var_basetype(
   dataset = advs,
-  basetypes = exprs(
+  basetypes = rlang::exprs(
     "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
     "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
     "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
@@ -641,6 +645,9 @@ dataset_vignette(
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```
+
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
 
 ## Derive Analysis Flags (e.g. `ANL01FL`) {#analysisrec}
 

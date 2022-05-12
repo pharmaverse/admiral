@@ -33,7 +33,7 @@ is less than or equal \code{A1HI}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data(vs)
+data(admiral_vs)
 
 ref_ranges <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
@@ -41,7 +41,7 @@ ref_ranges <- tibble::tribble(
   "PULSE",  60,     100,    40,    110
 )
 
-vs \%>\%
+admiral_vs \%>\%
   mutate(
     PARAMCD = VSTESTCD,
     AVAL = VSSTRESN
