@@ -135,22 +135,22 @@
 #' @examples
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("vs")
-#' data("dm")
+#' data("admiral_vs")
+#' data("admiral_dm")
 #'
 #' # merging all dm variables to vs
 #' derive_vars_merged(
-#'   vs,
-#'   dataset_add = select(dm, -DOMAIN),
+#'   admiral_vs,
+#'   dataset_add = select(admiral_dm, -DOMAIN),
 #'   by_vars = vars(STUDYID, USUBJID)
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
 #' # merge last weight to adsl
-#' data("adsl")
+#' data("admiral_adsl")
 #' derive_vars_merged(
-#'   adsl,
-#'   dataset_add = vs,
+#'   admiral_adsl,
+#'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   order = vars(VSDTC),
 #'   mode = "last",
@@ -290,13 +290,13 @@ derive_vars_merged <- function(dataset,
 #' @examples
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("dm")
-#' data("ex")
+#' data("admiral_dm")
+#' data("admiral_ex")
 #'
 #' # derive treatment start date (TRTSDT)
 #' derive_vars_merged_dt(
-#'   select(dm, STUDYID, USUBJID),
-#'   dataset_add = ex,
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = admiral_ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTS",
 #'   dtc = EXSTDTC,
@@ -307,8 +307,8 @@ derive_vars_merged <- function(dataset,
 #'
 #' # derive treatment end date (TRTEDT) (without imputation)
 #' derive_vars_merged_dt(
-#'   select(dm, STUDYID, USUBJID),
-#'   dataset_add = ex,
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = admiral_ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTE",
 #'   dtc = EXENDTC,
@@ -412,13 +412,13 @@ derive_vars_merged_dt <- function(dataset,
 #' @examples
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("dm")
-#' data("ex")
+#' data("admiral_dm")
+#' data("admiral_ex")
 #'
 #' # derive treatment start datetime (TRTSDTM)
 #' derive_vars_merged_dtm(
-#'   select(dm, STUDYID, USUBJID),
-#'   dataset_add = ex,
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = admiral_ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTS",
 #'   dtc = EXSTDTC,
@@ -430,8 +430,8 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' # derive treatment end datetime (TRTEDTM) (without date imputation)
 #' derive_vars_merged_dtm(
-#'   select(dm, STUDYID, USUBJID),
-#'   dataset_add = ex,
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = admiral_ex,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_vars_prefix = "TRTE",
 #'   dtc = EXENDTC,
@@ -542,8 +542,8 @@ derive_vars_merged_dtm <- function(dataset,
 #' @examples
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("dm")
-#' data("vs")
+#' data("admiral_dm")
+#' data("admiral_vs")
 #'
 #' wgt_cat <- function(wgt) {
 #'   case_when(
@@ -554,8 +554,8 @@ derive_vars_merged_dtm <- function(dataset,
 #' }
 #'
 #' derive_var_merged_cat(
-#'   dm,
-#'   dataset_add = vs,
+#'   admiral_dm,
+#'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   order = vars(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -568,8 +568,8 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' # defining a value for missing VS data
 #' derive_var_merged_cat(
-#'   dm,
-#'   dataset_add = vs,
+#'   admiral_dm,
+#'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   order = vars(VSDTC, VSSEQ),
 #'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
@@ -691,21 +691,21 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("dm")
-#' data("ae")
+#' data("admiral_dm")
+#' data("admiral_ae")
 #' derive_var_merged_exist_flag(
-#'   dm,
-#'   dataset_add = ae,
+#'   admiral_dm,
+#'   dataset_add = admiral_ae,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 #'
-#' data("vs")
+#' data("admiral_vs")
 #' derive_var_merged_exist_flag(
-#'   dm,
-#'   dataset_add = vs,
+#'   admiral_dm,
+#'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
@@ -805,12 +805,12 @@ derive_var_merged_exist_flag <- function(dataset,
 #' @examples
 #' library(admiraltest)
 #' library(dplyr, warn.conflicts = FALSE)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' derive_var_merged_character(
-#'   dm,
-#'   dataset_add = ds,
+#'   admiral_dm,
+#'   dataset_add = admiral_ds,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   new_var = DISPSTAT,
 #'   filter_add = DSCAT == "DISPOSITION EVENT",
@@ -843,14 +843,11 @@ derive_var_merged_character <- function(dataset,
 
   if (is.null(case)) {
     trans <- expr(!!source_var)
-  }
-  else if (case == "lower") {
+  } else if (case == "lower") {
     trans <- expr(str_to_lower(!!source_var))
-  }
-  else if (case == "upper") {
+  } else if (case == "upper") {
     trans <- expr(str_to_upper(!!source_var))
-  }
-  else if (case == "title") {
+  } else if (case == "title") {
     trans <- expr(str_to_title(!!source_var))
   }
   add_data <- filter_if(dataset_add, filter_add) %>%

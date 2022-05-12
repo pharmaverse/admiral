@@ -67,17 +67,17 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
 #' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -99,9 +99,9 @@
 #'   )
 #' }
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt1,
@@ -146,12 +146,12 @@ derive_disposition_status <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt_default,
@@ -230,17 +230,17 @@ format_eoxxstt_default <- function(x) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
 #' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -262,9 +262,9 @@ format_eoxxstt_default <- function(x) {
 #'   )
 #' }
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt1,

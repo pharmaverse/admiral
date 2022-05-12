@@ -43,11 +43,11 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("ex")
-#' data("dm")
+#' data("admiral_ex")
+#' data("admiral_dm")
 #'
-#' dm %>%
-#'   derive_var_trtsdtm(dataset_ex = ex) %>%
+#' admiral_dm %>%
+#'   derive_var_trtsdtm(dataset_ex = admiral_ex) %>%
 #'   select(USUBJID, TRTSDTM)
 derive_var_trtsdtm <- function(dataset,
                                dataset_ex,

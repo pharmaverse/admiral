@@ -17,7 +17,7 @@
 #'   The columns specified in the expressions inside `basetypes` are required.
 #'
 #' @param basetypes A *named* list of expressions created using the
-#' `exprs` function
+#' `rlang::exprs()` function
 #'
 #'   The names corresponds to the values of the newly created `BASETYPE` variables
 #'   and the expressions are used to subset the input dataset.
@@ -54,7 +54,7 @@
 #'
 #' bds_with_basetype <- derive_var_basetype(
 #'   dataset = bds,
-#'   basetypes = exprs(
+#'   basetypes = rlang::exprs(
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
 #'     "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
 #'     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
@@ -80,7 +80,7 @@
 #'
 #' bds_with_basetype <- derive_var_basetype(
 #'   dataset = bds,
-#'   basetypes = exprs(
+#'   basetypes = rlang::exprs(
 #'     "LAST" = TRUE,
 #'     "WORST" = TRUE
 #'   )

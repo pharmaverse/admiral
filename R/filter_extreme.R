@@ -54,10 +54,10 @@
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
 #' library(admiraltest)
-#' data("ex")
+#' data("admiral_ex")
 #'
 #' # Select first dose for each patient
-#' ex %>%
+#' admiral_ex %>%
 #'   filter_extreme(
 #'     by_vars = vars(USUBJID),
 #'     order = vars(EXSEQ),
@@ -66,7 +66,7 @@
 #'   select(USUBJID, EXSEQ)
 #'
 #' # Select highest dose for each patient on the active drug
-#' ex %>%
+#' admiral_ex %>%
 #'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
 #'     by_vars = vars(USUBJID),

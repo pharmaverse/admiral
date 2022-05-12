@@ -209,13 +209,13 @@ time imputation flag is added to the additional dataset.
 \examples{
 library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("ex")
+data("admiral_dm")
+data("admiral_ex")
 
 # derive treatment start datetime (TRTSDTM)
 derive_vars_merged_dtm(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTS",
   dtc = EXSTDTC,
@@ -227,8 +227,8 @@ derive_vars_merged_dtm(
 
 # derive treatment end datetime (TRTEDTM) (without date imputation)
 derive_vars_merged_dtm(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTE",
   dtc = EXENDTC,

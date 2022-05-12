@@ -123,7 +123,7 @@ slice_derivation <- function(dataset,
 
   # put datasets together again
   dataset_split %>%
-    unnest() %>%
+    unnest(cols = c(data)) %>%
     ungroup() %>%
     select(-temp_slicenr)
 }

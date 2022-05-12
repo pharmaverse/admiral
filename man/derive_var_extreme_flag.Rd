@@ -74,10 +74,10 @@ parameter the first or last record will be flagged across the whole dataset.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("vs")
+data("admiral_vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
-vs \%>\%
+admiral_vs \%>\%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -168,10 +168,10 @@ restrict_derivation(
 )
 
 # OCCURDS Examples
-data("ae")
+data("admiral_ae")
 
 # Most severe AE first occurrence per patient
-ae \%>\%
+admiral_ae \%>\%
   mutate(TEMP_AESEVN =
          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
   derive_var_extreme_flag(
@@ -184,7 +184,7 @@ ae \%>\%
   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 
 # Most severe AE first occurrence per patient per body system
-ae \%>\%
+admiral_ae \%>\%
   mutate(TEMP_AESEVN =
          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
   derive_var_extreme_flag(

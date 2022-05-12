@@ -38,10 +38,10 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(ae)
+#' data(admiral_ae)
 #' data(ex_single)
 #'
-#' ae %>%
+#' admiral_ae %>%
 #'   head(100) %>%
 #'   derive_var_last_dose_grp(
 #'     head(ex_single, 100),

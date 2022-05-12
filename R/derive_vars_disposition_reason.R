@@ -107,13 +107,13 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using the default format
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -128,9 +128,9 @@
 #'     TRUE ~ NA_character_
 #'   )
 #' }
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     new_var_spe = DCSREASP,
@@ -184,13 +184,13 @@ derive_disposition_reason <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using format_reason_default
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     format_new_vars = format_reason_default,
@@ -301,13 +301,13 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using the default format
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -322,9 +322,9 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'     if_else(x == "OTHER", y, NA_character_)
 #'   }
 #' }
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     new_var_spe = DCSREASP,
