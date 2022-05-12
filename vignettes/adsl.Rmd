@@ -76,13 +76,13 @@ lb <- admiral_lb
 The `DM` domain is used as the basis for `ADSL`:
 
 ```{r eval=TRUE}
-adsl <- dm %>% 
+adsl <- dm %>%
   select(-DOMAIN)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adsl, 
+  adsl,
   display_vars = vars(USUBJID, RFSTDTC, COUNTRY, AGE, SEX, RACE, ETHNIC, ARM, ACTARM)
 )
 ```
@@ -160,8 +160,8 @@ With `DS`:
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  ds, 
-  display_vars = vars(USUBJID, DSCAT, DSDECOD,DSTERM, DSSTDTC),
+  ds,
+  display_vars = vars(USUBJID, DSCAT, DSDECOD, DSTERM, DSSTDTC),
   filter = DSDECOD != "SCREEN FAILURE"
 )
 ```
@@ -288,10 +288,10 @@ Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
 format_dctreas <- function(dsdecod, dsterm = NULL) {
-  if (is.null(dsterm)){
+  if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
-     if_else (dsdecod == "OTHER", dsterm, NA_character_)
+    if_else(dsdecod == "OTHER", dsterm, NA_character_)
   }
 }
 ```
@@ -330,7 +330,6 @@ adsl <- adsl %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(adsl, display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL))
-
 ```
 
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
@@ -454,7 +453,6 @@ src_ds <- dthcaus_source(
 adsl <- adsl %>%
   select(-DTHCAUS) %>% # remove it before deriving it again
   derive_var_dthcaus(src_ae, src_ds, source_datasets = list(ae = ae, ds = ds))
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -556,7 +554,7 @@ adsl <- adsl %>%
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   adsl,
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT), 
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT),
   filter = !is.na(TRTSDT)
 )
 ```
@@ -601,8 +599,8 @@ adsl <- adsl %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adsl, 
-  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR), 
+  adsl,
+  display_vars = vars(USUBJID, TRTEDT, DTHDTC, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR),
   filter =  !is.na(TRTSDT)
 )
 ```
@@ -663,7 +661,7 @@ adsl <- adsl %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adsl, 
+  adsl,
   display_vars = vars(USUBJID, AGE, SEX, COUNTRY, AGEGR1, AGEGR2, REGION1)
 )
 ```
@@ -677,7 +675,6 @@ An example of an implementation could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-
   derive_var_merged_exist_flag(
     dataset_add = ex,
     by_vars = vars(STUDYID, USUBJID),
@@ -688,7 +685,7 @@ adsl <- adsl %>%
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  adsl , 
+  adsl,
   display_vars = vars(USUBJID, TRTSDT, ARM, ACTARM, SAFFL)
 )
 ```

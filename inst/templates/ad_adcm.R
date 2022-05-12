@@ -29,7 +29,6 @@ adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 # Derive flags
 adcm <- cm %>%
-
   # Join supplementary qualifier variables
   # derive_vars_suppqual(suppcm) %>%
 
@@ -39,7 +38,6 @@ adcm <- cm %>%
     new_vars = adsl_vars,
     by = vars(STUDYID, USUBJID)
   ) %>%
-
   # Derive analysis start time
   derive_vars_dtm(
     dtc = CMSTDTC,
@@ -48,7 +46,6 @@ adcm <- cm %>%
     time_imputation = "first",
     min_dates = vars(TRTSDT)
   ) %>%
-
   # Derive analysis end time
   derive_vars_dtm(
     dtc = CMENDTC,
@@ -57,22 +54,18 @@ adcm <- cm %>%
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
   ) %>%
-
   # Derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-
   # Derive analysis start relative day
   derive_var_astdy(
     reference_date = TRTSDT,
     date = ASTDT
   ) %>%
-
   # Derive analysis end relative day
   derive_var_aendy(
     reference_date = TRTSDT,
     date = AENDT
   ) %>%
-
   # Derive analysis duration (value and unit)
   derive_vars_duration(
     new_var = ADURN,
@@ -87,7 +80,6 @@ adcm <- cm %>%
 
 # Derive flags
 adcm <- adcm %>%
-
   # Derive On-Treatment flag
   # Set `span_period = "Y"` if you want occurrences that started prior to drug
   # intake and ongoing or ended after this time to be considered as on-treatment.
@@ -97,18 +89,14 @@ adcm <- adcm %>%
     ref_start_date = TRTSDT,
     ref_end_date = TRTEDT
   ) %>%
-
   # Derive Pre-Treatment flag
   mutate(PREFL = if_else(ASTDT < TRTSDT, "Y", NA_character_)) %>%
-
   # Derive Follow-Up flag
   mutate(FUPFL = if_else(ASTDT > TRTEDT, "Y", NA_character_)) %>%
-
   # Derive ANL01FL
   # This variable is sponsor specific and may be used to indicate particular
   # records to be used in subsequent derivations or analysis.
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
-
   # Derive 1st Occurrence of Preferred Term Flag
   derive_var_extreme_flag(
     new_var = AOCCPFL,
@@ -122,7 +110,6 @@ adcm <- adcm %>%
 # Derive Aphase and Aphasen Variable
 # Other timing variable can be derived similarly.
 adcm <- adcm %>%
-
   mutate(
     APHASE = case_when(
       PREFL == "Y" ~ "Pre-Treatment",
@@ -135,7 +122,6 @@ adcm <- adcm %>%
       FUPFL == "Y" ~ 3
     )
   ) %>%
-
   # Assign TRTP/TRTA
   mutate(
     TRTP = TRT01P,
