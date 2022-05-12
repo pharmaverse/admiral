@@ -35,61 +35,47 @@
 #' @param age Subject age
 #'
 #'   A variable containing the subject's age
-#'   Permitted Values: Numeric value
+#'   Permitted Values: A numeric variable name that refers to a subject age
+#'                     column of the input dataset
 #'
 #' @param sex Subject sex
 #'
 #'   A variable containing the subject's sex
-#'   Permitted Values: M, F
+#'   Permitted Values: A character variable name that refers to a subject sex
+#'                     column of the input dataset
 #'
 #' @param smokefl Smoking status flag
 #'
 #'   A flag indicating smoking status: Y=current smoker, N=otherwise
-#'   Permitted Values: Y, N
+#'   Permitted Values: A character variable name that refers to a smoking status
+#'                     column of the input dataset
 #'
 #' @param diabetfl Diabetic flag
 #'
 #'   A flag indicating diabetic status: Y=diabetic, N=otherwise
-#'   Permitted Values: Y, N
+#'   Permitted Values: A character variable name that refers to a diabetic
+#'                     status column of the input dataset
 #'
 #' @param trthypfl Treated with hypertension medication flag
 #'
 #'   A flag indicating if a subject was treated with hypertension medication:
 #'   Y=treated for high blood pressure, N=Not treated for high blood pressure
-#'   Permitted Values: Y, N
+#'   Permitted Values: A character variable name that refers to a column that
+#'                     indicates whether a subject is treated for high blood
+#'                     pressure
 #'
 #' @inheritParams derive_derived_param
 #'
 #' @inheritParams derive_param_qtc
 #'
 #' @details
-#' The values of `age`, `sex`, `smokefl`, `diabetfl`, and `trthypfl` will be
+#' The values of `age`, `sex`, `smokefl`, `diabetfl` and `trthypfl` will be
 #' added to the `by_vars` list.
 #'
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula D'Agostino, 2008 is:
-#'
-#' For women:
-#'   Age Factor = 2.32888;
-#'   Total Chol Factor = 1.20904;
-#'   HDL Chol Factor = -0.70833;
-#'   SysBPFactor=2.76157 if not on hypertension medications, 2.82263 if on
-#'     hypertension medications, Avg Risk = 26.1931 and Risk Period;
-#'   Smoker=.52873 if smoker, 0 otherwise;
-#'   Diabetes Present=.69154 is present, 0 otherwise;
-#'   Avg Risk = 26.1931;
-#'   RiskPeriodFactor = 0.95012;
-#'
-#' For men:
-#'   Age Factor = 3.06117;
-#'   Total Chol Factor = 1.12370;
-#'   HDL Chol Factor = -0.93263;
-#'   SysBPFactor=1.93303 if not on hypertension medications, 2.99881 if on
-#'     hypertensino medications,;
-#'   Smoker=.65451 if smoker, 0 otherwise;
-#'   Diabetes Present=.57367 is present, 0 otherwise,;
-#'   Avg Risk = 23.9802;
-#'   Risk Period Factor = 0.88936;
+#' within 10-years according to Framingham formula \href
+#' {https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}
+#' {D'Agostino, 2008} is:
 #'
 #' Equation:
 #' \deqn{RiskFactors = (log(Age) * AgeFactor)
@@ -104,9 +90,11 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation
+#' @keywords derivation bds
 #'
 #' @export
+#'
+#' @seealso [compute_framingham()]
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -160,30 +148,29 @@
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
+#'
+#'
+
 derive_param_framingham <- function(dataset,
                                     by_vars,
                                     set_values_to = vars(PARAMCD = "FCVD101"),
                                     sysbp_code = "SYSBP",
                                     chol_code = "CHOL",
                                     cholhdl_code = "CHOLHDL",
-                                    age = AGE,
-                                    sex = SEX,
-                                    smokefl = SMOKEFL,
-                                    diabetfl = DIABETFL,
-                                    trthypfl = TRTHYPFL,
+                                    age = assert_symbol(enquo(AGE)),
+                                    sex = assert_symbol(enquo(SEX)),
+                                    smokefl = assert_symbol(enquo(SMOKEFL)),
+                                    diabetfl = assert_symbol(enquo(DIABETFL)),
+                                    trthypfl = assert_symbol(enquo(TRTHYPFL)),
                                     get_unit_expr,
                                     filter = NULL) {
+
+  by_vars <- assert_vars(by_vars)
 
   assert_data_frame(dataset,
                     required_vars =
                       quo_c(
-                        vars(!!!by_vars, PARAMCD, AVAL),
-                        enquo(age),
-                        enquo(sex),
-                        enquo(smokefl),
-                        enquo(diabetfl),
-                        enquo(trthypfl)
-                      ))
+                        vars(!!!by_vars)))
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -230,7 +217,7 @@ derive_param_framingham <- function(dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),
     by_vars = quo_c(
-      vars(!!!by_vars, PARAMCD, AVAL),
+      vars(!!!by_vars),
       enquo(age),
       enquo(sex),
       enquo(smokefl),
@@ -252,7 +239,7 @@ derive_param_framingham <- function(dataset,
 #'
 #' @param sysbp Systolic blood pressure
 #'
-#'   A numeric vector is expected.
+#'   A numeric vector e is expected.
 #'
 #' @param chol Total serum cholesterol (mg/dL)
 #'
@@ -269,46 +256,32 @@ derive_param_framingham <- function(dataset,
 #' @param sex Gender
 #'
 #'   A character vector is expected.
+#'   Expected Values: 'M' 'F'
 #'
 #' @param smokefl Smoking Status
 #'
-#'   A character vector is expected.
+#'   A character vector  is expected.
+#'   Expected Values: 'Y' 'N'
 #'
 #' @param diabetfl Diabetic Status
 #'
 #'   A character vector is expected.
+#'   Expected Values: 'Y' 'N'
 #'
 #' @param trthypfl Treated for hypertension status
 #'
 #'   A character vector is expected.
+#'   Expected Values: 'Y' 'N'
 #'
 #' @author Alice Ehmann
 #'
 #' @details
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula D'Agostino, 2008 is:
+#' within 10-years according to Framingham formula \href
+#' {https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}
+#' {D'Agostino, 2008}is:
 #'
-#' For women:
-#'   Age Factor = 2.32888;
-#'   Total Chol Factor = 1.20904;
-#'   HDL Chol Factor = -0.70833;
-#'   SysBPFactor=2.76157 if not on hypertension medications, 2.82263 if on
-#'     hypertension medications, Avg Risk = 26.1931 and Risk Period;
-#'   Smoker=.52873 if smoker, 0 otherwise;
-#'   Diabetes Present=.69154 is present, 0 otherwise;
-#'   Avg Risk = 26.1931;
-#'   RiskPeriodFactor = 0.95012;
 #'
-#' For men:
-#'   Age Factor = 3.06117;
-#'   Total Chol Factor = 1.12370;
-#'   HDL Chol Factor = -0.93263;
-#'   SysBPFactor=1.93303 if not on hypertension medications, 2.99881 if on
-#'     hypertensino medications,;
-#'   Smoker=.65451 if smoker, 0 otherwise;
-#'   Diabetes Present=.57367 is present, 0 otherwise,;
-#'   Avg Risk = 23.9802;
-#'   Risk Period Factor = 0.88936;
 #'
 #' Equation:
 #' \deqn{RiskFactors = (log(Age) * AgeFactor)
@@ -321,9 +294,11 @@ derive_param_framingham <- function(dataset,
 #'
 #' @return A numeric vector of Framingham values
 #'
-#' @keywords computation
+#' @keywords computation adam
 #'
 #' @export
+#'
+#' @seealso [derive_param_framingham()]
 #'
 #' @examples
 #' compute_framingham(sysbp = 133, chol = 216.16, cholhdl = 54.91, age=53,
@@ -334,15 +309,15 @@ derive_param_framingham <- function(dataset,
 #'
 compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
                                diabetfl, trthypfl) {
-
-  assert_numeric_vector(sysbp)
-  assert_numeric_vector(chol)
-  assert_numeric_vector(cholhdl)
-  assert_numeric_vector(age)
-  assert_character_vector(sex, values = c("M", "F"))
-  assert_character_vector(smokefl, values = c("Y", "N"))
-  assert_character_vector(diabetfl, values = c("Y", "N"))
-  assert_character_vector(trthypfl, values = c("Y", "N"))
+style_text(
+  assert_numeric_vector(sysbp),
+  assert_numeric_vector(chol),
+  assert_numeric_vector(cholhdl),
+  assert_numeric_vector(age),
+  assert_character_vector(sex, values = c("M", "F")),
+  assert_character_vector(smokefl, values = c("Y", "N")),
+  assert_character_vector(diabetfl, values = c("Y", "N")),
+  assert_character_vector(trthypfl, values = c("Y", "N")))
 
   aval <- case_when(
     sex == "F" ~
@@ -365,6 +340,6 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
                          - 23.9802)))
 
 
-  aval <- aval * 100
+ aval * 100
 
 }
