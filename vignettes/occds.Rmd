@@ -54,9 +54,13 @@ library(dplyr)
 library(admiraltest)
 library(lubridate)
 
-data("ae")
-data("suppae")
-data("adsl")
+data("admiral_ae")
+data("admiral_suppae")
+data("admiral_adsl")
+
+ae <- admiral_ae
+suppae <- admiral_suppae
+adsl <- admiral_adsl
 ```
 
 The `SUPPAE` domain can be joined to the 'AE` domain using the function `derive_vars_suppqual()`.

@@ -1,22 +1,22 @@
 library(admiraltest)
 
 test_that("A warning is issued when a variable to be derived already exists in the input dataset", {
-  data(dm)
+  data(admiral_dm)
 
   expect_warning(
-    warn_if_vars_exist(dm, "AGE"),
+    warn_if_vars_exist(admiral_dm, "AGE"),
     "Variable `AGE` already exists in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(dm, c("AGE", "AGEU", "ARM")),
+    warn_if_vars_exist(admiral_dm, c("AGE", "AGEU", "ARM")),
     "Variables `AGE`, `AGEU` and `ARM` already exist in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(dm, c("AAGE", "AGEU", "ARM")),
+    warn_if_vars_exist(admiral_dm, c("AAGE", "AGEU", "ARM")),
     "Variables `AGEU` and `ARM` already exist in the dataset"
   )
   expect_warning(
-    warn_if_vars_exist(dm, "AAGE"),
+    warn_if_vars_exist(admiral_dm, "AAGE"),
     NA
   )
 })
