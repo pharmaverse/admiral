@@ -16,7 +16,7 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 data("lb")
-data("adsl")
+data("admiral_adsl")
 
 lb <- convert_blanks_to_na(lb)
 
@@ -97,18 +97,7 @@ adlb <- lb %>%
     flag_imputation = FALSE
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADT)
-
-# Get WBC
-# Uncomment when derive_param_wbc_abs() is merged (PR #1035)
-# adlb <- adlb %>%
-#   derive_param_wbc_abs(#dataset = input,
-#                        by_vars = vars(USUBJID, VISIT),
-#                        set_values_to = vars(PARAMCD = "LYMPHSI",
-#                                           DTYPE = "CALCULATION"),
-#                        filter_diff = LBSTRESU == "fraction of 1",
-#                        wbc_code = "WBC",
-#                        diff_code = "LYMLE")
+  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adlb <- adlb %>%
 
@@ -144,6 +133,18 @@ adlb <- adlb %>%
       !is.na(VISITNUM) ~ VISITNUM
     )
   )
+
+# Get WBC
+adlb <- adlb %>%
+  derive_param_wbc_abs(by_vars = vars(USUBJID, VISIT),
+                       set_values_to = vars(PARAMCD = "LYMPH",
+                                            PARAM = "Leukocytes (GI/L)",
+                                            DTYPE = "CALCULATION"),
+                       get_unit_expr = extract_unit(PARAM),
+                       wbc_code = "WBC",
+                       diff_code = "LYMLE",
+                       diff_type = "fraction",
+                       wbc_unit = "GI/L")
 
 adlb <- adlb %>%
 
