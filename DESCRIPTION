@@ -23,6 +23,7 @@ Authors@R: c(
     person("Alana", "Harris", role = "aut"),
     person("Mahdi", "About", role = "aut"),
     person("Pooja", "Kumari", role = "aut"),
+    person("Claudia", "Carlucci", role = "aut"),
     person("Daniil", "Stefonishin", role = "aut"), 
     person("Michael", "Thorpe", role = "ctb"),
     person("Pavan", "Kumar", role = "ctb"),
