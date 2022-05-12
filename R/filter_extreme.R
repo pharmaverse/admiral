@@ -89,20 +89,25 @@ filter_extreme <- function(dataset,
     )
 
   # group and sort input dataset
+  tmp_obs_nr <- get_new_tmp_var(dataset)
   if (!is.null(by_vars)) {
     assert_has_variables(dataset, vars2chr(by_vars))
 
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        by_vars = by_vars,
-                        check_type = check_type) %>%
+      derive_var_obs_number(
+        new_var = !!tmp_obs_nr,
+        order = order,
+        by_vars = by_vars,
+        check_type = check_type
+      ) %>%
       group_by(!!!by_vars)
   } else {
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        check_type = check_type)
+      derive_var_obs_number(
+        new_var = !!tmp_obs_nr,
+        order = order,
+        check_type = check_type
+      )
   }
 
   if (mode == "first") {
@@ -116,5 +121,5 @@ filter_extreme <- function(dataset,
   }
   data %>%
     ungroup() %>%
-    select(-starts_with("temp_"))
+    remove_tmp_vars()
 }
