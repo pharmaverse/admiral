@@ -19,13 +19,13 @@ Warn if a variable already exists inside a dataset
 }
 \examples{
 library(admiraltest)
-data(dm)
+data(admiral_dm)
 
 ## No warning as `AAGE` doesn't exist in `dm`
-warn_if_vars_exist(dm, "AAGE")
+warn_if_vars_exist(admiral_dm, "AAGE")
 
 ## Issues a warning
-warn_if_vars_exist(dm, "ARM")
+warn_if_vars_exist(admiral_dm, "ARM")
 }
 \author{
 Thomas Neitmann

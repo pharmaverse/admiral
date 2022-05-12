@@ -304,7 +304,7 @@ test_that("a warning is issued when using `derive_params_exposure()", {
 
 test_that("a warning is issued when using `derive_agegr_fda()`", {
   expect_warning(
-    derive_agegr_fda(adsl, age_var = AGE, new_var = AGEGR2),
+    derive_agegr_fda(admiral_adsl, age_var = AGE, new_var = AGEGR2),
     "deprecated",
     fixed = TRUE
   )
@@ -312,7 +312,7 @@ test_that("a warning is issued when using `derive_agegr_fda()`", {
 
 test_that("a warning is issued when using `derive_agegr_ema()`", {
   expect_warning(
-    derive_agegr_ema(adsl, age_var = AGE, new_var = AGEGR2),
+    derive_agegr_ema(admiral_adsl, age_var = AGE, new_var = AGEGR2),
     "deprecated",
     fixed = TRUE
   )

@@ -29,9 +29,13 @@ library(admiral)
 library(admiraltest)
 
 # read in SDTM datasets
-data("dm")
-data("ds")
-data("ex")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+
+dm <- admiral_dm
+ds <- admiral_ds
+ex <- admiral_ex
 ```
 
 ```{r, eval=TRUE}

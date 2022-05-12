@@ -60,11 +60,17 @@ library(admiraltest)
 library(lubridate)
 library(stringr)
 
-data("dm")
-data("ds")
-data("ex")
-data("ae")
-data("lb")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+data("admiral_ae")
+data("admiral_lb")
+
+dm <- admiral_dm
+ds <- admiral_ds
+ex <- admiral_ex
+ae <- admiral_ae
+lb <- admiral_lb
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
