@@ -452,6 +452,8 @@ contains_vars <- function(arg) {
 #' `datset` with a given `prefix` then the suffix is increased by 1, e.g. if
 #' `tmp_var_1` already exists then `get_new_tmp_var()` will return `tmp_var_2`.
 #'
+#' @export
+#'
 #' @examples
 #' data(adsl)
 #' tmp_var <- get_new_tmp_var(adsl)
@@ -486,6 +488,8 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 #' Remove All Temporary Variables Created Within the Current Function Environment
 #'
 #' @param dataset The input dataset
+#'
+#' @export
 #'
 #' @examples
 #' data(dm)
