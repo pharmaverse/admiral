@@ -623,7 +623,7 @@ test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var
   fixed = TRUE)
 })
 
-test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", {
+test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", { # nolint
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
