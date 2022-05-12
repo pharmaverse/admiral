@@ -187,7 +187,7 @@ advs <- advs %>%
 advs <- advs %>%
   # Calculate BASETYPE
   derive_var_basetype(
-    basetypes = exprs(
+    basetypes = rlang::exprs(
       "LAST: AFTER LYING DOWN FOR 5 MINUTES" = ATPTN == 815,
       "LAST: AFTER STANDING FOR 1 MINUTE" = ATPTN == 816,
       "LAST: AFTER STANDING FOR 3 MINUTES" = ATPTN == 817,
