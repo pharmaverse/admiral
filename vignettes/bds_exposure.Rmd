@@ -189,8 +189,10 @@ calculating and imputing analysis dates.
 Next, the analysis study days can be derived:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_var_astdy(adex, reference_date = TRTSDT, date = ASTDT)
-adex <- derive_var_aendy(adex, reference_date = TRTSDT, date = AENDT)
+adex <-
+  derive_vars_dy(adex,
+                 reference_date = TRTSDT,
+                 source_vars = vars(ASTDT, AENDT))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

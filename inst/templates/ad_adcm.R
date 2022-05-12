@@ -61,16 +61,10 @@ adcm <- cm %>%
   # Derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
 
-  # Derive analysis start relative day
-  derive_var_astdy(
+  # Derive analysis start relative day and analysis end relative day
+  derive_vars_dy(
     reference_date = TRTSDT,
-    date = ASTDT
-  ) %>%
-
-  # Derive analysis end relative day
-  derive_var_aendy(
-    reference_date = TRTSDT,
-    date = AENDT
+    source_vars = vars(ASTDT, AENDT)
   ) %>%
 
   # Derive analysis duration (value and unit)
@@ -110,12 +104,15 @@ adcm <- adcm %>%
   mutate(ANL01FL = if_else(ONTRTFL == "Y", "Y", NA_character_)) %>%
 
   # Derive 1st Occurrence of Preferred Term Flag
-  derive_var_extreme_flag(
-    new_var = AOCCPFL,
-    by_vars = vars(USUBJID, CMDECOD),
-    order = vars(ASTDTM, CMSEQ),
-    filter = ANL01FL == "Y",
-    mode = "first"
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AOCCPFL,
+      by_vars = vars(USUBJID, CMDECOD),
+      order = vars(ASTDTM, CMSEQ),
+      mode = "first"
+    ),
+    filter = ANL01FL == "Y"
   )
 
 
