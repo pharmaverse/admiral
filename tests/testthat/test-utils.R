@@ -110,7 +110,7 @@ test_that("blank strings are turned into `NA` inside data frames", {
 })
 
 test_that("negate_vars returns list of negated variables", {
-  expect_identical(negate_vars(vars(var1, var2)), exprs(-var1, -var2))
+  expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
 })
 
 test_that("negate_vars returns NULL if input is NULL", {
