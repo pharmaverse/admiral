@@ -30,8 +30,8 @@
 #'
 #' ref_ranges <- tibble::tribble(
 #'   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-#'   "DIABP",  60,      80,    40,     90,
-#'   "PULSE",  60,     100,    40,    110
+#'   "DIABP",      60,     80,    40,    90,
+#'   "PULSE",      60,    100,    40,   110
 #' )
 #'
 #' vs %>%

@@ -279,9 +279,11 @@ derive_var_extreme_dtm <- function(dataset,
       check_type = "none"
     )
 
-  derive_vars_merged(dataset,
-                     dataset_add = all_data,
-                     by_vars = subject_keys)
+  derive_vars_merged(
+    dataset,
+    dataset_add = all_data,
+    by_vars = subject_keys
+  )
 }
 
 #' Derive First or Last Date from Multiple Sources
@@ -424,7 +426,7 @@ derive_var_extreme_dt <- function(dataset,
   sources <- list(...)
   assert_list_of(sources, "date_source")
   for (i in seq_along(sources)) {
-    sources[[i]]$time_imputation = "first"
+    sources[[i]]$time_imputation <- "first"
   }
 
   derive_var_extreme_dtm(
@@ -487,7 +489,8 @@ lstalvdt_source <- function(dataset_name,
     filter = !!enquo(filter),
     date = !!enquo(date),
     date_imputation = date_imputation,
-    traceability_vars = traceability_vars)
+    traceability_vars = traceability_vars
+  )
 }
 
 #' Create a `date_source` object
@@ -534,7 +537,6 @@ date_source <- function(dataset_name,
                         time_imputation = NULL,
                         preserve = FALSE,
                         traceability_vars = NULL) {
-
   if (!is.null(date_imputation)) {
     assert_that(is_valid_date_entry(date_imputation))
   }

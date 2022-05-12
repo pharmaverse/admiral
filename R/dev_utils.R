@@ -82,8 +82,7 @@ squote <- function(x) {
 dquote <- function(x) {
   if (is.null(x)) {
     "NULL"
-  }
-  else {
+  } else {
     paste0("\"", x, "\"")
   }
 }
@@ -153,8 +152,8 @@ arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
-             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
-             is.symbol(expr[[2L]])) {
+    (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+    is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
   } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
     deparse(expr[[2L]])
@@ -188,8 +187,8 @@ extract_vars <- function(x, side = "lhs") {
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)
     symbols <- syms(all.vars(quo_get_expr(x)))
-    map(symbols, ~quo_set_env(quo(!!.x), env))
-  } else  if (is_formula(x)) {
+    map(symbols, ~ quo_set_env(quo(!!.x), env))
+  } else if (is_formula(x)) {
     funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
     assert_character_scalar(side, values = names(funs))
     quo_set_env(
@@ -302,8 +301,10 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
 
   if (!is.null(ignore_vars)) {
-    non_by_vars <- setdiff(non_by_vars,
-                           vars_select(non_by_vars, !!!ignore_vars))
+    non_by_vars <- setdiff(
+      non_by_vars,
+      vars_select(non_by_vars, !!!ignore_vars)
+    )
   }
 
   # get unique values within each group by variables
@@ -401,8 +402,7 @@ extract_unit <- function(x) {
 #'   arg <- rlang::enquo(arg)
 #'   if (admiral:::is_auto(arg)) {
 #'     "auto keyword was specified"
-#'   }
-#'   else {
+#'   } else {
 #'     arg
 #'   }
 #' }

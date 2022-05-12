@@ -98,7 +98,6 @@
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
-#'
 derive_last_dose <- function(dataset,
                              dataset_ex,
                              filter_ex = NULL,
@@ -115,7 +114,7 @@ derive_last_dose <- function(dataset,
   assert_logical_scalar(check_dates_only)
   if (check_dates_only) {
     cond <- expr(substr(!!quo_get_expr(enquo(dose_start)), 1, 10)
-                 == substr(!!quo_get_expr(enquo(dose_end)), 1, 10))
+    == substr(!!quo_get_expr(enquo(dose_end)), 1, 10))
   } else {
     cond <- expr(!!quo_get_expr(enquo(dose_start)) == !!quo_get_expr(enquo(dose_end)))
   }
@@ -129,5 +128,6 @@ derive_last_dose <- function(dataset,
     new_var = !!enquo(new_var),
     output_datetime = output_datetime,
     single_dose_condition = !!cond,
-    traceability_vars = traceability_vars)
+    traceability_vars = traceability_vars
+  )
 }

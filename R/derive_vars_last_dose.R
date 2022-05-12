@@ -102,18 +102,16 @@
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
-#'
 derive_vars_last_dose <- function(dataset,
-                             dataset_ex,
-                             filter_ex = NULL,
-                             by_vars = vars(STUDYID, USUBJID),
-                             dose_id = vars(),
-                             dose_date,
-                             analysis_date,
-                             single_dose_condition = (EXDOSFRQ == "ONCE"),
-                             new_vars = NULL,
-                             traceability_vars = NULL) {
-
+                                  dataset_ex,
+                                  filter_ex = NULL,
+                                  by_vars = vars(STUDYID, USUBJID),
+                                  dose_id = vars(),
+                                  dose_date,
+                                  analysis_date,
+                                  single_dose_condition = (EXDOSFRQ == "ONCE"),
+                                  new_vars = NULL,
+                                  traceability_vars = NULL) {
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)
@@ -123,8 +121,10 @@ derive_vars_last_dose <- function(dataset,
   assert_varval_list(new_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
-  assert_data_frame(dataset_ex, quo_c(by_vars, dose_date, new_vars,
-                                      get_source_vars(traceability_vars)))
+  assert_data_frame(dataset_ex, quo_c(
+    by_vars, dose_date, new_vars,
+    get_source_vars(traceability_vars)
+  ))
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -140,8 +140,10 @@ derive_vars_last_dose <- function(dataset,
   }
 
   # check if doses are unique based on dose_date and dose_id
-  signal_duplicate_records(dataset_ex, c(by_vars, dose_date, dose_id),
-  "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses.")
+  signal_duplicate_records(
+    dataset_ex, c(by_vars, dose_date, dose_id),
+    "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses."
+  )
 
   # filter EX based on user-specified condition
   if (!is.null(quo_get_expr(filter_ex))) {
@@ -162,8 +164,10 @@ derive_vars_last_dose <- function(dataset,
     new_vars_name <- replace_values_by_names(new_vars)
     dataset_ex <- dataset_ex %>%
       mutate(!!!new_vars) %>%
-      select(!!!by_vars, !!!syms(dose_id_str), !!dose_date,
-             !!!new_vars_name, !!!syms(trace_vars_str))
+      select(
+        !!!by_vars, !!!syms(dose_id_str), !!dose_date,
+        !!!new_vars_name, !!!syms(trace_vars_str)
+      )
   } else {
     new_vars_name <- syms(colnames(dataset_ex))
   }
@@ -182,7 +186,7 @@ derive_vars_last_dose <- function(dataset,
     derive_var_obs_number(
       order = vars(USUBJID),
       new_var = tmp_seq_var
-      ) %>%
+    ) %>%
     mutate(
       tmp_analysis_date = convert_date_to_dtm(
         dt = !!analysis_date,
@@ -207,14 +211,18 @@ derive_vars_last_dose <- function(dataset,
     select(!!!by_vars, tmp_seq_var, tmp_analysis_date) %>%
     inner_join(dataset_ex, by = by_vars_str) %>%
     filter(!is.na(tmp_dose_date) & !is.na(tmp_analysis_date) &
-             tmp_dose_date <= tmp_analysis_date) %>%
-    filter_extreme(by_vars =  vars(tmp_seq_var),
-                   order = c(vars(tmp_dose_date), dose_id),
-                   mode = "last") %>%
+      tmp_dose_date <= tmp_analysis_date) %>%
+    filter_extreme(
+      by_vars = vars(tmp_seq_var),
+      order = c(vars(tmp_dose_date), dose_id),
+      mode = "last"
+    ) %>%
     select(tmp_seq_var, !!!new_vars_name, !!!syms(trace_vars_str), -by_vars_str)
 
   # return observations from original dataset with last dose variables added
-  derive_vars_merged(dataset,
-                     dataset_add = res,
-                     by_vars = vars(tmp_seq_var)) %>% select(-starts_with("tmp_"))
+  derive_vars_merged(
+    dataset,
+    dataset_add = res,
+    by_vars = vars(tmp_seq_var)
+  ) %>% select(-starts_with("tmp_"))
 }

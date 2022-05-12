@@ -116,13 +116,15 @@ derive_disposition_status <- function(dataset,
                                       filter_ds,
                                       subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_status()", "derive_var_disposition_status()")
-  derive_var_disposition_status(dataset = dataset,
-                                dataset_ds = dataset_ds,
-                                new_var = !!enquo(new_var),
-                                status_var = !!enquo(status_var),
-                                format_new_var = format_new_var,
-                                filter_ds = !!enquo(filter_ds),
-                                subject_keys = subject_keys)
+  derive_var_disposition_status(
+    dataset = dataset,
+    dataset_ds = dataset_ds,
+    new_var = !!enquo(new_var),
+    status_var = !!enquo(status_var),
+    format_new_var = format_new_var,
+    filter_ds = !!enquo(filter_ds),
+    subject_keys = subject_keys
+  )
 }
 
 #' Default Format for Disposition Status
@@ -270,12 +272,12 @@ format_eoxxstt_default <- function(x) {
 #'   ) %>%
 #'   select(STUDYID, USUBJID, EOSSTT)
 derive_var_disposition_status <- function(dataset,
-                                      dataset_ds,
-                                      new_var,
-                                      status_var,
-                                      format_new_var = format_eoxxstt_default,
-                                      filter_ds,
-                                      subject_keys = vars(STUDYID, USUBJID)) {
+                                          dataset_ds,
+                                          new_var,
+                                          status_var,
+                                          format_new_var = format_eoxxstt_default,
+                                          filter_ds,
+                                          subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   status_var <- assert_symbol(enquo(status_var))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -287,10 +289,12 @@ derive_var_disposition_status <- function(dataset,
 
   # Add the status variable and derive the new dispo status in the input dataset
   dataset %>%
-    derive_vars_merged(dataset_add = dataset_ds,
-                       filter_add = !!filter_ds,
-                       new_vars = vars(!!status_var),
-                       by_vars = subject_keys) %>%
+    derive_vars_merged(
+      dataset_add = dataset_ds,
+      filter_add = !!filter_ds,
+      new_vars = vars(!!status_var),
+      by_vars = subject_keys
+    ) %>%
     mutate(!!new_var := format_new_var(!!status_var)) %>%
     select(-!!status_var)
 }

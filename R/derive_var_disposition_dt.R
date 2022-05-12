@@ -79,13 +79,15 @@ derive_disposition_dt <- function(dataset,
                                   date_imputation = NULL,
                                   subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_dt()", "derive_var_disposition_dt()")
-  derive_var_disposition_dt(dataset = dataset,
-                            dataset_ds = dataset_ds,
-                            new_var = !!enquo(new_var),
-                            dtc = !!enquo(dtc),
-                            filter_ds = !!enquo(filter_ds),
-                            date_imputation = date_imputation,
-                            subject_keys = subject_keys)
+  derive_var_disposition_dt(
+    dataset = dataset,
+    dataset_ds = dataset_ds,
+    new_var = !!enquo(new_var),
+    dtc = !!enquo(dtc),
+    filter_ds = !!enquo(filter_ds),
+    date_imputation = date_imputation,
+    subject_keys = subject_keys
+  )
 }
 
 #' Derive a Disposition Date
@@ -163,14 +165,13 @@ derive_disposition_dt <- function(dataset,
 #'   ) %>%
 #'   select(STUDYID, USUBJID, FRVDT)
 derive_var_disposition_dt <- function(dataset,
-                                  dataset_ds,
-                                  new_var,
-                                  dtc,
-                                  filter_ds,
-                                  date_imputation = NULL,
-                                  preserve = FALSE,
-                                  subject_keys = vars(STUDYID, USUBJID)) {
-
+                                      dataset_ds,
+                                      new_var,
+                                      dtc,
+                                      filter_ds,
+                                      date_imputation = NULL,
+                                      preserve = FALSE,
+                                      subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   filter_ds <- assert_filter_cond(enquo(filter_ds))

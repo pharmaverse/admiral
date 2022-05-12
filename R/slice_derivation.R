@@ -46,8 +46,8 @@
 #'
 #' @examples
 #'
-#'  library(stringr)
-#'  advs <- tibble::tribble(
+#' library(stringr)
+#' advs <- tibble::tribble(
 #'   ~USUBJID, ~VSDTC,       ~VSTPT,
 #'   "1",      "2020-04-16", NA_character_,
 #'   "1",      "2020-04-16", "BEFORE TREATMENT"
@@ -63,10 +63,14 @@
 #'     dtc = VSDTC,
 #'     new_vars_prefix = "A"
 #'   ),
-#'   derivation_slice(filter = str_detect(VSTPT, "PRE|BEFORE"),
-#'                    args = params(time_imputation = "first")),
-#'   derivation_slice(filter = TRUE,
-#'                    args = params(time_imputation = "last"))
+#'   derivation_slice(
+#'     filter = str_detect(VSTPT, "PRE|BEFORE"),
+#'     args = params(time_imputation = "first")
+#'   ),
+#'   derivation_slice(
+#'     filter = TRUE,
+#'     args = params(time_imputation = "last")
+#'   )
 #' )
 slice_derivation <- function(dataset,
                              derivation,
@@ -98,7 +102,9 @@ slice_derivation <- function(dataset,
   )
 
   # split dataset into slices
-  dataset_split <- dataset %>% group_by(temp_slicenr) %>% nest()
+  dataset_split <- dataset %>%
+    group_by(temp_slicenr) %>%
+    nest()
 
   # call derivation for each slice
   for (i in seq_along(slices)) {
