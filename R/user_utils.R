@@ -65,10 +65,10 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @examples
 #' library(admiraltest)
-#' data(vs)
+#' data(admiral_vs)
 #'
-#' filter_if(vs, rlang::quo(NULL))
-#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+#' filter_if(admiral_vs, rlang::quo(NULL))
+#' filter_if(admiral_vs, rlang::quo(VSTESTCD == "Weight"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)
@@ -186,7 +186,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #' @keywords user_utility
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' try(
 #'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
@@ -218,7 +218,7 @@ get_one_to_many_dataset <- function() {
 #' @keywords user_utility
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #'
 #' try(
 #'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))

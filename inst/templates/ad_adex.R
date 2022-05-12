@@ -14,8 +14,11 @@ library(stringr)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
-data("adsl")
-data("ex")
+data("admiral_adsl")
+data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 
 ex <- convert_blanks_to_na(ex)
 
