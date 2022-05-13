@@ -508,7 +508,6 @@ derive_param_tte <- function(dataset = NULL,
 #'   subject_keys = vars(STUDYID, USUBJID),
 #'   mode = "first"
 #' )
-#'
 #' @export
 filter_date_sources <- function(sources,
                                 source_datasets,
@@ -564,7 +563,8 @@ filter_date_sources <- function(sources,
           !!date_var := convert_dtc_to_dt(
             !!date,
             date_imputation = "first"
-        ))
+          )
+        )
       }
     }
 
@@ -621,7 +621,7 @@ filter_date_sources <- function(sources,
 #' library(lubridate)
 #'
 #' adsl <- tibble::tribble(
-#' ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
@@ -639,7 +639,6 @@ filter_date_sources <- function(sources,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD)
 #' )
-#'
 #' @export
 extend_source_datasets <- function(source_datasets,
                                    by_vars) {
@@ -662,8 +661,7 @@ extend_source_datasets <- function(source_datasets,
             source_datasets[[i]], !!!by_vars
           )))
         )
-    }
-    else if (!setequal(by_vars_chr, missing_by_vars)) {
+    } else if (!setequal(by_vars_chr, missing_by_vars)) {
       # only some of the by variables are included in the source dataset #
       abort(paste(
         "Only",
@@ -672,8 +670,7 @@ extend_source_datasets <- function(source_datasets,
         names(source_datasets)[[i]],
         ".\n The source dataset must include all or none of the by variables."
       ))
-    }
-    else {
+    } else {
       extend[[i]] <- TRUE
     }
   }

@@ -46,8 +46,8 @@ output dataset but the derivation is not called for them.
 }
 \examples{
 
- library(stringr)
- advs <- tibble::tribble(
+library(stringr)
+advs <- tibble::tribble(
   ~USUBJID, ~VSDTC,       ~VSTPT,
   "1",      "2020-04-16", NA_character_,
   "1",      "2020-04-16", "BEFORE TREATMENT"
@@ -63,10 +63,14 @@ slice_derivation(
     dtc = VSDTC,
     new_vars_prefix = "A"
   ),
-  derivation_slice(filter = str_detect(VSTPT, "PRE|BEFORE"),
-                   args = params(time_imputation = "first")),
-  derivation_slice(filter = TRUE,
-                   args = params(time_imputation = "last"))
+  derivation_slice(
+    filter = str_detect(VSTPT, "PRE|BEFORE"),
+    args = params(time_imputation = "first")
+  ),
+  derivation_slice(
+    filter = TRUE,
+    args = params(time_imputation = "last")
+  )
 )
 }
 \seealso{
