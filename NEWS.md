@@ -37,7 +37,8 @@ observation within each by group to the dataset (#1042)
   
 ### ADLB
 
-  - New ADLB template script and specific ADLB functions
+  - New ADLB template script available, specific ADLB functions developed and
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
 

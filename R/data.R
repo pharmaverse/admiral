@@ -65,5 +65,3 @@
 #' Derived from the `adsl` and `vs` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R})
 #'
 "admiral_advs"
-
-
