@@ -686,7 +686,7 @@ records only, `restrict_derivation()` can be used.
 ## Derive Shift (e.g. `SHIFT1`) {#shift}
 
 Shift variables can be derived using the `{admiral}` function `derive_var_shift()`. 
-This function derives a character shift variable concatenating shift in values based on 
+This function derives a character shift variable concatenating shift in values based on a
 user-defined pairing, e.g., shift from baseline reference range `BNRIND`
 to analysis reference range `ANRIND`. Examples calls are:
 
