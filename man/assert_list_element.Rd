@@ -73,8 +73,10 @@ try(assert_list_element(
   element = "dataset_name",
   condition = dataset_name \%in\% c("adrs", "adae"),
   valid_datasets = valid_datasets,
-  message_text = paste0("The dataset name must be one of the following:\n",
-                        paste(valid_datasets, collapse = ", "))
+  message_text = paste0(
+    "The dataset name must be one of the following:\n",
+    paste(valid_datasets, collapse = ", ")
+  )
 ))
 }
 \author{
