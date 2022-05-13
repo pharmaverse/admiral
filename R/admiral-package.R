@@ -23,4 +23,5 @@
 #' @importFrom tidyr drop_na nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
+#' @importFrom lifecycle deprecate_warn
 "_PACKAGE"
