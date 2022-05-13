@@ -697,6 +697,9 @@ advs <- derive_var_shift(advs,
                          to_var = ANRIND)
 ```
 
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
+
 ## Derive Analysis Ratio (`R2BASE`) {#analysisratio}
 
 Analysis ratio variables can be derived using the `{admiral}` function 
