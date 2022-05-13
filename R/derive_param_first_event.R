@@ -53,8 +53,8 @@
 #'   *Permitted Values*: `"none"`, `"warning"`, `"error"`
 #'
 #' @details
-#'   1. The input dataset is restricted to observations where `PARAMCD` equals
-#'   `source_param`.
+#'   1. The input dataset is restricted to observations fulfilling
+#'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
 #'   `subject_keys` parameter) the first observation (with respect `ADT`) where
 #'   the event condition (`condition` parameter) is fulfilled is selected.
@@ -110,8 +110,7 @@
 #' derive_param_first_event(
 #'   adrs,
 #'   dataset_adsl = adsl,
-#'   source_param = "OVR",
-#'   condition = AVALC == "PD",
+#'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
 #'   set_values_to = vars(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
@@ -120,14 +119,12 @@
 #' )
 derive_param_first_event <- function(dataset,
                                      dataset_adsl,
-                                     source_param,
-                                     condition,
+                                     filter_source,
                                      subject_keys = vars(STUDYID, USUBJID),
                                      set_values_to,
                                      check_type = "warning") {
   # Check input parameters
-  assert_character_scalar(source_param)
-  condition <- assert_filter_cond(enquo(condition))
+  filter_source <- assert_filter_cond(enquo(condition))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = vars(!!!subject_keys, PARAMCD, ADT))
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
@@ -142,8 +139,8 @@ derive_param_first_event <- function(dataset,
   # Create new observations
   new_obs <- derive_vars_merged(
     dataset_adsl,
-    dataset_add = filter(dataset, PARAMCD == source_param),
-    filter_add = !!condition,
+    dataset_add = dataset,
+    filter_add = !!filter_source,
     by_vars = subject_keys,
     order = vars(ADT),
     new_vars = vars(ADT),
