@@ -153,12 +153,14 @@ filter_relative <- function(dataset,
   assert_order_vars(order)
   condition <- assert_filter_cond(enquo(condition))
   mode <-
-    assert_character_scalar(mode,
+    assert_character_scalar(
+      mode,
       values = c("first", "last"),
       case_sensitive = FALSE
     )
   selection <-
-    assert_character_scalar(selection,
+    assert_character_scalar(
+      selection,
       values = c("before", "after"),
       case_sensitive = FALSE
     )
