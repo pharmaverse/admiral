@@ -44,7 +44,7 @@ The BSA (Body Surface Area) in m^2.
 Computes BSA from height and weight making use of the specified derivation method
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 # Derive BSA by the Mosteller method

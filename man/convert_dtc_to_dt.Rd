@@ -83,7 +83,7 @@ a date object
 Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 convert_dtc_to_dt("2019-07-18")

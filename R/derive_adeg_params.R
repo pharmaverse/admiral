@@ -203,7 +203,7 @@ default_qtc_paramcd <- function(method) {
 #' *Sagie*: \deqn{1000\left(\frac{QT}{1000} + 0.154\left(1 - \frac{RR}{1000}\right)\right)}{
 #' 1000(QT/1000 + 0.154(1 - RR/1000))}
 #'
-#' Usually this computation function can not be used with %>%.
+#' Usually this computation function can not be used with `%>%`.
 #'
 #' @keywords computation adeg
 #'
@@ -333,7 +333,7 @@ derive_param_rr <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @details Usually this computation function can not be used with %>%.
+#' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return RR interval in msec:
 #' \deqn{\frac{60000}{HR}}{60000 / HR}

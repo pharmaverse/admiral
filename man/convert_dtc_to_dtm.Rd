@@ -95,7 +95,7 @@ A datetime object
 Convert a date character vector (usually \code{'--DTC'}) into a Date vector (usually \code{'--DTM'}).
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 convert_dtc_to_dtm("2019-07-18T15:25:00")

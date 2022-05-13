@@ -84,7 +84,7 @@ relative day, age, ...
 The duration is derived as time from start to end date in the
 specified output unit. If the end date is before the start date, the
 duration is negative. Usually this computation function can not be used
-with \%>\%.
+with \verb{\%>\%}.
 }
 \examples{
 # derive duration in days (integer), i.e., relative day

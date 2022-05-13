@@ -23,7 +23,7 @@ Derive the date imputation flag (\code{'--DTF'}) comparing a date character vect
 (\code{'--DTC'}) with a Date vector (\code{'--DT'}).
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))

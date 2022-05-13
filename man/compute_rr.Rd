@@ -20,7 +20,7 @@ RR interval in msec:
 Computes RR interval from heart rate.
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 compute_rr(hr = 70.14)

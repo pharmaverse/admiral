@@ -32,7 +32,7 @@ Derive the time imputation flag (\code{'--TMF'}) comparing a date character vect
 (\code{'--DTC'}) with a Datetime vector (\code{'--DTM'}).
 }
 \details{
-Usually this computation function can not be used with \%>\%.
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))

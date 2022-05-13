@@ -113,7 +113,7 @@ be preserved.
 # Computations
 
 [Computations](../reference/index.html#section-computations) expect vectors as
-input and return a vector. Usually these computation functions can not be used with %>%. These functions can be used in expressions like
+input and return a vector. Usually these computation functions can not be used with `%>%`. These functions can be used in expressions like
 `convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
 example below:
 
