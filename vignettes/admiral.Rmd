@@ -29,26 +29,52 @@ library(admiral)
 library(admiraltest)
 
 # read in SDTM datasets
-data("dm")
-data("ds")
-data("ex")
+data("admiral_dm")
+data("admiral_ds")
+data("admiral_ex")
+
+dm <- admiral_dm
+ds <- admiral_ds
+ex <- admiral_ex
 ```
 
 ```{r, eval=TRUE}
 # derive treatment variables
 adsl <- dm %>%
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex) %>%
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = nchar(EXSTDTC) >= 10,
+    new_vars_prefix = "TRTS",
+    dtc = EXSTDTC,
+    order = vars(TRTSDTM, EXSEQ),
+    mode = "first",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = nchar(EXENDTC) >= 10,
+    new_vars_prefix = "TRTE",
+    dtc = EXENDTC,
+    time_imputation = "last",
+    flag_imputation = "none",
+    order = vars(TRTEDTM, EXSEQ),
+    mode = "last",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
   derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
   derive_var_trtdurd()
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, 
-                 display_vars = vars(STUDYID, USUBJID, TRT01P, TRT01A,
-                                     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-                                     TRTDURD))
+dataset_vignette(
+  adsl,
+  display_vars = vars(
+    STUDYID, USUBJID, TRT01P, TRT01A,
+    TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
+    TRTDURD
+  )
+)
 ```
 
 # Derivations
@@ -93,13 +119,13 @@ example below:
 
 ```{r, eval=TRUE}
 # derive final lab visit date
-ds_final_lab_visit <- ds %>% 
-  filter(DSDECOD == "FINAL LAB VISIT") %>% 
+ds_final_lab_visit <- ds %>%
+  filter(DSDECOD == "FINAL LAB VISIT") %>%
   transmute(USUBJID, FINLABDT = convert_dtc_to_dt(DSSTDTC))
 
-# derive treatment variables  
+# derive treatment variables
 adsl <- dm %>%
-   # merge on final lab visit date
+  # merge on final lab visit date
   derive_vars_merged(
     dataset_add = ds_final_lab_visit,
     by_vars = vars(USUBJID)
@@ -107,8 +133,10 @@ adsl <- dm %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, 
-                 display_vars = vars(STUDYID, USUBJID, FINLABDT))
+dataset_vignette(
+  adsl,
+  display_vars = vars(STUDYID, USUBJID, FINLABDT)
+)
 ```
 
 # Parameters

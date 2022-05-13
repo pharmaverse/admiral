@@ -5,12 +5,15 @@
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `reference_date` and the `source_vars` parameter are
-#'   expected.
+#'   The columns specified by the `reference_date` and the `source_vars`
+#'   parameter are expected.
 #'
 #' @param reference_date The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param source_vars A list of datetime or date variables created using
 #'   `vars()` from which dates are to be extracted. This can either be a list of
@@ -21,14 +24,15 @@
 #'
 #' @author Teckla Akinyi
 #'
-#' @details The relative day is derived as number of days from the reference date
-#'   to the end date. If it is nonnegative, one is added. I.e., the relative day
-#'   of the reference date is 1. Unless a name is explicitly specified, the name
-#'   of the resulting relative day variable is generated from the source variable
-#'   name by replacing DT (or DTM as appropriate) with DY.
+#' @details The relative day is derived as number of days from the reference
+#'   date to the end date. If it is nonnegative, one is added. I.e., the
+#'   relative day of the reference date is 1. Unless a name is explicitly
+#'   specified, the name of the resulting relative day variable is generated
+#'   from the source variable name by replacing DT (or DTM as appropriate) with
+#'   DY.
 #'
 #' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
-#'     source variable(s) added
+#'   source variable(s) added
 #'
 #' @keywords derivation ADaM timing
 #'
@@ -102,8 +106,7 @@ derive_vars_dy <- function(dataset,
   } else {
     dataset %>%
       mutate(!!sym(dy_vars) :=
-               compute_duration(start_date = !!reference_date, end_date = !!!source_vars)
+               compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]])
              )
   }
-
 }

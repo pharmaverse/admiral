@@ -109,8 +109,8 @@ first or last observation for each by group.
 \examples{
 library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("vs")
+data("admiral_dm")
+data("admiral_vs")
 
 wgt_cat <- function(wgt) {
   case_when(wgt < 50 ~ "low",
@@ -119,8 +119,8 @@ wgt_cat <- function(wgt) {
 }
 
 derive_var_merged_cat(
-  dm,
-  dataset_add = vs,
+  admiral_dm,
+  dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
@@ -133,8 +133,8 @@ select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 
 # defining a value for missing VS data
 derive_var_merged_cat(
-  dm,
-  dataset_add = vs,
+  admiral_dm,
+  dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC, VSSEQ),
   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,

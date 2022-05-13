@@ -172,8 +172,8 @@ mutate(
 #' Create dataset of single doses
 #'
 #' Derives dataset of single dose from aggregate dose information. This may be
-#' necessary when e.g. calculating last dose before an adverse event in `ADAE` or
-#' deriving a total dose parameter in `ADEX` when `EXDOSFRQ != ONCE`.
+#' necessary when e.g. calculating last dose before an adverse event in `ADAE`
+#' or deriving a total dose parameter in `ADEX` when `EXDOSFRQ != ONCE`.
 #'
 #' @param dataset Input dataset
 #'
@@ -192,11 +192,17 @@ mutate(
 #'
 #'   A date or date-time object is expected.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
 #'   Default: `ASTDT`
 #'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #'   Default: `AENDT`
 #'
@@ -210,8 +216,8 @@ mutate(
 #'
 #'   Default: `dose_freq_lookup`
 #'
-#'  Permitted Values for `DOSE_WINDOW`: `"MINUTE"`, `"HOUR"`, `"DAY"`, `"WEEK"`,
-#'  `"MONTH"`, `"YEAR"`
+#'   Permitted Values for `DOSE_WINDOW`: `"MINUTE"`, `"HOUR"`, `"DAY"`,
+#'   `"WEEK"`, `"MONTH"`, `"YEAR"`
 #'
 #' @param lookup_column The dose frequency value column in the lookup table
 #'
@@ -220,11 +226,12 @@ mutate(
 #'   Default: `CDISC_VALUE` (column of `dose_freq_lookup`)
 #'
 #'
-#' @details Each aggregate dose row is split into multiple rows which each represent
-#' a single dose.The number of completed dose periods between `start_date` and
-#' `end_date` is calculated with `compute_duration` and multiplied by `DOSE_COUNT`.
-#' For `DOSE_WINDOW` values of `"WEEK"`, `"MONTH"`, and `"YEAR"`, `CONVERSION_FACTOR`
-#' is used to convert into days the time object to be added to `start_date`.
+#' @details Each aggregate dose row is split into multiple rows which each
+#'   represent a single dose.The number of completed dose periods between
+#'   `start_date` and `end_date` is calculated with `compute_duration` and
+#'   multiplied by `DOSE_COUNT`. For `DOSE_WINDOW` values of `"WEEK"`,
+#'   `"MONTH"`, and `"YEAR"`, `CONVERSION_FACTOR` is used to convert into days
+#'   the time object to be added to `start_date`.
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'

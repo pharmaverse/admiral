@@ -132,8 +132,9 @@ before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
 range of possible dates of the \code{dtc} value are considered. The possible dates
 are defined by the missing parts of the \code{dtc} date (see example below). This
-ensures that the non-missing parts of the \code{dtc} date are not changed. For
-example\preformatted{impute_dtc(
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example\preformatted{impute_dtc(
   "2020-11",
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
@@ -153,7 +154,7 @@ have changed the month although it is not missing (in the \code{dtc} date).}
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered.}
+considered. A date or date-time object is expected.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
@@ -208,13 +209,13 @@ time imputation flag is added to the additional dataset.
 \examples{
 library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("ex")
+data("admiral_dm")
+data("admiral_ex")
 
 # derive treatment start datetime (TRTSDTM)
 derive_vars_merged_dtm(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTS",
   dtc = EXSTDTC,
@@ -226,8 +227,8 @@ derive_vars_merged_dtm(
 
 # derive treatment end datetime (TRTEDTM) (without date imputation)
 derive_vars_merged_dtm(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTE",
   dtc = EXENDTC,

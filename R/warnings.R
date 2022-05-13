@@ -15,13 +15,13 @@
 #'
 #' @examples
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
-#' warn_if_vars_exist(dm, "AAGE")
+#' warn_if_vars_exist(admiral_dm, "AAGE")
 #'
 #' ## Issues a warning
-#' warn_if_vars_exist(dm, "ARM")
+#' warn_if_vars_exist(admiral_dm, "ARM")
 warn_if_vars_exist <- function(dataset, vars) {
   existing_vars <- vars[vars %in% colnames(dataset)]
   if (length(existing_vars) == 1L) {
@@ -129,22 +129,6 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 }
 
 
-warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
-  missing_ref_ranges <- dataset %>%
-    anti_join(meta_ref_ranges, by = by_var) %>%
-    pull(!!sym(by_var)) %>%
-    unique()
-
-  if (length(missing_ref_ranges) >= 1L) {
-    msg <- sprintf(
-      "Reference ranges are missing for the following `%s`: %s",
-      by_var,
-      enumerate(missing_ref_ranges, quote_fun = squote)
-    )
-    warn(msg)
-  }
-}
-
 #' Warn If Two Lists are Inconsistent
 #'
 #' Checks if two list inputs have the same names and same number of elements and
@@ -223,16 +207,16 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(adsl)
-#' data(vs)
+#' data(admiral_adsl)
+#' data(admiral_vs)
 #'
 #' # Remove label
-#' attr(vs$USUBJID, "label") <- NULL
+#' attr(admiral_vs$USUBJID, "label") <- NULL
 #'
-#' left_join(adsl, vs, by = "USUBJID")
+#' left_join(admiral_adsl, admiral_vs, by = "USUBJID")
 #'
 #' suppress_warning(
-#'   left_join(adsl, vs, by = "USUBJID"),
+#'   left_join(admiral_adsl, admiral_vs, by = "USUBJID"),
 #'   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
 #' )
 suppress_warning <- function(expr, regexpr) {

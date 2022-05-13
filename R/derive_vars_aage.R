@@ -11,11 +11,15 @@
 #'
 #'   A date or date-time object is expected.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'
 #'   Default: `BRTHDT`
 #'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
 #'
 #'   Default: `RANDDT`
 #'
@@ -273,9 +277,9 @@ NULL
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) %>%
 #'   select(SUBJID, AGE, AGEGR1)
 #'
@@ -330,9 +334,9 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_agegr_ema(age_var = AGE, new_var = AGEGR1) %>%
 #'   select(SUBJID, AGE, AGEGR1)
 #'
