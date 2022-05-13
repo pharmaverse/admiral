@@ -1,7 +1,9 @@
 #' Derive Datetime of Last Exposure to Treatment
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged_dtm()` instead.
 #'
 #' Derives datetime of last exposure to treatment (`TRTEDTM`)
 #'
@@ -40,15 +42,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
-#' data("ex")
-#' data("dm")
-#'
-#' dm %>%
-#'   derive_var_trtedtm(dataset_ex = ex) %>%
-#'   select(USUBJID, TRTEDTM)
 derive_var_trtedtm <- function(dataset,
                                dataset_ex,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10 , # nolint
@@ -57,6 +50,7 @@ derive_var_trtedtm <- function(dataset,
   assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXENDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  deprecate_warn("0.7.0", "derive_var_trtedtm()", "derive_vars_merged_dtm()")
 
   derive_vars_merged_dtm(dataset,
                          dataset_add = dataset_ex,
