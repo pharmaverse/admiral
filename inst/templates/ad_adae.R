@@ -36,14 +36,12 @@ adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
 adae <- ae %>%
   # join supplementary qualifier variables
   derive_vars_suppqual(suppae) %>%
-
   # join adsl to ae
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by = vars(STUDYID, USUBJID)
   ) %>%
-
   # derive analysis start time
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -52,7 +50,6 @@ adae <- ae %>%
     time_imputation = "first",
     min_dates = vars(TRTSDT)
   ) %>%
-
   # derive analysis end time
   derive_vars_dtm(
     dtc = AEENDTC,
@@ -61,16 +58,13 @@ adae <- ae %>%
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
   ) %>%
-
   # derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-
   # derive analysis start relative day and  analysis end relative day
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT, AENDT)
   ) %>%
-
   # derive analysis duration (value and unit)
   derive_vars_duration(
     new_var = ADURN,
@@ -85,7 +79,6 @@ adae <- ae %>%
 
 
 adae <- adae %>%
-
   # derive last dose date/time
   derive_var_last_dose_date(
     ex,
@@ -97,18 +90,15 @@ adae <- adae %>%
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE
   ) %>%
-
   # derive severity / causality / ...
   mutate(
     ASEV = AESEV,
     AREL = AEREL
   ) %>%
-
   # derive treatment emergent flag
   mutate(
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
-
   # derive occurrence flags: first occurence of most severe AE
   # create numeric value ASEVN for severity
   mutate(
