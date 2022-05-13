@@ -58,8 +58,13 @@ For example purpose, the ADaM datasets---which are included
 in `{admiral}`---are used.
 
 ```{r}
-data("adsl")
-data("adae")
+data("admiral_adsl")
+data("admiral_ae")
+data("admiral_adae")
+
+adsl <- admiral_adsl
+adae <- admiral_adae
+ae <- admiral_ae
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
