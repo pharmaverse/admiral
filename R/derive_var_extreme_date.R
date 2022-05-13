@@ -488,7 +488,6 @@ lstalvdt_source <- function(dataset_name,
                             date,
                             date_imputation = NULL,
                             traceability_vars = NULL) {
-
   deprecate_warn("0.7.0", "lstalvdt_source()", "date_source()")
 
   date_source(

@@ -427,13 +427,13 @@ The documentation will be updated at:
 + the description level for a function, 
 
     ```{r, eval=FALSE}
-    #' Title of the function
-    #'
-    #' @description
-    #' `r lifecycle::badge("deprecated")`
-    #'
-    #' This function is *deprecated*, please use `new_fun()` instead.
-    #' description of the function in plain English
+#' Title of the function
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `new_fun()` instead.
+#' description of the function in plain English
     ``` 
 
     The "Examples" section should be removed.

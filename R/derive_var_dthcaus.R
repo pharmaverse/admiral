@@ -252,7 +252,6 @@ dthcaus_source <- function(dataset_name,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL) {
-
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
