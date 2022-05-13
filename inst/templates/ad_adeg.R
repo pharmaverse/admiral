@@ -111,7 +111,7 @@ adeg <- eg %>%
     flag_imputation = "time"
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADTM)
+  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
 
 adeg <- adeg %>%
 
@@ -238,14 +238,18 @@ adeg <- adeg %>%
   ) %>%
 
   # Calculate ABLFL
-  derive_var_extreme_flag(
-    by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-    order = vars(ADT, VISITNUM, EGSEQ),
-    new_var = ABLFL,
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = vars(ADT, VISITNUM, EGSEQ),
+      new_var = ABLFL,
+      mode = "last"
+    ),
     filter = ((!is.na(AVAL) | !is.na(AVALC)) &
-      ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
-      PARAMCD != "EGINTP")
+                ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
+                PARAMCD != "EGINTP"
+    )
   )
 
 # Derive baseline information
@@ -280,12 +284,14 @@ adeg <- adeg %>%
 
 # ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
 adeg <- adeg %>%
-
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-    order = vars(ADT, AVAL),
-    new_var = ANL01FL,
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
+      order = vars(ADT, AVAL),
+      new_var = ANL01FL,
+      mode = "last"
+    ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
 

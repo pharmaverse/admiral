@@ -94,7 +94,7 @@ advs <- vs %>%
     flag_imputation = FALSE
   ) %>%
 
-  derive_var_ady(reference_date = TRTSDT, date = ADT)
+  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 advs <- advs %>%
   # Add PARAMCD only - add PARAM etc later
@@ -196,12 +196,16 @@ advs <- advs %>%
   ) %>%
 
   # Calculate ABLFL
-  derive_var_extreme_flag(
-    by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-    order = vars(ADT, VISITNUM, VSSEQ),
-    new_var = ABLFL,
-    mode = "last",
-    filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = vars(ADT, VISITNUM, VSSEQ),
+      new_var = ABLFL,
+      mode = "last"
+    ),
+    filter = (!is.na(AVAL) &
+                ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
   )
 
 # Derive baseline information
@@ -237,11 +241,14 @@ advs <- advs %>%
 
 # ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
 advs <- advs %>%
-  derive_var_extreme_flag(
-    new_var = ANL01FL,
-    by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
-    order = vars(ADT, AVAL),
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = ANL01FL,
+      by_vars = vars(USUBJID, PARAMCD, AVISIT, ATPT, DTYPE),
+      order = vars(ADT, AVAL),
+      mode = "last"
+    ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
 
@@ -255,12 +262,16 @@ advs <- advs %>%
   ) %>%
 
   # Create End of Treatment Record
-  derive_var_extreme_flag(
-    by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
-    order = vars(ADT),
-    new_var = EOTFL,
-    mode = "last",
-    filter = (4 < VISITNUM & VISITNUM <= 13 & ANL01FL == "Y" & is.na(DTYPE))
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(STUDYID, USUBJID, PARAMCD, ATPTN),
+      order = vars(ADT),
+      new_var = EOTFL,
+      mode = "last"
+    ),
+    filter = (4 < VISITNUM &
+                VISITNUM <= 13 & ANL01FL == "Y" & is.na(DTYPE))
   ) %>%
   filter(EOTFL == "Y") %>%
   mutate(
