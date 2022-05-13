@@ -93,16 +93,20 @@ filter_extreme <- function(dataset,
     assert_has_variables(dataset, vars2chr(by_vars))
 
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        by_vars = by_vars,
-                        check_type = check_type) %>%
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        by_vars = by_vars,
+        check_type = check_type
+      ) %>%
       group_by(!!!by_vars)
   } else {
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        check_type = check_type)
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        check_type = check_type
+      )
   }
 
   if (mode == "first") {

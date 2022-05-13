@@ -21,7 +21,7 @@ library(admiraltest)
 data(admiral_ae)
 data(admiral_adsl)
 
-adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000),] \%>\%
+adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000), ] \%>\%
   select(USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
     dataset_add = admiral_adsl,

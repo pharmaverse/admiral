@@ -14,7 +14,7 @@
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
-    map_chr(quosures, ~as_string(quo_get_expr(.x))),
+    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
     names(quosures)
   )
 }

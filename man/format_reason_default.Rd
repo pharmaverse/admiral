@@ -39,7 +39,6 @@ admiral_dm \%>\%
     filter_ds = DSCAT == "DISPOSITION EVENT"
   ) \%>\%
   select(STUDYID, USUBJID, DCSREAS)
-
 }
 \seealso{
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
