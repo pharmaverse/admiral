@@ -37,13 +37,13 @@ observation within each by group to the dataset (#1042)
   
 ### ADLB
 
-  - New ADLB template script, adlb dataset and specific ADLB functions
+  - New ADLB template script and specific ADLB functions
 
-  - `derive_var_shift()` - Derives a character shift variable containing concatenated   shift in values based on user-defined pairing (#944)
+  - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
 
-  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied    variables from a BDS dataset, e.g. ADLB. (#943)
+  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
 
-  - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to     absolute values. (#941)
+  - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
 ## Updates of Existing Functions
  

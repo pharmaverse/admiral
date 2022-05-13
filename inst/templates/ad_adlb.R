@@ -80,21 +80,25 @@ param_lookup <- tibble::tribble(
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 adlb <- lb %>%
+
   # Join ADSL with LB (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
+
   # Calculate ADT, ADY
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = LBDTC,
     flag_imputation = FALSE
   ) %>%
+
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adlb <- adlb %>%
+
   # Add PARAMCD PARAM and PARAMN - from LOOK-UP table
   # Replace with PARAMCD lookup function
   derive_vars_merged(
@@ -102,6 +106,7 @@ adlb <- adlb %>%
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD)
   ) %>%
+
   # Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
   mutate(
     PARCAT1 = LBCAT,
@@ -113,6 +118,7 @@ adlb <- adlb %>%
 
 # Get Visit Info
 adlb <- adlb %>%
+
   # Derive Timing
   mutate(
     AVISIT = case_when(
@@ -127,6 +133,7 @@ adlb <- adlb %>%
   )
 
 adlb <- adlb %>%
+
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -145,6 +152,7 @@ adlb <- adlb %>%
   mutate(
     BASETYPE = "LAST"
   ) %>%
+
   # Calculate ABLFL
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -159,26 +167,31 @@ adlb <- adlb %>%
 
 # Derive baseline information
 adlb <- adlb %>%
+
   # Calculate BASE
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
+
   # Calculate BASEC
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
+
   # Calculate BNRIND
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
+
   # Calculate CHG
   derive_var_chg() %>%
+
   # Calculate PCHG
   derive_var_pchg()
 
@@ -229,6 +242,7 @@ adlb <- adlb %>%
 
 # Get treatment information
 adlb <- adlb %>%
+
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
@@ -237,6 +251,7 @@ adlb <- adlb %>%
 
 # Get extreme values
 adlb <- adlb %>%
+
   # get MINIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -250,6 +265,7 @@ adlb <- adlb %>%
       DTYPE = "MINIMUM"
     )
   ) %>%
+
   # get MAXIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -263,6 +279,7 @@ adlb <- adlb %>%
       DTYPE = "MAXIMUM"
     )
   ) %>%
+
   # get LOV value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
@@ -279,6 +296,7 @@ adlb <- adlb %>%
 
 # Get ASEQ
 adlb <- adlb %>%
+
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
