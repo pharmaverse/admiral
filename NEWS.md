@@ -37,7 +37,7 @@ observation within each by group to the dataset (#1042)
   
 ### ADLB
 
-  - New ADLB template script is now available and specific ADLB functions
+  - New ADLB template script, adlb dataset and specific ADLB functions
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated   shift in values based on user-defined pairing (#944)
 
