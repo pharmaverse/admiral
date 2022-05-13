@@ -108,8 +108,8 @@ adsl <- adsl %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
     filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
     new_vars_prefix = "TRTS",
     dtc = EXSTDTC,
     order = vars(TRTSDTM, EXSEQ),
@@ -119,8 +119,8 @@ adsl <- adsl %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
     filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
     new_vars_prefix = "TRTE",
     dtc = EXENDTC,
     time_imputation = "last",

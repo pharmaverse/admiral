@@ -197,8 +197,9 @@ Next, the analysis study days can be derived:
 ```{r eval=TRUE, echo=TRUE}
 adex <-
   derive_vars_dy(adex,
-                 reference_date = TRTSDT,
-                 source_vars = vars(ASTDT, AENDT))
+    reference_date = TRTSDT,
+    source_vars = vars(ASTDT, AENDT)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

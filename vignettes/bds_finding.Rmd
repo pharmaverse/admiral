@@ -196,7 +196,6 @@ This example assumes both `ADT` and `TRTSDT` exist on the data frame.
 ```{r eval=TRUE}
 advs <-
   derive_vars_dy(advs, reference_date = TRTSDT, source_vars = vars(ADT))
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
