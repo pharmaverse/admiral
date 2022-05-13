@@ -28,21 +28,22 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
 
-- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
-values based on user-defined pairing (#944)
-
-- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
-from a BDS dataset, e.g. ADLB. (#943)
-
-- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
-(#941)
-
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
+  
+### ADLB
+
+  - New ADLB template script is now available and specific ADLB functions
+
+  - `derive_var_shift()` - Derives a character shift variable containing concatenated   shift in values based on user-defined pairing (#944)
+
+  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied    variables from a BDS dataset, e.g. ADLB. (#943)
+
+  - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to     absolute values. (#941)
 
 ## Updates of Existing Functions
  

@@ -15,64 +15,62 @@ library(stringr)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("lb")
+data("admiral_lb")
 data("admiral_adsl")
+
+lb <- admiral_lb
+adsl <- admiral_adsl
 
 lb <- convert_blanks_to_na(lb)
 
-# The CDISC Pilot Data contains no SUPPVS data
-# If you have a SUPPLB then uncomment function below
-
-# lb <- derive_vars_suppqual(lb, supplb) %>%
-
-# ---- Lookup tables ----
+# ---- Look-up tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~LBTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "ALB",     "ALB",    "Albumin (g/L)", 1,
-  "ALP",     "ALKPH",  "Alkaline Phosphatase (U/L)", 2,
-  "ALT",     "ALT",    "Alanine Aminotransferase (U/L)", 3,
-  "ANISO",   "ANISO",  "Anisocytes", 4,
-  "AST",     "AST",    "Aspartate Aminotransferase (U/L)", 5,
-  "BASO",    "BASO",   "Basophils (GI/L)", 6,
-  "BILI",    "BILI",   "Bilirubin (umol/L)", 7,
-  "BUN",     "BUN",    "Blood Urea Nitrogen (mmol/L)", 8,
-  "CA",      "CA",     "Calcium (mmol/L)", 9,
-  "CHOLES",  "CHOLES", "Cholesterol (mmol/L)", 10,
-  "CK",      "CK",     "Creatinine Kinase (U/L)", 11,
-  "CL",      "CL",     "Chloride (mmol/L)", 12,
-  "COLOR",   "COLOR",  "Color", 13,
-  "CREAT",   "CREAT",  "Creatinine (umol/L)", 14,
-  "EOS",     "EOS",    "Eosinophils (GI/L)", 15,
-  "GGT",     "GGT",    "Gamma Glutamyl Transferase (U/L)", 16,
-  "GLUC",    "GLUC",   "Glucose (mmol/L)", 17,
-  "HBA1C",   "HBA1C",  "Hemoglobin A1C (1)", 18,
-  "HCT",     "HCT",    "Hematocrit (1)", 19,
-  "HGB",     "HGB",    "Hemoglobin (mmol/L)", 20,
-  "K",       "POTAS",  "Potassium (mmol/L)", 21,
-  "KETONES", "KETON",  "Ketones", 22,
-  "LYM",     "LYMPH",  "Lymphocytes (GI/L)", 23,
+  "ALB", "ALB", "Albumin (g/L)", 1,
+  "ALP", "ALKPH", "Alkaline Phosphatase (U/L)", 2,
+  "ALT", "ALT", "Alanine Aminotransferase (U/L)", 3,
+  "ANISO", "ANISO", "Anisocytes", 4,
+  "AST", "AST", "Aspartate Aminotransferase (U/L)", 5,
+  "BASO", "BASO", "Basophils (GI/L)", 6,
+  "BILI", "BILI", "Bilirubin (umol/L)", 7,
+  "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 8,
+  "CA", "CA", "Calcium (mmol/L)", 9,
+  "CHOLES", "CHOLES", "Cholesterol (mmol/L)", 10,
+  "CK", "CK", "Creatinine Kinase (U/L)", 11,
+  "CL", "CL", "Chloride (mmol/L)", 12,
+  "COLOR", "COLOR", "Color", 13,
+  "CREAT", "CREAT", "Creatinine (umol/L)", 14,
+  "EOS", "EOS", "Eosinophils (GI/L)", 15,
+  "GGT", "GGT", "Gamma Glutamyl Transferase (U/L)", 16,
+  "GLUC", "GLUC", "Glucose (mmol/L)", 17,
+  "HBA1C", "HBA1C", "Hemoglobin A1C (1)", 18,
+  "HCT", "HCT", "Hematocrit (1)", 19,
+  "HGB", "HGB", "Hemoglobin (mmol/L)", 20,
+  "K", "POTAS", "Potassium (mmol/L)", 21,
+  "KETONES", "KETON", "Ketones", 22,
+  "LYM", "LYMPH", "Lymphocytes (GI/L)", 23,
   "MACROCY", "MACROC", "Macrocytes", 24,
-  "MCH",     "MCH",    "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 25,
-  "MCHC",    "MCHC",   "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 26,
-  "MCV",     "MCV",    "Ery. Mean Corpuscular Volume (f/L)", 27,
+  "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 25,
+  "MCHC", "MCHC", "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 26,
+  "MCV", "MCV", "Ery. Mean Corpuscular Volume (f/L)", 27,
   "MICROCY", "MICROC", "Microcytes", 28,
-  "MONO",    "MONO",   "Monocytes (GI/L)", 29,
-  "PH",      "PH",     "pH", 30,
-  "PHOS",    "PHOS",   "Phosphate (mmol/L)", 31,
-  "PLAT",    "PLAT",   "Platelet (GI/L)", 32,
+  "MONO", "MONO", "Monocytes (GI/L)", 29,
+  "PH", "PH", "pH", 30,
+  "PHOS", "PHOS", "Phosphate (mmol/L)", 31,
+  "PLAT", "PLAT", "Platelet (GI/L)", 32,
   "POIKILO", "POIKIL", "Poikilocytes", 33,
   "POLYCHR", "POLYCH", "Polychromasia", 34,
-  "PROT",    "PROT",   "Protein (g/L)", 35,
-  "RBC",     "RBC",    "Erythrocytes (TI/L)", 36,
-  "SODIUM",  "SODIUM", "Sodium (mmol/L)", 37,
-  "SPGRAV",  "SPGRAV", "Specific Gravity", 38,
-  "TSH",     "TSH",    "Thyrotropin (mU/L)", 39,
-  "URATE",   "URATE",  "Urate (umol/L)", 40,
-  "UROBIL",  "UROBIL", "Urobilinogen", 41,
-  "VITB12",  "VITB12", "Vitamin B12 (pmol/L)", 42,
-  "WBC",     "WBC",    "Leukocytes (GI/L)", 43
+  "PROT", "PROT", "Protein (g/L)", 35,
+  "RBC", "RBC", "Erythrocytes (TI/L)", 36,
+  "SODIUM", "SODIUM", "Sodium (mmol/L)", 37,
+  "SPGRAV", "SPGRAV", "Specific Gravity", 38,
+  "TSH", "TSH", "Thyrotropin (mU/L)", 39,
+  "URATE", "URATE", "Urate (umol/L)", 40,
+  "UROBIL", "UROBIL", "Urobilinogen", 41,
+  "VITB12", "VITB12", "Vitamin B12 (pmol/L)", 42,
+  "WBC", "WBC", "Leukocytes (GI/L)", 43
 )
 
 
@@ -112,7 +110,7 @@ adlb <- adlb %>%
   # Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
   mutate(
     PARCAT1 = LBCAT,
-    AVAL  = LBSTRESN,
+    AVAL = LBSTRESN,
     AVALC = LBSTRESC,
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
@@ -133,18 +131,6 @@ adlb <- adlb %>%
       !is.na(VISITNUM) ~ VISITNUM
     )
   )
-
-# Get WBC
-adlb <- adlb %>%
-  derive_param_wbc_abs(by_vars = vars(USUBJID, VISIT),
-                       set_values_to = vars(PARAMCD = "LYMPH",
-                                            PARAM = "Leukocytes (GI/L)",
-                                            DTYPE = "CALCULATION"),
-                       get_unit_expr = extract_unit(PARAM),
-                       wbc_code = "WBC",
-                       diff_code = "LYMLE",
-                       diff_type = "fraction",
-                       wbc_unit = "GI/L")
 
 adlb <- adlb %>%
 
@@ -168,11 +154,14 @@ adlb <- adlb %>%
   ) %>%
 
   # Calculate ABLFL
-  derive_var_extreme_flag(
-    by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-    order = vars(ADT, VISITNUM, LBSEQ),
-    new_var = ABLFL,
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
+      order = vars(ADT, VISITNUM, LBSEQ),
+      new_var = ABLFL,
+      mode = "last"
+    ),
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   )
 
@@ -207,7 +196,7 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
-# R2BASE, R2ANRLO R2ANRHI
+# Calculate R2BASE, R2ANRLO and R2ANRHI
 adlb <- adlb %>%
   derive_var_analysis_ratio(
     numer_var = AVAL,
@@ -228,19 +217,21 @@ adlb <- adlb %>%
     new_var = SHIFT1,
     from_var = BNRIND,
     to_var = ANRIND
-    )
+  )
 
 # ANL01FL: Flag last result within an AVISIT for post-baseline records
 # LVOTFL: Flag last valid on-treatment record
 adlb <- adlb %>%
-  derive_var_extreme_flag(
-    new_var = ANL01FL,
-    by_vars = vars(USUBJID, PARAMCD, AVISIT),
-    order = vars(ADT, AVAL),
-    mode = "last",
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID, PARAMCD, AVISIT),
+      order = vars(ADT, AVAL),
+      new_var = ANL01FL,
+      mode = "last"
+    ),
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   ) %>%
-
   derive_var_extreme_flag(
     new_var = LVOTFL,
     by_vars = vars(USUBJID, PARAMCD),
@@ -261,12 +252,12 @@ adlb <- adlb %>%
 # Get extreme values
 adlb <- adlb %>%
 
-  #get MINIMUM value
+  # get MINIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(AVAL, ADT, AVISITN),
     mode = "first",
-    #"AVISITN < 9997" to evaluate only real visits
+    # "AVISITN < 9997" to evaluate only real visits
     filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9997,
@@ -275,12 +266,12 @@ adlb <- adlb %>%
     )
   ) %>%
 
-  #get MAXIMUM value
+  # get MAXIMUM value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(desc(AVAL), ADT, AVISITN),
     mode = "first",
-    #"AVISITN < 9997" to evaluate only real visits
+    # "AVISITN < 9997" to evaluate only real visits
     filter = (!is.na(AVAL) & ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9998,
@@ -289,12 +280,12 @@ adlb <- adlb %>%
     )
   ) %>%
 
-  #get LOV value
+  # get LOV value
   derive_extreme_records(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     order = vars(ADT, AVISITN),
     mode = "last",
-    #"AVISITN < 9997" to evaluate only real visits
+    # "AVISITN < 9997" to evaluate only real visits
     filter = (ONTRTFL == "Y" & AVISITN < 9997),
     set_values_to = vars(
       AVISITN = 9999,

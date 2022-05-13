@@ -65,3 +65,13 @@
 #' Derived from the `adsl` and `vs` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R})
 #'
 "admiral_advs"
+
+#' Laboratory Analysis Dataset
+#'
+#' An example laboratory analysis dataset
+#'
+#' @source
+#' Derived from the `adsl` and `lb` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adlb.R})
+#'
+"admiral_adlb"
+
