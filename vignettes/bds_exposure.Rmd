@@ -59,8 +59,11 @@ library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
-data("ex")
+data("admiral_adsl")
+data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 ```
 ```{r echo=FALSE}
 ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
@@ -186,8 +189,10 @@ calculating and imputing analysis dates.
 Next, the analysis study days can be derived:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_var_astdy(adex, reference_date = TRTSDT, date = ASTDT)
-adex <- derive_var_aendy(adex, reference_date = TRTSDT, date = AENDT)
+adex <-
+  derive_vars_dy(adex,
+                 reference_date = TRTSDT,
+                 source_vars = vars(ASTDT, AENDT))
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

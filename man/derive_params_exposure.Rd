@@ -70,7 +70,7 @@ The input dataset with a new record added for each group (with respect to the
 variables specified for the \code{by_vars} parameter).
 }
 \description{
-\verb{r lifecycle::badge("deprecated")}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 This function is \emph{deprecated}. Please use \code{\link[=derive_param_exposure]{derive_param_exposure()}} instead.
 }

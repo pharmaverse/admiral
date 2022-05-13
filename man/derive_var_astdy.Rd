@@ -32,7 +32,9 @@ The default is \code{ASTDT}}
 The input dataset with \code{ASTDY} column added
 }
 \description{
-\verb{r lifecycle::badge("questioning")}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dy()} instead.
 
 Adds the analysis start relative day (\code{ASTDY}) to the dataset, i.e., study
 day of analysis start date.
@@ -41,14 +43,6 @@ day of analysis start date.
 The study day is derived as number of days from the start date
 to the end date. If it is nonnegative, one is added. I.e., the study day of the
 start date is 1.
-}
-\examples{
-data <- tibble::tribble(
-  ~TRTSDT, ~ASTDT,
-  lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-)
-
-derive_var_astdy(data)
 }
 \author{
 Stefan Bundfuss
