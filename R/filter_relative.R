@@ -149,18 +149,19 @@ filter_relative <- function(dataset,
                             inclusive,
                             keep_no_ref_groups = TRUE,
                             check_type = "warning") {
-
   assert_vars(by_vars)
   assert_order_vars(order)
   condition <- assert_filter_cond(enquo(condition))
   mode <-
     assert_character_scalar(mode,
-                            values = c("first", "last"),
-                            case_sensitive = FALSE)
+      values = c("first", "last"),
+      case_sensitive = FALSE
+    )
   selection <-
     assert_character_scalar(selection,
-                            values = c("before", "after"),
-                            case_sensitive = FALSE)
+      values = c("before", "after"),
+      case_sensitive = FALSE
+    )
   assert_logical_scalar(inclusive)
   assert_data_frame(dataset, required_vars = quo_c(by_vars, extract_vars(order)))
   check_type <-
@@ -180,10 +181,12 @@ filter_relative <- function(dataset,
 
   cond_nrs <- data %>%
     filter(!!condition) %>%
-    filter_extreme(by_vars = by_vars,
-                   order = order,
-                   mode = mode,
-                   check_type = check_type) %>%
+    filter_extreme(
+      by_vars = by_vars,
+      order = order,
+      mode = mode,
+      check_type = check_type
+    ) %>%
     select(!!!by_vars, tmp_obs_nr_filter_relative)
 
   data <- derive_vars_merged(
@@ -213,7 +216,7 @@ filter_relative <- function(dataset,
     "tmp_obs_nr_match_filter_relative"
   )
   if (keep_no_ref_groups) {
-   selection_condition <- paste(selection_condition, "| is.na(tmp_obs_nr_match_filter_relative)")
+    selection_condition <- paste(selection_condition, "| is.na(tmp_obs_nr_match_filter_relative)")
   }
 
   data %>%

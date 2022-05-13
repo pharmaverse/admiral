@@ -43,9 +43,11 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
     "4",      2,        "PD"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 2: mode = first, selection = before, inclusive = FALSE ----
@@ -67,9 +69,11 @@ test_that("filter_relative Test 2: mode = first, selection = before, inclusive =
     "4",      1,        "PR"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 3: mode = first, selection = after, inclusive = TRUE ----
@@ -95,9 +99,11 @@ test_that("filter_relative Test 3: mode = first, selection = after, inclusive = 
     "4",      5,        "PR"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 4: mode = first, selection = after, inclusive = FALSE ----
@@ -126,9 +132,11 @@ test_that("filter_relative Test 4: mode = first, selection = after, inclusive = 
     "4",      5,        "PR"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 5: mode = last, selection = before, inclusive = TRUE ----
@@ -158,9 +166,11 @@ test_that("filter_relative Test 1: mode = last, selection = before, inclusive = 
     "4",      4,        "SD",
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 6: mode = last, selection = before, inclusive = FALSE ----
@@ -186,9 +196,11 @@ test_that("filter_relative Test 2: mode = last, selection = before, inclusive = 
     "4",      3,        "SD",
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 7: mode = last, selection = after, inclusive = TRUE ----
@@ -216,9 +228,11 @@ test_that("filter_relative Test 7: mode = last, selection = after, inclusive = T
     "4",      5,        "PR"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
 
 ## filter_relative Test 8: mode = last, selection = after, inclusive = FALSE ----
@@ -242,7 +256,9 @@ test_that("filter_relative Test 8: mode = last, selection = after, inclusive = F
     "4",      5,        "PR"
   )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "AVISITN"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
 })
