@@ -116,12 +116,14 @@ assert_data_frame <- function(arg,
 #'
 #' # handling parameters case-insensitive
 #' example_fun2 <- function(msg_type) {
-#'   msg_type <- assert_character_scalar(msg_type,
-#'                                       values = c("warning", "error"),
-#'                                       case_sensitive = FALSE)
-#'  if (msg_type == "warning") {
-#'    print("A warning was requested.")
-#'  }
+#'   msg_type <- assert_character_scalar(
+#'     msg_type,
+#'     values = c("warning", "error"),
+#'     case_sensitive = FALSE
+#'   )
+#'   if (msg_type == "warning") {
+#'     print("A warning was requested.")
+#'   }
 #' }
 #'
 #' example_fun2("Warning")
@@ -219,11 +221,13 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
   if (!is.null(values)) {
     mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
     if (length(mismatches) > 0) {
-      abort(paste0("`", arg_name(substitute(arg)),
-                   "` contains invalid values:\n",
-                   enumerate(mismatches), "\n",
-                   "Valid values:\n",
-                   enumerate(values)))
+      abort(paste0(
+        "`", arg_name(substitute(arg)),
+        "` contains invalid values:\n",
+        enumerate(mismatches), "\n",
+        "Valid values:\n",
+        enumerate(values)
+      ))
     }
   }
 }
@@ -753,8 +757,8 @@ assert_named_exprs <- function(arg, optional = FALSE) {
   }
 
   if (!is.list(arg) ||
-      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
-      any(names(arg) == "")) {
+    !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+    any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `rlang::exprs()` but is %s",
       arg_name(substitute(arg)),
@@ -774,8 +778,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
   }
 
   if (!is.list(arg) ||
-      !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) ||
-      !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+    !all(map_lgl(arg, ~ is_formula(.x, lhs = TRUE))) ||
+    !all(map_lgl(arg, ~ is.symbol(.x[[2L]])))) {
     err_msg <- paste(
       backquote(arg_name(substitute(arg))),
       "must be a list of formulas where each formula's left-hand side is a single",
@@ -862,7 +866,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' example_fun(mean)
 #'
 #' try(example_fun(1))
-
+#'
 #' try(example_fun(sum))
 assert_function <- function(arg, params = NULL, optional = FALSE) {
   assert_character_vector(params, optional = TRUE)
@@ -873,8 +877,10 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
   }
 
   if (missing(arg)) {
-    err_msg <- sprintf("Argument `%s` missing, with no default",
-                       arg_name(substitute(arg)))
+    err_msg <- sprintf(
+      "Argument `%s` missing, with no default",
+      arg_name(substitute(arg))
+    )
     abort(err_msg)
   }
 
@@ -1042,7 +1048,8 @@ assert_supp_idvar <- function(x) {
     message(
       msg <- paste0(
         str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n")
+        collapse = "\n"
+      )
     )
     inform(msg)
   }
@@ -1110,7 +1117,7 @@ assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
                                accept_var = FALSE,
-                               optional =  FALSE) {
+                               optional = FALSE) {
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
@@ -1283,8 +1290,10 @@ assert_varval_list <- function(arg, # nolint
 #'   element = "dataset_name",
 #'   condition = dataset_name %in% c("adrs", "adae"),
 #'   valid_datasets = valid_datasets,
-#'   message_text = paste0("The dataset name must be one of the following:\n",
-#'                         paste(valid_datasets, collapse = ", "))
+#'   message_text = paste0(
+#'     "The dataset name must be one of the following:\n",
+#'     paste(valid_datasets, collapse = ", ")
+#'   )
 #' ))
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
@@ -1293,9 +1302,11 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_character_scalar(message_text)
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
-  invalids <-  ! eval(quo_get_expr(condition),
-                      envir = list(...),
-                      enclos = current_env())
+  invalids <- !eval(
+    quo_get_expr(condition),
+    envir = list(...),
+    enclos = current_env()
+  )
   if (any(invalids)) {
     invalids_idx <- which(invalids)
     abort(
