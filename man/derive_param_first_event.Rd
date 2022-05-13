@@ -7,8 +7,9 @@
 derive_param_first_event(
   dataset,
   dataset_adsl,
-  source_param,
-  condition,
+  dataset_source,
+  filter_source,
+  date_var,
   subject_keys = vars(STUDYID, USUBJID),
   set_values_to,
   check_type = "warning"
@@ -17,8 +18,7 @@ derive_param_first_event(
 \arguments{
 \item{dataset}{Input dataset
 
-The variables \code{PARAMCD}, \code{ADT}, and those specified by the \code{subject_keys}
-parameter are expected.}
+The \code{PARAMCD} variable is expected.}
 
 \item{dataset_adsl}{ADSL input dataset
 
@@ -26,19 +26,30 @@ The variables specified for \code{subject_keys} are expected. For each
 observation of the specified dataset a new observation is added to the
 input dataset.}
 
-\item{source_param}{Source parameter
+\item{dataset_source}{Source dataset
 
-Only the observations from the input dataset where \code{PARAMCD} equals the
-specified value are considered for looking for an event.}
+All observations in the specified dataset fulfilling the condition
+specified by \code{filter_source} are considered as event.
 
-\item{condition}{Event condition
+The variables specified by the \code{subject_keys} and
+\code{date_var} parameter are expected.}
 
-For subjects with at least one observation where the condition is fulfilled
-\code{AVALC} is set to \code{"Y"}, \code{AVAL} to \code{1}, and \code{ADT} to the first date where
-the condition is fulfilled.
+\item{filter_source}{Source filter
+
+All observations in \code{dataset_source} fulfilling the specified condition are
+considered as event.
+
+For subjects with at least one event \code{AVALC} is set to \code{"Y"}, \code{AVAL} to
+\code{1}, and \code{ADT} to the first date where the condition is fulfilled.
 
 For all other subjects \code{AVALC} is set to \code{"N"}, \code{AVAL} to \code{0}, and \code{ADT} to
 \code{NA}.}
+
+\item{date_var}{Date variable
+
+Date variable in the source dataset (\code{dataset_source}). The variable is
+used to sort the source dataset. \code{ADT} is set to the specified variable for
+events.}
 
 \item{subject_keys}{Variables to uniquely identify a subject
 
@@ -67,18 +78,19 @@ The input dataset with a new parameter indicating if and when an
 event occurred
 }
 \description{
-Add a new parameter for the first event occurring within a parameter of the
-input dataset. \code{AVALC} and \code{AVAL} indicate if an event occurred and \code{ADT} is
-set to the date of the first event. For example, the function can derive a
-parameter for the first disease progression.
+Add a new parameter for the first event occurring in a dataset. \code{AVALC} and
+\code{AVAL} indicate if an event occurred and \code{ADT} is set to the date of the
+first event. For example, the function can derive a parameter for the first
+disease progression.
 }
 \details{
 \enumerate{
-\item The input dataset is restricted to observations where \code{PARAMCD} equals
-\code{source_param}.
+\item The input dataset is restricted to observations fulfilling
+\code{filter_source}.
 \item For each subject (with respect to the variables specified for the
-\code{subject_keys} parameter) the first observation (with respect \code{ADT}) where
-the event condition (\code{condition} parameter) is fulfilled is selected.
+\code{subject_keys} parameter) the first observation (with respect to
+\code{date_var}) where the event condition (\code{filter_source} parameter) is
+fulfilled is selected.
 \item For each observation in \code{dataset_adsl} a new observation is created. For
 subjects with event \code{AVALC} is set to \code{"Y"}, \code{AVAL} to \code{1}, and \code{ADT} to
 the first date where the event condition is fulfilled. For all other
@@ -94,10 +106,10 @@ library(lubridate)
 
 # Derive a new parameter for the first disease progression (PD)
 adsl <- tibble::tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
+  ~USUBJID, ~DTHDT,
+  "1",      ymd("2022-05-13"),
+  "2",      ymd(""),
+  "3",      ymd("")
 ) \%>\%
   mutate(STUDYID = "XX1234")
 
@@ -123,11 +135,26 @@ adrs <- tibble::tribble(
 derive_param_first_event(
   adrs,
   dataset_adsl = adsl,
-  source_param = "OVR",
-  condition = AVALC == "PD",
+  dataset_source = adrs,
+  filter_source = PARAMCD == "OVR" & AVALC == "PD",
+  date_var = ADT,
   set_values_to = vars(
     PARAMCD = "PD",
     PARAM = "Disease Progression",
+    ANL01FL = "Y"
+  )
+)
+
+# derive parameter indicating death
+derive_param_first_event(
+  dataset = adrs,
+  dataset_adsl = adsl,
+  dataset_source = adsl,
+  filter_source = !is.na(DTHDT),
+  date_var = DTHDT,
+  set_values_to = vars(
+    PARAMCD = "DEATH",
+    PARAM = "Death",
     ANL01FL = "Y"
   )
 )

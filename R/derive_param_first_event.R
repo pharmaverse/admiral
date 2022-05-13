@@ -1,14 +1,13 @@
 #' Add a First Event Parameter
 #'
-#' Add a new parameter for the first event occurring within a parameter of the
-#' input dataset. `AVALC` and `AVAL` indicate if an event occurred and `ADT` is
-#' set to the date of the first event. For example, the function can derive a
-#' parameter for the first disease progression.
+#' Add a new parameter for the first event occurring in a dataset. `AVALC` and
+#' `AVAL` indicate if an event occurred and `ADT` is set to the date of the
+#' first event. For example, the function can derive a parameter for the first
+#' disease progression.
 #'
 #' @param dataset Input dataset
 #'
-#'   The variables `PARAMCD`, `ADT`, and those specified by the `subject_keys`
-#'   parameter are expected.
+#'   The `PARAMCD` variable is expected.
 #'
 #' @param dataset_adsl ADSL input dataset
 #'
@@ -16,19 +15,30 @@
 #'   observation of the specified dataset a new observation is added to the
 #'   input dataset.
 #'
-#' @param source_param Source parameter
+#' @param dataset_source Source dataset
 #'
-#'   Only the observations from the input dataset where `PARAMCD` equals the
-#'   specified value are considered for looking for an event.
+#'   All observations in the specified dataset fulfilling the condition
+#'   specified by `filter_source` are considered as event.
 #'
-#' @param condition Event condition
+#'   The variables specified by the `subject_keys` and
+#'   `date_var` parameter are expected.
 #'
-#'   For subjects with at least one observation where the condition is fulfilled
-#'   `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to the first date where
-#'   the condition is fulfilled.
+#' @param filter_source Source filter
+#'
+#'   All observations in `dataset_source` fulfilling the specified condition are
+#'   considered as event.
+#'
+#'   For subjects with at least one event `AVALC` is set to `"Y"`, `AVAL` to
+#'   `1`, and `ADT` to the first date where the condition is fulfilled.
 #'
 #'   For all other subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to
 #'   `NA`.
+#'
+#' @param date_var Date variable
+#'
+#'   Date variable in the source dataset (`dataset_source`). The variable is
+#'   used to sort the source dataset. `ADT` is set to the specified variable for
+#'   events.
 #'
 #' @param set_values_to Variables to set
 #'
@@ -56,8 +66,9 @@
 #'   1. The input dataset is restricted to observations fulfilling
 #'   `filter_source`.
 #'   1. For each subject (with respect to the variables specified for the
-#'   `subject_keys` parameter) the first observation (with respect `ADT`) where
-#'   the event condition (`condition` parameter) is fulfilled is selected.
+#'   `subject_keys` parameter) the first observation (with respect to
+#'   `date_var`) where the event condition (`filter_source` parameter) is
+#'   fulfilled is selected.
 #'   1. For each observation in `dataset_adsl` a new observation is created. For
 #'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
 #'   the first date where the event condition is fulfilled. For all other
@@ -81,10 +92,10 @@
 #'
 #' # Derive a new parameter for the first disease progression (PD)
 #' adsl <- tibble::tribble(
-#'   ~USUBJID,
-#'   "1",
-#'   "2",
-#'   "3"
+#'   ~USUBJID, ~DTHDT,
+#'   "1",      ymd("2022-05-13"),
+#'   "2",      ymd(""),
+#'   "3",      ymd("")
 #' ) %>%
 #'   mutate(STUDYID = "XX1234")
 #'
@@ -110,23 +121,43 @@
 #' derive_param_first_event(
 #'   adrs,
 #'   dataset_adsl = adsl,
+#'   dataset_source = adrs,
 #'   filter_source = PARAMCD == "OVR" & AVALC == "PD",
+#'   date_var = ADT,
 #'   set_values_to = vars(
 #'     PARAMCD = "PD",
 #'     PARAM = "Disease Progression",
 #'     ANL01FL = "Y"
 #'   )
 #' )
+#'
+#' # derive parameter indicating death
+#' derive_param_first_event(
+#'   dataset = adrs,
+#'   dataset_adsl = adsl,
+#'   dataset_source = adsl,
+#'   filter_source = !is.na(DTHDT),
+#'   date_var = DTHDT,
+#'   set_values_to = vars(
+#'     PARAMCD = "DEATH",
+#'     PARAM = "Death",
+#'     ANL01FL = "Y"
+#'   )
+#' )
 derive_param_first_event <- function(dataset,
                                      dataset_adsl,
+                                     dataset_source,
                                      filter_source,
+                                     date_var,
                                      subject_keys = vars(STUDYID, USUBJID),
                                      set_values_to,
                                      check_type = "warning") {
   # Check input parameters
-  filter_source <- assert_filter_cond(enquo(condition))
+  filter_source <- assert_filter_cond(enquo(filter_source))
+  date_var <- assert_symbol(enquo(date_var))
   assert_vars(subject_keys)
-  assert_data_frame(dataset, required_vars = vars(!!!subject_keys, PARAMCD, ADT))
+  assert_data_frame(dataset, required_vars = vars(PARAMCD))
+  assert_data_frame(dataset_source, required_vars = vars(!!!subject_keys, !!date_var))
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   check_type <-
     assert_character_scalar(
@@ -134,16 +165,17 @@ derive_param_first_event <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  assert_varval_list(set_values_to)
+  assert_varval_list(set_values_to, required_elements = "PARAMCD")
+  assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   # Create new observations
   new_obs <- derive_vars_merged(
-    dataset_adsl,
-    dataset_add = dataset,
+    select(dataset_adsl, !!!subject_keys),
+    dataset_add = dataset_source,
     filter_add = !!filter_source,
     by_vars = subject_keys,
-    order = vars(ADT),
-    new_vars = vars(ADT),
+    order = vars(!!date_var),
+    new_vars = vars(ADT = !!date_var),
     mode = "first",
     check_type = check_type
   ) %>%

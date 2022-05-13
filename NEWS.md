@@ -38,7 +38,7 @@ from a BDS dataset, e.g. ADLB. (#943)
 (#941)
 
 - New function `derive_param_first_event()`: Add a new parameter for the first
-event occurring within a parameter of the input dataset. (#1063)
+event occurring in a dataset. (#1063)
 
 - New high order functions (#701):
 

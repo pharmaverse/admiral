@@ -1,8 +1,8 @@
 adsl <- tibble::tribble(
-  ~USUBJID,
-  "1",
-  "2",
-  "3"
+  ~USUBJID, ~DTHDT,
+  "1",      ymd("2022-05-13"),
+  "2",      ymd(""),
+  "3",      ymd("")
 ) %>%
   mutate(STUDYID = "XX1234")
 
@@ -35,8 +35,9 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
   actual <- derive_param_first_event(
     adrs,
     dataset_adsl = adsl,
-    source_param = "OVR",
-    condition = AVALC == "PD",
+    dataset_source = adrs,
+    filter_source = PARAMCD == "OVR" & AVALC == "PD",
+    date_var = ADT,
     set_values_to = vars(
       PARAMCD = "PD",
       ANL01FL = "Y"
@@ -49,14 +50,54 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
       ~USUBJID, ~ADT,              ~AVALC, ~AVALN,
       "1",      ymd(""),           "N",    0,
       "2",      ymd("2021-07-16"), "Y",    1,
-      "3",      ymd(""),           "N",    0) %>%
+      "3",      ymd(""),           "N",    0
+    ) %>%
       mutate(
         STUDYID = "XX1234",
         PARAMCD = "PD",
-        ANL01FL = "Y")
-    )
+        ANL01FL = "Y"
+      )
+  )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "PARAMCD", "ADT"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
+})
+
+## derive_param_first_event Test 2: derive death date parameter ----
+test_that("derive_param_first_event Test 2: derive death date parameter", {
+  actual <- derive_param_first_event(
+    dataset = adrs,
+    dataset_adsl = adsl,
+    dataset_source = adsl,
+    filter_source = !is.na(DTHDT),
+    date_var = DTHDT,
+    set_values_to = vars(
+      PARAMCD = "DEATH",
+      ANL01FL = "Y"
+    )
+  )
+
+  expected <- bind_rows(
+    adrs,
+    tibble::tribble(
+      ~USUBJID, ~ADT,              ~AVALC, ~AVALN,
+      "1",      ymd("2022-05-13"), "Y",    1,
+      "2",      ymd(""),           "N",    0,
+      "3",      ymd(""),           "N",    0
+    ) %>%
+      mutate(
+        STUDYID = "XX1234",
+        PARAMCD = "DEATH",
+        ANL01FL = "Y"
+      )
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD", "ADT")
+  )
 })
