@@ -106,8 +106,7 @@ derive_vars_dy <- function(dataset,
   } else {
     dataset %>%
       mutate(!!sym(dy_vars) :=
-               compute_duration(start_date = !!reference_date, end_date = !!!source_vars)
+               compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]])
              )
   }
-
 }

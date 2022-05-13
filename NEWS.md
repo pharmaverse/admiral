@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Added more detail on the site homepage and Programming Strategy around our manifesto and how
+we design new functions (#954)
+
 - New functions for merging variables (#607):
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
@@ -46,6 +49,11 @@ where a specified condition is fulfilled. For example, all observations up to
 first disease progression. (#1023)
 
 ## Updates of Existing Functions
+ 
+- Datasets internal to the package have been renamed, e.g. `adsl` has 
+been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
+vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
 `derive_vars_dtm()` the function failed. This bug was fixed (#1097).
@@ -63,6 +71,22 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
+
+- The following functions were deprecated in favor of `derive_vars_dy()`
+(#1076):
+
+    - `derive_var_ady()` - Derive Analysis Study Day
+    - `derive_var_aendy()` - Derive Analysis End Relative Day
+    - `derive_var_astdy()` - Derive Analysis Start Relative Day
+
+- The following functions were deprecated in favor of `derive_vars_merged_dtm()`
+(#1076):
+
+    - `derive_var_trtedtm()` - Derive Datetime of Last Exposure to Treatment
+    - `derive_var_trtsdtm()` - Derive Datetime of First Exposure to Treatment
+
+- The `derive_var_disposition_dt()` function was deprecated in favor of
+`derive_vars_merged_dt()` (#1076)
 
 ## Documentation
 

@@ -49,6 +49,7 @@ globalVariables(c(
   "USUBJID",
   "auto",
   "censor",
+  "data",
   "Dataset",
   "dataset_name",
   "datedtc___",

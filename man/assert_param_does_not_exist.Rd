@@ -19,9 +19,9 @@ dataset. Otherwise, the dataset is returned invisibly.
 Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.
 }
 \examples{
-data(advs)
-assert_param_does_not_exist(advs, param = "HR")
-try(assert_param_does_not_exist(advs, param = "WEIGHT"))
+data(admiral_advs)
+assert_param_does_not_exist(admiral_advs, param = "HR")
+try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
 }
 \author{
 Stefan Bundfuss

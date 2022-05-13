@@ -5,7 +5,6 @@
 \alias{reexports}
 \alias{vars}
 \alias{desc}
-\alias{exprs}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -14,7 +13,5 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{desc}}, \code{\link[dplyr]{vars}}}
-
-  \item{rlang}{\code{\link[rlang:nse-defuse]{exprs}}}
 }}
 
