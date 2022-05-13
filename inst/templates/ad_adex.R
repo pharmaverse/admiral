@@ -64,8 +64,10 @@ adex0 <- ex %>%
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
   derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
   # Calculate ASTDY, AENDY
-  derive_var_astdy(date = ASTDTM) %>%
-  derive_var_aendy(date = AENDTM) %>%
+  derive_vars_dy(
+    reference_date = TRTSDTM,
+    source_vars = vars(ASTDTM, AENDTM)
+  ) %>%
   # add EXDUR, the duration of trt for each record
   derive_vars_duration(
     new_var = EXDURD,

@@ -98,18 +98,43 @@ adsl <- dm %>%
 
 ## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`, `TRTDURD`) {#trtdatetime}
 
-The functions `derive_var_trtsdtm()`, `derive_var_trtedtm()` can be used to derive the treatment 
+The function `derive_vars_merged_dtm()` can be used to derive the treatment
 start and end date/times using the `ex` domain.
 
 Example calls:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-  derive_var_trtedtm(dataset_ex = ex)
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+                    (EXDOSE == 0 &
+                       str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
+    new_vars_prefix = "TRTS",
+    dtc = EXSTDTC,
+    order = vars(TRTSDTM, EXSEQ),
+    mode = "first",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+                    (EXDOSE == 0 &
+                       str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
+    new_vars_prefix = "TRTE",
+    dtc = EXENDTC,
+    time_imputation = "last",
+    order = vars(TRTEDTM, EXSEQ),
+    mode = "last",
+    by_vars = vars(STUDYID, USUBJID)
+  )
 ```
 
-This call returns the original data frame with the column `TRTSDTM` and `TRTEDTM` added.
+This call returns the original data frame with the column `TRTSDTM` and
+`TRTEDTM` added. Exposure observations with incomplete date and zero doses of
+non placebo treatments are ignored. Missing time parts are imputed as first or
+last for start and end date respectively.
+
 The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
 function.
 
@@ -146,11 +171,12 @@ To derive the End of Study date (`EOSDT`), a call could be:
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
-  derive_var_disposition_dt(
-    dataset_ds = ds,
-    new_var = EOSDT,
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "EOS",
     dtc = DSSTDTC,
-    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE",
     date_imputation = NULL
   )
 ```

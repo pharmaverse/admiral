@@ -742,6 +742,13 @@
       "Repository": "CRAN",
       "Hash": "1ab6223d3670fac7143202cb6a2d43d5"
     },
+    "textshaping": {
+      "Package": "textshaping",
+      "Version": "0.3.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1ab6223d3670fac7143202cb6a2d43d5"
+    },
     "tibble": {
       "Package": "tibble",
       "Version": "3.0.0",

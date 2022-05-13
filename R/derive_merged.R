@@ -330,6 +330,7 @@ derive_vars_merged_dt <- function(dataset,
                                   preserve = FALSE,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
+  assert_vars(by_vars)
   dtc <- assert_symbol(enquo(dtc))
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))

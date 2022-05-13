@@ -1,7 +1,9 @@
 #' Derive Analysis End Relative Day
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dy()` instead.
 #'
 #' Adds the analysis end relative day (`AENDY`) to the dataset, i.e. study day
 #' of analysis end date
@@ -39,22 +41,15 @@
 #'
 #' @export
 #'
-#' @examples
-#' data <- tibble::tribble(
-#'   ~TRTSDT, ~AENDT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-#' )
-#'
-#' derive_var_aendy(data)
 derive_var_aendy <- function(dataset, reference_date = TRTSDT, date = AENDT) {
   reference_date <- assert_symbol(enquo(reference_date))
   date <- assert_symbol(enquo(date))
   assert_data_frame(dataset, vars(!!reference_date, !!date))
+  deprecate_warn("0.7.0", "derive_var_aendy()", "derive_vars_dy()")
 
-  derive_vars_duration(
+  derive_vars_dy(
     dataset,
-    new_var = AENDY,
-    start_date = !!reference_date,
-    end_date = !!date
+    reference_date = !!reference_date,
+    source_vars = vars(AENDY = !!date)
   )
 }

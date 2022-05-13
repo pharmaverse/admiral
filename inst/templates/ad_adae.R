@@ -60,15 +60,10 @@ adae <- ae %>%
   ) %>%
   # derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-  # derive analysis start relative day
-  derive_var_astdy(
+  # derive analysis start relative day and  analysis end relative day
+  derive_vars_dy(
     reference_date = TRTSDT,
-    date = ASTDT
-  ) %>%
-  # derive analysis end relative day
-  derive_var_aendy(
-    reference_date = TRTSDT,
-    date = AENDT
+    source_vars = vars(ASTDT, AENDT)
   ) %>%
   # derive analysis duration (value and unit)
   derive_vars_duration(
@@ -109,12 +104,15 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(ASTDTM, AESEQ),
-    new_var = AOCCIFL,
-    filter = TRTEMFL == "Y",
-    mode = "last"
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID),
+      order = vars(ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "last"
+    ),
+    filter = TRTEMFL == "Y"
   )
 
 # Join all ADSL with AE
