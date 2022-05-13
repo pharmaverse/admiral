@@ -55,7 +55,6 @@ derive_vars_aage <- function(dataset,
                              start_date = BRTHDT,
                              end_date = RANDDT,
                              unit = "years") {
-
   start_date <- assert_symbol(enquo(start_date))
   end_date <- assert_symbol(enquo(end_date))
   assert_data_frame(dataset, required_vars = quo_c(start_date, end_date))
@@ -104,17 +103,17 @@ derive_vars_aage <- function(dataset,
 #'
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' data <- data.frame(AGE = c(27, 24, 3, 4, 1),
-#'                    AGEU = c("days", "months", "years", "weeks", "years"))
+#' data <- data.frame(
+#'   AGE = c(27, 24, 3, 4, 1),
+#'   AGEU = c("days", "months", "years", "weeks", "years")
+#' )
 #'
 #' data %>%
-#'      derive_var_age_years(., AGE, new_var = AAGE)
+#'   derive_var_age_years(., AGE, new_var = AAGE)
 #'
 #' data.frame(AGE = c(12, 24, 36, 48)) %>%
-#'  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
-#'
+#'   derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
-
   age_variable <- assert_symbol(enquo(age_var))
   assert_data_frame(dataset, required_vars = quo_c(age_variable))
 
@@ -128,67 +127,71 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   if (!unit_var %in% colnames(dataset)) {
-
     if (is.null(age_unit)) {
-
       err_msg <- paste(
         "There is no variable unit:", unit_var, "associated with", quo_get_expr(age_var),
         "and the argument `age_unit` is missing. Please specify a value for `age_unit`"
       )
       abort(err_msg)
-    } else{
-      assert_character_scalar(tolower(age_unit), values = c("years", "months", "weeks", "days",
-                                                            "hours", "minutes", "seconds"))
+    } else {
+      assert_character_scalar(
+        tolower(age_unit),
+        values = c(
+          "years", "months", "weeks", "days",
+          "hours", "minutes", "seconds"
+        )
+      )
       ds <- dataset %>%
-        mutate(!!new_var := time_length(duration(!!age_var, units = tolower(age_unit)),
-                                        unit = "years"))
+        mutate(
+          !!new_var := time_length(duration(!!age_var, units = tolower(age_unit)),
+            unit = "years"
+          )
+        )
     }
   } else {
-
     unit <- tolower(unique(pull(dataset, !!sym(unit_var))))
-    assert_character_vector(unit,
-                            values = c(NA, "years", "months", "weeks", "days",
-                                       "hours", "minutes", "seconds"))
+    assert_character_vector(
+      unit,
+      values = c(
+        NA, "years", "months", "weeks", "days",
+        "hours", "minutes", "seconds"
+      )
+    )
 
     if (!is.null(age_unit)) {
-
       if (length(unit) > 1) {
-
         msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "and contatins multiple values but the argument `age_unit`
           has been specified with a single different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var)
+          unit_var
+        )
         warn(msg)
-
-      }
-
-      else if (unit != tolower(age_unit)) {
-
+      } else if (unit != tolower(age_unit)) {
         msg <- paste(
           "The variable unit", unit_var, "is associated with", quo_get_expr(age_var),
           "but the argument `age_unit` has been specified with a different value.",
           "The `age_unit` argument is ignored and the grouping will based on",
-          unit_var)
+          unit_var
+        )
         warn(msg)
       }
-
     }
 
-    average_durations <- c(seconds = 365.25 * 24 * 60 * 60,
-                           minutes = 365.25 * 24 * 60,
-                           hours = 365.25 * 24,
-                           days = 365.25,
-                           weeks = 365.25 / 7,
-                           months = 12,
-                           years = 1)
+    average_durations <- c(
+      seconds = 365.25 * 24 * 60 * 60,
+      minutes = 365.25 * 24 * 60,
+      hours = 365.25 * 24,
+      days = 365.25,
+      weeks = 365.25 / 7,
+      months = 12,
+      years = 1
+    )
 
     ds <- dataset %>%
-      mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))])
-      )
+      mutate(!!new_var := !!age_var / unname(average_durations[tolower(!!sym(unit_var))]))
   }
-
 }
 
 
@@ -227,16 +230,16 @@ NULL
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) %>%
 #'   select(SUBJID, AGE, AGEGR1)
 #'
 #' data <- tibble::tribble(
 #'   ~BRTHDT, ~RANDDT,
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
-#'   )
+#' )
 #'
 #' data %>%
 #'   derive_vars_aage(unit = "months") %>%
@@ -244,9 +247,7 @@ NULL
 #'
 #' data.frame(AGE = 1:100) %>%
 #'   derive_var_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-#'
 derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
@@ -284,9 +285,9 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data(dm)
+#' data(admiral_dm)
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_agegr_ema(age_var = AGE, new_var = AGEGR1) %>%
 #'   select(SUBJID, AGE, AGEGR1)
 #'
@@ -296,20 +297,21 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #' data.frame(AGE = 1:20) %>%
 #'   derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 derive_var_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-
   age_var <- assert_symbol(enquo(age_var))
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
-  ds <-   derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
+  ds <- derive_var_age_years(dataset, !!age_var, age_unit, new_var = temp_age)
 
   out <- mutate(
     ds,
     !!new_var := cut(
       x = temp_age,
       breaks = c(-Inf, (28 / 365.25), 2, 12, 18, 65, 85, Inf),
-      labels = c("0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
-                 "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"),
+      labels = c(
+        "0-27 days (Newborns)", "28 days to 23 months (Infants and Toddlers)",
+        "2-11 (Children)", "12-17 (Adolescents)", "18-64", "65-84", ">=85"
+      ),
       include.lowest = FALSE,
       right = FALSE
     )

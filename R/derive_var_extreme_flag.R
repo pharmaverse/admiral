@@ -64,17 +64,18 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("vs")
+#' data("admiral_vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
-#' vs %>%
+#' admiral_vs %>%
 #'   restrict_derivation(
 #'     derivation = derive_var_extreme_flag,
 #'     args = params(
 #'       by_vars = vars(USUBJID, VSTESTCD, VISIT),
 #'       order = vars(VSTPTNUM),
 #'       new_var = LASTFL,
-#'       mode = "last"),
+#'       mode = "last"
+#'     ),
 #'     filter = VISIT != "BASELINE"
 #'   ) %>%
 #'   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
@@ -83,30 +84,27 @@
 #' # Baseline (ABLFL) examples:
 #'
 #' input <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-#'
-#'   "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
-#'
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
-#'   "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-#'
-#'   "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL, ~DTYPE,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"), 15.0,  NA,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,  NA,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,  "AVERAGE",
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,  "AVERAGE",
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,  "AVERAGE",
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,  "AVERAGE",
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,  NA,
+#'   "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"), 10.0,  "AVERAGE",
+#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"), 12.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"), 14.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"), 15.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"), 10.0,  NA,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"), 12.0,  NA
 #' )
 #'
 #' # Last observation
@@ -117,7 +115,8 @@
 #'     by_vars = vars(USUBJID, PARAMCD),
 #'     order = vars(ADT),
 #'     new_var = ABLFL,
-#'     mode = "last"),
+#'     mode = "last"
+#'   ),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
@@ -129,7 +128,8 @@
 #'     by_vars = vars(USUBJID, PARAMCD),
 #'     order = vars(AVAL, ADT),
 #'     new_var = ABLFL,
-#'     mode = "last"),
+#'     mode = "last"
+#'   ),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
@@ -141,7 +141,8 @@
 #'     by_vars = vars(USUBJID, PARAMCD),
 #'     order = vars(desc(AVAL), ADT),
 #'     new_var = ABLFL,
-#'     mode = "last"),
+#'     mode = "last"
+#'   ),
 #'   filter = AVISIT == "BASELINE"
 #' )
 #'
@@ -153,17 +154,20 @@
 #'     by_vars = vars(USUBJID, PARAMCD),
 #'     order = vars(ADT, desc(AVAL)),
 #'     new_var = ABLFL,
-#'     mode = "last"),
+#'     mode = "last"
+#'   ),
 #'   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 #' )
 #'
 #' # OCCURDS Examples
-#' data("ae")
+#' data("admiral_ae")
 #'
 #' # Most severe AE first occurrence per patient
-#' ae %>%
-#'   mutate(TEMP_AESEVN =
-#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#' admiral_ae %>%
+#'   mutate(
+#'     TEMP_AESEVN =
+#'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+#'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCIFL,
 #'     by_vars = vars(USUBJID),
@@ -174,9 +178,11 @@
 #'   select(USUBJID, AEDECOD, AESEV, AESTDY, AESEQ, AOCCIFL)
 #'
 #' # Most severe AE first occurrence per patient per body system
-#' ae %>%
-#'   mutate(TEMP_AESEVN =
-#'          as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+#' admiral_ae %>%
+#'   mutate(
+#'     TEMP_AESEVN =
+#'       as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+#'   ) %>%
 #'   derive_var_extreme_flag(
 #'     new_var = AOCCSIFL,
 #'     by_vars = vars(USUBJID, AEBODSYS),
@@ -186,12 +192,12 @@
 #'   arrange(USUBJID, AESTDY, AESEQ) %>%
 #'   select(USUBJID, AEBODSYS, AESEV, AESTDY, AOCCSIFL)
 derive_var_extreme_flag <- function(dataset,
-                                by_vars,
-                                order,
-                                new_var,
-                                mode,
-                                filter = deprecated(),
-                                check_type = "warning") {
+                                    by_vars,
+                                    order,
+                                    new_var,
+                                    mode,
+                                    filter = deprecated(),
+                                    check_type = "warning") {
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars)
   assert_order_vars(order)
@@ -203,9 +209,13 @@ derive_var_extreme_flag <- function(dataset,
     case_sensitive = FALSE
   )
   if (!missing(filter)) {
-    warn(paste("`filter` is deprecated as of admiral 0.7.0.",
-               "Please use `restrict_derivation()` instead (see examples).",
-               sep = "\n"))
+
+    warn(paste(
+      "`filter` is deprecated as of admiral 0.7.0.",
+      "Please use `restrict_derivation()` instead (see examples).",
+      sep = "\n"
+    ))
+
     filter <- assert_filter_cond(enquo(filter), optional = TRUE)
     return(
       restrict_derivation(
@@ -290,36 +300,32 @@ derive_var_extreme_flag <- function(dataset,
 #' @examples
 #'
 #' input <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-#'
-#'   "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-#'
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
-#'   "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-#'
-#'   "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-#'
-#'   "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-#'   "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"),  15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
+#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+#'   "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
+#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
+#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
+#'   "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"),  10.0,
+#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+#'   "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"),  14.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"),  12.0,
+#'   "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"),  14.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"),  15.0,
+#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+#'   "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-30"),  12.0
 #' )
 #'
 #' derive_var_worst_flag(
@@ -332,8 +338,7 @@ derive_var_extreme_flag <- function(dataset,
 #'   worst_high = c("PARAM01", "PARAM03"),
 #'   worst_low = "PARAM02"
 #' )
-#'
-#'\dontrun{
+#' \dontrun{
 #' # example with ADVS
 #' restrict_derivation(
 #'   advs,
@@ -345,21 +350,22 @@ derive_var_extreme_flag <- function(dataset,
 #'     param_var = PARAMCD,
 #'     analysis_var = AVAL,
 #'     worst_high = c("SYSBP", "DIABP"),
-#'     worst_low = "RESP"),
+#'     worst_low = "RESP"
+#'   ),
 #'   filter = !is.na(AVISIT) & !is.na(AVAL)
 #' )
-#'}
+#' }
 #'
 derive_var_worst_flag <- function(dataset,
-                              by_vars,
-                              order,
-                              new_var,
-                              param_var,
-                              analysis_var,
-                              worst_high,
-                              worst_low,
-                              filter = deprecated(),
-                              check_type = "warning") {
+                                  by_vars,
+                                  order,
+                                  new_var,
+                                  param_var,
+                                  analysis_var,
+                                  worst_high,
+                                  worst_low,
+                                  filter = deprecated(),
+                                  check_type = "warning") {
 
   # perform argument checks
   new_var <- assert_symbol(enquo(new_var))
@@ -412,7 +418,7 @@ derive_var_worst_flag <- function(dataset,
   # additional checks for worstflag - parameters not available
   param_var_str <- as_string(quo_get_expr(param_var))
   if (length(worst_high) > 0 &&
-      !all(worst_high %in% dataset[[param_var_str]])) {
+    !all(worst_high %in% dataset[[param_var_str]])) {
     err_msg <- paste0(
       "The following parameter(-s) in `worst_high` are not available in column ",
       param_var_str,
@@ -424,7 +430,7 @@ derive_var_worst_flag <- function(dataset,
 
   # additional checks for worstflag - parameters not available
   if (length(worst_low) > 0 &&
-      !all(worst_low %in% dataset[[param_var_str]])) {
+    !all(worst_low %in% dataset[[param_var_str]])) {
     err_msg <- paste0(
       "The following parameter(-s) in `worst_low` are not available in column ",
       param_var_str,

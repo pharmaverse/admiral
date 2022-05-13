@@ -32,7 +32,9 @@ The default is \code{ADT}}
 The input dataset with \code{ADY} column added
 }
 \description{
-\verb{r lifecycle::badge("questioning")}
+\verb{r lifecycle::badge("deprecated")}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dy()} instead.
 
 Adds the analysis study day (\code{ADY}) to the dataset, i.e., study day of analysis date.
 }
@@ -40,14 +42,6 @@ Adds the analysis study day (\code{ADY}) to the dataset, i.e., study day of anal
 The study day is derived as number of days from the start date
 to the end date. If it is non-negative, one is added. I.e., the study day of the
 start date is 1.
-}
-\examples{
-data <- tibble::tribble(
-  ~TRTSDT, ~ADT,
-  lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-)
-
-derive_var_ady(data)
 }
 \author{
 Stefan Bundfuss

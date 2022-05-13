@@ -45,6 +45,11 @@ from a BDS dataset, e.g. ADLB. (#943)
   derivation may vary depending on the slice.
 
 ## Updates of Existing Functions
+ 
+- Datasets internal to the package have been renamed, e.g. `adsl` has 
+been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
+vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
 `derive_vars_dtm()` the function failed. This bug was fixed (#1097).
@@ -79,6 +84,22 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
   - `derive_last_dose()`
   - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
 
+- The following functions were deprecated in favor of `derive_vars_dy()`
+(#1076):
+
+    - `derive_var_ady()` - Derive Analysis Study Day
+    - `derive_var_aendy()` - Derive Analysis End Relative Day
+    - `derive_var_astdy()` - Derive Analysis Start Relative Day
+
+- The following functions were deprecated in favor of `derive_vars_merged_dtm()`
+(#1076):
+
+    - `derive_var_trtedtm()` - Derive Datetime of Last Exposure to Treatment
+    - `derive_var_trtsdtm()` - Derive Datetime of First Exposure to Treatment
+
+- The `derive_var_disposition_dt()` function was deprecated in favor of
+`derive_vars_merged_dt()` (#1076)
+
 ## Documentation
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
@@ -93,7 +114,6 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 
 -  Naming convention of admiral.xxx packages change to admiralxxx from this point onwards (#968)
  
->>>>>>> origin/devel
 
 # admiral 0.6.3
 

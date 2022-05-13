@@ -40,7 +40,9 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTSDTM} variable added
 }
 \description{
-\verb{r lifecycle::badge("questioning")}
+\verb{r lifecycle::badge("deprecated")}
+
+This function is \emph{deprecated}, please use \code{derive_vars_merged_dtm()} instead.
 
 Derives datetime of first exposure to treatment (\code{TRTSDTM})
 }
@@ -48,16 +50,6 @@ Derives datetime of first exposure to treatment (\code{TRTSDTM})
 For each group (with respect to the variables specified for the
 \code{by_vars} parameter) the first observation (with respect to the order
 specified for the \code{order} parameter) is included in the output dataset.
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
-data("ex")
-data("dm")
-
-dm \%>\%
-  derive_var_trtsdtm(dataset_ex = ex) \%>\%
-  select(USUBJID, TRTSDTM)
 }
 \author{
 Stefan Bundfuss

@@ -109,13 +109,13 @@ The details associated with the reason for discontinuation are derived based on
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-data("dm")
-data("ds")
+data("admiral_dm")
+data("admiral_ds")
 
 # Derive DCSREAS using the default format
-dm \%>\%
+admiral_dm \%>\%
   derive_vars_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -127,12 +127,12 @@ format_dcsreas <- function(x, y = NULL) {
   if (is.null(y)) {
     if_else(!x \%in\% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
   } else {
-  if_else (x == "OTHER", y, NA_character_)
+    if_else(x == "OTHER", y, NA_character_)
   }
 }
-dm \%>\%
+admiral_dm \%>\%
   derive_vars_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,

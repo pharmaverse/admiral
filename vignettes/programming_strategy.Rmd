@@ -426,19 +426,23 @@ The documentation will be updated at:
 
 + the description level for a function, 
 
-```
-#' Title of the function
-#'
-#' @description
-#'*Deprecated*, please use `new_fun()` instead.
-#' description of the function in plain English
-``` 
+    ```{r, eval=FALSE}
+    #' Title of the function
+    #'
+    #' @description
+    #' `r lifecycle::badge("deprecated")`
+    #'
+    #' This function is *deprecated*, please use `new_fun()` instead.
+    #' description of the function in plain English
+    ``` 
+
+    The "Examples" section should be removed.
 
 + the `@param` level for a parameter.
 
-```
-@param old_param *Deprecated*, please use `new_param` instead.
-```
+    ```
+    @param old_param *Deprecated*, please use `new_param` instead.
+    ```
 
 ## Handling of warning and error
 
@@ -500,6 +504,12 @@ will need to be quoted.
 ### END DEPRECATION
 ```
 
+## Unit Testing
+
+Unit tests for deprecated functions and parameters must be added to
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+
+Other unit tests of deprecated functions must be removed.
 
 # Best Practices and Hints
 
@@ -582,3 +592,11 @@ If meaningful, comments can cover multiple variables within a piece of code
 "<code>"
 # end of X, Y, Z
 ```
+
+# R and package versions for development
+
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with `{admiral}`. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml)
+* This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
+* Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
+* We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.

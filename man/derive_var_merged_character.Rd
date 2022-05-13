@@ -114,19 +114,19 @@ first or last observation for each by group.
 \examples{
 library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("ds")
+data("admiral_dm")
+data("admiral_ds")
 
 derive_var_merged_character(
-  dm,
-  dataset_add = ds,
+  admiral_dm,
+  dataset_add = admiral_ds,
   by_vars = vars(STUDYID, USUBJID),
   new_var = DISPSTAT,
   filter_add = DSCAT == "DISPOSITION EVENT",
   source_var = DSDECOD,
   case = "title"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
+  select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 }
 \author{
 Stefan Bundfuss

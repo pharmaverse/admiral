@@ -36,15 +36,16 @@ These can then be used to create age groups.
 
 library(dplyr, warn.conflicts = FALSE)
 
-data <- data.frame(AGE = c(27, 24, 3, 4, 1),
-                   AGEU = c("days", "months", "years", "weeks", "years"))
+data <- data.frame(
+  AGE = c(27, 24, 3, 4, 1),
+  AGEU = c("days", "months", "years", "weeks", "years")
+)
 
 data \%>\%
-     derive_var_age_years(., AGE, new_var = AAGE)
+  derive_var_age_years(., AGE, new_var = AAGE)
 
 data.frame(AGE = c(12, 24, 36, 48)) \%>\%
- derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
-
+  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 }
 \author{
 Michael Thorpe

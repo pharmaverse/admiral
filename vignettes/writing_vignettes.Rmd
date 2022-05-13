@@ -135,17 +135,16 @@ library(admiraltest)
 library(DT)
 library(admiral)
 
-data(vs)
+data(admiral_vs)
 ```
 
 ```{r, eval=FALSE, echo=TRUE}
-      vs1 <- vs %>%
-        derive_vars_dt(
-        new_vars_prefix = "A",
-        dtc = VSDTC,
-        date_imputation = "FIRST"
-      )
-
+vs1 <- admiral_vs %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = VSDTC,
+    date_imputation = "FIRST"
+  )
 ```
 
 
@@ -153,18 +152,18 @@ data(vs)
 
 
 ```{r, echo=FALSE}
-      vs1 <- vs %>%
-        derive_vars_dt(
-        new_vars_prefix = "A",
-        dtc = VSDTC,
-        date_imputation = "FIRST"
-      )
-      
-      dataset_vignette(
-        vs1,
-        display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-        filter = VSTESTCD == "WEIGHT"
-      )
+vs1 <- admiral_vs %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = VSDTC,
+    date_imputation = "FIRST"
+  )
+
+dataset_vignette(
+  vs1,
+  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  filter = VSTESTCD == "WEIGHT"
+)
 ```
 
 
@@ -172,11 +171,11 @@ Note: The call to get the formatted dataset would be:
  
 
       ```{r, eval=FALSE, echo=TRUE}
-      dataset_vignette(
-        vs1, 
-        display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-        filter = VSTESTCD == "WEIGHT"
-      )
+dataset_vignette(
+  vs1,
+  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  filter = VSTESTCD == "WEIGHT"
+)
       ```
       
 Displaying many big datasets on a vignette, may require a long time to load
