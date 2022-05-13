@@ -20,7 +20,6 @@ derive_derived_param(
 
 The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and \code{AVAL}
 are expected.
-
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.}
@@ -67,7 +66,7 @@ into account.
 \item{constant_by_vars}{By variables for constant parameters
 
 The constant parameters (parameters that are measured only once) are merged
-to the other parameters using the specified variables. (Refer example 2)
+to the other parameters using the specified variables. (Refer to Example 2)
 
 \emph{Permitted Values:} list of variables}
 
@@ -77,7 +76,7 @@ It is expected that all the parameter codes (\code{PARAMCD}) which are required
 to derive the new parameter and are measured only once are specified here.
 For example if BMI should be derived and height is measured only once while
 weight is measured at each visit. Height could be specified in the
-\code{constant_parameters} parameter. (Refer example 2)
+\code{constant_parameters} parameter. (Refer to Example 2)
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
@@ -104,7 +103,7 @@ the provided values. The values of the other variables of the input dataset
 are set to \code{NA}.
 }
 \examples{
-# Example 1: derive MAP
+# Example 1: Derive MAP
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -129,7 +128,7 @@ derive_derived_param(
   )
 )
 
-# Example 2: derive BMI where height is measured only once
+# Example 2: Derive BMI where height is measured only once
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
