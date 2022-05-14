@@ -87,12 +87,6 @@ jobs:
           sink(type = "message")
           logs <- readLines(logfile)
           error_marker <- grep("Error:", logs)
-          warnings_marker <- grep("Warning message", logs)
-          if (length(warnings_marker) > 0) {
-            cat("⚠ One or more warnings were generated during the roxygen build:\n")
-            cat(logs[warnings_marker[[1]]:length(logs)], sep = "\n")
-            stop("Please 🙏 fix the warnings shown below this message 👇")
-          }
           if (length(error_marker) > 0) {
             cat("☠ One or more errors were generated during the roxygen build:\n")
             cat(logs[error_marker[[1]]:length(logs)], sep = "\n")
