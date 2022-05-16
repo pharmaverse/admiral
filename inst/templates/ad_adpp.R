@@ -4,7 +4,7 @@
 #
 # Input: pp, adsl
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -17,10 +17,10 @@ library(stringr)
 # For illustration purposes read in admiral test data
 
 # Load PP and Adsl
-data("pp")
-data("adsl")
+data("admiral_pp")
+data("admiral_adsl")
 
-pp <- convert_blanks_to_na(pp)
+pp <- convert_blanks_to_na(admiral_pp)
 
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
@@ -71,7 +71,7 @@ adpp <- pp %>%
 
   # Join ADSL with PP (need TRTSDT for ADY derivation)
   left_join(
-    select(adsl, STUDYID, USUBJID, !!!adsl_vars),
+    select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
 
@@ -138,7 +138,7 @@ adpp <- adpp %>%
 # Add all ADSL variables
 adpp <- adpp %>%
 
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
+  left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
     by = c("STUDYID", "USUBJID")
   )
 
@@ -148,4 +148,4 @@ adpp <- adpp %>%
 
 # ---- Save output ----
 
-save(adpp, file = "data/adpp.rda", compress = "bzip2")
+save(adpp, file = "data/admiral_adpp.rda", compress = "bzip2")
