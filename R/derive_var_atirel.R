@@ -1,5 +1,12 @@
 #' Derive Time Relative to Reference
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, as it is deemed as too specific for admiral.
+#' Derivations like this can be implemented calling `mutate()` and
+#' `case_when()`.
+#'
 #' Derives the variable `ATIREL` to CONCOMITANT, PRIOR, PRIOR_CONCOMITANT or NULL
 #' based on the relationship of cm Analysis start/end date/times to treatment start date/time
 #'
@@ -28,31 +35,16 @@
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' adcm <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
-#'   "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", "",
-#'   "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
-#'   "TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
-#'   "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
-#'   "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00", ""
-#' ) %>% dplyr::mutate(
-#'   TRTSDTM = lubridate::as_datetime(TRTSDTM),
-#'   ASTDTM = lubridate::as_datetime(ASTDTM),
-#'   AENDTM = lubridate::as_datetime(AENDTM)
-#' )
-#'
-#' derive_var_atirel(
-#'   dataset = adcm,
-#'   flag_var = ASTTMF,
-#'   new_var = ATIREL
-#' )
-#'
 derive_var_atirel <- function(dataset,
                               flag_var,
                               new_var) {
   # checks
+  warn(paste(
+    "`derive_var_atirel` is deprecated as of admiral 0.7.0.",
+    "Please use `mutate()` and `case_when()` instead.",
+    sep = "\n"
+  ))
+
   flag_var <- assert_symbol(enquo(flag_var))
   assert_data_frame(dataset,
     required_vars = vars(STUDYID, USUBJID, TRTSDTM, ASTDTM, AENDTM, !!flag_var)
@@ -60,7 +52,7 @@ derive_var_atirel <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   warn_if_vars_exist(dataset, quo_text(new_var))
 
-  #logic to create ATIREL
+  # logic to create ATIREL
   dataset %>%
     mutate(!!new_var :=
       case_when(

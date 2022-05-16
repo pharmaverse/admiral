@@ -19,6 +19,12 @@ A dataset containing all observations and variables of the input
 dataset and additionally the variable specified by the \code{new_var} parameter.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, as it is deemed as too specific for admiral.
+Derivations like this can be implemented calling \code{mutate()} and
+\code{case_when()}.
+
 Derives the variable \code{ATIREL} to CONCOMITANT, PRIOR, PRIOR_CONCOMITANT or NULL
 based on the relationship of cm Analysis start/end date/times to treatment start date/time
 }
@@ -35,28 +41,6 @@ the date part of Datetime of First Exposure to Treatment and
 the Analysis Start Time Imputation Flag is 'H' or 'M',
 \item otherwise it is set to "PRIOR_CONCOMITANT".
 }
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-adcm <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF,
-  "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00", "",
-  "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
-  "TEST01", "PAT01", "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
-  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
-  "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-04-29 14:00:00", ""
-) \%>\% dplyr::mutate(
-  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-  ASTDTM = lubridate::as_datetime(ASTDTM),
-  AENDTM = lubridate::as_datetime(AENDTM)
-)
-
-derive_var_atirel(
-  dataset = adcm,
-  flag_var = ASTTMF,
-  new_var = ATIREL
-)
-
 }
 \author{
 Teckla Akinyi

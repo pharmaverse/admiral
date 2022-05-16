@@ -15,30 +15,40 @@ A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC)
 
 Authors:
 \itemize{
-  \item Alice Ehmann
   \item Stefan Bundfuss
-  \item Samia Kabi
-  \item Vignesh Thanikachalam
-  \item Ondrej Slama
-  \item Shimeng Huang
-  \item Teckla Akinyi
-  \item Eric Simms
-  \item Michael Thorpe
-  \item Annie Yang
   \item Ben Straub
+  \item Samia Kabi
+  \item Gordon Miller
+  \item Teckla Akinyi
   \item Andrew Smith
+  \item Konstantina Koukourikou
+  \item Ross Farrugia
+  \item Eric Simms
+  \item Annie Yang
+  \item Robin Koeger
+  \item Sophie Shapcott
+  \item Ojesh Upadhyay
+  \item Jack McGavigan
+  \item Kamila Duniec
+  \item Gayatri G
+  \item Alana Harris
+  \item Mahdi About
+  \item Pooja Kumari
+  \item Claudia Carlucci
+  \item Daniil Stefonishin
 }
 
 Other contributors:
 \itemize{
-  \item Robin Koeger [contributor]
-  \item Gordon Miller [contributor]
+  \item Michael Thorpe [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
-  \item Ross Farrugia [contributor]
-  \item Konstantina Koukourikou [contributor]
+  \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
-  \item James Kim \email{james.j.kim@pfizer.com} [contributor]
+  \item Vignesh Thanikachalam [contributor]
+  \item Ondrej Slama [contributor]
+  \item Shimeng Huang [contributor]
+  \item James Kim [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

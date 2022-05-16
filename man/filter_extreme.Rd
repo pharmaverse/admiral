@@ -39,7 +39,7 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Default:} \code{"none"}
+\emph{Default:} \code{"warning"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 }
@@ -57,11 +57,11 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(admiral.test)
-data("ex")
+library(admiraltest)
+data("admiral_ex")
 
 # Select first dose for each patient
-ex \%>\%
+admiral_ex \%>\%
   filter_extreme(
     by_vars = vars(USUBJID),
     order = vars(EXSEQ),
@@ -69,17 +69,19 @@ ex \%>\%
   ) \%>\%
   select(USUBJID, EXSEQ)
 
-# Select highest dose for each patient
-ex \%>\%
+# Select highest dose for each patient on the active drug
+admiral_ex \%>\%
+  filter(EXTRT != "PLACEBO") \%>\%
   filter_extreme(
     by_vars = vars(USUBJID),
     order = vars(EXDOSE),
     mode = "last",
     check_type = "none"
   ) \%>\%
-  select(USUBJID, EXDOSE)
+  select(USUBJID, EXTRT, EXDOSE)
 }
 \author{
 Stefan Bundfuss
 }
 \keyword{adam}
+\keyword{user_utility}

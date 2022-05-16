@@ -172,6 +172,8 @@ derive_param_map <- function(dataset,
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
+#' Usually this computation function can not be used with `%>%`.
+#'
 #' @return A numeric vector of MAP values
 #'
 #' @keywords computation advs
@@ -381,6 +383,8 @@ derive_param_bsa <- function(dataset,
 #'
 #' @author Eric Simms
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return The BSA (Body Surface Area) in m^2.
 #'
 #' @keywords computation adam BSA
@@ -566,6 +570,8 @@ derive_param_bmi <-  function(dataset,
 #'
 #' @author Pavan Kumar
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return The BMI (Body Mass Index Area) in kg/m^2.
 #'
 #' @keywords computation adam BMI
@@ -578,5 +584,5 @@ compute_bmi <- function(height, weight) {
   assert_numeric_vector(height)
   assert_numeric_vector(weight)
 
-  weight / (height * height / 10000)
+  if_else(height == 0, NA_real_, weight / (height * height / 10000))
 }

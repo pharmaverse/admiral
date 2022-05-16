@@ -144,7 +144,9 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
-#' data("adsl")
+#' data("admiral_adsl")
+#'
+#' adsl <- admiral_adsl
 #'
 #' death <- event_source(
 #'   dataset_name = "adsl",
@@ -402,12 +404,6 @@ derive_param_tte <- function(dataset = NULL,
 
   # add new parameter to input dataset #
   all_data <- bind_rows(dataset, new_param)
-
-  if (create_datetime) {
-    mutate(all_data, !!date_var := as_iso_dtm(!!date_var))
-  } else {
-    all_data
-  }
 }
 
 #' Select the First or Last Date from Several Sources
@@ -512,7 +508,6 @@ derive_param_tte <- function(dataset = NULL,
 #'   subject_keys = vars(STUDYID, USUBJID),
 #'   mode = "first"
 #' )
-#'
 #' @export
 filter_date_sources <- function(sources,
                                 source_datasets,
@@ -568,7 +563,8 @@ filter_date_sources <- function(sources,
           !!date_var := convert_dtc_to_dt(
             !!date,
             date_imputation = "first"
-        ))
+          )
+        )
       }
     }
 
@@ -625,7 +621,7 @@ filter_date_sources <- function(sources,
 #' library(lubridate)
 #'
 #' adsl <- tibble::tribble(
-#' ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
@@ -643,7 +639,6 @@ filter_date_sources <- function(sources,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD)
 #' )
-#'
 #' @export
 extend_source_datasets <- function(source_datasets,
                                    by_vars) {
@@ -666,8 +661,7 @@ extend_source_datasets <- function(source_datasets,
             source_datasets[[i]], !!!by_vars
           )))
         )
-    }
-    else if (!setequal(by_vars_chr, missing_by_vars)) {
+    } else if (!setequal(by_vars_chr, missing_by_vars)) {
       # only some of the by variables are included in the source dataset #
       abort(paste(
         "Only",
@@ -676,8 +670,7 @@ extend_source_datasets <- function(source_datasets,
         names(source_datasets)[[i]],
         ".\n The source dataset must include all or none of the by variables."
       ))
-    }
-    else {
+    } else {
       extend[[i]] <- TRUE
     }
   }
@@ -719,6 +712,9 @@ extend_source_datasets <- function(source_datasets,
 #' @param date A variable providing the date of the event or censoring. A date,
 #'   a datetime, or a character variable containing ISO 8601 dates can be
 #'   specified. An unquoted symbol is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param censor Censoring value
 #'
@@ -871,7 +867,12 @@ print.tte_source <- function(x, ...) {
 }
 
 list_tte_source_objects <- function() {
-  objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
+  # Get all tte_source objects exported by admiral
+  exported <- getNamespaceExports("admiral")
+  objects <-
+    exported[map_lgl(exported, function(obj_name) {
+      inherits(get(obj_name), "tte_source")
+    })]
 
   rows <- lapply(objects, function(obj_name) {
     obj <- get(obj_name)

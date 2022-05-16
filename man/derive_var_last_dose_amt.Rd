@@ -35,9 +35,9 @@ Defaults to NULL.}
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
 Defaults to empty \code{vars()}.}
 
-\item{dose_date}{The EX dose date variable.}
+\item{dose_date}{The EX dose date variable. A date or date-time object is expected.}
 
-\item{analysis_date}{The analysis date variable.}
+\item{analysis_date}{The analysis date variable. A date or date-time object is expected.}
 
 \item{single_dose_condition}{The condition for checking if \code{dataset_ex} is single dose. An error
 is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.}
@@ -71,11 +71,11 @@ aggregate dose information and satisfy \code{single_dose_condition}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(ae)
+library(admiraltest)
+data(admiral_ae)
 data(ex_single)
 
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_var_last_dose_amt(
     head(ex_single, 100),
@@ -90,7 +90,7 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSE)
 
 # or with traceability variables
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_var_last_dose_amt(
     head(ex_single, 100),
