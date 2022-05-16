@@ -174,6 +174,7 @@ derive_disposition_reason <- function(dataset,
 #' @details
 #' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
 #' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is equal to `'OTHER'`.
+#' \cr Usually this function can not be used with `%>%`.
 #'
 #' @return A `character` vector
 #'
