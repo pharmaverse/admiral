@@ -126,7 +126,7 @@ derive_var_merged_character(
   source_var = DSDECOD,
   case = "title"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
+  select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 }
 \author{
 Stefan Bundfuss

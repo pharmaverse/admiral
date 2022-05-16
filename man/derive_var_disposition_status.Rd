@@ -36,14 +36,16 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
-Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(x) \{
+Default: \code{format_eoxxstt_default()} defined as:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{format_eoxxstt_default <- function(x) \{
   case_when(
     x == "COMPLETED" ~ "COMPLETED",
     x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 \}
-}
+}\if{html}{\out{</div>}}
 
 where \code{x} is the \code{status_var.}}
 
