@@ -39,7 +39,12 @@ Default is \code{NULL}}
 
 \item{order}{Sort order
 
-Additional character vector to be used for sorting \code{dataset} to avoid duplicate record warning.}
+Additional character vector to be used for sorting \code{dataset} to avoid duplicate record warning.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
 Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}
