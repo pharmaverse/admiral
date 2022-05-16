@@ -645,3 +645,28 @@ test_that("derive_var_disposition Test 1: A warning is issued when using `derive
     fixed = TRUE
   )
 })
+
+test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF,
+    "TEST01", "PAT01",  "2012-02-25 23:00:00", "2012-03-28 19:00:00", "2012-05-25 23:00:00", "",
+    "TEST01", "PAT01",  "",                    "2012-02-28 19:00:00", "",                    "",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2017-01-25 14:00:00", "2018-04-29 14:00:00", "",
+  ) %>% mutate(
+    TRTSDTM = lubridate::as_datetime(TRTSDTM),
+    ASTDTM = lubridate::as_datetime(ASTDTM),
+    AENDTM = lubridate::as_datetime(AENDTM)
+  )
+
+  expect_warning(
+    derive_var_atirel(
+      dataset = input,
+      flag_var = ASTTMF,
+      new_var = ATIREL
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})

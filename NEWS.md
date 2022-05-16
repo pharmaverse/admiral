@@ -87,6 +87,10 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 - The `derive_var_disposition_dt()` function was deprecated in favor of
 `derive_vars_merged_dt()` (#1076)
 
+- The `derive_var_atirel()` function was deprecated, as it is deemed as too
+specific for admiral. Derivations like this can be implemented calling
+`mutate()` and `case_when()`.
+
 ## Documentation
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)

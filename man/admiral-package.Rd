@@ -22,6 +22,7 @@ Authors:
   \item Teckla Akinyi
   \item Andrew Smith
   \item Konstantina Koukourikou
+  \item Ross Farrugia
   \item Eric Simms
   \item Annie Yang
   \item Robin Koeger
@@ -29,8 +30,12 @@ Authors:
   \item Ojesh Upadhyay
   \item Jack McGavigan
   \item Kamila Duniec
-  \item Gayatri  G
+  \item Gayatri G
   \item Alana Harris
+  \item Mahdi About
+  \item Pooja Kumari
+  \item Claudia Carlucci
+  \item Daniil Stefonishin
 }
 
 Other contributors:
@@ -38,7 +43,6 @@ Other contributors:
   \item Michael Thorpe [contributor]
   \item Pavan Kumar [contributor]
   \item Hamza Rahal [contributor]
-  \item Ross Farrugia [contributor]
   \item Alice Ehmann [contributor]
   \item Tom Ratford [contributor]
   \item Vignesh Thanikachalam [contributor]
