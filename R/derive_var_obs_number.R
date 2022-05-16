@@ -56,9 +56,9 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("vs")
+#' data("admiral_vs")
 #'
-#' vs %>%
+#' admiral_vs %>%
 #'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   filter(VSTESTCD %in% c("HEIGHT", "WEIGHT")) %>%
 #'   derive_obs_number(
@@ -71,11 +71,12 @@ derive_obs_number <- function(dataset,
                               new_var = ASEQ,
                               check_type = "none") {
   deprecate_warn("0.6.0", "derive_obs_number()", "derive_var_obs_number()")
-  derive_var_obs_number(dataset = dataset,
-                        by_vars = by_vars,
-                        order = order,
-                        new_var = !!enquo(new_var),
-                        check_type = check_type
+  derive_var_obs_number(
+    dataset = dataset,
+    by_vars = by_vars,
+    order = order,
+    new_var = !!enquo(new_var),
+    check_type = check_type
   )
 }
 
@@ -132,9 +133,9 @@ derive_obs_number <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("vs")
+#' data("admiral_vs")
 #'
-#' vs %>%
+#' admiral_vs %>%
 #'   select(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) %>%
 #'   filter(VSTESTCD %in% c("HEIGHT", "WEIGHT")) %>%
 #'   derive_var_obs_number(
@@ -142,18 +143,17 @@ derive_obs_number <- function(dataset,
 #'     order = vars(VISITNUM, VSTPTNUM)
 #'   )
 derive_var_obs_number <- function(dataset,
-                              by_vars = NULL,
-                              order = NULL,
-                              new_var = ASEQ,
-                              check_type = "none") {
+                                  by_vars = NULL,
+                                  order = NULL,
+                                  new_var = ASEQ,
+                                  check_type = "none") {
   # checks and quoting
   new_var <- assert_symbol(enquo(new_var))
   assert_vars(by_vars, optional = TRUE)
   assert_order_vars(order, optional = TRUE)
   if (!is.null(by_vars)) {
     required_vars <- by_vars
-  }
-  else {
+  } else {
     required_vars <- NULL
   }
   if (!is.null(order)) {
@@ -164,7 +164,8 @@ derive_var_obs_number <- function(dataset,
     assert_character_scalar(
       check_type,
       values = c("none", "warning", "error"),
-      case_sensitive = FALSE)
+      case_sensitive = FALSE
+    )
 
   # derivation
   data <- dataset

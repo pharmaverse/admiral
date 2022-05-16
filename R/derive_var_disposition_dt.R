@@ -60,12 +60,12 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_dt(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = FRVDT,
 #'     dtc = DSSTDTC,
 #'     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
@@ -79,19 +79,23 @@ derive_disposition_dt <- function(dataset,
                                   date_imputation = NULL,
                                   subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_dt()", "derive_var_disposition_dt()")
-  derive_var_disposition_dt(dataset = dataset,
-                            dataset_ds = dataset_ds,
-                            new_var = !!enquo(new_var),
-                            dtc = !!enquo(dtc),
-                            filter_ds = !!enquo(filter_ds),
-                            date_imputation = date_imputation,
-                            subject_keys = subject_keys)
+  derive_var_disposition_dt(
+    dataset = dataset,
+    dataset_ds = dataset_ds,
+    new_var = !!enquo(new_var),
+    dtc = !!enquo(dtc),
+    filter_ds = !!enquo(filter_ds),
+    date_imputation = date_imputation,
+    subject_keys = subject_keys
+  )
 }
 
 #' Derive a Disposition Date
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged_dt()` instead.
 #'
 #' Derive a disposition status date from the the relevant records in the disposition domain.
 #'
@@ -148,29 +152,14 @@ derive_disposition_dt <- function(dataset,
 #'
 #' @export
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
-#' data("dm")
-#' data("ds")
-#'
-#' dm %>%
-#'   derive_var_disposition_dt(
-#'     dataset_ds = ds,
-#'     new_var = FRVDT,
-#'     dtc = DSSTDTC,
-#'     filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
-#'   ) %>%
-#'   select(STUDYID, USUBJID, FRVDT)
 derive_var_disposition_dt <- function(dataset,
-                                  dataset_ds,
-                                  new_var,
-                                  dtc,
-                                  filter_ds,
-                                  date_imputation = NULL,
-                                  preserve = FALSE,
-                                  subject_keys = vars(STUDYID, USUBJID)) {
-
+                                      dataset_ds,
+                                      new_var,
+                                      dtc,
+                                      filter_ds,
+                                      date_imputation = NULL,
+                                      preserve = FALSE,
+                                      subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   dtc <- assert_symbol(enquo(dtc))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -180,6 +169,7 @@ derive_var_disposition_dt <- function(dataset,
   warn_if_vars_exist(dataset, quo_text(new_var))
   assert_vars(subject_keys)
   assert_logical_scalar(preserve)
+  deprecate_warn("0.7.0", "derive_var_disposition_dt()", "derive_vars_merged_dt()")
 
   derive_vars_merged_dt(
     dataset,

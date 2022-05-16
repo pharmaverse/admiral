@@ -107,13 +107,13 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using the default format
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -128,9 +128,9 @@
 #'     TRUE ~ NA_character_
 #'   )
 #' }
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     new_var_spe = DCSREASP,
@@ -149,15 +149,17 @@ derive_disposition_reason <- function(dataset,
                                       filter_ds,
                                       subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_reason()", "derive_vars_disposition_reason()")
-  derive_vars_disposition_reason(dataset = dataset,
-                                 dataset_ds = dataset_ds,
-                                 new_var = !!enquo(new_var),
-                                 reason_var = !!enquo(reason_var),
-                                 new_var_spe = !!enquo(new_var_spe),
-                                 reason_var_spe = !!enquo(reason_var_spe),
-                                 format_new_vars = format_new_vars,
-                                 filter_ds = !!enquo(filter_ds),
-                                 subject_keys = subject_keys)
+  derive_vars_disposition_reason(
+    dataset = dataset,
+    dataset_ds = dataset_ds,
+    new_var = !!enquo(new_var),
+    reason_var = !!enquo(reason_var),
+    new_var_spe = !!enquo(new_var_spe),
+    reason_var_spe = !!enquo(reason_var_spe),
+    format_new_vars = format_new_vars,
+    filter_ds = !!enquo(filter_ds),
+    subject_keys = subject_keys
+  )
 }
 
 #' Default Format for the Disposition Reason
@@ -172,6 +174,7 @@ derive_disposition_reason <- function(dataset,
 #' @details
 #' `format_reason_default(DSDECOD)` returns `DSDECOD` when `DSDECOD` is not `'COMPLETED'` nor `NA`.
 #' \cr`format_reason_default(DSDECOD, DSTERM)` returns `DSTERM` when `DSDECOD` is equal to `'OTHER'`.
+#' \cr Usually this function can not be used with `%>%`.
 #'
 #' @return A `character` vector
 #'
@@ -182,25 +185,24 @@ derive_disposition_reason <- function(dataset,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using format_reason_default
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     format_new_vars = format_reason_default,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
 #'   ) %>%
 #'   select(STUDYID, USUBJID, DCSREAS)
-#'
 format_reason_default <- function(reason, reason_spe = NULL) {
   if (is.null(reason_spe)) {
     if_else(reason != "COMPLETED" & !is.na(reason), reason, NA_character_)
   } else {
-    if_else (reason == "OTHER", reason_spe, NA_character_)
+    if_else(reason == "OTHER", reason_spe, NA_character_)
   }
 }
 
@@ -300,13 +302,13 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiraltest)
-#' data("dm")
-#' data("ds")
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Derive DCSREAS using the default format
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -315,15 +317,15 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #'
 #' # Derive DCSREAS and DCSREASP using a study-specific format
 #' format_dcsreas <- function(x, y = NULL) {
-#'   if (is.null(y)){
+#'   if (is.null(y)) {
 #'     if_else(!x %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
 #'   } else {
-#'   if_else (x == "OTHER", y, NA_character_)
+#'     if_else(x == "OTHER", y, NA_character_)
 #'   }
 #' }
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_vars_disposition_reason(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = DCSREAS,
 #'     reason_var = DSDECOD,
 #'     new_var_spe = DCSREASP,
@@ -349,8 +351,10 @@ derive_vars_disposition_reason <- function(dataset,
   filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
-  assert_data_frame(dataset_ds,
-                    required_vars = quo_c(subject_keys, reason_var, reason_var_spe))
+  assert_data_frame(
+    dataset_ds,
+    required_vars = quo_c(subject_keys, reason_var, reason_var_spe)
+  )
   warn_if_vars_exist(dataset, quo_text(new_var))
 
   # Additional checks
@@ -370,15 +374,19 @@ derive_vars_disposition_reason <- function(dataset,
   }
 
   dataset <- dataset %>%
-    derive_vars_merged(dataset_add = dataset_ds,
-                       filter_add = !!filter_ds,
-                       new_vars = quo_c(reason_var, reason_var_spe),
-                       by_vars = subject_keys) %>%
+    derive_vars_merged(
+      dataset_add = dataset_ds,
+      filter_add = !!filter_ds,
+      new_vars = quo_c(reason_var, reason_var_spe),
+      by_vars = subject_keys
+    ) %>%
     mutate(!!new_var := format_new_vars(!!reason_var))
 
   if (!quo_is_null(new_var_spe)) {
-    dataset <- mutate(dataset,
-                      !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe))
+    dataset <- mutate(
+      dataset,
+      !!new_var_spe := format_new_vars(!!reason_var, !!reason_var_spe)
+    )
   }
   select(dataset, -statusvar)
 }

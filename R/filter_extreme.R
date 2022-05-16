@@ -34,7 +34,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"none"`
+#'   *Default:* `"warning"`
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
@@ -47,17 +47,17 @@
 #'
 #' @return A dataset containing the first or last observation of each by group
 #'
-#' @keywords adam
+#' @keywords adam user_utility
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
 #' library(admiraltest)
-#' data("ex")
+#' data("admiral_ex")
 #'
 #' # Select first dose for each patient
-#' ex %>%
+#' admiral_ex %>%
 #'   filter_extreme(
 #'     by_vars = vars(USUBJID),
 #'     order = vars(EXSEQ),
@@ -66,7 +66,7 @@
 #'   select(USUBJID, EXSEQ)
 #'
 #' # Select highest dose for each patient on the active drug
-#' ex %>%
+#' admiral_ex %>%
 #'   filter(EXTRT != "PLACEBO") %>%
 #'   filter_extreme(
 #'     by_vars = vars(USUBJID),
@@ -93,16 +93,20 @@ filter_extreme <- function(dataset,
     assert_has_variables(dataset, vars2chr(by_vars))
 
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        by_vars = by_vars,
-                        check_type = check_type) %>%
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        by_vars = by_vars,
+        check_type = check_type
+      ) %>%
       group_by(!!!by_vars)
   } else {
     data <- dataset %>%
-      derive_var_obs_number(new_var = temp_obs_nr,
-                        order = order,
-                        check_type = check_type)
+      derive_var_obs_number(
+        new_var = temp_obs_nr,
+        order = order,
+        check_type = check_type
+      )
   }
 
   if (mode == "first") {

@@ -25,13 +25,13 @@
 #' library(magrittr)
 #' adlb <- tibble::tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
-#'   "1",      -1,       113,   NA_character_,
-#'   "1",       0,       113,   "Y",
-#'   "1",       3,       117,   NA_character_,
-#'   "2",       0,        95,   "Y",
-#'   "3",       0,       111,   "Y",
-#'   "3",       1,       101,   NA_character_,
-#'   "3",       2,       123,   NA_character_
+#'   "1",            -1,   113, NA_character_,
+#'   "1",             0,   113, "Y",
+#'   "1",             3,   117, NA_character_,
+#'   "2",             0,    95, "Y",
+#'   "3",             0,   111, "Y",
+#'   "3",             1,   101, NA_character_,
+#'   "3",             2,   123, NA_character_
 #' )
 #'
 #' # Derive BASE for post-baseline records only (derive_var_base() can not be used in this case
@@ -57,13 +57,11 @@
 #'   ),
 #'   filter = AVISITN >= 0
 #' ) %>%
-#'
-#' # Derive CHG for post-baseline records only
-#' restrict_derivation(
-#'   derivation = derive_var_chg,
-#'   filter = AVISITN > 0
-#' )
-#'
+#'   # Derive CHG for post-baseline records only
+#'   restrict_derivation(
+#'     derivation = derive_var_chg,
+#'     filter = AVISITN > 0
+#'   )
 restrict_derivation <- function(dataset,
                                 derivation,
                                 args = NULL,
@@ -86,9 +84,11 @@ restrict_derivation <- function(dataset,
   # Call derivation on subset
   call <- as.call(c(substitute(derivation), c(quote(data_derive), args)))
   data_derive <-
-    eval(call,
-         envir = list(data_derive = data_derive),
-         enclos = parent.frame())
+    eval(
+      call,
+      envir = list(data_derive = data_derive),
+      enclos = parent.frame()
+    )
 
   # Put datasets together again
   bind_rows(data_derive, data_ignore)

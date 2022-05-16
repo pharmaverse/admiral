@@ -132,11 +132,13 @@ therefore want any module to be understandable to all, not only the `{admiral}` 
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
+* Please see [FAQ: R and Package Versions](https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development) for why we develop with certain R and package versions.
 
 ## Conference Presentations
 
 * [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
-* [PHUSE EU Connect 2021 workshop](https://github.com/pharmaverse/admiral.phuse.workshop/tree/main/EU%202021) (slides and materials)
+* [PHUSE US Connect 2022 pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials - including `{admiral}`
+workshop slides from PHUSE EU Connect 2021)
 
 ## Contact 
 
