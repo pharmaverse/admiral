@@ -186,9 +186,11 @@ derive_param_exist_flag <- function(dataset = NULL,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_function(aval_fun)
   assert_vars(subject_keys)
-  assert_data_frame(dataset,
-                    required_vars = vars(PARAMCD, !!!subject_keys),
-                    optional = TRUE)
+  assert_data_frame(
+    dataset,
+    required_vars = vars(PARAMCD, !!!subject_keys),
+    optional = TRUE
+  )
   assert_data_frame(dataset_adsl, required_vars = subject_keys)
   assert_data_frame(dataset_add, required_vars = subject_keys)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
