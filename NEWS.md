@@ -47,6 +47,10 @@ a certain event exists in a dataset. (#1064)
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
 
+- `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
+
 ## Updates of Existing Functions
  
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
