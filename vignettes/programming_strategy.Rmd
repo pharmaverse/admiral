@@ -426,7 +426,7 @@ The documentation will be updated at:
 
 + the description level for a function, 
 
-    ```r
+    ```{r, eval=FALSE}
     #' Title of the function
     #'
     #' @description
