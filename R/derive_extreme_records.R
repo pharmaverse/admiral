@@ -49,12 +49,12 @@
 #' @examples
 #' adlb <- tibble::tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-#'   "1",      1,        113,   1,
-#'   "1",      2,        113,   2,
-#'   "1",      3,        117,   3,
-#'   "2",      1,        101,   1,
-#'   "2",      2,        101,   2,
-#'   "2",      3,         95,   3
+#'   "1",      1,          113,      1,
+#'   "1",      2,          113,      2,
+#'   "1",      3,          117,      3,
+#'   "2",      1,          101,      1,
+#'   "2",      2,          101,      2,
+#'   "2",      3,           95,      3
 #' )
 #'
 #' # Add a new record for each USUBJID storing the minimum value (first AVAL).
@@ -122,14 +122,14 @@ derive_extreme_records <- function(dataset,
   # Create new observations
   new_obs <- dataset %>%
     filter_if(filter) %>%
-    filter_extreme(by_vars = by_vars,
-                   order = order,
-                   mode = mode,
-                   check_type = check_type) %>%
+    filter_extreme(
+      by_vars = by_vars,
+      order = order,
+      mode = mode,
+      check_type = check_type
+    ) %>%
     mutate(!!!set_values_to)
 
   # Create output dataset
   bind_rows(dataset, new_obs)
-
-
 }

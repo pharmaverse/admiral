@@ -78,6 +78,8 @@
 #'
 #' @author Samia Kabi
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return A character vector
 #'
 #' @keywords computation timing
@@ -348,6 +350,8 @@ impute_dtc <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return a date object
 #'
 #' @keywords computation timing
@@ -395,6 +399,8 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return A datetime object
 #'
 #' @keywords computation timing
@@ -436,6 +442,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' @inheritParams convert_dtc_to_dtm
 #'
 #' @author Samia Kabi
+#'
+#' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return A datetime object
 #'
@@ -491,6 +499,8 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @author Samia Kabi
 #'
+#' @details Usually this computation function can not be used with `%>%`.
+#'
 #' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
 #' @keywords computation timing
@@ -540,6 +550,8 @@ compute_dtf <- function(dtc, dt) {
 #'   Default: `FALSE`
 #'
 #' @author Samia Kabi
+#'
+#' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
