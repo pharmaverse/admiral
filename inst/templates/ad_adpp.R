@@ -36,12 +36,12 @@ param_lookup <- tibble::tribble(
   "CLST", "CLST", "Last Nonzero Conc", 9,
   "CMAX", "CMAX", "Max Conc", 10,
   "CMAXD", "CMAXD", "Max Conc Norm by Dose", 11,
-  "CSF", "CSF", "CSF to Plasma Ratio", 12,  # non Cdisc Term
+  "CSF", "CSF", "CSF to Plasma Ratio", 12, # non Cdisc Term
   "LAMZ", "LAMZ", "Lambda z", 13,
   "LAMZHL", "LAMZHL", "Half-Life Lambda z", 14,
   "LAMZNPT", "LAMZNPT", "Number of Points for Lambda z", 15,
   "R2ADJ", "R2ADJ", "R Squared Adjusted", 16,
-  "TCEND", "TCEND", "Time of CEND", 17,             # non Cdisc Term
+  "TCEND", "TCEND", "Time of CEND", 17, # non Cdisc Term
   "TLST", "TLST", "Time of Last Nonzero Conc", 18,
   "TMAX", "TMAX", "Time of CMAX", 19,
   "VSSO", "VSSO", "Vol Dist Steady State Obs", 20
