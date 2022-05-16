@@ -356,29 +356,31 @@ adeg <- derive_param_qtc(
 )
 ```
 
-Similarly, for `ADLB`, the function `derive_param_wbc_abs` can be used to create new parameter 
+Similarly, for `ADLB`, the function `derive_param_wbc_abs()` can be used to create new parameter 
 for lab differentials converted to absolute values. See example below:
 
 ```{r eval=FALSE}
 adlb <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
-  "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-  "P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1",
-  "P01",    "LYMLE",   0.90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-  "P01",    "LYMLE",   0.70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1"
+  "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+  "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
+  "P01", "LYMLE", 0.90, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+  "P01", "LYMLE", 0.70, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1"
 )
 
-derive_param_wbc_abs (dataset = adlb,
-                      by_vars = vars(USUBJID, VISIT),
-                      set_values_to = vars(
-                        PARAMCD = "LYMPH",
-                        PARAM = "Lymphocytes Abs (10^9/L)",
-                        DTYPE = "CALCULATION"
-                      ),
-                      get_unit_expr = extract_unit(PARAM),
-                      wbc_code = "WBC",
-                      diff_code = "LYMLE",
-                      diff_type = "fraction")
+derive_param_wbc_abs(
+  dataset = adlb,
+  by_vars = vars(USUBJID, VISIT),
+  set_values_to = vars(
+    PARAMCD = "LYMPH",
+    PARAM = "Lymphocytes Abs (10^9/L)",
+    DTYPE = "CALCULATION"
+  ),
+  get_unit_expr = extract_unit(PARAM),
+  wbc_code = "WBC",
+  diff_code = "LYMLE",
+  diff_type = "fraction"
+)
 ```
 
 When all `PARAMCD` have been derived and added to the dataset, the other information 
@@ -506,10 +508,10 @@ and `ref_end_date = AP01EDT`.
 advs_pre <- select(advs, -ONTRTFL)
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,           ~AENDT,
-  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"),  ymd("2020-12-01"),
-  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),  ymd("2020-03-15"),
-  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),  NA,
+  ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT,
+  "P01", ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
 ```
 
@@ -609,7 +611,8 @@ advs <- restrict_derivation(
     by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
     order = vars(ADT, ATPTN, VISITNUM),
     new_var = ABLFL,
-    mode = "last"),
+    mode = "last"
+  ),
   filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
 )
 ```
@@ -691,10 +694,11 @@ user-defined pairing, e.g., shift from baseline reference range `BNRIND`
 to analysis reference range `ANRIND`. Examples calls are:
 
 ```{r eval=TRUE}
-advs <- derive_var_shift(advs, 
-                         new_var = SHIFT1,
-                         from_var = BNRIND,
-                         to_var = ANRIND)
+advs <- derive_var_shift(advs,
+  new_var = SHIFT1,
+  from_var = BNRIND,
+  to_var = ANRIND
+)
 ```
 
 If the variables should not be derived for all records, e.g., for post-baseline
@@ -708,20 +712,22 @@ For example, Ratio to Baseline is calculated by `AVAL / BASE` and the function a
 variable `R2BASE` to the dataset. Examples calls are:
 
 ```{r eval=TRUE}
-advs <- derive_var_analysis_ratio(advs, 
-                                  numer_var = AVAL, 
-                                  denom_var = BASE)
+advs <- derive_var_analysis_ratio(advs,
+  numer_var = AVAL,
+  denom_var = BASE
+)
 
-advs <- derive_var_analysis_ratio(advs, 
-                                  numer_var = AVAL, 
-                                  denom_var = ANRLO, 
-                                  new_var = R01ANRLO) 
+advs <- derive_var_analysis_ratio(advs,
+  numer_var = AVAL,
+  denom_var = ANRLO,
+  new_var = R01ANRLO
+)
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs, 
+  advs,
   display_vars = vars(USUBJID, VISIT, BASE, AVAL, ANRLO, R2BASE, R01ANRLO),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
