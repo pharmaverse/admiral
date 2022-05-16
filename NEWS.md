@@ -40,6 +40,9 @@ from a BDS dataset, e.g. ADLB. (#943)
 - New function `derive_param_first_event()`: Add a new parameter for the first
 event occurring in a dataset. (#1063)
 
+- New function `derive_param_exist_flag()`: Add a new parameter indicating that
+a certain event exists in a dataset. (#1064)
+
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
