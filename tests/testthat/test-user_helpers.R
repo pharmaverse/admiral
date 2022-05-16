@@ -1,7 +1,7 @@
 test_that("all templates are listed", {
   expect_identical(
     unclass(list_all_templates()),
-    c("ADAE", "ADCM", "ADEG", "ADEX", "ADSL", "ADVS")
+    c("ADAE", "ADCM", "ADEG", "ADEX", "ADLB", "ADSL", "ADVS")
   )
 })
 
