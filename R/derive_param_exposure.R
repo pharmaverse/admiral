@@ -161,7 +161,7 @@ derive_param_exposure <- function(dataset,
   add_data <- subset_ds %>%
     get_summary_records(
       by_vars = by_vars,
-      filter = rlang::quo(PARAMCD == input_code),
+      filter = PARAMCD == input_code,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun,
       set_values_to = set_values_to
