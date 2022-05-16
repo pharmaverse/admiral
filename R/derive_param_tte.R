@@ -867,7 +867,12 @@ print.tte_source <- function(x, ...) {
 }
 
 list_tte_source_objects <- function() {
-  objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
+  # Get all tte_source objects exported by admiral
+  exported <- getNamespaceExports("admiral")
+  objects <-
+    exported[map_lgl(exported, function(obj_name) {
+      inherits(get(obj_name), "tte_source")
+    })]
 
   rows <- lapply(objects, function(obj_name) {
     obj <- get(obj_name)
