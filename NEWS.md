@@ -37,6 +37,9 @@ from a BDS dataset, e.g. ADLB. (#943)
 - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
 (#941)
 
+- New function `derive_param_exist_flag()`: Add a new parameter indicating that
+a certain event exists in a dataset. (#1064)
+
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
