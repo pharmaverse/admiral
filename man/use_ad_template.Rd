@@ -12,8 +12,6 @@ use_ad_template(
 )
 }
 \arguments{
-<<<<<<< HEAD
-
 \item{adam_name}{An ADaM dataset name. You can use any of the available dataset name ADAE
 ADCM
 ADEG
@@ -21,8 +19,6 @@ ADEX
 ADLB
 ADSL
 ADVS, and the dataset name is case-insensitive. The default dataset name is ADSL.}
-
-
 
 \item{save_path}{Path to save the script.}
 

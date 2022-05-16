@@ -32,7 +32,7 @@ The default is \code{AENDT}}
 The input dataset with \code{AENDY} column added
 }
 \description{
-\verb{r lifecycle::badge("deprecated")}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 This function is \emph{deprecated}, please use \code{derive_vars_dy()} instead.
 

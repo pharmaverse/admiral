@@ -99,12 +99,12 @@ the selected observations.
 \examples{
 adlb <- tibble::tribble(
   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
-  "1",      1,        113,   1,
-  "1",      2,        113,   2,
-  "1",      3,        117,   3,
-  "2",      1,        101,   1,
-  "2",      2,        101,   2,
-  "2",      3,         95,   3
+  "1",      1,          113,      1,
+  "1",      2,          113,      2,
+  "1",      3,          117,      3,
+  "2",      1,          101,      1,
+  "2",      2,          101,      2,
+  "2",      3,           95,      3
 )
 
 # Add a new record for each USUBJID storing the minimum value (first AVAL).
