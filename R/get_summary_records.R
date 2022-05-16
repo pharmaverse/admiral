@@ -59,15 +59,18 @@
 
 get_summary_records <- function(dataset,
                                 by_vars,
-                                filter,
+                                filter = NULL,
                                 analysis_var,
                                 summary_fun,
                                 set_values_to){
 
+  # Quotes the filter argument and ensure that it is a condition
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
+
   # Summarise the analysis value
   dataset %>%
     group_by(!!!by_vars) %>%
-    filter_if(!!filter) %>%
+    filter_if(filter) %>%
     summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
     mutate(!!!set_values_to) %>%
     ungroup()
