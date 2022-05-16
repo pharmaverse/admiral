@@ -158,12 +158,15 @@
 #' cqterms <- tribble(
 #'   ~TERM_NAME, ~TERM_ID,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
-#'   "APPLICATION SITE PRURITUS", 10003053L) %>%
+#'   "APPLICATION SITE PRURITUS", 10003053L
+#' ) %>%
 #'   mutate(TERM_LEVEL = "AEDECOD")
 #'
-#' cq <- query(prefix = "CQ01",
-#'             name = "Application Site Issues",
-#'             definition = cqterms)
+#' cq <- query(
+#'   prefix = "CQ01",
+#'   name = "Application Site Issues",
+#'   definition = cqterms
+#' )
 #'
 #' create_query_data(queries = list(cq))
 #'
@@ -171,18 +174,27 @@
 #' pregsmq <- query(
 #'   prefix = "SMQ02",
 #'   id = auto,
-#'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-#'                           scope = "NARROW"))
+#'   definition = smq_select(
+#'     name = "Pregnancy and neonatal topics (SMQ)",
+#'     scope = "NARROW"
+#'   )
+#' )
 #'
-#' bilismq <- query(prefix = "SMQ04",
-#'                  definition = smq_select(id = 20000121L,
-#'                                          scope = "BROAD"))
+#' bilismq <- query(
+#'   prefix = "SMQ04",
+#'   definition = smq_select(
+#'     id = 20000121L,
+#'     scope = "BROAD"
+#'   )
+#' )
 #'
 #' # The get_smq_terms function from admiraltest is used for this example.
 #' # In a real application a company-specific function must be used.
-#' create_query_data(queries = list(pregsmq, bilismq),
-#'                   get_smq_fun = admiraltest:::get_smq_terms,
-#'                   meddra_version = "20.1")
+#' create_query_data(
+#'   queries = list(pregsmq, bilismq),
+#'   get_smq_fun = admiraltest:::get_smq_terms,
+#'   meddra_version = "20.1"
+#' )
 #'
 #' # create a query dataset for SDGs
 #' sdg <- query(
@@ -195,9 +207,11 @@
 #'
 #' # The get_sdg_terms function from admiraltest is used for this example.
 #' # In a real application a company-specific function must be used.
-#' create_query_data(queries = list(sdg),
-#'                   get_sdg_fun = admiraltest:::get_sdg_terms,
-#'                   whodd_version = "2019-09")
+#' create_query_data(
+#'   queries = list(sdg),
+#'   get_sdg_fun = admiraltest:::get_sdg_terms,
+#'   whodd_version = "2019-09"
+#' )
 #'
 #' # creating a query dataset for a customized query including SMQs
 #' # The get_smq_terms function from admiraltest is used for this example.
@@ -208,8 +222,10 @@
 #'       prefix = "CQ03",
 #'       name = "Special issues of interest",
 #'       definition = list(
-#'         smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-#'                    scope = "NARROW"),
+#'         smq_select(
+#'           name = "Pregnancy and neonatal topics (SMQ)",
+#'           scope = "NARROW"
+#'         ),
 #'         cqterms
 #'       )
 #'     )
@@ -226,11 +242,13 @@ create_query_data <- function(queries,
   assert_character_scalar(meddra_version, optional = TRUE)
   assert_character_scalar(whodd_version, optional = TRUE)
   assert_function(get_smq_fun,
-                  params = c("smq_select", "version", "keep_id", "temp_env"),
-                  optional = TRUE)
+    params = c("smq_select", "version", "keep_id", "temp_env"),
+    optional = TRUE
+  )
   assert_function(get_sdg_fun,
-                  params = c("sdg_select", "version", "keep_id", "temp_env"),
-                  optional = TRUE)
+    params = c("sdg_select", "version", "keep_id", "temp_env"),
+    optional = TRUE
+  )
 
   walk(queries, validate_query)
 
@@ -250,16 +268,18 @@ create_query_data <- function(queries,
         expect_query_id = !is.null(queries[[i]]$id),
         i = i,
         temp_env = temp_env,
-        type = "SMQ")
+        type = "SMQ"
+      )
       query_data[[i]] <- mutate(query_data[[i]],
-                                QUERY_SCOPE = queries[[i]]$definition$scope)
+        QUERY_SCOPE = queries[[i]]$definition$scope
+      )
       if (queries[[i]]$add_scope_num) {
         query_data[[i]] <-
           mutate(query_data[[i]],
-                 QUERY_SCOPE_NUM = if_else(QUERY_SCOPE == "BROAD", 1, 2))
+            QUERY_SCOPE_NUM = if_else(QUERY_SCOPE == "BROAD", 1, 2)
+          )
       }
-    }
-    else if (inherits(queries[[i]]$definition, "sdg_select")) {
+    } else if (inherits(queries[[i]]$definition, "sdg_select")) {
       # query is a SDG
       query_data[[i]] <- get_terms_from_db(
         version = whodd_version,
@@ -270,21 +290,19 @@ create_query_data <- function(queries,
         expect_query_id = !is.null(queries[[i]]$id),
         i = i,
         temp_env = temp_env,
-        type = "SDG")
-    }
-    else if (is.data.frame(queries[[i]]$definition)) {
+        type = "SDG"
+      )
+    } else if (is.data.frame(queries[[i]]$definition)) {
       # query is a customized query
       query_data[[i]] <- queries[[i]]$definition
-    }
-    else if (is.list(queries[[i]]$definition)) {
+    } else if (is.list(queries[[i]]$definition)) {
       # query is defined by customized queries and SMQs
       definition <- queries[[i]]$definition
       terms <- vector("list", length(definition))
       for (j in seq_along(definition)) {
         if (is.data.frame(definition[[j]])) {
           terms[[j]] <- definition[[j]]
-        }
-        else {
+        } else {
           terms[[j]] <- get_terms_from_db(
             version = meddra_version,
             fun = get_smq_fun,
@@ -292,7 +310,8 @@ create_query_data <- function(queries,
             definition = definition[[j]],
             i = i,
             temp_env = temp_env,
-            type = "SMQ")
+            type = "SMQ"
+          )
         }
       }
       query_data[[i]] <- bind_rows(terms)
@@ -300,17 +319,20 @@ create_query_data <- function(queries,
 
     # add mandatory variables
     query_data[[i]] <- mutate(query_data[[i]],
-                              VAR_PREFIX = queries[[i]]$prefix)
+      VAR_PREFIX = queries[[i]]$prefix
+    )
 
     if (!is_auto(queries[[i]]$name)) {
       query_data[[i]] <- mutate(query_data[[i]],
-                                QUERY_NAME = queries[[i]]$name)
+        QUERY_NAME = queries[[i]]$name
+      )
     }
 
     # add optional variables
     if (!is.null(queries[[i]]$id) && !is_auto(queries[[i]]$id)) {
       query_data[[i]] <- mutate(query_data[[i]],
-                                QUERY_ID = queries[[i]]$id)
+        QUERY_ID = queries[[i]]$id
+      )
     }
   }
   bind_rows(query_data)
@@ -362,23 +384,24 @@ create_query_data <- function(queries,
 #' @return Output dataset of the access function
 #'
 #' @author Stefan Bundfuss
-get_terms_from_db <- function(
-  version,
-  fun,
-  queries,
-  definition,
-  expect_query_name = FALSE,
-  expect_query_id = FALSE,
-  i,
-  temp_env,
-  type) {
-  assert_db_requirements(version = version,
-                         version_arg_name = arg_name(substitute(version)),
-                         fun = fun,
-                         fun_arg_name = arg_name(substitute(fun)),
-                         queries = queries,
-                         i = i,
-                         type = type)
+get_terms_from_db <- function(version,
+                              fun,
+                              queries,
+                              definition,
+                              expect_query_name = FALSE,
+                              expect_query_id = FALSE,
+                              i,
+                              temp_env,
+                              type) {
+  assert_db_requirements(
+    version = version,
+    version_arg_name = arg_name(substitute(version)),
+    fun = fun,
+    fun_arg_name = arg_name(substitute(fun)),
+    queries = queries,
+    i = i,
+    type = type
+  )
   select <- rlang::parse_expr(paste0(str_to_lower(type), "_select = definition"))
   fun_call <- quo(fun(
     !!select,
@@ -444,7 +467,8 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
         i,
         ":\n",
         paste(capture.output(str(queries[[i]])),
-              collapse = "\n")
+          collapse = "\n"
+        )
       )
     abort(msg)
   }
@@ -461,7 +485,8 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
         i,
         ":\n",
         paste(capture.output(str(queries[[i]])),
-              collapse = "\n")
+          collapse = "\n"
+        )
       )
     abort(msg)
   }
@@ -553,8 +578,11 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' query(
 #'   prefix = "SMQ02",
 #'   id = auto,
-#'   definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-#'                           scope = "NARROW"))
+#'   definition = smq_select(
+#'     name = "Pregnancy and neonatal topics (SMQ)",
+#'     scope = "NARROW"
+#'   )
+#' )
 #'
 #' # create a query for an SDG
 #' query(
@@ -569,22 +597,32 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' cqterms <- tribble(
 #'   ~TERM_NAME, ~TERM_ID,
 #'   "APPLICATION SITE ERYTHEMA", 10003041L,
-#'   "APPLICATION SITE PRURITUS", 10003053L) %>%
+#'   "APPLICATION SITE PRURITUS", 10003053L
+#' ) %>%
 #'   mutate(TERM_LEVEL = "AEDECOD")
 #'
-#' query(prefix = "CQ01",
-#'       name = "Application Site Issues",
-#'       definition = cqterms)
+#' query(
+#'   prefix = "CQ01",
+#'   name = "Application Site Issues",
+#'   definition = cqterms
+#' )
 #'
 #' # creating a customized query based on SMQs and additional terms
-#' query(prefix = "CQ03",
-#'       name = "Special issues of interest",
-#'       definition = list(
-#'         cqterms,
-#'         smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-#'                           scope = "NARROW"),
-#'         smq_select(id = 8050L,
-#'                    scope = "BROAD")))
+#' query(
+#'   prefix = "CQ03",
+#'   name = "Special issues of interest",
+#'   definition = list(
+#'     cqterms,
+#'     smq_select(
+#'       name = "Pregnancy and neonatal topics (SMQ)",
+#'       scope = "NARROW"
+#'     ),
+#'     smq_select(
+#'       id = 8050L,
+#'       scope = "BROAD"
+#'     )
+#'   )
+#' )
 query <- function(prefix,
                   name = auto,
                   id = NULL,
@@ -639,23 +677,23 @@ validate_query <- function(obj) {
 
   scope <- values$scope
   assert_character_scalar(scope,
-                          values = c("BROAD", "NARROW"),
-                          optional = TRUE)
+    values = c("BROAD", "NARROW"),
+    optional = TRUE
+  )
 
   add_scope_num <- values$add_scope_num
   assert_logical_scalar(add_scope_num,
-                        optional = TRUE)
+    optional = TRUE
+  )
   if (add_scope_num && !inherits(values$definition, "smq_select")) {
     abort("`add_scope_num == TRUE` must be used for SMQs only.")
   }
 
   if (inherits(values$definition, "smq_select")) {
     validate_smq_select(values$definition)
-  }
-  else if (inherits(values$definition, "sdg_select")) {
+  } else if (inherits(values$definition, "sdg_select")) {
     validate_sdg_select(values$definition)
-  }
-  else if (is.data.frame(values$definition) || is.list(values$definition)) {
+  } else if (is.data.frame(values$definition) || is.list(values$definition)) {
     if (is_auto(values$name)) {
       abort(
         paste0(
@@ -666,24 +704,29 @@ validate_query <- function(obj) {
     }
     if (is_auto(values$id)) {
       abort(
-        paste0("The auto keyword can be used for SMQs and SDGs only.\n",
-               "It was provided for the id element."))
+        paste0(
+          "The auto keyword can be used for SMQs and SDGs only.\n",
+          "It was provided for the id element."
+        )
+      )
     }
     if (is.data.frame(values$definition)) {
-      assert_terms(terms = values$definition,
-                   source_text = "the data frame provided for the `definition` element")
-    }
-    else {
+      assert_terms(
+        terms = values$definition,
+        source_text = "the data frame provided for the `definition` element"
+      )
+    } else {
       is_valid <-
         map_lgl(values$definition, is.data.frame) |
-        map_lgl(values$definition, inherits, "smq_select")
+          map_lgl(values$definition, inherits, "smq_select")
       if (!all(is_valid)) {
         info_msg <- paste(sprintf(
           "\u2716 Element %s is %s",
           which(!is_valid),
           map_chr(values$definition[!is_valid], what_is_it)
         ),
-        collapse = "\n")
+        collapse = "\n"
+        )
         err_msg <- sprintf(
           paste(
             "Each element of the list in the definition field must be a data frame",
@@ -703,8 +746,7 @@ validate_query <- function(obj) {
         }
       }
     }
-  }
-  else {
+  } else {
     abort(
       paste0(
         "`definition` expects a `smq_select` or `sdg_select` object, a data frame,",
@@ -746,9 +788,9 @@ validate_query <- function(obj) {
 #' try(
 #'   assert_terms(
 #'     terms = 42,
-#'     source_text = "object provided by the `definition` element")
+#'     source_text = "object provided by the `definition` element"
+#'   )
 #' )
-#'
 #' @export
 #'
 #' @seealso [create_query_data()], [query()]
@@ -761,41 +803,50 @@ assert_terms <- function(terms,
                          expect_query_id = FALSE,
                          source_text) {
   if (!is.data.frame(terms)) {
-    abort(paste0(source_text,
-                 " is not a data frame but ",
-                 what_is_it(terms),
-                 "."))
+    abort(paste0(
+      source_text,
+      " is not a data frame but ",
+      what_is_it(terms),
+      "."
+    ))
   }
 
   if (nrow(terms) == 0) {
     abort(paste0(
-          source_text,
-          " does not contain any observations."))
+      source_text,
+      " does not contain any observations."
+    ))
   }
 
   vars <- names(terms)
   if (!"TERM_LEVEL" %in% vars) {
     abort(
-      paste0("Required variable `TERM_LEVEL` is missing in ",
-            source_text,
-            ".")
+      paste0(
+        "Required variable `TERM_LEVEL` is missing in ",
+        source_text,
+        "."
+      )
     )
   }
   if (expect_query_name) {
     if (!"QUERY_NAME" %in% vars) {
       abort(
-        paste0("Required variable `QUERY_NAME` is missing in ",
-               source_text,
-               ".")
+        paste0(
+          "Required variable `QUERY_NAME` is missing in ",
+          source_text,
+          "."
+        )
       )
     }
   }
   if (expect_query_id) {
     if (!"QUERY_ID" %in% vars) {
       abort(
-        paste0("Required variable `QUERY_ID` is missing in ",
-               source_text,
-               ".")
+        paste0(
+          "Required variable `QUERY_ID` is missing in ",
+          source_text,
+          "."
+        )
       )
     }
   }
@@ -865,13 +916,16 @@ validate_smq_select <- function(obj) {
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,
-                          optional = TRUE)
+    optional = TRUE
+  )
   id <- values$id
   assert_integer_scalar(id,
-                        optional = TRUE)
+    optional = TRUE
+  )
   scope <- values$scope
   assert_character_scalar(scope,
-                          values = c("BROAD", "NARROW"))
+    values = c("BROAD", "NARROW")
+  )
 
   if (is.null(values$id) && is.null(values$name)) {
     abort("Either id or name has to be non null.")
@@ -905,13 +959,15 @@ validate_smq_select <- function(obj) {
 #'
 #' format(smq_select(id = 42, scope = "NARROW"))
 format.smq_select <- function(x, ...) {
-  paste0("smq_select(name = ",
-         dquote(x$name),
-         ", id = ",
-         format(x$id),
-         ", scope = ",
-         dquote(x$scope),
-         ")")
+  paste0(
+    "smq_select(name = ",
+    dquote(x$name),
+    ", id = ",
+    format(x$id),
+    ", scope = ",
+    dquote(x$scope),
+    ")"
+  )
 }
 
 #' Create an `sdg_select` object
@@ -933,7 +989,7 @@ format.smq_select <- function(x, ...) {
 #' @keywords source_specifications
 #'
 #' @export
-sdg_select <- function(name=NULL,
+sdg_select <- function(name = NULL,
                        id = NULL) {
   out <- list(
     name = name,
@@ -959,10 +1015,12 @@ validate_sdg_select <- function(obj) {
   values <- unclass(obj)
   name <- values$name
   assert_character_scalar(name,
-                          optional = TRUE)
+    optional = TRUE
+  )
   id <- values$id
   assert_integer_scalar(id,
-                        optional = TRUE)
+    optional = TRUE
+  )
   if (is.null(values$id) && is.null(values$name)) {
     abort("Either id or name has to be non null.")
   }
@@ -999,9 +1057,11 @@ validate_sdg_select <- function(obj) {
 #'   )
 #' )
 format.sdg_select <- function(x, ...) {
-  paste0("sdg_select(name = ",
-         dquote(x$name),
-         ", id = ",
-         format(x$id),
-         ")")
+  paste0(
+    "sdg_select(name = ",
+    dquote(x$name),
+    ", id = ",
+    format(x$id),
+    ")"
+  )
 }
