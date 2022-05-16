@@ -16,6 +16,10 @@ use_ad_template(
 ADCM
 ADEG
 ADEX
+<<<<<<< HEAD
+=======
+ADLB
+>>>>>>> devel
 ADSL
 ADVS, and the dataset name is case-insensitive. The default dataset name is ADSL.}
 
