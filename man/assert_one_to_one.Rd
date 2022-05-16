@@ -22,7 +22,7 @@ An error if the condition is not meet. The input otherwise.
 Checks if there is a one to one mapping between two lists of variables.
 }
 \examples{
-data(adsl)
+data(admiral_adsl)
 try(
   assert_one_to_one(adsl, vars(SEX), vars(RACE))
 )

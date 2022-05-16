@@ -119,8 +119,11 @@ before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
 range of possible dates of the \code{dtc} value are considered. The possible dates
 are defined by the missing parts of the \code{dtc} date (see example below). This
-ensures that the non-missing parts of the \code{dtc} date are not changed. For
-example\preformatted{impute_dtc(
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{impute_dtc(
   "2020-11",
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
@@ -128,7 +131,7 @@ example\preformatted{impute_dtc(
    ),
   date_imputation = "first"
 )
-}
+}\if{html}{\out{</div>}}
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
@@ -140,7 +143,7 @@ have changed the month although it is not missing (in the \code{dtc} date).}
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered.}
+considered. A date or date-time object is expected.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
@@ -165,9 +168,11 @@ with respect to the by variables and the order.
 
 If the uniqueness check fails, the specified message is displayed.
 
-\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+\emph{Default}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
       enumerate(vars2chr(by_vars))
-}}
+}\if{html}{\out{</div>}}}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -192,15 +197,15 @@ the additional dataset.
 }
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("ex")
+data("admiral_dm")
+data("admiral_ex")
 
 # derive treatment start date (TRTSDT)
 derive_vars_merged_dt(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTS",
   dtc = EXSTDTC,
@@ -211,8 +216,8 @@ derive_vars_merged_dt(
 
 # derive treatment end date (TRTEDT) (without imputation)
 derive_vars_merged_dt(
-  select(dm, STUDYID, USUBJID),
-  dataset_add = ex,
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = admiral_ex,
   by_vars = vars(STUDYID, USUBJID),
   new_vars_prefix = "TRTE",
   dtc = EXENDTC,

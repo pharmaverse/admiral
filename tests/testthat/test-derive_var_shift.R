@@ -91,40 +91,6 @@ test_that("Shift based on numeric variables with missing values", {
   )
 })
 
-
-test_that("Only populate post-baseline", {
-  input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
-    "P01",    "ALB",     33.1,  "Y",  33.1,
-    "P01",    "ALB",     38.5,  NA,   33.1,
-    "P01",    "ALB",     NA,    NA,   33.1,
-    "P02",    "ALB",     NA,    "Y",  NA,
-    "P02",    "ALB",     49.0,  NA,   NA,
-    "P02",    "SODIUM",  147.5, "Y",  147.5
-  )
-  expected_output <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE, ~SHIFT2,
-    "P01",    "ALB",     33.1,  "Y",  33.1,    NA_character_,
-    "P01",    "ALB",     38.5,  NA,   33.1,    "33.1 to 38.5",
-    "P01",    "ALB",     NA,    NA,   33.1,    "33.1 to NULL",
-    "P02",    "ALB",     NA,    "Y",  NA,      NA_character_,
-    "P02",    "ALB",     49,    NA,   NA,      "NULL to 49",
-    "P02",    "SODIUM",  147.5, "Y",  147.5,   NA_character_
-  )
-
-  expect_equal(
-    derive_var_shift(
-      input,
-      new_var = SHIFT2,
-      from_var = BASE,
-      to_var = AVAL,
-      filter_post_baseline = ABLFL != "Y"
-    ),
-    expected_output
-  )
-})
-
-
 test_that("Shift with user-specified na_val and sep_val", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,

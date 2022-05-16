@@ -23,17 +23,17 @@ are suppressed.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(adsl)
-data(vs)
+library(admiraltest)
+data(admiral_adsl)
+data(admiral_vs)
 
 # Remove label
-attr(vs$USUBJID, "label") <- NULL
+attr(admiral_vs$USUBJID, "label") <- NULL
 
-left_join(adsl, vs, by = "USUBJID")
+left_join(admiral_adsl, admiral_vs, by = "USUBJID")
 
 suppress_warning(
-  left_join(adsl, vs, by = "USUBJID"),
+  left_join(admiral_adsl, admiral_vs, by = "USUBJID"),
   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
 )
 }

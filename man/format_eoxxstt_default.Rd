@@ -19,15 +19,23 @@ A \code{character} vector derived based on the values given in \code{status}:
 Define a function to map the disposition status. To be used as an input for
 \code{derive_var_disposition_status()}.
 }
+\details{
+Usually this function can not be used with \verb{\%>\%}.
+}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
+<<<<<<< HEAD
 data("dm")
 data("ds")
+=======
+data("admiral_dm")
+data("admiral_ds")
+>>>>>>> origin/devel
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt_default,

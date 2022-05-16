@@ -12,7 +12,7 @@ use_ad_template(
 )
 }
 \arguments{
-\item{adam_name}{An ADaM dataset name.}
+\item{adam_name}{An ADaM dataset name. You can use any of the available dataset name ADAE, ADCM, ADEG, ADEX, ADSL, ADVS, and the dataset name is case-insensitive. The default dataset name is ADSL.}
 
 \item{save_path}{Path to save the script.}
 
@@ -27,7 +27,7 @@ No return values, called for side effects
 Open an ADaM Template Script
 }
 \details{
-Use \code{list_all_templates()} to discover which templates are available
+Running without any arguments such as \code{use_ad_template()} auto-generates adsl.R in the current path. Use \code{list_all_templates()} to discover which templates are available.
 }
 \examples{
 if (interactive()) {

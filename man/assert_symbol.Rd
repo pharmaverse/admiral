@@ -20,21 +20,21 @@ invisibly otherwise.
 Checks if an argument is a symbol
 }
 \examples{
-library(admiral.test)
-data(dm)
+library(admiraltest)
+data(admiral_dm)
 
 example_fun <- function(dat, var) {
   var <- assert_symbol(rlang::enquo(var))
   dplyr::select(dat, !!var)
 }
 
-example_fun(dm, USUBJID)
+example_fun(admiral_dm, USUBJID)
 
-try(example_fun(dm))
+try(example_fun(admiral_dm))
 
-try(example_fun(dm, "USUBJID"))
+try(example_fun(admiral_dm, "USUBJID"))
 
-try(example_fun(dm, toupper(PARAMCD)))
+try(example_fun(admiral_dm, toupper(PARAMCD)))
 }
 \author{
 Thomas Neitmann

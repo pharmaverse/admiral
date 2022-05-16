@@ -1,0 +1,108 @@
+---
+name: Style 🎽
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - devel
+  pull_request:
+    branches:
+      - main
+      - pre-release
+      - devel
+
+concurrency:
+  group: style-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  style:
+    name: Code Style 👚
+    runs-on: ubuntu-20.04
+    if: >
+      !contains(github.event.commits[0].message, '[skip style]')
+        && github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout Code 🛎
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install styler 👗
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+        shell: Rscript {0}
+
+      - name: Get changed files 🗞
+        id: changed-files
+        uses: tj-actions/changed-files@v17
+        with:
+          separator: ","
+          files: |
+            **.R
+            **.Rmd
+            **.Rnw
+            **.Rmarkdown
+
+      - name: Run styler 👟
+        run: |
+          changed_files <- unlist(strsplit(
+            "${{ steps.changed-files.outputs.all_changed_files }}",
+            split=","
+          ))
+          is_r_file <- function(x) {
+              ext <- tools::file_ext(x)
+              ext %in% c("R", "Rmd", "Rnw", "Rmarkdown")
+          }
+          changed_r_files <- Filter(is_r_file, changed_files)
+          detect <- styler::style_file(changed_r_files, dry = "on")
+          if (TRUE %in% detect$changed) {
+            problems <- subset(detect$file, detect$changed == T)
+            cat(paste(
+              "☠ One or more files had styling errors.",
+              "Please see the log above for remediations,",
+              "or simply run the following commands",
+              "for an immediate fix:\n"
+            ))
+            cat("────────────────────────────────────────\n")
+            cat(paste0(
+              "styler::style_file(", capture.output(dput(problems)), ")\n"
+            ))
+            cat("────────────────────────────────────────\n")
+            quit(status = length(problems))
+          }
+        shell: Rscript {0}

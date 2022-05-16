@@ -7,9 +7,15 @@
 #'
 #'   A date or date-time object is expected.
 #'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
+#'
 #' @param end_date The end date
 #'
 #'   A date or date-time object is expected.
+#'
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
 #' @param in_unit Input unit
 #'
@@ -25,7 +31,8 @@
 #'
 #'   Default: 'days'
 #'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
+#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes',
+#'   'seconds'
 #'
 #' @param floor_in Round down input dates?
 #'
@@ -55,8 +62,9 @@
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
 #' @details The duration is derived as time from start to end date in the
-#'   specified output unit. If the end date is before the start date, the duration
-#'   is negative.
+#'   specified output unit. If the end date is before the start date, the
+#'   duration is negative. Usually this computation function can not be used
+#'   with `%>%`.
 #'
 #' @author Stefan Bundfuss
 #'

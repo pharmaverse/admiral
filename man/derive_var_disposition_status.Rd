@@ -36,14 +36,20 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
+<<<<<<< HEAD
 Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(status) \{
+=======
+Default: \code{format_eoxxstt_default()} defined as:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{format_eoxxstt_default <- function(x) \{
+>>>>>>> origin/devel
   case_when(
     status == "COMPLETED" ~ "COMPLETED",
     status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 \}
-}
+}\if{html}{\out{</div>}}
 
 where \code{status} is the \code{status_var.}}
 
@@ -73,17 +79,22 @@ Derive a disposition status from the the relevant records in the disposition dom
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
+<<<<<<< HEAD
 data("dm")
 data("ds")
+=======
+data("admiral_dm")
+data("admiral_ds")
+>>>>>>> origin/devel
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
 #- DISCONTINUED when status_var is not COMPLETED nor NA
 #- ONGOING otherwise
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -105,9 +116,9 @@ format_eoxxstt1 <- function(x) {
   )
 }
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt1,

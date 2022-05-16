@@ -118,14 +118,14 @@ The details associated with the reason for discontinuation are derived based on
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("dm")
-data("ds")
+library(admiraltest)
+data("admiral_dm")
+data("admiral_ds")
 
 # Derive DCSREAS using the default format
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -140,9 +140,9 @@ format_dcsreas <- function(x, y = NULL) {
     TRUE ~ NA_character_
   )
 }
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     new_var_spe = DCSREASP,
