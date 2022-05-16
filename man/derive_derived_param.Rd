@@ -20,6 +20,7 @@ derive_derived_param(
 
 The variables specified by the \code{by_vars} parameter, \code{PARAMCD}, and \code{AVAL}
 are expected.
+
 The variable specified by \code{by_vars} and \code{PARAMCD} must be a unique key of
 the input dataset after restricting it by the filter condition (\code{filter}
 parameter) and to the parameters specified by \code{parameters}.}
