@@ -2,7 +2,7 @@
 title: "Pull Request Review Guidance"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pr_review_guidance}
+  %\VignetteIndexEntry{Pull Request Review Guidance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -1,10 +1,10 @@
 ---
-title: "Contribution to admiral"
+title: "Contribution to {admiral}"
 output: 
   rmarkdown::html_vignette
     
 vignette: >
-  %\VignetteIndexEntry{contribution_model}
+  %\VignetteIndexEntry{Contribution to {admiral}}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

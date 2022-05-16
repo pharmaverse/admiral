@@ -28,6 +28,9 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
 
+- New function `derive_param_exist_flag()`: Add a new parameter indicating that
+a certain event exists in a dataset. (#1064)
+
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset

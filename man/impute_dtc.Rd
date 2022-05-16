@@ -95,6 +95,9 @@ A character vector
 Imputation partial date/time portion of a \code{'--DTC'} variable. based on user
 input.
 }
+\details{
+Usually this computation function can not be used with \verb{\%>\%}.
+}
 \examples{
 library(lubridate)
 
