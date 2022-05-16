@@ -59,6 +59,9 @@ vignettes, unit tests and templates (#1108 and #1088)
 but the function was returning `2019-06-15`. Now returns it correctly. This bug fix 
 also addresses the issue in the downstream functions `derive_vars_dt()` and `derive_vars_dtm()`. (#1081)
 
+- `derive_var_dthcaus()` - updated to allow partial date imputation and to allow additional variables 
+to be used for sorting `dataset` to avoid duplicate record warning. (#822)
+
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).

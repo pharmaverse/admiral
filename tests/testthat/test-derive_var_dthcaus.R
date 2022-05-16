@@ -443,3 +443,58 @@ test_that("date imputation is done before the first/last observation is selected
 
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
+
+test_that("`dataset` is sorted using the `order` parameter", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID,
+    "TEST01", "PAT01",
+    "TEST01", "PAT02"
+  )
+
+  ae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
+    "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-02-04"
+  )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
+    "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT01", 3, "COMPLETED", "PROTOCOL COMPLETED", "2021-12-01",
+    "TEST01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
+    "TEST01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", 3, "DEATH", "DEATH DUE TO ADVERSE EVENT", "2022-02-02",
+    "TEST01", "PAT02", 4, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-02"
+  )
+
+  src_ae <- dthcaus_source(
+    dataset_name = "ae",
+    filter = AEOUT == "FATAL",
+    date = AEDTHDTC,
+    mode = "first",
+    dthcaus = "Adverse Event"
+  )
+
+  src_ds <- dthcaus_source(
+    dataset_name = "ds",
+    filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
+    date = DSSTDTC,
+    order = vars(DSSEQ),
+    mode = "last",
+    dthcaus = DSTERM
+  )
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DTHCAUS,
+    "TEST01", "PAT01", "Adverse Event",
+    "TEST01", "PAT02", "DEATH DUE TO PROGRESSION OF DISEASE"
+  )
+
+  actual_output <- derive_var_dthcaus(
+    adsl,
+    source_datasets = list(ae = ae, ds = ds),
+    src_ae, src_ds
+  )
+
+  expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
+})

@@ -170,12 +170,11 @@ derive_var_dthcaus <- function(dataset,
       add_data[[ii]] <- source_dataset %>%
         mutate(temp_date = !!sources[[ii]]$date)
     }
-    add_data[[ii]][6] <- add_data[[ii]][7]
 
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = c(vars(!!sources[[ii]]$date), sources[[ii]]$order),
+        order = c(vars(temp_date), sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
@@ -245,6 +244,11 @@ derive_var_dthcaus <- function(dataset,
 #' @param order Sort order
 #'
 #'   Additional character vector to be used for sorting `dataset` to avoid duplicate record warning.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
