@@ -648,7 +648,7 @@ test_that("derive_var_disposition Test 1: A warning is issued when using `derive
 
 test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF, #nolint
+    ~STUDYID, ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF, # nolint
     "TEST01", "PAT01",  "2012-02-25 23:00:00", "2012-03-28 19:00:00", "2012-05-25 23:00:00", "",
     "TEST01", "PAT01",  "",                    "2012-02-28 19:00:00", "",                    "",
     "TEST01", "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
