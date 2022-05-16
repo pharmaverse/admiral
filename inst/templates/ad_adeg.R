@@ -96,32 +96,27 @@ format_chgcat1n <- function(paramcd, chg) {
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 adeg <- eg %>%
-
   # Join ADSL & EG (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-
   # Calculate ADTM, ADY
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
     flag_imputation = "time"
   ) %>%
-
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
 
 adeg <- adeg %>%
-
   # Add PARAMCD only (add PARAM, etc later)
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(EGTESTCD)
   ) %>%
-
   # Calculate AVAL and AVALC
   mutate(
     AVAL = EGSTRESN,
@@ -131,6 +126,7 @@ adeg <- adeg %>%
   # Derive new parameters based on existing records. Note that, for the following
   # four `derive_param_*()` functions, only the variables specified in `by_vars` will
   # be populated in the newly created records.
+
   # Derive RRR
   derive_param_rr(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
@@ -139,7 +135,6 @@ adeg <- adeg %>%
     get_unit_expr = tolower(EGSTRESU),
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
-
   # Derive QTCBR
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
@@ -150,7 +145,6 @@ adeg <- adeg %>%
     get_unit_expr = EGSTRESU,
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
-
   # Derive QTCFR
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
@@ -161,7 +155,6 @@ adeg <- adeg %>%
     get_unit_expr = EGSTRESU,
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   ) %>%
-
   # Derive QTLCR
   derive_param_qtc(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),
@@ -175,7 +168,6 @@ adeg <- adeg %>%
 
 # get visit info
 adeg <- adeg %>%
-
   # Derive Timing
   mutate(
     ADT = date(ADTM),
@@ -207,7 +199,6 @@ adeg <- adeg %>%
   )
 
 adeg <- adeg %>%
-
   # Calculate ONTRTFL: from trt start up to 30 days after trt ends
   derive_var_ontrtfl(
     start_date = ADT,
@@ -220,15 +211,15 @@ adeg <- adeg %>%
 # Calculate ANRIND: requires the reference ranges ANRLO, ANRHI
 # Also accommodates the ranges A1LO, A1HI
 adeg <- adeg %>%
-  derive_vars_merged(dataset_add = range_lookup,
-                     by_vars = vars(PARAMCD)) %>%
-
+  derive_vars_merged(
+    dataset_add = range_lookup,
+    by_vars = vars(PARAMCD)
+  ) %>%
   # Calculate ANRIND
   derive_var_anrind()
 
 # Derive baseline flags
 adeg <- adeg %>%
-
   # Calculate BASETYPE
   derive_var_basetype(
     basetypes = rlang::exprs(
@@ -238,7 +229,6 @@ adeg <- adeg %>%
       "LAST" = is.na(ATPTN)
     )
   ) %>%
-
   # Calculate ABLFL
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -249,38 +239,33 @@ adeg <- adeg %>%
       mode = "last"
     ),
     filter = ((!is.na(AVAL) | !is.na(AVALC)) &
-                ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
-                PARAMCD != "EGINTP"
+      ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE) &
+      PARAMCD != "EGINTP"
     )
   )
 
 # Derive baseline information
 adeg <- adeg %>%
-
   # Calculate BASE
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
-
   # Calculate BASEC
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
-
   # Calculate BNRIND
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-
   # Calculate CHG
   derive_var_chg() %>%
-
   # Calculate PCHG
   derive_var_pchg()
 
@@ -299,14 +284,12 @@ adeg <- adeg %>%
 
 # Get treatment information
 adeg <- adeg %>%
-
   # Assign TRTA, TRTP
   mutate(TRTP = TRT01P, TRTA = TRT01A)
 
 
 # Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN
 adeg <- adeg %>%
-
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
@@ -314,19 +297,20 @@ adeg <- adeg %>%
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
-
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalca1n(param = PARAMCD, aval = AVAL)) %>%
-  derive_vars_merged(dataset_add = avalcat_lookup,
-                     by_vars = vars(AVALCA1N)) %>%
-
+  derive_vars_merged(
+    dataset_add = avalcat_lookup,
+    by_vars = vars(AVALCA1N)
+  ) %>%
   # Derive CHGCAT1N and CHGCAT1
   mutate(CHGCAT1N = format_chgcat1n(param = PARAMCD, chg = CHG)) %>%
   derive_vars_merged(dataset_add = chgcat_lookup, by_vars = vars(CHGCAT1N)) %>%
-
   # Derive PARAM and PARAMN
-  derive_vars_merged(dataset_add = select(param_lookup, -EGTESTCD),
-                     by_vars = vars(PARAMCD))
+  derive_vars_merged(
+    dataset_add = select(param_lookup, -EGTESTCD),
+    by_vars = vars(PARAMCD)
+  )
 
 # Add all ADSL variables
 adeg <- adeg %>%

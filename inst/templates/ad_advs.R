@@ -79,21 +79,18 @@ format_avalcat1n <- function(param, aval) {
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
 
 advs <- vs %>%
-
   # Join ADSL with VS (need TRTSDT for ADY derivation)
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-
   # Calculate ADT, ADY
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
     flag_imputation = FALSE
   ) %>%
-
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 advs <- advs %>%
@@ -103,16 +100,19 @@ advs <- advs %>%
     new_vars = vars(PARAMCD),
     by_vars = vars(VSTESTCD)
   ) %>%
-
   # Calculate AVAL and AVALC
   mutate(
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
+<<<<<<< HEAD
 
   # Derive new parameters based on existing records. Note that, for the following
   # three `derive_param_*()` functions, only the variables specified in `by_vars` will
   # be populated in the newly created records.
+=======
+  # Derive new parameters based on existing records.
+>>>>>>> devel
   # Derive Mean Arterial Pressure
   derive_param_map(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
@@ -120,7 +120,6 @@ advs <- advs %>%
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
-
   # Derive Body Surface Area
   derive_param_bsa(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
@@ -129,7 +128,6 @@ advs <- advs %>%
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
-
   # Derive Body Surface Area
   derive_param_bmi(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
@@ -141,7 +139,6 @@ advs <- advs %>%
 
 # get visit info
 advs <- advs %>%
-
   # Derive Timing
   mutate(
     ATPTN = VSTPTNUM,
@@ -150,12 +147,12 @@ advs <- advs %>%
       str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
-      ),
+    ),
     AVISITN = as.numeric(case_when(
       VISIT == "BASELINE" ~ "0",
       str_detect(VISIT, "WEEK") ~ str_trim(str_replace(VISIT, "WEEK", "")),
       TRUE ~ NA_character_
-      ))
+    ))
   )
 
 # Derive a new record as a summary record (e.g. mean of the triplicates at each time point)
@@ -169,7 +166,6 @@ advs <- advs %>%
   )
 
 advs <- advs %>%
-
   # Calculate ONTRTFL
   derive_var_ontrtfl(
     start_date = ADT,
@@ -196,7 +192,6 @@ advs <- advs %>%
       "LAST" = is.na(ATPTN)
     )
   ) %>%
-
   # Calculate ABLFL
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -207,36 +202,31 @@ advs <- advs %>%
       mode = "last"
     ),
     filter = (!is.na(AVAL) &
-                ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
+      ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
   )
 
 # Derive baseline information
 advs <- advs %>%
-
   # Calculate BASE
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVAL,
     new_var = BASE
   ) %>%
-
   # Calculate BASEC
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = AVALC,
     new_var = BASEC
   ) %>%
-
   # Calculate BNRIND
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ANRIND,
     new_var = BNRIND
   ) %>%
-
   # Calculate CHG
   derive_var_chg() %>%
-
   # Calculate PCHG
   derive_var_pchg()
 
@@ -256,13 +246,11 @@ advs <- advs %>%
 
 # Get treatment information
 advs <- advs %>%
-
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-
   # Create End of Treatment Record
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -273,7 +261,7 @@ advs <- advs %>%
       mode = "last"
     ),
     filter = (4 < VISITNUM &
-                VISITNUM <= 13 & ANL01FL == "Y" & is.na(DTYPE))
+      VISITNUM <= 13 & ANL01FL == "Y" & is.na(DTYPE))
   ) %>%
   filter(EOTFL == "Y") %>%
   mutate(
@@ -292,11 +280,9 @@ advs <- advs %>%
     order = vars(PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE),
     check_type = "error"
   ) %>%
-
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
   derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N)) %>%
-
   # Derive PARAM and PARAMN
   derive_vars_merged(dataset_add = select(param_lookup, -VSTESTCD), by_vars = vars(PARAMCD))
 

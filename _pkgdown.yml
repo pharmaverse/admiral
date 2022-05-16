@@ -90,12 +90,7 @@ reference:
 
 - title: ADaM Datasets
 - contents:
-  - admiral_adae
-  - admiral_adcm
-  - admiral_adsl
-  - admiral_advs
-  - admiral_adex
-  - admiral_adeg
+  - starts_with("admiral_")
 
 - title: User Utilities
 - contents:
