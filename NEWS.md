@@ -37,12 +37,22 @@ from a BDS dataset, e.g. ADLB. (#943)
 - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
 (#941)
 
+- New function `derive_param_first_event()`: Add a new parameter for the first
+event occurring in a dataset. (#1063)
+
+- New function `derive_param_exist_flag()`: Add a new parameter indicating that
+a certain event exists in a dataset. (#1064)
+
 - New high order functions (#701):
 
   - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
+
+- `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
 
 ## Updates of Existing Functions
  
@@ -86,6 +96,10 @@ to be used for sorting `dataset` to avoid duplicate record warning. (#822)
 
 - The `derive_var_disposition_dt()` function was deprecated in favor of
 `derive_vars_merged_dt()` (#1076)
+
+- The `derive_var_atirel()` function was deprecated, as it is deemed as too
+specific for admiral. Derivations like this can be implemented calling
+`mutate()` and `case_when()`.
 
 ## Documentation
 

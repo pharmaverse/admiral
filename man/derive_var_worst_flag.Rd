@@ -80,36 +80,32 @@ and for others the worst is the lowest value.
 \examples{
 
 input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"),  15.0,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
+  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
+  "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+  "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+  "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
+  "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
+  "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+  "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
+  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
+  "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"),  10.0,
+  "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"),  12.0,
+  "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"),  14.0,
+  "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"),  15.0,
+  "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+  "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"),  12.0,
+  "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"),  14.0,
+  "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"),  15.0,
+  "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-27"),  10.0,
+  "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-30"),  12.0
 )
 
 derive_var_worst_flag(
@@ -122,7 +118,6 @@ derive_var_worst_flag(
   worst_high = c("PARAM01", "PARAM03"),
   worst_low = "PARAM02"
 )
-
 \dontrun{
 # example with ADVS
 restrict_derivation(
@@ -135,7 +130,8 @@ restrict_derivation(
     param_var = PARAMCD,
     analysis_var = AVAL,
     worst_high = c("SYSBP", "DIABP"),
-    worst_low = "RESP"),
+    worst_low = "RESP"
+  ),
   filter = !is.na(AVISIT) & !is.na(AVAL)
 )
 }

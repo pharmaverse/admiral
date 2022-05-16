@@ -44,23 +44,24 @@
 #'
 derive_var_trtedtm <- function(dataset,
                                dataset_ex,
-                               filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10 , # nolint
+                               filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10, # nolint
                                subject_keys = vars(STUDYID, USUBJID)) {
-
   assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXENDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   deprecate_warn("0.7.0", "derive_var_trtedtm()", "derive_vars_merged_dtm()")
 
-  derive_vars_merged_dtm(dataset,
-                         dataset_add = dataset_ex,
-                         filter_add = !!filter_ex,
-                         new_vars_prefix = "TRTE",
-                         dtc = EXENDTC,
-                         date_imputation = "last",
-                         time_imputation = "last",
-                         flag_imputation = "none",
-                         order = vars(TRTEDTM, EXSEQ),
-                         mode = "last",
-                         by_vars = subject_keys)
+  derive_vars_merged_dtm(
+    dataset,
+    dataset_add = dataset_ex,
+    filter_add = !!filter_ex,
+    new_vars_prefix = "TRTE",
+    dtc = EXENDTC,
+    date_imputation = "last",
+    time_imputation = "last",
+    flag_imputation = "none",
+    order = vars(TRTEDTM, EXSEQ),
+    mode = "last",
+    by_vars = subject_keys
+  )
 }
