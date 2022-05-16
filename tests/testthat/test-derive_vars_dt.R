@@ -260,8 +260,8 @@ test_that("Partial date imputed to the first day/month, no DTF and preserve=TRUE
     date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "none",
-    flag_imputation = FALSE,
+    date_imputation = "FIRST",
+    flag_imputation = "none",
     preserve = TRUE
   )
 
