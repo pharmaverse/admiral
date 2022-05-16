@@ -142,8 +142,9 @@
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
-#'   by_vars = vars(STUDYID, USUBJID)) %>%
-#' select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+#'   by_vars = vars(STUDYID, USUBJID)
+#' ) %>%
+#'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
 #' # merge last weight to adsl
 #' data("admiral_adsl")
@@ -157,7 +158,7 @@
 #'   filter_add = VSTESTCD == "WEIGHT",
 #'   match_flag = vsdatafl
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+#'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -178,11 +179,13 @@ derive_vars_merged <- function(dataset,
 
   add_data <- filter_if(dataset_add, filter_add)
   if (!is.null(order)) {
-    add_data <- filter_extreme(add_data,
-                               by_vars = by_vars,
-                               order = order,
-                               mode = mode,
-                               check_type = check_type)
+    add_data <- filter_extreme(
+      add_data,
+      by_vars = by_vars,
+      order = order,
+      mode = mode,
+      check_type = check_type
+    )
   } else {
     if (is.null(duplicate_msg)) {
       duplicate_msg <- paste(
@@ -200,8 +203,10 @@ derive_vars_merged <- function(dataset,
     add_data <- select(add_data, !!!by_vars, !!!new_vars)
   }
   if (!quo_is_null(match_flag)) {
-    add_data <- mutate(add_data,
-                       !!match_flag := TRUE)
+    add_data <- mutate(
+      add_data,
+      !!match_flag := TRUE
+    )
   }
   # check if there are any variables in both datasets which are not by vars
   # in this case an error is issued to avoid renaming of varibles by left_join()
@@ -325,6 +330,7 @@ derive_vars_merged_dt <- function(dataset,
                                   preserve = FALSE,
                                   check_type = "warning",
                                   duplicate_msg = NULL) {
+  assert_vars(by_vars)
   dtc <- assert_symbol(enquo(dtc))
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
@@ -341,14 +347,16 @@ derive_vars_merged_dt <- function(dataset,
       preserve = preserve
     )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(dataset,
-                     dataset_add = add_data,
-                     by_vars = by_vars,
-                     order = order,
-                     new_vars = new_vars,
-                     mode = mode,
-                     check_type = check_type,
-                     duplicate_msg = duplicate_msg)
+  derive_vars_merged(
+    dataset,
+    dataset_add = add_data,
+    by_vars = by_vars,
+    order = order,
+    new_vars = new_vars,
+    mode = mode,
+    check_type = check_type,
+    duplicate_msg = duplicate_msg
+  )
 }
 
 #' Merge a (Imputed) Datetime Variable
@@ -466,14 +474,16 @@ derive_vars_merged_dtm <- function(dataset,
       preserve = preserve
     )
   new_vars <- quos(!!!syms(setdiff(names(add_data), old_vars)))
-  derive_vars_merged(dataset,
-                     dataset_add = add_data,
-                     by_vars = by_vars,
-                     order = order,
-                     new_vars = new_vars,
-                     mode = mode,
-                     check_type = check_type,
-                     duplicate_msg = duplicate_msg)
+  derive_vars_merged(
+    dataset,
+    dataset_add = add_data,
+    by_vars = by_vars,
+    order = order,
+    new_vars = new_vars,
+    mode = mode,
+    check_type = check_type,
+    duplicate_msg = duplicate_msg
+  )
 }
 
 #' Merge a Categorization Variable
@@ -537,9 +547,11 @@ derive_vars_merged_dtm <- function(dataset,
 #' data("admiral_vs")
 #'
 #' wgt_cat <- function(wgt) {
-#'   case_when(wgt < 50 ~ "low",
-#'             wgt > 90 ~ "high",
-#'             TRUE ~ "normal")
+#'   case_when(
+#'     wgt < 50 ~ "low",
+#'     wgt > 90 ~ "high",
+#'     TRUE ~ "normal"
+#'   )
 #' }
 #'
 #' derive_var_merged_cat(
@@ -547,13 +559,13 @@ derive_vars_merged_dtm <- function(dataset,
 #'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   order = vars(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
+#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
 #'   new_var = WGTBLCAT,
 #'   source_var = VSSTRESN,
 #'   cat_fun = wgt_cat,
 #'   mode = "last"
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
+#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 #'
 #' # defining a value for missing VS data
 #' derive_var_merged_cat(
@@ -561,14 +573,14 @@ derive_vars_merged_dtm <- function(dataset,
 #'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
 #'   order = vars(VSDTC, VSSEQ),
-#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
+#'   filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
 #'   new_var = WGTBLCAT,
 #'   source_var = VSSTRESN,
 #'   cat_fun = wgt_cat,
 #'   mode = "last",
 #'   missing_value = "MISSING"
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
+#'   select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 derive_var_merged_cat <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -689,31 +701,29 @@ derive_var_merged_cat <- function(dataset,
 #'   new_var = AERELFL,
 #'   condition = AEREL == "PROBABLE"
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+#'   select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 #'
 #' data("admiral_vs")
 #' derive_var_merged_exist_flag(
 #'   admiral_dm,
 #'   dataset_add = admiral_vs,
 #'   by_vars = vars(STUDYID, USUBJID),
-#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y" ,
+#'   filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
 #'   new_var = WTBLHIFL,
-#'   condition = VSSTRESN > 90 ,
+#'   condition = VSSTRESN > 90,
 #'   false_value = "N",
 #'   missing_value = "M"
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
-derive_var_merged_exist_flag <- function(
-  dataset,
-  dataset_add,
-  by_vars,
-  new_var,
-  condition,
-  true_value = "Y",
-  false_value = NA_character_,
-  missing_value = NA_character_,
-  filter_add = NULL
-) {
+#'   select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+derive_var_merged_exist_flag <- function(dataset,
+                                         dataset_add,
+                                         by_vars,
+                                         new_var,
+                                         condition,
+                                         true_value = "Y",
+                                         false_value = NA_character_,
+                                         missing_value = NA_character_,
+                                         filter_add = NULL) {
   new_var <- assert_symbol(enquo(new_var))
   condition <- assert_filter_cond(enquo(condition))
   filter_add <-
@@ -808,7 +818,7 @@ derive_var_merged_exist_flag <- function(
 #'   source_var = DSDECOD,
 #'   case = "title"
 #' ) %>%
-#' select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
+#'   select(STUDYID, USUBJID, AGE, AGEU, DISPSTAT)
 derive_var_merged_character <- function(dataset,
                                         dataset_add,
                                         by_vars,
@@ -819,7 +829,6 @@ derive_var_merged_character <- function(dataset,
                                         filter_add = NULL,
                                         mode = NULL,
                                         missing_value = NA_character_) {
-
   new_var <- assert_symbol(enquo(new_var))
   source_var <- assert_symbol(enquo(source_var))
   case <-
@@ -835,25 +844,24 @@ derive_var_merged_character <- function(dataset,
 
   if (is.null(case)) {
     trans <- expr(!!source_var)
-  }
-  else if (case == "lower") {
+  } else if (case == "lower") {
     trans <- expr(str_to_lower(!!source_var))
-  }
-  else if (case == "upper") {
+  } else if (case == "upper") {
     trans <- expr(str_to_upper(!!source_var))
-  }
-  else if (case == "title") {
+  } else if (case == "title") {
     trans <- expr(str_to_title(!!source_var))
   }
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := !!trans)
-  derive_vars_merged(dataset,
-                     dataset_add = add_data,
-                     by_vars = by_vars,
-                     order = order,
-                     new_vars = vars(!!new_var),
-                     match_flag = temp_match_flag,
-                     mode = mode) %>%
+  derive_vars_merged(
+    dataset,
+    dataset_add = add_data,
+    by_vars = by_vars,
+    order = order,
+    new_vars = vars(!!new_var),
+    match_flag = temp_match_flag,
+    mode = mode
+  ) %>%
     mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
     select(-temp_match_flag)
 }

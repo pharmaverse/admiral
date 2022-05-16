@@ -50,3 +50,5 @@ admiral*.tgz
 .DS_Store
 ._.DS_Store
 
+# vscode
+.vscode

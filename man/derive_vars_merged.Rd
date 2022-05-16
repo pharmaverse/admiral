@@ -112,9 +112,11 @@ with respect to the by variables and the order.
 
 If the uniqueness check fails, the specified message is displayed.
 
-\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+\emph{Default}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
       enumerate(vars2chr(by_vars))
-}}
+}\if{html}{\out{</div>}}}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -151,8 +153,9 @@ data("admiral_dm")
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
-  by_vars = vars(STUDYID, USUBJID)) \%>\%
-select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+  by_vars = vars(STUDYID, USUBJID)
+) \%>\%
+  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 
 # merge last weight to adsl
 data("admiral_adsl")
@@ -166,7 +169,7 @@ derive_vars_merged(
   filter_add = VSTESTCD == "WEIGHT",
   match_flag = vsdatafl
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+  select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 }
 \author{
 Stefan Bundfuss

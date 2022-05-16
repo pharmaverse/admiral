@@ -45,12 +45,14 @@ try(example_fun(TRUE))
 
 # handling parameters case-insensitive
 example_fun2 <- function(msg_type) {
-  msg_type <- assert_character_scalar(msg_type,
-                                      values = c("warning", "error"),
-                                      case_sensitive = FALSE)
- if (msg_type == "warning") {
-   print("A warning was requested.")
- }
+  msg_type <- assert_character_scalar(
+    msg_type,
+    values = c("warning", "error"),
+    case_sensitive = FALSE
+  )
+  if (msg_type == "warning") {
+    print("A warning was requested.")
+  }
 }
 
 example_fun2("Warning")
