@@ -35,7 +35,7 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adsl <- tibble::tribble(
-~USUBJID, ~TRTSDT,           ~EOSDT,
+  ~USUBJID, ~TRTSDT,           ~EOSDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\%
@@ -53,7 +53,6 @@ extend_source_datasets(
   source_datasets = list(adsl = adsl, ae = ae),
   by_vars = vars(AEDECOD)
 )
-
 }
 \author{
 Stefan Bundfuss
