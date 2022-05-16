@@ -22,6 +22,6 @@
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
 #' @importFrom tidyr drop_na nest pivot_longer pivot_wider unnest
 #' @importFrom tidyselect all_of contains vars_select
-#' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated
+#' @importFrom hms as_hms
 "_PACKAGE"
