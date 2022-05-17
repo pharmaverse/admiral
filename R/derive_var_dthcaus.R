@@ -161,6 +161,8 @@ derive_var_dthcaus <- function(dataset,
     }
 
     # if several death records, use the first/last according to 'mode'
+    tmp_source_nr <- get_new_tmp_var(dataset)
+    tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
         order = vars(!!sources[[ii]]$date),
@@ -168,8 +170,8 @@ derive_var_dthcaus <- function(dataset,
         mode = sources[[ii]]$mode
       ) %>%
       mutate(
-        temp_source_nr = ii,
-        temp_date = !!sources[[ii]]$date,
+        !!tmp_source_nr := ii,
+        !!tmp_date := !!sources[[ii]]$date,
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
@@ -188,24 +190,24 @@ derive_var_dthcaus <- function(dataset,
       add_data[[ii]] <- add_data[[ii]] %>%
         transmute(
           !!!subject_keys,
-          temp_source_nr,
-          temp_date,
+          !!tmp_source_nr,
+          !!tmp_date,
           DTHCAUS,
           !!!sources[[ii]]$traceability
         )
     } else {
       add_data[[ii]] <- add_data[[ii]] %>%
-        select(!!!subject_keys, temp_source_nr, temp_date, DTHCAUS)
+        select(!!!subject_keys, !!tmp_source_nr, !!tmp_date, DTHCAUS)
     }
   }
   # if a subject has multiple death info, keep the one from the first source
   dataset_add <- bind_rows(add_data) %>%
     filter_extreme(
-      order = vars(temp_date, temp_source_nr),
+      order = vars(!!tmp_date, !!tmp_source_nr),
       by_vars = subject_keys,
       mode = "first"
     ) %>%
-    select(-starts_with("temp_"))
+    remove_tmp_vars()
 
   derive_vars_merged(dataset, dataset_add = dataset_add, by_vars = subject_keys)
 }
