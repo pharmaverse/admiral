@@ -24,13 +24,13 @@ traceability.
 \code{DOSE_COUNT} represents the number of doses received in one single unit of
 \code{DOSE_WINDOW}. For example, for \code{CDISC_VALUE=="10 DAYS PER MONTH"},
 \code{DOSE_WINDOW=="MONTH"} and \code{DOSE_COUNT==10}. Similarly, for
-\verb{CDISC_VALUE=="EVERY 2 WEEKS}, \code{DOSE_WINDOW=="WEEK"} and
+\code{CDISC_VALUE=="EVERY 2 WEEKS"}, \code{DOSE_WINDOW=="WEEK"} and
 \code{DOSE_COUNT==0.5} (to yield one dose every two weeks).
 
 \code{CONVERSION_FACTOR} is used to convert \code{DOSE_WINDOW} units \code{"WEEK"},
 \code{"MONTH"}, and \code{"YEAR"} to the unit \code{"DAY"}.
 
-For example, for \verb{CDISC_VALUE=="10 DAYS PER MONTH}, \code{CONVERSION_FACTOR}
+For example, for \code{CDISC_VALUE=="10 DAYS PER MONTH"}, \code{CONVERSION_FACTOR}
 is \code{0.0329}. One day of a month is assumed to be \code{1 / 30.4375} of a month (one
 day is assumed to be \code{1/365.25} of a year).
 Given only \code{start_date} and \code{end_date} in the aggregate dataset, \code{CONVERSION_FACTOR}

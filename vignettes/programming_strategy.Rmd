@@ -129,7 +129,7 @@ variables must start with `temp_` and must be removed from the output dataset.
 
 ## Function Names
 
-* Function names should start with a verb and use snake case, e.g. `derive_baseline()`. 
+* Function names should start with a verb and use snake case, e.g. `derive_var_baseline()`. 
 
 | Function name prefix                         | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
