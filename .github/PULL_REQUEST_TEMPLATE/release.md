@@ -1,11 +1,6 @@
 # Release Description
 <!--- Summarize what is being released.  -->
 
-## Milestone
-<!--- Link to the milestone for the release. ---> 
-<!--- Make sure all relevant issues/PRs are included on the linked pages. --->
-Milestone: 
-
 # Release Checklist
 <!--- Fill out the following Release checklist -->
 - [ ] Version number has been updated
