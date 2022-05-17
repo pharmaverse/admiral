@@ -105,7 +105,6 @@ advs <- advs %>%
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
-
   # Derive new parameters based on existing records. Note that, for the following
   # three `derive_param_*()` functions, only the variables specified in `by_vars` will
   # be populated in the newly created records.

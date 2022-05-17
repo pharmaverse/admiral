@@ -93,7 +93,7 @@ advs <- tibble::tribble(
   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
 )
 
-derive_param_bmi (
+derive_param_bmi(
   advs,
   by_vars = vars(USUBJID, AVISIT),
   weight_code = "WEIGHT",
@@ -103,7 +103,7 @@ derive_param_bmi (
     PARAM = "Body Mass Index (kg/m^2)"
   ),
   get_unit_expr = extract_unit(PARAM)
- )
+)
 }
 \author{
 Pavan Kumar

@@ -121,7 +121,7 @@ adex \%>\%
     input_code = "DOSE",
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE)
-   ) \%>\%
+  ) \%>\%
   select(-ASTDTM, -AENDTM)
 
 # average dose in w2-24

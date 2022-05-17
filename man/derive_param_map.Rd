@@ -97,19 +97,19 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 library(dplyr, warn.conflicts = FALSE)
 
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
-  "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "BASELINE",
-  "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "WEEK 2",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "BASELINE",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "WEEK 2",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "BASELINE",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "WEEK 2",
-  "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "BASELINE",
-  "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "WEEK 2",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "BASELINE",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "WEEK 2",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "BASELINE",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "WEEK 2"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+  "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
+  "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "WEEK 2",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "WEEK 2",
+  "01-701-1028", "PULSE", "Pulse (beats/min)", 62, "BASELINE",
+  "01-701-1028", "PULSE", "Pulse (beats/min)", 77, "WEEK 2",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "BASELINE",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "WEEK 2",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "BASELINE",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "WEEK 2"
 )
 
 # Derive MAP based on diastolic and systolic blood pressure

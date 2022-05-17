@@ -107,31 +107,33 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 
 adex <- tibble::tribble(
-~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
-"P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
-"P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
-"P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
-"P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
-"P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
-"P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
-"P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
-"P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
+  ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT, ~AENDT, ~AVAL,
+  "P001", "TNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-01-30"), 59,
+  "P001", "TSNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-02-01"), 96,
+  "P001", "TNDOSE", "V2", "Y", ymd("2020-02-01"), ymd("2020-03-15"), 88,
+  "P001", "TSNDOSE", "V2", "Y", ymd("2020-02-05"), ymd("2020-03-01"), 88,
+  "P002", "TNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-01-30"), 0,
+  "P002", "TSNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-02-01"), 0,
+  "P002", "TNDOSE", "V2", "Y", ymd("2021-02-01"), ymd("2021-03-15"), 52,
+  "P002", "TSNDOSE", "V2", "Y", ymd("2021-02-05"), ymd("2021-03-01"), 0
 )
 
 derive_param_doseint(
   adex,
-  by_vars=vars(USUBJID, VISIT),
+  by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
-  tpadm_code = "TSNDOSE")
+  tpadm_code = "TSNDOSE"
+)
 
 derive_param_doseint(
   adex,
-  by_vars=vars(USUBJID, VISIT),
+  by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAMCD = "TDOSINT2"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
-  zero_doses = "100")
+  zero_doses = "100"
+)
 }
 \author{
 Alice Ehmann

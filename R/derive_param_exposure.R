@@ -103,7 +103,7 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    ) %>%
+#'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
@@ -129,12 +129,12 @@
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
-                                   by_vars,
-                                   input_code,
-                                   analysis_var,
-                                   summary_fun,
-                                   filter = NULL,
-                                   set_values_to = NULL) {
+                                  by_vars,
+                                  input_code,
+                                  analysis_var,
+                                  summary_fun,
+                                  filter = NULL,
+                                  set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
 
@@ -201,8 +201,10 @@ derive_param_exposure <- function(dataset,
       ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
-      mutate(ASTDT = coalesce(ASTDT, temp_start),
-             AENDT = coalesce(AENDT, temp_end)) %>%
+      mutate(
+        ASTDT = coalesce(ASTDT, temp_start),
+        AENDT = coalesce(AENDT, temp_end)
+      ) %>%
       select(-starts_with("temp_"))
   }
 

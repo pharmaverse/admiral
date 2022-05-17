@@ -60,8 +60,6 @@ adex0 <- ex %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-
-
   # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
 
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
@@ -97,10 +95,10 @@ adex <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
-  # Part 3
-  # Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
-  # `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
-  # in `by_vars` will be populated in the newly created records.
+# Part 3
+# Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
+# `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
+# in `by_vars` will be populated in the newly created records.
 
 adex <- adex %>%
   # Overall exposure
