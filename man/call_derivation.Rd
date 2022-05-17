@@ -33,7 +33,7 @@ data(admiral_ae)
 data(admiral_adsl)
 
 adae <-
-  select(admiral_ae[sample(1:nrow(admiral_ae), 1000),], USUBJID, AESTDTC, AEENDTC) \%>\%
+  select(admiral_ae[sample(1:nrow(admiral_ae), 1000), ], USUBJID, AESTDTC, AEENDTC) \%>\%
   derive_vars_merged(
     dataset_add = admiral_adsl,
     new_vars = vars(TRTSDT, TRTEDT),

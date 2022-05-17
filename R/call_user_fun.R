@@ -14,17 +14,21 @@
 #' @export
 #'
 #' @examples
-#' call_user_fun(compute_bmi(height = 172,
-#'                           weight = 60))
+#' call_user_fun(compute_bmi(
+#'   height = 172,
+#'   weight = 60
+#' ))
 #'
-#' try(call_user_fun(compute_bmi(height = 172,
-#'                               weight = "hallo")))
+#' try(call_user_fun(compute_bmi(
+#'   height = 172,
+#'   weight = "hallo"
+#' )))
 call_user_fun <- function(call) {
   tryCatch(
     eval_tidy(call),
     error = function(cnd) {
       abort(
-          paste0("Calling ", rlang::as_label(enexpr(call)), " caused the following error:\n", cnd)
+        paste0("Calling ", rlang::as_label(enexpr(call)), " caused the following error:\n", cnd)
       )
     }
   )

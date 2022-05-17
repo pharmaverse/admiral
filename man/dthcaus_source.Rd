@@ -12,8 +12,7 @@ dthcaus_source(
   order = NULL,
   mode = "first",
   dthcaus,
-  traceability_vars = NULL,
-  dataset = deprecated()
+  traceability_vars = NULL
 )
 }
 \arguments{
@@ -57,8 +56,6 @@ in the returned dataset.
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
 These can be either strings or symbols referring to existing variables.}
-
-\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 }
 \value{
 An object of class "dthcaus_source".
