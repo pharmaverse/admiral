@@ -18,49 +18,56 @@
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
 #'   as the systolic blood pressure assessments.
-#'   Permitted Values: character value
+#'
+#'   \emph{Permitted Values:} character value
 #'
 #' @param chol_code Total serum cholesterol code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the total cholesterol assessments. This must be measured in mg/dL
-#'   Permitted Values: character value
+#'   as the total cholesterol assessments. This must be measured in mg/dL.
+#'
+#'   \emph{Permitted Values:} character value
 #'
 #' @param cholhdl_code HDL serum cholesterol code
 #'
 #'   The observations where `PARAMCD` equals the specified value are considered
-#'   as the HDL cholesterol assessments. This must be measured in mg/dL
-#'   Permitted Values: character value
+#'   as the HDL cholesterol assessments. This must be measured in mg/dL.
+#'
+#'   \emph{Permitted Values:} character value
 #'
 #' @param age Subject age
 #'
-#'   A variable containing the subject's age
-#'   Permitted Values: A numeric variable name that refers to a subject age
+#'   A variable containing the subject's age.
+#'
+#'   \emph{Permitted Values:} A numeric variable name that refers to a subject age
 #'                     column of the input dataset
 #'
 #' @param sex Subject sex
 #'
-#'   A variable containing the subject's sex
-#'   Permitted Values: A character variable name that refers to a subject sex
+#'   A variable containing the subject's sex.
+#'
+#'   \emph{Permitted Values:} A character variable name that refers to a subject sex
 #'                     column of the input dataset
 #'
 #' @param smokefl Smoking status flag
 #'
-#'   A flag indicating smoking status: Y=current smoker, N=otherwise
-#'   Permitted Values: A character variable name that refers to a smoking status
-#'                     column of the input dataset
+#'   A flag indicating smoking status.
+#'
+#'   \emph{Permitted Values:} A character variable name that refers to a smoking status
+#'                     column of the input dataset.
 #'
 #' @param diabetfl Diabetic flag
 #'
-#'   A flag indicating diabetic status: Y=diabetic, N=otherwise
-#'   Permitted Values: A character variable name that refers to a diabetic
+#'   A flag indicating diabetic status.
+#'
+#'   \emph{Permitted Values:} A character variable name that refers to a diabetic
 #'                     status column of the input dataset
 #'
 #' @param trthypfl Treated with hypertension medication flag
 #'
-#'   A flag indicating if a subject was treated with hypertension medication:
-#'   Y=treated for high blood pressure, N=Not treated for high blood pressure
-#'   Permitted Values: A character variable name that refers to a column that
+#'   A flag indicating if a subject was treated with hypertension medication.
+#'
+#'   \emph{Permitted Values:} A character variable name that refers to a column that
 #'                     indicates whether a subject is treated for high blood
 #'                     pressure
 #'
@@ -73,20 +80,56 @@
 #' added to the `by_vars` list.
 #'
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula \href
-#' {https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}
-#' {D'Agostino, 2008} is:
+#' within 10-years according to Framingham formula
+#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is:
 #'
-#' Equation:
+#' \strong{For Women:}
+#'
+#' \tabular{rr}{
+#' \strong{Factor} \tab \strong{Amount} \cr
+#' Age \tab 2.32888 \cr
+#' Total Chol \tab 1.20904 \cr
+#' HDL Chol \tab -0.70833 \cr
+#' Sys BP \tab 2.76157 \cr
+#' Sys BP + Hypertension Meds \tab 2.82263 \cr
+#' Smoker \tab 0.52873 \cr
+#' Non-Smoker \tab 0 \cr
+#' Diabetic \tab 0.69154 \cr
+#' Not Diabetic \tab 0 \cr
+#' Average Risk \tab 26.1931 \cr
+#' Risk Period \tab 0.95012 \cr
+#' }
+#'
+#'\strong{For Men:}
+#'
+#' \tabular{rr}{
+#' \strong{Factor} \tab \strong{Amount} \cr
+#' Age \tab 3.06117 \cr
+#' Total Chol \tab 1.12370 \cr
+#' HDL Chol \tab -0.93263 \cr
+#' Sys BP \tab 1.93303 \cr
+#' Sys BP + Hypertension Meds \tab 2.99881 \cr
+#' Smoker \tab .65451  \cr
+#' Non-Smoker \tab 0 \cr
+#' Diabetic \tab 0.57367  \cr
+#' Not Diabetic \tab 0 \cr
+#' Average Risk \tab 23.9802 \cr
+#' Risk Period \tab 0.88936 \cr
+#' }
+#'
+#' \strong{The equation for calculating risk:}
+#'
 #' \deqn{RiskFactors = (log(Age) * AgeFactor)
 #' + (log(TotalChol) * TotalCholFactor)
-#' + (log(CholHDL) * CholHDLFactor)
+#' + (log(CholHDL) * CholHDLFactor) \\
 #' + (log(SysBP) * SysBPFactor) + Smoker
 #' + Diabetes Present - AvgRisk}
 #'
 #' \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
 #'
-#' @author Alice Ehmann
+#' @author
+#' Alice Ehmann
+#' Jack McGavigan
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -169,8 +212,8 @@ derive_param_framingham <- function(dataset,
 
   assert_data_frame(dataset,
                     required_vars =
-                      quo_c(
-                        vars(!!!by_vars)))
+                      quo_c(vars(!!!by_vars), age, sex,
+                            smokefl, diabetfl, trthypfl))
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -239,7 +282,7 @@ derive_param_framingham <- function(dataset,
 #'
 #' @param sysbp Systolic blood pressure
 #'
-#'   A numeric vector e is expected.
+#'   A numeric vector is expected.
 #'
 #' @param chol Total serum cholesterol (mg/dL)
 #'
@@ -277,16 +320,48 @@ derive_param_framingham <- function(dataset,
 #'
 #' @details
 #' The predicted probability of having cardiovascular disease (CVD)
-#' within 10-years according to Framingham formula \href
-#' {https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}
-#' {D'Agostino, 2008}is:
+#' within 10-years according to Framingham formula
+#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is:
 #'
+#' \strong{For Women:}
 #'
+#' \tabular{rr}{
+#' \strong{Factor} \tab \strong{Amount} \cr
+#' Age \tab 2.32888 \cr
+#' Total Chol \tab 1.20904 \cr
+#' HDL Chol \tab -0.70833 \cr
+#' Sys BP \tab 2.76157 \cr
+#' Sys BP + Hypertension Meds \tab 2.82263 \cr
+#' Smoker \tab 0.52873 \cr
+#' Non-Smoker \tab 0 \cr
+#' Diabetic \tab 0.69154 \cr
+#' Not Diabetic \tab 0 \cr
+#' Average Risk \tab 26.1931 \cr
+#' Risk Period \tab 0.95012 \cr
+#' }
 #'
-#' Equation:
+#' \strong{For Men:}
+#'
+#' \tabular{rr}{
+#' \strong{Factor} \tab \strong{Amount} \cr
+#' Age \tab 3.06117 \cr
+#' Total Chol \tab 1.12370 \cr
+#' HDL Chol \tab -0.93263 \cr
+#' Sys BP \tab 1.93303 \cr
+#' Sys BP + Hypertension Meds \tab 2.99881 \cr
+#' Smoker \tab .65451  \cr
+#' Non-Smoker \tab 0 \cr
+#' Diabetic \tab 0.57367  \cr
+#' Not Diabetic \tab 0 \cr
+#' Average Risk \tab 23.9802 \cr
+#' Risk Period \tab 0.88936 \cr
+#' }
+#'
+#' \strong{The equation for calculating risk:}
+#'
 #' \deqn{RiskFactors = (log(Age) * AgeFactor)
 #' + (log(TotalChol) * TotalCholFactor)
-#' + (log(CholHDL) * CholHDLFactor)
+#' + (log(CholHDL) * CholHDLFactor) \\
 #' + (log(SysBP) * SysBPFactor) + Smoker
 #' + Diabetes Present - AvgRisk}
 #'
@@ -343,3 +418,4 @@ style_text(
  aval * 100
 
 }
+
