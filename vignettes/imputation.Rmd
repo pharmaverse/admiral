@@ -181,11 +181,13 @@ representation of the same date. Thus the imputation must be the same and the
 imputation flags are valid for both the datetime and the date variable.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
@@ -204,15 +206,19 @@ If an imputed date variable without a corresponding datetime variable is
 required, it can be derived by the `derive_vars_dt()` function.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
-  derive_vars_dt(dtc = AESTDTC,
-                 new_vars_prefix = "AST",
-                 date_imputation = "first",
-                 flag_imputation = "none")
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
+  derive_vars_dt(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    date_imputation = "first",
+    flag_imputation = "none"
+  )
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)
@@ -225,11 +231,13 @@ should be set to `NULL`. This results in `NA` if the date is partial. As
 no date is imputed the date imputation flag is not created.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
@@ -318,10 +326,10 @@ mh <- tribble(
   "2019-04-01", ymd("2019-04-15"),
   "2019-05",    ymd("2019-04-15"),
   "2019-06-21", ymd("2019-04-15")
-) %>% 
-filter(
-  convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
-)
+) %>%
+  filter(
+    convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
+  )
 ```
 ```{r, echo=FALSE}
 dataset_vignette(mh)
@@ -342,16 +350,19 @@ vs <- tribble(
 ) %>%
   slice_derivation(
     derivation = derive_vars_dtm,
-    args = params(dtc = VSDTC,
-                  new_vars_prefix = "A",
-                  date_imputation = NULL),
+    args = params(
+      dtc = VSDTC,
+      new_vars_prefix = "A",
+      date_imputation = NULL
+    ),
     derivation_slice(
       filter = VSTPT == "PRE-DOSE",
       args = params(time_imputation = "first")
     ),
     derivation_slice(
       filter = TRUE,
-      args = params(time_imputation = "last"))
+      args = params(time_imputation = "last")
+    )
   )
 ```
 ```{r, echo=FALSE}

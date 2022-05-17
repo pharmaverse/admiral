@@ -125,7 +125,7 @@ advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC, flag_imputation
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
-  advs, 
+  advs,
   display_vars = vars(USUBJID, VISIT, VSDTC, ADT),
   filter = VSTESTCD == "DIABP"
 )
@@ -144,7 +144,7 @@ advs <- advs %>%
       "2012-07",
       VSDTC
     )
-  ) %>% 
+  ) %>%
   select(-ADT)
 ```
 

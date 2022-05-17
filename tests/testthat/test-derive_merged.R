@@ -28,53 +28,66 @@ ex <- tibble::tribble(
 ## derive_vars_merged: merge all variables ----
 test_that("derive_vars_merged: merge all variables", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = vars(STUDYID, USUBJID))
+    dataset_add = adsl,
+    by_vars = vars(STUDYID, USUBJID)
+  )
 
   expected <- left_join(advs, adsl, by = c("STUDYID", "USUBJID"))
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID", "AVISIT"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
 })
 
 ## derive_vars_merged: merge selected variables ----
 test_that("derive_vars_merged: merge selected variables", {
   actual <- derive_vars_merged(advs,
-                               dataset_add = adsl,
-                               by_vars = vars(USUBJID),
-                               new_vars = vars(SEX))
+    dataset_add = adsl,
+    by_vars = vars(USUBJID),
+    new_vars = vars(SEX)
+  )
 
   expected <- left_join(advs, select(adsl, USUBJID, SEX), by = "USUBJID")
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID", "AVISIT"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
 })
 
 ## derive_vars_merged: merge last value and flag matched by groups ----
 test_that("derive_vars_merged: merge last value and flag matched by groups", {
   actual <- derive_vars_merged(adsl,
-                               dataset_add = advs,
-                               order = vars(AVAL),
-                               by_vars = vars(STUDYID, USUBJID),
-                               new_vars = vars(WEIGHTBL = AVAL),
-                               mode = "last",
-                               match_flag = matched)
-  expected <- adsl %>% mutate(WEIGHTBL = c(68, 88, 55, NA),
-                              matched = c(TRUE, TRUE, TRUE, NA))
+    dataset_add = advs,
+    order = vars(AVAL),
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars = vars(WEIGHTBL = AVAL),
+    mode = "last",
+    match_flag = matched
+  )
+  expected <- adsl %>% mutate(
+    WEIGHTBL = c(68, 88, 55, NA),
+    matched = c(TRUE, TRUE, TRUE, NA)
+  )
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
 })
 
 ## derive_vars_merged: error if variable in both datasets ----
 test_that("derive_vars_merged: error if variable in both datasets", {
   expect_error(derive_vars_merged(advs,
-                                  dataset_add = adsl,
-                                  by_vars = vars(USUBJID)),
-               regexp = "")
+    dataset_add = adsl,
+    by_vars = vars(USUBJID)
+  ),
+  regexp = ""
+  )
 })
 
 # derive_vars_merged_dt ----
@@ -91,14 +104,18 @@ test_that("derive_vars_merged_dt: merge first date", {
     mode = "first"
   )
   expected <-
-    adsl %>% mutate(TRTSDT = ymd(c(
-      "2020-12-07", "2021-01-12", "2021-03-02", NA
-    )),
-    TRTSDTF = NA_character_)
+    adsl %>% mutate(
+      TRTSDT = ymd(c(
+        "2020-12-07", "2021-01-12", "2021-03-02", NA
+      )),
+      TRTSDTF = NA_character_
+    )
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
 })
 
 # derive_vars_merged_dtm ----
@@ -115,19 +132,23 @@ test_that("derive_vars_merged_dt: merge first date", {
     mode = "first"
   )
   expected <-
-    adsl %>% mutate(TRTSDTM = ymd_hms(
-      c(
-        "2020-12-07T00:00:00",
-        "2021-01-12T12:00:00",
-        "2021-03-02T00:00:00",
-        NA
-      )
-    ),
-    TRTSTMF = c("H", NA, "H", NA))
+    adsl %>% mutate(
+      TRTSDTM = ymd_hms(
+        c(
+          "2020-12-07T00:00:00",
+          "2021-01-12T12:00:00",
+          "2021-03-02T00:00:00",
+          NA
+        )
+      ),
+      TRTSTMF = c("H", NA, "H", NA)
+    )
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
 })
 
 # derive_var_merged_cat ----
@@ -151,9 +172,11 @@ test_that("derive_vars_merged_cat: merge categorized variable", {
     select(-COUNTRY)
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID", "AVISIT"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISIT")
+  )
 })
 
 ## derive_var_merged_cat: define value for non-matched by groups ----
@@ -176,11 +199,14 @@ test_that("derive_vars_merged_cat: define value for non-matched by groups", {
 
   expected <-
     mutate(adsl,
-           LSTVSCAT = c("POST-BASELINE", "BASELINE", "POST-BASELINE", "MISSING"))
+      LSTVSCAT = c("POST-BASELINE", "BASELINE", "POST-BASELINE", "MISSING")
+    )
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = c("USUBJID"))
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID")
+  )
 })
 
 # derive_var_merged_exist_flag ----
@@ -198,9 +224,11 @@ test_that("derive_vars_merged_exist_flag: merge existence flag", {
     mutate(adsl, VSEVALFL = c("Y", "Y", NA_character_, NA_character_))
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
 })
 
 # derive_var_merged_character ----
@@ -220,9 +248,11 @@ test_that("derive_var_merged_character: merge character variable, no transformat
     mutate(adsl, LASTVIS = c("Week 2", "BASELINE", "Week 4", NA_character_))
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
 })
 
 ## derive_var_merged_character: merge character variable, upper case ----
@@ -243,9 +273,11 @@ test_that("derive_var_merged_character: merge character variable, upper case", {
     mutate(adsl, LASTVIS = c("WEEK 2", "BASELINE", "WEEK 4", "UNKNOWN"))
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
 })
 
 ## derive_var_merged_character: merge character variable, lower case ----
@@ -265,9 +297,11 @@ test_that("derive_var_merged_character: merge character variable, lower case", {
     mutate(adsl, LASTVIS = c("week 2", "baseline", "week 4", NA_character_))
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
 })
 
 ## derive_var_merged_character: merge character variable, title case ----
@@ -287,7 +321,9 @@ test_that("derive_var_merged_character: merge character variable, title case", {
     mutate(adsl, LASTVIS = c("Week 2", "Baseline", "Week 4", NA_character_))
 
 
-  expect_dfs_equal(base = expected,
-                   compare = actual,
-                   keys = "USUBJID")
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = "USUBJID"
+  )
 })
