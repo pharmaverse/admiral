@@ -313,21 +313,12 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-<<<<<<< HEAD
-format_dcsreas <- function(DSDECOD, DSTERM = NULL) {
-  out <- if (is.null(DSTERM)) DSDECOD else DSTERM
-  case_when(
-    !DSDECOD %in% c("COMPLETED", "SCREEN FAILURE") & !is.na(DSDECOD) ~ out,
-    TRUE ~ NA_character_
-  )
-=======
 format_dctreas <- function(dsdecod, dsterm = NULL) {
   if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
     if_else(dsdecod == "OTHER", dsterm, NA_character_)
   }
->>>>>>> origin/devel
 }
 ```
 

@@ -25,13 +25,8 @@ Usually this function can not be used with \verb{\%>\%}.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-<<<<<<< HEAD
-data("dm")
-data("ds")
-=======
 data("admiral_dm")
 data("admiral_ds")
->>>>>>> origin/devel
 
 admiral_dm \%>\%
   derive_var_disposition_status(

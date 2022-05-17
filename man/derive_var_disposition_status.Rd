@@ -36,13 +36,9 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
-<<<<<<< HEAD
-Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(status) \{
-=======
 Default: \code{format_eoxxstt_default()} defined as:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{format_eoxxstt_default <- function(x) \{
->>>>>>> origin/devel
+\if{html}{\out{<div class="sourceCode">}}\preformatted{format_eoxxstt_default <- function(status) \{
   case_when(
     status == "COMPLETED" ~ "COMPLETED",
     status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
@@ -79,13 +75,8 @@ Derive a disposition status from the the relevant records in the disposition dom
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(admiraltest)
-<<<<<<< HEAD
-data("dm")
-data("ds")
-=======
 data("admiral_dm")
 data("admiral_ds")
->>>>>>> origin/devel
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED

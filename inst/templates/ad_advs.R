@@ -23,12 +23,6 @@ vs <- admiral_vs
 
 vs <- convert_blanks_to_na(vs)
 
-# The CDISC Pilot Data contains no SUPPVS data
-# If you have a SUPPVS then uncomment function below
-
-# vs <- derive_vars_suppqual(vs, suppvs) %>%
-
-
 # ---- Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
