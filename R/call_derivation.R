@@ -1,23 +1,23 @@
 #' Call a Single Derivation Multiple Times
 #'
-#' Call a single derivation multiple times with some parameters being fixed across
+#' Call a single derivation multiple times with some parameters/arguments being fixed across
 #' iterations and others varying.
 #'
 #' @param dataset The input dataset
 #' @param derivation The derivation function to call
-#' @param variable_params A `list` of arguments that are different across iterations.
-#'   Each set of arguments must be created using [`params()`].
-#' @param ... Any number of *named* arguments that are fixed across iterations.
-#'   If a parameter is specified both inside `variable_params` and `...` then
+#' @param variable_params A `list` of function arguments that are different across iterations.
+#'   Each set of function arguments must be created using [`params()`].
+#' @param ... Any number of *named* function arguments that stay the same across iterations.
+#'   If a function argument is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss
+#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 #'
 #' @return
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
-#' @keywords user_utility
+#' @keywords user_utility high_order_function
 #'
 #' @export
 #'
@@ -25,14 +25,14 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(ae)
-#' data(adsl)
+#' library(admiraltest)
+#' data(admiral_ae)
+#' data(admiral_adsl)
 #'
 #' adae <-
-#'   select(ae[sample(1:nrow(ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%
+#'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000), ], USUBJID, AESTDTC, AEENDTC) %>%
 #'   derive_vars_merged(
-#'     dataset_add = adsl,
+#'     dataset_add = admiral_adsl,
 #'     new_vars = vars(TRTSDT, TRTEDT),
 #'     by_vars = vars(USUBJID)
 #'   )
@@ -94,11 +94,11 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 
 #' Create a Set of Parameters
 #'
-#' Create a set of variable parameters to be used in an iteration of [`call_derivation()`]
+#' Create a set of variable parameters/function arguments to be used in [`call_derivation()`].
 #'
 #' @param ... One or more named arguments
 #'
-#' @author Thomas Neitmann
+#' @author Thomas Neitmann, Tracey Wang
 #'
 #' @return An object of class `params`
 #'
@@ -106,11 +106,58 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @export
 #'
+#' @seealso [call_derivation()]
+#'
 #' @examples
-#' params(
-#'   fns = list(VSSTRESN ~ mean(., na.rm = TRUE)),
-#'   set_values_to = vars(DTYPE = "AVERAGE")
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiraltest)
+#' data(admiral_ae)
+#' data(admiral_adsl)
+#'
+#' adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000), ] %>%
+#'   select(USUBJID, AESTDTC, AEENDTC) %>%
+#'   derive_vars_merged(
+#'     dataset_add = admiral_adsl,
+#'     new_vars = vars(TRTSDT, TRTEDT),
+#'     by_vars = vars(USUBJID)
+#'   )
+#'
+#' ## In order to derive both `ASTDT` and `AENDT` in `ADAE`, one can use `derive_vars_dt()`
+#' adae %>%
+#'   derive_vars_dt(
+#'     new_vars_prefix = "AST",
+#'     dtc = AESTDTC,
+#'     date_imputation = "first",
+#'     min_dates = vars(TRTSDT),
+#'     max_dates = vars(TRTEDT)
+#'   ) %>%
+#'   derive_vars_dt(
+#'     new_vars_prefix = "AEN",
+#'     dtc = AEENDTC,
+#'     date_imputation = "last",
+#'     min_dates = vars(TRTSDT),
+#'     max_dates = vars(TRTEDT)
+#'   )
+#'
+#' ## While `derive_vars_dt()` can only add one variable at a time, using `call_derivation()`
+#' ## one can add multiple variables in one go.
+#' ## The function arguments which are different from a variable to another (e.g. `new_vars_prefix`,
+#' ## `dtc`, and `date_imputation`) are specified as a list of `params()` in the `variable_params`
+#' ## argument of `call_derivation()`. All other arguments which are common to all variables
+#' ## (e.g. `min_dates` and `max_dates`) are specified outside of `variable_params` (i.e. in `...`).
+#' call_derivation(
+#'   dataset = adae,
+#'   derivation = derive_vars_dt,
+#'   variable_params = list(
+#'     params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
+#'     params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
+#'   ),
+#'   min_dates = vars(TRTSDT),
+#'   max_dates = vars(TRTEDT)
 #' )
+#'
+#' ## The above call using `call_derivation()` is equivalent to the call using `derive_vars_dt()`
+#' ## to derive variables `ASTDT` and `AENDT` separately at the beginning.
 params <- function(...) {
   args <- eval(substitute(alist(...)))
   if (length(args) == 0L) {

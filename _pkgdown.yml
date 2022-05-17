@@ -1,9 +1,9 @@
 template:
+  bootstrap: 5
   params:
     bootswatch: flatly
-    docsearch:
-      api_key: 2d4895759f79e89d6eb1c3b990bca6d8
-      index_name: pharmaverse
+search:
+  exclude: ['news/index.html']
 repo:
   url:
     home: https://github.com/pharmaverse/admiral/
@@ -64,9 +64,14 @@ reference:
 
 - title: Other Keywords
 - subtitle: Timing
-  desc: Function related to timing, e.g., deriving dates, imputing dates, converting dates, deriving duration, ...
+  desc: Function related to timing, e.g. deriving dates, imputing dates, converting dates, deriving duration, ...
   contents:
   - has_keyword('timing')
+
+- subtitle: High Order Functions
+  desc: Functions which call other derivations, e.g. on subset of input dataset or multiple times with varying parameters.
+  contents:
+  - has_keyword('high_order_function')
 
 - subtitle: Source Specifications
   desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`

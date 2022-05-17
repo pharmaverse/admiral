@@ -2,6 +2,9 @@
 
 ## New Features
 
+- Added more detail on the site homepage and Programming Strategy around our manifesto and how
+we design new functions (#954)
+
 - New functions for merging variables (#607):
 
   - `derive_vars_merged()` - Merge Variables from a Dataset to the Input Dataset
@@ -15,8 +18,6 @@
 dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
 `derive_vars_query()` (#606)
 
-
-
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
 - New functions for deriving first or last dates from multiple source datasets (#753):
@@ -24,25 +25,82 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
   - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
   - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
 
+- New function `derive_extreme_records()` for adding the first or last
+observation within each by group to the dataset (#1042)
 
 - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
 values based on user-defined pairing (#944)
 
-- `derive_var_analysis_ratio` - Derives a ratio variable based on user-supplied variables
+- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
 from a BDS dataset, e.g. ADLB. (#943)
 
-## Updates of Existing Functions
+- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
+(#941)
 
+- New function `derive_param_exist_flag()`: Add a new parameter indicating that
+a certain event exists in a dataset. (#1064)
+
+- New high order functions (#701):
+
+  - `restrict_derivation()` - Execute a derivation on a subset of the input dataset
+  - `slice_derivation()` - The input dataset is split into slices (subsets) and
+  for each slice a derivation is called separately. Some or all arguments of the
+  derivation may vary depending on the slice.
+
+## Updates of Existing Functions
+ 
+- Datasets internal to the package have been renamed, e.g. `adsl` has 
+been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
+have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
+vignettes, unit tests and templates (#1108 and #1088)
+
+- When `derive_vars_dtm_to_tm()` was called for variables created by
+`derive_vars_dtm()` the function failed. This bug was fixed (#1097).
+
+- `impute_dtc()` - Fixed imputation bug. A user setting `date_imputation = MID` and 
+`preserve = FALSE` would expect the date `2019---07` to be imputed to `2019-06-30`, 
+but the function was returning `2019-06-15`. Now returns it correctly. This bug fix 
+also addresses the issue in the downstream functions `derive_vars_dt()` and `derive_vars_dtm()`. (#1081)
 
 ## Breaking Changes
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
+- `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
+
+- The `filter` parameter in `derive_var_extreme_flag()` and
+`derive_var_worst_flag()` has been deprecated in favor of
+`restrict_derivation()` (#701).
+
+- The following functions were deprecated in favor of `derive_vars_dy()`
+(#1076):
+
+    - `derive_var_ady()` - Derive Analysis Study Day
+    - `derive_var_aendy()` - Derive Analysis End Relative Day
+    - `derive_var_astdy()` - Derive Analysis Start Relative Day
+
+- The following functions were deprecated in favor of `derive_vars_merged_dtm()`
+(#1076):
+
+    - `derive_var_trtedtm()` - Derive Datetime of Last Exposure to Treatment
+    - `derive_var_trtsdtm()` - Derive Datetime of First Exposure to Treatment
+
+- The `derive_var_disposition_dt()` function was deprecated in favor of
+`derive_vars_merged_dt()` (#1076)
 
 ## Documentation
+
+- Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
+
+- Added example of ASEQ derivation in ADCM to 
+[OCCDS vignette](https://pharmaverse.github.io/admiral/articles/occds.html#aseq)
+(#720)
 
 - Examples have been added for `format_reason_default()`, `format_eoxxstt_default()`, `extend_source_datasets()` and `filter_date_sources()` (#745)
 
 ## Various
+
+-  Naming convention of admiral.xxx packages change to admiralxxx from this point onwards (#968)
+ 
 
 # admiral 0.6.3
 

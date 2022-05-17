@@ -217,3 +217,47 @@ test_that("derive_vars_dy Test7: All dates as --DTM", {
     keys = c("STUDYID", "USUBJID")
   )
 })
+
+# derive_vars_dy Test 8----
+test_that("derive_vars_dy Test8: An error is issued if source variables do not end in DT or DTM", { # nolint
+    datain <- tibble::tribble(
+      ~STUDYID, ~USUBJID, ~TRTSDTW, ~ASTDTW, ~AENDTW,
+      "TEST01", "PAT01", "2014-01-17T16:34:O9", "2014-01-18T13:09:O9", "2014-01-20T08:29:05"
+    )
+
+  expect_error(
+    derive_vars_dy(datain,
+                   reference_date = TRTSDTW,
+                   source_vars = vars(TRTSDTW, ASTDTW, AENDTW)),
+    "source_vars must end in DT or DTM or be explicitly and uniquely named.\nPlease name or rename the following source_vars:\nTRTSDTW, ASTDTW, AENDTW" # nolint
+  )
+})
+
+# derive_vars_dy Test 9: Single named --DT input when ref date is --DTM ----
+test_that("derive_vars_dy Test 9: Single named --DT input when ref date is --DTM", {
+  datain <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18",
+
+  ) %>%
+    mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
+           ASTDT = lubridate::ymd(ASTDT))
+
+  expected_output <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT,  ~ASTDY,
+    "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", 2
+
+  ) %>%
+    mutate(TRTSDTM = lubridate::as_datetime(TRTSDTM),
+           ASTDT = lubridate::ymd(ASTDT))
+
+  actual_output <- derive_vars_dy(datain,
+                                  reference_date = TRTSDTM,
+                                  source_vars = vars(ASTDY = ASTDT))
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    keys = c("STUDYID", "USUBJID")
+  )
+})

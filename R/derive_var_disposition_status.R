@@ -66,18 +66,18 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("dm")
-#' data("ds")
+#' library(admiraltest)
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
 #' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -99,9 +99,9 @@
 #'   )
 #' }
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt1,
@@ -116,13 +116,15 @@ derive_disposition_status <- function(dataset,
                                       filter_ds,
                                       subject_keys = vars(STUDYID, USUBJID)) {
   deprecate_warn("0.6.0", "derive_disposition_status()", "derive_var_disposition_status()")
-  derive_var_disposition_status(dataset = dataset,
-                                dataset_ds = dataset_ds,
-                                new_var = !!enquo(new_var),
-                                status_var = !!enquo(status_var),
-                                format_new_var = format_new_var,
-                                filter_ds = !!enquo(filter_ds),
-                                subject_keys = subject_keys)
+  derive_var_disposition_status(
+    dataset = dataset,
+    dataset_ds = dataset_ds,
+    new_var = !!enquo(new_var),
+    status_var = !!enquo(status_var),
+    format_new_var = format_new_var,
+    filter_ds = !!enquo(filter_ds),
+    subject_keys = subject_keys
+  )
 }
 
 #' Default Format for Disposition Status
@@ -143,13 +145,13 @@ derive_disposition_status <- function(dataset,
 #' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("dm")
-#' data("ds")
+#' library(admiraltest)
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt_default,
@@ -227,18 +229,18 @@ format_eoxxstt_default <- function(x) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data("dm")
-#' data("ds")
+#' library(admiraltest)
+#' data("admiral_dm")
+#' data("admiral_ds")
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED
 #' #- DISCONTINUED when status_var is not COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -260,9 +262,9 @@ format_eoxxstt_default <- function(x) {
 #'   )
 #' }
 #'
-#' dm %>%
+#' admiral_dm %>%
 #'   derive_var_disposition_status(
-#'     dataset_ds = ds,
+#'     dataset_ds = admiral_ds,
 #'     new_var = EOSSTT,
 #'     status_var = DSDECOD,
 #'     format_new_var = format_eoxxstt1,
@@ -270,12 +272,12 @@ format_eoxxstt_default <- function(x) {
 #'   ) %>%
 #'   select(STUDYID, USUBJID, EOSSTT)
 derive_var_disposition_status <- function(dataset,
-                                      dataset_ds,
-                                      new_var,
-                                      status_var,
-                                      format_new_var = format_eoxxstt_default,
-                                      filter_ds,
-                                      subject_keys = vars(STUDYID, USUBJID)) {
+                                          dataset_ds,
+                                          new_var,
+                                          status_var,
+                                          format_new_var = format_eoxxstt_default,
+                                          filter_ds,
+                                          subject_keys = vars(STUDYID, USUBJID)) {
   new_var <- assert_symbol(enquo(new_var))
   status_var <- assert_symbol(enquo(status_var))
   filter_ds <- assert_filter_cond(enquo(filter_ds))
@@ -287,10 +289,12 @@ derive_var_disposition_status <- function(dataset,
 
   # Add the status variable and derive the new dispo status in the input dataset
   dataset %>%
-    derive_vars_merged(dataset_add = dataset_ds,
-                       filter_add = !!filter_ds,
-                       new_vars = vars(!!status_var),
-                       by_vars = subject_keys) %>%
+    derive_vars_merged(
+      dataset_add = dataset_ds,
+      filter_add = !!filter_ds,
+      new_vars = vars(!!status_var),
+      by_vars = subject_keys
+    ) %>%
     mutate(!!new_var := format_new_var(!!status_var)) %>%
     select(-!!status_var)
 }

@@ -21,13 +21,13 @@ Define a function to map the disposition status. To be used as an input for
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("dm")
-data("ds")
+library(admiraltest)
+data("admiral_dm")
+data("admiral_ds")
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt_default,

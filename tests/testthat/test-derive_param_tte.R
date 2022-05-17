@@ -140,8 +140,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     mutate(
       STUDYID = "AB42",
       PARAMCD = "PFS",
-      PARAM = "Progression Free Survival",
-      ADTM = as_iso_dtm(ADTM)
+      PARAM = "Progression Free Survival"
     ) %>%
     left_join(
       select(adsl, USUBJID, STARTDTM = TRTSDTM, STARTDTF = TRTSDTF, STARTTMF = TRTSTMF),
@@ -595,8 +594,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
     mutate(
       STUDYID = "AB42",
       PARAMCD = "TTAE",
-      PARAM = "Time to First Adverse Event",
-      ADTM = as_iso_dtm(ADTM)
+      PARAM = "Time to First Adverse Event"
     ) %>%
     left_join(select(adsl, USUBJID, STARTDTM = TRTSDTM), by = "USUBJID")
 

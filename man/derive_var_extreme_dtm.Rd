@@ -67,11 +67,11 @@ variable is merged to the input dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("dm")
-data("ae")
-data("lb")
-data("adsl")
+library(admiraltest)
+data("admiral_dm")
+data("admiral_ae")
+data("admiral_lb")
+data("admiral_adsl")
 
 # derive last known alive datetime (LSTALVDTM)
 ae_start <- date_source(
@@ -94,11 +94,12 @@ lb_date <- date_source(
 )
 adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    source_datasets = list(adsl = admiral_adsl,
+    ae = admiral_ae, lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDTM)
@@ -149,11 +150,12 @@ adsl_date <- date_source(
   )
 )
 
-dm \%>\%
+admiral_dm \%>\%
   derive_var_extreme_dtm(
     new_var = LSTALVDTM,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = adsl, ae = ae, lb = lb),
+    source_datasets = list(adsl = admiral_adsl,
+    ae = admiral_ae, lb = admiral_lb),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDTM, LALVDOM, LALVSEQ, LALVVAR)

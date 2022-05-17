@@ -76,18 +76,18 @@ Derive a disposition status from the the relevant records in the disposition dom
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("dm")
-data("ds")
+library(admiraltest)
+data("admiral_dm")
+data("admiral_ds")
 
 # Default derivation: EOSSTT =
 #- COMPLETED when status_var = COMPLETED
 #- DISCONTINUED when status_var is not COMPLETED nor NA
 #- ONGOING otherwise
 
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     filter_ds = DSCAT == "DISPOSITION EVENT"
@@ -109,9 +109,9 @@ format_eoxxstt1 <- function(x) {
   )
 }
 
-dm \%>\%
+admiral_dm \%>\%
   derive_disposition_status(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = EOSSTT,
     status_var = DSDECOD,
     format_new_var = format_eoxxstt1,

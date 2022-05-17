@@ -40,8 +40,9 @@
 #' date is not before the first treatment date. Only dates which are in the
 #' range of possible dates of the `dtc` value are considered. The possible dates
 #' are defined by the missing parts of the `dtc` date (see example below). This
-#' ensures that the non-missing parts of the `dtc` date are not changed. For
-#' example
+#' ensures that the non-missing parts of the `dtc` date are not changed.
+#' A date or date-time object is expected.
+#' For example
 #'
 #' ```
 #' impute_dtc(
@@ -64,7 +65,7 @@
 #' A list of dates is expected. It is ensured that the imputed date is not after
 #' any of the specified dates, e.g., that the imputed date is not after the data
 #' cut off date. Only dates which are in the range of possible dates are
-#' considered.
+#' considered. A date or date-time object is expected.
 #'
 #' @param preserve Preserve day if month is missing and day is present
 #'
@@ -202,14 +203,14 @@ impute_dtc <- function(dtc,
 
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
-        n_chr == 4  ~ paste0(dtc, "-", "06", "-", "30"),
+        n_chr == 4 ~ paste0(dtc, "-", "06", "-", "30"),
         TRUE ~ imputed_date)
 
     } else if (date_imputation == "MID" & !preserve) {
 
       imputed_date <- case_when(
-        n_chr == 9  ~ paste0(substr(dtc, 1, 4), "-", mo, "-", d),
-        n_chr == 4  ~ paste0(dtc, "-", "06", "-", "30"),
+        n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", "30"),
+        n_chr == 4 ~ paste0(dtc, "-", "06", "-", "30"),
         TRUE ~ imputed_date)
 
     } else if (date_imputation != "MID" & preserve) {
@@ -421,7 +422,7 @@ convert_dtc_to_dtm <- function(dtc,
       max_dates = max_dates,
       preserve = preserve
     ) %>%
-    as_iso_dtm()
+    ymd_hms()
 }
 
 #' Convert a Date into a Datetime Object

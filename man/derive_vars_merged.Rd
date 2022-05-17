@@ -142,23 +142,24 @@ observation in the input dataset are ignored.
 }
 }
 \examples{
-library(admiral.test)
+library(admiraltest)
 library(dplyr, warn.conflicts = FALSE)
-data("vs")
-data("dm")
+data("admiral_vs")
+data("admiral_dm")
 
 # merging all dm variables to vs
 derive_vars_merged(
-  vs,
-  dataset_add = select(dm, -DOMAIN),
-  by_vars = vars(STUDYID, USUBJID)) \%>\%
-select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
+  admiral_vs,
+  dataset_add = select(admiral_dm, -DOMAIN),
+  by_vars = vars(STUDYID, USUBJID)
+) \%>\%
+  select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 
 # merge last weight to adsl
-data("adsl")
+data("admiral_adsl")
 derive_vars_merged(
-  adsl,
-  dataset_add = vs,
+  admiral_adsl,
+  dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC),
   mode = "last",
@@ -166,7 +167,7 @@ derive_vars_merged(
   filter_add = VSTESTCD == "WEIGHT",
   match_flag = vsdatafl
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+  select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 }
 \author{
 Stefan Bundfuss
