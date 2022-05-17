@@ -1,5 +1,6 @@
 library(admiraltest)
-data(dm)
+data(admiral_dm)
+dm <- admiral_dm
 
 test_that("creating temporary variables works", {
   expect_identical(get_new_tmp_var(dm), sym("tmp_var_1"))
