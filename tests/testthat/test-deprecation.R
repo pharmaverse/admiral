@@ -27,13 +27,15 @@ test_that("a warning is issued when specifying `lstalvdt_source(dataset = )", {
 test_that("a warning is issued when using `derive_var_lstalvdt()`", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
-    "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
-    "STUDY01",  "2", NA, "2020-06",
-    "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
+    "STUDY01", "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
+    "STUDY01", "2", NA, "2020-06",
+    "STUDY01", "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
   )
 
-  adsl_trtdate <- lstalvdt_source(dataset_name = "adsl",
-                                  date = TRTEDTM)
+  adsl_trtdate <- lstalvdt_source(
+    dataset_name = "adsl",
+    date = TRTEDTM
+  )
 
   adsl_dthdate <- lstalvdt_source(
     dataset_name = "adsl",
@@ -74,13 +76,13 @@ test_that("a warning is issued when using `derive_var_basec()", {
 
 test_that("a warning is issued when using `derive_baseline()", {
   dataset <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~AVALC, ~AVISIT,    ~ABLFL,
-    "TEST01", "PAT01",  "PARAM01", 10.12,  NA,     "Baseline", "Y",
-    "TEST01", "PAT01",  "PARAM01",  9.7,   NA,     "Day 7",    "N",
-    "TEST01", "PAT01",  "PARAM01", 15.01,  NA,     "Day 14",   "N",
-    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Baseline", "Y",
-    "TEST01", "PAT01",  "PARAM02", NA,     NA,     "Day 7",    "N",
-    "TEST01", "PAT01",  "PARAM02",  8.35,  NA,     "Day 14",   "N"
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~AVISIT, ~ABLFL,
+    "TEST01", "PAT01", "PARAM01", 10.12, NA, "Baseline", "Y",
+    "TEST01", "PAT01", "PARAM01", 9.7, NA, "Day 7", "N",
+    "TEST01", "PAT01", "PARAM01", 15.01, NA, "Day 14", "N",
+    "TEST01", "PAT01", "PARAM02", 8.35, NA, "Baseline", "Y",
+    "TEST01", "PAT01", "PARAM02", NA, NA, "Day 7", "N",
+    "TEST01", "PAT01", "PARAM02", 8.35, NA, "Day 14", "N"
   )
 
   expect_warning(
@@ -94,40 +96,6 @@ test_that("a warning is issued when using `derive_baseline()", {
     fixed = TRUE
   )
 })
-
-
-test_that("a warning is issued when using `derive_disposition_dt()`", {
-  adsl <- tibble::tribble(
-    ~STUDYID, ~USUBJID,
-    "TEST01", "PAT01",
-    "TEST01", "PAT02"
-  )
-
-  ds <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
-    "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
-    "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
-    "TEST01", "PAT01", "DISPOSITION EVENT", "ADVERSE EVENT", "2021-12-01",
-    "TEST01", "PAT01", "OTHER EVENT", "DEATH", "2022-02-01",
-    "TEST01", "PAT02", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-02",
-    "TEST01", "PAT02", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
-    "TEST01", "PAT02", "DISPOSITION EVENT", "COMPLETED", "2021-12-01",
-    "TEST01", "PAT02", "OTHER EVENT", "DEATH", "2022-04"
-  )
-
-  expect_warning(
-    adsl %>%
-      derive_disposition_dt(
-        dataset_ds = ds,
-        new_var = RFICDT,
-        dtc = DSSTDTC,
-        filter = DSCAT == "PROTOCOL MILESTONE" & DSDECOD == "INFORMED CONSENT OBTAINED",
-        date_imputation = NULL),
-    "deprecated",
-    fixed = TRUE
-  )
-})
-
 
 test_that("a warning is issued when using `derive_disposition_status()`", {
   dm <- tibble::tribble(
@@ -153,7 +121,8 @@ test_that("a warning is issued when using `derive_disposition_status()`", {
     "TEST01", "PAT03", "DISPOSITION EVENT", "PROGRESSIVE DISEASE", "2021-05-01",
     "TEST01", "PAT03", "OTHER EVENT", "DEATH", "2022-04",
     "TEST01", "PAT04", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-02",
-    "TEST01", "PAT04", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11")
+    "TEST01", "PAT04", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11"
+  )
 
   expect_warning(
     derive_disposition_status(
@@ -225,14 +194,14 @@ test_that("a warning is issued when using `derive_last_dose()`", {
   )
 
   input_ex <- tibble::tribble(
-    ~STUDYID,   ~USUBJID,   ~EXSTDTC,     ~EXENDTC,    ~EXSEQ, ~EXDOSE, ~EXTRT,
-    "my_study", "subject1", "2020-01-01", "2020-01-01", 1,     10,      "treatment",
-    "my_study", "subject1", "2020-08-29", "2020-08-29", 2,     10,      "treatment",
-    "my_study", "subject1", "2020-09-02", "2020-09-02", 3,     10,      "treatment",
-    "my_study", "subject1", "2020-10-20", "2020-10-20", 4,     10,      "treatment",
-    "my_study", "subject2", "2019-05-25", "2019-05-25", 1,      0,      "placebo",
-    "my_study", "subject2", "2020-01-20", "2020-01-20", 2,      0,      "placebo",
-    "my_study", "subject3", "2020-03-15", "2020-03-15", 1,     10,      "treatment"
+    ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+    "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
+    "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
+    "my_study", "subject1", "2020-09-02", "2020-09-02", 3, 10, "treatment",
+    "my_study", "subject1", "2020-10-20", "2020-10-20", 4, 10, "treatment",
+    "my_study", "subject2", "2019-05-25", "2019-05-25", 1, 0, "placebo",
+    "my_study", "subject2", "2020-01-20", "2020-01-20", 2, 0, "placebo",
+    "my_study", "subject3", "2020-03-15", "2020-03-15", 1, 10, "treatment"
   ) %>%
     mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
@@ -289,7 +258,8 @@ test_that("a warning is issued when using `derive_disposition_reason()`", {
       dataset_ds = ds,
       new_var = DCSREAS,
       reason_var = DSDECOD,
-      filter_ds = DSCAT == "DISPOSITION EVENT"),
+      filter_ds = DSCAT == "DISPOSITION EVENT"
+    ),
     "deprecated",
     fixed = TRUE
   )
@@ -297,28 +267,28 @@ test_that("a warning is issued when using `derive_disposition_reason()`", {
 
 test_that("a warning is issued when using `derive_params_exposure()", {
   dataset <- tibble::tribble(
-  ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
-  "01-701-1015", "BASELINE", "DOSE",   80,    NA,     "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12",  "DOSE",   65,    NA,     "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24",  "DOSE",   65,    NA,     "2020-12-17", "2021-06-02",
-  "01-701-1015", "BASELINE", "ADJ",    NA,    NA,     "2020-07-01", "2020-07-14",
-  "01-701-1015", "WEEK 2",   "ADJ",    NA,    "Y",    "2020-07-15", "2020-09-23",
-  "01-701-1015", "WEEK 12",  "ADJ",    NA,    "Y",    "2020-09-24", "2020-12-16",
-  "01-701-1015", "WEEK 24",  "ADJ",    NA,    NA,     "2020-12-17", "2021-06-02",
-  "01-701-1281", "BASELINE", "DOSE",   80,    NA,     "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12",  "DOSE",   82,    NA,     "2020-10-02", "2020-12-01",
-  "01-701-1281", "BASELINE", "ADJ",    NA,    NA,     "2020-07-03", "2020-07-18",
-  "01-701-1281", "WEEK 2",   "ADJ",    NA,    NA,     "2020-07-19", "2020-10-01",
-  "01-701-1281", "WEEK 12",  "ADJ",    NA,    NA,     "2020-10-02", "2020-12-01"
+    ~USUBJID,      ~VISIT,     ~PARAMCD, ~AVAL, ~AVALC, ~EXSTDTC,     ~EXENDTC,
+    "01-701-1015", "BASELINE", "DOSE",   80,    NA,     "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12",  "DOSE",   65,    NA,     "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24",  "DOSE",   65,    NA,     "2020-12-17", "2021-06-02",
+    "01-701-1015", "BASELINE", "ADJ",    NA,    NA,     "2020-07-01", "2020-07-14",
+    "01-701-1015", "WEEK 2",   "ADJ",    NA,    "Y",    "2020-07-15", "2020-09-23",
+    "01-701-1015", "WEEK 12",  "ADJ",    NA,    "Y",    "2020-09-24", "2020-12-16",
+    "01-701-1015", "WEEK 24",  "ADJ",    NA,    NA,     "2020-12-17", "2021-06-02",
+    "01-701-1281", "BASELINE", "DOSE",   80,    NA,     "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2",   "DOSE",   80,    NA,     "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12",  "DOSE",   82,    NA,     "2020-10-02", "2020-12-01",
+    "01-701-1281", "BASELINE", "ADJ",    NA,    NA,     "2020-07-03", "2020-07-18",
+    "01-701-1281", "WEEK 2",   "ADJ",    NA,    NA,     "2020-07-19", "2020-10-01",
+    "01-701-1281", "WEEK 12",  "ADJ",    NA,    NA,     "2020-10-02", "2020-12-01"
   ) %>%
-  mutate(
-    ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
-    ASTDT = date(ASTDTM),
-    AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
-    AENDT = date(AENDTM)
-  )
+    mutate(
+      ASTDTM = ymd_hms(paste(EXSTDTC, "T00:00:00")),
+      ASTDT = date(ASTDTM),
+      AENDTM = ymd_hms(paste(EXENDTC, "T00:00:00")),
+      AENDT = date(AENDTM)
+    )
 
   expect_warning(
     derive_params_exposure(
@@ -329,7 +299,6 @@ test_that("a warning is issued when using `derive_params_exposure()", {
       summary_fun = function(x) sum(x, na.rm = TRUE),
       filter = NULL,
       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
-
     ),
     "deprecated",
     fixed = TRUE
@@ -360,25 +329,21 @@ test_that("a warning is issued when using `derive_worst_flag()`", {
     "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,
     "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,
     "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,
-
     "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
     "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,
     "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,
     "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,
     "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,
-
     "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
     "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
     "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
     "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"), 10.0,
     "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"), 12.0,
-
     "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
     "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"), 14.0,
     "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"), 15.0,
     "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"), 10.0,
     "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"), 12.0,
-
     "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
     "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"), 14.0,
     "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"), 15.0,
@@ -428,41 +393,36 @@ test_that("a warning is issued when using `derive_extreme_flag()` with `filter` 
     ),
     fixed = TRUE
   )
-}
-)
+})
 
 test_that("a warning is issued when using `derive_worst_flag()` with `filter` argument", {
   input_worst_flag <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01", "PARAM02", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
   )
 
   expect_warning(
@@ -484,8 +444,7 @@ test_that("a warning is issued when using `derive_worst_flag()` with `filter` ar
     ),
     fixed = TRUE
   )
-}
-)
+})
 
 test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
   input <- tibble::tribble(
@@ -513,41 +472,36 @@ test_that("a warning is issued when using `derive_var_extreme_flag()` with `filt
     ),
     fixed = TRUE
   )
-}
-)
+})
 
 test_that("a warning is issued when using `derive_var_worst_flag()` with `filter` argument", {
   input_worst_flag <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-    "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
-    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-    "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-    "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT01", "PARAM02", "WEEK 2", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+    "TEST01", "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
+    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-23"), 15.0,
+    "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-27"), 10.0,
+    "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
   )
 
   expect_warning(
@@ -569,5 +523,150 @@ test_that("a warning is issued when using `derive_var_worst_flag()` with `filter
     ),
     fixed = TRUE
   )
-}
-)
+})
+
+test_that("derive_var_ady() Test 1: A warning is issued when using `derive_var_ady()`", {
+  input <- tibble::tribble(
+    ~TRTSDT, ~ADT,
+    ymd("2020-01-01"), ymd("2020-02-24"),
+    ymd("2020-01-01"), ymd("2020-01-01"),
+    ymd("2020-02-24"), ymd("2020-01-01")
+  )
+
+  expect_warning(
+    derive_var_ady(input),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("derive_var_aendy Test 1: A warning is issued when using `derive_var_aendy()`", {
+  input <- tibble::tribble(
+    ~TRTSDT, ~AENDT,
+    ymd("2020-01-01"), ymd("2020-02-24"),
+    ymd("2020-01-01"), ymd("2020-01-01"),
+    ymd("2020-02-24"), ymd("2020-01-01")
+  )
+
+  expect_warning(
+    derive_var_aendy(input),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_astdy()`", {
+  input <- tibble::tribble(
+    ~TRTSDT, ~ASTDT,
+    ymd("2020-01-01"), ymd("2020-02-24"),
+    ymd("2020-01-01"), ymd("2020-01-01"),
+    ymd("2020-02-24"), ymd("2020-01-01")
+  )
+
+  expect_warning(
+    derive_var_astdy(input),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var_trtedtm()`", {
+  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
+  ex <- tibble::tribble(
+    ~USUBJID, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+    1L, "2020-01-01", 1, 12, "ACTIVE",
+    1L, "2020-02-03", 2, 9, "ACTIVE",
+    2L, "2020-01-02", 1, 0, "PLACEBO",
+    3L, "2020-03-13", 1, 14, "ACTIVE",
+    3L, "2020-03-21", 2, 0, "ACTIVE"
+  )
+
+  expect_warning(derive_var_trtedtm(
+    adsl,
+    dataset_ex = ex,
+    subject_keys = vars(USUBJID)
+  ),
+  "deprecated",
+  fixed = TRUE
+  )
+})
+
+test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var_trtsdtm()`", {
+  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
+  ex <- tibble::tribble(
+    ~USUBJID, ~EXSTDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+    1L, "2020-01-01", 1, 12, "ACTIVE",
+    1L, "2020-02-03", 2, 9, "ACTIVE",
+    2L, "2020-01-02", 1, 0, "PLACEBO",
+    3L, "2020-03-13", 1, 14, "ACTIVE",
+    3L, "2020-03-21", 2, 0, "ACTIVE"
+  )
+
+  expect_warning(derive_var_trtsdtm(
+    adsl,
+    dataset_ex = ex,
+    subject_keys = vars(USUBJID)
+  ),
+  "deprecated",
+  fixed = TRUE
+  )
+})
+
+test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", { # nolint
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID,
+    "TEST01", "PAT01",
+    "TEST01", "PAT02"
+  )
+
+  ds <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
+    "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
+    "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT01", "DISPOSITION EVENT", "ADVERSE EVENT", "2021-12-01",
+    "TEST01", "PAT01", "OTHER EVENT", "DEATH", "2022-02-01",
+    "TEST01", "PAT02", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-02",
+    "TEST01", "PAT02", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
+    "TEST01", "PAT02", "DISPOSITION EVENT", "COMPLETED", "2021-12-01",
+    "TEST01", "PAT02", "OTHER EVENT", "DEATH", "2022-04"
+  )
+
+  expect_warning(
+    derive_var_disposition_dt(
+      adsl,
+      dataset_ds = ds,
+      new_var = RFICDT,
+      dtc = DSSTDTC,
+      filter = DSCAT == "PROTOCOL MILESTONE" &
+        DSDECOD == "INFORMED CONSENT OBTAINED",
+      date_imputation = NULL
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,               ~ASTTMF, # nolint
+    "TEST01", "PAT01",  "2012-02-25 23:00:00", "2012-03-28 19:00:00", "2012-05-25 23:00:00", "",
+    "TEST01", "PAT01",  "",                    "2012-02-28 19:00:00", "",                    "",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2013-02-25 19:00:00", "2014-02-25 19:00:00", "",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
+    "TEST01", "PAT01",  "2017-02-25 23:00:00", "2017-01-25 14:00:00", "2018-04-29 14:00:00", "",
+  ) %>% mutate(
+    TRTSDTM = lubridate::as_datetime(TRTSDTM),
+    ASTDTM = lubridate::as_datetime(ASTDTM),
+    AENDTM = lubridate::as_datetime(AENDTM)
+  )
+
+  expect_warning(
+    derive_var_atirel(
+      dataset = input,
+      flag_var = ASTTMF,
+      new_var = ATIREL
+    ),
+    "deprecated",
+    fixed = TRUE
+  )
+})

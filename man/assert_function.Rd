@@ -35,6 +35,7 @@ example_fun <- function(fun) {
 example_fun(mean)
 
 try(example_fun(1))
+
 try(example_fun(sum))
 }
 \author{

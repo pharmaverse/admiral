@@ -113,7 +113,6 @@ filter_date_sources(
   subject_keys = vars(STUDYID, USUBJID),
   mode = "first"
 )
-
 }
 \author{
 Stefan Bundfuss

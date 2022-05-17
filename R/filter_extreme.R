@@ -34,7 +34,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"none"`
+#'   *Default:* `"warning"`
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
@@ -47,7 +47,7 @@
 #'
 #' @return A dataset containing the first or last observation of each by group
 #'
-#' @keywords adam
+#' @keywords adam user_utility
 #'
 #' @export
 #'
