@@ -461,7 +461,7 @@ contains_vars <- function(arg) {
 get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
   assert_data_frame(dataset)
   assert_character_scalar(prefix)
-  if (!str_detect(prefix,"^tmp_")) {
+  if (!str_detect(prefix, "^tmp_")) {
     abort("`prefix` must start with 'tmp_'")
   }
 
