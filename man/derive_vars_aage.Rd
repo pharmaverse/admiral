@@ -21,11 +21,17 @@ expected.}
 
 A date or date-time object is expected.
 
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character
+vector to a date object.
+
 Default: \code{BRTHDT}}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
+
+Refer to \code{derive_var_dt()} to impute and derive a date from a date character
+vector to a date object.
 
 Default: \code{RANDDT}}
 

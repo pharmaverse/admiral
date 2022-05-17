@@ -5,7 +5,6 @@
 \alias{reexports}
 \alias{vars}
 \alias{desc}
-\alias{exprs}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{

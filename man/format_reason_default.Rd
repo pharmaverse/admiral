@@ -20,27 +20,27 @@ Define a function to map the disposition reason, to be used as a parameter in
 \code{derive_vars_disposition_reason()}.
 }
 \details{
-\code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not
-'COMPLETED' nor \code{NA}. \code{format_reason_default(DSDECOD, DSTERM)} returns
-\code{DSTERM} when \code{DSDECOD} is not 'COMPLETED' nor \code{NA}.
+\code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not \code{'COMPLETED'} nor \code{NA}.
+\cr\code{format_reason_default(DSDECOD, DSTERM)} returns \code{DSTERM} when \code{DSDECOD} is
+equal to \code{'OTHER'}.
+\cr Usually this function can not be used with \verb{\%>\%}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("dm")
-data("ds")
+library(admiraltest)
+data("admiral_dm")
+data("admiral_ds")
 
 # Derive DCSREAS using format_reason_default
-dm \%>\%
+admiral_dm \%>\%
   derive_vars_disposition_reason(
-    dataset_ds = ds,
+    dataset_ds = admiral_ds,
     new_var = DCSREAS,
     reason_var = DSDECOD,
     format_new_vars = format_reason_default,
     filter_ds = DSCAT == "DISPOSITION EVENT"
   ) \%>\%
   select(STUDYID, USUBJID, DCSREAS)
-
 }
 \seealso{
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
