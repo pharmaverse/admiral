@@ -105,14 +105,11 @@ advs <- advs %>%
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
-<<<<<<< HEAD
 
   # Derive new parameters based on existing records. Note that, for the following
   # three `derive_param_*()` functions, only the variables specified in `by_vars` will
   # be populated in the newly created records.
-=======
-  # Derive new parameters based on existing records.
->>>>>>> devel
+
   # Derive Mean Arterial Pressure
   derive_param_map(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
