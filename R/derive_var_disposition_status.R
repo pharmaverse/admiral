@@ -104,7 +104,6 @@ format_eoxxstt_default <- function(status) {
 #' library(admiraltest)
 #' data("admiral_dm")
 #' data("admiral_ds")
-
 #'
 #' # Default derivation: EOSSTT =
 #' #- COMPLETED when status_var = COMPLETED

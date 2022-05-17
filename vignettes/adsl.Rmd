@@ -658,18 +658,18 @@ However for example if
 the user defined function(s) would be like:
 
 ```{r eval=TRUE}
-format_agegr2 <- function(AGE) {
+format_agegr2 <- function(var_input) {
   case_when(
-    !is.na(AGE) & AGE < 65 ~ "< 65",
-    AGE >= 65 ~ ">= 65",
+    !is.na(var_input) & var_input < 65 ~ "< 65",
+    var_input >= 65 ~ ">= 65",
     TRUE ~ NA_character_
   )
 }
 
-format_region1 <- function(COUNTRY) {
+format_region1 <- function(var_input) {
   case_when(
-    COUNTRY %in% c("CAN", "USA") ~ "North America",
-    !is.na(COUNTRY) ~ "Rest of the World",
+    var_input %in% c("CAN", "USA") ~ "North America",
+    !is.na(var_input) ~ "Rest of the World",
     TRUE ~ "Missing"
   )
 }
