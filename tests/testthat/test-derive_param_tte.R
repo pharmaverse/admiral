@@ -30,8 +30,8 @@ test_that("new observations with analysis date are derived correctly", {
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
-    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL", "DTHDT",
-    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL", "LSTALVDT"
+    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
+    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -136,7 +136,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
     "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
   ) %>%
-  # nolint end
+    # nolint end
     mutate(
       STUDYID = "AB42",
       PARAMCD = "PFS",
@@ -280,7 +280,7 @@ test_that("by_vars parameter works correctly", {
     "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
   ) %>%
-  # nolint end
+    # nolint end
     mutate(
       STUDYID = "AB42",
       PARCAT1 = "TTAE",
