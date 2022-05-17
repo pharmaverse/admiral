@@ -635,7 +635,6 @@ compute_tmf <- function(dtc,
 #' @export
 #'
 #' @examples
-#' TEST COMMENT
 #' library(lubridate)
 #'
 #' mhdt <- tibble::tribble(
