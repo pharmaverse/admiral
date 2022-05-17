@@ -77,6 +77,22 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
 
+- The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (#1056):
+
+  - `derive_agegr_ema()`
+  - `derive_agegr_fda()`
+  - `derive_disposition_dt()`
+  - `derive_disposition_status()`
+  - `derive_extreme_flag()`
+  - `derive_worst_flag()`
+  - `derive_obs_number()`
+  - `derive_disposition_reason()`
+  - `derive_var_basec()`
+  - `derive_baseline()` 
+  - `derive_params_exposure()` 
+  - `derive_last_dose()`
+  - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
+
 - The following functions were deprecated in favor of `derive_vars_dy()`
 (#1076):
 
