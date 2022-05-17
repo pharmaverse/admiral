@@ -96,24 +96,24 @@ data(admiral_ae)
 data(ex_single)
 
 admiral_ae \%>\%
-   head(100) \%>\%
-   derive_var_last_dose_grp(
-   head(ex_single, 100),
-   filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-   nchar(EXENDTC) >= 10,
-   by_vars = vars(STUDYID, USUBJID),
-   dose_date = EXSTDTC,
-   new_var = LDGRP,
-   grp_brks = c(0, 20, 40, 60),
-   grp_lbls = c("Low", "Medium", "High"),
-   include_lowest = TRUE,
-   right = TRUE,
-   dose_var = EXDOSE,
-   analysis_date = AESTDTC,
-   single_dose_condition = (EXSTDTC == EXENDTC),
-   traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
-   ) \%>\%
-   select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
+  head(100) \%>\%
+  derive_var_last_dose_grp(
+    head(ex_single, 100),
+    filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
+      nchar(EXENDTC) >= 10,
+    by_vars = vars(STUDYID, USUBJID),
+    dose_date = EXSTDTC,
+    new_var = LDGRP,
+    grp_brks = c(0, 20, 40, 60),
+    grp_lbls = c("Low", "Medium", "High"),
+    include_lowest = TRUE,
+    right = TRUE,
+    dose_var = EXDOSE,
+    analysis_date = AESTDTC,
+    single_dose_condition = (EXSTDTC == EXENDTC),
+    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+  ) \%>\%
+  select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=cut]{cut()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}

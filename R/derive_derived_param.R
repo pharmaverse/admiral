@@ -41,19 +41,18 @@
 #'
 #' @param constant_parameters Required constant parameter codes
 #'
-#'   It is expected that all parameter codes (`PARAMCD`) which are required to
-#'   derive the new parameter are specified for this parameter or the
-#'   `parameters` parameter.
+#'   It is expected that all the parameter codes (`PARAMCD`) which are required
+#'   to derive the new parameter and are measured only once are specified here.
+#'   For example if BMI should be derived and height is measured only once while
+#'   weight is measured at each visit. Height could be specified in the
+#'   `constant_parameters` parameter. (Refer to Example 2)
 #'
 #'   *Permitted Values:* A character vector of `PARAMCD` values
 #'
 #' @param constant_by_vars By variables for constant parameters
 #'
-#'   The constant parameters are merged to the other parameters using the
-#'   specified variables. This is useful if some parameters were measured only
-#'   once. For example if BMI should be derived and height is measured only once
-#'   while weight is measured at each visit. Height could be specified for the
-#'   constant parameters.
+#'   The constant parameters (parameters that are measured only once) are merged
+#'   to the other parameters using the specified variables. (Refer to Example 2)
 #'
 #'   *Permitted Values:* list of variables
 #'
@@ -92,7 +91,7 @@
 #' @export
 #'
 #' @examples
-#' # derive MAP
+#' # Example 1: Derive MAP
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -117,7 +116,7 @@
 #'   )
 #' )
 #'
-#' # derive BMI where height is measured only once
+#' # Example 2: Derive BMI where height is measured only once
 #' advs <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",

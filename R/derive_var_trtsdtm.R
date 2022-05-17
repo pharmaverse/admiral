@@ -1,7 +1,9 @@
 #' Derive Datetime of First Exposure to Treatment
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_merged_dtm()` instead.
 #'
 #' Derives datetime of first exposure to treatment (`TRTSDTM`)
 #'
@@ -40,15 +42,6 @@
 #'
 #' @keywords adsl timing derivation
 #'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
-#' data("admiral_ex")
-#' data("admiral_dm")
-#'
-#' admiral_dm %>%
-#'   derive_var_trtsdtm(dataset_ex = admiral_ex) %>%
-#'   select(USUBJID, TRTSDTM)
 derive_var_trtsdtm <- function(dataset,
                                dataset_ex,
                                filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10, # nolint
@@ -56,16 +49,19 @@ derive_var_trtsdtm <- function(dataset,
   assert_data_frame(dataset, subject_keys)
   assert_data_frame(dataset_ex, required_vars = quo_c(subject_keys, vars(EXSTDTC, EXSEQ)))
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
+  deprecate_warn("0.7.0", "derive_var_trtsdtm()", "derive_vars_merged_dtm()")
 
-  derive_vars_merged_dtm(dataset,
-                         dataset_add = dataset_ex,
-                         filter_add = !!filter_ex,
-                         new_vars_prefix = "TRTS",
-                         dtc = EXSTDTC,
-                         date_imputation = "first",
-                         time_imputation = "first",
-                         flag_imputation = "none",
-                         order = vars(TRTSDTM, EXSEQ),
-                         mode = "first",
-                         by_vars = subject_keys)
+  derive_vars_merged_dtm(
+    dataset,
+    dataset_add = dataset_ex,
+    filter_add = !!filter_ex,
+    new_vars_prefix = "TRTS",
+    dtc = EXSTDTC,
+    date_imputation = "first",
+    time_imputation = "first",
+    flag_imputation = "none",
+    order = vars(TRTSDTM, EXSEQ),
+    mode = "first",
+    by_vars = subject_keys
+  )
 }
