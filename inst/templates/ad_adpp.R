@@ -70,8 +70,6 @@ format_avalcat1n <- function(param, aval) {
   )
 }
 
-
-
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
@@ -116,8 +114,8 @@ adpp <- adpp %>%
 adpp <- adpp %>%
   # Derive Timing
   mutate(
-    VISIT = "", # /!\ To remove,
-    VISITNUM = NA, # /!\ To remove,
+    VISIT = "", # /!\ To remove
+    VISITNUM = NA, # /!\ To remove
     AVISIT = case_when(
       str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
