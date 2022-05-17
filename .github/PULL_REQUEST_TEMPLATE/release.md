@@ -15,6 +15,7 @@ Milestone:
 - [ ] Ensure CMD Checks are passing on Readme
 - [ ] GitHub actions on this PR are all passing
 - [ ] Draft GitHub release created using automatic template and updated with additional details. Remember to click "release" after PR is merged.
+- [ ] Prepare and Post announcements for Linked-In and Slack Channels for Release
 
 # Clean up Checklist
 <!--- Fill out the following Clean up checklist -->
