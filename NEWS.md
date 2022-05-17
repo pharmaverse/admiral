@@ -50,6 +50,10 @@ first disease progression. (#1023)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
   - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
+- `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
+
 ## Updates of Existing Functions
  
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
@@ -73,6 +77,22 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
+
+- The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (#1056):
+
+  - `derive_agegr_ema()`
+  - `derive_agegr_fda()`
+  - `derive_disposition_dt()`
+  - `derive_disposition_status()`
+  - `derive_extreme_flag()`
+  - `derive_worst_flag()`
+  - `derive_obs_number()`
+  - `derive_disposition_reason()`
+  - `derive_var_basec()`
+  - `derive_baseline()` 
+  - `derive_params_exposure()` 
+  - `derive_last_dose()`
+  - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
 
 - The following functions were deprecated in favor of `derive_vars_dy()`
 (#1076):
