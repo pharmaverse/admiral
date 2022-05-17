@@ -30,18 +30,6 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
 
-- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
-values based on user-defined pairing (#944)
-
-- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
-from a BDS dataset, e.g. ADLB. (#943)
-
-- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
-(#941)
-
-- New function `derive_param_first_event()`: Add a new parameter for the first
-event occurring in a dataset. (#1063)
-
 - New function `derive_param_exist_flag()`: Add a new parameter indicating that
 a certain event exists in a dataset. (#1064)
 
@@ -51,6 +39,17 @@ a certain event exists in a dataset. (#1064)
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
+  
+### ADLB
+
+  - New ADLB template script available, specific ADLB functions developed and
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+
+  - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
+
+  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
+
+  - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
 - `filter_relative()` - Selects observations before or after the observation
 where a specified condition is fulfilled. For example, all observations up to
@@ -79,6 +78,22 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
+
+- The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (#1056):
+
+  - `derive_agegr_ema()`
+  - `derive_agegr_fda()`
+  - `derive_disposition_dt()`
+  - `derive_disposition_status()`
+  - `derive_extreme_flag()`
+  - `derive_worst_flag()`
+  - `derive_obs_number()`
+  - `derive_disposition_reason()`
+  - `derive_var_basec()`
+  - `derive_baseline()` 
+  - `derive_params_exposure()` 
+  - `derive_last_dose()`
+  - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
 
 - The following functions were deprecated in favor of `derive_vars_dy()`
 (#1076):

@@ -9,8 +9,7 @@ lstalvdt_source(
   filter = NULL,
   date,
   date_imputation = NULL,
-  traceability_vars = NULL,
-  dataset = deprecated()
+  traceability_vars = NULL
 )
 }
 \arguments{
@@ -28,8 +27,6 @@ See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, or \code{NA}.}
-
-\item{dataset}{Deprecated, please use \code{dataset_name} instead.}
 }
 \value{
 An object of class \code{lstalvdt_source}.
