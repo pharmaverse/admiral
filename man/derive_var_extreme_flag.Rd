@@ -94,27 +94,27 @@ admiral_vs \%>\%
 # Baseline (ABLFL) examples:
 
 input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL, ~DTYPE,
-  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0, NA,
-  "TEST01", "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT02", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01", "PARAM02", "WEEK 2", as.Date("2021-04-30"), 12.0, NA,
-  "TEST01", "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-27"), 10.0, NA,
-  "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
+  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
+  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
 )
 
 # Last observation
