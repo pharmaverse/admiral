@@ -101,7 +101,7 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    ) %>%
+#'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
@@ -127,12 +127,12 @@
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
-                                   by_vars,
-                                   input_code,
-                                   analysis_var,
-                                   summary_fun,
-                                   filter = NULL,
-                                   set_values_to = NULL) {
+                                  by_vars,
+                                  input_code,
+                                  analysis_var,
+                                  summary_fun,
+                                  filter = NULL,
+                                  set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
 
@@ -199,8 +199,10 @@ derive_param_exposure <- function(dataset,
       ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
-      mutate(ASTDT = coalesce(ASTDT, temp_start),
-             AENDT = coalesce(AENDT, temp_end)) %>%
+      mutate(
+        ASTDT = coalesce(ASTDT, temp_start),
+        AENDT = coalesce(AENDT, temp_end)
+      ) %>%
       select(-starts_with("temp_"))
   }
 
@@ -212,43 +214,4 @@ derive_param_exposure <- function(dataset,
   }
 
   all_data
-}
-
-#' Add an Aggregated Parameter and Derive the Associated Start and End Dates
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use [derive_param_exposure()] instead.
-#'
-#' @inheritParams derive_param_exposure
-#'
-#' @return
-#' The input dataset with a new record added for each group (with respect to the
-#' variables specified for the `by_vars` parameter).
-#'
-#' @export
-#'
-#' @seealso [derive_param_exposure()]
-#'
-#' @author Samia Kabi
-#'
-#' @keywords derivation bds adex
-derive_params_exposure <- function(dataset,
-                                   by_vars,
-                                   input_code,
-                                   analysis_var,
-                                   summary_fun,
-                                   filter = NULL,
-                                   set_values_to = NULL) {
-  deprecate_warn("0.6.0", "derive_params_exposure()", "derive_param_exposure()")
-  derive_param_exposure(
-    dataset,
-    by_vars = by_vars,
-    input_code = input_code,
-    analysis_var = !!enquo(analysis_var),
-    summary_fun = summary_fun,
-    filter = !!enquo(filter),
-    set_values_to = set_values_to
-  )
 }

@@ -97,7 +97,7 @@ create_single_dose_dataset(data)
 # Example with custom lookup
 
 custom_lookup <- tibble::tribble(
-  ~Value,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+  ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
   "Q30MIN", (1 / 30), "MINUTE", 1,
   "Q90MIN", (1 / 90), "MINUTE", 1
 )
@@ -109,10 +109,11 @@ data <- tibble::tribble(
 )
 
 create_single_dose_dataset(data,
-                           lookup_table = custom_lookup,
-                           lookup_column = Value,
-                           start_date = ASTDTM,
-                           end_date = AENDTM)
+  lookup_table = custom_lookup,
+  lookup_column = Value,
+  start_date = ASTDTM,
+  end_date = AENDTM
+)
 }
 \author{
 Michael Thorpe, Andrew Smith
