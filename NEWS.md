@@ -45,7 +45,8 @@ a certain event exists in a dataset. (#1064)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
 
-- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
+
+  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
 
   - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
