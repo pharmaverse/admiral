@@ -17,11 +17,15 @@ Calls a function provided by the user and adds the function call to the error
 message if the call fails.
 }
 \examples{
-call_user_fun(compute_bmi(height = 172,
-                          weight = 60))
+call_user_fun(compute_bmi(
+  height = 172,
+  weight = 60
+))
 
-try(call_user_fun(compute_bmi(height = 172,
-                              weight = "hallo")))
+try(call_user_fun(compute_bmi(
+  height = 172,
+  weight = "hallo"
+)))
 }
 \author{
 Stefan Bundfuss

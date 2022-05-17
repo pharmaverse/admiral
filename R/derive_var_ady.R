@@ -1,7 +1,9 @@
 #' Derive Analysis Study Day
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dy()` instead.
 #'
 #' Adds the analysis study day (`ADY`) to the dataset, i.e., study day of analysis date.
 #'
@@ -38,22 +40,15 @@
 #'
 #' @export
 #'
-#' @examples
-#' data <- tibble::tribble(
-#'   ~TRTSDT, ~ADT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-#' )
-#'
-#' derive_var_ady(data)
 derive_var_ady <- function(dataset, reference_date = TRTSDT, date = ADT) {
   reference_date <- assert_symbol(enquo(reference_date))
   date <- assert_symbol(enquo(date))
   assert_data_frame(dataset, vars(!!reference_date, !!date))
+  deprecate_warn("0.7.0", "derive_var_ady()", "derive_vars_dy()")
 
-  derive_vars_duration(
+  derive_vars_dy(
     dataset,
-    new_var = ADY,
-    start_date = !!reference_date,
-    end_date = !!date
+    reference_date = !!reference_date,
+    source_vars = vars(ADY = !!date)
   )
 }

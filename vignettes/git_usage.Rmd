@@ -5,7 +5,7 @@ output:
     toc: true
     toc_depth: 6
 vignette: >
-  %\VignetteIndexEntry{Guidance for git Usage}
+  %\VignetteIndexEntry{Guidance for git and GitHub Usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

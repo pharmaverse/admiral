@@ -96,8 +96,10 @@ admiral_dm \%>\%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = admiral_adsl,
-    ae = admiral_ae, lb = admiral_lb),
+    source_datasets = list(
+      adsl = admiral_adsl,
+      ae = admiral_ae, lb = admiral_lb
+    ),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDT)
@@ -149,8 +151,10 @@ admiral_dm \%>\%
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
-    source_datasets = list(adsl = admiral_adsl,
-    ae = admiral_ae, lb = admiral_lb),
+    source_datasets = list(
+      adsl = admiral_adsl,
+      ae = admiral_ae, lb = admiral_lb
+    ),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
