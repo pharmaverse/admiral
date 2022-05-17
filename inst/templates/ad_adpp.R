@@ -2,6 +2,8 @@
 #
 # Label: Pharmacokinetics Parameters Analysis Dataset
 #
+# Description: Based on simulated data, create ADPP analysis dataset
+#
 # Input: pp, adsl
 library(admiral)
 library(admiraltest) # Contains example datasets from the CDISC pilot project
@@ -25,7 +27,7 @@ pp <- convert_blanks_to_na(admiral_pp)
 # ---- Lookup tables ----
 param_lookup <- tibble::tribble(
   ~PPTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "ACTDOSE", "ACTDOSE", "Actual Dose", 1, # non Cdisc Term
+  "AUCALL", "AUCALL", "AUC All", 1,
   "AUCIFO", "AUCIFO", "AUC Infinity Obs", 2,
   "AUCIFOD", "AUCIFOD", "AUC Infinity Obs Norm by Dose", 3,
   "AUCINT", "AUCINT", "AUC from T1 to T2", 4,
@@ -47,16 +49,24 @@ param_lookup <- tibble::tribble(
   "VSSO", "VSSO", "Vol Dist Steady State Obs", 20
 )
 
+# ASSIGN AVALCAT1
+avalcat_lookup <- tibble::tribble(
+  ~PARAMCD, ~AVALCA1N, ~AVALCAT1,
+  "AUCALL", 1, "< 19",
+  "AUCALL", 2, ">= 19"
+)
+
 attr(param_lookup$PPTESTCD, "label") <- "Parameter Short Name"
 
 # ---- User defined functions ----
 
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate`.
-format_avalcat1 <- function(paramcd, aval) {
+format_avalcat1n <- function(param, aval) {
   case_when(
-    paramcd == "AUC from T1 to T2" & !is.na(aval) ~ 1,
-    T ~ 2
+    param == "AUCALL" & aval < 19 ~ 1,
+    param == "AUCALL" & aval >= 19 ~ 2,
+    T ~ NA_real_
   )
 }
 
@@ -68,21 +78,18 @@ format_avalcat1 <- function(paramcd, aval) {
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 adpp <- pp %>%
-
   # Join ADSL with PP (need TRTSDT for ADY derivation)
   left_join(
     select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
-
   # Calculate ADT, ADY
   derive_vars_dt(
     new_vars_prefix = "A",
-    dtc = PPDTC,
+    dtc = PPRFDTC,
     flag_imputation = FALSE
   ) %>%
-
-  derive_var_ady(reference_date = TRTSDT, date = ADT)
+  derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adpp <- adpp %>%
   # Add PARAMCD only - add PARAM etc later
@@ -90,16 +97,13 @@ adpp <- adpp %>%
     select(param_lookup, PPTESTCD, PARAMCD),
     by = "PPTESTCD"
   ) %>%
-
   # Calculate AVAL and AVALC
   mutate(
     AVAL = PPSTRESN,
     AVALC = PPSTRESC
   ) %>%
-
   # Remove variables
   select(-PPSTRESN, -PPSTRESC) %>%
-
   # Add ASEQ
   mutate(
     SRCDOM = DOMAIN,
@@ -110,9 +114,10 @@ adpp <- adpp %>%
 
 # get visit info
 adpp <- adpp %>%
-
   # Derive Timing
   mutate(
+    VISIT = "", # /!\ To remove,
+    VISITNUM = NA, # /!\ To remove,
     AVISIT = case_when(
       str_detect(VISIT, "SCREEN|UNSCHED|RETRIEVAL|AMBUL") ~ NA_character_,
       !is.na(VISIT) ~ str_to_title(VISIT),
@@ -120,24 +125,17 @@ adpp <- adpp %>%
     ),
     AVISITN = VISITNUM
   ) %>%
-
   # Assign TRTA, TRTP
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-
   # Derive AVALCA1N and AVALCAT1
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
-  left_join(avalcat_lookup, by = c("PARAMCD", "AVALCA1N")) %>%
-
-  # Derive PARAM and PARAMN
-  left_join(select(param_lookup, -PPTESTCD), by = "PARAMCD")
-
+  derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N))
 
 # Add all ADSL variables
 adpp <- adpp %>%
-
   left_join(select(admiral_adsl, !!!admiral:::negate_vars(adsl_vars)),
     by = c("STUDYID", "USUBJID")
   )
@@ -145,7 +143,7 @@ adpp <- adpp %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-
+admiral_adpp <- adpp
 # ---- Save output ----
 
-save(adpp, file = "data/admiral_adpp.rda", compress = "bzip2")
+save(admiral_adpp, file = "data/admiral_adpp.rda", compress = "bzip2")
