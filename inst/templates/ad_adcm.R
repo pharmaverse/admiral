@@ -29,7 +29,6 @@ adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 # Derive flags
 adcm <- cm %>%
-
   # Join ADSL with CM (only ADSL vars required for derivations)
   derive_vars_merged(
     dataset_add = adsl,

@@ -212,7 +212,6 @@ However, an example of a simple implementation could be:
 adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
 
 count(adae, TRTP, TRTA, TRT01P, TRT01A)
-
 ```
 
 
@@ -466,7 +465,6 @@ adae <- adae %>%
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

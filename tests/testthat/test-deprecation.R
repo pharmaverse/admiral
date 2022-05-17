@@ -368,7 +368,6 @@ test_that("a warning is issued when using `derive_worst_flag()`", {
 })
 
 test_that("an error is thrown if `derive_vars_suppqual()` is called", {
-
   expect_error(
     derive_vars_suppqual(),
     "deprecated",
