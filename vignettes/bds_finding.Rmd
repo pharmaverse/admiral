@@ -37,6 +37,8 @@ otherwise specified.*
 * [Assign Reference Range Indicator (`ANRIND`)](#referencerange)
 * [Derive Baseline (`BASETYPE`, `ABLFL`, `BASE`, `BASEC`, `BNRIND`)](#baseline)
 * [Derive Change from Baseline (`CHG`, `PCHG`)](#bchange)
+* [Derive Shift (e.g.`SHIFT1`)](#shift)
+* [Derive Analysis Ratio (e.g. `R2BASE`)](#analysisratio)
 * [Derive Analysis Flags (e.g. `ANL01FL`)](#analysisrec)
 * [Assign Treatment (`TRTA`, `TRTP`)](#treatment)
 * [Assign `ASEQ`](#aseq)
@@ -48,7 +50,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
-data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
+data frames needed may be `VS` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
@@ -71,21 +73,6 @@ vs <- convert_blanks_to_na(vs)
 ```{r echo=FALSE}
 vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
-
-The `SUPPVS` domain can be joined to the `VS` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPVS`) and
-join the transposed data to the parent domain (e.g. `VS`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-```{r eval=FALSE}
-vs <- derive_vars_suppqual(vs, suppvs)
-```
-
-Please note, the CDISC pilot did not include a `SUPPVS` dataset and therefore this
-join is not demonstrated.
 
 At this step, it may be useful to join `ADSL` to your `VS` domain. Only the 
 `ADSL` variables used for derivations are selected at this step. The rest of the
@@ -344,14 +331,42 @@ dataset_vignette(
 )
 ```
 
-Similarly, for `ADEG` domain, the parameters `QTCBF` `QTCBS` and `QTCL` can be
+Similarly, for `ADEG`, the parameters `QTCBF` `QTCBS` and `QTCL` can be
 created with a function call. See example below for `PARAMCD` = `QTCF`.
 
 ```{r eval=FALSE}
 adeg <- derive_param_qtc(
   adeg,
   by_vars = vars(USUBJID, VISIT, ADT),
-  set_values_to = vars(PARAMCD = "QTCFR")
+  method = "Fridericia",
+  set_values_to = vars(PARAMCD = "QTCFR"),
+)
+```
+
+Similarly, for `ADLB`, the function `derive_param_wbc_abs()` can be used to create new parameter 
+for lab differentials converted to absolute values. See example below:
+
+```{r eval=FALSE}
+adlb <- tibble::tribble(
+  ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
+  "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+  "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
+  "P01", "LYMLE", 0.90, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+  "P01", "LYMLE", 0.70, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1"
+)
+
+derive_param_wbc_abs(
+  dataset = adlb,
+  by_vars = vars(USUBJID, VISIT),
+  set_values_to = vars(
+    PARAMCD = "LYMPH",
+    PARAM = "Lymphocytes Abs (10^9/L)",
+    DTYPE = "CALCULATION"
+  ),
+  get_unit_expr = extract_unit(PARAM),
+  wbc_code = "WBC",
+  diff_code = "LYMLE",
+  diff_type = "fraction"
 )
 ```
 
@@ -480,10 +495,10 @@ and `ref_end_date = AP01EDT`.
 advs_pre <- select(advs, -ONTRTFL)
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,           ~AENDT,
-  "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"),  ymd("2020-12-01"),
-  "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),  ymd("2020-03-15"),
-  "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),  NA,
+  ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT,
+  "P01", ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
+  "P02", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
+  "P03", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
 ```
 
@@ -576,12 +591,15 @@ function `derive_var_extreme_flag()`.  For example, if baseline is defined as th
 non-missing `AVAL` prior or on `TRTSDT`, the function call for `ABLFL` would be:
 
 ```{r eval=TRUE}
-advs <- derive_var_extreme_flag(
+advs <- restrict_derivation(
   advs,
-  by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
-  order = vars(ADT, ATPTN, VISITNUM),
-  new_var = ABLFL,
-  mode = "last",
+  derivation = derive_var_extreme_flag,
+  args = params(
+    by_vars = vars(STUDYID, USUBJID, BASETYPE, PARAMCD),
+    order = vars(ADT, ATPTN, VISITNUM),
+    new_var = ABLFL,
+    mode = "last"
+  ),
   filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
 )
 ```
@@ -648,6 +666,56 @@ advs <- derive_var_pchg(advs)
 dataset_vignette(
   advs,
   display_vars = vars(USUBJID, VISIT, BASE, AVAL, CHG, PCHG),
+  filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
+)
+```
+
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
+
+## Derive Shift (e.g. `SHIFT1`) {#shift}
+
+Shift variables can be derived using the `{admiral}` function `derive_var_shift()`. 
+This function derives a character shift variable concatenating shift in values based on a
+user-defined pairing, e.g., shift from baseline reference range `BNRIND`
+to analysis reference range `ANRIND`. Examples calls are:
+
+```{r eval=TRUE}
+advs <- derive_var_shift(advs,
+  new_var = SHIFT1,
+  from_var = BNRIND,
+  to_var = ANRIND
+)
+```
+
+If the variables should not be derived for all records, e.g., for post-baseline
+records only, `restrict_derivation()` can be used.
+
+## Derive Analysis Ratio (`R2BASE`) {#analysisratio}
+
+Analysis ratio variables can be derived using the `{admiral}` function 
+`derive_var_analysis_ratio()`. This function derives a ratio variable based on user-specified pair. 
+For example, Ratio to Baseline is calculated by `AVAL / BASE` and the function appends a new 
+variable `R2BASE` to the dataset. Examples calls are:
+
+```{r eval=TRUE}
+advs <- derive_var_analysis_ratio(advs,
+  numer_var = AVAL,
+  denom_var = BASE
+)
+
+advs <- derive_var_analysis_ratio(advs,
+  numer_var = AVAL,
+  denom_var = ANRLO,
+  new_var = R01ANRLO
+)
+```
+
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  advs,
+  display_vars = vars(USUBJID, VISIT, BASE, AVAL, ANRLO, R2BASE, R01ANRLO),
   filter = PARAMCD == "DIABP" & VISIT %in% c("WEEK 2", "WEEK 8")
 )
 ```

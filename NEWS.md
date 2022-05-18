@@ -72,10 +72,27 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 - `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
+- `derive_vars_suppqual()` has been removed from {admiral} as adding supplementary qualifiers is now done in another package called [{metatools}](https://github.com/pharmaverse/metatools) in a function called `combine_supp()` and is available on CRAN (#950)
 
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
 `restrict_derivation()` (#701).
+
+- The following functions and parameters, which were deprecated in previous {admiral} versions, have been removed (#1056):
+
+  - `derive_agegr_ema()`
+  - `derive_agegr_fda()`
+  - `derive_disposition_dt()`
+  - `derive_disposition_status()`
+  - `derive_extreme_flag()`
+  - `derive_worst_flag()`
+  - `derive_obs_number()`
+  - `derive_disposition_reason()`
+  - `derive_var_basec()`
+  - `derive_baseline()` 
+  - `derive_params_exposure()` 
+  - `derive_last_dose()`
+  - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
 
 - The following functions were deprecated in favor of `derive_vars_dy()`
 (#1076):
