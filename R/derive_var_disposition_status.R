@@ -3,11 +3,11 @@
 #' Define a function to map the disposition status. To be used as an input for
 #' `derive_var_disposition_status()`.
 #'
-#' @param x the disposition variable used for the mapping (e.g. `DSDECOD`).
+#' @param status the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
-#' @return A `character` vector derived based on the values given in `x`:
-#'  "COMPLETED" if `x` is "COMPLETED",
-#'  "DISCONTINUED" if `x` is not "COMPLETED" nor NA,
+#' @return A `character` vector derived based on the values given in `status`:
+#'  "COMPLETED" if `status` is "COMPLETED",
+#'  "DISCONTINUED" if `status` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
@@ -30,10 +30,10 @@
 #'     filter_ds = DSCAT == "DISPOSITION EVENT"
 #'   ) %>%
 #'   select(STUDYID, USUBJID, EOSSTT)
-format_eoxxstt_default <- function(x) {
+format_eoxxstt_default <- function(status) {
   case_when(
-    x == "COMPLETED" ~ "COMPLETED",
-    x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
+    status == "COMPLETED" ~ "COMPLETED",
+    status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -63,15 +63,15 @@ format_eoxxstt_default <- function(x) {
 #'
 #' Default: `format_eoxxstt_default()` defined as:
 #' ```
-#' format_eoxxstt_default <- function(x) {
+#' format_eoxxstt_default <- function(status) {
 #'   case_when(
-#'     x == "COMPLETED" ~ "COMPLETED",
-#'     x != "COMPLETED" & !is.na(x) ~ "DISCONTINUED",
+#'     status == "COMPLETED" ~ "COMPLETED",
+#'     status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
 #' ```
-#' where `x` is the `status_var.`
+#' where `status` is the `status_var.`
 #'
 #' @param filter_ds Filter condition for the disposition data.
 #'

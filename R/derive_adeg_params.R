@@ -16,6 +16,9 @@
 #'
 #' @param by_vars Grouping variables
 #'
+#'   Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
+#'
 #'   Permitted Values: list of variables
 #'
 #' @param method Method used to QT correction
@@ -48,7 +51,8 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation adeg
 #'
@@ -56,16 +60,16 @@
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL,  ~AVALU,      ~VISIT,
-#'   "01-701-1015", "HR",     "Heart Rate (beats/min)",  70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT",     "QT Duration (msec)",     370,    "msec",      "WEEK 2",
-#'   "01-701-1015", "HR",     "Heart Rate (beats/min)",  62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR",     "RR Duration (msec)",     710,    "msec",      "WEEK 2",
-#'   "01-701-1028", "HR",     "Heart Rate (beats/min)",  85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT",     "QT Duration (msec)",     480,    "msec",      "WEEK 2",
-#'   "01-701-1028", "QT",     "QT Duration (msec)",     350,    "msec",      "WEEK 3",
-#'   "01-701-1028", "HR",     "Heart Rate (beats/min)",  56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR",     "RR Duration (msec)",     842,    "msec",      "WEEK 2",
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR", "RR Duration (msec)", 710, "msec", "WEEK 2",
+#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT", "QT Duration (msec)", 480, "msec", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration (msec)", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR", "RR Duration (msec)", 842, "msec", "WEEK 2",
 #' )
 #'
 #' derive_param_qtc(
@@ -258,7 +262,8 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation adeg
 #'
@@ -266,16 +271,16 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
-#'   "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
-#'   "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
-#'   "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
-#'   "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
-#'   "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+#'   "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2"
 #' )
 #'
 #' derive_param_rr(

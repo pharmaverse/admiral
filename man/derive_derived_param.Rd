@@ -28,7 +28,8 @@ parameter) and to the parameters specified by \code{parameters}.}
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -82,7 +83,8 @@ weight is measured at each visit. Height could be specified in the
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a parameter computed from the analysis value of other parameters. It is
