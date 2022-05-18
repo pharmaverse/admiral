@@ -153,23 +153,10 @@ derive_var_dthcaus <- function(dataset,
   for (ii in seq_along(sources)) {
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
-    if (!is.null(sources[[ii]]$date_imputation) & !quo_is_null(sources[[ii]]$filter)) {
-      add_data[[ii]] <- source_dataset %>%
-        filter(!!sources[[ii]]$filter) %>%
-        mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date,
-                                      date_imputation = !!sources[[ii]]$date_imputation))
-    } else if (!is.null(sources[[ii]]$date_imputation)) {
-      add_data[[ii]] <- source_dataset %>%
-        mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date,
-                                      date_imputation = !!sources[[ii]]$date_imputation))
-    } else if (!quo_is_null(sources[[ii]]$filter)) {
-      add_data[[ii]] <- source_dataset %>%
-        filter(!!sources[[ii]]$filter) %>%
-        mutate(temp_date = !!sources[[ii]]$date)
-    } else {
-      add_data[[ii]] <- source_dataset %>%
-        mutate(temp_date = !!sources[[ii]]$date)
-    }
+    add_data[[ii]] <- source_dataset %>%
+      filter_if(sources[[ii]]$filter) %>%
+      mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date,
+                                    date_imputation = sources[[ii]]$date_imputation))
 
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
@@ -243,7 +230,7 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param order Sort order
 #'
-#'   Additional character vector to be used for sorting `dataset` to avoid duplicate record warning.
+#'   Additional variables to be used for sorting `dataset` to avoid duplicate record warning.
 #'
 #'   *Default*: `NULL`
 #'
