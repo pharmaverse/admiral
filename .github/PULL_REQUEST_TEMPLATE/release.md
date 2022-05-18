@@ -7,7 +7,7 @@
 - [ ] Description file updated with New Developers (if applicable)
 - [ ] NEWS.md has been updated and issues linked where appropriate
 - [ ] Ensure all unit tests are passing and Test Coverage is Green on Readme
-- [ ] Ensure CMD Checks are passing on Readme
+- [ ] Ensure CMD Checks are passing and says Passing on Readme
 - [ ] GitHub actions on this PR are all passing
 - [ ] Draft GitHub release created using automatic template and updated with additional details. Remember to click "release" after PR is merged.
 - [ ] Website is deployed and visual checks for integrity completed
@@ -19,6 +19,6 @@
 - [ ] Delete branches from merged Pull Requests that made it into `devel`
 - [ ] Triage and close issues that were not closed properly via PRs that made it into release 
 - [ ] Close Pull Requests that are stale 
-- [ ] Set up 0.8.0 News/Changelog Skeleton
+- [ ] Set up and increment News/Changelog Skeleton
 - [ ] Retire labels specific to a time-period (testing feedback) if no longer in use
-- [ ] Remove Inactive Users from Repository
+- [ ] Remove Users with no acitivty for 12 months from Repository
