@@ -50,7 +50,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADVS` should be read into
 the environment.  This will be a company specific process.  Some of the 
-data frames needed may be `VS`, `SUPPVS`, and `ADSL`.
+data frames needed may be `VS` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
@@ -73,21 +73,6 @@ vs <- convert_blanks_to_na(vs)
 ```{r echo=FALSE}
 vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
-
-The `SUPPVS` domain can be joined to the `VS` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPVS`) and
-join the transposed data to the parent domain (e.g. `VS`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-```{r eval=FALSE}
-vs <- derive_vars_suppqual(vs, suppvs)
-```
-
-Please note, the CDISC pilot did not include a `SUPPVS` dataset and therefore this
-join is not demonstrated.
 
 At this step, it may be useful to join `ADSL` to your `VS` domain. Only the 
 `ADSL` variables used for derivations are selected at this step. The rest of the
@@ -290,11 +275,13 @@ dataset_vignette(
 
 ## Derive Additional Parameters (e.g. `BSA`, `BMI` or `MAP` for `ADVS`) {#derive_param}
 
-Optionally derive new parameters creating `PARAMCD` and `AVAL`. Below is an
-example of creating `Mean Arterial Pressure` for `ADVS`, see also Example 3 in 
-section below [Derive New Rows](#additional) for alternative way of creating new
-parameters.
+Optionally derive new parameters creating `PARAMCD` and `AVAL`. Note that only
+variables specified in the `by_vars` argument will be populated in the newly 
+created records. This is relevant to the functions `derive_param_map`, 
+`derive_param_bsa`, `derive_param_bmi`, and `derive_param_qtc`. 
 
+Below is an example of creating `Mean Arterial Pressure` for `ADVS`, see also 
+Example 3 in section below [Derive New Rows](#additional) for alternative way of creating new parameters.
 
 ```{r eval=TRUE}
 advs <- derive_param_map(
@@ -989,9 +976,12 @@ dataset_vignette(
 
 ### Example 3 (Deriving a New `PARAMCD`)
 
-Use function `derive_derived_param()` to create a new `PARAMCD`. Below is an
-example of creating `Mean Arterial Pressure` (`PARAMCD = MAP2`) with an 
-alternative formula.
+Use function `derive_derived_param()` to create a new `PARAMCD`. Note that only
+variables specified in the `by_vars` argument will be populated in the newly 
+created records. 
+
+Below is an example of creating `Mean Arterial Pressure` 
+(`PARAMCD = MAP2`) with an alternative formula.
 
 ```{r eval=TRUE}
 advs_ex3 <- derive_derived_param(

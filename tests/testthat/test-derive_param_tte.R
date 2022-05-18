@@ -30,8 +30,8 @@ test_that("new observations with analysis date are derived correctly", {
 
   expected_output <- tibble::tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
-    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL", "DTHDT",
-    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL", "LSTALVDT"
+    "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
+    "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
   ) %>%
     mutate(
       STUDYID = "AB42",
@@ -40,19 +40,20 @@ test_that("new observations with analysis date are derived correctly", {
     ) %>%
     left_join(select(adsl, USUBJID, STARTDT = TRTSDT, STARTDTF = TRTSDTF), by = "USUBJID")
 
+  actual_output <- derive_param_tte(
+    dataset_adsl = adsl,
+    start_date = TRTSDT,
+    event_conditions = list(death),
+    censor_conditions = list(lstalv),
+    source_datasets = list(adsl = adsl),
+    set_values_to = vars(
+      PARAMCD = "OS",
+      PARAM = "Overall Survival"
+    )
+  )
+
   expect_dfs_equal(
-    derive_param_tte(
-      dataset_adsl = adsl,
-      start_date = TRTSDT,
-      start_date_imputation_flag = TRTSDTF,
-      event_conditions = list(death),
-      censor_conditions = list(lstalv),
-      source_datasets = list(adsl = adsl),
-      set_values_to = vars(
-        PARAMCD = "OS",
-        PARAM = "Overall Survival"
-      )
-    ),
+    actual_output,
     expected_output,
     keys = c("USUBJID", "PARAMCD")
   )
@@ -135,7 +136,7 @@ test_that("new observations with analysis datetime are derived correctly", {
     "04",     ymd_hms("2021-05-15 12:02:00"), 1L,    "LAST TUMOR ASSESSMENT", "ADRS",  "ADTM",    NA,
     "05",     ymd_hms("2021-04-05 11:22:33"), 1L,    "TREATMENT START",       "ADSL",  "TRTSDTM", NA
   ) %>%
-  # nolint end
+    # nolint end
     mutate(
       STUDYID = "AB42",
       PARAMCD = "PFS",
@@ -149,8 +150,6 @@ test_that("new observations with analysis datetime are derived correctly", {
   actual_output <- derive_param_tte(
     dataset_adsl = adsl,
     start_date = TRTSDTM,
-    start_date_imputation_flag = TRTSDTF,
-    start_time_imputation_flag = TRTSTMF,
     event_conditions = list(pd, death),
     censor_conditions = list(lastvisit, start),
     source_datasets = list(adsl = adsl, adrs = adrs),
@@ -281,7 +280,7 @@ test_that("by_vars parameter works correctly", {
     "01",     ymd("2021-03-04"), 0L,    "AE",           "AE",    "AESTDTC", 2,       "Cough",  "TTAE1",
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Cough",  "TTAE1"
   ) %>%
-  # nolint end
+    # nolint end
     mutate(
       STUDYID = "AB42",
       PARCAT1 = "TTAE",

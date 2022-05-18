@@ -24,8 +24,10 @@ To install the latest development version of the package directly from GitHub us
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
-remotes::install_github("pharmaverse/admiral", ref = "devel")
-```
+
+remotes::install_github("pharmaverse/admiraltest", ref = "main") # This is a required dependency of {admiral}
+remotes::install_github("pharmaverse/admiral", ref = "main")
+
 
 ## Main Goal
 

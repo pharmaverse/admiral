@@ -1032,56 +1032,6 @@ assert_param_does_not_exist <- function(dataset, param) {
   invisible(dataset)
 }
 
-#' Helper Function to Check IDVAR per QNAM
-#'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
-#'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
-#'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-      msg <- paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n"
-      )
-    )
-    inform(msg)
-  }
-}
-
-#' Helper Function to Check DOAMIN and RDOMAIN
-#'
-#' @param dataset A SDTM domain data set.
-#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
-#' @param domain Two letter domain value. Used when supplemental data set is
-#'   common across multiple SDTM domain.
-#'
-#' @noRd
-#'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
-#'
-#' @family suppqual
-assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
-  parent <- unique(parent$DOMAIN)
-  supp <- unique(supp$RDOMAIN)
-
-  if (!is.null(.domain)) {
-    if (!.domain %in% supp) {
-      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
-    }
-  }
-
-  if (!parent %in% supp) {
-    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
-  }
-}
-
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of `quosures` where the expressions are

@@ -55,6 +55,10 @@ a certain event exists in a dataset. (#1064)
 where a specified condition is fulfilled. For example, all observations up to
 first disease progression. (#1023)
 
+### ADPP
+
+  - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
+
 ## Updates of Existing Functions
  
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
@@ -74,6 +78,7 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 - `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
+- `derive_vars_suppqual()` has been removed from {admiral} as adding supplementary qualifiers is now done in another package called [{metatools}](https://github.com/pharmaverse/metatools) in a function called `combine_supp()` and is available on CRAN (#950)
 
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
@@ -117,8 +122,9 @@ specific for admiral. Derivations like this can be implemented calling
 
 ## Documentation
 
-- Added more detail on the site homepage and Programming Strategy around our manifesto and how
-we design new functions (#954)
+
+- Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
+
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 

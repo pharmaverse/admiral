@@ -222,3 +222,12 @@ test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_
     fixed = TRUE
   )
 })
+
+test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppqual()` is called", {
+  expect_error(
+    derive_vars_suppqual(),
+    "deprecated",
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
+  )
+})
