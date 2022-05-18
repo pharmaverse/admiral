@@ -40,6 +40,9 @@ a certain event exists in a dataset. (#1064)
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
+  - `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
   
 ### ADLB
 
@@ -47,9 +50,7 @@ a certain event exists in a dataset. (#1064)
   [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
-
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
-
   - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
 - `filter_relative()` - Selects observations before or after the observation
