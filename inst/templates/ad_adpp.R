@@ -141,7 +141,7 @@ adpp <- adpp %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-admiral_adpp <- adpp
 # ---- Save output ----
 
-save(admiral_adpp, file = "data/admiral_adpp.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adpp, file = file.path(dir, "adpp.rda"), compress = "bzip2")
