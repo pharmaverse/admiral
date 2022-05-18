@@ -28,15 +28,6 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
 
-- `derive_var_shift()` - Derives a character shift variable containing concatenated shift in 
-values based on user-defined pairing (#944)
-
-- `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables
-from a BDS dataset, e.g. ADLB. (#943)
-
-- `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. 
-(#941)
-
 - New function `derive_param_first_event()`: Add a new parameter for the first
 event occurring in a dataset. (#1063)
 
@@ -49,13 +40,31 @@ a certain event exists in a dataset. (#1064)
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
+  - `filter_relative()` - Selects observations before or after the observation
+where a specified condition is fulfilled. For example, all observations up to
+first disease progression. (#1023)
+  
+### ADLB
+
+  - New ADLB template script available, specific ADLB functions developed and
+  [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
+
+  - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
+  - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
+  - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
 - `filter_relative()` - Selects observations before or after the observation
 where a specified condition is fulfilled. For example, all observations up to
 first disease progression. (#1023)
 
+### ADPP
+
+  - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
+
 ## Updates of Existing Functions
- 
+
+- `format_eoxxstt_default()` - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (#911)
+
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
 been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
 have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
@@ -76,6 +85,7 @@ to be used for sorting `dataset` to avoid duplicate record warning. (#822)
 
 - `derive_var_lstalvdt()` has been deprecated in favor of `derive_var_extreme_dt()` (#753).
 - `derive_vars_disposition_reason()` now is updated such that the default is populating `DCSREASP` only when `DSDECOD` is equal to `'OTHER'`, which is consistent with ADaMIG_v1.3 (#886).
+- `derive_vars_suppqual()` has been removed from {admiral} as adding supplementary qualifiers is now done in another package called [{metatools}](https://github.com/pharmaverse/metatools) in a function called `combine_supp()` and is available on CRAN (#950)
 
 - The `filter` parameter in `derive_var_extreme_flag()` and
 `derive_var_worst_flag()` has been deprecated in favor of
@@ -118,6 +128,8 @@ specific for admiral. Derivations like this can be implemented calling
 `mutate()` and `case_when()`.
 
 ## Documentation
+
+- Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 
