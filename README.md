@@ -27,7 +27,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 
 remotes::install_github("pharmaverse/admiraltest", ref = "main") # This is a required dependency of {admiral}
 remotes::install_github("pharmaverse/admiral", ref = "main")
-
+```
 
 ## Main Goal
 
@@ -76,7 +76,7 @@ This manifesto helps show the considerations of our developers when making decis
 
 We have four design principles to achieve the main goal:
 
-_**Usability**_
+### Usability
 
 All `{admiral}` functions should be easy to use. 
 * Documentation is an absolute priority. Each function reference page should cover the purpose,
@@ -87,7 +87,7 @@ applied to achieve ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them
 for study specific purposes if needed (see Readability below).
 
-_**Simplicity**_
+### Simplicity
 
 All `{admiral}` functions have a clear purpose.
 * We try not to ever design single functions that could achieve numerous very different derivations. For
@@ -105,7 +105,7 @@ the function.
 and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting,
 so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.
 
-_**Findability**_
+### Findability
 
 All `{admiral}` functions are easily findable.
 * In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.
@@ -115,7 +115,7 @@ help users to get started and build familiarity. Each `{admiral}` family package
 * Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple
 extension packages will be moved to the core `{admiral}` package.
 
-_**Readability**_
+### Readability
 
 All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
