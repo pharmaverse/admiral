@@ -28,6 +28,9 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
 
+- New function `derive_param_first_event()`: Add a new parameter for the first
+event occurring in a dataset. (#1063)
+
 - New function `derive_param_exist_flag()`: Add a new parameter indicating that
 a certain event exists in a dataset. (#1064)
 
@@ -58,7 +61,9 @@ first disease progression. (#1023)
   - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
 
 ## Updates of Existing Functions
- 
+
+- `format_eoxxstt_default()` - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (#911)
+
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
 been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
 have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
