@@ -11,7 +11,7 @@ library(stringr)
 
 # ---- Load source datasets ----
 
-# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
@@ -22,12 +22,6 @@ adsl <- admiral_adsl
 vs <- admiral_vs
 
 vs <- convert_blanks_to_na(vs)
-
-# The CDISC Pilot Data contains no SUPPVS data
-# If you have a SUPPVS then uncomment function below
-
-# vs <- derive_vars_suppqual(vs, suppvs) %>%
-
 
 # ---- Lookup tables ----
 
@@ -65,7 +59,7 @@ avalcat_lookup <- tibble::tribble(
 # ---- User defined functions ----
 
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
+#  operates on vectors, which can be used in `mutate()`.
 format_avalcat1n <- function(param, aval) {
   case_when(
     param == "HEIGHT" & aval > 140 ~ 1,
@@ -105,7 +99,10 @@ advs <- advs %>%
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
-  # Derive new parameters based on existing records.
+  # Derive new parameters based on existing records. Note that, for the following
+  # three `derive_param_*()` functions, only the variables specified in `by_vars` will
+  # be populated in the newly created records.
+
   # Derive Mean Arterial Pressure
   derive_param_map(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),

@@ -47,7 +47,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
-data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
+data frames needed may be `EX` and `ADSL`.
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
 
@@ -68,21 +68,6 @@ ex <- admiral_ex
 ```{r echo=FALSE}
 ex <- filter(ex, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
-
-The `SUPPEX` domain can be joined to the `EX` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPEX`) and
-join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-```{r eval=FALSE}
-ex <- derive_vars_suppqual(ex, suppex)
-```
-
-Please note, the CDISC pilot did not include a `SUPPEX` dataset and therefore this
-join is not demonstrated.
 
 At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only the `ADSL` variables used for derivations are selected at this step. The rest of the relevant `ADSL` would be added later.
 
@@ -261,8 +246,8 @@ dataset_vignette(
 ```
 
 
-Please refer to the `derive_vars_duration()` documentation for detailed information on 
-the input parameters.
+Please refer to the `derive_vars_duration()` documentation for detailed information 
+on the input parameters.
 
 It may be necessary to calculate additional intermediate values.  For example, 
 the cumulative doses received and cumulative planned doses may be calculated as:
@@ -370,7 +355,7 @@ adex %>%
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`, `APERIOD`,
 `AVISIT`, etc.). For these types of calculations, the `derive_param_exposure()`
 function may be used. In addition to creating a summarized `AVAL`, the function
-will also compute minimum and maximum dates for the record.
+will also compute minimum and maximum dates for the record. 
 
 For example, to calculate the total dose by subject and treatment,
 
@@ -402,7 +387,8 @@ adex <- filter(adex, PARAMCD != "TDOSE")
 A record with `PARAMCD == "TDOSE"` is created with `PARCAT1` set to `"OVERALL"` using
 the records in `ADEX` where `PARAMCD == "DOSE"` by summing `AVAL`. In addition,
 the `ASTDT`, and `AENDT` are created as the minimum and
-maximum date/times associated with each `by_vars` grouping.
+maximum date/times associated with each `by_vars` grouping. Note that, in addition
+to `PARAMCD`, `PARCAT1`, `AVAL`, `ASTDT` and `AENDT`, only those variables specified in the `by_vars` argument will be populated in the new records.
 
 Multiple parameters (records) may be created at one time using the 
 `call_derivation()` function:
@@ -461,7 +447,8 @@ adex %>%
 
 Dose intensity can be calculated using the function `derive_param_doseint()`. The
 planned dose and administered dose are passed into the function and a new record
-is created with the dose intensity calculation.
+is created with the dose intensity calculation. Again, only those variables 
+specified in the `by_vars` argument will be populated in this new record.
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%

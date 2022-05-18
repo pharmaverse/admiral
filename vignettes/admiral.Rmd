@@ -102,9 +102,7 @@ and are removed from the output dataset. If the input dataset contains such
 variables, an error is issued.
 
 It is expected all variable names are uppercase in the input dataset and new
-variables will be returned in uppercase. It is expected all `SUPPxx.QNAM` 
-values are uppercase to conform with this convention when using the 
-`derive_vars_suppqual()` to adhere to the uppercase requirement.
+variables will be returned in uppercase.
 
 The output dataset is ungrouped. The observations are not ordered in a dedicated
 way. In particular, the order of the observations of the input dataset may not

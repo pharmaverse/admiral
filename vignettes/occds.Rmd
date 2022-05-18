@@ -44,7 +44,7 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADAE` should be read into
 the environment. This will be a company specific process. Some of the data
-frames needed may be `AE`, `ADSL`, `SUPPAE`, 'SUPPDM`.
+frames needed may be `AE` and `ADSL`
 
 For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
 
@@ -55,34 +55,10 @@ library(admiraltest)
 library(lubridate)
 
 data("admiral_ae")
-data("admiral_suppae")
 data("admiral_adsl")
 
 ae <- admiral_ae
-suppae <- admiral_suppae
 adsl <- admiral_adsl
-```
-
-The `SUPPAE` domain can be joined to the 'AE` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPAE`) and
-join the transposed data to the parent domain (e.g. `ae`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-To derive Supplemental Qualifiers, `derive_vars_suppqual()` can be used. 
-
-```{r eval=TRUE}
-ae <- derive_vars_suppqual(ae, suppae)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(
-  ae,
-  display_vars = vars(USUBJID, AETERM, AEDECOD, AESTDTC, AETRTEM),
-  filter = USUBJID == "01-701-1015"
-)
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain. Only the 
@@ -236,7 +212,6 @@ However, an example of a simple implementation could be:
 adae <- mutate(adae, TRTP = TRT01P, TRTA = TRT01A)
 
 count(adae, TRTP, TRTA, TRT01P, TRT01A)
-
 ```
 
 
@@ -490,7 +465,6 @@ adae <- adae %>%
     dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
     by_vars = vars(STUDYID, USUBJID)
   )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
