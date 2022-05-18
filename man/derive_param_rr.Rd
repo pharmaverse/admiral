@@ -26,7 +26,8 @@ parameter) and to the parameters specified by \code{hr_code}.}
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -60,7 +61,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for derived RR based on heart rate for each by group (e.g.,
@@ -72,16 +74,16 @@ The analysis value of the new parameter is derived as
 }
 \examples{
 adeg <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
-  "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
-  "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
-  "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
-  "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
-  "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+  "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+  "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
+  "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+  "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2"
 )
 
 derive_param_rr(

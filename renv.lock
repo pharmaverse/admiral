@@ -75,7 +75,7 @@
       "RemoteUsername": "pharmaverse",
       "RemoteRef": "devel",
       "RemoteSha": "e0e50a93c67da023e6efa30cee12b38807943344",
-      "Hash": "ddd3d502ec39f29882b100e9425f9ff9"
+      "Hash": "1a155602d60338307722b247ba03a814"
     },
     "askpass": {
       "Package": "askpass",
@@ -268,10 +268,10 @@
     },
     "evaluate": {
       "Package": "evaluate",
-      "Version": "0.14",
+      "Version": "0.15",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7"
+      "Hash": "699a7a93d08c962d9f8950b2d7a227f1"
     },
     "fansi": {
       "Package": "fansi",
@@ -401,10 +401,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.28",
+      "Version": "1.39",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "915a6f0134cdbdf016d7778bc80b2eda"
+      "Hash": "029ab7c4badd3cf8af69016b2ba27493"
     },
     "later": {
       "Package": "later",
@@ -447,13 +447,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7ce2733a9826b3aeb1775d56fd305472"
-    },
-    "markdown": {
-      "Package": "markdown",
-      "Version": "1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "61e4a10781dd00d7d81dd06ca9b94e95"
     },
     "memoise": {
       "Package": "memoise",
