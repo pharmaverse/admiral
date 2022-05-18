@@ -7,7 +7,7 @@
 convert_date_to_dtm(
   dt,
   date_imputation = NULL,
-  time_imputation = NULL,
+  time_imputation = "00:00:00",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE

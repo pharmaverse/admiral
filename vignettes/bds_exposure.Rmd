@@ -127,8 +127,8 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC)
-adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
+adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC, flag_imputation = "none")
+adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC, flag_imputation = "none")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -136,11 +136,6 @@ dataset_vignette(
   adex,
   display_vars = vars(USUBJID, VISIT, EXSTDTC, EXENDTC, ASTDT, AENDT)
 )
-```
-
-
-```{r eval=TRUE, echo=FALSE}
-adex <- select(adex, -ASTDTF, -AENDTF)
 ```
 
 

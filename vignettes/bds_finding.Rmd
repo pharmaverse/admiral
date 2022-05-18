@@ -107,13 +107,13 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE}
-advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
+advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC, flag_imputation = "none")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
   advs,
-  display_vars = vars(USUBJID, VISIT, VSDTC, ADT, ADTF),
+  display_vars = vars(USUBJID, VISIT, VSDTC, ADT),
   filter = VSTESTCD == "DIABP"
 )
 ```
@@ -132,7 +132,7 @@ advs <- advs %>%
       VSDTC
     )
   ) %>%
-  select(-ADT, -ADTF)
+  select(-ADT)
 ```
 
 ```{r eval=TRUE}

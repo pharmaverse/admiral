@@ -5,7 +5,7 @@
 \alias{admiral_adpp}
 \title{Pharmacokinetics Parameters Analysis Dataset}
 \format{
-An object of class \code{data.frame} with 1344 rows and 64 columns.
+An object of class \code{data.frame} with 1344 rows and 72 columns.
 }
 \source{
 Derived from the \code{adsl} and \code{pp} datasets using \code{{admiral}} (\url{https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adpp.R})

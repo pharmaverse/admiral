@@ -2,8 +2,10 @@
 
 ## New Features
 
-- Added more detail on the site homepage and Programming Strategy around our manifesto and how
-we design new functions (#954)
+- Updates to date/time imputation functions (#761):
+
+  - `convert_date_to_dtm()` and `convert_dtc_to_dtm()` now have time_imputation = "00:00:00" as default 
+  - `derive_vars_dt()`now has flag_imputation = "auto" as default
 
 - New functions for merging variables (#607):
 
@@ -126,7 +128,9 @@ specific for admiral. Derivations like this can be implemented calling
 
 ## Documentation
 
+
 - Additional explanation added to `derive_param_*` and `derive_derived_param` functions regarding which variables are populated in the additional rows (#939)
+
 
 - Updated [`derive_var_worst_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_worst_flag.html) and [`derive_var_extreme_flag()`](https://pharmaverse.github.io/admiral/reference/derive_var_extreme_flag.html) vignettes to clarify their purpose (#691)
 

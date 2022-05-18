@@ -9,7 +9,7 @@ derive_vars_dt(
   new_vars_prefix,
   dtc,
   date_imputation = NULL,
-  flag_imputation = TRUE,
+  flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
@@ -48,11 +48,14 @@ day/month.
 
 Default is \code{NULL}.}
 
-\item{flag_imputation}{Whether the date imputation flag should also be derived.
+\item{flag_imputation}{Whether the date imputation flag must also be derived.
 
-A logical value
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null.
 
-Default: \code{TRUE}}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
@@ -164,7 +167,7 @@ derive_vars_dt(
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
   date_imputation = "MID",
-  flag_imputation = FALSE
+  flag_imputation = "none"
 )
 
 # Impute AE start date to the first date and ensure that the imputed date
@@ -187,7 +190,7 @@ derive_vars_dt(
 # use preserve argument to "preserve" partial dates.  For example, "2019---07",
 # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 
-derive_vars_dtm(
+derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,

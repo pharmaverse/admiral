@@ -84,8 +84,7 @@ adpp <- pp %>%
   # Calculate ADT, ADY
   derive_vars_dt(
     new_vars_prefix = "A",
-    dtc = PPRFDTC,
-    flag_imputation = FALSE
+    dtc = PPRFDTC
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
@@ -141,7 +140,7 @@ adpp <- adpp %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-admiral_adpp <- adpp
 # ---- Save output ----
 
-save(admiral_adpp, file = "data/admiral_adpp.rda", compress = "bzip2")
+dir <- tempdir() # Change to whichever directory you want to save the dataset in
+save(adpp, file = file.path(dir, "adpp.rda"), compress = "bzip2")
