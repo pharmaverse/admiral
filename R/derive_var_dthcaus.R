@@ -229,7 +229,8 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param order Sort order
 #'
-#'   Additional variables to be used for sorting `dataset` to avoid duplicate record warning.
+#'   Additional variables to be used for sorting the `dataset` which is ordered by the
+#'   (imputed) `date` and `order`. Can be used to avoid duplicate record warning.
 #'
 #'   *Default*: `NULL`
 #'
