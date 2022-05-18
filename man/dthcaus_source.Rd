@@ -38,7 +38,8 @@ Default is \code{NULL}}
 
 \item{order}{Sort order
 
-Additional character vector to be used for sorting \code{dataset} to avoid duplicate record warning.
+Additional variables to be used for sorting the \code{dataset} which is ordered by the
+(imputed) \code{date} and \code{order}. Can be used to avoid duplicate record warning.
 
 \emph{Default}: \code{NULL}
 
