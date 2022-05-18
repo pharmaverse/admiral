@@ -48,3 +48,8 @@ admiral*.tgz
 
 # vscode
 .vscode
+
+# MacOS
+.DS_Store
+._.DS_Store
+

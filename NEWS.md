@@ -53,6 +53,10 @@ a certain event exists in a dataset. (#1064)
 where a specified condition is fulfilled. For example, all observations up to
 first disease progression. (#1023)
 
+### ADPP
+
+  - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
+
 ## Updates of Existing Functions
  
 - Datasets internal to the package have been renamed, e.g. `adsl` has 
