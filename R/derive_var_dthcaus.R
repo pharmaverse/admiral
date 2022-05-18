@@ -167,7 +167,6 @@ derive_var_dthcaus <- function(dataset,
       ) %>%
       mutate(
         temp_source_nr = ii,
-        temp_date = !!sources[[ii]]$date,
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
