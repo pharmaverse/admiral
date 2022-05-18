@@ -230,9 +230,10 @@ created to specify how those patients will be censored. Therefore the `start`
 censoring is defined below to achieve that subjects without data in `adrs` are
 censored at the start date.
 
-The ADaM IG requires that computed date must be accompanied by imputation flags.
-If the start date is imputed, the date imputation flag can be specified by the
-`start_date_imputation_flag` parameter. If a date variable from one of the event
+The ADaM IG requires that a computed date must be accompanied by imputation flags.
+Thus, if the function detects a `--DTF` and/or `--TMF` variable corresponding
+to `start_date` then `STARTDTF` and `STARTTMF` are set automatically to the values
+of these variables. If a date variable from one of the event
 or censoring source datasets is imputed, the imputation flag can be specified
 for the `set_values_to` parameter in `event_source()` or `censor_source()` (see
 definition of the `start` censoring below).
@@ -371,7 +372,6 @@ adtte <- derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl, adrs = adrs),
   start_date = TRTSDT,
-  start_date_imputation_flag = TRTSDTF,
   event_conditions = list(pd, death),
   censor_conditions = list(lastvisit, start),
   set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival")
