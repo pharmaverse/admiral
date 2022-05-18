@@ -90,7 +90,7 @@ adlb <- lb %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = LBDTC,
-    flag_imputation = FALSE
+    flag_imputation = "none"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
