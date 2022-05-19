@@ -44,37 +44,43 @@
 #'
 #' datain <- tibble::tribble(
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
-#'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
-#'  mutate(TRTSDTM = as_datetime(TRTSDTM),
-#'         ASTDTM = as_datetime(ASTDTM),
-#'         AENDT = ymd(AENDT))
+#'   mutate(
+#'     TRTSDTM = as_datetime(TRTSDTM),
+#'     ASTDTM = as_datetime(ASTDTM),
+#'     AENDT = ymd(AENDT)
+#'   )
 #'
 #' derive_vars_dy(
 #'   datain,
 #'   reference_date = TRTSDTM,
-#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#' )
 #'
 #' # specifying name of new variables
 #' datain <- tibble::tribble(
 #'   ~TRTSDT, ~DTHDT,
-#'  "2014-01-17", "2014-02-01"
+#'   "2014-01-17", "2014-02-01"
 #' ) %>%
-#'  mutate(TRTSDT = ymd(TRTSDT),
-#'         DTHDT = ymd(DTHDT))
+#'   mutate(
+#'     TRTSDT = ymd(TRTSDT),
+#'     DTHDT = ymd(DTHDT)
+#'   )
 #'
 #' derive_vars_dy(datain,
-#'                reference_date = TRTSDT,
-#'                source_vars = vars(TRTSDT, DEATHDY = DTHDT))
+#'   reference_date = TRTSDT,
+#'   source_vars = vars(TRTSDT, DEATHDY = DTHDT)
+#' )
 derive_vars_dy <- function(dataset,
                            reference_date,
                            source_vars) {
-  #assertions
+  # assertions
   reference_date <- assert_symbol(enquo(reference_date))
   assert_vars(source_vars)
   assert_data_frame(dataset, required_vars = quo_c(source_vars, reference_date))
 
-  #Warn if `--DY` variables already exist
+  # Warn if `--DY` variables already exist
   n_vars <- length(source_vars)
   source_names <- names(source_vars)
 
@@ -84,29 +90,36 @@ derive_vars_dy <- function(dataset,
 
   if (length(bad_vars > 0)) {
     err_msg <-
-      sprintf(paste0("source_vars must end in DT or DTM or be explicitly and uniquely named.\n",
-                     "Please name or rename the following source_vars:\n", "%s"),
-              paste0(bad_vars, collapse = ", "))
+      sprintf(
+        paste0(
+          "source_vars must end in DT or DTM or be explicitly and uniquely named.\n",
+          "Please name or rename the following source_vars:\n", "%s"
+        ),
+        paste0(bad_vars, collapse = ", ")
+      )
     abort(err_msg)
   }
 
   dy_vars <- if_else(source_names == "",
-                     stringr::str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
-                     source_names)
+    stringr::str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
+    source_names
+  )
   warn_if_vars_exist(dataset, dy_vars)
 
   if (n_vars > 1L) {
     dataset %>%
-      mutate_at(.vars = source_vars,
-                .funs = list(temp = ~
-                  compute_duration(start_date = eval(reference_date), end_date = .))
-                ) %>%
-      rename_at(vars(ends_with("temp")),
-               ~ dy_vars)
+      mutate_at(
+        .vars = source_vars,
+        .funs = list(temp = ~
+        compute_duration(start_date = eval(reference_date), end_date = .))
+      ) %>%
+      rename_at(
+        vars(ends_with("temp")),
+        ~dy_vars
+      )
   } else {
     dataset %>%
       mutate(!!sym(dy_vars) :=
-               compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]])
-             )
+        compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]]))
   }
 }

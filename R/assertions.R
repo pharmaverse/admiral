@@ -1301,7 +1301,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @examples
 #' data(admiral_adsl)
 #' try(
-#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#'   assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
 #' )
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)

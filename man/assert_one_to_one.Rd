@@ -24,7 +24,7 @@ Checks if there is a one to one mapping between two lists of variables.
 \examples{
 data(admiral_adsl)
 try(
-  assert_one_to_one(adsl, vars(SEX), vars(RACE))
+  assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
 )
 }
 \author{
