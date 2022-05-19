@@ -23,8 +23,8 @@ library(admiraltest)
 library(admiral)
 data(admiral_vs)
 
-filter_if(admiral_vs, rlang::quo(NULL))
-filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
+admiral::filter_if(admiral_vs, rlang::quo(NULL))
+admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 }
 \author{
 Thomas Neitmann
