@@ -45,7 +45,7 @@ To set expectations: It is not our target that `{admiral}` will ever provide all
 for all ADaM datasets outside of study specific needs. It depends on the user's collaboration
 and contribution to help grow over time to an asset library that is robust, easy to use and
 has an across-industry focus. We do not see a coverage of 100% of all ADaM derivations as ever
-achievable - ADaM is endless.
+achievable---ADaM is endless.
 
 We will provide:
 
@@ -53,7 +53,7 @@ We will provide:
 modular manner (an "opinionated" design strategy)
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
 the provided programming strategy and modular approach
-* Functions that are comprehensively documented and tested, including example calls - these are
+* Functions that are comprehensively documented and tested, including example calls---these are
 all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
 * Vignettes on how to create ADSL, BDS and OCCUR datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation,
@@ -62,11 +62,11 @@ SMQs ...)
 ## Types of Packages
 There will be 3 foreseeable types of `{admiral}` packages:
 
-* Core package - one package containing all core functions required to create ADaMs,
+* Core package---one package containing all core functions required to create ADaMs,
 usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
-* TA (Therapeutic Area) package extensions - one package per TA with functions that are
+* TA (Therapeutic Area) package extensions---one package per TA with functions that are
 specific to algorithms and requirements for that particular TA (e.g. `{admiralonco}`)
-* Company package extensions - specific needs and plug-ins for the company, such as access to metadata
+* Company package extensions---specific needs and plug-ins for the company, such as access to metadata
 (e.g. `{admiralroche}` or `{admiralgsk}`)
 
 ## Admiral Manifesto
@@ -84,7 +84,7 @@ All `{admiral}` functions should be easy to use.
 
 * Documentation is an absolute priority. Each function reference page should cover the purpose,
 descriptions of each argument with permitted values, the expected input and output, with clear real-life
-examples - so that users don’t need to dig through code to find answers.
+examples---so that users don’t need to dig through code to find answers.
 * Vignettes that complement the functional documentation to help users see how best the functions can be
 applied to achieve ADaM requirements.
 * Functions should be written and structured in a way that users are able to read, re-use or extend them
@@ -128,7 +128,7 @@ that all our developers and contributors must follow, so that all our code has a
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities),
 we try to limit nesting of too many dependencies or functions.
-* Modularity is a focus - we don’t try to achieve too many steps in one.
+* Modularity is a focus---we don’t try to achieve too many steps in one.
 * All code has to be well commented.
 * We recognise that a user or a Health Authority reviewer may have the wish to delve into the codebase (especially
 given this open source setting), or users may need to extend/adapt the code for their study specific needs. We
@@ -145,12 +145,12 @@ therefore want any module to be understandable to all, not only the `{admiral}` 
 ## Conference Presentations
 
 * [R/Pharma 2021 talk](https://www.youtube.com/watch?v=N7Bw8c3D5fU) (recording)
-* [PHUSE US Connect 2022 pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials - including `{admiral}`
+* [PHUSE US Connect 2022 pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials---including `{admiral}`
 workshop slides from PHUSE EU Connect 2021)
 
 ## Contact 
 
 We use the following for support and communications between user and developer community:
 
-* [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) - for informal discussions, Q&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
-* [GitHub Issues](https://github.com/pharmaverse/admiral/issues) - for direct feedback, enhancement requests or raising bugs
+* [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269)---for informal discussions, Q&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
+* [GitHub Issues](https://github.com/pharmaverse/admiral/issues)---for direct feedback, enhancement requests or raising bugs
