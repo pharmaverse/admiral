@@ -44,17 +44,17 @@
 #' A date or date-time object is expected.
 #' For example
 #'
-#' ```
+#' ```{r echo=TRUE, eval=FALSE}
 #' impute_dtc(
-#'   "2020-11",
-#'   min_dates = list(
-#'     ymd_hms("2020-12-06T12:12:12"),
-#'     ymd_hms("2020-11-11T11:11:11")
-#'    ),
-
-#'   date_imputation = "first"
+#'"2020-11",
+#'min_dates = list(
+#'  ymd_hms("2020-12-06T12:12:12"),
+#'  ymd_hms("2020-11-11T11:11:11")
+#' ),
+#'date_imputation = "first"
 #' )
 #' ```
+#'
 #' returns `"2020-11-11T11:11:11"` because the possible dates for `"2020-11"`
 #' range from `"2020-11-01T00:00:00"` to `"2020-11-30T23:59:59"`. Therefore
 #' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
