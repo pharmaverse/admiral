@@ -65,7 +65,6 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @examples
 #' library(admiraltest)
-#' library(admiral)
 #' data(admiral_vs)
 #'
 #' admiral::filter_if(admiral_vs, rlang::quo(NULL))
