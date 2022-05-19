@@ -692,7 +692,7 @@ extend_source_datasets <- function(source_datasets,
 #'   a datetime, or a character variable containing ISO 8601 dates can be
 #'   specified. An unquoted symbol is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param censor Censoring value

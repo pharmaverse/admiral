@@ -17,7 +17,7 @@
 #'
 #'   A date or date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character vector to a date object.
 #'
 #'   The default is `TRTSDT`.
 #'
@@ -25,7 +25,7 @@
 #'
 #'   A date or date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character vector to a date object.
 #'
 #'   The default is `AENDT`
 #'
