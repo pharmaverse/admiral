@@ -16,7 +16,7 @@ parameter are expected.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
