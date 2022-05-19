@@ -199,5 +199,5 @@ automatically run and pull request will be denied if any unit tests fail.
 ## Flow Chart
 
 ```{r echo=FALSE, out.width='120%'}
-knitr::include_graphics('./unit_test_guidance.png')
+knitr::include_graphics("./unit_test_guidance.png")
 ```
