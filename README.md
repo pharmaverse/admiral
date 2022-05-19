@@ -48,6 +48,7 @@ has an across-industry focus. We do not see a coverage of 100% of all ADaM deriv
 achievable - ADaM is endless.
 
 We will provide:
+
 * A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a
 modular manner (an "opinionated" design strategy)
 * Pharmaceutical communities and companies are encouraged to contribute to `{admiral}` following
@@ -60,6 +61,7 @@ SMQs ...)
 
 ## Types of Packages
 There will be 3 foreseeable types of `{admiral}` packages:
+
 * Core package - one package containing all core functions required to create ADaMs,
 usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)
 * TA (Therapeutic Area) package extensions - one package per TA with functions that are
@@ -79,6 +81,7 @@ We have four design principles to achieve the main goal:
 ### Usability
 
 All `{admiral}` functions should be easy to use. 
+
 * Documentation is an absolute priority. Each function reference page should cover the purpose,
 descriptions of each argument with permitted values, the expected input and output, with clear real-life
 examples - so that users don’t need to dig through code to find answers.
@@ -90,6 +93,7 @@ for study specific purposes if needed (see Readability below).
 ### Simplicity
 
 All `{admiral}` functions have a clear purpose.
+
 * We try not to ever design single functions that could achieve numerous very different derivations. For
 example if you as a user pick up a function with >10 different arguments then chances are it is going to be
 difficult to understand if this function could be applied for your specific need. The intention is that
@@ -108,6 +112,7 @@ so this needs to be considered carefully to keep the nesting of 3-4 functions an
 ### Findability
 
 All `{admiral}` functions are easily findable.
+
 * In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.
 * We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
 help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
@@ -119,6 +124,7 @@ extension packages will be moved to the core `{admiral}` package.
 
 All `{admiral}` functions follow the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html)
 that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.
+
 * We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.
 * For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities),
 we try to limit nesting of too many dependencies or functions.
@@ -145,5 +151,6 @@ workshop slides from PHUSE EU Connect 2021)
 ## Contact 
 
 We use the following for support and communications between user and developer community:
+
 * [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) - for informal discussions, Q&A and building our user community. If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join the pharmaverse Slack workspace
 * [GitHub Issues](https://github.com/pharmaverse/admiral/issues) - for direct feedback, enhancement requests or raising bugs
