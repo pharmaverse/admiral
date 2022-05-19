@@ -77,6 +77,8 @@ dataset_vignette(
 )
 ```
 
+**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed.  
+
 # Derivations
 
 The most important functions in `{admiral}` are the
@@ -110,7 +112,7 @@ be preserved.
 
 # Computations
 
-[Computations](../reference/index.html#section-computations) expect vectors as
+[Computations](../reference/index.html#computations) expect vectors as
 input and return a vector. Usually these computation functions can not be used with `%>%`. These functions can be used in expressions like
 `convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
 example below:
