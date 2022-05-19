@@ -61,6 +61,10 @@ reference:
   desc: Functions specific for ADCM
   contents:
   - has_keyword('adcm')
+- subtitle: ADLB
+  desc: Functions specific for ADLB
+  contents:
+  - has_keyword('adlb')
 
 - title: Other Keywords
 - subtitle: Timing
