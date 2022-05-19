@@ -96,8 +96,9 @@ impute_dtc(
 )
 ```
 
-If you wanted to replace any missing part of the date with a fixed value, this
-is also possible:
+If you wanted to achieve a similar result by replacing any missing part of the
+date with a fixed value `06-15`, this is also possible, but note the difference
+in days for cases when month is missing:
 
 ```{r}
 dates <- c(
@@ -174,10 +175,10 @@ Otherwise, `NA` is returned.
 
 The `derive_vars_dtm()` function derives an imputed datetime variable and the
 corresponding date and time imputation flags. The imputed date variable can be
-derived by a simple `mutate()` call. It is not necessary and advisable to
-perform the imputation for the date variable if it was already done for the
-datetime variable. CDISC considers the datetime and the date variable as two
-representation of the same date. Thus the imputation must be the same and the
+derived by using the `derive_vars_dtm_to_dt()` function. It is not necessary and
+advisable to perform the imputation for the date variable if it was already done
+for the datetime variable. CDISC considers the datetime and the date variable as
+two representations of the same date. Thus the imputation must be the same and the
 imputation flags are valid for both the datetime and the date variable.
 
 ```{r}
@@ -194,7 +195,7 @@ ae <- tribble(
     date_imputation = "first",
     time_imputation = "first"
   ) %>%
-  mutate(ASTDT = date(ASTDTM))
+  derive_vars_dtm_to_dt(vars(ASTDTM))
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)
@@ -216,8 +217,7 @@ ae <- tribble(
   derive_vars_dt(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    flag_imputation = "none"
+    date_imputation = "first"
   )
 ```
 ```{r, echo=FALSE}
