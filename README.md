@@ -60,6 +60,7 @@ all listed in the [Reference section](https://pharmaverse.github.io/admiral/refe
 SMQs ...)
 
 ## Types of Packages
+
 There will be 3 foreseeable types of `{admiral}` packages:
 
 * Core package---one package containing all core functions required to create ADaMs,
@@ -70,6 +71,7 @@ specific to algorithms and requirements for that particular TA (e.g. `{admiralon
 (e.g. `{admiralroche}` or `{admiralgsk}`)
 
 ## Admiral Manifesto
+
 For `{admiral}` and all extension packages, we prioritise providing our users with a **simple to adopt** toolkit
 that enables them to produce **readable** and **easily constructible** ADaM programs. The following explains
 our philosophy, which we try to adhere to across the `{admiral}` family of packages.
