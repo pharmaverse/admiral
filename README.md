@@ -55,7 +55,7 @@ modular manner (an "opinionated" design strategy)
 the provided programming strategy and modular approach
 * Functions that are comprehensively documented and tested, including example calls---these are
 all listed in the [Reference section](https://pharmaverse.github.io/admiral/reference/index.html)
-* Vignettes on how to create ADSL, BDS and OCCUR datasets, including example scripts
+* Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts
 * Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation,
 SMQs ...)
 
@@ -101,9 +101,7 @@ example if you as a user pick up a function with >10 different arguments then ch
 difficult to understand if this function could be applied for your specific need. The intention is that
 arguments/parameters can influence how the output of a function is calculated, but not change the purpose of
 the function.
-* We try to combine similar tasks and algorithms into one function where applicable
- - this is to reduce the amount of repetitive functions with similar algorithms
- - this is to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
+* We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).
 
 * We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.
 * Functions should not allow expressions as arguments that are used as code snippets in function calls.
