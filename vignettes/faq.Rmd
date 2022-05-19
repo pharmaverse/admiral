@@ -100,7 +100,7 @@ knitr::opts_chunk$set(
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
  * No. The functions  are documented  via programming  headers, the define.xml is the responsibility of the end user.
- * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?])
+ * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?](https://pharmaverse.github.io/admiral/articles/faq.html#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean))
  * The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml
 
 ##### Will `{admiral}` provide ADaM IG **CDISC compliant** datasets?
