@@ -759,7 +759,6 @@ advs <- restrict_derivation(
   ),
   filter = !is.na(AVISITN)
 )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -791,8 +790,6 @@ advs <- restrict_derivation(
   ),
   filter = !is.na(AVISIT) & !is.na(AVAL)
 )
-
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
