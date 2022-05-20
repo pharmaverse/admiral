@@ -1227,18 +1227,19 @@ assert_varval_list <- function(arg, # nolint
 #'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
-#'
+#'events <- list(death, lstalv)
 #' try(assert_list_element(
-#'   list = list(death, lstalv),
+#'   list = events ,
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
 #' ))
 #'
+#' valid_datasets <- c("adrs", "adae")
 #' try(assert_list_element(
 #'   list = events,
 #'   element = "dataset_name",
-#'   condition = dataset_name %in% c("adrs", "adae"),
+#'   condition = dataset_name %in% valid_datasets,
 #'   valid_datasets = valid_datasets,
 #'   message_text = paste0(
 #'     "The dataset name must be one of the following:\n",
