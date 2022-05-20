@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 # Introduction
 
 This article describes creating an OCCDS ADaM. Examples are currently 
-presented and tested in the context of ADAE.
+presented and tested in the context of `ADAE`.
 However, the examples could be applied to other OCCDS ADaMs such as 
-ADCM, ADMH, ADDV, etc.
+`ADCM`, `ADMH`, `ADDV`, etc.
 
 **Note**: *All examples assume CDISC SDTM and/or ADaM format as input unless 
 otherwise specified.*
@@ -46,7 +46,8 @@ To start, all data frames needed for the creation of `ADAE` should be read into
 the environment. This will be a company specific process. Some of the data
 frames needed may be `AE` and `ADSL`
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets ---which are
+included in `{admiraltest}`--- are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -61,9 +62,9 @@ ae <- admiral_ae
 adsl <- admiral_adsl
 ```
 
-At this step, it may be useful to join `ADSL` to your `AE` domain. Only the 
+At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only the 
 `ADSL` variables used for derivations are selected at this step. The rest of the
-relevant `ADSL` would be added later.
+relevant `ADSL` variables would be added later.
 
 ```{r eval=TRUE}
 
@@ -92,7 +93,7 @@ dataset_vignette(
 This part derives `ASTDTM`, `ASTDT`, `ASTDY`, `AENDTM`, `AENDT`, and `AENDY`.
 The function `derive_vars_dtm()` can be used to derive `ASTDTM` and `AENDTM`
 where `ASTDTM` could be company-specific. `ASTDT` and `AENDT` can be derived
-from `ASTDTM` and `AENDTM`, respectively using function `derive_vars_dtm_to_dt`.
+from `ASTDTM` and `AENDTM`, respectively, using function `derive_vars_dtm_to_dt()`.
 `derive_vars_dy()` can be used to create `ASTDY` and `AENDY`.
 
 ```{r eval=TRUE}
@@ -221,7 +222,7 @@ count(adae, TRTP, TRTA, TRT01P, TRT01A)
 
 The function `derive_var_last_dose_date()` can be used to derive the last dose date before the start of the event. 
 
-Additionally, this function can also provide the traceability variables 
+Additionally, this function can also provide traceability variables 
 (e.g. `LDOSEDOM`, `LDOSESEQ`) using the `traceability_vars` argument.
 
 
@@ -252,8 +253,8 @@ dataset_vignette(
 
 ## Derive Severity, Causality, and Toxicity Grade {#severity}
 
-The variables `ASEV`, `AREL`, and `ATOXGR` can be added by simply
-`mutate()` if no imputation is required.
+The variables `ASEV`, `AREL`, and `ATOXGR` can be added using simple
+`dplyr::mutate()` assignments, if no imputation is required.
 
 ```{r eval=TRUE}
 adae <- adae %>%
@@ -265,8 +266,8 @@ adae <- adae %>%
 
 ## Derive Treatment Emergent Flag {#trtflag}
 
-To derive the treatment emergent flag `TRTEMFL`, one can use simple
-`dplyr::mutate()`. In the example below, we use 30 days in the flag derivation.
+To derive the treatment emergent flag `TRTEMFL`, one can use a simple
+`dplyr::mutate()` assignment. In the example below, we use 30 days in the flag derivation.
 
 ```{r eval=TRUE}
 adae <- adae %>%
@@ -290,9 +291,9 @@ use `derive_var_ontrtfl()`.
 
 The expected result is the input dataset with an additional column named `ONTRTFL` with a value of `"Y"` or `NA`.
 
-If you wanted to additionally check an end date you could add the `end_date` argument.
-Note that in this case you could set `span_period = "Y"` if you wanted occurrences that started
-prior to drug intake and ongoing or ended after this time to be considered as on-treatment.
+If you want to also check an end date, you could add the `end_date` argument.
+Note that in this scenario you could set `span_period = "Y"` if you want occurrences that started
+prior to drug intake, and was ongoing or ended after this time to be considered as on-treatment.
 
 ```{r eval=TRUE}
 bds1 <- tibble::tribble(
@@ -361,9 +362,9 @@ adae <- adae %>%
   )
 ```
 
-Similarly, `ASEV` can also be used to derive the occurrence flags if severity is
-collected. In this case, the variable may need to be firstly recorded into a
-numeric one. Flag first occurrence of most severe adverse event:
+Similarly, `ASEV` can also be used to derive the occurrence flags, if severity is
+collected. In this case, the variable will need to be recoded to a numeric variable.
+Flag first occurrence of most severe adverse event:
 
 ```{r, eval=TRUE}
 adae <- adae %>%
@@ -481,7 +482,7 @@ dataset_vignette(
 
 The function `derive_var_obs_number()` can be used for deriving `ASEQ` variable to ensure the uniqueness of subject records within the dataset.
 
-For example, there can be multiple records present in `ADCM` for a single subject with the same `ASTDTM` and `CMSEQ` variables. But these records are still differ in ATC levels:
+For example, there can be multiple records present in `ADCM` for a single subject with the same `ASTDTM` and `CMSEQ` variables. But these records still differ at ATC level:
 
 ``` {r eval=TRUE, echo=TRUE}
 adcm <- tibble::tribble(
