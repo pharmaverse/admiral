@@ -107,6 +107,7 @@ If the \code{span_period} is specified as \code{"Y"}, this allows the user to as
 Any date imputations needed should be done prior to calling this function.
 }
 \examples{
+library(magrittr)
 library(lubridate, warn.conflict = FALSE)
 
 advs <- tibble::tribble(
