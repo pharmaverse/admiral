@@ -137,11 +137,12 @@ derive_var_ontrtfl(
 )
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
-  "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA,
-  "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
-  "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA
-)
+  ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,
+  "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+) \%>\%
+  mutate(TPT = c(NA, "PRE", NA))
 derive_var_ontrtfl(
   advs,
   start_date = ADTM,
