@@ -92,6 +92,7 @@
 #' @export
 #'
 #' @examples
+#' library(magrittr)
 #' library(lubridate, warn.conflict = FALSE)
 #'
 #' advs <- tibble::tribble(
