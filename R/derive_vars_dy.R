@@ -68,7 +68,8 @@
 #'     DTHDT = ymd(DTHDT)
 #'   )
 #'
-#' derive_vars_dy(datain,
+#' derive_vars_dy(
+#'   datain,
 #'   reference_date = TRTSDT,
 #'   source_vars = vars(TRTSDT, DEATHDY = DTHDT)
 #' )
@@ -100,7 +101,8 @@ derive_vars_dy <- function(dataset,
     abort(err_msg)
   }
 
-  dy_vars <- if_else(source_names == "",
+  dy_vars <- if_else(
+    source_names == "",
     stringr::str_replace_all(vars2chr(source_vars), "(DT|DTM)$", "DY"),
     source_names
   )
@@ -119,7 +121,9 @@ derive_vars_dy <- function(dataset,
       )
   } else {
     dataset %>%
-      mutate(!!sym(dy_vars) :=
-        compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]]))
+      mutate(
+        !!sym(dy_vars) :=
+        compute_duration(start_date = !!reference_date, end_date = !!source_vars[[1]])
+      )
   }
 }

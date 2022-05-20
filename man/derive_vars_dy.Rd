@@ -71,7 +71,8 @@ datain <- tibble::tribble(
     DTHDT = ymd(DTHDT)
   )
 
-derive_vars_dy(datain,
+derive_vars_dy(
+  datain,
   reference_date = TRTSDT,
   source_vars = vars(TRTSDT, DEATHDY = DTHDT)
 )
