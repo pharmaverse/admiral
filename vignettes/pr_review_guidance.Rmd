@@ -64,7 +64,7 @@ When a contributor opens a PR a lengthy standard text will be inserted into the 
 
 
 ```{r echo=FALSE, out.width='120%'}
-knitr::include_graphics('./pr_review_checklist.png')
+knitr::include_graphics("./pr_review_checklist.png")
 ```
 
 ## Create a Pull Request
@@ -72,7 +72,7 @@ knitr::include_graphics('./pr_review_checklist.png')
 After you click the green `Create pull request` button the automated text that was inserted will be turned into a checklist in your Pull Request. Each check box has been drawn from the previously mentioned vignettes and presented in the recommended sequence. These check boxes are meant to be a helpful aid in ensuring that you have created a compliant Pull Request. 
 
 ```{r echo=FALSE, out.width='120%'}
-knitr::include_graphics('./pr_review_checkbox.png')
+knitr::include_graphics("./pr_review_checkbox.png")
 ```
 
 ## Complete all checks
@@ -80,7 +80,7 @@ knitr::include_graphics('./pr_review_checkbox.png')
 The check boxes are linked to the `task-list-completed` workflow. You need to check off each box in acknowledgment that you have done you due diligence in creating a compliant Pull Request. GitHub will refresh the Pull Request and trigger `task-list-completed` workflow that you have completed the task. The PR can not be merged into `devel` until the contributor has checked off each of the check box items.
 
 ```{r echo=FALSE, out.width='120%'}
-knitr::include_graphics('./pr_review_actions.png')
+knitr::include_graphics("./pr_review_actions.png")
 ```
 
 Please don't hesitate to reach out to the `{admiral}` team on [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) or through the [GitHub Issues](https://github.com/pharmaverse/admiral/issues) tracker if you think this checklist needs to be amended or further clarity is needed on a check box item. 
@@ -92,25 +92,34 @@ Please don't hesitate to reach out to the `{admiral}` team on [Slack](https://ap
 
 ## Check Fails Only on One Version
 
-If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally. The test environment for R version 3.6 is the same we use for development.
+If the `R CMD check` workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally.
 
-To reproduce the R version 3.5 environment open the `{admiral}` project in R version 3.5.x, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
+To reproduce a particular R version environment open the `{admiral}` project in the corresponding R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
 
 ```r
-install.packages("remotes")
-options(repos = "https://cran.microsoft.com/snapshot/2018-12-20/")
+if (!dir.exists(".library")) {
+  dir.create(".library")
+}
+.libPaths(".library")
+
+r_version <- getRversion()
+if (grepl("^3.6", r_version)) {
+  options(repos = "https://cran.microsoft.com/snapshot/2020-02-29")
+} else if (grepl("^4.0", r_version)) {
+  options(repos = "https://cran.microsoft.com/snapshot/2021-03-31")
+} else {
+  options(repos = "https://cran.rstudio.com")
+}
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
 remotes::install_deps(dependencies = TRUE)
 devtools::check()
 ```
 
-To reproduce the R release version environment open the `{admiral}` project in the latest available R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
-
-```r
-install.packages("remotes")
-options(repos = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
-remotes::install_deps(dependencies = TRUE)
-devtools::check()
-```
+This will ensure that the exact package versions we use in the workflow are installed into the hidden folder `.library`. That way your existing R packages are *not* overwritten.
 
 ## Package Dependencies
 
