@@ -151,3 +151,16 @@ expect_error(create_single_dose_dataset(input,
                            start_date = ASTDTM,
                            end_date = AENDTM))
 })
+
+test_that("Error is returned when a date variable contains NA values", {
+
+input <- tibble::tribble(
+              ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+              "P01", "Q2D", ymd("2021-01-01"), NA,
+              "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
+              "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
+            )
+expect_error(
+  create_single_dose_dataset(input), regexp = "cannot contain `NA`")
+
+})
