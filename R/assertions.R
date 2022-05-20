@@ -1227,9 +1227,9 @@ assert_varval_list <- function(arg, # nolint
 #'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
-#'events <- list(death, lstalv)
+#' events <- list(death, lstalv)
 #' try(assert_list_element(
-#'   list = events ,
+#'   list = events,
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
