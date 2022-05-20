@@ -322,17 +322,20 @@ An example is given below:
 #' library(dplyr)
 #'
 #' datain <- tibble::tribble(
-#'   ~TRTSDTM, ~ASTDTM, ~AENDT,
+#'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,
 #'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
-#'  mutate(TRTSDTM = as_datetime(TRTSDTM),
-#'         ASTDTM = as_datetime(ASTDTM),
-#'         AENDT = ymd(AENDT))
+#'  mutate(
+#'    TRTSDTM = as_datetime(TRTSDTM),
+#'    ASTDTM = as_datetime(ASTDTM),
+#'    AENDT = ymd(AENDT)
+#'  )
 #'
 #' derive_vars_dy(
 #'   datain,
 #'   reference_date = TRTSDTM,
-#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#' )
 ```
 
 
