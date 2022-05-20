@@ -16,7 +16,7 @@ expected.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character vector to a date object.
 
 The default is \code{TRTSDT}.}
 
@@ -24,7 +24,7 @@ The default is \code{TRTSDT}.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character vector to a date object.
 
 The default is \code{ASTDT}}
 }
