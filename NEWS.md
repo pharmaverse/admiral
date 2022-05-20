@@ -42,7 +42,8 @@ a certain event exists in a dataset. (#1064)
   - `slice_derivation()` - The input dataset is split into slices (subsets) and
   for each slice a derivation is called separately. Some or all arguments of the
   derivation may vary depending on the slice.
-  - `filter_relative()` - Selects observations before or after the observation
+
+- `filter_relative()` - Selects observations before or after the observation
 where a specified condition is fulfilled. For example, all observations up to
 first disease progression. (#1023)
   
