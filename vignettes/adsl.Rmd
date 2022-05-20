@@ -204,7 +204,7 @@ This call would return the input dataset with the column `EOSDT` added.
 This function allows the user to impute partial dates as well. If imputation is needed and the date 
 is to be imputed to the first of the month, then set `date_imputation = "FIRST"`.
 
-### Disposition Status (e.g. `EOSTT`) {#disposition_status}
+### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
 The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
