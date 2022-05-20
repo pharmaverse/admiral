@@ -62,7 +62,7 @@ lstalv <- censor_source(
 )
 events <- list(death, lstalv)
 try(assert_list_element(
-  list = events ,
+  list = events,
   element = "censor",
   condition = censor == 0,
   message_text = "For events the censor values must be zero."

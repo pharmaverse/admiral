@@ -5,6 +5,7 @@
 - Updates to date/time imputation functions (#761):
 
   - `convert_date_to_dtm()` and `convert_dtc_to_dtm()` now have time_imputation = "00:00:00" as default 
+  
   - `derive_vars_dt()`now has flag_imputation = "auto" as default
 
 - New functions for merging variables (#607):
@@ -15,10 +16,10 @@
   - `derive_var_merged_cat()` - Merge a Categorization Variable
   - `derive_var_merged_exist_flag()` - Merge an Existence Flag
   - `derive_var_merged_character()` - Merge a Character Variable
+  
 
 - `create_query_data()` is provided to create the [queries
-dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for
-`derive_vars_query()` (#606)
+dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) required as input for `derive_vars_query()` (#606)
 
 - `create_single_dose_dataset()` - Derives dataset of single dose from aggregate dose information (#660)
 
@@ -26,6 +27,7 @@ dataset](https://pharmaverse.github.io/admiral/articles/queries_dataset.html) re
 
   - `derive_var_extreme_dtm()` - Derive First or Last Datetime from Multiple Sources
   - `derive_var_extreme_dt()` - Derive First or Last Date from Multiple Sources
+
 
 - New function `derive_extreme_records()` for adding the first or last
 observation within each by group to the dataset (#1042)
@@ -49,28 +51,21 @@ first disease progression. (#1023)
   
 ### ADLB
 
-  - New ADLB template script available, specific ADLB functions developed and
+  - New ADLB template script available `ad_adlb.R`, specific ADLB functions developed and
   [BDS Finding vignette](https://pharmaverse.github.io/admiral/articles/bds_finding.html) has examples enhanced with ADLB functions. (#1122)
 
   - `derive_var_shift()` - Derives a character shift variable containing concatenated shift in values based on user-defined pairing (#944)
   - `derive_var_analysis_ratio()` - Derives a ratio variable based on user-supplied variables from a BDS dataset, e.g. ADLB. (#943)
   - `derive_param_wbc_abs()` - Adds a parameter for lab differentials converted to absolute values. (#941)
 
-- `filter_relative()` - Selects observations before or after the observation
-where a specified condition is fulfilled. For example, all observations up to
-first disease progression. (#1023)
 
 ### ADPP
 
-  - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset
+  - New ADPP template script available `ad_adpp.R` which creates Pharmacokinetics Parameters Analysis Dataset (#850)
 
 ## Updates of Existing Functions
 
-- `format_eoxxstt_default()` - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (#911)
-
-- Datasets internal to the package have been renamed, e.g. `adsl` has 
-been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`
-have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
+- Datasets internal to the package have been renamed with prefix `admiral_`, e.g. `adsl` has been renamed to `admiral_adsl`.  Corresponding SDTM datasets in `{admiraltest}`have also been renamed, e.g.`dm` to `admiral_dm`.  These changes will impact examples,
 vignettes, unit tests and templates (#1108 and #1088)
 
 - When `derive_vars_dtm_to_tm()` was called for variables created by
@@ -80,6 +75,8 @@ vignettes, unit tests and templates (#1108 and #1088)
 `preserve = FALSE` would expect the date `2019---07` to be imputed to `2019-06-30`, 
 but the function was returning `2019-06-15`. Now returns it correctly. This bug fix 
 also addresses the issue in the downstream functions `derive_vars_dt()` and `derive_vars_dtm()`. (#1081)
+
+- `format_eoxxstt_default()` - Updated to have a more meaningful parameter name i.e. the parameter that was x is now status (#911)
 
 ## Breaking Changes
 
@@ -106,6 +103,7 @@ also addresses the issue in the downstream functions `derive_vars_dt()` and `der
   - `derive_params_exposure()` 
   - `derive_last_dose()`
   - `dataset` parameter in `lstalvdt_source` and `dthcaus_source`
+  
 
 - The following functions were deprecated in favor of `derive_vars_dy()`
 (#1076):
