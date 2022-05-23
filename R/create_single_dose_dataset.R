@@ -307,9 +307,12 @@ create_single_dose_dataset <- function(dataset,
   if (nrow(na_check) > 0) {
     na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
     err_msg <- paste0(
-        "The arguments start_date and end_date cannot contain `NA` values.\n",
-        sprintf("Please check %s for `NA` values.",
-        na_columns))
+      "The arguments start_date and end_date cannot contain `NA` values.\n",
+      sprintf(
+        "Please check %s for `NA` values.",
+        na_columns
+      )
+    )
     abort(err_msg)
   }
 
