@@ -195,7 +195,7 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -204,7 +204,7 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
@@ -298,6 +298,23 @@ create_single_dose_dataset <- function(dataset,
 
   lookup <- lookup_table %>%
     rename(!!dose_freq := !!lookup_column)
+
+  # Check that NAs do not appear in start_date or end_date columns
+  na_check <- dataset %>%
+    filter(is.na(!!start_date) | is.na(!!end_date)) %>%
+    select(!!start_date, !!end_date)
+
+  if (nrow(na_check) > 0) {
+    na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
+    err_msg <- paste0(
+      "The arguments start_date and end_date cannot contain `NA` values.\n",
+      sprintf(
+        "Please check %s for `NA` values.",
+        na_columns
+      )
+    )
+    abort(err_msg)
+  }
 
   # Check values of lookup vs. data and return error if values are not covered
 
