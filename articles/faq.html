@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="admiral">
 <title>FAQ • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,14 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
-<link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="FAQ">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="FAQ">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -27,138 +25,91 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">admiral</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/admiral.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">User Guides</li>
-    <li>
-      <a href="../articles/adsl.html">Creating ADSL</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/imputation.html">Date and Time Imputation</a>
-    </li>
-    <li>
-      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-    </li>
-    <li>
-      <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Developer Guides</li>
-    <li>
-      <a href="../articles/contribution_model.html">Contribution to admiral</a>
-    </li>
-    <li>
-      <a href="../articles/development_process.html">Development Process</a>
-    </li>
-    <li>
-      <a href="../articles/programming_strategy.html">Programming Strategy</a>
-    </li>
-    <li>
-      <a href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    </li>
-    <li>
-      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    </li>
-    <li>
-      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    </li>
-    <li>
-      <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/pharmaverse/admiral/">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
-      </form>
-      
-    </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>FAQ</h1>
+
+<script src="faq_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>FAQ</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/faq.Rmd"><code>vignettes/faq.Rmd</code></a></small>
-      <div class="hidden name"><code>faq.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/faq.Rmd" class="external-link"><code>vignettes/faq.Rmd</code></a></small>
+      <div class="d-none name"><code>faq.Rmd</code></div>
     </div>
 
     
     
-<div id="what-is-admiral" class="section level5">
-<h5 class="hasAnchor">
-<a href="#what-is-admiral" class="anchor"></a><strong>What is admiral</strong>?</h5>
+<div class="section level5">
+<h5 id="what-is-admiral">
+<strong>What is admiral</strong>?<a class="anchor" aria-label="anchor" href="#what-is-admiral"></a>
+</h5>
 <ul>
 <li>Think of <code>{admiral}</code> as a toolbox of modular blocks (R functions) to create analysis derivations:
 <ul>
@@ -169,9 +120,10 @@
 <li>Constructing ADaM dataset should become like building out of blocks that are based on <code>{admiral}</code> modular functions and user created modular functions.</li>
 </ul>
 </div>
-<div id="why-did-we-decide-to-start-admiral" class="section level5">
-<h5 class="hasAnchor">
-<a href="#why-did-we-decide-to-start-admiral" class="anchor"></a><strong>Why</strong> did we decide to start <strong>admiral</strong>?</h5>
+<div class="section level5">
+<h5 id="why-did-we-decide-to-start-admiral">
+<strong>Why</strong> did we decide to start <strong>admiral</strong>?<a class="anchor" aria-label="anchor" href="#why-did-we-decide-to-start-admiral"></a>
+</h5>
 <ul>
 <li>Data analysis challenges in clinical trials vary depending on scientific goals, therapeutic areas, indications, data sources and data quality. We all face the same challenge so why limit ourselves only to company-level adoption and crowd-sourcing to create ADaM datasets?</li>
 <li>Build ADaMs via collaboration and co-creation</li>
@@ -184,9 +136,9 @@
 <li>Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow</li>
 </ul>
 </div>
-<div id="why-did-we-use-r-as-a-programming-language" class="section level5">
-<h5 class="hasAnchor">
-<a href="#why-did-we-use-r-as-a-programming-language" class="anchor"></a>Why did we use <strong>R as a programming language</strong>?</h5>
+<div class="section level5">
+<h5 id="why-did-we-use-r-as-a-programming-language">Why did we use <strong>R as a programming language</strong>?<a class="anchor" aria-label="anchor" href="#why-did-we-use-r-as-a-programming-language"></a>
+</h5>
 <ul>
 <li>R is not an isolated software product, everyone can contribute (open source principal)</li>
 <li>People from University/Statistical talent pipeline more likely to come through with R skills rather than a proprietary language</li>
@@ -197,9 +149,21 @@
 <li>There might be equally suited programming languages out there - however at some stage we had to make a decision :)</li>
 </ul>
 </div>
-<div id="admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean" class="section level5">
-<h5 class="hasAnchor">
-<a href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean" class="anchor"></a>Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?</h5>
+<div class="section level5">
+<h5 id="why-do-we-use-a-certain-r-version-and-package-versions-for-development">Why do we use a <strong>certain R version and package versions</strong> for development?<a class="anchor" aria-label="anchor" href="#why-do-we-use-a-certain-r-version-and-package-versions-for-development"></a>
+</h5>
+<ul>
+<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <code>{admiral}</code>. This need for a common development environment also carries over for our choice of package versions.<br>
+</li>
+<li>GitHub allows us through the Actions/Workflows to test <code>{admiral}</code> under several versions of R as well as several versions of dependent R packages needed for <code>{admiral}</code>. Currently we test <code>{admiral}</code> against R Version 3.6.3 with a CRAN package snapshot from 2020-02-29, R Version 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>.</li>
+<li>This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.</li>
+<li>Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request. This ensures faster review times and higher quality Pull Request reviews.</li>
+<li>We achieve this common development environment by using a <strong>lockfile</strong> created from the <a href="https://rstudio.github.io/renv/" class="external-link"><code>renv</code></a> package. New developers will encounter a suggested <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code> in the console to revert or move forward your R version and package versions.</li>
+</ul>
+</div>
+<div class="section level5">
+<h5 id="admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean">Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?<a class="anchor" aria-label="anchor" href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean"></a>
+</h5>
 <ul>
 <li>Functions are usually not necessarily specific but parameter driven:
 <ul>
@@ -211,9 +175,9 @@
 </li>
 </ul>
 </div>
-<div id="how-does-a-user-know-what-a-function-does-exactly" class="section level5">
-<h5 class="hasAnchor">
-<a href="#how-does-a-user-know-what-a-function-does-exactly" class="anchor"></a>How does a user <strong>know what a function does</strong> exactly?</h5>
+<div class="section level5">
+<h5 id="how-does-a-user-know-what-a-function-does-exactly">How does a user <strong>know what a function does</strong> exactly?<a class="anchor" aria-label="anchor" href="#how-does-a-user-know-what-a-function-does-exactly"></a>
+</h5>
 <ul>
 <li>Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.</li>
 <li>Complex functions potentially have a vignette on the <code>{admiral}</code> homepage to provide more details.</li>
@@ -221,9 +185,9 @@
 <code>{admiral}</code> does not provide a link to an explicit specification in the define.xml.</li>
 </ul>
 </div>
-<div id="would-admiral-create-a-whole-adam-dataset" class="section level5">
-<h5 class="hasAnchor">
-<a href="#would-admiral-create-a-whole-adam-dataset" class="anchor"></a>Would <code>{admiral}</code> <strong>create a whole</strong> ADaM dataset?</h5>
+<div class="section level5">
+<h5 id="would-admiral-create-a-whole-adam-dataset">Would <code>{admiral}</code> <strong>create a whole</strong> ADaM dataset?<a class="anchor" aria-label="anchor" href="#would-admiral-create-a-whole-adam-dataset"></a>
+</h5>
 <ul>
 <li>
 <code>{admiral}</code> is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs</li>
@@ -232,27 +196,27 @@
 <li>on the <code>{admiral}</code> webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
 </ul>
 </div>
-<div id="in-which-order-does-a-user-need-to-execute-the-functions" class="section level5">
-<h5 class="hasAnchor">
-<a href="#in-which-order-does-a-user-need-to-execute-the-functions" class="anchor"></a>In <strong>which order</strong> does a user need to execute the functions?</h5>
+<div class="section level5">
+<h5 id="in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?<a class="anchor" aria-label="anchor" href="#in-which-order-does-a-user-need-to-execute-the-functions"></a>
+</h5>
 <ul>
 <li>Guidance will be provided for ADSL, BDS and OCCDS ADaM structure including template scripts.</li>
 </ul>
 </div>
-<div id="is-the-admiral-package-validated" class="section level5">
-<h5 class="hasAnchor">
-<a href="#is-the-admiral-package-validated" class="anchor"></a>Is the <code>{admiral}</code> package <strong>validated</strong>?</h5>
+<div class="section level5">
+<h5 id="is-the-admiral-package-validated">Is the <code>{admiral}</code> package <strong>validated</strong>?<a class="anchor" aria-label="anchor" href="#is-the-admiral-package-validated"></a>
+</h5>
 <ul>
 <li>All functions are reviewed and tested (see <a href="#what-will-be-provided-around-function-testing">What will be provided around <strong>function testing</strong>?</a>) to ensure that they work as described in the documentation.</li>
 <li>Test cases for each function will be part of the R package.</li>
 <li>Users can add to the tests or provide additional feedback.</li>
 <li>The testing the <code>{admiral}</code> team will do for each function does <strong>not replace the QC and validation process at each company</strong>.</li>
-<li>A <a href="https://github.com/marketplace/actions/r-package-validation-report">GitHub action</a> (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of <code>{admiral}</code> exists <a href="https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf">here</a> as an illustration.</li>
+<li>A <a href="https://github.com/marketplace/actions/r-package-validation-report" class="external-link">GitHub action</a> (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of <code>{admiral}</code> exists <a href="https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf" class="external-link">here</a> as an illustration.</li>
 </ul>
 </div>
-<div id="what-will-be-provided-around-function-testing" class="section level5">
-<h5 class="hasAnchor">
-<a href="#what-will-be-provided-around-function-testing" class="anchor"></a>What will be provided around <strong>function testing</strong>?</h5>
+<div class="section level5">
+<h5 id="what-will-be-provided-around-function-testing">What will be provided around <strong>function testing</strong>?<a class="anchor" aria-label="anchor" href="#what-will-be-provided-around-function-testing"></a>
+</h5>
 <ul>
 <li>Unit tests for reliability of each function - available as part of open source release</li>
 <li>Some integration testing will be done to ensure functions can be called together to create ADaM (e.g. even via the internal testing teams)</li>
@@ -266,25 +230,24 @@
 </li>
 </ul>
 </div>
-<div id="will-admiral-provide-harmonized-define-xml-or-submittable-specifications-for-functions" class="section level5">
-<h5 class="hasAnchor">
-<a href="#will-admiral-provide-harmonized-define-xml-or-submittable-specifications-for-functions" class="anchor"></a>Will <strong>admiral provide harmonized define.xml</strong> or submittable specifications for functions?</h5>
+<div class="section level5">
+<h5 id="will-admiral-provide-harmonized-define-xml-or-submittable-specifications-for-functions">Will <strong>admiral provide harmonized define.xml</strong> or submittable specifications for functions?<a class="anchor" aria-label="anchor" href="#will-admiral-provide-harmonized-define-xml-or-submittable-specifications-for-functions"></a>
+</h5>
 <ul>
 <li>No. The functions are documented via programming headers, the define.xml is the responsibility of the end user.</li>
-<li>Functions are usually generalized and not specific. (see <a href="#admiral-offers-a-toolbox-of-functions-to-facilitate-adam.-what-does-that-mean">Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?</a>)</li>
+<li>Functions are usually generalized and not specific. (see <a href="https://pharmaverse.github.io/admiral/articles/faq.html#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean" class="external-link">Admiral offers a <strong>toolbox of functions to facilitate ADaM</strong>. What does that mean?</a>)</li>
 <li>The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml</li>
 </ul>
 </div>
-<div id="will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="section level5">
-<h5 class="hasAnchor">
-<a href="#will-admiral-provide-adam-ig-cdisc-compliant-datasets" class="anchor"></a>Will <code>{admiral}</code> provide ADaM IG <strong>CDISC compliant</strong> datasets?</h5>
+<div class="section level5">
+<h5 id="will-admiral-provide-adam-ig-cdisc-compliant-datasets">Will <code>{admiral}</code> provide ADaM IG <strong>CDISC compliant</strong> datasets?<a class="anchor" aria-label="anchor" href="#will-admiral-provide-adam-ig-cdisc-compliant-datasets"></a>
+</h5>
 <ul>
 <li>Although <code>{admiral}</code> follows CDISC standards it does not claim that the dataset resulting from calling <code>{admiral}</code> functions is ADaM compliant. This has to be ensured by the user.</li>
 </ul>
 </div>
-<div id="how-much-of-the-adam-ig-is-covered-by-admiral" class="section level5">
-<h5 class="hasAnchor">
-<a href="#how-much-of-the-adam-ig-is-covered-by-admiral" class="anchor"></a>How much of the <strong>ADaM IG is covered by admiral?</strong>
+<div class="section level5">
+<h5 id="how-much-of-the-adam-ig-is-covered-by-admiral">How much of the <strong>ADaM IG is covered by admiral?</strong><a class="anchor" aria-label="anchor" href="#how-much-of-the-adam-ig-is-covered-by-admiral"></a>
 </h5>
 <ul>
 <li>ADaM IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.</li>
@@ -293,17 +256,17 @@
 <li>For standard ADaM datasets (ADAE, ADCM, …) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation</li>
 </ul>
 </div>
-<div id="will-there-be-a-usercontribution-guide" class="section level5">
-<h5 class="hasAnchor">
-<a href="#will-there-be-a-usercontribution-guide" class="anchor"></a>Will there be a user/<strong>contribution</strong> guide?</h5>
+<div class="section level5">
+<h5 id="will-there-be-a-usercontribution-guide">Will there be a user/<strong>contribution</strong> guide?<a class="anchor" aria-label="anchor" href="#will-there-be-a-usercontribution-guide"></a>
+</h5>
 <ul>
 <li>Our <a href="programming_strategy.html">programming strategy</a> serves as a framework for users how to create their own functions.</li>
 <li>Please see the <a href="contribution_model.html">contribution model website</a> for a detailed description how to contribute</li>
 </ul>
 </div>
-<div id="how-has-admiral-been-tested-externally-to-rochegsk" class="section level5">
-<h5 class="hasAnchor">
-<a href="#how-has-admiral-been-tested-externally-to-rochegsk" class="anchor"></a>How has <code>{admiral}</code> been <strong>tested externally</strong> to Roche/GSK?</h5>
+<div class="section level5">
+<h5 id="how-has-admiral-been-tested-externally-to-rochegsk">How has <code>{admiral}</code> been <strong>tested externally</strong> to Roche/GSK?<a class="anchor" aria-label="anchor" href="#how-has-admiral-been-tested-externally-to-rochegsk"></a>
+</h5>
 <ul>
 <li>During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and &gt;50 individuals) in order to assess compatibility of the <code>{admiral}</code> toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.</li>
 <li>This foundational version of <code>{admiral}</code> achieved a 7.9 / 10 average score from all the survey respondents and &gt;75% said they’d advocate using <code>{admiral}</code> for ADaM transformations in R.</li>
@@ -316,42 +279,27 @@
 </li>
 </ul>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
-
+  </main>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
-  docsearch({
-    
-    
-    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'pharmaverse',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-</body>
+
+  
+
+  </body>
 </html>

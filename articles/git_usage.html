@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="admiral">
 <title>Guidance for git and GitHub Usage • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,14 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
-<link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Guidance for git and GitHub Usage">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Guidance for git and GitHub Usage">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -27,164 +25,116 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">admiral</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/admiral.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">User Guides</li>
-    <li>
-      <a href="../articles/adsl.html">Creating ADSL</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/imputation.html">Date and Time Imputation</a>
-    </li>
-    <li>
-      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-    </li>
-    <li>
-      <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Developer Guides</li>
-    <li>
-      <a href="../articles/contribution_model.html">Contribution to admiral</a>
-    </li>
-    <li>
-      <a href="../articles/development_process.html">Development Process</a>
-    </li>
-    <li>
-      <a href="../articles/programming_strategy.html">Programming Strategy</a>
-    </li>
-    <li>
-      <a href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    </li>
-    <li>
-      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    </li>
-    <li>
-      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    </li>
-    <li>
-      <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/pharmaverse/admiral/">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
-      </form>
-      
-    </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Guidance for git and GitHub Usage</h1>
+
+<script src="git_usage_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Guidance for git and GitHub Usage</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/git_usage.Rmd"><code>vignettes/git_usage.Rmd</code></a></small>
-      <div class="hidden name"><code>git_usage.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/git_usage.Rmd" class="external-link"><code>vignettes/git_usage.Rmd</code></a></small>
+      <div class="d-none name"><code>git_usage.Rmd</code></div>
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This article will give you an overview of how the <code>{admiral}</code> project is utilizing the version-control software <code>git</code> and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the <code>{admiral}</code> project as well as how we use <strong>Feature</strong> branches to address <strong>Issues</strong>. Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of <code>git</code> commands needed to get up and running. Please refer to the <a href="#github_resources">Resource</a> section for more in-depth guidance on using <code>git</code> and GitHub.</p>
 </div>
-<div id="branches" class="section level1">
-<h1 class="hasAnchor">
-<a href="#branches" class="anchor"></a>Branches</h1>
+<div class="section level2">
+<h2 id="branches">Branches<a class="anchor" aria-label="anchor" href="#branches"></a>
+</h2>
 <ul>
-<li><p>The <code>main</code> branch contains the latest <strong>released</strong> version and should not be used for development. You can find the released versions <a href="https://GitHub.com/pharmaverse/admiral/releases">here</a></p></li>
+<li><p>The <code>main</code> branch contains the latest <strong>released</strong> version and should not be used for development. You can find the released versions <a href="https://GitHub.com/pharmaverse/admiral/releases" class="external-link">here</a></p></li>
 <li><p>The <code>devel</code> branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the <code>devel</code> branch.</p></li>
 <li><p>The <code>gh-pages</code> branches contains the code used to render this website you are looking at right now!</p></li>
 <li><p>The <code>main</code>, <code>devel</code> and <code>gh-pages</code> branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator.</p></li>
 <li><p><strong>Feature</strong> branches are where actual development related to a specific issue happens. Feature branches are merged into <code>devel</code> once a pull request is merged. Check out the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>.</p></li>
 </ul>
 </div>
-<div id="working-with-feature-branches" class="section level1">
-<h1 class="hasAnchor">
-<a href="#working-with-feature-branches" class="anchor"></a>Working with Feature Branches</h1>
+<div class="section level2">
+<h2 id="working-with-feature-branches">Working with Feature Branches<a class="anchor" aria-label="anchor" href="#working-with-feature-branches"></a>
+</h2>
 <p>Feature Branches are where most developers will work when addressing Issues.</p>
-<div id="implementing-an-issue" class="section level2">
-<h2 class="hasAnchor">
-<a href="#implementing-an-issue" class="anchor"></a>Implementing an Issue</h2>
+<div class="section level3">
+<h3 id="implementing-an-issue">Implementing an Issue<a class="anchor" aria-label="anchor" href="#implementing-an-issue"></a>
+</h3>
 <p>Each feature branch must be related to an issue.</p>
 <p><strong>Name:</strong><br>
 The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 “Program function to derive <code>LSTALVDT</code>”, the Branch name would be: <code>94_lstalvdt</code>.</p>
-<div id="create-a-new-feature-branch-from-the-terminal-from-devel" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-a-new-feature-branch-from-the-terminal-from-devel" class="anchor"></a>Create a New Feature Branch from the Terminal (from <code>devel</code>)</h3>
+<div class="section level4">
+<h4 id="create-a-new-feature-branch-from-the-terminal-from-devel">Create a New Feature Branch from the Terminal (from <code>devel</code>)<a class="anchor" aria-label="anchor" href="#create-a-new-feature-branch-from-the-terminal-from-devel"></a>
+</h4>
 <ul>
 <li>Checkout the devel branch: <code>git checkout devel</code><br>
 </li>
@@ -194,9 +144,9 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 </li>
 </ul>
 </div>
-<div id="create-a-new-feature-branch-from-github-from-devel" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-a-new-feature-branch-from-github-from-devel" class="anchor"></a>Create a New Feature Branch from GitHub (from <code>devel</code>)</h3>
+<div class="section level4">
+<h4 id="create-a-new-feature-branch-from-github-from-devel">Create a New Feature Branch from GitHub (from <code>devel</code>)<a class="anchor" aria-label="anchor" href="#create-a-new-feature-branch-from-github-from-devel"></a>
+</h4>
 <p>You can also create a feature branch in GitHub.</p>
 <ul>
 <li>Switch to the <code>devel</code> branch</li>
@@ -207,45 +157,45 @@ The name of the branch must be prefixed with the issue number and be meaningful,
 </ul>
 <p><img src="github_feature_branch.png"><!-- --></p>
 </div>
-<div id="commits-from-the-terminal-in-rstudio" class="section level3">
-<h3 class="hasAnchor">
-<a href="#commits-from-the-terminal-in-rstudio" class="anchor"></a>Commits from the Terminal in RStudio</h3>
+<div class="section level4">
+<h4 id="commits-from-the-terminal-in-rstudio">Commits from the Terminal in RStudio<a class="anchor" aria-label="anchor" href="#commits-from-the-terminal-in-rstudio"></a>
+</h4>
 <p>To start the commit process, you will need to tell <code>git</code> to move your changes to the staging area. Use <code>git add &lt;your_file&gt;</code> to move all changes of <code>&lt;your_file&gt;</code> in the staging area to wait for the next commit. You can use <code>git add .</code> to move all files you have worked on to the staging area. Next you can commit, which takes a snapshot of your staged changes. When committing, prefix the message with the issue number and add a meaningful message <code>git commit –m '#94 last alive date implementation'</code>.</p>
 <p>Lastly, you should push your changes up to GitHub using <code>git push origin &lt;branch name&gt;</code></p>
 </div>
-<div id="commits-from-the-git-tab-in-rstudio" class="section level3">
-<h3 class="hasAnchor">
-<a href="#commits-from-the-git-tab-in-rstudio" class="anchor"></a>Commits from the Git Tab in RStudio</h3>
+<div class="section level4">
+<h4 id="commits-from-the-git-tab-in-rstudio">Commits from the Git Tab in RStudio<a class="anchor" aria-label="anchor" href="#commits-from-the-git-tab-in-rstudio"></a>
+</h4>
 <p>You can also make use of the Git Tab within RStudio to commit your changes. A benefit of using this Tab is being able to see your changes to the file with red and green highlighting. Just like in the terminal, start the message with the issue number and add a meaningful and succinct sentence. Hit the Commit button and then Push up to GitHub.</p>
 <p><img src="github_committ.png"><!-- --></p>
 <p><strong>NOTE:</strong> Placing the issue number in your commit message allows new developers to quickly find discussion surrounding your issue. When pushed to GitHub the issue number will hyperlink to the issue tracker. A powerful tool for discussion.</p>
 </div>
 </div>
-<div id="pull-request" class="section level2">
-<h2 class="hasAnchor">
-<a href="#pull-request" class="anchor"></a>Pull request</h2>
+<div class="section level3">
+<h3 id="pull-request">Pull request<a class="anchor" aria-label="anchor" href="#pull-request"></a>
+</h3>
 <p>We recommend a thorough read through of the articles, <a href="pr_review_guidance.html">Pull Request Review Guidance</a> and the <a href="programming_strategy.html">Programming Strategy</a> for in-depth discussions on a doing a proper Pull Request. Pull Request authors will benefit from shorter review times by closely following the guidance provided in those two articles. Below we discuss some simple <code>git</code> commands in the terminal and on GitHub for doing a Pull Request. We recommend doing the Pull Request in GitHub only and not through the terminal.</p>
 <p>Once all changes are committed, push the updated branch to GitHub:<br><code>git push -u origin &lt;branch_name&gt;</code></p>
 <p>In GitHub, under <strong>Pull requests</strong>, the user will either have a “Compare and pull request” button and/or a “Create Pull Request”. The first button will be created for you if GitHub detects recent changes you have made. The branch to merge with must be the <code>devel</code> branch (base = <code>devel</code>) and the compare branch is the new branch to merge - as shown in the below picture. Please <strong>pay close attention</strong> to the branch you are merging into!</p>
-<p>The issue must be linked to the pull request in the “Linked issues” field of the Pull Request.</p>
-<p><img src="github_linked_issues.png"><!-- --></p>
+<p>The issue must be linked to the pull request in the “Development” field of the Pull Request.</p>
+<p><img src="github_linked_issues_dark.png"><!-- --></p>
 <p>Once you have completed the Pull Request you will see all committed changes are then available for the reviewer. A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request. Pictures are nice too, which are easy to do in GitHub! Use any Screen Capture software and Copy and Paste into your summary.</p>
 <p><img src="github_create_pr.png"><!-- --></p>
-<div id="reviewingclosing-an-issue" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reviewingclosing-an-issue" class="anchor"></a>Reviewing/Closing an Issue</h3>
+<div class="section level4">
+<h4 id="reviewingclosing-an-issue">Reviewing/Closing an Issue<a class="anchor" aria-label="anchor" href="#reviewingclosing-an-issue"></a>
+</h4>
 <ul>
 <li>At least one reviewer must approve the Pull Request. Please review the <a href="pr_review_guidance.html">Pull Request Review Guidance</a>, which provides in depth guidance on doing a proper Pull Request.</li>
 <li>The reviewer must ensure that the function follows the programming strategy recommendations.</li>
 <li>Any comment/question/discussion must be addressed and documented in GitHub before the Pull Request is merged</li>
 </ul>
 <p>Once the review is completed, the reviewer will merge the Pull Request and the feature branch will automatically be deleted.</p>
-<p>After merging the Pull Request the corresponding issue must be moved to the “Sprint Done” column on the “admiral scrum board” by the developer. The issue must not be closed. It will be closed automatically once the <code>devel</code> branch is merged into the <code>main</code> branch.</p>
-<p><img src="github_sprint_done.png"><!-- --></p>
+<p>After merging the Pull Request the corresponding issue must be moved to the “Done” column on the “admiral core board” by the developer. <strong>The issue must not be closed</strong>. It will be closed automatically once the <code>devel</code> branch is merged into the <code>main</code> branch.</p>
+<p><img src="github_done.png"><!-- --></p>
 </div>
-<div id="solving-merge-conflicts-in-the-terminal-on-rstudio" class="section level3">
-<h3 class="hasAnchor">
-<a href="#solving-merge-conflicts-in-the-terminal-on-rstudio" class="anchor"></a>Solving Merge Conflicts in the Terminal on RStudio</h3>
+<div class="section level4">
+<h4 id="solving-merge-conflicts-in-the-terminal-on-rstudio">Solving Merge Conflicts in the Terminal on RStudio<a class="anchor" aria-label="anchor" href="#solving-merge-conflicts-in-the-terminal-on-rstudio"></a>
+</h4>
 <p>Merge conflict is a situation where <code>git</code> cannot decide which changes to apply since there were multiple updates in the same part of a file. This typically happens when multiple people update the same part of code. Those conflicts always need to be handled manually (as some further code updates may be required):</p>
 <pre><code>git checkout devel
 git pull
@@ -257,16 +207,16 @@ git merge devel</code></pre>
 git commit -m "&lt;insert_message&gt;"
 git push</code></pre>
 </div>
-<div id="solving-merge-conflicts-in-github" class="section level3">
-<h3 class="hasAnchor">
-<a href="#solving-merge-conflicts-in-github" class="anchor"></a>Solving Merge Conflicts in GitHub</h3>
-<p>For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, Github has found 3 conflicts, but we only display the first one. Just like in the terminal, GitHub will make use of the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> to highlight the conflicting sections. You will need to make the decision on whether to keep the code from the base or the feature branch. Once you have decided, go into the code and remove the section you no longer wish to keep. Be sure to remove the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> as well! Once you work through the conflicts you will mark as <strong>Resolved and Commit your changes</strong>. It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch.</p>
+<div class="section level4">
+<h4 id="solving-merge-conflicts-in-github">Solving Merge Conflicts in GitHub<a class="anchor" aria-label="anchor" href="#solving-merge-conflicts-in-github"></a>
+</h4>
+<p>For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, GitHub has found 3 conflicts, but we only display the first one. Just like in the terminal, GitHub will make use of the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> to highlight the conflicting sections. You will need to make the decision on whether to keep the code from the base or the feature branch. Once you have decided, go into the code and remove the section you no longer wish to keep. Be sure to remove the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> as well! Once you work through the conflicts you will mark as <strong>Resolved and Commit your changes</strong>. It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch.</p>
 <p><img src="github_conflicts.png"><!-- --></p>
 </div>
 </div>
-<div id="useful-git-commands" class="section level2">
-<h2 class="hasAnchor">
-<a href="#useful-git-commands" class="anchor"></a>Useful <code>git</code> Commands</h2>
+<div class="section level3">
+<h3 id="useful-git-commands">Useful <code>git</code> Commands<a class="anchor" aria-label="anchor" href="#useful-git-commands"></a>
+</h3>
 <ul>
 <li>merging: <code>git merge &lt;my_branch&gt;</code> - merge my_branch into current branch<br>
 </li>
@@ -293,53 +243,37 @@ git push</code></pre>
 </ul>
 </div>
 </div>
-<div id="github_resources" class="section level1">
-<h1 class="hasAnchor">
-<a href="#github_resources" class="anchor"></a>Resources on using <code>git</code>, GitHub and RStudio</h1>
+<div class="section level2">
+<h2 id="github_resources">Resources on using <code>git</code>, GitHub and RStudio<a class="anchor" aria-label="anchor" href="#github_resources"></a>
+</h2>
 <ul>
-<li><a href="https://resources.github.com/whitepapers/github-and-rstudio/">GitHub and RStudio</a></li>
-<li><a href="https://happygitwithr.com/">Happy Git and GitHub for the useR</a></li>
-<li><a href="https://r-pkgs.org/git.html">Git and GitHub from the R Package Manual</a></li>
+<li><a href="https://resources.github.com/whitepapers/github-and-rstudio/" class="external-link">GitHub and RStudio</a></li>
+<li><a href="https://happygitwithr.com/" class="external-link">Happy Git and GitHub for the useR</a></li>
+<li><a href="https://r-pkgs.org/git.html" class="external-link">Git and GitHub from the R Package Manual</a></li>
 </ul>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
-  docsearch({
-    
-    
-    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'pharmaverse',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-</body>
+
+  
+
+  </body>
 </html>

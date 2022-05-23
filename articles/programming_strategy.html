@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="admiral">
 <title>Programming Strategy • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,14 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
-<link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Programming Strategy">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Programming Strategy">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -27,145 +25,98 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">admiral</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/admiral.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">User Guides</li>
-    <li>
-      <a href="../articles/adsl.html">Creating ADSL</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/imputation.html">Date and Time Imputation</a>
-    </li>
-    <li>
-      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-    </li>
-    <li>
-      <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Developer Guides</li>
-    <li>
-      <a href="../articles/contribution_model.html">Contribution to admiral</a>
-    </li>
-    <li>
-      <a href="../articles/development_process.html">Development Process</a>
-    </li>
-    <li>
-      <a href="../articles/programming_strategy.html">Programming Strategy</a>
-    </li>
-    <li>
-      <a href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    </li>
-    <li>
-      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    </li>
-    <li>
-      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    </li>
-    <li>
-      <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/pharmaverse/admiral/">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
-      </form>
-      
-    </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Programming Strategy</h1>
+
+<script src="programming_strategy_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Programming Strategy</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/programming_strategy.Rmd"><code>vignettes/programming_strategy.Rmd</code></a></small>
-      <div class="hidden name"><code>programming_strategy.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/programming_strategy.Rmd" class="external-link"><code>vignettes/programming_strategy.Rmd</code></a></small>
+      <div class="d-none name"><code>programming_strategy.Rmd</code></div>
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>As <code>{admiral}</code> is intended to be contributed by the user community, this article is meant for developers that want to either expand <code>{admiral}</code> functionalities or build on top of <code>{admiral}</code>. In order to keep the framework robust across the whole community, we have defined a programming strategy that should be followed in such cases. These contributions could include, for example, company specific derivations of ADaM datasets.</p>
 </div>
-<div id="functional-workflow" class="section level1">
-<h1 class="hasAnchor">
-<a href="#functional-workflow" class="anchor"></a>Functional Workflow</h1>
+<div class="section level2">
+<h2 id="functional-workflow">Functional Workflow<a class="anchor" aria-label="anchor" href="#functional-workflow"></a>
+</h2>
 <ul>
 <li>Overall programming will follow a functional approach.</li>
+<li>We mandate the use of tidyverse (e.g. dplyr) over similar functionality existing in base R</li>
 <li>Each ADaM dataset is built with a set of functions and not with free flow code.</li>
 <li>Each ADaM dataset has a specific programming workflow.</li>
 <li>Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an <code>{admiral}</code> function or a company specific function.</li>
@@ -177,9 +128,9 @@
 <li>ADaMs are created with readable, submission-ready code.</li>
 </ul>
 </div>
-<div id="categorization-of-functions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#categorization-of-functions" class="anchor"></a>Categorization of Functions</h1>
+<div class="section level2">
+<h2 id="categorization-of-functions">Categorization of Functions<a class="anchor" aria-label="anchor" href="#categorization-of-functions"></a>
+</h2>
 <p>The functions are categorized by keywords. The keywords can be specified in the function header via the <code>@keywords</code> field. Each function must use at least one of the following keywords. Please note that the keywords are handled case-sensitive. Thus they must be in lower case.</p>
 <table class="table">
 <colgroup>
@@ -249,14 +200,35 @@
 </tbody>
 </table>
 </div>
-<div id="functions-in-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#functions-in-r" class="anchor"></a>Functions in R</h1>
-<p>Functions in <code>{admiral}</code> must follow the modular approach, i.e. functions which add variables should add only a single variable except if other variables are closely related to the derived variable and can not be derived without it. For example <code>AAGE</code> (analysis age) and <code>AAGEU</code> (analysis age units) should be derived by the same function because it does not make sense to derive <code>AAGEU</code> without <code>AAGE</code>.</p>
-<p>Variables like <code>BASE</code> (baseline value) and <code>BNRIND</code> (baseline reference range indicator) must be derived by two separate function calls as it is reasonable to derive only one of them.</p>
-<div id="input-output-and-side-effects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#input-output-and-side-effects" class="anchor"></a>Input, Output, and Side-effects</h2>
+<div class="section level2">
+<h2 id="functions-in-r">Functions in R<a class="anchor" aria-label="anchor" href="#functions-in-r"></a>
+</h2>
+<div class="section level3">
+<h3 id="function-design">Function Design<a class="anchor" aria-label="anchor" href="#function-design"></a>
+</h3>
+<p>Firstly, it is important to explain how we decide on the need for new derivation functions.</p>
+<p>If a derivation rule or algorithm is common and highly similar across different variables/parameters (e.g. study day or duration) then we would provide a generic function that can be used to satisfy all the times this may be needed across different ADaMs. Similarly, if we feel that a certain derivation could be useful beyond a single purpose we also would provide a generic function (e.g. instead of a last known alive date function, we have an extreme date function where a user could find the last date from a selection, or for example the first).</p>
+<p>Otherwise, if we feel that a derivation rule is a unique need or sufficiently complex to justify then we opt for a dedicated function for that specific variable/parameter (e.g. treatment-emergent flag for AEs).</p>
+<p>If certain variables are closely connected (e.g. an imputed date and the corresponding imputation flag) then a single function would provide both variables.</p>
+<p>If something needed for ADaM could be achieved simply via an existing tidyverse function, then we do not wrap this into an admiral function, as that would add an unnecessary extra layer for users.</p>
+<p>The following principles are key when designing a new function:</p>
+<ul>
+<li><p><em><strong>Modularity</strong></em> - All code follows a modular approach, i.e. the steps must be clearly separated and have a dedicated purpose. This applies to scripts creating a dataset where each module should create a single variable or parameter. But also to complex derivations with several steps. Commenting on these steps is key for readability.</p></li>
+<li><p><em><strong>Avoid Copy and Paste</strong></em> - If the same or very similar code is used multiple times, it should be put into a separate function. This improves readability and maintainability and makes unit testing easier. This should not be done for every simple programming step where tidyverse can be used. But rather for computational functions or data checks. However, also consider not to nest too many functions.</p></li>
+<li><p><em><strong>Checks</strong></em> - Whenever a function fails, a meaningful error message must be provided with a clear reference to the input which caused the failure. A users should not have to dig into detailed code if they only want to apply a function. A meaningful error message supports usability.</p></li>
+<li>
+<p><em><strong>Flexibility</strong></em> - Functions should be as flexible as possible as long as it does not reduce the usability. For example:</p>
+<ul>
+<li><p>The source variables or newly created variables and conditions for selecting observations should not be hard-coded.</p></li>
+<li><p>It is useful if a parameter triggers optional steps, e.g. if the filter parameter is specified, the input dataset is restricted, otherwise this step is skipped.</p></li>
+<li><p>However, parameters should not trigger completely different algorithms. For example <code>BNRIND</code> could be derived based on <code>BASE</code> or based on <code>ANRIND</code>. It should not be implemented within one function as the algorithms are completely different. If <code>BASE</code> is used, the values are categorized while if <code>ANRIND</code> is used, the values are merged from the baseline observation.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="input-output-and-side-effects">Input, Output, and Side-effects<a class="anchor" aria-label="anchor" href="#input-output-and-side-effects"></a>
+</h3>
 <ul>
 <li>The behavior of the function is only determined by its input, not by any global object,<br>
 i.e. all input like datasets, variable names, options, … must be provided to the function by parameters.</li>
@@ -269,11 +241,11 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <li>The function must not have any side-effects like creating or modifying global objects, printing, writing files, …</li>
 </ul>
 </div>
-<div id="function-names" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-names" class="anchor"></a>Function Names</h2>
+<div class="section level3">
+<h3 id="function-names">Function Names<a class="anchor" aria-label="anchor" href="#function-names"></a>
+</h3>
 <ul>
-<li>Function names should start with a verb and use snake case, e.g. <code><a href="../reference/derive_baseline.html">derive_baseline()</a></code>.</li>
+<li>Function names should start with a verb and use snake case, e.g. <code><a href="../reference/derive_var_base.html">derive_var_base()</a></code>.</li>
 </ul>
 <table class="table">
 <colgroup>
@@ -319,9 +291,9 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 </table>
 <p>Please note that the appropriate <em>var</em>/<em>vars</em> prefix should be used for all cases in which the function creates any variable(s), regardless of the presence of a <code>new_var</code> parameter in the function call.</p>
 </div>
-<div id="function-parameters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-parameters" class="anchor"></a>Function Parameters</h2>
+<div class="section level3">
+<h3 id="function-parameters">Function Parameters<a class="anchor" aria-label="anchor" href="#function-parameters"></a>
+</h3>
 <p>The default value of optional parameters should be <code>NULL</code>.</p>
 <p>There is a recommended parameter order that all contributors are asked to adhere to (in order to keep consistency across functions):</p>
 <ol style="list-style-type: decimal">
@@ -339,7 +311,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 </ul>
 </li>
 </ol>
-<p>Names of variables inside a dataset should be passed as symbols rather than strings, i.e. <code>AVAL</code> rather than <code>"AVAL"</code>. If a parameter accepts one or more variables as input, the variables should be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code>.</p>
+<p>Names of variables inside a dataset should be passed as symbols rather than strings, i.e. <code>AVAL</code> rather than <code>"AVAL"</code>. If a parameter accepts one or more variables as input, the variables should be wrapped inside <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code>.</p>
 <p>For example:</p>
 <ul>
 <li><code>new_var = TEMPBL</code></li>
@@ -366,18 +338,18 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <li>whether it is an expression (or a list of expressions, depending on the function)</li>
 <li>whether it is a valid expression (i.e. whether it evaluates without error)</li>
 </ul>
-<p>The only exception to this is <code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> where we allowed the use of <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::exprs()</a></code>. The reason is that in this case the user needs to have the flexibility to provide not just symbols but usually more complicated filtering conditions (that may be based on multiple input parameters).</p>
+<p>The only exception to this is <code><a href="../reference/derive_var_basetype.html">derive_var_basetype()</a></code> where we allowed the use of <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::exprs()</a></code>. The reason is that in this case the user needs to have the flexibility to provide not just symbols but usually more complicated filtering conditions (that may be based on multiple input parameters).</p>
 </div>
-<div id="common-function-parameters-naming-convention" class="section level2">
-<h2 class="hasAnchor">
-<a href="#common-function-parameters-naming-convention" class="anchor"></a>Common Function Parameters Naming Convention</h2>
+<div class="section level3">
+<h3 id="common-function-parameters-naming-convention">Common Function Parameters Naming Convention<a class="anchor" aria-label="anchor" href="#common-function-parameters-naming-convention"></a>
+</h3>
 <p>The first parameter of <code>derive_</code> functions should be the input dataset and it should be named <code>dataset</code>. If more than one input dataset is required, the other input dataset should start with <code>dataset_</code>, e.g., <code>dataset_ex.</code></p>
 <p>Parameters for specifying items to add should start with <code>new_</code>. If a variable is added, the second part of the parameter name should be var, if a parameter is added, it should be <code>param.</code> For example: <code>new_var</code>, <code>new_var_unit</code>, <code>new_param</code>.</p>
 <p>Parameters which expect a boolean or boolean vector must start with a verb, e.g., <code>is_imputed</code> or <code>impute_date</code>.</p>
 </div>
-<div id="list-of-common-parameters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#list-of-common-parameters" class="anchor"></a>List of Common Parameters</h2>
+<div class="section level3">
+<h3 id="list-of-common-parameters">List of Common Parameters<a class="anchor" aria-label="anchor" href="#list-of-common-parameters"></a>
+</h3>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -398,7 +370,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 </tr>
 <tr class="odd">
 <td><code>order</code></td>
-<td>List of expressions for sorting a dataset, e.g., <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars(PARAMCD, AVISITN, desc(AVAL))</a></code>.</td>
+<td>List of expressions for sorting a dataset, e.g., <code>vars(PARAMCD, AVISITN, desc(AVAL))</code>.</td>
 </tr>
 <tr class="even">
 <td><code>new_var</code></td>
@@ -443,62 +415,87 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 </tbody>
 </table>
 </div>
-<div id="source-code-formatting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#source-code-formatting" class="anchor"></a>Source Code Formatting</h2>
-<p>All source code should be formatted according to the <a href="https://style.tidyverse.org/">tidyverse</a> style guide. The <a href="https://github.com/jimhester/lintr">lintr</a> package will be used to check and enforce this.</p>
+<div class="section level3">
+<h3 id="source-code-formatting">Source Code Formatting<a class="anchor" aria-label="anchor" href="#source-code-formatting"></a>
+</h3>
+<p>All source code should be formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse</a> style guide. The <a href="https://github.com/jimhester/lintr" class="external-link">lintr</a> package will be used to check and enforce this.</p>
 </div>
-<div id="input-checking" class="section level2">
-<h2 class="hasAnchor">
-<a href="#input-checking" class="anchor"></a>Input Checking</h2>
-<p>In line with the <a href="https://en.wikipedia.org/wiki/Fail-fast">fail-fast</a> design principle, function inputs should be checked for validity and, if there’s an invalid input, the function should stop immediately with an error. An exception is the case where a variable to be added by a function already exists in the input dataset: here only a warning should be displayed and the function should continue executing.</p>
-<p>Inputs should be checked either using <code>asserthat::assert_that()</code> or custom assertion functions defined in <code>R/assertions.R</code>. These custom assertion functions should either return an error in case of an invalid input or return nothing.</p>
+<div class="section level3">
+<h3 id="input-checking">Input Checking<a class="anchor" aria-label="anchor" href="#input-checking"></a>
+</h3>
+<p>In line with the <a href="https://en.wikipedia.org/wiki/Fail-fast" class="external-link">fail-fast</a> design principle, function inputs should be checked for validity and, if there’s an invalid input, the function should stop immediately with an error. An exception is the case where a variable to be added by a function already exists in the input dataset: here only a warning should be displayed and the function should continue executing.</p>
+<p>Inputs should be checked either using <code>asserthat::assert_that()</code> or custom assertion functions defined in <a href="https://github.com/pharmaverse/admiral/blob/main/R/assertions.R" class="external-link"><code>R/assertions.R</code></a>. These custom assertion functions should either return an error in case of an invalid input or return nothing.</p>
 <p>For the most common types of input parameters like a single variable, a list of variables, a dataset, … functions for checking are available (see <a href="../reference/index.html#section-assertions">assertions</a>).</p>
 <p>Parameters which expect keywords should handle them in a case-insensitive manner, e.g., both <code>date_imputation = "FIRST"</code> and <code>date_imputation = "first"</code> should be accepted. The <code><a href="../reference/assert_character_scalar.html">assert_character_scalar()</a></code> function helps with handling parameters in a case-insensitive manner.</p>
 <p>A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. This rule is applicable only if both functions are part of <code>{admiral}</code>.</p>
 </div>
-<div id="function-header-documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-header-documentation" class="anchor"></a>Function Header (Documentation)</h2>
-<p>Every function that is exported from the package must have an accompanying header that should be formatted according to the <a href="https://roxygen2.r-lib.org/">roxygen2</a> convention.</p>
+<div class="section level3">
+<h3 id="function-header-documentation">Function Header (Documentation)<a class="anchor" aria-label="anchor" href="#function-header-documentation"></a>
+</h3>
+<p>Every function that is exported from the package must have an accompanying header that should be formatted according to the <a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2</a> convention.</p>
 <p>In addition to the roxygen2 parameters, <code>@author</code> and <code>@keywords</code> are also used.</p>
 <p>Author is the owner of the function while the keywords are used to categorize the function. Please see section “Categorization of functions”.</p>
 <p>An example is given below:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r">#' Derive Analysis Study Day
-#'
-#' Adds the analysis study day (`ADY`) to the dataset, i.e. study day #' of analysis date.
-#'
-#' @param dataset Input dataset
-#'
-#'   The columns specified by the `reference_date` and the `date` parameter are
-#'   expected.
-#'
-#' @param reference_date The start date column, e.g., date of first #'treatment
-#'
-#'   A date or date-time object column is expected.
-#'
-#'   The default is `TRTSDT`.
-#'
-#' @param date The end date column for which the study day should be #'derived
-#'
-#'   A date or date-time object column is expected.
-#'
-#'   The default is `ADT`
-#'
-#' @details The study day is derived as number of days from the start date
-#'   to the end date. If it is non-negative, one is added, i.e. the study day of the
-#'   start date is 1.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return The input dataset with `ADY` column added
-#'
-#' @keywords bds timing
-#'
-#' @export
-#'
-#' @examples
-#' data </pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' Derive Relative Day Variables</span>
+<span class="co">#'</span>
+<span class="co">#' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and</span>
+<span class="co">#' `AENDY`.</span>
+<span class="co">#'</span>
+<span class="co">#' @param dataset Input dataset</span>
+<span class="co">#'</span>
+<span class="co">#'   The columns specified by the `reference_date` and the `source_vars`</span>
+<span class="co">#'   parameter are expected.</span>
+<span class="co">#'</span>
+<span class="co">#' @param reference_date The start date column, e.g., date of first treatment</span>
+<span class="co">#'</span>
+<span class="co">#'   A date or date-time object column is expected.</span>
+<span class="co">#'</span>
+<span class="co">#'   Refer to `derive_var_dt()` to impute and derive a date from a date</span>
+<span class="co">#'   character vector to a date object.</span>
+<span class="co">#'</span>
+<span class="co">#' @param source_vars A list of datetime or date variables created using</span>
+<span class="co">#'   `vars()` from which dates are to be extracted. This can either be a list of</span>
+<span class="co">#'   date(time) variables or named `--DY` variables and corresponding --DT(M)</span>
+<span class="co">#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,</span>
+<span class="co">#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a</span>
+<span class="co">#'   name for the resulting `--DY` variable must be provided.</span>
+<span class="co">#'</span>
+<span class="co">#' @author Teckla Akinyi</span>
+<span class="co">#'</span>
+<span class="co">#' @details The relative day is derived as number of days from the reference</span>
+<span class="co">#'   date to the end date. If it is nonnegative, one is added. I.e., the</span>
+<span class="co">#'   relative day of the reference date is 1. Unless a name is explicitly</span>
+<span class="co">#'   specified, the name of the resulting relative day variable is generated</span>
+<span class="co">#'   from the source variable name by replacing DT (or DTM as appropriate) with</span>
+<span class="co">#'   DY.</span>
+<span class="co">#'</span>
+<span class="co">#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`</span>
+<span class="co">#'   source variable(s) added</span>
+<span class="co">#'</span>
+<span class="co">#' @keywords derivation ADaM timing</span>
+<span class="co">#'</span>
+<span class="co">#' @export</span>
+<span class="co">#'</span>
+<span class="co">#' @examples</span>
+<span class="co">#' library(lubridate)</span>
+<span class="co">#' library(dplyr)</span>
+<span class="co">#'</span>
+<span class="co">#' datain &lt;- tibble::tribble(</span>
+<span class="co">#'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,</span>
+<span class="co">#'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"</span>
+<span class="co">#' ) %&gt;%</span>
+<span class="co">#'  mutate(</span>
+<span class="co">#'    TRTSDTM = as_datetime(TRTSDTM),</span>
+<span class="co">#'    ASTDTM = as_datetime(ASTDTM),</span>
+<span class="co">#'    AENDT = ymd(AENDT)</span>
+<span class="co">#'  )</span>
+<span class="co">#'</span>
+<span class="co">#' derive_vars_dy(</span>
+<span class="co">#'   datain,</span>
+<span class="co">#'   reference_date = TRTSDTM,</span>
+<span class="co">#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)</span>
+<span class="co">#' )</span></code></pre></div>
 <p>The following fields are mandatory:</p>
 <ul>
 <li>
@@ -512,7 +509,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <li>
 <code>@return</code>: A description of the return value of the function. Any newly added variable(-s) should be mentioned here.</li>
 <li>
-<code>@examples</code>: A fully self-contained example of how to use the function. Self-contained means that, if this code is executed in a new R session, it will run without errors. That means any packages need to be loaded with <code>library()</code> and any datasets needed either to be created directly inside the example code or loaded using <code><a href="https://rdrr.io/r/utils/data.html">data()</a></code>. If a dataset is created in the example, it should be done so using the function <code><a href="https://tibble.tidyverse.org/reference/tribble.html">tibble::tribble()</a></code>. Make sure to align columns as this ensures quick code readability.</li>
+<code>@examples</code>: A fully self-contained example of how to use the function. Self-contained means that, if this code is executed in a new R session, it will run without errors. That means any packages need to be loaded with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> and any datasets needed either to be created directly inside the example code or loaded using <code><a href="https://rdrr.io/r/utils/data.html" class="external-link">data()</a></code>. If a dataset is created in the example, it should be done so using the function <code><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tibble::tribble()</a></code>. Make sure to align columns as this ensures quick code readability.</li>
 </ul>
 <p>Copying descriptions should be avoided as it makes the documentation hard to maintain. For example if the same parameter with the same description is used by more than one function, the parameter should be described for one function and the other functions should use <code>@inheritParams &lt;function name where the parameter is described&gt;</code>.</p>
 <p>Please note that if <code>@inheritParams func_first</code> is used in the header of the <code>func_second()</code> function, those parameter descriptions of <code>func_first()</code> are included in the documentation of <code>func_second()</code> for which</p>
@@ -525,132 +522,144 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <p>For functions which derive a specific CDISC variable, the title must state the label of the variable without the variable name. The variable should be stated in the description.</p>
 </div>
 </div>
-<div id="missing-values" class="section level1">
-<h1 class="hasAnchor">
-<a href="#missing-values" class="anchor"></a>Missing values</h1>
+<div class="section level2">
+<h2 id="missing-values">Missing values<a class="anchor" aria-label="anchor" href="#missing-values"></a>
+</h2>
 <p>Missing values (<code>NA</code>s) need to be explicitly shown.</p>
 <p>Regarding character vectors converted from SAS files: SAS treats missing character values as blank. Those are imported into R as empty strings (<code>""</code>) although in nature they are missing values (<code>NA</code>). All empty strings that originate like this need to be converted to proper R missing values <code>NA</code>.</p>
 </div>
-<div id="file-structuring" class="section level1">
-<h1 class="hasAnchor">
-<a href="#file-structuring" class="anchor"></a>File Structuring</h1>
+<div class="section level2">
+<h2 id="file-structuring">File Structuring<a class="anchor" aria-label="anchor" href="#file-structuring"></a>
+</h2>
 <p>Organizing functions into files is more of an art than a science. Thus, there are no hard rules but just recommendations. First and foremost, there are two extremes that should be avoided: putting each function into its own file and putting all functions into a single file. Apart from that the following recommendations should be taken into consideration when deciding upon file structuring:</p>
 <ul>
 <li>If a function is very long (together with its documentation), store it in a separate file</li>
 <li>If some functions are documented together, put them into one file</li>
-<li>If some functions have some sort of commonality or relevance with one another (like <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_rows()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_cols()</a></code>), put them into one file</li>
+<li>If some functions have some sort of commonality or relevance with one another (like <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">dplyr::bind_rows()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">dplyr::bind_cols()</a></code>), put them into one file</li>
 <li>Store functions together with their helpers and methods</li>
 <li>Have no more than 1000 lines in a single file, unless necessary (exceptions are, for example, classes with methods)</li>
 </ul>
 <p>It is the responsibility of both the author of a new function and reviewer to ensure that these recommendations are put into practice.</p>
 </div>
-<div id="r-package-dependencies" class="section level1">
-<h1 class="hasAnchor">
-<a href="#r-package-dependencies" class="anchor"></a>R Package Dependencies</h1>
+<div class="section level2">
+<h2 id="r-package-dependencies">R Package Dependencies<a class="anchor" aria-label="anchor" href="#r-package-dependencies"></a>
+</h2>
 <p>Package dependencies have to be documented in the <code>DESCRIPTION</code> file. If a package is used only in examples and/or unit tests then it should be listed in <code>Suggests</code>, otherwise in <code>Imports</code>.</p>
-<p>Functions from other packages have to be explicitly imported by using the <code>@importFrom</code> tag in the <code>R/admiral-package.R</code> file. To import the <code>if_else()</code> and <code>mutate()</code> function from <code>dplyr</code> the following line would have to be included in that file: <code>#' @importFrom dplyr if_else mutate</code>.</p>
+<p>Functions from other packages have to be explicitly imported by using the <code>@importFrom</code> tag in the <code>R/admiral-package.R</code> file. To import the <code><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> function from <code>dplyr</code> the following line would have to be included in that file: <code>#' @importFrom dplyr if_else mutate</code>.</p>
 </div>
-<div id="metadata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#metadata" class="anchor"></a>Metadata</h1>
+<div class="section level2">
+<h2 id="metadata">Metadata<a class="anchor" aria-label="anchor" href="#metadata"></a>
+</h2>
 <p>Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.</p>
-<p>The only exception is <code><a href="../reference/derive_vars_suppqual.html">derive_vars_suppqual()</a></code> which takes it from its argument <code>dataset_suppqual</code>, where the labels are stored.</p>
 </div>
-<div id="unit-testing" class="section level1">
-<h1 class="hasAnchor">
-<a href="#unit-testing" class="anchor"></a>Unit Testing</h1>
+<div class="section level2">
+<h2 id="unit-testing">Unit Testing<a class="anchor" aria-label="anchor" href="#unit-testing"></a>
+</h2>
 <p>A function requires a set of unit tests to verify it produces the expected result. See <a href="unit_test_guidance.html#writing-unit-tests-in-admiral-">Writing Unit Tests in {admiral}</a> for details.</p>
 </div>
-<div id="deprecation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#deprecation" class="anchor"></a>Deprecation</h1>
+<div class="section level2">
+<h2 id="deprecation">Deprecation<a class="anchor" aria-label="anchor" href="#deprecation"></a>
+</h2>
 <p>As <code>{admiral}</code> is still evolving, functions or parameters may need to be removed or replaced with more efficient options from one release to another. In such cases, the relevant function or parameter must be marked as deprecated. A warning will be issued until the next release and an error will be generated thereafter. Information about deprecation timelines must be added to the warning/error message.</p>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<div class="section level3">
+<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h3>
 <p>If a function or parameter is removed, the documentation must be updated to indicate the function or the parameter is now deprecated and which new function/parameter should be used instead.</p>
 <p>The documentation will be updated at:</p>
 <ul>
-<li>the description level for a function,</li>
-</ul>
-<pre><code>#' Title of the function
-#'
-#' @description
-#'*Deprecated*, please use `new_fun()` instead.
-#' description of the function in plain English</code></pre>
-<ul>
-<li>the <code>@param</code> level for a parameter.</li>
-</ul>
+<li>
+<p>the description level for a function,</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#' Title of the function</span>
+<span class="co">#'</span>
+<span class="co">#' @description</span>
+<span class="co">#' `r lifecycle::badge("deprecated")`</span>
+<span class="co">#'</span>
+<span class="co">#' This function is *deprecated*, please use `new_fun()` instead.</span>
+<span class="co">#' description of the function in plain English</span></code></pre></div>
+<p>The “Examples” section should be removed.</p>
+</li>
+<li>
+<p>the <code>@param</code> level for a parameter.</p>
 <pre><code>@param old_param *Deprecated*, please use `new_param` instead.</code></pre>
+</li>
+</ul>
 </div>
-<div id="handling-of-warning-and-error" class="section level2">
-<h2 class="hasAnchor">
-<a href="#handling-of-warning-and-error" class="anchor"></a>Handling of warning and error</h2>
+<div class="section level3">
+<h3 id="handling-of-warning-and-error">Handling of warning and error<a class="anchor" aria-label="anchor" href="#handling-of-warning-and-error"></a>
+</h3>
 <p>When a function or parameter is deprecated, the function must be updated to issue an error or a warning to inform the user.</p>
 <p>There should be a test case added in <code>tests/testthat/test-deprecation.R</code> that checks whether this warning/error is issued as appropriate when using the deprecated function or parameter.</p>
-<div id="function" class="section level3">
-<h3 class="hasAnchor">
-<a href="#function" class="anchor"></a>Function</h3>
+<div class="section level4">
+<h4 id="function">Function<a class="anchor" aria-label="anchor" href="#function"></a>
+</h4>
 <p>If the deprecated function still exists in the package besides the new function, a <strong>warning</strong> must be issued. If it has been removed, an <strong>error</strong> must be generated.</p>
-<pre><code>### BEGIN DEPRECATION
-# Warning if the deprecated function still exists
-deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
+<pre><code><span class="co">### BEGIN DEPRECATION</span>
+<span class="co"># Warning if the deprecated function still exists</span>
+<span class="fu">deprecate_warn</span><span class="op">(</span><span class="st">"x.y.z"</span>, <span class="st">"fun_xxx()"</span>, <span class="st">"new_fun_xxx()"</span><span class="op">)</span>
 
-# Error if the deprecated function does not exist anymore
-deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
-### END DEPRECATION</code></pre>
+<span class="co"># Error if the deprecated function does not exist anymore</span>
+<span class="fu">deprecate_stop</span><span class="op">(</span><span class="st">"x.y.z"</span>, <span class="st">"fun_xxx()"</span>, <span class="st">"new_fun_xxx()"</span><span class="op">)</span>
+<span class="co">### END DEPRECATION</span></code></pre>
 <p>For the former case above, please pass any input arguments into a call to the new function so that it still runs and pushes users towards adopting the new function.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">fun_xxx</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">dataset</span>, <span class="no">new_var</span>) {
-  <span class="fu">deprecate_warn</span>(<span class="st">"x.y.z"</span>, <span class="st">"fun_xxx()"</span>, <span class="st">"new_fun_xxx()"</span>)
-  <span class="fu">new_fun_xxx</span>(<span class="no">dataset</span>, <span class="kw">new_var</span> <span class="kw">=</span> <span class="no">new_var</span>)
-}</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fun_xxx</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">new_var</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">deprecate_warn</span><span class="op">(</span><span class="st">"x.y.z"</span>, <span class="st">"fun_xxx()"</span>, <span class="st">"new_fun_xxx()"</span><span class="op">)</span>
+  <span class="fu">new_fun_xxx</span><span class="op">(</span><span class="va">dataset</span>, new_var <span class="op">=</span> <span class="va">new_var</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 </div>
-<div id="parameter" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parameter" class="anchor"></a>Parameter</h3>
+<div class="section level4">
+<h4 id="parameter">Parameter<a class="anchor" aria-label="anchor" href="#parameter"></a>
+</h4>
 <p>If a parameter is removed and is not replaced, an <strong>error</strong> must be generated:</p>
-<pre><code>### BEGIN DEPRECATION
-  if (!missing(old_param)) {
-    deprecate_stop("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
-  }
-### END DEPRECATION</code></pre>
-<p>If the parameter is renamed or replaced, a <strong>warning</strong> must be issued and the new parameter takes the value of the old parameter until the next release. Note: parameters which are not passed as <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> argument (e.g. <code>new_var = VAR1</code> or <code>filter = AVAL &gt;10</code>) will need to be quoted.</p>
-<pre><code>### BEGIN DEPRECATION
-  if (!missing(old_param)) {
-    deprecate_warn("x.y.z", "fun_xxx(old_param = )", "fun_xxx(new_param = )")
-    # old_param is given using vars()
-    new_param &lt;- old_param
-    # old_param is NOT given using vars()
-    new_param &lt;- enquo(old_param)
-  }
-### END DEPRECATION</code></pre>
+<pre><code><span class="co">### BEGIN DEPRECATION</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">old_param</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu">deprecate_stop</span><span class="op">(</span><span class="st">"x.y.z"</span>, <span class="st">"fun_xxx(old_param = )"</span>, <span class="st">"fun_xxx(new_param = )"</span><span class="op">)</span>
+  <span class="op">}</span>
+<span class="co">### END DEPRECATION</span></code></pre>
+<p>If the parameter is renamed or replaced, a <strong>warning</strong> must be issued and the new parameter takes the value of the old parameter until the next release. Note: parameters which are not passed as <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> argument (e.g. <code>new_var = VAR1</code> or <code>filter = AVAL &gt;10</code>) will need to be quoted.</p>
+<pre><code><span class="co">### BEGIN DEPRECATION</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">old_param</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu">deprecate_warn</span><span class="op">(</span><span class="st">"x.y.z"</span>, <span class="st">"fun_xxx(old_param = )"</span>, <span class="st">"fun_xxx(new_param = )"</span><span class="op">)</span>
+    <span class="co"># old_param is given using vars()</span>
+    <span class="va">new_param</span> <span class="op">&lt;-</span> <span class="va">old_param</span>
+    <span class="co"># old_param is NOT given using vars()</span>
+    <span class="va">new_param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tidyeval.html" class="external-link">enquo</a></span><span class="op">(</span><span class="va">old_param</span><span class="op">)</span>
+  <span class="op">}</span>
+<span class="co">### END DEPRECATION</span></code></pre>
 </div>
 </div>
+<div class="section level3">
+<h3 id="unit-testing-1">Unit Testing<a class="anchor" aria-label="anchor" href="#unit-testing-1"></a>
+</h3>
+<p>Unit tests for deprecated functions and parameters must be added to <code>tests/testthat/test-deprecation.R</code> to ensure that a warning or error is issued.</p>
+<p>Other unit tests of deprecated functions must be removed.</p>
 </div>
-<div id="best-practices-and-hints" class="section level1">
-<h1 class="hasAnchor">
-<a href="#best-practices-and-hints" class="anchor"></a>Best Practices and Hints</h1>
+</div>
+<div class="section level2">
+<h2 id="best-practices-and-hints">Best Practices and Hints<a class="anchor" aria-label="anchor" href="#best-practices-and-hints"></a>
+</h2>
 <p>Please take the following list as recommendation and try to adhere to its rules if possible.</p>
 <ul>
-<li>Parameters in function calls should be named except for the first parameter (e.g. <code><a href="../reference/assert_data_frame.html">assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)</a></code>).</li>
+<li>Parameters in function calls should be named except for the first parameter (e.g. <code>assert_data_frame(dataset, required_vars = vars(var1, var2), optional = TRUE)</code>).</li>
 <li>
-<code><a href="https://dplyr.tidyverse.org/reference/if_else.html">dplyr::if_else()</a></code> should be used when there are only two conditions. Try to always set the <code>missing</code> parameter whenever appropriate.</li>
+<code><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">dplyr::if_else()</a></code> should be used when there are only two conditions. Try to always set the <code>missing</code> parameter whenever appropriate.</li>
 </ul>
 </div>
-<div id="readable-code-for-adam" class="section level1">
-<h1 class="hasAnchor">
-<a href="#readable-code-for-adam" class="anchor"></a>Readable Code for ADaM</h1>
+<div class="section level2">
+<h2 id="readable-code-for-adam">Readable Code for ADaM<a class="anchor" aria-label="anchor" href="#readable-code-for-adam"></a>
+</h2>
 <p>Each function should be considered as readable code by default.</p>
-<div id="basic-rules" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-rules" class="anchor"></a>Basic Rules</h2>
+<div class="section level3">
+<h3 id="basic-rules">Basic Rules<a class="anchor" aria-label="anchor" href="#basic-rules"></a>
+</h3>
 <p>All R code that produces ADaM datasets should be based on readable code for their 1st line code. Producing Readable Code should not be part or the responsibility of any QC activities or 2nd line programming.</p>
 <p>ADaMs in R will be highly modularized. This means code needs to be commented across the set of functions that produces the final ADaM dataset.</p>
 <p>This guidance is built on the assumption that each ADaM dataset will have one R script that will call a set of functions needed to produce the corresponding ADaM dataset.</p>
 </div>
-<div id="header-for-the-main-r-script" class="section level2">
-<h2 class="hasAnchor">
-<a href="#header-for-the-main-r-script" class="anchor"></a>Header for the main R-Script</h2>
+<div class="section level3">
+<h3 id="header-for-the-main-r-script">Header for the main R-Script<a class="anchor" aria-label="anchor" href="#header-for-the-main-r-script"></a>
+</h3>
 <p>The main R-script would contain all function calls to create the ADaM dataset. In the header, describe the ADaM dataset that will be produced:</p>
 <ul>
 <li>Name</li>
@@ -658,16 +667,16 @@ deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 <li>Input SDTMs and ADaMs</li>
 <li>Short description of its purpose if not obvious by the label (novel endpoints mainly)</li>
 </ul>
-<div id="header-for-functions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#header-for-functions" class="anchor"></a>Header for functions</h3>
+<div class="section level4">
+<h4 id="header-for-functions">Header for functions<a class="anchor" aria-label="anchor" href="#header-for-functions"></a>
+</h4>
 <ul>
 <li>See Function header</li>
 </ul>
 </div>
-<div id="functions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#functions" class="anchor"></a>Functions</h3>
+<div class="section level4">
+<h4 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+</h4>
 <ul>
 <li>Function calls should have a preceding comment which is a short and meaningful description for which purpose the function is called, like:
 <ul>
@@ -695,64 +704,64 @@ deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
 </li>
 </ul>
 </div>
-<div id="code" class="section level3">
-<h3 class="hasAnchor">
-<a href="#code" class="anchor"></a>Code</h3>
+<div class="section level4">
+<h4 id="code">Code<a class="anchor" aria-label="anchor" href="#code"></a>
+</h4>
 <p>The code itself should be described in meaningful, plain English, so that a reviewer can understand how the piece of code works, e.g. </p>
 <ul>
 <li># calculates the sum of scores divided by the non missing numbers of scores to calculate the average score</li>
 </ul>
 <p>Code within a function that creates a specific variable should have a starting comment and an ending comment, e.g.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co"># calculate X</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># calculate X</span>
 <span class="co"># describe how the code works in meaningful plain english</span>
 <span class="st">"&lt;code&gt;"</span>
-<span class="co"># end of X</span></pre></body></html></div>
+<span class="co"># end of X</span></code></pre></div>
 <p>If meaningful, comments can cover multiple variables within a piece of code</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># creates X, Y, Z</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># creates X, Y, Z</span>
 <span class="co"># describe how the code works in meaningful plain english</span>
 <span class="st">"&lt;code&gt;"</span>
-<span class="co"># end of X, Y, Z</span></pre></body></html></div>
+<span class="co"># end of X, Y, Z</span></code></pre></div>
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
+<div class="section level2">
+<h2 id="r-and-package-versions-for-development">R and package versions for development<a class="anchor" aria-label="anchor" href="#r-and-package-versions-for-development"></a>
+</h2>
+<ul>
+<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <code>{admiral}</code>. This need for a common development environment also carries over for our choice of package versions.<br>
+</li>
+<li>GitHub allows us through the Actions/Workflows to test <code>{admiral}</code> under several versions of R as well as several versions of dependent R packages needed for <code>{admiral}</code>. Currently we test <code>{admiral}</code> against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>
+</li>
+<li>This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.<br>
+</li>
+<li>Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request. This ensures faster review times and higher quality Pull Request reviews.</li>
+<li>We achieve this common development environment by using a <strong>lockfile</strong> created from the <a href="https://rstudio.github.io/renv/" class="external-link"><code>renv</code></a> package. New developers will encounter a suggested <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code> in the console to revert or move forward your R version and package versions.</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
+
+
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
-
-
-      <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
-</div>
-
-      </footer>
+    </footer>
 </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
-  docsearch({
-    
-    
-    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'pharmaverse',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-</body>
+
+  
+
+  </body>
 </html>

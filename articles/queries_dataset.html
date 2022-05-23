@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="admiral">
 <title>Queries Dataset Documentation • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,14 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
-<link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Queries Dataset Documentation">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Queries Dataset Documentation">
 <meta property="og:description" content="admiral">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -27,150 +25,102 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">admiral</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/admiral.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/admiral.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="../articles/adsl.html">Creating ADSL</a>
+    <a class="dropdown-item" href="../articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <a class="dropdown-item" href="../articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="../articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="../articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="../articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="../articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="../articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">User Guides</li>
-    <li>
-      <a href="../articles/adsl.html">Creating ADSL</a>
-    </li>
-    <li>
-      <a href="../articles/occds.html">Creating an OCCDS ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    </li>
-    <li>
-      <a href="../articles/imputation.html">Date and Time Imputation</a>
-    </li>
-    <li>
-      <a href="../articles/queries_dataset.html">Queries Dataset Documentation</a>
-    </li>
-    <li>
-      <a href="../articles/faq.html">FAQ</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Developer Guides</li>
-    <li>
-      <a href="../articles/contribution_model.html">Contribution to admiral</a>
-    </li>
-    <li>
-      <a href="../articles/development_process.html">Development Process</a>
-    </li>
-    <li>
-      <a href="../articles/programming_strategy.html">Programming Strategy</a>
-    </li>
-    <li>
-      <a href="../articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    </li>
-    <li>
-      <a href="../articles/writing_vignettes.html">Writing Vignettes</a>
-    </li>
-    <li>
-      <a href="../articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    </li>
-    <li>
-      <a href="../articles/unit_test_guidance.html">Unit Test Guidance</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/pharmaverse/admiral/">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
-      </form>
-      
-    </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Queries Dataset Documentation</h1>
+
+<script src="queries_dataset_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Queries Dataset Documentation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/queries_dataset.Rmd"><code>vignettes/queries_dataset.Rmd</code></a></small>
-      <div class="hidden name"><code>queries_dataset.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/pharmaverse/admiral/blob/main/vignettes/queries_dataset.Rmd" class="external-link"><code>vignettes/queries_dataset.Rmd</code></a></small>
+      <div class="d-none name"><code>queries_dataset.Rmd</code></div>
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries or WHO-Drug Standardized Drug Grouping.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>To support the safety analysis, it is quite common to define specific grouping of events. One of the most common ways is to group events or medications by a specific medical concept such as a Standard MedDRA Queries (SMQs) or WHO-Drug Standardized Drug Groupings (SDGs).</p>
 <p>To help with the derivation of these variables, the {admiral} function <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> can be used. This function takes as input the dataset (<code>dataset</code>) where the grouping must occur (e.g <code>ADAE</code>) and a dataset containing the required information to perform the derivation of the grouping variables (<code>dataset_queries</code>).</p>
-<p>Because the definition, collection and storage of the medical concepts is company specific, the dataset passed to the <code>dataset_queries</code> argument of the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function should be created outside of {admiral} in a specific format so that it can be passed in the function.</p>
+<p>The dataset passed to the <code>dataset_queries</code> argument of the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function can be created by the <code><a href="../reference/create_query_data.html">create_query_data()</a></code> function. For SMQs and SDGs company-specific functions for accessing the SMQ and SDG database need to be passed to the <code><a href="../reference/create_query_data.html">create_query_data()</a></code> function (see the description of the <code>get_smq_fun</code> and <code>get_sdq_fun</code> parameter for details).</p>
 <p>This vignette describes the expected structure and content of the dataset passed to the <code>dataset_queries</code> argument in the <code><a href="../reference/derive_vars_query.html">derive_vars_query()</a></code> function.</p>
 </div>
-<div id="structure-of-the-query-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#structure-of-the-query-dataset" class="anchor"></a>Structure of the Query Dataset</h1>
-<div id="variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#variables" class="anchor"></a>Variables</h2>
-<table class="table">
+<div class="section level2">
+<h2 id="structure-of-the-query-dataset">Structure of the Query Dataset<a class="anchor" aria-label="anchor" href="#structure-of-the-query-dataset"></a>
+</h2>
+<div class="section level3">
+<h3 id="variables">Variables<a class="anchor" aria-label="anchor" href="#variables"></a>
+</h3>
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="30%">
 <col width="21%">
@@ -236,14 +186,14 @@
 </table>
 <p><strong>Bold variables</strong> are required in <code>dataset_queries</code>: an error is issued if any of these variables is missing. Other variables are optional.</p>
 </div>
-<div id="required-content" class="section level2">
-<h2 class="hasAnchor">
-<a href="#required-content" class="anchor"></a>Required Content</h2>
+<div class="section level3">
+<h3 id="required-content">Required Content<a class="anchor" aria-label="anchor" href="#required-content"></a>
+</h3>
 <p>Each row must be unique within the dataset.</p>
 <p>As described above, the variables <code>VAR_PREFIX</code>, <code>QUERY_NAME</code>, <code>TERM_LEVEL</code>, <code>TERM_NAME</code> and <code>TERM_ID</code> are required. The combination of these variables will allow the creation of the grouping variable.</p>
-<div id="input" class="section level3">
-<h3 class="hasAnchor">
-<a href="#input" class="anchor"></a>Input</h3>
+<div class="section level4">
+<h4 id="input">Input<a class="anchor" aria-label="anchor" href="#input"></a>
+</h4>
 <ul>
 <li><p><code>VAR_PREFIX</code> must be a character string starting with 2 or 3 letters, followed by a 2-digits number (e.g. “CQ01”).</p></li>
 <li><p><code>QUERY_NAME</code> must be a non missing character string and it must be unique within <code>VAR_PREFIX</code>.</p></li>
@@ -259,9 +209,9 @@
 <li><p><code>TERM_ID</code> must be an integer. This <strong>must</strong> be populated if <code>TERM_NAME</code> is missing.</p></li>
 </ul>
 </div>
-<div id="output" class="section level3">
-<h3 class="hasAnchor">
-<a href="#output" class="anchor"></a>Output</h3>
+<div class="section level4">
+<h4 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
+</h4>
 <ul>
 <li>
 <p><code>VAR_PREFIX</code> will be used to create the grouping variable appending the suffix “NAM”. This variable will now be referred to as <code>ABCzzNAM</code>: the name of the grouping variable.</p>
@@ -282,17 +232,17 @@
 </li>
 </ul>
 </div>
-<div id="example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h3>
+<div class="section level4">
+<h4 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h4>
 <p>In this example, one standard MedDRA query (<code>VAR_PREFIX = "SMQ01"</code>) and one customized query (<code>VAR_PREFIX = "CQ02"</code>) are defined to analyze the adverse events.</p>
 <ul>
 <li><p>The standard MedDRA query variable <code>SMQ01NAM</code> [<code>VAR_PREFIX</code>] will be populated with “Standard Query 1” [<code>QUERY_NAME</code>] if any preferred term (<code>AEDECOD</code>) [<code>TERM_LEVEL</code>] in <code>dataset</code> is equal to “AE1” or “AE2” [<code>TERM_NAME</code>]</p></li>
 <li><p>The customized query (<code>CQ02NAM</code>) [<code>VAR_PREFIX</code>] will be populated with “Query 2” [<code>QUERY_NAME</code>] if any Low Level Term Code (<code>AELLTCD</code>) [<code>TERM_LEVEL</code>] in <code>dataset</code> is equal to 10 [<code>TERM_ID</code>] or any preferred term (<code>AEDECOD</code>) [<code>TERM_LEVEL</code>] in <code>dataset</code> is equal to “AE4” [<code>TERM_NAME</code>].</p></li>
 </ul>
-<div id="query-dataset-ds_query" class="section level4">
-<h4 class="hasAnchor">
-<a href="#query-dataset-ds_query" class="anchor"></a>Query Dataset (<code>ds_query</code>)</h4>
+<div class="section level5">
+<h5 id="query-dataset-ds_query">Query Dataset (<code>ds_query</code>)<a class="anchor" aria-label="anchor" href="#query-dataset-ds_query"></a>
+</h5>
 <table class="table">
 <thead><tr class="header">
 <th>VAR_PREFIX</th>
@@ -338,9 +288,9 @@
 </tbody>
 </table>
 </div>
-<div id="adverse-event-dataset-ae" class="section level4">
-<h4 class="hasAnchor">
-<a href="#adverse-event-dataset-ae" class="anchor"></a>Adverse Event Dataset (<code>ae</code>)</h4>
+<div class="section level5">
+<h5 id="adverse-event-dataset-ae">Adverse Event Dataset (<code>ae</code>)<a class="anchor" aria-label="anchor" href="#adverse-event-dataset-ae"></a>
+</h5>
 <table class="table">
 <thead><tr class="header">
 <th>USUBJID</th>
@@ -371,10 +321,10 @@
 </tbody>
 </table>
 </div>
-<div id="output-dataset" class="section level4">
-<h4 class="hasAnchor">
-<a href="#output-dataset" class="anchor"></a>Output Dataset</h4>
-<p>Generated by calling <code><a href="../reference/derive_vars_query.html">derive_vars_query(dataset = ae, dataset_queries = ds_query)</a></code>.</p>
+<div class="section level5">
+<h5 id="output-dataset">Output Dataset<a class="anchor" aria-label="anchor" href="#output-dataset"></a>
+</h5>
+<p>Generated by calling <code>derive_vars_query(dataset = ae, dataset_queries = ds_query)</code>.</p>
 <table class="table">
 <thead><tr class="header">
 <th>USUBJID</th>
@@ -418,31 +368,31 @@
 </div>
 </div>
 </div>
-<div id="optional-content" class="section level2">
-<h2 class="hasAnchor">
-<a href="#optional-content" class="anchor"></a>Optional Content</h2>
+<div class="section level3">
+<h3 id="optional-content">Optional Content<a class="anchor" aria-label="anchor" href="#optional-content"></a>
+</h3>
 <p>When standardized MedDRA Queries are added to the dataset, it is expected that the name of the query (<code>ABCzzNAM</code>) is populated along with its number code (<code>ABCzzCD</code>), and its Broad or Narrow scope (<code>ABCzzSC</code>).</p>
 <p>The following variables can be added to <code>queries_datset</code> to derive this information.</p>
-<div id="input-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#input-1" class="anchor"></a>Input</h3>
+<div class="section level4">
+<h4 id="input-1">Input<a class="anchor" aria-label="anchor" href="#input-1"></a>
+</h4>
 <ul>
 <li><p><code>QUERY_ID</code> must be an integer.</p></li>
 <li><p><code>QUERY_SCOPE</code> must be a character string. Possible values are: “BROAD”, “NARROW” or <code>NA</code>.</p></li>
 <li><p><code>QUERY_SCOPE_NUM</code> must be an integer. Possible values are: <code>1</code>, <code>2</code> or <code>NA</code>.</p></li>
 </ul>
 </div>
-<div id="output-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#output-1" class="anchor"></a>Output</h3>
+<div class="section level4">
+<h4 id="output-1">Output<a class="anchor" aria-label="anchor" href="#output-1"></a>
+</h4>
 <ul>
 <li>
 <code>QUERY_ID</code>, <code>QUERY_SCOPE</code> and <code>QUERY_SCOPE_NUM</code> will be used in the same way as <code>QUERY_NAME</code> <a href="#query_name">(see here)</a> and will help in the creation of the <code>ABCzzCD</code>, <code>ABCzzSC</code> and <code>ABCzzSCN</code> variables.</li>
 </ul>
 </div>
-<div id="output-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#output-variables" class="anchor"></a>Output Variables</h3>
+<div class="section level4">
+<h4 id="output-variables">Output Variables<a class="anchor" aria-label="anchor" href="#output-variables"></a>
+</h4>
 <p>These variables are optional and if not populated in <code>dataset_queries</code>, the corresponding output variable will not be created:</p>
 <table class="table">
 <thead><tr class="header">
@@ -507,44 +457,28 @@
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
-  docsearch({
-    
-    
-    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'pharmaverse',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-</body>
+
+  
+
+  </body>
 </html>

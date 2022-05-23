@@ -4,7 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content='A toolbox for programming Clinical Data Standards Interchange Consortium
+    (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
+    mandatory part of any New Drug or Biologics License Application submitted to the
+    United States Food and Drug Administration (FDA). Analysis derivations are
+    implemented in accordance with the "Analysis Data Model Implementation Guide"
+    (CDISC Analysis Data Model Team, 2021, &lt;https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package&gt;).'>
 <title>ADaM in R Asset Library • admiral</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -12,14 +18,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
-<link href="docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="ADaM in R Asset Library">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ADaM in R Asset Library">
 <meta property="og:description" content='A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the
@@ -32,301 +35,302 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">admiral</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="index.html">admiral</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="articles/admiral.html">Get started</a>
 </li>
-<li>
-  <a href="articles/admiral.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="reference/index.html">Reference</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>User Guides</h6>
+    <a class="dropdown-item" href="articles/adsl.html">Creating ADSL</a>
+    <a class="dropdown-item" href="articles/occds.html">Creating an OCCDS ADaM</a>
+    <a class="dropdown-item" href="articles/bds_finding.html">Creating a BDS Finding ADaM</a>
+    <a class="dropdown-item" href="articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
+    <a class="dropdown-item" href="articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
+    <a class="dropdown-item" href="articles/imputation.html">Date and Time Imputation</a>
+    <a class="dropdown-item" href="articles/queries_dataset.html">Queries Dataset Documentation</a>
+    <a class="dropdown-item" href="articles/faq.html">FAQ</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Developer Guides</h6>
+    <a class="dropdown-item" href="articles/contribution_model.html">Contribution to {admiral}</a>
+    <a class="dropdown-item" href="articles/development_process.html">Development Process</a>
+    <a class="dropdown-item" href="articles/programming_strategy.html">Programming Strategy</a>
+    <a class="dropdown-item" href="articles/git_usage.html">Guidance for git and GitHub Usage</a>
+    <a class="dropdown-item" href="articles/writing_vignettes.html">Writing Vignettes</a>
+    <a class="dropdown-item" href="articles/pr_review_guidance.html">Pull Request Review Guidance</a>
+    <a class="dropdown-item" href="articles/unit_test_guidance.html">Unit Test Guidance</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">User Guides</li>
-    <li>
-      <a href="articles/adsl.html">Creating ADSL</a>
-    </li>
-    <li>
-      <a href="articles/occds.html">Creating an OCCDS ADaM</a>
-    </li>
-    <li>
-      <a href="articles/bds_finding.html">Creating a BDS Finding ADaM</a>
-    </li>
-    <li>
-      <a href="articles/bds_exposure.html">Creating a BDS Exposure ADaM</a>
-    </li>
-    <li>
-      <a href="articles/bds_tte.html">Creating a BDS Time-to-Event ADaM</a>
-    </li>
-    <li>
-      <a href="articles/imputation.html">Date and Time Imputation</a>
-    </li>
-    <li>
-      <a href="articles/queries_dataset.html">Queries Dataset Documentation</a>
-    </li>
-    <li>
-      <a href="articles/faq.html">FAQ</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Developer Guides</li>
-    <li>
-      <a href="articles/contribution_model.html">Contribution to admiral</a>
-    </li>
-    <li>
-      <a href="articles/development_process.html">Development Process</a>
-    </li>
-    <li>
-      <a href="articles/programming_strategy.html">Programming Strategy</a>
-    </li>
-    <li>
-      <a href="articles/git_usage.html">Guidance for git and GitHub Usage</a>
-    </li>
-    <li>
-      <a href="articles/writing_vignettes.html">Writing Vignettes</a>
-    </li>
-    <li>
-      <a href="articles/pr_review_guidance.html">Pull Request Review Guidance</a>
-    </li>
-    <li>
-      <a href="articles/unit_test_guidance.html">Unit Test Guidance</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/pharmaverse/admiral/">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/pharmaverse/admiral/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
-        <div class="form-group">
-          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
-      </form>
-      
-    </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="admiral-">admiral <a class="anchor" aria-label="anchor" href="#admiral-"></a>
+</h1>
 </div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-<div id="admiral-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#admiral-" class="anchor"></a>admiral <img src="reference/figures/logo.png" align="right" width="200" style="margin-left:50px;">
-</h1></div>
 <!-- badges: start -->
-
 <p>ADaM in R Asset Library</p>
-<div id="purpose" class="section level2">
-<h2 class="hasAnchor">
-<a href="#purpose" class="anchor"></a>Purpose</h2>
+<div class="section level2">
+<h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
+</h2>
 <p>To provide an open source, modularized toolbox that enables the pharmaceutical programming community to develop ADaM datasets in R.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package is available from CRAN and can be installed by running <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("admiral")</a></code>.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>The package is available from CRAN and can be installed by running <code>install.packages("admiral")</code>.</p>
 <p>To install the latest development version of the package directly from GitHub use the following code:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"remotes"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) {
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
-}
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"pharmaverse/admiral"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"devel"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiraltest"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span> <span class="co"># This is a required dependency of {admiral}</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharmaverse/admiral"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="scope" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scope" class="anchor"></a>Scope</h2>
+<div class="section level2">
+<h2 id="main-goal">Main Goal<a class="anchor" aria-label="anchor" href="#main-goal"></a>
+</h2>
+<p>Provide users with an open source, modularized toolbox with which to create ADaM datasets in R. <em>As opposed to a “run 1 line and an ADaM appears” black-box solution or an attempt to automate ADaM.</em></p>
+<p>One of the key aspects of <code>{admiral}</code> is its development by the users for the users. It gives an entry point for all to collaborate, co-create and contribute to a harmonised approach of developing ADaMs in R across the pharmaceutical industry.</p>
+</div>
+<div class="section level2">
+<h2 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
+</h2>
+<p>To set expectations: It is not our target that <code>{admiral}</code> will ever provide all possible solutions for all ADaM datasets outside of study specific needs. It depends on the user’s collaboration and contribution to help grow over time to an asset library that is robust, easy to use and has an across-industry focus. We do not see a coverage of 100% of all ADaM derivations as ever achievable—ADaM is endless.</p>
+<p>We will provide:</p>
 <ul>
 <li>A toolbox of re-usable functions and utilities to create ADaM datasets using R scripts in a modular manner (an “opinionated” design strategy)</li>
 <li>Pharmaceutical communities and companies are encouraged to contribute to <code>{admiral}</code> following the provided programming strategy and modular approach</li>
-<li>All functions are documented, tested, include examples and are listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html">Reference section</a>
+<li>Functions that are comprehensively documented and tested, including example calls—these are all listed in the <a href="https://pharmaverse.github.io/admiral/reference/index.html" class="external-link">Reference section</a>
 </li>
-<li>Vignettes on how to create ADSL, BDS and OCCUR datasets, including example scripts</li>
+<li>Vignettes on how to create ADSL, BDS and OCCDS datasets, including example scripts</li>
 <li>Vignettes for ADaM dataset specific functionality (i.e. dictionary coding, date imputation, SMQs …)</li>
 </ul>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="section level2">
+<h2 id="types-of-packages">Types of Packages<a class="anchor" aria-label="anchor" href="#types-of-packages"></a>
+</h2>
+<p>There will be 3 foreseeable types of <code>{admiral}</code> packages:</p>
 <ul>
-<li>Think of <code>{admiral}</code> as a toolbox of modular blocks (R functions) to create analysis derivations
-<ul>
-<li>Each block has a stand alone purpose, i.e. each function provides a specific functionality</li>
-<li>Data Scientists can create their own blocks, i.e. create own R functions</li>
-</ul>
-</li>
-<li>Constructing ADaM dataset should become like building out of blocks that are based on <code>{admiral}</code> modular functions and user created modular functions</li>
+<li>Core package—one package containing all core functions required to create ADaMs, usable by any company (i.e. general derivations, utility functions and checks for ADSL, OCCDS and BDS)</li>
+<li>TA (Therapeutic Area) package extensions—one package per TA with functions that are specific to algorithms and requirements for that particular TA (e.g. <code>{admiralonco}</code>)</li>
+<li>Company package extensions—specific needs and plug-ins for the company, such as access to metadata (e.g. <code>{admiralroche}</code> or <code>{admiralgsk}</code>)</li>
 </ul>
 </div>
-<div id="expectations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#expectations" class="anchor"></a>Expectations</h2>
+<div class="section level2">
+<h2 id="admiral-manifesto">Admiral Manifesto<a class="anchor" aria-label="anchor" href="#admiral-manifesto"></a>
+</h2>
+<p>For <code>{admiral}</code> and all extension packages, we prioritise providing our users with a <strong>simple to adopt</strong> toolkit that enables them to produce <strong>readable</strong> and <strong>easily constructible</strong> ADaM programs. The following explains our philosophy, which we try to adhere to across the <code>{admiral}</code> family of packages. There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for <code>{admiral}</code>. This manifesto helps show the considerations of our developers when making decisions.</p>
+<p>We have four design principles to achieve the main goal:</p>
+<div class="section level3">
+<h3 id="usability">Usability<a class="anchor" aria-label="anchor" href="#usability"></a>
+</h3>
+<p>All <code>{admiral}</code> functions should be easy to use.</p>
+<ul>
+<li>Documentation is an absolute priority. Each function reference page should cover the purpose, descriptions of each argument with permitted values, the expected input and output, with clear real-life examples—so that users don’t need to dig through code to find answers.</li>
+<li>Vignettes that complement the functional documentation to help users see how best the functions can be applied to achieve ADaM requirements.</li>
+<li>Functions should be written and structured in a way that users are able to read, re-use or extend them for study specific purposes if needed (see Readability below).</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="simplicity">Simplicity<a class="anchor" aria-label="anchor" href="#simplicity"></a>
+</h3>
+<p>All <code>{admiral}</code> functions have a clear purpose.</p>
+<ul>
+<li><p>We try not to ever design single functions that could achieve numerous very different derivations. For example if you as a user pick up a function with &gt;10 different arguments then chances are it is going to be difficult to understand if this function could be applied for your specific need. The intention is that arguments/parameters can influence how the output of a function is calculated, but not change the purpose of the function.</p></li>
+<li><p>We try to combine similar tasks and algorithms into one function where applicable to reduce the amount of repetitive functions with similar algorithms and to group together similar functionality to increase usability (e.g. one study day calculation rather than a function per variable).</p></li>
+<li><p>We strive to design functions that are not too general and trying to fulfil multiple, complex purposes.</p></li>
+<li><p>Functions should not allow expressions as arguments that are used as code snippets in function calls.</p></li>
+<li><p>We recommend to avoid copy and paste of complex computational algorithms or repetitive code like checks and advise to wrap them into a function. However we would also like to avoid multi-layered functional nesting, so this needs to be considered carefully to keep the nesting of 3-4 functions an exception rather than the rule.</p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="findability">Findability<a class="anchor" aria-label="anchor" href="#findability"></a>
+</h3>
+<p>All <code>{admiral}</code> functions are easily findable.</p>
+<ul>
+<li>In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.</li>
+<li>We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that help users to get started and build familiarity. Each <code>{admiral}</code> family package website is searchable.</li>
+<li>We avoid repetitive functions that will do similar tasks (as explained above with study day example).</li>
+<li>Each package extension is kept focused on the specific scope, e.g. features that are relevant across multiple extension packages will be moved to the core <code>{admiral}</code> package.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="readability">Readability<a class="anchor" aria-label="anchor" href="#readability"></a>
+</h3>
+<p>All <code>{admiral}</code> functions follow the <a href="https://pharmaverse.github.io/admiral/articles/programming_strategy.html" class="external-link">Programming Strategy</a> that all our developers and contributors must follow, so that all our code has a high degree of consistency and readability.</p>
+<ul>
+<li>We mandate use of tidyverse (e.g. dplyr) over similar functionality existing in base R.</li>
+<li>For sections of code that perform the actual derivations (e.g. besides assertions or basic utilities), we try to limit nesting of too many dependencies or functions.</li>
+<li>Modularity is a focus—we don’t try to achieve too many steps in one.</li>
+<li>All code has to be well commented.</li>
+<li>We recognise that a user or a Health Authority reviewer may have the wish to delve into the codebase (especially given this open source setting), or users may need to extend/adapt the code for their study specific needs. We therefore want any module to be understandable to all, not only the <code>{admiral}</code> developers.</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references-and-documentation">References and Documentation<a class="anchor" aria-label="anchor" href="#references-and-documentation"></a>
+</h2>
+<ul>
+<li>Please go to <a href="https://pharmaverse.github.io/admiral/articles/admiral.html" class="external-link">Get Started</a> section to start using <code>{admiral}</code>
+</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/programming_strategy.html" class="external-link">Programming Strategy</a> to understand how functions are created</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/faq.html" class="external-link">FAQ</a> for the most frequent questions</li>
+<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/contribution_model.html" class="external-link">Contribution Model</a> for how to get involved with making contributions</li>
+<li>Please see <a href="https://pharmaverse.github.io/admiral/articles/faq.html#why-do-we-use-a-certain-r-version-and-package-versions-for-development" class="external-link">FAQ: R and Package Versions</a> for why we develop with certain R and package versions.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="conference-presentations">Conference Presentations<a class="anchor" aria-label="anchor" href="#conference-presentations"></a>
+</h2>
 <ul>
 <li>
-<code>{admiral}</code> will never cover 100% of eventualities that could be needed to produce ADaMs across each and every company/disease area/study - ADaM is infinite</li>
-<li>Some flexibility can be added to the functions, but only where there is an agreed common need across the industry as this has to balance vs ease of usage and testing</li>
-<li>One of our principle design decisions in creating <code>{admiral}</code> was to prioritise transparency and simplicity for our users - and not to let this ever become a “black-box” toolkit</li>
-<li>We hope <code>{admiral}</code> offers a chance for users to be programmers - this is not a “run 1 line and an ADaM appears” solution or an attempt to automate ADaM</li>
-<li>It is expected for companies to adopt <code>{admiral}</code> that a company-specific extension package would likely be needed (e.g. <code>{admiral.roche}</code> or <code>{admiral.gsk}</code>)
-<ul>
-<li>Consider this an opportunity to influence company-specific standards, as <code>{admiral}</code> offers a bridge towards a more industry-aligned implementation of ADaM</li>
-</ul>
-</li>
-<li>From the core <code>{admiral}</code> package covering common functions and mostly safety templates, there will be further package extensions dedicated to certain disease area endpoints (e.g. <code>{admiral.onco}</code> or <code>{admiral.hiv}</code>)</li>
-</ul>
-</div>
-<div id="references-and-documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references-and-documentation" class="anchor"></a>References and Documentation</h2>
-<ul>
-<li>Please go to <a href="https://pharmaverse.github.io/admiral/articles/admiral.html">Get Started</a> section to start using <code>{admiral}</code>
-</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/programming_strategy.html">Programming Strategy</a> to understand how functions are created</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/faq.html">FAQ</a> for the most frequent questions</li>
-<li>Please see the <a href="https://pharmaverse.github.io/admiral/articles/contribution_model.html">Contribution Model</a> for how to get involved with making contributions</li>
-</ul>
-</div>
-<div id="conference-presentations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#conference-presentations" class="anchor"></a>Conference Presentations</h2>
-<ul>
+<a href="https://www.youtube.com/watch?v=N7Bw8c3D5fU" class="external-link">R/Pharma 2021 talk</a> (recording)</li>
 <li>
-<a href="https://www.youtube.com/watch?v=N7Bw8c3D5fU">R/Pharma 2021 talk</a> (recording)</li>
-<li>
-<a href="https://github.com/pharmaverse/admiral.phuse.workshop">PHUSE EU Connect 2021 workshop</a> (slides and materials)</li>
+<a href="https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022" class="external-link">PHUSE US Connect 2022 pharmaverse workshop</a> (slides and materials—including <code>{admiral}</code> workshop slides from PHUSE EU Connect 2021)</li>
 </ul>
 </div>
-<div id="contact" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contact" class="anchor"></a>Contact</h2>
+<div class="section level2">
+<h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
+</h2>
 <p>We use the following for support and communications between user and developer community:</p>
 <ul>
 <li>
-<a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269">Slack</a> - for informal discussions, Q&amp;A and building our user community. If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A">link</a> to join the pharmaverse Slack workspace</li>
+<a href="https://app.slack.com/client/T028PB489D3/C02M8KN8269" class="external-link">Slack</a>—for informal discussions, Q&amp;A and building our user community. If you don’t have access, use this <a href="https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A" class="external-link">link</a> to join the pharmaverse Slack workspace</li>
 <li>
-<a href="https://github.com/pharmaverse/admiral/issues">GitHub Issues</a> - for direct feedback, enhancement requests or raising bugs</li>
+<a href="https://github.com/pharmaverse/admiral/issues" class="external-link">GitHub Issues</a>—for direct feedback, enhancement requests or raising bugs</li>
 </ul>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
-<h2>Links</h2>
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=admiral">https://​cloud.r-project.org/​package=admiral</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/pharmaverse/admiral/">https://​github.com/​pharmaverse/​admiral/​</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=admiral" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/pharmaverse/admiral/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>Apache License (&gt;= 2)</small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing admiral</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Thomas Neitmann <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Alice Ehmann <br><small class="roles"> Author </small>  </li>
 <li>Stefan Bundfuss <br><small class="roles"> Author </small>  </li>
-<li>Samia Kabi <br><small class="roles"> Author </small>  </li>
-<li>Vignesh Thanikachalam <br><small class="roles"> Author </small>  </li>
-<li>Ondrej Slama <br><small class="roles"> Author </small>  </li>
-<li>Shimeng Huang <br><small class="roles"> Author </small>  </li>
-<li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
-<li>Eric Simms <br><small class="roles"> Author </small>  </li>
-<li>Michael Thorpe <br><small class="roles"> Author </small>  </li>
-<li>Annie Yang <br><small class="roles"> Author </small>  </li>
 <li>Ben Straub <br><small class="roles"> Author </small>  </li>
+<li>Samia Kabi <br><small class="roles"> Author </small>  </li>
+<li>Gordon Miller <br><small class="roles"> Author </small>  </li>
+<li>Teckla Akinyi <br><small class="roles"> Author </small>  </li>
 <li>Andrew Smith <br><small class="roles"> Author </small>  </li>
+<li>Konstantina Koukourikou <br><small class="roles"> Author </small>  </li>
+<li>Ross Farrugia <br><small class="roles"> Author </small>  </li>
+<li>Eric Simms <br><small class="roles"> Author </small>  </li>
+<li>Annie Yang <br><small class="roles"> Author </small>  </li>
+<li>Robin Koeger <br><small class="roles"> Author </small>  </li>
+<li>Sophie Shapcott <br><small class="roles"> Author </small>  </li>
+<li>Ojesh Upadhyay <br><small class="roles"> Author </small>  </li>
+<li>Jack McGavigan <br><small class="roles"> Author </small>  </li>
+<li>Kamila Duniec <br><small class="roles"> Author </small>  </li>
+<li>Gayatri G <br><small class="roles"> Author </small>  </li>
+<li>Alana Harris <br><small class="roles"> Author </small>  </li>
+<li>Mahdi About <br><small class="roles"> Author </small>  </li>
+<li>Pooja Kumari <br><small class="roles"> Author </small>  </li>
+<li>Claudia Carlucci <br><small class="roles"> Author </small>  </li>
+<li>Daniil Stefonishin <br><small class="roles"> Author </small>  </li>
 <li>F. Hoffmann-La Roche AG <br><small class="roles"> Copyright holder, funder </small>  </li>
 <li>GlaxoSmithKline LLC <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://pharmaverse.org"><img src="http://pharmaverse.org/shields/admiral.svg"></a></li>
-<li><a href="https://CRAN.R-project.org/package=admiral"><img src="https://www.r-pkg.org/badges/version/admiral" alt="CRAN status"></a></li>
-<li><a href="https://github.com/pharmaverse/admiral/actions"><img src="https://github.com/pharmaverse/admiral/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/Roche-GSK/admiral?branch=main"><img src="https://codecov.io/gh/Roche-GSK/admiral/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://pharmaverse.org" class="external-link"><img src="http://pharmaverse.org/shields/admiral.svg"></a></li>
+<li><a href="https://CRAN.R-project.org/package=admiral" class="external-link"><img src="https://www.r-pkg.org/badges/version/admiral" alt="CRAN status"></a></li>
+<li><a href="https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml" class="external-link"><img src="https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/pharmaverse/admiral/actions/workflows/style.yml" class="external-link"><img src="https://github.com/pharmaverse/admiral/actions/workflows/style.yml/badge.svg" alt="Style"></a></li>
+<li><a href="https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml" class="external-link"><img src="https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml/badge.svg" alt="Spelling"></a></li>
+<li><a href="https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml" class="external-link"><img src="https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml/badge.svg" alt="Man Pages 📃"></a></li>
+<li><a href="https://app.codecov.io/gh/pharmaverse/admiral?branch=devel" class="external-link"><img src="https://codecov.io/gh/pharmaverse/admiral/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
-</div>
-</div>
 
-
-      <footer><div class="copyright">
-  <p>Developed by Thomas Neitmann, Alice Ehmann, Stefan Bundfuss, Samia Kabi, Vignesh Thanikachalam, Ondrej Slama, Shimeng Huang, Teckla Akinyi, Eric Simms, Michael Thorpe, Annie Yang, Ben Straub, Andrew Smith, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
+  </aside>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Thomas Neitmann, Stefan Bundfuss, Ben Straub, Samia Kabi, Gordon Miller, Teckla Akinyi, Andrew Smith, Konstantina Koukourikou, Ross Farrugia, Eric Simms, Annie Yang, Robin Koeger, Sophie Shapcott, Ojesh Upadhyay, Jack McGavigan, Kamila Duniec, Gayatri G, Alana Harris, Mahdi About, Pooja Kumari, Claudia Carlucci, Daniil Stefonishin, F. Hoffmann-La Roche AG, GlaxoSmithKline LLC.</p>
 </div>
 
-      </footer>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+</div>
+
+    </footer>
 </div>
 
   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
-  docsearch({
-    
-    
-    apiKey: '2d4895759f79e89d6eb1c3b990bca6d8',
-    indexName: 'pharmaverse',
-    inputSelector: 'input#search-input.form-control',
-    transformData: function(hits) {
-      return hits.map(function (hit) {
-        hit.url = updateHitURL(hit);
-        return hit;
-      });
-    }
-  });
-</script>
-</body>
+
+  
+
+  </body>
 </html>
