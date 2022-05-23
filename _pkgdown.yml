@@ -114,7 +114,7 @@ reference:
 - contents:
   - has_keyword("dev_utility")
 
-- title: Miscellenous
+- title: Miscellaneous
 - contents:
   - ex_single
   - get_terms_from_db
