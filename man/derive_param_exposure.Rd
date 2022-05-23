@@ -25,7 +25,8 @@ expected,
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -66,7 +67,8 @@ More general expression are not allowed.
 }
 \value{
 The input dataset with a new record added for each group (with respect to the variables
-specified for the \code{by_vars} parameter).
+specified for the \code{by_vars} parameter). That is, a variable will only
+be populated in this new record if it is specified in \code{by_vars}.
 For each new record,
 \itemize{
 \item the variable specified \code{analysis_var} is computed as defined by \code{summary_fun},
@@ -119,7 +121,7 @@ adex \%>\%
     input_code = "DOSE",
     analysis_var = AVAL,
     summary_fun = function(x) sum(x, na.rm = TRUE)
-   ) \%>\%
+  ) \%>\%
   select(-ASTDTM, -AENDTM)
 
 # average dose in w2-24

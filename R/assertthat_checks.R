@@ -269,7 +269,7 @@ is_order_vars <- function(arg) {
   }
 
   inherits(arg, "quosures") &&
-    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
+    all(map_lgl(arg, ~ quo_is_symbol(.x) || quo_is_desc_call(.x)))
 }
 on_failure(is_order_vars) <- function(call, env) {
   paste0(
@@ -294,7 +294,10 @@ on_failure(is_order_vars) <- function(call, env) {
 #' @noRd
 #'
 #' @examples
-#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+#' test_fun <- function(x) {
+#'   x <- rlang::enquo(x)
+#'   assertthat::assert_that(quo_not_missing(x))
+#' }
 #' test_fun(my_variable) # no missing argument -> returns TRUE
 #' \dontrun{
 #' test_fun() # missing argument -> throws error

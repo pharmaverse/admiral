@@ -62,6 +62,31 @@ squote <- function(x) {
   paste0("'", x, "'")
 }
 
+#' Wrap a String in Double Quotes
+#'
+#' Wrap a string in double quotes, e.g., for displaying character values in
+#' messages.
+#'
+#' @param x A character vector
+#'
+#' @return If the input is `NULL`, the text `"NULL"` is returned. Otherwise, the
+#'   input in double quotes is returned.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#' admiral:::dquote("foo")
+#' admiral:::dquote(NULL)
+dquote <- function(x) {
+  if (is.null(x)) {
+    "NULL"
+  } else {
+    paste0("\"", x, "\"")
+  }
+}
+
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
@@ -127,8 +152,8 @@ arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
-             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
-             is.symbol(expr[[2L]])) {
+    (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+    is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
   } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
     deparse(expr[[2L]])
@@ -155,13 +180,15 @@ arg_name <- function(expr) { # nolint
 #' @examples
 #' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
-  if (is.list(x)) {
+  if (is.null(x)) {
+    NULL
+  } else if (is.list(x)) {
     do.call(quo_c, map(x, extract_vars, side))
   } else if (is_quosure(x)) {
     env <- quo_get_env(x)
     symbols <- syms(all.vars(quo_get_expr(x)))
-    map(symbols, ~quo_set_env(quo(!!.x), env))
-  } else  if (is_formula(x)) {
+    map(symbols, ~ quo_set_env(quo(!!.x), env))
+  } else if (is_formula(x)) {
     funs <- list("lhs" = f_lhs, "rhs" = f_rhs)
     assert_character_scalar(side, values = names(funs))
     quo_set_env(
@@ -260,13 +287,13 @@ what_is_it <- function(x) {
 #' @return Variable vector.
 #'
 #' @examples
-#' library(admiral.test)
-#' data(vs)
+#' library(admiraltest)
+#' data(admiral_vs)
 #'
-#' admiral:::get_constant_vars(vs, by_vars = vars(USUBJID, VSTESTCD))
+#' admiral:::get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
 #' admiral:::get_constant_vars(
-#'   vs,
+#'   admiral_vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
 #'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
 #' )
@@ -274,8 +301,10 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
 
   if (!is.null(ignore_vars)) {
-    non_by_vars <- setdiff(non_by_vars,
-                           vars_select(non_by_vars, !!!ignore_vars))
+    non_by_vars <- setdiff(
+      non_by_vars,
+      vars_select(non_by_vars, !!!ignore_vars)
+    )
   }
 
   # get unique values within each group by variables
@@ -334,6 +363,57 @@ get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
 
+#' Extract Unit From Parameter Description
+#'
+#' Extract the unit of a parameter from a description like "Param (unit)".
+#'
+#' @param x A parameter description
+#'
+#' @export
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' extract_unit("Height (cm)")
+#'
+#' extract_unit("Diastolic Blood Pressure (mmHg)")
+extract_unit <- function(x) {
+  assert_character_vector(x)
+
+  x %>%
+    str_extract("\\(.+\\)") %>%
+    str_remove_all("\\(|\\)")
+}
+
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords check
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- rlang::enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   } else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
+}
+
 #' Get Source Variables from a List of Quosures
 #'
 #' @param quosures A list of quosures
@@ -350,6 +430,20 @@ get_duplicates <- function(x) {
 #' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
+}
+
+#' Turn a Quosure into a String
+#'
+#' @details
+#' This function is missing in earlier version of {rlang} which is why we re-
+#' implment it here.
+#'
+#' @noRd
+as_name <- function(x) {
+  if (is_quosure(x)) {
+    x <- quo_get_expr(x)
+  }
+  as_string(x)
 }
 
 valid_time_units <- function() {

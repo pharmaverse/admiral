@@ -1,7 +1,9 @@
 #' Derive Analysis Start Relative Day
 #'
 #' @description
-#' `r lifecycle::badge("questioning")`
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dy()` instead.
 #'
 #' Adds the analysis start relative day (`ASTDY`) to the dataset, i.e., study
 #' day of analysis start date.
@@ -15,11 +17,15 @@
 #'
 #'   A date or date-time object column is expected.
 #'
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character vector to a date object.
+#'
 #'   The default is `TRTSDT`.
 #'
 #' @param date The end date column for which the study day should be derived
 #'
 #'   A date or date-time object column is expected.
+#'
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character vector to a date object.
 #'
 #'   The default is `ASTDT`
 #'
@@ -35,22 +41,15 @@
 #'
 #' @export
 #'
-#' @examples
-#' data <- tibble::tribble(
-#'   ~TRTSDT, ~ASTDT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-#' )
-#'
-#' derive_var_astdy(data)
 derive_var_astdy <- function(dataset, reference_date = TRTSDT, date = ASTDT) {
   reference_date <- assert_symbol(enquo(reference_date))
   date <- assert_symbol(enquo(date))
   assert_data_frame(dataset, vars(!!reference_date, !!date))
+  deprecate_warn("0.7.0", "derive_var_astdy()", "derive_vars_dy()")
 
-  derive_vars_duration(
+  derive_vars_dy(
     dataset,
-    new_var = ASTDY,
-    start_date = !!reference_date,
-    end_date = !!date
+    reference_date = !!reference_date,
+    source_vars = vars(ASTDY = !!date)
   )
 }

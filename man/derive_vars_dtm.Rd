@@ -24,7 +24,10 @@ The date character vector (\code{dtc}) must be present.}
 
 \item{new_vars_prefix}{Prefix used for the output variable(s).
 
-a character is expected: e.g. \code{new_vars_prefix = "AST"}.}
+A character scalar is expected. For the date variable "DT" is appended to
+the specified prefix, for the date imputation flag "DTF", and for the time
+imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
+\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -62,9 +65,13 @@ Default is \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
-One of "auto", "date" or "both"
+If \code{"auto"} is specified, the date imputation flag is derived if the
+\code{date_imputation} parameter is not null and the time imputation flag is
+derived if the \code{time_imputation} parameter is not null
 
-Default: "auto"}
+\emph{Default}: \code{"auto"}
+
+\emph{Permitted Values}: \code{"auto"}, \code{"date"}, \code{"time"}, \code{"both"}, or \code{"none"}}
 
 \item{min_dates}{Minimum dates
 
@@ -73,16 +80,19 @@ before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
 range of possible dates of the \code{dtc} value are considered. The possible dates
 are defined by the missing parts of the \code{dtc} date (see example below). This
-ensures that the non-missing parts of the \code{dtc} date are not changed. For
-example\preformatted{impute_dtc(
-  "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-   ),
-  date_imputation = "first"
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+"2020-11",
+min_dates = list(
+ ymd_hms("2020-12-06T12:12:12"),
+ ymd_hms("2020-11-11T11:11:11")
+),
+date_imputation = "first"
 )
-}
+}\if{html}{\out{</div>}}
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
@@ -94,7 +104,7 @@ have changed the month although it is not missing (in the \code{dtc} date).}
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered.}
+considered. A date or date-time object is expected.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 

@@ -13,7 +13,7 @@ derive_var_worst_flag(
   analysis_var,
   worst_high,
   worst_low,
-  filter = NULL,
+  filter = deprecated(),
   check_type = "warning"
 )
 }
@@ -47,13 +47,7 @@ Use \code{character(0)} if not required.}
 referring to "low".
 Use \code{character(0)} if not required.}
 
-\item{filter}{Filter for flag data
-
-Only observations fulfilling the specified condition are taken into account
-for flagging. If the parameter is not specified, all observations are
-considered.
-
-Permitted Values: a condition}
+\item{filter}{Deprecated, please use \code{restrict_derivation()} instead (see examples).}
 
 \item{check_type}{Check uniqueness?
 
@@ -74,45 +68,44 @@ Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observati
 \details{
 For each group with respect to the variables specified by the \code{by_vars} parameter,
 the maximal / minimal observation of \code{analysis_var}
-is labelled in the \code{new_var} column as \code{"Y"}
-if its \code{param_var} is in \code{worst_high} / \code{worst_low},
-otherwise it is assigned \code{NA}.
+is labelled in the \code{new_var} column as \code{"Y"},
+if its \code{param_var} is in \code{worst_high} / \code{worst_low}.
+Otherwise, it is assigned \code{NA}.
 If there is more than one such maximal / minimal observation,
-the first one with respect to the order specified by the \code{order} parameter is flagged.
+the first one with respect to the order specified by the \code{order} parameter is flagged. The
+direction of "worst" depends on the definition of worst for a specified parameters in the
+arguments \code{worst_high} / \code{worst_low}, i.e. for some parameters the highest value is the worst
+and for others the worst is the lowest value.
 }
 \examples{
 
 input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM03", "SCREENING",as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-30"),  12.0
 )
 
 derive_var_worst_flag(
@@ -125,22 +118,27 @@ derive_var_worst_flag(
   worst_high = c("PARAM01", "PARAM03"),
   worst_low = "PARAM02"
 )
-
 \dontrun{
 # example with ADVS
-derive_var_worst_flag(
+restrict_derivation(
   advs,
-  by_vars = vars(USUBJID, PARAMCD, AVISIT),
-  order = vars(ADT, ATPTN),
-  new_var = WORSTFL,
-  param_var = PARAMCD,
-  analysis_var = AVAL,
-  worst_high = c("SYSBP", "DIABP"),
-  worst_low = "RESP",
+  derivation = derive_var_worst_flag,
+  args = params(
+    by_vars = vars(USUBJID, PARAMCD, AVISIT),
+    order = vars(ADT, ATPTN),
+    new_var = WORSTFL,
+    param_var = PARAMCD,
+    analysis_var = AVAL,
+    worst_high = c("SYSBP", "DIABP"),
+    worst_low = "RESP"
+  ),
   filter = !is.na(AVISIT) & !is.na(AVAL)
 )
 }
 
+}
+\seealso{
+\code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
 }
 \author{
 Ondrej Slama

@@ -9,12 +9,15 @@ derive_vars_dy(dataset, reference_date, source_vars)
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{reference_date} and the \code{source_vars} parameter are
-expected.}
+The columns specified by the \code{reference_date} and the \code{source_vars}
+parameter are expected.}
 
 \item{reference_date}{The start date column, e.g., date of first treatment
 
-A date or date-time object column is expected.}
+A date or date-time object column is expected.
+
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
+character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
 \code{vars()} from which dates are to be extracted. This can either be a list of
@@ -31,11 +34,12 @@ Adds relative day variables (\code{--DY}) to the dataset, e.g., \code{ASTDY} and
 \code{AENDY}.
 }
 \details{
-The relative day is derived as number of days from the reference date
-to the end date. If it is nonnegative, one is added. I.e., the relative day
-of the reference date is 1. Unless a name is explicitly specified, the name
-of the resulting relative day variable is generated from the source variable
-name by replacing DT (or DTM as appropriate) with DY.
+The relative day is derived as number of days from the reference
+date to the end date. If it is nonnegative, one is added. I.e., the
+relative day of the reference date is 1. Unless a name is explicitly
+specified, the name of the resulting relative day variable is generated
+from the source variable name by replacing DT (or DTM as appropriate) with
+DY.
 }
 \examples{
 library(lubridate)
@@ -43,28 +47,35 @@ library(dplyr)
 
 datain <- tibble::tribble(
   ~TRTSDTM, ~ASTDTM, ~AENDT,
- "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 ) \%>\%
- mutate(TRTSDTM = as_datetime(TRTSDTM),
-        ASTDTM = as_datetime(ASTDTM),
-        AENDT = ymd(AENDT))
+  mutate(
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDT = ymd(AENDT)
+  )
 
 derive_vars_dy(
   datain,
   reference_date = TRTSDTM,
-  source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+  source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+)
 
 # specifying name of new variables
 datain <- tibble::tribble(
   ~TRTSDT, ~DTHDT,
- "2014-01-17", "2014-02-01"
+  "2014-01-17", "2014-02-01"
 ) \%>\%
- mutate(TRTSDT = ymd(TRTSDT),
-        DTHDT = ymd(DTHDT))
+  mutate(
+    TRTSDT = ymd(TRTSDT),
+    DTHDT = ymd(DTHDT)
+  )
 
-derive_vars_dy(datain,
-               reference_date = TRTSDT,
-               source_vars = vars(TRTSDT, DEATHDY = DTHDT))
+derive_vars_dy(
+  datain,
+  reference_date = TRTSDT,
+  source_vars = vars(TRTSDT, DEATHDY = DTHDT)
+)
 }
 \author{
 Teckla Akinyi

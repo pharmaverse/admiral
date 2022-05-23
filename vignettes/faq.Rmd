@@ -46,6 +46,15 @@ knitr::opts_chunk$set(
  * Top of the line visualization/graphics - R-Shiny for interactive data displays and also R Markdown offers great report writing functionality
  * R is very popular among statisticians so new statistical methods are likely implemented in R before any other language
  * There might be equally suited programming languages out there - however at some stage we had to make a decision :)
+ 
+##### Why do we use a **certain R version and package versions** for development?
+
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with `{admiral}`. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against R Version 3.6.3 with a CRAN package snapshot from 2020-02-29, R Version 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml).
+* This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.
+* Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
+* We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.
+
 
 ##### Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?
 
@@ -91,7 +100,7 @@ knitr::opts_chunk$set(
 ##### Will **admiral provide harmonized define.xml** or submittable specifications for functions?
 
  * No. The functions  are documented  via programming  headers, the define.xml is the responsibility of the end user.
- * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?])
+ * Functions  are usually  generalized  and not specific. (see [Admiral offers a **toolbox of functions to facilitate ADaM**. What does that mean?](https://pharmaverse.github.io/admiral/articles/faq.html#admiral-offers-a-toolbox-of-functions-to-facilitate-adam--what-does-that-mean))
  * The users are responsible to make sure they use the functions and their parameters in the right way to ensure alignment with their define.xml
 
 ##### Will `{admiral}` provide ADaM IG **CDISC compliant** datasets?

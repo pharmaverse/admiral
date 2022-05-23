@@ -30,11 +30,14 @@
 #' library(admiral)
 #' library(DT)
 #' library(dplyr)
-#' library(admiral.test)
-#' data("dm")
+#' library(admiraltest)
+#' data("admiral_dm")
 #'
-#' dataset_vignette(dm)
-#' dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
+#' dataset_vignette(admiral_dm)
+#' dataset_vignette(admiral_dm,
+#'   display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
+#'   filter = ARMCD == "Pbo"
+#' )
 dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   display_vars <- assert_vars(display_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = display_vars)
@@ -45,7 +48,7 @@ dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
     mutate_if(is.character, as.factor)
 
   # Create a short markdown table when this function is called outside {pkgdown}
-  if (!pkgdown::in_pkgdown()) {
+  if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) {
     if (is.null(display_vars)) {
       return(knitr::kable(utils::head(out, 10)))
     } else {

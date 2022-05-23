@@ -21,16 +21,16 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
-#' data(dm)
+#' library(admiraltest)
+#' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
 #'   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
 #' }
 #'
-#' example_fun(dm)
+#' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(dm, -STUDYID)))
+#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -116,12 +116,14 @@ assert_data_frame <- function(arg,
 #'
 #' # handling parameters case-insensitive
 #' example_fun2 <- function(msg_type) {
-#'   msg_type <- assert_character_scalar(msg_type,
-#'                                       values = c("warning", "error"),
-#'                                       case_sensitive = FALSE)
-#'  if (msg_type == "warning") {
-#'    print("A warning was requested.")
-#'  }
+#'   msg_type <- assert_character_scalar(
+#'     msg_type,
+#'     values = c("warning", "error"),
+#'     case_sensitive = FALSE
+#'   )
+#'   if (msg_type == "warning") {
+#'     print("A warning was requested.")
+#'   }
 #' }
 #'
 #' example_fun2("Warning")
@@ -219,11 +221,13 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
   if (!is.null(values)) {
     mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
     if (length(mismatches) > 0) {
-      abort(paste0("`", arg_name(substitute(arg)),
-                   "` contains invalid values:\n",
-                   enumerate(mismatches), "\n",
-                   "Valid values:\n",
-                   enumerate(values)))
+      abort(paste0(
+        "`", arg_name(substitute(arg)),
+        "` contains invalid values:\n",
+        enumerate(mismatches), "\n",
+        "Valid values:\n",
+        enumerate(values)
+      ))
     }
   }
 }
@@ -234,7 +238,12 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @param arg A function argument to be checked
 #'
-#' @author Thomas Neitmann
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown. Otherwise,
+#' `NULL` is considered as valid value.
+#'
+#' @author Thomas Neitmann, Stefan Bundfuss
 #'
 #' @return
 #' The function throws an error if `arg` is neither `TRUE` or `FALSE`. Otherwise,
@@ -256,7 +265,11 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #' try(example_fun(c(TRUE, FALSE, FALSE)))
 #'
 #' try(example_fun(1:10))
-assert_logical_scalar <- function(arg) {
+assert_logical_scalar <- function(arg, optional = FALSE) {
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
   if (!is.logical(arg) || length(arg) != 1L || is.na(arg)) {
     err_msg <- sprintf(
       "`%s` must be either `TRUE` or `FALSE` but is %s",
@@ -288,21 +301,21 @@ assert_logical_scalar <- function(arg) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
-#' data(dm)
+#' library(admiraltest)
+#' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
 #'   var <- assert_symbol(rlang::enquo(var))
 #'   dplyr::select(dat, !!var)
 #' }
 #'
-#' example_fun(dm, USUBJID)
+#' example_fun(admiral_dm, USUBJID)
 #'
-#' try(example_fun(dm))
+#' try(example_fun(admiral_dm))
 #'
-#' try(example_fun(dm, "USUBJID"))
+#' try(example_fun(admiral_dm, "USUBJID"))
 #'
-#' try(example_fun(dm, toupper(PARAMCD)))
+#' try(example_fun(admiral_dm, toupper(PARAMCD)))
 assert_symbol <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -367,8 +380,8 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiral.test)
-#' data(dm)
+#' library(admiraltest)
+#' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
@@ -376,9 +389,9 @@ assert_expr <- function(arg, optional = FALSE) {
 #'   dplyr::filter(dat, !!x)
 #' }
 #'
-#' example_fun(dm, AGE == 64)
+#' example_fun(admiral_dm, AGE == 64)
 #'
-#' try(example_fun(dm, USUBJID))
+#' try(example_fun(admiral_dm, USUBJID))
 assert_filter_cond <- function(arg, optional = FALSE) {
   stopifnot(is_quosure(arg))
   assert_logical_scalar(optional)
@@ -393,7 +406,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
     abort(err_msg)
   }
 
-  if (provided & !quo_is_call(arg)) {
+  if (provided & !(quo_is_call(arg) | is_logical(quo_get_expr(arg)))) {
     err_msg <- sprintf(
       "`%s` must be a filter condition but is %s",
       arg_name(substitute(arg)),
@@ -430,7 +443,7 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -494,7 +507,7 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' example_fun(vars(USUBJID, PARAMCD, desc(AVISITN)))
 #'
-#' try(example_fun(exprs(USUBJID, PARAMCD)))
+#' try(example_fun(rlang::exprs(USUBJID, PARAMCD)))
 #'
 #' try(example_fun(c("USUBJID", "PARAMCD", "VISIT")))
 #'
@@ -743,9 +756,11 @@ assert_named_exprs <- function(arg, optional = FALSE) {
     return(invisible(arg))
   }
 
-  if (!is.list(arg) || !all(map_lgl(arg, is.language)) || any(names(arg) == "")) {
+  if (!is.list(arg) ||
+    !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+    any(names(arg) == "")) {
     err_msg <- sprintf(
-      "`%s` must be a named list of expressions created using `exprs()` but is %s",
+      "`%s` must be a named list of expressions created using `rlang::exprs()` but is %s",
       arg_name(substitute(arg)),
       what_is_it(arg)
     )
@@ -763,8 +778,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
   }
 
   if (!is.list(arg) ||
-      !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) ||
-      !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+    !all(map_lgl(arg, ~ is_formula(.x, lhs = TRUE))) ||
+    !all(map_lgl(arg, ~ is.symbol(.x[[2L]])))) {
     err_msg <- paste(
       backquote(arg_name(substitute(arg))),
       "must be a list of formulas where each formula's left-hand side is a single",
@@ -793,13 +808,12 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiral.test)
-#' data(dm)
+#' library(admiraltest)
+#' data(admiral_dm)
 #'
-#' assert_has_variables(dm, "STUDYID")
-#' \dontrun{
-#' assert_has_variables(dm, "AVAL")
-#' }
+#' assert_has_variables(admiral_dm, "STUDYID")
+#'
+#' try(assert_has_variables(admiral_dm, "AVAL"))
 assert_has_variables <- function(dataset, required_vars) {
   is_missing <- !required_vars %in% colnames(dataset)
   if (any(is_missing)) {
@@ -816,6 +830,81 @@ assert_has_variables <- function(dataset, required_vars) {
     abort(err_msg)
   }
   invisible(dataset)
+}
+
+#' Is Argument a Function?
+#'
+#' Checks if the argument is a function and if all expected parameters are
+#' provided by the function.
+#'
+#' @param arg A function argument to be checked
+#'
+#' @param params A character vector of expected parameter names
+#'
+#' @param optional Is the checked parameter optional?
+#'
+#' If set to `FALSE` and `arg` is `NULL` then an error is thrown.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The function throws an error
+#'
+#'  - if the argument is not a function or
+#'
+#'  - if the function does not provide all parameters as specified for the
+#'  `params` parameter.
+#'
+#' @export
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' example_fun <- function(fun) {
+#'   assert_function(fun, params = c("x"))
+#' }
+#'
+#' example_fun(mean)
+#'
+#' try(example_fun(1))
+#'
+#' try(example_fun(sum))
+assert_function <- function(arg, params = NULL, optional = FALSE) {
+  assert_character_vector(params, optional = TRUE)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  if (missing(arg)) {
+    err_msg <- sprintf(
+      "Argument `%s` missing, with no default",
+      arg_name(substitute(arg))
+    )
+    abort(err_msg)
+  }
+
+  if (!is.function(arg)) {
+    err_msg <- sprintf(
+      "`%s` must be a function but is %s",
+      arg_name(substitute(arg)),
+      what_is_it(arg)
+    )
+    abort(err_msg)
+  }
+  if (!is.null(params)) {
+    is_param <- params %in% names(formals(arg))
+    if (!all(is_param)) {
+      txt <- if (sum(!is_param) == 1L) {
+        "%s is not a parameter of the function specified for `%s`"
+      } else {
+        "%s are not parameters of the function specified for `%s`"
+      }
+      err_msg <- sprintf(txt, enumerate(params[!is_param]), arg_name(substitute(arg)))
+      abort(err_msg)
+    }
+  }
+  invisible(arg)
 }
 
 assert_function_param <- function(arg, params) {
@@ -859,10 +948,10 @@ assert_function_param <- function(arg, params) {
 #' @keywords assertion
 #'
 #' @examples
-#' data(advs)
-#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+#' data(admiral_advs)
+#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 #' \dontrun{
-#' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
+#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 #' }
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
@@ -876,7 +965,19 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
     pull(`_unit`) %>%
     unique()
 
-  if (length(units) != 1L || tolower(units) != tolower(required_unit)) {
+  if (length(units) != 1L) {
+    abort(
+      paste0(
+        "Multiple units ",
+        enumerate(units, quote_fun = squote),
+        " found for ",
+        squote(param),
+        ".\n",
+        "Please review and update the units."
+      )
+    )
+  }
+  if (tolower(units) != tolower(required_unit)) {
     abort(
       paste0(
         "It is expected that ",
@@ -890,6 +991,7 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
       )
     )
   }
+
   invisible(dataset)
 }
 
@@ -911,9 +1013,9 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' @keywords assertion
 #'
 #' @examples
-#' data(advs)
-#' assert_param_does_not_exist(advs, param = "HR")
-#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
+#' data(admiral_advs)
+#' assert_param_does_not_exist(admiral_advs, param = "HR")
+#' try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
@@ -928,55 +1030,6 @@ assert_param_does_not_exist <- function(dataset, param) {
     )
   }
   invisible(dataset)
-}
-
-#' Helper Function to Check IDVAR per QNAM
-#'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
-#'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
-#'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-      msg <- paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n")
-    )
-    inform(msg)
-  }
-}
-
-#' Helper Function to Check DOAMIN and RDOMAIN
-#'
-#' @param dataset A SDTM domain data set.
-#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
-#' @param domain Two letter domain value. Used when supplemental data set is
-#'   common across multiple SDTM domain.
-#'
-#' @noRd
-#'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
-#'
-#' @family suppqual
-assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
-  parent <- unique(parent$DOMAIN)
-  supp <- unique(supp$RDOMAIN)
-
-  if (!is.null(.domain)) {
-    if (!.domain %in% supp) {
-      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
-    }
-  }
-
-  if (!parent %in% supp) {
-    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
-  }
 }
 
 #' Is an Argument a Variable-Value List?
@@ -1014,7 +1067,7 @@ assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
                                accept_var = FALSE,
-                               optional =  FALSE) {
+                               optional = FALSE) {
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
@@ -1174,21 +1227,24 @@ assert_varval_list <- function(arg, # nolint
 #'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
-#'
+#' events <- list(death, lstalv)
 #' try(assert_list_element(
-#'   list = list(death, lstalv),
+#'   list = events,
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
 #' ))
 #'
+#' valid_datasets <- c("adrs", "adae")
 #' try(assert_list_element(
 #'   list = events,
 #'   element = "dataset_name",
-#'   condition = dataset_name %in% c("adrs", "adae"),
+#'   condition = dataset_name %in% valid_datasets,
 #'   valid_datasets = valid_datasets,
-#'   message_text = paste0("The dataset name must be one of the following:\n",
-#'                         paste(valid_datasets, collapse = ", "))
+#'   message_text = paste0(
+#'     "The dataset name must be one of the following:\n",
+#'     paste(valid_datasets, collapse = ", ")
+#'   )
 #' ))
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
@@ -1197,9 +1253,11 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_character_scalar(message_text)
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
-  invalids <-  ! eval(quo_get_expr(condition),
-                      envir = list(...),
-                      enclos = current_env())
+  invalids <- !eval(
+    quo_get_expr(condition),
+    envir = list(...),
+    enclos = current_env()
+  )
   if (any(invalids)) {
     invalids_idx <- which(invalids)
     abort(
@@ -1242,9 +1300,9 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @export
 #'
 #' @examples
-#' data(adsl)
+#' data(admiral_adsl)
 #' try(
-#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#'   assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
 #' )
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)
@@ -1284,68 +1342,4 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
       )
     )
   }
-}
-
-#' Get One to Many Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the one to many values are stored
-#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
-#'
-#' Note that the function always returns the one to many values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @return A `data.frame` or `NULL`
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
-#' )
-#'
-#' get_one_to_many_dataset()
-get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
-}
-
-#' Get Many to One Values that Led to a Prior Error
-#'
-#' @export
-#'
-#' @author Stefan Bundfuss
-#'
-#' @details
-#' If `assert_one_to_one()` detects an issue, the many to one values are stored
-#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
-#'
-#' Note that the function always returns the many to one values from the last
-#' error that has been thrown in the current R session. Thus, after restarting
-#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
-#' second error has been thrown, the dataset of the first error can no longer be
-#' accessed (unless it has been saved in a variable).
-#'
-#' @return A `data.frame` or `NULL`
-#'
-#' @keywords user_utility
-#'
-#' @examples
-#' data(adsl)
-#'
-#' try(
-#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
-#' )
-#'
-#' get_many_to_one_dataset()
-get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
 }

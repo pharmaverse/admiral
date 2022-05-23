@@ -34,7 +34,7 @@ The examples of this vignette require the following packages.
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiral.test)
+library(admiraltest)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
@@ -58,8 +58,13 @@ For example purpose, the ADaM datasets---which are included
 in `{admiral}`---are used.
 
 ```{r}
-data("adsl")
-data("adae")
+data("admiral_adsl")
+data("admiral_ae")
+data("admiral_adae")
+
+adsl <- admiral_adsl
+adae <- admiral_adae
+ae <- admiral_ae
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -178,7 +183,7 @@ death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
   date = DTHDT,
-  set_values_to =vars(
+  set_values_to = vars(
     EVNTDESC = "DEATH",
     SRCDOM = "ADSL",
     SRCVAR = "DTHDT"
@@ -225,9 +230,10 @@ created to specify how those patients will be censored. Therefore the `start`
 censoring is defined below to achieve that subjects without data in `adrs` are
 censored at the start date.
 
-The ADaM IG requires that computed date must be accompanied by imputation flags.
-If the start date is imputed, the date imputation flag can be specified by the
-`start_date_imputation_flag` parameter. If a date variable from one of the event
+The ADaM IG requires that a computed date must be accompanied by imputation flags.
+Thus, if the function detects a `--DTF` and/or `--TMF` variable corresponding
+to `start_date` then `STARTDTF` and `STARTTMF` are set automatically to the values
+of these variables. If a date variable from one of the event
 or censoring source datasets is imputed, the imputation flag can be specified
 for the `set_values_to` parameter in `event_source()` or `censor_source()` (see
 definition of the `start` censoring below).
@@ -240,14 +246,14 @@ View(adsl)
 ```
 ```{r, echo=FALSE}
 adsl <- tibble::tribble(
-    ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDT,           ~TRTSDTF,
-    "01",     "Y",    ymd("2021-06-12"), ymd("2021-01-01"), "M",
-    "02",     "N",    NA,                ymd("2021-02-03"), NA,
-    "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-10"), NA,
-    "04",     "N",    NA,                ymd("2021-02-03"), NA,
-    "05",     "N",    NA,                ymd("2021-04-01"), "D"
-  ) %>%
-    mutate(STUDYID = "AB42")
+  ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDT,           ~TRTSDTF,
+  "01",     "Y",    ymd("2021-06-12"), ymd("2021-01-01"), "M",
+  "02",     "N",    NA,                ymd("2021-02-03"), NA,
+  "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-10"), NA,
+  "04",     "N",    NA,                ymd("2021-02-03"), NA,
+  "05",     "N",    NA,                ymd("2021-04-01"), "D"
+) %>%
+  mutate(STUDYID = "AB42")
 
 dataset_vignette(
   adsl,
@@ -259,22 +265,22 @@ dataset_vignette(
 View(adrs)
 ```
 ```{r, echo=FALSE}
-  adrs <- tibble::tribble(
-    ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
-    "01",     "SD",   ymd("2021-01-03"), 1,
-    "01",     "PR",   ymd("2021-03-04"), 2,
-    "01",     "PD",   ymd("2021-05-05"), 3,
-    "02",     "PD",   ymd("2021-02-03"), 1,
-    "04",     "SD",   ymd("2021-02-13"), 1,
-    "04",     "PR",   ymd("2021-04-14"), 2,
-    "04",     "CR",   ymd("2021-05-15"), 3
+adrs <- tibble::tribble(
+  ~USUBJID, ~AVALC, ~ADT,              ~ASEQ,
+  "01",     "SD",   ymd("2021-01-03"), 1,
+  "01",     "PR",   ymd("2021-03-04"), 2,
+  "01",     "PD",   ymd("2021-05-05"), 3,
+  "02",     "PD",   ymd("2021-02-03"), 1,
+  "04",     "SD",   ymd("2021-02-13"), 1,
+  "04",     "PR",   ymd("2021-04-14"), 2,
+  "04",     "CR",   ymd("2021-05-15"), 3
+) %>%
+  mutate(
+    STUDYID = "AB42",
+    PARAMCD = "OVR",
+    PARAM = "Overall Response"
   ) %>%
-    mutate(
-      STUDYID = "AB42",
-      PARAMCD = "OVR",
-      PARAM = "Overall Response"
-    ) %>% 
-    select(STUDYID, USUBJID, PARAMCD, PARAM, ADT, ASEQ, AVALC)
+  select(STUDYID, USUBJID, PARAMCD, PARAM, ADT, ASEQ, AVALC)
 
 dataset_vignette(
   adrs,
@@ -366,7 +372,6 @@ adtte <- derive_param_tte(
   dataset_adsl = adsl,
   source_datasets = list(adsl = adsl, adrs = adrs),
   start_date = TRTSDT,
-  start_date_imputation_flag = TRTSDTF,
   event_conditions = list(pd, death),
   censor_conditions = list(lastvisit, start),
   set_values_to = vars(PARAMCD = "PFS", PARAM = "Progression Free Survival")
@@ -376,10 +381,10 @@ adtte <- derive_param_tte(
 ```{r, echo=FALSE}
 dataset_vignette(
   adtte %>%
-  select(
-    STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
-    EVNTDESC, SRCDOM, SRCVAR
-  ),
+    select(
+      STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
+      EVNTDESC, SRCDOM, SRCVAR
+    ),
   display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR)
 )
 ```
@@ -471,7 +476,7 @@ adaette <- call_derivation(
 ```{r, echo=FALSE}
 adaette %>%
   select(STUDYID, USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
-  arrange(USUBJID, PARAMCD) %>% 
+  arrange(USUBJID, PARAMCD) %>%
   dataset_vignette(display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
 ```
 
@@ -595,7 +600,8 @@ adtte <- derive_vars_duration(
 
 ```{r, echo=FALSE}
 dataset_vignette(
-  adtte)
+  adtte
+)
 ```
 
 ## Derive Analysis Sequence Number (`ASEQ`) {#aseq}
@@ -618,16 +624,20 @@ dataset_vignette(adtte)
 ## Add ADSL Variables {#adslvars}
 
 Variables from ADSL which are required for time-to-event analyses, e.g.,
-treatment variables or covariates can be added using `left_join()`.
+treatment variables or covariates can be added using `derive_vars_merged()`.
 
 ```{r eval=TRUE}
-adtte <- left_join(
+adtte <- derive_vars_merged(
   adtte,
-  select(adsl, STUDYID, USUBJID, ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
-  by = c("STUDYID", "USUBJID")
+  dataset_add = adsl,
+  new_vars = vars(ARMCD, ARM, ACTARMCD, ACTARM, AGE, SEX),
+  by_vars = vars(STUDYID, USUBJID)
 )
 ```
 
 ```{r, echo=FALSE}
-dataset_vignette(adtte)
+dataset_vignette(
+  adtte,
+  display_vars = vars(USUBJID, PARAMCD, CNSR, AVAL, ARMCD, AGE, SEX)
+)
 ```

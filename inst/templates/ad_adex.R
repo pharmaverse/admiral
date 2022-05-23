@@ -6,7 +6,7 @@
 #
 
 library(admiral)
-library(admiral.test) # Contains example datasets from the CDISC pilot project
+library(admiraltest) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -14,8 +14,11 @@ library(stringr)
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
-data("adsl")
-data("ex")
+data("admiral_adsl")
+data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 
 ex <- convert_blanks_to_na(ex)
 
@@ -52,29 +55,28 @@ adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
 # Join ADSL with ex and derive required dates, variables
 adex0 <- ex %>%
   # Join ADSL with EX (only ADSL vars required for derivations)
-  left_join(
-    adsl %>% select(STUDYID, USUBJID, !!!adsl_vars),
-    by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = adsl,
+    new_vars = adsl_vars,
+    by_vars = vars(STUDYID, USUBJID)
   ) %>%
+  # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
 
-  # Calculate ASTDTM, AENDTM using derive_vars_dtm
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
   derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
-
   # Calculate ASTDY, AENDY
-  derive_var_astdy(date = ASTDTM) %>%
-  derive_var_aendy(date = AENDTM) %>%
-
+  derive_vars_dy(
+    reference_date = TRTSDTM,
+    source_vars = vars(ASTDTM, AENDTM)
+  ) %>%
   # add EXDUR, the duration of trt for each record
   derive_vars_duration(
     new_var = EXDURD,
     start_date = ASTDTM,
     end_date = AENDTM
   ) %>%
-
   # Derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-
   mutate(
     # Compute the cumulative dose
     DOSEO = EXDOSE * EXDURD,
@@ -93,8 +95,11 @@ adex <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
-  # Part 3
-  # Derive summary parameters
+# Part 3
+# Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
+# `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
+# in `by_vars` will be populated in the newly created records.
+
 adex <- adex %>%
   # Overall exposure
   call_derivation(
@@ -133,7 +138,6 @@ adex <- adex %>%
     ),
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
-
   # W2-W24 exposure
   call_derivation(
     derivation = derive_param_exposure,
@@ -172,7 +176,6 @@ adex <- adex %>%
     filter = VISIT %in% c("WEEK 2", "WEEK 24"),
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars)
   ) %>%
-
   # Overall Dose intensity and W2-24 dose intensity
   call_derivation(
     derivation = derive_param_doseint,
@@ -236,7 +239,7 @@ param_lookup <- tibble::tribble(
 # ---- User defined functions ----
 # Derive AVALCAT1
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
+#  operates on vectors, which can be used in `mutate()`.
 format_avalcat1 <- function(param, aval) {
   case_when(
     param %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",
@@ -250,11 +253,12 @@ format_avalcat1 <- function(param, aval) {
 
 adex <- adex %>%
   # Add PARAMN and PARAM, AVALU
-  left_join(param_lookup, by = "PARAMCD") %>%
-
+  derive_vars_merged(
+    dataset_add = param_lookup,
+    by_vars = vars(PARAMCD)
+  ) %>%
   # Derive AVALCATx
   mutate(AVALCAT1 = format_avalcat1(param = PARAMCD, aval = AVAL)) %>%
-
   # Calculate ASEQ
   derive_var_obs_number(
     new_var = ASEQ,
@@ -265,9 +269,9 @@ adex <- adex %>%
 
 # Join all ADSL with EX
 adex <- adex %>%
-
-  left_join(select(adsl, !!!admiral:::negate_vars(adsl_vars)),
-            by = c("STUDYID", "USUBJID")
+  derive_vars_merged(
+    dataset_add = select(adsl, !!!negate_vars(adsl_vars)),
+    by_vars = vars(STUDYID, USUBJID)
   )
 
 # Final Steps, Select final variables and Add labels

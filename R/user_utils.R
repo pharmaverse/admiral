@@ -14,7 +14,7 @@
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
-    map_chr(quosures, ~as_string(quo_get_expr(.x))),
+    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
     names(quosures)
   )
 }
@@ -64,11 +64,11 @@ negate_vars <- function(vars = NULL) {
 #' @keywords user_utility
 #'
 #' @examples
-#' library(admiral.test)
-#' data(vs)
+#' library(admiraltest)
+#' data(admiral_vs)
 #'
-#' filter_if(vs, rlang::quo(NULL))
-#' filter_if(vs, rlang::quo(VSTESTCD == "Weight"))
+#' admiral::filter_if(admiral_vs, rlang::quo(NULL))
+#' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)
@@ -163,4 +163,68 @@ convert_blanks_to_na.list <- function(x) {
 convert_blanks_to_na.data.frame <- function(x) { # nolint
   x[] <- lapply(x, convert_blanks_to_na)
   x
+}
+
+#' Get One to Many Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the one to many values are stored
+#' in a dataset. This dataset can be retrieved by `get_one_to_many_dataset()`.
+#'
+#' Note that the function always returns the one to many values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_one_to_many_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @return A `data.frame` or `NULL`
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(admiral_adsl)
+#'
+#' try(
+#'   assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
+#' )
+#'
+#' get_one_to_many_dataset()
+get_one_to_many_dataset <- function() {
+  .datasets$one_to_many
+}
+
+#' Get Many to One Values that Led to a Prior Error
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @details
+#' If `assert_one_to_one()` detects an issue, the many to one values are stored
+#' in a dataset. This dataset can be retrieved by `get_many_to_one_dataset()`.
+#'
+#' Note that the function always returns the many to one values from the last
+#' error that has been thrown in the current R session. Thus, after restarting
+#' the R sessions `get_many_to_one_dataset()` will return `NULL` and after a
+#' second error has been thrown, the dataset of the first error can no longer be
+#' accessed (unless it has been saved in a variable).
+#'
+#' @return A `data.frame` or `NULL`
+#'
+#' @keywords user_utility
+#'
+#' @examples
+#' data(admiral_adsl)
+#'
+#' try(
+#'   assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
+#' )
+#'
+#' get_many_to_one_dataset()
+get_many_to_one_dataset <- function() {
+  .datasets$many_to_one
 }

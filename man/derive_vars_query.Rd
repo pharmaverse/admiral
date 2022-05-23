@@ -9,11 +9,13 @@ derive_vars_query(dataset, dataset_queries)
 \arguments{
 \item{dataset}{Input dataset.}
 
-\item{dataset_queries}{A data.frame containing required columns \code{VAR_PREFIX},
+\item{dataset_queries}{A dataset containing required columns \code{VAR_PREFIX},
 \code{QUERY_NAME}, \code{TERM_LEVEL}, \code{TERM_NAME}, \code{TERM_ID}, and optional columns
 \code{QUERY_ID}, \code{QUERY_SCOPE}, \code{QUERY_SCOPE_NUM}.
 
-The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.}
+The content of the dataset will be verified by \code{\link[=assert_valid_queries]{assert_valid_queries()}}.
+
+\code{create_query_data()} can be used to create the dataset.}
 }
 \value{
 The input dataset with query variables derived.
@@ -43,18 +45,18 @@ data("queries")
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-    3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+  3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-    5, "Basedow's disease", NA_character_, 1L,
+  5, "Basedow's disease", NA_character_, 1L,
   "03", "2020-06-07 23:59:59", "SOME TERM",
-    2, "Some query", "Some term", NA_integer_,
+  2, "Some query", "Some term", NA_integer_,
   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-    7, "Alveolar proteinosis", NA_character_,  NA_integer_
+  7, "Alveolar proteinosis", NA_character_, NA_integer_
 )
 derive_vars_query(adae, queries)
 }
 \seealso{
-\code{\link[=assert_valid_queries]{assert_valid_queries()}}
+\code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
 }
 \author{
 Ondrej Slama, Shimeng Huang

@@ -14,14 +14,14 @@
 #' @export
 #'
 #' @examples
-#' library(admiral.test)
-#' data(dm)
+#' library(admiraltest)
+#' data(admiral_dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
-#' warn_if_vars_exist(dm, "AAGE")
+#' warn_if_vars_exist(admiral_dm, "AAGE")
 #'
 #' ## Issues a warning
-#' warn_if_vars_exist(dm, "ARM")
+#' warn_if_vars_exist(admiral_dm, "ARM")
 warn_if_vars_exist <- function(dataset, vars) {
   existing_vars <- vars[vars %in% colnames(dataset)]
   if (length(existing_vars) == 1L) {
@@ -40,7 +40,7 @@ is_valid_dtc <- function(arg) {
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
-     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})$",
     "^(\\d{4})-(\\d{2})$",
     "^(\\d{4})$",
@@ -109,8 +109,7 @@ warn_if_incomplete_dtc <- function(dtc, n) {
   if (n == 10) {
     dt_dtm <- "date"
     funtext <- "convert_dtc_to_dt"
-  }
-  else if (n == 19) {
+  } else if (n == 19) {
     dt_dtm <- "datetime"
     funtext <- "convert_dtc_to_dtm"
   }
@@ -128,22 +127,6 @@ warn_if_incomplete_dtc <- function(dtc, n) {
   }
 }
 
-
-warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
-  missing_ref_ranges <- dataset %>%
-    anti_join(meta_ref_ranges, by = by_var) %>%
-    pull(!!sym(by_var)) %>%
-    unique()
-
-  if (length(missing_ref_ranges) >= 1L) {
-    msg <- sprintf(
-      "Reference ranges are missing for the following `%s`: %s",
-      by_var,
-      enumerate(missing_ref_ranges, quote_fun = squote)
-    )
-    warn(msg)
-  }
-}
 
 #' Warn If Two Lists are Inconsistent
 #'
@@ -183,8 +166,9 @@ warn_if_ref_ranges_missing <- function(dataset, meta_ref_ranges, by_var) {
 warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
-      paste0("The variables used for traceability in `", list_name,
-             "` are not consistent, please check:\n",
+      paste0(
+        "The variables used for traceability in `", list_name,
+        "` are not consistent, please check:\n",
         paste(
           "source", i - 1, ", Variables are given as:",
           paste(sort(names(base)), collapse = " "), "\n"
@@ -222,17 +206,17 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral.test)
-#' data(adsl)
-#' data(vs)
+#' library(admiraltest)
+#' data(admiral_adsl)
+#' data(admiral_vs)
 #'
 #' # Remove label
-#' attr(vs$USUBJID, "label") <- NULL
+#' attr(admiral_vs$USUBJID, "label") <- NULL
 #'
-#' left_join(adsl, vs, by = "USUBJID")
+#' left_join(admiral_adsl, admiral_vs, by = "USUBJID")
 #'
 #' suppress_warning(
-#'   left_join(adsl, vs, by = "USUBJID"),
+#'   left_join(admiral_adsl, admiral_vs, by = "USUBJID"),
 #'   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
 #' )
 suppress_warning <- function(expr, regexpr) {

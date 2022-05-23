@@ -28,6 +28,7 @@ These contributions could include, for example, company specific derivations of 
 # Functional Workflow
 
 * Overall programming will follow a functional approach.
+* We mandate the use of tidyverse (e.g. dplyr) over similar functionality existing in base R
 * Each ADaM dataset is built with a set of functions and not with free flow code.
 * Each ADaM dataset has a specific programming workflow.
 * Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
@@ -65,16 +66,53 @@ case-sensitive. Thus they must be in lower case.
 
 # Functions in R
 
-Functions in `{admiral}` must follow the modular approach, i.e. functions which add
-variables should add only a single variable except if other variables are
-closely related to the derived variable and can not be derived without it. For
-example `AAGE` (analysis age) and `AAGEU` (analysis age units) should be derived
-by the same function because it does not make sense to derive `AAGEU` without
-`AAGE`.
+## Function Design
 
-Variables like `BASE` (baseline value) and `BNRIND` (baseline reference range
-indicator) must be derived by two separate function calls as it is reasonable to
-derive only one of them.
+Firstly, it is important to explain how we decide on the need for new derivation functions. 
+
+If a derivation rule or algorithm is common and highly similar across different variables/parameters
+(e.g. study day or duration) then we would provide a generic function that can be used to satisfy all
+the times this may be needed across different ADaMs. Similarly, if we feel that a certain derivation
+could be useful beyond a single purpose we also would provide a generic function (e.g. instead of a
+last known alive date function, we have an extreme date function where a user could find the last date
+from a selection, or for example the first).
+
+Otherwise, if we feel that a derivation rule is a unique need or sufficiently complex to justify then we
+opt for a dedicated function for that specific variable/parameter (e.g. treatment-emergent flag for AEs).
+
+If certain variables are closely connected (e.g. an imputed date and the corresponding imputation flag)
+then a single function would provide both variables.
+
+If something needed for ADaM could be achieved simply via an existing tidyverse function, then we do not
+wrap this into an admiral function, as that would add an unnecessary extra layer for users.
+
+The following principles are key when designing a new function:
+
+* _**Modularity**_ - All code follows a modular approach, i.e. the steps must be clearly separated and
+have a dedicated purpose. This applies to scripts creating a dataset where each module should create a
+single variable or parameter. But also to complex derivations with several steps. Commenting on these
+steps is key for readability.
+
+* _**Avoid Copy and Paste**_ - If the same or very similar code is used multiple times, it should be put
+into a separate function. This improves readability and maintainability and makes unit testing easier.
+This should not be done for every simple programming step where tidyverse can be used. But rather for
+computational functions or data checks. However, also consider not to nest too many functions.
+
+* _**Checks**_ - Whenever a function fails, a meaningful error message must be provided with a clear
+reference to the input which caused the failure. A users should not have to dig into detailed
+code if they only want to apply a function.  A meaningful error message supports usability.
+
+* _**Flexibility**_ - Functions should be as flexible as possible as long as it does not reduce the usability.
+For example:
+
+  * The source variables or newly created variables and conditions for selecting observations should not be hard-coded.
+
+  * It is useful if a parameter triggers optional steps, e.g. if the filter parameter is specified, the input dataset
+is restricted, otherwise this step is skipped.
+
+  * However, parameters should not trigger completely different algorithms. For example `BNRIND` could be derived based
+on `BASE` or based on `ANRIND`. It should not be implemented within one function as the algorithms are completely different.
+If `BASE` is used, the values are categorized while if `ANRIND` is used, the values are merged from the baseline observation.
 
 ## Input, Output, and Side-effects
 
@@ -89,10 +127,9 @@ variables must start with `temp_` and must be removed from the output dataset.
 * If the input dataset includes variables starting with `temp_`, an error must be issued.
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
-
 ## Function Names
 
-* Function names should start with a verb and use snake case, e.g. `derive_baseline()`. 
+* Function names should start with a verb and use snake case, e.g. `derive_var_base()`. 
 
 | Function name prefix                         | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -211,7 +248,7 @@ and, if there’s an invalid input, the function should stop immediately with an
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
-Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in `R/assertions.R`. 
+Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiral/blob/main/R/assertions.R). 
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
 For the most common types of input parameters like a single variable, a list of
@@ -240,46 +277,65 @@ Please see section "Categorization of functions".
 An example is given below:
 
 ```{r, eval=F}
-#' Derive Analysis Study Day
+#' Derive Relative Day Variables
 #'
-#' Adds the analysis study day (`ADY`) to the dataset, i.e. study day #' of analysis date.
+#' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
+#' `AENDY`.
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `reference_date` and the `date` parameter are
-#'   expected.
+#'   The columns specified by the `reference_date` and the `source_vars`
+#'   parameter are expected.
 #'
-#' @param reference_date The start date column, e.g., date of first #'treatment
-#'
-#'   A date or date-time object column is expected.
-#'
-#'   The default is `TRTSDT`.
-#'
-#' @param date The end date column for which the study day should be #'derived
+#' @param reference_date The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
 #'
-#'   The default is `ADT`
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
-#' @details The study day is derived as number of days from the start date
-#'   to the end date. If it is non-negative, one is added, i.e. the study day of the
-#'   start date is 1.
+#' @param source_vars A list of datetime or date variables created using
+#'   `vars()` from which dates are to be extracted. This can either be a list of
+#'   date(time) variables or named `--DY` variables and corresponding --DT(M)
+#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
+#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
+#'   name for the resulting `--DY` variable must be provided.
 #'
-#' @author Stefan Bundfuss
+#' @author Teckla Akinyi
 #'
-#' @return The input dataset with `ADY` column added
+#' @details The relative day is derived as number of days from the reference
+#'   date to the end date. If it is nonnegative, one is added. I.e., the
+#'   relative day of the reference date is 1. Unless a name is explicitly
+#'   specified, the name of the resulting relative day variable is generated
+#'   from the source variable name by replacing DT (or DTM as appropriate) with
+#'   DY.
 #'
-#' @keywords bds timing
+#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
+#'   source variable(s) added
+#'
+#' @keywords derivation ADaM timing
 #'
 #' @export
 #'
 #' @examples
-#' data <- tibble::tribble(
-#'   ~TRTSDT, ~ADT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-#' )
+#' library(lubridate)
+#' library(dplyr)
 #'
-#' derive_var_ady(data)
+#' datain <- tibble::tribble(
+#'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,
+#'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#' ) %>%
+#'  mutate(
+#'    TRTSDTM = as_datetime(TRTSDTM),
+#'    ASTDTM = as_datetime(ASTDTM),
+#'    AENDT = ymd(AENDT)
+#'  )
+#'
+#' derive_vars_dy(
+#'   datain,
+#'   reference_date = TRTSDTM,
+#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#' )
 ```
 
 
@@ -364,9 +420,6 @@ To import the `if_else()` and `mutate()` function from `dplyr` the following lin
 
 Functions should only perform the derivation logic and not add any kind of metadata, e.g. labels.
 
-The only exception is `derive_vars_suppqual()` which takes it from its argument `dataset_suppqual`, 
-where the labels are stored.
-
 
 # Unit Testing
 
@@ -389,19 +442,23 @@ The documentation will be updated at:
 
 + the description level for a function, 
 
-```
+    ```{r, eval=FALSE}
 #' Title of the function
 #'
 #' @description
-#'*Deprecated*, please use `new_fun()` instead.
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `new_fun()` instead.
 #' description of the function in plain English
-``` 
+    ``` 
+
+    The "Examples" section should be removed.
 
 + the `@param` level for a parameter.
 
-```
-@param old_param *Deprecated*, please use `new_param` instead.
-```
+    ```
+    @param old_param *Deprecated*, please use `new_param` instead.
+    ```
 
 ## Handling of warning and error
 
@@ -463,6 +520,12 @@ will need to be quoted.
 ### END DEPRECATION
 ```
 
+## Unit Testing
+
+Unit tests for deprecated functions and parameters must be added to
+`tests/testthat/test-deprecation.R` to ensure that a warning or error is issued.
+
+Other unit tests of deprecated functions must be removed.
 
 # Best Practices and Hints
 
@@ -545,3 +608,11 @@ If meaningful, comments can cover multiple variables within a piece of code
 "<code>"
 # end of X, Y, Z
 ```
+
+# R and package versions for development
+
+* The choice of R Version is not set in stone.  However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with `{admiral}`. This need for a common development environment also carries over for our choice of package versions.  
+* GitHub allows us through the Actions/Workflows to test `{admiral}` under several versions of R as well as several versions of dependent R packages needed for `{admiral}`.  Currently we test `{admiral}` against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages.  You can view this workflow on our [GitHub Repository](https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml)
+* This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.  
+* Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request.  This ensures faster review times and higher quality Pull Request reviews.
+* We achieve this common development environment by using a **lockfile** created from the [`renv`](https://rstudio.github.io/renv/) package. New developers will encounter a suggested `renv::restore()` in the console to revert or move forward your R version and package versions.

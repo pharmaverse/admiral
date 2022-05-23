@@ -27,8 +27,8 @@ function is involved.
 
 For example,
 \itemize{
-\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all AVAL
-values greater than mean of AVAL with in \code{by_vars}.
+\item \code{filter = (AVAL > mean(AVAL, na.rm = TRUE))} will filter all \code{AVAL}
+values greater than mean of \code{AVAL} with in \code{by_vars}.
 \item \code{filter = (dplyr::n() > 2)} will filter n count of \code{by_vars} greater
 than 2.
 }}
@@ -40,16 +40,16 @@ performs the calculation.
 This can include built-in functions as well as user defined functions,
 for example \code{mean} or \code{function(x) mean(x, na.rm = TRUE)}.}
 
-\item{set_values_to}{A list of variable name-value pairs. Use this argument
-if you need to change the values of any newly derived records.
+\item{set_values_to}{Variables to be set
 
-Set a list of variables to some specified value for the new observation(s)
+The specified variables are set to the specified values for the new
+observations.
+
+A list of variable name-value pairs is expected.
 \itemize{
-\item LHS refer to a variable.
-\item RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
-value or NA.
-(e.g.  \code{vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")}).
-More general expression are not allowed.
+\item LHS refers to a variable.
+\item RHS refers to the values to set to the variable. This can be a string, a
+symbol, a numeric value or \code{NA}, e.g., \code{vars(PARAMCD = "TDOSE", PARCAT1 =   "OVERALL")}. More general expression are not allowed.
 }}
 }
 \value{
@@ -73,21 +73,21 @@ adeg <- tibble::tribble(
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384, "Placebo",
-  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
-  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
-  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385, "Placebo",
-  "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
-  "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:45", 384, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:45", 385, "Placebo",
+  "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401, "Active 20mg",
-  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
-  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
-  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412, "Active 20mg",
-  "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
-  "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:50", 401, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:50", 412, "Active 20mg",
+  "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
 )
 
 # Summarize the average of the triplicate ECG interval values (AVAL)
@@ -101,12 +101,12 @@ derive_summary_records(
 
 advs <- tibble::tribble(
   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
-  "XYZ-001-001", 1164, "Weight", 99,  "kg", "Screening", "2018-03-19",
-  "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In",    "2018-03-26",
-  "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline",  "2018-04-16",
-  "XYZ-001-001", 1167, "Weight", 94,  "kg", "Week 24",   "2018-09-30",
-  "XYZ-001-001", 1168, "Weight", 92,  "kg", "Week 48",   "2019-03-17",
-  "XYZ-001-001", 1169, "Weight", 95,  "kg", "Week 52",   "2019-04-14",
+  "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
+  "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
+  "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline", "2018-04-16",
+  "XYZ-001-001", 1167, "Weight", 94, "kg", "Week 24", "2018-09-30",
+  "XYZ-001-001", 1168, "Weight", 92, "kg", "Week 48", "2019-03-17",
+  "XYZ-001-001", 1169, "Weight", 95, "kg", "Week 52", "2019-04-14",
 )
 
 # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
@@ -131,17 +131,17 @@ adeg <- tibble::tribble(
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
-  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
-  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
-  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
-  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
-  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
-  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
 )
 
 # Compute the average of AVAL only if there are more than 2 records within the

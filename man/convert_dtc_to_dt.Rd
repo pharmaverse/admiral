@@ -43,16 +43,19 @@ before any of the specified dates, e.g., that the imputed adverse event start
 date is not before the first treatment date. Only dates which are in the
 range of possible dates of the \code{dtc} value are considered. The possible dates
 are defined by the missing parts of the \code{dtc} date (see example below). This
-ensures that the non-missing parts of the \code{dtc} date are not changed. For
-example\preformatted{impute_dtc(
-  "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-   ),
-  date_imputation = "first"
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+"2020-11",
+min_dates = list(
+ ymd_hms("2020-12-06T12:12:12"),
+ ymd_hms("2020-11-11T11:11:11")
+),
+date_imputation = "first"
 )
-}
+}\if{html}{\out{</div>}}
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
@@ -64,7 +67,7 @@ have changed the month although it is not missing (in the \code{dtc} date).}
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered.}
+considered. A date or date-time object is expected.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 
@@ -80,6 +83,9 @@ a date object
 }
 \description{
 Convert a date character vector (usually '--DTC') into a Date vector (usually '--DT').
+}
+\details{
+Usually this computation function can not be used with \verb{\%>\%}.
 }
 \examples{
 convert_dtc_to_dt("2019-07-18")

@@ -10,8 +10,6 @@ derive_param_tte(
   source_datasets,
   by_vars = NULL,
   start_date = TRTSDT,
-  start_date_imputation_flag = NULL,
-  start_time_imputation_flag = NULL,
   event_conditions,
   censor_conditions,
   create_datetime = FALSE,
@@ -55,16 +53,6 @@ the origin date.
 
 If the specified variable is imputed, the corresponding date imputation
 flag must specified for \code{start_imputation_flag}.}
-
-\item{start_date_imputation_flag}{Date imputation flag for start date
-
-If the start date is imputed, the corresponding date imputation flag must
-be specified. The variable \code{STARTDTF} is set to the specified variable.}
-
-\item{start_time_imputation_flag}{Time imputation flag for start date
-
-If the start time is imputed, the corresponding time imputation flag must
-be specified. The variable \code{STARTTMF} is set to the specified variable.}
 
 \item{event_conditions}{Sources and conditions defining events
 
@@ -162,8 +150,10 @@ joined from the ADSL dataset,
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
-data("adsl")
+library(lubridate)
+data("admiral_adsl")
+
+adsl <- admiral_adsl
 
 death <- event_source(
   dataset_name = "adsl",

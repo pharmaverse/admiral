@@ -45,3 +45,11 @@ Meta
 admiral.Rcheck/
 admiral*.tar.gz
 admiral*.tgz
+
+# vscode
+.vscode
+
+# MacOS
+.DS_Store
+._.DS_Store
+

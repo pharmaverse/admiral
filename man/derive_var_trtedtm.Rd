@@ -27,7 +27,7 @@ parameter are expected.}
 Only observations of the ex dataset which fulfill the specified condition
 are considered for the treatment start date.
 
-Default: \verb{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')}
+Default: \code{EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, 'PLACEBO')) & nchar(EXENDTC) >= 10}
 
 Permitted Values: logical expression}
 
@@ -40,7 +40,9 @@ A list of quosures where the expressions are symbols as returned by
 The input dataset with \code{TRTEDTM} variable added
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_merged_dtm()} instead.
 
 Derives datetime of last exposure to treatment (\code{TRTEDTM})
 }
@@ -48,16 +50,6 @@ Derives datetime of last exposure to treatment (\code{TRTEDTM})
 For each group (with respect to the variables specified for the
 \code{by_vars} parameter) the first observation (with respect to the order
 specified for the \code{order} parameter) is included in the output dataset.
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data("ex")
-data("dm")
-
-dm \%>\%
-  derive_var_trtedtm(dataset_ex = ex) \%>\%
-  select(USUBJID, TRTEDTM)
 }
 \author{
 Stefan Bundfuss

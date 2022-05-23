@@ -23,7 +23,7 @@ Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'secon
 \item{new_var}{New AGE variable to be created in years.}
 }
 \value{
-The input dataset with new_var paramater added in years.
+The input dataset with new_var parameter added in years.
 }
 \description{
 Derive Age in Years
@@ -36,15 +36,16 @@ These can then be used to create age groups.
 
 library(dplyr, warn.conflicts = FALSE)
 
-data <- data.frame(AGE = c(27, 24, 3, 4, 1),
-                   AGEU = c("days", "months", "years", "weeks", "years"))
+data <- data.frame(
+  AGE = c(27, 24, 3, 4, 1),
+  AGEU = c("days", "months", "years", "weeks", "years")
+)
 
 data \%>\%
-     derive_var_age_years(., AGE, new_var = AAGE)
+  derive_var_age_years(., AGE, new_var = AAGE)
 
 data.frame(AGE = c(12, 24, 36, 48)) \%>\%
- derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
-
+  derive_var_age_years(., AGE, age_unit = "months", new_var = AAGE)
 }
 \author{
 Michael Thorpe
