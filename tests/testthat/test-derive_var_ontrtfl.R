@@ -198,13 +198,13 @@ test_that("`target` is set to  NA when `end_date`<`ref_start_date`
           regradless of start_date being NA", {
   input <- tibble::tribble(
     ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT,
-     "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"),
-     "PAT01", NA, ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"),
+    "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"),
+    "PAT01", NA, ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"),
   )
   expected_output <- tibble::tribble(
- ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT, ~ONTRTFL,
-"PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
-"PAT01", NA, ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
+    ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT, ~ONTRTFL,
+    "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
+    "PAT01", NA, ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
   )
 
   actual_output <- derive_var_ontrtfl(
@@ -340,15 +340,15 @@ test_that("`target` is set to  Y when `end_date` is missing and
 test_that("`target` is set to Y when `start_date` is before `ref_start_date` and
             `end_date` is before `ref_end_date` for Period 01", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+    ~STUDYID, ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT,
     "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15")
-    )
+  )
 
   expected_output <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~ASTDT, ~AP01SDT, ~AP01EDT, ~AENDT, ~ONTR01FL,
     "TEST01", "PAT01", ymd("2019-04-30"), ymd("2020-01-01"),
     ymd("2020-03-01"), ymd("2020-03-15"), "Y",
-    )
+  )
 
   actual_output <- derive_var_ontrtfl(
     input,
@@ -358,11 +358,11 @@ test_that("`target` is set to Y when `start_date` is before `ref_start_date` and
     ref_start_date = AP01SDT,
     ref_end_date = AP01EDT,
     span_period = "Y"
-    )
+  )
 
   expect_dfs_equal(
     expected_output,
     actual_output,
     keys = c("STUDYID", "USUBJID", "ASTDT")
-    )
-  })
+  )
+})

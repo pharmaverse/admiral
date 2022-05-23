@@ -78,30 +78,31 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' test_lb <- tibble::tribble(
-#' ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
-#' "P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-#' "P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1",
-#' "P01",    "LYMLE",   0.90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-#' "P01",    "LYMLE",   0.70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
-#' "P01",    "ALB",     36,   "Albumin (g/dL)",                 "CYCLE 2 DAY 1",
-#' "P02",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-#' "P02",    "LYMPH",   29,   "Lymphocytes Abs (10^9/L)",       "CYCLE 1 DAY 1",
-#' "P02",    "LYMLE",   0.87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-#' "P03",    "LYMLE",   0.89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
+#'   ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
+#'   "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+#'   "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
+#'   "P01", "LYMLE", 0.90, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+#'   "P01", "LYMLE", 0.70, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1",
+#'   "P01", "ALB", 36, "Albumin (g/dL)", "CYCLE 2 DAY 1",
+#'   "P02", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+#'   "P02", "LYMPH", 29, "Lymphocytes Abs (10^9/L)", "CYCLE 1 DAY 1",
+#'   "P02", "LYMLE", 0.87, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+#'   "P03", "LYMLE", 0.89, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1"
 #' )
 #'
-#' derive_param_wbc_abs (dataset = test_lb,
-#'                       by_vars = vars(USUBJID, VISIT),
-#'                       set_values_to = vars(
-#'                         PARAMCD = "LYMPH",
-#'                         PARAM = "Lymphocytes Abs (10^9/L)",
-#'                         DTYPE = "CALCULATION"
-#'                       ),
-#'                       get_unit_expr = extract_unit(PARAM),
-#'                       wbc_code = "WBC",
-#'                       diff_code = "LYMLE",
-#'                       diff_type = "fraction")
-
+#' derive_param_wbc_abs(
+#'   dataset = test_lb,
+#'   by_vars = vars(USUBJID, VISIT),
+#'   set_values_to = vars(
+#'     PARAMCD = "LYMPH",
+#'     PARAM = "Lymphocytes Abs (10^9/L)",
+#'     DTYPE = "CALCULATION"
+#'   ),
+#'   get_unit_expr = extract_unit(PARAM),
+#'   wbc_code = "WBC",
+#'   diff_code = "LYMLE",
+#'   diff_type = "fraction"
+#' )
 derive_param_wbc_abs <- function(dataset,
                                  by_vars,
                                  set_values_to,
@@ -143,17 +144,19 @@ derive_param_wbc_abs <- function(dataset,
 
   if (diff_type == "percent") {
     analysis_value <- expr(!!sym(paste0("AVAL.", wbc_code)) *
-                             !!sym(paste0("AVAL.", diff_code)) / 100)
+      !!sym(paste0("AVAL.", diff_code)) / 100)
   } else if (diff_type == "fraction") {
     analysis_value <- expr(!!sym(paste0("AVAL.", wbc_code)) *
-                             !!sym(paste0("AVAL.", diff_code)))
+      !!sym(paste0("AVAL.", diff_code)))
   }
 
   # Create new parameter.
   dataset_new <- dataset_temp %>%
     derive_derived_param(
-      parameters = c(wbc_code,
-                     diff_code),
+      parameters = c(
+        wbc_code,
+        diff_code
+      ),
       by_vars = by_vars,
       analysis_value = !!analysis_value,
       set_values_to = set_values_to
@@ -169,5 +172,4 @@ derive_param_wbc_abs <- function(dataset,
   } else {
     bind_rows(dataset, dataset_new)
   }
-
 }

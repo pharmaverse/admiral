@@ -47,15 +47,19 @@ test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
     ~USUBJID, ~AVALC,        ~AVAL,
     "1",      "N",           0,
     "2",      "Y",           1,
-    "3",      NA_character_, NA_real_) %>%
+    "3",      NA_character_, NA_real_
+  ) %>%
     mutate(
       STUDYID = "XX1234",
       PARAMCD = "PD",
-      ANL01FL = "Y")
+      ANL01FL = "Y"
+    )
 
-  expect_dfs_equal(base = expected,
-                   comp = actual,
-                   keys = c("USUBJID", "PARAMCD"))
+  expect_dfs_equal(
+    base = expected,
+    comp = actual,
+    keys = c("USUBJID", "PARAMCD")
+  )
 })
 
 ## derive_param_exist_flag Test 2: error is issued if aval_fun returns wrong type ----
@@ -68,8 +72,10 @@ test_that("derive_param_exist_flag Test 2: error is issued if aval_fun returns w
       condition = AVALC == "PD",
       false_value = "N",
       aval_fun = print,
-      set_values_to = vars(PARAMCD = "PD",
-                           ANL01FL = "Y")
+      set_values_to = vars(
+        PARAMCD = "PD",
+        ANL01FL = "Y"
+      )
     ),
     regexp = paste(
       "Calling `aval_fun(AVALC)` did not result in a numeric vector.\n",
