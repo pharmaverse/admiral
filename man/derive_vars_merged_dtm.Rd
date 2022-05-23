@@ -134,7 +134,9 @@ range of possible dates of the \code{dtc} value are considered. The possible dat
 are defined by the missing parts of the \code{dtc} date (see example below). This
 ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
-For example\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
 "2020-11",
 min_dates = list(
  ymd_hms("2020-12-06T12:12:12"),
@@ -179,9 +181,11 @@ with respect to the by variables and the order.
 
 If the uniqueness check fails, the specified message is displayed.
 
-\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+\emph{Default}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
       enumerate(vars2chr(by_vars))
-}}
+}\if{html}{\out{</div>}}}
 }
 \value{
 The output dataset contains all observations and variables of the
