@@ -35,7 +35,7 @@ Our contribution model is still in a testing phase so we advise you to contact u
 # Contribution Model
 
 ```{r echo=FALSE, out.width='120%'}
-knitr::include_graphics('./admiral_contribution_model.png')
+knitr::include_graphics("./admiral_contribution_model.png")
 ```
 
 Type 1 Contribution with Code: 
