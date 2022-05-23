@@ -50,7 +50,7 @@ test_that("derive_vars_dy Test2: Multiple --DT input when ref date is --DTM,
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDT, ~AENDT, ~DTHDT, ~TRTSDY, ~ASTDY, ~AENDY, ~DEATHDY,
     "TEST01", "PAT01", "2014-01-17T23:59:59", "2014-01-18", "2014-01-20", "2014-02-01", 1, 2, 4, 16,
     "TEST01", "PAT02", "2014-01-17T23:59:59", "2014-01-17", "2014-01-20", "2014-03-01", 1, 1, 4, 44,
-    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", "2014-05-01", 1, -2, 4, 105,
+    "TEST01", "PAT03", "2014-01-17T23:59:59", "2014-01-15", "2014-01-20", "2014-05-01", 1, -2, 4, 105, # nolint
   ) %>%
     mutate(
       TRTSDTM = lubridate::as_datetime(TRTSDTM),
