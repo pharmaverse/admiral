@@ -697,7 +697,7 @@ test_that(paste(
 })
 
 boyd <- function(hgt, wgt) {
-  0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt)))
+  0.0003207 * (hgt^0.3) * (1000 * wgt)^(0.7285 - (0.0188 * log10(1000 * wgt))) # nolint
 }
 
 test_that(paste(

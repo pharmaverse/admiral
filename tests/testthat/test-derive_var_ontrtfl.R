@@ -203,7 +203,7 @@ test_that("`target` is set to  NA when `end_date`<`ref_start_date`
   )
   expected_output <- tibble::tribble(
     ~USUBJID, ~ASTDT, ~TRTSDT, ~TRTEDT, ~AENDT, ~ONTRTFL,
-    "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
+    "PAT01", ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_, # nolint
     "PAT01", NA, ymd("2020-01-01"), ymd("2020-03-01"), ymd("2019-03-15"), NA_character_,
   )
 
