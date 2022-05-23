@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Programming Strategy">
 <meta property="og:description" content="admiral">
-<meta property="og:image" content="/logo.png">
+<meta property="og:image" content="https://pharmaverse.github.io/admiral/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -109,7 +109,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>As <code>{admiral}</code> is intended to be contributed by the user community, this article is meant for developers that want to either expand <code>{admiral}</code> functionalities or build on top of <code>{admiral}</code>. In order to keep the framework robust across the whole community, we have defined a programming strategy that should be followed in such cases. These contributions could include, for example, company specific derivations of ADaM datasets.</p>
+<p>As <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> is intended to be contributed by the user community, this article is meant for developers that want to either expand <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> functionalities or build on top of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>. In order to keep the framework robust across the whole community, we have defined a programming strategy that should be followed in such cases. These contributions could include, for example, company specific derivations of ADaM datasets.</p>
 </div>
 <div class="section level2">
 <h2 id="functional-workflow">Functional Workflow<a class="anchor" aria-label="anchor" href="#functional-workflow"></a>
@@ -119,7 +119,7 @@
 <li>We mandate the use of tidyverse (e.g. dplyr) over similar functionality existing in base R</li>
 <li>Each ADaM dataset is built with a set of functions and not with free flow code.</li>
 <li>Each ADaM dataset has a specific programming workflow.</li>
-<li>Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an <code>{admiral}</code> function or a company specific function.</li>
+<li>Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> function or a company specific function.</li>
 <li>Admiral functions can be re-used for company specific functions.</li>
 <li>Each function belongs to a category or multiple categories.</li>
 <li>Each function that is used to derive one or multiple variable(s) is required to be unit tested.</li>
@@ -333,7 +333,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
     time_imputation = "last",
     ...</code></pre>
 <p>Each function parameter needs to be tested with <code>assert_</code> type of function.</p>
-<p>Each expression needs to be tested for the following (there are many utility functions in <code>{admiral}</code> available to the contributor):</p>
+<p>Each expression needs to be tested for the following (there are many utility functions in <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> available to the contributor):</p>
 <ul>
 <li>whether it is an expression (or a list of expressions, depending on the function)</li>
 <li>whether it is a valid expression (i.e. whether it evaluates without error)</li>
@@ -427,7 +427,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <p>Inputs should be checked either using <code>asserthat::assert_that()</code> or custom assertion functions defined in <a href="https://github.com/pharmaverse/admiral/blob/main/R/assertions.R" class="external-link"><code>R/assertions.R</code></a>. These custom assertion functions should either return an error in case of an invalid input or return nothing.</p>
 <p>For the most common types of input parameters like a single variable, a list of variables, a dataset, … functions for checking are available (see <a href="../reference/index.html#section-assertions">assertions</a>).</p>
 <p>Parameters which expect keywords should handle them in a case-insensitive manner, e.g., both <code>date_imputation = "FIRST"</code> and <code>date_imputation = "first"</code> should be accepted. The <code><a href="../reference/assert_character_scalar.html">assert_character_scalar()</a></code> function helps with handling parameters in a case-insensitive manner.</p>
-<p>A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. This rule is applicable only if both functions are part of <code>{admiral}</code>.</p>
+<p>A parameter should not be checked in an outer function if the parameter name is the same as in the inner function. This rule is applicable only if both functions are part of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="function-header-documentation">Function Header (Documentation)<a class="anchor" aria-label="anchor" href="#function-header-documentation"></a>
@@ -560,7 +560,7 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <div class="section level2">
 <h2 id="deprecation">Deprecation<a class="anchor" aria-label="anchor" href="#deprecation"></a>
 </h2>
-<p>As <code>{admiral}</code> is still evolving, functions or parameters may need to be removed or replaced with more efficient options from one release to another. In such cases, the relevant function or parameter must be marked as deprecated. A warning will be issued until the next release and an error will be generated thereafter. Information about deprecation timelines must be added to the warning/error message.</p>
+<p>As <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> is still evolving, functions or parameters may need to be removed or replaced with more efficient options from one release to another. In such cases, the relevant function or parameter must be marked as deprecated. A warning will be issued until the next release and an error will be generated thereafter. Information about deprecation timelines must be added to the warning/error message.</p>
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h3>
@@ -730,9 +730,9 @@ i.e. all input like datasets, variable names, options, … must be provided to 
 <h2 id="r-and-package-versions-for-development">R and package versions for development<a class="anchor" aria-label="anchor" href="#r-and-package-versions-for-development"></a>
 </h2>
 <ul>
-<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <code>{admiral}</code>. This need for a common development environment also carries over for our choice of package versions.<br>
+<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>. This need for a common development environment also carries over for our choice of package versions.<br>
 </li>
-<li>GitHub allows us through the Actions/Workflows to test <code>{admiral}</code> under several versions of R as well as several versions of dependent R packages needed for <code>{admiral}</code>. Currently we test <code>{admiral}</code> against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>
+<li>GitHub allows us through the Actions/Workflows to test <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> under several versions of R as well as several versions of dependent R packages needed for <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>. Currently we test <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> against 3.6.3 with a CRAN package snapshot from 2020-02-29, 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>
 </li>
 <li>This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.<br>
 </li>
