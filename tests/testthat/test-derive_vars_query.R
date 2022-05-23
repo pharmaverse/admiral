@@ -1,12 +1,12 @@
 test_that("Derive CQ and SMQ variables with two term levels", {
   # nolint start
   queries <- tibble::tribble(
-    ~VAR_PREFIX,                                              ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL,                          ~TERM_NAME,
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)",  20000008,     "NARROW",                1,   "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
-    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)",  20000008,     "NARROW",                1,   "AEDECOD",                 "AMMONIA ABNORMALL",
-    "SMQ03",                              "Immune-Mediated Hypothyroidism",  20000161,     "NARROW",                1,   "AEDECOD",                 "BASEDOW'S DISEASE",
-    "SMQ05",                                 "Immune-Mediated Pneumonitis",        NA,     "NARROW",                1,   "AEDECOD",              "ALVEOLAR PROTEINOSIS",
-    "CQ06",                                                  "Some query",     11111,           NA,               NA,     "AELLT",                         "SOME TERM"
+    ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
+    "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
+    "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
+    "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
+    "CQ06", "Some query", 11111, NA, NA, "AELLT", "SOME TERM"
   ) %>% dplyr::mutate(
     TERM_ID = as.integer(as.factor(.data$TERM_NAME))
   )
@@ -91,7 +91,6 @@ test_that("Derive when an adverse event is in multiple baskets", {
 
 
 test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE column", {
-
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", NA_real_,
@@ -120,7 +119,6 @@ test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE colum
 })
 
 test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the variable", {
-
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
@@ -149,12 +147,10 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
     derive_vars_query(mutate(my_ae, AELLTCD = as.logical(AELLTCD)), query),
     regexp = ".* is of type logical, numeric or character is required"
   )
-
 })
 
 
 test_that("assert_valid_queries checks VAR_PREFIX values", {
-
   query <- tibble::tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
@@ -239,5 +235,4 @@ test_that("assert_valid_queries checks VAR_PREFIX values", {
     ),
     regexp = "In `test`, `QUERY_ID` of 'CQ40' is not unique."
   )
-
 })

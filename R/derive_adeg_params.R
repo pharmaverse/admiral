@@ -226,7 +226,7 @@ compute_qtc <- function(qt, rr, method) {
 
   formulae <- alist(
     Bazett = qt / sqrt(rr / 1000),
-    Fridericia = qt / (rr / 1000) ^ (1 / 3),
+    Fridericia = qt / (rr / 1000)^(1 / 3),
     Sagie = 1000 * (qt / 1000 + 0.154 * (1 - rr / 1000))
   )
   eval(formulae[[method]])
