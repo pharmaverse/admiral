@@ -45,13 +45,16 @@ range of possible dates of the \code{dtc} value are considered. The possible dat
 are defined by the missing parts of the \code{dtc} date (see example below). This
 ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
-For example\preformatted{impute_dtc(
-  "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-   ),
-  date_imputation = "first"
+
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+"2020-11",
+min_dates = list(
+ ymd_hms("2020-12-06T12:12:12"),
+ ymd_hms("2020-11-11T11:11:11")
+),
+date_imputation = "first"
 )
 }
 

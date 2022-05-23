@@ -3,8 +3,11 @@
 <!-- badges: start -->
 [<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
 [![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiral/workflows/R-CMD-check/badge.svg)](https://github.com/pharmaverse/admiral/actions)
-[![Codecov test coverage](https://codecov.io/gh/Roche-GSK/admiral/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Roche-GSK/admiral?branch=main)
+[![R-CMD-check](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/R-CMD-check.yml)
+[![Style](https://github.com/pharmaverse/admiral/actions/workflows/style.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/style.yml)
+[![Spelling](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml)
+[![Man Pages 📃](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml)
+[![Codecov test coverage](https://codecov.io/gh/pharmaverse/admiral/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/pharmaverse/admiral?branch=devel)
 <!-- badges: end -->
 
 ADaM in R Asset Library
@@ -148,7 +151,7 @@ therefore want any module to be understandable to all, not only the `{admiral}` 
 * [PHUSE US Connect 2022 pharmaverse workshop](https://github.com/pharmaverse/pharmaverse.workshop.phuseUS2022) (slides and materials---including `{admiral}`
 workshop slides from PHUSE EU Connect 2021)
 
-## Contact 
+## Contact
 
 We use the following for support and communications between user and developer community:
 

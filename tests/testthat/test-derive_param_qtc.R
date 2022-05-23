@@ -1,15 +1,15 @@
 test_that("new observations are derived correctly", {
   input <- tibble::tribble(
-    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
-    "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
-    "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
-    "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
-    "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
-    "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
-    "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
-    "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
-    "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
-    "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2",
+    ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
+    "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+    "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
+    "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+    "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
+    "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
+    "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+    "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
+    "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2",
   )
   methods <- c("Bazett", "Fridericia", "Sagie")
   outputs <- lapply(methods, function(method) {

@@ -18,7 +18,7 @@
 #'   A date or date-time variable is expected. This variable must be present in
 #'   specified input dataset.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param end_date The end date
@@ -26,7 +26,7 @@
 #'   A date or date-time variable is expected. This variable must be present in
 #'   specified input dataset.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param in_unit Input unit

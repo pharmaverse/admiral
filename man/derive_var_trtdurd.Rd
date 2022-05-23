@@ -16,7 +16,7 @@ expected.}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{TRTSDT}}
@@ -25,7 +25,7 @@ Default: \code{TRTSDT}}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{TRTEDT}}

@@ -226,10 +226,10 @@
     },
     "diffdf": {
       "Package": "diffdf",
-      "Version": "1.0.3",
+      "Version": "1.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "fdaa3c39218f9259420ea0ecf77c40d3"
+      "Hash": "9ddedef46959baad2080047a1b0117fe"
     },
     "diffobj": {
       "Package": "diffobj",

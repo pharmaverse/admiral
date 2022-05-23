@@ -10,20 +10,19 @@ input_ae <- tibble::tribble(
 )
 
 input_ex <- tibble::tribble(
-  ~STUDYID,   ~USUBJID,   ~EXSTDTC,     ~EXENDTC,    ~EXSEQ, ~EXDOSE, ~EXTRT,
-  "my_study", "subject1", "2020-01-01", "2020-01-01", 1,     10,      "treatment",
-  "my_study", "subject1", "2020-08-29", "2020-08-29", 2,     10,      "treatment",
-  "my_study", "subject1", "2020-09-02", "2020-09-02", 3,     10,      "treatment",
-  "my_study", "subject1", "2020-10-20", "2020-10-20", 4,     10,      "treatment",
-  "my_study", "subject2", "2019-05-25", "2019-05-25", 1,      0,      "placebo",
-  "my_study", "subject2", "2020-01-20", "2020-01-20", 2,      0,      "placebo",
-  "my_study", "subject3", "2020-03-15", "2020-03-15", 1,     10,      "treatment"
+  ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
+  "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
+  "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
+  "my_study", "subject1", "2020-09-02", "2020-09-02", 3, 10, "treatment",
+  "my_study", "subject1", "2020-10-20", "2020-10-20", 4, 10, "treatment",
+  "my_study", "subject2", "2019-05-25", "2019-05-25", 1, 0, "placebo",
+  "my_study", "subject2", "2020-01-20", "2020-01-20", 2, 0, "placebo",
+  "my_study", "subject3", "2020-03-15", "2020-03-15", 1, 10, "treatment"
 ) %>%
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
 test_that("derive_var_last_dose_amt works as expected", {
-
   expected_output <- mutate(
     input_ae,
     LDOSE = c(10, 10, 10, NA, 0, NA, NA)
@@ -43,11 +42,9 @@ test_that("derive_var_last_dose_amt works as expected", {
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
-
 })
 
 test_that("derive_var_last_dose_amt returns traceability vars", {
-
   expected_output <- mutate(
     input_ae,
     LDOSEDOM = c("EX", "EX", "EX", NA, "EX", NA, NA),
@@ -70,5 +67,4 @@ test_that("derive_var_last_dose_amt returns traceability vars", {
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
-
 })

@@ -4,7 +4,7 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
     1, 1, 12, 1,
-    1, 3,  9, 2,
+    1, 3, 9, 2,
     2, 2, 42, 1,
     3, 3, 14, 1,
     3, 3, 10, 2
@@ -12,11 +12,14 @@ test_that("derive_extreme_records Test 1: add last observation for each group", 
 
   expected_output <- bind_rows(
     input,
-    tibble::tribble(~ USUBJID, ~ AVISITN, ~ AVAL, ~LBSEQ,
-                    1, 3,  9, 2,
-                    2, 2, 42, 1,
-                    3, 3, 10, 2) %>%
-      mutate(DTYPE = "LOV"))
+    tibble::tribble(
+      ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
+      1, 3, 9, 2,
+      2, 2, 42, 1,
+      3, 3, 10, 2
+    ) %>%
+      mutate(DTYPE = "LOV")
+  )
 
   actual_output <- derive_extreme_records(
     input,

@@ -111,7 +111,6 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
 })
 
 test_that("derive_vars_disposition_reason checks new_var_spe and reason_var_spe", {
-
   expect_error(
     derive_vars_disposition_reason(
       dataset = dm,
@@ -126,5 +125,4 @@ test_that("derive_vars_disposition_reason checks new_var_spe and reason_var_spe"
       "Please specify `reason_var_spe` together with `new_var_spe`."
     )
   )
-
 })

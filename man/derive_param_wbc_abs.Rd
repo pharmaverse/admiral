@@ -86,29 +86,31 @@ white blood cell absolute value (identified by \code{wbc_code}) and the white bl
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 test_lb <- tibble::tribble(
-~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
-"P01",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-"P01",    "WBC",     38,   "Leukocyte Count (10^9/L)",       "CYCLE 2 DAY 1",
-"P01",    "LYMLE",   0.90,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-"P01",    "LYMLE",   0.70,   "Lymphocytes (fraction of 1)",    "CYCLE 2 DAY 1",
-"P01",    "ALB",     36,   "Albumin (g/dL)",                 "CYCLE 2 DAY 1",
-"P02",    "WBC",     33,   "Leukocyte Count (10^9/L)",       "CYCLE 1 DAY 1",
-"P02",    "LYMPH",   29,   "Lymphocytes Abs (10^9/L)",       "CYCLE 1 DAY 1",
-"P02",    "LYMLE",   0.87,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1",
-"P03",    "LYMLE",   0.89,   "Lymphocytes (fraction of 1)",    "CYCLE 1 DAY 1"
+  ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
+  "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+  "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
+  "P01", "LYMLE", 0.90, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+  "P01", "LYMLE", 0.70, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1",
+  "P01", "ALB", 36, "Albumin (g/dL)", "CYCLE 2 DAY 1",
+  "P02", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
+  "P02", "LYMPH", 29, "Lymphocytes Abs (10^9/L)", "CYCLE 1 DAY 1",
+  "P02", "LYMLE", 0.87, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
+  "P03", "LYMLE", 0.89, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1"
 )
 
-derive_param_wbc_abs (dataset = test_lb,
-                      by_vars = vars(USUBJID, VISIT),
-                      set_values_to = vars(
-                        PARAMCD = "LYMPH",
-                        PARAM = "Lymphocytes Abs (10^9/L)",
-                        DTYPE = "CALCULATION"
-                      ),
-                      get_unit_expr = extract_unit(PARAM),
-                      wbc_code = "WBC",
-                      diff_code = "LYMLE",
-                      diff_type = "fraction")
+derive_param_wbc_abs(
+  dataset = test_lb,
+  by_vars = vars(USUBJID, VISIT),
+  set_values_to = vars(
+    PARAMCD = "LYMPH",
+    PARAM = "Lymphocytes Abs (10^9/L)",
+    DTYPE = "CALCULATION"
+  ),
+  get_unit_expr = extract_unit(PARAM),
+  wbc_code = "WBC",
+  diff_code = "LYMLE",
+  diff_type = "fraction"
+)
 }
 \author{
 Annie Yang

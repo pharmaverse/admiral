@@ -197,7 +197,7 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `ASTDT`
@@ -206,7 +206,7 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `AENDT`
