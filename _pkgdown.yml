@@ -114,6 +114,18 @@ reference:
 - contents:
   - has_keyword("dev_utility")
 
+- title: Miscellaneous
+- contents:
+  - ex_single
+  - get_terms_from_db
+  - print.derivation_slice
+  - print.tte_source
+  - queries
+  - validate_query
+  - validate_sdg_select
+  - validate_smq_select
+  - assert_db_requirements
+
 articles:
 - title: User Guides
   navbar: User Guides
