@@ -1,0 +1,26 @@
+name: General Issue
+description: Issue that is difficult to fit into bug, feature or documentation issue.
+title: "General Issue: <Insert Issue Title Here>"
+labels: ["general issue"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Example:** General Issue: What happens when a new ADaM-IG is released?
+  - type: textarea
+    id: background
+    attributes:
+      label: Background Information
+      description: Please give relevant infromation to address this issue.  Links and screenshots are encouraged.      placeholder: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of Done
+      description: Please define what constitues completion of this issue
+      placeholder: "Example:  Developer will have gather information on updated ADaM-IG guide and placed into Box."
+    validations:
+      required: false
