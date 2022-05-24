@@ -1,3 +1,5 @@
+url: https://pharmaverse.github.io/admiral/
+
 template:
   bootstrap: 5
   params:
@@ -113,6 +115,18 @@ reference:
 - subtitle: Various
 - contents:
   - has_keyword("dev_utility")
+
+- title: Miscellaneous
+- contents:
+  - ex_single
+  - get_terms_from_db
+  - print.derivation_slice
+  - print.tte_source
+  - queries
+  - validate_query
+  - validate_sdg_select
+  - validate_smq_select
+  - assert_db_requirements
 
 articles:
 - title: User Guides
