@@ -13,7 +13,8 @@ body:
     id: background
     attributes:
       label: Background Information
-      description: Please give relevant infromation to address this issue.  Links and screenshots are encouraged.      placeholder: "A bug happened!"
+      description: Please give relevant infromation to address this issue.  Links and screenshots are encouraged.      
+      placeholder: "The more information the better and the faster we can get this issue completed."
     validations:
       required: true
   - type: textarea
