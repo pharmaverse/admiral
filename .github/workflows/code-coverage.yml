@@ -74,7 +74,7 @@ jobs:
                 )
                 print(x)
                 covr::to_cobertura(x, filename = "coverage.xml")
-                p <- covr::percent_coverage(x)
+                p <- round(covr::percent_coverage(x))
                 cat(p, file = "coverage.txt", sep = "")
                 covr::report(
                     x,
@@ -117,8 +117,8 @@ jobs:
           badge: true
           fail_below_min: false
           format: markdown
-          hide_branch_rate: false
-          hide_complexity: false
+          hide_branch_rate: true
+          hide_complexity: true
           indicators: true
           output: both
           thresholds: '60 80'
