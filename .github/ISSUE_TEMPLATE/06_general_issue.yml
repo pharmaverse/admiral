@@ -8,13 +8,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Example:** General Issue: What happens when a new ADaM-IG is released?
+        **Example:** General Issue: Blog Post for updates on the latest admiral release?
   - type: textarea
     id: background
     attributes:
       label: Background Information
       description: Please provide the context and purpose of this piece of work. Links and screenshots are encouraged.     
-      placeholder: "The more information the better and the faster we can get this issue completed."
+      placeholder: "Example:  Use changelog/news.md file to gather relevant changes and create into a nice post for Linked In.  The more information the better and the faster we can get this issue completed."
     validations:
       required: true
   - type: textarea
@@ -22,6 +22,6 @@ body:
     attributes:
       label: Definition of Done
       description: Please define the deliverable or the desired outcome.
-      placeholder: "Example:  All changes since last release are highlighted in News.md file."
+      placeholder: "Example:  All changes since last release are highlighted in Blog Post"
     validations:
       required: false
