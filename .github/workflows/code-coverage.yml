@@ -15,6 +15,7 @@ name: Code Coverage ☂
 
 jobs:
   coverage:
+    name: Test Coverage 🧪
     runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -139,10 +140,11 @@ jobs:
   badge:
     name: Generate badge for coverage
     needs: [coverage]
-    if: github.event_name != 'pull_request' || github.ref == 'refs/heads/devel' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/devel' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout the badges branch in repo
+      uses: actions/checkout@v3
       with:
         ref: badges
         path: badges
@@ -178,7 +180,7 @@ jobs:
         git add "${BRANCH}/${FILE}"
         git commit -m "Add/Update badge" || true
 
-    - name: Push badge commit
+    - name: Push badges
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
