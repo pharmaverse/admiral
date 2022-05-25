@@ -4,6 +4,7 @@ Thank you for your Pull Request! We have developed this task checklist from the 
 
 Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the `devel` branch until you have checked off each task.
 
+- [ ] Place Closes #<insert_issue_number> into the beginning of your Pull Rquest Title (Use Edit button in top-right)
 - [ ] Code is formatted according to the [tidyverse style guide](https://style.tidyverse.org/) 
 - [ ] Updated relevant unit tests or have written new unit tests - See [Unit Test Guide](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html#writing-unit-tests-in-admiral-)
 - [ ] If you removed/replaced any function and/or function parameters, did you fully follow the [deprecation guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation-1)?
