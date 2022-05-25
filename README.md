@@ -7,7 +7,7 @@
 [![Style](https://github.com/pharmaverse/admiral/actions/workflows/style.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/style.yml)
 [![Spelling](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/spellcheck.yml)
 [![Man Pages 📃](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml/badge.svg)](https://github.com/pharmaverse/admiral/actions/workflows/man-pages.yml)
-[![Codecov test coverage](https://codecov.io/gh/pharmaverse/admiral/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/pharmaverse/admiral?branch=devel)
+[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiral/badges/devel/test-coverage.svg)](https://github.com/pharmaverse/admiral/actions/workflows/code-coverage.yml)
 <!-- badges: end -->
 
 ADaM in R Asset Library
