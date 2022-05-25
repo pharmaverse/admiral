@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Example:** General Issue: Blog Post for updates on the latest admiral release?
+        **Example:** General Issue: Linked In Blog Post for updates on the latest admiral release?
   - type: textarea
     id: background
     attributes:
@@ -22,6 +22,6 @@ body:
     attributes:
       label: Definition of Done
       description: Please define the deliverable or the desired outcome.
-      placeholder: "Example:  All changes since last release are highlighted in Blog Post"
+      placeholder: "Example:  All changes since last release are highlighted in Blog Post and posted to Linked In"
     validations:
       required: false
