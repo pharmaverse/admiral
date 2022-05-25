@@ -1,0 +1,4 @@
+# Badges
+
+Badges for `admiral`
+
