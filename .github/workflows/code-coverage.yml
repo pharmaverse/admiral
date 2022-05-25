@@ -140,7 +140,6 @@ jobs:
   badge:
     name: Generate badge for coverage
     needs: [coverage]
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/devel' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the badges branch in repo
@@ -168,16 +167,14 @@ jobs:
         path: badges/test-coverage.svg
 
     - name: Commit badge
-      env:
-        BRANCH: ${{ needs.pre_ci.outputs.branch }}
-        FILE: 'test-coverage.svg'
       working-directory: ./badges
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Actions"
+        BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
         mkdir -p "${BRANCH}"
-        mv "${FILE}" "${BRANCH}"
-        git add "${BRANCH}/${FILE}"
+        mv test-coverage.svg "${BRANCH}"
+        git add "${BRANCH}/test-coverage.svg"
         git commit -m "Add/Update badge" || true
 
     - name: Push badges
