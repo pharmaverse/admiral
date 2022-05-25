@@ -13,7 +13,7 @@ body:
     id: background
     attributes:
       label: Background Information
-      description: Please give relevant infromation to address this issue.  Links and screenshots are encouraged.      
+      description: Please provide the context and purpose of this piece of work. Links and screenshots are encouraged.     
       placeholder: "The more information the better and the faster we can get this issue completed."
     validations:
       required: true
@@ -21,7 +21,7 @@ body:
     id: done
     attributes:
       label: Definition of Done
-      description: Please define what constitues completion of this issue
-      placeholder: "Example:  Developer will have gather information on updated ADaM-IG guide and placed into Box."
+      description: Please define the deliverable or the desired outcome.
+      placeholder: "Example:  All changes since last release are highlighted in News.md file."
     validations:
       required: false
