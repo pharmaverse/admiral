@@ -54,7 +54,7 @@ adsl <- dm %>%
 ## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`) {#trtdatetimegs}
 
 The function `derive_vars_merged_dtm()` can be used to derive the treatment
-start and end date/times using the `EX` domain. This call returns the original data frame with the column `TRTSDTM` and`TRTEDTM` added. Exposure observations with incomplete date and zero doses of non placebo treatments are ignored. Missing time parts are imputed as first or
+start and end date/times using the `EX` domain. This function call returns the original data frame with the column `TRTSDTM` and`TRTEDTM` added. Exposure observations with incomplete date and zero doses of non placebo treatments are ignored. Missing time parts are imputed as first or
 last for start and end date respectively.
 
 Don't be intimidated by the number of arguments! We try to make our arguments self-explanatory, e.g. the `new_vars_prefix` places `TRTS` at the start of the `--DTM` variable.  However, this is not always possible to make every arugment self-explanatory.  If you click on the function, `derive_vars_merged_dtm()`, you can bring up the reference documentation and learn more about each argument.  
@@ -94,7 +94,7 @@ adsl <- adsl %>%
   derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
 ```
 
-## Derive Treatment Duration (`TRTSDT`, `TRTEDT`) {#trtdurgs}
+## Derive Treatment Duration (`TRTDURD`) {#trtdurgs}
 
 Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
 can be used to calculate the Treatment duration (`TRTDURD`).
