@@ -81,7 +81,7 @@ adsl <- adsl %>%
     order = vars(TRTEDTM, EXSEQ),
     mode = "last",
     by_vars = vars(STUDYID, USUBJID)
-  ) 
+  )
 ```
 
 ## Derive Date variables from Date/Time variables (`TRTSDT`, `TRTEDT`) {#trtdategs}
