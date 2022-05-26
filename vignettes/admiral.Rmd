@@ -22,13 +22,17 @@ processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following script which creates a (very simple) ADSL dataset.
 
+## Load Packages and example datasets
+
+First, we will load our packages and example datasets to help with our ADSL creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{admiraltest}` package for example SDTM datasets which are from the CDISC Pilot Study.
+
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(lubridate)
 library(admiral)
 library(admiraltest)
 
-# read in SDTM datasets
+# Read in SDTM datasets
 data("admiral_dm")
 data("admiral_ds")
 data("admiral_ex")
@@ -38,10 +42,26 @@ ds <- admiral_ds
 ex <- admiral_ex
 ```
 
-```{r, eval=TRUE}
-# derive treatment variables
+## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvargs}
+
+The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
+
+```{r eval=TRUE}
 adsl <- dm %>%
-  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
+  mutate(TRT01P = ARM, TRT01A = ACTARM)
+```
+
+## Derive/Impute Numeric Treatment Date/Time and Duration (`TRTSDTM`, `TRTEDTM`) {#trtdatetimegs}
+
+The function `derive_vars_merged_dtm()` can be used to derive the treatment
+start and end date/times using the `EX` domain. This call returns the original data frame with the column `TRTSDTM` and`TRTEDTM` added. Exposure observations with incomplete date and zero doses of non placebo treatments are ignored. Missing time parts are imputed as first or
+last for start and end date respectively.
+
+Don't be intimidated by the number of arguments! We try to make our arguments self-explanatory, e.g. the `new_vars_prefix` places `TRTS` at the start of the `--DTM` variable.  However, this is not always possible to make every arugment self-explanatory.  If you click on the function, `derive_vars_merged_dtm()`, you can bring up the reference documentation and learn more about each argument.  
+
+```{r, eval=TRUE}
+# Derive treatment variables
+adsl <- adsl %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
     filter_add = nchar(EXSTDTC) >= 10,
@@ -61,10 +81,30 @@ adsl <- dm %>%
     order = vars(TRTEDTM, EXSEQ),
     mode = "last",
     by_vars = vars(STUDYID, USUBJID)
-  ) %>%
-  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
+  ) 
+```
+
+## Derive Date variables from Date/Time variables (`TRTSDT`, `TRTEDT`) {#trtdategs}
+
+The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
+function.
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
+```
+
+## Derive Treatment Duration (`TRTSDT`, `TRTEDT`) {#trtdurgs}
+
+Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
+can be used to calculate the Treatment duration (`TRTDURD`).
+
+```{r eval=TRUE}
+adsl <- adsl %>%
   derive_var_trtdurd()
 ```
+
+Let's take a look at all our newly derived variables.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -77,7 +117,7 @@ dataset_vignette(
 )
 ```
 
-**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed.  
+**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed. You can use the **Choose Columns to Display** button to add more variables into the Table.  
 
 # Derivations
 

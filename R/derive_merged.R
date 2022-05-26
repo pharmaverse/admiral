@@ -102,9 +102,9 @@
 #'
 #'   *Default*:
 #'
-#'   ```
+#'   ```{r echo=TRUE, eval=FALSE}
 #'   paste("Dataset `dataset_add` contains duplicate records with respect to",
-#'         enumerate(vars2chr(by_vars))
+#'         enumerate(vars2chr(by_vars)))
 #'   ```
 #'
 #' @return The output dataset contains all observations and variables of the
