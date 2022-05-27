@@ -1,6 +1,6 @@
 # Introduction 
 
-This outlines how to propose a change to admiral . For more detailed info about contributing to this, and other pharmaverse packages, please see the [development contributing guide](https://pharmaverse.github.io/admiral/articles/development_process.html).
+This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of [admiral](https://pharmaverse.github.io/admiral/index.html)
 
 The goal is to enable users of `{admiral}` to contribute and test the contribution model for `{admiral}`. Adjustments might be made over time.
  
@@ -13,8 +13,7 @@ Our contribution model is still in a testing phase so we advise you to contact u
 
  * All [created issues](https://github.com/pharmaverse/admiral/issues) will be reviewed within the next backlog meeting and the creator will receive an initial feedback via a comment. Someone from the core development team will then triage new issues by assigning the appropriate labels (such as “user request” so we can easily identify new requests).
  
- * Issues are meant to be taken on by users from the Pharma programming
- community and not exclusively by the `{admiral}` team from GSK and Roche.
+ * Issues are meant to be taken on by users from the Pharma programming community and not exclusively by the `{admiral}` team from GSK and Roche.
 
 # Contribution Model
 
