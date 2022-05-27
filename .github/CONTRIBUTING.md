@@ -1,6 +1,6 @@
 # Introduction 
 
-This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of [admiral](https://pharmaverse.github.io/admiral/index.html)
+This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of [admiral website](https://pharmaverse.github.io/admiral/index.html)
 
 The goal is to enable users of `{admiral}` to contribute and test the contribution model for `{admiral}`. Adjustments might be made over time.
  
