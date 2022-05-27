@@ -150,8 +150,8 @@ jobs:
       uses: emibcn/badge-action@v1
       id: badge
       with:
-        label: 'Coverage'
-        status: ${{ needs.coverage.outputs.coverage-percent }}
+        label: 'Test Coverage'
+        status: "${{ needs.coverage.outputs.coverage-percent }}%"
         color: ${{
           needs.coverage.outputs.coverage-percent > 90 && 'green'              ||
           needs.coverage.outputs.coverage-percent > 80 && 'yellow,green'       ||
