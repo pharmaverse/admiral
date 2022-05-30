@@ -144,7 +144,7 @@ observation in the input dataset are ignored.
 }
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")

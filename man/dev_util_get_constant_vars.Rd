@@ -27,7 +27,7 @@ Variable vector.
 Get Constant Variables
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 data(admiral_vs)
 
 admiral:::get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))

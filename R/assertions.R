@@ -21,7 +21,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -301,7 +301,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -380,7 +380,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -808,7 +808,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' assert_has_variables(admiral_dm, "STUDYID")

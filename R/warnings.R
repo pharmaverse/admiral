@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
@@ -206,7 +206,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_adsl)
 #' data(admiral_vs)
 #'
