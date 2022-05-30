@@ -151,7 +151,7 @@ jobs:
       id: badge
       with:
         label: 'Test Coverage'
-        status: "${{ needs.coverage.outputs.coverage-percent }}%"
+        status: "${{ needs.coverage.outputs.coverage-percent }} %"
         color: ${{
           needs.coverage.outputs.coverage-percent > 90 && 'green'              ||
           needs.coverage.outputs.coverage-percent > 80 && 'yellow,green'       ||
