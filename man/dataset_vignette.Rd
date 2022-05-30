@@ -34,7 +34,7 @@ Output a dataset in a vignette with the pre-specified admiral format.
 library(admiral)
 library(DT)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 
 dataset_vignette(admiral_dm)

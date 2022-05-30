@@ -27,7 +27,7 @@ equal to \code{'OTHER'}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
 

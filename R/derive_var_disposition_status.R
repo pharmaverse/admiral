@@ -17,7 +17,7 @@
 #' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ds")
 #'
@@ -101,7 +101,7 @@ format_eoxxstt_default <- function(status) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ds")
 #'

@@ -23,7 +23,7 @@ Check if \code{arg} is a suitable filtering condition to be used in
 functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 
 # typical usage in a function as a parameter check

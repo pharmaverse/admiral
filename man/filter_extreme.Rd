@@ -57,7 +57,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_ex")
 
 # Select first dose for each patient

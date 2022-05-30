@@ -1,4 +1,4 @@
-library(admiraltest)
+library(admiral.test)
 
 test_that("Test 1 : `assert_has_variables` an error is thrown if a required
            variable is missing", {

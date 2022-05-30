@@ -28,7 +28,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-remotes::install_github("pharmaverse/admiraltest", ref = "devel") # This is a required dependency of {admiral}
+remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a required dependency of {admiral}
 remotes::install_github("pharmaverse/admiral", ref = "devel")
 ```
 
