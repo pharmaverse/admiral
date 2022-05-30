@@ -102,9 +102,9 @@
 #'
 #'   *Default*:
 #'
-#'   ```
+#'   ```{r echo=TRUE, eval=FALSE}
 #'   paste("Dataset `dataset_add` contains duplicate records with respect to",
-#'         enumerate(vars2chr(by_vars))
+#'         enumerate(vars2chr(by_vars)))
 #'   ```
 #'
 #' @return The output dataset contains all observations and variables of the
@@ -133,7 +133,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
 #' data("admiral_dm")
@@ -288,7 +288,7 @@ derive_vars_merged <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ex")
@@ -411,7 +411,7 @@ derive_vars_merged_dt <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ex")
@@ -541,7 +541,7 @@ derive_vars_merged_dtm <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_vs")
@@ -690,7 +690,7 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @examples
 #'
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -804,7 +804,7 @@ derive_var_merged_exist_flag <- function(dataset,
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ds")

@@ -73,7 +73,7 @@ parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored

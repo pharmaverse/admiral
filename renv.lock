@@ -65,13 +65,13 @@
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
     },
-    "admiraltest": {
-      "Package": "admiraltest",
+    "admiral.test": {
+      "Package": "admiral.test",
       "Version": "0.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "admiraltest",
+      "RemoteRepo": "admiral.test",
       "RemoteUsername": "pharmaverse",
       "RemoteRef": "devel",
       "RemoteSha": "e0e50a93c67da023e6efa30cee12b38807943344",

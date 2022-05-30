@@ -60,7 +60,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_vs")
 
 admiral_vs \%>\%

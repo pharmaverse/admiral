@@ -18,7 +18,7 @@ No return value, called for side effects
 Warn if a variable already exists inside a dataset
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 
 ## No warning as `AAGE` doesn't exist in `dm`

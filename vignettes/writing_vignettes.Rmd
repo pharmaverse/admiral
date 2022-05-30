@@ -127,7 +127,7 @@ function so that it is displayed consistently across the vignettes.E.g.
 ```{r, include=FALSE}
 library(lubridate)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 library(DT)
 library(admiral)
 
