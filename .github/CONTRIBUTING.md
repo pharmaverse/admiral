@@ -29,7 +29,7 @@ This outlines how to propose a change to the admiral package. For more detailed 
  * The `{admiral}` core development team will contact the issue creator as soon as possible to discuss further details.
 
 
-![alt text](https://github.com/pharmaverse/admiral/blob/1140_contribute_code/vignettes/admiral_contribution_model.png)
+![Contribution Model](https://github.com/pharmaverse/admiral/blob/main/vignettes/admiral_contribution_model.png)
 
  
 
