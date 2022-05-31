@@ -1,4 +1,4 @@
-# Introduction 
+# Contribution to {admiral} 
 
 This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of [admiral website](https://pharmaverse.github.io/admiral/index.html)
 
@@ -9,7 +9,7 @@ Our contribution model is still in a testing phase so we advise you to contact u
 # Basics
  * For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. 
  
- * Familiarize yourself with our [programming strategy](programming_strategy.html), guidance for [GitHub usage](git_usage.html) and [unit testing](unit_test_guidance.html).
+ * Familiarize yourself with our [programming strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html), guidance for [GitHub Usage](https://pharmaverse.github.io/admiral/articles/git_usage.html) and [unit testing](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html)
 
  * All [created issues](https://github.com/pharmaverse/admiral/issues) will be reviewed within the next backlog meeting and the creator will receive an initial feedback via a comment. Someone from the core development team will then triage new issues by assigning the appropriate labels (such as “user request” so we can easily identify new requests).
  
@@ -22,7 +22,7 @@ Type 1 Contribution with Code:
 
  * First, the user creates an issue or comments on an existing issue to notify that they’d like to contribute code.
  
- * Follow our [development process](development_process.html) step-by-step guide.
+ * Follow our development process step-by-step guide.
  
  * We advise to contact an `{admiral}` core development team directly via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) before submitting code for complex functionality.
 
