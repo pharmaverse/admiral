@@ -2,13 +2,11 @@
 
 This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of the [admiral website](https://pharmaverse.github.io/admiral/index.html)
 
-The goal is to enable users of `{admiral}` to contribute and test the contribution model for `{admiral}`. Adjustments might be made over time.
- 
-We advise you to contact us when an issue is created via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) (If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join).  We can discuss details or align expectations if you are not familiar with the `{admiral}` philosophy and programming strategy. The team will try to review the issues within the next backlog meeting and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
-
 # Basics
  * For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. 
- 
+
+We advise you to contact us when an [issue](https://github.com/pharmaverse/admiral/issues) is created via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) (If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join).  We can discuss details or align expectations if you are not familiar with the `{admiral}` philosophy and programming strategy. The team will try to review the issues within the next backlog meeting and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
+
  * Familiarize yourself with our [programming strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html), guidance for [GitHub Usage](https://pharmaverse.github.io/admiral/articles/git_usage.html) and [unit testing](https://pharmaverse.github.io/admiral/articles/unit_test_guidance.html)
 
  * All [created issues](https://github.com/pharmaverse/admiral/issues) will be reviewed within the next backlog meeting and the creator will receive an initial feedback via a comment. Someone from the core development team will then triage new issues by assigning the appropriate labels (such as “user request” so we can easily identify new requests).
