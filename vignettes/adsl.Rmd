@@ -67,7 +67,7 @@ data("admiral_ae")
 data("admiral_lb")
 
 dm <- admiral_dm
-ds <- admiral_ds
+ds <- admiral_ds %>% ungroup()
 ex <- admiral_ex
 ae <- admiral_ae
 lb <- admiral_lb
