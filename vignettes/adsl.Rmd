@@ -100,7 +100,7 @@ adsl <- dm %>%
 
 The function `derive_vars_merged_dtm()` can be used to derive the treatment
 start and end date/times using the `ex` domain.
-
+test
 Example calls:
 
 ```{r eval=TRUE}
