@@ -1,10 +1,10 @@
 # Contribution to {admiral} 
 
-This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of [admiral website](https://pharmaverse.github.io/admiral/index.html)
+This outlines how to propose a change to admiral . For more detailed info about contributing to admiral, and other pharmaverse packages, please see the [development process guide](https://pharmaverse.github.io/admiral/articles/development_process.html) as well as other Developer Guides in the Articles section of the [admiral website](https://pharmaverse.github.io/admiral/index.html)
 
 The goal is to enable users of `{admiral}` to contribute and test the contribution model for `{admiral}`. Adjustments might be made over time.
  
-Our contribution model is still in a testing phase so we advise you to contact us when an issue is created via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) _(If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join)_.  We can discuss details or align expectations if you are not familiar with the `{admiral}` philosophy and programming strategy. The team will try to review the issues within the next backlog meeting and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
+We advise you to contact us when an issue is created via [Slack](https://app.slack.com/client/T028PB489D3/C02M8KN8269) (If you don't have access, use this [link](https://join.slack.com/t/pharmaverse/shared_invite/zt-yv5atkr4-Np2ytJ6W_QKz_4Olo7Jo9A) to join).  We can discuss details or align expectations if you are not familiar with the `{admiral}` philosophy and programming strategy. The team will try to review the issues within the next backlog meeting and give some initial feedback. Since we are not a 100% fully resourced software development team it might be that some issues will take longer to respond to depending on the amount of overall issues. 
 
 # Basics
  * For each new contribution, the user creates an issue on the issue tab on [GitHub](https://github.com/pharmaverse/admiral/issues) to put it in our backlog. 
