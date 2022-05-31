@@ -68,9 +68,9 @@
 
 #' Pharmacokinetics Parameters Analysis Dataset
 #'
-#' An example vital signs analysis dataset
+#' An example pharmacokinetics parameters analysis dataset
 #'
 #' @source
-#' Derived from the `adsl` and `pp` datasets using `{admiral}` (\url{https://github.com/Roche-GSK/admiral/blob/main/inst/templates/ad_adpp.R})
+#' Derived from the `adsl` and `pp` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpp.R})
 #'
 "admiral_adpp"
