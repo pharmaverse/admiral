@@ -100,10 +100,19 @@ If the `R CMD check` workflow fails only on one or two R versions it can be help
 To reproduce a particular R version environment open the `{admiral}` project in the corresponding R version, comment the line `source("renv/activate.R")` in the `.Rprofile` file, restart the R session and then run the following commands in the R console.
 
 ```r
+Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
+
 if (!dir.exists(".library")) {
   dir.create(".library")
 }
-.libPaths(".library")
+
+base_recommended_pkgs <- row.names(installed.packages(priority = "high"))
+for (pkg in base_recommended_pkgs) {
+  path <- file.path(.Library, pkg)
+  cmd <- sprintf("cp -r %s .library", path)
+  system(cmd)
+}
+assign(".lib.loc", ".library", envir = environment(.libPaths))
 
 r_version <- getRversion()
 if (grepl("^3.6", r_version)) {
@@ -117,9 +126,10 @@ if (grepl("^3.6", r_version)) {
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
-
 remotes::install_deps(dependencies = TRUE)
-devtools::check()
+remotes::install_github("pharamaverse/admiral.test", ref = "devel")
+
+rcmdcheck::rcmdcheck()
 ```
 
 This will ensure that the exact package versions we use in the workflow are installed into the hidden folder `.library`. That way your existing R packages are *not* overwritten.
