@@ -29,6 +29,6 @@ This outlines how to propose a change to the admiral package. For more detailed 
  * The `{admiral}` core development team will contact the issue creator as soon as possible to discuss further details.
 
 
-See [Contribution to {admiral](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for additional details.
+See [Contribution to {admiral}](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for additional details.
  
 
