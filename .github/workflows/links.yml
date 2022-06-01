@@ -33,8 +33,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check URLs in docs 🔬
-        uses: lycheeverse/lychee-action@v1.4.1
+        uses: lycheeverse/lychee-action@v1.5.0
         with:
+          fail: true
+          jobSummary: true
+          format: markdown
+          output: links-results.md
           args: >-
             --exclude-private
             --exclude "https://github.com.*.git|lycheeverse.*"
@@ -48,3 +52,31 @@ jobs:
             **/*.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check URLs in docs 🔬
+        uses: lycheeverse/lychee-action@v1.5.0
+        with:
+          fail: true
+          jobSummary: true
+          format: markdown
+          output: links-results.md
+          args: >-
+            --exclude-private
+            --exclude "https://github.com.*.git|lycheeverse.*"
+            --verbose
+            --no-progress
+            ${{ inputs.additional_args }}
+            **/*.md
+            **/*.html
+            **/*.Rmd
+            **/*.yaml
+            **/*.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post results on PR
+        if: 'failure() && github.event_name == "pull_request"'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: link-results
+          path: links-results.md
