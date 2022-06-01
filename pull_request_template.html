@@ -71,10 +71,11 @@
     </div>
 
 
-<p>Close #<insert_issue_number></insert_issue_number></p>
 <p>Thank you for your Pull Request! We have developed this task checklist from the <a href="https://pharmaverse.github.io/admiral/articles/development_process.html">Development Process Guide</a> to help with the final steps of the process. Completing the below tasks helps to ensure our reviewers can maximize their time on your code as well as making sure the admiral codebase remains robust and consistent.</p>
 <p>Please check off each taskbox as an acknowledgment that you completed the task or check off that it is not relevant to your Pull Request. This checklist is part of the Github Action workflows and the Pull Request will not be merged into the <code>devel</code> branch until you have checked off each task.</p>
 <ul><li>
+<input type="checkbox" disabled>Place Closes #<insert_issue_number> into the beginning of your Pull Request Title (Use Edit button in top-right if you need to update)</insert_issue_number></li>
+<li>
 <input type="checkbox" disabled>Code is formatted according to the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>
 </li>
 <li>
@@ -99,7 +100,7 @@
 <input type="checkbox" disabled>Run <code>R CMD check</code> locally and address all errors and warnings - <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code>
 </li>
 <li>
-<input type="checkbox" disabled>Link the issue so that it closes after successful merging.</li>
+<input type="checkbox" disabled>Link the issue in the Development Section on the right hand side.</li>
 <li>
 <input type="checkbox" disabled>Address all merge conflicts and resolve appropriately</li>
 <li>

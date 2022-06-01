@@ -215,7 +215,8 @@ with respect to the by variables and the order.</p>
 <dd><p>Message of unique check</p>
 <p>If the uniqueness check fails, the specified message is displayed.</p>
 <p><em>Default</em>:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
+<p></p><div class="sourceCode r"><pre><code><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Dataset `dataset_add` contains duplicate records with respect to"</span>,
+      <span class="fu"><a href="../reference/dev_util_enumerate.html">enumerate</a></span><span class="op">(</span><span class="fu"><a href="../reference/vars2chr.html">vars2chr</a></span><span class="op">(</span><span class="va">by_vars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -242,7 +243,7 @@ the additional dataset.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiraltest</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_dm"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"admiral_ex"</span><span class="op">)</span></span>

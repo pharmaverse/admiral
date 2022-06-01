@@ -110,6 +110,8 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This document is intended to be guidance for creators and reviewers of pull requests (PRs) in the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> package. PR authors will benefit from shorter review times by closely following the guidance provided here.</p>
+<p>A pull request into the <code>devel</code> branch signifies that an issue that has been “addressed”. This issue might be a bug, a feature request or a documentation update. For transparency, we keep the issue open until the <code>devel</code> branch is merged into the <code>main</code> branch, which usually coincides with a release of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> to CRAN. This ensures that repeat issues are not raised and if they are raised are quickly marked as duplicates and closed.</p>
+<p>Closely following the below guidance will ensure that our all our “addressed” issues auto-close once we merge <code>devel</code> into <code>main</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="review-criteria">Review Criteria<a class="anchor" aria-label="anchor" href="#review-criteria"></a>
@@ -139,7 +141,7 @@
 <div class="section level3">
 <h3 id="open-a-pull-request">Open a Pull Request<a class="anchor" aria-label="anchor" href="#open-a-pull-request"></a>
 </h3>
-<p>When a contributor opens a PR a lengthy standard text will be inserted into the comment section. Please do not alter any of the automated text apart from the very first line <code>Close #&lt;insert_issue_number&gt;</code>. Here <code>&lt;insert_issue_number&gt;</code> should be replaced by the number of the issue your PR is fixing, e.g. if you PR is related to issue number 920 the line should read <code>Close #920</code>. Besides that you are free to add in additional textual information, screenshots, etc. at the top of the automated text if needed to clarify or contribute to the discussion around your PR.</p>
+<p>When a contributor opens a PR a lengthy standard text will be inserted into the comment section. Please do not alter any of the automated text. You will need to manually add <code>Closes #&lt;insert_issue_number&gt;</code> into the title of the Pull Request. You can use the Edit button in the top right if you forget this step at the start of your Pull Request. Besides that you are free to add in additional textual information, screenshots, etc. at the bottom of the automated text if needed to clarify or contribute to the discussion around your PR.</p>
 <p><img src="pr_review_checklist.png" width="120%"></p>
 </div>
 <div class="section level3">
@@ -166,10 +168,19 @@
 <p>If the <code>R CMD check</code> workflow fails only on one or two R versions it can be helpful to reproduce the testing environment locally.</p>
 <p>To reproduce a particular R version environment open the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> project in the corresponding R version, comment the line <code>source("renv/activate.R")</code> in the <code>.Rprofile</code> file, restart the R session and then run the following commands in the R console.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="st">".library"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>R_REMOTES_NO_ERRORS_FROM_WARNINGS <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span>
+
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="st">".library"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">".library"</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths</a></span><span class="op">(</span><span class="st">".library"</span><span class="op">)</span>
+
+<span class="va">base_recommended_pkgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span>priority <span class="op">=</span> <span class="st">"high"</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">pkg</span> <span class="kw">in</span> <span class="va">base_recommended_pkgs</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">.Library</span>, <span class="va">pkg</span><span class="op">)</span>
+  <span class="va">cmd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"cp -r %s .library"</span>, <span class="va">path</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="va">cmd</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="st">".lib.loc"</span>, <span class="st">".library"</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="va">.libPaths</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">r_version</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric_version.html" class="external-link">getRversion</a></span><span class="op">(</span><span class="op">)</span>
 <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^3.6"</span>, <span class="va">r_version</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
@@ -183,9 +194,10 @@
 <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="op">}</span>
-
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html" class="external-link">install_deps</a></span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pharamaverse/admiral.test"</span>, ref <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span>
+
+<span class="fu">rcmdcheck</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rcmdcheck/man/rcmdcheck.html" class="external-link">rcmdcheck</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>This will ensure that the exact package versions we use in the workflow are installed into the hidden folder <code>.library</code>. That way your existing R packages are <em>not</em> overwritten.</p>
 </div>
 <div class="section level3">

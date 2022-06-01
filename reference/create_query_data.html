@@ -220,7 +220,7 @@ is not created.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiraltest</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">admiral.test</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pharmaverse.github.io/admiral/index.html">admiral</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query dataset for a customized query</span></span>
@@ -262,11 +262,11 @@ is not created.</p></li>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># The get_smq_terms function from admiraltest is used for this example.</span></span>
+<span class="r-in"><span class="co"># The get_smq_terms function from admiral.test is used for this example.</span></span>
 <span class="r-in"><span class="co"># In a real application a company-specific function must be used.</span></span>
 <span class="r-in"><span class="fu">create_query_data</span><span class="op">(</span></span>
 <span class="r-in">  queries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pregsmq</span>, <span class="va">bilismq</span><span class="op">)</span>,</span>
-<span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiraltest</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiraltest/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
+<span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
 <span class="r-in">  meddra_version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 43 x 6</span></span>
@@ -293,11 +293,11 @@ is not created.</p></li>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># The get_sdg_terms function from admiraltest is used for this example.</span></span>
+<span class="r-in"><span class="co"># The get_sdg_terms function from admiral.test is used for this example.</span></span>
 <span class="r-in"><span class="co"># In a real application a company-specific function must be used.</span></span>
 <span class="r-in"><span class="fu">create_query_data</span><span class="op">(</span></span>
 <span class="r-in">  queries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sdg</span><span class="op">)</span>,</span>
-<span class="r-in">  get_sdg_fun <span class="op">=</span> <span class="fu">admiraltest</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiraltest/man/get_sdg_terms.html" class="external-link">get_sdg_terms</a></span>,</span>
+<span class="r-in">  get_sdg_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_sdg_terms.html" class="external-link">get_sdg_terms</a></span>,</span>
 <span class="r-in">  whodd_version <span class="op">=</span> <span class="st">"2019-09"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 16 x 5</span></span>
@@ -321,7 +321,7 @@ is not created.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">16</span><span> DERSALAZINE SODIUM      CMDECOD    5-aminosalicylates fo…      220 SDG01     </span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># creating a query dataset for a customized query including SMQs</span></span>
-<span class="r-in"><span class="co"># The get_smq_terms function from admiraltest is used for this example.</span></span>
+<span class="r-in"><span class="co"># The get_smq_terms function from admiral.test is used for this example.</span></span>
 <span class="r-in"><span class="co"># In a real application a company-specific function must be used.</span></span>
 <span class="r-in"><span class="fu">create_query_data</span><span class="op">(</span></span>
 <span class="r-in">  queries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -337,7 +337,7 @@ is not created.</p></li>
 <span class="r-in">      <span class="op">)</span></span>
 <span class="r-in">    <span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiraltest</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiraltest/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
+<span class="r-in">  get_smq_fun <span class="op">=</span> <span class="fu">admiral.test</span><span class="fu">:::</span><span class="va"><a href="https://rdrr.io/pkg/admiral.test/man/get_smq_terms.html" class="external-link">get_smq_terms</a></span>,</span>
 <span class="r-in">  meddra_version <span class="op">=</span> <span class="st">"20.1"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 23 x 5</span></span>
