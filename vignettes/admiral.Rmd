@@ -123,7 +123,7 @@ dataset_vignette(
 # Derivations
 
 The most important functions in `{admiral}` are the
-[derivations](../reference/index.html#section-derivations). These functions
+[derivations](../reference/index.html#section-derivationsxyz). These functions
 start with `derive_`. The first parameter of these functions expects the
 input dataset. This allows us to string together derivations using the `%>%`
 operator.
