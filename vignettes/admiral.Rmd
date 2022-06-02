@@ -258,7 +258,7 @@ for the most common steps are provided by the following vignettes:
 
 - [Creating ADSL](adsl.html)
 - [Creating an OCCDS ADaM](occds.html)
-- [Creating a BDS Finding ADaM](bds_finding.htmlxyz)
+- [Creating a BDS Finding ADaM](bds_finding.html)
 
 `{admiral}` also provides template R scripts as a starting point. They can be
 created by calling `use_ad_template()`, e.g.,
@@ -283,6 +283,6 @@ channel](https://app.slack.com/client/T028PB489D3/C02M8KN8269).
 
 # See also
 
-- [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templatesxyz)
+- [Template scripts](https://github.com/pharmaverse/admiral/tree/main/inst/templates)
 
 - [Programming Strategy](programming_strategy.html)
