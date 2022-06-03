@@ -18,6 +18,7 @@ data("admiral_adsl")
 
 adsl <- admiral_adsl
 mh <- admiral_mh
+
 mh <- convert_blanks_to_na(mh)
 
 # ---- Derivations ----
@@ -36,11 +37,10 @@ admh <- mh %>%
   derive_vars_dtm(
     dtc = MHSTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
     time_imputation = "first"
   ) %>%
 
-  # derive analysis end time and flag [MHENDTC is missing from MH]
+  # derive analysis end time and flag
   # derive_vars_dtm(
   #   dtc = MHENDTC,
   #   new_vars_prefix = "AEN",
@@ -50,13 +50,19 @@ admh <- mh %>%
   # ) %>%
 
   # derive analysis end/start date
+  # derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
   derive_vars_dtm_to_dt(vars(ASTDTM)) %>%
+
   # derive analysis start relative day and analysis end relative day
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT)
-  ) # %>%
+  ) #%>%
 
-  # derive analysis flag [MHOCCUR is missing from MH]
-  # mutate(ifelse(MHOCCUR == "N", "", "Y"))) %>%
+  # derive_vars_dy(
+  #   reference_date = TRTSDT,
+  #   source_vars = vars(AENDT)
+  # ) %>%
 
+  # derive analysis flag
+  # mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_))
