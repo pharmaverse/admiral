@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - devel
 
 name: pkgdown
 
@@ -51,7 +54,28 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
-      - name: Deploy package
+      - name: Build docs for preview 🔍
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/main'
+        run: |
+          Rscript -e 'pkgdown::build_site(devel = TRUE)'
+
+      - name: Create documentation artifact 📂
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/main'
+        run: |
+          pushd docs/
+          zip -r9 $OLDPWD/pkgdown.zip *
+          popd
+        shell: bash
+
+      - name: Upload docs for review ⬆
+        if: github.event_name == 'pull_request' && github.ref != 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: pkgdown.zip
+          path: pkgdown.zip
+
+      - name: Deploy documentation to gh-pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
