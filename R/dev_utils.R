@@ -8,8 +8,6 @@
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_enumerate
-#'
 #' @export
 #'
 #' @examples
@@ -40,8 +38,6 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_backquote
-#'
 #' @export
 #'
 #' @examples
@@ -57,8 +53,6 @@ backquote <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_squote
 #'
 #' @export
 #'
@@ -107,8 +101,6 @@ dquote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_notin
-#'
 #' @export
 #'
 #' @examples
@@ -128,8 +120,6 @@ dquote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_convert_dtm_to_dtc
-#'
 #' @export
 #'
 #' @examples
@@ -147,8 +137,6 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_arg_name
 #'
 #' @export
 #'
@@ -188,8 +176,6 @@ arg_name <- function(expr) { # nolint
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_extract_vars
-#'
 #' @export
 #'
 #' @examples
@@ -225,8 +211,6 @@ extract_vars <- function(x, side = "lhs") {
 #'
 #' @keywords dev_utility
 #'
-#' @rdname dev_util_quo_c
-#'
 #' @export
 #'
 #' @examples
@@ -250,8 +234,6 @@ quo_c <- function(...) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_what_is_it
 #'
 #' @export
 #'
@@ -300,8 +282,6 @@ what_is_it <- function(x) {
 #'   like `starts_with("EX")`
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_get_constant_vars
 #'
 #' @return Variable vector.
 #'
@@ -360,8 +340,6 @@ is_named <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_replace_values_by_names
 #'
 #' @return A list of quosures
 #'
@@ -462,8 +440,6 @@ is_auto <- function(arg) {
 #' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_get_source_vars
 #'
 #' @return A list of quosures
 #'
