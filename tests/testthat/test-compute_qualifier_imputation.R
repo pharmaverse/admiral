@@ -1,20 +1,20 @@
-test_that("Method 1, > Qualifier", {
+test_that("compute_qualifier_imputation Test 1:  Method 1 , > Qualifier Test", {
   expect_equal(compute_qualifier_imputation(">40.1", imputation_type = 1), 40.1)
 })
 
-test_that("Method 1, >= Qualifier", {
+test_that("compute_qualifier_imputation Test 2: Method 1, >= Qualifier", {
   expect_equal(compute_qualifier_imputation(">=40.1", imputation_type = 1), 40.1)
 })
 
-test_that("Method 1, > Qualifier", {
+test_that("compute_qualifier_imputation Test 3: Method 1, > Qualifier", {
   expect_equal(compute_qualifier_imputation(">40", imputation_type = 1), 40)
 })
 
-test_that("Method 1, >= Qualifier", {
+test_that("compute_qualifier_imputation Test 4: Method 1, >= Qualifier", {
   expect_equal(compute_qualifier_imputation(">=40", imputation_type = 1), 40)
 })
 
-test_that("Method 1, < Qualifier", {
+test_that("compute_qualifier_imputation Test 5: Method 1, < Qualifier", {
   expect_equal(compute_qualifier_imputation("<40.1", imputation_type = 1), 40.1)
 })
 
