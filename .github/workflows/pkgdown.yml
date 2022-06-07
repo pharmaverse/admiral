@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
     branches:
-      - devel
+      - pre-release
 
 name: pkgdown
 
