@@ -23,10 +23,10 @@ second error has been thrown, the dataset of the first error can no longer be
 accessed (unless it has been saved in a variable).
 }
 \examples{
-data(adsl)
+data(admiral_adsl)
 
 try(
-  assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+  assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
 )
 
 get_one_to_many_dataset()

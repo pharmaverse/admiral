@@ -82,8 +82,11 @@ library(dplyr, warn.conflicts = FALSE)
 query(
   prefix = "SMQ02",
   id = auto,
-  definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                          scope = "NARROW"))
+  definition = smq_select(
+    name = "Pregnancy and neonatal topics (SMQ)",
+    scope = "NARROW"
+  )
+)
 
 # create a query for an SDG
 query(
@@ -98,22 +101,32 @@ query(
 cqterms <- tribble(
   ~TERM_NAME, ~TERM_ID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
-  "APPLICATION SITE PRURITUS", 10003053L) \%>\%
+  "APPLICATION SITE PRURITUS", 10003053L
+) \%>\%
   mutate(TERM_LEVEL = "AEDECOD")
 
-query(prefix = "CQ01",
-      name = "Application Site Issues",
-      definition = cqterms)
+query(
+  prefix = "CQ01",
+  name = "Application Site Issues",
+  definition = cqterms
+)
 
 # creating a customized query based on SMQs and additional terms
-query(prefix = "CQ03",
-      name = "Special issues of interest",
-      definition = list(
-        cqterms,
-        smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                          scope = "NARROW"),
-        smq_select(id = 8050L,
-                   scope = "BROAD")))
+query(
+  prefix = "CQ03",
+  name = "Special issues of interest",
+  definition = list(
+    cqterms,
+    smq_select(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW"
+    ),
+    smq_select(
+      id = 8050L,
+      scope = "BROAD"
+    )
+  )
+)
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}

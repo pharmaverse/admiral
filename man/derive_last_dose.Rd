@@ -92,11 +92,11 @@ Use \code{check_dates_only} to control whether only dates or whole date-times ne
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
-data(ae)
+library(admiral.test)
+data(admiral_ae)
 data(ex_single)
 
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_last_dose(
     head(ex_single, 100),
@@ -113,7 +113,7 @@ ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM)
 
 # or with traceability variables
-ae \%>\%
+admiral_ae \%>\%
   head(100) \%>\%
   derive_last_dose(
     head(ex_single, 100),
@@ -129,7 +129,6 @@ ae \%>\%
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
-
 }
 \author{
 Ondrej Slama

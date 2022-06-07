@@ -92,31 +92,31 @@ observation exists and for all observations the condition evaluates to
 }
 \examples{
 
-library(admiraltest)
+library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
-data("dm")
-data("ae")
+data("admiral_dm")
+data("admiral_ae")
 derive_var_merged_exist_flag(
-  dm,
-  dataset_add = ae,
+  admiral_dm,
+  dataset_add = admiral_ae,
   by_vars = vars(STUDYID, USUBJID),
   new_var = AERELFL,
   condition = AEREL == "PROBABLE"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
+  select(STUDYID, USUBJID, AGE, AGEU, AERELFL)
 
-data("vs")
+data("admiral_vs")
 derive_var_merged_exist_flag(
-  dm,
-  dataset_add = vs,
+  admiral_dm,
+  dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
-  filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y" ,
+  filter_add = VSTESTCD == "WEIGHT" & VSBLFL == "Y",
   new_var = WTBLHIFL,
-  condition = VSSTRESN > 90 ,
+  condition = VSSTRESN > 90,
   false_value = "N",
   missing_value = "M"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
+  select(STUDYID, USUBJID, AGE, AGEU, WTBLHIFL)
 }
 \author{
 Stefan Bundfuss

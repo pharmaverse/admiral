@@ -1,34 +1,30 @@
 input_worst_flag <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
-
-  "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-23"), 15.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",   as.Date("2021-04-27"), 10.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
+  ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
+  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+  "TEST01", "PAT01", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT01", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT02", "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0,
+  "TEST01", "PAT02", "PARAM01", "WEEK 1", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT02", "PARAM01", "WEEK 2", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,
+  "TEST01", "PAT01", "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT01", "PARAM02", "WEEK 2", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-23"), 15.0,
+  "TEST01", "PAT02", "PARAM02", "WEEK 1", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT02", "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0,
+  "TEST01", "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"), 15.0,
+  "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-25"), 14.0,
+  "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-23"), 15.0,
+  "TEST01", "PAT02", "PARAM03", "WEEK 1", as.Date("2021-04-27"), 10.0,
+  "TEST01", "PAT02", "PARAM03", "BASELINE", as.Date("2021-04-30"), 12.0
 )
 
 test_that("first observation for each group is flagged", {
@@ -86,11 +82,12 @@ test_that("last observation for each group is flagged", {
 })
 
 test_that("Derive worst flag works correctly", {
-
   expected_output <- input_worst_flag %>%
-    mutate(WORSTFL = c("Y", NA, NA, "Y", "Y", "Y", NA, "Y", "Y", "Y", NA,
-                       "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", "Y", "Y",
-                       "Y", NA, NA))
+    mutate(WORSTFL = c(
+      "Y", NA, NA, "Y", "Y", "Y", NA, "Y", "Y", "Y", NA,
+      "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", "Y", "Y",
+      "Y", NA, NA
+    ))
 
   actual_output <- derive_var_worst_flag(
     input_worst_flag,
@@ -104,16 +101,18 @@ test_that("Derive worst flag works correctly", {
   )
 
   expect_dfs_equal(expected_output,
-                   actual_output,
-                   keys = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT", "ADT"))
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT", "ADT")
+  )
 })
 
 test_that("Derive worst flag works correctly with no worst_high option", {
-
   expected_output <- input_worst_flag %>%
-    mutate(WORSTFL = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
-                       "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", NA, NA,
-                       NA, NA, NA))
+    mutate(WORSTFL = c(
+      NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+      "Y", NA, "Y", "Y", "Y", NA, NA, "Y", "Y", NA, NA,
+      NA, NA, NA
+    ))
 
   actual_output <- derive_var_worst_flag(
     input_worst_flag,
@@ -127,12 +126,12 @@ test_that("Derive worst flag works correctly with no worst_high option", {
   )
 
   expect_dfs_equal(expected_output,
-                   actual_output,
-                   keys = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT", "ADT"))
+    actual_output,
+    keys = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT", "ADT")
+  )
 })
 
 test_that("Derive worst flag catches invalid parameters", {
-
   expect_error(
     derive_var_worst_flag(
       input_worst_flag,
@@ -183,5 +182,4 @@ test_that("Derive worst flag catches invalid parameters", {
       "flags: B, C$"
     )
   )
-
 })

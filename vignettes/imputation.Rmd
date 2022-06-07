@@ -71,6 +71,48 @@ impute_dtc(
 )
 ```
 
+For dates, there is the additional option to use keyword `"mid"` to impute
+missing day to `15` or missing day and month to `06-30`, but note the
+different behaviour below depending on `preserve` parameter for case when month
+only is missing:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = FALSE
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = TRUE
+)
+```
+
+If you wanted to achieve a similar result by replacing any missing part of the
+date with a fixed value `06-15`, this is also possible, but note the difference
+in days for cases when month is missing:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "06-15",
+  time_imputation = "00:00:00"
+)
+```
+
 ## Minimum/Maximum Dates
 
 In some scenarios the imputed date should not be before or after certain dates.
@@ -103,6 +145,12 @@ that was imputed, e.g., if minutes and seconds were imputed, the imputation flag
 is set to `"M"`. The `{admiral}` functions which derive imputed variables are also
 adding the corresponding imputation flag variables.
 
+Note: The `{admiral}` datetime imputation function provides the `ignore_seconds_flag`
+parameter which can be set to `TRUE` in cases where seconds were never collected.
+This is due to the following from ADaM IG: For a given SDTM DTC variable, if only
+hours and minutes are ever collected, and seconds are imputed in `*DTM` as `00`,
+then it is not necessary to set `*TMF` to `"S"`.
+
 # Imputation Functions
 
 `{admiral}` provides the following functions for imputation:
@@ -116,8 +164,8 @@ and imputation rules.
 ISO 8601 date and imputation rules.
 - `convert_dtc_to_dt()`: Returns a date if the input ISO 8601 date is complete.
 Otherwise, `NA` is returned.
-- `convert_dtc_to_dtm()`: Returns a datetime if the input ISO 8601 date and time
-is complete. Otherwise, `NA` is returned.
+- `convert_dtc_to_dtm()`: Returns a datetime if the input ISO 8601 date is complete 
+(with missing time replaced by `"00:00:00"` as default). Otherwise, NA is returned.
 - `compute_dtf()`: Returns the date imputation flag.
 - `compute_tmf()`: Returns the time imputation flag.
 
@@ -127,25 +175,27 @@ is complete. Otherwise, `NA` is returned.
 
 The `derive_vars_dtm()` function derives an imputed datetime variable and the
 corresponding date and time imputation flags. The imputed date variable can be
-derived by a simple `mutate()` call. It is not necessary and advisable to
-perform the imputation for the date variable if it was already done for the
-datetime variable. CDISC considers the datetime and the date variable as two
-representation of the same date. Thus the imputation must be the same and the
+derived by using the `derive_vars_dtm_to_dt()` function. It is not necessary and
+advisable to perform the imputation for the date variable if it was already done
+for the datetime variable. CDISC considers the datetime and the date variable as
+two representations of the same date. Thus the imputation must be the same and the
 imputation flags are valid for both the datetime and the date variable.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
     date_imputation = "first",
     time_imputation = "first"
   ) %>%
-  mutate(ASTDT = date(ASTDTM))
+  derive_vars_dtm_to_dt(vars(ASTDTM))
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)
@@ -157,14 +207,18 @@ If an imputed date variable without a corresponding datetime variable is
 required, it can be derived by the `derive_vars_dt()` function.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
-  derive_vars_dt(dtc = AESTDTC,
-                 new_vars_prefix = "AST",
-                 date_imputation = "first")
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
+  derive_vars_dt(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    date_imputation = "first"
+  )
 ```
 ```{r, echo=FALSE}
 dataset_vignette(ae)
@@ -177,11 +231,13 @@ should be set to `NULL`. This results in `NA` if the date is partial. As
 no date is imputed the date imputation flag is not created.
 
 ```{r}
-ae <- tribble(~ AESTDTC,
-              "2019-08-09T12:34:56",
-              "2019-04-12",
-              "2010-09",
-              NA_character_) %>%
+ae <- tribble(
+  ~AESTDTC,
+  "2019-08-09T12:34:56",
+  "2019-04-12",
+  "2010-09",
+  NA_character_
+) %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
@@ -270,10 +326,10 @@ mh <- tribble(
   "2019-04-01", ymd("2019-04-15"),
   "2019-05",    ymd("2019-04-15"),
   "2019-06-21", ymd("2019-04-15")
-) %>% 
-filter(
-  convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
-)
+) %>%
+  filter(
+    convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
+  )
 ```
 ```{r, echo=FALSE}
 dataset_vignette(mh)
@@ -294,16 +350,19 @@ vs <- tribble(
 ) %>%
   slice_derivation(
     derivation = derive_vars_dtm,
-    args = params(dtc = VSDTC,
-                  new_vars_prefix = "A",
-                  date_imputation = NULL),
+    args = params(
+      dtc = VSDTC,
+      new_vars_prefix = "A",
+      date_imputation = NULL
+    ),
     derivation_slice(
       filter = VSTPT == "PRE-DOSE",
       args = params(time_imputation = "first")
     ),
     derivation_slice(
       filter = TRUE,
-      args = params(time_imputation = "last"))
+      args = params(time_imputation = "last")
+    )
   )
 ```
 ```{r, echo=FALSE}

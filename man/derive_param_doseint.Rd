@@ -26,6 +26,9 @@ parameter) and to the parameters specified by \code{tadm_code} and \code{padm_co
 
 \item{by_vars}{Grouping variables
 
+Only variables specified in \code{by_vars} will be populated
+in the newly created records.
+
 Permitted Values: list of variables}
 
 \item{set_values_to}{Variables to be set
@@ -88,7 +91,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter rows added
+The input dataset with the new parameter rows added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for the dose intensity for each by group
@@ -103,31 +107,33 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 
 adex <- tibble::tribble(
-~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
-"P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
-"P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
-"P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
-"P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
-"P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
-"P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
-"P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
-"P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
+  ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT, ~AENDT, ~AVAL,
+  "P001", "TNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-01-30"), 59,
+  "P001", "TSNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-02-01"), 96,
+  "P001", "TNDOSE", "V2", "Y", ymd("2020-02-01"), ymd("2020-03-15"), 88,
+  "P001", "TSNDOSE", "V2", "Y", ymd("2020-02-05"), ymd("2020-03-01"), 88,
+  "P002", "TNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-01-30"), 0,
+  "P002", "TSNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-02-01"), 0,
+  "P002", "TNDOSE", "V2", "Y", ymd("2021-02-01"), ymd("2021-03-15"), 52,
+  "P002", "TSNDOSE", "V2", "Y", ymd("2021-02-05"), ymd("2021-03-01"), 0
 )
 
 derive_param_doseint(
   adex,
-  by_vars=vars(USUBJID, VISIT),
+  by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAMCD = "TNDOSINT"),
   tadm_code = "TNDOSE",
-  tpadm_code = "TSNDOSE")
+  tpadm_code = "TSNDOSE"
+)
 
 derive_param_doseint(
   adex,
-  by_vars=vars(USUBJID, VISIT),
+  by_vars = vars(USUBJID, VISIT),
   set_values_to = vars(PARAMCD = "TDOSINT2"),
   tadm_code = "TNDOSE",
   tpadm_code = "TSNDOSE",
-  zero_doses = "100")
+  zero_doses = "100"
+)
 }
 \author{
 Alice Ehmann

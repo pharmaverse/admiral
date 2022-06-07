@@ -16,7 +16,7 @@ parameter are expected.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{source_vars}{A list of datetime or date variables created using
@@ -47,28 +47,35 @@ library(dplyr)
 
 datain <- tibble::tribble(
   ~TRTSDTM, ~ASTDTM, ~AENDT,
- "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 ) \%>\%
- mutate(TRTSDTM = as_datetime(TRTSDTM),
-        ASTDTM = as_datetime(ASTDTM),
-        AENDT = ymd(AENDT))
+  mutate(
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDT = ymd(AENDT)
+  )
 
 derive_vars_dy(
   datain,
   reference_date = TRTSDTM,
-  source_vars = vars(TRTSDTM, ASTDTM, AENDT))
+  source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+)
 
 # specifying name of new variables
 datain <- tibble::tribble(
   ~TRTSDT, ~DTHDT,
- "2014-01-17", "2014-02-01"
+  "2014-01-17", "2014-02-01"
 ) \%>\%
- mutate(TRTSDT = ymd(TRTSDT),
-        DTHDT = ymd(DTHDT))
+  mutate(
+    TRTSDT = ymd(TRTSDT),
+    DTHDT = ymd(DTHDT)
+  )
 
-derive_vars_dy(datain,
-               reference_date = TRTSDT,
-               source_vars = vars(TRTSDT, DEATHDY = DTHDT))
+derive_vars_dy(
+  datain,
+  reference_date = TRTSDT,
+  source_vars = vars(TRTSDT, DEATHDY = DTHDT)
+)
 }
 \author{
 Teckla Akinyi

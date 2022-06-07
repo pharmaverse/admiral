@@ -1,9 +1,0 @@
-comment: 
-  layout: "reach, diff, flags, files"
-  behavior: default
-  require_changes: true
-language: R
-sudo: false
-cache: packages
-after_success:
-- Rscript -e 'covr::codecov()'

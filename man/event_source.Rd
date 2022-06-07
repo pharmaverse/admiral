@@ -19,7 +19,7 @@ of \code{derive_param_tte()}.}
 a datetime, or a character variable containing ISO 8601 dates can be
 specified. An unquoted symbol is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{set_values_to}{A named list returned by \code{vars()} defining the variables

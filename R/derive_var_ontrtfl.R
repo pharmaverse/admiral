@@ -16,13 +16,13 @@
 #' @param start_date The start date (e.g. `AESDT`) or assessment date (e.g.
 #'   `ADT`) Required; A date or date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param end_date The end date of assessment/event (e.g. `AENDT`) A date or
 #'   date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Optional; Default is null. If the used and date value is missing on an
@@ -32,13 +32,13 @@
 #' @param ref_start_date The lower bound of the on-treatment period Required; A
 #'   date or date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param ref_end_date The upper bound of the on-treatment period A date or
 #'   date-time object column is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Optional; This can be null and everything after `ref_start_date` will be
@@ -92,6 +92,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' library(lubridate, warn.conflict = FALSE)
 #'
 #' advs <- tibble::tribble(
@@ -122,11 +123,12 @@
 #' )
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADTM,                ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
-#'   "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA,
-#'   "P02", ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
-#'   "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA
-#' )
+#'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,
+#'   "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#'   "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#'   "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#' ) %>%
+#'   mutate(TPT = c(NA, "PRE", NA))
 #' derive_var_ontrtfl(
 #'   advs,
 #'   start_date = ADTM,
@@ -136,35 +138,35 @@
 #' )
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+#'   ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,           ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
 #'   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 #' )
 #' derive_var_ontrtfl(
-#'  advs,
-#'  start_date = ASTDT,
-#'  end_date = AENDT,
-#'  ref_start_date = TRTSDT,
-#'  ref_end_date = TRTEDT,
-#'  ref_end_window = 60,
-#'  span_period = "Y"
+#'   advs,
+#'   start_date = ASTDT,
+#'   end_date = AENDT,
+#'   ref_start_date = TRTSDT,
+#'   ref_end_date = TRTEDT,
+#'   ref_end_window = 60,
+#'   span_period = "Y"
 #' )
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+#'   ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,          ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
 #'   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 #' )
 #' derive_var_ontrtfl(
-#'  advs,
-#'  new_var = ONTR01FL,
-#'  start_date = ASTDT,
-#'  end_date = AENDT,
-#'  ref_start_date = AP01SDT,
-#'  ref_end_date = AP01EDT,
-#'  span_period = "Y"
+#'   advs,
+#'   new_var = ONTR01FL,
+#'   start_date = ASTDT,
+#'   end_date = AENDT,
+#'   ref_start_date = AP01SDT,
+#'   ref_end_date = AP01EDT,
+#'   span_period = "Y"
 #' )
 derive_var_ontrtfl <- function(dataset,
                                new_var = ONTRTFL,
@@ -204,7 +206,8 @@ derive_var_ontrtfl <- function(dataset,
     dataset <- mutate(
       dataset,
       !!new_var := if_else(!!filter_pre_timepoint, NA_character_, !!new_var,
-                            missing = !!new_var)
+        missing = !!new_var
+      )
     )
   }
 
@@ -233,7 +236,7 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-    #scenario 3: end_date is parsed
+  # scenario 3: end_date is parsed
   if (!quo_is_null(end_date)) {
     dataset <- mutate(
       dataset,
@@ -246,12 +249,12 @@ derive_var_ontrtfl <- function(dataset,
     )
   }
 
-    #scenario 4: end_date and span_period are parsed
+  # scenario 4: end_date and span_period are parsed
   if (!is.null(span_period)) {
     dataset <- mutate(
       dataset,
       !!new_var := if_else(
-          !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
+        !!start_date <= (!!ref_end_date + days(!!ref_end_window)) &
           (is.na(!!end_date) | !!end_date >= !!ref_start_date),
         "Y",
         !!new_var,
@@ -261,5 +264,4 @@ derive_var_ontrtfl <- function(dataset,
   }
 
   dataset
-
 }

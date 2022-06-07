@@ -34,19 +34,19 @@
 #'
 #' @examples
 #' dataset <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~AVALC,   ~AVISIT,    ~ABLFL,
-#'   "TEST01", "PAT01",  "PARAM01", 10.12,  NA,       "Baseline", "Y",
-#'   "TEST01", "PAT01",  "PARAM01",  9.7,   NA,       "Day 7",    "N",
-#'   "TEST01", "PAT01",  "PARAM01", 15.01,  NA,       "Day 14",   "N",
-#'   "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Baseline", "Y",
-#'   "TEST01", "PAT01",  "PARAM02", NA,     NA,       "Day 7",    "N",
-#'   "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Day 14",   "N",
-#'   "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Baseline", "Y",
-#'   "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Day 7",    "N",
-#'   "TEST01", "PAT01",  "PARAM03", NA,     "MEDIUM", "Day 14",   "N",
-#'   "TEST01", "PAT01",  "PARAM04", NA,     "HIGH",   "Baseline", "Y",
-#'   "TEST01", "PAT01",  "PARAM04", NA,     "HIGH",   "Day 7",    "N",
-#'   "TEST01", "PAT01",  "PARAM04", NA,     "MEDIUM", "Day 14",   "N"
+#'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,
+#'   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y",
+#'   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",
+#'   "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",
+#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",
+#'   "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",
+#'   "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",
+#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",
+#'   "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",
+#'   "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",
+#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",
+#'   "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",
+#'   "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N"
 #' )
 #'
 #' ## Derive `BASE` variable from `AVAL`
@@ -99,56 +99,5 @@ derive_var_base <- function(dataset,
       "Input dataset contains multiple baseline records with respect to",
       enumerate(vars2chr(by_vars))
     )
-  )
-}
-
-#' Derive BASEC Variable
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use [derive_var_base()] instead.
-#'
-#' @inheritParams derive_var_base
-#'
-#' @return The input dataset with variable `BASEC` added
-#'
-#' @export
-#'
-#' @seealso [derive_var_base()]
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords bds derivation
-derive_var_basec <- function(dataset, by_vars) {
-  deprecate_warn("0.6.0", "derive_var_basec()", "derive_var_base()")
-  derive_var_base(dataset, by_vars = by_vars, source_var = AVALC, new_var = BASEC)
-}
-
-#' Derive Baseline
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use [derive_var_base()] instead.
-#'
-#' @inheritParams derive_var_base
-#'
-#' @return The input dataset with variable `new_var` added
-#'
-#' @export
-#'
-#' @author Thomas Neitmann
-#'
-#' @keywords bds derivation
-#'
-#' @seealso [derive_var_base()]
-derive_baseline <- function(dataset, by_vars, source_var, new_var) {
-  deprecate_warn("0.6.0", "derive_baseline()", "derive_var_base()")
-  derive_var_base(
-    dataset,
-    by_vars = by_vars,
-    source_var = !!enquo(source_var),
-    new_var = !!enquo(new_var)
   )
 }

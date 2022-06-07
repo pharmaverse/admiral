@@ -1,9 +1,9 @@
-library(admiraltest)
-data(ae)
-data(vs)
+library(admiral.test)
+data(admiral_ae)
+data(admiral_vs)
 
 test_that("call_derivation works", {
-  input <- vs[sample(seq_len(nrow(vs)), 1000), ]
+  input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
 
   expected_output <- input %>%
     derive_summary_records(
@@ -58,8 +58,8 @@ test_that("call_derivation works", {
 })
 
 test_that("call_derivation works", {
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expected_output <- input %>%
     derive_vars_dt(
@@ -93,9 +93,8 @@ test_that("call_derivation works", {
 
 
 test_that("call_derivation - Error is thrown if ... has no arguments", {
-
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -105,13 +104,13 @@ test_that("call_derivation - Error is thrown if ... has no arguments", {
         params(dtc = AESTDTC, date_imputation = "first", new_vars_prefix = "AST"),
         params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
       )
-    ), "At least one argument must be set inside `...`")
-  })
+    ), "At least one argument must be set inside `...`"
+  )
+})
 
 test_that("call_derivation - Error is thrown if ... arguments are not properly named", {
-
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -122,14 +121,14 @@ test_that("call_derivation - Error is thrown if ... arguments are not properly n
         params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
       ),
       XYZSDT,
-      XYZEDT)
+      XYZEDT
     )
+  )
 })
 
 test_that("call_derivation - Error is thrown params is empty", {
-
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -141,14 +140,13 @@ test_that("call_derivation - Error is thrown params is empty", {
       ),
       min_dates = vars(TRTSDT),
       max_dates = vars(TRTEDT)
-  ), "At least one argument must be provided"
+    ), "At least one argument must be provided"
   )
 })
 
 test_that("call_derivation - Error is thrown if passed params are not proprely named", {
-
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -160,14 +158,14 @@ test_that("call_derivation - Error is thrown if passed params are not proprely n
       ),
       min_dates = vars(TRTSDT),
       max_dates = vars(TRTEDT)
-    ), "All arguments passed to `params()` must be named", fixed = TRUE
+    ), "All arguments passed to `params()` must be named",
+    fixed = TRUE
   )
 })
 
 test_that("call_derivation - Error is thrown if `...` arguments are not properly named", {
-
-  input <- ae[sample(seq_len(nrow(ae)), 1000), ] %>%
-    left_join(adsl, by = "USUBJID")
+  input <- admiral_ae[sample(seq_len(nrow(admiral_ae)), 1000), ] %>%
+    left_join(admiral_adsl, by = "USUBJID")
 
   expect_error(
     call_derivation(
@@ -178,6 +176,7 @@ test_that("call_derivation - Error is thrown if `...` arguments are not properly
         params(dtc = AEENDTC, date_imputation = "last", new_vars_prefix = "AEN")
       ),
       XYZSDT,
-      XYZEDT)
+      XYZEDT
+    )
   )
 })

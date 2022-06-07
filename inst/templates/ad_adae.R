@@ -2,9 +2,9 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, suppae, ex_single
+# Input: ae, adsl, ex_single
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -14,13 +14,15 @@ library(lubridate)
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
-data("ae")
-data("suppae")
-data("adsl")
+data("admiral_ae")
+data("admiral_adsl")
 data("ex_single")
 
+adsl <- admiral_adsl
+ae <- admiral_ae
+suppae <- admiral_suppae
+
 ae <- convert_blanks_to_na(ae)
-suppae <- convert_blanks_to_na(suppae)
 ex <- convert_blanks_to_na(ex_single)
 
 
@@ -30,16 +32,12 @@ ex <- convert_blanks_to_na(ex_single)
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
 
 adae <- ae %>%
-  # join supplementary qualifier variables
-  derive_vars_suppqual(suppae) %>%
-
   # join adsl to ae
   derive_vars_merged(
     dataset_add = adsl,
     new_vars = adsl_vars,
     by = vars(STUDYID, USUBJID)
   ) %>%
-
   # derive analysis start time
   derive_vars_dtm(
     dtc = AESTDTC,
@@ -48,7 +46,6 @@ adae <- ae %>%
     time_imputation = "first",
     min_dates = vars(TRTSDT)
   ) %>%
-
   # derive analysis end time
   derive_vars_dtm(
     dtc = AEENDTC,
@@ -57,22 +54,13 @@ adae <- ae %>%
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
   ) %>%
-
   # derive analysis end/start date
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-
-  # derive analysis start relative day
-  derive_var_astdy(
+  # derive analysis start relative day and  analysis end relative day
+  derive_vars_dy(
     reference_date = TRTSDT,
-    date = ASTDT
+    source_vars = vars(ASTDT, AENDT)
   ) %>%
-
-  # derive analysis end relative day
-  derive_var_aendy(
-    reference_date = TRTSDT,
-    date = AENDT
-  ) %>%
-
   # derive analysis duration (value and unit)
   derive_vars_duration(
     new_var = ADURN,
@@ -87,7 +75,6 @@ adae <- ae %>%
 
 
 adae <- adae %>%
-
   # derive last dose date/time
   derive_var_last_dose_date(
     ex,
@@ -99,29 +86,29 @@ adae <- adae %>%
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE
   ) %>%
-
   # derive severity / causality / ...
   mutate(
     ASEV = AESEV,
     AREL = AEREL
   ) %>%
-
   # derive treatment emergent flag
   mutate(
     TRTEMFL = ifelse(ASTDT >= TRTSDT & ASTDT <= TRTEDT + days(30), "Y", NA_character_)
   ) %>%
-
   # derive occurrence flags: first occurence of most severe AE
   # create numeric value ASEVN for severity
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(ASTDTM, AESEQ),
-    new_var = AOCCIFL,
-    filter = TRTEMFL == "Y",
-    mode = "last"
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID),
+      order = vars(ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "last"
+    ),
+    filter = TRTEMFL == "Y"
   )
 
 # Join all ADSL with AE

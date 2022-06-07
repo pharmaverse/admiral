@@ -17,6 +17,9 @@
 #'
 #' @param by_vars Grouping variables
 #'
+#'   Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
+#'
 #'   Permitted Values: list of variables
 #'
 #' @param tadm_code Total Doses Administered parameter code
@@ -62,7 +65,8 @@
 #'
 #' @author Alice Ehmann
 #'
-#' @return The input dataset with the new parameter rows added
+#' @return The input dataset with the new parameter rows added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
 #' @keywords derivation adex
 #'
@@ -73,31 +77,33 @@
 #' library(lubridate, warn.conflicts = FALSE)
 #'
 #' adex <- tibble::tribble(
-#' ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT,            ~AENDT,            ~AVAL,
-#' "P001",   "TNDOSE", "V1",   "Y",      ymd("2020-01-01"), ymd("2020-01-30"), 59,
-#' "P001",   "TSNDOSE","V1",   "Y",      ymd("2020-01-01"), ymd("2020-02-01"), 96,
-#' "P001",   "TNDOSE", "V2",   "Y",      ymd("2020-02-01"), ymd("2020-03-15"), 88,
-#' "P001",   "TSNDOSE","V2",   "Y",      ymd("2020-02-05"), ymd("2020-03-01"), 88,
-#' "P002",   "TNDOSE", "V1",   "Y",      ymd("2021-01-01"), ymd("2021-01-30"), 0,
-#' "P002",   "TSNDOSE","V1",   "Y",      ymd("2021-01-01"), ymd("2021-02-01"), 0,
-#' "P002",   "TNDOSE", "V2",   "Y",      ymd("2021-02-01"), ymd("2021-03-15"), 52,
-#' "P002",   "TSNDOSE","V2",   "Y",      ymd("2021-02-05"), ymd("2021-03-01"), 0
+#'   ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT, ~AENDT, ~AVAL,
+#'   "P001", "TNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-01-30"), 59,
+#'   "P001", "TSNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-02-01"), 96,
+#'   "P001", "TNDOSE", "V2", "Y", ymd("2020-02-01"), ymd("2020-03-15"), 88,
+#'   "P001", "TSNDOSE", "V2", "Y", ymd("2020-02-05"), ymd("2020-03-01"), 88,
+#'   "P002", "TNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-01-30"), 0,
+#'   "P002", "TSNDOSE", "V1", "Y", ymd("2021-01-01"), ymd("2021-02-01"), 0,
+#'   "P002", "TNDOSE", "V2", "Y", ymd("2021-02-01"), ymd("2021-03-15"), 52,
+#'   "P002", "TSNDOSE", "V2", "Y", ymd("2021-02-05"), ymd("2021-03-01"), 0
 #' )
 #'
 #' derive_param_doseint(
 #'   adex,
-#'   by_vars=vars(USUBJID, VISIT),
+#'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAMCD = "TNDOSINT"),
 #'   tadm_code = "TNDOSE",
-#'   tpadm_code = "TSNDOSE")
+#'   tpadm_code = "TSNDOSE"
+#' )
 #'
 #' derive_param_doseint(
 #'   adex,
-#'   by_vars=vars(USUBJID, VISIT),
+#'   by_vars = vars(USUBJID, VISIT),
 #'   set_values_to = vars(PARAMCD = "TDOSINT2"),
 #'   tadm_code = "TNDOSE",
 #'   tpadm_code = "TSNDOSE",
-#'   zero_doses = "100")
+#'   zero_doses = "100"
+#' )
 derive_param_doseint <- function(dataset,
                                  by_vars,
                                  set_values_to = vars(PARAMCD = "TNDOSINT"),
@@ -105,15 +111,14 @@ derive_param_doseint <- function(dataset,
                                  tpadm_code = "TSNDOSE",
                                  zero_doses = "Inf",
                                  filter = NULL) {
-
   assert_character_scalar(tadm_code)
   assert_character_scalar(tpadm_code)
   assert_character_scalar(zero_doses, values = c("Inf", "100"), optional = TRUE)
   assert_vars(by_vars)
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
-                    required_vars = vars(!!!by_vars, PARAMCD, AVAL)
-                    )
+    required_vars = vars(!!!by_vars, PARAMCD, AVAL)
+  )
   assert_varval_list(set_values_to, required_elements = "PARAMCD", optional = TRUE)
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
@@ -124,7 +129,7 @@ derive_param_doseint <- function(dataset,
     parameters = c(tadm_code, tpadm_code),
     by_vars = by_vars,
     analysis_value = (!!sym(paste0("AVAL.", tadm_code)) /
-                        !!sym(paste0("AVAL.", tpadm_code)) * 100),
+      !!sym(paste0("AVAL.", tpadm_code)) * 100),
     set_values_to = vars(
       !!!set_values_to,
       temp_planned_dose = !!sym(paste0("AVAL.", tpadm_code)),
@@ -134,15 +139,17 @@ derive_param_doseint <- function(dataset,
 
   # # handle 0 doses planned if needed
   if (zero_doses == "100") {
-   dataset <- mutate(dataset,
-                      AVAL = case_when(temp_planned_dose == 0 &
-                                         temp_admin_dose > 0 ~ 100,
-                                       temp_planned_dose == 0 &
-                                         temp_admin_dose == 0 ~ 0,
-                                       TRUE ~ AVAL))
+    dataset <- mutate(dataset,
+      AVAL = case_when(
+        temp_planned_dose == 0 &
+          temp_admin_dose > 0 ~ 100,
+        temp_planned_dose == 0 &
+          temp_admin_dose == 0 ~ 0,
+        TRUE ~ AVAL
+      )
+    )
   }
 
 
   dataset %>% select(-starts_with("temp"))
-
 }

@@ -1,20 +1,20 @@
-library(admiraltest)
+library(admiral.test)
 
 test_that("Test 1 : `assert_has_variables` an error is thrown if a required
            variable is missing", {
-  data(dm)
+  data(admiral_dm)
 
   expect_error(
-    assert_has_variables(dm, "TRT01P"),
+    assert_has_variables(admiral_dm, "TRT01P"),
     "Required variable `TRT01P` is missing."
   )
 })
 
 test_that("Test 2 : `assert_has_variables` no error is thrown if a required
            variable exists", {
-  data(dm)
+  data(admiral_dm)
 
-  expect_error(assert_has_variables(dm, "USUBJID"), NA)
+  expect_error(assert_has_variables(admiral_dm, "USUBJID"), NA)
 })
 
 test_that("Test 3 : `assert_filter_cond` works as expected", {
@@ -64,10 +64,10 @@ test_that("Test 7 : `assert_data_frame` throws an error if dataframe is grouped"
     assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
   }
 
-  dm <- dm %>% group_by(ARMCD)
+  admiral_dm <- admiral_dm %>% group_by(ARMCD)
 
   expect_error(
-    example_fun(dm)
+    example_fun(admiral_dm)
   )
 })
 

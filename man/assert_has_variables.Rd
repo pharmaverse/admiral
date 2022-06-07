@@ -19,13 +19,12 @@ missing in the input dataset. Otherwise, the dataset is returned invisibly.
 Checks if a dataset contains all required variables
 }
 \examples{
-library(admiraltest)
-data(dm)
+library(admiral.test)
+data(admiral_dm)
 
-assert_has_variables(dm, "STUDYID")
-\dontrun{
-assert_has_variables(dm, "AVAL")
-}
+assert_has_variables(admiral_dm, "STUDYID")
+
+try(assert_has_variables(admiral_dm, "AVAL"))
 }
 \author{
 Thomas Neitmann

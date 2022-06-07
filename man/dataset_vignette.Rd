@@ -34,10 +34,13 @@ Output a dataset in a vignette with the pre-specified admiral format.
 library(admiral)
 library(DT)
 library(dplyr)
-library(admiraltest)
-data("dm")
+library(admiral.test)
+data("admiral_dm")
 
-dataset_vignette(dm)
-dataset_vignette(dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC), filter = ARMCD == "Pbo")
+dataset_vignette(admiral_dm)
+dataset_vignette(admiral_dm,
+  display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
+  filter = ARMCD == "Pbo"
+)
 }
 \keyword{dev_utility}

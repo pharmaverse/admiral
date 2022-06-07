@@ -46,7 +46,7 @@ to ensure that the chunks are rendered consistently across all vignettes.
     knitr::opts_chunk$set(
       collapse = TRUE,
       comment = "#>"
-      )
+    )
     ```
 
 
@@ -85,13 +85,9 @@ This is the introduction of my vignette.
     # <all packages used in the vignette>
     ```
 
-The `warning = FALSE` and `message = FALSE` options are there to prevent the usual messages:
+The `warning=FALSE` and `message=FALSE` options are there to prevent the usual messages:
 
-<span style="color: red;font-family: textmate; font-size = 12pt;" >Attaching package: 'xxxx'</span>
-
-<span style="color: red;font-family: textmate; font-size = 12pt;">The following objects are masked from 'package:yyyyy':</span>
-
-<span style="color: red;font-family: textmate; font-size = 12pt;">  fun1, fun2</span>
+<span style="color: red;font-family: textmate, monospace; font-size = 10pt;" >Attaching package: 'xxxx'</br>The following objects are masked from 'package:yyyyy'</br>  fun1, fun2</span>
 
 ### Conventions
 
@@ -131,21 +127,20 @@ function so that it is displayed consistently across the vignettes.E.g.
 ```{r, include=FALSE}
 library(lubridate)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 library(DT)
 library(admiral)
 
-data(vs)
+data(admiral_vs)
 ```
 
 ```{r, eval=FALSE, echo=TRUE}
-      vs1 <- vs %>%
-        derive_vars_dt(
-        new_vars_prefix = "A",
-        dtc = VSDTC,
-        date_imputation = "FIRST"
-      )
-
+vs1 <- admiral_vs %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = VSDTC,
+    date_imputation = "FIRST"
+  )
 ```
 
 
@@ -153,18 +148,18 @@ data(vs)
 
 
 ```{r, echo=FALSE}
-      vs1 <- vs %>%
-        derive_vars_dt(
-        new_vars_prefix = "A",
-        dtc = VSDTC,
-        date_imputation = "FIRST"
-      )
-      
-      dataset_vignette(
-        vs1,
-        display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-        filter = VSTESTCD == "WEIGHT"
-      )
+vs1 <- admiral_vs %>%
+  derive_vars_dt(
+    new_vars_prefix = "A",
+    dtc = VSDTC,
+    date_imputation = "FIRST"
+  )
+
+dataset_vignette(
+  vs1,
+  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  filter = VSTESTCD == "WEIGHT"
+)
 ```
 
 
@@ -172,11 +167,11 @@ Note: The call to get the formatted dataset would be:
  
 
       ```{r, eval=FALSE, echo=TRUE}
-      dataset_vignette(
-        vs1, 
-        display_vars=vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
-        filter = VSTESTCD == "WEIGHT"
-      )
+dataset_vignette(
+  vs1,
+  display_vars = vars(USUBJID, VSTESTCD, VISIT, VSDTC, ADT),
+  filter = VSTESTCD == "WEIGHT"
+)
       ```
       
 Displaying many big datasets on a vignette, may require a long time to load

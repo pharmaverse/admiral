@@ -23,8 +23,8 @@ Check if \code{arg} is a suitable filtering condition to be used in
 functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
-library(admiraltest)
-data(dm)
+library(admiral.test)
+data(admiral_dm)
 
 # typical usage in a function as a parameter check
 example_fun <- function(dat, x) {
@@ -32,9 +32,9 @@ example_fun <- function(dat, x) {
   dplyr::filter(dat, !!x)
 }
 
-example_fun(dm, AGE == 64)
+example_fun(admiral_dm, AGE == 64)
 
-try(example_fun(dm, USUBJID))
+try(example_fun(admiral_dm, USUBJID))
 }
 \author{
 Ondrej Slama

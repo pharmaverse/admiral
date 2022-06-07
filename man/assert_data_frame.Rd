@@ -31,16 +31,16 @@ Checks if an argument is a data frame and (optionally) whether is contains
 a set of required variables
 }
 \examples{
-library(admiraltest)
-data(dm)
+library(admiral.test)
+data(admiral_dm)
 
 example_fun <- function(dataset) {
   assert_data_frame(dataset, required_vars = vars(STUDYID, USUBJID))
 }
 
-example_fun(dm)
+example_fun(admiral_dm)
 
-try(example_fun(dplyr::select(dm, -STUDYID)))
+try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
 
 try(example_fun("Not a dataset"))
 }

@@ -28,7 +28,8 @@ parameter) and to the parameters specified by \code{parameters}.}
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -66,24 +67,24 @@ into account.
 
 \item{constant_by_vars}{By variables for constant parameters
 
-The constant parameters are merged to the other parameters using the
-specified variables. This is useful if some parameters were measured only
-once. For example if BMI should be derived and height is measured only once
-while weight is measured at each visit. Height could be specified for the
-constant parameters.
+The constant parameters (parameters that are measured only once) are merged
+to the other parameters using the specified variables. (Refer to Example 2)
 
 \emph{Permitted Values:} list of variables}
 
 \item{constant_parameters}{Required constant parameter codes
 
-It is expected that all parameter codes (\code{PARAMCD}) which are required to
-derive the new parameter are specified for this parameter or the
-\code{parameters} parameter.
+It is expected that all the parameter codes (\code{PARAMCD}) which are required
+to derive the new parameter and are measured only once are specified here.
+For example if BMI should be derived and height is measured only once while
+weight is measured at each visit. Height could be specified in the
+\code{constant_parameters} parameter. (Refer to Example 2)
 
 \emph{Permitted Values:} A character vector of \code{PARAMCD} values}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a parameter computed from the analysis value of other parameters. It is
@@ -105,7 +106,7 @@ the provided values. The values of the other variables of the input dataset
 are set to \code{NA}.
 }
 \examples{
-# derive MAP
+# Example 1: Derive MAP
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
@@ -130,7 +131,7 @@ derive_derived_param(
   )
 )
 
-# derive BMI where height is measured only once
+# Example 2: Derive BMI where height is measured only once
 advs <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",

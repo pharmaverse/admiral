@@ -47,60 +47,52 @@ otherwise specified.*
 
 To start, all data frames needed for the creation of `ADEX` should be read into
 the environment.  This will be a company specific process.  Some of the 
-data frames needed may be `EX`, `SUPPEX`, and `ADSL`.
+data frames needed may be `EX` and `ADSL`.
 
-For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiraltest}`---are used.
+For example purpose, the CDISC Pilot SDTM and ADaM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r message=FALSE}
 library(admiral)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 library(lubridate)
 library(stringr)
 library(tibble)
 
-data("adsl")
-data("ex")
+data("admiral_adsl")
+data("admiral_ex")
+
+adsl <- admiral_adsl
+ex <- admiral_ex
 ```
 ```{r echo=FALSE}
-ex <- filter(ex, USUBJID %in% c('01-701-1015', '01-701-1023', '01-703-1086', '01-703-1096', '01-707-1037', '01-716-1024'))
+ex <- filter(ex, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
 ```
 
-The `SUPPEX` domain can be joined to the `EX` domain using the function `derive_vars_suppqual()`.
-
-This function will transpose the supplemental SDTM domain (e.g. `SUPPEX`) and
-join the transposed data to the parent domain (e.g. `ex`) by `STUDYID`, 
-`USUBJID` using the `IDVAR` and `IDVARVAL` as an additional join variable.
-
-Example call:
-
-```{r eval=FALSE}
-ex <- derive_vars_suppqual(ex, suppex)
-```
-
-Please note, the CDISC pilot did not include a `SUPPEX` dataset and therefore this
-join is not demonstrated.
-
-At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only the `ADSL` variables used for derivations are selected at this step. The rest of the relevant `ADSL` would be added later.
+At this step, it may be useful to join `ADSL` to your `EX` domain as well. Only the `ADSL` variables used for derivations are selected at this step. The rest of the relevant `ADSL` variables would be added later.
 
 
 ```{r eval=TRUE}
 
-adsl_vars<-vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM )
+adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDT, TRTEDTM)
 
 adex <- derive_vars_merged(
-    ex,
-    dataset_add = adsl,
-    new_vars = adsl_vars,
-    by_vars = vars(STUDYID, USUBJID)
-  )
+  ex,
+  dataset_add = adsl,
+  new_vars = adsl_vars,
+  by_vars = vars(STUDYID, USUBJID)
+)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, EXTRT, EXDOSE,EXDOSFRQ,
-                                     VISIT,EXSTDTC , EXENDTC ,
-                                         TRTSDTM,   TRTEDTM))
+dataset_vignette(
+  adex,
+  display_vars = vars(
+    USUBJID, EXTRT, EXDOSE, EXDOSFRQ,
+    VISIT, EXSTDTC, EXENDTC,
+    TRTSDTM, TRTEDTM
+  )
+)
 ```
 
 The CDISC pilot `EX` domain data does not contain a dose adjustment flag or 
@@ -135,19 +127,15 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC)
-adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC)
-
+adex <- derive_vars_dt(adex, new_vars_prefix = "AST", dtc = EXSTDTC, flag_imputation = "none")
+adex <- derive_vars_dt(adex, new_vars_prefix = "AEN", dtc = EXENDTC, flag_imputation = "none")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, VISIT, EXSTDTC , EXENDTC ,ASTDT, AENDT))
-```
-
-
-```{r eval=TRUE, echo=FALSE}
-adex <- select(adex, -ASTDTF, -AENDTF)
+dataset_vignette(
+  adex,
+  display_vars = vars(USUBJID, VISIT, EXSTDTC, EXENDTC, ASTDT, AENDT)
+)
 ```
 
 
@@ -168,12 +156,13 @@ adex <- derive_vars_dtm(
   date_imputation = "last",
   new_vars_prefix = "AEN"
 )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, VISIT,EXSTDTC , EXENDTC , ASTDTM,  AENDTM))
+dataset_vignette(
+  adex,
+  display_vars = vars(USUBJID, VISIT, EXSTDTC, EXENDTC, ASTDTM, AENDTM)
+)
 ```
 
 
@@ -186,14 +175,21 @@ calculating and imputing analysis dates.
 Next, the analysis study days can be derived:
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_var_astdy(adex, reference_date = TRTSDT, date = ASTDT)
-adex <- derive_var_aendy(adex, reference_date = TRTSDT, date = AENDT)
+adex <-
+  derive_vars_dy(adex,
+    reference_date = TRTSDT,
+    source_vars = vars(ASTDT, AENDT)
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, 
-                                     VISIT, ASTDT, ASTDY, AENDT, AENDY, TRTSDT))
+dataset_vignette(
+  adex,
+  display_vars = vars(
+    USUBJID,
+    VISIT, ASTDT, ASTDY, AENDT, AENDY, TRTSDT
+  )
+)
 ```
 
 
@@ -212,9 +208,13 @@ adex <- adex %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, 
-                                     VISIT,ASTDT, ASTDY, AENDT, AENDY, EXDURD))
+dataset_vignette(
+  adex,
+  display_vars = vars(
+    USUBJID,
+    VISIT, ASTDT, ASTDY, AENDT, AENDY, EXDURD
+  )
+)
 ```
 
 The units of the calculated duration can also be changed. In this example, the
@@ -231,14 +231,18 @@ adex <- adex %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, 
-                                     VISIT, ASTDT,  AENDT,  EXDURD, EXDURDY))
+dataset_vignette(
+  adex,
+  display_vars = vars(
+    USUBJID,
+    VISIT, ASTDT, AENDT, EXDURD, EXDURDY
+  )
+)
 ```
 
 
-Please refer to the `derive_vars_duration()` documentation for detailed information on 
-the input parameters.
+Please refer to the `derive_vars_duration()` documentation for detailed information 
+on the input parameters.
 
 It may be necessary to calculate additional intermediate values.  For example, 
 the cumulative doses received and cumulative planned doses may be calculated as:
@@ -252,8 +256,10 @@ adex <- adex %>%
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO))
+dataset_vignette(
+  adex,
+  display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDURD, DOSEO, PDOSEO)
+)
 ```
 
 It may be of additional interest to turn a single record containing dosing
@@ -268,12 +274,13 @@ frequency to a corresponding set of records each representing one dose (i.e.
 
 ```{r eval=TRUE, echo=TRUE}
 single_dose <- adex %>%
-  filter(USUBJID=="01-701-1015" & EXSTDY==1) %>%
+  filter(USUBJID == "01-701-1015" & EXSTDY == 1) %>%
   create_single_dose_dataset()
 
-dataset_vignette(single_dose, 
-                 display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT))
-
+dataset_vignette(
+  single_dose,
+  display_vars = vars(USUBJID, EXDOSE, EXPLDOS, EXDOSFRQ, ASTDT, AENDT)
+)
 ```
 
 ## Create 1:1 mapping records {#onetoone}
@@ -334,9 +341,8 @@ count(adex, PARAMCD)
 
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
-  arrange(USUBJID,VISIT,desc(PARAMCD), EXSTDTC, EXENDTC) %>%
-  dataset_vignette(display_vars = vars(USUBJID,VISIT, ASTDT, AENDT, PARAMCD, AVAL, AVALC)
-                   )
+  arrange(USUBJID, VISIT, desc(PARAMCD), EXSTDTC, EXENDTC) %>%
+  dataset_vignette(display_vars = vars(USUBJID, VISIT, ASTDT, AENDT, PARAMCD, AVAL, AVALC))
 ```
 
 ## Create Summary Records {#summaryrec}
@@ -344,7 +350,7 @@ adex %>%
 Exposure is commonly analyzed by a timing interval (e.g. `APHASE`, `APERIOD`,
 `AVISIT`, etc.). For these types of calculations, the `derive_param_exposure()`
 function may be used. In addition to creating a summarized `AVAL`, the function
-will also compute minimum and maximum dates for the record.
+will also compute minimum and maximum dates for the record. 
 
 For example, to calculate the total dose by subject and treatment,
 
@@ -361,10 +367,11 @@ adex <- derive_param_exposure(
 
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
-  arrange(USUBJID,PARAMCD,PARCAT1,VISIT, EXSTDTC, EXENDTC)%>%
-  dataset_vignette(display_vars = vars(USUBJID,VISIT, 
-                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT)
-                 )
+  arrange(USUBJID, PARAMCD, PARCAT1, VISIT, EXSTDTC, EXENDTC) %>%
+  dataset_vignette(display_vars = vars(
+    USUBJID, VISIT,
+    PARCAT1, PARAMCD, AVAL, ASTDT, AENDT
+  ))
 ```
 
 
@@ -375,7 +382,8 @@ adex <- filter(adex, PARAMCD != "TDOSE")
 A record with `PARAMCD == "TDOSE"` is created with `PARCAT1` set to `"OVERALL"` using
 the records in `ADEX` where `PARAMCD == "DOSE"` by summing `AVAL`. In addition,
 the `ASTDT`, and `AENDT` are created as the minimum and
-maximum date/times associated with each `by_vars` grouping.
+maximum date/times associated with each `by_vars` grouping. Note that, in addition
+to `PARAMCD`, `PARCAT1`, `AVAL`, `ASTDT` and `AENDT`, only those variables specified in the `by_vars` argument will be populated in the new records.
 
 Multiple parameters (records) may be created at one time using the 
 `call_derivation()` function:
@@ -420,21 +428,22 @@ adex <- adex %>%
   )
 
 count(adex, PARAMCD, PARCAT1)
-
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
-  arrange(USUBJID,PARAMCD,PARCAT1,VISIT, EXSTDTC, EXENDTC)%>%
-  dataset_vignette(display_vars = vars(USUBJID,VISIT,
-                                       PARCAT1,PARAMCD,  AVAL,AVALC, ASTDT, AENDT)
-                   )
+  arrange(USUBJID, PARAMCD, PARCAT1, VISIT, EXSTDTC, EXENDTC) %>%
+  dataset_vignette(display_vars = vars(
+    USUBJID, VISIT,
+    PARCAT1, PARAMCD, AVAL, AVALC, ASTDT, AENDT
+  ))
 ```
 
 Dose intensity can be calculated using the function `derive_param_doseint()`. The
 planned dose and administered dose are passed into the function and a new record
-is created with the dose intensity calculation.
+is created with the dose intensity calculation. Again, only those variables 
+specified in the `by_vars` argument will be populated in this new record.
 
 ```{r eval=TRUE, echo=TRUE}
 adex <- adex %>%
@@ -444,15 +453,17 @@ adex <- adex %>%
     tadm_code = "TDOSE",
     tpadm_code = "TPDOSE"
   )
-
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID,VISIT, EXSTDTC, EXENDTC,
-                                     PARCAT1,PARAMCD,  AVAL, ASTDT, AENDT)
-                 )
+dataset_vignette(
+  adex,
+  display_vars = vars(
+    USUBJID, VISIT, EXSTDTC, EXENDTC,
+    PARCAT1, PARAMCD, AVAL, ASTDT, AENDT
+  )
+)
 ```
 
 
@@ -467,7 +478,7 @@ Please see the `derive_param_doseint()` documentation to see how planned doses o
 To assign parameter level values such as `PARAM`, `PARAMN`, `PARCAT1`, etc., a
 lookup can be created to join to the source data.
 
-For example, when creating `adex`, a lookup based on the ADaM `PARAMCD` value
+For example, when creating `ADEX`, a lookup based on the ADaM `PARAMCD` value
 may be created:
 
 PARAMCD | PARAM | PARAMN
@@ -503,9 +514,11 @@ param_lookup <- tribble(
 
 
 ```{r eval=TRUE, echo=TRUE}
-adex <- derive_vars_merged(adex,
-                           dataset_add = param_lookup,
-                           by_vars = vars(PARAMCD))
+adex <- derive_vars_merged(
+  adex,
+  dataset_add = param_lookup,
+  by_vars = vars(PARAMCD)
+)
 
 count(adex, PARAMCD, PARAM, PARAMN)
 ```
@@ -531,13 +544,12 @@ adex <- adex %>%
       TRUE ~ NA_character_
     )
   )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 adex %>%
-  arrange(USUBJID,AVALCAT1,PARCAT1,VISIT, EXSTDTC, EXENDTC)%>%
-  dataset_vignette(display_vars = vars(USUBJID,VISIT, PARCAT1,PARAMCD,  AVAL, AVALCAT1))
+  arrange(USUBJID, AVALCAT1, PARCAT1, VISIT, EXSTDTC, EXENDTC) %>%
+  dataset_vignette(display_vars = vars(USUBJID, VISIT, PARCAT1, PARAMCD, AVAL, AVALCAT1))
 ```
 
 ## Assign `ASEQ` {#aseq}
@@ -553,12 +565,13 @@ adex <- derive_var_obs_number(
   order = vars(PARCAT1, ASTDT, VISIT, VISITNUM, EXSEQ, PARAMN),
   check_type = "error"
 )
-
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adex, 
-                 display_vars = vars(USUBJID,VISIT, PARCAT1,PARAMCD,  AVAL, ASTDT,  ASEQ))
+dataset_vignette(
+  adex,
+  display_vars = vars(USUBJID, VISIT, PARCAT1, PARAMCD, AVAL, ASTDT, ASEQ)
+)
 ```
 
 ## Add the `ADSL` variables  {#adsl_vars}

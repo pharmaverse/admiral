@@ -41,9 +41,9 @@ via a user provided function for accessing a SMQ or SDG database.
 try(
   assert_terms(
     terms = 42,
-    source_text = "object provided by the `definition` element")
+    source_text = "object provided by the `definition` element"
+  )
 )
-
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}

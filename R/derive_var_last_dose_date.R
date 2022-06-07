@@ -29,11 +29,11 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
-#' data(ae)
+#' library(admiral.test)
+#' data(admiral_ae)
 #' data(ex_single)
 #'
-#' ae %>%
+#' admiral_ae %>%
 #'   head(100) %>%
 #'   derive_var_last_dose_date(
 #'     head(ex_single, 100),
@@ -46,19 +46,17 @@
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSEDTM)
-
 derive_var_last_dose_date <- function(dataset,
-                                  dataset_ex,
-                                  filter_ex = NULL,
-                                  by_vars = vars(STUDYID, USUBJID),
-                                  dose_id = vars(),
-                                  dose_date,
-                                  analysis_date,
-                                  single_dose_condition = (EXDOSFRQ == "ONCE"),
-                                  new_var,
-                                  output_datetime = TRUE,
-                                  traceability_vars = NULL) {
-
+                                      dataset_ex,
+                                      filter_ex = NULL,
+                                      by_vars = vars(STUDYID, USUBJID),
+                                      dose_id = vars(),
+                                      dose_date,
+                                      analysis_date,
+                                      single_dose_condition = (EXDOSFRQ == "ONCE"),
+                                      new_var,
+                                      output_datetime = TRUE,
+                                      traceability_vars = NULL) {
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_id <- assert_vars(dose_id)
@@ -68,23 +66,23 @@ derive_var_last_dose_date <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   assert_logical_scalar(output_datetime)
 
-  res <- derive_vars_last_dose(dataset = dataset,
-                dataset_ex = dataset_ex,
-                filter_ex = !!filter_ex,
-                by_vars = by_vars,
-                dose_id = dose_id,
-                dose_date = !!dose_date,
-                analysis_date = !!analysis_date,
-                single_dose_condition = !!single_dose_condition,
-                new_vars = vars(!!new_var := !!dose_date),
-                traceability_vars = traceability_vars)
+  res <- derive_vars_last_dose(
+    dataset = dataset,
+    dataset_ex = dataset_ex,
+    filter_ex = !!filter_ex,
+    by_vars = by_vars,
+    dose_id = dose_id,
+    dose_date = !!dose_date,
+    analysis_date = !!analysis_date,
+    single_dose_condition = !!single_dose_condition,
+    new_vars = vars(!!new_var := !!dose_date),
+    traceability_vars = traceability_vars
+  )
 
   # return either date or date-time variable
   if (!output_datetime) {
-    res %>%  mutate(!!new_var := as.Date(!!new_var))
-  }
-  else {
+    res %>% mutate(!!new_var := as.Date(!!new_var))
+  } else {
     res %>% mutate(!!new_var := as.POSIXct(as.character(!!new_var), tz = "UTC"))
   }
-
 }
