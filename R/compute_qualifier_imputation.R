@@ -1,3 +1,5 @@
+#' Compute Factor for Value Imputations When Character Value Contains < or >
+#'
 #' Function to compute factor for value imputation when character
 #' value contains < or >.  The factor is calculated using the number of decimals.
 #' If there are no decimals, the factor is 1, otherwise the factor = 1/10^decimal
@@ -15,6 +17,8 @@
 #'
 #' @author Alice Ehmann
 #'
+#' @keywords computation adam factor imputation
+#'
 #' @examples
 #' compute_qualifier_imputation_decimal("<40.1")
 compute_qualifier_imputation_decimal <- function(character_value_decimal) {
@@ -27,7 +31,7 @@ compute_qualifier_imputation_decimal <- function(character_value_decimal) {
   decimal
 }
 
-#' Function to impute values when qualifier exists in character result
+#' Function to Impute Values When Qualifier Exists in Character Result
 #'
 #' Derive an imputed value
 #'
@@ -51,6 +55,8 @@ compute_qualifier_imputation_decimal <- function(character_value_decimal) {
 #' @export
 #'
 #' @author Alice Ehmann
+#'
+#' @keywords imputation adam qualifier
 #'
 #' @examples
 #' compute_qualifier_imputation("<40")
