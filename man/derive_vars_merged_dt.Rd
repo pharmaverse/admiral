@@ -173,8 +173,8 @@ If the uniqueness check fails, the specified message is displayed.
 
 \emph{Default}:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
-      enumerate(vars2chr(by_vars))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+      enumerate(vars2chr(by_vars)))
 }\if{html}{\out{</div>}}}
 }
 \value{
@@ -200,7 +200,7 @@ the additional dataset.
 }
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_dm")
 data("admiral_ex")

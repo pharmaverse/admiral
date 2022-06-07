@@ -160,7 +160,7 @@ is not created.
 library(tibble)
 library(magrittr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 library(admiral)
 
 # creating a query dataset for a customized query
@@ -197,11 +197,11 @@ bilismq <- query(
   )
 )
 
-# The get_smq_terms function from admiraltest is used for this example.
+# The get_smq_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_smq_fun = admiraltest:::get_smq_terms,
+  get_smq_fun = admiral.test:::get_smq_terms,
   meddra_version = "20.1"
 )
 
@@ -214,16 +214,16 @@ sdg <- query(
   )
 )
 
-# The get_sdg_terms function from admiraltest is used for this example.
+# The get_sdg_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
-  get_sdg_fun = admiraltest:::get_sdg_terms,
+  get_sdg_fun = admiral.test:::get_sdg_terms,
   whodd_version = "2019-09"
 )
 
 # creating a query dataset for a customized query including SMQs
-# The get_smq_terms function from admiraltest is used for this example.
+# The get_smq_terms function from admiral.test is used for this example.
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(
@@ -239,7 +239,7 @@ create_query_data(
       )
     )
   ),
-  get_smq_fun = admiraltest:::get_smq_terms,
+  get_smq_fun = admiral.test:::get_smq_terms,
   meddra_version = "20.1"
 )
 }

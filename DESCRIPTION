@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.7.0
+Version: 0.8.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -64,7 +64,7 @@ Imports:
     tidyr,
     tidyselect
 Suggests:
-    admiraltest,
+    admiral.test,
     devtools,
     diffdf,
     knitr,

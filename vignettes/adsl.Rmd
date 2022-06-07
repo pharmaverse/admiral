@@ -51,12 +51,12 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiraltest}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 library(lubridate)
 library(stringr)
 
