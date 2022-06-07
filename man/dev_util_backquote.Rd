@@ -13,7 +13,7 @@ backquote(x)
 Wrap a String in Backquotes
 }
 \examples{
-admiral:::backquote("USUBJID")
+backquote("USUBJID")
 }
 \author{
 Thomas Neitmann

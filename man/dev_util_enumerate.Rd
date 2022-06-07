@@ -17,11 +17,11 @@ enumerate(x, quote_fun = backquote, conjunction = "and")
 Enumerate Multiple Strings
 }
 \examples{
-admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
-admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
-admiral:::enumerate(
+enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
+enumerate(letters[1:6], quote_fun = squote)
+enumerate(
   c("date", "time", "both"),
-  quote_fun = admiral:::squote,
+  quote_fun = squote,
   conjunction = "or"
 )
 }

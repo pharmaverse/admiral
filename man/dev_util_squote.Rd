@@ -13,7 +13,7 @@ squote(x)
 Wrap a String in Single Quotes
 }
 \examples{
-admiral:::squote("foo")
+squote("foo")
 }
 \author{
 Thomas Neitmann

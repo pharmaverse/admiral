@@ -10,12 +10,14 @@
 #'
 #' @rdname dev_util_enumerate
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
-#' admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
-#' admiral:::enumerate(
+#' enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
+#' enumerate(letters[1:6], quote_fun = squote)
+#' enumerate(
 #'   c("date", "time", "both"),
-#'   quote_fun = admiral:::squote,
+#'   quote_fun = squote,
 #'   conjunction = "or"
 #' )
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
@@ -40,8 +42,10 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @rdname dev_util_backquote
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::backquote("USUBJID")
+#' backquote("USUBJID")
 backquote <- function(x) {
   paste0("`", x, "`")
 }
@@ -56,8 +60,10 @@ backquote <- function(x) {
 #'
 #' @rdname dev_util_squote
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::squote("foo")
+#' squote("foo")
 squote <- function(x) {
   paste0("'", x, "'")
 }
@@ -76,9 +82,11 @@ squote <- function(x) {
 #'
 #' @keywords dev_utility
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::dquote("foo")
-#' admiral:::dquote(NULL)
+#' dquote("foo")
+#' dquote(NULL)
 dquote <- function(x) {
   if (is.null(x)) {
     "NULL"
@@ -101,8 +109,9 @@ dquote <- function(x) {
 #'
 #' @rdname dev_util_notin
 #'
+#' @export
+#'
 #' @examples
-#' `%notin%` <- admiral:::`%notin%`
 #' "a" %notin% c("b", "v", "k")
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
@@ -121,9 +130,11 @@ dquote <- function(x) {
 #'
 #' @rdname dev_util_convert_dtm_to_dtc
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
-#' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
+#' convert_dtm_to_dtc(as.POSIXct(Sys.time()))
+#' convert_dtm_to_dtc(as.Date(Sys.time()))
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
@@ -139,14 +150,16 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @rdname dev_util_arg_name
 #'
+#' @export
+#'
 #' @examples
 #' test_fun <- function(something) {
-#'   admiral:::arg_name(substitute(something))
+#'   arg_name(substitute(something))
 #' }
 #'
 #' inner_function <- function(x) x
 #' test_fun2 <- function(something) {
-#'   admiral:::arg_name(substitute(inner_function(something)))
+#'   arg_name(substitute(inner_function(something)))
 #' }
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -177,8 +190,10 @@ arg_name <- function(expr) { # nolint
 #'
 #' @rdname dev_util_extract_vars
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
+#' extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
@@ -212,11 +227,13 @@ extract_vars <- function(x, side = "lhs") {
 #'
 #' @rdname dev_util_quo_c
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::quo_c(rlang::quo(USUBJID))
-#' admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
-#' admiral:::quo_c(vars(USUBJID, ADTM))
-#' admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
+#' quo_c(rlang::quo(USUBJID))
+#' quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
+#' quo_c(vars(USUBJID, ADTM))
+#' quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
@@ -236,12 +253,14 @@ quo_c <- function(...) {
 #'
 #' @rdname dev_util_what_is_it
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::what_is_it(mtcars)
-#' admiral:::what_is_it(NA)
-#' admiral:::what_is_it(TRUE)
-#' admiral:::what_is_it(lm(hp ~ mpg, data = mtcars))
-#' admiral:::what_is_it(letters)
+#' what_is_it(mtcars)
+#' what_is_it(NA)
+#' what_is_it(TRUE)
+#' what_is_it(lm(hp ~ mpg, data = mtcars))
+#' what_is_it(letters)
 what_is_it <- function(x) {
   if (is.null(x)) {
     "`NULL`"
@@ -286,13 +305,15 @@ what_is_it <- function(x) {
 #'
 #' @return Variable vector.
 #'
+#' @export
+#'
 #' @examples
 #' library(admiral.test)
 #' data(admiral_vs)
 #'
-#' admiral:::get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
+#' get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
-#' admiral:::get_constant_vars(
+#' get_constant_vars(
 #'   admiral_vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
 #'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
@@ -344,8 +365,10 @@ is_named <- function(x) {
 #'
 #' @return A list of quosures
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
+#' replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {
@@ -359,6 +382,22 @@ replace_values_by_names <- function(quosures) {
   structure(vars, class = "quosures", names = NULL)
 }
 
+
+#' Returns Duplicated Values of a Vector
+#'
+#' Returns all values which occur more than once in the vector
+#'
+#' @param x Input vector
+#'
+#' @return A vector of the values which occur more than once in the input vector
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#'
+#' get_duplicates(c(1, 2, 1, 3, 1, 2, 4))
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
@@ -396,11 +435,13 @@ extract_unit <- function(x) {
 #'
 #' @keywords check
 #'
+#' @export
+#'
 #' @examples
 #'
 #' example_fun <- function(arg) {
 #'   arg <- rlang::enquo(arg)
-#'   if (admiral:::is_auto(arg)) {
+#'   if (is_auto(arg)) {
 #'     "auto keyword was specified"
 #'   } else {
 #'     arg
@@ -426,8 +467,10 @@ is_auto <- function(arg) {
 #'
 #' @return A list of quosures
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+#' get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }
@@ -446,10 +489,47 @@ as_name <- function(x) {
   as_string(x)
 }
 
+#' Returns Valid Time Units
+#'
+#' Returns valid time units as expected for arguments expecting a time unit
+#'
+#' @return A vector of valid time units
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#'
+#' valid_time_units()
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
+#' Returns If Argument is a Vector of Symbols or Named Expressions
+#'
+#' Returns If Argument is a Vector of Symbols or Named Expressions
+#'
+#' @param arg Input vector
+#'
+#' @return `TRUE` if
+#'   - The vector is a vector of quosures and
+#'   - all elements are a symbol or a named expression like `CHG = AVAL - BASE`
+#'
+#'   `FALSE` otherwise
+#'
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#'
+#' @examples
+#'
+#' contains_vars(rlang::expr(AVAL))
+#' contains_vars(dplyr::vars(AVAL))
+#' contains_vars(dplyr::vars(1))
+#' contains_vars(dplyr::vars(AVAL, ID = 1))
+#' contains_vars(dplyr::vars(AVAL, CHG = AVAL - BASE))
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }
