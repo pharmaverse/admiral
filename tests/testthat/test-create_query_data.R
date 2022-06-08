@@ -5,8 +5,7 @@ get_smq <- function(smq_select,
                     temp_env) {
   if (smq_select$scope == "NARROW") {
     end <- 3
-  }
-  else {
+  } else {
     end <- 5
   }
 
@@ -17,8 +16,7 @@ get_smq <- function(smq_select,
   terms <- mutate(terms, TERM_LEVEL = "AEDECOD", QUERY_NAME = smq_select$name)
   if (keep_id) {
     mutate(terms, QUERY_ID = 42)
-  }
-  else {
+  } else {
     terms
   }
 }
@@ -31,8 +29,7 @@ get_sdg <- function(sdg_select,
   terms <- mutate(terms, TERM_LEVEL = "CMDECOD", QUERY_NAME = sdg_select$name)
   if (keep_id) {
     mutate(terms, QUERY_ID = 42)
-  }
-  else {
+  } else {
     terms
   }
 }
@@ -40,19 +37,24 @@ get_sdg <- function(sdg_select,
 cqterms <- tibble::tribble(
   ~TERM_NAME, ~TERM_ID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
-  "APPLICATION SITE PRURITUS", 10003053L) %>%
+  "APPLICATION SITE PRURITUS", 10003053L
+) %>%
   mutate(TERM_LEVEL = "AEDECOD")
 
 # customized query defined by terms ----
 test_that("customized query defined by terms", {
-  cq <- query(prefix = "CQ01",
-              name = "Application Site Issues",
-              definition = cqterms)
+  cq <- query(
+    prefix = "CQ01",
+    name = "Application Site Issues",
+    definition = cqterms
+  )
 
   actual_output <- create_query_data(queries = list(cq))
 
-  expected_output <- cqterms %>% mutate(QUERY_NAME = "Application Site Issues",
-                                        VAR_PREFIX = "CQ01")
+  expected_output <- cqterms %>% mutate(
+    QUERY_NAME = "Application Site Issues",
+    VAR_PREFIX = "CQ01"
+  )
 
   expect_dfs_equal(
     base = expected_output,
@@ -69,12 +71,14 @@ test_that("customized query defined by SMQs", {
     definition = list(
       smq_select(
         name = "Noninfectious meningitis",
-        scope =  "NARROW"
+        scope = "NARROW"
       ),
       smq_select(
         name = "Noninfectious encephalitis",
         scope = "BROAD"
-      )))
+      )
+    )
+  )
 
   actual_output <- create_query_data(
     queries = list(cq),
@@ -83,14 +87,24 @@ test_that("customized query defined by SMQs", {
   )
 
   expected_output <-
-    bind_rows(get_smq(smq_select(name = "Noninfectious meningitis",
-                                 scope =  "NARROW"),
-                      version = "20.0"),
-              get_smq(smq_select(name = "Noninfectious encephalitis",
-                                 scope = "BROAD"),
-                      version = "20.0")) %>%
-    mutate(QUERY_NAME = "Immune-Mediated Meningoencephalitis",
-           VAR_PREFIX = "CQ02")
+    bind_rows(
+      get_smq(smq_select(
+        name = "Noninfectious meningitis",
+        scope = "NARROW"
+      ),
+      version = "20.0"
+      ),
+      get_smq(smq_select(
+        name = "Noninfectious encephalitis",
+        scope = "BROAD"
+      ),
+      version = "20.0"
+      )
+    ) %>%
+    mutate(
+      QUERY_NAME = "Immune-Mediated Meningoencephalitis",
+      VAR_PREFIX = "CQ02"
+    )
 
   expect_dfs_equal(
     base = expected_output,
@@ -106,13 +120,15 @@ test_that("customized query defined by terms and SMQs", {
     definition = list(
       smq_select(
         name = "Noninfectious meningitis",
-        scope =  "NARROW"
+        scope = "NARROW"
       ),
       cqterms,
       smq_select(
         name = "Noninfectious encephalitis",
         scope = "BROAD"
-      )))
+      )
+    )
+  )
 
   actual_output <- create_query_data(
     queries = list(cq),
@@ -121,15 +137,25 @@ test_that("customized query defined by terms and SMQs", {
   )
 
   expected_output <-
-    bind_rows(get_smq(smq_select(name = "Noninfectious meningitis",
-                                 scope =  "NARROW"),
-                      version = "20.1"),
-              cqterms,
-              get_smq(smq_select(name = "Noninfectious encephalitis",
-                                 scope = "BROAD"),
-                      version = "20.1")) %>%
-    mutate(QUERY_NAME = "Immune-Mediated Meningoencephalitis or Application Site Issues",
-           VAR_PREFIX = "CQ03")
+    bind_rows(
+      get_smq(smq_select(
+        name = "Noninfectious meningitis",
+        scope = "NARROW"
+      ),
+      version = "20.1"
+      ),
+      cqterms,
+      get_smq(smq_select(
+        name = "Noninfectious encephalitis",
+        scope = "BROAD"
+      ),
+      version = "20.1"
+      )
+    ) %>%
+    mutate(
+      QUERY_NAME = "Immune-Mediated Meningoencephalitis or Application Site Issues",
+      VAR_PREFIX = "CQ03"
+    )
 
   expect_dfs_equal(
     base = expected_output,
@@ -144,13 +170,19 @@ test_that("SMQs", {
     prefix = "SMQ02",
     id = 13,
     add_scope_num = TRUE,
-    definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                            scope = "NARROW")
+    definition = smq_select(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW"
+    )
   )
 
-  pneuaegt <- query(prefix = "SMQ04",
-                    definition = smq_select(id = 8050L,
-                                            scope = "BROAD"))
+  pneuaegt <- query(
+    prefix = "SMQ04",
+    definition = smq_select(
+      id = 8050L,
+      scope = "BROAD"
+    )
+  )
 
   actual_output <-
     create_query_data(
@@ -162,20 +194,29 @@ test_that("SMQs", {
   expected_output <-
     bind_rows(
       get_smq(
-        smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                   scope = "NARROW"),
+        smq_select(
+          name = "Pregnancy and neonatal topics (SMQ)",
+          scope = "NARROW"
+        ),
         version = "20.0"
       ) %>%
-        mutate(QUERY_NAME = "Pregnancy and neonatal topics (SMQ)",
-               QUERY_ID = 13,
-               QUERY_SCOPE = "NARROW",
-               QUERY_SCOPE_NUM = 2,
-               VAR_PREFIX = "SMQ02"),
-      get_smq(smq_select(id = 8050L,
-                         scope = "BROAD"),
-              version = "20.0") %>%
-        mutate(QUERY_SCOPE = "BROAD",
-               VAR_PREFIX = "SMQ04")
+        mutate(
+          QUERY_NAME = "Pregnancy and neonatal topics (SMQ)",
+          QUERY_ID = 13,
+          QUERY_SCOPE = "NARROW",
+          QUERY_SCOPE_NUM = 2,
+          VAR_PREFIX = "SMQ02"
+        ),
+      get_smq(smq_select(
+        id = 8050L,
+        scope = "BROAD"
+      ),
+      version = "20.0"
+      ) %>%
+        mutate(
+          QUERY_SCOPE = "BROAD",
+          VAR_PREFIX = "SMQ04"
+        )
     )
 
   expect_dfs_equal(
@@ -189,28 +230,38 @@ test_that("SMQs", {
 test_that("issues error if SMQs without get_smq_fun are requested", {
   pregsmq <- query(
     prefix = "SMQ02",
-    definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                            scope = "NARROW")
+    definition = smq_select(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW"
+    )
   )
 
   expect_error(
-    create_query_data(queries = list(pregsmq),
-                      meddra_version = "20.0"),
-    regexp = "^get_smq_fun is not specified. This is expected for SMQs.*")
+    create_query_data(
+      queries = list(pregsmq),
+      meddra_version = "20.0"
+    ),
+    regexp = "^get_smq_fun is not specified. This is expected for SMQs.*"
+  )
 })
 
 # issues error if SMQs without meddra_version are requested ----
 test_that("issues error if SMQs without meddra_version are requested", {
   pregsmq <- query(
     prefix = "SMQ02",
-    definition = smq_select(name = "Pregnancy and neonatal topics (SMQ)",
-                            scope = "NARROW")
+    definition = smq_select(
+      name = "Pregnancy and neonatal topics (SMQ)",
+      scope = "NARROW"
+    )
   )
 
   expect_error(
-    create_query_data(queries = list(pregsmq),
-                      get_smq_fun = get_smq),
-    regexp = "^meddra_version is not specified. This is expected for SMQs.*")
+    create_query_data(
+      queries = list(pregsmq),
+      get_smq_fun = get_smq
+    ),
+    regexp = "^meddra_version is not specified. This is expected for SMQs.*"
+  )
 })
 
 # SDGs ----
@@ -221,16 +272,20 @@ test_that("SDGs", {
     definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
   )
 
-  actual_output <- create_query_data(queries = list(sdg),
-                                   whodd_version = "2019_09",
-                                   get_sdg_fun = get_sdg)
+  actual_output <- create_query_data(
+    queries = list(sdg),
+    whodd_version = "2019_09",
+    get_sdg_fun = get_sdg
+  )
 
   expected_output <-
     get_sdg(sdg_select(name = "5-aminosalicylates for ulcerative colitis"),
-            version = "2019_09") %>%
+      version = "2019_09"
+    ) %>%
     mutate(
       QUERY_ID = 42,
-      VAR_PREFIX = "SDG01")
+      VAR_PREFIX = "SDG01"
+    )
 
   expect_dfs_equal(
     base = expected_output,
@@ -246,9 +301,12 @@ test_that("issues error if SDGs without get_sdg_fun are requested", {
   )
 
   expect_error(
-    create_query_data(queries = list(sdg),
-                      whodd_version = "2019_09"),
-    regexp = "^get_sdg_fun is not specified. This is expected for SDGs.*")
+    create_query_data(
+      queries = list(sdg),
+      whodd_version = "2019_09"
+    ),
+    regexp = "^get_sdg_fun is not specified. This is expected for SDGs.*"
+  )
 })
 
 # issues error if SDGs without meddra_version are requested ----
@@ -259,9 +317,12 @@ test_that("issues error if SDGs without meddra_version are requested", {
   )
 
   expect_error(
-    create_query_data(queries = list(sdg),
-                      get_sdg_fun = get_sdg),
-    regexp = "^whodd_version is not specified. This is expected for SDGs.*")
+    create_query_data(
+      queries = list(sdg),
+      get_sdg_fun = get_sdg
+    ),
+    regexp = "^whodd_version is not specified. This is expected for SDGs.*"
+  )
 })
 
 # query: error: add_scope_num = TRUE for non SMQs ----
@@ -273,7 +334,8 @@ test_that("query: error: add_scope_num = TRUE for non SMQs", {
       definition = sdg_select(name = "5-aminosalicylates for ulcerative colitis")
     ),
     regexp = "`add_scope_num == TRUE` must be used for SMQs only.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # query: error: name = auto for non SMQs/SDGs ----
@@ -283,7 +345,8 @@ test_that("query: error: name = auto for non SMQs/SDGs", {
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for SMQs and SDGs only.*")
+    regexp = "^The auto keyword can be used for SMQs and SDGs only.*"
+  )
 })
 
 # query: error: name = id for non SMQs/SDGs ----
@@ -295,7 +358,8 @@ test_that("query: error: name = id for non SMQs/SDGs", {
       prefix = "CQ01",
       definition = cqterms
     ),
-    regexp = "^The auto keyword can be used for SMQs and SDGs only.*")
+    regexp = "^The auto keyword can be used for SMQs and SDGs only.*"
+  )
 })
 
 # query: error: definition is list with non dataframe or smq_select elements ----
@@ -333,70 +397,91 @@ test_that("query: error: invalid definition", {
 # assert_terms: error: TERM_LEVEL missing ----
 test_that("assert_terms: error: TERM_LEVEL missing", {
   expect_error(
-    assert_terms(terms = select(cqterms, -TERM_LEVEL),
-                 source_text = "my test data"),
+    assert_terms(
+      terms = select(cqterms, -TERM_LEVEL),
+      source_text = "my test data"
+    ),
     regexp = "Required variable `TERM_LEVEL` is missing in my test data.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # assert_terms: error: TERM_NAME and TERM_ID missing ----
 test_that("assert_terms: error: TERM_NAME and TERM_ID missing", {
   expect_error(
-    assert_terms(terms = select(cqterms, TERM_LEVEL),
-                 source_text = "my test data"),
+    assert_terms(
+      terms = select(cqterms, TERM_LEVEL),
+      source_text = "my test data"
+    ),
     regexp = paste0(
       "Variable `TERM_NAME` or `TERM_ID` is required.\n",
       "None of them is in my test data.\nProvided variables: `TERM_LEVEL`"
     ),
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # assert_terms: error: no data frame ----
 test_that("assert_terms: error: no data frame", {
   expect_error(
-    assert_terms(terms = 42,
-                 source_text = "object returned by calling get_mysmq()"),
+    assert_terms(
+      terms = 42,
+      source_text = "object returned by calling get_mysmq()"
+    ),
     regexp = "object returned by calling get_mysmq() is not a data frame but `42`.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # assert_terms: error: no observations ----
 test_that("assert_terms: error: no observations", {
   expect_error(
-    assert_terms(terms = filter(cqterms, TERM_ID == 42),
-                 source_text = "object returned by calling get_my_smq"),
+    assert_terms(
+      terms = filter(cqterms, TERM_ID == 42),
+      source_text = "object returned by calling get_my_smq"
+    ),
     regexp = "object returned by calling get_my_smq does not contain any observations.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # assert_terms: error: QUERY_NAME is missing ----
 test_that("assert_terms: error: QUERY_NAME is missing", {
   expect_error(
-    assert_terms(terms = cqterms,
-                 expect_query_name = TRUE,
-                 source_text = "object returned by calling get_my_smq"),
+    assert_terms(
+      terms = cqterms,
+      expect_query_name = TRUE,
+      source_text = "object returned by calling get_my_smq"
+    ),
     regexp = "Required variable `QUERY_NAME` is missing in object returned by calling get_my_smq.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # assert_terms: error: QUERY_ID is missing ----
 test_that("assert_terms: error: QUERY_ID is missing", {
   expect_error(
-    assert_terms(terms = cqterms,
-                 expect_query_id = TRUE,
-                 source_text = "object returned by calling get_my_smq"),
+    assert_terms(
+      terms = cqterms,
+      expect_query_id = TRUE,
+      source_text = "object returned by calling get_my_smq"
+    ),
     regexp = "Required variable `QUERY_ID` is missing in object returned by calling get_my_smq.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # smq_select: error: name and id specified ----
 test_that("smq_select: error: name and id specified", {
   expect_error(
-    smq_select(name = "My SMQ",
-               id = 42,
-               scope = "NARROW"),
+    smq_select(
+      name = "My SMQ",
+      id = 42,
+      scope = "NARROW"
+    ),
     regexp = "Either id or name has to be null.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # smq_select: error: neither name nor id specified ----
@@ -404,23 +489,31 @@ test_that("smq_select: error: neither name nor id specified", {
   expect_error(
     smq_select(scope = "NARROW"),
     regexp = "Either id or name has to be non null.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # sdg_select: error: name and id specified ----
 test_that("sdg_select: error: name and id specified", {
   expect_error(
-    sdg_select(name = "My SDG",
-               id = 42),
+    sdg_select(
+      name = "My SDG",
+      id = 42
+    ),
     regexp = "Either id or name has to be null.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # format.smq_select: formatting is correct ----
 test_that("format.smq_select: formatting is correct", {
-  expect_equal(format(smq_select(id = 42,
-                                 scope = "NARROW")),
-               "smq_select(name = NULL, id = 42, scope = \"NARROW\")")
+  expect_equal(
+    format(smq_select(
+      id = 42,
+      scope = "NARROW"
+    )),
+    "smq_select(name = NULL, id = 42, scope = \"NARROW\")"
+  )
 })
 
 # sdg_select: error: neither name nor id specified ----
@@ -428,11 +521,14 @@ test_that("sdg_select: error: neither name nor id specified", {
   expect_error(
     sdg_select(),
     regexp = "Either id or name has to be non null.",
-    fixed = TRUE)
+    fixed = TRUE
+  )
 })
 
 # format.sdg_select: formatting is correct ----
 test_that("format.sdg_select: formatting is correct", {
-  expect_equal(format(sdg_select(name = "My SDG")),
-               "sdg_select(name = \"My SDG\", id = NULL)")
+  expect_equal(
+    format(sdg_select(name = "My SDG")),
+    "sdg_select(name = \"My SDG\", id = NULL)"
+  )
 })

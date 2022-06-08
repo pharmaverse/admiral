@@ -4,7 +4,7 @@
 #
 # Input: dm, ex, ds
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -143,6 +143,7 @@ adsl <- dm %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
+    flag_imputation = "none",
     date_imputation = "FIRST"
   ) %>%
   # Relative Day of Death

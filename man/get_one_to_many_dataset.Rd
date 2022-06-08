@@ -26,7 +26,7 @@ accessed (unless it has been saved in a variable).
 data(admiral_adsl)
 
 try(
-  assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+  assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
 )
 
 get_one_to_many_dataset()

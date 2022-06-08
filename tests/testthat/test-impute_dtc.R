@@ -141,47 +141,47 @@ test_that("impute to last day/month if date is partial,Missing time part imputed
 
 test_that("impute to last day/month if date is partial,Missing time part imputed
           with 23:59:59 portion and preserve equals FALSE", { # nolint
-            expected_output <- c(
-              "2019-07-18T15:25:40",
-              "2019-07-18T15:25:40",
-              "2019-07-18T15:25:59",
-              "2019-07-18T23:59:59",
-              "2019-02-28T23:59:59",
-              "2019-12-31T23:59:59",
-              "2019-12-31T23:59:59"
-            )
-            expect_equal(
-              imputes <- impute_dtc(
-                dtc = input,
-                date_imputation = "LAST",
-                time_imputation = "LAST",
-                preserve = FALSE
-              ),
-              expected_output
-            )
-          })
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:59",
+    "2019-07-18T23:59:59",
+    "2019-02-28T23:59:59",
+    "2019-12-31T23:59:59",
+    "2019-12-31T23:59:59"
+  )
+  expect_equal(
+    imputes <- impute_dtc(
+      dtc = input,
+      date_imputation = "LAST",
+      time_imputation = "LAST",
+      preserve = FALSE
+    ),
+    expected_output
+  )
+})
 
 test_that("impute to last day/month if date is partial,Missing time part imputed
           with 00:00:00 portion and preserve equals FALSE", { # nolint
-            expected_output <- c(
-              "2019-07-18T15:25:40",
-              "2019-07-18T15:25:40",
-              "2019-07-18T15:25:00",
-              "2019-07-18T00:00:00",
-              "2019-02-15T00:00:00",
-              "2019-06-30T00:00:00",
-              "2019-06-30T00:00:00"
-            )
-            expect_equal(
-              imputes <- impute_dtc(
-                dtc = input,
-                date_imputation = "MID",
-                time_imputation = "FIRST",
-                preserve = FALSE
-              ),
-              expected_output
-            )
-          })
+  expected_output <- c(
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:40",
+    "2019-07-18T15:25:00",
+    "2019-07-18T00:00:00",
+    "2019-02-15T00:00:00",
+    "2019-06-30T00:00:00",
+    "2019-06-30T00:00:00"
+  )
+  expect_equal(
+    imputes <- impute_dtc(
+      dtc = input,
+      date_imputation = "MID",
+      time_imputation = "FIRST",
+      preserve = FALSE
+    ),
+    expected_output
+  )
+})
 
 
 
@@ -259,21 +259,33 @@ test_that("impute to 01-01 day/month if date is partial and preserve argument
 
 
 test_that("min_dates parameter works", {
-            expect_equal(impute_dtc(c("2020-12", "2020-11"),
-                                    min_dates = list(c(lubridate::ymd_hms("2020-12-06T12:12:12"),
-                                                       NA),
-                                                     c(lubridate::ymd_hms("2020-11-11T11:11:11"),
-                                                       lubridate::ymd_hms("2020-11-11T11:11:11"))),
-                                    date_imputation = "first"),
-                         c("2020-12-06T12:12:12", "2020-11-11T11:11:11")
-            )
-          })
+  expect_equal(
+    impute_dtc(c("2020-12", "2020-11"),
+      min_dates = list(
+        c(
+          lubridate::ymd_hms("2020-12-06T12:12:12"),
+          NA
+        ),
+        c(
+          lubridate::ymd_hms("2020-11-11T11:11:11"),
+          lubridate::ymd_hms("2020-11-11T11:11:11")
+        )
+      ),
+      date_imputation = "first"
+    ),
+    c("2020-12-06T12:12:12", "2020-11-11T11:11:11")
+  )
+})
 
 test_that("max_dates parameter works", {
-            expect_equal(impute_dtc("2020-12",
-                                    max_dates = list(lubridate::ymd_hms("2020-12-06T12:12:12"),
-                                                     lubridate::ymd_hms("2020-11-11T11:11:11")),
-                                    date_imputation = "last"),
-                         "2020-12-06T12:12:12"
-            )
-          })
+  expect_equal(
+    impute_dtc("2020-12",
+      max_dates = list(
+        lubridate::ymd_hms("2020-12-06T12:12:12"),
+        lubridate::ymd_hms("2020-11-11T11:11:11")
+      ),
+      date_imputation = "last"
+    ),
+    "2020-12-06T12:12:12"
+  )
+})

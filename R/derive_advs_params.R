@@ -434,7 +434,7 @@ compute_bsa <- function(height = height,
     # The Boyd formula expects the value of weight in grams
     # we need to convert from kg
     bsa <- 0.0003207 * (height^0.3) *
-      (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
+      (1000 * weight)^(0.7285 - (0.0188 * log10(1000 * weight))) # nolint
   } else if (method == "Fujimoto") {
     bsa <- 0.008883 * height^0.663 * weight^0.444
   } else if (method == "Takahira") {

@@ -1,4 +1,4 @@
-library(admiraltest)
+library(admiral.test)
 data(admiral_ae)
 data(admiral_vs)
 

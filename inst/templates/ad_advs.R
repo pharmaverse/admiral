@@ -4,7 +4,7 @@
 #
 # Input: adsl, vs
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -83,7 +83,7 @@ advs <- vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
-    flag_imputation = FALSE
+    flag_imputation = "none"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 

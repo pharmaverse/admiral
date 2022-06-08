@@ -23,7 +23,7 @@ are suppressed.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_adsl)
 data(admiral_vs)
 

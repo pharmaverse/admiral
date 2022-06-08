@@ -129,7 +129,7 @@ variables must start with `temp_` and must be removed from the output dataset.
 
 ## Function Names
 
-* Function names should start with a verb and use snake case, e.g. `derive_var_baseline()`. 
+* Function names should start with a verb and use snake case, e.g. `derive_var_base()`. 
 
 | Function name prefix                         | Description                                                                                         |
 |----------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -248,7 +248,7 @@ and, if there’s an invalid input, the function should stop immediately with an
 An exception is the case where a variable to be added by a function already exists in the input dataset: 
 here only a warning should be displayed and the function should continue executing.
 
-Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in `R/assertions.R`. 
+Inputs should be checked either using `asserthat::assert_that()` or custom assertion functions defined in [`R/assertions.R`](https://github.com/pharmaverse/admiral/blob/main/R/assertions.R). 
 These custom assertion functions should either return an error in case of an invalid input or return nothing.
 
 For the most common types of input parameters like a single variable, a list of
@@ -277,46 +277,65 @@ Please see section "Categorization of functions".
 An example is given below:
 
 ```{r, eval=F}
-#' Derive Analysis Study Day
+#' Derive Relative Day Variables
 #'
-#' Adds the analysis study day (`ADY`) to the dataset, i.e. study day #' of analysis date.
+#' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
+#' `AENDY`.
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `reference_date` and the `date` parameter are
-#'   expected.
+#'   The columns specified by the `reference_date` and the `source_vars`
+#'   parameter are expected.
 #'
-#' @param reference_date The start date column, e.g., date of first #'treatment
-#'
-#'   A date or date-time object column is expected.
-#'
-#'   The default is `TRTSDT`.
-#'
-#' @param date The end date column for which the study day should be #'derived
+#' @param reference_date The start date column, e.g., date of first treatment
 #'
 #'   A date or date-time object column is expected.
 #'
-#'   The default is `ADT`
+#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   character vector to a date object.
 #'
-#' @details The study day is derived as number of days from the start date
-#'   to the end date. If it is non-negative, one is added, i.e. the study day of the
-#'   start date is 1.
+#' @param source_vars A list of datetime or date variables created using
+#'   `vars()` from which dates are to be extracted. This can either be a list of
+#'   date(time) variables or named `--DY` variables and corresponding --DT(M)
+#'   variables e.g. `vars(TRTSDTM, ASTDTM, AENDT)` or `vars(TRTSDT, ASTDTM,
+#'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
+#'   name for the resulting `--DY` variable must be provided.
 #'
-#' @author Stefan Bundfuss
+#' @author Teckla Akinyi
 #'
-#' @return The input dataset with `ADY` column added
+#' @details The relative day is derived as number of days from the reference
+#'   date to the end date. If it is nonnegative, one is added. I.e., the
+#'   relative day of the reference date is 1. Unless a name is explicitly
+#'   specified, the name of the resulting relative day variable is generated
+#'   from the source variable name by replacing DT (or DTM as appropriate) with
+#'   DY.
 #'
-#' @keywords bds timing
+#' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
+#'   source variable(s) added
+#'
+#' @keywords derivation ADaM timing
 #'
 #' @export
 #'
 #' @examples
-#' data <- tibble::tribble(
-#'   ~TRTSDT, ~ADT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
-#' )
+#' library(lubridate)
+#' library(dplyr)
 #'
-#' derive_var_ady(data)
+#' datain <- tibble::tribble(
+#'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,
+#'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
+#' ) %>%
+#'  mutate(
+#'    TRTSDTM = as_datetime(TRTSDTM),
+#'    ASTDTM = as_datetime(ASTDTM),
+#'    AENDT = ymd(AENDT)
+#'  )
+#'
+#' derive_vars_dy(
+#'   datain,
+#'   reference_date = TRTSDTM,
+#'   source_vars = vars(TRTSDTM, ASTDTM, AENDT)
+#' )
 ```
 
 

@@ -51,12 +51,12 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiraltest}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
 library(dplyr)
-library(admiraltest)
+library(admiral.test)
 library(lubridate)
 library(stringr)
 
@@ -204,7 +204,7 @@ This call would return the input dataset with the column `EOSDT` added.
 This function allows the user to impute partial dates as well. If imputation is needed and the date 
 is to be imputed to the first of the month, then set `date_imputation = "FIRST"`.
 
-### Disposition Status (e.g. `EOSTT`) {#disposition_status}
+### Disposition Status (e.g. `EOSSTT`) {#disposition_status}
 
 The function `derive_var_disposition_status()` can be used to derive a disposition status at a specific
 timepoint. The relevant disposition variable (`DS.DSDECOD`) is selected by adjusting the filter 
@@ -361,7 +361,7 @@ dataset_vignette(adsl, display_vars = vars(USUBJID, TRTEDT, DTHDTC, DTHDT, DTHFL
 This call would return the input dataset with the columns `DTHDT` added and, by default, the 
 associated date imputation flag (`DTHDTF`) populated with the controlled terminology outlined in 
 the ADaM IG for date imputations. 
-If the imputation flag is not required, the user must set the argument `flag_imputation` to `FALSE`.
+If the imputation flag is not required, the user must set the argument `flag_imputation` to "none".
 
 If imputation is needed and the date is to be imputed to the first day of the month/year 
 the call would be:

@@ -39,27 +39,27 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #'
-#' data <-tibble::tribble(
-#'  ~USUBJID, ~PARAMCD, ~SEQ,  ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
-#'  "P01",    "ALT",     1,     27,    27,    6,      34,
-#'  "P01",    "ALT",     2,     41,    27,    6,      34,
-#'  "P01",    "ALT",     3,     17,    27,    6,      34,
-#'  "P02",    "ALB",     1,     38,    38,    33,     49,
-#'  "P02",    "ALB",     2,     39,    38,    33,     49,
-#'  "P02",    "ALB",     3,     37,    38,    33,     49
-#')
+#' data <- tibble::tribble(
+#'   ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
+#'   "P01", "ALT", 1, 27, 27, 6, 34,
+#'   "P01", "ALT", 2, 41, 27, 6, 34,
+#'   "P01", "ALT", 3, 17, 27, 6, 34,
+#'   "P02", "ALB", 1, 38, 38, 33, 49,
+#'   "P02", "ALB", 2, 39, 38, 33, 49,
+#'   "P02", "ALB", 3, 37, 38, 33, 49
+#' )
 #'
 #' # Returns "R2" prefixed variables
 #' data %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI)
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE) %>%
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO) %>%
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI)
 #'
 #' # Returns user-defined variables
 #' data %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, new_var = R01BASE) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, new_var = R01ANRLO) %>%
-#'  derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, new_var = R01ANRHI)
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = BASE, new_var = R01BASE) %>%
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRLO, new_var = R01ANRLO) %>%
+#'   derive_var_analysis_ratio(numer_var = AVAL, denom_var = ANRHI, new_var = R01ANRHI)
 derive_var_analysis_ratio <- function(dataset,
                                       numer_var,
                                       denom_var,

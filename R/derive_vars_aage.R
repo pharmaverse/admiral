@@ -11,7 +11,7 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
 #'   vector to a date object.
 #'
 #'   Default: `BRTHDT`
@@ -20,7 +20,7 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
 #'   vector to a date object.
 #'
 #'   Default: `RANDDT`
@@ -229,7 +229,7 @@ NULL
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' admiral_dm %>%
@@ -284,7 +284,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' admiral_dm %>%

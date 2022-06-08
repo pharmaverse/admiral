@@ -33,7 +33,7 @@ specified, no variable for the unit is created.}
 A date or date-time variable is expected. This variable must be present in
 specified input dataset.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{end_date}{The end date
@@ -41,7 +41,7 @@ character vector to a date object.}
 A date or date-time variable is expected. This variable must be present in
 specified input dataset.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{in_unit}{Input unit

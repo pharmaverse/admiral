@@ -22,13 +22,17 @@ processed dataset. This modular approach makes it easy to adjust code by adding,
 removing, or modifying derivations. Each derivation is a function call. Consider
 for example the following script which creates a (very simple) ADSL dataset.
 
+## Load Packages and Example Datasets
+
+First, we will load our packages and example datasets to help with our `ADSL` creation. The `{dplyr}` and `{lubridate}` packages are `{tidyverse}` packages and used heavily throughout this script.  The `{admiral}` package also leverages the `{admiral.test}` package for example SDTM datasets which are from the CDISC Pilot Study.
+
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(lubridate)
 library(admiral)
-library(admiraltest)
+library(admiral.test)
 
-# read in SDTM datasets
+# Read in SDTM datasets
 data("admiral_dm")
 data("admiral_ds")
 data("admiral_ex")
@@ -38,16 +42,33 @@ ds <- admiral_ds
 ex <- admiral_ex
 ```
 
-```{r, eval=TRUE}
-# derive treatment variables
+## Derive Treatment Variables (`TRT0xP`, `TRT0xA`) {#treatmentvargs}
+
+The mapping of the treatment variables is left to the ADaM programmer. An example mapping may be:
+
+```{r eval=TRUE}
 adsl <- dm %>%
-  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
+  mutate(TRT01P = ARM, TRT01A = ACTARM)
+```
+
+## Derive/Impute Numeric Treatment Date/Time and Flag Variables (`TRTSDTM`, `TRTEDTM`, `TRTSTMF`, `TRTETMF`) {#trtdatetimegs}
+
+The function `derive_vars_merged_dtm()` can be used to derive the treatment
+start and end date/times using the `EX` domain. This function call returns the original data frame with the column `TRTSDTM`, `TRTEDTM` and flag variables `TRTSTMF`, `TRTETMF` added to the end of the dataframe. Exposure observations with an incomplete date are ignored. We impute time to to be 23:59:59 using `time_imputation = "last"`, which will append 23:59:59 to our `TRTSDTM`, `TRTEDTM` variables.  Additionally, we set `flag_imputation = "time"` to get appropriate flag variables `TRTSTMF`, `TRTETMF`.
+
+Don't be intimidated by the number of arguments! We try to make our arguments self-explanatory, e.g. the `new_vars_prefix` places `TRTS` at the start of the `--DTM` variable and `time_imputation = "last"` appends 23:59:59.  However, this is not always possible to make every argument self-explanatory.  If you click on the function, `derive_vars_merged_dtm()`, you can bring up the reference documentation and learn more about each argument.  
+
+```{r, eval=TRUE}
+# Derive treatment variables
+adsl <- adsl %>%
   derive_vars_merged_dtm(
     dataset_add = ex,
     filter_add = nchar(EXSTDTC) >= 10,
     new_vars_prefix = "TRTS",
     dtc = EXSTDTC,
     order = vars(TRTSDTM, EXSEQ),
+    time_imputation = "last",
+    flag_imputation = "time",
     mode = "first",
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
@@ -57,14 +78,34 @@ adsl <- dm %>%
     new_vars_prefix = "TRTE",
     dtc = EXENDTC,
     time_imputation = "last",
-    flag_imputation = "none",
+    flag_imputation = "time",
     order = vars(TRTEDTM, EXSEQ),
     mode = "last",
     by_vars = vars(STUDYID, USUBJID)
-  ) %>%
-  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
+  )
+```
+
+## Derive Date Variables from Date/Time Variables (`TRTSDT`, `TRTEDT`) {#trtdategs}
+
+The datetime variables returned can be converted to dates using the `derive_vars_dtm_to_dt()` 
+function.
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM))
+```
+
+## Derive Treatment Duration (`TRTDURD`) {#trtdurgs}
+
+Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
+can be used to calculate the Treatment duration (`TRTDURD`).  Notice the lack of inputs.  The function defaults are set to `TRTSDT` and `TRTEDT`.  Clicking on `derive_var_trtdurd()` will bring up the reference documentation where you can see the **Default** arguments.  
+
+```{r eval=TRUE}
+adsl <- adsl %>%
   derive_var_trtdurd()
 ```
+
+Amazing! With one `{dplyr}` function and 3 `{admiral}` functions we successfully created 9 new variables for our `ADSL` dataset. Let's take a look at all our newly derived variables.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -72,10 +113,12 @@ dataset_vignette(
   display_vars = vars(
     STUDYID, USUBJID, TRT01P, TRT01A,
     TRTSDTM, TRTEDTM, TRTSDT, TRTEDT,
-    TRTDURD
+    TRTSTMF, TRTETMF, TRTDURD
   )
 )
 ```
+
+**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed. You can use the **Choose Columns to Display** button to add more variables into the Table.  
 
 # Derivations
 
@@ -87,6 +130,9 @@ operator.
 
 Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
+
+Functions which can derive multiple variables start with `derive_vars_` followed by
+the variable name, e.g., `derive_vars_merged_dtm` can derive both the `TRTSDT` and `TRTEDT` variables.
 
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.
@@ -110,7 +156,7 @@ be preserved.
 
 # Computations
 
-[Computations](../reference/index.html#section-computations) expect vectors as
+[Computations](../reference/index.html#computations) expect vectors as
 input and return a vector. Usually these computation functions can not be used with `%>%`. These functions can be used in expressions like
 `convert_dtc_to_dt()` in the derivation of `FINLABDT` in the
 example below:

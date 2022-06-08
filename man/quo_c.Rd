@@ -16,10 +16,10 @@ An object of class \code{quosures}
 Concatenate One or More Quosure(s)
 }
 \examples{
-admiral:::quo_c(rlang::quo(USUBJID))
-admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
-admiral:::quo_c(vars(USUBJID, ADTM))
-admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
+quo_c(rlang::quo(USUBJID))
+quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
+quo_c(vars(USUBJID, ADTM))
+quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 }
 \author{
 Thomas Neitmann
