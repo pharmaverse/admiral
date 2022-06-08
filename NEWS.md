@@ -2,6 +2,9 @@
 
 ## New Features
 
+- All admiral utility functions are exported now such that they can be used in
+admiral extension packages (#1079).
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
