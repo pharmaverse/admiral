@@ -12,11 +12,11 @@ derive_param_framingham(
   sysbp_code = "SYSBP",
   chol_code = "CHOL",
   cholhdl_code = "CHOLHDL",
-  age = assert_symbol(enquo(AGE)),
-  sex = assert_symbol(enquo(SEX)),
-  smokefl = assert_symbol(enquo(SMOKEFL)),
-  diabetfl = assert_symbol(enquo(DIABETFL)),
-  trthypfl = assert_symbol(enquo(TRTHYPFL)),
+  age = AGE,
+  sex = SEX,
+  smokefl = SMOKEFL,
+  diabetfl = DIABETFL,
+  trthypfl = TRTHYPFL,
   get_unit_expr,
   filter = NULL
 )

@@ -200,21 +200,23 @@ derive_param_framingham <- function(dataset,
                                     sysbp_code = "SYSBP",
                                     chol_code = "CHOL",
                                     cholhdl_code = "CHOLHDL",
-                                    age = assert_symbol(enquo(AGE)),
-                                    sex = assert_symbol(enquo(SEX)),
-                                    smokefl = assert_symbol(enquo(SMOKEFL)),
-                                    diabetfl = assert_symbol(enquo(DIABETFL)),
-                                    trthypfl = assert_symbol(enquo(TRTHYPFL)),
+                                    age = AGEdev,
+                                    sex = SEX,
+                                    smokefl = SMOKEFL,
+                                    diabetfl = DIABETFL,
+                                    trthypfl = TRTHYPFL,
                                     get_unit_expr,
                                     filter = NULL) {
 
-  by_vars <- assert_vars(by_vars)
+  assert_symbol(enquo(AGE))
+  assert_symbol(enquo(SEX))
+  assert_symbol(enquo(SMOKEFL))
+  assert_symbol(enquo(DIABETFL))
+  assert_symbol(enquo(TRTHYPFL))
 
+  assert_vars(by_vars)
   assert_data_frame(dataset,
-                    required_vars =
-                      quo_c(vars(!!!by_vars), age, sex,
-                            smokefl, diabetfl, trthypfl))
-
+                    required_vars = quo_c(vars(!!!by_vars), PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   assert_character_scalar(sysbp_code)
@@ -384,15 +386,14 @@ derive_param_framingham <- function(dataset,
 #'
 compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
                                diabetfl, trthypfl) {
-style_text(
-  assert_numeric_vector(sysbp),
-  assert_numeric_vector(chol),
-  assert_numeric_vector(cholhdl),
-  assert_numeric_vector(age),
-  assert_character_vector(sex, values = c("M", "F")),
-  assert_character_vector(smokefl, values = c("Y", "N")),
-  assert_character_vector(diabetfl, values = c("Y", "N")),
-  assert_character_vector(trthypfl, values = c("Y", "N")))
+  assert_numeric_vector(sysbp)
+  assert_numeric_vector(chol)
+  assert_numeric_vector(cholhdl)
+  assert_numeric_vector(age)
+  assert_character_vector(sex, values = c("M", "F"))
+  assert_character_vector(smokefl, values = c("Y", "N"))
+  assert_character_vector(diabetfl, values = c("Y", "N"))
+  assert_character_vector(trthypfl, values = c("Y", "N"))
 
   aval <- case_when(
     sex == "F" ~
