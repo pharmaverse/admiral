@@ -15,6 +15,7 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 data("admiral_mh")
 data("admiral_adsl")
+data("queries_mh")
 
 adsl <- admiral_adsl
 mh <- admiral_mh
@@ -57,7 +58,10 @@ admh <- mh %>%
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT)
-  ) #%>%
+  ) %>%
+
+  # derive query variables
+  derive_vars_query(queries_mh)
 
   # derive_vars_dy(
   #   reference_date = TRTSDT,
