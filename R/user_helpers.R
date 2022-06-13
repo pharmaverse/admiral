@@ -21,17 +21,20 @@
 #' }
 use_ad_template <- function(adam_name = "adsl",
                             save_path = paste0("./", adam_name, ".R"),
+                            package = "admiral",
                             overwrite = FALSE,
                             open = interactive()) {
   assert_character_scalar(adam_name)
   assert_character_scalar(save_path)
+  assert_character_scalar(package)
   assert_logical_scalar(overwrite)
   assert_logical_scalar(open)
 
-  if (!toupper(adam_name) %in% list_all_templates()) {
-    err_msg <- paste0(
-      sprintf("No template for '%s' available.\n", toupper(adam_name)),
-      "\u2139 Run `list_all_templates()` to get a list of all available ADaM templates."
+  if (!toupper(adam_name) %in% list_all_templates(package)) {
+    err_msg <- sprintf(
+      "No template for '%s' available in package '%s'.\n",
+      "\u2139 Run `list_all_templates('%s')` to get a list of all available ADaM templates.",
+      toupper(adam_name), package, package
     )
     abort(err_msg)
   }
@@ -47,7 +50,7 @@ use_ad_template <- function(adam_name = "adsl",
 
   template_file <- system.file(
     paste0("templates/ad_", tolower(adam_name), ".R"),
-    package = "admiral"
+    package = package
   )
 
   if (file.copy(template_file, save_path, overwrite = TRUE)) {
@@ -73,8 +76,15 @@ use_ad_template <- function(adam_name = "adsl",
 #'
 #' @examples
 #' list_all_templates()
-list_all_templates <- function() {
-  list.files(system.file("templates", package = "admiral")) %>%
+list_all_templates <- function(package = "admiral") {
+  assert_character_scalar(package)
+
+  if (!requireNamespace(package, quietly = TRUE)) {
+    err_msg <- sprintf("No package called '%s' is installed and hence no templates are available", package)
+    abort(err_msg)
+  }
+
+  list.files(system.file("templates", package = package)) %>%
     str_remove(".R$") %>%
     str_remove("^ad_") %>%
     toupper() %>%
