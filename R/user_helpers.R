@@ -2,6 +2,7 @@
 #'
 #' @param adam_name An ADaM dataset name. You can use any of the available dataset name `r list_all_templates()`, and the dataset name is case-insensitive. The default dataset name is ADSL.
 #' @param save_path Path to save the script.
+#' @param package The R package in which to look for templates. By default `"admiral"`.
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
 #' @param open Whether to open the script right away.
 #'
@@ -65,6 +66,8 @@ use_ad_template <- function(adam_name = "adsl",
 }
 
 #' List All Available ADaM Templates
+#'
+#' @param package The R package in which to look for templates. By default `"admiral"`.
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
