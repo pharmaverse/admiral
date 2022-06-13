@@ -76,6 +76,11 @@ get_summary_records <- function(dataset,
     assert_varval_list(set_values_to, optional = TRUE)
   }
 
+  var_names <- as_tibble(matrix(nrow = 0,
+                                ncol = length(names(dataset))
+                                ),
+                         .name_repair = ~ names(dataset)
+                         )
 
   # Summarise the analysis value
   dataset %>%
@@ -83,5 +88,6 @@ get_summary_records <- function(dataset,
     group_by(!!!by_vars) %>%
     summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
     mutate(!!!set_values_to) %>%
-    ungroup()
+    ungroup() %>%
+    bind_rows(., var_names)
 }
