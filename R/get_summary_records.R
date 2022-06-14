@@ -7,9 +7,9 @@
 #' records has been added to a dataset.
 #'
 #' @details
-#' When all records have same values within `by_vars` then this function will
-#' retain those common values in the newly derived records. Otherwise new value
-#' will be set to `NA`.
+#' This function only creates derived observations and does not append them
+#' to the original dataset observations. If you would like to this instead,
+#' see the `derive_summary_records()` function.
 #'
 #' @param dataset A data frame.
 #'
@@ -48,9 +48,11 @@
 #'
 #' @author Pavan Kumar, updated by Alana Harris
 #'
-#' @return A data frame with derived records appended to original dataset.
+#' @return A data frame of derived records.
 #'
 #' @keywords adam user_utility.
+#'
+#' @seealso `derive_summary_records()`
 #'
 #' @export
 #'

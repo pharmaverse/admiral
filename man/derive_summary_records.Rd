@@ -155,6 +155,9 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
+\seealso{
+\code{get_summary_records()}
+}
 \author{
 Vignesh Thanikachalam, Ondrej Slama
 }

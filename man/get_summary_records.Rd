@@ -53,7 +53,7 @@ More general expression are not allowed.
 }}
 }
 \value{
-A data frame with derived records appended to original dataset.
+A data frame of derived records.
 }
 \description{
 It is not uncommon to have an analysis need whereby one needs to derive an
@@ -62,9 +62,9 @@ structure variable \code{DTYPE} is available to indicate when a new derived
 records has been added to a dataset.
 }
 \details{
-When all records have same values within \code{by_vars} then this function will
-retain those common values in the newly derived records. Otherwise new value
-will be set to \code{NA}.
+This function only creates derived observations and does not append them
+to the original dataset observations. If you would like to this instead,
+see the \code{derive_summary_records()} function.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -154,6 +154,9 @@ get_summary_records(
   summary_fun = function(x) mean(x, na.rm = TRUE),
   set_values_to = vars(DTYPE = "AVERAGE")
 )
+}
+\seealso{
+\code{derive_summary_records()}
 }
 \author{
 Pavan Kumar, updated by Alana Harris

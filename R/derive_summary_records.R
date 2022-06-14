@@ -53,6 +53,8 @@
 #'
 #' @keywords bds derivation
 #'
+#' @seealso `get_summary_records()`
+#'
 #' @export
 #'
 #' @examples
