@@ -4,6 +4,10 @@
 
 ## Updates of Existing Functions
 
+- Updates to `derive_summary_records()` and `derive_param_exposure()` to use the new sub function `get_summary_records()` (#525):
+
+  - `get_summary_records()` - creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only      keeping the derived observations
+
 ## Breaking Changes
 
 ## Documentation

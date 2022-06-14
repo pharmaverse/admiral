@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_summary_records.R
 \name{get_summary_records}
 \alias{get_summary_records}
-\title{To Get The Summary Record}
+\title{Create Summary Records}
 \usage{
 get_summary_records(
   dataset,
