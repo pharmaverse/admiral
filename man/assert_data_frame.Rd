@@ -7,6 +7,7 @@
 assert_data_frame(
   arg,
   required_vars = NULL,
+  accept_grouped = FALSE,
   check_is_grouped = TRUE,
   optional = FALSE
 )
@@ -15,6 +16,9 @@ assert_data_frame(
 \item{arg}{A function argument to be checked}
 
 \item{required_vars}{A list of variables created using \code{vars()}}
+
+\item{accept_grouped}{Is the data frame grouped? Defaults to \code{FALSE}. If set to \code{TRUE} then
+the check on grouped data frames is skipped}
 
 \item{check_is_grouped}{Throw an error is \code{dataset} is grouped? Defaults to \code{TRUE}.}
 
@@ -25,6 +29,8 @@ is \code{NULL} then an error is thrown}
 The function throws an error if \code{arg} is not a data frame or if \code{arg}
 is a data frame but misses any variable specified in \code{required_vars}. Otherwise,
 the input is returned invisibly.
+The function will also return an error if \code{arg}is a grouped data frame and
+\code{accept_grouped} is not set to \code{TRUE}.
 }
 \description{
 Checks if an argument is a data frame and (optionally) whether is contains
