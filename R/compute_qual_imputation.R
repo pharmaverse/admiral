@@ -56,7 +56,7 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #'
 #' @author Alice Ehmann
 #'
-#' @keywords imputation adam qualifier
+#' @keywords computation imputation adam qualifier
 #'
 #' @examples
 #' compute_qual_imputation("<40")
