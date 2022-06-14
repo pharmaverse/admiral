@@ -20,8 +20,8 @@
 #' @keywords computation adam factor imputation
 #'
 #' @examples
-#' compute_qualifier_imputation_decimal("<40.1")
-compute_qualifier_imputation_decimal <- function(character_value_decimal) {
+#' compute_qual_imputation_dec("<40.1")
+compute_qual_imputation_dec <- function(character_value_decimal) {
   decimal <- ifelse(str_detect(character_value_decimal, "\\."),
     1 / (10^(str_length(str_trim(character_value_decimal)) -
       str_locate(str_trim(character_value_decimal), "\\."))),
@@ -81,9 +81,9 @@ compute_qualifier_imputation <- function(character_value, imputation_type = 1, f
     numeric_value <-
       case_when(
         str_detect(character_value, ">") & !str_detect(character_value, "=") ~
-        numeric_value + compute_qualifier_imputation_decimal(character_value),
+        numeric_value + compute_qual_imputation_dec(character_value),
         str_detect(character_value, "<") & !str_detect(character_value, "=") ~
-        numeric_value - compute_qualifier_imputation_decimal(character_value),
+        numeric_value - compute_qual_imputation_dec(character_value),
         TRUE ~ numeric_value
       )
   }
