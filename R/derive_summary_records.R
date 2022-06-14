@@ -170,6 +170,7 @@ derive_summary_records <- function(dataset,
       filter = !!filter,
       analysis_var = !!analysis_var,
       summary_fun = summary_fun,
-      set_values_to = set_values_to)
+      set_values_to = set_values_to
+    )
   )
 }

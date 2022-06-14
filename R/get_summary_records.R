@@ -142,14 +142,12 @@
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
-
 get_summary_records <- function(dataset,
                                 by_vars,
                                 filter = NULL,
                                 analysis_var,
                                 summary_fun,
                                 set_values_to) {
-
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
