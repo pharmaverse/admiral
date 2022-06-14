@@ -13,11 +13,11 @@ what_is_it(x)
 Returns a string describing what kind of object the input is.
 }
 \examples{
-admiral:::what_is_it(mtcars)
-admiral:::what_is_it(NA)
-admiral:::what_is_it(TRUE)
-admiral:::what_is_it(lm(hp ~ mpg, data = mtcars))
-admiral:::what_is_it(letters)
+what_is_it(mtcars)
+what_is_it(NA)
+what_is_it(TRUE)
+what_is_it(lm(hp ~ mpg, data = mtcars))
+what_is_it(letters)
 }
 \author{
 Thomas Neitmann
