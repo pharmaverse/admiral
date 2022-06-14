@@ -23,7 +23,7 @@
 #' compute_qual_imputation_dec("<40.1")
 compute_qual_imputation_dec <- function(character_value_decimal) {
   decimal <- ifelse(str_detect(character_value_decimal, "\\."),
-    1 / (10^(str_length(str_trim(character_value_decimal)) -
+    1 / ( 10^( str_length(str_trim(character_value_decimal)) -
       str_locate(str_trim(character_value_decimal), "\\."))),
     1 / (10^0)
   )
@@ -59,8 +59,8 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #' @keywords imputation adam qualifier
 #'
 #' @examples
-#' compute_qualifier_imputation("<40")
-compute_qualifier_imputation <- function(character_value, imputation_type = 1, factor = 0) {
+#' compute_qual_imputation("<40")
+compute_qual_imputation <- function(character_value, imputation_type = 1, factor = 0) {
   numeric_value <- ifelse(grepl("[A-z]", character_value),
     NA_real_,
     as.numeric(gsub("=|>|<", "", character_value))
