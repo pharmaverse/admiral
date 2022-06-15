@@ -864,7 +864,10 @@ list_tte_source_objects <- function(package = "admiral") {
   assert_character_scalar(package)
 
   if (!requireNamespace(package, quietly = TRUE)) {
-    err_msg <- sprintf("No package called '%s' is installed and hence no `tte_source` objects are available", package)
+    err_msg <- sprintf(
+      "No package called '%s' is installed and hence no `tte_source` objects are available",
+      package
+    )
     abort(err_msg)
   }
 
