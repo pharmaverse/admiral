@@ -3,7 +3,9 @@
 ## New Features
 
 - All admiral utility functions are exported now such that they can be used in
-admiral extension packages (#1079).
+admiral extension packages (#1079)
+
+- `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
 
 ## Updates of Existing Functions
 
