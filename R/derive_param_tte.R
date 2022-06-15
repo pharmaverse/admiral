@@ -826,6 +826,8 @@ censor_source <- function(dataset_name,
 #'
 #' @return No return value, called for side effects
 #'
+#' @author Thomas Neitmann
+#'
 #' @export
 #'
 #' @seealso [tte_source()], [censor_source()], [event_source()]
@@ -853,6 +855,8 @@ print.tte_source <- function(x, ...) {
 #' @return
 #' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
 #' if `package` does not contain any `tte_source` objects
+#'
+#' @author Thomas Neitmann
 #'
 #' @export
 #'
