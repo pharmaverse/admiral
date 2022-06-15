@@ -845,6 +845,19 @@ print.tte_source <- function(x, ...) {
   }
 }
 
+
+#' List all `tte_source` Objects Available in a Package
+#'
+#' @param package The name of the package in which to search for `tte_source` objects
+#'
+#' @return
+#' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
+#' if `package` does not contain any `tte_source` objects
+#'
+#' @export
+#'
+#' @examples
+#' list_tte_source_objects()
 list_tte_source_objects <- function(package = "admiral") {
   assert_character_scalar(package)
 
