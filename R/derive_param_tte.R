@@ -845,15 +845,22 @@ print.tte_source <- function(x, ...) {
   }
 }
 
-list_tte_source_objects <- function() {
-  # Get all tte_source objects exported by admiral
-  exported <- getNamespaceExports("admiral")
-  objects <-
-    exported[map_lgl(exported, function(obj_name) {
-      inherits(get(obj_name), "tte_source")
-    })]
+list_tte_source_objects <- function(package = "admiral") {
+  assert_character_scalar(package)
 
-  rows <- lapply(objects, function(obj_name) {
+  if (!requireNamespace(package, quietly = TRUE)) {
+    err_msg <- sprintf("No package called '%s' is installed and hence no `tte_source` objects are available", package)
+    abort(err_msg)
+  }
+
+  # Get all `tte_source` objects exported by `package`
+  exports <- getNamespaceExports(package)
+  is_tte_source <- map_lgl(exports, function(obj_name) {
+    inherits(get(obj_name), "tte_source")
+  })
+  tte_sources <- exports[is_tte_source]
+
+  rows <- lapply(tte_sources, function(obj_name) {
     obj <- get(obj_name)
     data.frame(
       object = obj_name,
