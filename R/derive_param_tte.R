@@ -856,6 +856,8 @@ print.tte_source <- function(x, ...) {
 #'
 #' @export
 #'
+#' @keywords tte_source
+#'
 #' @examples
 #' list_tte_source_objects()
 list_tte_source_objects <- function(package = "admiral") {
