@@ -874,7 +874,7 @@ list_tte_source_objects <- function(package = "admiral") {
   # Get all `tte_source` objects exported by `package`
   exports <- getNamespaceExports(package)
   is_tte_source <- map_lgl(exports, function(obj_name) {
-    inherits(getExportedValue(obj_name, package), "tte_source")
+    inherits(getExportedValue(package, obj_name), "tte_source")
   })
   tte_sources <- exports[is_tte_source]
 
