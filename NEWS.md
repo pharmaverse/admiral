@@ -3,9 +3,12 @@
 ## New Features
 
 - All admiral utility functions are exported now such that they can be used in
-admiral extension packages (#1079).
+admiral extension packages (#1079)
 
 ## Updates of Existing Functions
+
+- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
 
 ## Breaking Changes
 
