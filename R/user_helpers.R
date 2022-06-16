@@ -93,10 +93,15 @@ list_all_templates <- function(package = "admiral") {
     str_remove(".R$") %>%
     str_remove("^ad_") %>%
     toupper() %>%
-    structure(class = c("adam_templates", "character"))
+    structure(class = c("adam_templates", "character"), package = package)
 }
 
 print.adam_templates <- function(x, ...) {
-  cat("Existing templates:\n")
-  cat(paste0("\U2022 ", x), sep = "\n")
+  pkg <- attr(x, "package")
+  if (length(x) == 0L) {
+    cat("No ADaM templates available in package '", pkg, "'\n", sep = "")
+  } else {
+    cat("Existing ADaM templates in package '", pkg, "':\n", sep = "")
+    cat(paste0("\U2022 ", x), sep = "\n")
+  }
 }
