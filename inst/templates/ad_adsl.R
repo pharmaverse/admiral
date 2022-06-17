@@ -143,7 +143,7 @@ adsl <- dm %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    flag_imputation = FALSE,
+    flag_imputation = "none",
     date_imputation = "FIRST"
   ) %>%
   # Relative Day of Death
@@ -216,12 +216,11 @@ adsl <- adsl %>%
     filter_add = DSDECOD == "RANDOMIZED",
     by_vars = vars(STUDYID, USUBJID),
     new_vars_prefix = "RAND",
-    dtc = DSSTDTC,
-    flag_imputation = FALSE
+    dtc = DSSTDTC
   )
 
 
 # ---- Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
-save(adsl, file = file.path(dir, "admiral_adsl.rda"), compress = "bzip2")
+save(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")
