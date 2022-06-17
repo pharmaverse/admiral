@@ -599,7 +599,7 @@
       "Package": "renv",
       "Version": "0.13.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Hash": "9f10d9db5b50400c348920c5c603385e"
     },
     "rex": {
