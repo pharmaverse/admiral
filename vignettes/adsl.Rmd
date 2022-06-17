@@ -41,6 +41,7 @@ otherwise specified.*
 * [Derive Groupings and Populations](#groupings)
   * [Grouping (e.g. `AGEGR1`)](#groupings_ex)
   * [Population Flags (e.g. `SAFFL`)](#popflag)
+* [Derive Randomization Date (`RANDDT`)](#randomization_date)
 * [Derive Other Variables](#other)
 * [Add Labels and Attributes](#attributes)
 
@@ -716,6 +717,36 @@ dataset_vignette(
 )
 ```
 
+### Derive Randomization Date (`RANDDT`) {#randomization_date}
+
+The function `derive_vars_merged_dt()` can be used to derive randomization date 
+variable.
+
+By default, the function will map DS records where DSDECOD="RANDOMIZED". To derive 
+the Randomization Date (`RANDDT`), the call would be:
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "RAND",
+    dtc = DSSTDTC,
+    flag_imputation = FALSE
+  )
+```
+
+
+This call would return the input dataset with the column `RANDDT` and by default
+the associated date imputation flag (`RANDDTF`) are added. If the imputation flag
+is not required, the user must set the argument `flag_imputation` to FALSE.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = vars(USUBJID, ARM, ACTARM, RANDDT))
+```
+
+[Link](#link_ds) to `DS`.
 
 ## Derive Other Variables  {#other}
 The users can add specific code to cover their need for the analysis.
@@ -755,4 +786,3 @@ have them associated with an End to End pipeline under the umbrella of the
 ADaM | Sample Code
 ---- | --------------
 ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
-

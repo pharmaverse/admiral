@@ -16,7 +16,6 @@ Returns a \code{logical} vector indicating if there is \emph{no} match of the
 left operand in the right operand.
 }
 \examples{
-`\%notin\%` <- admiral:::`\%notin\%`
 "a" \%notin\% c("b", "v", "k")
 }
 \author{
