@@ -7,6 +7,8 @@ admiral extension packages (#1079)
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
 
+- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes
