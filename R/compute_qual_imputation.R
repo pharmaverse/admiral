@@ -23,7 +23,7 @@
 #' compute_qual_imputation_dec("<40.1")
 compute_qual_imputation_dec <- function(character_value_decimal) {
   decimal <- ifelse(str_detect(character_value_decimal, "\\."),
-    1 / ( 10^( str_length(str_trim(character_value_decimal)) -
+    1 / (10^( str_length(str_trim(character_value_decimal)) -
       str_locate(str_trim(character_value_decimal), "\\."))),
     1 / (10^0)
   )
