@@ -11,6 +11,8 @@ admiral extension packages (#1079)
 
 ## Updates of Existing Functions
 
+- `value_var` parameter added to `derive_vars_atc()` (#1120) 
+
 ## Breaking Changes
 
 ## Documentation

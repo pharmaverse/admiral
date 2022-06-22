@@ -158,7 +158,7 @@ derive_vars_transposed <- function(dataset,
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = vars(USUBJID, CMREFID = FAREFID),
-                            value_var) {
+                            value_var = FASTRESC) {
   value_var <- assert_symbol(enquo(value_var))
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
