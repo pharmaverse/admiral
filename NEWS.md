@@ -114,6 +114,7 @@ duration (#1207)
 
 - `slice_derivation()` was updated such that it no longer fails if a slice is
 empty (#1309)
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
 
 # admiral 0.7.0
 
