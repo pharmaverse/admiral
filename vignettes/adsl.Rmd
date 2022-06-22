@@ -33,6 +33,7 @@ otherwise specified.*
   * [Disposition Dates (e.g. `EOSDT`)](#disposition_date)
   * [Disposition Status (e.g. `EOSTT`)](#disposition_status)
   * [Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`)](#disposition_reason)
+  * [Randomization Date (`RANDDT`)](#randomization_date)
 * [Derive Death Variables](#death)
   * [Death Date (`DTHDT`)](#death_date)
   * [Cause of Death (`DTHCAUS`)](#death_cause)
@@ -336,6 +337,32 @@ adsl <- adsl %>%
     filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
+
+
+### Randomization Date (`RANDDT`) {#randomization_date}
+
+The function `derive_vars_merged_dt()` can be used to derive randomization date 
+variable. To map Randomization Date (`RANDDT`), the call would be:
+
+```{r eval=TRUE}
+adsl <- adsl %>%
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "RAND",
+    dtc = DSSTDTC
+  )
+```
+
+
+This call would return the input dataset with the column `RANDDT` is added.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(adsl, display_vars = vars(USUBJID, RANDDT))
+```
+
+[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 
@@ -755,4 +782,3 @@ have them associated with an End to End pipeline under the umbrella of the
 ADaM | Sample Code
 ---- | --------------
 ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
-
