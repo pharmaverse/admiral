@@ -23,7 +23,7 @@ data("admiral_eg")
 adsl <- admiral_adsl
 eg <- admiral_eg
 
-# When SAS datasets are imported into R tibbles using haven::read_sas(), missing
+# When SAS datasets are imported into R using haven::read_sas(), missing
 # character values from SAS appear as "" characters in R, instead of appearing
 # as NA values. Further details can be obtained via the following link:
 # https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
