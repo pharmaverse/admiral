@@ -52,7 +52,6 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          renv::install("lintr")
         shell: Rscript {0}
 
       - name: Install package
