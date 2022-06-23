@@ -17,6 +17,13 @@ admiral extension packages (#1079)
 
 ## Various
 
+# admiral 0.7.1
+
+## Updates of Existing Functions
+
+- `derive_param_first_event()` was updated such that
+    - `AVAL` is derived instead of `AVALN` and
+    - all variables from the source dataset are kept.
 
 # admiral 0.7.0
 

@@ -73,6 +73,9 @@
 #'   subjects with event `AVALC` is set to `"Y"`, `AVAL` to `1`, and `ADT` to
 #'   the first date where the event condition is fulfilled. For all other
 #'   subjects `AVALC` is set to `"N"`, `AVAL` to `0`, and `ADT` to `NA`.
+#'   For subjects with event all variables from `dataset_source` are kept. For
+#'   subjects without event all variables which are in both `dataset_adsl` and
+#'   `dataset_source` are kept.
 #'   1. The variables specified by the `set_values_to` parameter are added to
 #'   the new observations.
 #'   1. The new observations are added to input dataset.
@@ -169,19 +172,26 @@ derive_param_first_event <- function(dataset,
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   # Create new observations
-  new_obs <- derive_vars_merged(
-    select(dataset_adsl, !!!subject_keys),
-    dataset_add = dataset_source,
-    filter_add = !!filter_source,
-    by_vars = subject_keys,
-    order = vars(!!date_var),
-    new_vars = vars(ADT = !!date_var),
-    mode = "first",
-    check_type = check_type
-  ) %>%
+  source_vars <- colnames(dataset_source)
+  adsl_vars <- colnames(dataset_adsl)
+
+  events <- dataset_source %>%
+    filter_if(filter_source) %>%
+    filter_extreme(
+      by_vars = subject_keys,
+      order = vars(!!date_var),
+      mode = "first",
+      check_type = check_type
+    )
+  noevents <- anti_join(
+    select(dataset_adsl, intersect(source_vars, adsl_vars)),
+    select(events, !!!subject_keys)
+  )
+  new_obs <- bind_rows(events, noevents) %>%
     mutate(
+      ADT = !!date_var,
       AVALC = if_else(!is.na(ADT), "Y", "N"),
-      AVALN = if_else(!is.na(ADT), 1, 0),
+      AVAL = if_else(!is.na(ADT), 1, 0),
       !!!set_values_to
     )
 
