@@ -1,0 +1,66 @@
+---
+name: Lint
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - main
+      - devel
+      - pre-release
+  pull_request:
+    branches:
+      - main
+      - devel
+      - pre-release
+
+jobs:
+  lint:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Override SuperLinter configs 💾
+        run: |
+          # Override markdownlint default config
+          [ ! -e .markdownlint.yaml ] && cat > .markdownlint.yaml <<EOF
+          ###############
+          # Rules by id #
+          ###############
+          MD004: false                  # Unordered list style
+          MD007:
+            indent: 2                   # Unordered list indentation
+          MD013:
+            line_length: 800            # Line length
+          MD026:
+            punctuation: ".,;:!。，；:"  # List of not allowed
+          MD029: false                  # Ordered list item prefix
+          MD033: false                  # Allow inline HTML
+          MD036: false                  # Emphasis used instead of a heading
+          #################
+          # Rules by tags #
+          #################
+          blank_lines: true  # Error on blank lines
+          EOF
+        shell: bash
+
+      - name: Lint Code Base 🧶
+        uses: github/super-linter/slim@v4
+        env:
+          LINTER_RULES_PATH: /
+          DEFAULT_BRANCH: main
+          FILTER_REGEX_EXCLUDE: NEWS.md|testthat/_snaps/.*
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_BASH: true
+          VALIDATE_DOCKERFILE: true
+          VALIDATE_MARKDOWN: true
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
+          VALIDATE_R: true
+          VALIDATE_YAML: true
+          LINTR_ERROR_ON_LINT: true
