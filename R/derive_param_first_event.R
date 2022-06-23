@@ -182,10 +182,11 @@ derive_param_first_event <- function(dataset,
       order = vars(!!date_var),
       mode = "first",
       check_type = check_type
-  )
+    )
   noevents <- anti_join(
     select(dataset_adsl, intersect(source_vars, adsl_vars)),
-    select(events, !!!subject_keys))
+    select(events, !!!subject_keys)
+  )
   new_obs <- bind_rows(events, noevents) %>%
     mutate(
       ADT = !!date_var,
