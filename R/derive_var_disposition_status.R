@@ -38,7 +38,7 @@ format_eoxxstt_default <- function(status) {
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
     !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") &
-    !is.na(status) ~ "DISCONTINUED",
+      !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
