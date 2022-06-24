@@ -60,6 +60,7 @@ jobs:
       - name: Lint
         run: |
           lints <- lintr::lint_package()
+          cat(lints)
           saveRDS(lints, file = "lints.rds")
         shell: Rscript {0}
 
