@@ -8,7 +8,8 @@
 #' @return A `character` vector derived based on the values given in `status`:
 #'  "NOT STARTED" if `status` is "SCREEN FAILURE" or "SCREENING NOT COMPLETED",
 #'  "COMPLETED" if `status` is "COMPLETED",
-#'  "DISCONTINUED" if `status` is not in ("COMPLETED","SCREEN FAILURE", "SCREENING NOT COMPLETED") nor NA,
+#'  "DISCONTINUED" if `status` is not in ("COMPLETED","SCREEN FAILURE",
+#'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
@@ -36,7 +37,8 @@ format_eoxxstt_default <- function(status) {
   case_when(
     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
-    !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") & !is.na(status) ~ "DISCONTINUED",
+    !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") &
+    !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 }
@@ -70,7 +72,8 @@ format_eoxxstt_default <- function(status) {
 #'   case_when(
 #'     status %in% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
 #'     status == "COMPLETED" ~ "COMPLETED",
-#'     !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") & !is.na(status) ~ "DISCONTINUED",
+#'     !status %in% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED")
+#'     & !is.na(status) ~ "DISCONTINUED",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
@@ -95,7 +98,8 @@ format_eoxxstt_default <- function(status) {
 #'  `new_var` as:
 #'  "NOT STARTED" if `status` is "SCREEN FAILURE" or "SCREENING NOT COMPLETED",
 #'  "COMPLETED" if `status_var` == "COMPLETED",
-#'  "DISCONTINUED" if `status` is not in ("COMPLETED","SCREEN FAILURE", "SCREENING NOT COMPLETED") nor NA,
+#'  "DISCONTINUED" if `status` is not in ("COMPLETED","SCREEN FAILURE",
+#'  "SCREENING NOT COMPLETED") nor NA,
 #'  "ONGOING" otherwise).
 #'
 #' @family der_adsl
@@ -114,7 +118,8 @@ format_eoxxstt_default <- function(status) {
 #' # Default derivation: EOSSTT =
 #' #- NOT STARTED when status_var is SCREEN FAILURE or SCREENING NOT COMPLETED
 #' #- COMPLETED when status_var is COMPLETED
-#' #- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor SCREENING NOT COMPLETED nor NA
+#' #- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor
+#' #  SCREENING NOT COMPLETED nor NA
 #' #- ONGOING otherwise
 #'
 #' admiral_dm %>%
@@ -130,7 +135,8 @@ format_eoxxstt_default <- function(status) {
 #' #- NOT STARTED when status_var = SCREEN FAILURE
 #' #- COMPLETED when status_var = COMPLETED
 #' #- DISCONTINUED DUE TO AE when status_var = ADVERSE EVENT
-#' #- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED nor SCREEN FAILURE nor missing
+#' #- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED
+#' #  nor SCREEN FAILURE nor missing
 #' #- ONGOING otherwise
 #'
 #' format_eoxxstt1 <- function(x) {
@@ -138,7 +144,8 @@ format_eoxxstt_default <- function(status) {
 #'     x == "SCREEN FAILURE" ~ "NOT STARTED",
 #'     x == "COMPLETED" ~ "COMPLETED",
 #'     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-#'     !(x %in% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE" )) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+#'     !(x %in% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
+#'     "DISCONTINUED NOT DUE TO AE",
 #'     TRUE ~ "ONGOING"
 #'   )
 #' }
@@ -179,4 +186,3 @@ derive_var_disposition_status <- function(dataset,
     mutate(!!new_var := format_new_var(!!status_var)) %>%
     select(-!!status_var)
 }
-

@@ -42,7 +42,8 @@ Default: \code{format_eoxxstt_default()} defined as:
   case_when(
     status \%in\% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
-    !status \%in\% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED") & !is.na(status) ~ "DISCONTINUED",
+    !status \%in\% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED")
+    & !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 \}
@@ -68,7 +69,8 @@ defined by \code{format_new_var} (e.g. when the default format is used, the func
 \code{new_var} as:
 "NOT STARTED" if \code{status} is "SCREEN FAILURE" or "SCREENING NOT COMPLETED",
 "COMPLETED" if \code{status_var} == "COMPLETED",
-"DISCONTINUED" if \code{status} is not in ("COMPLETED","SCREEN FAILURE", "SCREENING NOT COMPLETED") nor NA,
+"DISCONTINUED" if \code{status} is not in ("COMPLETED","SCREEN FAILURE",
+"SCREENING NOT COMPLETED") nor NA,
 "ONGOING" otherwise).
 }
 \description{
@@ -83,7 +85,8 @@ data("admiral_ds")
 # Default derivation: EOSSTT =
 #- NOT STARTED when status_var is SCREEN FAILURE or SCREENING NOT COMPLETED
 #- COMPLETED when status_var is COMPLETED
-#- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor SCREENING NOT COMPLETED nor NA
+#- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor
+#  SCREENING NOT COMPLETED nor NA
 #- ONGOING otherwise
 
 admiral_dm \%>\%
@@ -99,7 +102,8 @@ admiral_dm \%>\%
 #- NOT STARTED when status_var = SCREEN FAILURE
 #- COMPLETED when status_var = COMPLETED
 #- DISCONTINUED DUE TO AE when status_var = ADVERSE EVENT
-#- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED nor SCREEN FAILURE nor missing
+#- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED
+#  nor SCREEN FAILURE nor missing
 #- ONGOING otherwise
 
 format_eoxxstt1 <- function(x) {
@@ -107,7 +111,8 @@ format_eoxxstt1 <- function(x) {
     x == "SCREEN FAILURE" ~ "NOT STARTED",
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-    !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE" )) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+    !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
+    "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }

@@ -59,7 +59,8 @@ test_that("Derive EOTSTT using a study specific mapping", {
       x == "SCREEN FAILURE" ~ "NOT STARTED",
       x == "COMPLETED" ~ "COMPLETED",
       x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-      x %notin% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE") & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+      x %notin% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE") &
+      !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
       TRUE ~ "ONGOING"
     )
   }
