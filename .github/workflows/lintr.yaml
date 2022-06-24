@@ -16,7 +16,6 @@ name: lint
 
 jobs:
   lint:
-    name: lint
     runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -52,7 +51,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if(file.exists("renv.lock")) renv::install("lintr")
+          if(file.exists("renv.lock")) {
+            install.packages("renv")
+            renv::install("lintr")
+          }
         shell: Rscript {0}
 
       - name: Lint
