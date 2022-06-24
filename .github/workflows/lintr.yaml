@@ -1,18 +1,22 @@
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches:
       - main
       - devel
+      - pre-release
   pull_request:
     branches:
       - main
       - devel
+      - pre-release
 
-name: lint
+name: Lint
 
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-20.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -48,17 +52,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::restore()
-          renv::install("lintr")
+          if(file.exists("renv.lock")) renv::install("lintr")
         shell: Rscript {0}
-
-      - name: Install package
-        run: R CMD INSTALL .
 
       - name: Lint
         run: |
-          (lints <- lintr::lint_package())
+          lints <- lintr::lint_package()
           saveRDS(lints, file = "lints.rds")
         shell: Rscript {0}
 
