@@ -15,6 +15,8 @@ admiral extension packages (#1079)
 
 ## Documentation
 
+- Fix broken documentation links in README file. (#1248)
+
 ## Various
 
 # admiral 0.7.1
