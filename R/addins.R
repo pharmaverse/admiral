@@ -39,7 +39,7 @@ format_test_that_file <- function() {
     string = test_that_lines,
     pattern = paste0(
       '(?<=test_that\\(")', # positive look-ahead - search matching expression after test_that("
-      '.*',    # matching expression - match everything
+      ".*",    # matching expression - match everything
       '(?=")'  # positive look-behind - search matching expression before "
     )
   )
