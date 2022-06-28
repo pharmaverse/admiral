@@ -9,12 +9,12 @@
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
 #' is `NULL` then an error is thrown
 #'
-#' @author Thomas Neitmann
-#'
 #' @return
 #' The function throws an error if `arg` is not a data frame or if `arg`
 #' is a data frame but misses any variable specified in `required_vars`. Otherwise,
 #' the input is returned invisibly.
+#'
+#' @author Thomas Neitmann
 #'
 #' @export
 #'

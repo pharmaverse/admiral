@@ -63,10 +63,10 @@
 #'
 #' @inheritParams derive_derived_param
 #'
-#' @author Alice Ehmann
-#'
 #' @return The input dataset with the new parameter rows added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
+#'
+#' @author Alice Ehmann
 #'
 #' @keywords derivation adex
 #'
@@ -75,8 +75,9 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' adex <- tibble::tribble(
+#' adex <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~VISIT, ~ANL01FL, ~ASTDT, ~AENDT, ~AVAL,
 #'   "P001", "TNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-01-30"), 59,
 #'   "P001", "TSNDOSE", "V1", "Y", ymd("2020-01-01"), ymd("2020-02-01"), 96,

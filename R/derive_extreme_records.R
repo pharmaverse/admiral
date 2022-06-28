@@ -37,17 +37,19 @@
 #'   the selected observations.
 #'   1. The observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with the first or last observation of each by group
 #'   added as new observations.
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords derivation bds
 #'
 #' @export
 #'
 #' @examples
-#' adlb <- tibble::tribble(
+#' library(tibble)
+#'
+#' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~LBSEQ,
 #'   "1",      1,          113,      1,
 #'   "1",      2,          113,      2,

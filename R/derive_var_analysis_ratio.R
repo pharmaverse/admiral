@@ -28,18 +28,19 @@
 #' Reference CDISC ADaM Implementation Guide
 #' Version 1.1 Section 3.3.4 Analysis Parameter Variables for BDS Datasets
 #'
-#' @author Ben Straub
-#'
 #' @return The input dataset with a ratio variable appended
+#'
+#' @author Ben Straub
 #'
 #' @keywords adam bds adlb derivation
 #'
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
+#' library(tibble)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
 #'   "P01", "ALT", 1, 27, 27, 6, 34,
 #'   "P01", "ALT", 2, 41, 27, 6, 34,

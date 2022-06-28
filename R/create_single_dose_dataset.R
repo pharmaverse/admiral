@@ -31,11 +31,11 @@
 #'
 #' To see the entire table in the console, run `print(dose_freq_lookup)`.
 #'
+#' @keywords metadata
+#'
 #' @seealso [create_single_dose_dataset()]
 #'
 #' @export
-#'
-#' @keywords metadata
 #'
 #' @rdname dose_freq_lookup
 

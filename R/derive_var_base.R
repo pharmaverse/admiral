@@ -15,10 +15,6 @@
 #'
 #'   By default `ABLFL == "Y"`
 #'
-#' @return
-#' A new `data.frame` containing all records and variables of the input
-#' dataset plus the `new_var` variable
-#'
 #' @details
 #' For each `by_vars` group the baseline record is identified by filtering using the
 #' condition specified by `filter` which defaults to `ABLFL == "Y"`. Subsequently,
@@ -26,14 +22,20 @@
 #' value of the `source_var` variable of the baseline record. In case there are
 #' multiple baseline records within `by_vars` an error is issued.
 #'
-#' @export
+#' @return
+#' A new `data.frame` containing all records and variables of the input
+#' dataset plus the `new_var` variable
 #'
 #' @author Thomas Neitmann
+#'
+#' @export
 #'
 #' @keywords bds derivation
 #'
 #' @examples
-#' dataset <- tibble::tribble(
+#' library(tibble)
+#'
+#' dataset <- tribble(
 #'   ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,
 #'   "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y",
 #'   "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",

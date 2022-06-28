@@ -11,17 +11,17 @@
 #'   If a function argument is specified both inside `variable_params` and `...` then
 #'   the value in `variable_params` overwrites the one in `...`
 #'
-#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
-#'
 #' @return
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
+#' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
+#'
 #' @keywords user_utility high_order_function
 #'
-#' @export
-#'
 #' @seealso [params()]
+#'
+#' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

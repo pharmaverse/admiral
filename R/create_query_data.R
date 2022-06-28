@@ -1,4 +1,4 @@
-#' Creates a queries dataset as input dataset to the `dataset_queries` argument in
+#' Creates a Queries Dataset as Input Dataset to the `dataset_queries` Argument in
 #' `derive_vars_query()`
 #'
 #' Creates a queries dataset as input dataset to the `dataset_queries` argument
@@ -135,10 +135,11 @@
 #'   * `TERM_NAME`: Value of the term variable if it is a character variable.
 #'   * `TERM_ID`: Value of the term variable if it is a numeric variable.
 #'
-#' @author Stefan Bundfuss
 #'
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adae adcm user_utility
 #'

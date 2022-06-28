@@ -46,10 +46,10 @@
 #' DIABP + 0.01 exp(4.14 - 40.74 / HR) (SYSBP - DIABP)}
 #' if it is based on diastolic, systolic blood pressure, and heart rate.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords derivation advs
 #'
@@ -57,8 +57,9 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
 #'   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",

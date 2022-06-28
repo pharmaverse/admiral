@@ -6,29 +6,48 @@
 #' *Deprecated*, please use `derive_var_last_dose_date()` instead.
 #'
 #' @param dataset Input dataset.
+#'
 #' @param dataset_ex Input EX dataset.
+#'
 #' @param filter_ex Filtering condition applied to EX dataset.
+#'
 #' For example, it can be used to filter for valid dose.
+#'
 #' Defaults to NULL.
+#'
 #' @param by_vars Variables to join by (created by `dplyr::vars`).
+#'
 #' @param dose_start The dose start date variable.
+#'
 #' @param dose_end The dose end date variable.
+#'
 #' @param analysis_date The analysis date variable.
+#'
 #' @param dataset_seq_var The sequence variable
 #' (this together with `by_vars` creates the keys of `dataset`).
+#'
 #' @param new_var The output variable.
+#'
 #' @param output_datetime Logical. Should only date or date-time variable be returned?
 #' Defaults to `TRUE` (i.e. date-time variable).
+#'
 #' @param check_dates_only Logical.
+#'
 #' An assumption that start and end dates of treatment match is checked.
+#'
 #' By default (`FALSE`), the date as well as the time component is checked.
+#'
 #' If set to `TRUE`, then only the date component of those variables is checked.
+#'
 #' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
 #' e.g. `vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)`.
+#'
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
 #' in the returned dataset.
+#'
 #' The right-hand side (values of the list elements) gives the values of the traceability variables
 #' in the returned dataset.
+#'
 #' These can be either strings or symbols referring to existing variables.
 #'
 #' @details All date (date-time) variables can be characters in standard ISO format or

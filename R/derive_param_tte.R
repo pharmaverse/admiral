@@ -123,17 +123,18 @@
 #'   `STARTDT`/`STARTDTM` (depending on the `create_datetime` parameter), and
 #'   1. the new observations are added to the output dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with the new parameter added
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords derivation bds
 #'
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
+#' library(dplyr)
 #' library(lubridate)
+#' library(tibble)
 #' data("admiral_adsl")
 #'
 #' adsl <- admiral_adsl
@@ -173,14 +174,14 @@
 #'   filter(row_number() %in% 20:30)
 #'
 #' # derive time to adverse event for each preferred term #
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",

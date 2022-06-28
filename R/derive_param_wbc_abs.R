@@ -1,7 +1,5 @@
 #' Add a parameter for lab differentials converted to absolute values
 #'
-#' @description
-#'
 #' Add a parameter by converting lab differentials from fraction or percentage to absolute values
 #'
 #' @param dataset Input dataset
@@ -53,7 +51,6 @@
 #'   as the white blood differential lab results in fraction or percentage value to be converted
 #'   into absolute value.
 #'
-#'
 #' @details
 #' If `diff_type` is `"percent"`, the analysis value of the new parameter is derived as
 #' \deqn{\frac{White Blood Cell Count  * Percentage Value}{100}}
@@ -67,17 +64,19 @@
 #' white blood cell absolute value (identified by `wbc_code`) and the white blood cell differential
 #' (identified by `diff_code`) are both present.
 #'
-#' @author Annie Yang
-#'
 #' @return The input dataset with the new parameter added
+#'
+#' @author Annie Yang
 #'
 #' @keywords derivation bds adlb
 #'
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' test_lb <- tibble::tribble(
+#' library(dplyr)
+#' library(tibble)
+#'
+#' test_lb <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
 #'   "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
 #'   "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",

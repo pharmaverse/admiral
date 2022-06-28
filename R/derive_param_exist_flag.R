@@ -118,11 +118,11 @@
 #'
 #'   1. The new observations are added to input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with a new parameter indicating if an event
 #'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`
 #'   and `set_value_to` are populated for the new parameter)
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords derivation bds
 #'
@@ -131,9 +131,10 @@
 #' @examples
 #' library(dplyr)
 #' library(lubridate)
+#' library(tibble)
 #'
 #' # Derive a new parameter for measurable disease at baseline
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
 #'   "2",

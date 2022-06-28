@@ -11,8 +11,11 @@
 #' based on the relationship of cm Analysis start/end date/times to treatment start date/time
 #'
 #' @param dataset Input dataset
+#'
 #'   The variables `TRTSDTM`, `ASTDTM`, `AENDTM` are expected
+#'
 #' @param flag_var Name of the variable with Analysis Start Date Imputation Flag
+#'
 #' @param new_var Name of variable to create
 #'
 #' @details `ATIREL` is set to:
@@ -26,10 +29,10 @@
 #'       the Analysis Start Time Imputation Flag is 'H' or 'M',
 #'    -  otherwise it is set to "PRIOR_CONCOMITANT".
 #'
-#' @author Teckla Akinyi
-#'
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.
+#'
+#' @author Teckla Akinyi
 #'
 #' @keywords ADaM Relationship Var ATIREL
 #'

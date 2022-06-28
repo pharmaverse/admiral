@@ -76,11 +76,11 @@
 #'
 #' Default: `FALSE`
 #'
-#' @author Samia Kabi
-#'
 #' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return A character vector
+#'
+#' @author Samia Kabi
 #'
 #' @keywords computation timing
 #'

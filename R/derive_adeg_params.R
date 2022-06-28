@@ -47,19 +47,21 @@
 #'
 #' @inheritParams derive_derived_param
 #'
-#' @seealso [compute_qtc()]
-#'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
+#' @author Stefan Bundfuss
+#'
 #' @keywords derivation adeg
+#'
+#' @seealso [compute_qtc()]
 #'
 #' @export
 #'
 #' @examples
-#' adeg <- tibble::tribble(
+#' library(tibble)
+#'
+#' adeg <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
 #'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
 #'   "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",

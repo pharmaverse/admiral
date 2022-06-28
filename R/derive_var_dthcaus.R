@@ -23,29 +23,30 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords derivation adsl
-#'
-#' @author
-#' Shimeng Huang, Samia Kabi, Thomas Neitmann
-#'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
-#' @export
+#' @keywords derivation adsl
+#'
+#' @author Shimeng Huang, Samia Kabi, Thomas Neitmann
 #'
 #' @seealso [dthcaus_source()]
 #'
+#' @export
+#'
 #' @examples
-#' adsl <- tibble::tribble(
+#' library(tibble)
+#'
+#' adsl <- tribble(
 #'   ~STUDYID, ~USUBJID,
 #'   "STUDY01", "PAT01",
 #'   "STUDY01", "PAT02",
 #'   "STUDY01", "PAT03"
 #' )
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
 #'   "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
 #' )
-#' ds <- tibble::tribble(
+#' ds <- tribble(
 #'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
 #'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",

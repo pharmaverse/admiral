@@ -29,13 +29,13 @@
 #'
 #'   The default is `ASTDT`
 #'
-#' @author Stefan Bundfuss
-#'
 #' @details The study day is derived as number of days from the start date
 #'   to the end date. If it is nonnegative, one is added. I.e., the study day of the
 #'   start date is 1.
 #'
 #' @return The input dataset with `ASTDY` column added
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords derivation bds occds timing
 #'

@@ -5,16 +5,21 @@
 #'
 #' @param status the disposition variable used for the mapping (e.g. `DSDECOD`).
 #'
+#' @details Usually this function can not be used with `%>%`.
+#'
 #' @return A `character` vector derived based on the values given in `status`:
 #'  "COMPLETED" if `status` is "COMPLETED",
 #'  "DISCONTINUED" if `status` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise.
 #'
 #' @author Samia Kabi
-#' @details Usually this function can not be used with `%>%`.
-#' @export
+#'
 #' @keywords user_utility adsl computation
+#'
 #' @seealso [derive_var_disposition_status()]
+#'
+#' @export
+#'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)

@@ -54,9 +54,6 @@
 #' an observation is added to the output dataset and the defined values are set to the defined
 #' variables
 #'
-#'
-#' @author Samia Kabi
-#'
 #' @return The input dataset with a new record added for each group (with respect to the variables
 #' specified for the `by_vars` parameter). That is, a variable will only
 #' be populated in this new record if it is specified in `by_vars`.
@@ -70,15 +67,19 @@
 #' + only `AxxDTM` then `ASTDTM`,`AENDTM` are computed
 #' + only `AxxDT` then `ASTDT`,`AENDT` are computed.
 #'
+#' @author Samia Kabi
+#'
 #' @keywords derivation bds adex
 #'
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(lubridate, warn.conflicts = FALSE)
-#' library(stringr, warn.conflicts = FALSE)
-#' adex <- tibble::tribble(
+#' library(dplyr)
+#' library(lubridate)
+#' library(stringr)
+#' library(tibble)
+#'
+#' adex <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
 #'   "1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
 #'   "1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),

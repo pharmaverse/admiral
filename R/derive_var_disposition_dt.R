@@ -54,9 +54,9 @@
 #'
 #' @return the input dataset with the disposition date (`new_var`) added
 #'
-#' @keywords adsl timing
-#'
 #' @author Samia Kabi
+#'
+#' @keywords adsl timing
 #'
 #' @export
 #'

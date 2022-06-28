@@ -106,11 +106,6 @@
 #'   paste("Dataset `dataset_add` contains duplicate records with respect to",
 #'         enumerate(vars2chr(by_vars)))
 #'   ```
-#'
-#' @return The output dataset contains all observations and variables of the
-#'   input dataset and additionally the variables specified for `new_vars` from
-#'   the additional dataset (`dataset_add`).
-#'
 #' @details
 #'
 #'   1. The records from the additional dataset (`dataset_add`) are restricted
@@ -125,6 +120,10 @@
 #'   a matching observation in the additional dataset the new variables are set
 #'   to `NA`. Observations in the additional dataset which have no matching
 #'   observation in the input dataset are ignored.
+#'
+#' @return The output dataset contains all observations and variables of the
+#'   input dataset and additionally the variables specified for `new_vars` from
+#'   the additional dataset (`dataset_add`).
 #'
 #' @author Stefan Bundfuss
 #'

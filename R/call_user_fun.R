@@ -5,9 +5,9 @@
 #'
 #' @param call Call to be executed
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The return value of the function call
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords dev_utility
 #'

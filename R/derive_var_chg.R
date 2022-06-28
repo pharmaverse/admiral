@@ -9,16 +9,20 @@
 #' Change from baseline is calculated by subtracting the baseline value
 #' from the analysis value.
 #'
+#' @return The input dataset with an additional column named `CHG`
+#'
 #' @author Thomas Neitmann
 #'
-#' @return The input dataset with an additional column named `CHG`
 #' @keywords bds derivation
-#' @export
 #'
 #' @seealso [derive_var_pchg()]
 #'
+#' @export
+#'
 #' @examples
-#' advs <- tibble::tribble(
+#' library(tibble)
+#'
+#' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
 #'   "P01",    "WEIGHT", 80,    "Y",    80,
 #'   "P01",    "WEIGHT", 80.8,  "",     80,

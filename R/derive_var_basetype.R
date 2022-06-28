@@ -37,7 +37,11 @@
 #' @export
 #'
 #' @examples
-#' bds <- tibble::tribble(
+#' library(dplyr, warn.conflicts=F)
+#' library(tibble)
+#' library(rlang)
+#'
+#' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
 #'   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -54,7 +58,7 @@
 #'
 #' bds_with_basetype <- derive_var_basetype(
 #'   dataset = bds,
-#'   basetypes = rlang::exprs(
+#'   basetypes = exprs(
 #'     "RUN-IN" = EPOCH %in% c("RUN-IN", "STABILIZATION", "DOUBLE-BLIND", "OPEN-LABEL"),
 #'     "DOUBLE-BLIND" = EPOCH %in% c("DOUBLE-BLIND", "OPEN-LABEL"),
 #'     "OPEN-LABEL" = EPOCH == "OPEN-LABEL"
@@ -66,11 +70,11 @@
 #' # bds_with_basetype
 #' print(bds_with_basetype, n = Inf)
 #'
-#' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 #'
 #' # An example where all parameter records need to be included for 2 different
 #' # baseline type derivations (such as LAST and WORST)
-#' bds <- tibble::tribble(
+#' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
 #'   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -80,7 +84,7 @@
 #'
 #' bds_with_basetype <- derive_var_basetype(
 #'   dataset = bds,
-#'   basetypes = rlang::exprs(
+#'   basetypes = exprs(
 #'     "LAST" = TRUE,
 #'     "WORST" = TRUE
 #'   )
@@ -88,7 +92,7 @@
 #'
 #' print(bds_with_basetype, n = Inf)
 #'
-#' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 derive_var_basetype <- function(dataset, basetypes) {
   assert_data_frame(dataset)
   assert_named_exprs(basetypes)
