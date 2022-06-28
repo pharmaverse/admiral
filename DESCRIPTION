@@ -75,6 +75,7 @@ Suggests:
     miniUI,
     rmarkdown,
     roxygen2,
+    rstudioapi,
     spelling,
     styler,
     tibble,
