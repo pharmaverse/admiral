@@ -11,9 +11,10 @@ admiral extension packages (#1079)
 
 ## Updates of Existing Functions
 
-## Breaking Changes
+- Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
+deprecation notice (#1229)
 
-- Renamed `derive_derived_param()` to `derive_param_computed`. (#1229)
+## Breaking Changes
 
 ## Documentation
 
