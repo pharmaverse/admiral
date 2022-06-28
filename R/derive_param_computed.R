@@ -106,7 +106,7 @@
 #'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
 #' )
 #'
-#' derive_derived_param(
+#' derive_param_computed(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   parameters = c("SYSBP", "DIABP"),
@@ -131,7 +131,7 @@
 #'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7, "kg", "WEEK 2"
 #' )
 #'
-#' derive_derived_param(
+#' derive_param_computed(
 #'   advs,
 #'   by_vars = vars(USUBJID, VISIT),
 #'   parameters = "WEIGHT",
@@ -144,7 +144,7 @@
 #'   constant_parameters = c("HEIGHT"),
 #'   constant_by_vars = vars(USUBJID)
 #' )
-derive_derived_param <- function(dataset,
+derive_param_computed <- function(dataset,
                                  by_vars,
                                  parameters,
                                  analysis_value,
@@ -241,3 +241,45 @@ derive_derived_param <- function(dataset,
 
   bind_rows(dataset, hori_data)
 }
+
+#' Adds a Parameter Computed from the Analysis Value of Other Parameters
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is deprecated.  Please use `derive_param-computed()` instead.
+#'
+#' @inheritParams derive_param_computed
+#'
+#' @author Stefan Bundfuss
+#'
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
+#'
+#' @keywords derivation bds
+#'
+#' @export
+#'
+derive_derived_param <- function(dataset,
+                                 by_vars,
+                                 parameters,
+                                 analysis_value,
+                                 set_values_to,
+                                 filter = NULL,
+                                 constant_by_vars = NULL,
+                                 constant_parameters = NULL) {
+  ### BEGIN DEPRECATION
+  deprecate_warn("0.8.0", "derive_derived_param()", "derive_param_computed()")
+  derive_param_computed(
+    dataset,
+    by_vars,
+    parameters,
+    analysis_value,
+    set_values_to,
+    filter,
+    constant_by_vars,
+    constant_parameters
+  )
+  ### END DEPRECATION
+}
+

@@ -231,3 +231,35 @@ test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppq
     class = "lifecycle_error_deprecated"
   )
 })
+
+test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_param()` is called", {
+  input <- tibble::tribble(
+    ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
+    "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE",
+    "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "WEEK 2",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "mmHg", "BASELINE",
+    "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "mmHg", "WEEK 2",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "mmHg", "BASELINE",
+    "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "mmHg", "WEEK 2"
+  )
+
+  expect_warning(
+    derive_derived_param(
+      input,
+      parameters = c("SYSBP", "DIABP"),
+      by_vars = vars(USUBJID, VISIT),
+      analysis_value = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      set_values_to = vars(
+        PARAMCD = "MAP",
+        PARAM = "Mean arterial pressure (mmHg)",
+        AVALU = "mmHg"
+      )
+    ),
+    "deprecated",
+    fixed = TRUE,
+    class = "lifecycle_error_deprecated"
+  )
+
+})

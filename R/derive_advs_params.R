@@ -34,7 +34,7 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -137,7 +137,7 @@ derive_param_map <- function(dataset,
     )
   }
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
@@ -247,7 +247,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -339,7 +339,7 @@ derive_param_bsa <- function(dataset,
     )
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(height_code, weight_code),
@@ -472,7 +472,7 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -542,7 +542,7 @@ derive_param_bmi <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
