@@ -232,7 +232,8 @@ test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppq
   )
 })
 
-test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_param()` is called", {
+test_that(
+  "derive_derived_param Test 1: A warning is issued if `derive_derived_param()` is called", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
