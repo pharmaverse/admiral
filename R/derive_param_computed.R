@@ -145,13 +145,13 @@
 #'   constant_by_vars = vars(USUBJID)
 #' )
 derive_param_computed <- function(dataset,
-                                 by_vars,
-                                 parameters,
-                                 analysis_value,
-                                 set_values_to,
-                                 filter = NULL,
-                                 constant_by_vars = NULL,
-                                 constant_parameters = NULL) {
+                                  by_vars,
+                                  parameters,
+                                  analysis_value,
+                                  set_values_to,
+                                  filter = NULL,
+                                  constant_by_vars = NULL,
+                                  constant_parameters = NULL) {
   assert_vars(by_vars)
   assert_vars(constant_by_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
@@ -273,11 +273,10 @@ derive_derived_param <- function(dataset,
     dataset,
     by_vars = by_vars,
     parameters = parameters,
-    analysis_value = !! enquo(analysis_value),
+    analysis_value = !!enquo(analysis_value),
     set_values_to = set_values_to,
-    filter = !! enquo(filter),
+    filter = !!enquo(filter),
     constant_by_vars = constant_by_vars,
     constant_parameters = constant_parameters
   )
 }
-
