@@ -1,11 +1,8 @@
 on:
   workflow_dispatch:
-  workflow_call:
   push:
     branches:
       - main
-      - devel
-      - pre-release
 
 name: pkgdown
 
@@ -58,31 +55,4 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          BRANCH_OR_TAG="${GITHUB_REF##*/}"
-          Rscript - <<EOF
-          pkgdown::deploy_to_branch(
-            new_process = FALSE,
-            subdir = "${BRANCH_OR_TAG}",
-            clean = TRUE
-          )
-          EOF
-
-  multi-version-docs:
-    name: Multi-version docs 📑
-    needs: pkgdown
-    runs-on: ubuntu-20.04
-    if: >
-      github.event_name == 'push'
-        && !contains(github.event.commits[0].message, '[skip docs]')
-    steps:
-      - name: Checkout repo 🛎
-        uses: actions/checkout@v3
-        with:
-          path: ${{ github.event.repository.name }}
-          ref: "gh-pages"
-
-      - name: Create and publish docs ↗️
-        uses: insightsengineering/r-pkgdown-multiversion@v2
-        with:
-          path: ${{ github.event.repository.name }}
-          default-landing-page: "main"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
