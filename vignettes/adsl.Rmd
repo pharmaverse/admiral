@@ -52,7 +52,8 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in 
+`{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -72,6 +73,7 @@ ds <- admiral_ds
 ex <- admiral_ex
 ae <- admiral_ae
 lb <- admiral_lb
+
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
