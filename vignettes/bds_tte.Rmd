@@ -67,6 +67,10 @@ adae <- admiral_adae
 ae <- admiral_ae
 ```
 
+```{r echo=FALSE}
+ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+```
+
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
 
 To derive the parameter dependent variables like `CNSR`, `ADT`, `STARTDT`,
