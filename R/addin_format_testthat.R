@@ -1,10 +1,11 @@
 
-# Function for the RStudio addin, see inst/rstudio/addins.dcf.
-# Updates current test_that test file by adding a function name, a test number, and a section
-format_test_that_file <- function() {
+# Returns the call for updating a given test_that test file
+# by adding a function name, a test number, and a section.
+# Call the function either by using wrapper "format_test_that_file" or
+# programmatically in a for loop on list.files("tests/testthat", pattern = "^test-")
+prepare_test_that_file <- function(file_info) {
 
-  # get file info
-  file_info <- rstudioapi::getActiveDocumentContext()
+  assert_s3_class(file_info, "document_context")
 
   # check that testthat is used
   uses_testhat <- devtools::uses_testthat()
@@ -61,25 +62,36 @@ format_test_that_file <- function() {
   # formulate headers according to RStudio editor functionality
   headers <- paste0("# ---- ", new_descriptions, " ----")
 
-  # modify the file content - replace the new test descriptions
-  rstudioapi::insertText(
+  # arguments to modify the file content - replace the new test descriptions
+  l_desc <- list(
     location = Map(c, Map(c, test_that_loc, 1), Map(c, test_that_loc, Inf)),
     text = test_that_lines_updated,
     id = file_info$id
   )
 
-  # modify the file content - add headers if not present
+  # arguments to modify the file content - add headers if not present
   idx_valid <- !headers %in% file_content
-  if (any(idx_valid)) {
-    rstudioapi::insertText(
-      location = Map(c, test_that_loc, 1)[idx_valid],
-      text = paste0(headers[idx_valid], "\n"),
-      id = file_info$id
+  l_header <- list(
+    location = Map(c, test_that_loc, 1)[idx_valid],
+    text = paste0(headers[idx_valid], "\n"),
+    id = file_info$id
+  )
+
+  return(
+    list(
+      descriptions = l_desc,
+      headers_cond = any(idx_valid),
+      headers = l_header,
+      file_info = file_info
     )
-  }
+  )
+}
 
-  # save document
-  rstudioapi::documentSave(id = file_info$id)
-
-  return(invisible(NULL))
+# Function for the RStudio Addin, see inst/rstudio/addins.dcf.
+# Wrapper of prepare_test_that_file.
+format_test_that_file <- function() {
+  result <- prepare_test_that_file(file_info = rstudioapi::getActiveDocumentContext())
+  do.call(rstudioapi::insertText, result$descriptions)
+  `if`(result$headers_cond, do.call(rstudioapi::insertText, result$headers))
+  rstudioapi::documentSave(id = result$file_info$id)
 }
