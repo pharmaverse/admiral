@@ -102,7 +102,7 @@ adex <- bind_rows(
 
 # Part 3
 # Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
-# `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
+# `derive_param_doseint()` and `derive_param_computed()`, only the variables specified
 # in `by_vars` will be populated in the newly created records.
 
 adex <- adex %>%
@@ -194,7 +194,7 @@ adex <- adex %>%
   ) %>%
   # Overall/W2-24 Average daily dose
   call_derivation(
-    derivation = derive_derived_param,
+    derivation = derive_param_computed,
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),
