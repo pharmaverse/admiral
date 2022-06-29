@@ -94,9 +94,11 @@ variables
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(lubridate, warn.conflicts = FALSE)
-library(stringr, warn.conflicts = FALSE)
-adex <- tibble::tribble(
+library(lubridate)
+library(stringr)
+library(tibble)
+
+adex <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC, ~VISIT, ~ASTDT, ~AENDT,
   "1015", "DOSE", 80, NA_character_, "BASELINE", ymd("2014-01-02"), ymd("2014-01-16"),
   "1015", "DOSE", 85, NA_character_, "WEEK 2", ymd("2014-01-17"), ymd("2014-06-18"),

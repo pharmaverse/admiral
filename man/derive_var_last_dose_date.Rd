@@ -20,19 +20,24 @@ derive_var_last_dose_date(
 }
 \arguments{
 \item{dataset}{Input dataset.
+
 The variables specified by the \code{by_vars} and \code{analysis_date} parameters are expected.}
 
 \item{dataset_ex}{Input EX dataset.
+
 The variables specified by the \code{by_vars}, \code{dose_date}, \code{new_vars} parameters,
 and source variables from \code{traceability_vars} parameter are expected.}
 
 \item{filter_ex}{Filtering condition applied to EX dataset.
+
 For example, it can be used to filter for valid dose.
+
 Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
 
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+
 Defaults to empty \code{vars()}.}
 
 \item{dose_date}{The EX dose date variable. A date or date-time object is expected.}
@@ -48,10 +53,13 @@ is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
+
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
+
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
+
 These can be either strings or symbols referring to existing variables.}
 }
 \value{

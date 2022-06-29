@@ -25,7 +25,9 @@ derive_last_dose(
 \item{dataset_ex}{Input EX dataset.}
 
 \item{filter_ex}{Filtering condition applied to EX dataset.
+
 For example, it can be used to filter for valid dose.
+
 Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
@@ -45,16 +47,22 @@ Defaults to NULL.}
 Defaults to \code{TRUE} (i.e. date-time variable).}
 
 \item{check_dates_only}{Logical.
+
 An assumption that start and end dates of treatment match is checked.
+
 By default (\code{FALSE}), the date as well as the time component is checked.
+
 If set to \code{TRUE}, then only the date component of those variables is checked.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
+
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
+
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
+
 These can be either strings or symbols referring to existing variables.}
 }
 \value{

@@ -8,6 +8,7 @@ derive_var_atirel(dataset, flag_var, new_var)
 }
 \arguments{
 \item{dataset}{Input dataset
+
 The variables \code{TRTSDTM}, \code{ASTDTM}, \code{AENDTM} are expected}
 
 \item{flag_var}{Name of the variable with Analysis Start Date Imputation Flag}

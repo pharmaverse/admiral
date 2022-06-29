@@ -99,7 +99,9 @@ is negative. The start and end date variable must be present in the specified
 input dataset.
 }
 \examples{
-data <- tibble::tribble(
+library(tibble)
+
+data <- tribble(
   ~BRTHDT, ~RANDDT,
   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 )

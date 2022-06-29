@@ -140,11 +140,12 @@ the new observations.
 }
 }
 \examples{
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
+library(tibble)
 
 # Derive a new parameter for measurable disease at baseline
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID,
   "1",
   "2",

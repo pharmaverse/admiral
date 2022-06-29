@@ -95,8 +95,9 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(tibble)
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",

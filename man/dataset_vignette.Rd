@@ -33,7 +33,7 @@ Output a dataset in a vignette with the pre-specified admiral format.
 \examples{
 library(admiral)
 library(DT)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 data("admiral_dm")
 

@@ -94,8 +94,9 @@ parameter and \code{mode} parameter) is included in the output dataset.
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
+library(tibble)
 
-response <- tibble::tribble(
+response <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",

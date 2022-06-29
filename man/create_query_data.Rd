@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_query_data.R
 \name{create_query_data}
 \alias{create_query_data}
-\title{Creates a queries dataset as input dataset to the \code{dataset_queries} argument in
+\title{Creates a Queries Dataset as Input Dataset to the \code{dataset_queries} Argument in
 \code{derive_vars_query()}}
 \usage{
 create_query_data(

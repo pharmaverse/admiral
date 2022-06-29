@@ -22,7 +22,9 @@ baseline by the absolute value of the baseline value and
 multiplying the result by \code{100}.
 }
 \examples{
-advs <- tibble::tribble(
+library(tibble)
+
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
   "P01",    "WEIGHT", 80,    "Y",    80,
   "P01",    "WEIGHT", 80.8,  "",     80,
@@ -32,11 +34,10 @@ advs <- tibble::tribble(
 )
 derive_var_pchg(advs)
 }
-\seealso{
-\code{\link[=derive_var_chg]{derive_var_chg()}}
-}
 \author{
 Thomas Neitmann
 }
+\keyword{@seealso}
+\keyword{[derive_var_chg()]}
 \keyword{bds}
 \keyword{derivation}

@@ -12,9 +12,11 @@ call_derivation(dataset = NULL, derivation, variable_params, ...)
 \item{derivation}{The derivation function to call}
 
 \item{variable_params}{A \code{list} of function arguments that are different across iterations.
+
 Each set of function arguments must be created using \code{\link[=params]{params()}}.}
 
 \item{...}{Any number of \emph{named} function arguments that stay the same across iterations.
+
 If a function argument is specified both inside \code{variable_params} and \code{...} then
 the value in \code{variable_params} overwrites the one in \code{...}}
 }

@@ -24,19 +24,24 @@ derive_var_last_dose_grp(
 }
 \arguments{
 \item{dataset}{Input dataset.
+
 The variables specified by the \code{by_vars} and \code{analysis_date} parameters are expected.}
 
 \item{dataset_ex}{Input EX dataset.
+
 The variables specified by the \code{by_vars}, \code{dose_date}, \code{new_vars} parameters,
 and source variables from \code{traceability_vars} parameter are expected.}
 
 \item{filter_ex}{Filtering condition applied to EX dataset.
+
 For example, it can be used to filter for valid dose.
+
 Defaults to NULL.}
 
 \item{by_vars}{Variables to join by (created by \code{dplyr::vars}).}
 
 \item{dose_id}{Variables to identify unique dose (created by \code{dplyr::vars}).
+
 Defaults to empty \code{vars()}.}
 
 \item{dose_date}{The EX dose date variable. A date or date-time object is expected.}
@@ -49,27 +54,34 @@ is issued if the condition is not true. Defaults to \code{(EXDOSFRQ == "ONCE")}.
 \item{new_var}{The output variable defined by the user.}
 
 \item{grp_brks}{User supplied breaks to apply to groups.
+
 Refer to \code{breaks} parameter in \code{cut()} for details.}
 
 \item{grp_lbls}{User supplied labels to apply to groups.
+
 Refer to \code{labels} parameter in \code{cut()} for details.}
 
 \item{include_lowest}{logical, indicating if a value equal to the lowest
 (or highest, for right = FALSE) ‘breaks’ value should be included.
+
 Refer to \code{include.lowest} parameter in \code{cut()} for details.}
 
 \item{right}{Logical, indicating if the intervals should be closed on the right
 (and open on the left) or vice versa.
+
 Refer to \code{right} parameter in \code{cut()} for details.}
 
 \item{dose_var}{The source dose amount variable. Defaults to \code{EXDOSE}.}
 
 \item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
 e.g. \code{vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)}.
+
 The left-hand side (names of the list elements) gives the names of the traceability variables
 in the returned dataset.
+
 The right-hand side (values of the list elements) gives the values of the traceability variables
 in the returned dataset.
+
 These can be either strings or symbols referring to existing variables.}
 }
 \value{
@@ -81,6 +93,7 @@ Add a variable for user-defined dose grouping of the last dose to the input data
 \details{
 Last dose is the dose with maximum \code{dose_date} that is lower to or equal to the
 \code{analysis_date} per \code{by_vars} for each observation in \code{dataset}.
+
 The last dose group is then derived by user-defined grouping, which groups
 \code{dose_var} as specified in \code{grp_brks}, and returns \code{grp_lbls} as the values for \code{new_var}.
 
