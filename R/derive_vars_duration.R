@@ -91,7 +91,7 @@
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24"),
 #'   lubridate::ymd("1985-01-01"), NA,
 #'   NA, lubridate::ymd("2021-03-10"),
-#'   NA,NA
+#'   NA, NA
 #' )
 #'
 #' derive_vars_duration(data,
@@ -145,9 +145,9 @@ derive_vars_duration <- function(dataset,
       )
     )
 
-    if (!quo_is_null(new_var_unit)) {
-    dataset <- dataset %>% mutate(!!new_var_unit := ifelse (is.na(!!new_var),NA,toupper(out_unit)))
-    }
+  if (!quo_is_null(new_var_unit)) {
+    dataset <- dataset %>% mutate(!!new_var_unit := ifelse(is.na(!!new_var), NA, toupper(out_unit)))
+  }
 
   dataset
 }

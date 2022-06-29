@@ -9,6 +9,8 @@ admiral extension packages (#1079)
 
 - Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
 
+- `derive_vars_duration()` Updated to not display units when there is missing duration (#1207)
+
 ## Updates of Existing Functions
 
 ## Breaking Changes

@@ -101,7 +101,10 @@ input dataset.
 \examples{
 data <- tibble::tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24"),
+  lubridate::ymd("1985-01-01"), NA,
+  NA, lubridate::ymd("2021-03-10"),
+  NA, NA
 )
 
 derive_vars_duration(data,
