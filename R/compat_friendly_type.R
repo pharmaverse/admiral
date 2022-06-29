@@ -1,6 +1,9 @@
 #' Return English-friendly Type
+#'
 #' @param x Any R object.
+#'
 #' @param value Whether to describe the value of `x`.
+#'
 #' @param length Whether to mention the length of vectors and lists.
 #'
 #' @return A string describing the type. Starts with an indefinite

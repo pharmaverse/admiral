@@ -132,7 +132,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #' library(tibble)
 #' data("admiral_adsl")

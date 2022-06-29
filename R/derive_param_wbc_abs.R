@@ -73,7 +73,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
 #'
 #' test_lb <- tribble(

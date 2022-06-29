@@ -29,7 +29,7 @@
 #' @examples
 #' library(admiral)
 #' library(DT)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' data("admiral_dm")
 #'

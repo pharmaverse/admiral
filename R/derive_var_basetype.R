@@ -37,7 +37,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr, warn.conflicts=F)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(tibble)
 #' library(rlang)
 #'

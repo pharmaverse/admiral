@@ -74,7 +74,7 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #' library(stringr)
 #' library(tibble)
