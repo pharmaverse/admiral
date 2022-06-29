@@ -22,8 +22,6 @@
 #'   AENDT, DEATHDY = DTHDT)`. If the source variable does not end in --DT(M), a
 #'   name for the resulting `--DY` variable must be provided.
 #'
-#' @author Teckla Akinyi
-#'
 #' @details The relative day is derived as number of days from the reference
 #'   date to the end date. If it is nonnegative, one is added. I.e., the
 #'   relative day of the reference date is 1. Unless a name is explicitly
@@ -34,15 +32,18 @@
 #' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
 #'   source variable(s) added
 #'
+#' @author Teckla Akinyi
+#'
 #' @keywords derivation ADaM timing
 #'
 #' @export
 #'
 #' @examples
+#'library(dplyr, warn.conflicts = FALSE)
+#'library(tibble)
 #' library(lubridate)
-#' library(dplyr)
 #'
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
 #'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
@@ -59,7 +60,7 @@
 #' )
 #'
 #' # specifying name of new variables
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDT, ~DTHDT,
 #'   "2014-01-17", "2014-02-01"
 #' ) %>%

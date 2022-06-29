@@ -10,16 +10,20 @@
 #' baseline by the absolute value of the baseline value and
 #' multiplying the result by `100`.
 #'
+#' @return The input dataset with an additional column named `PCHG`
+#'
 #' @author Thomas Neitmann
 #'
-#' @return The input dataset with an additional column named `PCHG`
 #' @keywords bds derivation
+#'
+#'  @seealso [derive_var_chg()]
+#'
 #' @export
 #'
-#' @seealso [derive_var_chg()]
-#'
 #' @examples
-#' advs <- tibble::tribble(
+#' library(tibble)
+#'
+#' advs <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
 #'   "P01",    "WEIGHT", 80,    "Y",    80,
 #'   "P01",    "WEIGHT", 80.8,  "",     80,

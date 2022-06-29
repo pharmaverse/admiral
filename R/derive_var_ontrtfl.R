@@ -82,20 +82,21 @@
 #'
 #'   Any date imputations needed should be done prior to calling this function.
 #'
+#' @return The input dataset with an additional column named `ONTRTFL` with a
+#'   value of `"Y"` or `NA`
+#'
 #' @author Alice Ehmann, Teckla Akinyi
 #'
 #' @keywords bds derivation
 #'
-#' @return The input dataset with an additional column named `ONTRTFL` with a
-#'   value of `"Y"` or `NA`
-#'
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(dplyr, warn.conflict = FALSE)
 #' library(lubridate, warn.conflict = FALSE)
+#' library(tibble)
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -108,7 +109,7 @@
 #'   ref_end_date = TRTEDT
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -122,7 +123,7 @@
 #'   ref_end_window = 60
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,
 #'   "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
 #'   "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
@@ -137,7 +138,7 @@
 #'   filter_pre_timepoint = TPT == "PRE"
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,           ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
@@ -153,7 +154,7 @@
 #'   span_period = "Y"
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,          ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),

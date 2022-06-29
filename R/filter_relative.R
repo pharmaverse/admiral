@@ -68,11 +68,11 @@
 #'   (`condition` parameter) if fulfilled the first or last time (`order`
 #'   parameter and `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return A dataset containing for each by group the observations before or
 #'   after the observation where the condition was fulfilled the first or last
 #'   time
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adam user_utility
 #'
@@ -80,8 +80,9 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
+#' library(tibble)
 #'
-#' response <- tibble::tribble(
+#' response <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
 #'   "1",      2,        "CR",

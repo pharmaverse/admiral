@@ -1,32 +1,51 @@
 #' Derive Last Dose
 #'
 #' Add EX source variables from last dose to the input dataset.
+#'
 #' @param dataset Input dataset.
+#'
 #' The variables specified by the `by_vars` and `analysis_date` parameters are expected.
+#'
 #' @param dataset_ex Input EX dataset.
+#'
 #' The variables specified by the `by_vars`, `dose_date`, `new_vars` parameters,
 #' and source variables from `traceability_vars` parameter are expected.
+#'
 #' @param filter_ex Filtering condition applied to EX dataset.
+#'
 #' For example, it can be used to filter for valid dose.
+#'
 #' Defaults to NULL.
+#'
 #' @param by_vars Variables to join by (created by `dplyr::vars`).
+#'
 #' @param dose_id Variables to identify unique dose (created by `dplyr::vars`).
+#'
 #' Defaults to empty `vars()`.
+#'
 #' @param new_vars Variables to keep from `dataset_ex`, with the option to rename. Can either
 #' be variables created by `dplyr::vars` (e.g. `vars(VISIT)`), or named list returned by [`vars()`]
 #' (e.g. `vars(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from `dataset_ex` are
 #' kept without renaming.
+#'
 #' Defaults to `NULL`.
+#'
 #' @param dose_date The EX dose date variable. A date or date-time object is expected.
+#'
 #' @param analysis_date The analysis date variable. A date or date-time object is expected.
+#'
 #' @param single_dose_condition The condition for checking if `dataset_ex` is single dose. An error
 #' is issued if the condition is not true. Defaults to `(EXDOSFRQ == "ONCE")`.
+#'
 #' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
 #' e.g. `vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)`.
+#'
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
 #' in the returned dataset.
+#'
 #' The right-hand side (values of the list elements) gives the values of the traceability variables
 #' in the returned dataset.
+#'
 #' These can be either strings or symbols referring to existing variables.
 #'
 #' @details All date (date-time) variables can be characters in standard ISO format or
@@ -99,7 +118,7 @@
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
-#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+#'     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 derive_vars_last_dose <- function(dataset,

@@ -34,13 +34,13 @@
 #'   `by_vars` parameter) the first observation (with respect to the order
 #'   specified for the `order` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with `TRTSDTM` variable added
 #'
-#' @export
+#' @author Stefan Bundfuss
 #'
 #' @keywords adsl timing derivation
+#'
+#' @export
 #'
 derive_var_trtsdtm <- function(dataset,
                                dataset_ex,

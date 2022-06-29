@@ -39,10 +39,10 @@
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adam derivation
 #'

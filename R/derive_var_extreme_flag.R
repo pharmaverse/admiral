@@ -51,11 +51,11 @@
 #'   all parameters in the dataset depending on the `order` and the `mode`, i.e. for every
 #'   parameter the first or last record will be flagged across the whole dataset.
 #'
-#' @seealso [derive_var_worst_flag()]
+#' @return The input dataset with the new flag variable added
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new flag variable added
+#' @seealso [derive_var_worst_flag()]
 #'
 #' @keywords derivation adam
 #'
@@ -63,6 +63,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #' library(admiral.test)
 #' data("admiral_vs")
 #'
@@ -83,7 +84,7 @@
 #'
 #' # Baseline (ABLFL) examples:
 #'
-#' input <- tibble::tribble(
+#' input <- tribble(
 #'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
 #'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
 #'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,

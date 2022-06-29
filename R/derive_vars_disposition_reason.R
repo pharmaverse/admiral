@@ -4,6 +4,7 @@
 #' `derive_vars_disposition_reason()`.
 #'
 #' @param reason the disposition variable used for the mapping (e.g. `DSDECOD`).
+#'
 #' @param reason_spe the disposition variable used for the mapping of the details
 #' if required (e.g. `DSTERM`).
 #'
@@ -16,9 +17,13 @@
 #' @return A `character` vector
 #'
 #' @author Samia Kabi
-#' @export
+#'
 #' @keywords user_utility adsl computation
+#'
 #' @seealso [derive_vars_disposition_reason()]
+#'
+#' @export
+#'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)

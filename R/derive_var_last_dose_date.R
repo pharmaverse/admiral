@@ -3,7 +3,9 @@
 #' Add a variable for the dose date or datetime of the last dose to the input dataset.
 #'
 #' @inheritParams derive_vars_last_dose
+#'
 #' @param new_var The new date or datetime variable added to `dataset`.
+#'
 #' @param output_datetime  Display `new_var` as datetime or as date only. Defaults to `TRUE`.
 #'
 #' @details The last dose date is derived as the maximum dose date where the
@@ -23,9 +25,9 @@
 #'
 #' @keywords adam derivation
 #'
-#' @export
-#'
 #' @seealso [derive_vars_last_dose()], [create_single_dose_dataset()]
+#'
+#' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)

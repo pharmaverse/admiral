@@ -75,18 +75,20 @@
 #'   is negative. The start and end date variable must be present in the specified
 #'   input dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with the duration and unit variable added
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adam timing derivation
 #'
-#' @export
-#'
 #' @seealso [compute_duration()]
 #'
+#' @export
+#'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
 #'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
 #' )

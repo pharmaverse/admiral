@@ -28,20 +28,23 @@
 #' @details The total treatment duration is derived as the number of days from
 #'   start to end date plus one.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return The input dataset with `TRTDURD` added
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adsl timing derivation
 #'
-#' @export
-#'
 #' @seealso [derive_vars_duration()]
 #'
+#' @export
+#'
 #' @examples
-#' data <- tibble::tribble(
+#' library(tibble)
+#' library(lubridate)
+#'
+#' data <- tribble(
 #'   ~TRTSDT, ~TRTEDT,
-#'   lubridate::ymd("2020-01-01"), lubridate::ymd("2020-02-24")
+#'   ymd("2020-01-01"), ymd("2020-02-24")
 #' )
 #'
 #' derive_var_trtdurd(data)

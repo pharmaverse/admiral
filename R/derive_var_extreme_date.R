@@ -21,9 +21,9 @@
 #'   A list of quosures where the expressions are symbols as returned by
 #'   `vars()` is expected.
 #'
-#' @author Stefan Bundfuss, Thomas Neitmann
-#'
 #' @return The input dataset with the `LSTALVDT` variable added.
+#'
+#' @author Stefan Bundfuss, Thomas Neitmann
 #'
 #' @keywords derivation adsl
 #'

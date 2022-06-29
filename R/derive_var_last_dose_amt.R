@@ -3,7 +3,9 @@
 #' Add a variable for dose amount from the last dose to the input dataset.
 #'
 #' @inheritParams derive_vars_last_dose
+#'
 #' @param new_var The new variable added to `dataset`.
+#'
 #' @param dose_var The EX source dose amount variable. Defaults to `EXDOSE`.
 #'
 #' @details The last dose amount is derived as the dose amount where the maximum `dose_date` is

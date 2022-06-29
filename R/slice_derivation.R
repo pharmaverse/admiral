@@ -36,18 +36,19 @@
 #'
 #' @return The input dataset with the variables derived by the derivation added
 #'
-#' @keywords user_utility high_order_function
-#'
 #' @author Stefan Bundfuss
+#'
+#' @keywords user_utility high_order_function
 #'
 #' @seealso [params()] [restrict_derivation()]
 #'
 #' @export
 #'
 #' @examples
-#'
+#' library(tibble)
 #' library(stringr)
-#' advs <- tibble::tribble(
+#'
+#' advs <- tribble(
 #'   ~USUBJID, ~VSDTC,       ~VSTPT,
 #'   "1",      "2020-04-16", NA_character_,
 #'   "1",      "2020-04-16", "BEFORE TREATMENT"

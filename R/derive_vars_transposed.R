@@ -26,9 +26,9 @@
 #' dataset is transposed and subsequently merged onto `dataset` using `by_vars` as
 #' keys.
 #'
-#' @author Thomas Neitmann
-#'
 #' @return The input dataset with transposed variables from `dataset_merge` added
+#'
+#' @author Thomas Neitmann
 #'
 #' @keywords derivation adam
 #'
@@ -36,14 +36,15 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' cm <- tibble::tribble(
+#' cm <- tribble(
 #'   ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
 #'   "BP40257-1001", "14", "1192056", "PARACETAMOL",
 #'   "BP40257-1001", "18", "2007001", "SOLUMEDROL",
 #'   "BP40257-1002", "19", "2791596", "SPIRONOLACTONE"
 #' )
-#' facm <- tibble::tribble(
+#' facm <- tribble(
 #'   ~USUBJID, ~FAGRPID, ~FAREFID, ~FATESTCD, ~FASTRESC,
 #'   "BP40257-1001", "1", "1192056", "CMATC1CD", "N",
 #'   "BP40257-1001", "1", "1192056", "CMATC2CD", "N02",

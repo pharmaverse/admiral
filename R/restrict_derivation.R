@@ -12,18 +12,19 @@
 #'
 #' @param filter Filter condition
 #'
-#' @keywords user_utility high_order_function
-#'
 #' @author Stefan Bundfuss
+#'
+#' @keywords user_utility high_order_function
 #'
 #' @seealso [params()] [slice_derivation()]
 #'
 #' @export
 #'
 #' @examples
-#'
 #' library(magrittr)
-#' adlb <- tibble::tribble(
+#' library(tibble)
+#'
+#' adlb <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
 #'   "1",            -1,   113, NA_character_,
 #'   "1",             0,   113, "Y",

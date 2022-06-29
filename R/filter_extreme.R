@@ -43,9 +43,9 @@
 #'   order specified for the `order` parameter and the mode specified for the
 #'   `mode` parameter) is included in the output dataset.
 #'
-#' @author Stefan Bundfuss
-#'
 #' @return A dataset containing the first or last observation of each by group
+#'
+#' @author Stefan Bundfuss
 #'
 #' @keywords adam user_utility
 #'

@@ -7,11 +7,11 @@
 #' @param source_vars A list of datetime variables created using `vars()` from
 #'   which dates are to be extracted
 #'
-#' @author Teckla Akinyi
-#'
 #' @return
 #' A data frame containing the input dataset with the corresponding date (`--DT`)
 #' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
+#'
+#' @author Teckla Akinyi
 #'
 #' @keywords adam timing
 #'
@@ -19,9 +19,10 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #' library(lubridate)
 #'
-#' adcm <- tibble::tribble(
+#' adcm <- tribble(
 #'   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
 #'   "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00",
 #'   "PAT01",  NA,                    "2012-02-28 19:00:00", NA,

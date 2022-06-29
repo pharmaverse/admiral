@@ -1,5 +1,15 @@
 #' Derive Query Variables
 #'
+#' @param dataset Input dataset.
+#'
+#' @param dataset_queries A dataset containing required columns `VAR_PREFIX`,
+#' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns
+#' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
+#'
+#'   The content of the dataset will be verified by [assert_valid_queries()].
+#'
+#'   `create_query_data()` can be used to create the dataset.
+#'
 #' @details For each unique element in `VAR_PREFIX`, the corresponding "NAM"
 #'   variable will be created. For each unique `VAR_PREFIX`, if `QUERY_ID` is
 #'   not "" or NA, then the corresponding "CD" variable is created; similarly,
@@ -16,19 +26,9 @@
 #'   `QUERY_ID`, `QUERY_SCOPE`, and `QUERY_SCOPE_NUM` respectively,
 #'   whenever not missing.
 #'
-#' @param dataset Input dataset.
-#'
-#' @param dataset_queries A dataset containing required columns `VAR_PREFIX`,
-#' `QUERY_NAME`, `TERM_LEVEL`, `TERM_NAME`, `TERM_ID`, and optional columns
-#' `QUERY_ID`, `QUERY_SCOPE`, `QUERY_SCOPE_NUM`.
-#'
-#'   The content of the dataset will be verified by [assert_valid_queries()].
-#'
-#'   `create_query_data()` can be used to create the dataset.
+#' @return The input dataset with query variables derived.
 #'
 #' @author Ondrej Slama, Shimeng Huang
-#'
-#' @return The input dataset with query variables derived.
 #'
 #' @keywords adae adcm derivation
 #'
@@ -37,8 +37,10 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' data("queries")
-#' adae <- tibble::tribble(
+#'
+#' adae <- tribble(
 #'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
 #'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
 #'   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,

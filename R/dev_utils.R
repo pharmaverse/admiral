@@ -1,7 +1,9 @@
 #' Enumerate Multiple Strings
 #'
 #' @param x A `character` vector
+#'
 #' @param quote_fun Quoting function, defaults to `backquote`.
+#'
 #' @param conjunction Character to be used in the message, defaults to "and".
 #'
 #' @author Thomas Neitmann

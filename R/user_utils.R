@@ -6,9 +6,9 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @export
-#'
 #' @keywords user_utility
+#'
+#' @export
 #'
 #' @examples
 #' vars2chr(vars(USUBJID, AVAL))

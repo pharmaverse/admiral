@@ -3,6 +3,7 @@
 #' Warn if a variable already exists inside a dataset
 #'
 #' @param dataset A `data.frame`
+#'
 #' @param vars `character` vector of columns to check for in `dataset`
 #'
 #' @return No return value, called for side effects

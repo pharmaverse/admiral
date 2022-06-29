@@ -1,13 +1,16 @@
 #' Open an ADaM Template Script
 #'
 #' @param adam_name An ADaM dataset name. You can use any of the available dataset name `r list_all_templates()`, and the dataset name is case-insensitive. The default dataset name is ADSL.
+#'
 #' @param save_path Path to save the script.
+#'
 #' @param overwrite Whether to overwrite an existing file named `save_path`.
+#'
 #' @param open Whether to open the script right away.
 #'
-#' @return No return values, called for side effects
-#'
 #' @details Running without any arguments such as `use_ad_template()` auto-generates adsl.R in the current path. Use `list_all_templates()` to discover which templates are available.
+#'
+#' @return No return values, called for side effects
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'

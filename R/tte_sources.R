@@ -7,13 +7,13 @@
 #' R console, e.g. `print(death_event)`. For details of how to use these objects
 #' please refer to [derive_param_tte()].
 #'
+#' @keywords tte_source
+#'
 #' @seealso [derive_param_tte()], [tte_source()], [event_source()], [censor_source()]
 #'
 #' @format NULL
 #'
 #' @export
-#'
-#' @keywords tte_source
 #'
 #' @rdname tte_source_objects
 #'

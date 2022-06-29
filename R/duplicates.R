@@ -2,10 +2,6 @@
 
 #' Get Duplicate Records that Lead to a Prior Error
 #'
-#' @export
-#'
-#' @author Thomas Neitmann
-#'
 #' @details
 #' Many {admiral} function check that the input dataset contains only one record
 #' per `by_vars` group and throw an error otherwise. The `get_duplicates_dataset()`
@@ -19,7 +15,11 @@
 #'
 #' @return A `data.frame` or `NULL`
 #'
+#' @author Thomas Neitmann
+#'
 #' @keywords user_utility
+#'
+#' @export
 #'
 #' @examples
 #' data(admiral_adsl)

@@ -26,9 +26,9 @@
 #' (e.g. "NORMAL to HIGH"). When `from_var` or `to_var` has missing value, the
 #' missing value is replaced by `na_val` (e.g. "NORMAL to NULL").
 #'
-#' @author Annie Yang
-#'
 #' @return The input dataset with the character shift variable added
+#'
+#' @author Annie Yang
 #'
 #' @keywords adam bds adlb derivation
 #'
@@ -36,8 +36,9 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
+#' library(tibble)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
 #'   "P01", "ALB", 33, "Y", "LOW", "LOW",
 #'   "P01", "ALB", 38, NA, "LOW", "NORMAL",
