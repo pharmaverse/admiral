@@ -14,8 +14,6 @@ can be used to indicate in which package to look for templates (#1205)
 
 - Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
 
-## Updates of Existing Functions
-
 - Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
 deprecation notice (#1229)
 
