@@ -27,7 +27,7 @@ The date character vector (\code{dtc}) must be present.}
 A character scalar is expected. For the date variable "DT" is appended to
 the specified prefix, for the date imputation flag "DTF", and for the time
 imputation flag "TMF". I.e., for \code{new_vars_prefix = "AST"} the variables
-\code{ASTDT}, \code{ASTDTF}, and \code{ASTTMF} are created.}
+\code{ASTDTM}, \code{ASTDTF}, and \code{ASTTMF} are created.}
 
 \item{dtc}{The \code{'--DTC'} date to impute
 
@@ -90,7 +90,7 @@ min_dates = list(
  ymd_hms("2020-12-06T12:12:12"),
  ymd_hms("2020-11-11T11:11:11")
 ),
-date_imputation = "first"
+date_imputation = "FIRST"
 )
 }\if{html}{\out{</div>}}
 
