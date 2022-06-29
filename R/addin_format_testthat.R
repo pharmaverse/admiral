@@ -2,9 +2,8 @@
 # Returns the call for updating a given test_that test file
 # by adding a function name, a test number, and a section.
 # Call the function either by using RStudio Addin "format_test_that_file" or
-# programmatically in a for loop on
-# `list.files("tests/testthat", pattern="^test-.*\\.R$", full.names = T)`
-# and using the code in "format_test_that_file"
+# programmatically in a for loop on the test files and running
+# rstudioapi::navigateToFile and format_test_that_file
 prepare_test_that_file <- function(path) {
 
   assert_character_scalar(path)
