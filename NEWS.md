@@ -5,11 +5,14 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+## Updates of Existing Functions
+
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
 
-- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
+- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
 
-## Updates of Existing Functions
+- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
 
 ## Breaking Changes
 
