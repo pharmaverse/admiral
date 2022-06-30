@@ -17,6 +17,8 @@ can be used to indicate in which package to look for templates (#1205)
 - Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
 deprecation notice (#1229)
 
+- `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
+
 ## Breaking Changes
 
 ## Documentation
