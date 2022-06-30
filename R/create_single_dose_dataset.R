@@ -283,14 +283,18 @@ dose_freq_lookup <- tibble::tribble(
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
+                                       start_datetime = ASTDTM,
                                        end_date = AENDT,
+                                       end_datetime = AENDTM,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE) {
   col_names <- colnames(dataset)
   dose_freq <- assert_symbol(enquo(dose_freq))
   lookup_column <- assert_symbol(enquo(lookup_column))
   start_date <- assert_symbol(enquo(start_date))
+  start_datetime <- assert_symbol(enquo(start_datetime))
   end_date <- assert_symbol(enquo(end_date))
+  end_datetime <- assert_symbol(enquo(end_datetime))
   assert_data_frame(dataset, required_vars = quo_c(dose_freq, start_date, end_date))
   assert_data_frame(lookup_table, required_vars = vars(DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR))
 
@@ -299,15 +303,15 @@ create_single_dose_dataset <- function(dataset,
   lookup <- lookup_table %>%
     rename(!!dose_freq := !!lookup_column)
 
-  # Check that NAs do not appear in start_date or end_date columns
+  # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   na_check <- dataset %>%
-    filter(is.na(!!start_date) | is.na(!!end_date)) %>%
-    select(!!start_date, !!end_date)
+    filter(is.na(!!start_date) | is.na(!!end_date)| is.na(!!start_datetime) | is.na(!!end_datetime)) %>%
+    select(!!start_date, !!end_date, !!stat_datetime, !!end_datetime)
 
   if (nrow(na_check) > 0) {
     na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
     err_msg <- paste0(
-      "The arguments start_date and end_date cannot contain `NA` values.\n",
+      "The arguments start_date or start_datetime and end_date or end_datetime cannot contain `NA` values.\n",
       sprintf(
         "Please check %s for `NA` values.",
         na_columns
@@ -401,12 +405,14 @@ create_single_dose_dataset <- function(dataset,
   dataset_part_2 <- dataset_part_2 %>%
     mutate(
       !!dose_freq := "ONCE",
-      !!start_date := !!start_date + time_differential
+      !!start_date := !!start_date + time_differential,
+      !!start_datetime := !!start_datetime + time_differential
     )
 
   dataset_part_2 <- dataset_part_2 %>%
     filter(!(!!start_date > !!end_date)) %>%
-    mutate(!!end_date := !!start_date) %>%
+    mutate(!!end_date := !!start_date,
+           !!end_datetime := !!start_datetime) %>%
     select(!!!vars(all_of(col_names)))
 
   # Stitch back together
