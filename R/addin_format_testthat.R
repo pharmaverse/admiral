@@ -5,7 +5,6 @@
 # programmatically in a for loop on the test files and running
 # rstudioapi::navigateToFile and format_test_that_file
 prepare_test_that_file <- function(path) {
-
   assert_character_scalar(path)
 
   # check that file exists
@@ -42,8 +41,8 @@ prepare_test_that_file <- function(path) {
     string = test_that_lines,
     pattern = paste0(
       '(?<=test_that\\(")', # positive look-ahead - search matching expression after test_that("
-      ".*",    # matching expression - match everything
-      '(?=")'  # positive look-behind - search matching expression before "
+      ".*", # matching expression - match everything
+      '(?=")' # positive look-behind - search matching expression before "
     )
   )
   test_that_desc_cleaned <- stringr::str_remove(

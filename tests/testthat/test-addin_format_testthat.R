@@ -48,5 +48,4 @@ test_that("addin_format_testthat, test 1: works as expected", {
     )
   )
   expect_identical(prepare_test_that_file(tf), expected)
-
 })
