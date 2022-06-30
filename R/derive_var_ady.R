@@ -36,7 +36,7 @@
 #'
 #' @return The input dataset with `ADY` column added
 #'
-#' @keywords derivation bds timing
+#' @keywords deprecated
 #'
 #' @export
 #'

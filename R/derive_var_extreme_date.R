@@ -25,7 +25,7 @@
 #'
 #' @return The input dataset with the `LSTALVDT` variable added.
 #'
-#' @keywords derivation adsl
+#' @keywords deprecated
 #'
 #' @export
 derive_var_lstalvdt <- function(dataset,
@@ -478,7 +478,7 @@ derive_var_extreme_dt <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords source_specifications
+#' @keywords deprecated
 #'
 #' @export
 #'

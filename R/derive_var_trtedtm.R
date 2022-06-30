@@ -38,7 +38,7 @@
 #'
 #' @return The input dataset with `TRTEDTM` variable added
 #'
-#' @keywords adsl timing derivation
+#' @keywords deprecated
 #'
 #' @export
 #'
