@@ -82,6 +82,8 @@
 #'
 #' @return A character vector
 #'
+#' @family com_date_time
+#'
 #' @keywords computation timing
 #'
 #' @export
@@ -353,6 +355,8 @@ impute_dtc <- function(dtc,
 #'
 #' @return a date object
 #'
+#' @family com_date_time
+#'
 #' @keywords computation timing
 #'
 #' @export
@@ -402,6 +406,8 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @return A datetime object
 #'
+#' @family com_date_time
+#'
 #' @keywords computation timing
 #'
 #' @export
@@ -445,6 +451,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return A datetime object
+#'
+#' @family com_date_time
 #'
 #' @keywords computation timing
 #'
@@ -500,6 +508,8 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
+#' @family com_date_time
+#'
 #' @keywords computation timing
 #'
 #' @export
@@ -551,6 +561,8 @@ compute_dtf <- function(dtc, dt) {
 #' @details Usually this computation function can not be used with `%>%`.
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
+#'
+#' @family com_date_time
 #'
 #' @keywords computation timing
 #'
@@ -630,6 +642,8 @@ compute_tmf <- function(dtc,
 #' a warning is issued and `'--DTF'` will be overwritten.
 #'
 #' @author Samia Kabi
+#'
+#' @family der_date_time
 #'
 #' @keywords adam derivation timing
 #'
@@ -819,6 +833,8 @@ derive_vars_dt <- function(dataset,
 #' flag `'--DTF'`, `'--TMF'`) added.
 #'
 #' @author Samia Kabi
+#'
+#' @family der_date_time
 #'
 #' @keywords derivation adam timing
 #'

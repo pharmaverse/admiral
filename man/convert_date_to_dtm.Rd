@@ -104,8 +104,17 @@ convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
 convert_date_to_dtm("2019-07-18")
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Samia Kabi
 }
+\concept{com_date_time}
 \keyword{computation}
 \keyword{timing}

@@ -104,8 +104,17 @@ convert_dtc_to_dtm("2019-07-18T15:25:00")
 convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 convert_dtc_to_dtm("2019-07-18")
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Samia Kabi
 }
+\concept{com_date_time}
 \keyword{computation}
 \keyword{timing}

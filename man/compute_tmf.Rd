@@ -39,8 +39,17 @@ compute_tmf(dtc = "2019-07-18T15:25", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Samia Kabi
 }
+\concept{com_date_time}
 \keyword{computation}
 \keyword{timing}

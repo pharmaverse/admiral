@@ -198,9 +198,14 @@ derive_vars_dt(
   preserve = TRUE
 )
 }
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_vars_dtm}()}
+}
 \author{
 Samia Kabi
 }
+\concept{der_date_time}
 \keyword{adam}
 \keyword{derivation}
 \keyword{timing}
