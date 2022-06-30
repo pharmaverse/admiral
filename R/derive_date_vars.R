@@ -84,7 +84,7 @@
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -357,7 +357,7 @@ impute_dtc <- function(dtc,
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -408,7 +408,7 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -454,7 +454,7 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -510,7 +510,7 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -564,7 +564,7 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @family com_date_time
 #'
-#' @keywords computation timing
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -645,7 +645,7 @@ compute_tmf <- function(dtc,
 #'
 #' @family der_date_time
 #'
-#' @keywords adam derivation timing
+#' @keywords der_date_time
 #'
 #' @export
 #'
@@ -836,7 +836,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' @family der_date_time
 #'
-#' @keywords derivation adam timing
+#' @keywords der_date_time
 #'
 #' @export
 #'

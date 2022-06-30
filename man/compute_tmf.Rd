@@ -51,5 +51,4 @@ Date/Time Computation Functions that returns a vector:
 Samia Kabi
 }
 \concept{com_date_time}
-\keyword{computation}
-\keyword{timing}
+\keyword{com_date_time}

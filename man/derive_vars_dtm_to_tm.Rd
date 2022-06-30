@@ -51,8 +51,14 @@ adcm \%>\%
   derive_vars_dtm_to_tm(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
   select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 }
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()}
+}
 \author{
 Teckla Akinyi
 }
-\keyword{adam}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}

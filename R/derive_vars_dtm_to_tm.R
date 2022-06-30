@@ -19,7 +19,9 @@
 #' (`--TM`) variable(s) of all datetime variables (`--DTM`) specified in
 #' `source_vars` with the correct name.
 #'
-#' @keywords adam timing
+#' @family der_date_time
+#'
+#' @keywords der_date_time
 #'
 #' @export
 #'

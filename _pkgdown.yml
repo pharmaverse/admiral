@@ -15,6 +15,17 @@ repo:
 news:
   cran_dates: false
 reference:
+
+- title: Derivations for Date/Time Variables
+  desc: Derivations add one or more variables or parameters to the input
+        dataset and return the extended dataset.
+- contents:
+  - has_keyword("der_date_time")
+
+- title: Computations for Date/Time Vectors
+  desc: Computations expect vectors as input and returns a vector
+  contents:
+  - has_keyword('com_date_time')
 - title: Derivations
   desc: Derivations add one or more variables or parameters to the input
         dataset and return the extended dataset.
