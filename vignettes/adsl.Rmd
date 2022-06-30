@@ -73,7 +73,6 @@ ds <- admiral_ds
 ex <- admiral_ex
 ae <- admiral_ae
 lb <- admiral_lb
-
 ```
 
 The `DM` domain is used as the basis for `ADSL`:
