@@ -28,13 +28,15 @@ prepare_test_that_file <- function(path) {
   # get locations of tests - match 'test_that("' strings
   test_that_loc <- grep('^test_that\\("', file_content)
 
-  # define test title: add function name according to the filename and numbering
-  test_title <- paste0(
-    testing_fun, ", ",
-    "test ", seq_along(test_that_loc), ": "
-  )
+  if (length(test_that_loc) == 0) {
+    return(invisible(NULL))
+  }
 
-  # get test descriptions
+  ####
+  ## HANDLE test_that DESCRIPTIONS
+  ####
+
+  # get and parse test descriptions
   test_that_lines <- file_content[test_that_loc]
   test_that_desc_parsed <- stringr::str_extract(
     string = test_that_lines,
@@ -44,12 +46,16 @@ prepare_test_that_file <- function(path) {
       '(?=")'  # positive look-behind - search matching expression before "
     )
   )
+  test_that_desc_cleaned <- stringr::str_remove(
+    string = test_that_desc_parsed,
+    pattern = paste0(testing_fun, ", ", "test \\d{1,}: ")
+  )
 
   # formulate new test descriptions (update only those that don't include test_title)
-  new_desc <- ifelse(
-    stringr::str_detect(test_that_desc_parsed, test_title),
-    test_that_desc_parsed,
-    paste0(test_title, test_that_desc_parsed)
+  new_desc <- paste0(
+    testing_fun, ", ",
+    "test ", seq_along(test_that_loc), ": ",
+    test_that_desc_cleaned
   )
 
   # insert new test descriptions into test_that lines
@@ -59,27 +65,29 @@ prepare_test_that_file <- function(path) {
     replacement = paste0(new_desc, '"')
   )
 
+  # modify the file content
+  file_content[test_that_loc] <- test_that_lines_updated
+
+  ####
+  ## HANDLE HEADERS
+  ####
+
   # formulate headers according to RStudio editor functionality
   headers <- paste0("# ---- ", new_desc, " ----")
 
-  # arguments to modify the file content - replace the new test descriptions
-  l_desc <- list(
-    location = Map(c, Map(c, test_that_loc, 1), Map(c, test_that_loc, Inf)),
-    text = test_that_lines_updated
-  )
+  # get locations of headers created by this function
+  header_loc_lgl <- grepl(paste0("^# ---- ", testing_fun, ", ", "test \\d{1,}: "), file_content)
 
-  # arguments to modify the file content - add headers if not present
-  idx_valid <- !headers %in% file_content
-  l_header <- list(
-    location = Map(c, test_that_loc, 1)[idx_valid],
-    text = paste0(headers[idx_valid], "\n")
-  )
+  # remove those headers
+  file_content <- file_content[!header_loc_lgl]
 
-  list(
-    descriptions = l_desc,
-    headers_cond = any(idx_valid),
-    headers = l_header
-  )
+  # add new headers just before test_that calls
+  header_loc <- grep('^test_that\\("', file_content) + seq_along(headers) - 1
+  file_content_new <- vector(mode = "character", length = length(file_content) + length(headers))
+  file_content_new[header_loc] <- headers
+  file_content_new[-header_loc] <- file_content
+
+  list(file_content = file_content_new)
 }
 
 # Function for the RStudio Addin, see inst/rstudio/addins.dcf.
@@ -87,8 +95,6 @@ prepare_test_that_file <- function(path) {
 format_test_that_file <- function() {
   file_info <- rstudioapi::getActiveDocumentContext()
   result <- prepare_test_that_file(path = file_info$path)
-  do.call(rstudioapi::insertText, append(result$descriptions, list(id = file_info$id)))
-  if (result$headers_cond)
-    do.call(rstudioapi::insertText, append(result$headers, list(id = file_info$id)))
+  rstudioapi::setDocumentContents(paste0(result$file_content, collapse = "\n"), id = file_info$id)
   rstudioapi::documentSave(id = file_info$id)
 }
