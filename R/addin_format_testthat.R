@@ -13,13 +13,7 @@ prepare_test_that_file <- function(path) {
     stop("Invalid file path, the file does not exist.")
   }
 
-  # check that testthat is used
-  uses_testhat <- devtools::uses_testthat()
-  if (!uses_testhat) {
-    stop("This Addin requires that testthat package is used.")
-  }
-
-  # check that testing file is opened
+  # check that testthat is used and testing file is opened
   uses_test_file <- grepl("tests/testthat/test-", path, fixed = T)
   if (!uses_test_file) {
     stop("This Addin works only on unit test files that follow a testthat structure.")
