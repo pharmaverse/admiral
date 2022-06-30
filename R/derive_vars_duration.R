@@ -86,7 +86,6 @@
 #' @seealso [compute_duration()]
 #'
 #' @examples
-#'
 #' library(lubridate)
 #' library(tibble)
 #'
