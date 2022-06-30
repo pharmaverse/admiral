@@ -86,11 +86,15 @@
 #' @seealso [compute_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#'
+#' library(lubridate)
+#' library(tibble)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24"),
-#'   lubridate::ymd("1985-01-01"), NA,
-#'   NA, lubridate::ymd("2021-03-10"),
+#'   ymd("1984-09-06"), ymd("2020-02-24"),
+#'   ymd("1985-01-01"), NA,
+#'   NA, ymd("2021-03-10"),
 #'   NA, NA
 #' )
 #'
@@ -146,7 +150,8 @@ derive_vars_duration <- function(dataset,
     )
 
   if (!quo_is_null(new_var_unit)) {
-    dataset <- dataset %>% mutate(!!new_var_unit := ifelse(is.na(!!new_var), NA, toupper(out_unit)))
+    dataset <- dataset %>%
+      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
   }
 
   dataset
