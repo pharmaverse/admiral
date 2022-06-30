@@ -99,7 +99,6 @@ is negative. The start and end date variable must be present in the specified
 input dataset.
 }
 \examples{
-
 library(lubridate)
 library(tibble)
 
