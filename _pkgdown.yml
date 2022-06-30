@@ -120,6 +120,7 @@ reference:
 - contents:
   - ex_single
   - get_terms_from_db
+  - print.adam_templates
   - print.derivation_slice
   - print.tte_source
   - queries

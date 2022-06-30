@@ -96,6 +96,22 @@ list_all_templates <- function(package = "admiral") {
     structure(class = c("adam_templates", "character"), package = package)
 }
 
+#' Print `adam_templates` Objects
+#'
+#' @param x A `adam_templates` object
+#' @param ... Not used
+#'
+#' @return No return value, called for side effects
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @seealso [list_all_templates()]
+#'
+#' @examples
+#' templates <- list_all_templates()
+#' print(templates)
 print.adam_templates <- function(x, ...) {
   pkg <- attr(x, "package")
   if (length(x) == 0L) {
