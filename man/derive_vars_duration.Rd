@@ -99,9 +99,15 @@ is negative. The start and end date variable must be present in the specified
 input dataset.
 }
 \examples{
-data <- tibble::tribble(
+library(lubridate)
+library(tibble)
+
+data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24"),
+  ymd("1985-01-01"), NA,
+  NA, ymd("2021-03-10"),
+  NA, NA
 )
 
 derive_vars_duration(data,
