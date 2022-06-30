@@ -298,6 +298,31 @@ create_single_dose_dataset <- function(dataset,
   assert_data_frame(dataset, required_vars = quo_c(dose_freq, start_date, end_date))
   assert_data_frame(lookup_table, required_vars = vars(DOSE_WINDOW, DOSE_COUNT, CONVERSION_FACTOR))
 
+  #Checking that the dates specified follow the ADaM naming convention of ending in DT
+  start_datec <- as_string(quo_name(start_date))
+  start_date_chk <- str_locate_all(start_datec,"DT")
+  start_date_chk_pos <- as.vector(start_date_chk[[1]])
+
+  if (str_length(start_datec) != start_date_chk_pos[-1]){
+    err_msg <- paste0(
+      "The argument start_date is expected to have a name like xxxDT.\n",
+      "Please check as it does not follow the expected naming convention"
+    )
+    abort(err_msg)
+  }
+
+  end_datec <- as_string(quo_name(end_date))
+  end_date_chk <- str_locate_all(end_datec,"DT")
+  end_date_chk_pos <- as.vector(end_date_chk[[1]])
+
+  if (str_length(end_datec) != end_date_chk_pos[-1]){
+    err_msg <- paste0(
+      "The argument end_date is expected to have a name like xxxDT.\n",
+      "Please check as it does not follow the expected naming convention"
+    )
+    abort(err_msg)
+  }
+
   # Set up lookup table to be joined to dataset
 
   lookup <- lookup_table %>%
@@ -306,7 +331,7 @@ create_single_dose_dataset <- function(dataset,
   # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   na_check <- dataset %>%
     filter(is.na(!!start_date) | is.na(!!end_date)| is.na(!!start_datetime) | is.na(!!end_datetime)) %>%
-    select(!!start_date, !!end_date, !!stat_datetime, !!end_datetime)
+    select(!!start_date, !!end_date, !!start_datetime, !!end_datetime)
 
   if (nrow(na_check) > 0) {
     na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
@@ -362,26 +387,6 @@ create_single_dose_dataset <- function(dataset,
     mutate(dose_count = ceiling(dose_periods * DOSE_COUNT)) %>%
     derive_var_obs_number(new_var = grpseq)
 
-  # Flag to determine if date or datetime must be returned
-
-  time_flag <- nrow(dataset_part_2 %>%
-    filter(DOSE_WINDOW %in% c("MINUTE", "HOUR"))) > 0
-
-
-  if (time_flag &
-    (is.Date(eval_tidy(start_date, dataset)) | is.Date(eval_tidy(end_date, dataset)))) {
-    err_msg <- paste0(
-      sprintf(
-        "%s involves hours or minutes but one of %s or %s is a date variable. ",
-        as.character(quo_get_expr(dose_freq)),
-        as.character(quo_get_expr(start_date)),
-        as.character(quo_get_expr(end_date))
-      ),
-      "\nPlease provide datetime variables for start_date and end_date arguments."
-    )
-    abort(err_msg)
-  }
-
   # Generate a row for each completed dose
 
   dataset_part_2 <- dataset_part_2[rep(row.names(dataset_part_2), dataset_part_2$dose_count), ]
@@ -396,8 +401,14 @@ create_single_dose_dataset <- function(dataset,
       DOSE_WINDOW == "MINUTE" ~ minutes(floor(time_increment)),
       DOSE_WINDOW == "HOUR" ~ hours(floor(time_increment)),
       DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-      days(floor(time_increment / CONVERSION_FACTOR))
-    ))
+      days(floor(time_increment / CONVERSION_FACTOR))),
+      time_differential_dt = case_when(
+        DOSE_WINDOW == "MINUTE" ~ days(floor(time_increment/1440)),
+        DOSE_WINDOW == "HOUR" ~ days(floor(time_increment/24)),
+        DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
+          days(floor(time_increment / CONVERSION_FACTOR)))
+
+    )
 
   # Adjust start_date and end_date, drop calculation columns, make sure nothing
   # later than end_date shows up in output
@@ -405,7 +416,7 @@ create_single_dose_dataset <- function(dataset,
   dataset_part_2 <- dataset_part_2 %>%
     mutate(
       !!dose_freq := "ONCE",
-      !!start_date := !!start_date + time_differential,
+      !!start_date := !!start_date + time_differential_dt,
       !!start_datetime := !!start_datetime + time_differential
     )
 
