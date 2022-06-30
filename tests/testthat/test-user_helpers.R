@@ -10,7 +10,10 @@ test_that("all templates are listed", {
 test_that("Error Message is returned if package is not installed", {
   expect_error(
     list_all_templates(package = "non-existing-package"),
-    regexp = "No package called 'non-existing-package' is installed and hence no templates are available"
+    regexp = paste0(
+      "No package called 'non-existing-package' is installed ",
+      "and hence no templates are available"
+    )
   )
 })
 
