@@ -67,4 +67,3 @@ test_that("`adam_templates` objects are printed as intended: some templates", {
   )
   expect_identical(capture.output(print(templates)), expected_print_output)
 })
-
