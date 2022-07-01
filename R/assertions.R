@@ -949,10 +949,10 @@ assert_function_param <- function(arg, params) {
 #'
 #' @examples
 #' # example assuming user has a dataset called advs
-#' advs <- tibble(PARAMCD = "WEIGHT", VSSTRESU = "g")
+#' advs <- tibble::tribble(PARAMCD = "WEIGHT", VSSTRESU = "g")
 #' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 #' \dontrun{
-#' advs <-  tibble(PARAMCD = "WEIGHT", VSSTRESU = "kg")
+#' advs <-  tibble::tribble(PARAMCD = "WEIGHT", VSSTRESU = "kg")
 #' assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 #' }
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
