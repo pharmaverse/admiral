@@ -7,9 +7,6 @@
 #' @param derivation The derivation function to call
 #' @param variable_params A `list` of function arguments that are different across iterations.
 #'   Each set of function arguments must be created using [`params()`].
-#' @param ... Any number of *named* function arguments that stay the same across iterations.
-#'   If a function argument is specified both inside `variable_params` and `...` then
-#'   the value in `variable_params` overwrites the one in `...`
 #'
 #' @author Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 #'
