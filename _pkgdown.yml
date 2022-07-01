@@ -74,7 +74,7 @@ reference:
 
 - title: Functions moved to another pharmaverse package
 - contents:
-  - has_keyword("bye_fcn")
+  - has_keyword("bye_fcn_amd_dev")
 
 - title: Deprecated
 - contents:

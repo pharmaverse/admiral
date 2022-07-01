@@ -18,7 +18,8 @@
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -101,7 +102,8 @@ assert_data_frame <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(msg_type) {
@@ -191,7 +193,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(chr) {
@@ -251,7 +254,8 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(flag) {
@@ -298,7 +302,8 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -376,7 +381,8 @@ assert_expr <- function(arg, optional = FALSE) {
 #' Otherwise throws an informative error.
 #'
 #' @export
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #' @author Ondrej Slama
 #'
 #' @examples
@@ -434,7 +440,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -498,7 +505,8 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -556,7 +564,8 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(num1, num2) {
@@ -614,7 +623,8 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(num) {
@@ -658,7 +668,8 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(obj) {
@@ -709,7 +720,8 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(list) {
@@ -805,7 +817,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -856,7 +869,8 @@ assert_has_variables <- function(dataset, required_vars) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' example_fun <- function(fun) {
@@ -945,7 +959,8 @@ assert_function_param <- function(arg, params) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' data(admiral_advs)
@@ -1010,7 +1025,8 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @examples
 #' data(admiral_advs)
@@ -1052,7 +1068,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' The function throws an error if `arg` is not a list of variable-value expressions.
 #' Otherwise, the input it returned invisibly.
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @export
 #'
@@ -1202,7 +1219,8 @@ assert_varval_list <- function(arg, # nolint
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @export
 #'
@@ -1295,7 +1313,8 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family bye_fcn_amd_dev
+#' @keywords bye_fcn_amd_dev
 #'
 #' @export
 #'

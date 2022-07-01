@@ -7,6 +7,7 @@ list(
     der_adsl = "ADSL Functions that returns variable appended to dataset: ",
     utils_ds_chk = "Utilities for Dataset Checking: ",
     utils_fil = "Utilities for Filtering Observations: ",
-    utils_fmt = "Utilities for Formatting Observations: ")
+    utils_fmt = "Utilities for Formatting Observations: ",
+    bye_fcn_amd_dev = "Functions moved to admiraldev package: ")
 )
 
