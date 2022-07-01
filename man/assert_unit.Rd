@@ -25,10 +25,12 @@ Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected
 unit.
 }
 \examples{
-data(admiral_advs)
-assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+# example assuming user has a dataset called advs
+advs <- tibble(PARAMCD = "WEIGHT", VSSTRESU = "g")
+assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 \dontrun{
-assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
+advs <-  tibble(PARAMCD = "WEIGHT", VSSTRESU = "kg")
+assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
 }
 }
 \author{
