@@ -23,6 +23,8 @@ deprecation notice (#1229)
 
 ## Documentation
 
+- Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
+
 ## Various
 
 # admiral 0.7.1
