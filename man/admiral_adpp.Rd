@@ -16,4 +16,4 @@ admiral_adpp
 \description{
 An example pharmacokinetics parameters analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

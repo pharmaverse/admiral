@@ -8,7 +8,8 @@
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' vars2chr(vars(USUBJID, AVAL))
@@ -34,7 +35,8 @@ vars2chr <- function(quosures) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' negate_vars(vars(USUBJID, STUDYID))

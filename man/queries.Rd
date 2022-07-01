@@ -11,6 +11,21 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 queries
 }
 \description{
-An example of standard query dataset to be used in deriving variables in ADAE and ADCM
+Queries Dataset
 }
+\keyword{ADAE}
+\keyword{ADCM}
+\keyword{An}
+\keyword{and}
+\keyword{be}
+\keyword{dataset}
 \keyword{datasets}
+\keyword{deriving}
+\keyword{example}
+\keyword{in}
+\keyword{of}
+\keyword{query}
+\keyword{standard}
+\keyword{to}
+\keyword{used}
+\keyword{variables}

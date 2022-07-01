@@ -15,7 +15,15 @@ List All Available ADaM Templates
 \examples{
 list_all_templates()
 }
+\seealso{
+Helper Utilities: 
+\code{\link{extract_unit}()},
+\code{\link{negate_vars}()},
+\code{\link{use_ad_template}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Shimeng Huang, Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_help}
+\keyword{utils_help}

@@ -170,9 +170,12 @@ admiral_dm \%>\%
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 
 ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_disposition_reason}()}
 }
 \author{

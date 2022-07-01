@@ -1,13 +1,13 @@
 #' Single Dose Exposure Dataset
 #'
 #' A derived dataset with single dose per date.
-#'
+#' @keywords datasets
 #' @source
 #' Derived from the `ex` dataset using `{admiral}` and `{dplyr}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/example_scripts/derive_single_dose.R})
 "ex_single"
 
 #' Queries Dataset
-#'
+#' @keywords datasets
 #' An example of standard query dataset to be used in deriving variables in ADAE and ADCM
 #'
 "queries"
@@ -15,7 +15,7 @@
 #' Subject Level Analysis Dataset
 #'
 #' An example subject level analysis dataset
-#'
+#' @keywords datasets
 #' @source
 #' Derived from the `dm` and `ds` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
 #'
@@ -24,7 +24,7 @@
 #' Adverse Event Analysis Dataset
 #'
 #' An example adverse event analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `ae` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adae.R})
 #'
@@ -33,7 +33,7 @@
 #' Concomitant Medication Analysis Dataset
 #'
 #' An example concomitant medication analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `cm` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adcm.R})
 #'
@@ -42,7 +42,7 @@
 #' Exposure Analysis Dataset
 #'
 #' An example exposure analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `ex` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adex.R})
 #'
@@ -51,7 +51,7 @@
 #' ECG Analysis Dataset
 #'
 #' An example ECG analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `eg` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adeg.R})
 #'
@@ -60,7 +60,7 @@
 #' Vital Signs Analysis Dataset
 #'
 #' An example vital signs analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `vs` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_advs.R})
 #'
@@ -69,7 +69,7 @@
 #' Pharmacokinetics Parameters Analysis Dataset
 #'
 #' An example pharmacokinetics parameters analysis dataset
-#'
+#' @keywords deprecated
 #' @source
 #' Derived from the `adsl` and `pp` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adpp.R})
 #'

@@ -68,8 +68,18 @@ call_derivation(
 }
 \seealso{
 \code{\link[=call_derivation]{call_derivation()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{event_source}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()}
 }
 \author{
 Thomas Neitmann, Tracey Wang
 }
+\concept{source_specifications}
 \keyword{source_specifications}

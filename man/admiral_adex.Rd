@@ -16,4 +16,4 @@ admiral_adex
 \description{
 An example exposure analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

@@ -18,4 +18,4 @@ squote("foo")
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

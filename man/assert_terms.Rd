@@ -51,4 +51,4 @@ try(
 \author{
 Stefan Bundfuss
 }
-\keyword{assertion}
+\keyword{bye_fcn_amd_dev}

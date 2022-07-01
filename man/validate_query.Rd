@@ -21,3 +21,4 @@ Validate an object is indeed a \code{query} object
 \author{
 Stefan Bundfuss
 }
+\keyword{bye_fcn_amd_dev}

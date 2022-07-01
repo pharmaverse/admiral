@@ -26,31 +26,35 @@ reference:
 - contents:
   - has_keyword("der_adsl")
 
-- title: Derivations for BDS-Findings (e.g. advs, adeg, adex)
+- title: Derivations Functions for BDS-Findings (e.g. advs, adeg, adex)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("der_bds_findings")
 
-- title: Derivations for OCCDS Datasets (e.g. adae, adcm, admh)
+- title: Functions for OCCDS Datasets (e.g. adae, adcm, admh)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
-  - has_keyword("der_occds")
+  - has_keyword("occds")
 
 - title: Derivations for TTE Datasets (e.g. adtte)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
-  - has_keyword("der_tte")
+  - has_keyword("tte")
 
 - title: Functions for working with multiple datasets
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("source_specifications")
 
+- title: Advanced Functions
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("high_order_function")
+
 - title: Functions for working with metadata
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("metadata")
-
 
 - title: Computation Functions for Date/Time Vectors
   desc: Computations expect vectors as input and returns a vector
@@ -71,6 +75,11 @@ reference:
   desc: Functions for checking integrity of datasets
   contents:
   - has_keyword('utils_ds_chk')
+
+- title: Example Datasets
+  desc: You can run scripts to produce additional datasets
+  contents:
+  - has_keyword('datasets')
 
 - title: Functions moved to another pharmaverse package
 - contents:

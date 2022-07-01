@@ -29,4 +29,4 @@ contains_vars(dplyr::vars(1))
 contains_vars(dplyr::vars(AVAL, ID = 1))
 contains_vars(dplyr::vars(AVAL, CHG = AVAL - BASE))
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

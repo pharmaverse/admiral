@@ -29,8 +29,18 @@ Exactly one of \code{name} or \code{id} must be specified.
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=query]{query()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{event_source}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

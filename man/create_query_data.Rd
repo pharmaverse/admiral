@@ -245,10 +245,12 @@ create_query_data(
 }
 \seealso{
 \code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+
+Other occds: 
+\code{\link{get_terms_from_db}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adae}
-\keyword{adcm}
-\keyword{user_utility}
+\concept{occds}
+\keyword{occds}

@@ -26,3 +26,4 @@ print(death_event)
 \author{
 Thomas Neitmann
 }
+\keyword{internal}

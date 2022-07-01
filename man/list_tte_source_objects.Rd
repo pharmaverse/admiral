@@ -19,7 +19,18 @@ List all \code{tte_source} Objects Available in a Package
 \examples{
 list_tte_source_objects()
 }
+\seealso{
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{event_source}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{tte_source}
+\concept{source_specifications}
+\keyword{source_specifications}

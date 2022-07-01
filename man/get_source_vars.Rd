@@ -21,4 +21,4 @@ get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

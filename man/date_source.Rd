@@ -46,8 +46,18 @@ Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} a
 }
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{event_source}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

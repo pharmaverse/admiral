@@ -42,7 +42,29 @@ example_fun(vars(DTHDOM = "AE", DTHSEQ = AESEQ))
 
 try(example_fun(vars("AE", DTSEQ = AESEQ)))
 }
+\seealso{
+Functions moved to admiraldev package: 
+\code{\link{assert_character_scalar}()},
+\code{\link{assert_character_vector}()},
+\code{\link{assert_data_frame}()},
+\code{\link{assert_filter_cond}()},
+\code{\link{assert_function}()},
+\code{\link{assert_has_variables}()},
+\code{\link{assert_integer_scalar}()},
+\code{\link{assert_list_element}()},
+\code{\link{assert_list_of}()},
+\code{\link{assert_logical_scalar}()},
+\code{\link{assert_numeric_vector}()},
+\code{\link{assert_one_to_one}()},
+\code{\link{assert_order_vars}()},
+\code{\link{assert_param_does_not_exist}()},
+\code{\link{assert_s3_class}()},
+\code{\link{assert_symbol}()},
+\code{\link{assert_unit}()},
+\code{\link{assert_vars}()}
+}
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }
-\keyword{assertion}
+\concept{bye_fcn_amd_dev}
+\keyword{bye_fcn_amd_dev}

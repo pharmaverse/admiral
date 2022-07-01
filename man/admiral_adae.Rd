@@ -16,4 +16,4 @@ admiral_adae
 \description{
 An example adverse event analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

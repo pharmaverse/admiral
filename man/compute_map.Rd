@@ -45,7 +45,9 @@ compute_map(diabp = 51, sysbp = 121, hr = 59)
 \seealso{
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bmi}()},
-\code{\link{compute_bsa}()}
+\code{\link{compute_bsa}()},
+\code{\link{compute_qtc}()},
+\code{\link{compute_rr}()}
 }
 \author{
 Stefan Bundfuss

@@ -34,4 +34,4 @@ example_fun(auto)
 \author{
 Stefan Bundfuss
 }
-\keyword{check}
+\keyword{bye_fcn_amd_dev}

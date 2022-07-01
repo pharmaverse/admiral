@@ -27,4 +27,13 @@ extract_unit("Height (cm)")
 
 extract_unit("Diastolic Blood Pressure (mmHg)")
 }
+\seealso{
+Helper Utilities: 
+\code{\link{list_all_templates}()},
+\code{\link{negate_vars}()},
+\code{\link{use_ad_template}()},
+\code{\link{vars2chr}()}
+}
+\concept{utils_help}
 \keyword{user_utility}
+\keyword{utils_help}

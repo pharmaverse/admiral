@@ -34,7 +34,15 @@ if (interactive()) {
   use_ad_template("adsl")
 }
 }
+\seealso{
+Helper Utilities: 
+\code{\link{extract_unit}()},
+\code{\link{list_all_templates}()},
+\code{\link{negate_vars}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Shimeng Huang, Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_help}
+\keyword{utils_help}

@@ -62,6 +62,12 @@ The function checks if all requirements to access the database are fulfilled
 reads the terms from the database, and checks if the dataset with the terms
 is in the expected format (see \code{assert_terms()}).
 }
+\seealso{
+Other occds: 
+\code{\link{create_query_data}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{occds}
+\keyword{occds}

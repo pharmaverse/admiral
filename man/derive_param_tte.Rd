@@ -245,5 +245,5 @@ derive_param_tte(
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_tte}
+\keyword{der_tte}

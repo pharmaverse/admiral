@@ -16,4 +16,4 @@ admiral_adeg
 \description{
 An example ECG analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

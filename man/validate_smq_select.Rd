@@ -21,3 +21,4 @@ Validate an object is indeed a \code{smq_select} object
 \author{
 Stefan Bundfuss
 }
+\keyword{bye_fcn_amd_dev}

@@ -16,4 +16,4 @@ admiral_advs
 \description{
 An example vital signs analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

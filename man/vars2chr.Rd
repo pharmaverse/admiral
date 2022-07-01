@@ -18,7 +18,15 @@ Turn a List of Quosures into a Character Vector
 \examples{
 vars2chr(vars(USUBJID, AVAL))
 }
+\seealso{
+Helper Utilities: 
+\code{\link{extract_unit}()},
+\code{\link{list_all_templates}()},
+\code{\link{negate_vars}()},
+\code{\link{use_ad_template}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_help}
+\keyword{utils_help}

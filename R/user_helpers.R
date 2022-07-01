@@ -11,7 +11,9 @@
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_help
+#'
+#' @keywords utils_help
 #'
 #' @export
 #'
@@ -65,7 +67,9 @@ use_ad_template <- function(adam_name = "adsl",
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_help
+#'
+#' @keywords utils_help
 #'
 #' @return A `character` vector of all available templates
 #'

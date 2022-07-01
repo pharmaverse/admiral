@@ -41,3 +41,4 @@ database must be provided. The function checks these requirements.
 \author{
 Stefan Bundfuss
 }
+\keyword{bye_fcn_amd_dev}

@@ -24,4 +24,4 @@ convert_dtm_to_dtc(as.Date(Sys.time()))
 \author{
 Ondrej Slama
 }
-\keyword{dev_utility}
+\keyword{com_date_time}

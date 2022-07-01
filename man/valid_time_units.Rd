@@ -16,4 +16,4 @@ Returns valid time units as expected for arguments expecting a time unit
 
 valid_time_units()
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

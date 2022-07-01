@@ -16,4 +16,4 @@ admiral_adcm
 \description{
 An example concomitant medication analysis dataset
 }
-\keyword{datasets}
+\keyword{deprecated}

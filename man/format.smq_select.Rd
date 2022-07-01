@@ -28,4 +28,4 @@ format(smq_select(id = 42, scope = "NARROW"))
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

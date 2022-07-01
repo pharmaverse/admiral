@@ -85,7 +85,8 @@
 #' @return The input dataset with a new parameter indicating if and when an
 #'   event occurred
 #'
-#' @keywords derivation bds
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

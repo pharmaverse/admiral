@@ -533,6 +533,7 @@ lstalvdt_source <- function(dataset_name,
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export

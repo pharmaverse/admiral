@@ -21,4 +21,4 @@ left operand in the right operand.
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

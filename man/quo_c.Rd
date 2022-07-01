@@ -24,4 +24,4 @@ quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}

@@ -43,4 +43,4 @@ The \code{tte_source} object is used to define events and possible censorings.
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\keyword{bye_fcn_amd_dev}
