@@ -25,6 +25,10 @@ reference:
   desc: Derivation Functions helpful for building the ADSL dataset
 - contents:
   - has_keyword("der_adsl")
+- subtitle: Genearal Derivation Functions for BDS(e.g. advs, adeg, adex adlb)
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_bds_gen")
 - subtitle: Derivation Functions for BDS-Findings (e.g. advs, adeg, adex adlb)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
