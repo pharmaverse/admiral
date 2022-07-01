@@ -93,6 +93,7 @@ prepare_test_that_file <- function(path) {
 # Wrapper of prepare_test_that_file.
 format_test_that_file <- function() {
   file_info <- rstudioapi::getActiveDocumentContext()
+  rstudioapi::documentSave(id = file_info$id)
   result <- prepare_test_that_file(path = file_info$path)
   rstudioapi::setDocumentContents(paste0(result$file_content, collapse = "\n"), id = file_info$id)
   rstudioapi::documentSave(id = file_info$id)
