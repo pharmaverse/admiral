@@ -130,9 +130,15 @@ derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae 
 }
 \seealso{
 \code{\link[=dthcaus_source]{dthcaus_source()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_disposition_reason}()}
 }
 \author{
 Shimeng Huang, Samia Kabi, Thomas Neitmann
 }
-\keyword{adsl}
-\keyword{derivation}
+\concept{der_adsl}
+\keyword{der_adsl}

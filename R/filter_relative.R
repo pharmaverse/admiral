@@ -74,7 +74,9 @@
 #'   after the observation where the condition was fulfilled the first or last
 #'   time
 #'
-#' @keywords adam user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @export
 #'

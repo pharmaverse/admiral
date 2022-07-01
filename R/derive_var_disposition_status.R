@@ -13,7 +13,8 @@
 #' @author Samia Kabi
 #' @details Usually this function can not be used with `%>%`.
 #' @export
-#' @keywords user_utility adsl computation
+#' @family utils_fmt
+#' @keywords utils_fmt
 #' @seealso [derive_var_disposition_status()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -93,7 +94,8 @@ format_eoxxstt_default <- function(status) {
 #'  "DISCONTINUED" if `status_var` is not "COMPLETED" nor NA,
 #'  "ONGOING" otherwise).
 #'
-#' @keywords adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author Samia Kabi
 #'

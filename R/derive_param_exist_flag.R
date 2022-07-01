@@ -124,7 +124,9 @@
 #'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`
 #'   and `set_value_to` are populated for the new parameter)
 #'
-#' @keywords derivation bds
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
 #'
 #' @export
 #'
@@ -233,7 +235,9 @@ derive_param_exist_flag <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @family utils_fmt
+#'
+#' @keywords utils_fmt
 #'
 #' @export
 #'

@@ -69,7 +69,9 @@
 #'
 #' @return The duration between the two date in the specified unit
 #'
-#' @keywords computation adam timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'

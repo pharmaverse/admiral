@@ -158,8 +158,20 @@ derive_derived_param(
   constant_by_vars = vars(USUBJID)
 )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

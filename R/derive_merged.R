@@ -283,7 +283,9 @@ derive_vars_merged <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_date_time
 #'
 #' @export
 #'
@@ -406,7 +408,9 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_date_time
 #'
 #' @export
 #'

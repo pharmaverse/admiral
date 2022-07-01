@@ -98,7 +98,8 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
 #'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
@@ -327,7 +328,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @seealso [date_source()], [derive_var_extreme_dtm()],
 #'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],

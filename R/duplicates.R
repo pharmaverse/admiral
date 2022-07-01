@@ -19,7 +19,9 @@
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#'
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)

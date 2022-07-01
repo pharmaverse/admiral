@@ -155,8 +155,13 @@ response \%>\%
     inclusive = TRUE
   )
 }
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{filter_extreme}()},
+\code{\link{filter_if}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

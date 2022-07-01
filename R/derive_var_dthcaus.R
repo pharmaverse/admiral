@@ -23,7 +23,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann

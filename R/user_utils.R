@@ -61,7 +61,9 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @examples
 #' library(admiral.test)
@@ -183,7 +185,9 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#'
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -215,7 +219,9 @@ get_one_to_many_dataset <- function() {
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#'
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)

@@ -32,7 +32,9 @@
 #'
 #' @return The input dataset with `TRTDURD` added
 #'
-#' @keywords adsl timing derivation
+#' @family der_date_time
+#'
+#' @keywords der_date_time
 #'
 #' @export
 #'

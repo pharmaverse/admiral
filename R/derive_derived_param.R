@@ -88,7 +88,9 @@
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation bds
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

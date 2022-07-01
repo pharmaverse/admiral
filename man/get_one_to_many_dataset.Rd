@@ -31,7 +31,13 @@ try(
 
 get_one_to_many_dataset()
 }
+\seealso{
+Utilities for Dataset Checking: 
+\code{\link{get_duplicates_dataset}()},
+\code{\link{get_many_to_one_dataset}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{user_utility}
+\concept{utils_ds_chk}
+\keyword{utils_ds_chk}

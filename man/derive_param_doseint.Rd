@@ -135,8 +135,20 @@ derive_param_doseint(
   zero_doses = "100"
 )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_derived_param}()},
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()}
+}
 \author{
 Alice Ehmann
 }
-\keyword{adex}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

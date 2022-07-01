@@ -80,8 +80,13 @@ admiral_ex \%>\%
   ) \%>\%
   select(USUBJID, EXTRT, EXDOSE)
 }
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{filter_if}()},
+\code{\link{filter_relative}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

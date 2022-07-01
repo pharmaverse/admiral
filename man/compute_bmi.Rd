@@ -31,9 +31,13 @@ Usually this computation function can not be used with \verb{\%>\%}.
 \examples{
 compute_bmi(height = 170, weight = 75)
 }
+\seealso{
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bsa}()},
+\code{\link{compute_map}()}
+}
 \author{
 Pavan Kumar
 }
-\keyword{BMI}
-\keyword{adam}
-\keyword{computation}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}

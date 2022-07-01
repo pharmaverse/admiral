@@ -17,127 +17,64 @@ news:
 reference:
 
 - title: Derivations for Date/Time Variables
-  desc: Derivations add one or more variables or parameters to the input
-        dataset and return the extended dataset.
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("der_date_time")
 
-- title: Computations for Date/Time Vectors
+- title: Derivations for ADSL
+  desc: Derivations specific to the ADSL dataset
+- contents:
+  - has_keyword("der_adsl")
+
+- title: Derivations for BDS-Findings (e.g. advs, adeg, adex)
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_bds_findings")
+
+- title: Derivations for OCCDS Datasets (e.g. adae, adcm, admh)
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_occds")
+
+- title: Derivations for TTE Datasets (e.g. adtte)
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_tte")
+
+- title: Functions for working with multiple datasets
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("source_specifications")
+
+- title: Functions for working with metadata
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("metadata")
+
+
+- title: Computation Functions for Date/Time Vectors
+  desc: Computations expect vectors as input and returns a vector
+  contents:
+  - has_keyword('com_bds_findings')
+
+- title: Computations for for BDS-Findings
   desc: Computations expect vectors as input and returns a vector
   contents:
   - has_keyword('com_date_time')
-- title: Derivations
-  desc: Derivations add one or more variables or parameters to the input
-        dataset and return the extended dataset.
+
+- title: Utilities for Formatting Observations
+  desc: Functions that expect a vector and formats
+  contents:
+  - has_keyword('utils_fmt')
+
+- title: Utilities for Checking Datasets
+  desc: Functions for checking integrity of datasets
+  contents:
+  - has_keyword('utils_ds_chk')
+
+- title: Functions moved to another pharmaverse package
 - contents:
-  - starts_with("derive")
-
-- title: Computations
-  desc: Computations expect vectors as input and return a vector
-  contents:
-  - has_keyword('computation')
-
-- title: CDISC Hierarchy
-- subtitle: ADaM
-  desc: General functions which can be used for any ADaM dataset
-  contents:
-  - has_keyword('adam')
-- subtitle: BDS
-  desc: BDS specific functions
-  contents:
-  - has_keyword('bds')
-- subtitle: OCCDS
-  desc: OCCDS specific functions
-  contents:
-  - has_keyword('occds')
-- subtitle: ADSL
-  desc: Functions specific for ADSL
-  contents:
-  - has_keyword('adsl')
-- subtitle: ADEG
-  desc: Functions specific for ADEG
-  contents:
-  - has_keyword('adeg')
-- subtitle: ADVS
-  desc: Functions specific for ADVS
-  contents:
-  - has_keyword('advs')
-- subtitle: ADEX
-  desc: Functions specific for ADEX
-  contents:
-  - has_keyword('adex')
-- subtitle: ADAE
-  desc: Functions specific for ADAE
-  contents:
-  - has_keyword('adae')
-- subtitle: ADCM
-  desc: Functions specific for ADCM
-  contents:
-  - has_keyword('adcm')
-- subtitle: ADLB
-  desc: Functions specific for ADLB
-  contents:
-  - has_keyword('adlb')
-
-- title: Other Keywords
-- subtitle: Timing
-  desc: Function related to timing, e.g. deriving dates, imputing dates, converting dates, deriving duration, ...
-  contents:
-  - has_keyword('timing')
-
-- subtitle: High Order Functions
-  desc: Functions which call other derivations, e.g. on subset of input dataset or multiple times with varying parameters.
-  contents:
-  - has_keyword('high_order_function')
-
-- subtitle: Source Specifications
-  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
-  contents:
-  - has_keyword('source_specifications')
-
-- subtitle: Pre-Defined Time-to-Event Sources
-  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
-  contents:
-  - has_keyword('tte_source')
-
-- subtitle: Metadata
-  desc: Functions related to expanding or providing further context for other data
-  contents:
-  - has_keyword('metadata')
-
-- title: ADaM Datasets
-- contents:
-  - starts_with("admiral_")
-
-- title: User Utilities
-- contents:
-  - has_keyword("user_utility")
-
-- title: Developer Utilities
-- subtitle: Assertions
-- contents:
-  - has_keyword("assertion")
-- subtitle: Checks
-- contents:
-  - has_keyword("check")
-- subtitle: Warnings
-- contents:
-  - has_keyword("warning")
-- subtitle: Various
-- contents:
-  - has_keyword("dev_utility")
-
-- title: Miscellaneous
-- contents:
-  - ex_single
-  - get_terms_from_db
-  - print.derivation_slice
-  - print.tte_source
-  - queries
-  - validate_query
-  - validate_sdg_select
-  - validate_smq_select
-  - assert_db_requirements
+  - has_keyword("bye_fcn")
 
 - title: Deprecated
 - contents:

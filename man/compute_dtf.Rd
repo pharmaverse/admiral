@@ -31,6 +31,7 @@ compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 }
 \seealso{
 Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_duration}()},
 \code{\link{compute_tmf}()},
 \code{\link{convert_date_to_dtm}()},
 \code{\link{convert_dtc_to_dtm}()},
