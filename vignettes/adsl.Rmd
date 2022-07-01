@@ -371,7 +371,7 @@ adsl <- adsl %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    date_imputation = "FIRST"
+    date_imputation = "first"
   )
 ```
 
@@ -546,7 +546,7 @@ An example could be :
 ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
-  date_imputation = "FIRST"
+  date_imputation = "first"
 )
 ae_src2 <- date_source(
   dataset_name = "ae",
