@@ -35,6 +35,7 @@ get_duplicates_dataset()
 }
 \seealso{
 Utilities for Dataset Checking: 
+\code{\link{extract_duplicate_records}()},
 \code{\link{get_many_to_one_dataset}()},
 \code{\link{get_one_to_many_dataset}()}
 }

@@ -64,7 +64,11 @@ is in the expected format (see \code{assert_terms()}).
 }
 \seealso{
 Other occds: 
-\code{\link{create_query_data}()}
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_last_dose}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{derive_vars_query}()}
 }
 \author{
 Stefan Bundfuss

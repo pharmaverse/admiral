@@ -130,8 +130,16 @@ admiral_ae \%>\%
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
+\seealso{
+Other occds: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{derive_vars_query}()},
+\code{\link{get_terms_from_db}()}
+}
 \author{
 Ondrej Slama
 }
-\keyword{adae}
-\keyword{derivation}
+\concept{occds}
+\keyword{occds}

@@ -24,8 +24,11 @@ negate_vars(vars(USUBJID, STUDYID))
 }
 \seealso{
 Helper Utilities: 
+\code{\link{call_user_fun}()},
+\code{\link{convert_blanks_to_na}()},
 \code{\link{extract_unit}()},
 \code{\link{list_all_templates}()},
+\code{\link{signal_duplicate_records}()},
 \code{\link{use_ad_template}()},
 \code{\link{vars2chr}()}
 }

@@ -13,7 +13,8 @@
 #'
 #' @export
 #'
-#' @keywords tte_source
+#' @family source_specifications
+#' @keywords source_specifications
 #'
 #' @rdname tte_source_objects
 #'

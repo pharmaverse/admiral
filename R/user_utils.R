@@ -125,7 +125,8 @@ extract_unit <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @export
 #'

@@ -184,8 +184,12 @@ derive_var_ontrtfl(
   span_period = "Y"
 )
 }
+\seealso{
+General BDS Functions: 
+\code{\link{derive_var_pchg}()}
+}
 \author{
 Alice Ehmann, Teckla Akinyi
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_gen}
+\keyword{der_bds_gen}

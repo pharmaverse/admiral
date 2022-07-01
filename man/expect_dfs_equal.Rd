@@ -33,5 +33,4 @@ testthat::test_that("a missing row is detected", {
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
-\keyword{test_helper}
+\keyword{bye_fcn_amd_dev}

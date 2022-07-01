@@ -23,6 +23,7 @@ list_tte_source_objects()
 Source Specifications: 
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
+\code{\link{death_event}},
 \code{\link{event_source}()},
 \code{\link{params}()},
 \code{\link{query}()},

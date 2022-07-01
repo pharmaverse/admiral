@@ -43,4 +43,4 @@ suppress_warning(
 \item Stefan Bundfuss
 }
 }
-\keyword{warning}
+\keyword{bye_fcn_amd_dev}

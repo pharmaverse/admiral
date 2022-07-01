@@ -63,8 +63,16 @@ facm <- tibble::tribble(
 
 derive_vars_atc(cm, facm)
 }
+\seealso{
+Other occds: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_last_dose}()},
+\code{\link{derive_vars_query}()},
+\code{\link{get_terms_from_db}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{adcm}
-\keyword{derivation}
+\concept{occds}
+\keyword{occds}

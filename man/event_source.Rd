@@ -52,6 +52,7 @@ event_source(
 Source Specifications: 
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
+\code{\link{death_event}},
 \code{\link{list_tte_source_objects}()},
 \code{\link{params}()},
 \code{\link{query}()},

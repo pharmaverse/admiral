@@ -171,7 +171,8 @@ derive_param_qtc <- function(dataset,
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @examples
 #' default_qtc_paramcd("Sagie")

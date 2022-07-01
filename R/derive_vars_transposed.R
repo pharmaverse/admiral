@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -116,7 +117,8 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @return The input dataset with ATC variables added
 #'
-#' @keywords derivation adcm
+#' @family occds
+#' @keywords occds
 #'
 #' @export
 #'

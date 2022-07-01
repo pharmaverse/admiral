@@ -84,7 +84,8 @@
 #'
 #' @author Alice Ehmann, Teckla Akinyi
 #'
-#' @keywords bds derivation
+#' @family der_bds_gen
+#' @keywords der_bds_gen
 #'
 #' @return The input dataset with an additional column named `ONTRTFL` with a
 #'   value of `"Y"` or `NA`

@@ -37,7 +37,18 @@ adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
 signal_duplicate_records(adsl, vars(USUBJID), cnd_type = "message")
 }
+\seealso{
+Helper Utilities: 
+\code{\link{call_user_fun}()},
+\code{\link{convert_blanks_to_na}()},
+\code{\link{extract_unit}()},
+\code{\link{list_all_templates}()},
+\code{\link{negate_vars}()},
+\code{\link{use_ad_template}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{utils_help}
+\keyword{utils_help}

@@ -59,5 +59,17 @@ for (obj in list_tte_source_objects()$object) {
 }
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{event_source}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()}
 }
+\concept{source_specifications}
+\keyword{source_specifications}
 \keyword{tte_source}

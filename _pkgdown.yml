@@ -16,76 +16,83 @@ news:
   cran_dates: false
 reference:
 
-- title: Derivations for Date/Time Variables
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- title: Derivations for adding variables to ADaMs
+- subtitle: Derivation Functions for Date/Time Variables
+  desc: Derivation Functions for adding Date/Time Variables to ADaM Datasets
 - contents:
   - has_keyword("der_date_time")
-
-- title: Derivations for ADSL
-  desc: Derivations specific to the ADSL dataset
+- subtitle: Derivation Functions for ADSL
+  desc: Derivation Functions helpful for building the ADSL dataset
 - contents:
   - has_keyword("der_adsl")
-
-- title: Derivations Functions for BDS-Findings (e.g. advs, adeg, adex)
+- subtitle: Derivation Functions for BDS-Findings (e.g. advs, adeg, adex adlb)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("der_bds_findings")
-
-- title: Functions for OCCDS Datasets (e.g. adae, adcm, admh)
+- subtitle: Derivation Functions for OCCDS Datasets (e.g. adae, adcm, admh)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("occds")
-
-- title: Derivations for TTE Datasets (e.g. adtte)
+- subtitle: Derivation Functions for TTE Datasets (e.g. adtte)
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
-  - has_keyword("tte")
+  - has_keyword("der_tte")
+- subtitle: General Derivation Functions all ADaMs
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_gen")
 
-- title: Functions for working with multiple datasets
+- title: Advanced Functions
+- subtitle: Functions for working with multiple datasets
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("source_specifications")
-
-- title: Advanced Functions
+- subtitle: Higher Order Functions
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("high_order_function")
-
-- title: Functions for working with metadata
+- subtitle: Functions for working with metadata
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("metadata")
 
-- title: Computation Functions for Date/Time Vectors
+- title: Computation Functions for Vectors
+- subtitle: Computation Functions for Date/Time Vectors
   desc: Computations expect vectors as input and returns a vector
   contents:
   - has_keyword('com_bds_findings')
-
-- title: Computations for for BDS-Findings
+- subtitle: Computations for for BDS-Findings
   desc: Computations expect vectors as input and returns a vector
   contents:
   - has_keyword('com_date_time')
 
-- title: Utilities for Formatting Observations
+- title: Utilities for ADaMs
+- subtitle: Utilities for Formatting Observations
   desc: Functions that expect a vector and formats
   contents:
   - has_keyword('utils_fmt')
-
-- title: Utilities for Checking Datasets
+- subtitle: Utilities for Checking Datasets
   desc: Functions for checking integrity of datasets
   contents:
   - has_keyword('utils_ds_chk')
-
-- title: Example Datasets
+- subtitle: Utilities for Helping
+  desc: Functions for checking integrity of datasets
+  contents:
+  - has_keyword('utils_help')
+- subtitle: Utilities for Filter Observations
+  desc: Functions for checking integrity of datasets
+  contents:
+  - has_keyword('utils_fil')
+- subtitle: Example Datasets
   desc: You can run scripts to produce additional datasets
   contents:
   - has_keyword('datasets')
 
-- title: Functions moved to another pharmaverse package
+- title: Relocated/Depracated
+- subtitle: Functions moved to another pharmaverse package
 - contents:
   - has_keyword("bye_fcn_amd_dev")
-
-- title: Deprecated
+- subtitle: Deprecated
 - contents:
   - has_keyword("deprecated")
 

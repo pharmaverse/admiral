@@ -22,7 +22,7 @@
 #'
 #' @return A HTML table
 #'
-#' @keywords dev_utility
+#' @keywords bye_fcn_amd_dev
 #'
 #' @export
 #'

@@ -34,9 +34,12 @@ derive_var_pchg(advs)
 }
 \seealso{
 \code{\link[=derive_var_chg]{derive_var_chg()}}
+
+General BDS Functions: 
+\code{\link{derive_var_ontrtfl}()}
 }
 \author{
 Thomas Neitmann
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_gen}
+\keyword{der_bds_gen}

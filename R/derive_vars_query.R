@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with query variables derived.
 #'
-#' @keywords adae adcm derivation
+#' @family occds
+#' @keywords occds
 #'
 #' @seealso [create_query_data()] [assert_valid_queries()]
 #'
@@ -200,7 +201,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @author Shimeng Huang, Ondrej Slama
 #'
-#' @keywords assertion
+#' @keywords bye_fcn_amd_dev
 #'
 #' @export
 #'

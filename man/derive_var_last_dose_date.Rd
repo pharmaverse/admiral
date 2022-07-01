@@ -94,9 +94,21 @@ admiral_ae \%>\%
 }
 \seealso{
 \code{\link[=derive_vars_last_dose]{derive_vars_last_dose()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
+
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
 }
 \author{
 Ben Straub
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}

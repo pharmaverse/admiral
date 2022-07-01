@@ -44,7 +44,8 @@
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.
 #'
-#' @keywords adam derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

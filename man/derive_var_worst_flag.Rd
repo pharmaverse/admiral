@@ -139,9 +139,21 @@ restrict_derivation(
 }
 \seealso{
 \code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
+
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
 }
 \author{
 Ondrej Slama
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}
