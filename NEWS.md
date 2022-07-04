@@ -5,11 +5,19 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+## Updates of Existing Functions
+
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
+
+- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
 
 - Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
 
-## Updates of Existing Functions
+- Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
+deprecation notice (#1229)
+
+- `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
 - `value_var` parameter added to `derive_vars_atc()` (#1120) 
 
@@ -17,8 +25,17 @@ admiral extension packages (#1079)
 
 ## Documentation
 
+- Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
+
 ## Various
 
+# admiral 0.7.1
+
+## Updates of Existing Functions
+
+- `derive_param_first_event()` was updated such that
+    - `AVAL` is derived instead of `AVALN` and
+    - all variables from the source dataset are kept.
 
 # admiral 0.7.0
 

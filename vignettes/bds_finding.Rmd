@@ -994,7 +994,7 @@ dataset_vignette(
 
 ### Example 3 (Deriving a New `PARAMCD`)
 
-Use function `derive_derived_param()` to create a new `PARAMCD`. Note that only
+Use function `derive_param_computed()` to create a new `PARAMCD`. Note that only
 variables specified in the `by_vars` argument will be populated in the newly 
 created records. 
 
@@ -1002,7 +1002,7 @@ Below is an example of creating `Mean Arterial Pressure`
 (`PARAMCD = MAP2`) with an alternative formula.
 
 ```{r eval=TRUE}
-advs_ex3 <- derive_derived_param(
+advs_ex3 <- derive_param_computed(
   advs,
   by_vars = vars(USUBJID, VISIT, ATPT),
   parameters = c("SYSBP", "DIABP"),
