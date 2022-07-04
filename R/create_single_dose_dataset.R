@@ -254,10 +254,11 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' @details Each aggregate dose row is split into multiple rows which each
 #'   represent a single dose.The number of completed dose periods between
-#'   `start_date` or `start_datetime` and `end_date` or `end_datetime` is calculated with `compute_duration` and
-#'   multiplied by `DOSE_COUNT`. For `DOSE_WINDOW` values of `"WEEK"`,
-#'   `"MONTH"`, and `"YEAR"`, `CONVERSION_FACTOR` is used to convert into days
-#'   the time object to be added to `start_date`.
+#'   `start_date` or `start_datetime` and `end_date` or `end_datetime` is
+#'   calculated with `compute_duration` and multiplied by `DOSE_COUNT`.
+#'   For `DOSE_WINDOW` values of `"WEEK"`, `"MONTH"`, and `"YEAR"`,
+#'   `CONVERSION_FACTOR` is used to convert into days the time object
+#'   to be added to `start_date`.
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'
@@ -271,12 +272,16 @@ dose_freq_lookup <- tibble::tribble(
 #' # Example with default lookup
 #'
 #' library(lubridate)
+#' library(stringr)
 #'
 #' data <- tibble::tribble(
 #' ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-#' "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"), ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
-#' "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"), ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
-#' "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"), ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
+#' "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+#'  ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
+#' "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
+#'  ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
+#' "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+#'  ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
 #' )
 #'
 #' create_single_dose_dataset(data)
@@ -292,8 +297,10 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' data <- tibble::tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-#'   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"), ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
-#'   "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"), ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
+#'   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+#'    ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
+#'   "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
+#'    ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
 #' )
 #'
 #' create_single_dose_dataset(data,
@@ -308,7 +315,8 @@ create_single_dose_dataset <- function(dataset,
                                        end_datetime = AENDTM,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE,
-                                       keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)) {
+                                       keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM,
+                                                               AENDT, AENDTM)) {
   col_names <- colnames(dataset)
   dose_freq <- assert_symbol(enquo(dose_freq))
   lookup_column <- assert_symbol(enquo(lookup_column))
@@ -321,11 +329,11 @@ create_single_dose_dataset <- function(dataset,
   assert_data_frame(dataset, required_vars = keep_source_vars)
 
   #Checking that the dates specified follow the ADaM naming convention of ending in DT
-  start_datec <- as_string(quo_name(start_date))
-  start_date_chk <- str_locate_all(start_datec,"DT")
+  start_datec <- as_string(as_name(start_date))
+  start_date_chk <- str_locate_all(start_datec, "DT")
   start_date_chk_pos <- as.vector(start_date_chk[[1]])
 
-  if (str_length(start_datec) != start_date_chk_pos[-1]){
+  if (str_length(start_datec) != start_date_chk_pos[-1]) {
     err_msg <- paste0(
       "The argument start_date is expected to have a name like xxxDT.\n",
       "Please check as it does not follow the expected naming convention"
@@ -333,11 +341,11 @@ create_single_dose_dataset <- function(dataset,
     abort(err_msg)
   }
 
-  end_datec <- as_string(quo_name(end_date))
-  end_date_chk <- str_locate_all(end_datec,"DT")
+  end_datec <- as_string(as_name(end_date))
+  end_date_chk <- str_locate_all(end_datec, "DT")
   end_date_chk_pos <- as.vector(end_date_chk[[1]])
 
-  if (str_length(end_datec) != end_date_chk_pos[-1]){
+  if (str_length(end_datec) != end_date_chk_pos[-1]) {
     err_msg <- paste0(
       "The argument end_date is expected to have a name like xxxDT.\n",
       "Please check as it does not follow the expected naming convention"
@@ -352,13 +360,15 @@ create_single_dose_dataset <- function(dataset,
 
   # Check that NAs do not appear in start_date or start_datetime or end_date or end_datetime columns
   na_check <- dataset %>%
-    filter(is.na(!!start_date) | is.na(!!end_date)| is.na(!!start_datetime) | is.na(!!end_datetime)) %>%
+    filter(is.na(!!start_date) | is.na(!!end_date) |
+             is.na(!!start_datetime) | is.na(!!end_datetime)) %>%
     select(!!start_date, !!end_date, !!start_datetime, !!end_datetime)
 
   if (nrow(na_check) > 0) {
     na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
     err_msg <- paste0(
-      "The arguments start_date or start_datetime and end_date or end_datetime cannot contain `NA` values.\n",
+      "The arguments start_date or start_datetime",
+      " and end_date or end_datetime cannot contain `NA` values.\n",
       sprintf(
         "Please check %s for `NA` values.",
         na_columns
@@ -399,8 +409,10 @@ create_single_dose_dataset <- function(dataset,
   dataset_part_2 <- dataset_part_2 %>%
     left_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
     mutate(dose_periods = case_when(
-      DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_datetime, !!end_datetime, in_unit = "minutes", out_unit = "minutes"),
-      DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_datetime, !!end_datetime, in_unit = "hours", out_unit = "hours"),
+      DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_datetime, !!end_datetime,
+                                                 in_unit = "minutes", out_unit = "minutes"),
+      DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_datetime, !!end_datetime,
+                                               in_unit = "hours", out_unit = "hours"),
       DOSE_WINDOW == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
       DOSE_WINDOW == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
       DOSE_WINDOW == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
@@ -426,8 +438,8 @@ create_single_dose_dataset <- function(dataset,
       DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
       days(floor(time_increment / CONVERSION_FACTOR))),
       time_differential_dt = case_when(
-        DOSE_WINDOW == "MINUTE" ~ days(floor(time_increment/1440)),
-        DOSE_WINDOW == "HOUR" ~ days(floor(time_increment/24)),
+        DOSE_WINDOW == "MINUTE" ~ days(floor(time_increment / 1440)),
+        DOSE_WINDOW == "HOUR" ~ days(floor(time_increment / 24)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
           days(floor(time_increment / CONVERSION_FACTOR))),
 
@@ -437,8 +449,8 @@ create_single_dose_dataset <- function(dataset,
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
           days(floor(time_decrement / CONVERSION_FACTOR))),
       endtime_differential_dt = case_when(
-        DOSE_WINDOW == "MINUTE" ~ days(floor(time_decrement/1440)),
-        DOSE_WINDOW == "HOUR" ~ days(floor(time_decrement/24)),
+        DOSE_WINDOW == "MINUTE" ~ days(floor(time_decrement / 1440)),
+        DOSE_WINDOW == "HOUR" ~ days(floor(time_decrement / 24)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
           days(floor(time_decrement / CONVERSION_FACTOR)))
 

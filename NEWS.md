@@ -5,6 +5,8 @@
 - `derive_param_first_event()` was updated such that
     - `AVAL` is derived instead of `AVALN` and
     - all variables from the source dataset are kept.
+    
+- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when `start_date=ASTDT` and `end_date=AENDT`. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
 
 # admiral 0.7.0
 
