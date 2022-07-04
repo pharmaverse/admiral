@@ -153,7 +153,7 @@ derive_vars_transposed <- function(dataset,
 #'   "BP40257-1002", "1", "2791596", "CMATC4CD", "C03DA"
 #' )
 #'
-#' derive_vars_atc(cm, facm)
+#' derive_vars_atc(cm, facm, value_var = FASTRESC)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = vars(USUBJID, CMREFID = FAREFID),

@@ -64,7 +64,7 @@ facm <- tibble::tribble(
   "BP40257-1002", "1", "2791596", "CMATC4CD", "C03DA"
 )
 
-derive_vars_atc(cm, facm)
+derive_vars_atc(cm, facm, value_var = FASTRESC)
 }
 \author{
 Thomas Neitmann
