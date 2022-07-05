@@ -313,7 +313,7 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dctreas <- function(dsdecod, dsterm = NULL) {
+format_dcsreas <- function(dsdecod, dsterm = NULL) {
   if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
