@@ -18,7 +18,8 @@ The variables specified by the \code{by_vars} parameter are required}
 
 \item{dataset_facm}{FACM dataset
 
-The variables specified by the \code{by_vars} and \code{value_var} parameters, \code{FAGRPID} and \code{FATESTCD} are required}
+The variables specified by the \code{by_vars} and \code{value_var} parameters,
+\code{FAGRPID} and \code{FATESTCD} are required}
 
 \item{by_vars}{Keys used to merge \code{dataset_facm} with \code{dataset}
 

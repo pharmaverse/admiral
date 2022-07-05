@@ -105,7 +105,8 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @param dataset_facm FACM dataset
 #'
-#'   The variables specified by the `by_vars` and `value_var` parameters, `FAGRPID` and `FATESTCD` are required
+#'   The variables specified by the `by_vars` and `value_var` parameters,
+#'   `FAGRPID` and `FATESTCD` are required
 #'
 #' @param by_vars Keys used to merge `dataset_facm` with `dataset`
 #'
