@@ -330,10 +330,10 @@ create_single_dose_dataset <- function(dataset,
 
   #Checking that the dates specified follow the ADaM naming convention of ending in DT
   start_datec <- as_string(as_name(start_date))
-  start_date_chk <- str_locate_all(start_datec, "DT")
+  start_date_chk <- stringr::str_locate_all(start_datec, "DT")
   start_date_chk_pos <- as.vector(start_date_chk[[1]])
 
-  if (str_length(start_datec) != start_date_chk_pos[-1]) {
+  if (stringr::str_length(start_datec) != start_date_chk_pos[-1]) {
     err_msg <- paste0(
       "The argument start_date is expected to have a name like xxxDT.\n",
       "Please check as it does not follow the expected naming convention"
@@ -342,10 +342,10 @@ create_single_dose_dataset <- function(dataset,
   }
 
   end_datec <- as_string(as_name(end_date))
-  end_date_chk <- str_locate_all(end_datec, "DT")
+  end_date_chk <- stringr::str_locate_all(end_datec, "DT")
   end_date_chk_pos <- as.vector(end_date_chk[[1]])
 
-  if (str_length(end_datec) != end_date_chk_pos[-1]) {
+  if (stringr::str_length(end_datec) != end_date_chk_pos[-1]) {
     err_msg <- paste0(
       "The argument end_date is expected to have a name like xxxDT.\n",
       "Please check as it does not follow the expected naming convention"
@@ -429,8 +429,7 @@ create_single_dose_dataset <- function(dataset,
 
   dataset_part_2 <- dataset_part_2 %>%
     group_by(grpseq, !!dose_freq, !!start_date, !!end_date) %>%
-    mutate(time_increment = (row_number() - 1) / (DOSE_COUNT),
-            time_decrement = max((time_increment)) - time_increment)   %>%
+    mutate(time_increment = (row_number() - 1) / (DOSE_COUNT)) %>%
     ungroup() %>%
     mutate(time_differential = case_when(
       DOSE_WINDOW == "MINUTE" ~ minutes(floor(time_increment)),
@@ -441,19 +440,7 @@ create_single_dose_dataset <- function(dataset,
         DOSE_WINDOW == "MINUTE" ~ days(floor(time_increment / 1440)),
         DOSE_WINDOW == "HOUR" ~ days(floor(time_increment / 24)),
         DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          days(floor(time_increment / CONVERSION_FACTOR))),
-
-      endtime_differential = case_when(
-        DOSE_WINDOW == "MINUTE" ~ minutes(floor(time_decrement)),
-        DOSE_WINDOW == "HOUR" ~ hours(floor(time_decrement)),
-        DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          days(floor(time_decrement / CONVERSION_FACTOR))),
-      endtime_differential_dt = case_when(
-        DOSE_WINDOW == "MINUTE" ~ days(floor(time_decrement / 1440)),
-        DOSE_WINDOW == "HOUR" ~ days(floor(time_decrement / 24)),
-        DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-          days(floor(time_decrement / CONVERSION_FACTOR)))
-
+          days(floor(time_increment / CONVERSION_FACTOR)))
     )
 
   # Adjust start_date and end_date, drop calculation columns, make sure nothing
@@ -463,13 +450,19 @@ create_single_dose_dataset <- function(dataset,
     mutate(
       !!dose_freq := "ONCE",
       !!start_date := !!start_date + time_differential_dt,
-      !!end_date := !!end_date - endtime_differential_dt,
       !!start_datetime := !!start_datetime + time_differential,
-      !!end_datetime := !!end_datetime - endtime_differential
     )
 
   dataset_part_2 <- dataset_part_2 %>%
     filter(!(!!start_date > !!end_date)) %>%
+    mutate(!!end_date := !!start_date,
+           !!end_datetime := case_when (
+             DOSE_WINDOW %in% c("MINUTE", "HOUR") ~ !!start_datetime,
+             DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
+               ymd_hms(paste0(!!start_date,' ',format(!!end_datetime, format = "%H:%M:%S")))
+           )
+
+    ) %>%
       select(!!!vars(all_of(col_names)))
 
   # Stitch back together

@@ -14,14 +14,20 @@ test_that("create_single_dose_dataset works as expected for Q#/EVERY # cases", {
      lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 11:30:00"),
     "P01", "ONCE", lubridate::ymd("2021-01-03"), lubridate::ymd_hms("2021-01-03 10:30:00"),
      lubridate::ymd("2021-01-03"), lubridate::ymd_hms("2021-01-03 11:30:00"),
-    "P01", "ONCE", lubridate::ymd("2021-01-08"), lubridate::ymd_hms("2021-01-08 10:30:00"),
-     lubridate::ymd("2021-01-08"), lubridate::ymd_hms("2021-01-08 11:30:00"),
-    "P01", "ONCE", lubridate::ymd("2021-01-11"), lubridate::ymd_hms("2021-01-11 10:30:00"),
-     lubridate::ymd("2021-01-11"), lubridate::ymd_hms("2021-01-11 11:30:00"),
-    "P01", "ONCE", lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 10:30:00"),
-     lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 11:30:00"),
-    "P01", "ONCE", lubridate::ymd("2021-01-29"), lubridate::ymd_hms("2021-01-29 10:30:00"),
-     lubridate::ymd("2021-01-29"), lubridate::ymd_hms("2021-01-29 11:30:00")
+    "P01", "ONCE", lubridate::ymd("2021-01-05"), lubridate::ymd_hms("2021-01-05 10:30:00"),
+     lubridate::ymd("2021-01-05"), lubridate::ymd_hms("2021-01-05 11:30:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-07"), lubridate::ymd_hms("2021-01-07 10:30:00"),
+     lubridate::ymd("2021-01-07"), lubridate::ymd_hms("2021-01-07 11:30:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-08"), lubridate::ymd_hms("2021-01-08 12:00:00"),
+     lubridate::ymd("2021-01-08"), lubridate::ymd_hms("2021-01-08 14:00:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-11"), lubridate::ymd_hms("2021-01-11 12:00:00"),
+     lubridate::ymd("2021-01-11"), lubridate::ymd_hms("2021-01-11 14:00:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-14"), lubridate::ymd_hms("2021-01-14 12:00:00"),
+     lubridate::ymd("2021-01-14"), lubridate::ymd_hms("2021-01-14 14:00:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 09:57:00"),
+     lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 10:57:00"),
+    "P01", "ONCE", lubridate::ymd("2021-01-29"), lubridate::ymd_hms("2021-01-29 09:57:00"),
+     lubridate::ymd("2021-01-29"), lubridate::ymd_hms("2021-01-29 10:57:00")
   )
 
   expect_equal(create_single_dose_dataset(input), expected_output)
@@ -42,13 +48,13 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
      lubridate::ymd("2021-03-01"), lubridate::ymd_hms("2021-03-01 11:00:00"),
     "P04", "4 TIMES PER MONTH",
      lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 11:30:00"),
-     lubridate::ymd("2021-01-20"), lubridate::ymd_hms("2021-01-20 11:00:00"),
+     lubridate::ymd("2021-01-20"), lubridate::ymd_hms("2021-01-20 11:30:00"),
     "P05", "5 TIMES PER WEEK",
      lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 12:00:00"),
      lubridate::ymd("2021-01-17"), lubridate::ymd_hms("2021-01-17 12:00:00"),
     "P06", "5 TIMES PER WEEK",
-     lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-01 12:30:00"),
-     lubridate::ymd("2021-01-21"), lubridate::ymd_hms("2021-01-21 12:00:00"),
+     lubridate::ymd("2021-01-15"), lubridate::ymd_hms("2021-01-15 12:30:00"),
+     lubridate::ymd("2021-01-21"), lubridate::ymd_hms("2021-01-21 12:30:00"),
   )
   expected_output <- tibble::tribble(
     ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
@@ -57,7 +63,7 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
     "P02", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 10:30:00"),
      lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 10:30:00"),
     "P02", "ONCE", lubridate::ymd("2021-07-02"), lubridate::ymd_hms("2021-07-02 10:30:00"),
-     lubridate::ymd("2021-07-02"), lubridate::ymd_hms("2021-01-01 10:30:00"),
+     lubridate::ymd("2021-07-02"), lubridate::ymd_hms("2021-07-02 10:30:00"),
     "P03", "ONCE", lubridate::ymd("2021-02-01"), lubridate::ymd_hms("2021-02-01 11:00:00"),
      lubridate::ymd("2021-02-01"), lubridate::ymd_hms("2021-02-01 11:00:00"),
     "P03", "ONCE", lubridate::ymd("2021-02-08"), lubridate::ymd_hms("2021-02-08 11:00:00"),
@@ -95,7 +101,7 @@ test_that("create_single_dose_dataset works as expected for # TIMES PER cases", 
 
 test_that("create_single_dose_dataset works for different treatments", {
   input <- tibble::tribble(
-    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDT, ~EXTRT,
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM, ~EXTRT,
     "P01", "Q2D", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 09:00:00"),
      lubridate::ymd("2021-01-03"), lubridate::ymd_hms("2021-01-03 09:00:00"), "XANOMELINE",
     "P01", "QOD", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01 09:15:00"),
@@ -116,7 +122,7 @@ test_that("create_single_dose_dataset works for different treatments", {
   )
 
   expect_equal(create_single_dose_dataset(input,
-                keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM)
+                keep_source_vars = vars(USUBJID, EXDOSFRQ, ASTDT, ASTDTM, AENDT, AENDTM, EXTRT)
                                          ),
                expected_output)
 })
@@ -137,7 +143,7 @@ test_that("custom lookup works", {
   )
 
   expected_output <- tibble::tribble(
-    ~USUBJID, ~EXDOSFRQ, ~ASTDT ~ASTDTM, ~AENDT, ~AENDTM,
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
     "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01T06:00:00"),
     lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01T06:00:00"),
     "P01", "ONCE", lubridate::ymd("2021-01-01"), lubridate::ymd_hms("2021-01-01T06:30:00"),
