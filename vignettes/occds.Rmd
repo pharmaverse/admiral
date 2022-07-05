@@ -63,7 +63,6 @@ adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
-
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only the 
