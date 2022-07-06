@@ -56,3 +56,11 @@ adae <- tibble::tribble(
 
 # try below:
 derive_vars_query(adae, queries)
+
+
+# example to use for ADMH:
+queries_mh <- queries %>%
+  filter(TERM_LEVEL %in% c("AELLT", "AEDECOD")) %>%
+  mutate(TERM_LEVEL = ifelse(TERM_LEVEL == "AELLT", "MHLLT", "MHDECOD"))
+
+derive_vars_query(admh, queries_mh)
