@@ -113,13 +113,13 @@ library(lubridate)
 library(stringr)
 
 data <- tibble::tribble(
-~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
-"P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
- ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
-"P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
- ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
-"P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
- ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
+  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
+  "P01", "Q2D", ymd("2021-01-01"), ymd_hms("2021-01-01 10:30:00"),
+  ymd("2021-01-07"), ymd_hms("2021-01-07 11:30:00"),
+  "P01", "Q3D", ymd("2021-01-08"), ymd_hms("2021-01-08 12:00:00"),
+  ymd("2021-01-14"), ymd_hms("2021-01-14 14:00:00"),
+  "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd_hms("2021-01-15 09:57:00"),
+  ymd("2021-01-29"), ymd_hms("2021-01-29 10:57:00")
 )
 
 create_single_dose_dataset(data)
@@ -136,9 +136,9 @@ custom_lookup <- tibble::tribble(
 data <- tibble::tribble(
   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~ASTDTM, ~AENDT, ~AENDTM,
   "P01", "Q30MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
-   ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
+  ymd("2021-01-01"), ymd_hms("2021-01-01T07:00:00"),
   "P02", "Q90MIN", ymd("2021-01-01"), ymd_hms("2021-01-01T06:00:00"),
-   ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
+  ymd("2021-01-01"), ymd_hms("2021-01-01T09:00:00")
 )
 
 create_single_dose_dataset(data,
