@@ -5,6 +5,10 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+- New function `filter_confirmation()` for filtering out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
