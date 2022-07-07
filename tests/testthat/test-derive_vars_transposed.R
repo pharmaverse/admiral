@@ -90,7 +90,7 @@ test_that("ATC variables are merged properly", {
     "BP40257-1002", "19", "2791596", "SPIRONOLACTONE", "C", "C03", "C03D", "C03DA"
   )
   # nolint end
-  actual_output <- derive_vars_atc(cm, facm, value_var = FASTRESC)
+  actual_output <- derive_vars_atc(cm, facm)
 
   expect_dfs_equal(expected_output, actual_output, keys = c("USUBJID", "CMDECOD", "ATC4CD"))
 })

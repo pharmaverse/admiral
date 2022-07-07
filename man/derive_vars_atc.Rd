@@ -8,7 +8,7 @@ derive_vars_atc(
   dataset,
   dataset_facm,
   by_vars = vars(USUBJID, CMREFID = FAREFID),
-  value_var
+  value_var = FASTRESC
 )
 }
 \arguments{
@@ -26,7 +26,9 @@ The variables specified by the \code{by_vars} and \code{value_var} parameters,
 \emph{Permitted Values:} list of variables}
 
 \item{value_var}{The variable of \code{dataset_facm} containing the values of the
-transposed variables}
+transposed variables
+
+Default: \code{FASTRESC}}
 }
 \value{
 The input dataset with ATC variables added
@@ -65,7 +67,7 @@ facm <- tibble::tribble(
   "BP40257-1002", "1", "2791596", "CMATC4CD", "C03DA"
 )
 
-derive_vars_atc(cm, facm, value_var = FASTRESC)
+derive_vars_atc(cm, facm)
 }
 \author{
 Thomas Neitmann

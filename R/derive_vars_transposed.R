@@ -115,6 +115,8 @@ derive_vars_transposed <- function(dataset,
 #' @param value_var The variable of `dataset_facm` containing the values of the
 #'   transposed variables
 #'
+#'   Default: `FASTRESC`
+#'
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with ATC variables added
@@ -154,11 +156,11 @@ derive_vars_transposed <- function(dataset,
 #'   "BP40257-1002", "1", "2791596", "CMATC4CD", "C03DA"
 #' )
 #'
-#' derive_vars_atc(cm, facm, value_var = FASTRESC)
+#' derive_vars_atc(cm, facm)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
                             by_vars = vars(USUBJID, CMREFID = FAREFID),
-                            value_var) {
+                            value_var = FASTRESC) {
   value_var <- assert_symbol(enquo(value_var))
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
@@ -166,7 +168,7 @@ derive_vars_atc <- function(dataset,
 
   dataset %>%
     derive_vars_transposed(
-      select(dataset_facm, !!!unname(by_vars), !!unname(value_var), FAGRPID, FATESTCD),
+      select(dataset_facm, !!!unname(by_vars), !!value_var, FAGRPID, FATESTCD),
       by_vars = by_vars,
       key_var = FATESTCD,
       value_var = !!value_var,

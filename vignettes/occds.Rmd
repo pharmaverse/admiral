@@ -63,6 +63,7 @@ adsl <- admiral_adsl
 ```
 ```{r echo = FALSE}
 ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+
 ```
 
 At this step, it may be useful to join `ADSL` to your `AE` domain as well. Only the 
@@ -200,7 +201,7 @@ facm <- tibble::tribble(
   "BP40257-1002",      "1", "2791596", "CMATC4CD",   "C03DA"
 )
 
-derive_vars_atc(cm, facm, value_var = FASTRESC)
+derive_vars_atc(cm, facm)
 ```
 
 ## Derive Planned and Actual Treatment {#trtpa}
