@@ -163,6 +163,59 @@ library(dplyr, warn.conflicts = FALSE)
 library(admiral.test)
 library(admiral)
 
+\dontshow{
+#'   get_smq_terms <- function(smq_select,
+version,
+keep_id,
+temp_env) {
+  if (is.null(temp_env$admiral_smq_db)) {
+    data("admiral_smq_db", envir = temp_env)
+  }
+  if (!is.null(smq_select$name)) {
+    cond_smq <- expr(smq_name == !!smq_select$name)
+  } else {
+    cond_smq <- expr(smq_id == !!smq_select$id)
+  }
+  if (smq_select$scope == "NARROW") {
+    cond_scope <- expr(scope == "narrow")
+  } else {
+    cond_scope <- TRUE
+  }
+  if (keep_id) {
+    select_id <- exprs(QUERY_ID = smq_id)
+  } else {
+    select_id <- NULL
+  }
+
+  temp_env$admiral_smq_db \%>\%
+    filter(version == version, !!cond_smq, !!cond_scope) \%>\%
+    transmute(TERM_NAME = termname, TERM_LEVEL = termvar, QUERY_NAME = smq_name, !!!select_id)
+}
+
+get_sdg_terms <- function(sdg_select,
+                          version,
+                          keep_id,
+                          temp_env) {
+  if (is.null(temp_env$admiral_sdg_db)) {
+    data("admiral_sdg_db", envir = temp_env)
+  }
+  if (!is.null(sdg_select$name)) {
+    cond <- expr(sdg_name == !!sdg_select$name)
+  } else {
+    cond <- expr(sdg_id == !!sdg_select$id)
+  }
+  if (keep_id) {
+    select_id <- exprs(QUERY_ID = sdg_id)
+  } else {
+    select_id <- NULL
+  }
+
+  temp_env$admiral_sdg_db \%>\%
+    filter(version == version, !!cond) \%>\%
+    transmute(TERM_NAME = termname, TERM_LEVEL = termvar, QUERY_NAME = sdg_name, !!!select_id)
+}
+}
+
 # creating a query dataset for a customized query
 cqterms <- tribble(
   ~TERM_NAME, ~TERM_ID,
@@ -201,7 +254,7 @@ bilismq <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_smq_fun = admiral.test:::get_smq_terms,
+  get_smq_fun = get_smq_terms,
   meddra_version = "20.1"
 )
 
@@ -218,7 +271,7 @@ sdg <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
-  get_sdg_fun = admiral.test:::get_sdg_terms,
+  get_sdg_fun = get_sdg_terms,
   whodd_version = "2019-09"
 )
 
@@ -239,7 +292,7 @@ create_query_data(
       )
     )
   ),
-  get_smq_fun = admiral.test:::get_smq_terms,
+  get_smq_fun = get_smq_terms,
   meddra_version = "20.1"
 )
 }
