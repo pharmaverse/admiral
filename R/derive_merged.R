@@ -865,3 +865,81 @@ derive_var_merged_character <- function(dataset,
     mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
     select(-temp_match_flag)
 }
+
+
+#' Merge Lookup Table with Source Dataset
+#'
+#' Merge user-defined lookup table with the input dataset. Optionally output a
+#' list of observations from the input dataset that do not have corresponding
+#' mapping from the lookup table.
+#'
+#' @param dataset_add Lookup table
+#'
+#' The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param print_not_mapped Print a list of unique `by_vars` values that do not
+#' have corresponding records from the lookup table?
+#'
+#' *Default*: TRUE
+#'
+#' *Permitted Values*: TRUE, FALSE
+#'
+#' @inheritParams derive_vars_merged
+#'   ```
+#'
+#' @return The output dataset contains all observations and variables of the
+#' input dataset, and the variables specified in `new_vars`,
+#' mapped from the lookup table specified in `dataset_add`. Optionally prints
+#' a list of unique `by_vars` values that do not have corresponding records
+#' from the lookup table (by using option `print_not_mapped`).
+#'
+#' @author Annie Yang
+#'
+#' @keywords derivation adam
+#'
+#' @export
+#'
+#' @examples
+#' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' data("admiral_vs")
+#' vs <- convert_blanks_to_na(admiral_vs)
+#' param_lookup <- tibble::tribble(
+#'   ~VSTESTCD, ~PARAMCD, ~VSTEST, ~PARAMN,
+#'   "SYSBP", "SYSBP", "Systolic Blood Pressure", 1,
+#'   "WEIGHT", "WEIGHT", "Weight", 4,
+#'   "HEIGHT", "HEIGHT", "Height", 5,
+#'   "TEMP", "TEMP", "Temperature", 6,
+#'   "MAP", "MAP", "Mean Arterial Pressure", 7,
+#'   "BMI", "BMI", "Body Mass Index", 8,
+#'   "BSA", "BSA", "Body Surface Area", 9
+#' )
+#' derive_vars_merged_lookup(dataset = vs,
+#'                           dataset_add = param_lookup,
+#'                           by_vars = vars(VSTESTCD),
+#'                           new_vars = vars(PARAMCD),
+#'                           print_not_mapped = TRUE)
+derive_vars_merged_lookup <- function(dataset,
+                                      dataset_add,
+                                      by_vars,
+                                      new_vars = NULL,
+                                      print_not_mapped = TRUE){
+  res <- derive_vars_merged(
+    dataset,
+    dataset_add,
+    by_vars = by_vars,
+    new_vars = new_vars,
+    match_flag = temp_match_flag
+  )
+
+  if (print_not_mapped) {
+    temp_not_mapped <- res %>% filter(is.na(temp_match_flag)) %>%
+      distinct(!!!by_vars) %>% unlist()
+
+    message("Note list of ", enumerate(vars2chr(by_vars)), " not mapped: ",
+            enumerate(temp_not_mapped, quote_fun = dquote))
+  }
+
+  res %>%select(-temp_match_flag)
+
+}
