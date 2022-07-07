@@ -153,12 +153,11 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(admiral.test)
 #' library(admiral)
-#'
 #' \dontshow{
-#' #'   get_smq_terms <- function(smq_select,
-#' version,
-#' keep_id,
-#' temp_env) {
+#' get_smq_terms <- function(smq_select,
+#'                           version,
+#'                           keep_id,
+#'                           temp_env) {
 #'   if (is.null(temp_env$admiral_smq_db)) {
 #'     data("admiral_smq_db", envir = temp_env)
 #'   }
