@@ -4,6 +4,8 @@
 #' a set of required variables
 #'
 #' @param arg A function argument to be checked
+#' @param accept_grouped Is the data frame grouped? Defaults to `FALSE`. If set to `TRUE` then
+#' the check on grouped data frames is skipped
 #' @param required_vars A list of variables created using `vars()`
 #' @param check_is_grouped Throw an error is `dataset` is grouped? Defaults to `TRUE`.
 #' @param optional Is the checked parameter optional? If set to `FALSE` and `arg`
@@ -15,6 +17,8 @@
 #' The function throws an error if `arg` is not a data frame or if `arg`
 #' is a data frame but misses any variable specified in `required_vars`. Otherwise,
 #' the input is returned invisibly.
+#' The function will also return an error if `arg`is a grouped data frame and
+#' `accept_grouped` is not set to `TRUE`.
 #'
 #' @export
 #'
@@ -35,6 +39,7 @@
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
                               required_vars = NULL,
+                              accept_grouped = FALSE,
                               check_is_grouped = TRUE,
                               optional = FALSE) {
   assert_vars(required_vars, optional = TRUE)
@@ -54,7 +59,7 @@ assert_data_frame <- function(arg,
     abort(err_msg)
   }
 
-  if (check_is_grouped && dplyr::is_grouped_df(arg)) {
+  if (accept_grouped == FALSE && check_is_grouped && dplyr::is_grouped_df(arg)) {
     err_msg <- sprintf(
       "`%s` is a grouped data frame, please `ungroup()` it first",
       arg_name(substitute(arg))

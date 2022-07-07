@@ -2,6 +2,9 @@
 
 ## New Features
 
+- New function available (#525): 
+  - `get_summary_records()` - creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations.
+
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
