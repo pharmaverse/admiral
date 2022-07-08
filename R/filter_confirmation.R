@@ -10,6 +10,9 @@
 #' account. The suffix ".join" is added to the variables from the subsequent
 #' observations.
 #'
+#' An example usage might be checking if a patient received two required
+#' medications within a certain timeframe of each other.
+#'
 #' In the oncology setting, for example, we use such processing to check if a
 #' response value can be confirmed by a subsequent assessment. This is commonly
 #' used in endpoints such as best overall response.
@@ -64,10 +67,12 @@
 #'   observations. The condition can include summary functions. The joined
 #'   dataset is grouped by the original observations. I.e., the summary function
 #'   are applied to all observations up to the confirmation observation. For
-#'   example, `filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
-#'   count_vals(var = AVALC.join, val = "NE") <= 1` selects observations with
-#'   response "CR" and for all observations up to the confirmation observation
-#'   the response is "CR" or "NE" and there is at most one "NE".
+#'   example in the oncology setting when using this function for confirmed best
+#'   overall response,  `filter = AVALC == "CR" & all(AVALC.join %in% c("CR",
+#'   "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1` selects
+#'   observations with response "CR" and for all observations up to the
+#'   confirmation observation the response is "CR" or "NE" and there is at most
+#'   one "NE".
 #'
 #' @param check_type Check uniqueness?
 #'
@@ -165,7 +170,7 @@
 #' library(admiral)
 #'
 #' # filter observations with a duration longer than 30 and
-#' # at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
+#' # on or after 7 days before a COVID AE (ACOVFL == "Y")
 #' adae <- tribble(
 #'   ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
 #'   "1",        10, "N",          1,
@@ -189,7 +194,7 @@
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
 #'
-#' # filter observations with AVALC == "Y" and AVALC == "Y" at one subsequent visit
+#' # filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
 #' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "Y",
@@ -439,7 +444,9 @@ count_vals <- function(var, val) {
 #'   "2",      3,        "CR",
 #' )
 #'
-#' # add variable indicating if PR occurred after CR
+#' # In oncology setting, when needing to check the first time a patient had
+#' # a Complete Response (CR) to compare to see if any Partial Response (PR)
+#' # occurred after this add variable indicating if PR occurred after CR
 #' group_by(data, USUBJID) %>% mutate(
 #'   first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR"),
 #'   last_pr_vis = max_cond(var = AVISITN, cond = AVALC == "PR"),
@@ -465,8 +472,6 @@ min_cond <- function(var, cond) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @export
-#'
 #' @keywords user_utility
 #'
 #' @export
@@ -488,7 +493,9 @@ min_cond <- function(var, cond) {
 #'   "2",      3,        "CR",
 #' )
 #'
-#' # add variable indicating if PR occurred after CR
+#' # In oncology setting, when needing to check the first time a patient had
+#' # a Complete Response (CR) to compare to see if any Partial Response (PR)
+#' # occurred after this add variable indicating if PR occurred after CR
 #' group_by(data, USUBJID) %>% mutate(
 #'   first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR"),
 #'   last_pr_vis = max_cond(var = AVISITN, cond = AVALC == "PR"),

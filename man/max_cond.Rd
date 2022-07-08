@@ -32,7 +32,9 @@ data <- tribble(
   "2",      3,        "CR",
 )
 
-# add variable indicating if PR occurred after CR
+# In oncology setting, when needing to check the first time a patient had
+# a Complete Response (CR) to compare to see if any Partial Response (PR)
+# occurred after this add variable indicating if PR occurred after CR
 group_by(data, USUBJID) \%>\% mutate(
   first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR"),
   last_pr_vis = max_cond(var = AVISITN, cond = AVALC == "PR"),

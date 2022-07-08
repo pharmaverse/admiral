@@ -8,6 +8,7 @@ filter_confirmation(
   dataset,
   by_vars,
   join_vars,
+  join_type = "at_after",
   first_cond = NULL,
   order,
   filter,
@@ -33,6 +34,17 @@ with suffix ".join". For example to select all observations with \code{AVALC == 
 
 The \verb{*.join} variables are not included in the output dataset.}
 
+\item{join_type}{Observations to keep after joining
+
+The argument determines which of the joined observations are kept with
+respect to the original observation. For example, if \code{join_type = "at_after"} is specified all observations at and after the original
+observations are kept.
+
+\emph{Default:} \code{"at_after"}
+
+\emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
+\code{"all"}}
+
 \item{first_cond}{Condition for selecting range of data
 
 If this argument is specified, the subsequent observations are restricted
@@ -50,9 +62,11 @@ The filter is applied to the joined dataset for selecting the confirmed
 observations. The condition can include summary functions. The joined
 dataset is grouped by the original observations. I.e., the summary function
 are applied to all observations up to the confirmation observation. For
-example, \code{filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects observations with
-response "CR" and for all observations up to the confirmation observation
-the response is "CR" or "NE" and there is at most one "NE".}
+example in the oncology setting when using this function for confirmed best
+overall response,  \code{filter = AVALC == "CR" & all(AVALC.join \%in\% c("CR", "NE")) & count_vals(var = AVALC.join, val = "NE") <= 1} selects
+observations with response "CR" and for all observations up to the
+confirmation observation the response is "CR" or "NE" and there is at most
+one "NE".}
 
 \item{check_type}{Check uniqueness?
 
@@ -76,6 +90,9 @@ The input dataset is joined with itself to enable conditions taking variables
 from both the current observation and the subsequent observations into
 account. The suffix ".join" is added to the variables from the subsequent
 observations.
+
+An example usage might be checking if a patient received two required
+medications within a certain timeframe of each other.
 
 In the oncology setting, for example, we use such processing to check if a
 response value can be confirmed by a subsequent assessment. This is commonly
@@ -113,10 +130,10 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 
 \subsection{Step 2}{
 
-The joined dataset is restricted to observations where the joined variables
-are at or after the other variables with respect to \code{order}.
+The joined dataset is restricted to observations with respect to
+\code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{order = vars(AVISITN)} is restricted to
+The dataset from the example in the previous step with \code{join_type = "at_after"} and order = vars(AVISITN)` is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
@@ -155,12 +172,13 @@ library(tibble)
 library(admiral)
 
 # filter observations with a duration longer than 30 and
-# at, after, or up to 7 days before a COVID AE (ACOVFL == "Y")
+# on or after 7 days before a COVID AE (ACOVFL == "Y")
 adae <- tribble(
   ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
   "1",        10, "N",          1,
   "1",        21, "N",         50,
   "1",        23, "Y",         14,
+  "1",        32, "N",         31,
   "1",        42, "N",         20,
   "2",        11, "Y",         13,
   "2",        23, "N",          2,
@@ -173,6 +191,7 @@ filter_confirmation(
   adae,
   by_vars = vars(USUBJID),
   join_vars = vars(ACOVFL, ADY),
+  join_type = "all",
   order = vars(ADY),
   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
