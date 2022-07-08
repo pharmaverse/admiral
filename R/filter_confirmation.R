@@ -35,6 +35,18 @@
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
+#' @param join_type Observations to keep after joining
+#'
+#'   The argument determines which of the joined observations are kept with
+#'   respect to the original observation. For example, if `join_type =
+#'   "at_after"` is specified all observations at and after the original
+#'   observations are kept.
+#'
+#'   *Default:* `"at_after"`
+#'
+#'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
+#'   `"all"`
+#'
 #' @param first_cond Condition for selecting range of data
 #'
 #'   If this argument is specified, the subsequent observations are restricted
@@ -102,11 +114,11 @@
 #'
 #'   ## Step 2
 #'
-#'   The joined dataset is restricted to observations where the joined variables
-#'   are at or after the other variables with respect to `order`.
+#'   The joined dataset is restricted to observations with respect to
+#'   `join_type` and `order`.
 #'
-#'   The dataset from the example in the previous step with `order =
-#'   vars(AVISITN)` is restricted to
+#'   The dataset from the example in the previous step with `join_type =
+#'   "at_after"` and order = vars(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -159,6 +171,7 @@
 #'   "1",        10, "N",          1,
 #'   "1",        21, "N",         50,
 #'   "1",        23, "Y",         14,
+#'   "1",        32, "N",         31,
 #'   "1",        42, "N",         20,
 #'   "2",        11, "Y",         13,
 #'   "2",        23, "N",          2,
@@ -171,6 +184,7 @@
 #'   adae,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(ACOVFL, ADY),
+#'   join_type = "all",
 #'   order = vars(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
@@ -266,6 +280,7 @@
 filter_confirmation <- function(dataset,
                                 by_vars,
                                 join_vars,
+                                join_type = "at_after",
                                 first_cond = NULL,
                                 order,
                                 filter,
@@ -273,6 +288,12 @@ filter_confirmation <- function(dataset,
   # Check input parameters
   assert_vars(by_vars)
   assert_vars(join_vars)
+  join_type <-
+    assert_character_scalar(
+      join_type,
+      values = c("before", "at_before", "at_after", "after", "all"),
+      case_sensitive = FALSE
+    )
   first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
   assert_order_vars(order)
   filter <- assert_filter_cond(enquo(filter))
@@ -298,13 +319,23 @@ filter_confirmation <- function(dataset,
     )
   # join the input dataset with itself such that to each observation of the
   # input dataset all following observations are joined
-  data_joined <- data %>%
+  data_joined <-
     left_join(
+      data,
       select(data, !!!by_vars, !!!join_vars, tmp_obs_nr_filter_confirmation),
       by = vars2chr(by_vars),
       suffix = c("", ".join")
-    ) %>%
-    filter(tmp_obs_nr_filter_confirmation <= tmp_obs_nr_filter_confirmation.join)
+    )
+  if(join_type != "all") {
+    operator <- c(before = "<", at_before = "<=", at_after = ">=", after = ">")
+
+    data_joined <- filter(
+      data_joined,
+      !!parse_expr(paste("tmp_obs_nr_filter_confirmation.join",
+                         operator[join_type],
+                         "tmp_obs_nr_filter_confirmation"))
+      )
+  }
 
   if (!quo_is_null(first_cond)) {
     # select all observations up to the first confirmation observation

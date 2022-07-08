@@ -18,7 +18,7 @@ data <- tribble(
 )
 
 # filter_confirmation ----
-## filter_confirmation Test 1: filter without first_cond ----
+## Test 1: filter without first_cond ----
 test_that("filter_confirmation Test 1: filter without first_cond", {
   actual <-
     filter_confirmation(
@@ -43,7 +43,7 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
   )
 })
 
-## filter_confirmation Test 2: filter with first_cond ----
+## Test 2: filter with first_cond ----
 test_that("filter_confirmation Test 2: filter with first_cond", {
   actual <-
     filter_confirmation(
@@ -68,7 +68,7 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
   )
 })
 
-## filter_confirmation Test 3: filter with first_cond and summary function ----
+## Test 3: filter with first_cond and summary function ----
 test_that("filter_confirmation Test 3: filter with first_cond and summary function", {
   actual <-
     filter_confirmation(
@@ -90,5 +90,43 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
     base = expected,
     compare = actual,
     keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 4: join_type = "all" ----
+test_that("filter_confirmation Test 4: join_type = 'all'", {
+  adae <- tribble(
+    ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
+    "1",        10, "N",          1,
+    "1",        21, "N",         50,
+    "1",        23, "Y",         14,
+    "1",        32, "N",         31,
+    "1",        42, "N",         20,
+    "2",        11, "Y",         13,
+    "2",        23, "N",          2,
+    "3",        13, "Y",         12,
+    "4",        14, "N",         32,
+    "4",        21, "N",         41
+  )
+
+  actual <- filter_confirmation(
+    adae,
+    by_vars = vars(USUBJID),
+    join_vars = vars(ACOVFL, ADY),
+    join_type = "all",
+    order = vars(ADY),
+    filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
+    "1",        21, "N",         50,
+    "1",        32, "N",         31,
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "ADY")
   )
 })
