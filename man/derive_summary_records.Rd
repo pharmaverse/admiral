@@ -164,6 +164,8 @@ BDS-Findings Functions that returns variable appended to dataset:
 \code{\link{derive_var_basetype}()},
 \code{\link{derive_var_base}()},
 \code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
 \code{\link{derive_var_shift}()}
 }
 \author{

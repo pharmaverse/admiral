@@ -13,8 +13,8 @@
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `PCHG`
-#' @family der_bds_gen
-#' @keywords der_bds_gen
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #' @export
 #'
 #' @seealso [derive_var_chg()]
