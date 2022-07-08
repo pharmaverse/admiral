@@ -71,8 +71,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @family der_bds_findings
-#' @keywords der_bds_findings
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'

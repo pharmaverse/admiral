@@ -116,7 +116,7 @@ create_single_dose_dataset(data,
 )
 }
 \seealso{
-Other occds: 
+OCCDS Functions: 
 \code{\link{create_query_data}()},
 \code{\link{derive_last_dose}()},
 \code{\link{derive_vars_atc}()},

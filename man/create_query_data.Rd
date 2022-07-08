@@ -246,7 +246,7 @@ create_query_data(
 \seealso{
 \code{\link[=derive_vars_query]{derive_vars_query()}}, \code{\link[=query]{query()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
 
-Other occds: 
+OCCDS Functions: 
 \code{\link{create_single_dose_dataset}()},
 \code{\link{derive_last_dose}()},
 \code{\link{derive_vars_atc}()},

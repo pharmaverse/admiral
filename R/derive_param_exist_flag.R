@@ -124,9 +124,9 @@
 #'   occurred (`AVALC`, `AVAL`, and the variables specified by `subject_keys`
 #'   and `set_value_to` are populated for the new parameter)
 #'
-#' @family der_bds_findings
+#' @family der_prm_bds_findings
 #'
-#' @keywords der_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'

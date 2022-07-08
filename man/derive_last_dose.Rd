@@ -131,7 +131,7 @@ admiral_ae \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDTM, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
 \seealso{
-Other occds: 
+OCCDS Functions: 
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()},
 \code{\link{derive_vars_atc}()},

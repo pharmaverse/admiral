@@ -51,9 +51,9 @@
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @family der_bds_findings
+#' @family der_prm_bds_findings
 #'
-#' @keywords der_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -260,9 +260,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @family der_bds_findings
+#' @family der_prm_bds_findings
 #'
-#' @keywords der_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -493,9 +493,9 @@ compute_bsa <- function(height = height,
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @family der_bds_findings
+#' @family der_prm_bds_findings
 #'
-#' @keywords der_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'

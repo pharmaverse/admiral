@@ -58,7 +58,7 @@ derive_vars_query(adae, queries)
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
 
-Other occds: 
+OCCDS Functions: 
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()},
 \code{\link{derive_last_dose}()},

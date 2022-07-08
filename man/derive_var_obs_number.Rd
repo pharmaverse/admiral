@@ -72,30 +72,21 @@ admiral_vs \%>\%
   )
 }
 \seealso{
-BDS-Findings Functions that returns variable appended to dataset: 
-\code{\link{default_qtc_paramcd}()},
-\code{\link{derive_derived_param}()},
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_param_bmi}()},
-\code{\link{derive_param_bsa}()},
-\code{\link{derive_param_doseint}()},
-\code{\link{derive_param_exist_flag}()},
-\code{\link{derive_param_exposure}()},
-\code{\link{derive_param_first_event}()},
-\code{\link{derive_param_map}()},
-\code{\link{derive_param_qtc}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_param_wbc_abs}()},
-\code{\link{derive_summary_records}()},
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_basetype}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_shift}()}
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
 }
 \author{
 Stefan Bundfuss
 }
-\concept{der_bds_findings}
-\keyword{der_bds_findings}
+\concept{der_gen}
+\keyword{der_gen}

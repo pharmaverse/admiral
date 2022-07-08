@@ -127,8 +127,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @family der_tte
-#' @keywords der_tte
+#' @family der_prm_tte
+#' @keywords der_prm_tte
 #'
 #' @export
 #'

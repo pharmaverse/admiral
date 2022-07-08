@@ -16,35 +16,36 @@ news:
   cran_dates: false
 reference:
 
-- title: Derivations for adding variables to ADaMs
-- subtitle: Derivation Functions for Date/Time Variables
-  desc: Derivation Functions for adding Date/Time Variables to ADaM Datasets
+- title: Derivations for Adding Variables
+- subtitle: All ADaMs
 - contents:
   - has_keyword("der_date_time")
-- subtitle: Derivation Functions for ADSL
+  - has_keyword("der_gen")
+- subtitle: ADSL-specific
   desc: Derivation Functions helpful for building the ADSL dataset
 - contents:
   - has_keyword("der_adsl")
-- subtitle: Genearal Derivation Functions for BDS(e.g. advs, adeg, adex adlb)
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- subtitle: BDS-specific
+  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
 - contents:
   - has_keyword("der_bds_gen")
-- subtitle: Derivation Functions for BDS-Findings (e.g. advs, adeg, adex adlb)
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-- contents:
   - has_keyword("der_bds_findings")
-- subtitle: Derivation Functions for OCCDS Datasets (e.g. adae, adcm, admh)
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- subtitle: OCCDS-specific
+  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("occds")
-- subtitle: Derivation Functions for TTE Datasets (e.g. adtte)
+- subtitle: TTE-specific
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
   - has_keyword("der_tte")
-- subtitle: General Derivation Functions all ADaMs
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+
+- title: Derivations for Adding Parameters
+- subtitle: BDS-specific
 - contents:
-  - has_keyword("der_gen")
+  - has_keyword("der_prm_bds_findings")
+- subtitle: TTE-specific
+- contents:
+  - has_keyword("der_prm_tte")
 
 - title: Advanced Functions
 - subtitle: Functions for working with multiple datasets
@@ -70,24 +71,14 @@ reference:
   contents:
   - has_keyword('com_date_time')
 
-- title: Utilities for ADaMs
-- subtitle: Utilities for Formatting Observations
-  desc: Functions that expect a vector and formats
+- title: Utility Functions
   contents:
   - has_keyword('utils_fmt')
-- subtitle: Utilities for Checking Datasets
-  desc: Functions for checking integrity of datasets
-  contents:
   - has_keyword('utils_ds_chk')
-- subtitle: Utilities for Helping
-  desc: Functions for checking integrity of datasets
-  contents:
   - has_keyword('utils_help')
-- subtitle: Utilities for Filter Observations
-  desc: Functions for checking integrity of datasets
-  contents:
   - has_keyword('utils_fil')
-- subtitle: Example Datasets
+
+- title: Example Datasets
   desc: You can run scripts to produce additional datasets
   contents:
   - has_keyword('datasets')
