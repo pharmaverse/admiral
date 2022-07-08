@@ -10,7 +10,7 @@ derive_var_confirmation_flag(
   order,
   new_var,
   join_vars,
-  join_type,
+  join_type = "at_after",
   first_cond = NULL,
   filter,
   true_value = "Y",
