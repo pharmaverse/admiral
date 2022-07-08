@@ -133,21 +133,21 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
 
 # min_cond ----
 ## Test 1: test it ----
-test_that("min_cond, Test 1: test it",{
+test_that("min_cond, Test 1: test it", {
   data <- tribble(
-      ~USUBJID, ~AVISITN, ~AVALC,
-      "1",      1,        "PR",
-      "1",      2,        "CR",
-      "1",      3,        "NE",
-      "1",      4,        "CR",
-      "1",      5,        "NE",
-      "2",      1,        "CR",
-      "2",      2,        "PR",
-      "2",      3,        "CR",
-    )
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "NE",
+    "1",      4,        "CR",
+    "1",      5,        "NE",
+    "2",      1,        "CR",
+    "2",      2,        "PR",
+    "2",      3,        "CR",
+  )
 
   actual <- group_by(data, USUBJID) %>% mutate(
-       first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR")
+    first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR")
   )
 
   expected <- tribble(
@@ -171,7 +171,7 @@ test_that("min_cond, Test 1: test it",{
 
 # max_cond ----
 ## Test 1: test it ----
-test_that("max_cond, Test 1: test it",{
+test_that("max_cond, Test 1: test it", {
   data <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
