@@ -13,6 +13,14 @@
 #'   The specified variables are used as by variables for joining the input
 #'   dataset with itself.
 #'
+#' @param order Order
+#'
+#'   The observations are ordered by the specified order.
+#'
+#' @param new_var New variable
+#'
+#'   The specified variable is added to the input dataset.
+#'
 #' @param join_vars Variables to keep from joined dataset
 #'
 #'   The variables needed from the subsequent observations should be specified
@@ -42,10 +50,6 @@
 #'   up to the first observation where the specified condition is fulfilled. If
 #'   the condition is not fulfilled for any of the subsequent observations, no
 #'   observations are considered, i.e., the observation is not flagged.
-#'
-#' @param order Order
-#'
-#'   The observations are ordered by the specified order.
 #'
 #' @param filter Condition for selecting observations
 #'

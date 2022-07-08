@@ -33,6 +33,10 @@ dataset with itself.}
 
 The observations are ordered by the specified order.}
 
+\item{new_var}{New variable
+
+The specified variable is added to the input dataset.}
+
 \item{join_vars}{Variables to keep from joined dataset
 
 The variables needed from the subsequent observations should be specified
