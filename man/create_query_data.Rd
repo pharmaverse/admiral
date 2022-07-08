@@ -201,7 +201,7 @@ bilismq <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(pregsmq, bilismq),
-  get_smq_fun = admiral.test:::get_smq_terms,
+  get_smq_fun = get_smq_terms,
   meddra_version = "20.1"
 )
 
@@ -218,7 +218,7 @@ sdg <- query(
 # In a real application a company-specific function must be used.
 create_query_data(
   queries = list(sdg),
-  get_sdg_fun = admiral.test:::get_sdg_terms,
+  get_sdg_fun = get_sdg_terms,
   whodd_version = "2019-09"
 )
 
@@ -239,7 +239,7 @@ create_query_data(
       )
     )
   ),
-  get_smq_fun = admiral.test:::get_smq_terms,
+  get_smq_fun = get_smq_terms,
   meddra_version = "20.1"
 )
 }

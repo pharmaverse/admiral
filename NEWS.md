@@ -5,6 +5,10 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+- New function `filter_confirmation()` for filtering out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
 - New function `derive_var_confirmation_flag()` for deriving a flag which
 depends on other observations of the input dataset (#1293)
 
