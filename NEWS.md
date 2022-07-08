@@ -19,6 +19,8 @@ deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
+- New function to map lookup table `derive_vars_merged_lookup()` (#940)
+
 ## Breaking Changes
 
 ## Documentation

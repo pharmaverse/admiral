@@ -24,6 +24,17 @@ ex <- tibble::tribble(
   "ST42-2", "2021-01-26T13:21",
   "ST42-3", "2021-03-02"
 ) %>% mutate(STUDYID = "ST42")
+
+vs <- tibble::tribble(
+  ~USUBJID, ~VSTESTCD, ~VSTEST, ~VSORRES, ~VSSEQ,
+  "ST42-1", "DIABP", "Diastolic Blood Pressure", 64, 1,
+  "ST42-1", "DIABP", "Diastolic Blood Pressure", 83, 2,
+  "ST42-1", "WEIGHT", "Weight", 120, 3,
+  "ST42-2", "WEIGHT", "Weight", 110, 1,
+  "ST42-2", "HEIGHT", "Height", 58, 2
+) %>% mutate(STUDYID = "ST42")
+
+
 # derive_vars_merged ----
 ## derive_vars_merged: merge all variables ----
 test_that("derive_vars_merged: merge all variables", {
@@ -325,5 +336,40 @@ test_that("derive_var_merged_character: merge character variable, title case", {
     base = expected,
     compare = actual,
     keys = "USUBJID"
+  )
+})
+
+
+
+## derive_vars_merged_lookup: merge lookup table
+test_that("derive_vars_merged_lookup: merge lookup table", {
+  param_lookup <- tibble::tribble(
+  ~VSTESTCD, ~VSTEST,  ~PARAMCD, ~DESCRIPTION,
+  "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+  "HEIGHT",  "Height", "HEIGHT", "Height (cm)",
+  "BMI",  "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)"
+  )
+
+  attr(param_lookup$VSTESTCD, "label") <- "Vital Signs Test Short Name"
+  attr(param_lookup$VSTEST, "label") <- "Vital Signs Test Name"
+
+
+  actual <- derive_vars_merged_lookup(
+    vs,
+    dataset_add = param_lookup,
+    by_vars = vars(VSTESTCD, VSTEST),
+    new_var = vars(PARAMCD, PARAM = DESCRIPTION),
+    print_not_mapped = TRUE
+  )
+
+  expected <-
+    left_join(vs, param_lookup, by = c("VSTESTCD", "VSTEST")) %>%
+    rename(PARAM = DESCRIPTION)
+
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "VSSEQ", "VSTESTCD")
   )
 })
