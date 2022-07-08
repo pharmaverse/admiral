@@ -106,7 +106,7 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
       first_cond = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
       order = vars(AVISITN),
-      filter = admiralonco::count_vals(AVALC.join, "SD") <= 1,
+      filter = count_vals(AVALC.join, "SD") <= 1,
       false_value = "N"
     )
 
@@ -132,5 +132,52 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
     base = expected,
     compare = actual,
     keys = c("USUBJID", "AVISITN")
+  )
+})
+
+## Test 4: join_type = "all" ----
+test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
+  adae <- tribble(
+    ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
+    "1",        10, "N",          1,
+    "1",        21, "N",         50,
+    "1",        23, "Y",         14,
+    "1",        32, "N",         31,
+    "1",        42, "N",         20,
+    "2",        11, "Y",         13,
+    "2",        23, "N",          2,
+    "3",        13, "Y",         12,
+    "4",        14, "N",         32,
+    "4",        21, "N",         41
+  )
+
+  actual <- derive_var_confirmation_flag(
+    adae,
+    by_vars = vars(USUBJID),
+    new_var = ALCOVFL,
+    join_vars = vars(ACOVFL, ADY),
+    join_type = "all",
+    order = vars(ADY),
+    filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ADY, ~ACOVFL, ~ADURN, ~ALCOVFL,
+    "1",        10, "N",          1, NA_character_,
+    "1",        21, "N",         50, "Y",
+    "1",        23, "Y",         14, NA_character_,
+    "1",        32, "N",         31, "Y",
+    "1",        42, "N",         20, NA_character_,
+    "2",        11, "Y",         13, NA_character_,
+    "2",        23, "N",          2, NA_character_,
+    "3",        13, "Y",         12, NA_character_,
+    "4",        14, "N",         32, NA_character_,
+    "4",        21, "N",         41, NA_character_
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "ADY")
   )
 })

@@ -24,6 +24,18 @@
 #'
 #'   The `*.join` variables are not included in the output dataset.
 #'
+#' @param join_type Observations to keep after joining
+#'
+#'   The argument determines which of the joined observations are kept with
+#'   respect to the original observation. For example, if `join_type =
+#'   "at_after"` is specified all observations at and after the original
+#'   observations are kept.
+#'
+#'   *Default:* `"at_after"`
+#'
+#'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
+#'   `"all"`
+#'
 #' @param first_cond Condition for selecting range of data
 #'
 #'   If this argument is specified, the subsequent observations are restricted
@@ -98,11 +110,11 @@
 #'
 #'   ## Step 2
 #'
-#'   The joined dataset is restricted to observations where the joined variables
-#'   are at or after the other variables with respect to `order`.
+#'   The joined dataset is restricted to observations with respect to
+#'   `join_type` and `order`.
 #'
-#'   The dataset from the example in the previous step with `order =
-#'   vars(AVISITN)` is restricted to
+#'   The dataset from the example in the previous step with `join_type =
+#'   "at_after"` and `order = vars(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
@@ -158,6 +170,7 @@
 #'   "1",        10, "N",          1,
 #'   "1",        21, "N",         50,
 #'   "1",        23, "Y",         14,
+#'   "1",        32, "N",         31,
 #'   "1",        42, "N",         20,
 #'   "2",        11, "Y",         13,
 #'   "2",        23, "N",          2,
@@ -171,6 +184,7 @@
 #'   new_var = ALCOVFL,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(ACOVFL, ADY),
+#'   join_type = "all",
 #'   order = vars(ADY),
 #'   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 #' )
@@ -271,6 +285,7 @@ derive_var_confirmation_flag <- function(dataset,
                                          order,
                                          new_var,
                                          join_vars,
+                                         join_type = "at_after",
                                          first_cond = NULL,
                                          filter,
                                          true_value = "Y",
@@ -285,11 +300,12 @@ derive_var_confirmation_flag <- function(dataset,
     new_var = tmp_obs_nr_var_conf_flag
   )
 
-  data_filtered <- admiralonco::filter_confirmation(
+  data_filtered <- filter_confirmation(
     data,
     by_vars = by_vars,
     order = order,
     join_vars = join_vars,
+    join_type = join_type,
     first_cond = !!first_cond,
     filter = !!filter,
     check_type = check_type

@@ -10,6 +10,7 @@ derive_var_confirmation_flag(
   order,
   new_var,
   join_vars,
+  join_type,
   first_cond = NULL,
   filter,
   true_value = "Y",
@@ -39,6 +40,17 @@ for this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to flag all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = vars(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
 The \verb{*.join} variables are not included in the output dataset.}
+
+\item{join_type}{Observations to keep after joining
+
+The argument determines which of the joined observations are kept with
+respect to the original observation. For example, if \code{join_type = "at_after"} is specified all observations at and after the original
+observations are kept.
+
+\emph{Default:} \code{"at_after"}
+
+\emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
+\code{"all"}}
 
 \item{first_cond}{Condition for selecting range of data
 
@@ -114,10 +126,10 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 
 \subsection{Step 2}{
 
-The joined dataset is restricted to observations where the joined variables
-are at or after the other variables with respect to \code{order}.
+The joined dataset is restricted to observations with respect to
+\code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{order = vars(AVISITN)} is restricted to
+The dataset from the example in the previous step with \code{join_type = "at_after"} and \code{order = vars(AVISITN)} is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
@@ -167,6 +179,7 @@ adae <- tribble(
   "1",        10, "N",          1,
   "1",        21, "N",         50,
   "1",        23, "Y",         14,
+  "1",        32, "N",         31,
   "1",        42, "N",         20,
   "2",        11, "Y",         13,
   "2",        23, "N",          2,
@@ -180,6 +193,7 @@ derive_var_confirmation_flag(
   new_var = ALCOVFL,
   by_vars = vars(USUBJID),
   join_vars = vars(ACOVFL, ADY),
+  join_type = "all",
   order = vars(ADY),
   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
