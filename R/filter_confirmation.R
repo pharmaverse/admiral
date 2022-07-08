@@ -331,15 +331,17 @@ filter_confirmation <- function(dataset,
       by = vars2chr(by_vars),
       suffix = c("", ".join")
     )
-  if(join_type != "all") {
+  if (join_type != "all") {
     operator <- c(before = "<", at_before = "<=", at_after = ">=", after = ">")
 
     data_joined <- filter(
       data_joined,
-      !!parse_expr(paste("tmp_obs_nr_filter_confirmation.join",
-                         operator[join_type],
-                         "tmp_obs_nr_filter_confirmation"))
-      )
+      !!parse_expr(paste(
+        "tmp_obs_nr_filter_confirmation.join",
+        operator[join_type],
+        "tmp_obs_nr_filter_confirmation"
+      ))
+    )
   }
 
   if (!quo_is_null(first_cond)) {

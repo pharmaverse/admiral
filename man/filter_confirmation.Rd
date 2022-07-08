@@ -196,7 +196,7 @@ filter_confirmation(
   filter = ADURN > 30 & ACOVFL.join == "Y" & ADY >= ADY.join - 7
 )
 
-# filter observations with AVALC == "Y" and AVALC == "Y" at one subsequent visit
+# filter observations with AVALC == "Y" and AVALC == "Y" at a subsequent visit
 data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "Y",
