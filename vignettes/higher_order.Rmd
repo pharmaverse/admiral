@@ -31,9 +31,6 @@ parameters/arguments being fixed across iterations and others varying
 each slice the derivation is called separately. Some or all arguments of the
 derivation may vary depending on the slice.
 
-All examples show how a user may achieve the results without using these higher
-order functions and then how by using these the calls could be simplified.
-
 ## Required Packages
 
 The examples of this vignette require the following packages.
@@ -44,15 +41,18 @@ For example purpose, the CDISC Pilot SDTM datasets---which are included in
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
 library(admiral.test)
-library(tibble)
 library(dplyr)
 
 data("admiral_vs")
+data("admiral_ae")
 vs <- admiral_vs
+ae <- admiral_ae
 vs <- convert_blanks_to_na(vs)
+ae <- convert_blanks_to_na(ae)
 ```
 ```{r echo=FALSE}
 vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023"))
+ae <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023"))
 ```
 
 # call_derivation
@@ -92,7 +92,8 @@ dataset_vignette(
 )
 ```
 
-Here is an example of how to achieve the same *WITH* using `call_derivation()`: 
+Here is an example of how to achieve the same *WITH* using `call_derivation()`,
+where any different arguments are passed using `params()`: 
 
 ```{r}
 vs_with <- vs %>%
@@ -121,3 +122,82 @@ Developing your ADaM code this way would be more efficient and readable,
 maintenance would be eased in case of specification changes, and downstream
 quality checking would require less effort.
 
+# restrict_derivation
+
+The idea behind this function is that sometimes you want to apply a
+derivation only for certain records from the input dataset. Introducing
+`restrict_derivation()` therefore gives the users the ability to achieve
+this across any function, without each function needing to have such an
+argument to allow for this.
+
+An example would be if you wanted to flag the first occurring AE with the
+highest severity for each patient, BUT you only wanted to do this for
+records occurring on or after study day 1.
+
+Here is how you could achieve this using `restrict_derivation()`,
+where the function arguments are passed using `params()` and the restriction
+criteria is given using `filter`:
+
+```{r}
+ae <- ae %>%
+  mutate(TEMP_AESEVN = as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AHSEVFL,
+      by_vars = vars(USUBJID),
+      order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+      mode = "first"
+    ),
+    filter = AESTDY >= 1
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  ae,
+  display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
+)
+```
+
+# slice_derivation
+
+This function in a way combines the features of the above two. It allows a
+derivation to be applied with different arguments for different slices (subsets)
+of records from the input dataset. You could do this with separate `restrict_derivation()`
+calls for each different set of records, but `slice_derivation()` allows
+to achieve this in one call.
+
+An example would be if you wanted to achieve the same derivation as above
+for records occurring on or after study day 1, BUT for pre-treatment AEs
+you wanted to flag only the last occurring AE.
+
+Here is how you could achieve this using `slice_derivation()`,
+where the function arguments are passed using `params()` and via the different
+slices controlled by `filter`:
+
+```{r}
+ae <- ae %>%
+  slice_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AHSEV2FL,
+      by_vars = vars(USUBJID)
+    ),
+    derivation_slice(
+      filter = AESTDY >= 1,
+      args = params(order = vars(TEMP_AESEVN, AESTDY, AESEQ), mode = "first")
+    ),
+    derivation_slice(
+      filter = TRUE,
+      args = params(order = vars(AESTDY, AESEQ), mode = "last")
+    )
+  ) 
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  ae,
+  display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
+)
+```
