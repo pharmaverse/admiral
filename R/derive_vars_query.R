@@ -201,7 +201,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @author Shimeng Huang, Ondrej Slama
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'

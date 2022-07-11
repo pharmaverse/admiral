@@ -43,4 +43,4 @@ dataset_vignette(admiral_dm,
   filter = ARMCD == "Pbo"
 )
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

@@ -16,4 +16,4 @@ Returns valid time units as expected for arguments expecting a time unit
 
 valid_time_units()
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

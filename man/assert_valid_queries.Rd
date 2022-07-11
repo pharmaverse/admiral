@@ -39,4 +39,4 @@ assert_valid_queries(queries, "queries")
 \author{
 Shimeng Huang, Ondrej Slama
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

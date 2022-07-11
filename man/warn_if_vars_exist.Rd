@@ -30,4 +30,4 @@ warn_if_vars_exist(admiral_dm, "ARM")
 \author{
 Thomas Neitmann
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

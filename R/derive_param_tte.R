@@ -448,7 +448,7 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -594,7 +594,7 @@ filter_date_sources <- function(sources,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -708,7 +708,7 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'

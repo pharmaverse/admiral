@@ -456,7 +456,7 @@ get_terms_from_db <- function(version,
 #'
 #' Should be `"SMQ`" or `"SDG"`.
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @return An error is issued if `version` or `fun` is null.
 #'
@@ -661,7 +661,7 @@ query <- function(prefix,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @seealso [query()]
 #'
@@ -804,7 +804,7 @@ validate_query <- function(obj) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @author Stefan Bundfuss
 assert_terms <- function(terms,
@@ -916,7 +916,7 @@ smq_select <- function(name = NULL,
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @author Stefan Bundfuss
 #'
@@ -963,7 +963,7 @@ validate_smq_select <- function(obj) {
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1020,7 +1020,7 @@ sdg_select <- function(name = NULL,
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1060,7 +1060,7 @@ validate_sdg_select <- function(obj) {
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords bye_fcn_amd_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'

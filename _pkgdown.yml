@@ -82,7 +82,7 @@ reference:
 - title: Relocated/Deprecated
 - subtitle: Functions moved to another admiraldev package
 - contents:
-  - has_keyword("bye_fcn_amd_dev")
+  - has_keyword("move_adm_dev")
 - subtitle: Deprecated
 - contents:
   - has_keyword("deprecated")

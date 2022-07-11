@@ -25,4 +25,4 @@ test_fun2 <- function(something) {
 \author{
 Thomas Neitmann, Ondrej Slama
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

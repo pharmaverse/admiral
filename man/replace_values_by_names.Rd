@@ -21,4 +21,4 @@ replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 \author{
 Thomas Neitmann
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

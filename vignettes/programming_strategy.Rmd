@@ -85,7 +85,7 @@ add an issue in GitHub for discussion.
 | `utils_help` 	                                                                    | Helper Utilities                                                                                                         |	
 | `source_specifications` 	                                                        | Source Specifications                                                                                                    |	
 | `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
-| `bye_fcn_amd_dev` 	                                                              | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
+| `move_adm_dev` 	                                                              | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
 | `occds`                                                                           | OCCDS specific derivation of helper Functions                                                                            |
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 

@@ -19,4 +19,4 @@ Returns all values which occur more than once in the vector
 
 get_duplicates(c(1, 2, 1, 3, 1, 2, 4))
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

@@ -24,4 +24,4 @@ dquote(NULL)
 \author{
 Stefan Bundfuss
 }
-\keyword{bye_fcn_amd_dev}
+\keyword{move_adm_dev}

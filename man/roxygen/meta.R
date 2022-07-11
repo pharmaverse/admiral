@@ -17,7 +17,7 @@ list(
     utils_help = "Helper Utilities: ",
     source_specifications = "Source Specifications: ",
     high_order_function = "Higher Order Functions: ",
-    merge_der = "Derivation Functions for Merging or Transposing: ",
-    bye_fcn_amd_dev = "Functions moved to admiraldev package: ")
+    #merge_der = "Derivation Functions for Merging or Transposing: ",
+    move_adm_dev = "Functions moved to admiraldev package: ")
 )
 

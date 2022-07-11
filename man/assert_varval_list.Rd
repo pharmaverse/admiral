@@ -66,5 +66,5 @@ Functions moved to admiraldev package:
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }
-\concept{bye_fcn_amd_dev}
-\keyword{bye_fcn_amd_dev}
+\concept{move_adm_dev}
+\keyword{move_adm_dev}
