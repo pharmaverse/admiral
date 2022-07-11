@@ -1,0 +1,122 @@
+---
+title: "Higher Order Functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Higher Order Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This vignette explains some of the more advanced options of `{admiral}` related
+to higher order functions. A higher order function is a function that takes another
+function as input. By introducing these higher order functions, we intend to give
+the user greater power over our derivation functions, whilst trying to negate the
+need for adding additional `{admiral}` functions or arguments, or the user needing
+many separate steps.
+
+The functions covered here with extra examples are:
+- `call_derivation()`: Call a single derivation multiple times with some
+parameters/arguments being fixed across iterations and others varying
+- `restrict_derivation()`: Execute a derivation on a subset of the input dataset
+- `slice_derivation()`: The input dataset is split into slices (subsets) and for
+each slice the derivation is called separately. Some or all arguments of the
+derivation may vary depending on the slice.
+
+All examples show how a user may achieve the results without using these higher
+order functions and then how by using these the calls could be simplified.
+
+## Required Packages
+
+The examples of this vignette require the following packages.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(tibble)
+library(dplyr)
+```
+
+# call_derivation
+
+This function exists purely for convenience to save the user repeating numerous
+similar derivation function calls. It is best demonstrated by comparing examples
+... TO BE UPDATED
+
+```{r}
+impute_dtc(
+  "2019-10",
+  date_imputation = "01-01",
+  time_imputation = "00:00:00"
+)
+```
+
+Sometimes this does not work as it would result in invalid dates, e.g.,
+
+```{r}
+impute_dtc(
+  "2019-02",
+  date_imputation = "02-31",
+  time_imputation = "00:00:00"
+)
+```
+
+Therefore the keywords `"first"` or `"last"` can be specified to request that
+missing parts are replaced by the first or last possible value:
+
+```{r}
+impute_dtc(
+  "2019-02",
+  date_imputation = "last",
+  time_imputation = "00:00:00"
+)
+```
+
+For dates, there is the additional option to use keyword `"mid"` to impute
+missing day to `15` or missing day and month to `06-30`, but note the
+different behaviour below depending on `preserve` parameter for case when month
+only is missing:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = FALSE
+)
+impute_dtc(
+  dates,
+  date_imputation = "mid",
+  time_imputation = "00:00:00",
+  preserve = TRUE
+)
+```
+
+If you wanted to achieve a similar result by replacing any missing part of the
+date with a fixed value `06-15`, this is also possible, but note the difference
+in days for cases when month is missing:
+
+```{r}
+dates <- c(
+  "2019-02",
+  "2019",
+  "2019---01"
+)
+impute_dtc(
+  dates,
+  date_imputation = "06-15",
+  time_imputation = "00:00:00"
+)
+```
