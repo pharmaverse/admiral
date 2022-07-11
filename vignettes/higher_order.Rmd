@@ -23,7 +23,7 @@ the user greater power over our derivation functions, whilst trying to negate th
 need for adding additional `{admiral}` functions or arguments, or the user needing
 many separate steps.
 
-The functions covered here with extra examples are:
+The functions covered here are:
 - `call_derivation()`: Call a single derivation multiple times with some
 parameters/arguments being fixed across iterations and others varying
 - `restrict_derivation()`: Execute a derivation on a subset of the input dataset
@@ -38,85 +38,86 @@ order functions and then how by using these the calls could be simplified.
 
 The examples of this vignette require the following packages.
 
+For example purpose, the CDISC Pilot SDTM datasets---which are included in
+`{admiral.test}`---are used.
+
 ```{r, warning=FALSE, message=FALSE}
 library(admiral)
+library(admiral.test)
 library(tibble)
 library(dplyr)
+
+data("admiral_vs")
+vs <- admiral_vs
+vs <- convert_blanks_to_na(vs)
+```
+```{r echo=FALSE}
+vs <- filter(vs, USUBJID %in% c("01-701-1015", "01-701-1023"))
 ```
 
 # call_derivation
 
 This function exists purely for convenience to save the user repeating numerous
-similar derivation function calls. It is best demonstrated by comparing examples
-... TO BE UPDATED
+similar derivation function calls. It is best used when multiple derived variables
+have very similar specifications with only slight variations.
+
+As an example, imagine the case where all the parameters in a BDS ADaM required
+both a highest value flag and a lowest value flag.
+
+Here is an example of how to achieve this *WITHOUT* using `call_derivation()`: 
 
 ```{r}
-impute_dtc(
-  "2019-10",
-  date_imputation = "01-01",
-  time_imputation = "00:00:00"
+vs_without <- vs %>%
+  derive_var_extreme_flag(
+    dataset,
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(AVAL),
+    new_var = AHIFL,
+    mode = "last"
+  ) %>%
+  derive_var_extreme_flag(
+    dataset,
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(AVAL),
+    new_var = ALOFL,
+    mode = "first"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  vs_without,
+  display_vars = vars(USUBJID, VSTESTCD, AVAL, ALOFL, AHIFL),
+  filter = VSTESTCD %in% c("TEMP", "WGT")
 )
 ```
 
-Sometimes this does not work as it would result in invalid dates, e.g.,
+Here is an example of how to achieve the same *WITH* using `call_derivation()`: 
 
 ```{r}
-impute_dtc(
-  "2019-02",
-  date_imputation = "02-31",
-  time_imputation = "00:00:00"
+vs_with <- vs %>%
+  call_derivation(
+    derivation = derive_var_extreme_flag,
+    variable_params = list(
+      params(new_var = AHIFL, mode = "last"),
+      params(new_var = ALOFL, mode = "first")
+    ),
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(AVAL),
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  vs_with,
+  display_vars = vars(USUBJID, VSTESTCD, AVAL, ALOFL, AHIFL),
+  filter = VSTESTCD %in% c("TEMP", "WGT")
 )
 ```
 
-Therefore the keywords `"first"` or `"last"` can be specified to request that
-missing parts are replaced by the first or last possible value:
+The benefits of this higher order function would be further highlighted with
+examples where more than two variable derivations had similar needs.
+Developing your ADaM code this way would be more efficient and readable,
+maintenance would be eased in case of specification changes, and downstream
+quality checking would require less effort.
 
-```{r}
-impute_dtc(
-  "2019-02",
-  date_imputation = "last",
-  time_imputation = "00:00:00"
-)
-```
-
-For dates, there is the additional option to use keyword `"mid"` to impute
-missing day to `15` or missing day and month to `06-30`, but note the
-different behaviour below depending on `preserve` parameter for case when month
-only is missing:
-
-```{r}
-dates <- c(
-  "2019-02",
-  "2019",
-  "2019---01"
-)
-impute_dtc(
-  dates,
-  date_imputation = "mid",
-  time_imputation = "00:00:00",
-  preserve = FALSE
-)
-impute_dtc(
-  dates,
-  date_imputation = "mid",
-  time_imputation = "00:00:00",
-  preserve = TRUE
-)
-```
-
-If you wanted to achieve a similar result by replacing any missing part of the
-date with a fixed value `06-15`, this is also possible, but note the difference
-in days for cases when month is missing:
-
-```{r}
-dates <- c(
-  "2019-02",
-  "2019",
-  "2019---01"
-)
-impute_dtc(
-  dates,
-  date_imputation = "06-15",
-  time_imputation = "00:00:00"
-)
-```
