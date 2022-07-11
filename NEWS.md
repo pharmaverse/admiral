@@ -37,6 +37,14 @@ deprecation notice (#1229)
     - `AVAL` is derived instead of `AVALN` and
     - all variables from the source dataset are kept.
 
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+
+## Breaking Changes
+
+## Documentation
+
+## Various
+
 # admiral 0.7.0
 
 ## New Features

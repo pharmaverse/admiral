@@ -11,8 +11,10 @@ format_eoxxstt_default(status)
 }
 \value{
 A \code{character} vector derived based on the values given in \code{status}:
+"NOT STARTED" if \code{status} is "SCREEN FAILURE" or "SCREENING NOT COMPLETED",
 "COMPLETED" if \code{status} is "COMPLETED",
-"DISCONTINUED" if \code{status} is not "COMPLETED" nor NA,
+"DISCONTINUED" if \code{status} is not in ("COMPLETED","SCREEN FAILURE",
+"SCREENING NOT COMPLETED") nor NA,
 "ONGOING" otherwise.
 }
 \description{
