@@ -73,9 +73,9 @@ The following code creates a minimally viable ADAE dataset to be used throughout
 
 ```{r}
 adae <- ae %>%
-  left_join(adsl, by = c("STUDYID", "USUBJID")) %>% 
-  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>% 
-  derive_vars_dt(new_vars_prefix = "AEN", dtc = AEENDTC, date_imputation = "last") %>% 
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>%
+  derive_vars_dt(new_vars_prefix = "AEN", dtc = AEENDTC, date_imputation = "last") %>%
   mutate(TRTEMFL = if_else(ASTDT >= TRTSDT & AENDT <= TRTEDT + days(30), "Y", NA_character_))
 ```
 
