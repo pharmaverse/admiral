@@ -140,7 +140,7 @@ criteria is given using `filter`:
 
 ```{r}
 ae <- ae %>%
-  mutate(TEMP_AESEVN = as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) %>%
+  mutate(TEMP_AESEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))) %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
     args = params(
@@ -193,7 +193,7 @@ ae <- ae %>%
       filter = TRUE,
       args = params(order = vars(AESTDY, AESEQ), mode = "last")
     )
-  ) 
+  )
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
