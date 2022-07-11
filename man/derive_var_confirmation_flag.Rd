@@ -51,6 +51,15 @@ The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "at_after"} is specified all observations at and after the original
 observations are kept.
 
+For example for confirmed response or BOR in the oncology setting or
+confirmed deterioration in questionnaires the confirmed assessment must be
+after the assessment to be flagged. Thus \code{join_type = "after"} could be
+used.
+
+To flag AEs on or after seven days before an COVID AE observations before
+and after the observation to be flagged need to be considered. Thus
+\code{join_type = "all"} should be used.
+
 \emph{Default:} \code{"at_after"}
 
 \emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
@@ -61,7 +70,11 @@ observations are kept.
 If this argument is specified, the subsequent observations are restricted
 up to the first observation where the specified condition is fulfilled. If
 the condition is not fulfilled for any of the subsequent observations, no
-observations are considered, i.e., the observation is not flagged.}
+observations are considered, i.e., the observation is not flagged.
+
+This parameter should be specified if \code{filter} contains summary functions
+which should not apply to all observations but only up to the confirmation
+assessment. For ena example see the third example below.}
 
 \item{filter}{Condition for selecting observations
 
@@ -99,6 +112,13 @@ Derive a flag which depends on subsequent observations of the dataset. For
 example, flagging events which need to be confirmed by a second event.
 }
 \details{
+An example usage might be flagging if a patient received two required
+medications within a certain timeframe of each other.
+
+In the oncology setting, for example, the function could be used to flag if a
+response value can be confirmed by a subsequent assessment. This is commonly
+used in endpoints such as best overall response.
+
 The following steps are performed to produce the output dataset.
 \subsection{Step 1}{
 

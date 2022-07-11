@@ -19,6 +19,7 @@ data <- tribble(
 
 # derive_var_confirmation_flag ----
 ## Test 1: filter without first_cond ----
+## Flagging any patient PR value that is followed subsequently by a CR or PR
 test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
   actual <-
     derive_var_confirmation_flag(
@@ -26,9 +27,9 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
       new_var = CONFFL,
       by_vars = vars(USUBJID),
       join_vars = vars(AVISITN, AVALC),
+      join_type = "after",
       order = vars(AVISITN),
-      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
-        AVISITN < AVISITN.join
+      filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
     )
 
   expected <- tribble(
@@ -57,6 +58,7 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
 })
 
 ## Test 2: filter with first_cond ----
+## Flagging any patient CR value that is followed subsequently by a CR
 test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
   actual <-
     derive_var_confirmation_flag(
@@ -96,6 +98,8 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
 })
 
 ## Test 3: filter with first_cond and summary function ----
+## Flagging any patient PR value that is followed subsequently by a CR or PR
+## and at most one SD in between
 test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summary function", {
   actual <-
     derive_var_confirmation_flag(
@@ -136,6 +140,8 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
 })
 
 ## Test 4: join_type = "all" ----
+## Flagging observations with a duration longer than 30 and
+## on or before 7 days before a COVID AE (ACOVFL == "Y")
 test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
   adae <- tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
@@ -144,6 +150,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
     "1",        23, "Y",         14,
     "1",        32, "N",         31,
     "1",        42, "N",         20,
+    "2",         2, "N",         33,
     "2",        11, "Y",         13,
     "2",        23, "N",          2,
     "3",        13, "Y",         12,
@@ -168,6 +175,7 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
     "1",        23, "Y",         14, NA_character_,
     "1",        32, "N",         31, "Y",
     "1",        42, "N",         20, NA_character_,
+    "2",         2, "N",         33, NA_character_,
     "2",        11, "Y",         13, NA_character_,
     "2",        23, "N",          2, NA_character_,
     "3",        13, "Y",         12, NA_character_,
@@ -180,4 +188,82 @@ test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
     compare = actual,
     keys = c("USUBJID", "ADY")
   )
+})
+
+## Test 5: join_type = "before" ----
+test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
+  data <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC,
+    "1",          1, "Y",
+    "1",          2, "N",
+    "1",          3, "Y",
+    "2",          1, "Y",
+    "3",          1, "N"
+  )
+
+  actual <- derive_var_confirmation_flag(
+    data,
+    by_vars = vars(USUBJID),
+    order = vars(ASEQ),
+    new_var = CONFFL,
+    join_vars = vars(AVALC),
+    join_type = "before",
+    filter = AVALC == "Y" & AVALC.join == "Y",
+    false_value = "N"
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC, ~CONFFL,
+    "1",          1, "Y",    "N",
+    "1",          2, "N",    "N",
+    "1",          3, "Y",    "Y",
+    "2",          1, "Y",    "N",
+    "3",          1, "N",    "N"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "ASEQ")
+  )
+
+})
+
+## Test 6: join_type = "at_before" ----
+test_that("derive_var_confirmation_flag, Test 6: join_type = 'at_before'", {
+  data <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC,
+    "1",          1, "Y",
+    "1",          2, "N",
+    "1",          3, "Y",
+    "2",          1, "Y",
+    "3",          1, "N"
+  )
+
+  actual <- derive_var_confirmation_flag(
+    data,
+    by_vars = vars(USUBJID),
+    order = vars(ASEQ),
+    new_var = CONFFL,
+    join_vars = vars(AVALC),
+    join_type = "at_before",
+    filter = AVALC == "Y" & AVALC.join == "Y",
+    false_value = "N"
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC, ~CONFFL,
+    "1",          1, "Y",    "Y",
+    "1",          2, "N",    "N",
+    "1",          3, "Y",    "Y",
+    "2",          1, "Y",    "Y",
+    "3",          1, "N",    "N"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "ASEQ")
+  )
+
 })

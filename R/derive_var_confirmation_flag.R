@@ -3,6 +3,13 @@
 #' Derive a flag which depends on subsequent observations of the dataset. For
 #' example, flagging events which need to be confirmed by a second event.
 #'
+#' An example usage might be flagging if a patient received two required
+#' medications within a certain timeframe of each other.
+#'
+#' In the oncology setting, for example, the function could be used to flag if a
+#' response value can be confirmed by a subsequent assessment. This is commonly
+#' used in endpoints such as best overall response.
+#'
 #' @param dataset Input dataset
 #'
 #'   The variables specified by the `by_vars` and `join_vars` parameter are
@@ -39,6 +46,15 @@
 #'   "at_after"` is specified all observations at and after the original
 #'   observations are kept.
 #'
+#'   For example for confirmed response or BOR in the oncology setting or
+#'   confirmed deterioration in questionnaires the confirmed assessment must be
+#'   after the assessment to be flagged. Thus `join_type = "after"` could be
+#'   used.
+#'
+#'   To flag AEs on or after seven days before an COVID AE observations before
+#'   and after the observation to be flagged need to be considered. Thus
+#'   `join_type = "all"` should be used.
+#'
 #'   *Default:* `"at_after"`
 #'
 #'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
@@ -50,6 +66,10 @@
 #'   up to the first observation where the specified condition is fulfilled. If
 #'   the condition is not fulfilled for any of the subsequent observations, no
 #'   observations are considered, i.e., the observation is not flagged.
+#'
+#'   This parameter should be specified if `filter` contains summary functions
+#'   which should not apply to all observations but only up to the confirmation
+#'   assessment. For an example see the third example below.
 #'
 #' @param filter Condition for selecting observations
 #'
