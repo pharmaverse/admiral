@@ -33,36 +33,63 @@ These contributions could include, for example, company specific derivations of 
 * Each ADaM dataset has a specific programming workflow.
 * Each function has a specific purpose that supports the ADaM Dataset programming workflow. It could be an `{admiral}` function or a company specific function.
 * Admiral functions can be re-used for company specific functions.
-* Each function belongs to a category or multiple categories.
+* Each function belongs to one category defined in keywords/family.
 * Each function that is used to derive one or multiple variable(s) is required to be unit tested.
-* Functions do have a naming convention.
+* Functions have a standard naming convention.
 * Double coding is not used as a QC method (only if absolutely necessary).
 * ADaMs are created with readable, submission-ready code.
 
 
 # Categorization of Functions
 
-The functions are categorized by keywords. The keywords can be specified in the
-function header via the `@keywords` field. Each function must use at least one
-of the following keywords. Please note that the keywords are handled
-case-sensitive. Thus they must be in lower case.
+The functions are categorized by keywords and families within the roxygen header. Categorization is important 
+as `admiral` user-facing functions base totals above 125 and is growing!  However, to ease the burden for developers, we have decided that
+the keywords and families should be identical in the roxygen header, which are specified via the `@keywords` and `@family` fields. 
+To reiterate, each function must use the **same keyword and family**. Also, please note that the keywords and families are case-sensitive.
 
-| Keyword                                                                           | Description                                                                                                              |
+## keywords
+
+The keywords allows for the reference page to be easily organized when using certain 
+`pgkdown` functions. For example, using the function `has_keyword(der_bds_gen)` in the `_pkgdown.yml` file, while building
+the website, will collect all the BDS General Derivation functions and display them in alphabetical order on the Reference Page in a section called
+BDS-Specific.
+
+## family
+
+The families allow for similar functions to be displayed in the See Also section of a function's documentation. For example, a user looking at
+`derive_vars_dy()` function documentation might be interested in other Date/Time functions.  Using the `@family` tag `der_date_time` will display
+all the Date/Time functions available in admiral to the user in the See Also section of `derive_vars_dy()` function documentation. Please take a look at the
+function documentation for `derive_vars_dy()` to see the family tag in action.
+
+Below are the list of available keyword/family tags to be used in `admiral` functions. If you think an additional keyword/family tag should be added, then please
+add an issue in GitHub for discussion.
+
+
+| Keyword/Family                                                                    | Description                                                                                                              |
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| `general_utility`                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
-| `metadata`                                                                          | A function that provides Metadata functionality.                                                                         |
-| `derivation`                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
-| `assertion`                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
-| `warning`                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
-| `predicate`                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
-| Across ADaM dataset structures keywords: `adam`                                     | A function that is applicable across ADaM datasets.                                                                      |
-| ADaM dataset structure specific keywords: `adls`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
-| ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
-| `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
-| `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
-| `deprecated`                                                                       | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation).                        |
-| Therapeutic Area specific functions: `oncology`, `infectious_diseases`, `neuroscience`  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
-| Company specific keywords                                                         |                                                                                                                          |
+| `com_date_time`                                                                   | Date/Time Computation Functions that returns a vector                                                                    | 	
+| `com_bds_findings`                                                                | BDS-Findings Functions that returns a vector                                                                             |
+| `datasets`                                                                        | Example datasets used within admiral                                                                                     |
+| `der_gen`                                                                         | General Derivation Functions that can used for any ADaM.                                                                 |
+| `der_date_time`                                                                   | Date/Time Derivation Function                                                                                            |
+| `der_bds_gen`                                                                     | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc)                  |
+| `der_bds_findings`                                                                | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs                                                  |
+| `der_prm_bds_findings`                                                            | BDS-Findings Functions for adding Parameters                                                                             |
+| `der_adsl`                                                                        | Functions that can only be used for creating ADSL.                                                                       |
+| `der_tte`                                                                         | Function used only for creating a Time to Event (TTE) Dataset                                                            |
+| `der_prm_tte`                                                                     | TTE Functions for adding Parameters to TTE Dataset
+| `deprecated`                                                                      | Function which will be removed from admiral after next release.  See  [Deprecation Guidance](https://pharmaverse.github.io/admiral/articles/programming_strategy.html#deprecation).                        |
+| `utils_ds_chk`                                                                    | Utilities for Dataset Checking                                                                                           |	
+| `utils_fil`                                                                       | Utilities for Filtering Observations                                                                                     |
+| `utils_fmt`                                                                       | Utilities for Formatting Observations                                                                                    |	
+| `utils_help` 	                                                                    | Helper Utilities                                                                                                         |	
+| `source_specifications` 	                                                        | Source Specifications                                                                                                    |	
+| `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
+| `bye_fcn_amd_dev` 	                                                              | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
+| `occds`                                                                           | OCCDS specific derivation of helper Functions                                                                            |
+| `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
+
+**NOTE:** Each keyword and family are to be identical to ease burden of development and maintenance of `admiral` functions.  
 
 
 # Functions in R
@@ -277,7 +304,7 @@ Please see section "Categorization of functions".
 
 An example is given below:
 
-```{r, eval=F}
+```{r, eval=FALSE}
 #' Derive Relative Day Variables
 #'
 #' Adds relative day variables (`--DY`) to the dataset, e.g., `ASTDY` and
@@ -314,7 +341,8 @@ An example is given below:
 #' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
 #'   source variable(s) added
 #'
-#' @keywords derivation ADaM timing
+#' @keywords der_date_time
+#' @family der_date_time
 #'
 #' @export
 #'
@@ -347,7 +375,8 @@ The following attributes should be described: expected data type (e.g. `data.fra
 If the expected input is a dataset then the required variables should be clearly stated.
 * `@details`: A natural-language description of the derivation used inside the function.
 * `@author`: The person who wrote the function. In case a function is later on updated by another person the name should be appended to the list of authors.
-* `@keyword`: One or more keywords applicable to the function.
+* `@keyword`: One applicable tag to the function - identical to family.
+* `@family`: One applicable tag to the function - identical to keyword.
 * `@return`: A description of the return value of the function. 
 Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully self-contained example of how to use the function. 
@@ -455,6 +484,7 @@ The documentation will be updated at:
 #' .
 #' .
 #' @keywords deprecated
+#' @family deprecated
 #' .
 #' .
     ``` 

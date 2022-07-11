@@ -48,28 +48,24 @@ reference:
   - has_keyword("der_prm_tte")
 
 - title: Advanced Functions
-- subtitle: Functions for working with multiple datasets
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-- contents:
-  - has_keyword("source_specifications")
-- subtitle: Higher Order Functions
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- subtitle: Higher Order
 - contents:
   - has_keyword("high_order_function")
-- subtitle: Functions for working with metadata
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- subtitle: Metadata
 - contents:
   - has_keyword("metadata")
+- subtitle: Other
+- contents:
+  - has_keyword("source_specifications")
 
 - title: Computation Functions for Vectors
-- subtitle: Computation Functions for Date/Time Vectors
-  desc: Computations expect vectors as input and returns a vector
-  contents:
-  - has_keyword('com_bds_findings')
-- subtitle: Computations for for BDS-Findings
-  desc: Computations expect vectors as input and returns a vector
+- subtitle: All ADaMs
   contents:
   - has_keyword('com_date_time')
+- subtitle: BDS-specific
+  contents:
+  - has_keyword('com_bds_findings')
+
 
 - title: Utility Functions
   contents:
@@ -83,8 +79,8 @@ reference:
   contents:
   - has_keyword('datasets')
 
-- title: Relocated/Depracated
-- subtitle: Functions moved to another pharmaverse package
+- title: Relocated/Deprecated
+- subtitle: Functions moved to another admiraldev package
 - contents:
   - has_keyword("bye_fcn_amd_dev")
 - subtitle: Deprecated
