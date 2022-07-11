@@ -74,7 +74,7 @@ observations are considered, i.e., the observation is not flagged.
 
 This parameter should be specified if \code{filter} contains summary functions
 which should not apply to all observations but only up to the confirmation
-assessment. For ena example see the third example below.}
+assessment. For an example see the third example below.}
 
 \item{filter}{Condition for selecting observations
 

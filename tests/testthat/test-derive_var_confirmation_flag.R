@@ -226,7 +226,6 @@ test_that("derive_var_confirmation_flag, Test 5: join_type = 'before'", {
     compare = actual,
     keys = c("USUBJID", "ASEQ")
   )
-
 })
 
 ## Test 6: join_type = "at_before" ----
@@ -265,5 +264,4 @@ test_that("derive_var_confirmation_flag, Test 6: join_type = 'at_before'", {
     compare = actual,
     keys = c("USUBJID", "ASEQ")
   )
-
 })
