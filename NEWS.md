@@ -21,6 +21,8 @@ deprecation notice (#1229)
 
 ## Breaking Changes
 
+- All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
+
 ## Documentation
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
