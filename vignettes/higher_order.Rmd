@@ -27,9 +27,9 @@ The functions covered here are:
 
 * `call_derivation()`: Call a single derivation multiple times with some
 arguments being fixed across iterations and others varying
-* `restrict_derivation()`: Execute a derivation on a subset of the input dataset
+* `restrict_derivation()`: Execute a single derivation on a subset of the input dataset
 * `slice_derivation()`: The input dataset is split into slices (subsets) and for
-each slice the derivation is called separately. Some or all arguments of the
+each slice a single derivation is called separately. Some or all arguments of the
 derivation may vary depending on the slice.
 
 ## Required Packages
@@ -221,7 +221,7 @@ ae %>%
 
 # Slice Derivation
 
-This function in a way combines the features of the above two. It allows a
+This function in a way combines the features of the above two. It allows a single
 derivation to be applied with different arguments for different slices (subsets)
 of records from the input dataset. You could do this with separate `restrict_derivation()`
 calls for each different set of records, but `slice_derivation()` allows
