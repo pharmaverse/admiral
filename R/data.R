@@ -24,4 +24,3 @@
 #' Derived from the `dm` and `ds` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
 #'
 "admiral_adsl"
-
