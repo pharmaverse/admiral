@@ -2,13 +2,12 @@
 #'
 #' @description
 #'
-#' The function filters observation using a condition taking subsequent
-#' observations into account. For example, it could select all observations with
-#' `AVALC == "Y"` and `AVALC == "Y"` for at least one subsequent observation.
-#' The input dataset is joined with itself to enable conditions taking variables
-#' from both the current observation and the subsequent observations into
-#' account. The suffix ".join" is added to the variables from the subsequent
-#' observations.
+#' The function filters observation using a condition taking other observations
+#' into account. For example, it could select all observations with `AVALC ==
+#' "Y"` and `AVALC == "Y"` for at least one subsequent observation. The input
+#' dataset is joined with itself to enable conditions taking variables from both
+#' the current observation and the other observations into account. The suffix
+#' ".join" is added to the variables from the subsequent observations.
 #'
 #' An example usage might be checking if a patient received two required
 #' medications within a certain timeframe of each other.
@@ -29,8 +28,8 @@
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
-#'   The variables needed from the subsequent observations should be specified
-#'   for this parameter. The specified variables are added to the joined dataset
+#'   The variables needed from the other observations should be specified for
+#'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
 #'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
@@ -52,9 +51,9 @@
 #'
 #' @param first_cond Condition for selecting range of data
 #'
-#'   If this argument is specified, the subsequent observations are restricted
-#'   up to the first observation where the specified condition is fulfilled. If
-#'   the condition is not fulfilled for any of the subsequent observations, all
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the subsequent observations, all
 #'   observations are removed.
 #'
 #' @param order Order
