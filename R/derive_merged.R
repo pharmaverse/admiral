@@ -1,3 +1,4 @@
+.temp <- new.env(parent = emptyenv())
 #' Add New Variable(s) to the Input Dataset Based on Variables from Another
 #' Dataset
 #'
@@ -880,15 +881,15 @@ derive_var_merged_character <- function(dataset,
 #' @param print_not_mapped Print a list of unique `by_vars` values that do not
 #' have corresponding records from the lookup table?
 #'
-#' *Default*: TRUE
+#' *Default*: `TRUE`
 #'
-#' *Permitted Values*: TRUE, FALSE
+#' *Permitted Values*: `TRUE`, `FALSE`
 #'
 #' @inheritParams derive_vars_merged
 #'
 #'
 #' @return The output dataset contains all observations and variables of the
-#' input dataset, and add the variables specified in `new_vars from the lookup
+#' input dataset, and add the variables specified in `new_vars` from the lookup
 #' table specified in `dataset_add`. Optionally prints a list of unique
 #' `by_vars` values that do not have corresponding records
 #' from the lookup table (by specifying `print_not_mapped = TRUE`).
@@ -939,11 +940,29 @@ derive_vars_merged_lookup <- function(dataset,
       filter(is.na(temp_match_flag)) %>%
       distinct(!!!by_vars)
 
+    .temp$nmap <- structure(
+      temp_not_mapped,
+      class = union("nmap", class(temp_not_mapped)),
+      by_vars = vars2chr(by_vars)
+    )
+
     message(
       "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
-      paste0(capture.output(temp_not_mapped), collapse = "\n")
+      paste0(capture.output(temp_not_mapped), collapse = "\n"),
+      "\nRun `get_not_mapped()` to access the full list"
     )
   }
 
   res %>% select(-temp_match_flag)
+}
+
+#' Get list of records not mapped from the lookup table.
+#'
+#' @export
+#'
+#' @return A `data.frame` or `NULL`
+#'
+#' @keywords user_utility
+get_not_mapped <- function() {
+  .temp$nmap
 }

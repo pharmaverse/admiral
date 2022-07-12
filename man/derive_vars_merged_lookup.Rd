@@ -51,13 +51,16 @@ additional dataset (\code{dataset_add}) are added.
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
 have corresponding records from the lookup table?
 
-\emph{Default}: TRUE
+\emph{Default}: \code{TRUE}
 
-\emph{Permitted Values}: TRUE, FALSE}
+\emph{Permitted Values}: \code{TRUE}, \code{FALSE}}
 }
 \value{
 The output dataset contains all observations and variables of the
-input dataset, and add the variables specified in \verb{new_vars from the lookup table specified in }dataset_add\verb{. Optionally prints a list of unique }by_vars\verb{values that do not have corresponding records from the lookup table (by specifying}print_not_mapped = TRUE`).
+input dataset, and add the variables specified in \code{new_vars} from the lookup
+table specified in \code{dataset_add}. Optionally prints a list of unique
+\code{by_vars} values that do not have corresponding records
+from the lookup table (by specifying \code{print_not_mapped = TRUE}).
 }
 \description{
 Merge user-defined lookup table with the input dataset. Optionally print a

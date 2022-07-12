@@ -5,6 +5,8 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+- New function to map lookup table `derive_vars_merged_lookup()` (#940)
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
@@ -18,8 +20,6 @@ can be used to indicate in which package to look for templates (#1205)
 deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
-
-- New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
 ## Breaking Changes
 
