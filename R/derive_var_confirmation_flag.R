@@ -53,7 +53,7 @@
 #'
 #'   Whereas, sometimes you might allow for confirmatory observations to occur
 #'   prior to the observation to be flagged. For example, to flag AEs occurring
-#'   on or after seven days before a COVID AE. Thus join_type = "all" could be
+#'   on or after seven days before a COVID AE. Thus `join_type = "all"` could be
 #'   used.
 #'
 #'   *Default:* `"at_after"`
