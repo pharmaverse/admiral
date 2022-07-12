@@ -89,7 +89,6 @@ Functions moved to admiraldev package:
 \code{\link{expect_dfs_equal}()},
 \code{\link{extend_source_datasets}()},
 \code{\link{extract_vars}()},
-\code{\link{filter_date_sources}()},
 \code{\link{format.sdg_select}()},
 \code{\link{format.smq_select}()},
 \code{\link{get_constant_vars}()},
