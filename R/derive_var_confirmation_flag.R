@@ -47,13 +47,14 @@
 #'   observations are kept.
 #'
 #'   For example for confirmed response or BOR in the oncology setting or
-#'   confirmed deterioration in questionnaires the confirmed assessment must be
-#'   after the assessment to be flagged. Thus `join_type = "after"` could be
+#'   confirmed deterioration in questionnaires the confirmatory assessment must
+#'   be after the assessment to be flagged. Thus `join_type = "after"` could be
 #'   used.
 #'
-#'   To flag AEs on or after seven days before an COVID AE observations before
-#'   and after the observation to be flagged need to be considered. Thus
-#'   `join_type = "all"` should be used.
+#'   Whereas, sometimes you might allow for confirmatory observations to occur
+#'   prior to the observation to be flagged. For example, to flag AEs occurring
+#'   on or after seven days before a COVID AE. Thus join_type = "all" could be
+#'   used.
 #'
 #'   *Default:* `"at_after"`
 #'
@@ -88,7 +89,7 @@
 #'   if the observations of the input dataset are not unique with respect to the
 #'   by variables and the order.
 #'
-#'   *Default:* `"none"`
+#'   *Default:* `"warning"`
 #'
 #'   *Permitted Values:* `"none"`, `"warning"`, `"error"`
 #'
