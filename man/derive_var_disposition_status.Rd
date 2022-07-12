@@ -38,7 +38,7 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 Default: \code{format_eoxxstt_default()} defined as:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{format_eoxxstt_default <- function(status) \{
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{format_eoxxstt_default <- function(status) \{
   case_when(
     status == "COMPLETED" ~ "COMPLETED",
     status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",

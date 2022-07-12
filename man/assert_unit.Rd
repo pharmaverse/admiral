@@ -25,11 +25,16 @@ Checks if a parameter (\code{PARAMCD}) in a dataset is provided in the expected
 unit.
 }
 \examples{
-data(admiral_advs)
-assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
-\dontrun{
-assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
-}
+library(tibble)
+advs <- tribble(
+  ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+  "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+  "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+)
+
+assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+
+try(assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU))
 }
 \seealso{
 Functions moved to admiraldev package: 

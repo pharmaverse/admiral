@@ -138,9 +138,9 @@ derive_param_doseint(
 \seealso{
 BDS-Findings Functions for adding Parameters: 
 \code{\link{default_qtc_paramcd}()},
-\code{\link{derive_derived_param}()},
 \code{\link{derive_param_bmi}()},
 \code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
 \code{\link{derive_param_first_event}()},

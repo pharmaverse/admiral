@@ -157,7 +157,7 @@ adsl <- dm %>%
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
     flag_imputation = "none",
-    date_imputation = "FIRST"
+    date_imputation = "first"
   ) %>%
   # Relative Day of Death
   derive_vars_duration(

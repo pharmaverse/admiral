@@ -893,7 +893,7 @@ list_tte_source_objects <- function(package = "admiral") {
   tte_sources <- exports[is_tte_source]
 
   rows <- lapply(tte_sources, function(obj_name) {
-    obj <- get(obj_name)
+    obj <- getExportedValue(package, obj_name)
     data.frame(
       object = obj_name,
       dataset_name = obj$dataset_name,

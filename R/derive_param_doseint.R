@@ -61,7 +61,7 @@
 #'   2. If the planned dose (`tpadm_code`) is 0 and the administered dose
 #'   (`tadm_code`) is > 0, 100 is returned.
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @author Alice Ehmann
 #'
@@ -125,7 +125,7 @@ derive_param_doseint <- function(dataset,
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
 
   # Create Dose intensity records
-  dataset <- derive_derived_param(
+  dataset <- derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(tadm_code, tpadm_code),

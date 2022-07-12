@@ -52,7 +52,8 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in 
+`{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -314,7 +315,7 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dctreas <- function(dsdecod, dsterm = NULL) {
+format_dcsreas <- function(dsdecod, dsterm = NULL) {
   if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
@@ -398,7 +399,7 @@ adsl <- adsl %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    date_imputation = "FIRST"
+    date_imputation = "first"
   )
 ```
 
@@ -573,7 +574,7 @@ An example could be :
 ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
-  date_imputation = "FIRST"
+  date_imputation = "first"
 )
 ae_src2 <- date_source(
   dataset_name = "ae",

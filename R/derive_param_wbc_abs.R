@@ -153,7 +153,7 @@ derive_param_wbc_abs <- function(dataset,
 
   # Create new parameter.
   dataset_new <- dataset_temp %>%
-    derive_derived_param(
+    derive_param_computed(
       parameters = c(
         wbc_code,
         diff_code

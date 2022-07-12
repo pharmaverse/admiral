@@ -67,6 +67,7 @@ add an issue in GitHub for discussion.
 
 | Keyword/Family                                                                    | Description                                                                                                              |
 |-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+<<<<<<< HEAD
 | `com_date_time`                                                                   | Date/Time Computation Functions that returns a vector                                                                    | 	
 | `com_bds_findings`                                                                | BDS-Findings Functions that returns a vector                                                                             |
 | `datasets`                                                                        | Example datasets used within admiral                                                                                     |
@@ -90,6 +91,21 @@ add an issue in GitHub for discussion.
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 
 **NOTE:** Each keyword and family are to be identical to ease burden of development and maintenance of `admiral` functions.  
+=======
+| `general_utility`                                                                   | A general function which performs a general functionality, like copy variables, check missing, create parameters.        |
+| `metadata`                                                                          | A function that provides Metadata functionality.                                                                         |
+| `derivation`                                                                        | A function that derives one or more ADaM variable(s)                                                                     |
+| `assertion`                                                                         | Throws an error if a certain condition is not met and `NULL` otherwise                                                   |
+| `warning`                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
+| `predicate`                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
+| Across ADaM dataset structures keywords: `adam`                                     | A function that is applicable across ADaM datasets.                                                                      |
+| ADaM dataset structure specific keywords: `adsl`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
+| ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
+| `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
+| `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
+| Therapeutic Area specific functions: `oncology`, `infectious_diseases`, `neuroscience`  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
+| Company specific keywords                                                         |                                                                                                                          |
+>>>>>>> origin/devel
 
 
 # Functions in R
