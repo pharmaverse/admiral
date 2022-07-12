@@ -39,7 +39,7 @@ The specified variable is added to the input dataset.}
 
 \item{join_vars}{Variables to keep from joined dataset
 
-The variables needed from the subsequent observations should be specified
+The variables needed from the other observations should be specified
 for this parameter. The specified variables are added to the joined dataset
 with suffix ".join". For example to flag all observations with \code{AVALC == "Y"} and \code{AVALC == "Y"} for at least one subsequent visit \code{join_vars = vars(AVALC, AVISITN)} and \code{filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join} could be specified.
 
@@ -68,9 +68,9 @@ used.
 
 \item{first_cond}{Condition for selecting range of data
 
-If this argument is specified, the subsequent observations are restricted
-up to the first observation where the specified condition is fulfilled. If
-the condition is not fulfilled for any of the subsequent observations, no
+If this argument is specified, the other observations are restricted up to
+the first observation where the specified condition is fulfilled. If the
+condition is not fulfilled for any of the other observations, no
 observations are considered, i.e., the observation is not flagged.
 
 This parameter should be specified if \code{filter} contains summary functions
@@ -109,7 +109,7 @@ by variables and the order.
 The input dataset with the variable specified by \code{new_var} added.
 }
 \description{
-Derive a flag which depends on subsequent observations of the dataset. For
+Derive a flag which depends on other observations of the dataset. For
 example, flagging events which need to be confirmed by a second event.
 }
 \details{
@@ -117,7 +117,7 @@ An example usage might be flagging if a patient received two required
 medications within a certain timeframe of each other.
 
 In the oncology setting, for example, the function could be used to flag if a
-response value can be confirmed by a subsequent assessment. This is commonly
+response value can be confirmed by an other assessment. This is commonly
 used in endpoints such as best overall response.
 
 The following steps are performed to produce the output dataset.
