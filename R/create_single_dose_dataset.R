@@ -36,6 +36,7 @@
 #' @export
 #'
 #' @keywords metadata
+#' @family metadata
 #'
 #' @rdname dose_freq_lookup
 

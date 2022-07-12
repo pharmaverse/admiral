@@ -13,6 +13,7 @@
 #'
 #' @author Thomas Neitmann
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #' @export
 #'
 #' @examples

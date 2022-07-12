@@ -448,7 +448,8 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords move_adm_dev
+#' @keywords move_adm_dev#'
+#' @family move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -595,6 +596,7 @@ filter_date_sources <- function(sources,
 #' @author Stefan Bundfuss
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -708,7 +710,8 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords move_adm_dev
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
@@ -832,6 +835,7 @@ censor_source <- function(dataset_name,
 #' @author Thomas Neitmann
 #'
 #' @keywords internal
+#' @family internal
 #'
 #' @export
 #'

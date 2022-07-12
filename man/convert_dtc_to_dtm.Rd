@@ -111,6 +111,7 @@ Date/Time Computation Functions that returns a vector:
 \code{\link{compute_tmf}()},
 \code{\link{convert_date_to_dtm}()},
 \code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
 \code{\link{impute_dtc}()}
 }
 \author{

@@ -10,6 +10,7 @@
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -64,6 +65,7 @@ is_valid_dtc <- function(arg) {
 #' @author Samia Kabi
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -147,6 +149,7 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #' @return a `warning` if the 2 lists have different names or length
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -197,6 +200,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #' @return Return value of the expression
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @details
 #' All warnings which are issued by the expression and match the regular expression

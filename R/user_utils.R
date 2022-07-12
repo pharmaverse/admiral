@@ -94,7 +94,7 @@ filter_if <- function(dataset, filter) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")

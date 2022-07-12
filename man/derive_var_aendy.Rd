@@ -47,7 +47,5 @@ start date is 1.
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
-\keyword{occds}
-\keyword{timing}
+\concept{deprecated}
+\keyword{deprecated}

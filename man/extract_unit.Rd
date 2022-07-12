@@ -38,5 +38,4 @@ Helper Utilities:
 \code{\link{vars2chr}()}
 }
 \concept{utils_help}
-\keyword{user_utility}
 \keyword{utils_help}

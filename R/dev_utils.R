@@ -7,6 +7,7 @@
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -37,6 +38,7 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -53,7 +55,7 @@ backquote <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
-#'
+#' @family move_adm_dev
 #' @export
 #'
 #' @examples
@@ -75,6 +77,7 @@ squote <- function(x) {
 #' @author Stefan Bundfuss
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -119,6 +122,7 @@ dquote <- function(x) {
 #' @author Ondrej Slama
 #'
 #' @keywords com_date_time
+#' @family com_date_time
 #'
 #' @export
 #'
@@ -137,6 +141,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -175,6 +180,7 @@ arg_name <- function(expr) { # nolint
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -210,6 +216,7 @@ extract_vars <- function(x, side = "lhs") {
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -234,6 +241,7 @@ quo_c <- function(...) {
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -282,6 +290,7 @@ what_is_it <- function(x) {
 #'   like `starts_with("EX")`
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return Variable vector.
 #'
@@ -340,6 +349,7 @@ is_named <- function(x) {
 #' @author Thomas Neitmann
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return A list of quosures
 #'
@@ -372,6 +382,7 @@ replace_values_by_names <- function(quosures) {
 #' @export
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #'
@@ -413,6 +424,7 @@ extract_unit <- function(x) {
 #' @author Stefan Bundfuss
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -441,6 +453,7 @@ is_auto <- function(arg) {
 #' @author Stefan Bundfuss
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return A list of quosures
 #'
@@ -475,6 +488,7 @@ as_name <- function(x) {
 #' @export
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #'
@@ -499,6 +513,7 @@ valid_time_units <- function() {
 #' @export
 #'
 #' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #'

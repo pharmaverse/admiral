@@ -73,11 +73,13 @@ Source Specifications:
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
 \code{\link{death_event}},
+\code{\link{dthcaus_source}()},
 \code{\link{event_source}()},
 \code{\link{list_tte_source_objects}()},
 \code{\link{query}()},
 \code{\link{sdg_select}()},
-\code{\link{smq_select}()}
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Thomas Neitmann, Tracey Wang
