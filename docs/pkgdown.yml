@@ -1,5 +1,5 @@
 pandoc: 2.11.4
-pkgdown: 2.0.3
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   admiral: admiral.html
