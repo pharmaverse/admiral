@@ -158,7 +158,8 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords adam user_utility
+#' @keywords utils_fil
+#' @family utils_fil
 #'
 #' @seealso [count_vals()], [min_cond()], [max_cond()]
 #'
@@ -380,7 +381,8 @@ filter_confirmation <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @keywords utils_fil
+#' @family utils_fil
 #'
 #' @export
 #'
@@ -425,7 +427,8 @@ count_vals <- function(var, val) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @keywords utils_fil
+#' @family utils_fil
 #'
 #' @export
 #'
@@ -474,7 +477,8 @@ min_cond <- function(var, cond) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @keywords utils_fil
+#' @family utils_fil
 #'
 #' @export
 #'

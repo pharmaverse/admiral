@@ -41,7 +41,17 @@ data <- tibble::tribble(
 group_by(data, USUBJID) \%>\%
   mutate(nr_nes = count_vals(var = AVALC, val = "NE"))
 }
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{filter_confirmation}()},
+\code{\link{filter_extreme}()},
+\code{\link{filter_if}()},
+\code{\link{filter_relative}()},
+\code{\link{max_cond}()},
+\code{\link{min_cond}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

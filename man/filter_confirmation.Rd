@@ -287,9 +287,17 @@ filter_confirmation(
 }
 \seealso{
 \code{\link[=count_vals]{count_vals()}}, \code{\link[=min_cond]{min_cond()}}, \code{\link[=max_cond]{max_cond()}}
+
+Utilities for Filtering Observations: 
+\code{\link{count_vals}()},
+\code{\link{filter_extreme}()},
+\code{\link{filter_if}()},
+\code{\link{filter_relative}()},
+\code{\link{max_cond}()},
+\code{\link{min_cond}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

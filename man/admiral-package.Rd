@@ -19,6 +19,7 @@ Useful links:
 
 
 Other internal: 
+\code{\link{print.adam_templates}()},
 \code{\link{print.tte_source}()}
 }
 \author{
