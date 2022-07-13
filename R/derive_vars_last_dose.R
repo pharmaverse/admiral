@@ -133,10 +133,12 @@ derive_vars_last_dose <- function(dataset,
   assert_varval_list(new_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
-  assert_data_frame(dataset_ex, quo_c(
-    by_vars, dose_date, new_vars,
-    get_source_vars(traceability_vars)
-  ))
+  if (as_name(dose_date) %in% names(new_vars)) {
+    required_vars <- quo_c(by_vars, new_vars, get_source_vars(traceability_vars))
+  } else {
+    required_vars <- quo_c(by_vars, dose_date, new_vars, get_source_vars(traceability_vars))
+  }
+  assert_data_frame(dataset_ex, required_vars)
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -148,14 +150,21 @@ derive_vars_last_dose <- function(dataset,
     all()
 
   if (!single_dose_eval) {
-    stop("Specified single_dose_condition is not satisfied.")
+    stop("Specified `single_dose_condition` is not satisfied.")
   }
 
-  # check if doses are unique based on dose_date and dose_id
+  # check if doses are unique based on `dose_date` and `dose_id`
+  if (as_name(dose_date) %in% names(new_vars)) {
+    unique_by <- c(by_vars, new_vars[[as_name(dose_date)]], dose_id)
+  } else {
+    unique_by <- c(by_vars, dose_date, dose_id)
+  }
   signal_duplicate_records(
-    dataset_ex, c(by_vars, dose_date, dose_id),
-    "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses."
+    dataset_ex,
+    unique_by,
+    "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses."
   )
+
 
   # filter EX based on user-specified condition
   if (!is.null(quo_get_expr(filter_ex))) {
