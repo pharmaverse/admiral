@@ -215,7 +215,7 @@ test_that("no error is raised when setting `dose_date` to a renamed variable", {
   adae <- tibble::tribble(
     ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
     "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
-    "P02", "2022-01-31", "2022-01-31",ymd("2022-01-31"), ymd("2022-01-31"), "Vomitting",
+    "P02", "2022-01-31", "2022-01-31", ymd("2022-01-31"), ymd("2022-01-31"), "Vomitting",
     "P02", "2022-02-02", "2022-02-04", ymd("2022-02-02"), ymd("2022-02-04"), "Vomitting"
   )
 
