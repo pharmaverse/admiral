@@ -12,7 +12,7 @@ derive_vars_last_dose(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  single_dose_condition = (EXDOSFRQ == "ONCE"),
+  single_dose_condition = EXDOSFRQ == "ONCE",
   new_vars = NULL,
   traceability_vars = NULL
 )
