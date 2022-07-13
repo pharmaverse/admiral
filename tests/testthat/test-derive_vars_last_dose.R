@@ -130,7 +130,7 @@ test_that("derive_vars_last_dose when multiple doses on same date - error", {
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses."
+    regexp = "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses." # nolint
   )
 })
 
