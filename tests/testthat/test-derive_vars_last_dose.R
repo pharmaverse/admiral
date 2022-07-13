@@ -68,7 +68,7 @@ test_that("derive_vars_last_dose checks validity of start and end dose inputs", 
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Specified single_dose_condition is not satisfied."
+    regexp = "Specified `single_dose_condition` is not satisfied."
   )
 })
 
@@ -130,7 +130,7 @@ test_that("derive_vars_last_dose when multiple doses on same date - error", {
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses."
+    regexp = "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses."
   )
 })
 
@@ -208,5 +208,34 @@ test_that("derive_vars_last_dose - Error is issued if same variable is found in 
     ),
     "Variable(s) `EXSTDTC` found in both datasets, cannot perform join",
     fixed = TRUE
+  )
+})
+
+test_that("no error is raised when setting `dose_date` to a renamed variable", {
+  adae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
+    "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
+    "P02", "2022-01-31", "2022-01-31",ymd("2022-01-31"), ymd("2022-01-31"), "Vomitting",
+    "P02", "2022-02-02", "2022-02-04", ymd("2022-02-02"), ymd("2022-02-04"), "Vomitting"
+  )
+
+  adex <- tibble::tribble(
+    ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT,
+    "P01", "Drug A", "QD", "2022-01-09", "2022-01-12", ymd("2022-01-09"), ymd("2022-01-12"),
+    "P02", "Drug A", "QD", "2022-02-01", "2022-02-04", ymd("2022-02-01"), ymd("2022-02-04")
+  )
+
+  (adex_single <- create_single_dose_dataset(adex))
+
+  expect_error(
+    derive_vars_last_dose(
+      adae,
+      adex_single,
+      by_vars = vars(USUBJID),
+      dose_date = EXSTDT,
+      analysis_date = AESTDTC,
+      new_vars = vars(EXSTDT = ASTDT)
+    ),
+    NA
   )
 })
