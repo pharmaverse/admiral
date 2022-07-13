@@ -1,3 +1,17 @@
+# admiral 0.7.1
+
+## Updates of Existing Functions
+
+- `derive_vars_duration()` updated to not display units when there is missing
+duration (#1207)
+
+- `derive_param_first_event()` was updated (#1214) such that
+    - `AVAL` is derived instead of `AVALN` and
+    - all variables from the source dataset are kept.
+
+- `slice_derivation()` was updated such that it no longer fails if a slice is
+empty (#1309)
+
 # admiral 0.7.0
 
 ## New Features
