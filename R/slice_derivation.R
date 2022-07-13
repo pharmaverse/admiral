@@ -117,8 +117,10 @@ slice_derivation <- function(dataset,
     if (length(obsnr) > 0) {
       # call the derivation for non-empty slices only
       dataset_split$data[[obsnr]] <-
-        eval(call, envir = list(data = dataset_split$data[[obsnr]],
-                                enclos = parent.frame()))
+        eval(call, envir = list(
+          data = dataset_split$data[[obsnr]],
+          enclos = parent.frame()
+        ))
     }
   }
 

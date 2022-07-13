@@ -57,7 +57,8 @@ test_that("slice_derivation Test 2: non matching observations", {
     )
   )
 
-  expected <- mutate(advs,
+  expected <- mutate(
+    advs,
     ADTM = c(ymd_hms(NA), ymd_hms("2020-04-16 00:00:00")),
     ATMF = c(NA_character_, "H")
   )
@@ -94,9 +95,10 @@ test_that("slice_derivation Test 3: empty slice", {
     )
   )
 
-  expected <- mutate(advs,
-                     ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 23:59:59")),
-                     ATMF = "H"
+  expected <- mutate(
+    advs,
+    ADTM = c(ymd_hms("2020-04-16 23:59:59"), ymd_hms("2020-04-16 23:59:59")),
+    ATMF = "H"
   )
 
   expect_dfs_equal(
