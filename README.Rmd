@@ -1,5 +1,5 @@
 ---
-title: "admiral package extension Template"
+title: "admiraldev"
 output: md_document
 date: '2022-06-27'
 ---
@@ -25,7 +25,7 @@ dyn.link <- function(text, base_url, relative_url = "") {
 }
 
 # Other variables
-admiral_homepage <- "https://pharmaverse.github.io/admiral"
+admiral_homepage <- "https://pharmaverse.github.io/admiraldev"
 ```
 
 <!-- Please do not edit the README.md file as it is auto-generated. Only edit the README.Rmd file -->
