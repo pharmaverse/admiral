@@ -1,6 +1,7 @@
 # admiral 0.7.1
 
-## Updates of Existing Functions
+- `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied
+to the `dose_date` parameter (#1206)
 
 - `derive_vars_duration()` updated to not display units when there is missing
 duration (#1207)
