@@ -211,7 +211,7 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
   )
 })
 
-test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", {
+test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", { # nolint
   adae <- tibble::tribble(
     ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
     "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
