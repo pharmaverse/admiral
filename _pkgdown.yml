@@ -1,4 +1,4 @@
-url: https://pharmaverse.github.io/admiraltemplate
+url: https://pharmaverse.github.io/admiraldev
 
 template:
   params:
@@ -8,9 +8,9 @@ template:
       index_name: pharmaverse
 repo:
   url:
-    home: https://github.com/pharmaverse/admiraltemplate
-    source: https://github.com/pharmaverse/admiraltemplate/blob/main/
-    issue: https://github.com/pharmaverse/admiraltemplate/issues/
+    home: https://github.com/pharmaverse/admiraldev
+    source: https://github.com/pharmaverse/admiraldev/blob/main/
+    issue: https://github.com/pharmaverse/admiraldev/issues/
     user: https://github.com/
 news:
   cran_dates: false
