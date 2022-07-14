@@ -1,0 +1,9 @@
+# This is a list of urls to ignore in the link checking action Check URLS /
+# Validate Links
+
+https://packagemanager.rstudio.com/cran/linux/focal/latest
+https://github.com/pharmaverse/admiraltemplate/blob/main/
+irongut/CodeCoverageSummary@v1.2.0
+insightsengineering/thevalidatoR@v1.2.1
+https://packagemanager.rstudio.com/cran/__linux__/focal/latest
+tj-actions/branch-names@v5.2

@@ -1,0 +1,68 @@
+---
+name: Spelling 🆎
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - main
+      - devel
+      - pre-release
+  pull_request:
+    branches:
+      - main
+      - devel
+      - pre-release
+
+concurrency:
+  group: spelling-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roxygen:
+    name: Spellcheck 🔠
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    if: >
+      !contains(github.event.commits[0].message, '[skip spellcheck]')
+
+    steps:
+      ##################### BEGIN boilerplate steps #####################
+      - name: Get branch names 🌿
+        id: branch-name
+        uses: tj-actions/branch-names@v5.4
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+
+      - name: Setup R 📊
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: ${{ runner.os }}-renv-
+
+      - name: Run Staged dependencies 🎦
+        uses: insightsengineering/staged-dependencies-action@v1
+        with:
+          run-system-dependencies: true
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          SD_ENABLE_CHECK: false
+          SD_GIT_REF: ${{ steps.branch-name.outputs.base_ref_branch }}
+      ##################### END boilerplate steps #####################
+
+      - name: Run Spellcheck 👟
+        uses: insightsengineering/r-spellcheck-action@v3
+        with:
+          exclude: data/*,**/*.Rd,**/*.Rmd,**/*.md,**/*.qmd
+          additional_options: ""

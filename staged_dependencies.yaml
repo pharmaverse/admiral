@@ -1,0 +1,8 @@
+---
+current_repo:
+  repo: pharmaverse/admiraltemplate
+  host: https://github.com
+upstream_repos:
+  - repo: pharmaverse/admiral
+    host: https://github.com
+downstream_repos:

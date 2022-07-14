@@ -1,0 +1,38 @@
+name: R Package Validation report
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  release:
+    types: [published]
+
+jobs:
+  r-pkg-validation:
+    name: Create report 📃
+    runs-on: ubuntu-latest
+    container:
+      image: rocker/verse:4.2.1
+    # Set Github token permissions
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v3
+
+      - name: Build report 🏗
+        uses: insightsengineering/thevalidatoR@v1
+        with:
+          name: validation_report.pdf
+
+      - name: Upload report to release 🔼
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ./validation_report.pdf
+          asset_name: validation-report.pdf
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: true

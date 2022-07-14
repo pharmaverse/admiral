@@ -1,0 +1,76 @@
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request_review:
+    types: [submitted]
+
+name: Check Templates
+
+concurrency:
+  group: templates-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_templates:
+    name: check_templates
+    if: >
+      github.event.review.state == 'approved'
+        && !contains(github.event.commits[0].message, '[skip check_templates]')
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      ##################### BEGIN boilerplate steps #####################
+      - name: Get branch names 🌿
+        id: branch-name
+        uses: tj-actions/branch-names@v5.4
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: ${{ runner.os }}-renv-
+
+      - name: Run Staged dependencies 🎦
+        uses: insightsengineering/staged-dependencies-action@v1
+        with:
+          run-system-dependencies: true
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          SD_ENABLE_CHECK: false
+          SD_GIT_REF: ${{ steps.branch-name.outputs.head_ref_branch }}
+      ##################### END boilerplate steps #####################
+
+      - name: Install package
+        run: renv::install(".")
+        shell: Rscript {0}
+
+      - name: Run Template Scripts
+        run: |
+          templates <- list.files(
+            system.file("templates", package = "admiral"),
+            full.names = TRUE
+          )
+          exit_codes <- purrr::map_chr(templates, function(file) {
+            cmd <- sprintf("Rscript --vanilla %s", file)
+            system(cmd)
+          })
+          if (any(exit_codes == 1L)) {
+            failed_scripts <- basename(templates)[which(exit_codes == 1L)]
+            err_msg <- sprintf(
+              "Executing the following template scripts failed:\n%s",
+              paste("-", failed_scripts, collapse = "\n")
+            )
+            stop(err_msg, call. = FALSE)
+          }
+        shell: Rscript {0}
