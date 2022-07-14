@@ -1,6 +1,6 @@
 <!-- Please do not edit the README.md file as it is auto-generated. Only edit the README.Rmd file -->
 
-# admiral package extension Template
+# admiraldev
 
 <img src="man/figures/admiraldev.png" align="right" width="200" style="margin-left:50px;"/>
 
