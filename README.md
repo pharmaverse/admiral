@@ -2,7 +2,7 @@
 
 # admiral package extension Template
 
-<img src="man/figures/logo.png" align="right" width="200" style="margin-left:50px;"/>
+<img src="man/figures/admiraldev.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
 
