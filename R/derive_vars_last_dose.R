@@ -64,9 +64,9 @@
 #' `dataset` and returned to the user.
 #'
 #' This function only works correctly for EX dataset with a structure of single dose per row.
-#' If your study EX dataset has multiple doses per row, use `expansion_function_name??` to
+#' If your study EX dataset has multiple doses per row, use [`create_single_dose_dataset()`] to
 #' transform the EX dataset into single dose per row structure before calling
-#' `derive_vars_last_dose`.
+#' `derive_vars_last_dose()`.
 #'
 #' If variables (other than those specified in `by_vars`) exist in both `dataset` and `dataset_ex`,
 #' then join cannot be performed properly and an error is issued. To resolve the error, use
