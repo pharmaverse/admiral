@@ -1,6 +1,6 @@
 <!-- Please do not edit the README.md file as it is auto-generated. Only edit the README.Rmd file -->
 
-# admiral package extension Template
+# admiraldev - ADaM in R Asset Library Development Utilities
 
 <img src="man/figures/admiraldev.png" align="right" width="200" style="margin-left:50px;"/>
 
@@ -13,8 +13,6 @@ status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.or
 [![Test
 Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/code-coverage.yml)
 <!-- badges: end -->
-
-ADaM in R Asset Library Development Utilities
 
 ## Purpose
 
