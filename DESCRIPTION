@@ -1,6 +1,6 @@
-Package: admiralext
+Package: admiraldev
 Type: Package
-Title: ADaM in R Asset Library - Extension
+Title: ADaM in R Asset Library - Dev Tools
 Version: 0.0.1
 Authors@R: c(
     person("Open", "Source", email = "admiralext@pharmaverse.com", role = c("aut", "cre")))
