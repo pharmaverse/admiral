@@ -19,14 +19,14 @@ data <- tribble(
 
 # derive_var_confirmation_flag ----
 ## Test 1: filter without first_cond ----
-## Flagging any patient PR value that is followed subsequently by a CR or PR
+## Flagging any patient PR value that is followed by a CR or PR
 test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
   actual <-
     derive_var_confirmation_flag(
       data,
       new_var = CONFFL,
       by_vars = vars(USUBJID),
-      join_vars = vars(AVISITN, AVALC),
+      join_vars = vars(AVALC),
       join_type = "after",
       order = vars(AVISITN),
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR")
@@ -58,8 +58,24 @@ test_that("derive_var_confirmation_flag Test 1: filter without first_cond", {
 })
 
 ## Test 2: filter with first_cond ----
-## Flagging any patient CR value that is followed subsequently by a CR
+## Flagging any patient CR value that is followed by a CR
 test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
+  data <- tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "CR",
+    "1",      4,        "SD",
+    "1",      5,        "NE",
+    "2",      1,        "SD",
+    "2",      2,        "PR",
+    "2",      3,        "PD",
+    "3",      1,        "CR",
+    "4",      1,        "CR",
+    "4",      2,        "SD",
+    "4",      3,        "CR",
+    "4",      4,        "CR"
+  )
   actual <-
     derive_var_confirmation_flag(
       data,
@@ -82,12 +98,11 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
     "2",      1,        "SD",   NA_character_,
     "2",      2,        "PR",   NA_character_,
     "2",      3,        "PD",   NA_character_,
-    "3",      1,        "SD",   NA_character_,
-    "4",      1,        "PR",   NA_character_,
-    "4",      2,        "PD",   NA_character_,
-    "4",      3,        "SD",   NA_character_,
-    "4",      4,        "SD",   NA_character_,
-    "4",      5,        "PR",   NA_character_
+    "3",      1,        "CR",   NA_character_,
+    "4",      1,        "CR",   "Y",
+    "4",      2,        "SD",   NA_character_,
+    "4",      3,        "CR",   "Y",
+    "4",      4,        "CR",   NA_character_
   )
 
   expect_dfs_equal(
@@ -98,7 +113,7 @@ test_that("derive_var_confirmation_flag Test 2: filter with first_cond", {
 })
 
 ## Test 3: filter with first_cond and summary function ----
-## Flagging any patient PR value that is followed subsequently by a CR or PR
+## Flagging any patient PR value that is followed by a CR or PR
 ## and at most one SD in between
 test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summary function", {
   actual <-
@@ -141,7 +156,7 @@ test_that("derive_var_confirmation_flag Test 3: filter with first_cond and summa
 
 ## Test 4: join_type = "all" ----
 ## Flagging observations with a duration longer than 30 and
-## on or before 7 days before a COVID AE (ACOVFL == "Y")
+## on or after 7 days of a COVID AE (ACOVFL == "Y")
 test_that("derive_var_confirmation_flag, Test 4: join_type = 'all'", {
   adae <- tribble(
     ~USUBJID, ~ADY, ~ACOVFL, ~ADURN,
