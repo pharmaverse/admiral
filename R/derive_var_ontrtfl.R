@@ -92,10 +92,11 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr)
 #' library(lubridate, warn.conflict = FALSE)
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -108,7 +109,7 @@
 #'   ref_end_date = TRTEDT
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
 #'   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
 #'   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -122,11 +123,11 @@
 #'   ref_end_window = 60
 #' )
 #'
-#' advs <- tibble::tribble(
-#'   ~USUBJID, ~ADTM, ~TRTSDTM, ~TRTEDTM,
-#'   "P01", ymd_hm("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
-#'   "P02", ymd("2020-01-01"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
-#'   "P03", ymd("2019-12-31"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#' advs <- tribble(
+#'   ~USUBJID, ~ADTM,                      ~TRTSDTM,                   ~TRTEDTM,
+#'   "P01",    ymd_hm("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#'   "P02",    ymd("2020-01-01"),          ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+#'   "P03",    ymd("2019-12-31"),          ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
 #' ) %>%
 #'   mutate(TPT = c(NA, "PRE", NA))
 #' derive_var_ontrtfl(
@@ -137,7 +138,7 @@
 #'   filter_pre_timepoint = TPT == "PRE"
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,           ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
@@ -153,7 +154,7 @@
 #'   span_period = "Y"
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,          ~AENDT,
 #'   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
 #'   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
