@@ -48,8 +48,6 @@ Tools for developing functions and maintaining a healthy codebase within the fam
 
 ## Installation
 
-The package is available from CRAN and can be installed by running `install.packages("admiral")`.
-
 To install the latest development version of the package directly from GitHub use the following code:
 
 ```{r, eval = FALSE}
@@ -61,3 +59,16 @@ remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a r
 remotes::install_github("pharmaverse/admiral", ref = "devel")
 remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 ```
+
+
+## Keyword/Family
+
+| Keyword                                                                           | Description                                                                                                              |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `assertion`                                                                       | Asserts a certain type and gives warning, error to user        |
+| `warning`                                                                         | Provides custom warnings to user       
+| `what`                                                                            | A function that ...      
+| `is`                                                                              | A function that ...      
+| `get`                                                                             | A function that ...      
+
+

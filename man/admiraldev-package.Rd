@@ -8,18 +8,40 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A toolbox for programming Clinical Data Standards Interchange Consortium (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a mandatory part of any New Drug or Biologics License Application submitted to the United States Food and Drug Administration (FDA). Analysis derivations are implemented in accordance with the "Analysis Data Model Implementation Guide" (CDISC Analysis Data Model Team, 2021, \url{https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package}).
+A toolbox for developers working on (pharmaverse admiral packages, \url{https://github.com/pharmaverse}).
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiraltemplate}
-  \item \url{https://github.com/pharmaverse/admiraltemplate}
+  \item \url{https://pharmaverse.github.io/admiraldev}
+  \item \url{https://github.com/pharmaverse/admiraldev}
 }
 
 }
 \author{
-\strong{Maintainer}: Open Source \email{admiraldev@pharmaverse.com}
+\strong{Maintainer}: Ben Straub \email{ben.x.straub@gsk.com}
+
+Authors:
+\itemize{
+  \item Stefan Bundfuss
+  \item Thomas Neitmann
+  \item Samia Kabi
+  \item Gordon Miller
+  \item Ross Farrugia
+  \item Annie Yang
+  \item Robin Koeger
+  \item Pooja Kumari
+}
+
+Other contributors:
+\itemize{
+  \item Alice Ehmann [contributor]
+  \item Vignesh Thanikachalam [contributor]
+  \item Ondrej Slama [contributor]
+  \item Shimeng Huang [contributor]
+  \item F. Hoffmann-La Roche AG [copyright holder, funder]
+  \item GlaxoSmithKline LLC [copyright holder, funder]
+}
 
 }
 \keyword{internal}

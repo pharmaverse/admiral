@@ -16,13 +16,10 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/m
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthy codebase
-within the family of admiral R packages.
+Tools for developing functions and maintaining a healthy codebase within
+the family of admiral R packages.
 
 ## Installation
-
-The package is available from CRAN and can be installed by running
-`install.packages("admiral")`.
 
 To install the latest development version of the package directly from
 GitHub use the following code:
@@ -34,3 +31,40 @@ GitHub use the following code:
     remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a required dependency of {admiral}
     remotes::install_github("pharmaverse/admiral", ref = "devel")
     remotes::install_github("pharmaverse/admiraldev", ref = "devel")
+
+## Keyword/Family
+
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keyword</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>assertion</code></td>
+<td>Asserts a certain type and gives warning, error to user</td>
+</tr>
+<tr class="even">
+<td><code>warning</code></td>
+<td>Provides custom warnings to user</td>
+</tr>
+<tr class="odd">
+<td><code>what</code></td>
+<td>A function that …</td>
+</tr>
+<tr class="even">
+<td><code>is</code></td>
+<td>A function that …</td>
+</tr>
+<tr class="odd">
+<td><code>get</code></td>
+<td>A function that …</td>
+</tr>
+</tbody>
+</table>
