@@ -41,9 +41,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-admiralext.Rcheck/
-admiralext*.tar.gz
-admiralext*.tgz
+admiraldev.Rcheck/
+admiraldev*.tar.gz
+admiraldev*.tgz
 
 # MacOS
 .DS_Store

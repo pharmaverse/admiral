@@ -23,8 +23,8 @@
 ^vignettes/.+png$
 ^LICENSE\.md$
 ^\.github$
-^admiralext\.Rcheck$
-^admiralext.*\.tar\.gz$
-^admiralext.*\.tgz$
+^admiraldev\.Rcheck$
+^admiraldev.*\.tar\.gz$
+^admiraldev.*\.tgz$
 ^staged_dependencies.yaml$
 ^README.Rmd$

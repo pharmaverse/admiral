@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Open Source \email{admiralext@pharmaverse.com}
+\strong{Maintainer}: Open Source \email{admiraldev@pharmaverse.com}
 
 }
 \keyword{internal}

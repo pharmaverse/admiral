@@ -3,7 +3,7 @@ Type: Package
 Title: ADaM in R Asset Library - Dev Tools
 Version: 0.0.1
 Authors@R: c(
-    person("Open", "Source", email = "admiralext@pharmaverse.com", role = c("aut", "cre")))
+    person("Open", "Source", email = "admiraldev@pharmaverse.com", role = c("aut", "cre")))
 Description: A toolbox for programming Clinical Data Standards Interchange Consortium
     (CDISC) compliant Analysis Data Model (ADaM) datasets in R. ADaM datasets are a
     mandatory part of any New Drug or Biologics License Application submitted to the

@@ -44,7 +44,7 @@ admiral_homepage <- "https://pharmaverse.github.io/admiraldev"
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthly codebase within the family of admiral R packages.  
+Tools for developing functions and maintaining a healthy codebase within the family of admiral R packages.  
 
 ## Installation
 
