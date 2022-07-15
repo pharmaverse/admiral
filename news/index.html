@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,18 @@
       <small>Source: <a href="https://github.com/pharmaverse/admiral/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="admiral-071">admiral 0.7.1<a class="anchor" aria-label="anchor" href="#admiral-071"></a></h2>
+<ul><li><p><code><a href="../reference/derive_vars_last_dose.html">derive_vars_last_dose()</a></code> no longer fails when a variable renamed in <code>new_vars</code> is supplied to the <code>dose_date</code> parameter (<a href="https://github.com/pharmaverse/admiral/issues/1206" class="external-link">#1206</a>)</p></li>
+<li><p><code><a href="../reference/derive_vars_duration.html">derive_vars_duration()</a></code> updated to not display units when there is missing duration (<a href="https://github.com/pharmaverse/admiral/issues/1207" class="external-link">#1207</a>)</p></li>
+<li>
+<p><code><a href="../reference/derive_param_first_event.html">derive_param_first_event()</a></code> was updated (<a href="https://github.com/pharmaverse/admiral/issues/1214" class="external-link">#1214</a>) such that</p>
+<ul><li>
+<code>AVAL</code> is derived instead of <code>AVALN</code> and</li>
+<li>all variables from the source dataset are kept.</li>
+</ul></li>
+<li><p><code><a href="../reference/slice_derivation.html">slice_derivation()</a></code> was updated such that it no longer fails if a slice is empty (<a href="https://github.com/pharmaverse/admiral/issues/1309" class="external-link">#1309</a>)</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="admiral-070">admiral 0.7.0<a class="anchor" aria-label="anchor" href="#admiral-070"></a></h2>
 <div class="section level3">

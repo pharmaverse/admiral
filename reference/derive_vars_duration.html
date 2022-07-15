@@ -12,7 +12,7 @@ input dataset e.g., duration of adverse events, relative day, age, ..."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -167,9 +167,15 @@ input dataset.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="op">~</span><span class="va">BRTHDT</span>, <span class="op">~</span><span class="va">RANDDT</span>,</span>
-<span class="r-in">  <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"1984-09-06"</span><span class="op">)</span>, <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-02-24"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"1984-09-06"</span><span class="op">)</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2020-02-24"</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"1985-01-01"</span><span class="op">)</span>, <span class="cn">NA</span>,</span>
+<span class="r-in">  <span class="cn">NA</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="st">"2021-03-10"</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="cn">NA</span>, <span class="cn">NA</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">derive_vars_duration</span><span class="op">(</span><span class="va">data</span>,</span>
@@ -181,10 +187,13 @@ input dataset.</p>
 <span class="r-in">  add_one <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span class="r-in">  trunc_out <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 1 x 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"># A tibble: 4 x 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   BRTHDT     RANDDT      AAGE AAGEU</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">1</span><span> 1984-09-06 2020-02-24    35 YEARS</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">2</span><span> 1985-01-01 </span><span style="color: #BB0000;">NA</span><span>            </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">3</span><span> </span><span style="color: #BB0000;">NA</span><span>         2021-03-10    </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>   </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">4</span><span> </span><span style="color: #BB0000;">NA</span><span>         </span><span style="color: #BB0000;">NA</span><span>            </span><span style="color: #BB0000;">NA</span><span> </span><span style="color: #BB0000;">NA</span><span>   </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

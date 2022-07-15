@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
   dose_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="op">)</span>,
   <span class="va">dose_date</span>,
   <span class="va">analysis_date</span>,
-  single_dose_condition <span class="op">=</span> <span class="op">(</span><span class="va">EXDOSFRQ</span> <span class="op">==</span> <span class="st">"ONCE"</span><span class="op">)</span>,
+  single_dose_condition <span class="op">=</span> <span class="va">EXDOSFRQ</span> <span class="op">==</span> <span class="st">"ONCE"</span>,
   new_vars <span class="op">=</span> <span class="cn">NULL</span>,
   traceability_vars <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -156,9 +156,9 @@ sorted by <code>dose_id</code> will be used to identify last dose.</p></li>
 <li><p>The EX source variables (as specified in <code>new_vars</code>) from last dose are appended to the
 <code>dataset</code> and returned to the user.</p></li>
 </ol><p>This function only works correctly for EX dataset with a structure of single dose per row.
-If your study EX dataset has multiple doses per row, use <code>expansion_function_name??</code> to
+If your study EX dataset has multiple doses per row, use <code><a href="create_single_dose_dataset.html">create_single_dose_dataset()</a></code> to
 transform the EX dataset into single dose per row structure before calling
-<code>derive_vars_last_dose</code>.</p>
+<code>derive_vars_last_dose()</code>.</p>
 <p>If variables (other than those specified in <code>by_vars</code>) exist in both <code>dataset</code> and <code>dataset_ex</code>,
 then join cannot be performed properly and an error is issued. To resolve the error, use
 <code>new_vars</code> to either keep variables unique to <code>dataset_ex</code>, or use this option to rename
