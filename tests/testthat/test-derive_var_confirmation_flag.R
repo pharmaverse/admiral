@@ -282,3 +282,42 @@ test_that("derive_var_confirmation_flag, Test 6: join_type = 'at_before'", {
     keys = c("USUBJID", "ASEQ")
   )
 })
+
+## Test 7: join_type = "at_after" ----
+## Flagging observations with AVALC = Y and an observation with CRIT1FL = Y at or after
+test_that("derive_var_confirmation_flag, Test 7: join_type = 'at_after'", {
+  data <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL,
+    "1",          1, "Y",    "N",
+    "1",          2, "N",    "N",
+    "1",          3, "N",    "Y",
+    "2",          1, "Y",    "Y",
+    "3",          1, "N",    "Y"
+  )
+
+  actual <- derive_var_confirmation_flag(
+    data,
+    by_vars = vars(USUBJID),
+    order = vars(ASEQ),
+    new_var = CONFFL,
+    join_vars = vars(CRIT1FL),
+    join_type = "at_after",
+    filter = AVALC == "Y" & CRIT1FL.join == "Y",
+    false_value = "N"
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~ASEQ, ~AVALC, ~CRIT1FL, ~CONFFL,
+    "1",          1, "Y",    "N",      "Y",
+    "1",          2, "N",    "N",      "N",
+    "1",          3, "N",    "Y",      "N",
+    "2",          1, "Y",    "Y",      "Y",
+    "3",          1, "N",    "Y",      "N"
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "ASEQ")
+  )
+})
