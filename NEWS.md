@@ -7,6 +7,10 @@ admiral extension packages (#1079)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
+- New function `filter_confirmation()` for filtering out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
@@ -22,6 +26,8 @@ deprecation notice (#1229)
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
 ## Breaking Changes
+
+- All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
 ## Documentation
 
