@@ -16,7 +16,7 @@ Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/m
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthly codebase
+Tools for developing functions and maintaining a healthy codebase
 within the family of admiral R packages.
 
 ## Installation
