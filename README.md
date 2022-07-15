@@ -12,7 +12,6 @@ status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.or
 [![R-CMD-check](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml)
 [![Test
 Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/code-coverage.yml)
-
 <!-- badges: end -->
 
 ## Purpose
@@ -25,12 +24,10 @@ the family of admiral R packages.
 To install the latest development version of the package directly from
 GitHub use the following code:
 
-```
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
+    if (!requireNamespace("remotes", quietly = TRUE)) {
+      install.packages("remotes")
+    }
 
-<<<<<<< HEAD
     remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a required dependency of {admiral}
     remotes::install_github("pharmaverse/admiral", ref = "devel")
     remotes::install_github("pharmaverse/admiraldev", ref = "devel")
@@ -71,9 +68,3 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 </tr>
 </tbody>
 </table>
-=======
-remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a required dependency of {admiral}
-remotes::install_github("pharmaverse/admiral", ref = "devel")
-remotes::install_github("pharmaverse/admiraldev", ref = "devel")
-```
->>>>>>> 3a42005fc5398b53d0efc0b2f4cde88cdf8d83c4
