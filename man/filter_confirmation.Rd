@@ -8,7 +8,7 @@ filter_confirmation(
   dataset,
   by_vars,
   join_vars,
-  join_type = "at_after",
+  join_type = "after",
   first_cond = NULL,
   order,
   filter,
@@ -40,7 +40,7 @@ The argument determines which of the joined observations are kept with
 respect to the original observation. For example, if \code{join_type = "at_after"} is specified all observations at and after the original
 observations are kept.
 
-\emph{Default:} \code{"at_after"}
+\emph{Default:} \code{"after"}
 
 \emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
 \code{"all"}}

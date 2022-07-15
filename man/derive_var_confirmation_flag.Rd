@@ -10,7 +10,7 @@ derive_var_confirmation_flag(
   order,
   new_var,
   join_vars,
-  join_type = "at_after",
+  join_type = "after",
   first_cond = NULL,
   filter,
   true_value = "Y",
@@ -61,7 +61,7 @@ prior to the observation to be flagged. For example, to flag AEs occurring
 on or after seven days before a COVID AE. Thus \code{join_type = "all"} could be
 used.
 
-\emph{Default:} \code{"at_after"}
+\emph{Default:} \code{"after"}
 
 \emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
 \code{"all"}}

@@ -56,7 +56,7 @@
 #'   on or after seven days before a COVID AE. Thus `join_type = "all"` could be
 #'   used.
 #'
-#'   *Default:* `"at_after"`
+#'   *Default:* `"after"`
 #'
 #'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
 #'   `"all"`
@@ -310,7 +310,7 @@ derive_var_confirmation_flag <- function(dataset,
                                          order,
                                          new_var,
                                          join_vars,
-                                         join_type = "at_after",
+                                         join_type = "after",
                                          first_cond = NULL,
                                          filter,
                                          true_value = "Y",

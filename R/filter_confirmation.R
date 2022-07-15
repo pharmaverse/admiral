@@ -44,7 +44,7 @@
 #'   "at_after"` is specified all observations at and after the original
 #'   observations are kept.
 #'
-#'   *Default:* `"at_after"`
+#'   *Default:* `"after"`
 #'
 #'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
 #'   `"all"`
@@ -284,7 +284,7 @@
 filter_confirmation <- function(dataset,
                                 by_vars,
                                 join_vars,
-                                join_type = "at_after",
+                                join_type = "after",
                                 first_cond = NULL,
                                 order,
                                 filter,
@@ -348,8 +348,7 @@ filter_confirmation <- function(dataset,
     data_joined <- filter_relative(
       data_joined,
       by_vars = vars(!!!by_vars, tmp_obs_nr_filter_confirmation),
-      condition = !!first_cond &
-        tmp_obs_nr_filter_confirmation < tmp_obs_nr_filter_confirmation.join,
+      condition = !!first_cond,
       order = vars(tmp_obs_nr_filter_confirmation.join),
       mode = "first",
       selection = "before",
