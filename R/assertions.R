@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(admiral)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -503,6 +504,7 @@ assert_vars <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
+#'
 #' example_fun <- function(by_vars) {
 #'   assert_order_vars(by_vars)
 #' }
@@ -947,14 +949,15 @@ assert_function_param <- function(arg, params) {
 #'
 #' @export
 #'
-#' @keywords assertion
-#' @family assertion
 #' @examples
-#' data(admiral_advs)
-#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
-#' \dontrun{
-#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
-#' }
+#' library(tibble)
+#' advs <- tribble(
+#'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+#'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+#'   "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+#' )
+#'
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   assert_character_scalar(param)
@@ -1015,9 +1018,15 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #' @keywords assertion
 #' @family assertion
 #' @examples
-#' data(admiral_advs)
-#' assert_param_does_not_exist(admiral_advs, param = "HR")
-#' try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
+#'
+#' library(tibble)
+#' advs <- tribble(
+#'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+#'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+#'   "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+#' )
+#' assert_param_does_not_exist(advs, param = "HR")
+#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
@@ -1209,6 +1218,8 @@ assert_varval_list <- function(arg, # nolint
 #' @export
 #'
 #' @examples
+#' library(admiral)
+#'
 #' death <- event_source(
 #'   dataset_name = "adsl",
 #'   filter = DTHFL == "Y",

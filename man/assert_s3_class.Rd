@@ -49,7 +49,6 @@ Other assertion:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }

@@ -72,3 +72,44 @@ remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 | `get`                                                                             | A function that ...      
 
 
+```{r, echo = FALSE, results = 'asis'}
+nomnoml::nomnoml(
+  "[<frame>Release Schedule|
+[Q3-2022]
+[August 29th|
+admiraldev
+admiral.test
+]
+
+[September 5th|
+admiral
+]
+
+[September 12th|
+admiralonco
+admiralroche
+admiralext
+]
+  
+[Q4-2022]
+[Logs|
+  R does not naturally create a log file
+  There are many possible ways to create a log file
+  Clinical Environment creates a unique siutation
+]
+[Q1-2023]
+[R Logs|
+Does a R Log need to be like a SAS Log?
+Could a user decide on unique customization
+A new way of thinking!!?
+]
+[Logging in R] -> [Logs]
+[Audit-Ready] -> [Ready!]
+[SAS Logs] -> [R Logs]
+]",
+width = 1000,
+height = 500
+)
+```
+
+

@@ -32,6 +32,7 @@ a set of required variables
 }
 \examples{
 library(admiral.test)
+library(admiral)
 data(admiral_dm)
 
 example_fun <- function(dataset) {
@@ -61,7 +62,6 @@ Other assertion:
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }

@@ -19,9 +19,15 @@ dataset. Otherwise, the dataset is returned invisibly.
 Checks if a parameter (\code{PARAMCD}) does not exist in a dataset.
 }
 \examples{
-data(admiral_advs)
-assert_param_does_not_exist(admiral_advs, param = "HR")
-try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
+
+library(tibble)
+advs <- tribble(
+  ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+  "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+  "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+)
+assert_param_does_not_exist(advs, param = "HR")
+try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 }
 \seealso{
 Other assertion: 
@@ -40,7 +46,6 @@ Other assertion:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }

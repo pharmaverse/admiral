@@ -40,6 +40,8 @@ condition. If not, an error is issued and all elements of the list not
 fulfilling the condition are listed.
 }
 \examples{
+library(admiral)
+
 death <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
@@ -97,7 +99,6 @@ Other assertion:
 \code{\link{assert_param_does_not_exist}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_symbol}()},
-\code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }

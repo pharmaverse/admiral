@@ -68,3 +68,9 @@ GitHub use the following code:
 </tr>
 </tbody>
 </table>
+
+QStandardPaths: XDG\_RUNTIME\_DIR not set, defaulting to
+‘/tmp/runtime-r590548’ TypeError: Attempting to change the setter of an
+unconfigurable property. TypeError: Attempting to change the setter of
+an unconfigurable property.
+![](README_files/figure-markdown_strict/unnamed-chunk-2-1.png)
