@@ -87,13 +87,13 @@ Phases.
 | Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
 |                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
 |                            |   `admiral.test`             |                             | `admiralroche`               |
-| Q3-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
 |                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
 |                            |   `admiral.test`             |                             | `admiralroche`               |
-| Q3-2022                    |    February 27th             |   March 6th                 |  March 13th                  |  
+| Q1-2023                    |    February 27th             |   March 6th                 |  March 13th                  |  
 |                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
 |                            |   `admiral.test`             |                             | `admiralroche`               |
-| Q3-2022                    |    May 29th                  |  June 5th                   |  June 12th                   |  
+| Q2-2023                    |    May 29th                  |  June 5th                   |  June 12th                   |  
 |                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
 |                            |   `admiral.test`             |                             | `admiralroche`               |
 
