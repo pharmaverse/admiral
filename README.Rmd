@@ -103,12 +103,7 @@ Does a R Log need to be like a SAS Log?
 Could a user decide on unique customization
 A new way of thinking!!?
 ]
-[Logging in R] -> [Logs]
-[Audit-Ready] -> [Ready!]
-[SAS Logs] -> [R Logs]
-]",
-width = 1000,
-height = 500
+]"
 )
 ```
 
