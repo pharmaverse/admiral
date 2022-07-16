@@ -924,15 +924,25 @@ derive_var_merged_character <- function(dataset,
 derive_vars_merged_lookup <- function(dataset,
                                       dataset_add,
                                       by_vars,
+                                      order = NULL,
                                       new_vars = NULL,
+                                      mode = NULL,
+                                      filter_add = NULL,
+                                      check_type = "warning",
+                                      duplicate_msg = NULL,
                                       print_not_mapped = TRUE) {
   assert_logical_scalar(print_not_mapped)
   res <- derive_vars_merged(
     dataset,
     dataset_add,
     by_vars = by_vars,
+    order = order,
     new_vars = new_vars,
-    match_flag = temp_match_flag
+    mode = mode,
+    filter_add = !!filter_add,
+    match_flag = temp_match_flag,
+    check_type = check_type,
+    duplicate_msg = duplicate_msg
   )
 
   if (print_not_mapped) {

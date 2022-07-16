@@ -8,7 +8,12 @@ derive_vars_merged_lookup(
   dataset,
   dataset_add,
   by_vars,
+  order = NULL,
   new_vars = NULL,
+  mode = NULL,
+  filter_add = NULL,
+  check_type = "warning",
+  duplicate_msg = NULL,
   print_not_mapped = TRUE
 )
 }
@@ -29,6 +34,17 @@ key of the selected observations.
 
 \emph{Permitted Values}: list of variables created by \code{vars()}}
 
+\item{order}{Sort order
+
+If the parameter is set to a non-null value, for each by group the first or
+last observation from the additional dataset is selected with respect to the
+specified order.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+
 \item{new_vars}{Variables to add
 
 The specified variables from the additional dataset are added to the output
@@ -47,6 +63,47 @@ additional dataset (\code{dataset_add}) are added.
 \emph{Default}: \code{NULL}
 
 \emph{Permitted Values}: list of variables created by \code{vars()}}
+
+\item{mode}{Selection mode
+
+Determines if the first or last observation is selected. If the \code{order}
+parameter is specified, \code{mode} must be non-null.
+
+If the \code{order} parameter is not specified, the \code{mode} parameter is ignored.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
+
+\item{filter_add}{Filter for additional dataset (\code{dataset_add})
+
+Only observations fulfilling the specified condition are taken into account
+for merging. If the parameter is not specified, all observations are
+considered.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: a condition}
+
+\item{check_type}{Check uniqueness?
+
+If \code{"warning"} or \code{"error"} is specified, the specified message is issued
+if the observations of the (restricted) additional dataset are not unique
+with respect to the by variables and the order.
+
+\emph{Default}: \code{"warning"}
+
+\emph{Permitted Values}: \code{"none"}, \code{"warning"}, \code{"error"}}
+
+\item{duplicate_msg}{Message of unique check
+
+If the uniqueness check fails, the specified message is displayed.
+
+\emph{Default}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+      enumerate(vars2chr(by_vars)))
+}\if{html}{\out{</div>}}}
 
 \item{print_not_mapped}{Print a list of unique \code{by_vars} values that do not
 have corresponding records from the lookup table?
