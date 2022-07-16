@@ -72,39 +72,33 @@ remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 | `get`                                                                             | A function that ...      
 
 
-```{r, echo = FALSE, results = 'asis'}
-nomnoml::nomnoml(
-  "[<frame>Release Schedule|
-[Q3-2022]
-[August 29th|
-admiraldev
-admiral.test
-]
+## Release Schedule
 
-[September 5th|
-admiral
-]
+Releases are done at the end of every of quarter on the last Monday.  Pull Requests will be frozen the week before a release. 
+The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+Phases.  
 
-[September 12th|
-admiralonco
-admiralroche
-admiralext
-]
-  
-[Q4-2022]
-[Logs|
-  R does not naturally create a log file
-  There are many possible ways to create a log file
-  Clinical Environment creates a unique siutation
-]
-[Q1-2023]
-[R Logs|
-Does a R Log need to be like a SAS Log?
-Could a user decide on unique customization
-A new way of thinking!!?
-]
-]"
-)
-```
+* Phase 1 is for `admiraldev` and `admiral.test`, which feed into all `admiral` packages
+* Phase 2 is only for core `admiral`
+* Phase 3 is extension packages, e.g. `admiralonco`
+
+| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
+|----------------------------|------------------------------|---------------------------- |------------------------------|
+| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q3-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q3-2022                    |    February 27th             |   March 6th                 |  March 13th                  |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q3-2022                    |    May 29th                  |  June 5th                   |  June 12th                   |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+
+
+
+
 
 

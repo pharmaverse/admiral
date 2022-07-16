@@ -69,8 +69,105 @@ GitHub use the following code:
 </tbody>
 </table>
 
-QStandardPaths: XDG\_RUNTIME\_DIR not set, defaulting to
-‘/tmp/runtime-r590548’ TypeError: Attempting to change the setter of an
-unconfigurable property. TypeError: Attempting to change the setter of
-an unconfigurable property.
-![](README_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+## Release Schedule
+
+Releases are done at the end of every of quarter on the last Monday.
+Pull Requests will be frozen the week before a release. The `admiral`
+family has several downstream and upstream dependencies and so this
+release shall be done in three Phases.
+
+-   Phase 1 is for `admiraldev` and `admiral.test`, which feed into all
+    `admiral` packages
+-   Phase 2 is only for core `admiral`
+-   Phase 3 is extension packages, e.g. `admiralonco`
+
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 25%" />
+<col style="width: 24%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Release Schedule</th>
+<th>Phase 1- Date and Packages</th>
+<th>Phase 2- Date and Packages</th>
+<th>Phase 3- Date and Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q3-2022</td>
+<td>August 29th</td>
+<td>September 5th</td>
+<td>September 12th</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>admiraldev</code></td>
+<td><code>admiral</code></td>
+<td><code>admiralonco</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><code>admiral.test</code></td>
+<td></td>
+<td><code>admiralroche</code></td>
+</tr>
+<tr class="even">
+<td>Q3-2022</td>
+<td>November 28th</td>
+<td>December 5th</td>
+<td>December 12th</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><code>admiraldev</code></td>
+<td><code>admiral</code></td>
+<td><code>admiralonco</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>admiral.test</code></td>
+<td></td>
+<td><code>admiralroche</code></td>
+</tr>
+<tr class="odd">
+<td>Q3-2022</td>
+<td>February 27th</td>
+<td>March 6th</td>
+<td>March 13th</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>admiraldev</code></td>
+<td><code>admiral</code></td>
+<td><code>admiralonco</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><code>admiral.test</code></td>
+<td></td>
+<td><code>admiralroche</code></td>
+</tr>
+<tr class="even">
+<td>Q3-2022</td>
+<td>May 29th</td>
+<td>June 5th</td>
+<td>June 12th</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><code>admiraldev</code></td>
+<td><code>admiral</code></td>
+<td><code>admiralonco</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>admiral.test</code></td>
+<td></td>
+<td><code>admiralroche</code></td>
+</tr>
+</tbody>
+</table>
