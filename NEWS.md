@@ -1,3 +1,38 @@
+# admiral 0.8.0
+
+## New Features
+
+- All admiral utility functions are exported now such that they can be used in
+admiral extension packages (#1079)
+
+- New function `filter_confirmation()` for filtering out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
+## Updates of Existing Functions
+
+- `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
+
+- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
+
+- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
+
+- Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
+deprecation notice (#1229)
+
+- `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
+
+## Breaking Changes
+
+- All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
+
+## Documentation
+
+- Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
+
+## Various
+
 # admiral 0.7.1
 
 - `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied

@@ -54,17 +54,29 @@ library(lubridate)
 To start, all datasets needed for the creation of the time-to-event dataset
 should be read into the environment. This will be a company specific process.
 
-For example purpose, the ADaM datasets---which are included
-in `{admiral}`---are used.
+For example purpose, the ADSL dataset---which is included
+in `{admiral}`---and the SDTM datasets from `{admiral.test}` are used.
 
 ```{r}
-data("admiral_adsl")
 data("admiral_ae")
-data("admiral_adae")
+data("admiral_adsl")
 
-adsl <- admiral_adsl
-adae <- admiral_adae
 ae <- admiral_ae
+adsl <- admiral_adsl
+```
+
+```{r echo=FALSE}
+ae <- filter(ae, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+```
+
+The following code creates a minimally viable ADAE dataset to be used throughout the following examples.
+
+```{r}
+adae <- ae %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>%
+  derive_vars_dt(new_vars_prefix = "AEN", dtc = AEENDTC, date_imputation = "last") %>%
+  mutate(TRTEMFL = if_else(ASTDT >= TRTSDT & AENDT <= TRTEDT + days(30), "Y", NA_character_))
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -169,7 +181,7 @@ dataset_vignette(
 )
 ```
 
-Note that in practice for efficacy parameters you might use randomization date as the time to event origin date, but this variable is not in the CDISC Pilot `ADSL` dataset so we used `TRTSDT` for these examples.
+Note that in practice for efficacy parameters you might use randomization date as the time to event origin date.
 
 ### Add Additional Information for Events and Censoring (`EVNTDESC`, `SRCVAR`, ...)
 
@@ -382,10 +394,10 @@ adtte <- derive_param_tte(
 dataset_vignette(
   adtte %>%
     select(
-      STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, STARTDTF, ADT, ADTF, CNSR,
+      STUDYID, USUBJID, PARAMCD, PARAM, STARTDT, ADT, ADTF, CNSR,
       EVNTDESC, SRCDOM, SRCVAR
     ),
-  display_vars = vars(USUBJID, PARAMCD, STARTDT, STARTDTF, ADT, ADTF, CNSR)
+  display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, ADTF, CNSR)
 )
 ```
 

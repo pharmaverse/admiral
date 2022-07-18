@@ -18,7 +18,7 @@
 #'   Otherwise, a character value is expected, either as a
 #'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
 #'   of June,
-#'   - or as a keyword: `"FIRST"`, `"MID"`, `"LAST"` to impute to the first/mid/last
+#'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
 #'   Default is `NULL`.
@@ -29,7 +29,7 @@
 #'   A character value is expected, either as a
 #'   - format with hour, min and sec specified as `"hh:mm:ss"`: e.g. `"00:00:00"`
 #'   for the start of the day,
-#'   - or as a keyword: `"FIRST"`,`"LAST"` to impute to the start/end of a day.
+#'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
 #'   Default is `"00:00:00"`.
 #'
@@ -127,22 +127,22 @@
 #' # same as above
 #' impute_dtc(
 #'   dtc = dates,
-#'   date_imputation = "FIRST"
+#'   date_imputation = "first"
 #' )
 #'
 #' # Impute to last day/month if date is partial
 #' # Missing time part imputed with 23:59:59 portion
 #' impute_dtc(
 #'   dtc = dates,
-#'   date_imputation = "LAST",
-#'   time_imputation = "LAST"
+#'   date_imputation = "last",
+#'   time_imputation = "last"
 #' )
 #'
 #' # Impute to mid day/month if date is partial
 #' # Missing time part imputed with 00:00:00 portion by default
 #' impute_dtc(
 #'   dtc = dates,
-#'   date_imputation = "MID"
+#'   date_imputation = "mid"
 #' )
 #'
 #' # Impute a date and ensure that the imputed date is not before a list of
@@ -174,10 +174,10 @@ impute_dtc <- function(dtc,
 
     # Specific setup for FIRST/MID/LAST
     # make keywords case-insensitive
-    date_imputation <- str_to_upper(date_imputation)
-    if (date_imputation %in% c("FIRST", "MID", "LAST")) {
-      d <- list(FIRST = "01", MID = "15", LAST = "01")[[date_imputation]]
-      mo <- list(FIRST = "01", MID = "06", LAST = "12")[[date_imputation]]
+    date_imputation <- str_to_lower(date_imputation)
+    if (date_imputation %in% c("first", "mid", "last")) {
+      d <- list(first = "01", mid = "15", last = "01")[[date_imputation]]
+      mo <- list(first = "01", mid = "06", last = "12")[[date_imputation]]
     } else {
       # otherwise, use time_imputation input
       day__ <- as.integer(sub(".*-", "", date_imputation))
@@ -201,19 +201,19 @@ impute_dtc <- function(dtc,
     # 3 blocks of  if/else statements that deal with date imputation and
     # preserving partial dates.
     # Ex: 2019---07 with MID and preserve = TRUE gives 2019-06-07
-    if (date_imputation == "MID" & preserve) {
+    if (date_imputation == "mid" & preserve) {
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", substr(dtc, 8, 9)),
         n_chr == 4 ~ paste0(dtc, "-", "06", "-", "30"),
         TRUE ~ imputed_date
       )
-    } else if (date_imputation == "MID" & !preserve) {
+    } else if (date_imputation == "mid" & !preserve) {
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "06", "-", "30"),
         n_chr == 4 ~ paste0(dtc, "-", "06", "-", "30"),
         TRUE ~ imputed_date
       )
-    } else if (date_imputation != "MID" & preserve) {
+    } else if (date_imputation != "mid" & preserve) {
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", mo, "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
@@ -221,9 +221,9 @@ impute_dtc <- function(dtc,
     }
 
     # Ex: 2019---07 with LAST and preserve = TRUE gives 2019-12-07
-    if (date_imputation == "LAST" & !preserve) {
+    if (date_imputation == "last" & !preserve) {
       imputed_date <- case_when(
-        n_chr < 10 & date_imputation == "LAST" & !preserve ~
+        n_chr < 10 & date_imputation == "last" & !preserve ~
         as.character(
           ceiling_date(
             as.Date(imputed_date, format = "%Y-%m-%d"), "month"
@@ -231,7 +231,7 @@ impute_dtc <- function(dtc,
         ),
         TRUE ~ imputed_date
       )
-    } else if (date_imputation == "LAST" & preserve) {
+    } else if (date_imputation == "last" & preserve) {
       imputed_date <- case_when(
         n_chr == 9 ~ paste0(substr(dtc, 1, 4), "-", "12", "-", substr(dtc, 8, 9)),
         n_chr %in% c(4, 7) ~
@@ -245,9 +245,9 @@ impute_dtc <- function(dtc,
     }
 
     # Ex: 2019---07 with FIRST and preserve = TRUE gives 2019-01-07
-    if (date_imputation == "FIRST" & preserve) {
+    if (date_imputation == "first" & preserve) {
       imputed_date <- case_when(
-        n_chr == 9 & date_imputation == "FIRST" & preserve ~
+        n_chr == 9 & date_imputation == "first" & preserve ~
         paste0(substr(dtc, 1, 4), "-", "01", "-", substr(dtc, 8, 9)),
         TRUE ~ imputed_date
       )
@@ -261,13 +261,13 @@ impute_dtc <- function(dtc,
     # impute time
     assert_that(is_valid_time_entry(time_imputation))
     # make keywords case-insensitive
-    time_imputation <- str_to_upper(time_imputation)
-    if (time_imputation == "FIRST") {
+    time_imputation <- str_to_lower(time_imputation)
+    if (time_imputation == "first") {
       imputed_time <- "00:00:00"
       sec <- ":00"
       min <- ":00"
       h <- "00"
-    } else if (time_imputation == "LAST") {
+    } else if (time_imputation == "last") {
       imputed_time <- "23:59:59"
       sec <- ":59"
       min <- ":59"
@@ -663,7 +663,7 @@ compute_tmf <- function(dtc,
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
-#'   date_imputation = "FIRST"
+#'   date_imputation = "first"
 #' )
 #'
 #' # Impute partial dates to 6th of April
@@ -680,7 +680,7 @@ compute_tmf <- function(dtc,
 #'   mhdt,
 #'   new_vars_prefix = "AEN",
 #'   dtc = MHSTDTC,
-#'   date_imputation = "LAST"
+#'   date_imputation = "last"
 #' )
 #'
 #' # Create BIRTHDT
@@ -842,8 +842,8 @@ derive_vars_dt <- function(dataset,
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
-#'   date_imputation = "FIRST",
-#'   time_imputation = "FIRST"
+#'   date_imputation = "first",
+#'   time_imputation = "first"
 #' )
 #'
 #' # Impute AE end date to the last date and ensure that the imputed date is not
@@ -880,8 +880,8 @@ derive_vars_dt <- function(dataset,
 #'   mhdt,
 #'   new_vars_prefix = "AST",
 #'   dtc = MHSTDTC,
-#'   date_imputation = "FIRST",
-#'   time_imputation = "FIRST",
+#'   date_imputation = "first",
+#'   time_imputation = "first",
 #'   ignore_seconds_flag = TRUE
 #' )
 #'
