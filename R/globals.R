@@ -109,7 +109,5 @@ globalVariables(c(
   "dose_periods",
   "grpseq",
   "time_differential",
-  "temp_flag",
-  "tmp_obs_nr_filter_confirmation",
-  "tmp_obs_nr_filter_confirmation.join"
+  "temp_flag"
 ))

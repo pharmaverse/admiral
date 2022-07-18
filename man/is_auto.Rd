@@ -20,7 +20,7 @@ Checks if the argument equals the auto keyword
 
 example_fun <- function(arg) {
   arg <- rlang::enquo(arg)
-  if (is_auto(arg)) {
+  if (admiral:::is_auto(arg)) {
     "auto keyword was specified"
   } else {
     arg

@@ -18,8 +18,8 @@ Wrap a string in double quotes, e.g., for displaying character values in
 messages.
 }
 \examples{
-dquote("foo")
-dquote(NULL)
+admiral:::dquote("foo")
+admiral:::dquote(NULL)
 }
 \author{
 Stefan Bundfuss

@@ -14,12 +14,12 @@ Extract Argument Name from an Expression
 }
 \examples{
 test_fun <- function(something) {
-  arg_name(substitute(something))
+  admiral:::arg_name(substitute(something))
 }
 
 inner_function <- function(x) x
 test_fun2 <- function(something) {
-  arg_name(substitute(inner_function(something)))
+  admiral:::arg_name(substitute(inner_function(something)))
 }
 }
 \author{

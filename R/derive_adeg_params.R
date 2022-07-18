@@ -45,7 +45,7 @@
 #'
 #'   Permitted Values: A variable of the input dataset or a function call
 #'
-#' @inheritParams derive_param_computed
+#' @inheritParams derive_derived_param
 #'
 #' @seealso [compute_qtc()]
 #'
@@ -141,7 +141,7 @@ derive_param_qtc <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_param_computed(
+  derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
@@ -256,7 +256,7 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_param_computed
+#' @inheritParams derive_derived_param
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -317,7 +317,7 @@ derive_param_rr <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_param_computed(
+  derive_derived_param(
     dataset,
     filter = !!filter,
     parameters = c(hr_code),

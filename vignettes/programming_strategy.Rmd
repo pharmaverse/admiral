@@ -56,7 +56,7 @@ case-sensitive. Thus they must be in lower case.
 | `warning`                                                                           | Returns a warning message based on invalid data input or if existing variables are overwritten.                          |
 | `predicate`                                                                         | Returns `TRUE` if the argument is a valid input, `FALSE` otherwise.                                                      |
 | Across ADaM dataset structures keywords: `adam`                                     | A function that is applicable across ADaM datasets.                                                                      |
-| ADaM dataset structure specific keywords: `adsl`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
+| ADaM dataset structure specific keywords: `adls`, `occds`, `bds`, `other`           | A function specific to one of the ADaM dataset structures according to CDISC. Use the dataset structure as the keyword.  |
 | ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
 | `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
 | `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |

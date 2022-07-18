@@ -33,7 +33,6 @@ otherwise specified.*
   * [Disposition Dates (e.g. `EOSDT`)](#disposition_date)
   * [Disposition Status (e.g. `EOSTT`)](#disposition_status)
   * [Disposition Reason(s) (e.g. `DCSREAS`, `DCSREASP`)](#disposition_reason)
-  * [Randomization Date (`RANDDT`)](#randomization_date)
 * [Derive Death Variables](#death)
   * [Death Date (`DTHDT`)](#death_date)
   * [Cause of Death (`DTHCAUS`)](#death_cause)
@@ -52,8 +51,7 @@ To start, all data frames needed for the creation of `ADSL` should be read into
 the environment. This will be a company specific process. Some of the 
 data frames needed may be `DM`, `EX`, `DS`, `AE`, and `LB`.
 
-For example purpose, the CDISC Pilot SDTM datasets---which are included in 
-`{admiral.test}`---are used.
+For example purpose, the CDISC Pilot SDTM datasets---which are included in `{admiral.test}`---are used.
 
 ```{r, message=FALSE, warning=FALSE}
 library(admiral)
@@ -315,7 +313,7 @@ and  `DSTERM` to a suitable `DCSREAS`/`DCSREASP` value.
 Example function `format_dcsreas()`:
 
 ```{r eval=TRUE}
-format_dcsreas <- function(dsdecod, dsterm = NULL) {
+format_dctreas <- function(dsdecod, dsterm = NULL) {
   if (is.null(dsterm)) {
     if_else(dsdecod %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(dsdecod), dsdecod, NA_character_)
   } else {
@@ -338,32 +336,6 @@ adsl <- adsl %>%
     filter_ds = DSCAT == "DISPOSITION EVENT"
   )
 ```
-
-
-### Randomization Date (`RANDDT`) {#randomization_date}
-
-The function `derive_vars_merged_dt()` can be used to derive randomization date 
-variable. To map Randomization Date (`RANDDT`), the call would be:
-
-```{r eval=TRUE}
-adsl <- adsl %>%
-  derive_vars_merged_dt(
-    dataset_add = ds,
-    filter_add = DSDECOD == "RANDOMIZED",
-    by_vars = vars(STUDYID, USUBJID),
-    new_vars_prefix = "RAND",
-    dtc = DSSTDTC
-  )
-```
-
-
-This call would return the input dataset with the column `RANDDT` is added.
-
-```{r, eval=TRUE, echo=FALSE}
-dataset_vignette(adsl, display_vars = vars(USUBJID, RANDDT))
-```
-
-[Link](#link_ds) to `DS`.
 
 ## Derive Death Variables {#death}
 
@@ -399,7 +371,7 @@ adsl <- adsl %>%
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    date_imputation = "first"
+    date_imputation = "FIRST"
   )
 ```
 
@@ -574,7 +546,7 @@ An example could be :
 ae_src1 <- date_source(
   dataset_name = "ae",
   date = AESTDTC,
-  date_imputation = "first"
+  date_imputation = "FIRST"
 )
 ae_src2 <- date_source(
   dataset_name = "ae",
@@ -783,3 +755,4 @@ have them associated with an End to End pipeline under the umbrella of the
 ADaM | Sample Code
 ---- | --------------
 ADSL | [ad_adsl.R](https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R){target="_blank"} 
+

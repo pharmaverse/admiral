@@ -62,7 +62,7 @@ format_eoxxstt_default <- function(status) {
 #' @param format_new_var The format used to derive the status.
 #'
 #' Default: `format_eoxxstt_default()` defined as:
-#' ``` {r echo=TRUE, eval=FALSE}
+#' ```
 #' format_eoxxstt_default <- function(status) {
 #'   case_when(
 #'     status == "COMPLETED" ~ "COMPLETED",

@@ -39,8 +39,7 @@ vignettes/*.pdf
 .Renviron
 
 # website documents
-/docs/*
-!/docs/pkgdown.yml
+docs
 doc
 Meta
 admiral.Rcheck/

@@ -16,7 +16,7 @@ A list of quosures
 Get Source Variables from a List of Quosures
 }
 \examples{
-get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 }
 \author{
 Stefan Bundfuss

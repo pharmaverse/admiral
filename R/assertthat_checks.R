@@ -73,7 +73,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
-#' or as a keyword: "first", "mid", "last"
+#' or as a keyword: "FIRST", "MID", "LAST"
 #'
 #' @param arg The argument to check
 #'
@@ -87,10 +87,10 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
-#' assertthat::assert_that(admiral:::is_valid_date_entry("first"))
+#' assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
-  grepl(pattern, arg) | str_to_lower(arg) %in% c("first", "mid", "last")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
   paste0(
@@ -100,14 +100,14 @@ on_failure(is_valid_date_entry) <- function(call, env) {
     eval(call$arg, envir = env),
     " is not a valid date entry.\n",
     "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
-    "'first', 'mid', 'last' to get the first/mid/last day/month"
+    "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
   )
 }
 
 #' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-#' or as a keyword: "first", "last"
+#' or as a keyword: "FIRST", "LAST"
 #'
 #' @param arg The argument to check
 #'
@@ -121,10 +121,10 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(admiral:::is_valid_time_entry("first"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | str_to_lower(arg) %in% c("first", "last")
+  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
 }
 on_failure(is_valid_time_entry) <- function(call, env) {
   paste0(
@@ -134,7 +134,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
     eval(call$arg, envir = env),
     " is not a valid time entry.\n",
     "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or ",
-    "'first', 'last' to get the first/last time of the day"
+    "'FIRST', 'LAST' to get the first/last time of the day"
   )
 }
 

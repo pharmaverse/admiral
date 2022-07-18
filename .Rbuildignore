@@ -25,4 +25,3 @@
 ^admiral\.Rcheck$
 ^admiral.*\.tar\.gz$
 ^admiral.*\.tgz$
-^\.lycheeignore$

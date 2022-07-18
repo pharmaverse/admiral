@@ -30,9 +30,9 @@ Get Constant Variables
 library(admiral.test)
 data(admiral_vs)
 
-get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
+admiral:::get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
 
-get_constant_vars(
+admiral:::get_constant_vars(
   admiral_vs,
   by_vars = vars(USUBJID, VSTESTCD),
   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))

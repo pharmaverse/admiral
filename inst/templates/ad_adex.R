@@ -20,11 +20,6 @@ data("admiral_ex")
 adsl <- admiral_adsl
 ex <- admiral_ex
 
-# When SAS datasets are imported into R using haven::read_sas(), missing
-# character values from SAS appear as "" characters in R, instead of appearing
-# as NA values. Further details can be obtained via the following link:
-# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
-
 ex <- convert_blanks_to_na(ex)
 
 # The CDISC pilot data does not contain EXADJ,nor a SUPPEX dataset
@@ -102,7 +97,7 @@ adex <- bind_rows(
 
 # Part 3
 # Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
-# `derive_param_doseint()` and `derive_param_computed()`, only the variables specified
+# `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
 # in `by_vars` will be populated in the newly created records.
 
 adex <- adex %>%
@@ -194,7 +189,7 @@ adex <- adex %>%
   ) %>%
   # Overall/W2-24 Average daily dose
   call_derivation(
-    derivation = derive_param_computed,
+    derivation = derive_derived_param,
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),

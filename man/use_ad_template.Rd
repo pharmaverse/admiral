@@ -7,7 +7,6 @@
 use_ad_template(
   adam_name = "adsl",
   save_path = paste0("./", adam_name, ".R"),
-  package = "admiral",
   overwrite = FALSE,
   open = interactive()
 )
@@ -16,8 +15,6 @@ use_ad_template(
 \item{adam_name}{An ADaM dataset name. You can use any of the available dataset name ADAE, ADCM, ADEG, ADEX, ADLB, ADPP, ADSL, ADVS, and the dataset name is case-insensitive. The default dataset name is ADSL.}
 
 \item{save_path}{Path to save the script.}
-
-\item{package}{The R package in which to look for templates. By default \code{"admiral"}.}
 
 \item{overwrite}{Whether to overwrite an existing file named \code{save_path}.}
 

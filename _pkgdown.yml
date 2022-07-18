@@ -1,20 +1,9 @@
-url: https://pharmaverse.github.io/admiral
+url: https://pharmaverse.github.io/admiral/
 
 template:
   bootstrap: 5
   params:
     bootswatch: flatly
-  includes:
-    in_header: |
-       <!-- Global site tag (gtag.js) - Google Analytics -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-574L344W3R"#' ></script>
-       <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
-
-         gtag('config', '{YOUR TRACKING ID}');
-       </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -131,7 +120,6 @@ reference:
 - contents:
   - ex_single
   - get_terms_from_db
-  - print.adam_templates
   - print.derivation_slice
   - print.tte_source
   - queries

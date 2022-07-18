@@ -27,7 +27,7 @@ test_that("new observations are derived correctly", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_computed(
+    derive_derived_param(
       input,
       parameters = c("SYSBP", "DIABP"),
       by_vars = vars(USUBJID, VISIT),
@@ -72,7 +72,7 @@ test_that("new observations are derived correctly with constant parameters", {
   expected_output <- bind_rows(input, new_obs)
 
   expect_dfs_equal(
-    derive_param_computed(
+    derive_derived_param(
       input,
       parameters = c("WEIGHT"),
       by_vars = vars(USUBJID, VISIT),
@@ -104,7 +104,7 @@ test_that("no new observations are added if filtered dataset is empty", {
   )
 
   expect_warning(
-    derive_param_computed(
+    derive_derived_param(
       input,
       filter = VISIT == "WEEK 24",
       parameters = c("SYSBP", "DIABP"),
@@ -137,7 +137,7 @@ test_that("no new observations are added if a parameter is missing", {
   )
 
   expect_warning(
-    derive_param_computed(
+    derive_derived_param(
       input,
       filter = PARAMCD == "DIABP",
       parameters = c("SYSBP", "DIABP"),

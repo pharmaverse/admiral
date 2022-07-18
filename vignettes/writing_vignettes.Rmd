@@ -139,7 +139,7 @@ vs1 <- admiral_vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
-    date_imputation = "first"
+    date_imputation = "FIRST"
   )
 ```
 
@@ -152,7 +152,7 @@ vs1 <- admiral_vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
-    date_imputation = "first"
+    date_imputation = "FIRST"
   )
 
 dataset_vignette(

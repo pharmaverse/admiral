@@ -45,7 +45,7 @@ Otherwise, a character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
-\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
+\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
 day/month.
 }
 
@@ -58,7 +58,7 @@ A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
-\item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
+\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
 }
 
 Default is \code{"00:00:00"}.}
@@ -156,8 +156,8 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "first",
-  time_imputation = "first"
+  date_imputation = "FIRST",
+  time_imputation = "FIRST"
 )
 
 # Impute AE end date to the last date and ensure that the imputed date is not
@@ -194,8 +194,8 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "first",
-  time_imputation = "first",
+  date_imputation = "FIRST",
+  time_imputation = "FIRST",
   ignore_seconds_flag = TRUE
 )
 

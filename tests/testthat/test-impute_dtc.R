@@ -62,7 +62,7 @@ test_that("impute to first day/month if date is partial,Missing time part impute
   expect_equal(
     impute_dtc(
       dtc = input,
-      date_imputation = "first"
+      date_imputation = "FIRST"
     ),
     expected_output
   )
