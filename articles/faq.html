@@ -23,7 +23,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-574L344W3R"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{YOUR TRACKING ID}');
+</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admiral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,13 +117,13 @@
 <strong>What is admiral</strong>?<a class="anchor" aria-label="anchor" href="#what-is-admiral"></a>
 </h5>
 <ul>
-<li>Think of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> as a toolbox of modular blocks (R functions) to create analysis derivations:
+<li>Think of <a href="https://pharmaverse.github.io/admiral">admiral</a> as a toolbox of modular blocks (R functions) to create analysis derivations:
 <ul>
 <li>each block has a stand alone purpose (each function provides a specific functionality)</li>
 <li>Data Scientists can create their own blocks (create own R functions)</li>
 </ul>
 </li>
-<li>Constructing ADaM dataset should become like building out of blocks that are based on <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> modular functions and user created modular functions.</li>
+<li>Constructing ADaM dataset should become like building out of blocks that are based on <a href="https://pharmaverse.github.io/admiral">admiral</a> modular functions and user created modular functions.</li>
 </ul>
 </div>
 <div class="section level5">
@@ -153,9 +159,9 @@
 <h5 id="why-do-we-use-a-certain-r-version-and-package-versions-for-development">Why do we use a <strong>certain R version and package versions</strong> for development?<a class="anchor" aria-label="anchor" href="#why-do-we-use-a-certain-r-version-and-package-versions-for-development"></a>
 </h5>
 <ul>
-<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>. This need for a common development environment also carries over for our choice of package versions.<br>
+<li>The choice of R Version is not set in stone. However, a common development environment is important to establish when working across multiple companies and multiple developers. We currently work in R Version 3.6.3, but that will change as we move forward with <a href="https://pharmaverse.github.io/admiral">admiral</a>. This need for a common development environment also carries over for our choice of package versions.<br>
 </li>
-<li>GitHub allows us through the Actions/Workflows to test <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> under several versions of R as well as several versions of dependent R packages needed for <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a>. Currently we test <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> against R Version 3.6.3 with a CRAN package snapshot from 2020-02-29, R Version 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>.</li>
+<li>GitHub allows us through the Actions/Workflows to test <a href="https://pharmaverse.github.io/admiral">admiral</a> under several versions of R as well as several versions of dependent R packages needed for <a href="https://pharmaverse.github.io/admiral">admiral</a>. Currently we test <a href="https://pharmaverse.github.io/admiral">admiral</a> against R Version 3.6.3 with a CRAN package snapshot from 2020-02-29, R Version 4.0 with a CRAN package snapshot from 2021-03-31 and the latest R version with the latest snapshots of packages. You can view this workflow on our <a href="https://github.com/pharmaverse/admiral/blob/main/.github/workflows/R-CMD-check.yml" class="external-link">GitHub Repository</a>.</li>
 <li>This common development allows us to easily re-create bugs and provide solutions to each other issues that developers will encounter.</li>
 <li>Reviewers of Pull Requests when running code will know that their environment is identical to the initiator of the Pull Request. This ensures faster review times and higher quality Pull Request reviews.</li>
 <li>We achieve this common development environment by using a <strong>lockfile</strong> created from the <a href="https://rstudio.github.io/renv/" class="external-link"><code>renv</code></a> package. New developers will encounter a suggested <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code> in the console to revert or move forward your R version and package versions.</li>
@@ -170,7 +176,7 @@
 <li>e.g. the <code>derive_vars_aage</code> has a parameterized start and end-date and a unit.</li>
 <li>Depending on the parameters results may vary as does the specification.</li>
 <li>Functions serve as a toolbox so the user can create their ADaM according to the requirements.</li>
-<li>The principles, programming strategy and documentation of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> are considered as a framework for users to contribute.</li>
+<li>The principles, programming strategy and documentation of <a href="https://pharmaverse.github.io/admiral">admiral</a> are considered as a framework for users to contribute.</li>
 </ul>
 </li>
 </ul>
@@ -180,9 +186,9 @@
 </h5>
 <ul>
 <li>Function details and its purpose, the requirements, parameters, dependencies and examples are documented in the header of each function.</li>
-<li>Complex functions potentially have a vignette on the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> homepage to provide more details.</li>
+<li>Complex functions potentially have a vignette on the <a href="https://pharmaverse.github.io/admiral">admiral</a> homepage to provide more details.</li>
 <li>
-<a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> does not provide a link to an explicit specification in the define.xml.</li>
+<a href="https://pharmaverse.github.io/admiral">admiral</a> does not provide a link to an explicit specification in the define.xml.</li>
 </ul>
 </div>
 <div class="section level5">
@@ -190,10 +196,10 @@
 </h5>
 <ul>
 <li>
-<a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs</li>
+<a href="https://pharmaverse.github.io/admiral">admiral</a> is meant as a toolbox to enable Data Scientists to build ADaMs according to their varying analysis needs</li>
 <li>
-<a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> is not meant as a “click a button, out comes your ADaM” tool</li>
-<li>on the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
+<a href="https://pharmaverse.github.io/admiral">admiral</a> is not meant as a “click a button, out comes your ADaM” tool</li>
+<li>on the <a href="https://pharmaverse.github.io/admiral">admiral</a> webpage, example scripts are provided which can be used as a starting point to create an ADaM (see at the end of a vignette)</li>
 </ul>
 </div>
 <div class="section level5">
@@ -210,8 +216,8 @@
 <li>All functions are reviewed and tested (see <a href="#what-will-be-provided-around-function-testing">What will be provided around <strong>function testing</strong>?</a>) to ensure that they work as described in the documentation.</li>
 <li>Test cases for each function will be part of the R package.</li>
 <li>Users can add to the tests or provide additional feedback.</li>
-<li>The testing the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> team will do for each function does <strong>not replace the QC and validation process at each company</strong>.</li>
-<li>A <a href="https://github.com/marketplace/actions/r-package-validation-report" class="external-link">GitHub action</a> (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> exists <a href="https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf" class="external-link">here</a> as an illustration.</li>
+<li>The testing the <a href="https://pharmaverse.github.io/admiral">admiral</a> team will do for each function does <strong>not replace the QC and validation process at each company</strong>.</li>
+<li>A <a href="https://github.com/marketplace/actions/r-package-validation-report" class="external-link">GitHub action</a> (using open source packages) exists to generate a validation report for an R package, which would be an option for any company to use. An example report using an earlier version of <a href="https://pharmaverse.github.io/admiral">admiral</a> exists <a href="https://github.com/insightsengineering/thevalidatoR/blob/main/readme_files/report-0.1-admiral.pdf" class="external-link">here</a> as an illustration.</li>
 </ul>
 </div>
 <div class="section level5">
@@ -223,7 +229,7 @@
 <li>Guidance for testing and documentation expectations of community contribution functions. Then it is for each company to cover the following:
 <ul>
 <li>validation to be able to use the package on company-specific SCE for GxP purposes and associated audit evidence</li>
-<li>strategy of how the use of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)</li>
+<li>strategy of how the use of <a href="https://pharmaverse.github.io/admiral">admiral</a> fits into company-specific quality assurance process (double programming comparison versus your company-specific legacy ADaM solution could be appropriate until confidence builds)</li>
 <li>see our guidance on <a href="unit_test_guidance.html">unit testing</a>
 </li>
 </ul>
@@ -243,7 +249,7 @@
 <h5 id="will-admiral-provide-adam-ig-cdisc-compliant-datasets">Will <code>{admiral}</code> provide ADaM IG <strong>CDISC compliant</strong> datasets?<a class="anchor" aria-label="anchor" href="#will-admiral-provide-adam-ig-cdisc-compliant-datasets"></a>
 </h5>
 <ul>
-<li>Although <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> follows CDISC standards it does not claim that the dataset resulting from calling <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> functions is ADaM compliant. This has to be ensured by the user.</li>
+<li>Although <a href="https://pharmaverse.github.io/admiral">admiral</a> follows CDISC standards it does not claim that the dataset resulting from calling <a href="https://pharmaverse.github.io/admiral">admiral</a> functions is ADaM compliant. This has to be ensured by the user.</li>
 </ul>
 </div>
 <div class="section level5">
@@ -251,7 +257,7 @@
 </h5>
 <ul>
 <li>ADaM IG is a standard framework without a specific number of datasets or variables, so it cannot be used as a specific baseline to answer that question.</li>
-<li>We will provide guidance for each ADaM dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> covers. (see <a href="#in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?</a>)</li>
+<li>We will provide guidance for each ADaM dataset structure (ADSL, OCCDS and BDS) that will highlight which functionality <a href="https://pharmaverse.github.io/admiral">admiral</a> covers. (see <a href="#in-which-order-does-a-user-need-to-execute-the-functions">In <strong>which order</strong> does a user need to execute the functions?</a>)</li>
 <li>The guidance will also highlight the gaps to be filled by the user (e.g. timing, ranges).</li>
 <li>For standard ADaM datasets (ADAE, ADCM, …) we can provide an estimated coverage based on early adopters Roche/GSK ADaM implementation</li>
 </ul>
@@ -268,13 +274,13 @@
 <h5 id="how-has-admiral-been-tested-externally-to-rochegsk">How has <code>{admiral}</code> been <strong>tested externally</strong> to Roche/GSK?<a class="anchor" aria-label="anchor" href="#how-has-admiral-been-tested-externally-to-rochegsk"></a>
 </h5>
 <ul>
-<li>During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and &gt;50 individuals) in order to assess compatibility of the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.</li>
-<li>This foundational version of <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> achieved a 7.9 / 10 average score from all the survey respondents and &gt;75% said they’d advocate using <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> for ADaM transformations in R.</li>
+<li>During Sept/Oct 2021, a limited release testing was conducted with 18 other companies (and &gt;50 individuals) in order to assess compatibility of the <a href="https://pharmaverse.github.io/admiral">admiral</a> toolkit with different company standards implementations and to test the usability of the functions, e.g. clarity, reliability, robustness, and flexibility.</li>
+<li>This foundational version of <a href="https://pharmaverse.github.io/admiral">admiral</a> achieved a 7.9 / 10 average score from all the survey respondents and &gt;75% said they’d advocate using <a href="https://pharmaverse.github.io/admiral">admiral</a> for ADaM transformations in R.</li>
 <li>Some tester quotes:
 <ul>
 <li><em>“Extremely easy to learn and get into, well thought and planned. Plenty of minor functions instead of aiming to create a large”jack of all trades" framework. The toolkit does not attempt to become a large one-button ADaM generator (which is fantastic)."</em></li>
 <li><em>“It is a huge advantage for all Pharma companies that we have common functions for common stuff we develop. It will be easier for the authorities when it is the same foundation in the ADaM programs. The development goes faster for every one when we develop across companies, and bug-fixing is faster as many are using same package and will most likely find potential bugs.”</em></li>
-<li><em>“I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the <a href="https://pharmaverse.github.io/admiral/index.html">admiral</a> project – both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn’t able to see a strong need to shift to R. This project has shown me a reason to consider making the shift.”</em></li>
+<li><em>“I am a huge proponent of shared solutions within Pharma. Overall I was VERY impressed with the <a href="https://pharmaverse.github.io/admiral">admiral</a> project – both the design, development, documentation, and validation details are available for teams to readily adopt. Prior to participating in the testing, I was a SAS hold-out who wasn’t able to see a strong need to shift to R. This project has shown me a reason to consider making the shift.”</em></li>
 </ul>
 </li>
 </ul>
