@@ -13,11 +13,16 @@
 - [ ] Website is deployed and visual checks for integrity completed
 - [ ] Prepare and Post announcements for Linked-In and Slack Channels for Release
 
+# Hofix Release Checklist
+- [ ]
+- [ ]
+
 # Clean up Checklist
 <!--- Fill out the following Clean up checklist -->
 - [ ] Delete branches that are stale or abandoned or leftover from a Pull Request
 - [ ] Triage and close issues that were not closed properly via PRs that made it into release 
 - [ ] Close Pull Requests that are stale 
-- [ ] Set up and increment News/Changelog Skeleton
+- [ ] Set up and increment News/Changelog Skeleton and Description File
 - [ ] Retire labels specific to a time-period (testing feedback) if no longer in use
 - [ ] Remove Users with no acitivty for 12 months from Repository
+- [ ] Update Release Schedule on Readme and Github Vignette with new Quarters and Dates
