@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
+This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. We also provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. Finally, we discuss the release process and schedule for `{admiral}`.
 
 # Branches
 
@@ -174,5 +174,32 @@ knitr::include_graphics("github_conflicts.png", dpi = 144)
 
 * [GitHub and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
+
+# Package Release
+
+A package release is done in two parts.  First, we declare a freeze on all admiral activity and take the code in the `main` branch on GitHub, bundle it up and send off to [CRAN](https://cran.r-project.org/).  Once CRAN approval is given and the package is available on CRAN, we then use the release button on GitHub to "release" the package onto GitHub.  This release on Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.  
+
+## Package Release Schedule
+
+We have decided to release `{admiral}` on a quarterly schedule to ensure downstream and upstream packages can adequately planned their time for updates and releases.  
+
+`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release. 
+The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three Phases:  
+
+* Phase 1 release is for `{admiraldev}` and `{admiral.test}`, which feed into all `admiral` packages
+* Phase 2 release is only for core `{admiral}`
+* Phase 3 release is extension packages, e.g. `{admiralonco}`
+
+| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
+|----------------------------|------------------------------|---------------------------- |------------------------------|
+| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+
+
+
 
 
