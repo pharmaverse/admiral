@@ -932,6 +932,8 @@ derive_vars_merged_lookup <- function(dataset,
                                       duplicate_msg = NULL,
                                       print_not_mapped = TRUE) {
   assert_logical_scalar(print_not_mapped)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+
   res <- derive_vars_merged(
     dataset,
     dataset_add,
