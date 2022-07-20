@@ -177,9 +177,31 @@ knitr::include_graphics("github_conflicts.png", dpi = 144)
 
 # Package Release
 
-A package release is done in two parts.  First, we declare a freeze on all admiral activity and take the code in the `main` branch on GitHub, bundle it up and send off to [CRAN](https://cran.r-project.org/).  Once CRAN approval is given and the package is available on CRAN, we then use the release button on GitHub to "release" the package onto GitHub.  This release on Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.  
+## Quarterly Release
 
-## Package Release Schedule
+A package release is done in four parts:
+
+1) Declare a freeze on all Pull Requests going into the `devel` branch via internal channels.
+1) Create a PR from `devel` into the `pre-release` branch.  Verify that all CI/CD checks are passing and bundle up and send off to [CRAN](https://cran.r-project.org/).
+1) Once package is available on CRAN, another Pull Request is created for merging the `pre-release` branch the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this release.
+1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference. 
+
+**Quarterly Release:**  `devel >> pre-release >> main` 
+
+## Hot Fix Release
+
+Occasionally we will need to release a hot fix to address a package breaking bug.  A hot fix release is done in 6 parts:
+
+1) Create two branches called `patch` and `pre-release` off the current `main`.
+1) Pull Requests that address the bugs should be merged into the `patch` branch.
+1) Create a PR from `patch` into a newly created `pre-release` branch off of `main`.  Verify that all CI/CD checks are passing and bundle up and send off to [CRAN](https://cran.r-project.org/).
+1) Once package is approved and available on CRAN, another PR is created for merging the `pre-release` branch into the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this hot fix release.
+1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.
+1) These hot fixes should then be merged into the `devel` branch through an additional PR.  
+
+**Hot Fix Release**: `patch >> pre-release >> main  >> devel`
+
+##  Release Schedule
 
 We have decided to release `{admiral}` on a quarterly schedule to ensure downstream and upstream packages can adequately planned their time for updates and releases.  
 
