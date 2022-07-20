@@ -5,6 +5,8 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+- New function to map lookup table `derive_vars_merged_lookup()` (#940)
+
 - New function `filter_confirmation()` for filtering out confirmed observations
 (#1292) including supporting functions `count_vals()`, `min_cond()`, and
 `max_cond()`.
