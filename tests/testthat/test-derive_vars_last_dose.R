@@ -22,7 +22,7 @@ input_ex <- tibble::tribble(
   mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
 
 
-test_that("derive_vars_last_dose works as expected", {
+test_that("derive_vars_last_dose Test 1: function works as expected", {
   expected_output <- mutate(
     input_ae,
     EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
@@ -48,7 +48,7 @@ test_that("derive_vars_last_dose works as expected", {
 })
 
 
-test_that("derive_vars_last_dose checks validity of start and end dose inputs", {
+test_that("derive_vars_last_dose Test 2: function checks validity of start and end dose inputs", {
   input_ex_wrong <- dplyr::bind_rows(
     input_ex,
     tibble::tribble(
@@ -68,12 +68,12 @@ test_that("derive_vars_last_dose checks validity of start and end dose inputs", 
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Specified single_dose_condition is not satisfied."
+    regexp = "Specified `single_dose_condition` is not satisfied."
   )
 })
 
 
-test_that("derive_vars_last_dose returns traceability vars", {
+test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
   expected_output <- mutate(
     input_ae,
     EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
@@ -101,7 +101,7 @@ test_that("derive_vars_last_dose returns traceability vars", {
 })
 
 
-test_that("derive_vars_last_dose when multiple doses on same date - error", {
+test_that("derive_vars_last_dose Test 4: function errors when multiple doses are on same date", {
   input_ex_dup <- dplyr::bind_rows(
     input_ex,
     tibble::tribble(
@@ -130,12 +130,12 @@ test_that("derive_vars_last_dose when multiple doses on same date - error", {
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    regexp = "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses."
+    regexp = "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses." # nolint
   )
 })
 
 
-test_that("derive_vars_last_dose when multiple doses on same date - dose_id supplied", {
+test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id supplied", {
   input_ex_dup <- dplyr::bind_rows(
     input_ex,
     tibble::tribble(
@@ -170,7 +170,7 @@ test_that("derive_vars_last_dose when multiple doses on same date - dose_id supp
 })
 
 
-test_that("derive_vars_last_dose - Error is issued if same variable is found in both input datasets ", { # nolint
+test_that("derive_vars_last_dose Test 6: error is issued if same variable is found in both input datasets ", { # nolint
   input_ae <- tibble::tribble(
     ~STUDYID,   ~USUBJID,   ~AESEQ, ~EXSTDTC,
     "my_study", "subject1",      1, "2020-01-02",
@@ -208,5 +208,34 @@ test_that("derive_vars_last_dose - Error is issued if same variable is found in 
     ),
     "Variable(s) `EXSTDTC` found in both datasets, cannot perform join",
     fixed = TRUE
+  )
+})
+
+test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", { # nolint
+  adae <- tibble::tribble(
+    ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
+    "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
+    "P02", "2022-01-31", "2022-01-31", ymd("2022-01-31"), ymd("2022-01-31"), "Vomitting",
+    "P02", "2022-02-02", "2022-02-04", ymd("2022-02-02"), ymd("2022-02-04"), "Vomitting"
+  )
+
+  adex <- tibble::tribble(
+    ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT,
+    "P01", "Drug A", "QD", "2022-01-09", "2022-01-12", ymd("2022-01-09"), ymd("2022-01-12"),
+    "P02", "Drug A", "QD", "2022-02-01", "2022-02-04", ymd("2022-02-01"), ymd("2022-02-04")
+  )
+
+  (adex_single <- create_single_dose_dataset(adex))
+
+  expect_error(
+    derive_vars_last_dose(
+      adae,
+      adex_single,
+      by_vars = vars(USUBJID),
+      dose_date = EXSTDT,
+      analysis_date = AESTDTC,
+      new_vars = vars(EXSTDT = ASTDT)
+    ),
+    NA
   )
 })
