@@ -158,8 +158,8 @@
 #'
 impute_dtc_dtm <- function(dtc,
                            highest_imputation = "h",
-                           date_imputation = "01-01",
-                           time_imputation = "00:00:00",
+                           date_imputation = "first",
+                           time_imputation = "first",
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
@@ -397,7 +397,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 
 impute_dtc_dt <- function(dtc,
                           highest_imputation = "n",
-                           date_imputation = "01-01",
+                           date_imputation = "first",
                            min_dates = NULL,
                            max_dates = NULL,
                            preserve = FALSE) {
@@ -578,7 +578,7 @@ restrict_imputed_dtc_dt <- function(dtc,
 #' convert_dtc_to_dt("2019-07")
 convert_dtc_to_dt <- function(dtc,
                               highest_imputation = "n",
-                              date_imputation = "01-01",
+                              date_imputation = "first",
                               min_dates = NULL,
                               max_dates = NULL,
                               preserve = FALSE) {
@@ -624,8 +624,8 @@ convert_dtc_to_dt <- function(dtc,
 #' convert_dtc_to_dtm("2019-07-18")
 convert_dtc_to_dtm <- function(dtc,
                                highest_imputation = "h",
-                               date_imputation = "01-01",
-                               time_imputation = "00:00:00",
+                               date_imputation = "first",
+                               time_imputation = "first",
                                min_dates = NULL,
                                max_dates = NULL,
                                preserve = FALSE) {
@@ -672,8 +672,8 @@ convert_dtc_to_dtm <- function(dtc,
 #' convert_date_to_dtm("2019-07-18")
 convert_date_to_dtm <- function(dt,
                                 highest_imputation = "h",
-                                date_imputation = "01-01",
-                                time_imputation = "00:00:00",
+                                date_imputation = "first",
+                                time_imputation = "first",
                                 min_dates = NULL,
                                 max_dates = NULL,
                                 preserve = FALSE) {
@@ -796,7 +796,7 @@ compute_tmf <- function(dtc,
   map <- c(hour = "H",
            minute = "M",
            second = "S")
-  flag <- if_else(is.na(highest_miss), NA_character_, map[highest_miss])
+  flag <- if_else(is.na(dtm) | is.na(highest_miss), NA_character_, map[highest_miss])
 
   if (ignore_seconds_flag) {
     if (any(!is.na(partial[["second"]]))) {
@@ -938,7 +938,8 @@ compute_tmf <- function(dtc,
 derive_vars_dt <- function(dataset,
                            new_vars_prefix,
                            dtc,
-                           date_imputation = NULL,
+                           highest_imputation = "n",
+                           date_imputation = "first",
                            flag_imputation = "auto",
                            min_dates = NULL,
                            max_dates = NULL,
@@ -965,6 +966,7 @@ derive_vars_dt <- function(dataset,
     mutate(
       !!sym(dt) := convert_dtc_to_dt(
         dtc = !!dtc,
+        highest_imputation = highest_imputation,
         date_imputation = date_imputation,
         min_dates = lapply(min_dates, eval_tidy, data = rlang::as_data_mask(.)),
         max_dates = lapply(max_dates, eval_tidy, data = rlang::as_data_mask(.)),
@@ -973,8 +975,8 @@ derive_vars_dt <- function(dataset,
     )
 
   # derive DTF
-  if (flag_imputation %in% c("both", "date") ||
-    flag_imputation == "auto" && !is.null(date_imputation)) {
+  if (flag_imputation == "date" ||
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1114,8 +1116,9 @@ derive_vars_dt <- function(dataset,
 derive_vars_dtm <- function(dataset,
                             new_vars_prefix,
                             dtc,
-                            date_imputation = NULL,
-                            time_imputation = "00:00:00",
+                            highest_imputation = "h",
+                            date_imputation = "first",
+                            time_imputation = "first",
                             flag_imputation = "auto",
                             min_dates = NULL,
                             max_dates = NULL,
@@ -1141,6 +1144,7 @@ derive_vars_dtm <- function(dataset,
   mask <- rlang::as_data_mask(dataset)
   dataset[[dtm]] <- convert_dtc_to_dtm(
     dtc = eval_tidy(dtc, mask),
+    highest_imputation = highest_imputation,
     date_imputation = date_imputation,
     time_imputation = time_imputation,
     min_dates = lapply(min_dates, eval_tidy, data = mask),
@@ -1149,7 +1153,7 @@ derive_vars_dtm <- function(dataset,
   )
 
   if (flag_imputation %in% c("both", "date") ||
-    flag_imputation == "auto" && !is.null(date_imputation)) {
+    flag_imputation == "auto" && dtm_level(highest_imputation) > dtm_level("h")) {
     # add --DTF if not there already
     dtf <- paste0(new_vars_prefix, "DTF")
     dtf_exist <- dtf %in% colnames(dataset)
@@ -1166,7 +1170,7 @@ derive_vars_dtm <- function(dataset,
   }
 
   if (flag_imputation %in% c("both", "time") ||
-    flag_imputation == "auto" && !is.null(time_imputation)) {
+    flag_imputation == "auto" && highest_imputation != "n") {
     # add --TMF variable
     tmf <- paste0(new_vars_prefix, "TMF")
     warn_if_vars_exist(dataset, tmf)

@@ -1,4 +1,5 @@
 library(lubridate)
+library(dplyr)
 
 input <- c(
   "2019-07-18T15:25:40.243",
@@ -493,8 +494,8 @@ test_that("compute_tmf Test 24: compute TMF", {
     as.POSIXct("2019-07-18T15:00:00"),
     as.POSIXct("2019-07-18"),
     as.POSIXct("2019-02-01"),
-    as.POSIXct("2019-01-01"),
-    as.POSIXct("2019-01-01"),
+    as.POSIXct(NA_character_),
+    as.POSIXct(NA_character_),
     as.POSIXct("2003-12-15T23:15:18"),
     as.POSIXct("2003-12-15T13:59:19"),
     as.POSIXct("2020-07-31T00:00:59"),
@@ -506,8 +507,8 @@ test_that("compute_tmf Test 24: compute TMF", {
     "M",
     "H",
     "H",
-    "H",
-    "H",
+    NA_character_,
+    NA_character_,
     "H",
     "M",
     "S",
@@ -522,3 +523,364 @@ test_that("compute_tmf Test 24: compute TMF", {
     expected_output
   )
 })
+
+## Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present ----
+test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and seconds are present", { # nolint
+  expect_error(compute_tmf(
+    dtc = c("2020-11-11T11:11:11", "2020-11-11T11:11"),
+    dtm = ymd_hms(c(
+      "2020-11-11T11:11:11", "2020-11-11T11:11:00"
+    )),
+    ignore_seconds_flag = TRUE
+  ),
+  regexp = "Seconds detected in data while ignore_seconds_flag is invoked")
+})
+
+## Test 26: ignore_seconds_flag  = TRUE ----
+test_that("compute_tmf Test 26: ignore_seconds_flag  = TRUE", {
+  expect_equal(compute_tmf(
+    dtc = c("2020-11-11T11:11", "2020-11-11T11"),
+    dtm = ymd_hms(c(
+      "2020-11-11T11:11:00", "2020-11-11T11:00:00"
+    )),
+    ignore_seconds_flag = TRUE
+  ),
+  c(NA_character_, "M"))
+})
+
+# derive_vars_dt ----
+
+date <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+## Test 27: default behavior ----
+test_that("derive_vars_dt Test 27: default behavior", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDT,
+    "2019-07-18T15:25:40", as.Date("2019-07-18"),
+    "2019-07-18",          as.Date("2019-07-18"),
+    "2019-02",             as.Date(NA),
+    "2019",                as.Date(NA),
+    "2019---07",           as.Date(NA)
+  )
+
+  actual_output <- derive_vars_dt(
+    date,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    "XXSTDTC"
+  )
+})
+
+## Test 28: no date imputation, add DTF ----
+test_that("derive_vars_dt Test 28: no date imputation, add DTF", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
+    "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
+    "2019-07-18",          as.Date("2019-07-18"), NA_character_,
+    "2019-02",             as.Date(NA),           NA_character_,
+    "2019",                as.Date(NA),           NA_character_,
+    "2019---07",           as.Date(NA),           NA_character_
+  )
+
+  actual_output <- derive_vars_dt(
+    date,
+    new_vars_prefix = "AST",
+    flag_imputation = "date",
+    dtc = XXSTDTC
+  )
+
+  expect_dfs_equal(
+    expected_output,
+    actual_output,
+    "XXSTDTC"
+  )
+})
+
+## Test 29: date imputed to first, auto DTF ----
+test_that("derive_vars_dt Test 29: date imputed to first, auto DTF", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDT,                ~ASTDTF,
+    "2019-07-18T15:25:40", as.Date("2019-07-18"), NA_character_,
+    "2019-07-18",          as.Date("2019-07-18"), NA_character_,
+    "2019-02",             as.Date("2019-02-01"), "D",
+    "2019",                as.Date("2019-01-01"), "M",
+    "2019---07",           as.Date("2019-01-01"), "M"
+  )
+
+  actual_output <- derive_vars_dt(
+    date,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "first"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+## Test 30: date imputed to last, no DTF ----
+test_that("derive_vars_dt Test 30: date imputed to last, no DTF", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~AENDT,
+    "2019-07-18T15:25:40", as.Date("2019-07-18"),
+    "2019-07-18",          as.Date("2019-07-18"),
+    "2019-02",             as.Date("2019-02-28"),
+    "2019",                as.Date("2019-12-31"),
+    "2019---07",           as.Date("2019-12-31")
+  )
+
+  actual_output <- derive_vars_dt(
+    date,
+    new_vars_prefix = "AEN",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    flag_imputation = "none"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+# derive_vars_dtm ----
+
+input <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)
+
+## Test 31: default behavior ----
+test_that("derive_vars_dtm Test 31: default behavior", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
+    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-02",             ymd_hms(NA),                    NA_character_,
+    "2019",                ymd_hms(NA),                    NA_character_,
+    "2019---07",           ymd_hms(NA),                    NA_character_
+  )
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+## Test 32: date imputed to first, auto DTM/TMF ----
+test_that("derive_vars_dtm Test 32: date imputed to first, auto DTF/TMF", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02",             ymd_hms("2019-02-01T00:00:00"), "D",           "H",
+    "2019",                ymd_hms("2019-01-01T00:00:00"), "M",           "H",
+    "2019---07",           ymd_hms("2019-01-01T00:00:00"), "M",           "H"
+  )
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "first"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+## Test 33: date and time imputed to last, no DTF/TMF ----
+test_that("derive_vars_dtm Test 33: date and time imputed to last, no DTF/TMF", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~AENDTM,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"),
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:59"),
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:59:59"),
+    "2019-07-18",          ymd_hms("2019-07-18T23:59:59"),
+    "2019-02",             ymd_hms("2019-02-28T23:59:59"),
+    "2019",                ymd_hms("2019-12-31T23:59:59"),
+    "2019---07",           ymd_hms("2019-12-31T23:59:59")
+  )
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AEN",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "LAST",
+    time_imputation = "LAST",
+    flag_imputation = "none"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+## Test 34: date and time imputed to last, DTF only ----
+test_that("derive_vars_dtm Test 34: date and time imputed to last, DTF only", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~AENDTM,                        ~AENDTF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:59"), NA_character_,
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:59:59"), NA_character_,
+    "2019-07-18",          ymd_hms("2019-07-18T23:59:59"), NA_character_,
+    "2019-02",             ymd_hms("2019-02-28T23:59:59"), "D",
+    "2019",                ymd_hms("2019-12-31T23:59:59"), "M",
+    "2019---07",           ymd_hms("2019-12-31T23:59:59"), "M"
+  )
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AEN",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    time_imputation = "last",
+    flag_imputation = "date"
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC"
+  )
+})
+
+## Test 35: date imputed to MID, time to first, TMF only ----
+test_that("derive_vars_dtm Test 35: date imputed to MID, time to first, TMF only", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDTM,                        ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_,
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), "S",
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), "M",
+    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), "H",
+    "2019-02",             ymd_hms("2019-02-15T00:00:00"), "H",
+    "2019",                ymd_hms("2019-06-30T00:00:00"), "H",
+    "2019---07",           ymd_hms("2019-06-07T00:00:00"), "H"
+  )
+
+  actual_output <- derive_vars_dtm(
+    input,
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "mid",
+    flag_imputation = "time",
+    preserve = TRUE
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    comp = actual_output,
+    keys = c("XXSTDTC")
+  )
+})
+
+## Test 36: No re-derivation is done if --DTF variable already exists ----
+test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable already exists", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,              ~ASTDTM,                        ~ASTDTF,       ~ASTTMF,
+    "2019-07-18T15:25:40", ymd_hms("2019-07-18T15:25:40"), NA_character_, NA_character_,
+    "2019-07-18T15:25",    ymd_hms("2019-07-18T15:25:00"), NA_character_, "S",
+    "2019-07-18T15",       ymd_hms("2019-07-18T15:00:00"), NA_character_, "M",
+    "2019-07-18",          ymd_hms("2019-07-18T00:00:00"), NA_character_, "H",
+    "2019-02",             ymd_hms("2019-02-01T00:00:00"), "D",           "H",
+    "2019",                ymd_hms("2019-01-01T00:00:00"), "MD",          "H",
+    "2019---07",           ymd_hms("2019-01-01T00:00:00"), "M",           "H"
+  ) %>%
+    select(XXSTDTC, ASTDTF, everything())
+
+  actual_output <- expect_message(
+    derive_vars_dtm(
+      mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "MD", "M")),
+      new_vars_prefix = "AST",
+      dtc = XXSTDTC,
+      highest_imputation = "M",
+      date_imputation = "first"
+    ),
+    regexp = "^The .* variable is already present in the input dataset and will not be re-derived."
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = "XXSTDTC")
+})
+
+## Test 37: max_dates parameter works as expected ----
+test_that("derive_vars_dtm Test 37: max_dates parameter works as expected", {
+  expected_output <- tibble::tribble(
+    ~XXSTDTC,    ~ASTDTM,                        ~ASTDTF, ~ASTTMF,
+    "2019-02",   ymd_hms("2019-02-10T00:00:00"), "D",     "H",
+    "2019",      ymd_hms("2019-02-10T00:00:00"), "M",     "H",
+    "2019---07", ymd_hms("2019-02-10T00:00:00"), "M",     "H"
+  ) %>%
+    mutate(DCUTDT = ymd_hms("2019-02-10T00:00:00"))
+
+  actual_output <- derive_vars_dtm(
+    select(expected_output, XXSTDTC, DCUTDT),
+    new_vars_prefix = "AST",
+    dtc = XXSTDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    max_dates = vars(DCUTDT)
+  )
+
+  expect_dfs_equal(
+    base = expected_output,
+    compare = actual_output,
+    keys = c("XXSTDTC"))
+})
+
+input_secs <- tibble::tribble(
+  ~XXSTDTC,
+  "2019-07-18T15:25:40",
+  "2019-07-18T15:25",
+  "2019-07-18T15",
+  "2019-07-18",
+  "2019-02",
+  "2019",
+  "2019---07"
+)

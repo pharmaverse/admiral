@@ -58,15 +58,6 @@ of June
 
 Default is \code{NULL}}
 
-\item{preserve}{Preserve day if month is missing and day is present
-
-For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
-(and \code{date_imputation = "MID"}).
-
-Permitted Values: \code{TRUE}, \code{FALSE}
-
-Default: \code{FALSE}}
-
 \item{subject_keys}{Variables to uniquely identify a subject
 
 A list of quosures where the expressions are symbols as returned by

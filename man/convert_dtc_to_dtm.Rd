@@ -6,7 +6,8 @@
 \usage{
 convert_dtc_to_dtm(
   dtc,
-  date_imputation = NULL,
+  highest_imputation = "h",
+  date_imputation = "01-01",
   time_imputation = "00:00:00",
   min_dates = NULL,
   max_dates = NULL,
