@@ -122,8 +122,8 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @return The input dataset with ATC variables added
 #'
-#' @family occds
-#' @keywords occds
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @export
 #'

@@ -44,7 +44,7 @@ reference:
 - subtitle: OCCDS-specific
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
-  - has_keyword("occds")
+  - has_keyword("der_occds")
 - subtitle: TTE-specific
   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
 - contents:
@@ -79,14 +79,24 @@ reference:
 
 
 - title: Utility Functions
-  contents:
+- subtitle: Utilities for Formatting Observations
+- contents:
   - has_keyword('utils_fmt')
+- subtitle: Utilities for Dataset Checking
+- contents:
   - has_keyword('utils_ds_chk')
+- subtitle: Utilities used within Derivation functions
+- contents:
   - has_keyword('utils_help')
+- subtitle: Utilities for Filtering Observations
+- contents:
   - has_keyword('utils_fil')
+- subtitle: Utilities used for examples and template scripts
+- contents:
+  - has_keyword('utils_examples')
 
 - title: Example Datasets
-  desc: You can run scripts to produce additional datasets
+  desc: You can run `use_ad_template()` to produce additional datasets
   contents:
   - has_keyword('datasets')
 

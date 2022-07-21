@@ -140,8 +140,8 @@
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
 #'
-#' @family occds
-#' @keywords occds
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @seealso [derive_vars_query()], [query()], [smq_select()], [sdg_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
@@ -382,8 +382,8 @@ create_query_data <- function(queries,
 #'
 #'   *Permitted Values*: `"smq"`, `"sdg"`
 #'
-#' @family occds
-#' @keywords occds
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @return Output dataset of the access function
 #'

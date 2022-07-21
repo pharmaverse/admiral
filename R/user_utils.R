@@ -95,6 +95,7 @@ filter_if <- function(dataset, filter) {
 #' @export
 #'
 #' @keywords utils_help
+#' @family utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -125,8 +126,8 @@ extract_unit <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @family utils_help
-#' @keywords utils_help
+#' @family utils_fmt
+#' @keywords utils_fmt
 #'
 #' @export
 #'
@@ -189,7 +190,6 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #' @return A `data.frame` or `NULL`
 #'
 #' @family utils_ds_chk
-#'
 #' @keywords utils_ds_chk
 #'
 #' @examples
@@ -223,7 +223,6 @@ get_one_to_many_dataset <- function() {
 #' @return A `data.frame` or `NULL`
 #'
 #' @family utils_ds_chk
-#'
 #' @keywords utils_ds_chk
 #'
 #' @examples

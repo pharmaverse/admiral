@@ -30,8 +30,8 @@
 #'
 #' @return The input dataset with query variables derived.
 #'
-#' @family occds
-#' @keywords occds
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @seealso [create_query_data()] [assert_valid_queries()]
 #'

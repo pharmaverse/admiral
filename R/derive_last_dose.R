@@ -55,8 +55,8 @@
 #'
 #' @author Ondrej Slama
 #'
-#' @family occds
-#' @keywords occds
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @export
 #'

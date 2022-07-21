@@ -141,5 +141,5 @@ OCCDS Functions:
 \author{
 Ondrej Slama
 }
-\concept{occds}
-\keyword{occds}
+\concept{der_occds}
+\keyword{der_occds}

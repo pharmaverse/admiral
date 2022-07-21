@@ -47,17 +47,13 @@ print(df)
 convert_blanks_to_na(df)
 }
 \seealso{
-Helper Utilities: 
-\code{\link{call_user_fun}()},
-\code{\link{extract_unit}()},
-\code{\link{list_all_templates}()},
-\code{\link{negate_vars}()},
-\code{\link{signal_duplicate_records}()},
-\code{\link{use_ad_template}()},
-\code{\link{vars2chr}()}
+Utilities for Formatting Observations: 
+\code{\link{format_eoxxstt_default}()},
+\code{\link{format_reason_default}()},
+\code{\link{yn_to_numeric}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{utils_help}
-\keyword{utils_help}
+\concept{utils_fmt}
+\keyword{utils_fmt}

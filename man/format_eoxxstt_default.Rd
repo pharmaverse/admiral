@@ -42,6 +42,7 @@ admiral_dm \%>\%
 \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}}
 
 Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
 \code{\link{format_reason_default}()},
 \code{\link{yn_to_numeric}()}
 }

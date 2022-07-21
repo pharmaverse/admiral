@@ -68,5 +68,5 @@ OCCDS Functions:
 \author{
 Ondrej Slama, Shimeng Huang
 }
-\concept{occds}
-\keyword{occds}
+\concept{der_occds}
+\keyword{der_occds}

@@ -46,6 +46,7 @@ admiral_dm \%>\%
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
 
 Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
 \code{\link{format_eoxxstt_default}()},
 \code{\link{yn_to_numeric}()}
 }

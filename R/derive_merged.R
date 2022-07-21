@@ -904,7 +904,8 @@ derive_var_merged_character <- function(dataset,
 #'
 #' @author Annie Yang
 #'
-#' @keywords derivation adam
+#' @keywords der_gen
+#' @family der_gen
 #'
 #' @export
 #'
@@ -982,7 +983,8 @@ derive_vars_merged_lookup <- function(dataset,
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @keywords utils_help
+#' @family utils_help
 get_not_mapped <- function() {
   .temp$nmap
 }
