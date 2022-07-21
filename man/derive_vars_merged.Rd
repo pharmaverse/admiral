@@ -170,6 +170,69 @@ derive_vars_merged(
   match_flag = vsdatafl
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+
+# derive treatment start datetime (TRTSDTM)
+data(admiral_ex)
+
+## impute exposure start date to first date/time
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M",
+)
+
+## add first exposure datetime and imputation flags to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = vars(EXSTDTM),
+  mode = "first"
+)
+
+# derive treatment start datetime (TRTSDTM)
+data(admiral_ex)
+
+## impute exposure start date to first date/time
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M",
+)
+
+## add first exposure datetime and imputation flags to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  filter_add = !is.na(EXSTDTM),
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = vars(EXSTDTM),
+  mode = "first"
+)
+
+# derive treatment end datetime (TRTEDTM)
+## impute exposure end datetime to last time, no date imputation
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  time_imputation = "last",
+)
+
+## add last exposure datetime and imputation flag to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  filter_add = !is.na(EXENDTM),
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+  order = vars(EXENDTM),
+  mode = "last"
+)
 }
 \author{
 Stefan Bundfuss

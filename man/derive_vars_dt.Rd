@@ -8,7 +8,8 @@ derive_vars_dt(
   dataset,
   new_vars_prefix,
   dtc,
-  date_imputation = NULL,
+  highest_imputation = "n",
+  date_imputation = "first",
   flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
@@ -26,6 +27,28 @@ A character scalar is expected. For the date variable "DT" is appended to
 the specified prefix and for the date imputation flag "DTF". I.e., for
 \code{new_vars_prefix = "AST"} the variables \code{ASTDT} and \code{ASTDTF} are created.}
 
+\item{dtc}{The \code{'--DTC'} date to impute
+
+A character date is expected in a format like \code{yyyy-mm-dd} or
+\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
+imputation is performed.}
+
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
+
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
+
+Otherwise, a character value is expected, either as a
+\itemize{
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
+of June,
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
+day/month.
+}
+
+Default is \code{first}.}
+
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
@@ -34,6 +57,48 @@ If \code{"auto"} is specified, the date imputation flag is derived if the
 \emph{Default}: \code{"auto"}
 
 \emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the \code{dtc} value are considered. The possible dates
+are defined by the missing parts of the \code{dtc} date (see example below). This
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
+)
+}\if{html}{\out{</div>}}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the \code{dtc} date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered. A date or date-time object is expected.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 }
 \value{
 The input dataset with the date \code{'--DT'} (and the date imputation flag \code{'--DTF'}
@@ -76,7 +141,7 @@ derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "first"
+  highest_imputation = "M"
 )
 
 # Impute partial dates to 6th of April
@@ -84,6 +149,7 @@ derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
+  highest_imputation = "M",
   date_imputation = "04-06"
 )
 
@@ -93,6 +159,7 @@ derive_vars_dt(
   mhdt,
   new_vars_prefix = "AEN",
   dtc = MHSTDTC,
+  highest_imputation = "M",
   date_imputation = "last"
 )
 
@@ -102,6 +169,7 @@ derive_vars_dt(
   mhdt,
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
+  highest_imputation = "M",
   date_imputation = "MID",
   flag_imputation = "none"
 )
@@ -118,7 +186,7 @@ derive_vars_dt(
   adae,
   dtc = AESTDTC,
   new_vars_prefix = "AST",
-  date_imputation = "first",
+  highest_imputation = "M",
   min_dates = vars(TRTSDTM)
 )
 
@@ -130,7 +198,8 @@ derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "MID",
+  highest_imputation = "M",
+  date_imputation = "mid",
   preserve = TRUE
 )
 }

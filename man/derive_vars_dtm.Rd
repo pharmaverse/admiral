@@ -8,8 +8,9 @@ derive_vars_dtm(
   dataset,
   new_vars_prefix,
   dtc,
-  date_imputation = NULL,
-  time_imputation = "00:00:00",
+  highest_imputation = "h",
+  date_imputation = "first",
+  time_imputation = "first",
   flag_imputation = "auto",
   min_dates = NULL,
   max_dates = NULL,
@@ -84,13 +85,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -156,8 +157,7 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "first",
-  time_imputation = "first"
+  highest_imputation = "M"
 )
 
 # Impute AE end date to the last date and ensure that the imputed date is not
@@ -172,6 +172,7 @@ derive_vars_dtm(
   adae,
   dtc = AEENDTC,
   new_vars_prefix = "AEN",
+  highest_imputation = "M",
   date_imputation = "last",
   time_imputation = "last",
   max_dates = vars(DTHDT, DCUTDT)
@@ -194,8 +195,7 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "first",
-  time_imputation = "first",
+  highest_imputation = "M",
   ignore_seconds_flag = TRUE
 )
 
@@ -207,7 +207,8 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "MID",
+  highest_imputation = "M",
+  date_imputation = "mid",
   preserve = TRUE
 )
 }

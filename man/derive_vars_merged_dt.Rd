@@ -84,6 +84,28 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 
 \emph{Permitted Values}: \code{"first"}, \code{"last"}, \code{NULL}}
 
+\item{dtc}{The \code{'--DTC'} date to impute
+
+A character date is expected in a format like \code{yyyy-mm-dd} or
+\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
+imputation is performed.}
+
+\item{date_imputation}{The value to impute the day/month when a datepart is
+missing.
+
+If \code{NULL}: no date imputation is performed and partial dates are returned as
+missing.
+
+Otherwise, a character value is expected, either as a
+\itemize{
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
+of June,
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
+day/month.
+}
+
+Default is \code{first}.}
+
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
@@ -92,6 +114,48 @@ If \code{"auto"} is specified, the date imputation flag is derived if the
 \emph{Default}: \code{"auto"}
 
 \emph{Permitted Values}: \code{"auto"}, \code{"date"} or \code{"none"}}
+
+\item{min_dates}{Minimum dates
+
+A list of dates is expected. It is ensured that the imputed date is not
+before any of the specified dates, e.g., that the imputed adverse event start
+date is not before the first treatment date. Only dates which are in the
+range of possible dates of the \code{dtc} value are considered. The possible dates
+are defined by the missing parts of the \code{dtc} date (see example below). This
+ensures that the non-missing parts of the \code{dtc} date are not changed.
+A date or date-time object is expected.
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
+)
+}\if{html}{\out{</div>}}
+
+returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
+range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
+\code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
+have changed the month although it is not missing (in the \code{dtc} date).}
+
+\item{max_dates}{Maximum dates
+
+A list of dates is expected. It is ensured that the imputed date is not after
+any of the specified dates, e.g., that the imputed date is not after the data
+cut off date. Only dates which are in the range of possible dates are
+considered. A date or date-time object is expected.}
+
+\item{preserve}{Preserve day if month is missing and day is present
+
+For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
+(and \code{date_imputation = "MID"}).
+
+Permitted Values: \code{TRUE}, \code{FALSE}
+
+Default: \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
 
@@ -120,6 +184,11 @@ optionally the variable \verb{<new_vars_prefix>DTF} derived from the additional
 dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dt()} and
+\code{derive_vars_merged()} instead.
+
 Merge a imputed date variable and date imputation  flag from a dataset to the
 input dataset. The observations to merge can be selected by a condition
 and/or selecting the first or last observation for each by group.
@@ -134,35 +203,6 @@ the additional dataset.
 (depending on \code{mode}) is selected.
 \item The date and flag variables are merged to the input dataset.
 }
-}
-\examples{
-library(admiral.test)
-library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_ex")
-
-# derive treatment start date (TRTSDT)
-derive_vars_merged_dt(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTS",
-  dtc = EXSTDTC,
-  date_imputation = "first",
-  order = vars(TRTSDT),
-  mode = "first"
-)
-
-# derive treatment end date (TRTEDT) (without imputation)
-derive_vars_merged_dt(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTE",
-  dtc = EXENDTC,
-  order = vars(TRTEDT),
-  mode = "last"
-)
 }
 \author{
 Stefan Bundfuss

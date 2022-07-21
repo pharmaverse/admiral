@@ -1,48 +1,3 @@
-#' Derive Last Known Alive Date
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' *Deprecated*, please use `derive_var_extreme_dt()` instead. Add the last
-#' known alive date (`LSTALVDT`) to the dataset.
-#'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by `subject_keys` are required.
-#'
-#' @param source_datasets A named `list` containing datasets in which to search for the
-#'   last known alive date
-#'
-#' @param ... Source(s) of known alive dates. One or more `lstalvdt_source()` objects are
-#'   expected.
-#'
-#' @param subject_keys Variables to uniquely identify a subject
-#'
-#'   A list of quosures where the expressions are symbols as returned by
-#'   `vars()` is expected.
-#'
-#' @author Stefan Bundfuss, Thomas Neitmann
-#'
-#' @return The input dataset with the `LSTALVDT` variable added.
-#'
-#' @keywords derivation adsl
-#'
-#' @export
-derive_var_lstalvdt <- function(dataset,
-                                ...,
-                                source_datasets,
-                                subject_keys = vars(STUDYID, USUBJID)) {
-  deprecate_warn("0.7.0", "derive_var_lstalvdt()", "derive_var_extreme_dt()")
-  derive_var_extreme_dt(
-    dataset,
-    new_var = LSTALVDT,
-    ...,
-    source_datasets = source_datasets,
-    mode = "last",
-    subject_keys = subject_keys
-  )
-}
-
 #' Derive First or Last Datetime from Multiple Sources
 #'
 #' Add the first or last datetime from multiple sources to the dataset, e.g.,
@@ -79,11 +34,7 @@ derive_var_lstalvdt <- function(dataset,
 #'   (with respect to `date` and `mode`) is selected.
 #'
 #'   1. The new variable is set to the variable specified by the `date` element.
-#'   If the date variable is a date variable, the time is imputed as specified
-#'   by the `time_imputation` element. If the source variable is a character
-#'   variable, it is converted to a datetime. If the date is incomplete, it is
-#'   imputed as specified by the `date_imputation` and `time_imputation`
-#'   element.
+#'   If the date variable is a date variable, the time is imputed as "00:00:00".
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -101,7 +52,6 @@ derive_var_lstalvdt <- function(dataset,
 #' @keywords derivation adsl
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
-#'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
 #'   [derive_vars_merged()]
 #'
 #' @export
@@ -117,22 +67,38 @@ derive_var_lstalvdt <- function(dataset,
 #' # derive last known alive datetime (LSTALVDTM)
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first"
+#'   date = AESTDTM
 #' )
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first"
+#'   date = AEENDTM
 #' )
+#'
+#' ae_ext <- admiral_ex %>%
+#'   derive_vars_dtm(
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AEST",
+#'   highest_imputation = "M"
+#' ) %>%
+#'   derive_vars_dtm(
+#'   dtc = AEENDTC,
+#'   new_vars_prefix = "AEEN",
+#'   highest_imputation = "M"
+#' )
+#'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTC,
-#'   filter = nchar(LBDTC) >= 10,
+#'   date = LBDTM,
+#'   filter = !is.na(LBDTM),
 #'   time_imputation = "first"
 #' )
+#'
+#' lb_ext <- derive_vars_dtm(
+#'   admiral_lb,
+#'   dtc = LBDTC,
+#'   new_vars_prefix = "LB"
+#' )
+#'
 #' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDTM)
 #'
 #' admiral_dm %>%
@@ -141,7 +107,7 @@ derive_var_lstalvdt <- function(dataset,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
 #'       adsl = admiral_adsl,
-#'       ae = admiral_ae, lb = admiral_lb
+#'       ae = ae_ext, lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -150,9 +116,7 @@ derive_var_lstalvdt <- function(dataset,
 #' # derive last alive datetime and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first",
+#'   date = AESTDTM,
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -162,9 +126,7 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first",
+#'   date = AEENDTM,
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -173,9 +135,8 @@ derive_var_lstalvdt <- function(dataset,
 #' )
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTC,
-#'   filter = nchar(LBDTC) >= 10,
-#'   time_imputation = "first",
+#'   date = LBDTM,
+#'   filter = !is.na(LBDTM),
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -199,7 +160,8 @@ derive_var_lstalvdt <- function(dataset,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
 #'       adsl = admiral_adsl,
-#'       ae = admiral_ae, lb = admiral_lb
+#'       ae = ae_ext,
+#'       lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -253,6 +215,15 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset <- source_datasets[[source_dataset_name]]
 
     date <- quo_get_expr(sources[[i]]$date)
+    if (!is.instant(pull(source_dataset, !!date))) {
+      abort(paste0(
+        as_label(date),
+        " specified for `date` in dataset ",
+        source_dataset_name,
+        " is not a date or datetime variable but is ",
+        friendly_type_of(pull(source_dataset, !!date))
+      ))
+    }
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
@@ -266,12 +237,7 @@ derive_var_extreme_dtm <- function(dataset,
       add_data[[i]],
       !!!subject_keys,
       !!!sources[[i]]$traceability_vars,
-      !!new_var := convert_date_to_dtm(
-        !!date,
-        date_imputation = sources[[i]]$date_imputation,
-        time_imputation = sources[[i]]$time_imputation,
-        preserve = sources[[i]]$preserve
-      )
+      !!new_var := !!date
     )
   }
 
@@ -306,11 +272,6 @@ derive_var_extreme_dtm <- function(dataset,
 #'   (with respect to `date` and `mode`) is selected.
 #'
 #'   1. The new variable is set to the variable specified by the `date` element.
-#'   If the date variable is a date variable, the time is imputed as
-#'   `time_imputation = "first"`. If the source variable is a character
-#'   variable, it is converted to a datetime. If the date is incomplete, it is
-#'   imputed as specified by the `date_imputation` element and with
-#'   `time_imputation = "first"`.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
@@ -354,11 +315,31 @@ derive_var_extreme_dtm <- function(dataset,
 #'   date = AEENDTC,
 #'   date_imputation = "first",
 #' )
+#'
+#' ae_ext <- admiral_ex %>%
+#'   derive_vars_dt(
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AEST",
+#'   highest_imputation = "M"
+#' ) %>%
+#'   derive_vars_dt(
+#'   dtc = AEENDTC,
+#'   new_vars_prefix = "AEEN",
+#'   highest_imputation = "M"
+#' )
+#'
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
 #'   date = LBDTC,
 #'   filter = nchar(LBDTC) >= 10,
 #' )
+#'
+#' lb_ext <- derive_vars_dtm(
+#'   admiral_lb,
+#'   dtc = LBDTC,
+#'   new_vars_prefix = "LB"
+#' )
+#'
 #' adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 #'
 #' admiral_dm %>%
@@ -367,7 +348,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
 #'       adsl = admiral_adsl,
-#'       ae = admiral_ae, lb = admiral_lb
+#'       ae = ae_ext,
+#'       lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -376,8 +358,7 @@ derive_var_extreme_dtm <- function(dataset,
 #' # derive last alive date and traceability variables
 #' ae_start <- date_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTC,
-#'   date_imputation = "first",
+#'   date = AESTDT,
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -387,8 +368,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' ae_end <- date_source(
 #'   dataset_name = "ae",
-#'   date = AEENDTC,
-#'   date_imputation = "first",
+#'   date = AEENDT,
 #'   traceability_vars = vars(
 #'     LALVDOM = "AE",
 #'     LALVSEQ = AESEQ,
@@ -397,8 +377,8 @@ derive_var_extreme_dtm <- function(dataset,
 #' )
 #' lb_date <- date_source(
 #'   dataset_name = "lb",
-#'   date = LBDTC,
-#'   filter = nchar(LBDTC) >= 10,
+#'   date = LBDT,
+#'   filter = !is.na(LBDT),
 #'   traceability_vars = vars(
 #'     LALVDOM = "LB",
 #'     LALVSEQ = LBSEQ,
@@ -422,7 +402,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'     ae_start, ae_end, lb_date, adsl_date,
 #'     source_datasets = list(
 #'       adsl = admiral_adsl,
-#'       ae = admiral_ae, lb = admiral_lb
+#'       ae = ae_ext,
+#'       lb = lb_ext
 #'     ),
 #'     mode = "last"
 #'   ) %>%
@@ -437,9 +418,6 @@ derive_var_extreme_dt <- function(dataset,
 
   sources <- list(...)
   assert_list_of(sources, "date_source")
-  for (i in seq_along(sources)) {
-    sources[[i]]$time_imputation <- "first"
-  }
 
   derive_var_extreme_dtm(
     dataset,
@@ -452,53 +430,6 @@ derive_var_extreme_dt <- function(dataset,
     mutate(!!new_var := date(!!new_var))
 }
 
-#' Create an `lstalvdt_source` object
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' *Deprecated*, please use `date_source()` instead.
-#'
-#' @param dataset_name The name of the dataset, i.e. a string, used to search for
-#'   the last known alive date.
-#'
-#' @param filter An unquoted condition for filtering `dataset`.
-#'
-#' @param date A variable providing a date where the patient was known to be
-#'   alive. A date, a datetime, or a character variable containing ISO 8601
-#'   dates can be specified. An unquoted symbol is expected.
-#'
-#' @param date_imputation A string defining the date imputation for `date`.
-#'   See `date_imputation` parameter of `impute_dtc()` for valid values.
-#'
-#' @param traceability_vars A named list returned by `vars()` defining the
-#'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
-#'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
-#'
-#'
-#' @author Stefan Bundfuss
-#'
-#' @keywords source_specifications
-#'
-#' @export
-#'
-#' @return An object of class `lstalvdt_source`.
-lstalvdt_source <- function(dataset_name,
-                            filter = NULL,
-                            date,
-                            date_imputation = NULL,
-                            traceability_vars = NULL) {
-  deprecate_warn("0.7.0", "lstalvdt_source()", "date_source()")
-
-  date_source(
-    dataset_name = dataset_name,
-    filter = !!enquo(filter),
-    date = !!enquo(date),
-    date_imputation = date_imputation,
-    traceability_vars = traceability_vars
-  )
-}
-
 #' Create a `date_source` object
 #'
 #' Create a `date_source` object as input for `derive_var_extreme_dt()` and
@@ -509,18 +440,17 @@ lstalvdt_source <- function(dataset_name,
 #'
 #' @param filter An unquoted condition for filtering `dataset`.
 #'
-#' @param date A variable providing a date. A date, a datetime, or a character
-#'   variable containing ISO 8601 dates can be specified. An unquoted symbol is
-#'   expected.
+#' @param date A variable providing a date. A date or a datetime can be
+#'   specified. An unquoted symbol is expected.
 #'
-#' @param date_imputation A string defining the date imputation for `date`.
-#'   See `date_imputation` parameter of `impute_dtc()` for valid values.
+#' @param date_imputation *Deprecated*, please use `derive_vars_dtm()` to
+#'   convert DTC variables to datetime variables in the dataset.
 #'
-#' @param time_imputation A string defining the time imputation for `date`.
-#'   See `time_imputation` parameter of `impute_dtc()` for valid values.
+#' @param time_imputation *Deprecated*, please use `derive_vars_dtm()` to
+#'   convert DTC variables to datetime variables in the dataset.
 #'
-#' @param preserve Should day be preserved if month is imputed for `date`.
-#'   See `preserve` parameter of `impute_dtc()` for details.
+#' @param preserve *Deprecated*, please use `derive_vars_dtm()` to convert DTC
+#'   variables to datetime variables in the dataset.
 #'
 #' @param traceability_vars A named list returned by `vars()` defining the
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
@@ -539,23 +469,44 @@ lstalvdt_source <- function(dataset_name,
 date_source <- function(dataset_name,
                         filter = NULL,
                         date,
-                        date_imputation = NULL,
-                        time_imputation = NULL,
-                        preserve = FALSE,
+                        date_imputation = deprecated(),
+                        time_imputation = deprecated(),
+                        preserve = deprecated(),
                         traceability_vars = NULL) {
-  if (!is.null(date_imputation)) {
-    assert_that(is_valid_date_entry(date_imputation))
+  if(!missing(date_imputation)) {
+    deprecate_stop(
+      "0.8.0",
+      "date_source(date_imputation = )",
+      details = paste0(
+        "Please use `derive_vars_dtm()` to convert DTC variables",
+        "to datetime variables in the dataset."
+      )
+    )
   }
-  if (!is.null(time_imputation)) {
-    assert_that(is_valid_time_entry(time_imputation))
+  if(!missing(time_imputation)) {
+    deprecate_stop(
+      "0.8.0",
+      "date_source(time_imputation = )",
+      details = paste0(
+        "Please use `derive_vars_dtm()` to convert DTC variables",
+        "to datetime variables in the dataset."
+      )
+    )
+  }
+  if(!missing(preserve)) {
+    deprecate_stop(
+      "0.8.0",
+      "date_source(preserve = )",
+      details = paste0(
+        "Please use `derive_vars_dtm()` to convert DTC variables",
+        "to datetime variables in the dataset."
+      )
+    )
   }
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
-    date_imputation = date_imputation,
-    time_imputation = time_imputation,
-    preserve = preserve,
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )
   class(out) <- c("date_source", "list")

@@ -7,8 +7,8 @@
 impute_dtc_dtm(
   dtc,
   highest_imputation = "h",
-  date_imputation = "01-01",
-  time_imputation = "00:00:00",
+  date_imputation = "first",
+  time_imputation = "first",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
@@ -60,13 +60,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -116,38 +116,39 @@ dates <- c(
   ""
 )
 
-# No date imputation (date_imputation defaulted to NULL)
+# No date imputation (highest_imputation defaulted to "h")
 # Missing time part imputed with 00:00:00 portion by default
-impute_dtc(dtc = dates)
+impute_dtc_dtm(dtc = dates)
 
-# No date imputation (date_imputation defaulted to NULL)
+# No date imputation (highest_imputation defaulted to "h")
 # Missing time part imputed with 23:59:59 portion
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
   time_imputation = "23:59:59"
 )
 
 # Same as above
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
-  time_imputation = "LAST"
+  time_imputation = "last"
 )
 
 # Impute to first day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
-  date_imputation = "01-01"
+  highest_imputation = "M"
 )
 # same as above
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
-  date_imputation = "first"
+  highest_imputation = "M",
+  date_imputatation = "01-01"
 )
 
 # Impute to last day/month if date is partial
 # Missing time part imputed with 23:59:59 portion
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
   date_imputation = "last",
   time_imputation = "last"
@@ -155,25 +156,26 @@ impute_dtc(
 
 # Impute to mid day/month if date is partial
 # Missing time part imputed with 00:00:00 portion by default
-impute_dtc(
+impute_dtc_dtm(
   dtc = dates,
+  highest_impuation = "M",
   date_imputation = "mid"
 )
 
 # Impute a date and ensure that the imputed date is not before a list of
 # minimum dates
-impute_dtc(
+impute_dtc_dtm(
   "2020-12",
   min_dates = list(
     ymd_hms("2020-12-06T12:12:12"),
     ymd_hms("2020-11-11T11:11:11")
   ),
-  date_imputation = "first"
+  highest_imputation = "M"
 )
 
 }
 \author{
-Samia Kabi
+Samia Kabi, Stefan Bundfuss
 }
 \keyword{computation}
 \keyword{timing}

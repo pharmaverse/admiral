@@ -40,7 +40,7 @@ compute_tmf(dtc = "2019-07-18T15", dtm = as.POSIXct("2019-07-18T15:25:00"))
 compute_tmf(dtc = "2019-07-18", dtm = as.POSIXct("2019-07-18"))
 }
 \author{
-Samia Kabi
+Samia Kabi, Stefan Bundfuss
 }
 \keyword{computation}
 \keyword{timing}

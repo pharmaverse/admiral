@@ -29,6 +29,18 @@ deprecation notice (#1229)
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
+- Imputation related arguments have been deprecated for all functions except the
+imputation functions itself. The following parameters were deprecated:
+
+  - `date_imputation`, `time_imputation`, and `preserve` in `date_source`
+  
+- The following functions and parameters, which were deprecated in previous
+{admiral} versions, have been removed:
+
+  - `derive_var_disposition_dt()`
+  - `derive_var_lstalvdt()`
+  - `lstalvdt_source()`
+
 ## Documentation
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)

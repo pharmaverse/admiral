@@ -7,8 +7,8 @@
 convert_date_to_dtm(
   dt,
   highest_imputation = "h",
-  date_imputation = "01-01",
-  time_imputation = "00:00:00",
+  date_imputation = "first",
+  time_imputation = "first",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
@@ -58,13 +58,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 

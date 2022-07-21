@@ -136,13 +136,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -194,6 +194,11 @@ optionally the variables \verb{<new_vars_prefix>DTF} and \verb{<new_vars_prefix>
 derived from the additional dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dtm()} and
+\code{derive_vars_merged()} instead.
+
 Merge a imputed datetime variable, date imputation  flag, and time imputation
 flag from a dataset to the input dataset. The observations to merge can be
 selected by a condition and/or selecting the first or last observation for
@@ -209,37 +214,6 @@ time imputation flag is added to the additional dataset.
 (depending on \code{mode}) is selected.
 \item The date and flag variables are merged to the input dataset.
 }
-}
-\examples{
-library(admiral.test)
-library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_ex")
-
-# derive treatment start datetime (TRTSDTM)
-derive_vars_merged_dtm(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTS",
-  dtc = EXSTDTC,
-  date_imputation = "first",
-  time_imputation = "first",
-  order = vars(TRTSDTM),
-  mode = "first"
-)
-
-# derive treatment end datetime (TRTEDTM) (without date imputation)
-derive_vars_merged_dtm(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTE",
-  dtc = EXENDTC,
-  time_imputation = "last",
-  order = vars(TRTEDTM),
-  mode = "last"
-)
 }
 \author{
 Stefan Bundfuss
