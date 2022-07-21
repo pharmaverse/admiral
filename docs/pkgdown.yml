@@ -11,6 +11,7 @@ articles:
   development_process: development_process.html
   faq: faq.html
   git_usage: git_usage.html
+  higher_order: higher_order.html
   imputation: imputation.html
   occds: occds.html
   pr_review_guidance: pr_review_guidance.html
@@ -18,7 +19,7 @@ articles:
   queries_dataset: queries_dataset.html
   unit_test_guidance: unit_test_guidance.html
   writing_vignettes: writing_vignettes.html
-last_built: 2022-07-06T14:50Z
+last_built: 2022-07-16T00:19Z
 urls:
   reference: https://pharmaverse.github.io/admiral/reference
   article: https://pharmaverse.github.io/admiral/articles
