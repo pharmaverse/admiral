@@ -25,6 +25,8 @@ deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
+- `value_var` parameter added to `derive_vars_atc()` (#1120) 
+
 ## Breaking Changes
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
