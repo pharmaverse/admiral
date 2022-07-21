@@ -46,10 +46,10 @@ Phases:
 |----------------------------|------------------------------|---------------------------- |------------------------------|
 | Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+|                            |   `{admiral.test}`           |                             |           |
 | Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+|                            |   `{admiral.test}`           |                             |              |
 
 ## Main Goal
 

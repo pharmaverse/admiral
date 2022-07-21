@@ -24,4 +24,5 @@
 - [ ] Retire labels specific to a time-period (testing feedback) if no longer in use
 - [ ] Remove Users with no activity for 12 months from Repository
 - [ ] Update Release Schedule on Readme and Github Vignette with new Quarters and Dates
+- [ ] Verify any pre-release or patch updates are appropriately merged into devel
 

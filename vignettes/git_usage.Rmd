@@ -25,9 +25,11 @@ This article will give you an overview of how the `{admiral}` project is utilizi
 # Branches
 
 -	The `main` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/pharmaverse/admiral/releases) 
--	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
+-	The `devel` branch contains the latest development version of the package. You will always be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `main`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+- The `patch` branch is reserved for special hot fixes to address bugs. More info in [ Hot Fix Release](#hot-fix-release)
+- The `pre-release` branch is used to as an intermediate step to releasing the package from `main`.  More info in [Quarterly Release section](#quarterly-release)
+- The `main`, `devel`, `gh-pages`, `patch` and `pre-release` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
 
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
@@ -179,12 +181,13 @@ knitr::include_graphics("github_conflicts.png", dpi = 144)
 
 ## Quarterly Release
 
-A package release is done in four parts:
+A package release is done in five parts:
 
-1) Declare a freeze on all Pull Requests going into the `devel` branch via internal channels.
-1) Create a PR from `devel` into the `pre-release` branch.  Verify that all CI/CD checks are passing and bundle up and send off to [CRAN](https://cran.r-project.org/).
-1) Once package is available on CRAN, another Pull Request is created for merging the `pre-release` branch the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this release.
+1) Create a Pull Request from `devel` into the `pre-release` branch.  Issues identified in this Pull Request should have work done in separate branches and merged into the `pre-release` branch and **NOT** `devel`.
+1) Verify that all CI/CD checks are passing for the `devel` into the `pre-release` Pull Request, merge and then bundle up and send off to CRAN.
+1) Once the package is available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the GitHub action to rebuild the `{admiral}` website with all the updates for this release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference. 
+1) Any issues fixed in the `pre-release/main` branches should be merged back into `devel`.  
 
 **Quarterly Release:**  `devel >> pre-release >> main` 
 
@@ -192,12 +195,12 @@ A package release is done in four parts:
 
 Occasionally we will need to release a hot fix to address a package breaking bug.  A hot fix release is done in 6 parts:
 
-1) Create two branches called `patch` and `pre-release` off the current `main`.
-1) Pull Requests that address the bugs should be merged into the `patch` branch.
-1) Create a PR from `patch` into a newly created `pre-release` branch off of `main`.  Verify that all CI/CD checks are passing and bundle up and send off to [CRAN](https://cran.r-project.org/).
-1) Once package is approved and available on CRAN, another PR is created for merging the `pre-release` branch into the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this hot fix release.
+1) Identify all the bugs that need to be fixed for this hot fix release and label with hot fix label.
+1) Branches addressing the bugs should have Pull Requests merged into the `patch` branch **NOT** the `devel` branch.
+1) Create a Pull Request from `patch` into the `pre-release` branch.  Verify that all CI/CD checks are passing, merge and bundle up and send off to CRAN.
+1) Once package is approved and available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this hot fix release.
 1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.
-1) These hot fixes should then be merged into the `devel` branch through an additional PR.  
+1) These hot fixes should then be merged into the `devel` branch through an additional Pull Request.  
 
 **Hot Fix Release**: `patch >> pre-release >> main  >> devel`
 
@@ -216,10 +219,10 @@ The `admiral` family has several downstream and upstream dependencies and so thi
 |----------------------------|------------------------------|---------------------------- |------------------------------|
 | Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+|                            |   `{admiral.test}`           |                             |              |
 | Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
 |                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             | `{admiralroche}`             |
+|                            |   `{admiral.test}`           |                             |              |
 
 
 
