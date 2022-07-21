@@ -11,6 +11,7 @@ articles:
   development_process: development_process.html
   faq: faq.html
   git_usage: git_usage.html
+  higher_order: higher_order.html
   imputation: imputation.html
   occds: occds.html
   pr_review_guidance: pr_review_guidance.html

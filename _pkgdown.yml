@@ -150,6 +150,7 @@ articles:
   - bds_finding
   - bds_exposure
   - bds_tte
+  - higher_order
   - imputation
   - queries_dataset
   - faq

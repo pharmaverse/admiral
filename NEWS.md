@@ -33,6 +33,8 @@ deprecation notice (#1229)
 
 ## Documentation
 
+- New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
+
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
 ## Various
