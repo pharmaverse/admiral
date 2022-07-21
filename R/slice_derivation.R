@@ -114,11 +114,14 @@ slice_derivation <- function(dataset,
 
     call <- as.call(c(substitute(derivation), c(quote(data), act_args, slices[[i]]$args)))
     obsnr <- which(dataset_split$temp_slicenr == i)
-    dataset_split$data[[obsnr]] <-
-      eval(call, envir = list(
-        data = dataset_split$data[[obsnr]],
-        enclos = parent.frame()
-      ))
+    if (length(obsnr) > 0) {
+      # call the derivation for non-empty slices only
+      dataset_split$data[[obsnr]] <-
+        eval(call, envir = list(
+          data = dataset_split$data[[obsnr]],
+          enclos = parent.frame()
+        ))
+    }
   }
 
   # put datasets together again

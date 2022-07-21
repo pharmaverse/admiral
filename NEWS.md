@@ -5,6 +5,8 @@
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
+- New function to map lookup table `derive_vars_merged_lookup()` (#940)
+
 - New function `filter_confirmation()` for filtering out confirmed observations
 (#1292) including supporting functions `count_vals()`, `min_cond()`, and
 `max_cond()`.
@@ -23,6 +25,8 @@ deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
+- `value_var` parameter added to `derive_vars_atc()` (#1120) 
+
 ## Breaking Changes
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
@@ -37,11 +41,18 @@ deprecation notice (#1229)
 
 # admiral 0.7.1
 
-## Updates of Existing Functions
+- `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied
+to the `dose_date` parameter (#1206)
 
-- `derive_param_first_event()` was updated such that
+- `derive_vars_duration()` updated to not display units when there is missing
+duration (#1207)
+
+- `derive_param_first_event()` was updated (#1214) such that
     - `AVAL` is derived instead of `AVALN` and
     - all variables from the source dataset are kept.
+
+- `slice_derivation()` was updated such that it no longer fails if a slice is
+empty (#1309)
 
 # admiral 0.7.0
 
