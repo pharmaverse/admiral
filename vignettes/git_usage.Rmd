@@ -206,7 +206,7 @@ Occasionally we will need to release a hot fix to address a package breaking bug
 
 ##  Release Schedule
 
-A release schedule is maintained on the `{admiral}` homepage.  
+A release schedule is maintained on the [homepage](../index.html#release-schedule).  
 
 
 
