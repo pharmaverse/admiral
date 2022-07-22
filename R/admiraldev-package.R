@@ -24,5 +24,5 @@
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
-#' @importFrom admiral derive_vars_dy assert_character_scalar
+#' @importFrom admiral derive_vars_dy assert_character_scalar vars2chr filter_if
 "_PACKAGE"

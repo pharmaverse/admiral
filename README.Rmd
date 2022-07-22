@@ -60,6 +60,12 @@ remotes::install_github("pharmaverse/admiral", ref = "devel")
 remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 ```
 
+## Structure of package
+
+```{r tree, echo=FALSE}
+library(fs)
+tree <- dir_tree("R",recurse=2)
+```
 
 ## Keyword/Family
 

@@ -12,7 +12,9 @@
 #' An error if `base` and `compare` do not match or `NULL` invisibly if they do
 #'
 #' @author Thomas Neitmann
-#' @keywords test_helper dev_utility
+#' @keywords test_helper
+#' @family test_helper
+#'
 #' @export
 #'
 #' @examples

@@ -1,4 +1,3 @@
-
 test_that("enumerate works", {
   expect_equal(enumerate(letters[1]), "`a`")
   expect_equal(enumerate(letters[1:3]), "`a`, `b` and `c`")
@@ -21,7 +20,6 @@ test_that("`convert_dtm_to_dtc` is in correct format", {
     "2022-04-05T15:34:07"
   )
 })
-
 
 test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format", {
   expect_error(

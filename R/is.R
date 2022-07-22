@@ -1,3 +1,47 @@
+#' Is a named argument
+#'
+#' @param x something
+#'
+#' @return something
+#' @export
+#'
+#' @keywords is
+#' @family is
+#'
+is_named <- function(x) {
+  !is.null(names(x)) && all(names(x) != "")
+}
+
+#' Checks if the argument equals the auto keyword
+#'
+#' @param arg argument to check
+#'
+#' @return `TRUE` if the argument equals the auto keyword, i.e., it is a quosure
+#'   of a symbol named auto.
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords is
+#' @family is
+#'
+#' @examples
+#'
+#' example_fun <- function(arg) {
+#'   arg <- rlang::enquo(arg)
+#'   if (admiral:::is_auto(arg)) {
+#'     "auto keyword was specified"
+#'   } else {
+#'     arg
+#'   }
+#' }
+#'
+#' example_fun("Hello World!")
+#'
+#' example_fun(auto)
+is_auto <- function(arg) {
+  is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
+}
+
 #' Is Date/Date-time?
 #'
 #' Checks if a date or date-time vector was specified
@@ -8,9 +52,8 @@
 #'
 #' @return `TRUE` if the argument is a date or date-time, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' refdate <- lubridate::ymd("2020-01-02")
@@ -49,9 +92,8 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a time unit, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' unit <- "days"
@@ -81,9 +123,8 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid date_imputation input, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
@@ -115,9 +156,8 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid time_imputation input, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
@@ -148,9 +188,8 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid min/sec input, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_sec_min(59))
@@ -178,9 +217,8 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a valid hour input, `FALSE` otherwise
 #'
-#' @keywords check
-#'
-#' @noRd
+#' @keywords is
+#' @family is
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_hour(20))
@@ -208,9 +246,9 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a day input, `FALSE` otherwise
 #'
-#' @keywords check
+#' @keywords is
+#' @family is
 #'
-#' @noRd
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_day(20))
@@ -238,7 +276,8 @@ on_failure(is_valid_day) <- function(call, env) {
 #'
 #' @return `TRUE` if the argument is a month input, `FALSE` otherwise
 #'
-#' @keywords check
+#' @keywords is
+#' @family is
 #'
 #' @noRd
 #'
@@ -259,6 +298,15 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
+#' Is order vars??
+#'
+#' @param arg something
+#'
+#' @return something
+#' @export
+#'
+#' @keywords is
+#' @family is
 is_order_vars <- function(arg) {
   quo_is_desc_call <- function(quo) {
     expr <- quo_get_expr(quo)
@@ -283,28 +331,27 @@ on_failure(is_order_vars) <- function(call, env) {
   )
 }
 
-#' Check Whether an Argument Is Not a Quosure of a Missing Argument
+#' Is this string a valid DTC
 #'
-#' @param x Test object
+#' @param arg something
 #'
-#' @return TRUE or error.
+#' @return something
+#' @export
+#' @keywords is
+#' @family is
 #'
-#' @author Thomas Neitmann, Ondrej Slama
-#'
-#' @noRd
-#'
-#' @examples
-#' test_fun <- function(x) {
-#'   x <- rlang::enquo(x)
-#'   assertthat::assert_that(quo_not_missing(x))
-#' }
-#' test_fun(my_variable) # no missing argument -> returns TRUE
-#' \dontrun{
-#' test_fun() # missing argument -> throws error
-#' }
-quo_not_missing <- function(x) {
-  !rlang::quo_is_missing(x)
-}
-on_failure(quo_not_missing) <- function(call, env) {
-  paste0("Argument `", deparse(call$x), "` is missing, with no default")
+is_valid_dtc <- function(arg) {
+  pattern <- paste(
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})$",
+    "^(\\d{4})-(\\d{2})$",
+    "^(\\d{4})$",
+    "^(\\d{4})---(\\d{2})$",
+    sep = "|"
+  )
+
+  grepl(pattern, arg) | arg == "" | is.na(arg)
 }

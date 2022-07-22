@@ -32,6 +32,25 @@ GitHub use the following code:
     remotes::install_github("pharmaverse/admiral", ref = "devel")
     remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 
+## Structure of package
+
+    ## R
+    ## ├── addin_format_testthat.R
+    ## ├── admiraldev-package.R
+    ## ├── assertions.R
+    ## ├── compat_friendly_type.R
+    ## ├── dataset_vignette.R
+    ## ├── dev_utilities.R
+    ## ├── expect_dfs_equal.R
+    ## ├── get.R
+    ## ├── global.R
+    ## ├── is.R
+    ## ├── quo.R
+    ## ├── quote.R
+    ## ├── reexports.R
+    ## ├── warnings.R
+    ## └── what.R
+
 ## Keyword/Family
 
 <table>
