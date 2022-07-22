@@ -961,17 +961,23 @@ derive_vars_merged_lookup <- function(dataset,
       filter(is.na(temp_match_flag)) %>%
       distinct(!!!by_vars)
 
-    .temp$nmap <- structure(
-      temp_not_mapped,
-      class = union("nmap", class(temp_not_mapped)),
-      by_vars = vars2chr(by_vars)
-    )
+    if (nrow(temp_not_mapped) > 0) {
+      .temp$nmap <- structure(
+        temp_not_mapped,
+        class = union("nmap", class(temp_not_mapped)),
+        by_vars = vars2chr(by_vars)
+      )
 
-    message(
-      "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
-      paste0(capture.output(temp_not_mapped), collapse = "\n"),
-      "\nRun `get_not_mapped()` to access the full list"
-    )
+      message(
+        "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
+        paste0(capture.output(temp_not_mapped), collapse = "\n"),
+        "\nRun `get_not_mapped()` to access the full list"
+      )
+    } else if (nrow(temp_not_mapped) == 0) {
+      message(
+        "All ", enumerate(vars2chr(by_vars)), " are mapped."
+      )
+    }
   }
 
   res %>% select(-temp_match_flag)
