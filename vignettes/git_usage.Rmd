@@ -206,24 +206,7 @@ Occasionally we will need to release a hot fix to address a package breaking bug
 
 ##  Release Schedule
 
-We have decided to release `{admiral}` on a quarterly schedule to ensure downstream and upstream packages can adequately planned their time for updates and releases.  
-
-`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release. 
-The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three Phases:  
-
-* Phase 1 release is for `{admiraldev}` and `{admiral.test}`, which feed into all `admiral` packages
-* Phase 2 release is only for core `{admiral}`
-* Phase 3 release is extension packages, e.g. `{admiralonco}`
-
-| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
-|----------------------------|------------------------------|---------------------------- |------------------------------|
-| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
-|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             |              |
-| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
-|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
-|                            |   `{admiral.test}`           |                             |              |
-
+A release schedule is maintained on the `{admiral}` homepage.  
 
 
 
