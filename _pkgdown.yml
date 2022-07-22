@@ -84,13 +84,13 @@ reference:
 - subtitle: Utilities for Dataset Checking
 - contents:
   - has_keyword('utils_ds_chk')
-- subtitle: Utilities used within Derivation functions
+- subtitle: Utilities used within Derivation Functions
 - contents:
   - has_keyword('utils_help')
 - subtitle: Utilities for Filtering Observations
 - contents:
   - has_keyword('utils_fil')
-- subtitle: Utilities used for examples and template scripts
+- subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')
 
