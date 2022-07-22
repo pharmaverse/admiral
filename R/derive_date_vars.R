@@ -645,7 +645,7 @@ compute_tmf <- function(dtc,
 #'
 #' @family der_date_time
 #'
-#' @keywords der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
@@ -836,7 +836,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' @family der_date_time
 #'
-#' @keywords der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

@@ -287,7 +287,7 @@ derive_vars_merged <- function(dataset,
 #'
 #' @family der_date_time
 #'
-#' @keywords der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
@@ -412,7 +412,7 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @family der_date_time
 #'
-#' @keywords der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

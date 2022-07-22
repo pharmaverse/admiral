@@ -30,7 +30,6 @@ reference:
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
 - contents:
-  - has_keyword("der_date_time")
   - has_keyword("der_gen")
 - subtitle: ADSL-specific
   desc: Derivation Functions helpful for building the ADSL dataset

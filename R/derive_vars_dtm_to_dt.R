@@ -15,7 +15,7 @@
 #'
 #' @family der_date_time
 #'
-#' @keywords der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
