@@ -60,9 +60,6 @@ case-sensitive. Thus they must be in lower case.
 | ADaM dataset specific keywords:  `adex`, `adlb`, ...                                  | A function specific to an ADaM dataset according to CDISC. Use the name of the corresponding ADaM dataset name as keyword |
 | `timing`                                                                            | Function is related to timing, e.g., imputing dates, converting dates, deriving duration,, ...                           |
 | `computation`                                                                       | Function which performs a computation that is used by other functions to derive an ADaM variable                          |
-| Therapeutic Area specific functions: `oncology`, `infectious_diseases`, `neuroscience`  | Functions that provide a particular algorithm for a specific therapeutic area.                                           |
-| Company specific keywords                                                         |                                                                                                                          |
-
 
 # Functions in R
 
