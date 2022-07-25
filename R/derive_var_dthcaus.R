@@ -153,28 +153,25 @@ derive_var_dthcaus <- function(dataset,
   for (ii in seq_along(sources)) {
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
-    if (!quo_is_null(sources[[ii]]$filter)) {
-      add_data[[ii]] <- source_dataset %>%
-        filter(!!sources[[ii]]$filter)
-    } else {
-      add_data[[ii]] <- source_dataset
-    }
+    add_data[[ii]] <- source_dataset %>%
+      filter_if(sources[[ii]]$filter) %>%
+      mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date,
+                                    date_imputation = sources[[ii]]$date_imputation))
 
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = vars(!!sources[[ii]]$date),
+        order = c(vars(temp_date), sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
       mutate(
         temp_source_nr = ii,
-        temp_date = !!sources[[ii]]$date,
         DTHCAUS = !!sources[[ii]]$dthcaus
       )
 
     # add traceability param if required
-    # inconsitent traceability lists issue a warning
+    # inconsistent traceability lists issue a warning
     if (ii > 1) {
       warn_if_inconsistent_list(
         base = sources[[ii - 1]]$traceability,
@@ -219,6 +216,27 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param date A character vector to be used for sorting `dataset`.
 #'
+#' @param date_imputation The value to impute the day/month when a datepart is missing.
+#'
+#'   If `NULL`: no date imputation is performed and partial dates are returned as missing.
+#'
+#'   Otherwise, a character value is expected, either as a
+#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
+#'   of June
+#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
+#'
+#'   Default is `NULL`
+#'
+#' @param order Sort order
+#'
+#'   Additional variables to be used for sorting the `dataset` which is ordered by the
+#'   (imputed) `date` and `order`. Can be used to avoid duplicate record warning.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
 #' which is ordered by `date`.
@@ -249,6 +267,8 @@ derive_var_dthcaus <- function(dataset,
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
+                           date_imputation = NULL,
+                           order = NULL,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL) {
@@ -256,6 +276,8 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
+    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
+    order = assert_order_vars(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)
