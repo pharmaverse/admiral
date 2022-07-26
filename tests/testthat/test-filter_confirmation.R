@@ -25,6 +25,7 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVISITN, AVALC),
+      join_type = "after",
       order = vars(AVISITN),
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
         AVISITN < AVISITN.join
@@ -50,6 +51,7 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVALC),
+      join_type = "after",
       first_cond = AVALC == "CR" &
         AVALC.join == "CR",
       order = vars(AVISITN),
@@ -75,6 +77,7 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVALC),
+      join_type = "after",
       first_cond = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
       order = vars(AVISITN),
@@ -128,5 +131,81 @@ test_that("filter_confirmation Test 4: join_type = 'all'", {
     base = expected,
     compare = actual,
     keys = c("USUBJID", "ADY")
+  )
+})
+
+# min_cond ----
+## Test 1: test it ----
+test_that("min_cond, Test 1: test it", {
+  data <- tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "NE",
+    "1",      4,        "CR",
+    "1",      5,        "NE",
+    "2",      1,        "CR",
+    "2",      2,        "PR",
+    "2",      3,        "CR",
+  )
+
+  actual <- group_by(data, USUBJID) %>% mutate(
+    first_cr_vis = min_cond(var = AVISITN, cond = AVALC == "CR")
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~AVISITN, ~AVALC, ~first_cr_vis,
+    "1",      1,        "PR",               2,
+    "1",      2,        "CR",               2,
+    "1",      3,        "NE",               2,
+    "1",      4,        "CR",               2,
+    "1",      5,        "NE",               2,
+    "2",      1,        "CR",               1,
+    "2",      2,        "PR",               1,
+    "2",      3,        "CR",               1,
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
+  )
+})
+
+# max_cond ----
+## Test 1: test it ----
+test_that("max_cond, Test 1: test it", {
+  data <- tribble(
+    ~USUBJID, ~AVISITN, ~AVALC,
+    "1",      1,        "PR",
+    "1",      2,        "CR",
+    "1",      3,        "NE",
+    "1",      4,        "CR",
+    "1",      5,        "NE",
+    "2",      1,        "CR",
+    "2",      2,        "PR",
+    "2",      3,        "CR",
+  )
+
+  actual <- group_by(data, USUBJID) %>% mutate(
+    last_pr_vis = max_cond(var = AVISITN, cond = AVALC == "PR")
+  )
+
+  expected <- tribble(
+    ~USUBJID, ~AVISITN, ~AVALC, ~last_pr_vis,
+    "1",      1,        "PR",              1,
+    "1",      2,        "CR",              1,
+    "1",      3,        "NE",              1,
+    "1",      4,        "CR",              1,
+    "1",      5,        "NE",              1,
+    "2",      1,        "CR",              2,
+    "2",      2,        "PR",              2,
+    "2",      3,        "CR",              2,
+  )
+
+  expect_dfs_equal(
+    base = expected,
+    compare = actual,
+    keys = c("USUBJID", "AVISITN")
   )
 })
