@@ -24,7 +24,7 @@ repo:
     issue: https://github.com/pharmaverse/admiral/issues/
     user: https://github.com/
 news:
-  cran_dates: false
+  cran_dates: true
 reference:
 - title: Derivations
   desc: Derivations add one or more variables or parameters to the input
