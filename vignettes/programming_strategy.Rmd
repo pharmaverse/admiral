@@ -408,7 +408,7 @@ add an issue in GitHub for discussion.
 | `move_adm_dev` 	                                                                  | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
 
-**NOTE:** Each `@keyword` and `@family` are to be identical to ease burden of development and maintenance of `admiral` functions.  
+**NOTE:** It is strongly encouraged that each `@keyword` and `@family` are to be identical.  This eases the burden of development and maintenance for admiral functions. If you need to use multiple keywords or families, please reach out to the core development team for discussion.  
 
 
 # Missing values
