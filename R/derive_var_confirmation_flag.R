@@ -42,9 +42,8 @@
 #' @param join_type Observations to keep after joining
 #'
 #'   The argument determines which of the joined observations are kept with
-#'   respect to the original observation. For example, if `join_type =
-#'   "at_after"` is specified all observations at and after the original
-#'   observations are kept.
+#'   respect to the original observation. For example, if `join_type = "after"`
+#'   is specified all observations after the original observations are kept.
 #'
 #'   For example for confirmed response or BOR in the oncology setting or
 #'   confirmed deterioration in questionnaires the confirmatory assessment must
@@ -56,10 +55,7 @@
 #'   on or after seven days before a COVID AE. Thus `join_type = "all"` could be
 #'   used.
 #'
-#'   *Default:* `"after"`
-#'
-#'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
-#'   `"all"`
+#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond Condition for selecting range of data
 #'
@@ -139,15 +135,13 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "at_after"` and `order = vars(AVISITN)` is restricted to
+#'   "after"` and `order = vars(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
 #'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 #'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
-#'   1             1 Y         1            1 Y
 #'   1             1 Y         1            2 N
-#'   1             2 N         0            2 N
 #'   ```
 #'
 #'   ## Step 3
@@ -233,6 +227,7 @@
 #'   by_vars = vars(USUBJID),
 #'   new_var = CONFFL,
 #'   join_vars = vars(AVALC, AVISITN),
+#'   join_type = "after",
 #'   order = vars(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
@@ -261,6 +256,7 @@
 #'   data,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(AVALC),
+#'   join_type = "after",
 #'   order = vars(AVISITN),
 #'   new_var = CONFFL,
 #'   first_cond = AVALC.join == "CR",
@@ -293,6 +289,7 @@
 #'   data,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(AVALC, ADY),
+#'   join_type = "after",
 #'   order = vars(ADY),
 #'   new_var = CONFFL,
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
@@ -310,7 +307,7 @@ derive_var_confirmation_flag <- function(dataset,
                                          order,
                                          new_var,
                                          join_vars,
-                                         join_type = "after",
+                                         join_type,
                                          first_cond = NULL,
                                          filter,
                                          true_value = "Y",

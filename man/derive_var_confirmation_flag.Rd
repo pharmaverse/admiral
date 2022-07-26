@@ -10,7 +10,7 @@ derive_var_confirmation_flag(
   order,
   new_var,
   join_vars,
-  join_type = "after",
+  join_type,
   first_cond = NULL,
   filter,
   true_value = "Y",
@@ -48,8 +48,8 @@ The \verb{*.join} variables are not included in the output dataset.}
 \item{join_type}{Observations to keep after joining
 
 The argument determines which of the joined observations are kept with
-respect to the original observation. For example, if \code{join_type = "at_after"} is specified all observations at and after the original
-observations are kept.
+respect to the original observation. For example, if \code{join_type = "after"}
+is specified all observations after the original observations are kept.
 
 For example for confirmed response or BOR in the oncology setting or
 confirmed deterioration in questionnaires the confirmatory assessment must
@@ -61,10 +61,7 @@ prior to the observation to be flagged. For example, to flag AEs occurring
 on or after seven days before a COVID AE. Thus \code{join_type = "all"} could be
 used.
 
-\emph{Default:} \code{"after"}
-
-\emph{Permitted Values:} \code{"before"}, \code{"at_before"}, \code{"at_after"}, \code{"after"},
-\code{"all"}}
+\emph{Permitted Values:} \code{"before"}, \code{"after"}, \code{"all"}}
 
 \item{first_cond}{Condition for selecting range of data
 
@@ -154,14 +151,12 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 The joined dataset is restricted to observations with respect to
 \code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{join_type = "at_after"} and \code{order = vars(AVISITN)} is restricted to
+The dataset from the example in the previous step with \code{join_type = "after"} and \code{order = vars(AVISITN)} is restricted to
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
-1             1 Y         1            1 Y
 1             1 Y         1            2 N
-1             2 N         0            2 N
 }\if{html}{\out{</div>}}
 }
 
@@ -242,6 +237,7 @@ derive_var_confirmation_flag(
   by_vars = vars(USUBJID),
   new_var = CONFFL,
   join_vars = vars(AVALC, AVISITN),
+  join_type = "after",
   order = vars(AVISITN),
   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 )
@@ -270,6 +266,7 @@ derive_var_confirmation_flag(
   data,
   by_vars = vars(USUBJID),
   join_vars = vars(AVALC),
+  join_type = "after",
   order = vars(AVISITN),
   new_var = CONFFL,
   first_cond = AVALC.join == "CR",
@@ -302,6 +299,7 @@ derive_var_confirmation_flag(
   data,
   by_vars = vars(USUBJID),
   join_vars = vars(AVALC, ADY),
+  join_type = "after",
   order = vars(ADY),
   new_var = CONFFL,
   first_cond = AVALC.join \%in\% c("CR", "PR") & ADY.join - ADY >= 20,

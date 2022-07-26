@@ -25,6 +25,7 @@ test_that("filter_confirmation Test 1: filter without first_cond", {
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVISITN, AVALC),
+      join_type = "after",
       order = vars(AVISITN),
       filter = AVALC == "PR" & AVALC.join %in% c("CR", "PR") &
         AVISITN < AVISITN.join
@@ -50,6 +51,7 @@ test_that("filter_confirmation Test 2: filter with first_cond", {
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVALC),
+      join_type = "after",
       first_cond = AVALC == "CR" &
         AVALC.join == "CR",
       order = vars(AVISITN),
@@ -75,6 +77,7 @@ test_that("filter_confirmation Test 3: filter with first_cond and summary functi
       data,
       by_vars = vars(USUBJID),
       join_vars = vars(AVALC),
+      join_type = "after",
       first_cond = AVALC == "PR" &
         AVALC.join %in% c("CR", "PR"),
       order = vars(AVISITN),
