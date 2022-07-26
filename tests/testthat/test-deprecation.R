@@ -1,3 +1,5 @@
+library(tibble)
+
 test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
   input <- tibble::tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
@@ -122,48 +124,6 @@ test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_a
   )
 })
 
-test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var_trtedtm()`", {
-  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tibble::tribble(
-    ~USUBJID, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-    1L, "2020-01-01", 1, 12, "ACTIVE",
-    1L, "2020-02-03", 2, 9, "ACTIVE",
-    2L, "2020-01-02", 1, 0, "PLACEBO",
-    3L, "2020-03-13", 1, 14, "ACTIVE",
-    3L, "2020-03-21", 2, 0, "ACTIVE"
-  )
-
-  expect_warning(derive_var_trtedtm(
-    adsl,
-    dataset_ex = ex,
-    subject_keys = vars(USUBJID)
-  ),
-  "deprecated",
-  fixed = TRUE
-  )
-})
-
-test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var_trtsdtm()`", {
-  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tibble::tribble(
-    ~USUBJID, ~EXSTDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-    1L, "2020-01-01", 1, 12, "ACTIVE",
-    1L, "2020-02-03", 2, 9, "ACTIVE",
-    2L, "2020-01-02", 1, 0, "PLACEBO",
-    3L, "2020-03-13", 1, 14, "ACTIVE",
-    3L, "2020-03-21", 2, 0, "ACTIVE"
-  )
-
-  expect_warning(derive_var_trtsdtm(
-    adsl,
-    dataset_ex = ex,
-    subject_keys = vars(USUBJID)
-  ),
-  "deprecated",
-  fixed = TRUE
-  )
-})
-
 test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF, # nolint
@@ -226,4 +186,51 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
     "deprecated",
     fixed = TRUE
   )
+})
+
+adsl <- tribble(
+  ~USUBJID, ~SEX, ~COUNTRY,
+  "ST42-1", "F",  "AUT",
+  "ST42-2", "M",  "MWI",
+  "ST42-3", "M",  "NOR",
+  "ST42-4", "F",  "UGA"
+) %>% mutate(STUDYID = "ST42")
+
+ex <- tribble(
+  ~USUBJID, ~EXSTDTC,
+  "ST42-1", "2020-12-07",
+  "ST42-1", "2020-12-14",
+  "ST42-2", "2021-01-12T12:00:00",
+  "ST42-2", "2021-01-26T13:21",
+  "ST42-3", "2021-03-02"
+) %>% mutate(STUDYID = "ST42")
+
+test_that("derive_vars_merged_dt: a deprecation warning is issued", {
+  expect_warning(
+    derive_vars_merged_dt(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDT),
+      flag_imputation = "date",
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      mode = "first"
+    )
+    , "deprecated")
+})
+
+test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
+  expect_warning(
+    derive_vars_merged_dtm(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDTM),
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      time_imputation = "first",
+      mode = "first"
+    ),
+    "deprecated")
 })

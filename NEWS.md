@@ -32,7 +32,14 @@ deprecation notice (#1229)
 - Imputation related arguments have been deprecated for all functions except the
 imputation functions itself. The following parameters were deprecated:
 
-  - `date_imputation`, `time_imputation`, and `preserve` in `date_source`
+  - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
+  
+  The following parameters do no longer accept DTC variables:
+  
+  - `date` in `date_source()`, `censor_source()`, and `event_source()`
+  - `dose_date` and `analysis_date` in `derive_vars_last_dose()`,
+  `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`,
+  `derive_var_last_dose_grp()`
   
 - The following functions and parameters, which were deprecated in previous
 {admiral} versions, have been removed:
@@ -40,7 +47,9 @@ imputation functions itself. The following parameters were deprecated:
   - `derive_var_disposition_dt()`
   - `derive_var_lstalvdt()`
   - `lstalvdt_source()`
-
+  - `derive_var_trtedtm()`
+  - `derive_var_trtsdtm()`
+  
 ## Documentation
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)

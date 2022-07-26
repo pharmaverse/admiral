@@ -1,7 +1,9 @@
 
+library(admiral.test)
 library(admiral)
 library(dplyr)
-data(ex)
+data(admiral_ex)
+ex <- admiral_ex
 
 # check that there is only one start/end date of exposure per subject and visit
 check_cond <- ex %>%
@@ -38,8 +40,12 @@ ex_single <- dates %>%
   ungroup() %>%
   mutate(seq_dates = NULL,
          EXENDTC = as.character(EXENDTC),
-         EXSTDTC = as.character(EXSTDTC))
+         EXSTDTC = as.character(EXSTDTC),
+         EXDOSFRQ = "ONCE")
 
 attr(ex_single$EXSEQ, "label") <- attr(ex$EXSEQ, "label")
 attr(ex_single$EXSTDTC, "label") <- attr(ex$EXSTDTC, "label")
 attr(ex_single$EXENDTC, "label") <- attr(ex$EXENDTC, "label")
+attr(ex_single$EXDOSFRQ, "label") <- attr(ex$EXDOSFRQ, "label")
+
+save(ex_single, file = file.path("data", "ex_single.rda"), compress = "bzip2")

@@ -72,16 +72,14 @@ data("admiral_adsl")
 # derive last known alive date (LSTALVDT)
 ae_start <- date_source(
   dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "first",
+  date = AESTDT
 )
 ae_end <- date_source(
   dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "first",
+  date = AEENDT
 )
 
-ae_ext <- admiral_ex \%>\%
+ae_ext <- admiral_ae \%>\%
   derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AEST",
@@ -95,11 +93,11 @@ ae_ext <- admiral_ex \%>\%
 
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTC,
-  filter = nchar(LBDTC) >= 10,
+  date = LBDT,
+  filter = !is.na(LBDT),
 )
 
-lb_ext <- derive_vars_dtm(
+lb_ext <- derive_vars_dt(
   admiral_lb,
   dtc = LBDTC,
   new_vars_prefix = "LB"
@@ -175,9 +173,7 @@ admiral_dm \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \seealso{
-\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}},
-\code{\link[=derive_vars_merged_dt]{derive_vars_merged_dt()}}, \code{\link[=derive_vars_merged_dtm]{derive_vars_merged_dtm()}},
-\code{\link[=derive_vars_merged]{derive_vars_merged()}}
+\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_merged]{derive_vars_merged()}}
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann

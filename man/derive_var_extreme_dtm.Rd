@@ -79,7 +79,7 @@ ae_end <- date_source(
   date = AEENDTM
 )
 
-ae_ext <- admiral_ex \%>\%
+ae_ext <- admiral_ae \%>\%
   derive_vars_dtm(
   dtc = AESTDTC,
   new_vars_prefix = "AEST",
@@ -94,8 +94,7 @@ ae_ext <- admiral_ex \%>\%
 lb_date <- date_source(
   dataset_name = "lb",
   date = LBDTM,
-  filter = !is.na(LBDTM),
-  time_imputation = "first"
+  filter = !is.na(LBDTM)
 )
 
 lb_ext <- derive_vars_dtm(
