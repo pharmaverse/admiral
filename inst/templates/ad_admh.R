@@ -31,6 +31,7 @@ mhtermn_lookup <-tibble::tribble(
   "ALZHEIMER'S DISEASE", 1
 )
 
+
 # ---- Derivations ----
 
 # Get list of ADSL vars required for derivations
