@@ -190,7 +190,7 @@
 #'   dtc = AESTDTC,
 #'   new_vars_prefix = "AEST",
 #'   highest_imputation = "M",
-#'   imputation_flags = "none"
+#'   flag_imputation = "none"
 #' )
 #'
 #' ttae <- event_source(
@@ -523,7 +523,13 @@ filter_date_sources <- function(sources,
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
-    data[[i]] <- source_datasets[[sources[[i]]$dataset_name]] %>%
+    source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    assert_date_var(
+      dataset = source_dataset,
+      var = !!date,
+      dataset_name = sources[[i]]$dataset_name
+    )
+    data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = vars(!!date),

@@ -43,8 +43,9 @@ The simplest imputation rule is to set the missing parts to a fixed value. For
 example
 
 ```{r}
-impute_dtc(
+impute_dtc_dtm(
   "2019-10",
+  highest_imputation = "M",
   date_imputation = "01-01",
   time_imputation = "00:00:00"
 )
@@ -53,8 +54,9 @@ impute_dtc(
 Sometimes this does not work as it would result in invalid dates, e.g.,
 
 ```{r}
-impute_dtc(
+impute_dtc_dtm(
   "2019-02",
+  highest_imputation = "M",
   date_imputation = "02-31",
   time_imputation = "00:00:00"
 )
@@ -64,8 +66,9 @@ Therefore the keywords `"first"` or `"last"` can be specified to request that
 missing parts are replaced by the first or last possible value:
 
 ```{r}
-impute_dtc(
+impute_dtc_dtm(
   "2019-02",
+  highest_imputation = "M",
   date_imputation = "last",
   time_imputation = "00:00:00"
 )
@@ -82,14 +85,16 @@ dates <- c(
   "2019",
   "2019---01"
 )
-impute_dtc(
+impute_dtc_dtm(
   dates,
+  highest_imputation = "M",
   date_imputation = "mid",
   time_imputation = "00:00:00",
   preserve = FALSE
 )
-impute_dtc(
+impute_dtc_dtm(
   dates,
+  highest_imputation = "M",
   date_imputation = "mid",
   time_imputation = "00:00:00",
   preserve = TRUE
@@ -106,8 +111,9 @@ dates <- c(
   "2019",
   "2019---01"
 )
-impute_dtc(
+impute_dtc_dtm(
   dates,
+  highest_imputation = "M",
   date_imputation = "06-15",
   time_imputation = "00:00:00"
 )
@@ -121,8 +127,9 @@ desirable. The `{admiral}` imputation functions provide the `min_dates` and
 `max_dates` parameter to specify those dates. For example:
 
 ```{r}
-impute_dtc(
+impute_dtc_dtm(
   "2019-02",
+  highest_imputation = "M",
   date_imputation = "last",
   time_imputation = "last",
   max_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
@@ -160,8 +167,10 @@ then it is not necessary to set `*TMF` to `"S"`.
 - `derive_vars_dtm()`: Adds a datetime variable, a date imputation flag variable,
 and a time imputation flag variable (both optional) based on a --DTC variable
 and imputation rules.
-- `impute_dtc()`: Returns a complete ISO 8601 date or `NA` based on a partial
-ISO 8601 date and imputation rules.
+- `impute_dtc_dtm()`: Returns a complete ISO 8601 datetime or `NA` based on a
+partial ISO 8601 datetime and imputation rules.
+- `impute_dtc_dt()`: Returns a complete ISO 8601 date (without time) or `NA`
+based on a partial ISO 8601 date(time) and imputation rules.
 - `convert_dtc_to_dt()`: Returns a date if the input ISO 8601 date is complete.
 Otherwise, `NA` is returned.
 - `convert_dtc_to_dtm()`: Returns a datetime if the input ISO 8601 date is complete 
@@ -192,6 +201,7 @@ ae <- tribble(
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
+    highest_imputation = "M",
     date_imputation = "first",
     time_imputation = "first"
   ) %>%
@@ -217,6 +227,7 @@ ae <- tribble(
   derive_vars_dt(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
+    highest_imputation = "M",
     date_imputation = "first"
   )
 ```
@@ -226,8 +237,8 @@ dataset_vignette(ae)
 
 ## Impute Time without Imputing Date
 
-If the time should be imputed but not the date, the `date_imputation` parameter
-should be set to `NULL`. This results in `NA` if the date is partial. As
+If the time should be imputed but not the date, the `highest_imputation` parameter
+should be set to `"h"`. This results in `NA` if the date is partial. As
 no date is imputed the date imputation flag is not created.
 
 ```{r}
@@ -241,7 +252,7 @@ ae <- tribble(
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
-    date_imputation = NULL,
+    highest_imputation = "h",
     time_imputation = "first"
   )
 ```
@@ -273,6 +284,7 @@ ae <- tribble(
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
+    highest_imputation = "M",
     date_imputation = "first",
     time_imputation = "first",
     min_dates = vars(TRTSDTM)
@@ -304,6 +316,7 @@ ae <- tribble(
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, DCUTDT)
@@ -328,7 +341,11 @@ mh <- tribble(
   "2019-06-21", ymd("2019-04-15")
 ) %>%
   filter(
-    convert_dtc_to_dt(MHSTDTC, date_imputation = "first") < TRTSDT
+    convert_dtc_to_dt(
+      MHSTDTC,
+      highest_imputation = "M",
+      date_imputation = "first"
+    ) < TRTSDT
   )
 ```
 ```{r, echo=FALSE}
@@ -352,8 +369,7 @@ vs <- tribble(
     derivation = derive_vars_dtm,
     args = params(
       dtc = VSDTC,
-      new_vars_prefix = "A",
-      date_imputation = NULL
+      new_vars_prefix = "A"
     ),
     derivation_slice(
       filter = VSTPT == "PRE-DOSE",

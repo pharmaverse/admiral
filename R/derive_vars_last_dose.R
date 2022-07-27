@@ -148,10 +148,20 @@ derive_vars_last_dose <- function(dataset,
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
   if (as_name(dose_date) %in% names(new_vars)) {
     required_vars <- quo_c(by_vars, new_vars, get_source_vars(traceability_vars))
+    dose_date_res <- new_vars[[as_name(dose_date)]]
   } else {
     required_vars <- quo_c(by_vars, dose_date, new_vars, get_source_vars(traceability_vars))
+    dose_date_res <- dose_date
   }
   assert_data_frame(dataset_ex, required_vars)
+  assert_date_var(
+    dataset = dataset,
+    var = !!analysis_date
+  )
+  assert_date_var(
+    dataset = dataset_ex,
+    var = !!dose_date_res
+  )
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)

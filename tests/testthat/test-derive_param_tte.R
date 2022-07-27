@@ -224,7 +224,7 @@ test_that("derive_param_tte Test 3: error is issued if DTC variables specified f
         PARAM = "Time to First Adverse Event"
       )
     ),
-    regexp = "AESTDTC specified for `date` is not a date or datetime variable but is a string"
+    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector"
   )
 })
 

@@ -105,13 +105,13 @@ adae <- adae %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    time_imputation = "first",
+    highest_imputation = "M",
     min_dates = vars(TRTSDT)
   ) %>%
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
@@ -232,12 +232,18 @@ Additionally, this function can also provide traceability variables
 
 ```{r eval=TRUE}
 data(ex_single)
+ex_single <- derive_vars_dtm(
+  ex_single,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  flag_imputation = "none"
+)
 adae <- adae %>%
   derive_var_last_dose_date(
     ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
-    dose_date = EXSTDTC,
+      !is.na(EXSTDTM),
+    dose_date = EXSTDTM,
     analysis_date = ASTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSEDTM,
@@ -357,12 +363,15 @@ maximum toxicity grade.
 
 ```{r, eval=FALSE}
 adae <- adae %>%
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(desc(ATOXGR), ASTDTM, AESEQ),
-    new_var = AOCCIFL,
-    filter = TRTEMFL == "Y",
-    mode = "first"
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID),
+      order = vars(desc(ATOXGR), ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "first"
+      ),
+    filter = TRTEMFL == "Y"
   )
 ```
 
@@ -375,12 +384,15 @@ adae <- adae %>%
   mutate(
     ASEVN = as.integer(factor(ASEV, levels = c("MILD", "MODERATE", "SEVERE", "DEATH THREATENING")))
   ) %>%
-  derive_var_extreme_flag(
-    by_vars = vars(USUBJID),
-    order = vars(desc(ASEVN), ASTDTM, AESEQ),
-    new_var = AOCCIFL,
-    filter = TRTEMFL == "Y",
-    mode = "first"
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      by_vars = vars(USUBJID),
+      order = vars(desc(ASEVN), ASTDTM, AESEQ),
+      new_var = AOCCIFL,
+      mode = "first"
+    ),
+    filter = TRTEMFL == "Y"
   )
 ```
 

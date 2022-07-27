@@ -36,7 +36,7 @@ imputation functions itself. The following parameters were deprecated:
   
   The following parameters do no longer accept DTC variables:
   
-  - `date` in `date_source()`, `censor_source()`, and `event_source()`
+  - `date` in `date_source()`, `dthcaus_source`, `censor_source()`, and `event_source()`
   - `dose_date` and `analysis_date` in `derive_vars_last_dose()`,
   `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`,
   `derive_var_last_dose_grp()`

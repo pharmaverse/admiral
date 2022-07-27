@@ -160,6 +160,12 @@ derive_var_dthcaus <- function(dataset,
       add_data[[ii]] <- source_dataset
     }
 
+    assert_date_var(
+      dataset = add_data[[ii]],
+      var = !!sources[[ii]]$date,
+      dataset_name = source_dataset_name
+    )
+
     # if several death records, use the first/last according to 'mode'
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
@@ -217,7 +223,7 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param filter An expression used for filtering `dataset`.
 #'
-#' @param date A character vector to be used for sorting `dataset`.
+#' @param date A date or datetime variable to be used for sorting `dataset`.
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`

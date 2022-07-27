@@ -207,7 +207,7 @@ ae_ext <- derive_vars_dt(
   dtc = AESTDTC,
   new_vars_prefix = "AEST",
   highest_imputation = "M",
-  imputation_flags = "none"
+  flag_imputation = "none"
 )
 
 ttae <- event_source(

@@ -184,6 +184,6 @@ test_that("derive_var_extreme_dtm Test 4: error is issued if DTC variable is spe
       ae_start,
       mode = "last"
     ),
-    regexp = "AESTDTC specified for `date` in dataset ae is not a date or datetime variable but is a character vector"
+    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector"
   )
 })

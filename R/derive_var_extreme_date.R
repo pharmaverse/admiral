@@ -214,15 +214,11 @@ derive_var_extreme_dtm <- function(dataset,
     source_dataset <- source_datasets[[source_dataset_name]]
 
     date <- quo_get_expr(sources[[i]]$date)
-    if (!is.instant(pull(source_dataset, !!date))) {
-      abort(paste0(
-        as_label(date),
-        " specified for `date` in dataset ",
-        source_dataset_name,
-        " is not a date or datetime variable but is ",
-        friendly_type_of(pull(source_dataset, !!date))
-      ))
-    }
+    assert_date_var(
+      dataset = source_dataset,
+      var = !!date,
+      dataset_name = source_dataset_name
+    )
     add_data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
@@ -236,7 +232,7 @@ derive_var_extreme_dtm <- function(dataset,
       add_data[[i]],
       !!!subject_keys,
       !!!sources[[i]]$traceability_vars,
-      !!new_var := !!date
+      !!new_var := convert_date_to_dtm(!!date)
     )
   }
 
