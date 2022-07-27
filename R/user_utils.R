@@ -228,3 +228,30 @@ get_one_to_many_dataset <- function() {
 get_many_to_one_dataset <- function() {
   .datasets$many_to_one
 }
+
+#' Map `"Y"` and `"N"` to Numeric Values
+#'
+#' Map `"Y"` and `"N"` to numeric values.
+#'
+#' @param arg Character vector
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords user_utility
+#'
+#' @export
+#'
+#' @return `1` if `arg` equals `"Y"`, `0` if `arg` equals `"N"`, `NA_real_` otherwise
+#'
+#' @examples
+#'
+#' yn_to_numeric(c("Y", "N", NA_character_))
+yn_to_numeric <- function(arg) {
+  assert_character_vector(arg)
+  case_when(
+    arg == "Y" ~ 1,
+    arg == "N" ~ 0,
+    TRUE ~ NA_real_
+  )
+}
+
