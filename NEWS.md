@@ -11,6 +11,9 @@ admiral extension packages (#1079)
 (#1292) including supporting functions `count_vals()`, `min_cond()`, and
 `max_cond()`.
 
+- New function `derive_var_confirmation_flag()` for deriving a flag which
+depends on other observations of the input dataset (#1293)
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
@@ -24,6 +27,8 @@ can be used to indicate in which package to look for templates (#1205)
 deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
+
+- `value_var` parameter added to `derive_vars_atc()` (#1120) 
 
 ## Breaking Changes
 
@@ -52,6 +57,8 @@ imputation functions itself. The following parameters were deprecated:
   - `derive_var_trtsdtm()`
   
 ## Documentation
+
+- New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
