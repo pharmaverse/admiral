@@ -30,16 +30,30 @@ the specified prefix and for the date imputation flag "DTF". I.e., for
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
-\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
-imputation is performed.}
+\code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
+valid value for any component.}
+
+\item{highest_imputation}{Highest imputation level
+
+If a component at a higher level than the highest imputation level is
+missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
+
+If \code{"n"} is specified no imputation is performed, i.e., if any component is
+missing, \code{NA_character_} is returned.
+
+If \code{"Y"} is specified, \code{min_dates} or \code{max_dates} should be specified as
+well. Otherwise, \code{NA_character_} is returned if the year component is
+missing.
+
+\emph{Default}: \code{"n"}
+
+\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
@@ -114,9 +128,10 @@ The presence of a \code{'--DTF'} variable is checked and if it already exists in
 a warning is issued and \code{'--DTF'} will be overwritten.
 }
 \examples{
+library(tibble)
 library(lubridate)
 
-mhdt <- tibble::tribble(
+mhdt <- tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
@@ -170,13 +185,13 @@ derive_vars_dt(
   new_vars_prefix = "BIRTH",
   dtc = MHSTDTC,
   highest_imputation = "M",
-  date_imputation = "MID",
+  date_imputation = "mid",
   flag_imputation = "none"
 )
 
 # Impute AE start date to the first date and ensure that the imputed date
 # is not before the treatment start date
-adae <- tibble::tribble(
+adae <- tribble(
   ~AESTDTC, ~TRTSDTM,
   "2020-12", ymd_hms("2020-12-06T12:12:12"),
   "2020-11", ymd_hms("2020-12-06T12:12:12")
@@ -190,7 +205,7 @@ derive_vars_dt(
   min_dates = vars(TRTSDTM)
 )
 
-# A user imputing dates as middle month/day, i.e. date_imputation = "MID" can
+# A user imputing dates as middle month/day, i.e. date_imputation = "mid" can
 # use preserve argument to "preserve" partial dates.  For example, "2019---07",
 # will be displayed as "2019-06-07" rather than 2019-06-15 with preserve = TRUE
 

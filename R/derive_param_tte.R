@@ -537,19 +537,12 @@ filter_date_sources <- function(sources,
         mode = mode,
         check_type = "none"
       )
+
     # add date variable and accompanying variables
-    if (is.instant(pull(data[[i]], !!date))) {
-      if (create_datetime) {
-        date_derv <- vars(!!date_var := as_datetime(!!date))
-      } else {
-        date_derv <- vars(!!date_var := date(!!date))
-      }
+    if (create_datetime) {
+      date_derv <- vars(!!date_var := as_datetime(!!date))
     } else {
-      abort(paste0(
-        as_label(date),
-        " specified for `date` is not a date or datetime variable but is ",
-        friendly_type_of(pull(data[[i]], !!date))
-      ))
+      date_derv <- vars(!!date_var := date(!!date))
     }
 
     data[[i]] <- transmute(

@@ -16,13 +16,27 @@ convert_dtc_to_dt(
 \arguments{
 \item{dtc}{The --DTC date to convert.}
 
+\item{highest_imputation}{Highest imputation level
+
+If a component at a higher level than the highest imputation level is
+missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
+
+If \code{"n"} is specified no imputation is performed, i.e., if any component is
+missing, \code{NA_character_} is returned.
+
+If \code{"Y"} is specified, \code{min_dates} or \code{max_dates} should be specified as
+well. Otherwise, \code{NA_character_} is returned if the year component is
+missing.
+
+\emph{Default}: \code{"n"}
+
+\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
+
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,

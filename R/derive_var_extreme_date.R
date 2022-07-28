@@ -470,7 +470,7 @@ date_source <- function(dataset_name,
       "date_source(date_imputation = )",
       details = paste0(
         "Please use `derive_vars_dtm()` to convert DTC variables",
-        "to datetime variables in the dataset."
+        " to datetime variables in the dataset."
       )
     )
   }
@@ -480,7 +480,7 @@ date_source <- function(dataset_name,
       "date_source(time_imputation = )",
       details = paste0(
         "Please use `derive_vars_dtm()` to convert DTC variables",
-        "to datetime variables in the dataset."
+        " to datetime variables in the dataset."
       )
     )
   }
@@ -490,7 +490,7 @@ date_source <- function(dataset_name,
       "date_source(preserve = )",
       details = paste0(
         "Please use `derive_vars_dtm()` to convert DTC variables",
-        "to datetime variables in the dataset."
+        " to datetime variables in the dataset."
       )
     )
   }

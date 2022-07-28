@@ -17,16 +17,30 @@ impute_dtc_dt(
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
-\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
-imputation is performed.}
+\code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
+valid value for any component.}
+
+\item{highest_imputation}{Highest imputation level
+
+If a component at a higher level than the highest imputation level is
+missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
+
+If \code{"n"} is specified no imputation is performed, i.e., if any component is
+missing, \code{NA_character_} is returned.
+
+If \code{"Y"} is specified, \code{min_dates} or \code{max_dates} should be specified as
+well. Otherwise, \code{NA_character_} is returned if the year component is
+missing.
+
+\emph{Default}: \code{"n"}
+
+\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
@@ -114,7 +128,7 @@ impute_dtc_dt(
 impute_dtc_dtm(
   dtc = dates,
   highest_imputation = "M",
-  date_imputatation = "01-01"
+  date_imputation = "01-01"
 )
 
 # Impute to last day/month if date is partial
@@ -127,7 +141,7 @@ impute_dtc_dt(
 # Impute to mid day/month if date is partial
 impute_dtc_dt(
   dtc = dates,
-  highest_impuation = "M",
+  highest_imputation = "M",
   date_imputation = "mid"
 )
 
@@ -140,6 +154,16 @@ impute_dtc_dt(
     ymd("2020-11-11")
   ),
   highest_imputation = "M"
+)
+
+# Impute completely missing dates (only possible if min_dates or max_dates is specified)
+impute_dtc_dt(
+  c("2020-12", NA_character_),
+  min_dates = list(
+    ymd("2020-12-06"),
+    ymd("2020-11-11")
+  ),
+  highest_imputation = "Y"
 )
 
 }

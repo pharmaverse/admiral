@@ -234,3 +234,51 @@ test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
     ),
     "deprecated")
 })
+
+test_that("date_source: errors when date_imputation is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      date_imputation = "first"
+    ),
+    paste(
+      "The `date_imputation` argument of `date_source()` was deprecated in admiral 0.8.0 and is now defunct.",
+      "Please use `derive_vars_dtm()` to convert DTC variables to datetime variables in the dataset.",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+})
+
+test_that("date_source: errors when time_imputation is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      time_imputation = "first"
+    ),
+    paste(
+      "The `time_imputation` argument of `date_source()` was deprecated in admiral 0.8.0 and is now defunct.",
+      "Please use `derive_vars_dtm()` to convert DTC variables to datetime variables in the dataset.",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+})
+
+test_that("date_source: errors when preserve is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      preserve = TRUE
+    ),
+    paste(
+      "The `preserve` argument of `date_source()` was deprecated in admiral 0.8.0 and is now defunct.",
+      "Please use `derive_vars_dtm()` to convert DTC variables to datetime variables in the dataset.",
+      sep = "\n"
+    ),
+    fixed = TRUE
+  )
+})

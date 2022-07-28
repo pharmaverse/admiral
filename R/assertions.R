@@ -667,6 +667,7 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(tibble)
+#' library(lubridate)
 #' library(rlang)
 #'
 #' example_fun <- function(dataset, var) {

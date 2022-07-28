@@ -139,6 +139,15 @@ reference:
   - validate_sdg_select
   - validate_smq_select
   - assert_db_requirements
+- subtitle: Helper functions for imputation
+- contents:
+  - dt_level
+  - dtm_level
+  - get_imputation_target_date
+  - get_imputation_target_time
+  - get_partialdatetime
+  - restrict_imputed_dtc_dt
+  - restrict_imputed_dtc_dtm
 
 articles:
 - title: User Guides

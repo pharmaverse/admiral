@@ -26,6 +26,7 @@ Checks if a variable in a dataset is a date or datetime variable
 }
 \examples{
 library(tibble)
+library(lubridate)
 library(rlang)
 
 example_fun <- function(dataset, var) {

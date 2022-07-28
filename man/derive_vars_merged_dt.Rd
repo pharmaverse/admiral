@@ -87,16 +87,13 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
-\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
-imputation is performed.}
+\code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
+valid value for any component.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
