@@ -61,7 +61,7 @@ remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 
 ```{r tree, echo=FALSE}
 library(fs)
-tree <- dir_tree("R",recurse=2)
+tree <- dir_tree("R", recurse = 2)
 ```
 
 ## Keyword/Family

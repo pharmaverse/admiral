@@ -2,20 +2,20 @@ library(admiral.test)
 
 test_that("Test 1 : `assert_has_variables` an error is thrown if a required
            variable is missing", {
-             data(admiral_dm)
+  data(admiral_dm)
 
-             expect_error(
-               assert_has_variables(admiral_dm, "TRT01P"),
-               "Required variable `TRT01P` is missing."
-             )
-           })
+  expect_error(
+    assert_has_variables(admiral_dm, "TRT01P"),
+    "Required variable `TRT01P` is missing."
+  )
+})
 
 test_that("Test 2 : `assert_has_variables` no error is thrown if a required
            variable exists", {
-             data(admiral_dm)
+  data(admiral_dm)
 
-             expect_error(assert_has_variables(admiral_dm, "USUBJID"), NA)
-           })
+  expect_error(assert_has_variables(admiral_dm, "USUBJID"), NA)
+})
 
 test_that("Test 3 : `assert_filter_cond` works as expected", {
   fc <- quo(AGE == 64)
@@ -74,7 +74,7 @@ test_that("Test 7 : `assert_data_frame` throws an error if dataframe is grouped"
 test_that("Test 8 : `assert_character_scalar` throws an error if not a character scaler string", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
-                                        values = c("warning", "error"), case_sensitive = FALSE
+      values = c("warning", "error"), case_sensitive = FALSE
     )
 
     if (msg_type == "warning") {
@@ -87,7 +87,7 @@ test_that("Test 8 : `assert_character_scalar` throws an error if not a character
 test_that("Test 9 : `assert_character_scalar` throws an error if input is a vector", {
   example_fun2 <- function(msg_type) {
     msg_type <- assert_character_scalar(msg_type,
-                                        values = c("warning", "error"), case_sensitive = FALSE
+      values = c("warning", "error"), case_sensitive = FALSE
     )
 
     if (msg_type == "warning") {
