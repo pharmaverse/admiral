@@ -1,25 +1,25 @@
 Package: admiraldev
 Type: Package
 Title: ADaM in R Asset Library - Dev Tools
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
     person("Ben", "Straub", email = "ben.x.straub@gsk.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
     person("Thomas", "Neitmann", role = "aut"),
     person("Samia", "Kabi", role = "aut"),
-    person("Gordon", "Miller", role = "aut"),
     person("Ross", "Farrugia", role = "aut"),
     person("Annie", "Yang", role = "aut"),
     person("Robin", "Koeger", role = "aut"),
     person("Pooja", "Kumari", role = "aut"),
-    person("Alice", "Ehmann", role = "ctb"),
-    person("Vignesh", "Thanikachalam", role = "ctb"),
+    person("Syed", "Mubasheer", role = "aut"),
     person("Ondrej", "Slama", role = "ctb"),
-    person("Shimeng", "Huang", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
-Description: A toolbox for developers working on (pharmaverse admiral packages, <https://github.com/pharmaverse>). 
+Description: A toolbox for developers working on (pharmaverse admiral packages, <https://github.com/pharmaverse>).
+ Package contains functions that are used internally to admiral and admiral extension packages to 
+ check data, variables and conditions. Package also contains utilitiy functions to help developer with
+ documentaion, testing and genearl upkeep of admiral and admiral extension packages.  
 License: Apache License (>= 2)
 URL: https://pharmaverse.github.io/admiraldev, https://github.com/pharmaverse/admiraldev
 Encoding: UTF-8

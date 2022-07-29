@@ -26,19 +26,16 @@ Authors:
   \item Stefan Bundfuss
   \item Thomas Neitmann
   \item Samia Kabi
-  \item Gordon Miller
   \item Ross Farrugia
   \item Annie Yang
   \item Robin Koeger
   \item Pooja Kumari
+  \item Syed Mubasheer
 }
 
 Other contributors:
 \itemize{
-  \item Alice Ehmann [contributor]
-  \item Vignesh Thanikachalam [contributor]
   \item Ondrej Slama [contributor]
-  \item Shimeng Huang [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item GlaxoSmithKline LLC [copyright holder, funder]
 }

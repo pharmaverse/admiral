@@ -1,5 +1,3 @@
-
-
 #' Negated Value Matching
 #'
 #' Returns a `logical` vector indicating if there is *no* match of the
