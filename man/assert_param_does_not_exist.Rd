@@ -46,6 +46,7 @@ Checks for valid input and returns warning or errors messages:
 \code{\link{assert_order_vars}()},
 \code{\link{assert_s3_class}()},
 \code{\link{assert_symbol}()},
+\code{\link{assert_unit}()},
 \code{\link{assert_vars}()},
 \code{\link{assert_varval_list}()}
 }

@@ -921,6 +921,9 @@ assert_function_param <- function(arg, params) {
 #'
 #' @author Stefan Bundfuss
 #'
+#' @keywords assertion
+#' @family assertion
+#'
 #' @return
 #' The function throws an error if the unit variable differs from the
 #' unit for any observation of the parameter in the input dataset. Otherwise, the
