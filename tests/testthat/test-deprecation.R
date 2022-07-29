@@ -246,7 +246,7 @@ test_that("date_source: errors when date_imputation is specified", {
     ),
     paste(
       "The `date_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
       sep = "\n"
     )
   )
@@ -261,7 +261,7 @@ test_that("date_source: errors when time_imputation is specified", {
     ),
     paste(
       "The `time_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
       sep = "\n"
     )
   )
@@ -276,7 +276,7 @@ test_that("date_source: errors when preserve is specified", {
     ),
     paste(
       "The `preserve` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
-      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
       sep = "\n"
     )
   )

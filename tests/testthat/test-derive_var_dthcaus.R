@@ -142,8 +142,8 @@ test_that("derive_var_dthcaus Test 3: `dthcaus` handles symbols and string liter
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 4: DTHCAUS and traceability variables are added from AE and DS ----
-test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability variables are added from AE and DS", {
+## Test 4: DTHCAUS and traceability vars are added from AE and DS ----
+test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability vars are added from AE and DS", {
   adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
@@ -210,8 +210,8 @@ test_that("derive_var_dthcaus Test 4: DTHCAUS and traceability variables are add
   expect_dfs_equal(expected_output, actual_output, keys = "USUBJID")
 })
 
-## Test 5: DTHCAUS/traceabiity are added from AE and DS, info available in 2 input datasets ----
-test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from AE and DS, info available in 2 input datasets", {
+## Test 5: DTHCAUS/traceabiity are added from 2 input datasets ----
+test_that("derive_var_dthcaus Test 5: DTHCAUS/traceabiity are added from 2 input datasets", {
   adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",

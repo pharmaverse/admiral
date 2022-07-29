@@ -64,8 +64,8 @@ test_that("derive_param_tte Test 1: new observations with analysis date are deri
   )
 })
 
-## Test 2: new observations with analysis datetime are derived correctly ----
-test_that("derive_param_tte Test 2: new observations with analysis datetime are derived correctly", {
+## Test 2: new parameter with analysis datetime is derived correctly ----
+test_that("derive_param_tte Test 2: new parameter with analysis datetime is derived correctly", {
   adsl <- tibble::tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDTM,                       ~TRTSDTF, ~TRTSTMF,
     "01",     "Y",    ymd("2021-06-12"), ymd_hms("2021-01-01 00:00:00"), "M",      "H",
@@ -224,7 +224,7 @@ test_that("derive_param_tte Test 3: error is issued if DTC variables specified f
         PARAM = "Time to First Adverse Event"
       )
     ),
-    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector"
+    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector" # nolint
   )
 })
 
@@ -367,8 +367,8 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
   )
 })
 
-## Test 6: an error is issued all by variables are missing in all source datasets ----
-test_that("derive_param_tte Test 6: an error is issued if all by variables are missing in all source datasets", {
+## Test 6: errors if all by vars are missing in all source datasets ----
+test_that("derive_param_tte Test 6: errors if all by vars are missing in all source datasets", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -429,8 +429,8 @@ test_that("derive_param_tte Test 6: an error is issued if all by variables are m
   )
 })
 
-## Test 7: an error is issued if there is no one to one mapping between PARAMCD and by_vars ----
-test_that("derive_param_tte Test 7: an error is issued if there is no one to one mapping between PARAMCD and by_vars", {
+## Test 7: errors if PARAMCD and by_vars are not one to one ----
+test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to one", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -492,8 +492,8 @@ test_that("derive_param_tte Test 7: an error is issued if there is no one to one
   )
 })
 
-## Test 8: an error if issued set_values_to contains invalid expressions ----
-test_that("derive_param_tte Test 8: an error if issued set_values_to contains invalid expressions", {
+## Test 8: errors if set_values_to contains invalid expressions ----
+test_that("derive_param_tte Test 8: errors if set_values_to contains invalid expressions", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
