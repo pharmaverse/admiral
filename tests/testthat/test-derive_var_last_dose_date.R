@@ -39,8 +39,10 @@ test_that("derive_var_last_dose_date Test 1: works as expected output_datetime =
     "my_study", "subject3", 1, "2020-03-02", NA_character_,
     "my_study", "subject4", 1, "2020-11-02", NA_character_
   ) %>%
-    mutate(LDOSEDTM = as.Date(LDOSEDTM),
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      LDOSEDTM = as.Date(LDOSEDTM),
+      AESTDT = ymd(AESTDTC)
+    )
 
   res <- derive_var_last_dose_date(
     input_ae,
@@ -70,8 +72,10 @@ test_that("derive_var_last_dose_date Test 2: works as expected with output_datet
     "my_study", "subject3", 1, "2020-03-02", NA_character_,
     "my_study", "subject4", 1, "2020-11-02", NA_character_
   ) %>%
-    mutate(LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"),
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      LDOSEDTM = as.POSIXct(as.character(LDOSEDTM), tz = "UTC"),
+      AESTDT = ymd(AESTDTC)
+    )
 
   res <- derive_var_last_dose_date(
     input_ae,

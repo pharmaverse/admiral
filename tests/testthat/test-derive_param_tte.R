@@ -4,7 +4,7 @@ library(lubridate)
 # derive_param_tte ----
 ## Test 1: new observations with analysis date are derived correctly ----
 test_that("derive_param_tte Test 1: new observations with analysis date are derived correctly", {
-  adsl <-tribble(
+  adsl <- tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
     "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
     "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA
@@ -243,8 +243,10 @@ test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
@@ -319,8 +321,10 @@ test_that("derive_param_tte Test 5: an error is issued if some of the by variabl
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
@@ -378,8 +382,10 @@ test_that("derive_param_tte Test 6: an error is issued if all by variables are m
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
@@ -438,8 +444,10 @@ test_that("derive_param_tte Test 7: an error is issued if there is no one to one
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
@@ -499,8 +507,10 @@ test_that("derive_param_tte Test 8: an error if issued set_values_to contains in
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
@@ -568,8 +578,10 @@ test_that("derive_param_tte Test 9: error is issued if parameter code already ex
     "01",     "2021-03-04", 2,      "Cough",
     "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42",
-           AESTDT = ymd(AESTDTC))
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",

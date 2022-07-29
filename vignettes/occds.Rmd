@@ -370,7 +370,7 @@ adae <- adae %>%
       order = vars(desc(ATOXGR), ASTDTM, AESEQ),
       new_var = AOCCIFL,
       mode = "first"
-      ),
+    ),
     filter = TRTEMFL == "Y"
   )
 ```

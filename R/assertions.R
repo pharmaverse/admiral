@@ -684,12 +684,12 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' example_fun(
 #'   dataset = my_data,
 #'   var = ADT
-#'   )
+#' )
 #'
 #' try(example_fun(
 #'   dataset = my_data,
 #'   var = USUBJID
-#'   ))
+#' ))
 #'
 #' example_fun2 <- function(dataset, var) {
 #'   var <- assert_symbol(enquo(var))
@@ -704,7 +704,7 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #' try(example_fun2(
 #'   dataset = my_data,
 #'   var = USUBJID
-#'   ))
+#' ))
 assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
   var <- assert_symbol(enquo(var))
   assert_data_frame(dataset, required_vars = vars(!!var))

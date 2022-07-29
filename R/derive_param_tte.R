@@ -170,7 +170,7 @@
 #'   filter(row_number() %in% 20:30)
 #'
 #' # derive time to adverse event for each preferred term #
-#' adsl <-tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")

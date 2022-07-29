@@ -86,7 +86,7 @@ adae <- ae %>%
     date_imputation = "last"
   ) %>%
   mutate(TRTEMFL = if_else(ASTDT >= TRTSDT &
-                             AENDT <= TRTEDT + days(30), "Y", NA_character_))
+    AENDT <= TRTEDT + days(30), "Y", NA_character_))
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -543,8 +543,10 @@ ae <- tibble::tribble(
   "01",     "2021-03-04",       2,      "Cough",
   "01",     "2021",             3,      "Flu"
 ) %>%
-  mutate(STUDYID = "AB42",
-         AESTDT = convert_dtc_to_dt(dtc = AESTDTC, highest_imputation = "M"))
+  mutate(
+    STUDYID = "AB42",
+    AESTDT = convert_dtc_to_dt(dtc = AESTDTC, highest_imputation = "M")
+  )
 
 dataset_vignette(ae)
 ```

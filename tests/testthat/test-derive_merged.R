@@ -105,17 +105,18 @@ test_that("derive_vars_merged Test 4: error if variable in both datasets", {
 ## Test 5: merge first date ----
 test_that("derive_vars_merged_dt Test 5: merge first date", {
   suppress_warning(
-  actual <- derive_vars_merged_dt(
-    adsl,
-    dataset_add = ex,
-    order = vars(TRTSDT),
-    flag_imputation = "date",
-    by_vars = vars(STUDYID, USUBJID),
-    dtc = EXSTDTC,
-    new_vars_prefix = "TRTS",
-    mode = "first"
+    actual <- derive_vars_merged_dt(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDT),
+      flag_imputation = "date",
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      mode = "first"
+    ),
+    "deprecated"
   )
-  , "deprecated")
   expected <-
     adsl %>% mutate(
       TRTSDT = ymd(c(
@@ -135,17 +136,18 @@ test_that("derive_vars_merged_dt Test 5: merge first date", {
 ## Test 6: merge first date ----
 test_that("derive_vars_merged_dtm Test 6: merge first date", {
   suppress_warning(
-  actual <- derive_vars_merged_dtm(
-    adsl,
-    dataset_add = ex,
-    order = vars(TRTSDTM),
-    by_vars = vars(STUDYID, USUBJID),
-    dtc = EXSTDTC,
-    new_vars_prefix = "TRTS",
-    time_imputation = "first",
-    mode = "first"
-  ),
-  "deprecated")
+    actual <- derive_vars_merged_dtm(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDTM),
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      time_imputation = "first",
+      mode = "first"
+    ),
+    "deprecated"
+  )
   expected <-
     adsl %>% mutate(
       TRTSDTM = ymd_hms(

@@ -216,8 +216,9 @@ test_that("derive_vars_merged_dt: a deprecation warning is issued", {
       dtc = EXSTDTC,
       new_vars_prefix = "TRTS",
       mode = "first"
-    )
-    , "deprecated")
+    ),
+    "deprecated"
+  )
 })
 
 test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
@@ -232,7 +233,8 @@ test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
       time_imputation = "first",
       mode = "first"
     ),
-    "deprecated")
+    "deprecated"
+  )
 })
 
 test_that("date_source: errors when date_imputation is specified", {

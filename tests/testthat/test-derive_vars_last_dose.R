@@ -220,7 +220,7 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
     mutate(
       EXSTDT = as.Date(EXSTDTC),
       EXENDT = as.Date(EXENDTC)
-      )
+    )
 
   expect_error(
     derive_vars_last_dose(

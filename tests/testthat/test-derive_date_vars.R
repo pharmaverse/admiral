@@ -350,14 +350,18 @@ test_that("impute_dtc_dt Test 15: min_dates parameter works", {
   expect_equal(
     impute_dtc_dt(
       c("2020-12", "2020-11", NA_character_),
-      min_dates = list(c(ymd("2020-12-06"),
-                         NA,
-                         NA),
-                       c(
-                         ymd("2020-11-11"),
-                         ymd("2020-11-11"),
-                         ymd("2020-11-11")
-                       )),
+      min_dates = list(
+        c(
+          ymd("2020-12-06"),
+          NA,
+          NA
+        ),
+        c(
+          ymd("2020-11-11"),
+          ymd("2020-11-11"),
+          ymd("2020-11-11")
+        )
+      ),
       highest_imputation = "Y",
       date_imputation = "first"
     ),
@@ -369,12 +373,12 @@ test_that("impute_dtc_dt Test 15: min_dates parameter works", {
 test_that("impute_dtc_dt Test 16: max_dates parameter works", {
   expect_equal(
     impute_dtc_dt(c("2020-12", "2020-11", NA_character_),
-                   max_dates = list(
-                     c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
-                     c(ymd(""), ymd("2020-11-11"), ymd(""))
-                   ),
-                   highest_imputation = "Y",
-                   date_imputation = "last"
+      max_dates = list(
+        c(ymd("2020-12-06"), NA, ymd("2020-09-13")),
+        c(ymd(""), ymd("2020-11-11"), ymd(""))
+      ),
+      highest_imputation = "Y",
+      date_imputation = "last"
     ),
     c("2020-12-06", "2020-11-11", "2020-09-13")
   )
@@ -533,19 +537,22 @@ test_that("compute_tmf Test 25: throws ERROR when ignore_seconds_flag  = T and s
     )),
     ignore_seconds_flag = TRUE
   ),
-  regexp = "Seconds detected in data while ignore_seconds_flag is invoked")
+  regexp = "Seconds detected in data while ignore_seconds_flag is invoked"
+  )
 })
 
 ## Test 26: ignore_seconds_flag  = TRUE ----
 test_that("compute_tmf Test 26: ignore_seconds_flag  = TRUE", {
-  expect_equal(compute_tmf(
-    dtc = c("2020-11-11T11:11", "2020-11-11T11"),
-    dtm = ymd_hms(c(
-      "2020-11-11T11:11:00", "2020-11-11T11:00:00"
-    )),
-    ignore_seconds_flag = TRUE
-  ),
-  c(NA_character_, "M"))
+  expect_equal(
+    compute_tmf(
+      dtc = c("2020-11-11T11:11", "2020-11-11T11"),
+      dtm = ymd_hms(c(
+        "2020-11-11T11:11:00", "2020-11-11T11:00:00"
+      )),
+      ignore_seconds_flag = TRUE
+    ),
+    c(NA_character_, "M")
+  )
 })
 
 # derive_vars_dt ----
@@ -846,7 +853,8 @@ test_that("derive_vars_dtm Test 36: No re-derivation is done if --DTF variable a
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = "XXSTDTC")
+    keys = "XXSTDTC"
+  )
 })
 
 ## Test 37: max_dates parameter works as expected ----
@@ -871,7 +879,8 @@ test_that("derive_vars_dtm Test 37: max_dates parameter works as expected", {
   expect_dfs_equal(
     base = expected_output,
     compare = actual_output,
-    keys = c("XXSTDTC"))
+    keys = c("XXSTDTC")
+  )
 })
 
 input_secs <- tibble::tribble(

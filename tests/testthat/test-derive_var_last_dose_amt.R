@@ -29,7 +29,7 @@ input_ex <- tribble(
   mutate(
     EXSTDT = as.Date(EXSTDTC),
     EXENDT = as.Date(EXENDTC)
-    )
+  )
 
 # derive_var_last_dose_amt ----
 ## Test 1: works as expected ----

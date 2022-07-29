@@ -110,11 +110,11 @@ Example calls:
 
 ```{r eval=TRUE}
 # impute start and end time of exposure to first and last respectively, do not impute date
-ex_ext <- ex %>% 
+ex_ext <- ex %>%
   derive_vars_dtm(
     dtc = EXSTDTC,
     new_vars_prefix = "EXST"
-  ) %>% 
+  ) %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     new_vars_prefix = "EXEN",
