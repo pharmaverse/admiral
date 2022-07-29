@@ -1,0 +1,4 @@
+Name: Format test_that test file
+Description: Updates current test_that test file by adding a function name, a test number, and a section
+Binding: format_test_that_file
+Interactive: false

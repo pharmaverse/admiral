@@ -35,20 +35,15 @@ admiral_homepage <- "https://pharmaverse.github.io/admiraldev"
 <img src="man/figures/admiraldev.png" align="right" width="200" style="margin-left:50px;"/>
 
 <!-- badges: start -->
-[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
-[![CRAN status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml)
-[![Test Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/code-coverage.yml)
+## To Do Update Badges
 <!-- badges: end -->
 
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthly codebase within the family of admiral R packages.  
+Tools for developing functions and maintaining a healthy codebase within the family of admiral R packages.  
 
 ## Installation
-
-The package is available from CRAN and can be installed by running `install.packages("admiral")`.
 
 To install the latest development version of the package directly from GitHub use the following code:
 
@@ -61,3 +56,52 @@ remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a r
 remotes::install_github("pharmaverse/admiral", ref = "devel")
 remotes::install_github("pharmaverse/admiraldev", ref = "devel")
 ```
+
+## Structure of package
+
+```{r tree, echo=FALSE}
+library(fs)
+tree <- dir_tree("R", recurse = 2)
+```
+
+## Keyword/Family
+
+| Keyword                                                                           | Description                                                                                                              |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `assertion`                                                                       | Asserts a certain type and gives warning, error to user        |
+| `warning`                                                                         | Provides custom warnings to user       
+| `what`                                                                            | A function that ...      
+| `is`                                                                              | A function that ...      
+| `get`                                                                             | A function that ...      
+
+
+## Release Schedule
+
+Releases are done at the end of every of quarter on the last Monday.  Pull Requests will be frozen the week before a release. 
+The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+Phases.  
+
+* Phase 1 is for `admiraldev` and `admiral.test`, which feed into all `admiral` packages
+* Phase 2 is only for core `admiral`
+* Phase 3 is extension packages, e.g. `admiralonco`
+
+| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
+|----------------------------|------------------------------|---------------------------- |------------------------------|
+| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q1-2023                    |    February 27th             |   March 6th                 |  March 13th                  |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+| Q2-2023                    |    May 29th                  |  June 5th                   |  June 12th                   |  
+|                            |   `admiraldev`               |  `admiral`                  | `admiralonco`                |
+|                            |   `admiral.test`             |                             | `admiralroche`               |
+
+
+
+
+
+
