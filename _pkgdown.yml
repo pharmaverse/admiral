@@ -52,9 +52,25 @@ reference:
   - has_keyword('dev_utility')
 
 
-
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - adxx
+navbar:
+ components:
+   articles:
+    text: Developer Guides
+    menu:
+    - text: Overview of Process
+    - text: Contribution to {admiral}
+      href: articles/a1.html
+    - text: Development Process
+      href: articles/a2.html
+    - text: -------
+    - text: "Deep Dive and How tos"
+    - text: Programming Strategy
+      href: articles/b1.html
+    - text: Guidance for git and GitHub Usage
+      href: articles/b1.html
+    - text: Writing Vignettes
+      href: articles/b1.html
+    - text: Pull Request Review Guidance
+      href: articles/b1.html
+    - text: Unit Test Guidance
+      href: articles/b1.html
