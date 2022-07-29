@@ -8,6 +8,5 @@ list(
     test_helper = "Helps with Testing: ",
     dev_utility = "Developer Utility Functions: ",
     warnings = "Function that provide users with custom warnings"
-
   )
 )
