@@ -67,8 +67,16 @@ adex0 <- ex %>%
   ) %>%
   # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
 
-  derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
-  derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    highest_imputation = "M",
+    new_vars_prefix = "AST"
+    ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    new_vars_prefix = "AEN") %>%
   # Calculate ASTDY, AENDY
   derive_vars_dy(
     reference_date = TRTSDTM,
@@ -239,7 +247,6 @@ param_lookup <- tibble::tribble(
   "TDOSINT", "Overall dose intensity (%)", 90,
   "PDOSINT", "W2-24 dose intensity (%)", 91
 )
-
 
 # ---- User defined functions ----
 # Derive AVALCAT1

@@ -47,14 +47,14 @@ adae <- ae %>%
   derive_vars_dtm(
     dtc = AESTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    time_imputation = "first",
+    highest_imputation = "M",
     min_dates = vars(TRTSDT)
   ) %>%
   # derive analysis end time
   derive_vars_dtm(
     dtc = AEENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
@@ -78,14 +78,20 @@ adae <- ae %>%
     trunc_out = FALSE
   )
 
+ex_ext <- derive_vars_dtm(
+    ex,
+    dtc = EXSTDTC,
+    new_vars_prefix = "EXST",
+    flag_imputation = "none"
+  )
 
 adae <- adae %>%
   # derive last dose date/time
   derive_var_last_dose_date(
-    ex,
+    ex_ext,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
-    dose_date = EXSTDTC,
+      !is.na(EXSTDTM) ,
+    dose_date = EXSTDTM,
     analysis_date = ASTDT,
     new_var = LDOSEDTM,
     single_dose_condition = (EXSTDTC == EXENDTC),

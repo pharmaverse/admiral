@@ -63,7 +63,10 @@ needed in the following examples.
 ```{r}
 adae <- ae %>%
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
-  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>%
+  derive_vars_dt(
+    new_vars_prefix = "AST",
+    dtc = AESTDTC,
+    highest_imputation = "M") %>%
   mutate(TRTEMFL = if_else(ASTDT >= TRTSDT, "Y", NA_character_))
 ```
 
