@@ -183,7 +183,6 @@
 #'   ),
 #'   highest_imputation = "Y"
 #' )
-#'
 impute_dtc_dtm <- function(dtc,
                            highest_imputation = "h",
                            date_imputation = "first",
@@ -202,7 +201,8 @@ impute_dtc_dtm <- function(dtc,
     hour = "h",
     day = "D",
     month = "M",
-    year = "Y")
+    year = "Y"
+  )
   assert_character_scalar(highest_imputation, values = imputation_levels)
   highest_imputation <- dtm_level(highest_imputation)
   date_imputation <-
@@ -211,8 +211,10 @@ impute_dtc_dtm <- function(dtc,
       case_sensitive = FALSE
     )
   time_imputation <-
-    assert_character_scalar(time_imputation,
-                            case_sensitive = FALSE)
+    assert_character_scalar(
+      time_imputation,
+      case_sensitive = FALSE
+    )
   assert_logical_scalar(preserve)
 
   if (length(dtc) == 0) {
@@ -304,9 +306,11 @@ impute_dtc_dtm <- function(dtc,
 #' @author Stefan Bundfuss
 dtm_level <- function(level) {
   out <-
-    factor(level,
-           levels = c("n", "s", "m", "h", "D", "M", "Y"),
-           ordered = TRUE)
+    factor(
+      level,
+      levels = c("n", "s", "m", "h", "D", "M", "Y"),
+      ordered = TRUE
+    )
   class(out) <- c("dtm_level", class(out))
   out
 }
@@ -341,8 +345,8 @@ get_partialdatetime <- function(dtc) {
     ":?",
     two,
     ":?",
-    "(\\d{2}(\\.\\d{1,5})?)?")
-  )
+    "(\\d{2}(\\.\\d{1,5})?)?"
+  ))
   partial <- vector("list", 6)
   components <- c("year", "month", "day", "hour", "minute", "second")
   names(partial) <- components
@@ -381,26 +385,22 @@ get_partialdatetime <- function(dtc) {
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
-                                       month
-) {
+                                       month) {
   target <- vector("list", 3)
   names(target) <- c("year", "month", "day")
   if (date_imputation == "first") {
     target[["year"]] <- "0000"
     target[["month"]] <- "01"
     target[["day"]] <- "01"
-  }
-  else if (date_imputation == "mid") {
+  } else if (date_imputation == "mid") {
     target[["year"]] <- "xxxx"
     target[["month"]] <- "06"
     target[["day"]] <- if_else(is.na(month), "30", "15")
-  }
-  else if (date_imputation == "last") {
+  } else if (date_imputation == "last") {
     target[["year"]] <- "9999"
     target[["month"]] <- "12"
     target[["day"]] <- "28"
-  }
-  else {
+  } else {
     target[["year"]] <- "xxxx"
     target[["month"]] <- str_sub(date_imputation, 1, 2)
     target[["day"]] <- str_sub(date_imputation, 4, 5)
@@ -437,13 +437,11 @@ get_imputation_target_time <- function(time_imputation) {
     target[["hour"]] <- "00"
     target[["minute"]] <- "00"
     target[["second"]] <- "00"
-  }
-  else if (time_imputation == "last") {
+  } else if (time_imputation == "last") {
     target[["hour"]] <- "23"
     target[["minute"]] <- "59"
     target[["second"]] <- "59"
-  }
-  else {
+  } else {
     target[["hour"]] <- str_sub(time_imputation, 1, 2)
     target[["minute"]] <- str_sub(time_imputation, 4, 5)
     target[["second"]] <- str_sub(time_imputation, 7, -1)
@@ -453,7 +451,7 @@ get_imputation_target_time <- function(time_imputation) {
 
 #' Restrict Imputed DTC date to Minimum/Maximum Dates
 #'
-#' @param impute_dtc The imputed DTC date
+#' @param imputed_dtc The imputed DTC date
 #'
 #' @inheritParams impute_dtc_dtm
 #'
@@ -680,13 +678,12 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   ),
 #'   highest_imputation = "Y"
 #' )
-#'
 impute_dtc_dt <- function(dtc,
                           highest_imputation = "n",
-                           date_imputation = "first",
-                           min_dates = NULL,
-                           max_dates = NULL,
-                           preserve = FALSE) {
+                          date_imputation = "first",
+                          min_dates = NULL,
+                          max_dates = NULL,
+                          preserve = FALSE) {
   # Check arguments ----
   assert_character_vector(dtc)
   valid_dtc <- is_valid_dtc(dtc)
@@ -695,7 +692,8 @@ impute_dtc_dt <- function(dtc,
     none = "n",
     day = "D",
     month = "M",
-    year = "Y")
+    year = "Y"
+  )
   assert_character_scalar(highest_imputation, values = imputation_levels)
   highest_imputation <- dt_level(highest_imputation)
   date_imputation <-
@@ -711,8 +709,8 @@ impute_dtc_dt <- function(dtc,
     "(\\d{4}|-?)-?",
     two,
     "-?",
-    two)
-  )
+    two
+  ))
   partial <- vector("list", 3)
   components <- c("year", "month", "day")
   names(partial) <- components
@@ -792,16 +790,18 @@ impute_dtc_dt <- function(dtc,
 #' @author Stefan Bundfuss
 dt_level <- function(level) {
   out <-
-    factor(level,
-           levels = c("n", "D", "M", "Y"),
-           ordered = TRUE)
+    factor(
+      level,
+      levels = c("n", "D", "M", "Y"),
+      ordered = TRUE
+    )
   class(out) <- c("dt_level", class(out))
   out
 }
 
 #' Restrict Imputed DTC date to Minimum/Maximum Dates
 #'
-#' @param impute_dtc The imputed DTC date
+#' @param imputed_dtc The imputed DTC date
 #'
 #' @inheritParams impute_dtc_dt
 #'
@@ -1100,9 +1100,11 @@ compute_tmf <- function(dtc,
   valid_dtc <- is_valid_dtc(dtc)
   warn_if_invalid_dtc(dtc, valid_dtc)
 
-  map <- c(hour = "H",
-           minute = "M",
-           second = "S")
+  map <- c(
+    hour = "H",
+    minute = "M",
+    second = "S"
+  )
   flag <- if_else(is.na(dtm) | is.na(highest_miss), NA_character_, map[highest_miss])
 
   if (ignore_seconds_flag) {

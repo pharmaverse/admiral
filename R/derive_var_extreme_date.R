@@ -464,7 +464,7 @@ date_source <- function(dataset_name,
                         time_imputation = deprecated(),
                         preserve = deprecated(),
                         traceability_vars = NULL) {
-  if(!missing(date_imputation)) {
+  if (!missing(date_imputation)) {
     deprecate_stop(
       "0.8.0",
       "date_source(date_imputation = )",
@@ -474,7 +474,7 @@ date_source <- function(dataset_name,
       )
     )
   }
-  if(!missing(time_imputation)) {
+  if (!missing(time_imputation)) {
     deprecate_stop(
       "0.8.0",
       "date_source(time_imputation = )",
@@ -484,7 +484,7 @@ date_source <- function(dataset_name,
       )
     )
   }
-  if(!missing(preserve)) {
+  if (!missing(preserve)) {
     deprecate_stop(
       "0.8.0",
       "date_source(preserve = )",
