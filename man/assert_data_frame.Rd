@@ -46,7 +46,7 @@ try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
 try(example_fun("Not a dataset"))
 }
 \seealso{
-Other assertion: 
+Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_filter_cond}()},

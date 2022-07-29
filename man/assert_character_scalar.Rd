@@ -58,7 +58,7 @@ example_fun2 <- function(msg_type) {
 example_fun2("Warning")
 }
 \seealso{
-Other assertion: 
+Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_filter_cond}()},

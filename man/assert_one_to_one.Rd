@@ -28,7 +28,7 @@ try(
 )
 }
 \seealso{
-Other assertion: 
+Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},

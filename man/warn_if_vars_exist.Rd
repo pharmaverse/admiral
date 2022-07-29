@@ -27,7 +27,15 @@ warn_if_vars_exist(admiral_dm, "AAGE")
 ## Issues a warning
 warn_if_vars_exist(admiral_dm, "ARM")
 }
+\seealso{
+Function that provide users with custom warnings
+\code{\link{suppress_warning}()},
+\code{\link{warn_if_incomplete_dtc}()},
+\code{\link{warn_if_inconsistent_list}()},
+\code{\link{warn_if_invalid_dtc}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{warning}
+\concept{warnings}
+\keyword{warnings}

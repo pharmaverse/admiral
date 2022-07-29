@@ -16,11 +16,42 @@ news:
   cran_dates: false
 
 reference:
-- title: assertion functions
-- subtitle: Hello
-  desc: General example functions
+- title: Assertion Functions
+  desc: Checks inputs for functions and provide error and messaging around those checks
   contents:
   - has_keyword('assertion')
+
+- title: Get Functions
+  desc: Gets information or input from an object
+  contents:
+  - has_keyword('get')
+
+- title: Is Functions
+  desc: Is the object what it says it is
+  contents:
+  - has_keyword('is')
+
+- title: What Functions
+  desc: What type of object is this?
+  contents:
+  - has_keyword('what')
+
+- title: Warning Functions
+  desc: Custom warnings for users
+  contents:
+  - has_keyword('warnings')
+
+- title: Test Helper Functions
+  desc: Test Utilities that help with organization and presentation of tests
+  contents:
+  - has_keyword('test_helper')
+
+- title: Developer Utility Functions
+  desc: Utilities to help with organization and documenation
+  contents:
+  - has_keyword('dev_utility')
+
+
 
 articles:
 - title: User Guides

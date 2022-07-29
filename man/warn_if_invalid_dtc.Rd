@@ -26,7 +26,15 @@ warn_if_invalid_dtc(dtc = "2021-04-06")
 ## Issues a warning
 warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
 }
+\seealso{
+Function that provide users with custom warnings
+\code{\link{suppress_warning}()},
+\code{\link{warn_if_incomplete_dtc}()},
+\code{\link{warn_if_inconsistent_list}()},
+\code{\link{warn_if_vars_exist}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{warning}
+\concept{warnings}
+\keyword{warnings}
