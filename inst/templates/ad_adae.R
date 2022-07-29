@@ -79,18 +79,18 @@ adae <- ae %>%
   )
 
 ex_ext <- derive_vars_dtm(
-    ex,
-    dtc = EXSTDTC,
-    new_vars_prefix = "EXST",
-    flag_imputation = "none"
-  )
+  ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  flag_imputation = "none"
+)
 
 adae <- adae %>%
   # derive last dose date/time
   derive_var_last_dose_date(
     ex_ext,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      !is.na(EXSTDTM) ,
+      !is.na(EXSTDTM),
     dose_date = EXSTDTM,
     analysis_date = ASTDT,
     new_var = LDOSEDTM,

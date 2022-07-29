@@ -66,7 +66,8 @@ adae <- ae %>%
   derive_vars_dt(
     new_vars_prefix = "AST",
     dtc = AESTDTC,
-    highest_imputation = "M") %>%
+    highest_imputation = "M"
+  ) %>%
   mutate(TRTEMFL = if_else(ASTDT >= TRTSDT, "Y", NA_character_))
 ```
 

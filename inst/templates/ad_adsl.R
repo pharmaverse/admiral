@@ -98,8 +98,8 @@ adsl <- dm %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) &
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) &
       !is.na(EXSTDTM),
     new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
     order = vars(EXSTDTM, EXSEQ),
@@ -110,8 +110,8 @@ adsl <- dm %>%
   derive_vars_merged(
     dataset_add = ex_ext,
     filter_add = (EXDOSE > 0 |
-                    (EXDOSE == 0 &
-                       str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) & !is.na(EXENDTM),
     new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
     order = vars(EXENDTM, EXSEQ),
     mode = "last",

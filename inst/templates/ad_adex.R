@@ -71,12 +71,13 @@ adex0 <- ex %>%
     dtc = EXSTDTC,
     highest_imputation = "M",
     new_vars_prefix = "AST"
-    ) %>%
+  ) %>%
   derive_vars_dtm(
     dtc = EXENDTC,
     highest_imputation = "M",
     date_imputation = "last",
-    new_vars_prefix = "AEN") %>%
+    new_vars_prefix = "AEN"
+  ) %>%
   # Calculate ASTDY, AENDY
   derive_vars_dy(
     reference_date = TRTSDTM,
