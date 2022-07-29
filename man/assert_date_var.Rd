@@ -43,12 +43,12 @@ my_data <- tribble(
 example_fun(
   dataset = my_data,
   var = ADT
-  )
+)
 
 try(example_fun(
   dataset = my_data,
   var = USUBJID
-  ))
+))
 
 example_fun2 <- function(dataset, var) {
   var <- assert_symbol(enquo(var))
@@ -63,7 +63,7 @@ example_fun2 <- function(dataset, var) {
 try(example_fun2(
   dataset = my_data,
   var = USUBJID
-  ))
+))
 }
 \author{
 Stefan Bundfuss

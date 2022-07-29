@@ -13,6 +13,8 @@ A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
 valid value for any component.}
 
+\item{imputed_dtc}{The imputed DTC date}
+
 \item{min_dates}{Minimum dates
 
 A list of dates is expected. It is ensured that the imputed date is not
@@ -45,8 +47,6 @@ A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
 considered. A date or date-time object is expected.}
-
-\item{impute_dtc}{The imputed DTC date}
 }
 \value{
 \itemize{

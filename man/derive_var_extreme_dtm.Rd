@@ -81,15 +81,15 @@ ae_end <- date_source(
 
 ae_ext <- admiral_ae \%>\%
   derive_vars_dtm(
-  dtc = AESTDTC,
-  new_vars_prefix = "AEST",
-  highest_imputation = "M"
-) \%>\%
+    dtc = AESTDTC,
+    new_vars_prefix = "AEST",
+    highest_imputation = "M"
+  ) \%>\%
   derive_vars_dtm(
-  dtc = AEENDTC,
-  new_vars_prefix = "AEEN",
-  highest_imputation = "M"
-)
+    dtc = AEENDTC,
+    new_vars_prefix = "AEEN",
+    highest_imputation = "M"
+  )
 
 lb_date <- date_source(
   dataset_name = "lb",

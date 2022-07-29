@@ -165,7 +165,6 @@ impute_dtc_dt(
   ),
   highest_imputation = "Y"
 )
-
 }
 \author{
 Samia Kabi, Stefan Bundfuss

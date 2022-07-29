@@ -54,9 +54,9 @@ ae <- tribble(
   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04"
 ) \%>\%
-mutate(
-  AEDTHDT = ymd(AEDTHDTC)
-)
+  mutate(
+    AEDTHDT = ymd(AEDTHDTC)
+  )
 ds <- tribble(
   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
@@ -64,9 +64,9 @@ ds <- tribble(
   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
 ) \%>\%
-mutate(
-  DSSTDT = ymd(DSSTDTC)
-)
+  mutate(
+    DSSTDT = ymd(DSSTDTC)
+  )
 
 # Derive `DTHCAUS` only - for on-study deaths only
 src_ae <- dthcaus_source(
