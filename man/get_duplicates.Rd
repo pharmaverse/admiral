@@ -16,7 +16,7 @@ something
 Get Duplicates
 }
 \seealso{
-Brings something to you!?!
+Brings something to you!?!: 
 \code{\link{get_constant_vars}()},
 \code{\link{get_source_vars}()}
 }

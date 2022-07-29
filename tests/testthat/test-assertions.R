@@ -42,13 +42,13 @@ test_that("Test 3 : `assert_filter_cond` works as expected", {
   )
 })
 
-# test_that("Test 4 : is_valid_sec_min works as expected", {
-#   expect_true(is_valid_sec_min(59))
-# })
-#
-# test_that("Test 5 : is_valid_hour works as expected", {
-#   expect_true(is_valid_hour(23))
-# })
+test_that("Test 4 : is_valid_sec_min works as expected", {
+  expect_true(is_valid_sec_min(59))
+})
+
+test_that("Test 5 : is_valid_hour works as expected", {
+  expect_true(is_valid_hour(23))
+})
 
 test_that("Test 6 : `assert_data_frame` throws an error if not a dataframe", {
   example_fun <- function(dataset) {
@@ -97,18 +97,18 @@ test_that("Test 9 : `assert_character_scalar` throws an error if input is a vect
   expect_error(example_fun2(c("admiral", "admiralonco")))
 })
 
-# test_that("Test 10 : `quo_not_missing` returns TRUE if no missing argument", {
-#   test_fun <- function(x) {
-#     x <- rlang::enquo(x)
-#     assertthat::assert_that(quo_not_missing(x))
-#   }
-#   expect_true(test_fun(my_variable))
-# })
-#
-# test_that("Test 11 : `quo_not_missing` throws and Error if missing argument", {
-#   test_fun <- function(x) {
-#     x <- rlang::enquo(x)
-#     assertthat::assert_that(quo_not_missing(x))
-#   }
-#   expect_error(test_fun()) # missing argument -> throws error
-# })
+test_that("Test 10 : `quo_not_missing` returns TRUE if no missing argument", {
+  test_fun <- function(x) {
+    x <- rlang::enquo(x)
+    assertthat::assert_that(quo_not_missing(x))
+  }
+  expect_true(test_fun(my_variable))
+})
+
+test_that("Test 11 : `quo_not_missing` throws and Error if missing argument", {
+  test_fun <- function(x) {
+    x <- rlang::enquo(x)
+    assertthat::assert_that(quo_not_missing(x))
+  }
+  expect_error(test_fun()) # missing argument -> throws error
+})

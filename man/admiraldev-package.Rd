@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A toolbox for developers working on (pharmaverse admiral packages, \url{https://github.com/pharmaverse}).
+A toolbox for developers working on (pharmaverse admiral packages, \url{https://github.com/pharmaverse}). Package contains functions that are used internally to admiral and admiral extension packages to check data, variables and conditions. Package also contains utilitiy functions to help developer with documentaion, testing and genearl upkeep of admiral and admiral extension packages.
 }
 \seealso{
 Useful links:

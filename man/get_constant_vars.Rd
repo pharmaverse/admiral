@@ -39,7 +39,7 @@ admiral:::get_constant_vars(
 )
 }
 \seealso{
-Brings something to you!?!
+Brings something to you!?!: 
 \code{\link{get_duplicates}()},
 \code{\link{get_source_vars}()}
 }

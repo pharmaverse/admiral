@@ -6,12 +6,8 @@
 
 <!-- badges: start -->
 
-[<img src="http://pharmaverse.org/shields/admiral.svg">](https://pharmaverse.org)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/admiral)](https://CRAN.R-project.org/package=admiral)
-[![R-CMD-check](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/R-CMD-check.yml)
-[![Test
-Coverage](https://raw.githubusercontent.com/pharmaverse/admiraltemplate/badges/main/test-coverage.svg)](https://github.com/pharmaverse/admiraltemplate/actions/workflows/code-coverage.yml)
+## To Do Update Badges
+
 <!-- badges: end -->
 
 ## Purpose
