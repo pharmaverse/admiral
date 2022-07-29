@@ -16,8 +16,7 @@ of \code{derive_param_tte()}.}
 \code{dataset} which are events or possible censoring time points.}
 
 \item{date}{A variable providing the date of the event or censoring. A date,
-a datetime, or a character variable containing ISO 8601 dates can be
-specified. An unquoted symbol is expected.
+or a datetime can be specified. An unquoted symbol is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}

@@ -44,14 +44,14 @@ adcm <- cm %>%
   derive_vars_dtm(
     dtc = CMSTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    time_imputation = "first",
+    highest_imputation = "M",
     min_dates = vars(TRTSDT)
   ) %>%
   # Derive analysis end time
   derive_vars_dtm(
     dtc = CMENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)

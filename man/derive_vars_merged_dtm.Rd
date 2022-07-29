@@ -84,16 +84,13 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
-\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
-imputation is performed.}
+\code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
+valid value for any component.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
@@ -101,7 +98,7 @@ of June,
 day/month.
 }
 
-Default is \code{NULL}.}
+\emph{Default}: \code{"first"}.}
 
 \item{time_imputation}{The value to impute the time when a timepart is
 missing.
@@ -113,7 +110,7 @@ for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
-Default is \code{"00:00:00"}.}
+\emph{Default}: \code{"00:00:00"}.}
 
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
@@ -136,13 +133,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -161,11 +158,11 @@ considered. A date or date-time object is expected.}
 \item{preserve}{Preserve day if month is missing and day is present
 
 For example \code{"2019---07"} would return \verb{"2019-06-07} if \code{preserve = TRUE}
-(and \code{date_imputation = "MID"}).
+(and \code{date_imputation = "mid"}).
 
 Permitted Values: \code{TRUE}, \code{FALSE}
 
-Default: \code{FALSE}}
+\emph{Default}: \code{FALSE}}
 
 \item{check_type}{Check uniqueness?
 
@@ -194,6 +191,11 @@ optionally the variables \verb{<new_vars_prefix>DTF} and \verb{<new_vars_prefix>
 derived from the additional dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dtm()} and
+\code{derive_vars_merged()} instead.
+
 Merge a imputed datetime variable, date imputation  flag, and time imputation
 flag from a dataset to the input dataset. The observations to merge can be
 selected by a condition and/or selecting the first or last observation for
@@ -209,37 +211,6 @@ time imputation flag is added to the additional dataset.
 (depending on \code{mode}) is selected.
 \item The date and flag variables are merged to the input dataset.
 }
-}
-\examples{
-library(admiral.test)
-library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_ex")
-
-# derive treatment start datetime (TRTSDTM)
-derive_vars_merged_dtm(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTS",
-  dtc = EXSTDTC,
-  date_imputation = "first",
-  time_imputation = "first",
-  order = vars(TRTSDTM),
-  mode = "first"
-)
-
-# derive treatment end datetime (TRTEDTM) (without date imputation)
-derive_vars_merged_dtm(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTE",
-  dtc = EXENDTC,
-  time_imputation = "last",
-  order = vars(TRTEDTM),
-  mode = "last"
-)
 }
 \author{
 Stefan Bundfuss

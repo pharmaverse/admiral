@@ -107,7 +107,7 @@ the user to impute the date as well.
 Example calls:
 
 ```{r eval=TRUE}
-advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC, flag_imputation = "none")
+advs <- derive_vars_dt(advs, new_vars_prefix = "A", dtc = VSDTC)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -140,7 +140,7 @@ advs <- derive_vars_dt(
   advs,
   new_vars_prefix = "A",
   dtc = VSDTC,
-  date_imputation = "first"
+  highest_imputation = "M"
 )
 ```
 
@@ -167,7 +167,7 @@ advs <- derive_vars_dtm(
   advs,
   new_vars_prefix = "A",
   dtc = VSDTC,
-  date_imputation = "first"
+  highest_imputation = "M"
 )
 ```
 

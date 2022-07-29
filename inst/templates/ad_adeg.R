@@ -111,7 +111,6 @@ adeg <- eg %>%
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
-    flag_imputation = "auto"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
 
