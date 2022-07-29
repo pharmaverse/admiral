@@ -37,7 +37,15 @@ warn_if_inconsistent_list(
   list_name = "Test"
 )
 }
+\seealso{
+Function that provide users with custom warnings
+\code{\link{suppress_warning}()},
+\code{\link{warn_if_incomplete_dtc}()},
+\code{\link{warn_if_invalid_dtc}()},
+\code{\link{warn_if_vars_exist}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{warning}
+\concept{warnings}
+\keyword{warnings}

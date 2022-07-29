@@ -38,10 +38,18 @@ suppress_warning(
   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
 )
 }
+\seealso{
+Function that provide users with custom warnings
+\code{\link{warn_if_incomplete_dtc}()},
+\code{\link{warn_if_inconsistent_list}()},
+\code{\link{warn_if_invalid_dtc}()},
+\code{\link{warn_if_vars_exist}()}
+}
 \author{
 \itemize{
 \item Thomas Neitmann
 \item Stefan Bundfuss
 }
 }
-\keyword{warning}
+\concept{warnings}
+\keyword{warnings}

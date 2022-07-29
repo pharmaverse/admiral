@@ -30,7 +30,7 @@ assert_param_does_not_exist(advs, param = "HR")
 try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 }
 \seealso{
-Other assertion: 
+Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_character_vector}()},
 \code{\link{assert_data_frame}()},

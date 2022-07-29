@@ -32,7 +32,7 @@ example_fun(letters)
 try(example_fun(1:10))
 }
 \seealso{
-Other assertion: 
+Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},
 \code{\link{assert_data_frame}()},
 \code{\link{assert_filter_cond}()},

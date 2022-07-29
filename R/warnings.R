@@ -9,7 +9,8 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords warning
+#' @keywords warnings
+#' @family warnings
 #'
 #' @export
 #'
@@ -47,7 +48,8 @@ warn_if_vars_exist <- function(dataset, vars) {
 #'
 #' @author Samia Kabi
 #'
-#' @keywords warning
+#' @keywords warnings
+#' @family warnings
 #'
 #' @export
 #'
@@ -88,6 +90,17 @@ warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
   }
 }
 
+#' Warn if incomplete dtc
+#'
+#' @param dtc something
+#' @param n something
+#'
+#' @return something
+#' @export
+#'
+#' @keywords warnings
+#' @family warnings
+#'
 warn_if_incomplete_dtc <- function(dtc, n) {
   is_complete_dtc <- (nchar(dtc) >= n | is.na(dtc))
   if (n == 10) {
@@ -130,7 +143,8 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #'
 #' @return a `warning` if the 2 lists have different names or length
 #'
-#' @keywords warning
+#' @keywords warnings
+#' @family warnings
 #'
 #' @export
 #'
@@ -180,7 +194,8 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @return Return value of the expression
 #'
-#' @keywords warning
+#' @keywords warnings
+#' @family warnings
 #'
 #' @details
 #' All warnings which are issued by the expression and match the regular expression
