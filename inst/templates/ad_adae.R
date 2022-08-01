@@ -109,9 +109,9 @@ adae <- adae %>%
     derivation = derive_var_extreme_flag,
     args = params(
       by_vars = vars(USUBJID),
-      order = vars(ASTDTM, AESEQ),
+      order = vars(desc(ASEVN), ASTDTM, AESEQ),
       new_var = AOCCIFL,
-      mode = "last"
+      mode = "first"
     ),
     filter = TRTEMFL == "Y"
   )
