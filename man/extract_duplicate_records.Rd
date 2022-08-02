@@ -26,7 +26,14 @@ adsl <- rbind(admiral_adsl[1L, ], admiral_adsl)
 
 extract_duplicate_records(adsl, vars(USUBJID))
 }
+\seealso{
+Utilities for Dataset Checking: 
+\code{\link{get_duplicates_dataset}()},
+\code{\link{get_many_to_one_dataset}()},
+\code{\link{get_one_to_many_dataset}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{utils_ds_chk}
+\keyword{utils_ds_chk}

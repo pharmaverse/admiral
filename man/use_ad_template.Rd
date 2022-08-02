@@ -37,7 +37,12 @@ if (interactive()) {
   use_ad_template("adsl")
 }
 }
+\seealso{
+Utilities used for examples and template scripts: 
+\code{\link{list_all_templates}()}
+}
 \author{
 Shimeng Huang, Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_examples}
+\keyword{utils_examples}

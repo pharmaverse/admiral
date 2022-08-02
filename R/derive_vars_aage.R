@@ -40,6 +40,9 @@
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
 #'
+#' @family der_adsl
+#' @keywords der_adsl
+#'
 #' @export
 #'
 #' @seealso [derive_vars_duration()]
@@ -92,6 +95,9 @@ derive_vars_aage <- function(dataset,
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param new_var New AGE variable to be created in years.
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author Michael Thorpe
 #'
@@ -212,6 +218,9 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @param new_var New variable to be created.
 #'
+#' @family der_adsl
+#' @keywords der_adsl
+#'
 #' @return `dataset` with new column `new_var` of class factor.
 #'
 #' @author Ondrej Slama
@@ -273,6 +282,9 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 }
 
 #' @rdname derive_var_agegr_fda
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @export
 #'

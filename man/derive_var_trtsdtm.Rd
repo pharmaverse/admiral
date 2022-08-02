@@ -54,6 +54,4 @@ specified for the \code{order} parameter) is included in the output dataset.
 \author{
 Stefan Bundfuss
 }
-\keyword{adsl}
-\keyword{derivation}
-\keyword{timing}
+\keyword{deprecated}

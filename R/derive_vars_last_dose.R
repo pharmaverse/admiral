@@ -77,7 +77,8 @@
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
-#' @keywords adam derivation user_utility
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'

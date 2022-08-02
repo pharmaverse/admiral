@@ -29,7 +29,8 @@
 #'
 #' @author Ben Straub
 #'
-#' @keywords adam derivation
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'

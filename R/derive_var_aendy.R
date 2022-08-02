@@ -37,8 +37,8 @@
 #'
 #' @return The input dataset with `AENDY` column added
 #'
-#' @keywords derivation bds occds timing
-#'
+#' @keywords deprecated
+#' @family deprecated
 #' @export
 #'
 derive_var_aendy <- function(dataset, reference_date = TRTSDT, date = AENDT) {

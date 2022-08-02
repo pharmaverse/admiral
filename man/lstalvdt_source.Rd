@@ -39,4 +39,4 @@ An object of class \code{lstalvdt_source}.
 \author{
 Stefan Bundfuss
 }
-\keyword{source_specifications}
+\keyword{deprecated}

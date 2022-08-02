@@ -40,7 +40,7 @@
 #'
 #' @export
 #'
-#' @keywords adsl timing derivation
+#' @keywords deprecated
 #'
 derive_var_trtsdtm <- function(dataset,
                                dataset_ex,

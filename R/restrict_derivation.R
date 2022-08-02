@@ -12,7 +12,8 @@
 #'
 #' @param filter Filter condition
 #'
-#' @keywords user_utility high_order_function
+#' @family high_order_function
+#' @keywords high_order_function
 #'
 #' @author Stefan Bundfuss
 #'

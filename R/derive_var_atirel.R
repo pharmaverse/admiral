@@ -31,7 +31,7 @@
 #' @return A dataset containing all observations and variables of the input
 #'   dataset and additionally the variable specified by the `new_var` parameter.
 #'
-#' @keywords ADaM Relationship Var ATIREL
+#' @keywords deprecated
 #'
 #' @export
 #'

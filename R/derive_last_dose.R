@@ -55,7 +55,8 @@
 #'
 #' @author Ondrej Slama
 #'
-#' @keywords adae derivation
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @export
 #'

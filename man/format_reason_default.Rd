@@ -44,10 +44,13 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
+
+Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
+\code{\link{format_eoxxstt_default}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
-\keyword{computation}
-\keyword{user_utility}
+\concept{utils_fmt}
+\keyword{utils_fmt}

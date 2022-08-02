@@ -51,7 +51,8 @@
 #'
 #' @return A data frame with derived records appended to original dataset.
 #'
-#' @keywords bds derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

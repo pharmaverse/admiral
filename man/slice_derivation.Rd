@@ -75,9 +75,15 @@ slice_derivation(
 }
 \seealso{
 \code{\link[=params]{params()}} \code{\link[=restrict_derivation]{restrict_derivation()}}
+
+Higher Order Functions: 
+\code{\link{call_derivation}()},
+\code{\link{derivation_slice}()},
+\code{\link{print.derivation_slice}()},
+\code{\link{restrict_derivation}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{high_order_function}
 \keyword{high_order_function}
-\keyword{user_utility}

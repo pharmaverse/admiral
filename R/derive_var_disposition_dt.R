@@ -54,7 +54,7 @@
 #'
 #' @return the input dataset with the disposition date (`new_var`) added
 #'
-#' @keywords adsl timing
+#' @keywords deprecated
 #'
 #' @author Samia Kabi
 #'

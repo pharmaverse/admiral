@@ -27,7 +27,16 @@ try(call_user_fun(compute_bmi(
   weight = "hallo"
 )))
 }
+\seealso{
+Utilities used within Derivation functions: 
+\code{\link{extract_unit}()},
+\code{\link{get_not_mapped}()},
+\code{\link{negate_vars}()},
+\code{\link{signal_duplicate_records}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\concept{utils_help}
+\keyword{utils_help}

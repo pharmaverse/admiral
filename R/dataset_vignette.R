@@ -22,7 +22,8 @@
 #'
 #' @return A HTML table
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'

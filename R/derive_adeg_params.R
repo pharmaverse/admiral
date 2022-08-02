@@ -54,7 +54,9 @@
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation adeg
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -169,7 +171,8 @@ derive_param_qtc <- function(dataset,
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @examples
 #' default_qtc_paramcd("Sagie")
@@ -209,7 +212,9 @@ default_qtc_paramcd <- function(method) {
 #'
 #' Usually this computation function can not be used with `%>%`.
 #'
-#' @keywords computation adeg
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -265,7 +270,9 @@ compute_qtc <- function(qt, rr, method) {
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation adeg
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
 #'
 #' @export
 #'
@@ -343,7 +350,9 @@ derive_param_rr <- function(dataset,
 #' @return RR interval in msec:
 #' \deqn{\frac{60000}{HR}}{60000 / HR}
 #'
-#' @keywords computation adeg
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'

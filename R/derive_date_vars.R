@@ -82,7 +82,9 @@
 #'
 #' @return A character vector
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -353,7 +355,9 @@ impute_dtc <- function(dtc,
 #'
 #' @return a date object
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -402,7 +406,9 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -446,7 +452,9 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @return A datetime object
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -500,7 +508,9 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @return The date imputation flag (`'--DTF'`) (character value of `'D'`, `'M'` , `'Y'` or `NA`)
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -552,7 +562,9 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @return The time imputation flag (`'--TMF'`) (character value of `'H'`, `'M'` , `'S'` or `NA`)
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -631,7 +643,9 @@ compute_tmf <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords adam derivation timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
@@ -820,7 +834,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

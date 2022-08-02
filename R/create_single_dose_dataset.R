@@ -36,6 +36,7 @@
 #' @export
 #'
 #' @keywords metadata
+#' @family metadata
 #'
 #' @rdname dose_freq_lookup
 
@@ -240,7 +241,8 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'
-#' @keywords adae adex user_utility
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @return The input dataset with a single dose per row.
 #'

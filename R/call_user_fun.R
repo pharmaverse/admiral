@@ -9,7 +9,8 @@
 #'
 #' @return The return value of the function call
 #'
-#' @keywords dev_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @export
 #'

@@ -12,10 +12,11 @@
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with an additional column named `CHG`
-#' @keywords bds derivation
-#' @export
 #'
-#' @seealso [derive_var_pchg()]
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
+#' @export
 #'
 #' @examples
 #' advs <- tibble::tribble(

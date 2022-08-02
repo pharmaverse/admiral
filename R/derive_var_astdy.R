@@ -37,7 +37,7 @@
 #'
 #' @return The input dataset with `ASTDY` column added
 #'
-#' @keywords derivation bds occds timing
+#' @keywords deprecated
 #'
 #' @export
 #'

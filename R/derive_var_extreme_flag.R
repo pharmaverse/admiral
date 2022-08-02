@@ -57,7 +57,8 @@
 #'
 #' @return The input dataset with the new flag variable added
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -292,7 +293,8 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @return The input dataset with the new flag variable added.
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'

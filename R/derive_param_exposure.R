@@ -70,7 +70,8 @@
 #' + only `AxxDTM` then `ASTDTM`,`AENDTM` are computed
 #' + only `AxxDT` then `ASTDT`,`AENDT` are computed.
 #'
-#' @keywords derivation bds adex
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'

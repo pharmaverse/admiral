@@ -18,7 +18,8 @@
 #'
 #' @author Annie Yang
 #'
-#' @keywords adam derivation
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'

@@ -144,8 +144,18 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=format_reason_default]{format_reason_default()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
+\concept{der_adsl}
+\keyword{der_adsl}

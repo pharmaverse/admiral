@@ -23,7 +23,13 @@ print(templates)
 }
 \seealso{
 \code{\link[=list_all_templates]{list_all_templates()}}
+
+Other internal: 
+\code{\link{admiral}},
+\code{\link{print.tte_source}()}
 }
 \author{
 Thomas Neitmann
 }
+\concept{internal}
+\keyword{internal}

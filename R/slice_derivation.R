@@ -36,7 +36,8 @@
 #'
 #' @return The input dataset with the variables derived by the derivation added
 #'
-#' @keywords user_utility high_order_function
+#' @family high_order_function
+#' @keywords high_order_function
 #'
 #' @author Stefan Bundfuss
 #'
@@ -148,7 +149,8 @@ slice_derivation <- function(dataset,
 #'
 #' @seealso [slice_derivation()], [params()]
 #'
-#' @keywords source_specifications
+#' @family high_order_function
+#' @keywords high_order_function
 #'
 #' @export
 #'
@@ -171,6 +173,9 @@ derivation_slice <- function(filter,
 #' @return No return value, called for side effects
 #'
 #' @export
+#'
+#' @family high_order_function
+#' @keywords high_order_function
 #'
 #' @seealso [derivation_slice()]
 #'

@@ -47,7 +47,9 @@
 #'
 #' @return A dataset containing the first or last observation of each by group
 #'
-#' @keywords adam user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @export
 #'

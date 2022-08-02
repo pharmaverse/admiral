@@ -155,8 +155,21 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
+}
 \author{
 Vignesh Thanikachalam, Ondrej Slama
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

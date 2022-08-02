@@ -30,7 +30,9 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords bds derivation
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
 #'
 #' @examples
 #' dataset <- tibble::tribble(
