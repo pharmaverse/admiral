@@ -67,13 +67,8 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
-          ref <- if (Sys.getenv("GITHUB_REF_NAME") %in% c("main", "patch")) "main" else "devel"
-          remotes::install_github(
-            "pharmaverse/admiral.test",
-            ref = ref,
-            dependencies = FALSE,
-            upgrade = "never"
-          )
+          deps <- staged.dependencies::dependency_table(fallback_branch = "devel")
+          staged.dependencies::install_deps(deps)
         shell: Rscript {0}
 
       - name: Check

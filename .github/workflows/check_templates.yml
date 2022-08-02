@@ -44,7 +44,8 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          remotes::install_github("pharmaverse/admiral.test", ref = "devel")
+          deps <- staged.dependencies::dependency_table(fallback_branch = "devel")
+          staged.dependencies::install_deps(deps)
         shell: Rscript {0}
 
       - name: Install package
