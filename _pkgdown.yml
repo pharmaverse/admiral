@@ -151,11 +151,11 @@ navbar:
       text: Community
       menu:
       - text: Contribute to admiral
-        href: articles/admiral.html
+        href: articles/contribution_model.html
       - text: Find us on Slack
-        href: articles/admiral.html
+        href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
       - text: Welcome to the Pharmaverse
-        href: articles/admiral.html
+        href: https://pharmaverse.org/
     articles:
       text: User Guides
       menu:
