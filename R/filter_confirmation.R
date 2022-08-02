@@ -2,13 +2,12 @@
 #'
 #' @description
 #'
-#' The function filters observation using a condition taking subsequent
-#' observations into account. For example, it could select all observations with
-#' `AVALC == "Y"` and `AVALC == "Y"` for at least one subsequent observation.
-#' The input dataset is joined with itself to enable conditions taking variables
-#' from both the current observation and the subsequent observations into
-#' account. The suffix ".join" is added to the variables from the subsequent
-#' observations.
+#' The function filters observation using a condition taking other observations
+#' into account. For example, it could select all observations with `AVALC ==
+#' "Y"` and `AVALC == "Y"` for at least one subsequent observation. The input
+#' dataset is joined with itself to enable conditions taking variables from both
+#' the current observation and the other observations into account. The suffix
+#' ".join" is added to the variables from the subsequent observations.
 #'
 #' An example usage might be checking if a patient received two required
 #' medications within a certain timeframe of each other.
@@ -29,8 +28,8 @@
 #'
 #' @param join_vars Variables to keep from joined dataset
 #'
-#'   The variables needed from the subsequent observations should be specified
-#'   for this parameter. The specified variables are added to the joined dataset
+#'   The variables needed from the other observations should be specified for
+#'   this parameter. The specified variables are added to the joined dataset
 #'   with suffix ".join". For example to select all observations with `AVALC ==
 #'   "Y"` and `AVALC == "Y"` for at least one subsequent visit `join_vars =
 #'   vars(AVALC, AVISITN)` and `filter = AVALC == "Y" & AVALC.join == "Y" &
@@ -42,19 +41,16 @@
 #'
 #'   The argument determines which of the joined observations are kept with
 #'   respect to the original observation. For example, if `join_type =
-#'   "at_after"` is specified all observations at and after the original
-#'   observations are kept.
+#'   "after"` is specified all observations after the original observations are
+#'   kept.
 #'
-#'   *Default:* `"at_after"`
-#'
-#'   *Permitted Values:* `"before"`, `"at_before"`, `"at_after"`, `"after"`,
-#'   `"all"`
+#'   *Permitted Values:* `"before"`, `"after"`, `"all"`
 #'
 #' @param first_cond Condition for selecting range of data
 #'
-#'   If this argument is specified, the subsequent observations are restricted
-#'   up to the first observation where the specified condition is fulfilled. If
-#'   the condition is not fulfilled for any of the subsequent observations, all
+#'   If this argument is specified, the other observations are restricted up to
+#'   the first observation where the specified condition is fulfilled. If the
+#'   condition is not fulfilled for any of the subsequent observations, all
 #'   observations are removed.
 #'
 #' @param order Order
@@ -123,15 +119,13 @@
 #'   `join_type` and `order`.
 #'
 #'   The dataset from the example in the previous step with `join_type =
-#'   "at_after"` and order = vars(AVISITN)` is restricted to
+#'   "after"` and order = vars(AVISITN)` is restricted to
 #'
 #'   ```{r eval=FALSE}
 #'   A tibble: 4 x 6
 #'   USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 #'   <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
-#'   1             1 Y         1            1 Y
 #'   1             1 Y         1            2 N
-#'   1             2 N         0            2 N
 #'   ```
 #'
 #'   ## Step 3
@@ -213,6 +207,7 @@
 #'   data,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(AVALC, AVISITN),
+#'   join_type = "after",
 #'   order = vars(AVISITN),
 #'   filter = AVALC == "Y" & AVALC.join == "Y" & AVISITN < AVISITN.join
 #' )
@@ -241,6 +236,7 @@
 #'   data,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(AVALC),
+#'   join_type = "after",
 #'   order = vars(AVISITN),
 #'   first_cond = AVALC.join == "CR",
 #'   filter = AVALC == "CR" & all(AVALC.join %in% c("CR", "NE")) &
@@ -272,6 +268,7 @@
 #'   data,
 #'   by_vars = vars(USUBJID),
 #'   join_vars = vars(AVALC, ADY),
+#'   join_type = "after",
 #'   order = vars(ADY),
 #'   first_cond = AVALC.join %in% c("CR", "PR") & ADY.join - ADY >= 20,
 #'   filter = AVALC == "PR" &
@@ -286,7 +283,7 @@
 filter_confirmation <- function(dataset,
                                 by_vars,
                                 join_vars,
-                                join_type = "at_after",
+                                join_type,
                                 first_cond = NULL,
                                 order,
                                 filter,
@@ -297,7 +294,7 @@ filter_confirmation <- function(dataset,
   join_type <-
     assert_character_scalar(
       join_type,
-      values = c("before", "at_before", "at_after", "after", "all"),
+      values = c("before", "after", "all"),
       case_sensitive = FALSE
     )
   first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
@@ -333,7 +330,7 @@ filter_confirmation <- function(dataset,
       suffix = c("", ".join")
     )
   if (join_type != "all") {
-    operator <- c(before = "<", at_before = "<=", at_after = ">=", after = ">")
+    operator <- c(before = "<", after = ">")
 
     data_joined <- filter(
       data_joined,
@@ -350,8 +347,7 @@ filter_confirmation <- function(dataset,
     data_joined <- filter_relative(
       data_joined,
       by_vars = vars(!!!by_vars, tmp_obs_nr_filter_confirmation),
-      condition = !!first_cond &
-        tmp_obs_nr_filter_confirmation < tmp_obs_nr_filter_confirmation.join,
+      condition = !!first_cond,
       order = vars(tmp_obs_nr_filter_confirmation.join),
       mode = "first",
       selection = "before",

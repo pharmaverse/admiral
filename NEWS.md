@@ -11,6 +11,9 @@ admiral extension packages (#1079)
 (#1292) including supporting functions `count_vals()`, `min_cond()`, and
 `max_cond()`.
 
+- New function `derive_var_confirmation_flag()` for deriving a flag which
+depends on other observations of the input dataset (#1293)
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
