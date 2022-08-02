@@ -67,6 +67,7 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_github("openpharma/staged.dependencies")
           deps <- staged.dependencies::dependency_table(fallback_branch = "devel")
           staged.dependencies::install_deps(deps)
         shell: Rscript {0}
