@@ -140,28 +140,45 @@ reference:
   - validate_smq_select
   - assert_db_requirements
 
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - admiral
-  - adsl
-  - occds
-  - bds_finding
-  - bds_exposure
-  - bds_tte
-  - higher_order
-  - imputation
-  - queries_dataset
-  - faq
+navbar:
+  structure:
+    left: [reference, articles, community, news]
+  components:
+    reference:
+      text: Functions
+      href: reference/index.html
+    community:
+      text: Community
+      menu:
+      - text: Contribute to admiral
+        href: articles/admiral.html
+      - text: Find us on Slack
+        href: articles/admiral.html
+      - text: Welcome to the Pharmaverse
+        href: articles/admiral.html
+    articles:
+      text: User Guides
+      menu:
+      - text: Getting Started
+      - text: Creating a basic ADSL
+        href: articles/admiral.html
+      - text: FAQ
+        href: articles/faq.html
+      - text: -------
+      - text: "Deep Dives on ADaMs"
+      - text: Creating an OCCDS ADaM
+        href: articles/occds.html
+      - text: Creating a BDS Findings ADAM
+        href: articles/bds_finding.html
+      - text: Creating a BDS Exposure ADaM
+        href: articles/bds_exposure.html
+      - text: Creating a BDS Time-to-Event ADaM
+        href: articles/bds_tte.html
+      - text: "Advanced User Guides"
+      - text: Date and Time Imputation
+        href: articles/imputation.html
+      - text: Higher Order Functions
+        href: articles/higher_order.html
+      - text: Queries Dataset Documentation
+        href: articles/queries_dataset.html
 
-- title: Developer Guides
-  navbar: Developer Guides
-  contents:
-  - contribution_model
-  - development_process
-  - programming_strategy
-  - git_usage
-  - writing_vignettes
-  - pr_review_guidance
-  - unit_test_guidance
