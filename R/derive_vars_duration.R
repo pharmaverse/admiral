@@ -79,7 +79,8 @@
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
-#' @keywords adam timing derivation
+#' @family der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

@@ -44,8 +44,15 @@ compute_qtc(qt = 350, rr = 56.54, method = "Fridericia")
 
 compute_qtc(qt = 350, rr = 56.54, method = "Sagie")
 }
+\seealso{
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bmi}()},
+\code{\link{compute_bsa}()},
+\code{\link{compute_map}()},
+\code{\link{compute_rr}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adeg}
-\keyword{computation}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}

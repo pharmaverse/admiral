@@ -39,5 +39,4 @@ known alive date (\code{LSTALVDT}) to the dataset.
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }
-\keyword{adsl}
-\keyword{derivation}
+\keyword{deprecated}

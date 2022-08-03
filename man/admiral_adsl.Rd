@@ -16,4 +16,10 @@ admiral_adsl
 \description{
 An example subject level analysis dataset
 }
+\seealso{
+Other datasets: 
+\code{\link{ex_single}},
+\code{\link{queries}}
+}
+\concept{datasets}
 \keyword{datasets}

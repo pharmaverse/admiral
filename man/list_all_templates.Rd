@@ -18,7 +18,12 @@ List All Available ADaM Templates
 \examples{
 list_all_templates()
 }
+\seealso{
+Utilities used for examples and template scripts: 
+\code{\link{use_ad_template}()}
+}
 \author{
 Shimeng Huang, Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_examples}
+\keyword{utils_examples}
