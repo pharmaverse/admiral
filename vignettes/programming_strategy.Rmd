@@ -460,8 +460,17 @@ See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests
 
 As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more 
 efficient options from one release to another. In such cases, the relevant function or parameter 
-must be marked as deprecated. A warning will be issued until the next release and an error will be 
-generated thereafter. Information about deprecation timelines must be added to the warning/error message.
+must be marked as deprecated. This deprecation is done in three phases over our release cycles.
+
+-  **Phase 1:** In the release where the identified function or parameter is to be deprecated there will be a warning issued when using the function or parameter using `deprecate_warn()`
+
+-  **Phase 2:** In the next release an error will be thrown using `deprecate_stop()`
+
+-  **Phase 3:** Finally in the 3rd release thereafterthe function will be removed from the package altogether
+
+Information about deprecation timelines must be added to the warning/error message.
+
+Note that the deprecation cycle time for a function or parameter based on our current release schedule is 6 months.
 
 ## Documentation
 
@@ -481,15 +490,12 @@ The documentation will be updated at:
 #' `r lifecycle::badge("deprecated")`
 #'
 #' This function is *deprecated*, please use `new_fun()` instead.
-#' description of the function in plain English
-#' .
 #' .
 #' @keywords deprecated
 #' .
-#' .
     ``` 
 
-    The "Examples" section should be removed.
++ the `@examples` section should be removed.
 
 + the `@param` level for a parameter.
 
@@ -499,34 +505,39 @@ The documentation will be updated at:
 
 ## Handling of warning and error
 
-When a function or parameter is deprecated, the function must be updated to issue an error or a 
-warning to inform the user.
+When a function or parameter is deprecated, the function must be updated to issue a
+warning or error using `deprecate_warn()` and `deprecate_stop()`, respectively, as
+described above.
 
 There should be a test case added in `tests/testthat/test-deprecation.R` that checks whether this warning/error is issued as appropriate when using the deprecated function or parameter.
 
 ### Function
 
-If the deprecated function still exists in the package besides the new function, a **warning** must be
-issued. If it has been removed, an **error** must be generated.
+In the initial release in which a function is deprecated the original function body
+must be replaced with a call to `deprecate_warn()` and subsequently all arguments
+should be passed on to the new function.
 
-```
-### BEGIN DEPRECATION
-# Warning if the deprecated function still exists
-deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
-
-# Error if the deprecated function does not exist anymore
-deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
-### END DEPRECATION
-```
-
-For the former case above, please pass any input arguments into a call to the new function so that it still runs and pushes users towards adopting the new function.
-
-```{r, eval=F}
-fun_xxx <- function(dataset, new_var) {
+```r
+fun_xxx <- function(dataset, some_param, other_param) {
   deprecate_warn("x.y.z", "fun_xxx()", "new_fun_xxx()")
-  new_fun_xxx(dataset, new_var = new_var)
+  new_fun_xxx(
+    dataset = dataset,
+    some_param = some_param,
+    other_param = other_param
+  )
 }
 ```
+
+In the following release the function body should be changed to just include a call
+to `deprecate_stop()`.
+
+```r
+fun_xxx <- function(dataset, some_param, other_param) {
+  deprecate_stop("x.y.z", "fun_xxx()", "new_fun_xxx()")
+}
+```
+
+Finally, in the next release the function should be removed from the package.
 
 ### Parameter
 
