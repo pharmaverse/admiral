@@ -42,8 +42,9 @@ Feature Branches are where most developers will work when addressing Issues.
 
 Each feature branch must be related to an issue.
 
-**Name:**  
-The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 "Program function to derive `LSTALVDT`", the Branch name would be: `94_lstalvdt`.
+### Naming Branches
+
+The name of the branch must be prefixed with the issue number, followed by a short but meaningful description and the `@<target_branch>` suffix. The latter would be `@devel` in most cases. As an example, given an issue #94 "Program function to derive `LSTALVDT`", the branch name would be `94_derive_var_lstalvdt@devel`.
 
 ### Create a New Feature Branch from the Terminal (from `devel`)
 
