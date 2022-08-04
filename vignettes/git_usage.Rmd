@@ -46,6 +46,8 @@ Each feature branch must be related to an issue.
 
 The name of the branch must be prefixed with the issue number, followed by a short but meaningful description and the `@<target_branch>` suffix. The latter would be `@devel` in most cases. As an example, given an issue #94 "Program function to derive `LSTALVDT`", the branch name would be `94_derive_var_lstalvdt@devel`.
 
+The `@<target_branch>` suffix is used in our CI/CD pipelines, e.g. when running `R CMD check`. It ensures that {admiral}'s upstream dependencies such as {admiral.test} are installed from the specified target branch. So when the target branch is set to `@devel` the upstream dependencies will be installed from the `devel` branch rather than installing the latest released version. This ensures that we test the development version of {admiral} against the development versions of its upstream dependencies. That way all packages are kept in sync.
+
 ### Create a New Feature Branch from the Terminal (from `devel`)
 
 -	Checkout the devel branch: `git checkout devel`  
