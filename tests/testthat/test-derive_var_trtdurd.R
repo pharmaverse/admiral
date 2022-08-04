@@ -1,5 +1,7 @@
 test_that("TRTDURD is added", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~TRTSDT, ~TRTEDT,
     ymd("2020-01-01"), ymd("2020-02-24")
   )

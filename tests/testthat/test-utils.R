@@ -25,7 +25,9 @@ test_that("S3 objects", {
 
 
 test_that("S4 objects", {
-  expect_identical(what_is_it(lubridate::days(1)), "a S4 object of class 'Period'")
+  library(lubridate)
+
+  expect_identical(what_is_it(days(1)), "a S4 object of class 'Period'")
 })
 
 test_that("symbols", {
@@ -33,7 +35,9 @@ test_that("symbols", {
 })
 
 test_that("input is returned as is if filter is NULL", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
@@ -47,7 +51,9 @@ test_that("input is returned as is if filter is NULL", {
 })
 
 test_that("input is filtered if filter is not NULL", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~VSTESTCD, ~VSSTRESN,
     "P01", "WEIGHT", 80.9,
     "P01", "HEIGHT", 189.2
@@ -93,13 +99,15 @@ test_that("attributes are preserved when converting blanks to `NA`", {
 })
 
 test_that("blank strings are turned into `NA` inside data frames", {
-  input <- tibble::tibble(
+  library(tibble)
+
+  input <- tibble(
     a = structure(c("a", "b", "", "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
     c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
     d = structure(c("", "", "s", "q"), label = "D")
   )
-  expected_output <- tibble::tibble(
+  expected_output <- tibble(
     a = structure(c("a", "b", NA, "c"), label = "A"),
     b = structure(c(1, NA, 21, 9), label = "B"),
     c = structure(c(TRUE, FALSE, TRUE, TRUE), label = "C"),
@@ -154,7 +162,9 @@ test_that("`convert_dtm_to_dtc` Error is thrown if dtm is not in correct format"
 })
 
 test_that("get_constant_vars Test 1: without ignore_vars", {
-  data <- tibble::tribble(
+  library(tibble)
+
+  data <- tribble(
     ~USUBJID, ~AGE, ~AVISIT,
     "1",      26,   "BASELINE",
     "1",      26,   "WEEK 1",
@@ -169,7 +179,9 @@ test_that("get_constant_vars Test 1: without ignore_vars", {
 })
 
 test_that("get_constant_vars Test 2: with ignore_vars", {
-  data <- tibble::tribble(
+  library(tibble)
+
+  data <- tribble(
     ~USUBJID, ~AGE, ~WGTBL, ~HGTBL, ~AVISIT,
     "1",      26,   61,     172,    "BASELINE",
     "1",      26,   61,     172,    "WEEK 1",

@@ -1,7 +1,9 @@
 # slice_derivation ----
 ## Test 1: slice derivation ----
 test_that("slice_derivation Test 1: slice derivation", {
-  advs <- tibble::tribble(
+  library(tibble)
+
+  advs <- tribble(
     ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
     "1",      "2020-04-16", NA_character_,      1,
     "1",      "2020-04-16", "BEFORE TREATMENT", 2
@@ -38,7 +40,9 @@ test_that("slice_derivation Test 1: slice derivation", {
 
 ## Test 2: non matching observations ----
 test_that("slice_derivation Test 2: non matching observations", {
-  advs <- tibble::tribble(
+  library(tibble)
+
+  advs <- tribble(
     ~USUBJID, ~VSDTC,       ~VSTPT,             ~VSSEQ,
     "1",      "2020-04-16", NA_character_,      1,
     "1",      "2020-04-16", "BEFORE TREATMENT", 2
@@ -72,7 +76,9 @@ test_that("slice_derivation Test 2: non matching observations", {
 
 ## Test 3: empty slice ----
 test_that("slice_derivation Test 3: empty slice", {
-  advs <- tibble::tribble(
+  library(tibble)
+
+  advs <- tribble(
     ~USUBJID, ~VSDTC,       ~VSTPT,        ~VSSEQ,
     "1",      "2020-04-16", NA_character_, 1,
     "1",      "2020-04-16", NA_character_, 2

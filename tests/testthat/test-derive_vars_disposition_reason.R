@@ -1,4 +1,6 @@
-dm <- tibble::tribble(
+library(tibble)
+
+dm <- tribble(
   ~STUDYID, ~USUBJID,
   "TEST01", "PAT01",
   "TEST01", "PAT02",
@@ -6,7 +8,7 @@ dm <- tibble::tribble(
   "TEST01", "PAT04"
 )
 
-ds <- tibble::tribble(
+ds <- tribble(
   ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSTERM, ~DSSTDTC,
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01", # nolint
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "RANDOMIZED", "2021-04-11",
@@ -26,7 +28,9 @@ ds <- tibble::tribble(
 
 
 test_that("Derive DCSREAS using default mapping", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DCSREAS,
     "TEST01", "PAT01", "ADVERSE EVENT",
     "TEST01", "PAT02", NA_character_,
@@ -50,7 +54,9 @@ test_that("Derive DCSREAS using default mapping", {
 })
 
 test_that("Derive DCSREAS DCSREASP using default mapping", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DCSREAS, ~DCTREASP,
     "TEST01", "PAT01", "ADVERSE EVENT", NA_character_,
     "TEST01", "PAT02", NA_character_, NA_character_,
@@ -77,6 +83,8 @@ test_that("Derive DCSREAS DCSREASP using default mapping", {
 
 
 test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
+  library(tibble)
+
   format_dctreas <- function(x, y = NULL) {
     if (is.null(y)) {
       if_else(x %notin% c("COMPLETED", "SCREEN FAILURE") & !is.na(x), x, NA_character_)
@@ -84,7 +92,7 @@ test_that("Derive DCTREAS, DCTREASP using a study specific mapping", {
       if_else(x == "OTHER", y, NA_character_)
     }
   }
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DCTREAS, ~DCTREASP,
     "TEST01", "PAT01", "ADVERSE EVENT", NA_character_,
     "TEST01", "PAT02", NA_character_, NA_character_,

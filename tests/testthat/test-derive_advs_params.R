@@ -276,7 +276,9 @@ test_that(paste(
   "derive_param_bmi Test 01.01: BMI parameter NOT added to input dataset",
   "- wrong unit for hgt"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "m", 170,
@@ -296,7 +298,9 @@ test_that(paste(
   "derive_param_bmi Test 01.02: BMI parameter NOT added to input dataset",
   "- wrong unit for wgt"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     # Wrong unit for WEIGHT should be kg
@@ -316,7 +320,9 @@ test_that(paste(
   "derive_param_bmi Test 01.03: BMI parameter NOT added to input dataset",
   "- multiple unit for wgt"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     # Multiple units for WEIGHT
@@ -337,7 +343,9 @@ test_that(paste(
   "derive_param_bmi Test 01.04: BMI parameter NOT added to input dataset",
   "- PARAMCD not set"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE",      "kg",    85,
@@ -357,7 +365,9 @@ test_that(paste(
 ## derive_param_bmi: No obs added (Test 02.xx)  ----
 
 test_that("derive_param_bmi Test 02.01: BMI parameter NOT added to input dataset", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     # WEIGHT set to NA - so BMI not calculated
@@ -385,7 +395,9 @@ bmi <- function(hgt, wgt) {
 }
 
 test_that("derive_param_bmi Test 03.01: BMI parameter is correctly added to input dataset", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -418,7 +430,9 @@ test_that(paste(
   "derive_param_bsa Test 01.01: BSA parameter NOT added to input dataset",
   "- wrong unit for height"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     # Wrong unit for HEIGHT should be cm
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "m", 170,
@@ -443,7 +457,9 @@ test_that(paste(
   "derive_param_bsa Test 01.02: BSA parameter NOT added to input dataset",
   "- wrong unit for weight"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     # Wrong unit for WEIGHT should be kg
@@ -468,7 +484,9 @@ test_that(paste(
   "derive_param_bsa Test 01.03: BSA parameter NOT added to input dataset",
   "- multiple unit for weight"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     # Multiple units for WEIGHT
@@ -494,7 +512,9 @@ test_that(paste(
   "derive_param_bsa Test 01.04: BSA parameter NOT added to input dataset",
   "- PARAMCD not set"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~VISIT,     ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE",      "cm",   170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE",      "kg",    85,
@@ -518,7 +538,9 @@ test_that(paste(
 ## derive_param_bsa: No obs added (Test 02.xx) ----
 
 test_that("derive_param_bsa Test 02.01: BSA parameter NOT added to input dataset", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     # WEIGHT set to NA - so BSA not calculated
@@ -554,7 +576,9 @@ test_that(paste(
   "derive_param_bsa Test 03.01: BSA parameter (Mosteller method) is",
   "correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -591,7 +615,9 @@ test_that(paste(
   "derive_param_bsa Test 03.02: BSA parameter (DuBois-DuBois method)",
   "is correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -629,7 +655,9 @@ test_that(paste(
   "derive_param_bsa Test 03.03: BSA parameter (Haycock method) is",
   "correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -666,7 +694,9 @@ test_that(paste(
   "derive_param_bsa Test 03.04: BSA parameter (Gehan-George method)",
   "is correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -704,7 +734,9 @@ test_that(paste(
   "derive_param_bsa Test 03.05: BSA parameter (Boyd method) is ",
   "correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -741,7 +773,9 @@ test_that(paste(
   "derive_param_bsa Test 03.06: BSA parameter (Fujimoto method) is",
   "correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -778,7 +812,9 @@ test_that(paste(
   "derive_param_bsa Test 03.07: BSA parameter (Takahira method) is",
   "correctly added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~VSSTRESU, ~AVAL,
     "01-701-1015", "HEIGHT", "Height (cm)", "BASELINE", "cm", 170,
     "01-701-1015", "WEIGHT", "Weight (kg)", "BASELINE", "kg", 75,
@@ -816,7 +852,9 @@ test_that(paste(
   "derive_param_map Test 01.01: MAP parameter NOT added to input dataset",
   "- wrong unit for DIABP"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mHg)", 51, "BASELINE",
     "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
@@ -839,7 +877,9 @@ test_that(paste(
   "derive_param_map Test 01.02: MAP parameter NOT added to input dataset",
   "- wrong unit for SYSBP"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    51, "BASELINE",
     "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mHg)",     121, "BASELINE",
@@ -862,7 +902,9 @@ test_that(paste(
   "derive_param_map Test 01.03: MAP parameter NOT added to input dataset",
   "- wrong unit for PULSE"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
     "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
@@ -887,7 +929,9 @@ test_that(paste(
   "derive_param_map Test 01.04: MAP parameter NOT added to input dataset",
   "- PARAMCD not set"
 ), {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
     "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
@@ -910,7 +954,9 @@ test_that(paste(
 ## derive_param_map: No obs added (Test 02.xx) ----
 
 test_that("derive_param_map Test 02.01: MAP parameter NOT added to input dataset", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    NA, "BASELINE",
     "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",    50, "WEEK 2",
@@ -947,7 +993,9 @@ test_that(paste(
   "derive_param_map Test 03.01: MAP parameter (DBP/SBP/PULSE) is correctly",
   "added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "PULSE", "Pulse (beats/min)", "BASELINE", 59,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", "BASELINE", 51,
@@ -985,7 +1033,9 @@ test_that(paste(
   "derive_param_map Test 03.02: MAP parameter (DBP/SBP) is correctly",
   "added to input dataset"
 ), {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~VISIT, ~AVAL,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", "BASELINE", 51,
     "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", "BASELINE", 121,

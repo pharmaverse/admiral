@@ -1,5 +1,7 @@
 test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST",
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST",
@@ -14,7 +16,7 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
     "TEST01", "PAT02", "PARAM02", 2, 9, "", "LAST",
     "TEST01", "PAT02", "PARAM02", 3, 5.35, "", "LAST"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST", 10.12,
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST", 10.12,
@@ -44,7 +46,9 @@ test_that("`target` is set to `source` where `ABLFL == 'Y'`", {
 })
 
 test_that("`target` is set to `NA` if a baseline record is missing", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST",
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST",
@@ -53,7 +57,7 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
     "TEST01", "PAT01", "PARAM02", 2, 7.1, "", "LAST",
     "TEST01", "PAT01", "PARAM02", 3, 8.35, "", "LAST"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~BASE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST", 10.12,
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST", 10.12,
@@ -77,7 +81,9 @@ test_that("`target` is set to `NA` if a baseline record is missing", {
 })
 
 test_that("only the `target` variable is added to the input dataset", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST", "Y",
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST", "Y",
@@ -86,7 +92,7 @@ test_that("only the `target` variable is added to the input dataset", {
     "TEST01", "PAT01", "PARAM02", 2, NA, "", "LAST", "Y",
     "TEST01", "PAT01", "PARAM02", 3, 8.35, "", "LAST", "Y"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ABLFL, ~BASETYPE, ~ANL01FL, ~BASE,
     "TEST01", "PAT01", "PARAM01", 1, 10.12, "Y", "LAST", "Y", 10.12,
     "TEST01", "PAT01", "PARAM01", 2, 9.7, "", "LAST", "Y", 10.12,
@@ -110,7 +116,9 @@ test_that("only the `target` variable is added to the input dataset", {
 })
 
 test_that("An error is thrown if a subject has multiple records per `PARAMCD` and `BASETYPE`", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVALC,   ~ABLFL, ~BASETYPE,
     "TEST01", "PAT01",  "PARAM01", "LOW",    "Y",    "LAST",
     "TEST01", "PAT01",  "PARAM01", "MEDIUM", "Y",    "LAST",

@@ -1,4 +1,6 @@
-data <- tibble::tribble(
+library(tibble)
+
+data <- tribble(
   ~USUBJID, ~AVISITN, ~AVALC,
   "1",      1,        "PR",
   "1",      2,        "CR",
@@ -52,6 +54,8 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
 
 ## filter_relative Test 2: mode = first, selection = before, inclusive = FALSE ----
 test_that("filter_relative Test 2: mode = first, selection = before, inclusive = FALSE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -63,7 +67,7 @@ test_that("filter_relative Test 2: mode = first, selection = before, inclusive =
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "2",      1,        "SD",
     "4",      1,        "PR"
@@ -78,6 +82,8 @@ test_that("filter_relative Test 2: mode = first, selection = before, inclusive =
 
 ## filter_relative Test 3: mode = first, selection = after, inclusive = TRUE ----
 test_that("filter_relative Test 3: mode = first, selection = after, inclusive = TRUE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -89,7 +95,7 @@ test_that("filter_relative Test 3: mode = first, selection = after, inclusive = 
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "2",      2,        "PD",
     "2",      3,        "PD",
@@ -108,6 +114,8 @@ test_that("filter_relative Test 3: mode = first, selection = after, inclusive = 
 
 ## filter_relative Test 4: mode = first, selection = after, inclusive = FALSE ----
 test_that("filter_relative Test 4: mode = first, selection = after, inclusive = FALSE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -118,7 +126,7 @@ test_that("filter_relative Test 4: mode = first, selection = after, inclusive = 
     inclusive = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -141,6 +149,8 @@ test_that("filter_relative Test 4: mode = first, selection = after, inclusive = 
 
 ## filter_relative Test 5: mode = last, selection = before, inclusive = TRUE ----
 test_that("filter_relative Test 1: mode = last, selection = before, inclusive = TRUE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -152,7 +162,7 @@ test_that("filter_relative Test 1: mode = last, selection = before, inclusive = 
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -175,6 +185,8 @@ test_that("filter_relative Test 1: mode = last, selection = before, inclusive = 
 
 ## filter_relative Test 6: mode = last, selection = before, inclusive = FALSE ----
 test_that("filter_relative Test 2: mode = last, selection = before, inclusive = FALSE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -186,7 +198,7 @@ test_that("filter_relative Test 2: mode = last, selection = before, inclusive = 
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",
@@ -205,6 +217,8 @@ test_that("filter_relative Test 2: mode = last, selection = before, inclusive = 
 
 ## filter_relative Test 7: mode = last, selection = after, inclusive = TRUE ----
 test_that("filter_relative Test 7: mode = last, selection = after, inclusive = TRUE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -216,7 +230,7 @@ test_that("filter_relative Test 7: mode = last, selection = after, inclusive = T
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      4,        "SD",
     "1",      5,        "NE",
@@ -237,6 +251,8 @@ test_that("filter_relative Test 7: mode = last, selection = after, inclusive = T
 
 ## filter_relative Test 8: mode = last, selection = after, inclusive = FALSE ----
 test_that("filter_relative Test 8: mode = last, selection = after, inclusive = FALSE", {
+  library(tibble)
+
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -248,7 +264,7 @@ test_that("filter_relative Test 8: mode = last, selection = after, inclusive = F
     keep_no_ref_group = FALSE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      5,        "NE",
     "2",      2,        "PD",

@@ -1,12 +1,14 @@
 test_that("Test 1: Test adding absolute records for each by group", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
     "P01", "LYMLE", 0.9, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1",
     "P01", "LYMLE", 0.6, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT, ~DTYPE,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1", NA_character_,
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1", NA_character_,
@@ -35,14 +37,16 @@ test_that("Test 1: Test adding absolute records for each by group", {
 })
 
 test_that("Test 2: Test when only one of WBC/differential is present", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
     "P01", "LYMLE", 0.9, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1",
     "P01", "LYMLE", 0.8, "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT, ~DTYPE,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1", NA_character_,
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1", NA_character_,
@@ -70,7 +74,9 @@ test_that("Test 2: Test when only one of WBC/differential is present", {
 })
 
 test_that("Test 3: Test when absolute record already present in source dataset 1", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
@@ -78,7 +84,7 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
     "P01", "LYMLE", 0.7, "Lymphocytes (fraction of 1)", "CYCLE 2 DAY 1",
     "P01", "LYMLE", 0.8, "Lymphocytes (fraction of 1)", "CYCLE 3 DAY 1"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
@@ -107,7 +113,9 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
 
 
 test_that("Test 4: Test when absolute record already present in source dataset 2", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
@@ -116,7 +124,7 @@ test_that("Test 4: Test when absolute record already present in source dataset 2
     "P01", "LYMLE", 0.9, "Lymphocytes (fraction of 1)", "CYCLE 1 DAY 1"
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT, ~DTYPE,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1", NA_character_,
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1", NA_character_,
@@ -146,7 +154,9 @@ test_that("Test 4: Test when absolute record already present in source dataset 2
 
 
 test_that("Test 5: Test percent differential type", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",
@@ -155,7 +165,7 @@ test_that("Test 5: Test percent differential type", {
     "P01", "LYMLE", 90, "Lymphocytes (%)", "CYCLE 1 DAY 1"
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT, ~DTYPE,
     "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1", NA_character_,
     "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1", NA_character_,

@@ -1,4 +1,6 @@
-input_ae <- tibble::tribble(
+library(tibble)
+
+input_ae <- tribble(
   ~STUDYID,   ~USUBJID,   ~AESEQ, ~AESTDTC,
   "my_study", "subject1",      1, "2020-01-02",
   "my_study", "subject1",      2, "2020-08-31",
@@ -9,7 +11,7 @@ input_ae <- tibble::tribble(
   "my_study", "subject4",      1, "2020-11-02"
 )
 
-input_ex <- tibble::tribble(
+input_ex <- tribble(
   ~STUDYID,   ~USUBJID,   ~EXSTDTC,     ~EXENDTC,    ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01",     1,      10, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29",     2,      10, "treatment",
@@ -49,9 +51,11 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
 
 
 test_that("derive_vars_last_dose Test 2: function checks validity of start and end dose inputs", {
+  library(tibble)
+
   input_ex_wrong <- dplyr::bind_rows(
     input_ex,
-    tibble::tribble(
+    tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
       "my_study", "subject4", as.Date("2020-11-05"), as.Date("2020-11-06"), 1, 10, "treatment"
     )
@@ -102,9 +106,11 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
 
 
 test_that("derive_vars_last_dose Test 4: function errors when multiple doses are on same date", {
+  library(tibble)
+
   input_ex_dup <- dplyr::bind_rows(
     input_ex,
-    tibble::tribble(
+    tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
       "my_study", "subject2", as.Date("2020-01-20"), as.Date("2020-01-20"), 3, 0, "placebo"
     )
@@ -136,9 +142,12 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
 
 
 test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id supplied", {
-  input_ex_dup <- dplyr::bind_rows(
+  library(tibble)
+  library(dplyr)
+
+  input_ex_dup <- bind_rows(
     input_ex,
-    tibble::tribble(
+    tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
       "my_study", "subject2", as.Date("2020-01-20"), as.Date("2020-01-20"), 3, 0, "placebo"
     )
@@ -171,7 +180,9 @@ test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id s
 
 
 test_that("derive_vars_last_dose Test 6: error is issued if same variable is found in both input datasets ", { # nolint
-  input_ae <- tibble::tribble(
+  library(tibble)
+
+  input_ae <- tribble(
     ~STUDYID,   ~USUBJID,   ~AESEQ, ~EXSTDTC,
     "my_study", "subject1",      1, "2020-01-02",
     "my_study", "subject1",      2, "2020-08-31",
@@ -182,7 +193,7 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
     "my_study", "subject4",      1, "2020-11-02"
   )
 
-  input_ex <- tibble::tribble(
+  input_ex <- tribble(
     ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
     "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
     "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
@@ -212,14 +223,16 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
 })
 
 test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", { # nolint
-  adae <- tibble::tribble(
+  library(tibble)
+
+  adae <- tribble(
     ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
     "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
     "P02", "2022-01-31", "2022-01-31", ymd("2022-01-31"), ymd("2022-01-31"), "Vomitting",
     "P02", "2022-02-02", "2022-02-04", ymd("2022-02-02"), ymd("2022-02-04"), "Vomitting"
   )
 
-  adex <- tibble::tribble(
+  adex <- tribble(
     ~USUBJID, ~EXTRT, ~EXDOSFRQ, ~EXSTDTC, ~EXENDTC, ~ASTDT, ~AENDT,
     "P01", "Drug A", "QD", "2022-01-09", "2022-01-12", ymd("2022-01-09"), ymd("2022-01-12"),
     "P02", "Drug A", "QD", "2022-02-01", "2022-02-04", ymd("2022-02-01"), ymd("2022-02-04")

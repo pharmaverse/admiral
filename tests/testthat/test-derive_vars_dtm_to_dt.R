@@ -1,6 +1,9 @@
 # test 1 - multiple vars
 test_that("Convert a complete -- DTM into a date object", {
-  input <- tibble::tribble(
+  library(tibble)
+  library(lubridate)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00",
     "TEST01", "PAT01", "", "2012-02-28 19:00:00", "",
@@ -8,13 +11,13 @@ test_that("Convert a complete -- DTM into a date object", {
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00",
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2018-04-29 14:00:00",
   ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM)
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM)
   )
 
   # nolint start
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~TRTSDT, ~ASTDT, ~AENDT,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00", "2012-02-25", "2012-02-28", "2013-02-25",
     "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "", "2012-02-28", "",
@@ -22,12 +25,12 @@ test_that("Convert a complete -- DTM into a date object", {
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "2017-02-25", "2017-02-25", "2017-03-25",
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2018-04-29 14:00:00", "2017-02-25", "2017-02-25", "2018-04-29",
   ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM),
-    TRTSDT = lubridate::as_date(TRTSDT),
-    ASTDT = lubridate::as_date(ASTDT),
-    AENDT = lubridate::as_date(AENDT)
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM),
+    TRTSDT = as_date(TRTSDT),
+    ASTDT = as_date(ASTDT),
+    AENDT = as_date(AENDT)
   )
   # nolint end
 
@@ -42,7 +45,10 @@ test_that("Convert a complete -- DTM into a date object", {
 
 # test 2 - single var
 test_that("Convert a complete -- DTM into a date object", {
-  input <- tibble::tribble(
+  library(tibble)
+  library(lubridate)
+
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00",
     "TEST01", "PAT01", "", "2012-02-28 19:00:00", "",
@@ -50,13 +56,13 @@ test_that("Convert a complete -- DTM into a date object", {
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00",
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2018-04-29 14:00:00",
   ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM)
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM)
   )
 
   # nolint start
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~TRTSDT,
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2013-02-25 23:00:00", "2012-02-25",
     "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
@@ -64,10 +70,10 @@ test_that("Convert a complete -- DTM into a date object", {
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "2017-02-25",
     "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:00:00", "2018-04-29 14:00:00", "2017-02-25",
   ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM),
-    TRTSDT = lubridate::as_date(TRTSDT),
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM),
+    TRTSDT = as_date(TRTSDT),
   )
   # nolint end
 

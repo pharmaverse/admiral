@@ -1,5 +1,7 @@
 test_that("duration and unit variable are added", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~BRTHDT, ~RANDDT,
     ymd("1999-09-09"), ymd("2020-02-20")
   )
@@ -10,7 +12,9 @@ test_that("duration and unit variable are added", {
 
 
 test_that("derive_var_age_years works as expected", {
-  input <- tibble::tibble(
+  library(tibble)
+
+  input <- tibble(
     AGE = c(12, 24, 36, 48, 60),
     AGEU = c("months", "months", "months", "months", "months")
   )
@@ -24,7 +28,9 @@ test_that("derive_var_age_years works as expected", {
 })
 
 test_that("derive_var_age_years works as expected", {
-  input <- tibble::tibble(AGE = c(12, 24, 36, 48, 60))
+  library(tibble)
+
+  input <- tibble(AGE = c(12, 24, 36, 48, 60))
 
   expected_output <- mutate(
     input,
@@ -38,7 +44,9 @@ test_that("derive_var_age_years works as expected", {
 })
 
 test_that("derive_var_agegr_fda works as expected", {
-  input <- tibble::tibble(AGE = c(10, 17, 18, 50, 64, 65, 80))
+  library(tibble)
+
+  input <- tibble(AGE = c(10, 17, 18, 50, 64, 65, 80))
 
   expected_output <- mutate(
     input,
@@ -55,7 +63,9 @@ test_that("derive_var_agegr_fda works as expected", {
 })
 
 test_that("derive_var_agegr_fda works with age_unit missing and multiple units in AGEU", {
-  input <- tibble::tibble(
+  library(tibble)
+
+  input <- tibble(
     AGE = c(10, 17, 18, 50, 64, 65, 80, 85),
     AGEU = c(
       "years", "years", "years", "years", "years", "years", "months",
@@ -78,7 +88,9 @@ test_that("derive_var_agegr_fda works with age_unit missing and multiple units i
 })
 
 test_that("derive_var_agegr_ema works as expected", {
-  input <- tibble::tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85))
+  library(tibble)
+
+  input <- tibble(AGE = c(10, 18, 19, 50, 64, 65, 80, 85))
 
   expected_output <- mutate(
     input,
@@ -98,7 +110,9 @@ test_that("derive_var_agegr_ema works as expected", {
 })
 
 test_that("derive_var_agegr_ema - works as expected", {
-  input <- tibble::tibble(AGE = c(1, 2, 11, 12, 17, 18))
+  library(tibble)
+
+  input <- tibble(AGE = c(1, 2, 11, 12, 17, 18))
 
   expected_output <- mutate(
     input,
@@ -125,7 +139,9 @@ test_that("derive_var_agegr_ema - works as expected", {
 
 
 test_that("derive_var_agegr_ema works with age_unit missing and multiple units in AGEU (adults)", {
-  input <- tibble::tibble(
+  library(tibble)
+
+  input <- tibble(
     AGE = c(10, 18, 19, 50, 64, 65, 80, 85),
     AGEU = c(
       "years", "years", "years", "years", "years", "years",
@@ -151,7 +167,9 @@ test_that("derive_var_agegr_ema works with age_unit missing and multiple units i
 })
 
 test_that("derive_var_agegr_ema - works with age_unit missing and multiple units in AGEU (all)", {
-  input <- tibble::tibble(
+  library(tibble)
+
+  input <- tibble(
     AGE = c(1, 2, 11, 12, 17, 18, 36, 72, 3),
     AGEU = c(
       "years", "years", "years", "years", "years", "years", "months",

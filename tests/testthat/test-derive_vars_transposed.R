@@ -1,10 +1,12 @@
-dataset <- tibble::tribble(
+library(tibble)
+
+dataset <- tribble(
   ~USUBJID, ~VAR1,
   "P01",    3,
   "P02",    31,
   "P03",    42
 )
-dataset_merge <- tibble::tribble(
+dataset_merge <- tribble(
   ~USUBJID, ~TESTCD, ~VALUE,
   "P01",    "T01",   31,
   "P01",    "T02",   5,
@@ -13,7 +15,9 @@ dataset_merge <- tibble::tribble(
 )
 
 test_that("the merge dataset is transposed and merged correctly", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~VAR1, ~T01, ~T02,
     "P01", 3, 31, 5,
     "P02", 31, 3, NA,
@@ -32,7 +36,9 @@ test_that("the merge dataset is transposed and merged correctly", {
 
 
 test_that("filtering the merge dataset works", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~VAR1, ~T01,
     "P01", 3, 31,
     "P02", 31, 3,
@@ -51,13 +57,15 @@ test_that("filtering the merge dataset works", {
 })
 
 test_that("ATC variables are merged properly", {
-  cm <- tibble::tribble(
+  library(tibble)
+
+  cm <- tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD,
     "BP40257-1001", "14", "1192056", "PARACETAMOL",
     "BP40257-1001", "18", "2007001", "SOLUMEDROL",
     "BP40257-1002", "19", "2791596", "SPIRONOLACTONE"
   )
-  facm <- tibble::tribble(
+  facm <- tribble(
     ~USUBJID, ~FAGRPID, ~FAREFID, ~FATESTCD, ~FASTRESC,
     "BP40257-1001", "1", "1192056", "CMATC1CD", "N",
     "BP40257-1001", "1", "1192056", "CMATC2CD", "N02",
@@ -81,7 +89,7 @@ test_that("ATC variables are merged properly", {
     "BP40257-1002", "1", "2791596", "CMATC4CD", "C03DA"
   )
   # nolint start
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~CMGRPID, ~CMREFID, ~CMDECOD, ~ATC1CD, ~ATC2CD, ~ATC3CD, ~ATC4CD,
     "BP40257-1001", "14", "1192056", "PARACETAMOL", "N", "N02", "N02B", "N02BE",
     "BP40257-1001", "18", "2007001", "SOLUMEDROL", "D", "D07", "D07A", "D07AA",

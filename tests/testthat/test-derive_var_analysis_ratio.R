@@ -1,5 +1,7 @@
 test_that("Test 1: All Ratio Variables are Created", {
-  expected_data <- tibble::tribble(
+  library(tibble)
+
+  expected_data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI, ~R2BASE, ~R2ANRLO, ~R2ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34, 1, 4.5, 0.794,
     "P01", "ALT", 2, 41, 27, 6, 34, 1.52, 6.83, 1.21,
@@ -9,7 +11,7 @@ test_that("Test 1: All Ratio Variables are Created", {
     "P02", "ALB", 3, 37, 38, 33, 49, 0.974, 1.12, 0.755
   )
 
-  data <- tibble::tribble(
+  data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34,
     "P01", "ALT", 2, 41, 27, 6, 34,
@@ -41,7 +43,9 @@ test_that("Test 1: All Ratio Variables are Created", {
 })
 
 test_that("Test 2: All Ratio Variables are Created while NAs present", {
-  expected_data <- tibble::tribble(
+  library(tibble)
+
+  expected_data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI, ~R2BASE, ~R2ANRLO, ~R2ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34, 1, 4.5, 0.794,
     "P01", "ALT", 2, 41, 27, 6, 34, 1.52, 6.83, 1.21,
@@ -51,7 +55,7 @@ test_that("Test 2: All Ratio Variables are Created while NAs present", {
     "P02", "ALB", 3, 37, 38, 33, 49, 0.974, 1.12, 0.755
   )
 
-  data <- tibble::tribble(
+  data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34,
     "P01", "ALT", 2, 41, 27, 6, 34,
@@ -84,7 +88,9 @@ test_that("Test 2: All Ratio Variables are Created while NAs present", {
 
 test_that("Test 3: User can supply custom variable by invoking override = TRUE
           and supplying a new_var name", {
-  expected_data <- tibble::tribble(
+  library(tibble)
+
+  expected_data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI, ~custom1, ~custom2, ~custom3,
     "P01", "ALT", 1, 27, 27, 6, 34, 1, 4.5, 0.794,
     "P01", "ALT", 2, 41, 27, 6, 34, 1.52, 6.83, 1.21,
@@ -94,7 +100,7 @@ test_that("Test 3: User can supply custom variable by invoking override = TRUE
     "P02", "ALB", 3, 37, 38, 33, 49, 0.974, 1.12, 0.755
   )
 
-  data <- tibble::tribble(
+  data <- tribble(
     ~USUBJID, ~PARAMCD, ~SEQ, ~AVAL, ~BASE, ~ANRLO, ~ANRHI,
     "P01", "ALT", 1, 27, 27, 6, 34,
     "P01", "ALT", 2, 41, 27, 6, 34,

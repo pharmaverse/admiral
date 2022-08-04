@@ -1,5 +1,7 @@
 test_that("two-sided reference ranges work", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, 40, 110, "NORMAL",
     "P01", "PUL", 2, 57, 60, 100, 40, 110, "LOW",
@@ -21,7 +23,9 @@ test_that("two-sided reference ranges work", {
 })
 
 test_that("implicitly missing extreme ranges are supported", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, "NORMAL",
     "P01", "PUL", 2, 57, 60, 100, "LOW",
@@ -43,7 +47,9 @@ test_that("implicitly missing extreme ranges are supported", {
 })
 
 test_that("explicitly missing extreme ranges are supported", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 70, 60, 100, NA, NA, "NORMAL",
     "P01", "PUL", 2, 57, 60, 100, NA, NA, "LOW",
@@ -65,7 +71,9 @@ test_that("explicitly missing extreme ranges are supported", {
 })
 
 test_that("one-sided reference ranges work", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI, ~ANRIND,
     "P01", "PUL", 1, 101, NA, 100, NA, 120, "HIGH",
     "P01", "PUL", 2, 99, NA, 100, NA, 120, "NORMAL",
@@ -87,7 +95,9 @@ test_that("one-sided reference ranges work", {
 })
 
 test_that("missing `AVAL` is handled properly", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~ASEQ, ~AVAL,    ~ANRLO, ~ANRHI, ~ANRIND,
     "P01",    "PUL",    1,     NA_real_, 60,     100,    NA_character_
   )

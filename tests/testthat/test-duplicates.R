@@ -1,5 +1,7 @@
 test_that("duplicate records are extracted", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
     "P01",    "JPN",    34,
@@ -17,7 +19,9 @@ test_that("duplicate records are extracted", {
 })
 
 test_that("dataset of duplicate records can be accessed using `get_duplicates_dataset()`", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~COUNTRY, ~AAGE,
     "P01",    "GER",    22,
     "P01",    "JPN",    34,

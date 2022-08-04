@@ -1,4 +1,6 @@
-adsl <- tibble::tribble(
+library(tibble)
+
+adsl <- tribble(
   ~USUBJID,
   "1",
   "2",
@@ -6,7 +8,7 @@ adsl <- tibble::tribble(
 ) %>%
   mutate(STUDYID = "XX1234")
 
-adrs <- tibble::tribble(
+adrs <- tribble(
   ~USUBJID, ~AVALC, ~PARAMCD,
   "1",      "PR",   "OVR",
   "1",      "CR",   "OVR",
@@ -31,6 +33,8 @@ adrs <- tibble::tribble(
 # derive_param_merged_exist_flag ----
 ## derive_param_merge_exist_flag Test 1: derive parameter indicating PD ----
 test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
+  library(tibble)
+
   actual <- derive_param_exist_flag(
     dataset_adsl = adsl,
     dataset_add = adrs,
@@ -43,7 +47,7 @@ test_that("derive_param_exist_flag Test 1: derive parameter indicating PD", {
     )
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVALC,        ~AVAL,
     "1",      "N",           0,
     "2",      "Y",           1,

@@ -1,6 +1,8 @@
 test_that("new observations are derived correctly when zero_doses is NULL", {
   # nolint start
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~VISIT,
     "01-701-1015", "TNDOSE", 52, "WEEK 1",
     "01-701-1015", "TSNDOSE", 96, "WEEK 1",
@@ -45,7 +47,9 @@ test_that("new observations are derived correctly when zero_doses is NULL", {
 
 test_that("new observations are derived correctly when zero_doses is Y", {
   # nolint start
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~VISIT,
     "01-701-1015", "TNDOSE", 52, "WEEK 1",
     "01-701-1015", "TSNDOSE", 96, "WEEK 1",

@@ -1,5 +1,7 @@
 test_that("Shift based on character variables", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
     "P01", "ALB", 33, "Y", "LOW", "LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL",
@@ -7,7 +9,7 @@ test_that("Shift based on character variables", {
     "P02", "ALB", 49, NA, "NORMAL", "HIGH",
     "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND, ~SHIFT1,
     "P01", "ALB", 33, "Y", "LOW", "LOW", "LOW to LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL", "LOW to NORMAL",
@@ -29,7 +31,9 @@ test_that("Shift based on character variables", {
 
 
 test_that("Shift based on character variables with missing values", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
     "P01", "ALB", 33, "Y", "LOW", "LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL",
@@ -38,7 +42,7 @@ test_that("Shift based on character variables with missing values", {
     "P02", "ALB", 49, NA, NA, "HIGH",
     "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND, ~SHIFT1,
     "P01", "ALB", 33, "Y", "LOW", "LOW", "LOW to LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL", "LOW to NORMAL",
@@ -61,7 +65,9 @@ test_that("Shift based on character variables with missing values", {
 
 
 test_that("Shift based on numeric variables with missing values", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE,
     "P01", "ALB", 33.1, "Y", 33.1,
     "P01", "ALB", 38.5, NA, 33.1,
@@ -70,7 +76,7 @@ test_that("Shift based on numeric variables with missing values", {
     "P02", "ALB", 49.0, NA, NA,
     "P02", "SODIUM", 147.5, "Y", 147.5
   ) %>% convert_blanks_to_na()
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BASE, ~SHIFT2,
     "P01", "ALB", 33.1, "Y", 33.1, "33.1 to 33.1",
     "P01", "ALB", 38.5, NA, 33.1, "33.1 to 38.5",
@@ -92,7 +98,9 @@ test_that("Shift based on numeric variables with missing values", {
 })
 
 test_that("Shift with user-specified na_val and sep_val", {
-  input <- tibble::tribble(
+  library(tibble)
+
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
     "P01", "ALB", 33, "Y", "LOW", "LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL",
@@ -101,7 +109,7 @@ test_that("Shift with user-specified na_val and sep_val", {
     "P02", "ALB", 49, NA, NA, "HIGH",
     "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
   )
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND, ~SHIFT1,
     "P01", "ALB", 33, "Y", "LOW", "LOW", "LOW - LOW",
     "P01", "ALB", 38, NA, "LOW", "NORMAL", "LOW - NORMAL",

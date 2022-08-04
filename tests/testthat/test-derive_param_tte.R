@@ -1,5 +1,7 @@
 test_that("new observations with analysis date are derived correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
     "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
     "04",     "N",    NA,                ymd("2021-05-24"), ymd("2021-02-03"), NA
@@ -28,7 +30,7 @@ test_that("new observations with analysis date are derived correctly", {
     )
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,
     "03",     ymd("2021-08-21"), 0L,    "DEATH",                 "ADSL",  "DTHDT",
     "04",     ymd("2021-05-24"), 1L,    "LAST KNOWN ALIVE DATE", "ADSL",  "LSTALVDT"
@@ -60,7 +62,9 @@ test_that("new observations with analysis date are derived correctly", {
 })
 
 test_that("new observations with analysis datetime are derived correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDTM,                       ~TRTSDTF, ~TRTSTMF,
     "01",     "Y",    ymd("2021-06-12"), ymd_hms("2021-01-01 00:00:00"), "M",      "H",
     "02",     "N",    NA,                ymd_hms("2021-02-03 10:24:00"), NA,       NA,
@@ -70,7 +74,7 @@ test_that("new observations with analysis datetime are derived correctly", {
   ) %>%
     mutate(STUDYID = "AB42")
 
-  adrs <- tibble::tribble(
+  adrs <- tribble(
     ~USUBJID, ~AVALC, ~ADTM,                          ~ASEQ,
     "01",     "SD",   ymd_hms("2021-01-03 10:56:00"), 1,
     "01",     "PR",   ymd_hms("2021-03-04 11:13:00"), 2,
@@ -128,7 +132,7 @@ test_that("new observations with analysis datetime are derived correctly", {
   )
 
   # nolint start
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,              ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd_hms("2021-05-05 12:02:00"), 0L,    "PD",                    "ADRS",  "ADTM",    3,
     "02",     ymd_hms("2021-02-03 10:56:00"), 0L,    "PD",                    "ADRS",  "ADTM",    1,
@@ -168,14 +172,16 @@ test_that("new observations with analysis datetime are derived correctly", {
 })
 
 test_that("new observations based on DTC variables are derived correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ,
     "01",     "2021-01-03T10:56", 1,
     "01",     "2021-03-04",       2,
@@ -205,7 +211,7 @@ test_that("new observations based on DTC variables are derived correctly", {
     )
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
@@ -235,14 +241,16 @@ test_that("new observations based on DTC variables are derived correctly", {
 })
 
 test_that("by_vars parameter works correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03T10:56", 1,      "Flu",
     "01",     "2021-03-04",       2,      "Cough",
@@ -273,7 +281,7 @@ test_that("by_vars parameter works correctly", {
   )
 
   # nolint start
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ, ~PARCAT2, ~PARAMCD,
     "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,       "Flu",    "TTAE2",
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA,      "Flu",    "TTAE2",
@@ -309,14 +317,16 @@ test_that("by_vars parameter works correctly", {
 })
 
 test_that("an error is issued if some of the by variables are missing", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03T10:56", 1,      "Flu",
     "01",     "2021-03-04",       2,      "Cough",
@@ -365,14 +375,16 @@ test_that("an error is issued if some of the by variables are missing", {
   )
 })
 test_that("an error is issued all by variables are missing in all source datasets", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03T10:56", 1,      "Flu",
     "01",     "2021-03-04",       2,      "Cough",
@@ -423,14 +435,16 @@ test_that("an error is issued all by variables are missing in all source dataset
 })
 
 test_that("an error is issued if there is no one to one mapping between PARAMCD and by_vars", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03T10:56", 1,      "Flu",
     "01",     "2021-03-04",       2,      "Cough",
@@ -482,14 +496,16 @@ test_that("an error is issued if there is no one to one mapping between PARAMCD 
 })
 
 test_that("an error if issued set_values_to contains invalid expressions", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
     "01",     "2021-01-03T10:56", 1,      "Flu",
     "01",     "2021-03-04",       2,      "Cough",
@@ -549,14 +565,16 @@ test_that("an error if issued set_values_to contains invalid expressions", {
 })
 
 test_that("new observations analysis datetime based on DTC variables are derived correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDTM,                       ~EOSDT,
     "01",     ymd_hms("2020-12-06 14:23:00"), ymd("2021-03-06"),
     "02",     ymd_hms("2021-01-16 13:09:00"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ,
     "01",     "2021-01-03T10:56", 1,
     "01",     "2021-03-04",       2,
@@ -586,7 +604,7 @@ test_that("new observations analysis datetime based on DTC variables are derived
     )
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd_hms("2021-01-03 10:56:00"), 0L,    "AE",           "AE",    "AESTDTC", 1,
     "02",     ymd_hms("2021-02-03 00:00:00"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
@@ -619,14 +637,16 @@ test_that("new observations analysis datetime based on DTC variables are derived
 })
 
 test_that("error is issued if parameter code already exists", {
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
     "02",     ymd("2021-01-16"), ymd("2021-02-03")
   ) %>%
     mutate(STUDYID = "AB42")
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~USUBJID, ~AESTDTC,           ~AESEQ,
     "01",     "2021-01-03T10:56", 1,
     "01",     "2021-03-04",       2,
@@ -656,7 +676,7 @@ test_that("error is issued if parameter code already exists", {
     )
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
     "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
     "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA

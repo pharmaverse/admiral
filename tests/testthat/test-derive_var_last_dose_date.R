@@ -1,4 +1,6 @@
-input_ae <- tibble::tribble(
+library(tibble)
+
+input_ae <- tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
   "my_study", "subject1", 2, "2020-08-31",
@@ -9,7 +11,7 @@ input_ae <- tibble::tribble(
   "my_study", "subject4", 1, "2020-11-02"
 )
 
-input_ex <- tibble::tribble(
+input_ex <- tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 10, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 10, "treatment",
@@ -23,7 +25,9 @@ input_ex <- tibble::tribble(
 
 
 test_that("derive_var_last_dose_date works as expected output_datetime = FALSE", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDOSEDTM,
     "my_study", "subject1", 1, "2020-01-02", "2020-01-01",
     "my_study", "subject1", 2, "2020-08-31", "2020-08-29",
@@ -52,7 +56,9 @@ test_that("derive_var_last_dose_date works as expected output_datetime = FALSE",
 })
 
 test_that("derive_var_last_dose_date works as expected with output_datetime = TRUE", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDOSEDTM,
     "my_study", "subject1", 1, "2020-01-02", "2020-01-01 00:00:00",
     "my_study", "subject1", 2, "2020-08-31", "2020-08-29 00:00:00",
@@ -81,7 +87,10 @@ test_that("derive_var_last_dose_date works as expected with output_datetime = TR
 })
 
 test_that("derive_var_last_dose_date returns traceability vars", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+  library(dplyr)
+
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDOSEDTM,
     "my_study", "subject1", 1, "2020-01-02", "2020-01-01 00:00:00",
     "my_study", "subject1", 2, "2020-08-31", "2020-08-29 00:00:00",
@@ -108,7 +117,7 @@ test_that("derive_var_last_dose_date returns traceability vars", {
     new_var = LDOSEDTM,
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
