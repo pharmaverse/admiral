@@ -460,10 +460,17 @@ See [Writing Unit Tests in {admiral}](unit_test_guidance.html#writing-unit-tests
 
 As `{admiral}` is still evolving, functions or parameters may need to be removed or replaced with more 
 efficient options from one release to another. In such cases, the relevant function or parameter 
-must be marked as deprecated. In the initial release a warning will be issued when using the function
-or parameter using `deprecate_warn()`. In the next release an error will be thrown using `deprecate_stop()`
-and finally in the release thereafter  the function will be removed from the package altogether.
+must be marked as deprecated. This deprecation is done in three phases over our release cycles.
+
+-  **Phase 1:** In the release where the identified function or parameter is to be deprecated there will be a warning issued when using the function or parameter using `deprecate_warn()`
+
+-  **Phase 2:** In the next release an error will be thrown using `deprecate_stop()`
+
+-  **Phase 3:** Finally in the 3rd release thereafterthe function will be removed from the package altogether
+
 Information about deprecation timelines must be added to the warning/error message.
+
+Note that the deprecation cycle time for a function or parameter based on our current release schedule is 6 months.
 
 ## Documentation
 
