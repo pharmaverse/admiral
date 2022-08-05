@@ -51,26 +51,28 @@ reference:
   contents:
   - has_keyword('dev_utility')
 
-
 navbar:
  components:
-   articles:
+  reference:
+      text: Functions
+      href: reference/index.html
+  articles:
     text: Developer Guides
     menu:
-    - text: Overview of Process
+    - text: Overview
     - text: Contribution to {admiral}
-      href: articles/a1.html
+      href: articles/contribution_model.html
     - text: Development Process
-      href: articles/a2.html
+      href: articles/development_process.html
     - text: -------
-    - text: "Deep Dive and How tos"
+    - text: "All things development"
     - text: Programming Strategy
-      href: articles/b1.html
+      href: articles/programming_strategy.html
     - text: Guidance for git and GitHub Usage
-      href: articles/b1.html
+      href: articles/git_usage.html
     - text: Writing Vignettes
-      href: articles/b1.html
+      href: articles/writing_vignettes.html
     - text: Pull Request Review Guidance
-      href: articles/b1.html
+      href: articles/pr_review_guidance.html
     - text: Unit Test Guidance
-      href: articles/b1.html
+      href: articles/unit_test_guidance.html
