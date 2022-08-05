@@ -28,35 +28,35 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   if (value && !n_dim) {
     if (rlang::is_na(x)) {
       return(switch(typeof(x),
-                    logical = "`NA`",
-                    integer = "an integer `NA`",
-                    double = "a numeric `NA`",
-                    complex = "a complex `NA`",
-                    character = "a character `NA`",
-                    .rlang_stop_unexpected_typeof(x)
+        logical = "`NA`",
+        integer = "an integer `NA`",
+        double = "a numeric `NA`",
+        complex = "a complex `NA`",
+        character = "a character `NA`",
+        .rlang_stop_unexpected_typeof(x)
       ))
     }
     if (length(x) == 1 && !rlang::is_list(x)) {
       return(switch(typeof(x),
-                    logical = if (x) "`TRUE`" else "`FALSE`",
-                    integer = "an integer",
-                    double = "a number",
-                    complex = "a complex number",
-                    character = if (nzchar(x)) "a string" else "`\"\"`",
-                    raw = "a raw value",
-                    .rlang_stop_unexpected_typeof(x)
+        logical = if (x) "`TRUE`" else "`FALSE`",
+        integer = "an integer",
+        double = "a number",
+        complex = "a complex number",
+        character = if (nzchar(x)) "a string" else "`\"\"`",
+        raw = "a raw value",
+        .rlang_stop_unexpected_typeof(x)
       ))
     }
     if (length(x) == 0) {
       return(switch(typeof(x),
-                    logical = "an empty logical vector",
-                    integer = "an empty integer vector",
-                    double = "an empty numeric vector",
-                    complex = "an empty complex vector",
-                    character = "an empty character vector",
-                    raw = "an empty raw vector",
-                    list = "an empty list",
-                    .rlang_stop_unexpected_typeof(x)
+        logical = "an empty logical vector",
+        integer = "an empty integer vector",
+        double = "an empty numeric vector",
+        complex = "an empty complex vector",
+        character = "an empty character vector",
+        raw = "an empty raw vector",
+        list = "an empty list",
+        .rlang_stop_unexpected_typeof(x)
       ))
     }
   }
@@ -82,14 +82,14 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
   }
 
   type <- switch(type,
-                 logical = "a logical %s",
-                 integer = "an integer %s",
-                 numeric = , # nolint
-                 double = "a double %s",
-                 complex = "a complex %s",
-                 character = "a character %s",
-                 raw = "a raw %s",
-                 type = paste0("a ", type, " %s")
+    logical = "a logical %s",
+    integer = "an integer %s",
+    numeric = , # nolint
+    double = "a double %s",
+    complex = "a complex %s",
+    character = "a character %s",
+    raw = "a raw %s",
+    type = paste0("a ", type, " %s")
   )
 
   if (n_dim < 2) {
@@ -104,27 +104,27 @@ friendly_type_of <- function(x, value = TRUE, length = FALSE) { # nolint
 
 .rlang_as_friendly_type <- function(type) {
   switch(type,
-         list = "a list",
-         NULL = "NULL",
-         environment = "an environment",
-         externalptr = "a pointer",
-         weakref = "a weak reference",
-         S4 = "an S4 object",
-         name = , # nolint
-         symbol = "a symbol",
-         language = "a call",
-         pairlist = "a pairlist node",
-         expression = "an expression vector",
-         char = "an internal string",
-         promise = "an internal promise",
-         ... = "an internal dots object",
-         any = "an internal `any` object",
-         bytecode = "an internal bytecode object",
-         primitive = , # nolint
-         builtin = , # nolint
-         special = "a primitive function",
-         closure = "a function",
-         type
+    list = "a list",
+    NULL = "NULL",
+    environment = "an environment",
+    externalptr = "a pointer",
+    weakref = "a weak reference",
+    S4 = "an S4 object",
+    name = , # nolint
+    symbol = "a symbol",
+    language = "a call",
+    pairlist = "a pairlist node",
+    expression = "an expression vector",
+    char = "an internal string",
+    promise = "an internal promise",
+    ... = "an internal dots object",
+    any = "an internal `any` object",
+    bytecode = "an internal bytecode object",
+    primitive = , # nolint
+    builtin = , # nolint
+    special = "a primitive function",
+    closure = "a function",
+    type
   )
 }
 

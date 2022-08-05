@@ -63,8 +63,8 @@ arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
   } else if (length(expr) == 2L &&
-             (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
-             is.symbol(expr[[2L]])) {
+    (expr[[1L]] == quote(enquo) || expr[[1L]] == quote(rlang::enquo)) &&
+    is.symbol(expr[[2L]])) {
     deparse(expr[[2L]])
   } else if (is.call(expr) && length(expr) >= 2 && is.symbol(expr[[2]])) {
     deparse(expr[[2L]])

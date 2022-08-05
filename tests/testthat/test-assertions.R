@@ -97,18 +97,12 @@ test_that("Test 9 : `assert_character_scalar` throws an error if input is a vect
   expect_error(example_fun2(c("admiral", "admiralonco")))
 })
 
-test_that("Test 10 : `quo_not_missing` returns TRUE if no missing argument", {
-  test_fun <- function(x) {
-    x <- rlang::enquo(x)
-    assertthat::assert_that(quo_not_missing(x))
-  }
-  expect_true(test_fun(my_variable))
+test_that("Test 10 : `assert_order_vars` returns invisible if used correctly", {
+  expect_invisible(assert_order_vars(vars(USUBJID, PARAMCD, desc(AVISITN))))
 })
 
-test_that("Test 11 : `quo_not_missing` throws and Error if missing argument", {
-  test_fun <- function(x) {
-    x <- rlang::enquo(x)
-    assertthat::assert_that(quo_not_missing(x))
-  }
-  expect_error(test_fun()) # missing argument -> throws error
+test_that("Test 11 : `assert_order_vars` returns errors if used incorrectly", {
+  expect_error(assert_order_vars(rlang::exprs(USUBJID, PARAMCD)))
+  expect_error(assert_order_vars(c("USUBJID", "PARAMCD", "VISIT")))
+  expect_error(assert_order_vars(vars(USUBJID, toupper(PARAMCD), -AVAL)))
 })
