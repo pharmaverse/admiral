@@ -1,11 +1,11 @@
 ---
-title: "Creating ADXX"
+title: "Contribution to {admiral} and {admiraldev}"
 output: 
   rmarkdown::html_vignette
+    
 vignette: >
-  %\VignetteIndexEntry{Creating ADSL}
+  %\VignetteIndexEntry{Contribution to {admiraldev}}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -15,6 +15,5 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
 
-This article describes creating an `ADXX` ADaM.
+Some stuff here...
