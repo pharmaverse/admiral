@@ -342,6 +342,15 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
+#' Expression Something
+#'
+#' @param arg something
+#' @param optional something
+#' @keywords assertion
+#' @family assertion
+#' @return something
+#' @export
+#'
 assert_expr <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -753,6 +762,16 @@ assert_list_of <- function(arg, class, optional = TRUE) {
   invisible(arg)
 }
 
+#' Named Something
+#'
+#' @param arg something
+#' @param optional something
+#'
+#' @keywords assertion
+#' @family assertion
+#' @return something
+#' @export
+#'
 assert_named_exprs <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -890,6 +909,17 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
   invisible(arg)
 }
 
+#' Function Parameters
+#'
+#' @param arg something
+#' @param params something
+#'
+#' @keywords assertion
+#' @family assertion
+#'
+#' @return something
+#' @export
+#'
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)
