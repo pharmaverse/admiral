@@ -1,6 +1,7 @@
 # This is a list of urls to ignore in the link checking action Check URLS /
 # Validate Links
 
+https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adxx.R
 https://packagemanager.rstudio.com/cran/linux/focal/latest
 https://github.com/pharmaverse/admiraltemplate/blob/main/
 irongut/CodeCoverageSummary@v1.2.0
