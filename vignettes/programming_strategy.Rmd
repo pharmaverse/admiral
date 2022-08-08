@@ -407,6 +407,12 @@ add an issue in GitHub for discussion.
 | `high_order_function`                                                             |	Higher Order Functions                                                                                                   |	
 | `move_adm_dev` 	                                                                  | Functions moved to `admiraldev` package [Link TBA]                                                                       |	
 | `internal`                                                                        | Internal functions only available to admiral developers                                                                  |
+|                                                                                   |                                                                                                                         |
+| `assertion`*                                                                       | Asserts a certain type and gives warning, error to user        |
+| `warning`                                                                         | Provides custom warnings to user       |
+| `what`                                                                            | A function that ...      |
+| `is`                                                                              | A function that ...      |
+| `get`                                                                             | A function that ...      |
 
 **NOTE:** It is strongly encouraged that each `@keyword` and `@family` are to be identical.  This eases the burden of development and maintenance for admiral functions. If you need to use multiple keywords or families, please reach out to the core development team for discussion.  
 
