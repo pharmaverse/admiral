@@ -1,0 +1,115 @@
+---
+# Source: https://github.com/pharmaverse/admiralci
+# Common workflows designed for Admiral
+# but can be easily used by any other R package
+name: Admiral Workflows
+
+on:
+  # 'workflow_dispatch' gives you the ability
+  # to run this workflow on demand, anytime
+  workflow_dispatch:
+  # 'push' events are triggered when commits
+  # are pushed to one of these branches
+  push:
+    branches:
+      - main
+      - devel
+      - pre-release
+      - test
+  # 'pull_request' events are triggered when PRs are
+  # created against one of these target branches.
+  pull_request:
+    branches:
+      - main
+      - devel
+      - pre-release
+      - test
+  # 'release' events are triggered when...
+  # you guessed it - when releases are made.
+  release:
+    types: [published]
+
+env:
+  # R version to use for the workflows
+  R_VERSION: "3.6"
+
+# Docs on concurrency:
+# https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: admiral-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  style:
+    name: Code Style
+    uses: pharmaverse/admiralci/.github/workflows/style.yml@main
+    if: github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
+  spellcheck:
+    name: Spelling
+    uses: pharmaverse/admiralci/.github/workflows/spellcheck.yml@main
+    if: github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
+  readme:
+    name: Render README
+    uses: pharmaverse/admiralci/.github/workflows/readme-render.yml@main
+    if: github.event_name == 'push'
+    with:
+      r-version: $R_VERSION
+  validation:
+    name: Validation
+    uses: pharmaverse/admiralci/.github/workflows/r-pkg-validation.yml@main
+    if: github.event_name == 'release'
+    with:
+      r-version: $R_VERSION
+  check:
+    name: Check
+    uses: pharmaverse/admiralci/.github/workflows/r-cmd-check.yml@main
+    if: github.event_name == 'pull_request'
+  docs:
+    name: Documentation
+    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
+    if: github.event_name == 'push'
+    with:
+      r-version: $R_VERSION
+      # Whether to skip multiversion docs
+      # Note that if you have multiple versions of docs,
+      # your URL links are likely to break due to path changes
+      skip-multiversion-docs: false
+  linter:
+    name: Lint
+    uses: pharmaverse/admiralci/.github/workflows/lintr.yml@main
+    if: github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
+  links:
+    name: Links
+    uses: pharmaverse/admiralci/.github/workflows/links.yml@main
+    if: >
+      github.event_name == 'push' || github.event_name == 'pull_request'
+  coverage:
+    name: Code Coverage
+    uses: pharmaverse/admiralci/.github/workflows/code-coverage.yml@main
+    if: >
+      github.event_name == 'push' || github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
+      # Whether to skip code coverage badge creation
+      # Setting to 'false' will require you to create
+      # an orphan branch called 'badges' in your repository
+      skip-coverage-badges: false
+  templates:
+    name: Check Templates
+    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
+    if: >
+      github.event_name == 'push' || github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
+  man-pages:
+    name: Man Pages
+    uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main
+    if: github.event_name == 'pull_request'
+    with:
+      r-version: $R_VERSION
