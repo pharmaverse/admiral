@@ -10,6 +10,7 @@
 ^docs$
 ^Meta$
 ^codecov\.yml$
+^vignettes/admiraldev\.Rmd$
 ^vignettes/development_process\.Rmd$
 ^vignettes/pr_review_guidance\.Rmd$
 ^vignettes/programming_strategy\.Rmd$

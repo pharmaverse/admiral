@@ -1,0 +1,19 @@
+---
+title: "Contribution to {admiral} and {admiraldev}"
+output: 
+  rmarkdown::html_vignette
+    
+vignette: >
+  %\VignetteIndexEntry{Contribution to {admiraldev}}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+Some stuff here...
