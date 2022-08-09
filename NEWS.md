@@ -1,23 +1,24 @@
-# admiraldev 0.0.1
+# admiraldev 0.1.0
 
 ## New Features
 
-- You can link the GitHub Issue to Changelog by using (#ISSUE-NUMBER)
+  - Developer specific functions brought over from `{admiral}`
+  - Developer specific vignettes brought over from `{admiral}`
+  - New `{admiraldev}` website created
 
 ## Updates of Existing Functions
 
- - Updates that you have made for this version (#ISSUE-NUMBER)
+  - NA
 
 ## Breaking Changes
 
- - Deprecated functions. (#ISSUE-NUMBER)
- - Bug Fixes (#ISSUE-NUMBER)
+  - NA
 
 ## Documentation
 
- - Stuff that you did (#ISSUE-NUMBER)
+  - NA
 
 ## Various
 
- - Stuff that you did (#ISSUE-NUMBER)
+  - NA
 

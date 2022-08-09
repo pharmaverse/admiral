@@ -6,7 +6,8 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords quo
+#' @family quo
 #'
 #' @rdname dev_util_quo_c
 #'
@@ -29,6 +30,9 @@ quo_c <- function(...) {
 #' @return TRUE or error.
 #'
 #' @author Thomas Neitmann, Ondrej Slama
+#'
+#' @keywords quo
+#' @family quo
 #'
 #' @noRd
 #'

@@ -15,7 +15,15 @@ Wrap a String in Single Quotes
 \examples{
 admiral:::squote("foo")
 }
+\seealso{
+Helpers for working with Quosures and Quoting: 
+\code{\link{backquote}()},
+\code{\link{dquote}()},
+\code{\link{enumerate}()},
+\code{\link{quo_c}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{quo}
+\keyword{quo}

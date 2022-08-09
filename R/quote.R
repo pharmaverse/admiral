@@ -6,7 +6,8 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords quo
+#' @family quo
 #'
 #' @rdname dev_util_enumerate
 #'
@@ -36,7 +37,8 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords quo
+#' @family quo
 #'
 #' @rdname dev_util_backquote
 #'
@@ -52,7 +54,8 @@ backquote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords quo
+#' @family quo
 #'
 #' @rdname dev_util_squote
 #'
@@ -74,7 +77,8 @@ squote <- function(x) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords quo
+#' @family quo
 #'
 #' @examples
 #' admiral:::dquote("foo")

@@ -21,7 +21,15 @@ admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
 admiral:::quo_c(vars(USUBJID, ADTM))
 admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 }
+\seealso{
+Helpers for working with Quosures and Quoting: 
+\code{\link{backquote}()},
+\code{\link{dquote}()},
+\code{\link{enumerate}()},
+\code{\link{squote}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{quo}
+\keyword{quo}

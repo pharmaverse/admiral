@@ -15,7 +15,15 @@ Wrap a String in Backquotes
 \examples{
 admiral:::backquote("USUBJID")
 }
+\seealso{
+Helpers for working with Quosures and Quoting: 
+\code{\link{dquote}()},
+\code{\link{enumerate}()},
+\code{\link{quo_c}()},
+\code{\link{squote}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{quo}
+\keyword{quo}
