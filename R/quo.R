@@ -10,7 +10,7 @@
 #' @family quo
 #'
 #' @rdname dev_util_quo_c
-#'
+#' @export
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
@@ -30,7 +30,7 @@ quo_c <- function(...) {
 #' @family quo
 #'
 #' @noRd
-#'
+#' @export
 quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
 }

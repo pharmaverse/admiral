@@ -11,7 +11,7 @@
 #' @keywords dev_utility
 #'
 #' @rdname dev_util_notin
-#'
+#' @export
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
 }
@@ -28,7 +28,7 @@
 #' @keywords dev_utility
 #'
 #' @rdname dev_util_convert_dtm_to_dtc
-#'
+#' @export
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
@@ -43,7 +43,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @keywords dev_utility
 #'
 #' @rdname dev_util_arg_name
-#'
+#' @export
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
@@ -72,7 +72,7 @@ arg_name <- function(expr) { # nolint
 #' @keywords dev_utility
 #'
 #' @rdname dev_util_extract_vars
-#'
+#' @export
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
@@ -110,6 +110,7 @@ extract_vars <- function(x, side = "lhs") {
 #' @rdname dev_util_replace_values_by_names
 #'
 #' @return A list of quosures
+#' @export
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {
@@ -131,6 +132,7 @@ replace_values_by_names <- function(quosures) {
 #' implment it here.
 #'
 #' @noRd
+#' @export
 as_name <- function(x) {
   if (is_quosure(x)) {
     x <- quo_get_expr(x)
