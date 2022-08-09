@@ -54,7 +54,7 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #'
 #' @export
 #'
-#' @author Alice Ehmann
+#' @author Alice Ehmann Ojesh Upadhyay
 #'
 #' @keywords computation imputation adam qualifier
 #'
