@@ -12,7 +12,8 @@ ADaM in R Asset Library Development Utilities
 Tools for developing functions and maintaining a healthy code base
 within the family of admiral R packages. `{admiraldev}` is intended to
 be used when developing `{admiral}` or `{admiral}` extension packages.
-Use of this package as a standalone package is currently not
+
+**NOTE:** Use of this package as a standalone package is currently not
 recommended.
 
 ## Installation
@@ -31,6 +32,7 @@ GitHub use the following code:
 
 ## Release Schedule
 
-`{admiraldev}` is to be release one week before the release of
-`{admiral}`. You can find the release schedule for `{admiral}` packages
-[here](https://github.com/pharmaverse/admiral/tree/devel#release-schedule)
+`{admiraldev}` is to be official released to CRAN one week before the
+release of `{admiral}`. You can find the release schedule for
+`{admiral}` packages
+[here](https://github.com/pharmaverse/admiral/tree/devel#release-schedule).

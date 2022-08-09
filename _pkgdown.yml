@@ -17,7 +17,7 @@ news:
 
 reference:
 - title: Assertion Functions
-  desc: Checks the inputs for user-faceing functions and provides error, warnings and other messaging around expectation of inputs.
+  desc: Checks the inputs for user-facing functions and provides error, warnings and other messaging around expectation of inputs.
   contents:
   - has_keyword('assertion')
 
@@ -37,7 +37,7 @@ reference:
   - has_keyword('what')
 
 - title: Warning Functions
-  desc: Custom warnings for users
+  desc: Custom warnings intended for users
   contents:
   - has_keyword('warnings')
 

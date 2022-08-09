@@ -18,15 +18,15 @@ knitr::opts_chunk$set(
 
 #  Dear Developers
 
-`{admiraldev}` is intended for you, the developer, to help make developing within the admiral family easier and consistently robust and maybe even fun!  
+`{admiraldev}` is a set of tools intended for you, the developer, to help make developing within the admiral family easier, consistently robust across all packages and maybe even fun! 
 
 Tools are loosely defined as follows:
 
-* Utility Functions used in `{admiral}` and `{admiral}` extension functions for doing custom checks and providing custom messages, warnings and errors.  These cusotm messages, warnings and errors are succint, but helpful messaging around what a function expects as inputs. The inputs to admiral functions are many, but generally fit into three categories: datasets, variables and arguments. Most of the functions start with `assert_`, `is_` or `get_`.
+* Utility Functions used in `{admiral}` and `{admiral}` extension functions for doing custom checks and providing custom messages, warnings and errors.  These custom messages, warnings and errors are succinct, but helpful messaging around what a function expects as inputs. The inputs to admiral functions are many, but generally fit into three categories: datasets, variables and arguments. Most of the functions start with `assert_`, `is_` or `get_`.
 
 * Addins and utility functions that help with documentation, testing and checking on health of the code base in all admiral packages.
 
-* Vignettes on working on `{admiral}` functions, developing unit testing, releases process, vignette writing and other documenation.  These vignettes are intended for use across admiral packages.
+* Vignettes on working on `{admiral}` functions, developing unit testing, releases process, vignette writing and other documentation needs.  These vignettes are intended for use across all admiral packages.
 
 # Adding new tools
 
@@ -34,7 +34,9 @@ Tools are loosely defined as follows:
 
 * Experimental tools are highly encouraged to help reduce repetitive patterns and automating the boring stuff.  
 
+# Why have a separate development package?
 
+As the `{admiral}` package function base has grown it was decided to create extension packages for use within companies and specific TAs to help with specific problems. We intended these extension packages to follow the same processes as `{admiral}` core, e.g. Unit Testing, Roxygen Documentation, Function Design.  A standalone development package allows us to keep an up to date development process for all developers across the family.  We also feel that a lot of the developer functions are not user-specific and gives us more freedom to create and release utility tools specific to our family of packages.
 
 
 
