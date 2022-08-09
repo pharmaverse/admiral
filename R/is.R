@@ -245,7 +245,6 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @keywords is
 #' @family is
 #'
-#' @noRd
 #' @export
 is_valid_month <- function(arg) {
   arg %in% 1:12

@@ -25,6 +25,7 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_valid_date_entry}()},
 \code{\link{is_valid_day}()},
 \code{\link{is_valid_hour}()},
+\code{\link{is_valid_month}()},
 \code{\link{is_valid_sec_min}()},
 \code{\link{is_valid_time_entry}()}
 }
