@@ -25,7 +25,15 @@ admiral:::enumerate(
   conjunction = "or"
 )
 }
+\seealso{
+Helpers for working with Quosures and Quoting: 
+\code{\link{backquote}()},
+\code{\link{dquote}()},
+\code{\link{quo_c}()},
+\code{\link{squote}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{dev_utility}
+\concept{quo}
+\keyword{quo}

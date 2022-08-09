@@ -21,7 +21,15 @@ messages.
 admiral:::dquote("foo")
 admiral:::dquote(NULL)
 }
+\seealso{
+Helpers for working with Quosures and Quoting: 
+\code{\link{backquote}()},
+\code{\link{enumerate}()},
+\code{\link{quo_c}()},
+\code{\link{squote}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\concept{quo}
+\keyword{quo}

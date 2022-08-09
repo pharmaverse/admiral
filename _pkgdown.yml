@@ -17,7 +17,7 @@ news:
 
 reference:
 - title: Assertion Functions
-  desc: Checks inputs for functions and provide error and messaging around those checks
+  desc: Checks the inputs for user-faceing functions and provides error, warnings and other messaging around expectation of inputs.
   contents:
   - has_keyword('assertion')
 
@@ -46,8 +46,13 @@ reference:
   contents:
   - has_keyword('test_helper')
 
+- title: Quosure and Quoting Helper Functions
+  desc: Helping your quoting and quosure needs
+  contents:
+  - has_keyword('quo')
+
 - title: Developer Utility Functions
-  desc: Utilities to help with organization and documenation
+  desc: General Utilities
   contents:
   - has_keyword('dev_utility')
 
@@ -60,12 +65,10 @@ navbar:
     text: Developer Guides
     menu:
     - text: Overview
-    - text: Contribution to {admiral}
-      href: articles/contribution_model.html
     - text: Development Process
       href: articles/development_process.html
     - text: -------
-    - text: "All things development"
+    - text: "{admiral} development processes"
     - text: Programming Strategy
       href: articles/programming_strategy.html
     - text: Guidance for git and GitHub Usage

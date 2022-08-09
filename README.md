@@ -9,12 +9,16 @@ ADaM in R Asset Library Development Utilities
 
 ## Purpose
 
-Tools for developing functions and maintaining a healthy codebase within
-the family of admiral R packages. `{admiraldev}` is intended to be used
-when developing `{admiral}` or `{admiral}` extension packages. Use of
-this package as a standalone package is not recommended.
+Tools for developing functions and maintaining a healthy code base
+within the family of admiral R packages. `{admiraldev}` is intended to
+be used when developing `{admiral}` or `{admiral}` extension packages.
+Use of this package as a standalone package is currently not
+recommended.
 
 ## Installation
+
+The package is available from CRAN and can be installed by running
+install.packages(“admiraldev”).
 
 To install the latest development version of the package directly from
 GitHub use the following code:
@@ -24,11 +28,9 @@ GitHub use the following code:
     }
 
     remotes::install_github("pharmaverse/admiraldev", ref = "devel")
-    remotes::install_github("pharmaverse/admiral.test", ref = "devel")
-    remotes::install_github("pharmaverse/admiral", ref = "devel")
 
 ## Release Schedule
 
 `{admiraldev}` is to be release one week before the release of
 `{admiral}`. You can find the release schedule for `{admiral}` packages
-here(TBL)
+[here](https://github.com/pharmaverse/admiral/tree/devel#release-schedule)

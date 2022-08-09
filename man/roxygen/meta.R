@@ -3,7 +3,7 @@ list(
     is = "Identifies type of Object with return of TRUE/FALSE: ",
     assertion = "Checks for valid input and returns warning or errors messages: ",
     what = "Identifies type of object and returns type: ",
-    quo = "Helps for working with Quosures: ",
+    quo = "Helpers for working with Quosures and Quoting: ",
     get = "Brings something to you!?!: ",
     test_helper = "Helps with Testing: ",
     dev_utility = "Developer Utility Functions: ",
