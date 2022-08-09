@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-#' @author Alice Ehmann
+#' @author Alice Ehmann Ojesh Upadhyay
 #'
 #' @keywords computation adam factor imputation
 #'
