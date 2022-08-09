@@ -23,7 +23,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann
@@ -256,6 +257,7 @@ derive_var_dthcaus <- function(dataset,
 #' @author Shimeng Huang
 #'
 #' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_var_dthcaus()]
 #'

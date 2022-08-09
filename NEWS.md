@@ -97,6 +97,9 @@ have been removed:
 
 ## Various
 
+- Restructured Reference page and updated **all** functions to use `family` tag 
+in roxygen headers for finding similar functions.  (#1105)
+
 # admiral 0.7.1
 
 - `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied

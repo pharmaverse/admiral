@@ -98,7 +98,9 @@
 #'
 #' @author Samia Kabi, Stefan Bundfuss
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -880,7 +882,9 @@ restrict_imputed_dtc_dt <- function(dtc,
 #'
 #' @return a date object
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -921,7 +925,9 @@ convert_dtc_to_dt <- function(dtc,
 #'
 #' @author Samia Kabi, Stefan Bundfuss
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -967,7 +973,9 @@ convert_dtc_to_dtm <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -1023,7 +1031,9 @@ convert_date_to_dtm <- function(dt,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -1075,7 +1085,9 @@ compute_dtf <- function(dtc, dt) {
 #'
 #' @author Samia Kabi, Stefan Bundfuss
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -1155,7 +1167,9 @@ compute_tmf <- function(dtc,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords adam derivation timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
@@ -1351,7 +1365,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @author Samia Kabi
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

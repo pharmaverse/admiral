@@ -51,7 +51,9 @@
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -177,7 +179,9 @@ derive_param_map <- function(dataset,
 #'
 #' @return A numeric vector of MAP values
 #'
-#' @keywords computation advs
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -256,7 +260,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -389,7 +395,9 @@ derive_param_bsa <- function(dataset,
 #'
 #' @return The BSA (Body Surface Area) in m^2.
 #'
-#' @keywords computation adam BSA
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -485,7 +493,9 @@ compute_bsa <- function(height = height,
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -577,7 +587,9 @@ derive_param_bmi <- function(dataset,
 #'
 #' @return The BMI (Body Mass Index Area) in kg/m^2.
 #'
-#' @keywords computation adam BMI
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'

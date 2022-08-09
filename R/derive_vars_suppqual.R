@@ -27,6 +27,8 @@
 #'
 #' @author Vignesh Thanikachalam
 #'
+#' @keywords deprecated
+#'
 #' @export
 #'
 

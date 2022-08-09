@@ -74,7 +74,8 @@
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
-#' @keywords adam derivation user_utility
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @seealso [derive_var_last_dose_amt()], [derive_var_last_dose_date()],
 #'   [derive_var_last_dose_grp()], [create_single_dose_dataset()]

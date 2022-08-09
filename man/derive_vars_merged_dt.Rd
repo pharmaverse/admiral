@@ -201,9 +201,20 @@ the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()},
+\code{\link{derive_vars_merged_dtm}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

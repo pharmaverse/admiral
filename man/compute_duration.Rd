@@ -109,9 +109,18 @@ compute_duration(
   add_one = FALSE
 )
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc_dtm}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

@@ -17,7 +17,8 @@
 #'
 #' @author Samia Kabi
 #' @export
-#' @keywords user_utility adsl computation
+#' @family utils_fmt
+#' @keywords utils_fmt
 #' @seealso [derive_vars_disposition_reason()]
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -130,8 +131,9 @@ format_reason_default <- function(reason, reason_spe = NULL) {
 #' The details associated with the reason for discontinuation are derived based on
 #' `reason_var_spe` (e.g. `DSTERM`), `reason_var` and `format_new_vars`.
 #'
+#' @family der_adsl
 #' @seealso [format_reason_default()]
-#' @keywords adsl
+#' @keywords der_adsl
 #'
 #' @author Samia Kabi
 #'

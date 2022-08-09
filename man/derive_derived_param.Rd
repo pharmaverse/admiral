@@ -91,8 +91,12 @@ be populated in the new parameter rows if it is specified in \code{by_vars}.
 
 This function is deprecated.  Please use \code{derive_param-computed()} instead.
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_var_aendy}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{deprecated}
+\keyword{deprecated}

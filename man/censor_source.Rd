@@ -57,8 +57,22 @@ censor_source(
 }
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=event_source]{event_source()}}
+
+Source Specifications: 
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{dthcaus_source}()},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

@@ -21,7 +21,18 @@ Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Form
 convert_dtm_to_dtc(as.POSIXct(Sys.time()))
 convert_dtm_to_dtc(as.Date(Sys.time()))
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{impute_dtc_dtm}()}
+}
 \author{
 Ondrej Slama
 }
-\keyword{dev_utility}
+\concept{com_date_time}
+\keyword{com_date_time}

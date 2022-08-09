@@ -123,7 +123,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation bds
+#' @family der_prm_tte
+#' @keywords der_prm_tte
 #'
 #' @export
 #'
@@ -452,7 +453,8 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @export
 #'
@@ -591,7 +593,8 @@ filter_date_sources <- function(sources,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -704,7 +707,8 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
@@ -737,6 +741,7 @@ tte_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()]
@@ -781,6 +786,7 @@ event_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [event_source()]
@@ -825,6 +831,9 @@ censor_source <- function(dataset_name,
 #'
 #' @author Thomas Neitmann
 #'
+#' @keywords internal
+#' @family internal
+#'
 #' @export
 #'
 #' @seealso [tte_source()], [censor_source()], [event_source()]
@@ -857,7 +866,8 @@ print.tte_source <- function(x, ...) {
 #'
 #' @export
 #'
-#' @keywords tte_source
+#' @family source_specifications
+#' @keywords source_specifications
 #'
 #' @examples
 #' list_tte_source_objects()
