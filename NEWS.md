@@ -62,7 +62,7 @@ vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
 
   - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
   
-  The following arguments do no longer accept DTC variables:
+  The following arguments no longer accept DTC variables:
   
   - `date` in `date_source()`, `dthcaus_source()`, `censor_source()`, and
   `event_source()`

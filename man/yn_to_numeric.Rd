@@ -22,4 +22,4 @@ yn_to_numeric(c("Y", "N", NA_character_))
 \author{
 Stefan Bundfuss
 }
-\keyword{user_utility}
+\keyword{utils_fmt}

@@ -149,7 +149,7 @@ library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")
 
-# merging all dm variables to vs
+# Merging all dm variables to vs
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
@@ -157,7 +157,7 @@ derive_vars_merged(
 ) \%>\%
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 
-# merge last weight to adsl
+# Merge last weight to adsl
 data("admiral_adsl")
 derive_vars_merged(
   admiral_adsl,
@@ -171,10 +171,10 @@ derive_vars_merged(
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 
-# derive treatment start datetime (TRTSDTM)
+# Derive treatment start datetime (TRTSDTM)
 data(admiral_ex)
 
-## impute exposure start date to first date/time
+## Impute exposure start date to first date/time
 ex_ext <- derive_vars_dtm(
   admiral_ex,
   dtc = EXSTDTC,
@@ -182,7 +182,7 @@ ex_ext <- derive_vars_dtm(
   highest_imputation = "M",
 )
 
-## add first exposure datetime and imputation flags to adsl
+## Add first exposure datetime and imputation flags to adsl
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
@@ -192,10 +192,10 @@ derive_vars_merged(
   mode = "first"
 )
 
-# derive treatment start datetime (TRTSDTM)
+# Derive treatment start datetime (TRTSDTM)
 data(admiral_ex)
 
-## impute exposure start date to first date/time
+## Impute exposure start date to first date/time
 ex_ext <- derive_vars_dtm(
   admiral_ex,
   dtc = EXSTDTC,
@@ -203,7 +203,7 @@ ex_ext <- derive_vars_dtm(
   highest_imputation = "M",
 )
 
-## add first exposure datetime and imputation flags to adsl
+## Add first exposure datetime and imputation flags to adsl
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,
@@ -214,8 +214,8 @@ derive_vars_merged(
   mode = "first"
 )
 
-# derive treatment end datetime (TRTEDTM)
-## impute exposure end datetime to last time, no date imputation
+# Derive treatment end datetime (TRTEDTM)
+## Impute exposure end datetime to last time, no date imputation
 ex_ext <- derive_vars_dtm(
   admiral_ex,
   dtc = EXENDTC,
@@ -223,7 +223,7 @@ ex_ext <- derive_vars_dtm(
   time_imputation = "last",
 )
 
-## add last exposure datetime and imputation flag to adsl
+## Add last exposure datetime and imputation flag to adsl
 derive_vars_merged(
   select(admiral_dm, STUDYID, USUBJID),
   dataset_add = ex_ext,

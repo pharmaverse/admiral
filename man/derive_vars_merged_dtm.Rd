@@ -115,8 +115,8 @@ for the start of the day,
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} parameter is not null and the time imputation flag is
-derived if the \code{time_imputation} parameter is not null
+\code{date_imputation} argument is not null and the time imputation flag is
+derived if the \code{time_imputation} argument is not null
 
 \emph{Default}: \code{"auto"}
 
@@ -212,20 +212,7 @@ time imputation flag is added to the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
-\seealso{
-Date/Time Derivation Functions that returns variable appended to dataset: 
-\code{\link{derive_var_trtdurd}()},
-\code{\link{derive_vars_dtm_to_dt}()},
-\code{\link{derive_vars_dtm_to_tm}()},
-\code{\link{derive_vars_dtm}()},
-\code{\link{derive_vars_dt}()},
-\code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()},
-\code{\link{derive_vars_merged_dt}()}
-}
 \author{
 Stefan Bundfuss
 }
-\concept{der_date_time}
-\keyword{der_date_time}
-\keyword{der_gen}
+\keyword{deprecated}

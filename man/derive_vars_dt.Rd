@@ -35,6 +35,10 @@ valid value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
+The \code{highest_imputation} argument controls which components of the DTC
+value are imputed if they are missing. All components up to the specified
+level are imputed.
+
 If a component at a higher level than the highest imputation level is
 missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
 
@@ -66,7 +70,7 @@ Default is \code{first}.}
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} parameter is not null.
+\code{date_imputation} argument is not null.
 
 \emph{Default}: \code{"auto"}
 
@@ -120,7 +124,7 @@ if requested) added.
 }
 \description{
 Derive a date (\code{'--DT'}) from a date character vector (\verb{'--DTC}').
-The date can be imputed (see \code{date_imputation} parameter)
+The date can be imputed (see \code{date_imputation} argument)
 and the date imputation flag ('\verb{--DTF'}) can be added.
 }
 \details{
@@ -143,7 +147,7 @@ mhdt <- tribble(
 )
 
 # Create ASTDT and ASTDTF
-# no imputation for partial date
+# No imputation for partial date
 derive_vars_dt(
   mhdt,
   new_vars_prefix = "AST",
@@ -225,9 +229,7 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dtm_to_tm}()},
 \code{\link{derive_vars_dtm}()},
 \code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()},
-\code{\link{derive_vars_merged_dtm}()},
-\code{\link{derive_vars_merged_dt}()}
+\code{\link{derive_vars_dy}()}
 }
 \author{
 Samia Kabi

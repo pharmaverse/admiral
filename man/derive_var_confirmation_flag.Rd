@@ -319,5 +319,4 @@ derive_var_confirmation_flag(
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
+\keyword{der_gen}

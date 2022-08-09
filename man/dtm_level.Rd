@@ -23,6 +23,17 @@ Create a \code{dtm_level} object
 A \code{dtm_level} object is an ordered factor, i.e., two objects can be
 compared.
 }
+\seealso{
+Other utils_impute: 
+\code{\link{dt_level}()},
+\code{\link{get_imputation_target_date}()},
+\code{\link{get_imputation_target_time}()},
+\code{\link{get_partialdatetime}()},
+\code{\link{restrict_imputed_dtc_dtm}()},
+\code{\link{restrict_imputed_dtc_dt}()}
+}
 \author{
 Stefan Bundfuss
 }
+\concept{utils_impute}
+\keyword{utils_impute}

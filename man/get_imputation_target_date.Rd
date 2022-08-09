@@ -35,10 +35,24 @@ and \code{"15"} otherwise are returned.
 \item For \code{date_imputation = "last"} \code{"9999"}, \code{"12"}, \code{"31"} are returned.
 \item For \code{date_imputation = "<mm>-<dd>"} \code{"xxxx"}, \code{"<mm>"}, \code{"<dd>"} are returned.
 }
+
+\code{"xxxx"} indicates that the component is undefined. If an undefined
+component occurs in the imputed DTC value, the imputed DTC value is set to
+\code{NA_character_} in the imputation functions.
 }
 \seealso{
 \code{\link[=impute_dtc_dtm]{impute_dtc_dtm()}}, \code{\link[=impute_dtc_dt]{impute_dtc_dt()}}
+
+Other utils_impute: 
+\code{\link{dt_level}()},
+\code{\link{dtm_level}()},
+\code{\link{get_imputation_target_time}()},
+\code{\link{get_partialdatetime}()},
+\code{\link{restrict_imputed_dtc_dtm}()},
+\code{\link{restrict_imputed_dtc_dt}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{utils_impute}
+\keyword{utils_impute}

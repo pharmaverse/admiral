@@ -11,6 +11,10 @@
 #'
 #' @param highest_imputation Highest imputation level
 #'
+#'   The `highest_imputation` argument controls which components of the DTC
+#'   value are imputed if they are missing. All components up to the specified
+#'   level are imputed.
+#'
 #'   If a component at a higher level than the highest imputation level is
 #'   missing, `NA_character_` is returned. For example, for `highest_imputation
 #'   = "D"` `"2020"` results in `NA_character_` because the month is missing.
@@ -306,6 +310,10 @@ impute_dtc_dtm <- function(dtc,
 #'   compared.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 dtm_level <- function(level) {
   out <-
     factor(
@@ -333,6 +341,10 @@ dtm_level <- function(level) {
 #'   available.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_partialdatetime <- function(dtc) {
@@ -383,7 +395,15 @@ get_partialdatetime <- function(dtc) {
 #'  - For `date_imputation = "last"` `"9999"`, `"12"`, `"31"` are returned.
 #'  - For `date_imputation = "<mm>-<dd>"` `"xxxx"`, `"<mm>"`, `"<dd>"` are returned.
 #'
+#'  `"xxxx"` indicates that the component is undefined. If an undefined
+#'  component occurs in the imputed DTC value, the imputed DTC value is set to
+#'  `NA_character_` in the imputation functions.
+#'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 get_imputation_target_date <- function(date_imputation,
@@ -431,6 +451,10 @@ get_imputation_target_date <- function(date_imputation,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
+#'
 #' @seealso  [impute_dtc_dtm()]
 get_imputation_target_time <- function(time_imputation) {
   target <- vector("list", 3)
@@ -466,6 +490,10 @@ get_imputation_target_time <- function(time_imputation) {
 #'   the minimum or maximum dates.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dtm <- function(dtc,
@@ -535,6 +563,10 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   valid value for any component.
 #'
 #' @param highest_imputation Highest imputation level
+#'
+#'   The `highest_imputation` argument controls which components of the DTC
+#'   value are imputed if they are missing. All components up to the specified
+#'   level are imputed.
 #'
 #'   If a component at a higher level than the highest imputation level is
 #'   missing, `NA_character_` is returned. For example, for `highest_imputation
@@ -612,7 +644,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #' @author Samia Kabi, Stefan Bundfuss
 #'
-#' @keywords computation timing
+#' @family com_date_time
+#'
+#' @keywords com_date_time
 #'
 #' @export
 #'
@@ -639,7 +673,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   dtc = dates,
 #'   highest_imputation = "M"
 #' )
-#' # same as above
+#' # Same as above
 #' impute_dtc_dtm(
 #'   dtc = dates,
 #'   highest_imputation = "M",
@@ -790,6 +824,10 @@ impute_dtc_dt <- function(dtc,
 #'   compared.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 dt_level <- function(level) {
   out <-
     factor(
@@ -816,6 +854,10 @@ dt_level <- function(level) {
 #'   the minimum or maximum dates.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @family utils_impute
+#'
+#' @keywords utils_impute
 #'
 #' @seealso [impute_dtc_dtm()], [impute_dtc_dt()]
 restrict_imputed_dtc_dt <- function(dtc,
@@ -1132,7 +1174,7 @@ compute_tmf <- function(dtc,
 #' Derive/Impute a Date from a Date Character Vector
 #'
 #' Derive a date (`'--DT'`) from a date character vector (`'--DTC`').
-#' The date can be imputed (see `date_imputation` parameter)
+#' The date can be imputed (see `date_imputation` argument)
 #' and the date imputation flag ('`--DTF'`) can be added.
 #'
 #' @param dataset Input dataset.
@@ -1148,7 +1190,7 @@ compute_tmf <- function(dtc,
 #' @param flag_imputation Whether the date imputation flag must also be derived.
 #'
 #'   If `"auto"` is specified, the date imputation flag is derived if the
-#'   `date_imputation` parameter is not null.
+#'   `date_imputation` argument is not null.
 #'
 #'   *Default*: `"auto"`
 #'
@@ -1189,7 +1231,7 @@ compute_tmf <- function(dtc,
 #' )
 #'
 #' # Create ASTDT and ASTDTF
-#' # no imputation for partial date
+#' # No imputation for partial date
 #' derive_vars_dt(
 #'   mhdt,
 #'   new_vars_prefix = "AST",
@@ -1273,7 +1315,7 @@ derive_vars_dt <- function(dataset,
                            max_dates = NULL,
                            preserve = FALSE) {
 
-  # check and quote parameters
+  # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)
@@ -1326,7 +1368,7 @@ derive_vars_dt <- function(dataset,
 #' Derive/Impute a Datetime from a Date Character Vector
 #'
 #' Derive a datetime object (`'--DTM'`) from a date character vector (`'--DTC'`).
-#' The date and time can be imputed (see `date_imputation`/`time_imputation` parameters)
+#' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
 #' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
 #'
 #' @param dataset Input dataset
@@ -1344,8 +1386,8 @@ derive_vars_dt <- function(dataset,
 #' @param flag_imputation Whether the date/time imputation flag(s) must also be derived.
 #'
 #'   If `"auto"` is specified, the date imputation flag is derived if the
-#'   `date_imputation` parameter is not null and the time imputation flag is
-#'   derived if the `time_imputation` parameter is not null
+#'   `date_imputation` argument is not null and the time imputation flag is
+#'   derived if the `time_imputation` argument is not null
 #'
 #'   *Default*: `"auto"`
 #'
@@ -1456,7 +1498,7 @@ derive_vars_dtm <- function(dataset,
                             preserve = FALSE,
                             ignore_seconds_flag = FALSE) {
 
-  # check and quote parameters
+  # check and quote arguments
   assert_character_scalar(new_vars_prefix)
   assert_vars(max_dates, optional = TRUE)
   assert_vars(min_dates, optional = TRUE)

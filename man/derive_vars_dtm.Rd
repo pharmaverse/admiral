@@ -38,6 +38,10 @@ valid value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
+The \code{highest_imputation} argument controls which components of the DTC
+value are imputed if they are missing. All components up to the specified
+level are imputed.
+
 If a component at a higher level than the highest imputation level is
 missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
 
@@ -82,8 +86,8 @@ for the start of the day,
 \item{flag_imputation}{Whether the date/time imputation flag(s) must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} parameter is not null and the time imputation flag is
-derived if the \code{time_imputation} parameter is not null
+\code{date_imputation} argument is not null and the time imputation flag is
+derived if the \code{time_imputation} argument is not null
 
 \emph{Default}: \code{"auto"}
 
@@ -146,7 +150,7 @@ flag \code{'--DTF'}, \code{'--TMF'}) added.
 }
 \description{
 Derive a datetime object (\code{'--DTM'}) from a date character vector (\code{'--DTC'}).
-The date and time can be imputed (see \code{date_imputation}/\code{time_imputation} parameters)
+The date and time can be imputed (see \code{date_imputation}/\code{time_imputation} arguments)
 and the date/time imputation flag (\code{'--DTF'}, \code{'--TMF'}) can be added.
 }
 \details{
@@ -235,9 +239,7 @@ Date/Time Derivation Functions that returns variable appended to dataset:
 \code{\link{derive_vars_dtm_to_tm}()},
 \code{\link{derive_vars_dt}()},
 \code{\link{derive_vars_duration}()},
-\code{\link{derive_vars_dy}()},
-\code{\link{derive_vars_merged_dtm}()},
-\code{\link{derive_vars_merged_dt}()}
+\code{\link{derive_vars_dy}()}
 }
 \author{
 Samia Kabi

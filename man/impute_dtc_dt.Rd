@@ -22,6 +22,10 @@ valid value for any component.}
 
 \item{highest_imputation}{Highest imputation level
 
+The \code{highest_imputation} argument controls which components of the DTC
+value are imputed if they are missing. All components up to the specified
+level are imputed.
+
 If a component at a higher level than the highest imputation level is
 missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
 
@@ -124,7 +128,7 @@ impute_dtc_dt(
   dtc = dates,
   highest_imputation = "M"
 )
-# same as above
+# Same as above
 impute_dtc_dtm(
   dtc = dates,
   highest_imputation = "M",
@@ -166,8 +170,19 @@ impute_dtc_dt(
   highest_imputation = "Y"
 )
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc_dtm}()}
+}
 \author{
 Samia Kabi, Stefan Bundfuss
 }
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}
