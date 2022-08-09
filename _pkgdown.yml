@@ -4,17 +4,6 @@ template:
   bootstrap: 5
   params:
     bootswatch: flatly
-  includes:
-    in_header: |
-       <!-- Global site tag (gtag.js) - Google Analytics -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-574L344W3R"#' ></script>
-       <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
-
-         gtag('config', '{YOUR TRACKING ID}');
-       </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -26,112 +15,163 @@ repo:
 news:
   cran_dates: true
 reference:
+- title: Derivations
+  desc: Derivations add one or more variables or parameters to the input
+        dataset and return the extended dataset.
+- contents:
+  - starts_with("derive")
 
-- title: Derivations for Adding Variables
-- subtitle: All ADaMs
-- contents:
-  - has_keyword("der_gen")
-- subtitle: ADSL-specific
-  desc: Derivation Functions helpful for building the ADSL dataset
-- contents:
-  - has_keyword("der_adsl")
-- subtitle: BDS-specific
-  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
-- contents:
-  - has_keyword("der_bds_gen")
-  - has_keyword("der_bds_findings")
-- subtitle: OCCDS-specific
-  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
-- contents:
-  - has_keyword("der_occds")
-- subtitle: TTE-specific
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-- contents:
-  - has_keyword("der_tte")
+- title: Computations
+  desc: Computations expect vectors as input and return a vector
+  contents:
+  - has_keyword('computation')
 
-- title: Derivations for Adding Parameters
-- subtitle: BDS-specific
-- contents:
-  - has_keyword("der_prm_bds_findings")
-- subtitle: TTE-specific
-- contents:
-  - has_keyword("der_prm_tte")
+- title: CDISC Hierarchy
+- subtitle: ADaM
+  desc: General functions which can be used for any ADaM dataset
+  contents:
+  - has_keyword('adam')
+- subtitle: BDS
+  desc: BDS specific functions
+  contents:
+  - has_keyword('bds')
+- subtitle: OCCDS
+  desc: OCCDS specific functions
+  contents:
+  - has_keyword('occds')
+- subtitle: ADSL
+  desc: Functions specific for ADSL
+  contents:
+  - has_keyword('adsl')
+- subtitle: ADEG
+  desc: Functions specific for ADEG
+  contents:
+  - has_keyword('adeg')
+- subtitle: ADVS
+  desc: Functions specific for ADVS
+  contents:
+  - has_keyword('advs')
+- subtitle: ADEX
+  desc: Functions specific for ADEX
+  contents:
+  - has_keyword('adex')
+- subtitle: ADAE
+  desc: Functions specific for ADAE
+  contents:
+  - has_keyword('adae')
+- subtitle: ADCM
+  desc: Functions specific for ADCM
+  contents:
+  - has_keyword('adcm')
+- subtitle: ADLB
+  desc: Functions specific for ADLB
+  contents:
+  - has_keyword('adlb')
 
-- title: Advanced Functions
-- subtitle: Higher Order
-- contents:
-  - has_keyword("high_order_function")
+- title: Other Keywords
+- subtitle: Timing
+  desc: Function related to timing, e.g. deriving dates, imputing dates, converting dates, deriving duration, ...
+  contents:
+  - has_keyword('timing')
+
+- subtitle: High Order Functions
+  desc: Functions which call other derivations, e.g. on subset of input dataset or multiple times with varying parameters.
+  contents:
+  - has_keyword('high_order_function')
+
+- subtitle: Source Specifications
+  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
+  contents:
+  - has_keyword('source_specifications')
+
+- subtitle: Pre-Defined Time-to-Event Sources
+  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
+  contents:
+  - has_keyword('tte_source')
+
 - subtitle: Metadata
-- contents:
-  - has_keyword("metadata")
-- subtitle: Other
-- contents:
-  - has_keyword("source_specifications")
-
-- title: Computation Functions for Vectors
-- subtitle: All ADaMs
+  desc: Functions related to expanding or providing further context for other data
   contents:
-  - has_keyword('com_date_time')
-- subtitle: BDS-specific
-  contents:
-  - has_keyword('com_bds_findings')
+  - has_keyword('metadata')
 
+- title: ADaM Datasets
+- contents:
+  - starts_with("admiral_")
 
-- title: Utility Functions
-- subtitle: Utilities for Formatting Observations
+- title: User Utilities
 - contents:
-  - has_keyword('utils_fmt')
-- subtitle: Utilities for Dataset Checking
+  - has_keyword("user_utility")
+
+- title: Developer Utilities
+- subtitle: Assertions
 - contents:
-  - has_keyword('utils_ds_chk')
-- subtitle: Utilities used within Derivation Functions
+  - has_keyword("assertion")
+- subtitle: Checks
 - contents:
-  - has_keyword('utils_help')
-- subtitle: Utilities for Filtering Observations
+  - has_keyword("check")
+- subtitle: Warnings
 - contents:
-  - has_keyword('utils_fil')
-- subtitle: Utilities used for Examples and Template Scripts
+  - has_keyword("warning")
+- subtitle: Various
 - contents:
-  - has_keyword('utils_examples')
-- subtitle: Utilities used by Imputation Functions
-- contents:
-  - has_keyword('utils_impute')
+  - has_keyword("dev_utility")
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets
   contents:
   - has_keyword('datasets')
 
-- title: Relocated/Deprecated
-- subtitle: Functions moved to another admiraldev package
+- title: Miscellaneous
 - contents:
-  - has_keyword("move_adm_dev")
-- subtitle: Deprecated
-- contents:
-  - has_keyword("deprecated")
+  - ex_single
+  - get_terms_from_db
+  - print.adam_templates
+  - print.derivation_slice
+  - print.tte_source
+  - queries
+  - validate_query
+  - validate_sdg_select
+  - validate_smq_select
+  - assert_db_requirements
 
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - admiral
-  - adsl
-  - occds
-  - bds_finding
-  - bds_exposure
-  - bds_tte
-  - higher_order
-  - imputation
-  - queries_dataset
-  - faq
-
-- title: Developer Guides
-  navbar: Developer Guides
-  contents:
-  - contribution_model
-  - development_process
-  - programming_strategy
-  - git_usage
-  - writing_vignettes
-  - pr_review_guidance
-  - unit_test_guidance
+navbar:
+  structure:
+    left: [reference, articles, community, news]
+  components:
+    reference:
+      text: Functions
+      href: reference/index.html
+    community:
+      text: Community
+      menu:
+      - text: Contribute to admiral
+        href: articles/contribution_model.html
+      - text: Find us on Slack
+        href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      - text: Welcome to the Pharmaverse
+        href: https://pharmaverse.org/
+    articles:
+      text: User Guides
+      menu:
+      - text: Getting Started
+      - text: Creating a basic ADSL
+        href: articles/admiral.html
+      - text: FAQ
+        href: articles/faq.html
+      - text: -------
+      - text: "Deep Dives on ADaMs"
+      - text: Creating an OCCDS ADaM
+        href: articles/occds.html
+      - text: Creating a BDS Findings ADAM
+        href: articles/bds_finding.html
+      - text: Creating a BDS Exposure ADaM
+        href: articles/bds_exposure.html
+      - text: Creating a BDS Time-to-Event ADaM
+        href: articles/bds_tte.html
+      - text: "Advanced User Guides"
+      - text: Date and Time Imputation
+        href: articles/imputation.html
+      - text: Higher Order Functions
+        href: articles/higher_order.html
+      - text: Queries Dataset Documentation
+        href: articles/queries_dataset.html

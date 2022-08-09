@@ -74,7 +74,7 @@ negate_vars <- function(vars = NULL) {
 #' admiral::filter_if(admiral_vs, rlang::quo(NULL))
 #' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 filter_if <- function(dataset, filter) {
-  assert_data_frame(dataset, accept_grouped = TRUE)
+  assert_data_frame(dataset, check_is_grouped = FALSE)
   assert_filter_cond(filter, optional = TRUE)
 
   if (quo_is_null(filter)) {
@@ -201,7 +201,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' get_one_to_many_dataset()
 get_one_to_many_dataset <- function() {
-  .datasets$one_to_many
+  get_dataset("one_to_many")
 }
 
 #' Get Many to One Values that Led to a Prior Error
@@ -234,7 +234,7 @@ get_one_to_many_dataset <- function() {
 #'
 #' get_many_to_one_dataset()
 get_many_to_one_dataset <- function() {
-  .datasets$many_to_one
+  get_dataset("many_to_one")
 }
 
 #' Map `"Y"` and `"N"` to Numeric Values
@@ -246,6 +246,7 @@ get_many_to_one_dataset <- function() {
 #' @author Stefan Bundfuss
 #'
 #' @keywords utils_fmt
+#' @family utils_fmt
 #'
 #' @export
 #'
