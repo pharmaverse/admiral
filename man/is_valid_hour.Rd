@@ -15,9 +15,6 @@ is_valid_hour(arg)
 \description{
 Hours are expected to range from 0 to 23
 }
-\examples{
-assertthat::assert_that(admiral:::is_valid_hour(20))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},

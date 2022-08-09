@@ -16,10 +16,6 @@ is_valid_date_entry(arg)
 Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
 or as a keyword: "FIRST", "MID", "LAST"
 }
-\examples{
-assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
-assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},

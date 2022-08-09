@@ -12,9 +12,6 @@ backquote(x)
 \description{
 Wrap a String in Backquotes
 }
-\examples{
-admiral:::backquote("USUBJID")
-}
 \seealso{
 Helpers for working with Quosures and Quoting: 
 \code{\link{dquote}()},

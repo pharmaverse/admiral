@@ -17,10 +17,6 @@ input in double quotes is returned.
 Wrap a string in double quotes, e.g., for displaying character values in
 messages.
 }
-\examples{
-admiral:::dquote("foo")
-admiral:::dquote(NULL)
-}
 \seealso{
 Helpers for working with Quosures and Quoting: 
 \code{\link{backquote}()},

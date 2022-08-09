@@ -17,9 +17,6 @@ A list of \code{quosures}
 \description{
 Extract All Symbols from a List of Quosures
 }
-\examples{
-admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
-}
 \author{
 Thomas Neitmann
 }

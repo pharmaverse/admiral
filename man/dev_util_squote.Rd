@@ -12,9 +12,6 @@ squote(x)
 \description{
 Wrap a String in Single Quotes
 }
-\examples{
-admiral:::squote("foo")
-}
 \seealso{
 Helpers for working with Quosures and Quoting: 
 \code{\link{backquote}()},

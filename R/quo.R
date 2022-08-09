@@ -11,11 +11,6 @@
 #'
 #' @rdname dev_util_quo_c
 #'
-#' @examples
-#' admiral:::quo_c(rlang::quo(USUBJID))
-#' admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
-#' admiral:::quo_c(vars(USUBJID, ADTM))
-#' admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
@@ -36,15 +31,6 @@ quo_c <- function(...) {
 #'
 #' @noRd
 #'
-#' @examples
-#' test_fun <- function(x) {
-#'   x <- rlang::enquo(x)
-#'   assertthat::assert_that(quo_not_missing(x))
-#' }
-#' test_fun(my_variable) # no missing argument -> returns TRUE
-#' \dontrun{
-#' test_fun() # missing argument -> throws error
-#' }
 quo_not_missing <- function(x) {
   !rlang::quo_is_missing(x)
 }

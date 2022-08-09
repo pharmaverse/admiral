@@ -11,12 +11,6 @@
 #'
 #' @rdname dev_util_what_is_it
 #'
-#' @examples
-#' admiral:::what_is_it(mtcars)
-#' admiral:::what_is_it(NA)
-#' admiral:::what_is_it(TRUE)
-#' admiral:::what_is_it(lm(hp ~ mpg, data = mtcars))
-#' admiral:::what_is_it(letters)
 what_is_it <- function(x) {
   if (is.null(x)) {
     "`NULL`"

@@ -17,10 +17,6 @@ character
 Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
 (-DTC type of variable)
 }
-\examples{
-admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
-admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
-}
 \author{
 Ondrej Slama
 }

@@ -12,9 +12,6 @@
 #'
 #' @rdname dev_util_notin
 #'
-#' @examples
-#' `%notin%` <- admiral:::`%notin%`
-#' "a" %notin% c("b", "v", "k")
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
 }
@@ -32,9 +29,6 @@
 #'
 #' @rdname dev_util_convert_dtm_to_dtc
 #'
-#' @examples
-#' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
-#' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
@@ -50,15 +44,6 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @rdname dev_util_arg_name
 #'
-#' @examples
-#' test_fun <- function(something) {
-#'   admiral:::arg_name(substitute(something))
-#' }
-#'
-#' inner_function <- function(x) x
-#' test_fun2 <- function(something) {
-#'   admiral:::arg_name(substitute(inner_function(something)))
-#' }
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
     deparse(expr)
@@ -88,8 +73,6 @@ arg_name <- function(expr) { # nolint
 #'
 #' @rdname dev_util_extract_vars
 #'
-#' @examples
-#' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
@@ -127,9 +110,6 @@ extract_vars <- function(x, side = "lhs") {
 #' @rdname dev_util_replace_values_by_names
 #'
 #' @return A list of quosures
-#'
-#' @examples
-#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {

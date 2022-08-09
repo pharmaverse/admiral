@@ -15,9 +15,6 @@ is_valid_day(arg)
 \description{
 Days are expected to range from 1 to 31
 }
-\examples{
-assertthat::assert_that(admiral:::is_valid_day(20))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},

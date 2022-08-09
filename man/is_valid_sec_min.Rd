@@ -15,9 +15,6 @@ is_valid_sec_min(arg)
 \description{
 Minutes and seconds are expected to range from 0 to 59
 }
-\examples{
-assertthat::assert_that(admiral:::is_valid_sec_min(59))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},

@@ -32,7 +32,6 @@ a set of required variables
 }
 \examples{
 library(admiral.test)
-library(admiral)
 data(admiral_dm)
 
 example_fun <- function(dataset) {

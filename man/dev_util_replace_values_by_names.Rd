@@ -15,9 +15,6 @@ A list of quosures
 \description{
 Replace Quosure Value with Name
 }
-\examples{
-admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
-}
 \author{
 Thomas Neitmann
 }
