@@ -10,7 +10,7 @@
 #' @family quo
 #'
 #' @rdname dev_util_enumerate
-#'
+#' @export
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
     quote_fun(x)
@@ -33,7 +33,7 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #' @family quo
 #'
 #' @rdname dev_util_backquote
-#'
+#' @export
 backquote <- function(x) {
   paste0("`", x, "`")
 }
@@ -48,7 +48,7 @@ backquote <- function(x) {
 #' @family quo
 #'
 #' @rdname dev_util_squote
-#'
+#' @export
 squote <- function(x) {
   paste0("'", x, "'")
 }
@@ -67,7 +67,7 @@ squote <- function(x) {
 #'
 #' @keywords quo
 #' @family quo
-#'
+#' @export
 dquote <- function(x) {
   if (is.null(x)) {
     "NULL"

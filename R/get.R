@@ -17,7 +17,7 @@
 #'
 #'
 #' @return Variable vector.
-#'
+#' @export
 get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
 
@@ -55,6 +55,7 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 #'
 #' @keywords get
 #' @family get
+#' @export
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
@@ -69,6 +70,7 @@ get_duplicates <- function(x) {
 #' @family get
 #'
 #' @return A list of quosures
+#' @export
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }

@@ -7,7 +7,7 @@
 #'
 #' @keywords is
 #' @family is
-#'
+#' @export
 is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
@@ -23,7 +23,7 @@ is_named <- function(x) {
 #'
 #' @keywords is
 #' @family is
-#'
+#' @export
 is_auto <- function(arg) {
   is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }
@@ -40,6 +40,7 @@ is_auto <- function(arg) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_date <- function(arg) {
   is.instant(arg)
 }
@@ -75,6 +76,7 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_timeunit <- function(arg) {
   arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
@@ -102,7 +104,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
+#' @export
 is_valid_date_entry <- function(arg) {
   pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
@@ -132,6 +134,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
@@ -160,6 +163,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_valid_sec_min <- function(arg) {
   arg %in% 0:59
 }
@@ -186,6 +190,7 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_valid_hour <- function(arg) {
   arg %in% 0:23
 }
@@ -212,6 +217,7 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
+#' @export
 is_valid_day <- function(arg) {
   arg %in% 1:31
 }
@@ -240,6 +246,7 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @family is
 #'
 #' @noRd
+#' @export
 is_valid_month <- function(arg) {
   arg %in% 1:12
 }
