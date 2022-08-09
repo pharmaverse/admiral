@@ -17,7 +17,8 @@
 #'
 #' @author Alice Ehmann Ojesh Upadhyay
 #'
-#' @keywords computation adam factor imputation
+#' @keywords com_bds_findings
+#' @family com_bds_findings
 #'
 #' @examples
 #' compute_qual_imputation_dec("<40.1")
