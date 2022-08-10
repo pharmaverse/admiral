@@ -1,9 +1,20 @@
-url: https://pharmaverse.github.io/admiral/
+url: https://pharmaverse.github.io/admiral
 
 template:
   bootstrap: 5
   params:
     bootswatch: flatly
+  includes:
+    in_header: |
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-574L344W3R"#' ></script>
+       <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', '{YOUR TRACKING ID}');
+       </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -13,120 +24,88 @@ repo:
     issue: https://github.com/pharmaverse/admiral/issues/
     user: https://github.com/
 news:
-  cran_dates: false
+  cran_dates: true
 reference:
-- title: Derivations
-  desc: Derivations add one or more variables or parameters to the input
-        dataset and return the extended dataset.
+
+- title: Derivations for Adding Variables
+- subtitle: All ADaMs
 - contents:
-  - starts_with("derive")
+  - has_keyword("der_gen")
+- subtitle: ADSL-specific
+  desc: Derivation Functions helpful for building the ADSL dataset
+- contents:
+  - has_keyword("der_adsl")
+- subtitle: BDS-specific
+  desc: Derivation Functions helpful for building the BDS datasets (e.g. advs, adlb, adeg, adex)
+- contents:
+  - has_keyword("der_bds_gen")
+  - has_keyword("der_bds_findings")
+- subtitle: OCCDS-specific
+  desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
+- contents:
+  - has_keyword("der_occds")
+- subtitle: TTE-specific
+  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+- contents:
+  - has_keyword("der_tte")
 
-- title: Computations
-  desc: Computations expect vectors as input and return a vector
-  contents:
-  - has_keyword('computation')
+- title: Derivations for Adding Parameters
+- subtitle: BDS-specific
+- contents:
+  - has_keyword("der_prm_bds_findings")
+- subtitle: TTE-specific
+- contents:
+  - has_keyword("der_prm_tte")
 
-- title: CDISC Hierarchy
-- subtitle: ADaM
-  desc: General functions which can be used for any ADaM dataset
-  contents:
-  - has_keyword('adam')
-- subtitle: BDS
-  desc: BDS specific functions
-  contents:
-  - has_keyword('bds')
-- subtitle: OCCDS
-  desc: OCCDS specific functions
-  contents:
-  - has_keyword('occds')
-- subtitle: ADSL
-  desc: Functions specific for ADSL
-  contents:
-  - has_keyword('adsl')
-- subtitle: ADEG
-  desc: Functions specific for ADEG
-  contents:
-  - has_keyword('adeg')
-- subtitle: ADVS
-  desc: Functions specific for ADVS
-  contents:
-  - has_keyword('advs')
-- subtitle: ADEX
-  desc: Functions specific for ADEX
-  contents:
-  - has_keyword('adex')
-- subtitle: ADAE
-  desc: Functions specific for ADAE
-  contents:
-  - has_keyword('adae')
-- subtitle: ADCM
-  desc: Functions specific for ADCM
-  contents:
-  - has_keyword('adcm')
-- subtitle: ADLB
-  desc: Functions specific for ADLB
-  contents:
-  - has_keyword('adlb')
-
-- title: Other Keywords
-- subtitle: Timing
-  desc: Function related to timing, e.g. deriving dates, imputing dates, converting dates, deriving duration, ...
-  contents:
-  - has_keyword('timing')
-
-- subtitle: High Order Functions
-  desc: Functions which call other derivations, e.g. on subset of input dataset or multiple times with varying parameters.
-  contents:
-  - has_keyword('high_order_function')
-
-- subtitle: Source Specifications
-  desc: Classes defining sources for derivations where variables or observations from more than one dataset are considered, e.g., like in `derive_var_lstalvdt()`
-  contents:
-  - has_keyword('source_specifications')
-
-- subtitle: Pre-Defined Time-to-Event Sources
-  desc: '`tte_source` objects defined by {admiral} that can be used as input for `derive_param_tte()`'
-  contents:
-  - has_keyword('tte_source')
-
+- title: Advanced Functions
+- subtitle: Higher Order
+- contents:
+  - has_keyword("high_order_function")
 - subtitle: Metadata
-  desc: Functions related to expanding or providing further context for other data
+- contents:
+  - has_keyword("metadata")
+- subtitle: Other
+- contents:
+  - has_keyword("source_specifications")
+
+- title: Computation Functions for Vectors
+- subtitle: All ADaMs
   contents:
-  - has_keyword('metadata')
+  - has_keyword('com_date_time')
+- subtitle: BDS-specific
+  contents:
+  - has_keyword('com_bds_findings')
 
-- title: ADaM Datasets
-- contents:
-  - starts_with("admiral_")
 
-- title: User Utilities
+- title: Utility Functions
+- subtitle: Utilities for Formatting Observations
 - contents:
-  - has_keyword("user_utility")
+  - has_keyword('utils_fmt')
+- subtitle: Utilities for Dataset Checking
+- contents:
+  - has_keyword('utils_ds_chk')
+- subtitle: Utilities used within Derivation Functions
+- contents:
+  - has_keyword('utils_help')
+- subtitle: Utilities for Filtering Observations
+- contents:
+  - has_keyword('utils_fil')
+- subtitle: Utilities used for Examples and Template Scripts
+- contents:
+  - has_keyword('utils_examples')
 
-- title: Developer Utilities
-- subtitle: Assertions
-- contents:
-  - has_keyword("assertion")
-- subtitle: Checks
-- contents:
-  - has_keyword("check")
-- subtitle: Warnings
-- contents:
-  - has_keyword("warning")
-- subtitle: Various
-- contents:
-  - has_keyword("dev_utility")
+- title: Example Datasets
+  desc: You can run `use_ad_template()` to produce additional datasets
+  contents:
+  - has_keyword('datasets')
 
-- title: Miscellaneous
+- title: Relocated/Deprecated
+- subtitle: Functions moved to another admiraldev package
 - contents:
-  - ex_single
-  - get_terms_from_db
-  - print.derivation_slice
-  - print.tte_source
-  - queries
-  - validate_query
-  - validate_sdg_select
-  - validate_smq_select
-  - assert_db_requirements
+  - has_keyword("move_adm_dev")
+- subtitle: Deprecated
+- contents:
+  - has_keyword("deprecated")
 
 articles:
 - title: User Guides
@@ -138,6 +117,7 @@ articles:
   - bds_finding
   - bds_exposure
   - bds_tte
+  - higher_order
   - imputation
   - queries_dataset
   - faq

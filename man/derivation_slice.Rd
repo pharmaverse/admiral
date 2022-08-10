@@ -24,8 +24,15 @@ Create a \code{derivation_slice} object as input for \code{slice_derivation()}.
 }
 \seealso{
 \code{\link[=slice_derivation]{slice_derivation()}}, \code{\link[=params]{params()}}
+
+Higher Order Functions: 
+\code{\link{call_derivation}()},
+\code{\link{print.derivation_slice}()},
+\code{\link{restrict_derivation}()},
+\code{\link{slice_derivation}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{source_specifications}
+\concept{high_order_function}
+\keyword{high_order_function}

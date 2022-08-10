@@ -127,7 +127,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation bds
+#' @family der_prm_tte
+#' @keywords der_prm_tte
 #'
 #' @export
 #'
@@ -447,7 +448,8 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -593,7 +595,8 @@ filter_date_sources <- function(sources,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -707,7 +710,8 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
@@ -740,6 +744,7 @@ tte_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()]
@@ -784,6 +789,7 @@ event_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [event_source()]
@@ -826,6 +832,11 @@ censor_source <- function(dataset_name,
 #'
 #' @return No return value, called for side effects
 #'
+#' @author Thomas Neitmann
+#'
+#' @keywords internal
+#' @family internal
+#'
 #' @export
 #'
 #' @seealso [tte_source()], [censor_source()], [event_source()]
@@ -845,16 +856,44 @@ print.tte_source <- function(x, ...) {
   }
 }
 
-list_tte_source_objects <- function() {
-  # Get all tte_source objects exported by admiral
-  exported <- getNamespaceExports("admiral")
-  objects <-
-    exported[map_lgl(exported, function(obj_name) {
-      inherits(get(obj_name), "tte_source")
-    })]
 
-  rows <- lapply(objects, function(obj_name) {
-    obj <- get(obj_name)
+#' List all `tte_source` Objects Available in a Package
+#'
+#' @param package The name of the package in which to search for `tte_source` objects
+#'
+#' @return
+#' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
+#' if `package` does not contain any `tte_source` objects
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @family source_specifications
+#' @keywords source_specifications
+#'
+#' @examples
+#' list_tte_source_objects()
+list_tte_source_objects <- function(package = "admiral") {
+  assert_character_scalar(package)
+
+  if (!requireNamespace(package, quietly = TRUE)) {
+    err_msg <- sprintf(
+      "No package called '%s' is installed and hence no `tte_source` objects are available",
+      package
+    )
+    abort(err_msg)
+  }
+
+  # Get all `tte_source` objects exported by `package`
+  exports <- getNamespaceExports(package)
+  is_tte_source <- map_lgl(exports, function(obj_name) {
+    inherits(getExportedValue(package, obj_name), "tte_source")
+  })
+  tte_sources <- exports[is_tte_source]
+
+  rows <- lapply(tte_sources, function(obj_name) {
+    obj <- getExportedValue(package, obj_name)
     data.frame(
       object = obj_name,
       dataset_name = obj$dataset_name,

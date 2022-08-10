@@ -85,5 +85,4 @@ Derive a disposition status date from the the relevant records in the dispositio
 \author{
 Samia Kabi
 }
-\keyword{adsl}
-\keyword{timing}
+\keyword{deprecated}

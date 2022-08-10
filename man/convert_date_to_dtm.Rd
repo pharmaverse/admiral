@@ -28,7 +28,7 @@ Otherwise, a character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
-\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
 
@@ -41,7 +41,7 @@ A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
-\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
+\item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
 Default is \code{"00:00:00"}.}
@@ -102,8 +102,18 @@ convert_date_to_dtm(as.Date("2019-07-18"), time_imputation = "23:59:59")
 convert_date_to_dtm("2019-07-18", time_imputation = "23:59:59")
 convert_date_to_dtm("2019-07-18")
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

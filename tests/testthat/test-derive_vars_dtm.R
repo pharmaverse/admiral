@@ -50,7 +50,7 @@ test_that("Partial date imputed to the first day/month", {
     input,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "FIRST"
+    date_imputation = "first"
   )
   actual_output1 <- derive_vars_dtm(
     input,
@@ -203,7 +203,7 @@ test_that("No re-derivation is done if --DTF variable already exists", {
       mutate(input, ASTDTF = c(NA, NA, NA, NA, "D", "M", "M")),
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
-      date_imputation = "FIRST"
+      date_imputation = "first"
     ),
     regexp = "^The .* variable is already present in the input dataset and will not be re-derived."
   )
@@ -262,7 +262,7 @@ test_that("Ignore Seconds Flag is not used when not present in the function call
     input_secs,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "FIRST",
+    date_imputation = "first",
     time_imputation = "FIRST"
   )
 
@@ -285,7 +285,7 @@ test_that("Ignore Seconds Flag is not used when set to FALSE in function call", 
     input_secs,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "FIRST",
+    date_imputation = "first",
     time_imputation = "FIRST",
     ignore_seconds_flag = FALSE
   )
@@ -323,7 +323,7 @@ test_that("Ignore Seconds Flag remove the Seconds Flag, S, from XXDTF variable w
     input_no_s,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "FIRST",
+    date_imputation = "first",
     time_imputation = "FIRST",
     ignore_seconds_flag = TRUE
   )
@@ -350,7 +350,7 @@ test_that("Function throws ERROR when Ignore Seconds Flag is invoked and seconds
       input_secs,
       new_vars_prefix = "AST",
       dtc = XXSTDTC,
-      date_imputation = "FIRST",
+      date_imputation = "first",
       time_imputation = "FIRST",
       ignore_seconds_flag = TRUE
     ),

@@ -1,26 +1,36 @@
 #' Derive Last Dose
 #'
 #' Add EX source variables from last dose to the input dataset.
+#'
 #' @param dataset Input dataset.
 #' The variables specified by the `by_vars` and `analysis_date` parameters are expected.
+#'
 #' @param dataset_ex Input EX dataset.
 #' The variables specified by the `by_vars`, `dose_date`, `new_vars` parameters,
 #' and source variables from `traceability_vars` parameter are expected.
+#'
 #' @param filter_ex Filtering condition applied to EX dataset.
 #' For example, it can be used to filter for valid dose.
 #' Defaults to NULL.
+#'
 #' @param by_vars Variables to join by (created by `dplyr::vars`).
+#'
 #' @param dose_id Variables to identify unique dose (created by `dplyr::vars`).
 #' Defaults to empty `vars()`.
+#'
 #' @param new_vars Variables to keep from `dataset_ex`, with the option to rename. Can either
 #' be variables created by `dplyr::vars` (e.g. `vars(VISIT)`), or named list returned by [`vars()`]
 #' (e.g. `vars(LSTEXVIS = VISIT)`). If set to `NULL`, then all variables from `dataset_ex` are
 #' kept without renaming.
 #' Defaults to `NULL`.
+#'
 #' @param dose_date The EX dose date variable. A date or date-time object is expected.
+#'
 #' @param analysis_date The analysis date variable. A date or date-time object is expected.
+#'
 #' @param single_dose_condition The condition for checking if `dataset_ex` is single dose. An error
 #' is issued if the condition is not true. Defaults to `(EXDOSFRQ == "ONCE")`.
+#'
 #' @param traceability_vars A named list returned by [`vars()`] listing the traceability variables,
 #' e.g. `vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ)`.
 #' The left-hand side (names of the list elements) gives the names of the traceability variables
@@ -29,7 +39,8 @@
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
-#' @details All date (date-time) variables can be characters in standard ISO format or
+#' @details
+#' All date (date-time) variables can be characters in standard ISO format or
 #' of date / date-time class.
 #' For ISO format, see [`impute_dtc`] - parameter `dtc` for further details.
 #' When doing date comparison to identify last dose, date-time imputations are done as follows:
@@ -37,6 +48,7 @@
 #' * `analysis_date`: no date imputation, time imputation to `23:59:59` if time is missing.
 #'
 #' The last dose records are identified as follows:
+#'
 #' 1. The `dataset_ex` is filtered using `filter_ex`, if provided.
 #' This is useful for, for example, filtering for valid dose only.
 #' 2. The datasets `dataset` and `dataset_ex` are joined using `by_vars`.
@@ -52,9 +64,9 @@
 #' `dataset` and returned to the user.
 #'
 #' This function only works correctly for EX dataset with a structure of single dose per row.
-#' If your study EX dataset has multiple doses per row, use `expansion_function_name??` to
+#' If your study EX dataset has multiple doses per row, use [`create_single_dose_dataset()`] to
 #' transform the EX dataset into single dose per row structure before calling
-#' `derive_vars_last_dose`.
+#' `derive_vars_last_dose()`.
 #'
 #' If variables (other than those specified in `by_vars`) exist in both `dataset` and `dataset_ex`,
 #' then join cannot be performed properly and an error is issued. To resolve the error, use
@@ -65,7 +77,8 @@
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
-#' @keywords adam derivation user_utility
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -109,7 +122,7 @@ derive_vars_last_dose <- function(dataset,
                                   dose_id = vars(),
                                   dose_date,
                                   analysis_date,
-                                  single_dose_condition = (EXDOSFRQ == "ONCE"),
+                                  single_dose_condition = EXDOSFRQ == "ONCE",
                                   new_vars = NULL,
                                   traceability_vars = NULL) {
   filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
@@ -121,10 +134,12 @@ derive_vars_last_dose <- function(dataset,
   assert_varval_list(new_vars, optional = TRUE, accept_var = TRUE)
   assert_varval_list(traceability_vars, optional = TRUE)
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
-  assert_data_frame(dataset_ex, quo_c(
-    by_vars, dose_date, new_vars,
-    get_source_vars(traceability_vars)
-  ))
+  if (as_name(dose_date) %in% names(new_vars)) {
+    required_vars <- quo_c(by_vars, new_vars, get_source_vars(traceability_vars))
+  } else {
+    required_vars <- quo_c(by_vars, dose_date, new_vars, get_source_vars(traceability_vars))
+  }
+  assert_data_frame(dataset_ex, required_vars)
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -136,14 +151,21 @@ derive_vars_last_dose <- function(dataset,
     all()
 
   if (!single_dose_eval) {
-    stop("Specified single_dose_condition is not satisfied.")
+    stop("Specified `single_dose_condition` is not satisfied.")
   }
 
-  # check if doses are unique based on dose_date and dose_id
+  # check if doses are unique based on `dose_date` and `dose_id`
+  if (as_name(dose_date) %in% names(new_vars)) {
+    unique_by <- c(by_vars, new_vars[[as_name(dose_date)]], dose_id)
+  } else {
+    unique_by <- c(by_vars, dose_date, dose_id)
+  }
   signal_duplicate_records(
-    dataset_ex, c(by_vars, dose_date, dose_id),
-    "Multiple doses exist for the same dose_date. Update dose_id to identify unique doses."
+    dataset_ex,
+    unique_by,
+    "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses."
   )
+
 
   # filter EX based on user-specified condition
   if (!is.null(quo_get_expr(filter_ex))) {

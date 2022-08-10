@@ -32,7 +32,8 @@
 #'
 #' @return The input dataset with a ratio variable appended
 #'
-#' @keywords adam bds adlb derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

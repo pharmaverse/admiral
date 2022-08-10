@@ -36,7 +36,11 @@ A variable name is expected (e.g. \code{DSDECOD}).}
 
 \item{format_new_var}{The format used to derive the status.
 
-Default: \code{format_eoxxstt_default()} defined as:\preformatted{format_eoxxstt_default <- function(status) \{
+
+Default: \code{format_eoxxstt_default()} defined as:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{format_eoxxstt_default <- function(status) \{
+
   case_when(
     status == "COMPLETED" ~ "COMPLETED",
     status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
@@ -115,7 +119,18 @@ admiral_dm \%>\%
   ) \%>\%
   select(STUDYID, USUBJID, EOSSTT)
 }
+\seealso{
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_disposition_reason}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{adsl}
+\concept{der_adsl}
+\keyword{der_adsl}

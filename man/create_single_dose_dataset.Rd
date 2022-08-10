@@ -115,9 +115,16 @@ create_single_dose_dataset(data,
   end_date = AENDTM
 )
 }
+\seealso{
+OCCDS Functions: 
+\code{\link{create_query_data}()},
+\code{\link{derive_last_dose}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{derive_vars_query}()},
+\code{\link{get_terms_from_db}()}
+}
 \author{
 Michael Thorpe, Andrew Smith
 }
-\keyword{adae}
-\keyword{adex}
-\keyword{user_utility}
+\concept{der_occds}
+\keyword{der_occds}

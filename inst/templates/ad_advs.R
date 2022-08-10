@@ -21,6 +21,11 @@ data("admiral_adsl")
 adsl <- admiral_adsl
 vs <- admiral_vs
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 vs <- convert_blanks_to_na(vs)
 
 # ---- Lookup tables ----
@@ -118,7 +123,7 @@ advs <- advs %>%
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
-  # Derive Body Surface Area
+  # Derive Body Mass Index
   derive_param_bmi(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI"),

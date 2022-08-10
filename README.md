@@ -32,6 +32,25 @@ remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a r
 remotes::install_github("pharmaverse/admiral", ref = "devel")
 ```
 
+## Release Schedule
+
+`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release. 
+The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+Phases:  
+
+* Phase 1 release is for `{admiraldev}` and `{admiral.test}`, which feed into all `admiral` packages
+* Phase 2 release is only for core `{admiral}`
+* Phase 3 release is extension packages, e.g. `{admiralonco}`
+
+| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
+|----------------------------|------------------------------|---------------------------- |------------------------------|
+| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             |           |
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             |              |
+
 ## Main Goal
 
 Provide users with an open source, modularized toolbox with which to create ADaM datasets
