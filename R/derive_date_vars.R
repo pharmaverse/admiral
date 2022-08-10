@@ -7,7 +7,7 @@
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
-#'   valid value for any component.
+#'   valid "missing" value for any component.
 #'
 #' @param highest_imputation Highest imputation level
 #'
@@ -22,9 +22,9 @@
 #'   If `"n"` is specified, no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `min_dates` or `max_dates` should be specified as
-#'   well. Otherwise, `NA_character_` is returned if the year component is
-#'   missing.
+#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
+#'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
+#'   `NA_character_` is returned if the year component is missing.
 #'
 #'   *Default*: `"h"`
 #'
@@ -41,6 +41,8 @@
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
+#'   The argument is ignored if `highest_imputation` is less then `"D"`.
+#'
 #'   *Default*: `"first"`.
 #'
 #' @param time_imputation The value to impute the time when a timepart is
@@ -51,7 +53,9 @@
 #'   for the start of the day,
 #'   - or as a keyword: `"first"`,`"last"` to impute to the start/end of a day.
 #'
-#'   *Default*: `"00:00:00"`.
+#'   The argument is ignored if `highest_imputation = "n"`.
+#'
+#'   *Default*: `"first"`.
 #'
 #' @param min_dates Minimum dates
 #'
@@ -80,6 +84,10 @@
 #' `"2020-12-06T12:12:12"` is ignored. Returning `"2020-12-06T12:12:12"` would
 #' have changed the month although it is not missing (in the `dtc` date).
 #'
+#' For date variables (not datetime) in the list the time is imputed to
+#' `"00:00:00"`. Specifying date variables makes sense only if the date is
+#' imputed. If only time is imputed, date variables do not affect the result.
+#'
 #' @param max_dates Maximum dates
 #'
 #' A list of dates is expected. It is ensured that the imputed date is not after
@@ -87,6 +95,10 @@
 #' cut off date. Only dates which are in the range of possible dates are
 #' considered. A date or date-time object is expected.
 #'
+#' For date variables (not datetime) in the list the time is imputed to
+#' `"23:59:59"`. Specifying date variables makes sense only if the date is
+#' imputed. If only time is imputed, date variables do not affect the result.
+
 #' @param preserve Preserve day if month is missing and day is present
 #'
 #' For example `"2019---07"` would return `"2019-06-07` if `preserve = TRUE`
@@ -560,7 +572,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'
 #'   A character date is expected in a format like `yyyy-mm-dd` or
 #'   `yyyy-mm-ddThh:mm:ss`. Trailing components can be omitted and `-` is a
-#'   valid value for any component.
+#'   valid "missing" value for any component.
 #'
 #' @param highest_imputation Highest imputation level
 #'
@@ -575,9 +587,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   If `"n"` is specified no imputation is performed, i.e., if any component is
 #'   missing, `NA_character_` is returned.
 #'
-#'   If `"Y"` is specified, `min_dates` or `max_dates` should be specified as
-#'   well. Otherwise, `NA_character_` is returned if the year component is
-#'   missing.
+#'   If `"Y"` is specified, `date_imputation` should be `"first"` or `"last"`
+#'   and `min_dates` or `max_dates` should be specified respectively. Otherwise,
+#'   `NA_character_` is returned if the year component is missing.
 #'
 #'   *Default*: `"n"`
 #'
@@ -593,7 +605,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
-#'   Default is `first`.
+#'   The argument is ignored if `highest_imputation` is less then `"D"`.
+#'
+#'   *Default*: `"first"`
 #'
 #' @param min_dates Minimum dates
 #'
@@ -1177,6 +1191,10 @@ compute_tmf <- function(dtc,
 #' The date can be imputed (see `date_imputation` argument)
 #' and the date imputation flag ('`--DTF'`) can be added.
 #'
+#' In {admiral} we don't allow users to pick any single part of the date/time to
+#' impute, we only enable to impute up to a highest level, i.e. you couldn't
+#' choose to say impute months, but not days.
+#'
 #' @param dataset Input dataset.
 #'
 #'   The date character vector (`dtc`) must be present.
@@ -1370,6 +1388,10 @@ derive_vars_dt <- function(dataset,
 #' Derive a datetime object (`'--DTM'`) from a date character vector (`'--DTC'`).
 #' The date and time can be imputed (see `date_imputation`/`time_imputation` arguments)
 #' and the date/time imputation flag (`'--DTF'`, `'--TMF'`) can be added.
+#'
+#' In {admiral} we don't allow users to pick any single part of the date/time to
+#' impute, we only enable to impute up to a highest level, i.e. you couldn't
+#' choose to say impute months, but not days.
 #'
 #' @param dataset Input dataset
 #'

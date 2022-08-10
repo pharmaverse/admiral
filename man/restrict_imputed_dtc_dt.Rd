@@ -11,7 +11,7 @@ restrict_imputed_dtc_dt(dtc, imputed_dtc, min_dates, max_dates)
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid value for any component.}
+valid "missing" value for any component.}
 
 \item{imputed_dtc}{The imputed DTC date}
 

@@ -28,9 +28,9 @@ missing, \code{NA_character_} is returned. For example, for \code{highest_imputa
 If \code{"n"} is specified no imputation is performed, i.e., if any component is
 missing, \code{NA_character_} is returned.
 
-If \code{"Y"} is specified, \code{min_dates} or \code{max_dates} should be specified as
-well. Otherwise, \code{NA_character_} is returned if the year component is
-missing.
+If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
+and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
+\code{NA_character_} is returned if the year component is missing.
 
 \emph{Default}: \code{"n"}
 
@@ -48,7 +48,9 @@ of June,
 day/month.
 }
 
-Default is \code{first}.}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
+\emph{Default}: \code{"first"}}
 
 \item{min_dates}{Minimum dates
 

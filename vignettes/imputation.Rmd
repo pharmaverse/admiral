@@ -26,6 +26,12 @@ Relative Day) are numeric variables. They can be derived only if the date or
 datetime is complete. Therefore `{admiral}` provides imputation functions which fill
 in missing date or time parts according to certain imputation rules.
 
+In {admiral} we use only two functions `derive_vars_dt()` and
+`derive_vars_dtm()` for date and datetime imputations respectively. In all other
+functions where dates can be passed as an argument, we expect full dates or
+datetimes (unless otherwise specified), so if any possibility of partials then
+these functions should be used as a first step to make the required imputation.
+
 ## Required Packages
 
 The examples of this vignette require the following packages.
@@ -38,6 +44,10 @@ library(dplyr)
 ```
 
 # Imputation Rules
+
+In {admiral} we don't allow users to pick any single part of the date/time to
+impute, we only enable to impute up to a highest level, i.e. you couldn't choose
+to say impute months, but not days.
 
 The simplest imputation rule is to set the missing parts to a fixed value. For
 example
@@ -76,7 +86,7 @@ impute_dtc_dtm(
 
 For dates, there is the additional option to use keyword `"mid"` to impute
 missing day to `15` or missing day and month to `06-30`, but note the
-different behaviour below depending on `preserve` parameter for case when month
+different behaviour below depending on `preserve` argument for case when month
 only is missing:
 
 ```{r}
@@ -118,13 +128,60 @@ impute_dtc_dtm(
   time_imputation = "00:00:00"
 )
 ```
+## Imputation Level
+
+The imputation level, i.e., which components are imputed if they are missing, is
+controlled by the `highest_imputation` argument. All components up to the
+specified level are imputed.
+
+```{r}
+dates <- c(
+  "2019-02-03T12:30:15",
+  "2019-02-03T12:30",
+  "2019-02-03",
+  "2019-02",
+  "2019"
+)
+
+# Do not impute
+impute_dtc_dtm(
+  dates,
+  highest_imputation = "n"
+)
+
+# Impute seconds only
+impute_dtc_dtm(
+  dates,
+  highest_imputation = "s"
+)
+
+# Impute time (hours, minutes, seconds) only
+impute_dtc_dtm(
+  dates,
+  highest_imputation = "h"
+)
+
+# Impute days and time
+impute_dtc_dtm(
+  dates,
+  highest_imputation = "D"
+)
+
+# Impute date (months and days) and time
+impute_dtc_dtm(
+  dates,
+  highest_imputation = "M"
+)
+```
+
+For imputation of years (`highest_imputation = "Y"`) see next section.
 
 ## Minimum/Maximum Dates
 
 In some scenarios the imputed date should not be before or after certain dates.
 For example an imputed date after data cut off date or death date is not
 desirable. The `{admiral}` imputation functions provide the `min_dates` and
-`max_dates` parameter to specify those dates. For example:
+`max_dates` argument to specify those dates. For example:
 
 ```{r}
 impute_dtc_dtm(
@@ -143,6 +200,29 @@ i.e., for "2019-02" the possible dates range from "2019-02-01" to "2019-02-28".
 Thus "2019-01-14" is ignored. This ensures that the non-missing parts of the dtc
 date are not changed.
 
+If the `min_dates` or `max_dates` argument is specified, it is also possible to
+impute completely missing dates. For `date_imputation = "first"` the `min_dates`
+argument must be specified and for `date_imputation = "last"` the `max_dates`
+argument. For other imputation rules imputing the year is not possible.
+
+```{r}
+# Impute year to first
+impute_dtc_dtm(
+  c("2019-02", NA),
+  highest_imputation = "Y",
+  min_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
+)
+
+# Impute year to last
+impute_dtc_dtm(
+  c("2019-02", NA),
+  highest_imputation = "Y",
+  date_imputation = "last",
+  time_imputation = "last",
+  max_dates = list(ymd("2019-01-14"), ymd("2019-02-25"))
+)
+```
+
 # Imputation Flags
 
 ADaM requires that date or datetime variables for which imputation was used are
@@ -153,7 +233,7 @@ is set to `"M"`. The `{admiral}` functions which derive imputed variables are al
 adding the corresponding imputation flag variables.
 
 Note: The `{admiral}` datetime imputation function provides the `ignore_seconds_flag`
-parameter which can be set to `TRUE` in cases where seconds were never collected.
+argument which can be set to `TRUE` in cases where seconds were never collected.
 This is due to the following from ADaM IG: For a given SDTM DTC variable, if only
 hours and minutes are ever collected, and seconds are imputed in `*DTM` as `00`,
 then it is not necessary to set `*TMF` to `"S"`.
@@ -237,7 +317,7 @@ dataset_vignette(ae)
 
 ## Impute Time without Imputing Date
 
-If the time should be imputed but not the date, the `highest_imputation` parameter
+If the time should be imputed but not the date, the `highest_imputation` argument
 should be set to `"h"`. This results in `NA` if the date is partial. As
 no date is imputed the date imputation flag is not created.
 
@@ -266,7 +346,7 @@ possible dates when filling the missing parts. The result may be a date before
 treatment start date. This is not desirable because the adverse event would not
 be considered as treatment emergent and excluded from the adverse event
 summaries. This can be avoided by specifying the treatment start date variable
-(`TRTSDTM`) for the `min_dates` parameter.
+(`TRTSDTM`) for the `min_dates` argument.
 
 Please note that `TRTSDTM` is used as imputed date only if the non missing date
 and time parts of `AESTDTC` coincide with those of `TRTSDTM`. Therefore
@@ -298,7 +378,7 @@ dataset_vignette(ae)
 
 If a date is imputed as the latest date of all possible dates when filling the
 missing parts, it should not result in dates after data cut off or death. This
-can be achieved by specifying the dates for the `max_dates` parameter.
+can be achieved by specifying the dates for the `max_dates` argument.
 
 Please note that non missing date parts are not changed. Thus `2019-12-04` is
 imputed as `2019-12-04 23:59:59` although it is after the data cut off date. It

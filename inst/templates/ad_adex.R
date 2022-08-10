@@ -51,7 +51,7 @@ ex <- ex %>%
   mutate(EXPLDOS = if_else(EXTRT == "PLACEBO", 0, 54))
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
@@ -65,7 +65,7 @@ adex0 <- ex %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
+  ## Calculate ASTDTM, AENDTM using `derive_vars_dtm()` ----
 
   derive_vars_dtm(
     dtc = EXSTDTC,
@@ -78,18 +78,18 @@ adex0 <- ex %>%
     date_imputation = "last",
     new_vars_prefix = "AEN"
   ) %>%
-  # Calculate ASTDY, AENDY
+  ## Calculate ASTDY, AENDY ----
   derive_vars_dy(
     reference_date = TRTSDTM,
     source_vars = vars(ASTDTM, AENDTM)
   ) %>%
-  # add EXDUR, the duration of trt for each record
+  ## Add EXDUR, the duration of trt for each record ----
   derive_vars_duration(
     new_var = EXDURD,
     start_date = ASTDTM,
     end_date = AENDTM
   ) %>%
-  # Derive analysis end/start date
+  ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
   mutate(
     # Compute the cumulative dose
@@ -97,8 +97,7 @@ adex0 <- ex %>%
     PDOSEO = EXPLDOS * EXDURD
   )
 
-# Part 2
-# 1:1 mapping
+# Part 2: 1:1 mapping ----
 
 adex <- bind_rows(
   adex0 %>% mutate(PARAMCD = "DURD", AVAL = EXDURD),
@@ -109,10 +108,10 @@ adex <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
-# Part 3
-# Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
-# `derive_param_doseint()` and `derive_param_computed()`, only the variables specified
-# in `by_vars` will be populated in the newly created records.
+# Part 3: Derive summary parameters ----
+# Note that, for the functions `derive_param_exposure()`,
+# `derive_param_doseint()` and `derive_param_computed()`, only the variables
+# specified in `by_vars` will be populated in the newly created records.
 
 adex <- adex %>%
   # Overall exposure
@@ -221,8 +220,7 @@ adex <- adex %>%
     )
   )
 
-# Part 4
-# Derive/Assign the last required variables
+# Part 4: Derive/Assign the last required variables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 # ---- Lookup tables ----
@@ -249,7 +247,7 @@ param_lookup <- tibble::tribble(
   "PDOSINT", "W2-24 dose intensity (%)", 91
 )
 
-# ---- User defined functions ----
+# User defined functions ----
 # Derive AVALCAT1
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate()`.
@@ -291,7 +289,7 @@ adex <- adex %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

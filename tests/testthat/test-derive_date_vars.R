@@ -65,8 +65,8 @@ test_that("impute_dtc_dtm Test 2: no date imputation, min and sec imputed with 5
   )
 })
 
-## Test 3: impute date to first, time to 00:00:00 ----
-test_that("impute_dtc_dtm Test 3: impute date to first, time to 00:00:00", {
+## Test 3: impute month and day to first, time to 00:00:00 ----
+test_that("impute_dtc_dtm Test 3: impute month and day to first, time to 00:00:00", {
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -117,16 +117,15 @@ test_that("impute_dtc_dtm Test 4: impute day to last, time to 23:59:59", {
     impute_dtc_dtm(
       dtc = input,
       highest_imputation = "D",
-      date_imputation = "LAST",
-      time_imputation = "LAST",
-      preserve = FALSE
+      date_imputation = "last",
+      time_imputation = "last"
     ),
     expected_output
   )
 })
 
-## Test 5: impute date to last, time to 23:59:59 and preserve = TRUE ----
-test_that("impute_dtc_dtm Test 5: impute date to last, time to 23:59:59 and preserve = TRUE", {
+## Test 5: impute month, day to last, time to 23:59:59, preserve = TRUE ----
+test_that("impute_dtc_dtm Test 5: impute month, day to last, time to 23:59:59, preserve = TRUE", {
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -143,8 +142,8 @@ test_that("impute_dtc_dtm Test 5: impute date to last, time to 23:59:59 and pres
     imputes <- impute_dtc_dtm(
       dtc = input,
       highest_imputation = "M",
-      date_imputation = "LAST",
-      time_imputation = "LAST",
+      date_imputation = "last",
+      time_imputation = "last",
       preserve = TRUE
     ),
     expected_output
@@ -177,8 +176,8 @@ test_that("impute_dtc_dtm Test 6: no date imputation, impute second to 59", {
   )
 })
 
-## Test 7: impute date to mid, time to last ----
-test_that("impute_dtc_dtm Test 7: impute date to mid, time to last", {
+## Test 7: impute month and day to mid, time to first ----
+test_that("impute_dtc_dtm Test 7: impute month and day to mid, time to first", {
   expected_output <- c(
     "2019-07-18T15:25:40.243",
     "2019-07-18T15:25:40",
@@ -195,8 +194,8 @@ test_that("impute_dtc_dtm Test 7: impute date to mid, time to last", {
     imputes <- impute_dtc_dtm(
       dtc = input,
       highest_imputation = "M",
-      date_imputation = "MID",
-      time_imputation = "FIRST",
+      date_imputation = "mid",
+      time_imputation = "first",
       preserve = FALSE
     ),
     expected_output
@@ -229,15 +228,16 @@ test_that("impute_dtc_dtm Test 8: min_dates parameter works", {
 ## Test 9: max_dates parameter works ----
 test_that("impute_dtc_dtm Test 9: max_dates parameter works", {
   expect_equal(
-    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_),
+    impute_dtc_dtm(c("2020-12", "2020-11", NA_character_, "2020-02-02"),
       max_dates = list(
-        c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00")),
-        c(ymd(""), ymd("2020-11-11"), ymd(""))
+        c(ymd_hms("2020-12-06T12:12:12"), NA, ymd_hms("2020-09-13T08:30:00"), NA),
+        c(ymd(""), ymd("2020-11-11"), ymd(""), ymd("2020-02-02"))
       ),
       highest_imputation = "Y",
-      date_imputation = "last"
+      date_imputation = "last",
+      time_imputation = "last"
     ),
-    c("2020-12-06T12:12:12", "2020-11-11T23:59:59", "2020-09-13T08:30:00")
+    c("2020-12-06T12:12:12", "2020-11-11T23:59:59", "2020-09-13T08:30:00", "2020-02-02T23:59:59")
   )
 })
 
@@ -260,8 +260,8 @@ test_that("impute_dtc_dt Test 10: default: no date imputation", {
   expect_equal(impute_dtc_dt(dtc = input), expected_output)
 })
 
-## Test 11: impute date to first ----
-test_that("impute_dtc_dt Test 11: impute date to first", {
+## Test 11: impute month and day to first ----
+test_that("impute_dtc_dt Test 11: impute month and day to first", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-01",
@@ -307,8 +307,8 @@ test_that("impute_dtc_dt Test 12: impute day to last", {
   )
 })
 
-## Test 13: impute date to last and preserve = TRUE ----
-test_that("impute_dtc_dt Test 13: impute date to last and preserve = TRUE", {
+## Test 13: impute month and day to last and preserve = TRUE ----
+test_that("impute_dtc_dt Test 13: impute month and day to last and preserve = TRUE", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-28",
@@ -327,8 +327,8 @@ test_that("impute_dtc_dt Test 13: impute date to last and preserve = TRUE", {
 })
 
 
-## Test 14: impute date to mid ----
-test_that("impute_dtc_dt Test 14: impute date to mid", {
+## Test 14: impute month and day to mid ----
+test_that("impute_dtc_dt Test 14: impute month and day to mid", {
   expected_output <- c(
     "2019-07-18",
     "2019-02-15",

@@ -29,9 +29,9 @@ missing, \code{NA_character_} is returned. For example, for \code{highest_imputa
 If \code{"n"} is specified, no imputation is performed, i.e., if any component is
 missing, \code{NA_character_} is returned.
 
-If \code{"Y"} is specified, \code{min_dates} or \code{max_dates} should be specified as
-well. Otherwise, \code{NA_character_} is returned if the year component is
-missing.
+If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
+and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
+\code{NA_character_} is returned if the year component is missing.
 
 \emph{Default}: \code{"h"}
 
@@ -50,6 +50,8 @@ of June,
 day/month.
 }
 
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
 \emph{Default}: \code{"first"}.}
 
 \item{time_imputation}{The value to impute the time when a timepart is
@@ -62,7 +64,9 @@ for the start of the day,
 \item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
-\emph{Default}: \code{"00:00:00"}.}
+The argument is ignored if \code{highest_imputation = "n"}.
+
+\emph{Default}: \code{"first"}.}
 
 \item{min_dates}{Minimum dates
 
@@ -88,14 +92,22 @@ For example
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
 \code{"2020-12-06T12:12:12"} is ignored. Returning \code{"2020-12-06T12:12:12"} would
-have changed the month although it is not missing (in the \code{dtc} date).}
+have changed the month although it is not missing (in the \code{dtc} date).
+
+For date variables (not datetime) in the list the time is imputed to
+\code{"00:00:00"}. Specifying date variables makes sense only if the date is
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{max_dates}{Maximum dates
 
 A list of dates is expected. It is ensured that the imputed date is not after
 any of the specified dates, e.g., that the imputed date is not after the data
 cut off date. Only dates which are in the range of possible dates are
-considered. A date or date-time object is expected.}
+considered. A date or date-time object is expected.
+
+For date variables (not datetime) in the list the time is imputed to
+\code{"23:59:59"}. Specifying date variables makes sense only if the date is
+imputed. If only time is imputed, date variables do not affect the result.}
 
 \item{preserve}{Preserve day if month is missing and day is present
 

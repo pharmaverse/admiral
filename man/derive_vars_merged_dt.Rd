@@ -88,7 +88,7 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
 \code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
-valid value for any component.}
+valid "missing" value for any component.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
@@ -101,7 +101,9 @@ of June,
 day/month.
 }
 
-Default is \code{first}.}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
+\emph{Default}: \code{"first"}}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 

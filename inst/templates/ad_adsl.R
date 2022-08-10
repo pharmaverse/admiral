@@ -9,7 +9,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -38,7 +38,7 @@ ex <- convert_blanks_to_na(ex)
 ae <- convert_blanks_to_na(ae)
 lb <- convert_blanks_to_na(lb)
 
-# ---- User defined functions ----
+# User defined functions ----
 
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate`.
@@ -78,7 +78,7 @@ format_eoxxstt <- function(x) {
   )
 }
 
-# ---- Derivations ----
+# Derivations ----
 # impute start and end time of exposure to first and last respectively, do not impute date
 ex_ext <- ex %>%
   derive_vars_dtm(
@@ -258,7 +258,7 @@ adsl <- adsl %>%
   )
 
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adsl, file = file.path(dir, "adsl.rda"), compress = "bzip2")

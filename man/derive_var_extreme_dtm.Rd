@@ -52,7 +52,8 @@ The following steps are performed to create the output dataset:
 element are selected. Then for each patient the first or last observation
 (with respect to \code{date} and \code{mode}) is selected.
 \item The new variable is set to the variable specified by the \code{date} element.
-If the date variable is a date variable, the time is imputed as "00:00:00".
+If this is a date variable (rather than datetime), then the time is imputed
+as \code{"00:00:00"}.
 \item The variables specified by the \code{traceability_vars} element are added.
 \item The selected observations of all source datasets are combined into a
 single dataset.

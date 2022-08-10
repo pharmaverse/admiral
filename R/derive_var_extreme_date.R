@@ -34,7 +34,8 @@
 #'   (with respect to `date` and `mode`) is selected.
 #'
 #'   1. The new variable is set to the variable specified by the `date` element.
-#'   If the date variable is a date variable, the time is imputed as "00:00:00".
+#'   If this is a date variable (rather than datetime), then the time is imputed
+#'   as `"00:00:00"`.
 #'
 #'   1. The variables specified by the `traceability_vars` element are added.
 #'
