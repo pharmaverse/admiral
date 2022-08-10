@@ -48,8 +48,10 @@ missing.
 
 A character value is expected, either as a
 \itemize{
-\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
-of June,
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the
+15th of June (The year can not be specified; for imputing the year
+\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
+be used (see examples).),
 \item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }

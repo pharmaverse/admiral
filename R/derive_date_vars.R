@@ -36,8 +36,10 @@
 #'   missing.
 #'
 #'   A character value is expected, either as a
-#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
-#'   of June,
+#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the
+#'   15th of June (The year can not be specified; for imputing the year
+#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
+#'   be used (see examples).),
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
@@ -600,8 +602,10 @@ restrict_imputed_dtc_dtm <- function(dtc,
 #'   missing.
 #'
 #'   A character value is expected, either as a
-#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the 15th
-#'   of June,
+#'   - format with month and day specified as `"mm-dd"`: e.g. `"06-15"` for the
+#'   15th of June (The year can not be specified; for imputing the year
+#'   `"first"` or `"last"` together with `min_dates` or `max_dates` argument can
+#'   be used (see examples).),
 #'   - or as a keyword: `"first"`, `"mid"`, `"last"` to impute to the first/mid/last
 #'   day/month.
 #'
