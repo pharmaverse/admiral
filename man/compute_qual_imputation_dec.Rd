@@ -26,10 +26,12 @@ Derive an imputed value
 \examples{
 compute_qual_imputation_dec("<40.1")
 }
-\author{
-Alice Ehmann
+\seealso{
+Other com_bds_findings: 
+\code{\link{compute_qual_imputation}()}
 }
-\keyword{adam}
-\keyword{computation}
-\keyword{factor}
-\keyword{imputation}
+\author{
+Alice Ehmann Ojesh Upadhyay
+}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}
