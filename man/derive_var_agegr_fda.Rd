@@ -42,7 +42,7 @@ will be split in categories: <18, 18-64, >=65.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 
 admiral_dm \%>\%
@@ -61,7 +61,7 @@ data \%>\%
 data.frame(AGE = 1:100) \%>\%
   derive_var_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 
 admiral_dm \%>\%
@@ -74,6 +74,27 @@ data.frame(AGE = 1:100) \%>\%
 data.frame(AGE = 1:20) \%>\%
   derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
 }
+\seealso{
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_disposition_reason}()}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_disposition_reason}()}
+}
 \author{
 Ondrej Slama
 }
+\concept{der_adsl}
+\keyword{der_adsl}

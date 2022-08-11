@@ -29,7 +29,8 @@
 #'
 #' @author Ben Straub
 #'
-#' @keywords adam derivation
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -37,7 +38,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(ex_single)
 #'

@@ -57,7 +57,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_ex")
 
 # Select first dose for each patient
@@ -80,8 +80,17 @@ admiral_ex \%>\%
   ) \%>\%
   select(USUBJID, EXTRT, EXDOSE)
 }
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{count_vals}()},
+\code{\link{filter_confirmation}()},
+\code{\link{filter_if}()},
+\code{\link{filter_relative}()},
+\code{\link{max_cond}()},
+\code{\link{min_cond}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

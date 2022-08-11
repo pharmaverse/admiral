@@ -79,7 +79,7 @@ test_that("create_single_dose_dataset works for different treatments", {
 
 test_that("custom lookup works", {
   custom_lookup <- tibble::tribble(
-    ~VALUE,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+    ~VALUE, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
     "Q30MIN", (1 / 30), "MINUTE", 1,
     "Q90MIN", (1 / 90), "MINUTE", 1
   )
@@ -108,46 +108,62 @@ test_that("custom lookup works", {
     lubridate::ymd_hms("2021-01-01T09:00:00")
   )
 
-  expect_equal(create_single_dose_dataset(input,
-                             lookup_table = custom_lookup,
-                             lookup_column = VALUE,
-                             start_date = ASTDTM,
-                             end_date = AENDTM),
-               expected_output)
-
-
+  expect_equal(
+    create_single_dose_dataset(input,
+      lookup_table = custom_lookup,
+      lookup_column = VALUE,
+      start_date = ASTDTM,
+      end_date = AENDTM
+    ),
+    expected_output
+  )
 })
 
 test_that("Warning is returned when values in EXDOSFRQ does not appear in lookup table", {
-input <- tibble::tribble(
-  ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
-  "P01", "1", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"),
-  "P01", "1", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-12"),
-  "P01", "1", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
-)
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "P01", "1", lubridate::ymd("2021-01-01"), lubridate::ymd("2021-01-03"),
+    "P01", "1", lubridate::ymd("2021-01-08"), lubridate::ymd("2021-01-12"),
+    "P01", "1", lubridate::ymd("2021-01-15"), lubridate::ymd("2021-01-29")
+  )
   expect_error(
-    create_single_dose_dataset(input))
+    create_single_dose_dataset(input)
+  )
 })
 
 test_that("Error is returned when a date variable is supplied rather than
           a datetime variable", {
-custom_lookup <- tibble::tribble(
-  ~VALUE,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
-  "Q30MIN", (1 / 30), "MINUTE", 1,
-  "Q90MIN", (1 / 90), "MINUTE", 1
-)
+  custom_lookup <- tibble::tribble(
+    ~VALUE, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+    "Q30MIN", (1 / 30), "MINUTE", 1,
+    "Q90MIN", (1 / 90), "MINUTE", 1
+  )
 
-input <- tibble::tribble(
-  ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
-  "P01", "Q30MIN", lubridate::ymd("2021-01-01"),
-  lubridate::ymd_hms("2021-01-01T07:00:00"),
-  "P02", "Q90MIN", lubridate::ymd("2021-01-01"),
-  lubridate::ymd_hms("2021-01-01T09:00:00")
-)
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
+    "P01", "Q30MIN", lubridate::ymd("2021-01-01"),
+    lubridate::ymd_hms("2021-01-01T07:00:00"),
+    "P02", "Q90MIN", lubridate::ymd("2021-01-01"),
+    lubridate::ymd_hms("2021-01-01T09:00:00")
+  )
 
-expect_error(create_single_dose_dataset(input,
-                           lookup_table = custom_lookup,
-                           lookup_column = VALUE,
-                           start_date = ASTDTM,
-                           end_date = AENDTM))
+  expect_error(create_single_dose_dataset(input,
+    lookup_table = custom_lookup,
+    lookup_column = VALUE,
+    start_date = ASTDTM,
+    end_date = AENDTM
+  ))
+})
+
+test_that("Error is returned when a date variable contains NA values", {
+  input <- tibble::tribble(
+    ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
+    "P01", "Q2D", ymd("2021-01-01"), NA,
+    "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
+    "P01", "EVERY 2 WEEKS", ymd("2021-01-15"), ymd("2021-01-29")
+  )
+  expect_error(
+    create_single_dose_dataset(input),
+    regexp = "cannot contain `NA`"
+  )
 })

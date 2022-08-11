@@ -34,7 +34,8 @@
 #' @param by_vars Grouping variables
 #'
 #'   For each group defined by `by_vars` an observation is added to the output
-#'   dataset.
+#'   dataset. Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
 #'
 #'   *Permitted Values:* list of variables
 #'
@@ -57,7 +58,8 @@
 #' @author Samia Kabi
 #'
 #' @return The input dataset with a new record added for each group (with respect to the variables
-#' specified for the `by_vars` parameter).
+#' specified for the `by_vars` parameter). That is, a variable will only
+#' be populated in this new record if it is specified in `by_vars`.
 #' For each new record,
 #' + the variable specified `analysis_var` is computed as defined by `summary_fun`,
 #' + the variable(s) specified on the LHS of `set_values_to` are set to their paired value (RHS).
@@ -68,7 +70,8 @@
 #' + only `AxxDTM` then `ASTDTM`,`AENDTM` are computed
 #' + only `AxxDT` then `ASTDT`,`AENDT` are computed.
 #'
-#' @keywords derivation bds adex
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -101,7 +104,7 @@
 #'     input_code = "DOSE",
 #'     analysis_var = AVAL,
 #'     summary_fun = function(x) sum(x, na.rm = TRUE)
-#'    ) %>%
+#'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 #'
 #' # average dose in w2-24
@@ -127,12 +130,12 @@
 #'   ) %>%
 #'   select(-ASTDTM, -AENDTM)
 derive_param_exposure <- function(dataset,
-                                   by_vars,
-                                   input_code,
-                                   analysis_var,
-                                   summary_fun,
-                                   filter = NULL,
-                                   set_values_to = NULL) {
+                                  by_vars,
+                                  input_code,
+                                  analysis_var,
+                                  summary_fun,
+                                  filter = NULL,
+                                  set_values_to = NULL) {
   by_vars <- assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
 
@@ -207,43 +210,4 @@ derive_param_exposure <- function(dataset,
   }
 
   bind_rows(dataset, expo_data)
-}
-
-#' Add an Aggregated Parameter and Derive the Associated Start and End Dates
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' This function is *deprecated*. Please use [derive_param_exposure()] instead.
-#'
-#' @inheritParams derive_param_exposure
-#'
-#' @return
-#' The input dataset with a new record added for each group (with respect to the
-#' variables specified for the `by_vars` parameter).
-#'
-#' @export
-#'
-#' @seealso [derive_param_exposure()]
-#'
-#' @author Samia Kabi
-#'
-#' @keywords derivation bds adex
-derive_params_exposure <- function(dataset,
-                                   by_vars,
-                                   input_code,
-                                   analysis_var,
-                                   summary_fun,
-                                   filter = NULL,
-                                   set_values_to = NULL) {
-  deprecate_warn("0.6.0", "derive_params_exposure()", "derive_param_exposure()")
-  derive_param_exposure(
-    dataset,
-    by_vars = by_vars,
-    input_code = input_code,
-    analysis_var = !!enquo(analysis_var),
-    summary_fun = summary_fun,
-    filter = !!enquo(filter),
-    set_values_to = set_values_to
-  )
 }

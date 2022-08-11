@@ -11,7 +11,8 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
+#'   vector to a date object.
 #'
 #'   Default: `BRTHDT`
 #'
@@ -19,7 +20,8 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date character vector to a date object.
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date character
+#'   vector to a date object.
 #'
 #'   Default: `RANDDT`
 #'
@@ -37,6 +39,9 @@
 #' @author Stefan Bundfuss
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @export
 #'
@@ -90,6 +95,9 @@ derive_vars_aage <- function(dataset,
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param new_var New AGE variable to be created in years.
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author Michael Thorpe
 #'
@@ -192,58 +200,6 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
   }
 }
 
-#' Derive Age Groups
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' *Deprecated*, please use `derive_var_agegr_fda()` and `derive_var_agegr_ema()` instead.
-#'
-#' @param dataset Input dataset.
-#' @param age_var AGE variable.
-#' @param age_unit AGE unit variable.
-#'
-#'   The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
-#'   This is only used when the age_var variable does not have a corresponding unit in the dataset.
-#'
-#'   Default: NULL
-#'
-#'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
-#'
-#' @param new_var New variable to be created.
-#'
-#' @return `dataset` with new column `new_var` of class factor.
-#'
-#' @author Ondrej Slama
-#'
-#' @name derive_agegr_fda
-NULL
-
-#' @rdname derive_agegr_fda
-#'
-#' @export
-derive_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.6.0", "derive_agegr_fda()", "derive_var_agegr_fda()")
-  derive_var_agegr_fda(
-    dataset = dataset,
-    age_var = !!enquo(age_var),
-    age_unit = age_unit,
-    new_var = !!enquo(new_var)
-  )
-}
-
-#' @rdname derive_agegr_fda
-#'
-#' @export
-derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
-  deprecate_warn("0.6.0", "derive_agegr_ema()", "derive_var_agegr_ema()")
-  derive_var_agegr_ema(
-    dataset = dataset,
-    age_var = !!enquo(age_var),
-    age_unit = age_unit,
-    new_var = !!enquo(new_var)
-  )
-}
 
 #' Derive Age Groups
 #'
@@ -262,6 +218,9 @@ derive_agegr_ema <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @param new_var New variable to be created.
 #'
+#' @family der_adsl
+#' @keywords der_adsl
+#'
 #' @return `dataset` with new column `new_var` of class factor.
 #'
 #' @author Ondrej Slama
@@ -279,7 +238,7 @@ NULL
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' admiral_dm %>%
@@ -324,6 +283,9 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 
 #' @rdname derive_var_agegr_fda
 #'
+#' @family der_adsl
+#' @keywords der_adsl
+#'
 #' @export
 #'
 #' @details
@@ -334,7 +296,7 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' admiral_dm %>%

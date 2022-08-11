@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with query variables derived.
 #'
-#' @keywords adae adcm derivation
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @seealso [create_query_data()] [assert_valid_queries()]
 #'
@@ -41,26 +42,28 @@
 #' adae <- tibble::tribble(
 #'   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
 #'   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-#'     3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+#'   3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
 #'   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-#'     5, "Basedow's disease", NA_character_, 1L,
+#'   5, "Basedow's disease", NA_character_, 1L,
 #'   "03", "2020-06-07 23:59:59", "SOME TERM",
-#'     2, "Some query", "Some term", NA_integer_,
+#'   2, "Some query", "Some term", NA_integer_,
 #'   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-#'     7, "Alveolar proteinosis", NA_character_,  NA_integer_
+#'   7, "Alveolar proteinosis", NA_character_, NA_integer_
 #' )
 #' derive_vars_query(adae, queries)
 derive_vars_query <- function(dataset, dataset_queries) {
-
   assert_data_frame(dataset_queries)
   assert_valid_queries(dataset_queries, queries_name = deparse(substitute(dataset_queries)))
-  assert_data_frame(dataset, required_vars = vars(!!!syms(unique(dataset_queries$TERM_LEVEL))),
-                    optional = FALSE)
+  assert_data_frame(dataset,
+    required_vars = vars(!!!syms(unique(dataset_queries$TERM_LEVEL))),
+    optional = FALSE
+  )
 
   # replace all "" by NA
   dataset_queries <- dataset_queries %>%
     dplyr::mutate_if(is.character, function(x) {
-      ifelse(x == "", NA_character_, x)})
+      ifelse(x == "", NA_character_, x)
+    })
 
   # names of new columns
   if ("QUERY_ID" %notin% names(dataset_queries)) {
@@ -74,33 +77,42 @@ derive_vars_query <- function(dataset, dataset_queries) {
   }
   new_col_names <- dataset_queries %>%
     group_by(VAR_PREFIX) %>%
-    mutate(NAM = paste0(VAR_PREFIX, "NAM"),
-           CD = ifelse(!all(is.na(QUERY_ID)),
-                       paste0(VAR_PREFIX, "CD"), NA_character_),
-           SC = ifelse(!all(is.na(QUERY_SCOPE)),
-                       paste0(VAR_PREFIX, "SC"), NA_character_),
-           SCN = ifelse(!all(is.na(QUERY_SCOPE_NUM)),
-                        paste0(VAR_PREFIX, "SCN"), NA_character_)) %>%
+    mutate(
+      NAM = paste0(VAR_PREFIX, "NAM"),
+      CD = ifelse(!all(is.na(QUERY_ID)),
+        paste0(VAR_PREFIX, "CD"), NA_character_
+      ),
+      SC = ifelse(!all(is.na(QUERY_SCOPE)),
+        paste0(VAR_PREFIX, "SC"), NA_character_
+      ),
+      SCN = ifelse(!all(is.na(QUERY_SCOPE_NUM)),
+        paste0(VAR_PREFIX, "SCN"), NA_character_
+      )
+    ) %>%
     ungroup() %>%
     select(NAM, CD, SC, SCN) %>%
     distinct() %>%
     pivot_longer(c(NAM, CD, SC, SCN), names_to = "key", values_to = "value") %>%
     filter(!is.na(value)) %>%
-    mutate(order1 = stringr::str_extract(value, "^[a-zA-Z]{2,3}"),
-           order2 = stringr::str_extract(value, "\\d{2}"),
-           order3 = as.integer(factor(key, levels = c("NAM", "CD", "SC", "SCN")))) %>%
+    mutate(
+      order1 = stringr::str_extract(value, "^[a-zA-Z]{2,3}"),
+      order2 = stringr::str_extract(value, "\\d{2}"),
+      order3 = as.integer(factor(key, levels = c("NAM", "CD", "SC", "SCN")))
+    ) %>%
     arrange(desc(order1), order2, order3) %>%
     pull(value)
 
   # queries restructured
   queries_wide <- dataset_queries %>%
-    mutate(TERM_NAME = toupper(.data$TERM_NAME),
-           VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")) %>%
+    mutate(
+      TERM_NAME = toupper(.data$TERM_NAME),
+      VAR_PREFIX_NAM = paste0(.data$VAR_PREFIX, "NAM")
+    ) %>%
     pivot_wider(names_from = .data$VAR_PREFIX_NAM, values_from = .data$QUERY_NAME) %>%
     mutate(VAR_PREFIX_CD = paste0(.data$VAR_PREFIX, "CD")) %>%
     pivot_wider(names_from = .data$VAR_PREFIX_CD, values_from = .data$QUERY_ID) %>%
     mutate(VAR_PREFIX_SC = paste0(.data$VAR_PREFIX, "SC")) %>%
-    pivot_wider(names_from = .data$VAR_PREFIX_SC, values_from = .data$QUERY_SCOPE)  %>%
+    pivot_wider(names_from = .data$VAR_PREFIX_SC, values_from = .data$QUERY_SCOPE) %>%
     mutate(VAR_PREFIX_SCN = paste0(.data$VAR_PREFIX, "SCN")) %>%
     pivot_wider(names_from = .data$VAR_PREFIX_SCN, values_from = .data$QUERY_SCOPE_NUM) %>%
     select(-VAR_PREFIX) %>%
@@ -124,7 +136,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
         colnames(dat_incorrect_type),
         " is of type ",
         vapply(dat_incorrect_type, typeof, character(1)),
-        collapse = ", "),
+        collapse = ", "
+      ),
       ", numeric or character is required"
     )
     abort(msg)
@@ -133,7 +146,9 @@ derive_vars_query <- function(dataset, dataset_queries) {
   # prepare input dataset for joining
   static_cols <- setdiff(names(dataset), unique(dataset_queries$TERM_LEVEL))
   # if dataset does not have a unique key, create a temp one
-  no_key <- dataset %>% select(!!!syms(static_cols)) %>% distinct()
+  no_key <- dataset %>%
+    select(!!!syms(static_cols)) %>%
+    distinct()
   if (nrow(no_key) != nrow(dataset)) {
     dataset$temp_key <- seq_len(nrow(dataset))
     static_cols <- c(static_cols, "temp_key")
@@ -158,7 +173,7 @@ derive_vars_query <- function(dataset, dataset_queries) {
     inner_join(queries_wide, by = c("TERM_LEVEL", "TERM_NAME_ID")) %>%
     select(!!!syms(c(static_cols, new_col_names))) %>%
     dplyr::group_by_at(static_cols) %>%
-    dplyr::summarise_all(~dplyr::first(na.omit(.))) %>%
+    dplyr::summarise_all(~ dplyr::first(na.omit(.))) %>%
     ungroup()
 
   # join queries to input dataset
@@ -186,7 +201,8 @@ derive_vars_query <- function(dataset, dataset_queries) {
 #'
 #' @author Shimeng Huang, Ondrej Slama
 #'
-#' @keywords assertion
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -235,21 +251,27 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal query name
   if (any(queries$QUERY_NAME == "") | any(is.na(queries$QUERY_NAME))) {
-    abort(paste0("`QUERY_NAME` in `", queries_name,
-                 "` cannot be empty string or NA."))
+    abort(paste0(
+      "`QUERY_NAME` in `", queries_name,
+      "` cannot be empty string or NA."
+    ))
   }
 
   # check query id is numeric
   if ("QUERY_ID" %in% names(queries) && !is.numeric(queries$QUERY_ID)) {
-    abort(paste0("`QUERY_ID` in `", queries_name,
-                 "` should be numeric."))
+    abort(paste0(
+      "`QUERY_ID` in `", queries_name,
+      "` should be numeric."
+    ))
   }
 
   # check illegal query scope
   if ("QUERY_SCOPE" %in% names(queries) &&
-      any(unique(queries$QUERY_SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
-    abort(paste0("`QUERY_SCOPE` in `", queries_name,
-                 "` can only be 'BROAD', 'NARROW' or `NA`."))
+    any(unique(queries$QUERY_SCOPE) %notin% c("BROAD", "NARROW", "", NA_character_))) {
+    abort(paste0(
+      "`QUERY_SCOPE` in `", queries_name,
+      "` can only be 'BROAD', 'NARROW' or `NA`."
+    ))
   }
 
   # check illegal query scope number
@@ -269,32 +291,40 @@ assert_valid_queries <- function(queries, queries_name) {
 
   # check illegal term name
   if (any(is.na(queries$TERM_NAME) & is.na(queries$TERM_ID)) |
-      any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
-    abort(paste0("Either `TERM_NAME` or `TERM_ID` need to be specified",
-                 " in `", queries_name, "`. ",
-                 "They both cannot be NA or empty."))
+    any(queries$TERM_NAME == "" & is.na(queries$TERM_ID))) {
+    abort(paste0(
+      "Either `TERM_NAME` or `TERM_ID` need to be specified",
+      " in `", queries_name, "`. ",
+      "They both cannot be NA or empty."
+    ))
   }
 
   # each VAR_PREFIX must have unique QUERY_NAME, QUERY_ID if the columns exist
   count_unique <- queries %>%
     group_by(VAR_PREFIX) %>%
-    dplyr::summarise(n_qnam = length(unique(QUERY_NAME)),
-                     n_qid = ifelse("QUERY_ID" %in% names(queries),
-                                    length(unique(QUERY_ID)), 0)) %>%
+    dplyr::summarise(
+      n_qnam = length(unique(QUERY_NAME)),
+      n_qid = ifelse("QUERY_ID" %in% names(queries),
+        length(unique(QUERY_ID)), 0
+      )
+    ) %>%
     ungroup()
 
   if (any(count_unique$n_qnam > 1)) {
     idx <- which(count_unique$n_qnam > 1)
-    abort(paste0("In `", queries_name, "`, `QUERY_NAME` of '",
-                 paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
-                 "' is not unique."))
+    abort(paste0(
+      "In `", queries_name, "`, `QUERY_NAME` of '",
+      paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
+      "' is not unique."
+    ))
   }
 
   if (any(count_unique$n_qid > 1)) {
     idx <- which(count_unique$n_qid > 1)
-    abort(paste0("In `", queries_name, "`, `QUERY_ID` of '",
-                 paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
-                 "' is not unique."))
+    abort(paste0(
+      "In `", queries_name, "`, `QUERY_ID` of '",
+      paste(count_unique$VAR_PREFIX[idx], collapse = ", "),
+      "' is not unique."
+    ))
   }
-
 }

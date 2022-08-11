@@ -13,7 +13,9 @@
 #' A data frame containing the input dataset with the corresponding date (`--DT`)
 #' variable(s) of all datetime variables (`--DTM`) specified in `source_vars.`
 #'
-#' @keywords adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
@@ -55,7 +57,7 @@ derive_vars_dtm_to_dt <- function(dataset, source_vars) {
   if (n_vars > 1L) {
     dataset %>%
       mutate_at(source_vars, .funs = list(new = lubridate::date)) %>%
-      rename_at(vars(ends_with("new")), .funs = ~str_replace(., "DTM_new", "DT"))
+      rename_at(vars(ends_with("new")), .funs = ~ str_replace(., "DTM_new", "DT"))
   } else {
     dataset %>%
       mutate(!!sym(dt_vars) := lubridate::date(!!sym(dtm_vars2)))

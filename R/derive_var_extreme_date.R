@@ -25,7 +25,7 @@
 #'
 #' @return The input dataset with the `LSTALVDT` variable added.
 #'
-#' @keywords derivation adsl
+#' @keywords deprecated
 #'
 #' @export
 derive_var_lstalvdt <- function(dataset,
@@ -98,7 +98,8 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @seealso [date_source()], [derive_var_extreme_dt()],
 #'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
@@ -108,7 +109,7 @@ derive_var_lstalvdt <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' data("admiral_lb")
@@ -327,7 +328,8 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @author Stefan Bundfuss, Thomas Neitmann
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @seealso [date_source()], [derive_var_extreme_dtm()],
 #'   [derive_vars_merged_dt()], [derive_vars_merged_dtm()],
@@ -337,7 +339,7 @@ derive_var_extreme_dtm <- function(dataset,
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_dm")
 #' data("admiral_ae")
 #' data("admiral_lb")
@@ -475,11 +477,10 @@ derive_var_extreme_dt <- function(dataset,
 #'   traceability variables, e.g. `vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR
 #'   = "AESTDTC")`. The values must be a symbol, a character string, or `NA`.
 #'
-#' @param dataset Deprecated, please use `dataset_name` instead.
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords source_specifications
+#' @keywords deprecated
 #'
 #' @export
 #'
@@ -488,12 +489,7 @@ lstalvdt_source <- function(dataset_name,
                             filter = NULL,
                             date,
                             date_imputation = NULL,
-                            traceability_vars = NULL,
-                            dataset = deprecated()) {
-  if (!missing(dataset)) {
-    deprecate_warn("0.6.0", "lstalvdt_source(dataset = )", "lstalvdt_source(dataset_name = )")
-    dataset_name <- deparse(substitute(dataset))
-  }
+                            traceability_vars = NULL) {
   deprecate_warn("0.7.0", "lstalvdt_source()", "date_source()")
 
   date_source(
@@ -537,6 +533,7 @@ lstalvdt_source <- function(dataset_name,
 #'
 #' @seealso [derive_var_extreme_dtm()], [derive_var_extreme_dt()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export

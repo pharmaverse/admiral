@@ -8,7 +8,8 @@
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' vars2chr(vars(USUBJID, AVAL))
@@ -34,7 +35,8 @@ vars2chr <- function(quosures) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' negate_vars(vars(USUBJID, STUDYID))
@@ -61,14 +63,16 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_vs)
 #'
-#' filter_if(admiral_vs, rlang::quo(NULL))
-#' filter_if(admiral_vs, rlang::quo(VSTESTCD == "Weight"))
+#' admiral::filter_if(admiral_vs, rlang::quo(NULL))
+#' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)
@@ -90,7 +94,8 @@ filter_if <- function(dataset, filter) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords utils_help
+#' @family utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -121,7 +126,8 @@ extract_unit <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_fmt
+#' @keywords utils_fmt
 #'
 #' @export
 #'
@@ -183,13 +189,14 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+#'   assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
 #' )
 #'
 #' get_one_to_many_dataset()
@@ -215,16 +222,43 @@ get_one_to_many_dataset <- function() {
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
+#'   assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
 #' )
 #'
 #' get_many_to_one_dataset()
 get_many_to_one_dataset <- function() {
   .datasets$many_to_one
+}
+
+#' Map `"Y"` and `"N"` to Numeric Values
+#'
+#' Map `"Y"` and `"N"` to numeric values.
+#'
+#' @param arg Character vector
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords user_utility
+#'
+#' @export
+#'
+#' @return `1` if `arg` equals `"Y"`, `0` if `arg` equals `"N"`, `NA_real_` otherwise
+#'
+#' @examples
+#'
+#' yn_to_numeric(c("Y", "N", NA_character_))
+yn_to_numeric <- function(arg) {
+  assert_character_vector(arg)
+  case_when(
+    arg == "Y" ~ 1,
+    arg == "N" ~ 0,
+    TRUE ~ NA_real_
+  )
 }

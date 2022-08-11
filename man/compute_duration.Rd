@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_duration.R
 \name{compute_duration}
 \alias{compute_duration}
-\title{Derive Duration}
+\title{Compute Duration}
 \usage{
 compute_duration(
   start_date,
@@ -19,14 +19,14 @@ compute_duration(
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{in_unit}{Input unit
@@ -57,7 +57,7 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 
 \item{add_one}{Add one input unit?
 
-If the duration is non-negative, one input unit is added. I.e., the
+If the duration is non-negative, one input unit is added. i.e., the
 duration can not be zero.
 
 Default: \code{TRUE}
@@ -77,14 +77,13 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 The duration between the two date in the specified unit
 }
 \description{
-Derives duration between two dates, e.g., duration of adverse events,
+Compute duration between two dates, e.g., duration of an adverse event,
 relative day, age, ...
 }
 \details{
-The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the
-duration is negative. Usually this computation function can not be used
-with \verb{\%>\%}.
+The output is a numeric vector providing the duration as time from
+start to end date in the specified unit. If the end date is before the start
+date, the duration is negative.
 }
 \examples{
 # derive duration in days (integer), i.e., relative day
@@ -110,9 +109,18 @@ compute_duration(
   add_one = FALSE
 )
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

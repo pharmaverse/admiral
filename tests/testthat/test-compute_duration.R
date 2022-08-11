@@ -1,9 +1,11 @@
 test_that("default duration, i.e., relative day", {
-  expect_equal(compute_duration(
-    ymd_hms("2020-12-06T15:00:00"),
-    ymd_hms("2020-12-24T08:15:00")
-  ),
-  19)
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T15:00:00"),
+      ymd_hms("2020-12-24T08:15:00")
+    ),
+    19
+  )
 })
 
 test_that("fractional duration", {

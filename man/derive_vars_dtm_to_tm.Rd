@@ -30,18 +30,18 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adcm <- tibble::tribble(
- ~USUBJID, ~TRTSDTM,               ~ASTDTM,               ~AENDTM,
- "PAT01",  "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
- "PAT01",  "",                    "2012-02-28 19:00:00", "",
- "PAT01",  "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56",
- "PAT01",  "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
- "PAT01",  "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
- ) \%>\%
- mutate(
-   TRTSDTM = as_datetime(TRTSDTM),
-   ASTDTM = as_datetime(ASTDTM),
-   AENDTM = as_datetime(AENDTM)
- )
+  ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
+  "PAT01", "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
+  "PAT01", "", "2012-02-28 19:00:00", "",
+  "PAT01", "2017-02-25 23:00:02", "2013-02-25 19:00:15", "2014-02-25 19:00:56",
+  "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00",
+  "PAT01", "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
+) \%>\%
+  mutate(
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM)
+  )
 
 adcm \%>\%
   derive_vars_dtm_to_tm(vars(TRTSDTM)) \%>\%
@@ -51,8 +51,20 @@ adcm \%>\%
   derive_vars_dtm_to_tm(vars(TRTSDTM, ASTDTM, AENDTM)) \%>\%
   select(USUBJID, starts_with("TRT"), starts_with("AS"), starts_with("AE"))
 }
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
+}
 \author{
 Teckla Akinyi
 }
-\keyword{adam}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

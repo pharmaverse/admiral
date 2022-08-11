@@ -22,7 +22,8 @@
 #'
 #' @return A HTML table
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -30,12 +31,14 @@
 #' library(admiral)
 #' library(DT)
 #' library(dplyr)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_dm")
 #'
 #' dataset_vignette(admiral_dm)
-#' dataset_vignette(admiral_dm, display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
-#' filter = ARMCD == "Pbo")
+#' dataset_vignette(admiral_dm,
+#'   display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
+#'   filter = ARMCD == "Pbo"
+#' )
 dataset_vignette <- function(dataset, display_vars = NULL, filter = NULL) {
   display_vars <- assert_vars(display_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = display_vars)

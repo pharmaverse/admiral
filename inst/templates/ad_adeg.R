@@ -6,14 +6,14 @@
 #
 # Input: adsl, eg
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
 
 # ---- Load source datasets ----
 
-# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
@@ -22,6 +22,11 @@ data("admiral_eg")
 
 adsl <- admiral_adsl
 eg <- admiral_eg
+
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
 
 eg <- convert_blanks_to_na(eg)
 
@@ -70,7 +75,7 @@ chgcat_lookup <- tibble::tribble(
 )
 
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`. Info then used for
+#  operates on vectors, which can be used in `mutate()`. Info then used for
 # lookup table
 format_avalca1n <- function(paramcd, aval) {
   case_when(
@@ -106,7 +111,7 @@ adeg <- eg %>%
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
-    flag_imputation = "time"
+    flag_imputation = "auto"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
 
@@ -122,7 +127,10 @@ adeg <- adeg %>%
     AVAL = EGSTRESN,
     AVALC = EGSTRESC
   ) %>%
-  # Derive new parameters based on existing records.
+  # Derive new parameters based on existing records. Note that, for the following
+  # four `derive_param_*()` functions, only the variables specified in `by_vars` will
+  # be populated in the newly created records.
+
   # Derive RRR
   derive_param_rr(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, EGTPT, EGTPTNUM, ADTM, ADY),

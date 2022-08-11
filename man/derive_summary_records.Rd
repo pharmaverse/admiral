@@ -73,21 +73,21 @@ adeg <- tibble::tribble(
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:45", 384, "Placebo",
-  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
-  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
-  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:45", 385, "Placebo",
-  "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
-  "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:45", 384, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:45", 385, "Placebo",
+  "XYZ-1001", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:50", 401, "Active 20mg",
-  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
-  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
-  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:50", 412, "Active 20mg",
-  "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
-  "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:50", 401, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:50", 412, "Active 20mg",
+  "XYZ-1002", 8, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 9, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
 )
 
 # Summarize the average of the triplicate ECG interval values (AVAL)
@@ -101,12 +101,12 @@ derive_summary_records(
 
 advs <- tibble::tribble(
   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
-  "XYZ-001-001", 1164, "Weight", 99,  "kg", "Screening", "2018-03-19",
-  "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In",    "2018-03-26",
-  "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline",  "2018-04-16",
-  "XYZ-001-001", 1167, "Weight", 94,  "kg", "Week 24",   "2018-09-30",
-  "XYZ-001-001", 1168, "Weight", 92,  "kg", "Week 48",   "2019-03-17",
-  "XYZ-001-001", 1169, "Weight", 95,  "kg", "Week 52",   "2019-04-14",
+  "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
+  "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
+  "XYZ-001-001", 1166, "Weight", 100, "kg", "Baseline", "2018-04-16",
+  "XYZ-001-001", 1167, "Weight", 94, "kg", "Week 24", "2018-09-30",
+  "XYZ-001-001", 1168, "Weight", 92, "kg", "Week 48", "2019-03-17",
+  "XYZ-001-001", 1169, "Weight", 95, "kg", "Week 52", "2019-04-14",
 )
 
 # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
@@ -131,17 +131,17 @@ adeg <- tibble::tribble(
   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
   "XYZ-1001", 3, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:56", 396, "",
-  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:48", 393, "Placebo",
-  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-08T09:51", 388, "Placebo",
-  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:48", 394, "Placebo",
-  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-22T10:51", 402, "Placebo",
+  "XYZ-1001", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:48", 393, "Placebo",
+  "XYZ-1001", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-08T09:51", 388, "Placebo",
+  "XYZ-1001", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:48", 394, "Placebo",
+  "XYZ-1001", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-22T10:51", 402, "Placebo",
   "XYZ-1002", 1, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 399, "",
   "XYZ-1002", 2, "QTcF Int. (msec)", "Baseline", "2016-02-22T07:58", 410, "",
   "XYZ-1002", 3, "QTcF Int. (msec)", "Baseline", "2016-02-22T08:01", 392, "",
-  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:53", 407, "Active 20mg",
-  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2",  "2016-03-06T09:56", 400, "Active 20mg",
-  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:53", 414, "Active 20mg",
-  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3",  "2016-03-24T10:56", 402, "Active 20mg",
+  "XYZ-1002", 4, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:53", 407, "Active 20mg",
+  "XYZ-1002", 5, "QTcF Int. (msec)", "Visit 2", "2016-03-06T09:56", 400, "Active 20mg",
+  "XYZ-1002", 6, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:53", 414, "Active 20mg",
+  "XYZ-1002", 7, "QTcF Int. (msec)", "Visit 3", "2016-03-24T10:56", 402, "Active 20mg",
 )
 
 # Compute the average of AVAL only if there are more than 2 records within the
@@ -155,8 +155,21 @@ derive_summary_records(
   set_values_to = vars(DTYPE = "AVERAGE")
 )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
+}
 \author{
 Vignesh Thanikachalam, Ondrej Slama
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with the character shift variable added
 #'
-#' @keywords adam bds adlb derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'
@@ -39,12 +40,12 @@
 #'
 #' data <- tibble::tribble(
 #'   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
-#'   "P01",    "ALB",     33,    "Y",    "LOW",   "LOW",
-#'   "P01",    "ALB",     38,    NA,     "LOW",   "NORMAL",
-#'   "P01",    "ALB",     NA,    NA,     "LOW",   NA,
-#'   "P02",    "ALB",     37,    "Y",    "NORMAL","NORMAL",
-#'   "P02",    "ALB",     49,    NA,     "NORMAL","HIGH",
-#'   "P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
+#'   "P01", "ALB", 33, "Y", "LOW", "LOW",
+#'   "P01", "ALB", 38, NA, "LOW", "NORMAL",
+#'   "P01", "ALB", NA, NA, "LOW", NA,
+#'   "P02", "ALB", 37, "Y", "NORMAL", "NORMAL",
+#'   "P02", "ALB", 49, NA, "NORMAL", "HIGH",
+#'   "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
 #' )
 #'
 #' data %>%
@@ -63,10 +64,10 @@
 #'     args = params(
 #'       new_var = SHIFT1,
 #'       from_var = BNRIND,
-#'       to_var = ANRIND),
+#'       to_var = ANRIND
+#'     ),
 #'     filter = is.na(ABLFL)
 #'   )
-#'
 derive_var_shift <- function(dataset,
                              new_var,
                              from_var,

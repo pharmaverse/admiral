@@ -12,7 +12,7 @@ derive_vars_last_dose(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  single_dose_condition = (EXDOSFRQ == "ONCE"),
+  single_dose_condition = EXDOSFRQ == "ONCE",
   new_vars = NULL,
   traceability_vars = NULL
 )
@@ -89,9 +89,9 @@ sorted by \code{dose_id} will be used to identify last dose.
 }
 
 This function only works correctly for EX dataset with a structure of single dose per row.
-If your study EX dataset has multiple doses per row, use \verb{expansion_function_name??} to
+If your study EX dataset has multiple doses per row, use \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}} to
 transform the EX dataset into single dose per row structure before calling
-\code{derive_vars_last_dose}.
+\code{derive_vars_last_dose()}.
 
 If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{dataset_ex},
 then join cannot be performed properly and an error is issued. To resolve the error, use
@@ -100,7 +100,7 @@ variables from \code{dataset_ex} (e.g. \code{new_vars = vars(LSTEXVIS = VISIT)})
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_ae)
 data(ex_single)
 
@@ -132,9 +132,23 @@ admiral_ae \%>\%
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
+\seealso{
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
+}
 \author{
 Ondrej Slama, Annie Yang
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{user_utility}
+\concept{der_gen}
+\keyword{der_gen}

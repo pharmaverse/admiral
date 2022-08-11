@@ -1,3 +1,4 @@
+.temp <- new.env(parent = emptyenv())
 #' Add New Variable(s) to the Input Dataset Based on Variables from Another
 #' Dataset
 #'
@@ -102,9 +103,9 @@
 #'
 #'   *Default*:
 #'
-#'   ```
+#'   ```{r echo=TRUE, eval=FALSE}
 #'   paste("Dataset `dataset_add` contains duplicate records with respect to",
-#'         enumerate(vars2chr(by_vars))
+#'         enumerate(vars2chr(by_vars)))
 #'   ```
 #'
 #' @return The output dataset contains all observations and variables of the
@@ -128,12 +129,13 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_vs")
 #' data("admiral_dm")
@@ -283,12 +285,14 @@ derive_vars_merged <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ex")
@@ -324,7 +328,7 @@ derive_vars_merged_dt <- function(dataset,
                                   mode = NULL,
                                   dtc,
                                   date_imputation = NULL,
-                                  flag_imputation = TRUE,
+                                  flag_imputation = "auto",
                                   min_dates = NULL,
                                   max_dates = NULL,
                                   preserve = FALSE,
@@ -406,12 +410,14 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ex")
@@ -536,12 +542,13 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_vs")
@@ -684,13 +691,14 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
 #'
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ae")
@@ -799,12 +807,13 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' library(dplyr, warn.conflicts = FALSE)
 #' data("admiral_dm")
 #' data("admiral_ds")
@@ -864,4 +873,124 @@ derive_var_merged_character <- function(dataset,
   ) %>%
     mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
     select(-temp_match_flag)
+}
+
+
+#' Merge Lookup Table with Source Dataset
+#'
+#' Merge user-defined lookup table with the input dataset. Optionally print a
+#' list of records from the input dataset that do not have corresponding
+#' mapping from the lookup table.
+#'
+#' @param dataset_add Lookup table
+#'
+#' The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param print_not_mapped Print a list of unique `by_vars` values that do not
+#' have corresponding records from the lookup table?
+#'
+#' *Default*: `TRUE`
+#'
+#' *Permitted Values*: `TRUE`, `FALSE`
+#'
+#' @inheritParams derive_vars_merged
+#'
+#'
+#' @return The output dataset contains all observations and variables of the
+#' input dataset, and add the variables specified in `new_vars` from the lookup
+#' table specified in `dataset_add`. Optionally prints a list of unique
+#' `by_vars` values that do not have corresponding records
+#' from the lookup table (by specifying `print_not_mapped = TRUE`).
+#'
+#' @author Annie Yang
+#'
+#' @keywords der_gen
+#' @family der_gen
+#'
+#' @export
+#'
+#' @examples
+#' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' data("admiral_vs")
+#' param_lookup <- tibble::tribble(
+#'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
+#'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
+#'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+#'   "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+#'   "TEMP", "Temperature", "TEMP", "Temperature (C)",
+#'   "MAP", "Mean Arterial Pressure", "MAP", "Mean Arterial Pressure (mmHg)",
+#'   "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
+#'   "BSA", "Body Surface Area", "BSA", "Body Surface Area(m^2)"
+#' )
+#' derive_vars_merged_lookup(
+#'   dataset = admiral_vs,
+#'   dataset_add = param_lookup,
+#'   by_vars = vars(VSTESTCD),
+#'   new_vars = vars(PARAMCD),
+#'   print_not_mapped = TRUE
+#' )
+derive_vars_merged_lookup <- function(dataset,
+                                      dataset_add,
+                                      by_vars,
+                                      order = NULL,
+                                      new_vars = NULL,
+                                      mode = NULL,
+                                      filter_add = NULL,
+                                      check_type = "warning",
+                                      duplicate_msg = NULL,
+                                      print_not_mapped = TRUE) {
+  assert_logical_scalar(print_not_mapped)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+
+  res <- derive_vars_merged(
+    dataset,
+    dataset_add,
+    by_vars = by_vars,
+    order = order,
+    new_vars = new_vars,
+    mode = mode,
+    filter_add = !!filter_add,
+    match_flag = temp_match_flag,
+    check_type = check_type,
+    duplicate_msg = duplicate_msg
+  )
+
+  if (print_not_mapped) {
+    temp_not_mapped <- res %>%
+      filter(is.na(temp_match_flag)) %>%
+      distinct(!!!by_vars)
+
+    if (nrow(temp_not_mapped) > 0) {
+      .temp$nmap <- structure(
+        temp_not_mapped,
+        class = union("nmap", class(temp_not_mapped)),
+        by_vars = vars2chr(by_vars)
+      )
+
+      message(
+        "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
+        paste0(capture.output(temp_not_mapped), collapse = "\n"),
+        "\nRun `get_not_mapped()` to access the full list"
+      )
+    } else if (nrow(temp_not_mapped) == 0) {
+      message(
+        "All ", enumerate(vars2chr(by_vars)), " are mapped."
+      )
+    }
+  }
+
+  res %>% select(-temp_match_flag)
+}
+
+#' Get list of records not mapped from the lookup table.
+#'
+#' @export
+#'
+#' @return A `data.frame` or `NULL`
+#'
+#' @keywords utils_help
+#' @family utils_help
+get_not_mapped <- function() {
+  .temp$nmap
 }

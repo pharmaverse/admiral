@@ -16,7 +16,7 @@ expected.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character vector to a date object.
 
 The default is \code{TRTSDT}.}
 
@@ -24,7 +24,7 @@ The default is \code{TRTSDT}.}
 
 A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character vector to a date object.
 
 The default is \code{AENDT}}
 }
@@ -44,10 +44,12 @@ The study day is derived as number of days from the start date
 to the end date. If it is nonnegative, one is added. I.e., the study day of the
 start date is 1.
 }
+\seealso{
+Other deprecated: 
+\code{\link{derive_derived_param}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
-\keyword{occds}
-\keyword{timing}
+\concept{deprecated}
+\keyword{deprecated}

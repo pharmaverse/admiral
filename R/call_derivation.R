@@ -17,7 +17,8 @@
 #' The input dataset with additional records/variables added depending on
 #' which `derivation` has been used.
 #'
-#' @keywords user_utility high_order_function
+#' @family high_order_function
+#' @keywords high_order_function
 #'
 #' @export
 #'
@@ -25,7 +26,7 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
 #'
@@ -102,6 +103,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @return An object of class `params`
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -110,7 +112,7 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
 #'

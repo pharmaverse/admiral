@@ -67,7 +67,7 @@ variable is merged to the input dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ae")
 data("admiral_lb")
@@ -168,9 +168,18 @@ admiral_dm \%>\%
 \code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}},
 \code{\link[=derive_vars_merged_dt]{derive_vars_merged_dt()}}, \code{\link[=derive_vars_merged_dtm]{derive_vars_merged_dtm()}},
 \code{\link[=derive_vars_merged]{derive_vars_merged()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_disposition_reason}()}
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }
-\keyword{adsl}
-\keyword{derivation}
+\concept{der_adsl}
+\keyword{der_adsl}

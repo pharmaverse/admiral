@@ -1,11 +1,11 @@
 #' Derive Duration
 #'
-#' Derives duration between two dates, e.g., duration of adverse events,
-#' relative day, age, ...
+#' Derives duration between two dates, specified by the variables present in
+#' input dataset e.g., duration of adverse events, relative day, age, ...
 #'
 #' @param dataset Input dataset
 #'
-#'   The columns specified by the `start_date` and the `end_date` parameter are
+#'   The variables specified by the `start_date` and the `end_date` parameter are
 #'   expected.
 #'
 #' @param new_var Name of variable to create
@@ -15,16 +15,18 @@
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time variable is expected. This variable must be present in
+#'   specified input dataset.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time variable is expected. This variable must be present in
+#'   specified input dataset.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param in_unit Input unit
@@ -69,23 +71,31 @@
 #'   Permitted Values: `TRUE`, `FALSE`
 #'
 #' @details The duration is derived as time from start to end date in the
-#'   specified output unit. If the end date is before the start date, the
-#'   duration is negative.
+#'   specified output unit. If the end date is before the start date, the duration
+#'   is negative. The start and end date variable must be present in the specified
+#'   input dataset.
 #'
 #' @author Stefan Bundfuss
 #'
 #' @return The input dataset with the duration and unit variable added
 #'
-#' @keywords adam timing derivation
+#' @family der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'
 #' @seealso [compute_duration()]
 #'
 #' @examples
-#' data <- tibble::tribble(
+#' library(lubridate)
+#' library(tibble)
+#'
+#' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
-#'   lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+#'   ymd("1984-09-06"), ymd("2020-02-24"),
+#'   ymd("1985-01-01"), NA,
+#'   NA, ymd("2021-03-10"),
+#'   NA, NA
 #' )
 #'
 #' derive_vars_duration(data,
@@ -140,7 +150,8 @@ derive_vars_duration <- function(dataset,
     )
 
   if (!quo_is_null(new_var_unit)) {
-    dataset <- dataset %>% mutate(!!new_var_unit := toupper(out_unit))
+    dataset <- dataset %>%
+      mutate(!!new_var_unit := if_else(is.na(!!new_var), NA_character_, toupper(out_unit)))
   }
 
   dataset

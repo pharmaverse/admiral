@@ -39,7 +39,8 @@ vignettes/*.pdf
 .Renviron
 
 # website documents
-docs
+/docs/*
+!/docs/pkgdown.yml
 doc
 Meta
 admiral.Rcheck/
@@ -48,3 +49,8 @@ admiral*.tgz
 
 # vscode
 .vscode
+
+# MacOS
+.DS_Store
+._.DS_Store
+

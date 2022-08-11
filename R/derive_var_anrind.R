@@ -19,13 +19,14 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords bds derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_vs)
 #'
 #' ref_ranges <- tibble::tribble(

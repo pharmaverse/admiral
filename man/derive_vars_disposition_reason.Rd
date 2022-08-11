@@ -62,8 +62,8 @@ the function must have at least one character vector argument, e.g.
 and \code{new_var} will be derived as \code{new_var = format_reason(reason_var)}.
 Typically, the content of the function would return \code{reason_var} or \code{NA} depending on the
 value (e.g. \code{if_else ( reason != "COMPLETED" & !is.na(reason), reason, NA_character_)}).
-\code{DCSREAS = format_reason(DSDECOD)} returns \code{DCSREAS = DSDECOD} when \code{DSDECOD} is not \code{'COMPLETED'}
-nor \code{NA}, \code{NA} otherwise.
+\code{DCSREAS = format_reason(DSDECOD)} returns \code{DCSREAS = DSDECOD}
+when \code{DSDECOD} is not \code{'COMPLETED'} nor \code{NA}, \code{NA} otherwise.
 \item If both the main reason and the details needs to be derived (\code{new_var_spe} is specified)
 the function must have two character vectors argument, e.g.
 \verb{format_reason2 <- function(reason, reason_spe)} and
@@ -71,7 +71,8 @@ the function must have two character vectors argument, e.g.
 \code{new_var_spe} will be derived as \code{new_var_spe = format_reason(reason_var, reason_var_spe)}.
 Typically, the content of the function would return \code{reason_var_spe} or \code{NA} depending on the
 \code{reason_var} value (e.g. \code{if_else ( reason == "OTHER", reason_spe, NA_character_)}).
-\code{DCSREASP = format_reason(DSDECOD, DSTERM)} returns \code{DCSREASP = DSTERM} when \code{DSDECOD} is equal to \code{'OTHER'}.
+\code{DCSREASP = format_reason(DSDECOD, DSTERM)} returns \code{DCSREASP = DSTERM} when
+\code{DSDECOD} is equal to \code{'OTHER'}.
 }
 
 Default: \code{format_reason_default}, see \code{\link[=format_reason_default]{format_reason_default()}} for details.}
@@ -107,7 +108,7 @@ The details associated with the reason for discontinuation are derived based on
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
 
@@ -143,8 +144,18 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=format_reason_default]{format_reason_default()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_aage}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
+\concept{der_adsl}
+\keyword{der_adsl}

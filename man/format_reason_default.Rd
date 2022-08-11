@@ -21,12 +21,13 @@ Define a function to map the disposition reason, to be used as a parameter in
 }
 \details{
 \code{format_reason_default(DSDECOD)} returns \code{DSDECOD} when \code{DSDECOD} is not \code{'COMPLETED'} nor \code{NA}.
-\cr\code{format_reason_default(DSDECOD, DSTERM)} returns \code{DSTERM} when \code{DSDECOD} is equal to \code{'OTHER'}.
+\cr\code{format_reason_default(DSDECOD, DSTERM)} returns \code{DSTERM} when \code{DSDECOD} is
+equal to \code{'OTHER'}.
 \cr Usually this function can not be used with \verb{\%>\%}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
 
@@ -43,10 +44,13 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=derive_vars_disposition_reason]{derive_vars_disposition_reason()}}
+
+Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
+\code{\link{format_eoxxstt_default}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
-\keyword{computation}
-\keyword{user_utility}
+\concept{utils_fmt}
+\keyword{utils_fmt}

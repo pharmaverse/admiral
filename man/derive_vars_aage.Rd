@@ -21,7 +21,8 @@ expected.}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character
+vector to a date object.
 
 Default: \code{BRTHDT}}
 
@@ -29,7 +30,8 @@ Default: \code{BRTHDT}}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date character vector to a date object.
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date character
+vector to a date object.
 
 Default: \code{RANDDT}}
 
@@ -61,7 +63,18 @@ derive_vars_aage(data)
 }
 \seealso{
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_disposition_reason}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{der_adsl}
+\keyword{der_adsl}

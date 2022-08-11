@@ -4,14 +4,14 @@
 #
 # Input: adsl, vs
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
 
 # ---- Load source datasets ----
 
-# Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
+# Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
 # For illustration purposes read in admiral test data
 
@@ -21,13 +21,12 @@ data("admiral_adsl")
 adsl <- admiral_adsl
 vs <- admiral_vs
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 vs <- convert_blanks_to_na(vs)
-
-# The CDISC Pilot Data contains no SUPPVS data
-# If you have a SUPPVS then uncomment function below
-
-# vs <- derive_vars_suppqual(vs, suppvs) %>%
-
 
 # ---- Lookup tables ----
 
@@ -65,7 +64,7 @@ avalcat_lookup <- tibble::tribble(
 # ---- User defined functions ----
 
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
+#  operates on vectors, which can be used in `mutate()`.
 format_avalcat1n <- function(param, aval) {
   case_when(
     param == "HEIGHT" & aval > 140 ~ 1,
@@ -89,7 +88,7 @@ advs <- vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = VSDTC,
-    flag_imputation = FALSE
+    flag_imputation = "none"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
@@ -105,7 +104,10 @@ advs <- advs %>%
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
-  # Derive new parameters based on existing records.
+  # Derive new parameters based on existing records. Note that, for the following
+  # three `derive_param_*()` functions, only the variables specified in `by_vars` will
+  # be populated in the newly created records.
+
   # Derive Mean Arterial Pressure
   derive_param_map(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
@@ -121,7 +123,7 @@ advs <- advs %>%
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
-  # Derive Body Surface Area
+  # Derive Body Mass Index
   derive_param_bmi(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI"),

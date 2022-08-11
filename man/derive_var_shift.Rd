@@ -50,12 +50,12 @@ library(dplyr, warn.conflicts = FALSE)
 
 data <- tibble::tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~ABLFL, ~BNRIND, ~ANRIND,
-  "P01",    "ALB",     33,    "Y",    "LOW",   "LOW",
-  "P01",    "ALB",     38,    NA,     "LOW",   "NORMAL",
-  "P01",    "ALB",     NA,    NA,     "LOW",   NA,
-  "P02",    "ALB",     37,    "Y",    "NORMAL","NORMAL",
-  "P02",    "ALB",     49,    NA,     "NORMAL","HIGH",
-  "P02",    "SODIUM",  147,   "Y",    "HIGH",  "HIGH"
+  "P01", "ALB", 33, "Y", "LOW", "LOW",
+  "P01", "ALB", 38, NA, "LOW", "NORMAL",
+  "P01", "ALB", NA, NA, "LOW", NA,
+  "P02", "ALB", 37, "Y", "NORMAL", "NORMAL",
+  "P02", "ALB", 49, NA, "NORMAL", "HIGH",
+  "P02", "SODIUM", 147, "Y", "HIGH", "HIGH"
 )
 
 data \%>\%
@@ -74,15 +74,26 @@ data \%>\%
     args = params(
       new_var = SHIFT1,
       from_var = BNRIND,
-      to_var = ANRIND),
+      to_var = ANRIND
+    ),
     filter = is.na(ABLFL)
   )
-
+}
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_summary_records}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()}
 }
 \author{
 Annie Yang
 }
-\keyword{adam}
-\keyword{adlb}
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

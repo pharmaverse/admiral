@@ -18,10 +18,11 @@
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -101,7 +102,8 @@ assert_data_frame <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(msg_type) {
@@ -191,7 +193,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(chr) {
@@ -251,7 +254,8 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(flag) {
@@ -298,10 +302,11 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -376,11 +381,12 @@ assert_expr <- function(arg, optional = FALSE) {
 #' Otherwise throws an informative error.
 #'
 #' @export
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -434,7 +440,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -498,7 +505,8 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -556,7 +564,8 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(num1, num2) {
@@ -614,7 +623,8 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(num) {
@@ -658,7 +668,8 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(obj) {
@@ -709,7 +720,8 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(list) {
@@ -805,10 +817,11 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' assert_has_variables(admiral_dm, "STUDYID")
@@ -856,7 +869,8 @@ assert_has_variables <- function(dataset, required_vars) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(fun) {
@@ -945,14 +959,20 @@ assert_function_param <- function(arg, params) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
-#' data(admiral_advs)
-#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
-#' \dontrun{
-#' assert_unit(admiral_advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU)
-#' }
+#' library(tibble)
+#' advs <- tribble(
+#'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+#'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+#'   "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+#' )
+#'
+#' assert_unit(advs, param = "WEIGHT", required_unit = "kg", get_unit_expr = VSSTRESU)
+#'
+#' try(assert_unit(advs, param = "WEIGHT", required_unit = "g", get_unit_expr = VSSTRESU))
 assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   assert_character_scalar(param)
@@ -1010,12 +1030,19 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
-#' data(admiral_advs)
-#' assert_param_does_not_exist(admiral_advs, param = "HR")
-#' try(assert_param_does_not_exist(admiral_advs, param = "WEIGHT"))
+#' library(tibble)
+#' advs <- tribble(
+#'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
+#'   "P01",    "WEIGHT",      80.1, "kg",      "WEIGHT",  80.1,
+#'   "P02",    "WEIGHT",      85.7, "kg",      "WEIGHT",  85.7
+#' )
+#'
+#' assert_param_does_not_exist(advs, param = "BMI")
+#' try(assert_param_does_not_exist(advs, param = "WEIGHT"))
 assert_param_does_not_exist <- function(dataset, param) {
   assert_data_frame(dataset, required_vars = vars(PARAMCD))
   if (param %in% unique(dataset$PARAMCD)) {
@@ -1030,56 +1057,6 @@ assert_param_does_not_exist <- function(dataset, param) {
     )
   }
   invisible(dataset)
-}
-
-#' Helper Function to Check IDVAR per QNAM
-#'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
-#'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
-#'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-      msg <- paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n"
-      )
-    )
-    inform(msg)
-  }
-}
-
-#' Helper Function to Check DOAMIN and RDOMAIN
-#'
-#' @param dataset A SDTM domain data set.
-#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
-#' @param domain Two letter domain value. Used when supplemental data set is
-#'   common across multiple SDTM domain.
-#'
-#' @noRd
-#'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
-#'
-#' @family suppqual
-assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
-  parent <- unique(parent$DOMAIN)
-  supp <- unique(supp$RDOMAIN)
-
-  if (!is.null(.domain)) {
-    if (!.domain %in% supp) {
-      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
-    }
-  }
-
-  if (!parent %in% supp) {
-    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
-  }
 }
 
 #' Is an Argument a Variable-Value List?
@@ -1102,7 +1079,8 @@ assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
 #' The function throws an error if `arg` is not a list of variable-value expressions.
 #' Otherwise, the input it returned invisibly.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1252,7 +1230,8 @@ assert_varval_list <- function(arg, # nolint
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1277,18 +1256,19 @@ assert_varval_list <- function(arg, # nolint
 #'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
-#'
+#' events <- list(death, lstalv)
 #' try(assert_list_element(
-#'   list = list(death, lstalv),
+#'   list = events,
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
 #' ))
 #'
+#' valid_datasets <- c("adrs", "adae")
 #' try(assert_list_element(
 #'   list = events,
 #'   element = "dataset_name",
-#'   condition = dataset_name %in% c("adrs", "adae"),
+#'   condition = dataset_name %in% valid_datasets,
 #'   valid_datasets = valid_datasets,
 #'   message_text = paste0(
 #'     "The dataset name must be one of the following:\n",
@@ -1344,14 +1324,15 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
 #' @examples
 #' data(admiral_adsl)
 #' try(
-#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#'   assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
 #' )
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)

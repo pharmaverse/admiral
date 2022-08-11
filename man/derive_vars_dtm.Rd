@@ -45,7 +45,7 @@ Otherwise, a character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
-\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
 
@@ -58,7 +58,7 @@ A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
-\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
+\item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
 Default is \code{"00:00:00"}.}
@@ -82,15 +82,17 @@ range of possible dates of the \code{dtc} value are considered. The possible dat
 are defined by the missing parts of the \code{dtc} date (see example below). This
 ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
-For example\preformatted{impute_dtc(
-  "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-   ),
-  date_imputation = "first"
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+"2020-11",
+min_dates = list(
+ ymd_hms("2020-12-06T12:12:12"),
+ ymd_hms("2020-11-11T11:11:11")
+),
+date_imputation = "first"
 )
-}
+}\if{html}{\out{</div>}}
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
@@ -154,8 +156,8 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "FIRST",
-  time_imputation = "FIRST"
+  date_imputation = "first",
+  time_imputation = "first"
 )
 
 # Impute AE end date to the last date and ensure that the imputed date is not
@@ -192,8 +194,8 @@ derive_vars_dtm(
   mhdt,
   new_vars_prefix = "AST",
   dtc = MHSTDTC,
-  date_imputation = "FIRST",
-  time_imputation = "FIRST",
+  date_imputation = "first",
+  time_imputation = "first",
   ignore_seconds_flag = TRUE
 )
 
@@ -209,9 +211,20 @@ derive_vars_dtm(
   preserve = TRUE
 )
 }
+\seealso{
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

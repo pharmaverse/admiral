@@ -1,0 +1,185 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - patch
+      - devel
+  pull_request:
+    branches:
+      - main
+      - patch
+      - devel
+
+name: Code Coverage ☂
+
+jobs:
+  coverage:
+    name: Test Coverage 🧪
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      coverage-percent: ${{ steps.set-coverage-percentage.outputs.coverage-percentage }}
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.6
+
+      - name: Setup Pandoc
+        uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Install system dependencies
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install dependencies
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+        shell: Rscript {0}
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Run coverage 👟
+        run: |
+          tryCatch(
+            expr = {
+                x <- covr::package_coverage(
+                  path=".",
+                  clean = FALSE,
+                  quiet = FALSE
+                )
+                print(x)
+                covr::to_cobertura(x, filename = "coverage.xml")
+                p <- round(covr::percent_coverage(x))
+                cat(p, file = "coverage.txt", sep = "")
+                covr::report(
+                    x,
+                    file = "coverage-report.html",
+                    browse = FALSE
+                )
+            },
+            error = function(e) {
+              message("Errors generated during coverage analysis:")
+              print(e)
+              error_file <- stringr::str_match(e, "\`(.*?)\`")[, 2]
+              if (file.exists(error_file)) {
+                cat("__________FULL OUTPUT__________")
+                writeLines(readLines(error_file))
+              }
+            },
+            warning = function(w) {
+                message("Warnings generated during coverage analysis:")
+                print(w)
+            }
+          )
+        shell: Rscript {0}
+
+      - name: Check whether coverage reports exists
+        id: check_coverage_reports
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "coverage.xml, coverage.txt, coverage-report.html"
+
+      - name: Set coverage percentage as output
+        id: set-coverage-percentage
+        run: echo "::set-output name=coverage-percentage::$(cat coverage.txt)"
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+
+      - name: Generate Coverage Summary Report
+        if: steps.check_coverage_reports.outputs.files_exists == 'true' && github.event_name == 'pull_request'
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          filename: coverage.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          hide_branch_rate: true
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Upload report for review
+        if: steps.check_coverage_reports.outputs.files_exists == 'true' && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: "coverage-report.html"
+
+      - name: Add Coverage PR Comment
+        if: steps.check_coverage_reports.outputs.files_exists == 'true' && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: code-coverage
+          path: code-coverage-results.md
+
+  badge:
+    name: Generate badge for coverage
+    needs: [coverage]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the badges branch in repo
+      uses: actions/checkout@v3
+      with:
+        ref: badges
+        path: badges
+    # Use the output from the `coverage` step
+    - name: Generate the badge SVG image
+      uses: emibcn/badge-action@v1
+      id: badge
+      with:
+        label: 'Test Coverage'
+        status: "${{ needs.coverage.outputs.coverage-percent }}%"
+        color: ${{
+          needs.coverage.outputs.coverage-percent > 90 && 'green'              ||
+          needs.coverage.outputs.coverage-percent > 80 && 'yellow,green'       ||
+          needs.coverage.outputs.coverage-percent > 70 && 'yellow'             ||
+          needs.coverage.outputs.coverage-percent > 60 && 'orange,yellow'      ||
+          needs.coverage.outputs.coverage-percent > 50 && 'orange'             ||
+          needs.coverage.outputs.coverage-percent > 40 && 'red,orange'         ||
+          needs.coverage.outputs.coverage-percent > 30 && 'red,red,orange'     ||
+          needs.coverage.outputs.coverage-percent > 20 && 'red,red,red,orange' ||
+          'red' }}
+        path: badges/test-coverage.svg
+
+    - name: Commit badge
+      working-directory: ./badges
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Actions"
+        BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+        mkdir -p "${BRANCH}"
+        mv test-coverage.svg "${BRANCH}"
+        git add "${BRANCH}/test-coverage.svg"
+        git commit -m "Add/Update badge" || true
+
+    - name: Push badges
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: badges
+        directory: badges

@@ -1,16 +1,14 @@
-# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
-# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-      - master
+      - patch
       - devel
   pull_request:
     branches:
       - main
-      - master
+      - patch
       - devel
 
 name: R-CMD-check
@@ -30,10 +28,11 @@ jobs:
           - {os: ubuntu-latest, r: 'release', repos: 'https://packagemanager.rstudio.com/cran/__linux__/focal/latest'}
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_REPOS: ${{ matrix.config.repos }}
+      GITHUB_REF_NAME: ${{ github.ref_name }}
       R_KEEP_PKG_SOURCE: true
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      R_REPOS: ${{ matrix.config.repos }}
 
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +67,13 @@ jobs:
         run: |
           options(repos = Sys.getenv("R_REPOS"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_github("pharmaverse/admiraltest@devel", dependencies = FALSE, upgrade = "never")
+          ref <- if (Sys.getenv("GITHUB_REF_NAME") %in% c("main", "patch")) "main" else "devel"
+          remotes::install_github(
+            "pharmaverse/admiral.test",
+            ref = ref,
+            dependencies = FALSE,
+            upgrade = "never"
+          )
         shell: Rscript {0}
 
       - name: Check

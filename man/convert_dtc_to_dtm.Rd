@@ -7,7 +7,7 @@
 convert_dtc_to_dtm(
   dtc,
   date_imputation = NULL,
-  time_imputation = NULL,
+  time_imputation = "00:00:00",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
@@ -30,7 +30,7 @@ Otherwise, a character value is expected, either as a
 \itemize{
 \item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
 of June,
-\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
 
@@ -43,7 +43,7 @@ A character value is expected, either as a
 \itemize{
 \item format with hour, min and sec specified as \code{"hh:mm:ss"}: e.g. \code{"00:00:00"}
 for the start of the day,
-\item or as a keyword: \code{"FIRST"},\code{"LAST"} to impute to the start/end of a day.
+\item or as a keyword: \code{"first"},\code{"last"} to impute to the start/end of a day.
 }
 
 Default is \code{"00:00:00"}.}
@@ -57,15 +57,17 @@ range of possible dates of the \code{dtc} value are considered. The possible dat
 are defined by the missing parts of the \code{dtc} date (see example below). This
 ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
-For example\preformatted{impute_dtc(
-  "2020-11",
-  min_dates = list(
-    ymd_hms("2020-12-06T12:12:12"),
-    ymd_hms("2020-11-11T11:11:11")
-   ),
-  date_imputation = "first"
+For example
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
+"2020-11",
+min_dates = list(
+ ymd_hms("2020-12-06T12:12:12"),
+ ymd_hms("2020-11-11T11:11:11")
+),
+date_imputation = "first"
 )
-}
+}\if{html}{\out{</div>}}
 
 returns \code{"2020-11-11T11:11:11"} because the possible dates for \code{"2020-11"}
 range from \code{"2020-11-01T00:00:00"} to \code{"2020-11-30T23:59:59"}. Therefore
@@ -102,8 +104,18 @@ convert_dtc_to_dtm("2019-07-18T15:25:00")
 convert_dtc_to_dtm("2019-07-18T00:00:00") # note Time = 00:00:00 is not printed
 convert_dtc_to_dtm("2019-07-18")
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

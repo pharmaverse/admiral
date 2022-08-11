@@ -20,6 +20,7 @@ test_that("default: no date imputation, time part set o 00:00:00, add DTF", {
   actual_output <- derive_vars_dt(
     date,
     new_vars_prefix = "AST",
+    flag_imputation = "date",
     dtc = XXSTDTC
   )
 
@@ -208,8 +209,8 @@ test_that("Partial date imputed to the last day/month, no DTF", {
     date,
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
-    date_imputation = "LAST",
-    flag_imputation = FALSE
+    flag_imputation = "none",
+    date_imputation = "LAST"
   )
 
   expect_dfs_equal(
@@ -234,7 +235,7 @@ test_that("Partial date imputed to the last day/month, no DTF and preserve=TRUE"
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     date_imputation = "LAST",
-    flag_imputation = FALSE,
+    flag_imputation = "none",
     preserve = TRUE
   )
 
@@ -260,7 +261,7 @@ test_that("Partial date imputed to the first day/month, no DTF and preserve=TRUE
     new_vars_prefix = "AST",
     dtc = XXSTDTC,
     date_imputation = "FIRST",
-    flag_imputation = FALSE,
+    flag_imputation = "none",
     preserve = TRUE
   )
 

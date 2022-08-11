@@ -112,9 +112,11 @@ with respect to the by variables and the order.
 
 If the uniqueness check fails, the specified message is displayed.
 
-\emph{Default}:\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
-      enumerate(vars2chr(by_vars))
-}}
+\emph{Default}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{paste("Dataset `dataset_add` contains duplicate records with respect to",
+      enumerate(vars2chr(by_vars)))
+}\if{html}{\out{</div>}}}
 }
 \value{
 The output dataset contains all observations and variables of the
@@ -142,7 +144,7 @@ observation in the input dataset are ignored.
 }
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")
@@ -169,8 +171,23 @@ derive_vars_merged(
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
 }
+\seealso{
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_transposed}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}

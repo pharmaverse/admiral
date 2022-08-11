@@ -16,7 +16,7 @@ expected.}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{TRTSDT}}
@@ -25,7 +25,7 @@ Default: \code{TRTSDT}}
 
 A date or date-time object is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{TRTEDT}}
@@ -50,10 +50,20 @@ derive_var_trtdurd(data)
 }
 \seealso{
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
+
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_duration}()},
+\code{\link{derive_vars_dy}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adsl}
-\keyword{derivation}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

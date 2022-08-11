@@ -1,5 +1,6 @@
 #' Pre-Defined Dose Frequencies
 #'
+#' @description
 #' These pre-defined dose frequencies are sourced from
 #' [CDISC](https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM%20Terminology.pdf). The
 #' number of rows to generate using `create_single_dose_dataset()` arguments
@@ -11,15 +12,15 @@
 #' traceability.
 #'
 #' `DOSE_COUNT` represents the number of doses received in one single unit of
-#' `DOSE_WINDOW`. For example, for `CDISC_VALUE=="10 DAYS PER MONTH`,
+#' `DOSE_WINDOW`. For example, for `CDISC_VALUE=="10 DAYS PER MONTH"`,
 #' `DOSE_WINDOW=="MONTH"` and `DOSE_COUNT==10`. Similarly, for
-#' `CDISC_VALUE=="EVERY 2 WEEKS`, `DOSE_WINDOW=="WEEK"` and
+#' `CDISC_VALUE=="EVERY 2 WEEKS"`, `DOSE_WINDOW=="WEEK"` and
 #' `DOSE_COUNT==0.5` (to yield one dose every two weeks).
 #'
 #' `CONVERSION_FACTOR` is used to convert `DOSE_WINDOW` units `"WEEK"`,
 #'  `"MONTH"`, and `"YEAR"` to the unit `"DAY"`.
 #'
-#' For example, for `CDISC_VALUE=="10 DAYS PER MONTH`, `CONVERSION_FACTOR`
+#' For example, for `CDISC_VALUE=="10 DAYS PER MONTH"`, `CONVERSION_FACTOR`
 #' is `0.0329`. One day of a month is assumed to be `1 / 30.4375` of a month (one
 #' day is assumed to be `1/365.25` of a year).
 #' Given only `start_date` and `end_date` in the aggregate dataset, `CONVERSION_FACTOR`
@@ -35,9 +36,10 @@
 #' @export
 #'
 #' @keywords metadata
+#' @family metadata
 #'
 #' @rdname dose_freq_lookup
-#'
+
 dose_freq_lookup <- tibble::tribble(
   ~NCI_CODE, ~CDISC_VALUE,
   "C64526", "1 TIME PER WEEK",
@@ -73,101 +75,105 @@ dose_freq_lookup <- tibble::tribble(
   "C103390", "EVERY 5 WEEKS",
   "C161334", "EVERY 5 YEARS",
   "C89788", "EVERY 6 WEEKS",
-  "C116149",  "EVERY 7 WEEKS",
-  "C103389",  "EVERY 8 WEEKS",
-  "C154484",  "EVERY AFTERNOON",
-  "C160957",  "EVERY EVENING",
-  "C67069",  "EVERY WEEK",
-  "C74924",  "PA",
-  "C64500",  "Q10H",
-  "C64501",  "Q11H",
-  "C64502",  "Q12H",
-  "C64503",  "Q13H",
-  "C64504",  "Q14H",
-  "C64505",  "Q15H",
-  "C64506",  "Q16H",
-  "C64507",  "Q17H",
-  "C64508",  "Q18H",
-  "C64509",  "Q19H",
-  "C64511",  "Q20H",
-  "C64512",  "Q21H",
-  "C64513",  "Q22H",
-  "C64514",  "Q23H",
-  "C64515",  "Q24H",
-  "C64516",  "Q2H",
-  "C64536",  "Q2M",
-  "C89791",  "Q36H",
-  "C64533",  "Q3D",
-  "C64517",  "Q3H",
-  "C64537",  "Q3M",
-  "C139183",  "Q45MIN",
-  "C89790",  "Q48H",
-  "C64534",  "Q4D",
-  "C64518",  "Q4H",
-  "C64538",  "Q4M",
-  "C71124",  "Q5D",
-  "C64519",  "Q5H",
-  "C161335",  "Q6D",
-  "C64520",  "Q6H",
-  "C89789",  "Q6M",
-  "C174288",  "Q72H",
-  "C139177",  "Q7D",
-  "C64521",  "Q7H",
-  "C64523",  "Q8H",
-  "C64524",  "Q9H",
-  "C64595",  "QAM",
-  "C25473",  "QD",
-  "C64510",  "QH",
-  "C64593",  "QHS",
-  "C64530",  "QID",
-  "C64498",  "QM",
-  "C139178",  "QN",
-  "C64525",  "QOD",
-  "C64525",  "Q2D",
-  "C64596",  "QPM",
-  "C64527",  "TID"
-  ) %>%
-mutate(DOSE_COUNT = case_when(
-    str_detect(CDISC_VALUE, "PER [WMY]") ~
+  "C116149", "EVERY 7 WEEKS",
+  "C103389", "EVERY 8 WEEKS",
+  "C154484", "EVERY AFTERNOON",
+  "C160957", "EVERY EVENING",
+  "C67069", "EVERY WEEK",
+  "C74924", "PA",
+  "C64500", "Q10H",
+  "C64501", "Q11H",
+  "C64502", "Q12H",
+  "C64503", "Q13H",
+  "C64504", "Q14H",
+  "C64505", "Q15H",
+  "C64506", "Q16H",
+  "C64507", "Q17H",
+  "C64508", "Q18H",
+  "C64509", "Q19H",
+  "C64511", "Q20H",
+  "C64512", "Q21H",
+  "C64513", "Q22H",
+  "C64514", "Q23H",
+  "C64515", "Q24H",
+  "C64516", "Q2H",
+  "C64536", "Q2M",
+  "C89791", "Q36H",
+  "C64533", "Q3D",
+  "C64517", "Q3H",
+  "C64537", "Q3M",
+  "C139183", "Q45MIN",
+  "C89790", "Q48H",
+  "C64534", "Q4D",
+  "C64518", "Q4H",
+  "C64538", "Q4M",
+  "C71124", "Q5D",
+  "C64519", "Q5H",
+  "C161335", "Q6D",
+  "C64520", "Q6H",
+  "C89789", "Q6M",
+  "C174288", "Q72H",
+  "C139177", "Q7D",
+  "C64521", "Q7H",
+  "C64523", "Q8H",
+  "C64524", "Q9H",
+  "C64595", "QAM",
+  "C25473", "QD",
+  "C64510", "QH",
+  "C64593", "QHS",
+  "C64530", "QID",
+  "C64498", "QM",
+  "C139178", "QN",
+  "C64525", "QOD",
+  "C64525", "Q2D",
+  "C64596", "QPM",
+  "C64527", "TID"
+) %>%
+  mutate(
+    DOSE_COUNT = case_when(
+      str_detect(CDISC_VALUE, "PER [WMY]") ~
       as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
-    str_detect(CDISC_VALUE, "PER [D]") ~
+      str_detect(CDISC_VALUE, "PER [D]") ~
       24 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
-    str_detect(CDISC_VALUE, "^Q\\d{1,2}(H|MIN)") ~
+      str_detect(CDISC_VALUE, "^Q\\d{1,2}(H|MIN)") ~
       1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
-    str_detect(CDISC_VALUE, "^(Q|EVERY)\\s?\\d{1,2}") ~
+      str_detect(CDISC_VALUE, "^(Q|EVERY)\\s?\\d{1,2}") ~
       1 / as.numeric(str_remove_all(CDISC_VALUE, "[\\D]")),
-    str_detect(CDISC_VALUE, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
-    str_detect(CDISC_VALUE, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
-    str_detect(CDISC_VALUE, "^QH$") ~ 1,
-    str_detect(CDISC_VALUE, "BI[DM]") ~ 2,
-    str_detect(CDISC_VALUE, "TID") ~ 3,
-    str_detect(CDISC_VALUE, "QID") ~ 4,
-    str_detect(CDISC_VALUE, "QOD") ~ 0.5,
+      str_detect(CDISC_VALUE, "^EVERY (A|E|W)[:alpha:]+") ~ 1,
+      str_detect(CDISC_VALUE, "^Q(AM|PM|M|N|D|HS)|^PA$") ~ 1,
+      str_detect(CDISC_VALUE, "^QH$") ~ 1,
+      str_detect(CDISC_VALUE, "BI[DM]") ~ 2,
+      str_detect(CDISC_VALUE, "TID") ~ 3,
+      str_detect(CDISC_VALUE, "QID") ~ 4,
+      str_detect(CDISC_VALUE, "QOD") ~ 0.5,
     ),
-  DOSE_WINDOW = case_when(
-    str_detect(CDISC_VALUE, "EVERY \\d{1,2}|PER [WMY]") ~
+    DOSE_WINDOW = case_when(
+      str_detect(CDISC_VALUE, "EVERY \\d{1,2}|PER [WMY]") ~
       str_remove_all(sub(".* (\\w+)$", "\\1", CDISC_VALUE), "S"),
-    str_detect(CDISC_VALUE, "^Q\\d{1,2}D$") ~ "DAY",
-    str_detect(CDISC_VALUE, "^Q\\d{1,2}M$") ~ "MONTH",
-    str_detect(CDISC_VALUE, "^Q\\d{0,2}H$|PER D") ~ "HOUR",
-    str_detect(CDISC_VALUE, "^Q\\d{1,2}MIN$") ~ "MINUTE",
-    CDISC_VALUE %in% c("EVERY AFTERNOON", "EVERY EVENING") ~ "DAY",
-    CDISC_VALUE %in% c("EVERY WEEK") ~ "WEEK",
-    CDISC_VALUE %in% c("BID", "TID", "QAM", "QPM", "QHS",
-                                "QD", "QN", "QID", "QOD") ~ "DAY",
-    CDISC_VALUE %in% c("QM", "BIM") ~ "MONTH",
-    CDISC_VALUE == "PA" ~ "YEAR",
-  )) %>%
-mutate(
-  CONVERSION_FACTOR = case_when(
-    DOSE_WINDOW == "MINUTE" ~ 1,
-    DOSE_WINDOW == "HOUR" ~ 1,
-    DOSE_WINDOW == "DAY" ~ 1,
-    DOSE_WINDOW == "WEEK" ~ (1 / 7),
-    DOSE_WINDOW == "MONTH" ~ (1 / 30.4375),
-    DOSE_WINDOW == "YEAR" ~ (1 / 365.25),
+      str_detect(CDISC_VALUE, "^Q\\d{1,2}D$") ~ "DAY",
+      str_detect(CDISC_VALUE, "^Q\\d{1,2}M$") ~ "MONTH",
+      str_detect(CDISC_VALUE, "^Q\\d{0,2}H$|PER D") ~ "HOUR",
+      str_detect(CDISC_VALUE, "^Q\\d{1,2}MIN$") ~ "MINUTE",
+      CDISC_VALUE %in% c("EVERY AFTERNOON", "EVERY EVENING") ~ "DAY",
+      CDISC_VALUE %in% c("EVERY WEEK") ~ "WEEK",
+      CDISC_VALUE %in% c(
+        "BID", "TID", "QAM", "QPM", "QHS",
+        "QD", "QN", "QID", "QOD"
+      ) ~ "DAY",
+      CDISC_VALUE %in% c("QM", "BIM") ~ "MONTH",
+      CDISC_VALUE == "PA" ~ "YEAR",
+    )
+  ) %>%
+  mutate(
+    CONVERSION_FACTOR = case_when(
+      DOSE_WINDOW == "MINUTE" ~ 1,
+      DOSE_WINDOW == "HOUR" ~ 1,
+      DOSE_WINDOW == "DAY" ~ 1,
+      DOSE_WINDOW == "WEEK" ~ (1 / 7),
+      DOSE_WINDOW == "MONTH" ~ (1 / 30.4375),
+      DOSE_WINDOW == "YEAR" ~ (1 / 365.25),
+    )
   )
-)
 
 #' Create dataset of single doses
 #'
@@ -190,18 +196,18 @@ mutate(
 #'
 #' @param start_date The start date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `ASTDT`
 #'
 #' @param end_date The end date
 #'
-#'   A date or date-time object is expected.
+#'   A date or date-time object is expected. This object cannot contain `NA` values.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `AENDT`
@@ -235,7 +241,8 @@ mutate(
 #'
 #' @author Michael Thorpe, Andrew Smith
 #'
-#' @keywords adae adex user_utility
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @return The input dataset with a single dose per row.
 #'
@@ -258,7 +265,7 @@ mutate(
 #' # Example with custom lookup
 #'
 #' custom_lookup <- tibble::tribble(
-#'   ~Value,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+#'   ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
 #'   "Q30MIN", (1 / 30), "MINUTE", 1,
 #'   "Q90MIN", (1 / 90), "MINUTE", 1
 #' )
@@ -270,18 +277,17 @@ mutate(
 #' )
 #'
 #' create_single_dose_dataset(data,
-#'                            lookup_table = custom_lookup,
-#'                            lookup_column = Value,
-#'                            start_date = ASTDTM,
-#'                            end_date = AENDTM)
-
+#'   lookup_table = custom_lookup,
+#'   lookup_column = Value,
+#'   start_date = ASTDTM,
+#'   end_date = AENDTM
+#' )
 create_single_dose_dataset <- function(dataset,
                                        dose_freq = EXDOSFRQ,
                                        start_date = ASTDT,
                                        end_date = AENDT,
                                        lookup_table = dose_freq_lookup,
                                        lookup_column = CDISC_VALUE) {
-
   col_names <- colnames(dataset)
   dose_freq <- assert_symbol(enquo(dose_freq))
   lookup_column <- assert_symbol(enquo(lookup_column))
@@ -295,6 +301,23 @@ create_single_dose_dataset <- function(dataset,
   lookup <- lookup_table %>%
     rename(!!dose_freq := !!lookup_column)
 
+  # Check that NAs do not appear in start_date or end_date columns
+  na_check <- dataset %>%
+    filter(is.na(!!start_date) | is.na(!!end_date)) %>%
+    select(!!start_date, !!end_date)
+
+  if (nrow(na_check) > 0) {
+    na_columns <- paste0(colnames(na_check)[colSums(is.na(na_check)) > 0], collapse = ", ")
+    err_msg <- paste0(
+      "The arguments start_date and end_date cannot contain `NA` values.\n",
+      sprintf(
+        "Please check %s for `NA` values.",
+        na_columns
+      )
+    )
+    abort(err_msg)
+  }
+
   # Check values of lookup vs. data and return error if values are not covered
 
   value_check <- dataset %>%
@@ -306,11 +329,13 @@ create_single_dose_dataset <- function(dataset,
     values_not_found <- paste0(value_check %>% select(!!dose_freq), collapse = ", ")
 
     err_msg <- paste0(
-      sprintf("The following values of %s in %s do not appear in %s:\n",
-              as.character(quo_get_expr(dose_freq)),
-              arg_name(substitute(dataset)),
-              arg_name(substitute(lookup_table))
-              ), values_not_found)
+      sprintf(
+        "The following values of %s in %s do not appear in %s:\n",
+        as.character(quo_get_expr(dose_freq)),
+        arg_name(substitute(dataset)),
+        arg_name(substitute(lookup_table))
+      ), values_not_found
+    )
     abort(err_msg)
   }
 
@@ -325,31 +350,33 @@ create_single_dose_dataset <- function(dataset,
   dataset_part_2 <- dataset_part_2 %>%
     left_join(lookup, by = as.character(quo_get_expr(dose_freq))) %>%
     mutate(dose_periods = case_when(
-        DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_date, !!end_date, out_unit = "minutes"),
-        DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_date, !!end_date, out_unit = "hours"),
-        DOSE_WINDOW == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
-        DOSE_WINDOW == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
-        DOSE_WINDOW == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
-        DOSE_WINDOW == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
-    )
-      ) %>%
+      DOSE_WINDOW == "MINUTE" ~ compute_duration(!!start_date, !!end_date, out_unit = "minutes"),
+      DOSE_WINDOW == "HOUR" ~ compute_duration(!!start_date, !!end_date, out_unit = "hours"),
+      DOSE_WINDOW == "DAY" ~ compute_duration(!!start_date, !!end_date, out_unit = "days"),
+      DOSE_WINDOW == "WEEK" ~ compute_duration(!!start_date, !!end_date, out_unit = "weeks"),
+      DOSE_WINDOW == "MONTH" ~ compute_duration(!!start_date, !!end_date, out_unit = "months"),
+      DOSE_WINDOW == "YEAR" ~ compute_duration(!!start_date, !!end_date, out_unit = "years")
+    )) %>%
     mutate(dose_count = ceiling(dose_periods * DOSE_COUNT)) %>%
     derive_var_obs_number(new_var = grpseq)
 
   # Flag to determine if date or datetime must be returned
 
   time_flag <- nrow(dataset_part_2 %>%
-                       filter(DOSE_WINDOW %in% c("MINUTE", "HOUR"))) > 0
+    filter(DOSE_WINDOW %in% c("MINUTE", "HOUR"))) > 0
 
 
   if (time_flag &
-      (is.Date(eval_tidy(start_date, dataset)) | is.Date(eval_tidy(end_date, dataset)))) {
+    (is.Date(eval_tidy(start_date, dataset)) | is.Date(eval_tidy(end_date, dataset)))) {
     err_msg <- paste0(
-      sprintf("%s involves hours or minutes but one of %s or %s is a date variable. ",
-              as.character(quo_get_expr(dose_freq)),
-              as.character(quo_get_expr(start_date)),
-              as.character(quo_get_expr(end_date))),
-      "\nPlease provide datetime variables for start_date and end_date arguments.")
+      sprintf(
+        "%s involves hours or minutes but one of %s or %s is a date variable. ",
+        as.character(quo_get_expr(dose_freq)),
+        as.character(quo_get_expr(start_date)),
+        as.character(quo_get_expr(end_date))
+      ),
+      "\nPlease provide datetime variables for start_date and end_date arguments."
+    )
     abort(err_msg)
   }
 
@@ -367,23 +394,24 @@ create_single_dose_dataset <- function(dataset,
       DOSE_WINDOW == "MINUTE" ~ minutes(floor(time_increment)),
       DOSE_WINDOW == "HOUR" ~ hours(floor(time_increment)),
       DOSE_WINDOW %in% c("DAY", "WEEK", "MONTH", "YEAR") ~
-        days(floor(time_increment / CONVERSION_FACTOR))
-           )
-    )
+      days(floor(time_increment / CONVERSION_FACTOR))
+    ))
 
   # Adjust start_date and end_date, drop calculation columns, make sure nothing
   # later than end_date shows up in output
 
   dataset_part_2 <- dataset_part_2 %>%
-    mutate(!!dose_freq := "ONCE",
-    !!start_date := !!start_date + time_differential)
+    mutate(
+      !!dose_freq := "ONCE",
+      !!start_date := !!start_date + time_differential
+    )
 
   dataset_part_2 <- dataset_part_2 %>%
     filter(!(!!start_date > !!end_date)) %>%
     mutate(!!end_date := !!start_date) %>%
     select(!!!vars(all_of(col_names)))
 
-  #Stitch back together
+  # Stitch back together
 
   dataset <- bind_rows(dataset_part_1, dataset_part_2)
 

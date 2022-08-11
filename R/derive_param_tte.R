@@ -38,16 +38,6 @@
 #'   If the specified variable is imputed, the corresponding date imputation
 #'   flag must specified for `start_imputation_flag`.
 #'
-#' @param start_date_imputation_flag Date imputation flag for start date
-#'
-#'   If the start date is imputed, the corresponding date imputation flag must
-#'   be specified. The variable `STARTDTF` is set to the specified variable.
-#'
-#' @param start_time_imputation_flag Time imputation flag for start date
-#'
-#'   If the start time is imputed, the corresponding time imputation flag must
-#'   be specified. The variable `STARTTMF` is set to the specified variable.
-#'
 #' @param event_conditions Sources and conditions defining events
 #'
 #'   A list of `event_source()` objects is expected.
@@ -137,7 +127,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation bds
+#' @family der_prm_tte
+#' @keywords der_prm_tte
 #'
 #' @export
 #'
@@ -239,8 +230,6 @@ derive_param_tte <- function(dataset = NULL,
                              source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
-                             start_date_imputation_flag = NULL,
-                             start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
                              create_datetime = FALSE,
@@ -250,22 +239,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
-  start_date_imputation_flag <- assert_symbol(
-    enquo(start_date_imputation_flag),
-    optional = TRUE
-  )
-  start_time_imputation_flag <- assert_symbol(
-    enquo(start_time_imputation_flag),
-    optional = TRUE
-  )
-  assert_data_frame(
-    dataset_adsl,
-    required_vars = quo_c(
-      start_date,
-      start_date_imputation_flag,
-      start_time_imputation_flag
-    )
-  )
+  assert_data_frame(dataset_adsl, required_vars = vars(!!start_date))
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -301,11 +275,10 @@ derive_param_tte <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   }
   if (!is.null(by_vars)) {
-    source_datasets <-
-      extend_source_datasets(
-        source_datasets = source_datasets,
-        by_vars = by_vars
-      )
+    source_datasets <- extend_source_datasets(
+      source_datasets = source_datasets,
+      by_vars = by_vars
+    )
   }
 
   tmp_event <- get_new_tmp_var(dataset)
@@ -343,18 +316,25 @@ derive_param_tte <- function(dataset = NULL,
     !!!subject_keys,
     !!start_var := !!start_date
   )
-  if (!quo_is_null(start_date_imputation_flag)) {
+
+  start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
+  if (start_date_imputation_flag %in% colnames(dataset_adsl) &
+    as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTDTF = !!start_date_imputation_flag
+      STARTDTF = !!sym(start_date_imputation_flag)
     )
   }
-  if (!quo_is_null(start_time_imputation_flag)) {
+
+  start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
+  if (start_time_imputation_flag %in% colnames(dataset_adsl) &
+    as_name(start_date) != start_time_imputation_flag) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTTMF = !!start_time_imputation_flag
+      STARTTMF = !!sym(start_time_imputation_flag)
     )
   }
+
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
@@ -469,7 +449,8 @@ derive_param_tte <- function(dataset = NULL,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -615,7 +596,8 @@ filter_date_sources <- function(sources,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
@@ -714,7 +696,7 @@ extend_source_datasets <- function(source_datasets,
 #'   a datetime, or a character variable containing ISO 8601 dates can be
 #'   specified. An unquoted symbol is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param censor Censoring value
@@ -729,7 +711,8 @@ extend_source_datasets <- function(source_datasets,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()], [event_source()]
 #'
@@ -762,6 +745,7 @@ tte_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [censor_source()]
@@ -806,6 +790,7 @@ event_source <- function(dataset_name,
 #'
 #' @author Stefan Bundfuss
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @seealso [derive_param_tte()], [event_source()]
@@ -848,6 +833,11 @@ censor_source <- function(dataset_name,
 #'
 #' @return No return value, called for side effects
 #'
+#' @author Thomas Neitmann
+#'
+#' @keywords internal
+#' @family internal
+#'
 #' @export
 #'
 #' @seealso [tte_source()], [censor_source()], [event_source()]
@@ -867,16 +857,44 @@ print.tte_source <- function(x, ...) {
   }
 }
 
-list_tte_source_objects <- function() {
-  # Get all tte_source objects exported by admiral
-  exported <- getNamespaceExports("admiral")
-  objects <-
-    exported[map_lgl(exported, function(obj_name) {
-      inherits(get(obj_name), "tte_source")
-    })]
 
-  rows <- lapply(objects, function(obj_name) {
-    obj <- get(obj_name)
+#' List all `tte_source` Objects Available in a Package
+#'
+#' @param package The name of the package in which to search for `tte_source` objects
+#'
+#' @return
+#' A `data.frame` where each row corresponds to one `tte_source` object or `NULL`
+#' if `package` does not contain any `tte_source` objects
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @family source_specifications
+#' @keywords source_specifications
+#'
+#' @examples
+#' list_tte_source_objects()
+list_tte_source_objects <- function(package = "admiral") {
+  assert_character_scalar(package)
+
+  if (!requireNamespace(package, quietly = TRUE)) {
+    err_msg <- sprintf(
+      "No package called '%s' is installed and hence no `tte_source` objects are available",
+      package
+    )
+    abort(err_msg)
+  }
+
+  # Get all `tte_source` objects exported by `package`
+  exports <- getNamespaceExports(package)
+  is_tte_source <- map_lgl(exports, function(obj_name) {
+    inherits(getExportedValue(package, obj_name), "tte_source")
+  })
+  tte_sources <- exports[is_tte_source]
+
+  rows <- lapply(tte_sources, function(obj_name) {
+    obj <- getExportedValue(package, obj_name)
     data.frame(
       object = obj_name,
       dataset_name = obj$dataset_name,

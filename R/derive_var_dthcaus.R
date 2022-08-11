@@ -23,7 +23,8 @@
 #' equivalent, the first source will be kept, so the user should provide the inputs in
 #' the preferred order.
 #'
-#' @keywords derivation adsl
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann
@@ -238,11 +239,11 @@ derive_var_dthcaus <- function(dataset,
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
-#' @param dataset Deprecated, please use `dataset_name` instead.
 #'
 #' @author Shimeng Huang
 #'
 #' @keywords source_specifications
+#' @family source_specifications
 #'
 #' @seealso [derive_var_dthcaus()]
 #'
@@ -254,13 +255,7 @@ dthcaus_source <- function(dataset_name,
                            date,
                            mode = "first",
                            dthcaus,
-                           traceability_vars = NULL,
-                           dataset = deprecated()) {
-  if (!missing(dataset)) {
-    deprecate_warn("0.6.0", "dthcaus_source(dataset = )", "dthcaus_source(dataset_name = )")
-    dataset_name <- deparse(substitute(dataset))
-  }
-
+                           traceability_vars = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),

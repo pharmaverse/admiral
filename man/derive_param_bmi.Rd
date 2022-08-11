@@ -27,7 +27,8 @@ parameter) and to the parameters specified by \code{weight_code} and \code{heigh
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -68,7 +69,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for BMI/Body Mass Index using Weight and Height each by group
@@ -91,7 +93,7 @@ advs <- tibble::tribble(
   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
 )
 
-derive_param_bmi (
+derive_param_bmi(
   advs,
   by_vars = vars(USUBJID, AVISIT),
   weight_code = "WEIGHT",
@@ -101,10 +103,23 @@ derive_param_bmi (
     PARAM = "Body Mass Index (kg/m^2)"
   ),
   get_unit_expr = extract_unit(PARAM)
- )
+)
+}
+\seealso{
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_wbc_abs}()}
 }
 \author{
 Pavan Kumar
 }
-\keyword{advs}
-\keyword{derivation}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}

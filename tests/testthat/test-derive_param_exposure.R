@@ -61,7 +61,7 @@ test_that("new observations are derived correctly for AVAL", {
       input_code = "DOSE",
       analysis_var = AVAL,
       summary_fun = function(x) sum(x, na.rm = TRUE),
-       set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
+      set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
     ) %>%
     derive_param_exposure(
       by_vars = vars(USUBJID),
@@ -108,8 +108,10 @@ test_that("Errors", {
         summary_fun = function(x) mean(x, na.rm = TRUE),
         set_values_to = vars(PARAMCD = "TDOSE", PARCAT1 = "OVERALL")
       ),
-    regexp = paste("`input_code` contains invalid values:\n`DOSED`\nValid",
-                    "values:\n`DOSE` and `ADJ`")
+    regexp = paste(
+      "`input_code` contains invalid values:\n`DOSED`\nValid",
+      "values:\n`DOSE` and `ADJ`"
+    )
   )
 
   # ASTDTM/AENDTM or ASTDT/AENDT must be present

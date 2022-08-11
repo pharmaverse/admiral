@@ -55,13 +55,14 @@
 #'
 #' @author Ondrej Slama
 #'
-#' @keywords adae derivation
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(ex_single)
 #'

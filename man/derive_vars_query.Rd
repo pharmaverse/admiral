@@ -45,22 +45,28 @@ data("queries")
 adae <- tibble::tribble(
   ~USUBJID, ~ASTDTM, ~AETERM, ~AESEQ, ~AEDECOD, ~AELLT, ~AELLTCD,
   "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",
-    3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
+  3, "Alanine aminotransferase abnormal", NA_character_, NA_integer_,
   "02", "2020-06-05 23:59:59", "BASEDOW'S DISEASE",
-    5, "Basedow's disease", NA_character_, 1L,
+  5, "Basedow's disease", NA_character_, 1L,
   "03", "2020-06-07 23:59:59", "SOME TERM",
-    2, "Some query", "Some term", NA_integer_,
+  2, "Some query", "Some term", NA_integer_,
   "05", "2020-06-09 23:59:59", "ALVEOLAR PROTEINOSIS",
-    7, "Alveolar proteinosis", NA_character_,  NA_integer_
+  7, "Alveolar proteinosis", NA_character_, NA_integer_
 )
 derive_vars_query(adae, queries)
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
+
+OCCDS Functions: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_last_dose}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{get_terms_from_db}()}
 }
 \author{
 Ondrej Slama, Shimeng Huang
 }
-\keyword{adae}
-\keyword{adcm}
-\keyword{derivation}
+\concept{der_occds}
+\keyword{der_occds}

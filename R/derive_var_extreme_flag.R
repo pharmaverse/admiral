@@ -1,190 +1,5 @@
 #' Add a Variable Flagging the First or Last Observation Within Each By Group
 #'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' *Deprecated*, please use `derive_var_extreme_flag()` instead.
-#'
-#' Add a variable flagging the first or last observation within each by group
-#'
-#' @param dataset Input dataset
-#'
-#'   The variables specified by the `by_vars` parameter are expected.
-#'
-#' @param order Sort order
-#'
-#'   The first or last observation is determined with respect to the specified
-#'   order.
-#'
-#'   Permitted Values: list of variables or `desc(<variable>)` function calls
-#'
-#' @param new_var Variable to add
-#'
-#'   The specified variable is added to the output dataset. It is set to `"Y"`
-#'   for the first or last observation (depending on the mode) of each by group.
-#'
-#'   Permitted Values: variable name
-#'
-#' @param mode Flag mode
-#'
-#'   Determines if the first or last observation is flagged.
-#'
-#'   Permitted Values: `"first"`, `"last"`
-#'
-#' @param by_vars Grouping variables
-#'
-#'   Permitted Values: list of variables
-#'
-#' @param filter Deprecated, please use `restrict_derivation()` instead (see
-#'   examples for `derive_var_extreme_flag()`).
-#'
-#' @param check_type Check uniqueness?
-#'
-#'   If `"warning"` or `"error"` is specified, the specified message is issued
-#'   if the observations of the input dataset are not unique with respect to the
-#'   by variables and the order.
-#'
-#'   Default: `"warning"`
-#'
-#'   Permitted Values: `"none"`, `"warning"`, `"error"`
-#'
-#' @details For each group (with respect to the variables specified for the
-#'   `by_vars` parameter), `new_var` is set to "Y" for the first or last observation
-#'   (with respect to the order specified for the `order` parameter and the flag mode
-#'   specified for the `mode` parameter). Only observations included by the `filter` parameter
-#'   are considered for flagging.
-#'   Otherwise, `new_var` is set to `NA`.
-#'
-#' @author Stefan Bundfuss
-#'
-#' @return The input dataset with the new flag variable added
-#'
-#' @keywords derivation adam
-#'
-#' @export
-#'
-derive_extreme_flag <- function(dataset,
-                                by_vars,
-                                order,
-                                new_var,
-                                mode,
-                                filter = deprecated(),
-                                check_type = "warning") {
-  deprecate_warn("0.6.0", "derive_extreme_flag()", "derive_var_extreme_flag()")
-
-  if (!missing(filter)) {
-    derive_var_extreme_flag(
-      dataset = dataset,
-      by_vars = by_vars,
-      order = order,
-      new_var = !!enquo(new_var),
-      mode = mode,
-      filter = !!enquo(filter),
-      check_type = check_type
-    )
-  } else {
-    derive_var_extreme_flag(
-      dataset = dataset,
-      by_vars = by_vars,
-      order = order,
-      new_var = !!enquo(new_var),
-      mode = mode,
-      check_type = check_type
-    )
-  }
-}
-
-#' Adds a Variable Flagging the Maximal / Minimal Value Within a Group of Observations
-#'
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' *Deprecated*, please use `derive_var_worst_flag()` instead.
-#'
-#' @inheritParams derive_extreme_flag
-#'
-#' @param dataset Input dataset.
-#' Variables specified by `by_vars`, `order`, `param_var`, and `analysis_var` are expected.
-#'
-#' @param order Sort order.
-#' Used to determine maximal / minimal observation if they are not unique,
-#' see Details section for more information.
-#'
-#' @param new_var Variable to add to the `dataset`.
-#' It is set `"Y"` for the maximal / minimal observation of each group,
-#' see Details section for more information.
-#'
-#' @param param_var Variable with the parameter values for which the maximal / minimal
-#' value is calculated.
-#'
-#' @param analysis_var Variable with the measurement values for which the maximal / minimal
-#' value is calculated.
-#'
-#' @param worst_high Character with `param_var` values specifying the parameters
-#' referring to "high".
-#' Use `character(0)` if not required.
-#'
-#' @param worst_low Character with `param_var` values specifying the parameters
-#' referring to "low".
-#' Use `character(0)` if not required.
-#'
-#' @details
-#' For each group with respect to the variables specified by the `by_vars` parameter,
-#' the maximal / minimal observation of `analysis_var`
-#' is labelled in the `new_var` column as `"Y"`
-#' if its `param_var` is in `worst_high` / `worst_low`,
-#' otherwise it is assigned `NA`.
-#' If there is more than one such maximal / minimal observation,
-#' the first one with respect to the order specified by the `order` parameter is flagged.
-#'
-#' @author Ondrej Slama
-#'
-#' @return The input dataset with the new flag variable added.
-#'
-#' @keywords derivation adam
-#'
-#' @export
-#'
-derive_worst_flag <- function(dataset,
-                              by_vars,
-                              order,
-                              new_var,
-                              param_var,
-                              analysis_var,
-                              worst_high,
-                              worst_low,
-                              filter = deprecated(),
-                              check_type = "warning") {
-  deprecate_warn("0.6.0", "derive_worst_flag()", "derive_var_worst_flag()")
-  if (!missing(filter)) {
-    derive_var_worst_flag(
-      dataset = dataset,
-      by_vars = by_vars,
-      order = order,
-      new_var = !!enquo(new_var),
-      param_var = !!enquo(param_var),
-      analysis_var = !!enquo(analysis_var),
-      worst_high = worst_high,
-      worst_low = worst_low,
-      filter = !!enquo(filter)
-    )
-  } else {
-    derive_var_worst_flag(
-      dataset = dataset,
-      by_vars = by_vars,
-      order = order,
-      new_var = !!enquo(new_var),
-      param_var = !!enquo(param_var),
-      analysis_var = !!enquo(analysis_var),
-      worst_high = worst_high,
-      worst_low = worst_low
-    )
-  }
-}
-
-#' Add a Variable Flagging the First or Last Observation Within Each By Group
-#'
 #' Add a variable flagging the first or last observation within each by group
 #'
 #' @param dataset Input dataset
@@ -242,13 +57,14 @@ derive_worst_flag <- function(dataset,
 #'
 #' @return The input dataset with the new flag variable added
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_vs")
 #'
 #' # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -269,27 +85,27 @@ derive_worst_flag <- function(dataset,
 #' # Baseline (ABLFL) examples:
 #'
 #' input <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL, ~DTYPE,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"), 15.0,  NA,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,  NA,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"), 15.0,  "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"), 14.0,  "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"), 15.0,  "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"), 10.0,  "AVERAGE",
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"), 12.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"), 14.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"), 15.0,  NA,
-#'   "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"), 10.0,  "AVERAGE",
-#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"), 12.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"), 15.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"), 14.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"), 15.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"), 10.0,  NA,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"), 12.0,  NA
+#'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
+#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
+#'   "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
+#'   "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
+#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
 #' )
 #'
 #' # Last observation
@@ -399,6 +215,7 @@ derive_var_extreme_flag <- function(dataset,
       "Please use `restrict_derivation()` instead (see examples).",
       sep = "\n"
     ))
+
     filter <- assert_filter_cond(enquo(filter), optional = TRUE)
     return(
       restrict_derivation(
@@ -476,39 +293,40 @@ derive_var_extreme_flag <- function(dataset,
 #'
 #' @return The input dataset with the new flag variable added.
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
 #' @examples
 #'
 #' input <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"),  15.0,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
-#'   "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-#'   "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-#'   "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
-#'   "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-#'   "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
-#'   "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
-#'   "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"),  10.0,
-#'   "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-#'   "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"),  14.0,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-#'   "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"),  12.0,
-#'   "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"),  14.0,
-#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"),  15.0,
-#'   "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-#'   "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-30"),  12.0
+#'   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+#'   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+#'   "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+#'   "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+#'   "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+#'   "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
+#'   "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
+#'   "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0,
+#'   "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+#'   "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,
+#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+#'   "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,
+#'   "TEST01",  "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-25"),  14.0,
+#'   "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+#'   "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+#'   "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-30"),  12.0
 #' )
 #'
 #' derive_var_worst_flag(

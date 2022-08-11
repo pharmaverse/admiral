@@ -27,6 +27,9 @@ parameter) and to the parameters specified by \code{qt_code} and \code{rr_code}.
 
 \item{by_vars}{Grouping variables
 
+Only variables specified in \code{by_vars} will be populated
+in the newly created records.
+
 Permitted Values: list of variables}
 
 \item{method}{Method used to QT correction
@@ -70,7 +73,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for corrected QT using either Bazett's, Fridericia's or Sagie's
@@ -79,16 +83,16 @@ are available.
 }
 \examples{
 adeg <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL,  ~AVALU,      ~VISIT,
-  "01-701-1015", "HR",     "Heart Rate (beats/min)",  70.14, "beats/min", "BASELINE",
-  "01-701-1015", "QT",     "QT Duration (msec)",     370,    "msec",      "WEEK 2",
-  "01-701-1015", "HR",     "Heart Rate (beats/min)",  62.66, "beats/min", "WEEK 1",
-  "01-701-1015", "RR",     "RR Duration (msec)",     710,    "msec",      "WEEK 2",
-  "01-701-1028", "HR",     "Heart Rate (beats/min)",  85.45, "beats/min", "BASELINE",
-  "01-701-1028", "QT",     "QT Duration (msec)",     480,    "msec",      "WEEK 2",
-  "01-701-1028", "QT",     "QT Duration (msec)",     350,    "msec",      "WEEK 3",
-  "01-701-1028", "HR",     "Heart Rate (beats/min)",  56.54, "beats/min", "WEEK 3",
-  "01-701-1028", "RR",     "RR Duration (msec)",     842,    "msec",      "WEEK 2",
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+  "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
+  "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
+  "01-701-1015", "HR", "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
+  "01-701-1015", "RR", "RR Duration (msec)", 710, "msec", "WEEK 2",
+  "01-701-1028", "HR", "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
+  "01-701-1028", "QT", "QT Duration (msec)", 480, "msec", "WEEK 2",
+  "01-701-1028", "QT", "QT Duration (msec)", 350, "msec", "WEEK 3",
+  "01-701-1028", "HR", "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
+  "01-701-1028", "RR", "RR Duration (msec)", 842, "msec", "WEEK 2",
 )
 
 derive_param_qtc(
@@ -129,9 +133,21 @@ derive_param_qtc(
 }
 \seealso{
 \code{\link[=compute_qtc]{compute_qtc()}}
+
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_wbc_abs}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adeg}
-\keyword{derivation}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}

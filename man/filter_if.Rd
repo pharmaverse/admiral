@@ -19,13 +19,23 @@ just \code{dataset} if \code{filter} is \code{NULL}
 Filters the input dataset if the provided expression is not \code{NULL}
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 data(admiral_vs)
 
-filter_if(admiral_vs, rlang::quo(NULL))
-filter_if(admiral_vs, rlang::quo(VSTESTCD == "Weight"))
+admiral::filter_if(admiral_vs, rlang::quo(NULL))
+admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
+}
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{count_vals}()},
+\code{\link{filter_confirmation}()},
+\code{\link{filter_extreme}()},
+\code{\link{filter_relative}()},
+\code{\link{max_cond}()},
+\code{\link{min_cond}()}
 }
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

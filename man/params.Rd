@@ -17,7 +17,7 @@ Create a set of variable parameters/function arguments to be used in \code{\link
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_ae)
 data(admiral_adsl)
 
@@ -68,8 +68,22 @@ call_derivation(
 }
 \seealso{
 \code{\link[=call_derivation]{call_derivation()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{dthcaus_source}()},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Thomas Neitmann, Tracey Wang
 }
+\concept{source_specifications}
 \keyword{source_specifications}

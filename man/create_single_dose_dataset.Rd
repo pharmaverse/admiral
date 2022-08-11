@@ -29,18 +29,18 @@ Permitted Values: defined by lookup table.}
 
 \item{start_date}{The start date
 
-A date or date-time object is expected.
+A date or date-time object is expected. This object cannot contain \code{NA} values.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{ASTDT}}
 
 \item{end_date}{The end date
 
-A date or date-time object is expected.
+A date or date-time object is expected. This object cannot contain \code{NA} values.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Default: \code{AENDT}}
@@ -97,7 +97,7 @@ create_single_dose_dataset(data)
 # Example with custom lookup
 
 custom_lookup <- tibble::tribble(
-  ~Value,  ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+  ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
   "Q30MIN", (1 / 30), "MINUTE", 1,
   "Q90MIN", (1 / 90), "MINUTE", 1
 )
@@ -109,14 +109,22 @@ data <- tibble::tribble(
 )
 
 create_single_dose_dataset(data,
-                           lookup_table = custom_lookup,
-                           lookup_column = Value,
-                           start_date = ASTDTM,
-                           end_date = AENDTM)
+  lookup_table = custom_lookup,
+  lookup_column = Value,
+  start_date = ASTDTM,
+  end_date = AENDTM
+)
+}
+\seealso{
+OCCDS Functions: 
+\code{\link{create_query_data}()},
+\code{\link{derive_last_dose}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{derive_vars_query}()},
+\code{\link{get_terms_from_db}()}
 }
 \author{
 Michael Thorpe, Andrew Smith
 }
-\keyword{adae}
-\keyword{adex}
-\keyword{user_utility}
+\concept{der_occds}
+\keyword{der_occds}

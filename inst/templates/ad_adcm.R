@@ -4,7 +4,7 @@
 #
 # Input: cm, adsl
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -20,6 +20,11 @@ data("admiral_adsl")
 adsl <- admiral_adsl
 cm <- admiral_cm
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 cm <- convert_blanks_to_na(cm)
 
 # ---- Derivations ----
@@ -29,9 +34,6 @@ adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
 # Derive flags
 adcm <- cm %>%
-  # Join supplementary qualifier variables
-  # derive_vars_suppqual(suppcm) %>%
-
   # Join ADSL with CM (only ADSL vars required for derivations)
   derive_vars_merged(
     dataset_add = adsl,

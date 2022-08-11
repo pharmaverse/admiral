@@ -1,16 +1,16 @@
 adsl <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
-  "STUDY01",  "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
-  "STUDY01",  "2", NA, "2020-06",
-  "STUDY01",  "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
+  "STUDY01", "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
+  "STUDY01", "2", NA, "2020-06",
+  "STUDY01", "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
 )
 
 ae <- tibble::tribble(
   ~STUDYID, ~USUBJID, ~AESTDTC, ~AEENDTC, ~AESEQ,
-  "STUDY01",  "1", "2019-11", "2019-11-23", 1,
-  "STUDY01",  "1", "2020-02", "2020-02", 2,
-  "STUDY01",  "3", "2020-02-02", "2020-02-03", 1,
-  "STUDY01",  "3", "2020-04-11", NA_character_, 2
+  "STUDY01", "1", "2019-11", "2019-11-23", 1,
+  "STUDY01", "1", "2020-02", "2020-02", 2,
+  "STUDY01", "3", "2020-02-02", "2020-02-03", 1,
+  "STUDY01", "3", "2020-04-11", NA_character_, 2
 )
 
 # derive_var_extreme_dt ----

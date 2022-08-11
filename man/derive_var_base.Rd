@@ -42,19 +42,19 @@ multiple baseline records within \code{by_vars} an error is issued.
 }
 \examples{
 dataset <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVAL,  ~AVALC,   ~AVISIT,    ~ABLFL,
-  "TEST01", "PAT01",  "PARAM01", 10.12,  NA,       "Baseline", "Y",
-  "TEST01", "PAT01",  "PARAM01",  9.7,   NA,       "Day 7",    "N",
-  "TEST01", "PAT01",  "PARAM01", 15.01,  NA,       "Day 14",   "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Baseline", "Y",
-  "TEST01", "PAT01",  "PARAM02", NA,     NA,       "Day 7",    "N",
-  "TEST01", "PAT01",  "PARAM02",  8.35,  NA,       "Day 14",   "N",
-  "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Baseline", "Y",
-  "TEST01", "PAT01",  "PARAM03", NA,     "LOW",    "Day 7",    "N",
-  "TEST01", "PAT01",  "PARAM03", NA,     "MEDIUM", "Day 14",   "N",
-  "TEST01", "PAT01",  "PARAM04", NA,     "HIGH",   "Baseline", "Y",
-  "TEST01", "PAT01",  "PARAM04", NA,     "HIGH",   "Day 7",    "N",
-  "TEST01", "PAT01",  "PARAM04", NA,     "MEDIUM", "Day 14",   "N"
+  ~STUDYID, ~USUBJID,   ~PARAMCD, ~AVAL,   ~AVALC,      ~AVISIT, ~ABLFL,
+  "TEST01",  "PAT01",  "PARAM01", 10.12,       NA,   "Baseline",    "Y",
+  "TEST01",  "PAT01",  "PARAM01", 9.700,       NA,      "Day 7",    "N",
+  "TEST01",  "PAT01",  "PARAM01", 15.01,       NA,     "Day 14",    "N",
+  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,   "Baseline",    "Y",
+  "TEST01",  "PAT01",  "PARAM02",    NA,       NA,      "Day 7",    "N",
+  "TEST01",  "PAT01",  "PARAM02", 8.350,       NA,     "Day 14",    "N",
+  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",   "Baseline",    "Y",
+  "TEST01",  "PAT01",  "PARAM03",    NA,    "LOW",      "Day 7",    "N",
+  "TEST01",  "PAT01",  "PARAM03",    NA, "MEDIUM",     "Day 14",    "N",
+  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",   "Baseline",    "Y",
+  "TEST01",  "PAT01",  "PARAM04",    NA,   "HIGH",      "Day 7",    "N",
+  "TEST01",  "PAT01",  "PARAM04",    NA, "MEDIUM",     "Day 14",    "N"
 )
 
 ## Derive `BASE` variable from `AVAL`
@@ -83,8 +83,21 @@ if (FALSE) {
   )
 }
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_summary_records}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

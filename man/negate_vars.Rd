@@ -22,7 +22,16 @@ e.g., \code{select(!!!negate_vars(by_vars))} removes all by variables.
 \examples{
 negate_vars(vars(USUBJID, STUDYID))
 }
+\seealso{
+Utilities used within Derivation functions: 
+\code{\link{call_user_fun}()},
+\code{\link{extract_unit}()},
+\code{\link{get_not_mapped}()},
+\code{\link{signal_duplicate_records}()},
+\code{\link{vars2chr}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{user_utility}
+\concept{utils_help}
+\keyword{utils_help}

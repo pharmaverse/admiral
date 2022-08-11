@@ -6,7 +6,7 @@
 #
 
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -19,6 +19,11 @@ data("admiral_ex")
 
 adsl <- admiral_adsl
 ex <- admiral_ex
+
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
 
 ex <- convert_blanks_to_na(ex)
 
@@ -60,7 +65,8 @@ adex0 <- ex %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ASTDTM, AENDTM using derive_vars_dtm
+  # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
+
   derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
   derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
   # Calculate ASTDY, AENDY
@@ -95,7 +101,10 @@ adex <- bind_rows(
   mutate(PARCAT1 = "INDIVIDUAL")
 
 # Part 3
-# Derive summary parameters
+# Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
+# `derive_param_doseint()` and `derive_param_computed()`, only the variables specified
+# in `by_vars` will be populated in the newly created records.
+
 adex <- adex %>%
   # Overall exposure
   call_derivation(
@@ -185,7 +194,7 @@ adex <- adex %>%
   ) %>%
   # Overall/W2-24 Average daily dose
   call_derivation(
-    derivation = derive_derived_param,
+    derivation = derive_param_computed,
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),
@@ -235,7 +244,7 @@ param_lookup <- tibble::tribble(
 # ---- User defined functions ----
 # Derive AVALCAT1
 # Here are some examples of how you can create your own functions that
-#  operates on vectors, which can be used in `mutate`.
+#  operates on vectors, which can be used in `mutate()`.
 format_avalcat1 <- function(param, aval) {
   case_when(
     param %in% c("TDURD", "PDURD") & aval < 30 & !is.na(aval) ~ "< 30 days",

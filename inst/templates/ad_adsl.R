@@ -4,7 +4,7 @@
 #
 # Input: dm, ex, ds
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -26,6 +26,11 @@ ds <- admiral_ds
 ex <- admiral_ex
 ae <- admiral_ae
 lb <- admiral_lb
+
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
 
 dm <- convert_blanks_to_na(dm)
 ds <- convert_blanks_to_na(ds)
@@ -139,11 +144,20 @@ adsl <- dm %>%
     dtc = DSSTDTC,
     filter_add = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
+  # Derive Randomization Date
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    filter_add = DSDECOD == "RANDOMIZED",
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "RAND",
+    dtc = DSSTDTC
+  ) %>%
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
-    date_imputation = "FIRST"
+    flag_imputation = "none",
+    date_imputation = "first"
   ) %>%
   # Relative Day of Death
   derive_vars_duration(
@@ -209,6 +223,7 @@ adsl <- adsl %>%
     DTHB30FL = if_else(DTHDT <= TRTSDT + 30, "Y", NA_character_),
     DOMAIN = NULL
   )
+
 
 # ---- Save output ----
 

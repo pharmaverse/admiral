@@ -80,32 +80,32 @@ and for others the worst is the lowest value.
 \examples{
 
 input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,     ~ADT,                  ~AVAL,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-27"),  15.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-  "TEST01", "PAT02",  "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-25"),  14.0,
-  "TEST01", "PAT02",  "PARAM01", "BASELINE",  as.Date("2021-04-23"),  15.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
-  "TEST01", "PAT01",  "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE",  as.Date("2021-04-27"),  10.0,
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",    as.Date("2021-04-30"),  12.0,
-  "TEST01", "PAT02",  "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-25"),  14.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-23"),  15.0,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE",  as.Date("2021-04-30"),  12.0,
-  "TEST01", "PAT02",  "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-25"),  14.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-23"),  15.0,
-  "TEST01", "PAT02",  "PARAM03", "WEEK 1",    as.Date("2021-04-27"),  10.0,
-  "TEST01", "PAT02",  "PARAM03", "BASELINE",  as.Date("2021-04-30"),  12.0
+  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,
+  "TEST01",  "PAT02", "PARAM03", "SCREENING", as.Date("2021-04-27"),  15.0,
+  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-25"),  14.0,
+  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-23"),  15.0,
+  "TEST01",  "PAT02", "PARAM03",    "WEEK 1", as.Date("2021-04-27"),  10.0,
+  "TEST01",  "PAT02", "PARAM03",  "BASELINE", as.Date("2021-04-30"),  12.0
 )
 
 derive_var_worst_flag(
@@ -139,9 +139,23 @@ restrict_derivation(
 }
 \seealso{
 \code{\link[=derive_var_extreme_flag]{derive_var_extreme_flag()}}
+
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
 }
 \author{
 Ondrej Slama
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}

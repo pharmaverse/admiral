@@ -4,15 +4,15 @@
 \alias{format_eoxxstt_default}
 \title{Default Format for Disposition Status}
 \usage{
-format_eoxxstt_default(x)
+format_eoxxstt_default(status)
 }
 \arguments{
-\item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
+\item{status}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 }
 \value{
-A \code{character} vector derived based on the values given in \code{x}:
-"COMPLETED" if \code{x} is "COMPLETED",
-"DISCONTINUED" if \code{x} is not "COMPLETED" nor NA,
+A \code{character} vector derived based on the values given in \code{status}:
+"COMPLETED" if \code{status} is "COMPLETED",
+"DISCONTINUED" if \code{status} is not "COMPLETED" nor NA,
 "ONGOING" otherwise.
 }
 \description{
@@ -24,7 +24,7 @@ Usually this function can not be used with \verb{\%>\%}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
 
@@ -40,10 +40,13 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}}
+
+Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
+\code{\link{format_reason_default}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
-\keyword{computation}
-\keyword{user_utility}
+\concept{utils_fmt}
+\keyword{utils_fmt}

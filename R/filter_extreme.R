@@ -47,13 +47,15 @@
 #'
 #' @return A dataset containing the first or last observation of each by group
 #'
-#' @keywords adam user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @export
 #'
 #' @examples
 #' library(dplyr, warn.conflict = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data("admiral_ex")
 #'
 #' # Select first dose for each patient

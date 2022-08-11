@@ -1,0 +1,312 @@
+---
+title: "Higher Order Functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Higher Order Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This vignette explains some of the more advanced options of `{admiral}` related
+to higher order functions. A higher order function is a function that takes another
+function as input. By introducing these higher order functions, we intend to give
+the user greater power over our derivation functions, whilst trying to negate the
+need for adding additional `{admiral}` functions or arguments, or the user needing
+many separate steps.
+
+The functions covered here are:
+
+* `call_derivation()`: Call a single derivation multiple times with some
+arguments being fixed across iterations and others varying
+* `restrict_derivation()`: Execute a single derivation on a subset of the input dataset
+* `slice_derivation()`: The input dataset is split into slices (subsets) and for
+each slice a single derivation is called separately. Some or all arguments of the
+derivation may vary depending on the slice.
+
+## Required Packages
+
+The examples of this vignette require the following packages.
+
+For example purpose, the ADSL dataset---which is included
+in `{admiral}`---and the SDTM datasets from `{admiral.test}` are used.
+
+```{r, warning=FALSE, message=FALSE}
+library(admiral)
+library(admiral.test)
+library(dplyr)
+
+data("admiral_adsl")
+data("admiral_ae")
+data("admiral_vs")
+adsl <- admiral_adsl
+ae <- convert_blanks_to_na(admiral_ae)
+vs <- convert_blanks_to_na(admiral_vs)
+```
+```{r echo=FALSE}
+adsl <- filter(adsl, USUBJID %in% c("01-701-1111", "01-705-1393"))
+ae <- filter(ae, USUBJID %in% c("01-701-1111", "01-705-1393"))
+vs <- filter(vs, USUBJID %in% c("01-701-1015"))
+```
+
+The following code creates a minimally viable ADAE dataset to be used where
+needed in the following examples.
+
+```{r}
+adae <- ae %>%
+  left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
+  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>%
+  mutate(TRTEMFL = if_else(ASTDT >= TRTSDT, "Y", NA_character_))
+```
+
+# Call Derivation
+
+This function exists purely for convenience to save the user repeating numerous
+similar derivation function calls. It is best used when multiple derived variables
+have very similar specifications with only slight variations.
+
+As an example, imagine the case where all the parameters in a BDS ADaM required
+both a highest value flag and a lowest value flag.
+
+Here is an example of how to achieve this **without** using `call_derivation()`: 
+
+```{r}
+vs_without <- vs %>%
+  derive_var_extreme_flag(
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(VSORRES, VSSEQ),
+    new_var = AHIFL,
+    mode = "last"
+  ) %>%
+  derive_var_extreme_flag(
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(VSORRES, VSSEQ),
+    new_var = ALOFL,
+    mode = "first"
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+vs_without %>%
+  arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
+  dataset_vignette(
+    display_vars = vars(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
+    filter = VSTESTCD %in% c("TEMP", "WEIGHT")
+  )
+```
+
+Here is an example of how to achieve the same **with** using `call_derivation()`,
+where any different arguments are passed using `params()`: 
+
+```{r}
+vs_with <- vs %>%
+  call_derivation(
+    derivation = derive_var_extreme_flag,
+    variable_params = list(
+      params(new_var = AHIFL, mode = "last"),
+      params(new_var = ALOFL, mode = "first")
+    ),
+    by_vars = vars(USUBJID, VSTESTCD),
+    order = vars(VSORRES, VSSEQ)
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+vs_with %>%
+  arrange(USUBJID, VSTESTCD, VSDY, VSSEQ) %>%
+  dataset_vignette(
+    display_vars = vars(USUBJID, VSTESTCD, VSORRES, ALOFL, AHIFL),
+    filter = VSTESTCD %in% c("TEMP", "WEIGHT")
+  )
+```
+
+In the example, you can see how in these higher order functions, `derivation`
+is where the user supplies the name of the derivation function to apply, with
+no trailing parentheses required. Then `variable_params` is used to pass a
+list of the different arguments needed for each derived variable.
+
+The advantage of this higher order function would be further highlighted with
+examples where more than two variable derivations had similar needs, such as the
+below case where multiple time to AE parameters are derived in one call. 
+Note that this example relies on pre-defined `tte_source` objects, as explained
+at [Creating a BDS Time-to-Event ADaM](bds_tte.html).
+
+```{r}
+adaette <- call_derivation(
+  derivation = derive_param_tte,
+  variable_params = list(
+    params(
+      event_conditions = list(ae_event),
+      set_values_to = vars(PARAMCD = "TTAE")
+    ),
+    params(
+      event_conditions = list(ae_ser_event),
+      set_values_to = vars(PARAMCD = "TTSERAE")
+    ),
+    params(
+      event_conditions = list(ae_sev_event),
+      set_values_to = vars(PARAMCD = "TTSEVAE")
+    ),
+    params(
+      event_conditions = list(ae_wd_event),
+      set_values_to = vars(PARAMCD = "TTWDAE")
+    )
+  ),
+  dataset_adsl = adsl,
+  source_datasets = list(adsl = adsl, adae = adae),
+  censor_conditions = list(lastalive_censor)
+)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+adaette %>%
+  select(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR) %>%
+  arrange(USUBJID, PARAMCD) %>%
+  dataset_vignette(display_vars = vars(USUBJID, PARAMCD, STARTDT, ADT, CNSR, EVNTDESC, SRCDOM, SRCVAR))
+```
+
+Developing your ADaM scripts this way using `call_derivation()` could give the
+following benefits:
+
+* code becomes more efficient and readable
+* maintenance would be eased in case of specification changes
+* downstream quality checking would require less effort
+
+# Restrict Derivation
+
+The idea behind this function is that sometimes you want to apply a
+derivation only for certain records from the input dataset. Introducing
+`restrict_derivation()` therefore gives the users the ability to achieve
+this across any function, without each function needing to have such an
+argument to allow for this.
+
+An example would be if you wanted to flag the first occurring AE with the
+highest severity for each patient, but you only wanted to do this for
+records occurring on or after study day 1.
+
+Here is how you could achieve this using `restrict_derivation()`,
+where the function arguments are passed using `params()` and the restriction
+criteria is given using `filter`:
+
+```{r}
+ae <- ae %>%
+  mutate(TEMP_AESEVN = as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))) %>%
+  restrict_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AHSEVFL,
+      by_vars = vars(USUBJID),
+      order = vars(TEMP_AESEVN, AESTDY, AESEQ),
+      mode = "first"
+    ),
+    filter = AESTDY >= 1
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae %>%
+  arrange(USUBJID, AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
+  dataset_vignette(
+    display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEVFL)
+  )
+```
+
+# Slice Derivation
+
+This function in a way combines the features of the above two. It allows a single
+derivation to be applied with different arguments for different slices (subsets)
+of records from the input dataset. You could do this with separate `restrict_derivation()`
+calls for each different set of records, but `slice_derivation()` allows
+to achieve this in one call.
+
+An example would be if you wanted to achieve the same derivation as above
+for records occurring on or after study day 1, but for pre-treatment AEs
+you wanted to flag only the last occurring AE.
+
+Here is how you could achieve this using `slice_derivation()`,
+where the function arguments are passed using `params()` and via the different
+slices controlled by `filter`:
+
+```{r}
+ae <- ae %>%
+  slice_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AHSEV2FL,
+      by_vars = vars(USUBJID)
+    ),
+    derivation_slice(
+      filter = AESTDY >= 1,
+      args = params(order = vars(TEMP_AESEVN, AESTDY, AESEQ), mode = "first")
+    ),
+    derivation_slice(
+      filter = TRUE,
+      args = params(order = vars(AESTDY, AESEQ), mode = "last")
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae %>%
+  arrange(USUBJID, AESTDY, AESEQ, desc(TEMP_AESEVN)) %>%
+  dataset_vignette(
+    display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEV2FL)
+  )
+```
+
+As you can see in the example, the `derivation_slice` ordering is important.
+Here we addressed all the AEs on or after study day 1 first, and then we used
+`filter = TRUE` option to catch all remaining records (in this case
+pre-treatment AEs).
+
+The ordering is perhaps shown even more when we look at the below example where
+three slices are taken. Remember that observations that match with more than one
+slice are only considered for the first matching slice. So in this case we're
+creating a flag for each patient for the record with the first severe AE, and
+then the first moderate AE, and finally flagging the last occurring AE where
+not severe or moderate.
+
+```{r}
+ae <- ae %>%
+  slice_derivation(
+    derivation = derive_var_extreme_flag,
+    args = params(
+      new_var = AHSEV3FL,
+      by_vars = vars(USUBJID)
+    ),
+    derivation_slice(
+      filter = AESEV == "SEVERE",
+      args = params(order = vars(AESTDY, AESEQ), mode = "first")
+    ),
+    derivation_slice(
+      filter = AESEV == "MODERATE",
+      args = params(order = vars(AESTDY, AESEQ), mode = "first")
+    ),
+    derivation_slice(
+      filter = TRUE,
+      args = params(order = vars(AESTDY, AESEQ), mode = "last")
+    )
+  )
+```
+
+```{r, eval=TRUE, echo=FALSE}
+ae %>%
+  arrange(USUBJID, AESTDY, AESEQ) %>%
+  dataset_vignette(
+    display_vars = vars(USUBJID, AEDECOD, AESTDY, AESEQ, AESEV, AHSEV3FL)
+  )
+```
+
+The order is only important when the slices are not mutually exclusive, so
+in the above case the moderate AE slice could have been above the severe AE
+slice, for example, and there would have been no difference to the result.
+However the third slice had to come last to check all remaining (i.e. not severe
+or moderate) records only.

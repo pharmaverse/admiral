@@ -16,6 +16,9 @@
 #'
 #' @param by_vars Grouping variables
 #'
+#'   Only variables specified in `by_vars` will be populated
+#'   in the newly created records.
+#'
 #'   Permitted Values: list of variables
 #'
 #' @param method Method used to QT correction
@@ -42,30 +45,33 @@
 #'
 #'   Permitted Values: A variable of the input dataset or a function call
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @seealso [compute_qtc()]
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation adeg
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                   ~AVAL,  ~AVALU,      ~VISIT,
-#'   "01-701-1015", "HR",     "Heart Rate (beats/min)",  70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT",     "QT Duration (msec)",     370,    "msec",      "WEEK 2",
-#'   "01-701-1015", "HR",     "Heart Rate (beats/min)",  62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR",     "RR Duration (msec)",     710,    "msec",      "WEEK 2",
-#'   "01-701-1028", "HR",     "Heart Rate (beats/min)",  85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT",     "QT Duration (msec)",     480,    "msec",      "WEEK 2",
-#'   "01-701-1028", "QT",     "QT Duration (msec)",     350,    "msec",      "WEEK 3",
-#'   "01-701-1028", "HR",     "Heart Rate (beats/min)",  56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR",     "RR Duration (msec)",     842,    "msec",      "WEEK 2",
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT", "QT Duration (msec)", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "HR", "Heart Rate (beats/min)", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR", "RR Duration (msec)", 710, "msec", "WEEK 2",
+#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT", "QT Duration (msec)", 480, "msec", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration (msec)", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "HR", "Heart Rate (beats/min)", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR", "RR Duration (msec)", 842, "msec", "WEEK 2",
 #' )
 #'
 #' derive_param_qtc(
@@ -137,7 +143,7 @@ derive_param_qtc <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(qt_code, rr_code),
@@ -165,7 +171,8 @@ derive_param_qtc <- function(dataset,
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family der_prm_bds_findings
+#' @keywords der_prm_bds_findings
 #'
 #' @examples
 #' default_qtc_paramcd("Sagie")
@@ -205,7 +212,9 @@ default_qtc_paramcd <- function(method) {
 #'
 #' Usually this computation function can not be used with `%>%`.
 #'
-#' @keywords computation adeg
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -222,7 +231,7 @@ compute_qtc <- function(qt, rr, method) {
 
   formulae <- alist(
     Bazett = qt / sqrt(rr / 1000),
-    Fridericia = qt / (rr / 1000) ^ (1 / 3),
+    Fridericia = qt / (rr / 1000)^(1 / 3), # nolint
     Sagie = 1000 * (qt / 1000 + 0.154 * (1 - rr / 1000))
   )
   eval(formulae[[method]])
@@ -252,30 +261,33 @@ compute_qtc <- function(qt, rr, method) {
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation adeg
+#' @family der_bds_findings
+#'
+#' @keywords der_bds_findings
 #'
 #' @export
 #'
 #' @examples
 #' adeg <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL,  ~AVALU,      ~VISIT,
-#'   "01-701-1015", "HR",     "Heart Rate",   70.14, "beats/min", "BASELINE",
-#'   "01-701-1015", "QT",     "QT Duration", 370,    "msec",      "WEEK 2",
-#'   "01-701-1015", "HR",     "Heart Rate",   62.66, "beats/min", "WEEK 1",
-#'   "01-701-1015", "RR",     "RR Duration", 710,    "msec",      "WEEK 2",
-#'   "01-701-1028", "HR",     "Heart Rate",   85.45, "beats/min", "BASELINE",
-#'   "01-701-1028", "QT",     "QT Duration", 480,    "msec",      "WEEK 2",
-#'   "01-701-1028", "QT",     "QT Duration", 350,    "msec",      "WEEK 3",
-#'   "01-701-1028", "HR",     "Heart Rate",   56.54, "beats/min", "WEEK 3",
-#'   "01-701-1028", "RR",     "RR Duration", 842,    "msec",      "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
+#'   "01-701-1015", "HR", "Heart Rate", 70.14, "beats/min", "BASELINE",
+#'   "01-701-1015", "QT", "QT Duration", 370, "msec", "WEEK 2",
+#'   "01-701-1015", "HR", "Heart Rate", 62.66, "beats/min", "WEEK 1",
+#'   "01-701-1015", "RR", "RR Duration", 710, "msec", "WEEK 2",
+#'   "01-701-1028", "HR", "Heart Rate", 85.45, "beats/min", "BASELINE",
+#'   "01-701-1028", "QT", "QT Duration", 480, "msec", "WEEK 2",
+#'   "01-701-1028", "QT", "QT Duration", 350, "msec", "WEEK 3",
+#'   "01-701-1028", "HR", "Heart Rate", 56.54, "beats/min", "WEEK 3",
+#'   "01-701-1028", "RR", "RR Duration", 842, "msec", "WEEK 2"
 #' )
 #'
 #' derive_param_rr(
@@ -312,7 +324,7 @@ derive_param_rr <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(hr_code),
@@ -338,7 +350,9 @@ derive_param_rr <- function(dataset,
 #' @return RR interval in msec:
 #' \deqn{\frac{60000}{HR}}{60000 / HR}
 #'
-#' @keywords computation adeg
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'

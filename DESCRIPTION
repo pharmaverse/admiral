@@ -1,7 +1,7 @@
 Package: admiral
 Type: Package
 Title: ADaM in R Asset Library
-Version: 0.7.0
+Version: 0.8.0
 Authors@R: c(
     person("Thomas", "Neitmann", email = "thomas.neitmann@roche.com", role = c("aut", "cre")),
     person("Stefan", "Bundfuss", role = "aut"),
@@ -45,6 +45,7 @@ Description: A toolbox for programming Clinical Data Standards Interchange Conso
     (CDISC Analysis Data Model Team, 2021, <https://www.cdisc.org/standards/foundational/adam/adamig-v1-3-release-package>).
 Language: en-US
 License: Apache License (>= 2)
+URL: https://pharmaverse.github.io/admiral, https://github.com/pharmaverse/admiral
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -63,7 +64,7 @@ Imports:
     tidyr,
     tidyselect
 Suggests:
-    admiraltest,
+    admiral.test,
     devtools,
     diffdf,
     knitr,

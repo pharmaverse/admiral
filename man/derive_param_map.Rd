@@ -29,7 +29,8 @@ and \code{hr_code}.}
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -77,7 +78,8 @@ into account.
 \emph{Permitted Values:} a condition}
 }
 \value{
-The input dataset with the new parameter added
+The input dataset with the new parameter added. Note, a variable will only
+be populated in the new parameter rows if it is specified in \code{by_vars}.
 }
 \description{
 Adds a record for mean arterial pressure (MAP) for each by group
@@ -95,19 +97,19 @@ if it is based on diastolic, systolic blood pressure, and heart rate.
 library(dplyr, warn.conflicts = FALSE)
 
 advs <- tibble::tribble(
-  ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
-  "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "BASELINE",
-  "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "WEEK 2",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "BASELINE",
-  "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "WEEK 2",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "BASELINE",
-  "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "WEEK 2",
-  "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "BASELINE",
-  "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "WEEK 2",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "BASELINE",
-  "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "WEEK 2",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "BASELINE",
-  "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "WEEK 2"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+  "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
+  "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
+  "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "WEEK 2",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "WEEK 2",
+  "01-701-1028", "PULSE", "Pulse (beats/min)", 62, "BASELINE",
+  "01-701-1028", "PULSE", "Pulse (beats/min)", 77, "WEEK 2",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "BASELINE",
+  "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "WEEK 2",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "BASELINE",
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "WEEK 2"
 )
 
 # Derive MAP based on diastolic and systolic blood pressure
@@ -134,8 +136,21 @@ derive_param_map(
   get_unit_expr = extract_unit(PARAM)
 )
 }
+\seealso{
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_wbc_abs}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{advs}
-\keyword{derivation}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}

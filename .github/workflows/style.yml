@@ -6,12 +6,12 @@ on:
   push:
     branches:
       - main
-      - master
+      - patch
       - devel
   pull_request:
     branches:
       - main
-      - pre-release
+      - patch
       - devel
 
 concurrency:

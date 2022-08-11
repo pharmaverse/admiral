@@ -11,7 +11,7 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `TRTSDT`
@@ -20,7 +20,7 @@
 #'
 #'   A date or date-time object is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #'   Default: `TRTEDT`
@@ -32,7 +32,9 @@
 #'
 #' @return The input dataset with `TRTDURD` added
 #'
-#' @keywords adsl timing derivation
+#' @family der_date_time
+#'
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

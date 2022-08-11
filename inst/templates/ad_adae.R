@@ -2,9 +2,9 @@
 #
 # Label: Adverse Event Analysis Dataset
 #
-# Input: ae, adsl, suppae, ex_single
+# Input: ae, adsl, ex_single
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
@@ -15,7 +15,6 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 
 data("admiral_ae")
-data("admiral_suppae")
 data("admiral_adsl")
 data("ex_single")
 
@@ -23,8 +22,12 @@ adsl <- admiral_adsl
 ae <- admiral_ae
 suppae <- admiral_suppae
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 ae <- convert_blanks_to_na(ae)
-suppae <- convert_blanks_to_na(suppae)
 ex <- convert_blanks_to_na(ex_single)
 
 
@@ -34,8 +37,6 @@ ex <- convert_blanks_to_na(ex_single)
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT)
 
 adae <- ae %>%
-  # join supplementary qualifier variables
-  derive_vars_suppqual(suppae) %>%
   # join adsl to ae
   derive_vars_merged(
     dataset_add = adsl,

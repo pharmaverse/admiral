@@ -73,7 +73,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #' Check Validity of the Date Imputation Input
 #'
 #' Date_imputation format should be specified as "dd-mm" (e.g. "01-01")
-#' or as a keyword: "FIRST", "MID", "LAST"
+#' or as a keyword: "first", "mid", "last"
 #'
 #' @param arg The argument to check
 #'
@@ -87,10 +87,10 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
-#' assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
+#' assertthat::assert_that(admiral:::is_valid_date_entry("first"))
 is_valid_date_entry <- function(arg) {
   pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
-  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
+  grepl(pattern, arg) | str_to_lower(arg) %in% c("first", "mid", "last")
 }
 on_failure(is_valid_date_entry) <- function(call, env) {
   paste0(
@@ -100,14 +100,14 @@ on_failure(is_valid_date_entry) <- function(call, env) {
     eval(call$arg, envir = env),
     " is not a valid date entry.\n",
     "date_imputation should be specified as 'mm-dd' (e.g. '01-21') or ",
-    "'FIRST', 'MID', 'LAST' to get the first/mid/last day/month"
+    "'first', 'mid', 'last' to get the first/mid/last day/month"
   )
 }
 
 #' Check Validity of the Time Imputation Input
 #'
 #' Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
-#' or as a keyword: "FIRST", "LAST"
+#' or as a keyword: "first", "last"
 #'
 #' @param arg The argument to check
 #'
@@ -121,10 +121,10 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @examples
 #' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
+#' assertthat::assert_that(admiral:::is_valid_time_entry("first"))
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-  grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
+  grepl(pattern, arg) | str_to_lower(arg) %in% c("first", "last")
 }
 on_failure(is_valid_time_entry) <- function(call, env) {
   paste0(
@@ -134,7 +134,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
     eval(call$arg, envir = env),
     " is not a valid time entry.\n",
     "time_imputation should be specified as 'hh:mm:ss' (e.g. '00:00:00') or ",
-    "'FIRST', 'LAST' to get the first/last time of the day"
+    "'first', 'last' to get the first/last time of the day"
   )
 }
 
@@ -269,7 +269,7 @@ is_order_vars <- function(arg) {
   }
 
   inherits(arg, "quosures") &&
-    all(map_lgl(arg, ~quo_is_symbol(.x) || quo_is_desc_call(.x)))
+    all(map_lgl(arg, ~ quo_is_symbol(.x) || quo_is_desc_call(.x)))
 }
 on_failure(is_order_vars) <- function(call, env) {
   paste0(
@@ -294,7 +294,10 @@ on_failure(is_order_vars) <- function(call, env) {
 #' @noRd
 #'
 #' @examples
-#' test_fun <- function(x) {x <- rlang::enquo(x); assertthat::assert_that(quo_not_missing(x))}
+#' test_fun <- function(x) {
+#'   x <- rlang::enquo(x)
+#'   assertthat::assert_that(quo_not_missing(x))
+#' }
 #' test_fun(my_variable) # no missing argument -> returns TRUE
 #' \dontrun{
 #' test_fun() # missing argument -> throws error

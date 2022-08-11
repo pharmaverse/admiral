@@ -20,7 +20,7 @@ derive_vars_duration(
 \arguments{
 \item{dataset}{Input dataset
 
-The columns specified by the \code{start_date} and the \code{end_date} parameter are
+The variables specified by the \code{start_date} and the \code{end_date} parameter are
 expected.}
 
 \item{new_var}{Name of variable to create}
@@ -30,16 +30,18 @@ specified, no variable for the unit is created.}
 
 \item{start_date}{The start date
 
-A date or date-time object is expected.
+A date or date-time variable is expected. This variable must be present in
+specified input dataset.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{end_date}{The end date
 
-A date or date-time object is expected.
+A date or date-time variable is expected. This variable must be present in
+specified input dataset.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{in_unit}{Input unit
@@ -87,18 +89,25 @@ Permitted Values: \code{TRUE}, \code{FALSE}}
 The input dataset with the duration and unit variable added
 }
 \description{
-Derives duration between two dates, e.g., duration of adverse events,
-relative day, age, ...
+Derives duration between two dates, specified by the variables present in
+input dataset e.g., duration of adverse events, relative day, age, ...
 }
 \details{
 The duration is derived as time from start to end date in the
-specified output unit. If the end date is before the start date, the
-duration is negative.
+specified output unit. If the end date is before the start date, the duration
+is negative. The start and end date variable must be present in the specified
+input dataset.
 }
 \examples{
-data <- tibble::tribble(
+library(lubridate)
+library(tibble)
+
+data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24"),
+  ymd("1985-01-01"), NA,
+  NA, ymd("2021-03-10"),
+  NA, NA
 )
 
 derive_vars_duration(data,
@@ -113,10 +122,20 @@ derive_vars_duration(data,
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
+
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_dy}()},
+\code{\link{derive_vars_merged_dtm}()},
+\code{\link{derive_vars_merged_dt}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

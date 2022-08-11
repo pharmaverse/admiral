@@ -34,7 +34,7 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -48,9 +48,12 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -58,19 +61,19 @@
 #' library(dplyr, warn.conflicts = FALSE)
 #'
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
-#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  59,   "BASELINE",
-#'   "01-701-1015", "PULSE",  "Pulse (beats/min)"              ,  61,   "WEEK 2",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  51,   "BASELINE",
-#'   "01-701-1015", "DIABP",  "Diastolic Blood Pressure (mmHg)",  50,   "WEEK 2",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "BASELINE",
-#'   "01-701-1015", "SYSBP",  "Systolic Blood Pressure (mmHg)",  121,   "WEEK 2",
-#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  62,   "BASELINE",
-#'   "01-701-1028", "PULSE",  "Pulse (beats/min)"              ,  77,   "WEEK 2",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  79,   "BASELINE",
-#'   "01-701-1028", "DIABP",  "Diastolic Blood Pressure (mmHg)",  80,   "WEEK 2",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  130,   "BASELINE",
-#'   "01-701-1028", "SYSBP",  "Systolic Blood Pressure (mmHg)",  132,   "WEEK 2"
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+#'   "01-701-1015", "PULSE", "Pulse (beats/min)", 59, "BASELINE",
+#'   "01-701-1015", "PULSE", "Pulse (beats/min)", 61, "WEEK 2",
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "BASELINE",
+#'   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "WEEK 2",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "BASELINE",
+#'   "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "WEEK 2",
+#'   "01-701-1028", "PULSE", "Pulse (beats/min)", 62, "BASELINE",
+#'   "01-701-1028", "PULSE", "Pulse (beats/min)", 77, "WEEK 2",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 79, "BASELINE",
+#'   "01-701-1028", "DIABP", "Diastolic Blood Pressure (mmHg)", 80, "WEEK 2",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 130, "BASELINE",
+#'   "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 132, "WEEK 2"
 #' )
 #'
 #' # Derive MAP based on diastolic and systolic blood pressure
@@ -136,7 +139,7 @@ derive_param_map <- function(dataset,
     )
   }
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
@@ -176,7 +179,9 @@ derive_param_map <- function(dataset,
 #'
 #' @return A numeric vector of MAP values
 #'
-#' @keywords computation advs
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -246,29 +251,32 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
 #' @author Eric Simms
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
 #' @examples
 #' advs <- tibble::tribble(
-#'   ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~VISIT,
-#'   "01-701-1015", "HEIGHT", "Height (cm)", 170,   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  75,   "BASELINE",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  78,   "MONTH 1",
-#'   "01-701-1015", "WEIGHT", "Weight (kg)",  80,   "MONTH 2",
-#'   "01-701-1028", "HEIGHT", "Height (cm)", 185,   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  90,   "BASELINE",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  88,   "MONTH 1",
-#'   "01-701-1028", "WEIGHT", "Weight (kg)",  85,   "MONTH 2",
+#'   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~VISIT,
+#'   "01-701-1015", "HEIGHT", "Height (cm)", 170, "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 75, "BASELINE",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 78, "MONTH 1",
+#'   "01-701-1015", "WEIGHT", "Weight (kg)", 80, "MONTH 2",
+#'   "01-701-1028", "HEIGHT", "Height (cm)", 185, "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 90, "BASELINE",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 88, "MONTH 1",
+#'   "01-701-1028", "WEIGHT", "Weight (kg)", 85, "MONTH 2",
 #' )
 #'
 #' derive_param_bsa(
@@ -337,7 +345,7 @@ derive_param_bsa <- function(dataset,
     )
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(height_code, weight_code),
@@ -387,7 +395,9 @@ derive_param_bsa <- function(dataset,
 #'
 #' @return The BSA (Body Surface Area) in m^2.
 #'
-#' @keywords computation adam BSA
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -423,20 +433,20 @@ compute_bsa <- function(height = height,
   } else if (method == "DuBois-DuBois") {
     # The DuBois & DuBois formula expects the value of height in meters
     # We need to convert from cm
-    bsa <- 0.20247 * (height / 100) ^ 0.725 * weight ^ 0.425
+    bsa <- 0.20247 * (height / 100)^0.725 * weight^0.425
   } else if (method == "Haycock") {
-    bsa <- 0.024265 * height ^ 0.3964 * weight ^ 0.5378
+    bsa <- 0.024265 * height^0.3964 * weight^0.5378
   } else if (method == "Gehan-George") {
-    bsa <- 0.0235 * height ^ 0.42246 * weight ^ 0.51456
+    bsa <- 0.0235 * height^0.42246 * weight^0.51456
   } else if (method == "Boyd") {
     # The Boyd formula expects the value of weight in grams
     # we need to convert from kg
-    bsa <- 0.0003207 * (height ^ 0.3) *
-      (1000 * weight) ^ (0.7285 - (0.0188 * log10(1000 * weight)))
+    bsa <- 0.0003207 * (height^0.3) *
+      (1000 * weight)^(0.7285 - (0.0188 * log10(1000 * weight))) # nolint
   } else if (method == "Fujimoto") {
-    bsa <- 0.008883 * height ^ 0.663 * weight ^ 0.444
+    bsa <- 0.008883 * height^0.663 * weight^0.444
   } else if (method == "Takahira") {
-    bsa <- 0.007241 * height ^ 0.725 * weight ^ 0.425
+    bsa <- 0.007241 * height^0.725 * weight^0.425
   }
 
   bsa
@@ -470,7 +480,7 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -480,9 +490,12 @@ compute_bsa <- function(height = height,
 #'
 #' @author Pavan Kumar
 #'
-#' @return The input dataset with the new parameter added
+#' @return The input dataset with the new parameter added. Note, a variable will only
+#'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -499,7 +512,7 @@ compute_bsa <- function(height = height,
 #'   "01-701-1028", "WEIGHT", "Weight (kg)", 80.7,  "WEEK 2"
 #' )
 #'
-#' derive_param_bmi (
+#' derive_param_bmi(
 #'   advs,
 #'   by_vars = vars(USUBJID, AVISIT),
 #'   weight_code = "WEIGHT",
@@ -509,14 +522,14 @@ compute_bsa <- function(height = height,
 #'     PARAM = "Body Mass Index (kg/m^2)"
 #'   ),
 #'   get_unit_expr = extract_unit(PARAM)
-#'  )
-derive_param_bmi <-  function(dataset,
-                              by_vars,
-                              set_values_to = vars(PARAMCD = "BMI"),
-                              weight_code = "WEIGHT",
-                              height_code = "HEIGHT",
-                              get_unit_expr,
-                              filter = NULL) {
+#' )
+derive_param_bmi <- function(dataset,
+                             by_vars,
+                             set_values_to = vars(PARAMCD = "BMI"),
+                             weight_code = "WEIGHT",
+                             height_code = "HEIGHT",
+                             get_unit_expr,
+                             filter = NULL) {
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = vars(!!!by_vars, PARAMCD, AVAL))
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
@@ -539,7 +552,7 @@ derive_param_bmi <-  function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
@@ -574,7 +587,9 @@ derive_param_bmi <-  function(dataset,
 #'
 #' @return The BMI (Body Mass Index Area) in kg/m^2.
 #'
-#' @keywords computation adam BMI
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
