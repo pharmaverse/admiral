@@ -17,7 +17,16 @@ A list of \code{quosures}
 \description{
 Extract All Symbols from a List of Quosures
 }
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{arg_name}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{replace_values_by_names}()}
+}
 \author{
 Thomas Neitmann
 }
+\concept{dev_utility}
 \keyword{dev_utility}

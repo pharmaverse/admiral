@@ -15,7 +15,16 @@ A list of quosures
 \description{
 Replace Quosure Value with Name
 }
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{arg_name}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()}
+}
 \author{
 Thomas Neitmann
 }
+\concept{dev_utility}
 \keyword{dev_utility}

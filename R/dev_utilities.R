@@ -9,8 +9,7 @@
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_notin
+#' @family dev_utility
 #' @export
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
@@ -26,8 +25,7 @@
 #' @author Ondrej Slama
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_convert_dtm_to_dtc
+#' @family dev_utility
 #' @export
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
@@ -41,8 +39,7 @@ convert_dtm_to_dtc <- function(dtm) {
 #' @author Thomas Neitmann, Ondrej Slama
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_arg_name
+#' @family dev_utility
 #' @export
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -70,8 +67,7 @@ arg_name <- function(expr) { # nolint
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
-#'
-#' @rdname dev_util_extract_vars
+#' @family dev_utility
 #' @export
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
@@ -106,8 +102,8 @@ extract_vars <- function(x, side = "lhs") {
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
+#' @family dev_utility
 #'
-#' @rdname dev_util_replace_values_by_names
 #'
 #' @return A list of quosures
 #' @export
@@ -131,7 +127,8 @@ replace_values_by_names <- function(quosures) {
 #' This function is missing in earlier version of {rlang} which is why we re-
 #' implment it here.
 #'
-#' @noRd
+#' @keywords dev_utility
+#' @family dev_utility
 #' @export
 as_name <- function(x) {
   if (is_quosure(x)) {

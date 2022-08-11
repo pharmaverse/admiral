@@ -12,7 +12,16 @@ arg_name(expr)
 \description{
 Extract Argument Name from an Expression
 }
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()},
+\code{\link{replace_values_by_names}()}
+}
 \author{
 Thomas Neitmann, Ondrej Slama
 }
+\concept{dev_utility}
 \keyword{dev_utility}

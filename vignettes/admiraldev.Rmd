@@ -28,15 +28,39 @@ Tools are loosely defined as follows:
 
 * Vignettes on working on `{admiral}` functions, developing unit testing, releases process, vignette writing and other documentation needs.  These vignettes are intended for use across all admiral packages.
 
-# Adding new tools
+# Why have a separate development package?
 
-* Just like in `{admiral}`, we follow the same procedures of adding issues, developing those issues in branches and doing a Pull Request.  
+As the `{admiral}` package function base has grown it was decided to create extension packages for use within companies and specific TAs to help with specific problems. We intended these extension packages to follow the same processes as `{admiral}` core, e.g. Unit Testing, Roxygen Documentation, Function Design. A standalone development package allows us to keep an up to date development process for all developers across the family.  We also feel that a lot of the developer functions are not user-specific and gives us more freedom to create and release utility tools specific to our family of packages and reduces non-user facing functions within the admiral family of packages.
+
+# How to add new tools to `{admiraldev}`?
+
+* Just like in `{admiral}`, we follow the same procedures of adding issues to discuss feature requests, bugs and documentation updates.  We then develop those issues in branches and do a Pull Request with a Code Review.  
 
 * Experimental tools are highly encouraged to help reduce repetitive patterns and automating the boring stuff.  
 
-# Why have a separate development package?
+# When to add a function to `{admiraldev}`?
 
-As the `{admiral}` package function base has grown it was decided to create extension packages for use within companies and specific TAs to help with specific problems. We intended these extension packages to follow the same processes as `{admiral}` core, e.g. Unit Testing, Roxygen Documentation, Function Design.  A standalone development package allows us to keep an up to date development process for all developers across the family.  We also feel that a lot of the developer functions are not user-specific and gives us more freedom to create and release utility tools specific to our family of packages.
+## **Scenario One: {admiral} core** 
+
+A developer working on `{admiral}` core implements a new type of derivation function for a BDS-Findings ADaM dataset. The new derivation function has two new `assert` custom checking functions for inputs as well as a helper function.
+
+Loose guidelines:
+
+1. The derivation function should always live in `{admiral}` core.
+1. The helper function should be looked at to see it should be made available within `{admiraldev}` for other extension packages needs and so reduce repetitive coding across the family of `{admiral}`. If it cannot be generalized, then it should remain in `{admiral}`.
+1. The `assert` custom checking functions should always live within `{admiraldev}` to stay with the family of `assertion` functions.
+
+## **Scenario Two: {admiral} extension** 
+
+A developer working on `{admiralonco}` implements a new type of derivation function for adding certain parameters to an oncology specific ADaM dataset. The new derivation function has one new `assert` custom checking function. 
+
+Loose guidelines:
+
+1. The derivation function should be closely looked at to see if it can be generalized to other ADaM datsets.  If that is the case, then it should be moved to `{admiral}` core. If the function is very specific to onoclogy needs, then it should remain in `{admiralonco}`.
+1. The `assert` custom checking functions should always live within `{admiraldev}` to stay with the family of `assertion` functions.
+
+
+
 
 
 

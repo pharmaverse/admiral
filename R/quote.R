@@ -6,10 +6,9 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords quote
+#' @family quote
 #'
-#' @rdname dev_util_enumerate
 #' @export
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
   if (length(x) == 1L) {
@@ -29,10 +28,9 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords quote
+#' @family quote
 #'
-#' @rdname dev_util_backquote
 #' @export
 backquote <- function(x) {
   paste0("`", x, "`")
@@ -44,10 +42,9 @@ backquote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords quote
+#' @family quote
 #'
-#' @rdname dev_util_squote
 #' @export
 squote <- function(x) {
   paste0("'", x, "'")
@@ -65,8 +62,8 @@ squote <- function(x) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords quo
-#' @family quo
+#' @keywords quote
+#' @family quote
 #' @export
 dquote <- function(x) {
   if (is.null(x)) {

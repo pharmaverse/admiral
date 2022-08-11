@@ -8,7 +8,7 @@
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords remove_utility
 #'
 #' @examples
 #' vars2chr(vars(USUBJID, AVAL))
@@ -34,7 +34,7 @@ vars2chr <- function(quosures) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords remove_utility
 #'
 #' @examples
 #' negate_vars(vars(USUBJID, STUDYID))
@@ -61,7 +61,7 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords remove_utility
 #'
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)

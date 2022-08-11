@@ -21,4 +21,4 @@ vars2chr(vars(USUBJID, AVAL))
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\keyword{remove_utility}

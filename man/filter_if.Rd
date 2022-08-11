@@ -21,4 +21,4 @@ Filters the input dataset if the provided expression is not \code{NULL}
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\keyword{remove_utility}

@@ -17,14 +17,13 @@ enumerate(x, quote_fun = backquote, conjunction = "and")
 Enumerate Multiple Strings
 }
 \seealso{
-Helpers for working with Quosures and Quoting: 
+Helpers for working with Quotes and Quoting: 
 \code{\link{backquote}()},
 \code{\link{dquote}()},
-\code{\link{quo_c}()},
 \code{\link{squote}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{quo}
-\keyword{quo}
+\concept{quote}
+\keyword{quote}

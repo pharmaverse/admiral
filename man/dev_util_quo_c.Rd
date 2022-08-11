@@ -15,13 +15,6 @@ An object of class \code{quosures}
 \description{
 Concatenate One or More Quosure(s)
 }
-\seealso{
-Helpers for working with Quosures and Quoting: 
-\code{\link{backquote}()},
-\code{\link{dquote}()},
-\code{\link{enumerate}()},
-\code{\link{squote}()}
-}
 \author{
 Thomas Neitmann
 }

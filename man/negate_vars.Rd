@@ -25,4 +25,4 @@ negate_vars(vars(USUBJID, STUDYID))
 \author{
 Stefan Bundfuss
 }
-\keyword{user_utility}
+\keyword{remove_utility}
