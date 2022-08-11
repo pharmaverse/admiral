@@ -21,12 +21,6 @@ An error if the condition is not meet. The input otherwise.
 \description{
 Checks if there is a one to one mapping between two lists of variables.
 }
-\examples{
-data(admiral_adsl)
-try(
-  assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
-)
-}
 \seealso{
 Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},

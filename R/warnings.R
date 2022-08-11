@@ -202,23 +202,6 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #' are suppressed.
 #'
 #' @export
-#'
-#' @examples
-#' library(dplyr, warn.conflicts = FALSE)
-#' library(admiral)
-#' library(admiral.test)
-#' data(admiral_adsl)
-#' data(admiral_vs)
-#'
-#' # Remove label
-#' attr(admiral_vs$USUBJID, "label") <- NULL
-#'
-#' left_join(admiral_adsl, admiral_vs, by = "USUBJID")
-#'
-#' suppress_warning(
-#'   left_join(admiral_adsl, admiral_vs, by = "USUBJID"),
-#'   "^Column `USUBJID` has different attributes on LHS and RHS of join$"
-#' )
 suppress_warning <- function(expr, regexpr) {
   withCallingHandlers(
     expr,

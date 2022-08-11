@@ -30,17 +30,4 @@ A HTML table
 \description{
 Output a dataset in a vignette with the pre-specified admiral format.
 }
-\examples{
-library(admiral)
-library(DT)
-library(dplyr)
-library(admiral.test)
-data("admiral_dm")
-
-dataset_vignette(admiral_dm)
-dataset_vignette(admiral_dm,
-  display_vars = vars(USUBJID, RFSTDTC, DTHDTC),
-  filter = ARMCD == "Pbo"
-)
-}
 \keyword{dev_utility}

@@ -15,18 +15,9 @@ An object of class \code{quosures}
 \description{
 Concatenate One or More Quosure(s)
 }
-\examples{
-admiral:::quo_c(rlang::quo(USUBJID))
-admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
-admiral:::quo_c(vars(USUBJID, ADTM))
-admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
-}
 \seealso{
-Helpers for working with Quosures and Quoting: 
-\code{\link{backquote}()},
-\code{\link{dquote}()},
-\code{\link{enumerate}()},
-\code{\link{squote}()}
+Helpers for working with Quosures: 
+\code{\link{quo_not_missing}()}
 }
 \author{
 Thomas Neitmann

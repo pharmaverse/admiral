@@ -12,18 +12,14 @@ squote(x)
 \description{
 Wrap a String in Single Quotes
 }
-\examples{
-admiral:::squote("foo")
-}
 \seealso{
-Helpers for working with Quosures and Quoting: 
+Helpers for working with Quotes and Quoting: 
 \code{\link{backquote}()},
 \code{\link{dquote}()},
-\code{\link{enumerate}()},
-\code{\link{quo_c}()}
+\code{\link{enumerate}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{quo}
-\keyword{quo}
+\concept{quote}
+\keyword{quote}

@@ -16,10 +16,6 @@ is_valid_time_entry(arg)
 Time_imputation format should be specified as "hh:mm:ss" (e.g. "00:00:00")
 or as a keyword: "FIRST", "LAST"
 }
-\examples{
-assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
-assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},
@@ -31,6 +27,7 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_valid_day}()},
 \code{\link{is_valid_dtc}()},
 \code{\link{is_valid_hour}()},
+\code{\link{is_valid_month}()},
 \code{\link{is_valid_sec_min}()}
 }
 \author{

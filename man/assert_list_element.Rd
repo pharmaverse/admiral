@@ -39,49 +39,6 @@ Checks if the elements of a list of named lists/classes fulfill a certain
 condition. If not, an error is issued and all elements of the list not
 fulfilling the condition are listed.
 }
-\examples{
-library(admiral)
-
-death <- event_source(
-  dataset_name = "adsl",
-  filter = DTHFL == "Y",
-  date = DTHDT,
-  set_values_to = vars(
-    EVNTDESC = "DEATH",
-    SRCDOM = "ADSL",
-    SRCVAR = "DTHDT"
-  )
-)
-
-lstalv <- censor_source(
-  dataset_name = "adsl",
-  date = LSTALVDT,
-  set_values_to = vars(
-    EVNTDESC = "LAST KNOWN ALIVE DATE",
-    SRCDOM = "ADSL",
-    SRCVAR = "LSTALVDT"
-  )
-)
-events <- list(death, lstalv)
-try(assert_list_element(
-  list = events,
-  element = "censor",
-  condition = censor == 0,
-  message_text = "For events the censor values must be zero."
-))
-
-valid_datasets <- c("adrs", "adae")
-try(assert_list_element(
-  list = events,
-  element = "dataset_name",
-  condition = dataset_name \%in\% valid_datasets,
-  valid_datasets = valid_datasets,
-  message_text = paste0(
-    "The dataset name must be one of the following:\n",
-    paste(valid_datasets, collapse = ", ")
-  )
-))
-}
 \seealso{
 Checks for valid input and returns warning or errors messages: 
 \code{\link{assert_character_scalar}()},

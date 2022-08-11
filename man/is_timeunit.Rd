@@ -16,10 +16,6 @@ is_timeunit(arg)
 Checks if a string is a time unit, i.e., 'years', 'months', 'days', 'hours',
 'minutes', or 'seconds'.
 }
-\examples{
-unit <- "days"
-assertthat::assert_that(admiral:::is_timeunit(unit))
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_auto}()},
@@ -30,6 +26,7 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_valid_day}()},
 \code{\link{is_valid_dtc}()},
 \code{\link{is_valid_hour}()},
+\code{\link{is_valid_month}()},
 \code{\link{is_valid_sec_min}()},
 \code{\link{is_valid_time_entry}()}
 }

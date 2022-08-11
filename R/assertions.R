@@ -23,7 +23,6 @@
 #'
 #' @examples
 #' library(admiral.test)
-#' library(admiral)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -1229,48 +1228,6 @@ assert_varval_list <- function(arg, # nolint
 #' @family assertion
 #' @export
 #'
-#' @examples
-#' library(admiral)
-#'
-#' death <- event_source(
-#'   dataset_name = "adsl",
-#'   filter = DTHFL == "Y",
-#'   date = DTHDT,
-#'   set_values_to = vars(
-#'     EVNTDESC = "DEATH",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "DTHDT"
-#'   )
-#' )
-#'
-#' lstalv <- censor_source(
-#'   dataset_name = "adsl",
-#'   date = LSTALVDT,
-#'   set_values_to = vars(
-#'     EVNTDESC = "LAST KNOWN ALIVE DATE",
-#'     SRCDOM = "ADSL",
-#'     SRCVAR = "LSTALVDT"
-#'   )
-#' )
-#' events <- list(death, lstalv)
-#' try(assert_list_element(
-#'   list = events,
-#'   element = "censor",
-#'   condition = censor == 0,
-#'   message_text = "For events the censor values must be zero."
-#' ))
-#'
-#' valid_datasets <- c("adrs", "adae")
-#' try(assert_list_element(
-#'   list = events,
-#'   element = "dataset_name",
-#'   condition = dataset_name %in% valid_datasets,
-#'   valid_datasets = valid_datasets,
-#'   message_text = paste0(
-#'     "The dataset name must be one of the following:\n",
-#'     paste(valid_datasets, collapse = ", ")
-#'   )
-#' ))
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
   assert_character_scalar(element)
@@ -1324,11 +1281,6 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @family assertion
 #' @export
 #'
-#' @examples
-#' data(admiral_adsl)
-#' try(
-#'   assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
-#' )
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)
   assert_vars(vars2)

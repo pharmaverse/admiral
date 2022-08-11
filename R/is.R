@@ -7,7 +7,7 @@
 #'
 #' @keywords is
 #' @family is
-#'
+#' @export
 is_named <- function(x) {
   !is.null(names(x)) && all(names(x) != "")
 }
@@ -23,21 +23,7 @@ is_named <- function(x) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#'
-#' example_fun <- function(arg) {
-#'   arg <- rlang::enquo(arg)
-#'   if (admiral:::is_auto(arg)) {
-#'     "auto keyword was specified"
-#'   } else {
-#'     arg
-#'   }
-#' }
-#'
-#' example_fun("Hello World!")
-#'
-#' example_fun(auto)
+#' @export
 is_auto <- function(arg) {
   is_quosure(arg) && quo_is_symbol(arg) && quo_get_expr(arg) == expr(auto)
 }
@@ -54,11 +40,7 @@ is_auto <- function(arg) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' refdate <- lubridate::ymd("2020-01-02")
-#' date <- lubridate::ymd("2020-02-03")
-#' assertthat::assert_that(admiral:::is_date(refdate), admiral:::is_date(date))
+#' @export
 is_date <- function(arg) {
   is.instant(arg)
 }
@@ -94,10 +76,7 @@ on_failure(is_date) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' unit <- "days"
-#' assertthat::assert_that(admiral:::is_timeunit(unit))
+#' @export
 is_timeunit <- function(arg) {
   arg %in% c("years", "months", "days", "hours", "minutes", "seconds")
 }
@@ -125,10 +104,7 @@ on_failure(is_timeunit) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_date_entry("01-02"))
-#' assertthat::assert_that(admiral:::is_valid_date_entry("FIRST"))
+#' @export
 is_valid_date_entry <- function(arg) {
   pattern <- "^(01|02|03|04|05|06|07|08|09|10|11|12)-([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "MID", "LAST")
@@ -158,10 +134,7 @@ on_failure(is_valid_date_entry) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_time_entry("23:59:59"))
-#' assertthat::assert_that(admiral:::is_valid_time_entry("FIRST"))
+#' @export
 is_valid_time_entry <- function(arg) {
   pattern <- "^([0-9]{2}):([0-9]{2}):([0-9]{2})$"
   grepl(pattern, arg) | str_to_upper(arg) %in% c("FIRST", "LAST")
@@ -190,9 +163,7 @@ on_failure(is_valid_time_entry) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_sec_min(59))
+#' @export
 is_valid_sec_min <- function(arg) {
   arg %in% 0:59
 }
@@ -219,9 +190,7 @@ on_failure(is_valid_sec_min) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_hour(20))
+#' @export
 is_valid_hour <- function(arg) {
   arg %in% 0:23
 }
@@ -248,10 +217,7 @@ on_failure(is_valid_hour) <- function(call, env) {
 #'
 #' @keywords is
 #' @family is
-#'
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_day(20))
+#' @export
 is_valid_day <- function(arg) {
   arg %in% 1:31
 }
@@ -279,10 +245,7 @@ on_failure(is_valid_day) <- function(call, env) {
 #' @keywords is
 #' @family is
 #'
-#' @noRd
-#'
-#' @examples
-#' assertthat::assert_that(admiral:::is_valid_month(12))
+#' @export
 is_valid_month <- function(arg) {
   arg %in% 1:12
 }

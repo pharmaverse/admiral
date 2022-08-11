@@ -16,21 +16,6 @@ of a symbol named auto.
 \description{
 Checks if the argument equals the auto keyword
 }
-\examples{
-
-example_fun <- function(arg) {
-  arg <- rlang::enquo(arg)
-  if (admiral:::is_auto(arg)) {
-    "auto keyword was specified"
-  } else {
-    arg
-  }
-}
-
-example_fun("Hello World!")
-
-example_fun(auto)
-}
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 
 \code{\link{is_date}()},
@@ -41,6 +26,7 @@ Identifies type of Object with return of TRUE/FALSE:
 \code{\link{is_valid_day}()},
 \code{\link{is_valid_dtc}()},
 \code{\link{is_valid_hour}()},
+\code{\link{is_valid_month}()},
 \code{\link{is_valid_sec_min}()},
 \code{\link{is_valid_time_entry}()}
 }

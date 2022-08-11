@@ -12,18 +12,14 @@ backquote(x)
 \description{
 Wrap a String in Backquotes
 }
-\examples{
-admiral:::backquote("USUBJID")
-}
 \seealso{
-Helpers for working with Quosures and Quoting: 
+Helpers for working with Quotes and Quoting: 
 \code{\link{dquote}()},
 \code{\link{enumerate}()},
-\code{\link{quo_c}()},
 \code{\link{squote}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{quo}
-\keyword{quo}
+\concept{quote}
+\keyword{quote}

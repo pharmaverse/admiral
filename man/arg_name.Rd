@@ -12,17 +12,16 @@ arg_name(expr)
 \description{
 Extract Argument Name from an Expression
 }
-\examples{
-test_fun <- function(something) {
-  admiral:::arg_name(substitute(something))
-}
-
-inner_function <- function(x) x
-test_fun2 <- function(something) {
-  admiral:::arg_name(substitute(inner_function(something)))
-}
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()},
+\code{\link{replace_values_by_names}()}
 }
 \author{
 Thomas Neitmann, Ondrej Slama
 }
+\concept{dev_utility}
 \keyword{dev_utility}

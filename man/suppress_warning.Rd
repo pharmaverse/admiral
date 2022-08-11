@@ -21,23 +21,6 @@ Suppress certain warnings issued by an expression.
 All warnings which are issued by the expression and match the regular expression
 are suppressed.
 }
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral)
-library(admiral.test)
-data(admiral_adsl)
-data(admiral_vs)
-
-# Remove label
-attr(admiral_vs$USUBJID, "label") <- NULL
-
-left_join(admiral_adsl, admiral_vs, by = "USUBJID")
-
-suppress_warning(
-  left_join(admiral_adsl, admiral_vs, by = "USUBJID"),
-  "^Column `USUBJID` has different attributes on LHS and RHS of join$"
-)
-}
 \seealso{
 Function that provide users with custom warnings
 \code{\link{warn_if_incomplete_dtc}()},

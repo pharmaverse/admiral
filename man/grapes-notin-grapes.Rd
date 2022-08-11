@@ -15,11 +15,16 @@ x \%notin\% table
 Returns a \code{logical} vector indicating if there is \emph{no} match of the
 left operand in the right operand.
 }
-\examples{
-`\%notin\%` <- admiral:::`\%notin\%`
-"a" \%notin\% c("b", "v", "k")
+\seealso{
+Developer Utility Functions: 
+\code{\link{arg_name}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()},
+\code{\link{replace_values_by_names}()}
 }
 \author{
 Thomas Neitmann
 }
+\concept{dev_utility}
 \keyword{dev_utility}

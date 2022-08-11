@@ -15,10 +15,16 @@ A list of quosures
 \description{
 Replace Quosure Value with Name
 }
-\examples{
-admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{arg_name}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()}
 }
 \author{
 Thomas Neitmann
 }
+\concept{dev_utility}
 \keyword{dev_utility}

@@ -16,24 +16,14 @@ enumerate(x, quote_fun = backquote, conjunction = "and")
 \description{
 Enumerate Multiple Strings
 }
-\examples{
-admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
-admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
-admiral:::enumerate(
-  c("date", "time", "both"),
-  quote_fun = admiral:::squote,
-  conjunction = "or"
-)
-}
 \seealso{
-Helpers for working with Quosures and Quoting: 
+Helpers for working with Quotes and Quoting: 
 \code{\link{backquote}()},
 \code{\link{dquote}()},
-\code{\link{quo_c}()},
 \code{\link{squote}()}
 }
 \author{
 Thomas Neitmann
 }
-\concept{quo}
-\keyword{quo}
+\concept{quote}
+\keyword{quote}
