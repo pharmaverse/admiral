@@ -10,11 +10,13 @@ derive_var_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 derive_var_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 }
 \arguments{
-\item{dataset}{Input dataset.}
+\item{dataset}{Input dataset}
 
-\item{age_var}{AGE variable.}
+\item{age_var}{AGE variable}
 
-\item{age_unit}{AGE unit variable.}
+\item{age_unit}{AGE unit variable}
+
+\item{new_var}{New variable to create inside \code{dataset}}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}

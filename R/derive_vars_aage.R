@@ -208,9 +208,13 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' These functions are *deprecated*.
 #'
-#' @param dataset Input dataset.
-#' @param age_var AGE variable.
-#' @param age_unit AGE unit variable.
+#' @param dataset Input dataset
+#'
+#' @param age_var AGE variable
+#'
+#' @param age_unit AGE unit variable
+#'
+#' @param new_var New variable to create inside `dataset`
 #'
 #' @keywords deprecated
 #'
