@@ -126,7 +126,7 @@ replace_values_by_names <- function(quosures) {
 #' @details
 #' This function is missing in earlier version of {rlang} which is why we re-
 #' implment it here.
-#'
+#' @param x something
 #' @keywords dev_utility
 #' @family dev_utility
 #' @export

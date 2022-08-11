@@ -15,6 +15,10 @@ An object of class \code{quosures}
 \description{
 Concatenate One or More Quosure(s)
 }
+\seealso{
+Helpers for working with Quosures: 
+\code{\link{quo_not_missing}()}
+}
 \author{
 Thomas Neitmann
 }

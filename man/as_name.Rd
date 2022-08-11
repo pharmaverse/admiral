@@ -6,6 +6,9 @@
 \usage{
 as_name(x)
 }
+\arguments{
+\item{x}{something}
+}
 \description{
 Turn a Quosure into a String
 }
