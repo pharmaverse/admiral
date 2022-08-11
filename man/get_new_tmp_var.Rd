@@ -22,7 +22,12 @@ The function returns a new unique temporary variable name to be used inside
 \code{tmp_var_1} already exists then \code{get_new_tmp_var()} will return \code{tmp_var_2}.
 }
 \examples{
-data(adsl)
+library(dplyr)
+data(admiral_adsl)
+adsl <- admiral_adsl
 tmp_var <- get_new_tmp_var(adsl)
 mutate(adsl, !!tmp_var := NA)
+}
+\seealso{
+\code{\link[=remove_tmp_vars]{remove_tmp_vars()}}
 }

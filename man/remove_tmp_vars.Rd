@@ -13,12 +13,15 @@ remove_tmp_vars(dataset)
 Remove All Temporary Variables Created Within the Current Function Environment
 }
 \examples{
-data(dm)
+library(dplyr)
+library(admiral.test)
+data(admiral_dm)
+dm <- select(admiral_dm, USUBJID)
 tmp_var <- get_new_tmp_var(dm)
 dm <- mutate(dm, !!tmp_var := NA)
 
 ## This function creates two new temporary variables which are removed when calling
-## `remove_tmp_vars()`. Note that any temporary varirable created outside this
+## `remove_tmp_vars()`. Note that any temporary variable created outside this
 ## function is **not** removed
 do_something <- function(dataset) {
   tmp_var_1 <- get_new_tmp_var(dm)
@@ -30,4 +33,7 @@ do_something <- function(dataset) {
 }
 
 do_something(dm)
+}
+\seealso{
+\code{\link[=get_new_tmp_var]{get_new_tmp_var()}}
 }

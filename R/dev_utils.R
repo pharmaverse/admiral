@@ -538,14 +538,18 @@ contains_vars <- function(arg) {
 #' `datset` with a given `prefix` then the suffix is increased by 1, e.g. if
 #' `tmp_var_1` already exists then `get_new_tmp_var()` will return `tmp_var_2`.
 #'
+#' @seealso [remove_tmp_vars()]
+#'
 #' @export
 #'
 #' @examples
-#' data(adsl)
+#' library(dplyr)
+#' data(admiral_adsl)
+#' adsl <- admiral_adsl
 #' tmp_var <- get_new_tmp_var(adsl)
 #' mutate(adsl, !!tmp_var := NA)
 get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
-  assert_data_frame(dataset)
+  assert_data_frame(dataset, optional = TRUE)
   assert_character_scalar(prefix)
   if (!str_detect(prefix, "^tmp_")) {
     abort("`prefix` must start with 'tmp_'")
@@ -553,8 +557,12 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 
   caller_env <- parent.frame()
 
-  regexp <- str_c("^", prefix, "_[0-9]{1,}$")
-  colnames_with_prefix <- str_subset(colnames(dataset), regexp)
+  if (is.null(dataset)) {
+    colnames_with_prefix <- vector("character")
+  } else {
+    regexp <- str_c("^", prefix, "_[0-9]{1,}$")
+    colnames_with_prefix <- str_subset(colnames(dataset), regexp)
+  }
   if (!is.null(caller_env$.tmp_vars)) {
     suffices <- str_extract(caller_env$.tmp_vars, "[0-9]{1,}$")
     counter <- max(as.integer(suffices)) + 1L
@@ -577,13 +585,18 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 #'
 #' @export
 #'
+#' @seealso [get_new_tmp_var()]
+#'
 #' @examples
-#' data(dm)
+#' library(dplyr)
+#' library(admiral.test)
+#' data(admiral_dm)
+#' dm <- select(admiral_dm, USUBJID)
 #' tmp_var <- get_new_tmp_var(dm)
 #' dm <- mutate(dm, !!tmp_var := NA)
 #'
 #' ## This function creates two new temporary variables which are removed when calling
-#' ## `remove_tmp_vars()`. Note that any temporary varirable created outside this
+#' ## `remove_tmp_vars()`. Note that any temporary variable created outside this
 #' ## function is **not** removed
 #' do_something <- function(dataset) {
 #'   tmp_var_1 <- get_new_tmp_var(dm)
@@ -603,12 +616,11 @@ remove_tmp_vars <- function(dataset) {
 
   if (any(contains_pipe)) {
     last_pipe <- max(which(contains_pipe))
-    n <- length(calls) - last_pipe - 1L
+    tmp_vars <- sys.frame(last_pipe - 1L)$.tmp_vars
   } else {
-    n <- 1L
+    tmp_vars <- parent.frame()$.tmp_vars
   }
 
-  tmp_vars <- parent.frame(n)$.tmp_vars
   if (is.null(tmp_vars)) {
     dataset
   } else {

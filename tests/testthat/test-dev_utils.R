@@ -1,6 +1,6 @@
 library(admiraltest)
 data(admiral_dm)
-dm <- admiral_dm
+dm <- select(admiral_dm, USUBJID)
 
 test_that("creating temporary variables works", {
   expect_identical(get_new_tmp_var(dm), sym("tmp_var_1"))
@@ -36,7 +36,6 @@ test_that("removing temporary variables works when using the pipe operator", {
     tmp_var_2 <- get_new_tmp_var(dm)
     dm %>%
       mutate(!!tmp_var_1 := NA, !!tmp_var_2 := NA) %>%
-      print() %>%
       remove_tmp_vars()
   }
   expect_identical(colnames(dm), colnames(do_something_with_pipe(dm)))
