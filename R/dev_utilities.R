@@ -91,14 +91,15 @@ extract_vars <- function(x, side = "lhs") {
 }
 
 
-#' Title
+#' Or Guy - Update
 #'
 #' @param lhs something
 #' @param rhs something
 #'
 #' @return something
 #' @export
-#'
+#' @keywords dev_utility
+#' @family dev_utility
 `%or%` <- function(lhs, rhs) {
   tryCatch(lhs, error = function(e) rhs)
 }

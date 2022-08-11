@@ -2,7 +2,7 @@
 % Please edit documentation in R/dev_utilities.R
 \name{\%or\%}
 \alias{\%or\%}
-\title{Title}
+\title{Or Guy - Update}
 \usage{
 lhs \%or\% rhs
 }
@@ -15,5 +15,17 @@ lhs \%or\% rhs
 something
 }
 \description{
-Title
+Or Guy - Update
 }
+\seealso{
+Developer Utility Functions: 
+\code{\link{\%notin\%}()},
+\code{\link{arg_name}()},
+\code{\link{as_name}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{extract_vars}()},
+\code{\link{replace_values_by_names}()},
+\code{\link{valid_time_units}()}
+}
+\concept{dev_utility}
+\keyword{dev_utility}

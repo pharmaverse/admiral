@@ -15,6 +15,7 @@ Extract Argument Name from an Expression
 \seealso{
 Developer Utility Functions: 
 \code{\link{\%notin\%}()},
+\code{\link{\%or\%}()},
 \code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},

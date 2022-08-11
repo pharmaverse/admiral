@@ -20,6 +20,7 @@ Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Form
 \seealso{
 Developer Utility Functions: 
 \code{\link{\%notin\%}()},
+\code{\link{\%or\%}()},
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
 \code{\link{extract_vars}()},
