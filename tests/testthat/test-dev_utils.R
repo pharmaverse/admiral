@@ -1,4 +1,4 @@
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 dm <- select(admiral_dm, USUBJID)
 
