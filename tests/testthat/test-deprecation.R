@@ -294,8 +294,8 @@ test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr
 
 test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", { # nolint
   expect_warning(
-     derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
-     "deprecated",
-     fixed = TRUE
+    derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
+    "deprecated",
+    fixed = TRUE
   )
 })
