@@ -284,7 +284,7 @@ test_that("date_source: errors when preserve is specified", {
   )
 })
 
-test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr_ema()` is called", {
+test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr_ema()` is called", { # nolint
   expect_warning(
     derive_var_agegr_ema(admiral_dm, age_var = AGE, new_var = AGEGR1),
     "deprecated",
@@ -292,7 +292,7 @@ test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr
   )
 })
 
-test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", {
+test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", { # nolint
   expect_warning(
      derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
      "deprecated",
