@@ -97,7 +97,7 @@ adae <- adae %>%
     single_dose_condition = (EXSTDTC == EXENDTC),
     output_datetime = TRUE
   ) %>%
-  # derive severity / causality / ...
+  ## Derive severity / causality / ... ----
   mutate(
     ASEV = AESEV,
     AREL = AEREL

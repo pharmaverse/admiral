@@ -11,6 +11,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
+# Load source datasets ----
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
@@ -66,7 +67,6 @@ adex0 <- ex %>%
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
   ## Calculate ASTDTM, AENDTM using `derive_vars_dtm()` ----
-
   derive_vars_dtm(
     dtc = EXSTDTC,
     highest_imputation = "M",

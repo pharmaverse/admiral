@@ -131,7 +131,7 @@ adlb <- adlb %>%
   )
 
 adlb <- adlb %>%
-  # Calculate ONTRTFL
+  ## Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
