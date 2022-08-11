@@ -129,7 +129,7 @@ library(lubridate)
 library(dplyr)
 library(admiral.test)
 library(DT)
-library(admiral)
+#library(admiral)
 
 data(admiral_vs)
 ```
@@ -146,8 +146,9 @@ vs1 <- admiral_vs %>%
 
   + Output dataset formatted using `dataset_vignette()`...
 
+#TODO - Fix this
 
-```{r, echo=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 vs1 <- admiral_vs %>%
   derive_vars_dt(
     new_vars_prefix = "A",
