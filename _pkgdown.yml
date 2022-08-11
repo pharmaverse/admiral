@@ -32,10 +32,10 @@ reference:
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("der_occds")
-- subtitle: TTE-specific
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-- contents:
-  - has_keyword("der_tte")
+# - subtitle: TTE-specific
+#   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+# - contents:
+#   - has_keyword("der_tte")
 
 - title: Derivations for Adding Parameters
 - subtitle: BDS-specific

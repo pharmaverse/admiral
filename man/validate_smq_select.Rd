@@ -19,29 +19,14 @@ Validate an object is indeed a \code{smq_select} object
 \code{\link[=smq_select]{smq_select()}}
 
 Functions moved to admiraldev package: 
-\code{\link{arg_name}()},
 \code{\link{assert_db_requirements}()},
 \code{\link{assert_terms}()},
 \code{\link{assert_valid_queries}()},
-\code{\link{backquote}()},
-\code{\link{contains_vars}()},
-\code{\link{dquote}()},
-\code{\link{enumerate}()},
 \code{\link{extend_source_datasets}()},
-\code{\link{extract_vars}()},
 \code{\link{format.sdg_select}()},
 \code{\link{format.smq_select}()},
-\code{\link{get_constant_vars}()},
-\code{\link{get_duplicates}()},
-\code{\link{get_source_vars}()},
-\code{\link{is_auto}()},
-\code{\link{quo_c}()},
-\code{\link{replace_values_by_names}()},
-\code{\link{squote}()},
-\code{\link{valid_time_units}()},
 \code{\link{validate_query}()},
-\code{\link{validate_sdg_select}()},
-\code{\link{what_is_it}()}
+\code{\link{validate_sdg_select}()}
 }
 \author{
 Stefan Bundfuss
