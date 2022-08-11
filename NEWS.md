@@ -52,6 +52,8 @@ users feedback (#1300):
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
+- `derive_var_agegr_ema()` and `derive_var_agegr_fda()` have been deprecated (#1333)
+
 - Imputation related arguments have been deprecated for all functions except the
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
 date is based on dates, DTC variables have to be converted to numeric date or
@@ -88,7 +90,7 @@ have been removed:
   - `lstalvdt_source()`
   - `derive_var_trtedtm()`
   - `derive_var_trtsdtm()`
-  
+
 ## Documentation
 
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
