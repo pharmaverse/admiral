@@ -137,6 +137,12 @@ as_name <- function(x) {
   as_string(x)
 }
 
+#' Valid Time Units
+#'
+#' @return something
+#' @export
+#' @keywords dev_utility
+#' @family dev_utility
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }

@@ -23,7 +23,8 @@ Developer Utility Functions:
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
 \code{\link{extract_vars}()},
-\code{\link{replace_values_by_names}()}
+\code{\link{replace_values_by_names}()},
+\code{\link{valid_time_units}()}
 }
 \author{
 Ondrej Slama
