@@ -1,4 +1,23 @@
+library(admiral.test)
 library(tibble)
+data("admiral_dm")
+
+adsl <- tribble(
+  ~USUBJID, ~SEX, ~COUNTRY,
+  "ST42-1", "F",  "AUT",
+  "ST42-2", "M",  "MWI",
+  "ST42-3", "M",  "NOR",
+  "ST42-4", "F",  "UGA"
+) %>% mutate(STUDYID = "ST42")
+
+ex <- tribble(
+  ~USUBJID, ~EXSTDTC,
+  "ST42-1", "2020-12-07",
+  "ST42-1", "2020-12-14",
+  "ST42-2", "2021-01-12T12:00:00",
+  "ST42-2", "2021-01-26T13:21",
+  "ST42-3", "2021-03-02"
+) %>% mutate(STUDYID = "ST42")
 
 test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
   input <- tibble::tribble(
@@ -188,23 +207,6 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
   )
 })
 
-adsl <- tribble(
-  ~USUBJID, ~SEX, ~COUNTRY,
-  "ST42-1", "F",  "AUT",
-  "ST42-2", "M",  "MWI",
-  "ST42-3", "M",  "NOR",
-  "ST42-4", "F",  "UGA"
-) %>% mutate(STUDYID = "ST42")
-
-ex <- tribble(
-  ~USUBJID, ~EXSTDTC,
-  "ST42-1", "2020-12-07",
-  "ST42-1", "2020-12-14",
-  "ST42-2", "2021-01-12T12:00:00",
-  "ST42-2", "2021-01-26T13:21",
-  "ST42-3", "2021-03-02"
-) %>% mutate(STUDYID = "ST42")
-
 test_that("derive_vars_merged_dt: a deprecation warning is issued", {
   expect_warning(
     derive_vars_merged_dt(
@@ -279,5 +281,21 @@ test_that("date_source: errors when preserve is specified", {
       "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
       sep = "\n"
     )
+  )
+})
+
+test_that("derive_var_agegr_ema Test 1: A warning is issued if `derive_var_agegr_ema()` is called", {
+  expect_warning(
+    derive_var_agegr_ema(admiral_dm, age_var = AGE, new_var = AGEGR1),
+    "deprecated",
+    fixed = TRUE
+  )
+})
+
+test_that("derive_var_agegr_fda Test 1: A warning is issued if `derive_var_agegr_fda()` is called", {
+  expect_warning(
+     derive_var_agegr_fda(admiral_dm, age_var = AGE, new_var = AGEGR1),
+     "deprecated",
+     fixed = TRUE
   )
 })

@@ -143,7 +143,6 @@ derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae 
 
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},

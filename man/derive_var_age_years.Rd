@@ -49,7 +49,6 @@ data.frame(AGE = c(12, 24, 36, 48)) \%>\%
 }
 \seealso{
 ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_disposition_status}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
