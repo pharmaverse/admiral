@@ -281,6 +281,7 @@ derive_param_tte <- function(dataset = NULL,
     )
   }
 
+  tmp_event <- get_new_tmp_var(dataset)
   # determine events #
   event_data <- filter_date_sources(
     sources = event_conditions,
@@ -290,7 +291,7 @@ derive_param_tte <- function(dataset = NULL,
     subject_keys = subject_keys,
     mode = "first"
   ) %>%
-    mutate(temp_event = 1)
+    mutate(!!tmp_event := 1L)
 
   # determine censoring observations #
   censor_data <- filter_date_sources(
@@ -301,7 +302,7 @@ derive_param_tte <- function(dataset = NULL,
     subject_keys = subject_keys,
     mode = "last"
   ) %>%
-    mutate(temp_event = 0)
+    mutate(!!tmp_event := 0L)
 
   # determine variable to add from ADSL #
   if (create_datetime) {
@@ -341,7 +342,7 @@ derive_param_tte <- function(dataset = NULL,
   new_param <- filter_extreme(
     bind_rows(event_data, censor_data),
     by_vars = quo_c(subject_keys, by_vars),
-    order = vars(temp_event),
+    order = vars(!!tmp_event),
     mode = "last"
   ) %>%
     derive_vars_merged(
@@ -371,7 +372,7 @@ derive_param_tte <- function(dataset = NULL,
 
   new_param <- new_param %>%
     mutate(!!date_var := pmax(!!date_var, !!start_var)) %>%
-    select(-starts_with("temp_"))
+    remove_tmp_vars()
 
   if (!is.null(by_vars)) {
     if (!is.null(set_values_to$PARAMCD)) {
