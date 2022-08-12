@@ -98,8 +98,7 @@ i.e. all input like datasets, variable names, options, … must be provided to t
 * The output dataset must be ungrouped.
 * The functions should not sort (arrange) the output dataset at the end.
 * If the function needs to create temporary variables in an input dataset, these
-variables must start with `temp_` and must be removed from the output dataset.
-* If the input dataset includes variables starting with `temp_`, an error must be issued.
+variables must be created using `get_new_tmp_var()` and must be removed from the output dataset using `remove_tmp_vars()`
 * The function must not have any side-effects like creating or modifying global objects, printing, writing files, ...
 
 ## Function Names
