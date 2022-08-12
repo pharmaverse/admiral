@@ -2,21 +2,35 @@ library(admiral.test)
 data(admiral_dm)
 dm <- select(admiral_dm, USUBJID)
 
-test_that("creating temporary variables works", {
+# get_new_tmp_var ----
+## Test 1: creating temporary variables works ----
+test_that("get_new_tmp_var Test 1: creating temporary variables works", {
   expect_identical(get_new_tmp_var(dm), sym("tmp_var_1"))
 })
 
-test_that("the temporary variable counter is increased correctly", {
+## Test 2: errors if name does not start with tmp ----
+test_that("get_new_tmp_var Test 2: errors if name does not start with tmp", {
+  expect_error(
+    get_new_tmp_var(dm, prefix = "my_var"),
+    "`prefix` must start with 'tmp_'"
+  )
+})
+
+## Test 3: the temporary variable counter is increased correctly ----
+test_that("get_new_tmp_var Test 3: the temporary variable counter is increased correctly", {
   dm$tmp_var_1 <- NA
   dm$tmp_var_2 <- NA
   expect_identical(get_new_tmp_var(dm), sym("tmp_var_3"))
 })
 
-test_that("no variables are removed when no tmp vars are present", {
+# remove_tmp_vars ----
+## Test 4:  no variables are removed when no tmp vars are present ----
+test_that("remove_tmp_vars Test 4: no variables are removed when no tmp vars are present", {
   expect_identical(dm, remove_tmp_vars(dm))
 })
 
-test_that("removing temporary variables works", {
+## Test 5: removing temporary variables works ----
+test_that("remove_tmp_vars Test 5: removing temporary variables works", {
   tmp_var <- get_new_tmp_var(dm)
   dm <- mutate(dm, !!tmp_var := NA)
   do_something <- function(dataset) {
@@ -28,7 +42,8 @@ test_that("removing temporary variables works", {
   expect_identical(colnames(dm), colnames(do_something(dm)))
 })
 
-test_that("removing temporary variables works when using the pipe operator", {
+## Test 6: removing temp variables works with the pipe operator ----
+test_that("remove_tmp_vars Test 6: removing temp variables works with the pipe operator", {
   tmp_var <- get_new_tmp_var(dm)
   dm <- mutate(dm, !!tmp_var := NA)
   do_something_with_pipe <- function(dataset) {
