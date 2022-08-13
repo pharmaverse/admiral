@@ -172,7 +172,7 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords adam derivation
+#' @keywords der_gen
 #'
 #' @seealso [filter_confirmation()]
 #'

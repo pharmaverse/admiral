@@ -61,7 +61,6 @@ derive_vars_query(adae, queries)
 OCCDS Functions: 
 \code{\link{create_query_data}()},
 \code{\link{create_single_dose_dataset}()},
-\code{\link{derive_last_dose}()},
 \code{\link{derive_vars_atc}()},
 \code{\link{get_terms_from_db}()}
 }

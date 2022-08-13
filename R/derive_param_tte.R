@@ -73,9 +73,7 @@
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
-#'   the datepart is copied. If the source variable is a character variable, it
-#'   is converted to a date. If the date is incomplete, it is imputed as the
-#'   first possible date.
+#'   the datepart is copied.
 #'
 #'   \item The `CNSR` variable is added and set to the \code{censor} element.
 #'
@@ -96,9 +94,7 @@
 #'
 #'   \item The `ADT` variable is set to the variable specified by the
 #'   \code{date} element. If the date variable is a datetime variable, only
-#'   the datepart is copied. If the source variable is a character variable, it
-#'   is converted to a date. If the date is incomplete, it is imputed as the
-#'   first possible date.
+#'   the datepart is copied.
 #'
 #'   \item The `CNSR` variable is added and set to the \code{censor} element.
 #'
@@ -133,6 +129,7 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #' data("admiral_adsl")
@@ -174,14 +171,14 @@
 #'   filter(row_number() %in% 20:30)
 #'
 #' # derive time to adverse event for each preferred term #
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",
@@ -189,9 +186,17 @@
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
+#' ae_ext <- derive_vars_dt(
+#'   ae,
+#'   dtc = AESTDTC,
+#'   new_vars_prefix = "AEST",
+#'   highest_imputation = "M",
+#'   flag_imputation = "none"
+#' )
+#'
 #' ttae <- event_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTC,
+#'   date = AESTDT,
 #'   set_values_to = vars(
 #'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
@@ -216,7 +221,7 @@
 #'   start_date = TRTSDT,
 #'   event_conditions = list(ttae),
 #'   censor_conditions = list(eos),
-#'   source_datasets = list(adsl = adsl, ae = ae),
+#'   source_datasets = list(adsl = adsl, ae = ae_ext),
 #'   set_values_to = vars(
 #'     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
 #'     PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
@@ -452,28 +457,34 @@ derive_param_tte <- function(dataset = NULL,
 #' @keywords source_specifications
 #' @family source_specifications
 #'
+#' @export
+#'
 #' @examples
+#' library(tibble)
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
-#'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-#'   "01",     "2021-01-03T10:56", 1,      "Flu",
-#'   "01",     "2021-03-04",       2,      "Cough",
-#'   "01",     "2021",             3,      "Flu"
+#' ae <- tribble(
+#'   ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+#'   "01",     "2021-01-03", 1,      "Flu",
+#'   "01",     "2021-03-04", 2,      "Cough",
+#'   "01",     "2021-01-01", 3,      "Flu"
 #' ) %>%
-#'   mutate(STUDYID = "AB42")
+#'   mutate(
+#'     STUDYID = "AB42",
+#'     AESTDT = ymd(AESTDTC)
+#'   )
 #'
 #' ttae <- event_source(
 #'   dataset_name = "ae",
-#'   date = AESTDTC,
+#'   date = AESTDT,
 #'   set_values_to = vars(
 #'     EVNTDESC = "AE",
 #'     SRCDOM = "AE",
@@ -490,7 +501,6 @@ derive_param_tte <- function(dataset = NULL,
 #'   subject_keys = vars(STUDYID, USUBJID),
 #'   mode = "first"
 #' )
-#' @export
 filter_date_sources <- function(sources,
                                 source_datasets,
                                 by_vars,
@@ -516,7 +526,13 @@ filter_date_sources <- function(sources,
   data <- vector("list", length(sources))
   for (i in seq_along(sources)) {
     date <- sources[[i]]$date
-    data[[i]] <- source_datasets[[sources[[i]]$dataset_name]] %>%
+    source_dataset <- source_datasets[[sources[[i]]$dataset_name]]
+    assert_date_var(
+      dataset = source_dataset,
+      var = !!date,
+      dataset_name = sources[[i]]$dataset_name
+    )
+    data[[i]] <- source_dataset %>%
       filter_if(sources[[i]]$filter) %>%
       filter_extreme(
         order = vars(!!date),
@@ -524,30 +540,12 @@ filter_date_sources <- function(sources,
         mode = mode,
         check_type = "none"
       )
+
     # add date variable and accompanying variables
-    if (is.instant(pull(data[[i]], !!date))) {
-      if (create_datetime) {
-        date_derv <- vars(!!date_var := as_datetime(!!date))
-      } else {
-        date_derv <- vars(!!date_var := date(!!date))
-      }
+    if (create_datetime) {
+      date_derv <- vars(!!date_var := as_datetime(!!date))
     } else {
-      if (create_datetime) {
-        date_derv <- vars(
-          !!date_var := convert_dtc_to_dtm(
-            !!date,
-            date_imputation = "first",
-            time_imputation = "first"
-          )
-        )
-      } else {
-        date_derv <- vars(
-          !!date_var := convert_dtc_to_dt(
-            !!date,
-            date_imputation = "first"
-          )
-        )
-      }
+      date_derv <- vars(!!date_var := date(!!date))
     }
 
     data[[i]] <- transmute(
@@ -693,8 +691,7 @@ extend_source_datasets <- function(source_datasets,
 #'   `dataset` which are events or possible censoring time points.
 #'
 #' @param date A variable providing the date of the event or censoring. A date,
-#'   a datetime, or a character variable containing ISO 8601 dates can be
-#'   specified. An unquoted symbol is expected.
+#'   or a datetime can be specified. An unquoted symbol is expected.
 #'
 #'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.

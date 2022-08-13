@@ -95,23 +95,36 @@ library(admiral.test)
 data(admiral_ae)
 data(ex_single)
 
-admiral_ae \%>\%
+ex_single <- derive_vars_dtm(
+  head(ex_single, 100),
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  flag_imputation = "none"
+)
+
+adae <- admiral_ae \%>\%
   head(100) \%>\%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M"
+  )
+
+adae \%>\%
   derive_var_last_dose_grp(
-    head(ex_single, 100),
+    dataset_ex = ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
+      !is.na(EXSTDTM),
     by_vars = vars(STUDYID, USUBJID),
-    dose_date = EXSTDTC,
+    dose_date = EXSTDTM,
     new_var = LDGRP,
     grp_brks = c(0, 20, 40, 60),
     grp_lbls = c("Low", "Medium", "High"),
     include_lowest = TRUE,
     right = TRUE,
     dose_var = EXDOSE,
-    analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+    analysis_date = ASTDTM,
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(USUBJID, LDGRP, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }

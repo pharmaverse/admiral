@@ -11,7 +11,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -30,7 +30,7 @@ eg <- admiral_eg
 
 eg <- convert_blanks_to_na(eg)
 
-# ---- Lookup tables ----
+# Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -95,7 +95,7 @@ format_chgcat1n <- function(paramcd, chg) {
 }
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
@@ -107,29 +107,29 @@ adeg <- eg %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADTM, ADY
+  ## Calculate ADTM, ADY ----
   derive_vars_dtm(
     new_vars_prefix = "A",
     dtc = EGDTC,
-    flag_imputation = "auto"
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADTM))
 
 adeg <- adeg %>%
-  # Add PARAMCD only (add PARAM, etc later)
+  ## Add PARAMCD only (add PARAM, etc later) ----
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(EGTESTCD)
   ) %>%
-  # Calculate AVAL and AVALC
+  ## Calculate AVAL and AVALC ----
   mutate(
     AVAL = EGSTRESN,
     AVALC = EGSTRESC
   ) %>%
-  # Derive new parameters based on existing records. Note that, for the following
-  # four `derive_param_*()` functions, only the variables specified in `by_vars` will
-  # be populated in the newly created records.
+  ## Derive new parameters based on existing records ----
+  # Note that, for the following four `derive_param_*()` functions, only the
+  # variables specified in `by_vars` will be populated in the newly created
+  # records.
 
   # Derive RRR
   derive_param_rr(
@@ -170,7 +170,7 @@ adeg <- adeg %>%
     filter = EGSTAT != "NOT DONE" | is.na(EGSTAT)
   )
 
-# get visit info
+## Get visit info ----
 adeg <- adeg %>%
   # Derive Timing
   mutate(
@@ -191,8 +191,8 @@ adeg <- adeg %>%
     ),
   )
 
-# Derive a summary records representing the mean of the triplicates at each visit (if least 2
-# records available) for all parameter except EGINTP
+## Derive a summary records representing the mean of the triplicates at each visit ----
+# (if least 2 records available) for all parameter except EGINTP
 adeg <- adeg %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT),
@@ -203,7 +203,7 @@ adeg <- adeg %>%
   )
 
 adeg <- adeg %>%
-  # Calculate ONTRTFL: from trt start up to 30 days after trt ends
+  ## Calculate ONTRTFL: from trt start up to 30 days after trt ends ----
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
@@ -212,7 +212,7 @@ adeg <- adeg %>%
     filter_pre_timepoint = AVISIT == "Baseline"
   )
 
-# Calculate ANRIND: requires the reference ranges ANRLO, ANRHI
+## Calculate ANRIND: requires the reference ranges ANRLO, ANRHI ----
 # Also accommodates the ranges A1LO, A1HI
 adeg <- adeg %>%
   derive_vars_merged(
@@ -222,7 +222,7 @@ adeg <- adeg %>%
   # Calculate ANRIND
   derive_var_anrind()
 
-# Derive baseline flags
+## Derive baseline flags ----
 adeg <- adeg %>%
   # Calculate BASETYPE
   derive_var_basetype(
@@ -248,7 +248,7 @@ adeg <- adeg %>%
     )
   )
 
-# Derive baseline information
+## Derive baseline information ----
 adeg <- adeg %>%
   # Calculate BASE
   derive_var_base(
@@ -273,7 +273,7 @@ adeg <- adeg %>%
   # Calculate PCHG
   derive_var_pchg()
 
-# ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
+## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
 adeg <- adeg %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -286,13 +286,13 @@ adeg <- adeg %>%
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
 
-# Get treatment information
+## Get treatment information ----
 adeg <- adeg %>%
   # Assign TRTA, TRTP
   mutate(TRTP = TRT01P, TRTA = TRT01A)
 
 
-# Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN
+## Get ASEQ and AVALCAT1/CHGCAT1 and add PARAM/PARAMN ----
 adeg <- adeg %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -324,7 +324,7 @@ adeg <- adeg %>%
   )
 
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adeg, file = file.path(dir, "adeg.rda"), compress = "bzip2")

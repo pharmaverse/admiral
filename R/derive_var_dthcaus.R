@@ -36,29 +36,39 @@
 #' @seealso [dthcaus_source()]
 #'
 #' @examples
-#' adsl <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID,
+#' library(tibble)
+#' library(dplyr)
+#' library(lubridate)
+#'
+#' adsl <- tribble(
+#'   ~STUDYID,  ~USUBJID,
 #'   "STUDY01", "PAT01",
 #'   "STUDY01", "PAT02",
 #'   "STUDY01", "PAT03"
 #' )
-#' ae <- tibble::tribble(
-#'   ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
-#'   "STUDY01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
-#' )
-#' ds <- tibble::tribble(
+#' ae <- tribble(
+#'   ~STUDYID,  ~USUBJID, ~AESEQ, ~AEDECOD,       ~AEOUT,  ~AEDTHDTC,
+#'   "STUDY01", "PAT01",  12,     "SUDDEN DEATH", "FATAL", "2021-04-04"
+#' ) %>%
+#'   mutate(
+#'     AEDTHDT = ymd(AEDTHDTC)
+#'   )
+#' ds <- tribble(
 #'   ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
 #'   "STUDY01", "PAT02", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-03",
 #'   "STUDY01", "PAT02", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
 #'   "STUDY01", "PAT02", 3, "DEATH", "DEATH DUE TO PROGRESSION OF DISEASE", "2022-02-01",
 #'   "STUDY01", "PAT03", 1, "DEATH", "POST STUDY REPORTING OF DEATH", "2022-03-03"
-#' )
+#' ) %>%
+#'   mutate(
+#'     DSSTDT = ymd(DSSTDTC)
+#'   )
 #'
 #' # Derive `DTHCAUS` only - for on-study deaths only
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDTC,
+#'   date = AEDTHDT,
 #'   mode = "first",
 #'   dthcaus = AEDECOD
 #' )
@@ -66,7 +76,7 @@
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDTC,
+#'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM
 #' )
@@ -77,7 +87,7 @@
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDTC,
+#'   date = AEDTHDT,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
 #'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -86,7 +96,7 @@
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDTC,
+#'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
 #'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
@@ -98,7 +108,7 @@
 #' src_ae <- dthcaus_source(
 #'   dataset_name = "ae",
 #'   filter = AEOUT == "FATAL",
-#'   date = AEDTHDTC,
+#'   date = AEDTHDT,
 #'   mode = "first",
 #'   dthcaus = AEDECOD,
 #'   traceability_vars = vars(DTHDOM = "AE", DTHSEQ = AESEQ)
@@ -107,7 +117,7 @@
 #' src_ds <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & grepl("DEATH DUE TO", DSTERM),
-#'   date = DSSTDTC,
+#'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = DSTERM,
 #'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
@@ -116,7 +126,7 @@
 #' src_ds_post <- dthcaus_source(
 #'   dataset_name = "ds",
 #'   filter = DSDECOD == "DEATH" & DSTERM == "POST STUDY REPORTING OF DEATH",
-#'   date = DSSTDTC,
+#'   date = DSSTDT,
 #'   mode = "first",
 #'   dthcaus = "POST STUDY: UNKNOWN CAUSE",
 #'   traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
@@ -160,6 +170,12 @@ derive_var_dthcaus <- function(dataset,
     } else {
       add_data[[ii]] <- source_dataset
     }
+
+    assert_date_var(
+      dataset = add_data[[ii]],
+      var = !!sources[[ii]]$date,
+      dataset_name = source_dataset_name
+    )
 
     # if several death records, use the first/last according to 'mode'
     tmp_source_nr <- get_new_tmp_var(dataset)
@@ -220,7 +236,7 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param filter An expression used for filtering `dataset`.
 #'
-#' @param date A character vector to be used for sorting `dataset`.
+#' @param date A date or datetime variable to be used for sorting `dataset`.
 #'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`

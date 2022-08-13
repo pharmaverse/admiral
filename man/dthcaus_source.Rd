@@ -19,7 +19,7 @@ the death cause.}
 
 \item{filter}{An expression used for filtering \code{dataset}.}
 
-\item{date}{A character vector to be used for sorting \code{dataset}.}
+\item{date}{A date or datetime variable to be used for sorting \code{dataset}.}
 
 \item{mode}{One of \code{"first"} or \code{"last"}.
 Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}

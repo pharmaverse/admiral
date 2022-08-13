@@ -28,12 +28,67 @@ deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
-- `value_var` parameter added to `derive_vars_atc()` (#1120) 
+- `value_var` parameter added to `derive_vars_atc()` (#1120)
+
+- The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
+`convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
+users feedback (#1300):
+
+    - Partial dates with missing components in the middle like
+    `"2003-12-15T-:15:18"`, `"2003-12-15T13:-:19"`, `"2020-07--T00:00"` are
+    handled now.
+  
+    - The control of the level of imputation has been refined by adding the
+      `highest_imputation` argument. For example, `highest_imputation = "D"`
+      requests imputation for day and time but not for year and month.
+  
+      (For the `date_imputation` and the `time_imputation` argument `NULL` is no
+      longer a permitted value.)
+  
+    - It is now possible to impute completely missing dates by specifying
+    `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
 ## Breaking Changes
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
+- Imputation related arguments have been deprecated for all functions except the
+imputation functions themselves (#1299). I.e., if a derivation like last known alive
+date is based on dates, DTC variables have to be converted to numeric date or
+datetime variables in a preprocessing step. For examples see the [ADSL
+vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
+
+  The following arguments were deprecated:
+
+  - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
+  
+  The following arguments no longer accept DTC variables:
+  
+  - `date` in `date_source()`, `dthcaus_source()`, `censor_source()`, and
+  `event_source()`
+  - `dose_date` and `analysis_date` in `derive_vars_last_dose()`,
+  `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`,
+  `derive_var_last_dose_grp()`
+  
+  The following functions were deprecated:
+  
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  
+- For the `date_imputation` and the `time_imputation` argument of the imputation
+functions (`derive_vars_dtm()`, `derive_vars_dt()`, `convert_dtc_to_dtm()`,
+`convert_dtc_to_dt()`) `NULL` is no longer a permitted value. The level of
+imputation can be controlled by the `highest_imputation` argument now.
+
+- The following functions, which were deprecated in previous {admiral} versions,
+have been removed:
+
+  - `derive_var_disposition_dt()`
+  - `derive_var_lstalvdt()`
+  - `lstalvdt_source()`
+  - `derive_var_trtedtm()`
+  - `derive_var_trtsdtm()`
+  
 ## Documentation
 
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)

@@ -245,7 +245,7 @@ get_many_to_one_dataset <- function() {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @keywords utils_fmt
 #'
 #' @export
 #'
