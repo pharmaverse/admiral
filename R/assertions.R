@@ -1292,7 +1292,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars1)
   if (nrow(one_to_many) > 0) {
-    .datasets$one_to_many <- one_to_many
+    set_dataset(one_to_many, "one_to_many")
     abort(
       paste0(
         "For some values of ",
@@ -1308,7 +1308,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars2)
   if (nrow(many_to_one) > 0) {
-    .datasets$many_to_one <- many_to_one
+    set_dataset(many_to_one, "many_to_one")
     abort(
       paste0(
         "There is more than one value of ",
