@@ -2,7 +2,7 @@
 
 #' @export
 set_dataset <- function(dataset, name) {
-  assert_data_frame(dataset)
+  assert_data_frame(dataset, check_is_grouped = FALSE)
   assert_character_scalar(name)
 
   .datasets[[name]] <- dataset
