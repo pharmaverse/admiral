@@ -1,3 +1,4 @@
+#' @export
 anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
   suppress_warning(
     dplyr::anti_join(x, y, by = by, copy = copy, ...),
@@ -5,6 +6,7 @@ anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
   )
 }
 
+#' @export
 inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
   suppress_warning(
     dplyr::inner_join(x, y, by = by, copy = copy, suffix = suffix, ...),
@@ -12,6 +14,7 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
   )
 }
 
+#' @export
 left_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
   suppress_warning(
     dplyr::left_join(x, y, by = by, copy = copy, suffix = suffix, ...),
