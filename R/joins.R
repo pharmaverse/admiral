@@ -1,3 +1,13 @@
+#' Join Functions
+#'
+#' The `*_join()` functions from {dplyr} without a warning on different attributes
+#' in datasets.
+#'
+#' @inheritParams dplyr::inner_join
+#'
+#' @return `data.frame`
+#'
+#' @rdname joins
 #' @export
 anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
   suppress_warning(
@@ -6,6 +16,7 @@ anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {
   )
 }
 
+#' @rdname joins
 #' @export
 inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
   suppress_warning(
@@ -14,6 +25,7 @@ inner_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ..
   )
 }
 
+#' @rdname joins
 #' @export
 left_join <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
   suppress_warning(
