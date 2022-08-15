@@ -1,0 +1,43 @@
+#' Create metadata holding grading criteria for NCI-CTCAEv4
+#'
+#' @details
+#' Reads in excel file containing grading criteria, the spreadsheet has the following columns:
+#' - `SOC`: variable to hold the SOC of the lab test criteria.
+#' - `TERM`: variable to hold the term describing the criteria applied to a particular lab test,
+#'   eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
+#' - `Grade 1`: Criteria defining lab value as Grade 1.
+#' - `Grade 2`: Criteria defining lab value as Grade 2.
+#' - `Grade 3`: Criteria defining lab value as Grade 3.
+#' - `Grade 4`: Criteria defining lab value as Grade 4.
+#' - `Grade 5`: Criteria defining lab value as Grade 5.
+#' - `Definition`: Holds the definition of the lab test abnormality.
+#' - `IMPLEMENTATION`: variable to hold case statement to create grade based on defined criteria.
+#' - `SI_UNIT_CHECK`: variable to hold unit of particular lab test. Used to check against input data
+#'   if criteria is based on absolute values.
+#' - `VAR_CHECK`: List of variables required to implement lab grade criteria. Use to check against
+#'   input data.
+#' - `DIRECTION`: variable to hold the direction of the abnormality of a particular lab test
+#'   value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case insensitive.
+#' - `COMMENT`: Holds any information regarding rationale behind implementation of grading criteria.
+#'
+#' Note: Variables 'SOC', 'TERM', `Grade 1`, `Grade 2`,`Grade 3`,`Grade 4`,`Grade 5`, `Definition`
+#' are from the source document on NCI-CTC website defining the grading criteria.
+#' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
+#' tracability only.
+#'
+#' @format NULL
+#'
+#' @export
+#'
+#' @keywords atoxgr_sources
+#'
+#' @rdname atoxgr_sources
+
+
+# point to file containing lab grading criteria
+grading_spec <- system.file("adlb_grading_spec.xlsx", package = "admiral")
+
+# read in lab grading file and create metadata file
+atoxgr_criteria_ctcv4 <- read_excel(grading_spec, sheet = "NCICTCAEv4") %>%
+  mutate(IMPLEMENTATION = gsub("[\r\n]", " ", IMPLEMENTATION)
+  )

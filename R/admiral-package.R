@@ -24,4 +24,5 @@
 #' @importFrom tidyselect all_of contains vars_select
 #' @importFrom hms as_hms
 #' @importFrom lifecycle deprecate_warn deprecated deprecate_stop
+#' @importFrom readxl read_excel
 "_PACKAGE"
