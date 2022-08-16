@@ -32,12 +32,6 @@
 #' @keywords atoxgr_sources
 #'
 #' @rdname atoxgr_sources
-
-
-# point to file containing lab grading criteria
-grading_spec <- system.file("adlb_grading_spec.xlsx", package = "admiral")
-
-# read in lab grading file and create metadata file
-atoxgr_criteria_ctcv4 <- read_excel(grading_spec, sheet = "NCICTCAEv4") %>%
-  mutate(IMPLEMENTATION = gsub("[\r\n]", " ", IMPLEMENTATION)
-  )
+atoxgr_criteria_ctcv4 <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
+  read_excel(sheet = "NCICTCAEv4") %>%
+  mutate(IMPLEMENTATION = gsub("[\r\n]", " ", IMPLEMENTATION))
