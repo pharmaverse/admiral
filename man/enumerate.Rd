@@ -13,6 +13,9 @@ enumerate(x, quote_fun = backquote, conjunction = "and")
 
 \item{conjunction}{Character to be used in the message, defaults to "and".}
 }
+\value{
+A \code{character} vector
+}
 \description{
 Enumerate Multiple Strings
 }

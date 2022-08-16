@@ -2,20 +2,22 @@
 % Please edit documentation in R/assertions.R
 \name{assert_expr}
 \alias{assert_expr}
-\title{Expression Something}
+\title{Assert Argument is an Expression}
 \usage{
 assert_expr(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{something}
+\item{arg}{A function argument to be checked}
 
-\item{optional}{something}
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+is \code{NULL} then an error is thrown}
 }
 \value{
-something
+The function throws an error if \code{arg} is not an expression, i.e. either
+a symbol or a call, or returns the input invisibly otherwise
 }
 \description{
-Expression Something
+Assert Argument is an Expression
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 

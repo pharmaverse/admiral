@@ -341,15 +341,18 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
-#' Expression Something
+#' Assert Argument is an Expression
 #'
-#' @param arg something
-#' @param optional something
+#' @inheritParams assert_data_frame
+#'
 #' @keywords assertion
 #' @family assertion
-#' @return something
-#' @export
 #'
+#' @return
+#' The function throws an error if `arg` is not an expression, i.e. either
+#' a symbol or a call, or returns the input invisibly otherwise
+#'
+#' @export
 assert_expr <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -761,16 +764,18 @@ assert_list_of <- function(arg, class, optional = TRUE) {
   invisible(arg)
 }
 
-#' Named Something
+#' Assert Argument is a Named List of Expressions
 #'
-#' @param arg something
-#' @param optional something
+#' @inheritParams assert_data_frame
 #'
 #' @keywords assertion
 #' @family assertion
-#' @return something
-#' @export
 #'
+#' @return
+#' The function throws an error if `arg` is not a named `list` of expression or
+#' returns the input invisibly otherwise
+#'
+#' @export
 assert_named_exprs <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -908,17 +913,28 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
   invisible(arg)
 }
 
-#' Function Parameters
+#' Assert Argument is a Parameter of a Function
 #'
-#' @param arg something
-#' @param params something
+#' @param arg The name of a function passed as a string
+#' @param params A character vector of function parameters
 #'
 #' @keywords assertion
 #' @family assertion
 #'
-#' @return something
+#' @return
+#' The function throws an error if any elements of `params` is not a parameter of
+#' the function given by `arg`
+#'
 #' @export
 #'
+#' @examples
+#' hello <- function(name) {
+#'   print(sprintf("Hello %s", name))
+#' }
+#'
+#' assert_function_param("hello", "name")
+#'
+#' try(assert_function_param("hello", "surname"))
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)
@@ -1028,8 +1044,8 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @keywords assertion
 #' @family assertion
-#' @examples
 #'
+#' @examples
 #' library(tibble)
 #' advs <- tribble(
 #'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,

@@ -46,16 +46,22 @@ get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
 }
 
 
-#' Get Duplicates
+#' Get Duplicates From a Vector
 #'
-#' @param x something
+#' @param x An atomic vector
 #'
-#' @return something
+#' @return A vector of the same type as `x` contain duplicate values
 #' @export
 #'
 #' @keywords get
 #' @family get
+#'
 #' @export
+#'
+#' @examples
+#' get_duplicates(1:10)
+#'
+#' get_duplicates(c("a", "a", "b", "c", "d", "d"))
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }

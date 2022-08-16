@@ -9,7 +9,6 @@
 #' @keywords what
 #' @family what
 #'
-#' @rdname dev_util_what_is_it
 #' @export
 what_is_it <- function(x) {
   if (is.null(x)) {

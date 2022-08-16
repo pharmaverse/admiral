@@ -2,20 +2,30 @@
 % Please edit documentation in R/assertions.R
 \name{assert_function_param}
 \alias{assert_function_param}
-\title{Function Parameters}
+\title{Assert Argument is a Parameter of a Function}
 \usage{
 assert_function_param(arg, params)
 }
 \arguments{
-\item{arg}{something}
+\item{arg}{The name of a function passed as a string}
 
-\item{params}{something}
+\item{params}{A character vector of function parameters}
 }
 \value{
-something
+The function throws an error if any elements of \code{params} is not a parameter of
+the function given by \code{arg}
 }
 \description{
-Function Parameters
+Assert Argument is a Parameter of a Function
+}
+\examples{
+hello <- function(name) {
+  print(sprintf("Hello \%s", name))
+}
+
+assert_function_param("hello", "name")
+
+try(assert_function_param("hello", "surname"))
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 

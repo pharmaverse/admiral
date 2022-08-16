@@ -2,18 +2,23 @@
 % Please edit documentation in R/get.R
 \name{get_duplicates}
 \alias{get_duplicates}
-\title{Get Duplicates}
+\title{Get Duplicates From a Vector}
 \usage{
 get_duplicates(x)
 }
 \arguments{
-\item{x}{something}
+\item{x}{An atomic vector}
 }
 \value{
-something
+A vector of the same type as \code{x} contain duplicate values
 }
 \description{
-Get Duplicates
+Get Duplicates From a Vector
+}
+\examples{
+get_duplicates(1:10)
+
+get_duplicates(c("a", "a", "b", "c", "d", "d"))
 }
 \seealso{
 Brings something to you!?!: 
