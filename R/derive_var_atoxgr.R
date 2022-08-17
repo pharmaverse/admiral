@@ -98,15 +98,12 @@
 #'   criteria_direction = "H",
 #'   get_unit_expr = extract_unit(PARAM)
 #' )
-
-
 derive_var_atoxgr_dir <- function(dataset,
                                   new_var,
                                   tox_description_var,
                                   meta_criteria = atoxgr_criteria_ctcv4,
                                   criteria_direction,
                                   get_unit_expr) {
-
   new_var <- assert_symbol(enquo(new_var))
   tox_description_var <- assert_symbol(enquo(tox_description_var))
   get_unit_expr <- assert_expr(enquo(get_unit_expr))
@@ -127,12 +124,11 @@ derive_var_atoxgr_dir <- function(dataset,
   # Get list of terms from criteria metadata with particular direction
   # L = low (Hypo) H = high (Hyper)
   atoxgr_dir <- meta_criteria %>%
-    filter(!is.na(GRADE_CRITERIA_CODE) & toupper(DIRECTION) == toupper(criteria_direction)
-    ) %>%
-    select(TERM, DIRECTION, SI_UNIT_CHECK, GRADE_CRITERIA_CODE, VAR_CHECK
-    ) %>%
-    mutate(TERM_UPPER = toupper(TERM),
-           SI_UNIT_UPPER = toupper(SI_UNIT_CHECK)
+    filter(!is.na(GRADE_CRITERIA_CODE) & toupper(DIRECTION) == toupper(criteria_direction)) %>%
+    select(TERM, DIRECTION, SI_UNIT_CHECK, GRADE_CRITERIA_CODE, VAR_CHECK) %>%
+    mutate(
+      TERM_UPPER = toupper(TERM),
+      SI_UNIT_UPPER = toupper(SI_UNIT_CHECK)
     )
 
   # from ADLB VAD get distinct list of terms to be graded
@@ -149,28 +145,22 @@ derive_var_atoxgr_dir <- function(dataset,
     semi_join(atoxgr_dir, by = "TERM_UPPER") %>%
     arrange(TERM)
 
-  # Output terms in ADLB VAD that are not in criteria metadata
-  # put out a WARNING with list of terms - to be done
-
   # output lab data not to be graded
   # this will be appended to in for loop after each term is graded
   out_data <- dataset %>%
-    filter(!!tox_description_var %notin% (list_of_terms$TERM) | is.na(!!tox_description_var)
-    ) %>%
+    filter(!!tox_description_var %notin% (list_of_terms$TERM) | is.na(!!tox_description_var)) %>%
     mutate(!!new_var := NA_character_)
 
   # get lab data to be graded
   to_be_graded <- dataset %>%
-    filter(!!tox_description_var %in% (list_of_terms$TERM)
-    )
+    filter(!!tox_description_var %in% (list_of_terms$TERM))
 
   # for each TERM apply criteria and create grade derivation
   for (i in seq_along(list_of_terms$TERM)) {
 
     # filter metadata on a term
-    meta_this_term <-  atoxgr_dir %>%
-      filter(TERM_UPPER == list_of_terms$TERM_UPPER[i]
-      )
+    meta_this_term <- atoxgr_dir %>%
+      filter(TERM_UPPER == list_of_terms$TERM_UPPER[i])
 
     # Put list of variables required for criteria in a vector
     list_of_vars <- gsub("\\s+", "", unlist(strsplit(meta_this_term$VAR_CHECK, ",")))
@@ -199,11 +189,9 @@ derive_var_atoxgr_dir <- function(dataset,
 
     # append lab data just graded to output data
     out_data <- bind_rows(out_data, grade_this_term)
-
   }
 
   all_data <- out_data
-
 }
 
 
@@ -251,22 +239,20 @@ derive_var_atoxgr_dir <- function(dataset,
 #' )
 #'
 #' derive_var_atoxgr(adlb)
-
-
 derive_var_atoxgr <- function(dataset,
                               lotox_description_var = ATOXDSCL,
-                              hitox_description_var = ATOXDSCH
-                              ) {
-
+                              hitox_description_var = ATOXDSCH) {
   lotox_description_var <- assert_symbol(enquo(lotox_description_var))
   hitox_description_var <- assert_symbol(enquo(hitox_description_var))
 
   assert_data_frame(
     dataset,
-    required_vars = vars(!!lotox_description_var,
-                         ATOXGRL,
-                         !!hitox_description_var,
-                         ATOXGRH)
+    required_vars = vars(
+      !!lotox_description_var,
+      ATOXGRL,
+      !!hitox_description_var,
+      ATOXGRH
+    )
   )
 
   lowgrade_char <- unique(dataset$ATOXGRL)
@@ -290,7 +276,6 @@ derive_var_atoxgr <- function(dataset,
       !is.na(ATOXGRH) & ATOXGRH >= "1" ~ ATOXGRH,
       (ATOXGRL == "0" | is.na(!!lotox_description_var)) & ATOXGRH == "0" ~ "0",
       (ATOXGRH == "0" | is.na(!!hitox_description_var)) & ATOXGRL == "0" ~ "0",
-      TRUE ~ NA_character_)
-    )
-
+      TRUE ~ NA_character_
+    ))
 }

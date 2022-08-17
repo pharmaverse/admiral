@@ -12,20 +12,19 @@ test_that("derive_var_atoxgr: Test 1 ATOXGR cannot be graded", {
     "Hypoglycemia",     "Hyperglycemia",  NA_character_, "0",            NA_character_,
     # ATOXGRH is ungradable so cannot say ATOXGR is normal
     "Hypoglycemia",     "Hyperglycemia",  "0",           NA_character_,  NA_character_,
-    )
+  )
 
   input_1 <- exp_out_1 %>%
-  select(-ATOXGR)
+    select(-ATOXGR)
 
-expect_equal(
-  derive_var_atoxgr(
-    input_1,
-    lotox_description_var = ATOXDSCL,
-    hitox_description_var = ATOXDSCH
-  ),
-  exp_out_1
-)
-
+  expect_equal(
+    derive_var_atoxgr(
+      input_1,
+      lotox_description_var = ATOXDSCL,
+      hitox_description_var = ATOXDSCH
+    ),
+    exp_out_1
+  )
 })
 
 test_that("derive_var_atoxgr: Test 2 ATOXGR = 0 (normal)", {
@@ -47,7 +46,6 @@ test_that("derive_var_atoxgr: Test 2 ATOXGR = 0 (normal)", {
     ),
     exp_out_2
   )
-
 })
 
 test_that("derive_var_atoxgr: Test 3 ATOXGR > 0 (HYPER)", {
@@ -69,7 +67,6 @@ test_that("derive_var_atoxgr: Test 3 ATOXGR > 0 (HYPER)", {
     ),
     exp_out_3
   )
-
 })
 
 test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
@@ -91,7 +88,6 @@ test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
     ),
     exp_out_4
   )
-
 })
 
 # derive_var_atoxgr_dir - NCICTCAEv4 ----
@@ -186,7 +182,8 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
 ### Grade 1: >ULN - 1.5 x ULN
 
 test_that(
-  "derive_var_atoxgr_dir: Test 3 NCICTCAEv4 Activated partial thromboplastin time prolonged", {
+  "derive_var_atoxgr_dir: Test 3 NCICTCAEv4 Activated partial thromboplastin time prolonged",
+  {
     exp_out_ctcv4_3 <- tibble::tribble(
       ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
       "Not a term",                                      80,     100,     NA_character_,  NA,
@@ -216,7 +213,8 @@ test_that(
       ),
       exp_out_ctcv4_3
     )
-  })
+  }
+)
 
 ### 4. Alanine aminotransferase increased ----
 ### Grade 4: >20.0 x ULN
@@ -658,21 +656,21 @@ test_that("derive_var_atoxgr_dir: Test 12 NCICTCAEv4 Fibrinogen decreased", {
 
 test_that("derive_var_atoxgr_dir: Test 13 NCICTCAEv4 GGT increased", {
   exp_out_ctcv4_13 <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,         ~ATOXGRH,
-    "Not a term",    80,     0,       40,    NA_character_,  NA,
-    NA_character_,   60,     0,       40,    NA_character_,  NA,
-    "GGT increased", 801,    0,       40,    NA_character_,  "4",
-    "GGT increased", 800,    0,       40,    NA_character_,  "3",
-    "GGT increased", 201,    0,       40,    NA_character_,  "3",
-    "GGT increased", 200,    0,       40,    NA_character_,  "2",
-    "GGT increased", 101,    0,       40,    NA_character_,  "2",
-    "GGT increased", 100,    0,       40,    NA_character_,  "1",
-    "GGT increased", 41,     0,       40,    NA_character_,  "1",
-    "GGT increased", 40,     0,       40,    NA_character_,  "0",
+    ~ATOXDSCH, ~AVAL, ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRH,
+    "Not a term", 80, 0, 40, NA_character_, NA,
+    NA_character_, 60, 0, 40, NA_character_, NA,
+    "GGT increased", 801, 0, 40, NA_character_, "4",
+    "GGT increased", 800, 0, 40, NA_character_, "3",
+    "GGT increased", 201, 0, 40, NA_character_, "3",
+    "GGT increased", 200, 0, 40, NA_character_, "2",
+    "GGT increased", 101, 0, 40, NA_character_, "2",
+    "GGT increased", 100, 0, 40, NA_character_, "1",
+    "GGT increased", 41, 0, 40, NA_character_, "1",
+    "GGT increased", 40, 0, 40, NA_character_, "0",
     # ANRHI missing - cannot grade
-    "GGT increased", 100,    0,       NA,    NA_character_,  NA,
+    "GGT increased", 100, 0, NA, NA_character_, NA,
     # AVAL missing cannot grade
-    "GGT increased", NA,     0,       NA,    NA_character_,  NA,
+    "GGT increased", NA, 0, NA, NA_character_, NA,
   )
   input_ctcv4_13 <- exp_out_ctcv4_13 %>%
     select(-ATOXGRH)
@@ -786,29 +784,29 @@ test_that("derive_var_atoxgr_dir: Test 15 NCICTCAEv4 Hemoglobin increased", {
 
 test_that("derive_var_atoxgr_dir: Test 16 NCICTCAEv4 INR increased", {
   exp_out_ctcv4_16 <- tibble::tribble(
-    ~ATOXDSCH,       ~AVAL,  ~BASE, ~ANRHI, ~AVALU,         ~ATOXGRH,
-    "Not a term",    80,     120,    200,    NA_character_,  NA,
-    NA_character_,   60,     50,     100,    NA_character_,  NA,
+    ~ATOXDSCH, ~AVAL, ~BASE, ~ANRHI, ~AVALU, ~ATOXGRH,
+    "Not a term", 80, 120, 200, NA_character_, NA,
+    NA_character_, 60, 50, 100, NA_character_, NA,
     # GRADE derived from AVAL against ANRHI
-    "INR IncreaSed", 251,    200,    100,    NA_character_,  "3",
-    "INR Increased", 250,    199,    100,    NA_character_,  "2",
-    "INR Increased", 151,    150,    100,    NA_character_,  "2",
-    "INR Increased", 150,    150,    100,    NA_character_,  "1",
-    "INR Increased", 101,    150,    100,    NA_character_,  "1",
-    "INR Increased", 100,    100,    100,    NA_character_,  "0",
+    "INR IncreaSed", 251, 200, 100, NA_character_, "3",
+    "INR Increased", 250, 199, 100, NA_character_, "2",
+    "INR Increased", 151, 150, 100, NA_character_, "2",
+    "INR Increased", 150, 150, 100, NA_character_, "1",
+    "INR Increased", 101, 150, 100, NA_character_, "1",
+    "INR Increased", 100, 100, 100, NA_character_, "0",
     # GRADE derived from AVAL against BASE
-    "INR IncreaSed", 251,    100,    200,    NA_character_,  "3",
-    "INR Increased", 250,    100,    199,    NA_character_,  "2",
-    "INR Increased", 151,    100,    150,    NA_character_,  "2",
-    "INR Increased", 150,    100,    150,    NA_character_,  "1",
-    "INR Increased", 101,    100,    150,    NA_character_,  "1",
-    "INR Increased", 100,    100,    100,    NA_character_,  "0",
+    "INR IncreaSed", 251, 100, 200, NA_character_, "3",
+    "INR Increased", 250, 100, 199, NA_character_, "2",
+    "INR Increased", 151, 100, 150, NA_character_, "2",
+    "INR Increased", 150, 100, 150, NA_character_, "1",
+    "INR Increased", 101, 100, 150, NA_character_, "1",
+    "INR Increased", 100, 100, 100, NA_character_, "0",
     # BASE missing - AVAL <= ANRLO cannot grade as NORMAL
-    "INR Increased", 100,    NA,     100,    NA_character_,  NA,
+    "INR Increased", 100, NA, 100, NA_character_, NA,
     # ANRHI missing - AVAL <= BASE cannot grade as NORMAL
-    "INR Increased", 100,    100,    NA,     NA_character_,  NA,
+    "INR Increased", 100, 100, NA, NA_character_, NA,
     # AVAL missing cannot grade
-    "INR Increased", NA,     100,    100,    NA_character_,  NA,
+    "INR Increased", NA, 100, 100, NA_character_, NA,
   )
   input_ctcv4_16 <- exp_out_ctcv4_16 %>%
     select(-ATOXGRH)
@@ -1009,32 +1007,32 @@ test_that("derive_var_atoxgr_dir: Test 20 NCICTCAEv4 Neutrophil count decreased"
 
 test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 Platelet count decreased", {
   exp_out_ctcv4_21 <- tibble::tribble(
-    ~ATOXDSCL,                  ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",               80,     120,    200,    "10^9/L",  NA,
-    NA_character_,              60,     50,     100,    "10^9/L",  NA,
+    ~ATOXDSCL, ~AVAL, ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
+    "Not a term", 80, 120, 200, "10^9/L", NA,
+    NA_character_, 60, 50, 100, "10^9/L", NA,
     # ANRLO not missing
-    "Platelet count decreased", 24,     100,    150,    "10^9/L",  "4",
-    "Platelet count decreased", 25,     100,    150,    "10^9/L",  "3",
-    "Platelet count decreased", 49,     100,    150,    "10^9/L",  "3",
-    "Platelet count decreased", 50,     100,    150,    "10^9/L",  "2",
-    "Platelet count decreased", 74,     100,    150,    "10^9/L",  "2",
-    "Platelet count decreased", 75,     100,    150,    "10^9/L",  "1",
-    "Platelet count decreased", 99,     100,     NA,    "10^9/L",  "1",
-    "Platelet count decreased", 100,    100,     NA,    "10^9/L",  "0",
+    "Platelet count decreased", 24, 100, 150, "10^9/L", "4",
+    "Platelet count decreased", 25, 100, 150, "10^9/L", "3",
+    "Platelet count decreased", 49, 100, 150, "10^9/L", "3",
+    "Platelet count decreased", 50, 100, 150, "10^9/L", "2",
+    "Platelet count decreased", 74, 100, 150, "10^9/L", "2",
+    "Platelet count decreased", 75, 100, 150, "10^9/L", "1",
+    "Platelet count decreased", 99, 100, NA, "10^9/L", "1",
+    "Platelet count decreased", 100, 100, NA, "10^9/L", "0",
     # ANRLO missing - can grade 2-4
-    "Platelet count decreased", 24,     NA,     NA,     "10^9/L",  "4",
-    "Platelet count decreased", 25,     NA,     NA,     "10^9/L",  "3",
-    "Platelet count decreased", 49,     NA,     NA,     "10^9/L",  "3",
-    "Platelet count decreased", 50,     NA,     NA,     "10^9/L",  "2",
-    "Platelet count decreased", 74,     NA,     NA,     "10^9/L",  "2",
+    "Platelet count decreased", 24, NA, NA, "10^9/L", "4",
+    "Platelet count decreased", 25, NA, NA, "10^9/L", "3",
+    "Platelet count decreased", 49, NA, NA, "10^9/L", "3",
+    "Platelet count decreased", 50, NA, NA, "10^9/L", "2",
+    "Platelet count decreased", 74, NA, NA, "10^9/L", "2",
     # ANRLO missing - can NOT grade 0 or 1
-    "Platelet count decreased", 75,     NA,     NA,     "10^9/L",  NA,
-    "Platelet count decreased", 99,     NA,     NA,     "10^9/L",  NA,
-    "Platelet count decreased", 100,    NA,     NA,     "10^9/L",  NA,
+    "Platelet count decreased", 75, NA, NA, "10^9/L", NA,
+    "Platelet count decreased", 99, NA, NA, "10^9/L", NA,
+    "Platelet count decreased", 100, NA, NA, "10^9/L", NA,
     # Unit missing cannot grade
-    "Platelet count decreased", 100,    100,     NA,    NA,        NA,
+    "Platelet count decreased", 100, 100, NA, NA, NA,
     # AVAL missing cannot grade
-    "Platelet count decreased", NA,     100,     NA,    "10^9/L",  NA
+    "Platelet count decreased", NA, 100, NA, "10^9/L", NA
   )
   input_ctcv4_21 <- exp_out_ctcv4_21 %>%
     select(-ATOXGRL)
@@ -1100,32 +1098,32 @@ test_that("derive_var_atoxgr_dir: Test 22 NCICTCAEv4 Serum amylase increased", {
 
 test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 White blood cell decreased", {
   exp_out_ctcv4_23 <- tibble::tribble(
-    ~ATOXDSCL,                    ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRL,
-    "Not a term",                 1,      5,      15,     "10^9/L",  NA,
-    NA_character_,                2,      5,      15,     "10^9/L",  NA,
+    ~ATOXDSCL, ~AVAL, ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRL,
+    "Not a term", 1, 5, 15, "10^9/L", NA,
+    NA_character_, 2, 5, 15, "10^9/L", NA,
     # ANRLO not missing
-    "White blood cell decreased", 0.9,    5,      15,     "10^9/L",  "4",
-    "White blood cell decreased", 1,      5,      15,     "10^9/L",  "3",
-    "White blood cell decreased", 1.9,    5,      15,     "10^9/L",  "3",
-    "White blood cell decreased", 2,      5,      15,     "10^9/L",  "2",
-    "White blood cell decreased", 2.9,    5,      15,     "10^9/L",  "2",
-    "White blood cell decreased", 3,      5,      15,     "10^9/L",  "1",
-    "White blood cell decreased", 4.9,    5,      15,     "10^9/L",  "1",
-    "White blood cell decreased", 5,      5,      15,     "10^9/L",  "0",
+    "White blood cell decreased", 0.9, 5, 15, "10^9/L", "4",
+    "White blood cell decreased", 1, 5, 15, "10^9/L", "3",
+    "White blood cell decreased", 1.9, 5, 15, "10^9/L", "3",
+    "White blood cell decreased", 2, 5, 15, "10^9/L", "2",
+    "White blood cell decreased", 2.9, 5, 15, "10^9/L", "2",
+    "White blood cell decreased", 3, 5, 15, "10^9/L", "1",
+    "White blood cell decreased", 4.9, 5, 15, "10^9/L", "1",
+    "White blood cell decreased", 5, 5, 15, "10^9/L", "0",
     # ANRLO missing - can grade 2-4
-    "White blood cell decreased", 0.9,    NA,     NA,     "10^9/L",  "4",
-    "White blood cell decreased", 1,      NA,     NA,     "10^9/L",  "3",
-    "White blood cell decreased", 1.9,    NA,     NA,     "10^9/L",  "3",
-    "White blood cell decreased", 2,      NA,     NA,     "10^9/L",  "2",
-    "White blood cell decreased", 2.9,    NA,     NA,     "10^9/L",  "2",
+    "White blood cell decreased", 0.9, NA, NA, "10^9/L", "4",
+    "White blood cell decreased", 1, NA, NA, "10^9/L", "3",
+    "White blood cell decreased", 1.9, NA, NA, "10^9/L", "3",
+    "White blood cell decreased", 2, NA, NA, "10^9/L", "2",
+    "White blood cell decreased", 2.9, NA, NA, "10^9/L", "2",
     # ANRLO missing - can NOT grade 0 or 1
-    "White blood cell decreased", 3,      NA,     NA,     "10^9/L",  NA,
-    "White blood cell decreased", 3,      NA,     NA,     "10^9/L",  NA,
-    "White blood cell decreased", 3,      NA,     NA,     "10^9/L",  NA,
+    "White blood cell decreased", 3, NA, NA, "10^9/L", NA,
+    "White blood cell decreased", 3, NA, NA, "10^9/L", NA,
+    "White blood cell decreased", 3, NA, NA, "10^9/L", NA,
     # Unit missing cannot grade
-    "White blood cell decreased", 3,     100,     NA,     NA,        NA,
+    "White blood cell decreased", 3, 100, NA, NA, NA,
     # AVAL missing cannot grade
-    "White blood cell decreased", NA,     100,     NA,    "10^9/L",  NA,
+    "White blood cell decreased", NA, 100, NA, "10^9/L", NA,
   )
   input_ctcv4_23 <- exp_out_ctcv4_23 %>%
     select(-ATOXGRL)
@@ -1391,28 +1389,28 @@ test_that("derive_var_atoxgr_dir: Test 28 NCICTCAEv4 Hyperkalemia", {
 
 test_that("derive_var_atoxgr_dir: Test 29 NCICTCAEv4 Hypermagnesemia", {
   exp_out_ctcv4_29 <- tibble::tribble(
-    ~ATOXDSCH,         ~AVAL,  ~ANRLO, ~ANRHI, ~AVALU,    ~ATOXGRH,
-    "Not a term",       3.4,    0,      0.8,    "mmol/L",  NA,
-    NA_character_,      3.4,    0,      0.8,    "mmol/L",  NA,
+    ~ATOXDSCH, ~AVAL, ~ANRLO, ~ANRHI, ~AVALU, ~ATOXGRH,
+    "Not a term", 3.4, 0, 0.8, "mmol/L", NA,
+    NA_character_, 3.4, 0, 0.8, "mmol/L", NA,
     # ANRHI not missing
-    "Hypermagnesemia",  3.4,    0,      0.8,    "mmol/L",  "4",
-    "Hypermagnesemia",  3.3,    0,      0.8,    "mmol/L",  "3",
-    "Hypermagnesemia",  1.24,   0,      0.8,    "mmol/L",  "3",
-    "Hypermagnesemia",  1.23,   0,      0.8,    "mmol/L",  "1",
-    "Hypermagnesemia",  0.81,   0,      0.8,    "mmol/L",  "1",
-    "Hypermagnesemia",  0.8,    0,      0.8,    "mmol/L",  "0",
+    "Hypermagnesemia", 3.4, 0, 0.8, "mmol/L", "4",
+    "Hypermagnesemia", 3.3, 0, 0.8, "mmol/L", "3",
+    "Hypermagnesemia", 1.24, 0, 0.8, "mmol/L", "3",
+    "Hypermagnesemia", 1.23, 0, 0.8, "mmol/L", "1",
+    "Hypermagnesemia", 0.81, 0, 0.8, "mmol/L", "1",
+    "Hypermagnesemia", 0.8, 0, 0.8, "mmol/L", "0",
     # ANRHI missing - can grade 3-4
-    "Hypermagnesemia",  3.4,    0,      NA,     "mmol/L",  "4",
-    "Hypermagnesemia",  3.3,    0,      NA,     "mmol/L",  "3",
-    "Hypermagnesemia",  1.24,   0,      NA,     "mmol/L",  "3",
+    "Hypermagnesemia", 3.4, 0, NA, "mmol/L", "4",
+    "Hypermagnesemia", 3.3, 0, NA, "mmol/L", "3",
+    "Hypermagnesemia", 1.24, 0, NA, "mmol/L", "3",
     # ANRHI missing - can NOT grade 0 or 1
-    "Hypermagnesemia",  1.23,   0,      NA,     "mmol/L",  NA,
-    "Hypermagnesemia",  0.81,   0,      NA,     "mmol/L",  NA,
-    "Hypermagnesemia",  0.8,    0,      NA,     "mmol/L",  NA,
+    "Hypermagnesemia", 1.23, 0, NA, "mmol/L", NA,
+    "Hypermagnesemia", 0.81, 0, NA, "mmol/L", NA,
+    "Hypermagnesemia", 0.8, 0, NA, "mmol/L", NA,
     # Unit missing cannot grade
-    "Hypermagnesemia",  0.8,    0,      0.8,    NA,        NA,
+    "Hypermagnesemia", 0.8, 0, 0.8, NA, NA,
     # AVAL missing cannot grade
-    "Hypermagnesemia",  NA,     0,      0.8,    "mmol/L",  NA,
+    "Hypermagnesemia", NA, 0, 0.8, "mmol/L", NA,
   )
   input_ctcv4_29 <- exp_out_ctcv4_29 %>%
     select(-ATOXGRH)
