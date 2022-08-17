@@ -29,11 +29,9 @@
 #' @author
 #' Shimeng Huang, Samia Kabi, Thomas Neitmann
 #'
-#' @return The input dataset with `DTHCAUS` variable added.
+#' @return `derive_var_dthcaus()` returns the input dataset with `DTHCAUS` variable added.
 #'
 #' @export
-#'
-#' @seealso [dthcaus_source()]
 #'
 #' @examples
 #' library(tibble)
@@ -255,17 +253,14 @@ derive_var_dthcaus <- function(dataset,
 #' in the returned dataset.
 #' These can be either strings or symbols referring to existing variables.
 #'
-#'
-#' @author Shimeng Huang
+#' @describeIn derive_var_dthcaus Create objects of class "dthcaus_source"
 #'
 #' @keywords source_specifications
 #' @family source_specifications
 #'
-#' @seealso [derive_var_dthcaus()]
-#'
 #' @export
 #'
-#' @return An object of class "dthcaus_source".
+#' @return `dthcaus_source()` returns an object of class "dthcaus_source".
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
