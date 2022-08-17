@@ -182,8 +182,7 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
 ### Grade 1: >ULN - 1.5 x ULN
 
 test_that(
-  "derive_var_atoxgr_dir: Test 3 NCICTCAEv4 Activated partial thromboplastin time prolonged",
-  {
+  "derive_var_atoxgr_dir: Test 3 NCICTCAEv4 Activated partial thromboplastin time prolonged", {
     exp_out_ctcv4_3 <- tibble::tribble(
       ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
       "Not a term",                                      80,     100,     NA_character_,  NA,
