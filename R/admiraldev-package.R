@@ -4,7 +4,7 @@
 #'             starts_with transmute ungroup vars n_distinct union distinct
 #'             summarise_at summarise coalesce bind_cols na_if tibble
 #' @importFrom magrittr %>%
-#' @importFrom rlang := abort arg_match as_function as_string call2 caller_env
+#' @importFrom rlang := abort arg_match as_function as_label as_string call2 caller_env
 #'             call_name current_env .data enexpr enquo eval_bare eval_tidy expr
 #'             expr_interp expr_label f_lhs f_rhs inform
 #'             is_bare_formula is_call is_character is_formula is_integerish
@@ -16,7 +16,8 @@
 #' @importFrom purrr map map2 map_chr map_lgl reduce walk keep map_if transpose
 #'             flatten every modify_at modify_if reduce compose
 #' @importFrom stringr str_c str_detect str_extract str_remove str_remove_all
-#'             str_replace str_trim str_to_lower str_to_title str_to_upper str_glue
+#'             str_replace str_trim str_to_lower str_subset str_to_title str_to_upper
+#'             str_glue
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             time_length %--% ymd ymd_hms weeks years hours minutes
