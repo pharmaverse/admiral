@@ -67,7 +67,7 @@ reference:
   - has_keyword('quote')
 
 - title: Join Functions
-  desc: {dplyr} join function without warning about different attributes
+  desc: dplyr join function without warning about different attributes
   contents:
   - has_keyword('joins')
 
