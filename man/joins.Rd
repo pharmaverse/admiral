@@ -13,29 +13,15 @@ inner_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 left_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{x, y}{tbls to join}
+\item{x}{\code{data.frame}}
 
-\item{by}{a character vector of variables to join by.  If \code{NULL}, the
-default, \code{*_join()} will do a natural join, using all variables with
-common names across the two tables. A message lists the variables so
-that you can check they're right (to suppress the message, simply
-explicitly list the variables that you want to join).
+\item{y}{\code{data.frame}}
 
-To join by different variables on x and y use a named vector.
-For example, \code{by = c("a" = "b")} will match \code{x.a} to
-\code{y.b}.}
+\item{by}{\code{character} vector}
 
-\item{copy}{If \code{x} and \code{y} are not from the same data source,
-and \code{copy} is \code{TRUE}, then \code{y} will be copied into the
-same src as \code{x}.  This allows you to join tables across srcs, but
-it is a potentially expensive operation so you must opt into it.}
+\item{...}{Additional arguments}
 
-\item{...}{other parameters passed onto methods, for instance, \code{na_matches}
-to control how \code{NA} values are matched.  See \link[dplyr]{join.tbl_df} for more.}
-
-\item{suffix}{If there are non-joined duplicate variables in \code{x} and
-\code{y}, these suffixes will be added to the output to disambiguate them.
-Should be a character vector of length 2.}
+\item{suffix}{\code{character} vector}
 }
 \value{
 \code{data.frame}

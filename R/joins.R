@@ -3,7 +3,12 @@
 #' The `*_join()` functions from {dplyr} without a warning on different attributes
 #' in datasets.
 #'
-#' @inheritParams dplyr::inner_join
+#' @param x `data.frame`
+#' @param y `data.frame`
+#' @param by `character` vector
+#' @param suffix copy `logical`
+#' @param suffix `character` vector
+#' @param ... Additional arguments
 #'
 #' @return `data.frame`
 #'
