@@ -122,10 +122,18 @@ derive_vars_duration(data,
 }
 \seealso{
 \code{\link[=compute_duration]{compute_duration()}}
+
+Date/Time Derivation Functions that returns variable appended to dataset: 
+\code{\link{derive_var_trtdurd}()},
+\code{\link{derive_vars_dtm_to_dt}()},
+\code{\link{derive_vars_dtm_to_tm}()},
+\code{\link{derive_vars_dtm}()},
+\code{\link{derive_vars_dt}()},
+\code{\link{derive_vars_dy}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{timing}
+\concept{der_date_time}
+\keyword{der_date_time}
+\keyword{der_gen}

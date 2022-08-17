@@ -9,7 +9,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -28,7 +28,7 @@ adsl <- admiral_adsl
 
 lb <- convert_blanks_to_na(lb)
 
-# ---- Look-up tables ----
+# Look-up tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -79,7 +79,7 @@ param_lookup <- tibble::tribble(
 )
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
@@ -91,7 +91,7 @@ adlb <- lb %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADT, ADY
+  ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = LBDTC
@@ -99,14 +99,14 @@ adlb <- lb %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adlb <- adlb %>%
-  # Add PARAMCD PARAM and PARAMN - from LOOK-UP table
+  ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
   # Replace with PARAMCD lookup function
   derive_vars_merged(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD)
   ) %>%
-  # Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
+  ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
@@ -115,7 +115,7 @@ adlb <- adlb %>%
     ANRHI = LBSTNRHI
   )
 
-# Get Visit Info
+## Get Visit Info ----
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -131,7 +131,7 @@ adlb <- adlb %>%
   )
 
 adlb <- adlb %>%
-  # Calculate ONTRTFL
+  ## Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
@@ -139,11 +139,11 @@ adlb <- adlb %>%
     filter_pre_timepoint = AVISIT == "Baseline"
   )
 
-# Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
+## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 adlb <- adlb %>%
   derive_var_anrind()
 
-# Derive baseline flags
+## Derive baseline flags ----
 adlb <- adlb %>%
   # Calculate BASETYPE
   mutate(
@@ -161,7 +161,7 @@ adlb <- adlb %>%
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   )
 
-# Derive baseline information
+## Derive baseline information ----
 adlb <- adlb %>%
   # Calculate BASE
   derive_var_base(
@@ -187,7 +187,7 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
-# Calculate R2BASE, R2ANRLO and R2ANRHI
+## Calculate R2BASE, R2ANRLO and R2ANRHI ----
 adlb <- adlb %>%
   derive_var_analysis_ratio(
     numer_var = AVAL,
@@ -202,7 +202,7 @@ adlb <- adlb %>%
     denom_var = ANRHI
   )
 
-# SHIFT derivation
+## SHIFT derivation ----
 adlb <- adlb %>%
   derive_var_shift(
     new_var = SHIFT1,
@@ -210,6 +210,7 @@ adlb <- adlb %>%
     to_var = ANRIND
   )
 
+## Flag variables (ANL01FL, LVOTFL) ----
 # ANL01FL: Flag last result within an AVISIT for post-baseline records
 # LVOTFL: Flag last valid on-treatment record
 adlb <- adlb %>%
@@ -234,7 +235,7 @@ adlb <- adlb %>%
     filter = ONTRTFL == "Y"
   )
 
-# Get treatment information
+## Get treatment information ----
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(
@@ -242,7 +243,7 @@ adlb <- adlb %>%
     TRTA = TRT01A
   )
 
-# Get extreme values
+## Get extreme values ----
 adlb <- adlb %>%
   # get MINIMUM value
   derive_extreme_records(
@@ -284,7 +285,7 @@ adlb <- adlb %>%
     )
   )
 
-# Get ASEQ
+## Get ASEQ ----
 adlb <- adlb %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -305,7 +306,7 @@ adlb <- adlb %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")

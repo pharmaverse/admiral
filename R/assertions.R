@@ -18,7 +18,8 @@
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -101,7 +102,8 @@ assert_data_frame <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(msg_type) {
@@ -191,7 +193,8 @@ assert_character_scalar <- function(arg,
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(chr) {
@@ -251,7 +254,8 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(flag) {
@@ -298,7 +302,8 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -376,7 +381,8 @@ assert_expr <- function(arg, optional = FALSE) {
 #' Otherwise throws an informative error.
 #'
 #' @export
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #' @author Ondrej Slama
 #'
 #' @examples
@@ -434,7 +440,8 @@ assert_filter_cond <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -498,7 +505,8 @@ assert_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(by_vars) {
@@ -556,7 +564,8 @@ assert_order_vars <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(num1, num2) {
@@ -614,7 +623,8 @@ assert_integer_scalar <- function(arg, subset = "none", optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(num) {
@@ -641,6 +651,93 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
   }
 }
 
+#' Is a Variable in a Dataset a Date or Datetime Variable?
+#'
+#' Checks if a variable in a dataset is a date or datetime variable
+#'
+#' @param dataset The dataset where the variable is expected
+#'
+#' @param var The variable to check
+#'
+#' @param dataset_name The name of the dataset. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @param var_name The name of the variable. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @return
+#' The function throws an error if `var` is not a date or datetime variable in
+#' `dataset` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' library(tibble)
+#' library(lubridate)
+#' library(rlang)
+#'
+#' example_fun <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(dataset = dataset, var = !!var)
+#' }
+#'
+#' my_data <- tribble(
+#'   ~USUBJID, ~ADT,
+#'   "1",      ymd("2020-12-06"),
+#'   "2",      ymd("")
+#' )
+#'
+#' example_fun(
+#'   dataset = my_data,
+#'   var = ADT
+#' )
+#'
+#' try(example_fun(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+#'
+#' example_fun2 <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(
+#'     dataset = dataset,
+#'     var = !!var,
+#'     dataset_name = "your_data",
+#'     var_name = "your_var"
+#'   )
+#' }
+#'
+#' try(example_fun2(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
+  var <- assert_symbol(enquo(var))
+  assert_data_frame(dataset, required_vars = vars(!!var))
+  assert_character_scalar(dataset_name, optional = TRUE)
+  assert_character_scalar(var_name, optional = TRUE)
+  column <- pull(dataset, !!var)
+  if (is.null(dataset_name)) {
+    dataset_name <- arg_name(substitute(dataset))
+  }
+  if (is.null(var_name)) {
+    var_name <- as_label(var)
+  }
+  if (!is.instant(column)) {
+    abort(paste0(
+      "`",
+      var_name,
+      "` in dataset `",
+      dataset_name,
+      "` is not a date or datetime variable but is ",
+      friendly_type_of(column)
+    ))
+  }
+}
 
 #' Is an Argument an Object of a Specific S3 Class?
 #'
@@ -658,7 +755,8 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(obj) {
@@ -709,7 +807,8 @@ assert_s3_class <- function(arg, class, optional = TRUE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(list) {
@@ -805,7 +904,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(admiral.test)
@@ -856,7 +956,8 @@ assert_has_variables <- function(dataset, required_vars) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' example_fun <- function(fun) {
@@ -945,7 +1046,8 @@ assert_function_param <- function(arg, params) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(tibble)
@@ -1015,7 +1117,8 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @export
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @examples
 #' library(tibble)
@@ -1063,7 +1166,8 @@ assert_param_does_not_exist <- function(dataset, param) {
 #' The function throws an error if `arg` is not a list of variable-value expressions.
 #' Otherwise, the input it returned invisibly.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1213,7 +1317,8 @@ assert_varval_list <- function(arg, # nolint
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'
@@ -1306,7 +1411,8 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @return
 #' An error if the condition is not meet. The input otherwise.
 #'
-#' @keywords assertion
+#' @family move_adm_dev
+#' @keywords move_adm_dev
 #'
 #' @export
 #'

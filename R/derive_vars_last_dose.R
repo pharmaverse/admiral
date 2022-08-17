@@ -40,12 +40,9 @@
 #' These can be either strings or symbols referring to existing variables.
 #'
 #' @details
-#' All date (date-time) variables can be characters in standard ISO format or
-#' of date / date-time class.
-#' For ISO format, see [`impute_dtc`] - parameter `dtc` for further details.
 #' When doing date comparison to identify last dose, date-time imputations are done as follows:
-#' * `dose_date`: no date imputation, time imputation to `00:00:00` if time is missing.
-#' * `analysis_date`: no date imputation, time imputation to `23:59:59` if time is missing.
+#' * `dose_date`: time is imputed to `00:00:00` if the variable is a date variable
+#' * `analysis_date`: time is imputed to `23:59:59` if the variable is a date variable
 #'
 #' The last dose records are identified as follows:
 #'
@@ -77,7 +74,11 @@
 #'
 #' @author Ondrej Slama, Annie Yang
 #'
-#' @keywords adam derivation user_utility
+#' @family der_gen
+#' @keywords der_gen
+#'
+#' @seealso [derive_var_last_dose_amt()], [derive_var_last_dose_date()],
+#'   [derive_var_last_dose_grp()], [create_single_dose_dataset()]
 #'
 #' @export
 #'
@@ -87,30 +88,43 @@
 #' data(admiral_ae)
 #' data(ex_single)
 #'
-#' admiral_ae %>%
+#' # create datetime variables in input datasets
+#' ex_single <- derive_vars_dtm(
+#'   head(ex_single, 100),
+#'   dtc = EXENDTC,
+#'   new_vars_prefix = "EXEN",
+#'   flag_imputation = "none"
+#' )
+#'
+#' adae <- admiral_ae %>%
 #'   head(100) %>%
+#'   derive_vars_dtm(
+#'     dtc = AESTDTC,
+#'     new_vars_prefix = "AST",
+#'     highest_imputation = "M"
+#'   )
+#'
+#' # add last dose vars
+#' adae %>%
 #'   derive_vars_last_dose(
-#'     head(ex_single, 100),
+#'     dataset_ex = ex_single,
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       nchar(EXENDTC) >= 10,
+#'       !is.na(EXENDTM),
 #'     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
-#'     dose_date = EXENDTC,
-#'     analysis_date = AESTDTC,
-#'     single_dose_condition = (EXSTDTC == EXENDTC)
+#'     dose_date = EXENDTM,
+#'     analysis_date = ASTDTM
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 #'
 #' # or with traceability variables
-#' admiral_ae %>%
-#'   head(100) %>%
+#' adae %>%
 #'   derive_vars_last_dose(
-#'     head(ex_single, 100),
+#'     dataset_ex = ex_single,
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       nchar(EXENDTC) >= 10,
+#'       !is.na(EXENDTM),
 #'     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
-#'     dose_date = EXENDTC,
-#'     analysis_date = AESTDTC,
-#'     single_dose_condition = (EXSTDTC == EXENDTC),
+#'     dose_date = EXENDTM,
+#'     analysis_date = ASTDTM,
 #'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
@@ -135,10 +149,20 @@ derive_vars_last_dose <- function(dataset,
   assert_data_frame(dataset, quo_c(by_vars, analysis_date))
   if (as_name(dose_date) %in% names(new_vars)) {
     required_vars <- quo_c(by_vars, new_vars, get_source_vars(traceability_vars))
+    dose_date_res <- new_vars[[as_name(dose_date)]]
   } else {
     required_vars <- quo_c(by_vars, dose_date, new_vars, get_source_vars(traceability_vars))
+    dose_date_res <- dose_date
   }
   assert_data_frame(dataset_ex, required_vars)
+  assert_date_var(
+    dataset = dataset,
+    var = !!analysis_date
+  )
+  assert_date_var(
+    dataset = dataset_ex,
+    var = !!dose_date_res
+  )
 
   # vars converted to string
   by_vars_str <- vars2chr(by_vars)
@@ -164,7 +188,6 @@ derive_vars_last_dose <- function(dataset,
     unique_by,
     "Multiple doses exist for the same `dose_date`. Update `dose_id` to identify unique doses."
   )
-
 
   # filter EX based on user-specified condition
   if (!is.null(quo_get_expr(filter_ex))) {
@@ -211,8 +234,7 @@ derive_vars_last_dose <- function(dataset,
     mutate(
       tmp_analysis_date = convert_date_to_dtm(
         dt = !!analysis_date,
-        date_imputation = NULL,
-        time_imputation = "23:59:59"
+        time_imputation = "last"
       )
     )
 
@@ -220,9 +242,7 @@ derive_vars_last_dose <- function(dataset,
   dataset_ex <- dataset_ex %>%
     mutate(
       tmp_dose_date = convert_date_to_dtm(
-        dt = !!dose_date,
-        date_imputation = NULL,
-        time_imputation = "00:00:00"
+        dt = !!dose_date
       )
     )
 

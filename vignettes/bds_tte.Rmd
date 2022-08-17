@@ -74,9 +74,19 @@ The following code creates a minimally viable ADAE dataset to be used throughout
 ```{r}
 adae <- ae %>%
   left_join(adsl, by = c("STUDYID", "USUBJID")) %>%
-  derive_vars_dt(new_vars_prefix = "AST", dtc = AESTDTC, date_imputation = "first") %>%
-  derive_vars_dt(new_vars_prefix = "AEN", dtc = AEENDTC, date_imputation = "last") %>%
-  mutate(TRTEMFL = if_else(ASTDT >= TRTSDT & AENDT <= TRTEDT + days(30), "Y", NA_character_))
+  derive_vars_dt(
+    new_vars_prefix = "AST",
+    dtc = AESTDTC,
+    highest_imputation = "M"
+  ) %>%
+  derive_vars_dt(
+    new_vars_prefix = "AEN",
+    dtc = AEENDTC,
+    highest_imputation = "M",
+    date_imputation = "last"
+  ) %>%
+  mutate(TRTEMFL = if_else(ASTDT >= TRTSDT &
+    AENDT <= TRTEDT + days(30), "Y", NA_character_))
 ```
 
 ## Derive Parameters (`CNSR`, `ADT`, `STARTDT`) {#parameters}
@@ -430,7 +440,7 @@ observation_end <- censor_source(
 # define time to first AE #
 tt_ae <- event_source(
   dataset_name = "ae",
-  date = AESTDTC,
+  date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "ADVERSE EVENT",
     SRCDOM = "AE",
@@ -442,7 +452,7 @@ tt_ae <- event_source(
 tt_ser_ae <- event_source(
   dataset_name = "ae",
   filter = AESER == "Y",
-  date = AESTDTC,
+  date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "SERIOUS ADVERSE EVENT",
     SRCDOM = "AE",
@@ -454,7 +464,7 @@ tt_ser_ae <- event_source(
 tt_rel_ae <- event_source(
   dataset_name = "ae",
   filter = AEREL %in% c("PROBABLE", "POSSIBLE", "REMOTE"),
-  date = AESTDTC,
+  date = ASTDT,
   set_values_to = vars(
     EVNTDESC = "RELATED ADVERSE EVENT",
     SRCDOM = "AE",
@@ -480,7 +490,7 @@ adaette <- call_derivation(
     )
   ),
   dataset_adsl = adsl,
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, ae = adae),
   censor_conditions = list(observation_end)
 )
 ```
@@ -533,7 +543,10 @@ ae <- tibble::tribble(
   "01",     "2021-03-04",       2,      "Cough",
   "01",     "2021",             3,      "Flu"
 ) %>%
-  mutate(STUDYID = "AB42")
+  mutate(
+    STUDYID = "AB42",
+    AESTDT = convert_dtc_to_dt(dtc = AESTDTC, highest_imputation = "M")
+  )
 
 dataset_vignette(ae)
 ```
@@ -542,7 +555,7 @@ dataset_vignette(ae)
 # define time to first adverse event event #
 ttae <- event_source(
   dataset_name = "ae",
-  date = AESTDTC,
+  date = AESTDT,
   set_values_to = vars(
     EVNTDESC = "AE",
     SRCDOM = "AE",

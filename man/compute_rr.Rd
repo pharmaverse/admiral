@@ -25,8 +25,15 @@ Usually this computation function can not be used with \verb{\%>\%}.
 \examples{
 compute_rr(hr = 70.14)
 }
+\seealso{
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bmi}()},
+\code{\link{compute_bsa}()},
+\code{\link{compute_map}()},
+\code{\link{compute_qtc}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{adeg}
-\keyword{computation}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}

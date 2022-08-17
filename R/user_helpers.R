@@ -12,7 +12,8 @@
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_examples
+#' @keywords utils_examples
 #'
 #' @export
 #'
@@ -73,7 +74,8 @@ use_ad_template <- function(adam_name = "adsl",
 #'
 #' @author Shimeng Huang, Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_examples
+#' @keywords utils_examples
 #'
 #' @return A `character` vector of all available templates
 #'
@@ -106,6 +108,9 @@ list_all_templates <- function(package = "admiral") {
 #' @author Thomas Neitmann
 #'
 #' @export
+#'
+#' @keywords internal
+#' @family internal
 #'
 #' @seealso [list_all_templates()]
 #'

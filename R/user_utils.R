@@ -8,7 +8,8 @@
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' vars2chr(vars(USUBJID, AVAL))
@@ -34,7 +35,8 @@ vars2chr <- function(quosures) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' negate_vars(vars(USUBJID, STUDYID))
@@ -61,7 +63,9 @@ negate_vars <- function(vars = NULL) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_fil
+#'
+#' @keywords utils_fil
 #'
 #' @examples
 #' library(admiral.test)
@@ -90,7 +94,8 @@ filter_if <- function(dataset, filter) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @keywords utils_help
+#' @family utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -121,7 +126,8 @@ extract_unit <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords user_utility
+#' @family utils_fmt
+#' @keywords utils_fmt
 #'
 #' @export
 #'
@@ -183,7 +189,8 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -215,7 +222,8 @@ get_one_to_many_dataset <- function() {
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -237,7 +245,7 @@ get_many_to_one_dataset <- function() {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords user_utility
+#' @keywords utils_fmt
 #'
 #' @export
 #'

@@ -13,7 +13,8 @@
 #'
 #' @export
 #'
-#' @keywords tte_source
+#' @family source_specifications
+#' @keywords source_specifications
 #'
 #' @rdname tte_source_objects
 #'
@@ -36,7 +37,7 @@ death_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -50,7 +51,7 @@ lastalive_censor <- censor_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -66,7 +67,7 @@ ae_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -82,7 +83,7 @@ ae_ser_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -98,7 +99,7 @@ ae_gr1_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -114,7 +115,7 @@ ae_gr2_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -130,7 +131,7 @@ ae_gr3_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -146,7 +147,7 @@ ae_gr4_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -162,7 +163,7 @@ ae_gr5_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -178,7 +179,7 @@ ae_gr35_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export
@@ -194,7 +195,7 @@ ae_sev_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
 #' @format NULL
 #' @export

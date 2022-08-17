@@ -8,7 +8,7 @@ library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -27,12 +27,11 @@ cm <- admiral_cm
 
 cm <- convert_blanks_to_na(cm)
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
 
-# Derive flags
 adcm <- cm %>%
   # Join ADSL with CM (only ADSL vars required for derivations)
   derive_vars_merged(
@@ -40,30 +39,30 @@ adcm <- cm %>%
     new_vars = adsl_vars,
     by = vars(STUDYID, USUBJID)
   ) %>%
-  # Derive analysis start time
+  ## Derive analysis start time ----
   derive_vars_dtm(
     dtc = CMSTDTC,
     new_vars_prefix = "AST",
-    date_imputation = "first",
-    time_imputation = "first",
+    highest_imputation = "M",
     min_dates = vars(TRTSDT)
   ) %>%
-  # Derive analysis end time
+  ## Derive analysis end time ----
   derive_vars_dtm(
     dtc = CMENDTC,
     new_vars_prefix = "AEN",
+    highest_imputation = "M",
     date_imputation = "last",
     time_imputation = "last",
     max_dates = vars(DTHDT, EOSDT)
   ) %>%
-  # Derive analysis end/start date
+  ## Derive analysis end/start date -----
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
-  # Derive analysis start relative day and analysis end relative day
+  ## Derive analysis start relative day and analysis end relative day ----
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT, AENDT)
   ) %>%
-  # Derive analysis duration (value and unit)
+  ## Derive analysis duration (value and unit) ----
   derive_vars_duration(
     new_var = ADURN,
     new_var_unit = ADURU,
@@ -75,7 +74,7 @@ adcm <- cm %>%
     trunc_out = FALSE
   )
 
-# Derive flags
+## Derive flags ----
 adcm <- adcm %>%
   # Derive On-Treatment flag
   # Set `span_period = "Y"` if you want occurrences that started prior to drug
@@ -107,7 +106,7 @@ adcm <- adcm %>%
   )
 
 
-# Derive Aphase and Aphasen Variable
+## Derive APHASE and APHASEN Variable ----
 # Other timing variable can be derived similarly.
 adcm <- adcm %>%
   mutate(
@@ -136,7 +135,7 @@ adcm <- adcm %>%
   )
 
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adcm, file = file.path(dir, "adcm.rda"), compress = "bzip2")
