@@ -53,7 +53,7 @@ reference:
 
 - title: Getting and Setting Datasets
   desc: Assign or retrieve a dataset into/from the `.datasets` enironment
-  contetns:
+  contents:
   - has_keyword('datasets')
 
 - title: Quosure Helper Functions
