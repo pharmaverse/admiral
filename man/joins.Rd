@@ -19,6 +19,8 @@ left_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 \item{by}{\code{character} vector}
 
+\item{copy}{\code{logical}}
+
 \item{...}{Additional arguments}
 
 \item{suffix}{\code{character} vector}

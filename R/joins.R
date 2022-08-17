@@ -6,7 +6,7 @@
 #' @param x `data.frame`
 #' @param y `data.frame`
 #' @param by `character` vector
-#' @param suffix copy `logical`
+#' @param copy `logical`
 #' @param suffix `character` vector
 #' @param ... Additional arguments
 #'
