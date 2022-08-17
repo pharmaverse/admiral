@@ -1,39 +1,98 @@
 
 # derive_var_atoxgr ----
 
-test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
+test_that("derive_var_atoxgr: Test 1 ATOXGR cannot be graded", {
   exp_out_1 <- tibble::tribble(
     ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
-    "Hypoglycemia",     "Hyperglycemia",  NA_character_, NA_character_,  NA_character_,
-    "Hypoglycemia",     "Hyperglycemia",  NA_character_, "0",            NA_character_,
-    "Hypoglycemia",     "Hyperglycemia",  NA_character_, "1",            "1",
-    "Hypoglycemia",     "Hyperglycemia",  "0",           NA_character_,  NA_character_,
-    "Hypoglycemia",     "Hyperglycemia",  "0",           "0",            "0",
-    "Hypoglycemia",     "Hyperglycemia",  "0",           "1",            "1",
-    "Hypoglycemia",     "Hyperglycemia",  "1",           NA_character_,  "-1",
-    "Hypoglycemia",     "Hyperglycemia",  "1",           "0",            "-1",
-    NA_character_,      "INR Increased",  NA_character_, "0",            "0",
-    NA_character_,      "INR Increased",  NA_character_, "1",            "1",
+    NA_character_,      NA_character_,    NA_character_, NA_character_,  NA_character_,
     "Hypophosphatemia", NA_character_,    NA_character_, NA_character_,  NA_character_,
-    "Hypophosphatemia", NA_character_,    "0",           NA_character_,  "0",
-    "Hypophosphatemia", NA_character_,    "1",           NA_character_,  "1",
+    NA_character_,      "Hyperglycemia",  NA_character_, NA_character_,  NA_character_,
+    "Hypoglycemia",     "Hyperglycemia",  NA_character_, NA_character_,  NA_character_,
+    # ATOXGRL is ungradable so cannot say ATOXGR is normal
+    "Hypoglycemia",     "Hyperglycemia",  NA_character_, "0",            NA_character_,
+    # ATOXGRH is ungradable so cannot say ATOXGR is normal
+    "Hypoglycemia",     "Hyperglycemia",  "0",           NA_character_,  NA_character_,
     )
 
-  input_ctcv4_1 <- exp_out_1 %>%
-  select(-ATOXGRL)
+  input_1 <- exp_out_1 %>%
+  select(-ATOXGR)
 
 expect_equal(
   derive_var_atoxgr(
-    input_ctcv4_1,
-    new_var = ATOXGR,
+    input_1,
     lotox_description_var = ATOXDSCL,
-    hitox_description_var = ATOXDSCH,
+    hitox_description_var = ATOXDSCH
   ),
-  exp_out_ctcv4_1
+  exp_out_1
 )
 
 })
 
+test_that("derive_var_atoxgr: Test 2 ATOXGR = 0 (normal)", {
+  exp_out_2 <- tibble::tribble(
+    ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
+    "Hypoglycemia",     "Hyperglycemia",  "0",           "0",            "0",
+    NA_character_,      "INR Increased",  NA_character_, "0",            "0",
+    "Hypophosphatemia", NA_character_,    "0",           NA_character_,  "0",
+  )
+
+  input_2 <- exp_out_2 %>%
+    select(-ATOXGR)
+
+  expect_equal(
+    derive_var_atoxgr(
+      input_2,
+      lotox_description_var = ATOXDSCL,
+      hitox_description_var = ATOXDSCH
+    ),
+    exp_out_2
+  )
+
+})
+
+test_that("derive_var_atoxgr: Test 3 ATOXGR > 0 (HYPER)", {
+  exp_out_3 <- tibble::tribble(
+    ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
+    "Hypoglycemia",     "Hyperglycemia",  NA_character_, "1",            "1",
+    "Hypoglycemia",     "Hyperglycemia",  "0",           "4",            "4",
+    NA_character_,      "INR Increased",  NA_character_, "2",            "2",
+  )
+
+  input_3 <- exp_out_3 %>%
+    select(-ATOXGR)
+
+  expect_equal(
+    derive_var_atoxgr(
+      input_3,
+      lotox_description_var = ATOXDSCL,
+      hitox_description_var = ATOXDSCH
+    ),
+    exp_out_3
+  )
+
+})
+
+test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
+  exp_out_4 <- tibble::tribble(
+    ~ATOXDSCL,          ~ATOXDSCH,        ~ATOXGRL,      ~ATOXGRH,       ~ATOXGR,
+    "Hypoglycemia",     "Hyperglycemia",  "3",           NA_character_,  "-3",
+    "Hypoglycemia",     "Hyperglycemia",  "1",           "0",            "-1",
+    "Hypophosphatemia", NA_character_,    "4",           NA_character_,  "-4",
+  )
+
+  input_4 <- exp_out_4 %>%
+    select(-ATOXGR)
+
+  expect_equal(
+    derive_var_atoxgr(
+      input_4,
+      lotox_description_var = ATOXDSCL,
+      hitox_description_var = ATOXDSCH
+    ),
+    exp_out_4
+  )
+
+})
 
 # derive_var_atoxgr_dir - NCICTCAEv4 ----
 
@@ -78,7 +137,8 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_1
   )
@@ -111,7 +171,8 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_2
   )
@@ -150,7 +211,8 @@ test_that(
         new_var = ATOXGRH,
         meta_criteria = atoxgr_criteria_ctcv4,
         tox_description_var = ATOXDSCH,
-        criteria_direction = "H"
+        criteria_direction = "H",
+        get_unit_expr = AVALU
       ),
       exp_out_ctcv4_3
     )
@@ -189,7 +251,8 @@ test_that("derive_var_atoxgr_dir: Test 4 NCICTCAEv4 Alanine aminotransferase inc
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_4
   )
@@ -228,7 +291,8 @@ test_that("derive_var_atoxgr_dir: Test 5 NCICTCAEv4 Alkaline phosphatase increas
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_5
   )
@@ -267,7 +331,8 @@ test_that("derive_var_atoxgr_dir: Test 6 NCICTCAEv4 Aspartate aminotransferase i
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_6
   )
@@ -306,7 +371,8 @@ test_that("derive_var_atoxgr_dir: Test 7 NCICTCAEv4 Blood bilirubin increased", 
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_7
   )
@@ -358,7 +424,8 @@ test_that("derive_var_atoxgr_dir: Test 8 NCICTCAEv4 CD4 Lymphocytes decreased", 
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_8
   )
@@ -409,7 +476,8 @@ test_that("derive_var_atoxgr_dir: Test 9 NCICTCAEv4 Cholesterol high", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_9
   )
@@ -448,7 +516,8 @@ test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 CPK increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_10
   )
@@ -498,7 +567,8 @@ test_that("derive_var_atoxgr_dir: Test 10 NCICTCAEv4 Creatinine increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_11
   )
@@ -573,7 +643,8 @@ test_that("derive_var_atoxgr_dir: Test 12 NCICTCAEv4 Fibrinogen decreased", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_12
   )
@@ -612,7 +683,8 @@ test_that("derive_var_atoxgr_dir: Test 13 NCICTCAEv4 GGT increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_13
   )
@@ -643,7 +715,8 @@ test_that("derive_var_atoxgr_dir: Test 14 NCICTCAEv4 Haptoglobin decreased", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_14
   )
@@ -699,7 +772,8 @@ test_that("derive_var_atoxgr_dir: Test 15 NCICTCAEv4 Hemoglobin increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_15
   )
@@ -745,7 +819,8 @@ test_that("derive_var_atoxgr_dir: Test 16 NCICTCAEv4 INR increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_16
   )
@@ -784,7 +859,8 @@ test_that("derive_var_atoxgr_dir: Test 17 NCICTCAEv4 Lipase increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_17
   )
@@ -834,7 +910,8 @@ test_that("derive_var_atoxgr_dir: Test 18 NCICTCAEv4 Lymphocyte count decreased"
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_18
   )
@@ -866,7 +943,8 @@ test_that("derive_var_atoxgr_dir: Test 19 NCICTCAEv4 Lymphocyte count increased"
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_19
   )
@@ -916,7 +994,8 @@ test_that("derive_var_atoxgr_dir: Test 20 NCICTCAEv4 Neutrophil count decreased"
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_20
   )
@@ -966,7 +1045,8 @@ test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 Platelet count decreased", 
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_21
   )
@@ -1005,7 +1085,8 @@ test_that("derive_var_atoxgr_dir: Test 22 NCICTCAEv4 Serum amylase increased", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_22
   )
@@ -1055,7 +1136,8 @@ test_that("derive_var_atoxgr_dir: Test 21 NCICTCAEv4 White blood cell decreased"
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_23
   )
@@ -1107,7 +1189,8 @@ test_that("derive_var_atoxgr_dir: Test 24 NCICTCAEv4 Hypercalcemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_24
   )
@@ -1157,7 +1240,8 @@ test_that("derive_var_atoxgr_dir: Test 25 NCICTCAEv4 Hypercalcemia (Ionized)", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_25
   )
@@ -1207,7 +1291,8 @@ test_that("derive_var_atoxgr_dir: Test 26 NCICTCAEv4 Hyperglycemia (Fasting)", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_26
   )
@@ -1241,7 +1326,8 @@ test_that("derive_var_atoxgr_dir: Test 26 NCICTCAEv4 Hyperglycemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_27
   )
@@ -1291,7 +1377,8 @@ test_that("derive_var_atoxgr_dir: Test 28 NCICTCAEv4 Hyperkalemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_28
   )
@@ -1336,7 +1423,8 @@ test_that("derive_var_atoxgr_dir: Test 29 NCICTCAEv4 Hypermagnesemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_29
   )
@@ -1386,7 +1474,8 @@ test_that("derive_var_atoxgr_dir: Test 30 NCICTCAEv4 Hypernatremia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_30
   )
@@ -1425,7 +1514,8 @@ test_that("derive_var_atoxgr_dir: Test 31 NCICTCAEv4 Hypertriglyceridemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_31
   )
@@ -1465,7 +1555,8 @@ test_that("derive_var_atoxgr_dir: Test 32 NCICTCAEv4 Hyperuricemia", {
       new_var = ATOXGRH,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCH,
-      criteria_direction = "H"
+      criteria_direction = "H",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_32
   )
@@ -1511,7 +1602,8 @@ test_that("derive_var_atoxgr_dir: Test 33 NCICTCAEv4 Hypoalbuminemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_33
   )
@@ -1561,7 +1653,8 @@ test_that("derive_var_atoxgr_dir: Test 34 NCICTCAEv4 Hypocalcemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_34
   )
@@ -1610,7 +1703,8 @@ test_that("derive_var_atoxgr_dir: Test 35 NCICTCAEv4 Hypocalcemia (Ionized)", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_35
   )
@@ -1659,7 +1753,8 @@ test_that("derive_var_atoxgr_dir: Test 36 NCICTCAEv4 Hypoglycemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_36
   )
@@ -1703,7 +1798,8 @@ test_that("derive_var_atoxgr_dir: Test 37 NCICTCAEv4 Hypokalemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_37
   )
@@ -1753,7 +1849,8 @@ test_that("derive_var_atoxgr_dir: Test 38 NCICTCAEv4 Hypomagnesemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_38
   )
@@ -1798,7 +1895,8 @@ test_that("derive_var_atoxgr_dir: Test 39 NCICTCAEv4 Hyponatremia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_39
   )
@@ -1848,9 +1946,9 @@ test_that("derive_var_atoxgr_dir: Test 40 NCICTCAEv4 Hypophosphatemia", {
       new_var = ATOXGRL,
       meta_criteria = atoxgr_criteria_ctcv4,
       tox_description_var = ATOXDSCL,
-      criteria_direction = "L"
+      criteria_direction = "L",
+      get_unit_expr = AVALU
     ),
     exp_out_ctcv4_40
   )
 })
-

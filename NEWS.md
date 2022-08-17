@@ -14,6 +14,17 @@ admiral extension packages (#1079)
 - New function `derive_var_confirmation_flag()` for deriving a flag which
 depends on other observations of the input dataset (#1293)
 
+- New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
+- New function `derive_var_atoxgr_dir()` for deriving lab toxicity/severity grade for low
+lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is created from
+metadata.
+
+- New function `derive_var_atoxgr()` that derives lab toxicity/severity grade `ATOXGR`
+from `ATOXGRL` and `ATOXGRH`. `ATOXGRL` holds toxicity/severity grade for low lab values,
+and `ATOXGRH` holds toxicity/severity grade for high lab values.
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)

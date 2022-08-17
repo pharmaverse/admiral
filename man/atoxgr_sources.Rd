@@ -8,7 +8,7 @@
 atoxgr_criteria_ctcv4
 }
 \description{
-Create metadata holding grading criteria for NCI-CTCAEv4
+Reads in excel file and creates metadata data set
 }
 \details{
 Reads in excel file containing grading criteria, the spreadsheet has the following columns:
@@ -22,7 +22,7 @@ eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
 \item \verb{Grade 4}: Criteria defining lab value as Grade 4.
 \item \verb{Grade 5}: Criteria defining lab value as Grade 5.
 \item \code{Definition}: Holds the definition of the lab test abnormality.
-\item \code{IMPLEMENTATION}: variable to hold case statement to create grade based on defined criteria.
+\item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
 \item \code{SI_UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.
 \item \code{VAR_CHECK}: List of variables required to implement lab grade criteria. Use to check against

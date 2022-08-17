@@ -1,5 +1,8 @@
 #' Create metadata holding grading criteria for NCI-CTCAEv4
 #'
+#' @description
+#' Reads in excel file and creates metadata data set
+#'
 #' @details
 #' Reads in excel file containing grading criteria, the spreadsheet has the following columns:
 #' - `SOC`: variable to hold the SOC of the lab test criteria.
@@ -11,7 +14,7 @@
 #' - `Grade 4`: Criteria defining lab value as Grade 4.
 #' - `Grade 5`: Criteria defining lab value as Grade 5.
 #' - `Definition`: Holds the definition of the lab test abnormality.
-#' - `IMPLEMENTATION`: variable to hold case statement to create grade based on defined criteria.
+#' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
 #' - `SI_UNIT_CHECK`: variable to hold unit of particular lab test. Used to check against input data
 #'   if criteria is based on absolute values.
 #' - `VAR_CHECK`: List of variables required to implement lab grade criteria. Use to check against
@@ -32,6 +35,7 @@
 #' @keywords atoxgr_sources
 #'
 #' @rdname atoxgr_sources
+
 atoxgr_criteria_ctcv4 <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
-  read_excel(sheet = "NCICTCAEv4") %>%
-  mutate(IMPLEMENTATION = gsub("[\r\n]", " ", IMPLEMENTATION))
+  readxl::read_excel(sheet = "NCICTCAEv4") %>%
+  mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))

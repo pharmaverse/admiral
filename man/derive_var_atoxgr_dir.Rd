@@ -8,8 +8,9 @@ derive_var_atoxgr_dir(
   dataset,
   new_var,
   tox_description_var,
-  meta_criteria,
-  criteria_direction
+  meta_criteria = atoxgr_criteria_ctcv4,
+  criteria_direction,
+  get_unit_expr
 )
 }
 \arguments{
@@ -17,41 +18,55 @@ derive_var_atoxgr_dir(
 
 The columns specified by \code{tox_description_var} parameter is expected.}
 
-\item{new_var}{Name of the character grade variable to create.}
+\item{new_var}{Name of the character grade variable to create, for example, \code{ATOXGRH}
+or \code{ATOXGRL}.}
 
 \item{tox_description_var}{Variable containing the description of the grading
-criteria eg. Anemia.}
+criteria. for example. "Anemia" or "INR Increased".}
 
 \item{meta_criteria}{metadata data set holding the criteria (normally a case statement)
+
+Default: \code{atoxgr_criteria_ctcv4}
+
+{admiral} metadata data set \code{atoxgr_criteria_ctcv4} implements
+\href{https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm}{Common Terminology Criteria for Adverse Events (CTCAE) v4.0}
 
 The metadata should have the following variables:
 \itemize{
 \item \code{TERM}: variable to hold the term describing the criteria applied to a particular lab test,
-eg. 'Anemia' or 'INR Increased'. Note: the variable is case insensitive.
+eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 \item \code{DIRECTION}: variable to hold the direction of the abnormality of a particular lab test
-value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case insensitive.
+value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
 \item \code{SI_UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.
-\item \code{IMPLEMENTATION}: variable to hold case statement to create grade based on defined criteria.
+\item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
 }}
 
-\item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.}
+\item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
+Permitted Values: "L", "H"}
+
+\item{get_unit_expr}{An expression providing the unit of the parameter
+
+The result is used to check the units of the input parameters.
+
+Permitted Values: a variable containing unit from the input dataset, or a function call,
+for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 }
 \value{
 The input dataset with the character grade added
 }
 \description{
-Derives a character variable containing lab grade based on severity/toxicity criteria.
+Derives a character lab grade based on severity/toxicity criteria.
 }
 \details{
-\code{new_var} is derived with values NA, '0', '1', '2', '3', '4', where '4' is the most
+\code{new_var} is derived with values NA, "0", "1", "2", "3", "4", where "4" is the most
 severe grade
 \itemize{
-\item '4' is where the lab value satisfies the criteria for grade 4.
-\item '3' is where the lab value satisfies the criteria for grade 3.
-\item '2' is where the lab value satisfies the criteria for grade 2.
-\item '1' is where the lab value satisfies the criteria for grade 1.
-\item '0' is where a grade can be derived and is not grade '1', '2', '3' or '4'.
+\item "4" is where the lab value satisfies the criteria for grade 4.
+\item "3" is where the lab value satisfies the criteria for grade 3.
+\item "2" is where the lab value satisfies the criteria for grade 2.
+\item "1" is where the lab value satisfies the criteria for grade 1.
+\item "0" is where a grade can be derived and is not grade "1", "2", "3" or "4".
 \item NA is where a grade cannot be derived.
 }
 }
@@ -59,43 +74,42 @@ severe grade
 library(dplyr, warn.conflicts = FALSE)
 
 data <- tibble::tribble(
-  ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI,
-  "Hypoglycemia",                119,    4,        7,
-  "Hypoglycemia",                120,    4,        7,
-  "Anemia",                      129,    120,      180,
-  "White blood cell decreased",  10,     5,        20,
-  "White blood cell decreased",   15,     5,        20,
-  "Anemia",                      140,    120,      180,
+  ~ATOXDSCL,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
+  "Hypoglycemia",                119,    4,        7,      "Glucose (mmol/L)",
+  "Hypoglycemia",                120,    4,        7,      "Glucose (mmol/L)",
+  "Anemia",                      129,    120,      180,    "Hemoglobin (g/L)",
+  "White blood cell decreased",  10,     5,        20,     "White blood cell (10^9/L)",
+  "White blood cell decreased",  15,     5,        20,     "White blood cell (10^9/L)",
+  "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)",
 )
 
-derive_var_atoxgr_dir(adlb,
+derive_var_atoxgr_dir(data,
   new_var = ATOXGRL,
   tox_description_var = ATOXDSCL,
   meta_criteria = atoxgr_criteria_ctcv4,
-  criteria_direction = "L"
+  criteria_direction = "L",
+  get_unit_expr = extract_unit(PARAM)
 )
 
 data <- tibble::tribble(
-  ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI,
-  "Hyperglycemia",               119,    4,        7,
-  "Hyperglycemia",               120,    4,        7,
-  "Hemoglobin increased",        129,    120,      180,
-  "Lymphocyte count increased",  4,      1,        4,
-  "Lymphocyte count increased",  2,      1,        4,
-  "Hemoglobin increased",        140,    120,      180,
+  ~ATOXDSCH,                     ~AVAL,  ~ANRLO,   ~ANRHI, ~PARAM,
+  "Hyperglycemia",               119,    4,        7,      "Glucose (mmol/L)",
+  "Hyperglycemia",               120,    4,        7,      "Glucose  (mmol/L)",
+  "GGT increased",               129,    0,        30,     "Gamma Glutamyl Transferase (U/L)",
+  "Lymphocyte count increased",  4,      1,        4,      "Lymphocytes Abs (10^9/L)",
+  "Lymphocyte count increased",  2,      1,        4,      "Lymphocytes Abs (10^9/L)",
+  "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)",
 )
 
-derive_var_atoxgr_dir(adlb,
+derive_var_atoxgr_dir(data,
   new_var = ATOXGRH,
   tox_description_var = ATOXDSCH,
   meta_criteria = atoxgr_criteria_ctcv4,
-  criteria_direction = "H"
+  criteria_direction = "H",
+  get_unit_expr = extract_unit(PARAM)
 )
 }
 \author{
 Gordon Miller
 }
-\keyword{adam}
 \keyword{adlb}
-\keyword{bds}
-\keyword{derivation}
