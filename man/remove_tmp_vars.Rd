@@ -37,3 +37,4 @@ do_something(dm)
 \seealso{
 \code{\link[=get_new_tmp_var]{get_new_tmp_var()}}
 }
+\keyword{tmp_vars}

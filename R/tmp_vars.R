@@ -10,6 +10,7 @@
 #' `datset` with a given `prefix` then the suffix is increased by 1, e.g. if
 #' `tmp_var_1` already exists then `get_new_tmp_var()` will return `tmp_var_2`.
 #'
+#' @keywords tmp_vars
 #' @seealso [remove_tmp_vars()]
 #'
 #' @export
@@ -57,6 +58,7 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 #'
 #' @export
 #'
+#' @keywords tmp_vars
 #' @seealso [get_new_tmp_var()]
 #'
 #' @examples

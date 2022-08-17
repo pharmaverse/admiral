@@ -31,3 +31,4 @@ mutate(adsl, !!tmp_var := NA)
 \seealso{
 \code{\link[=remove_tmp_vars]{remove_tmp_vars()}}
 }
+\keyword{tmp_vars}

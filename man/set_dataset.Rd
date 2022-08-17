@@ -18,6 +18,12 @@ Set a Dataset in the \code{.datasets} environment
 The object passed to the \code{dataset} argument will be assigned to \code{name} in
 the \code{.datasets} environment. It can be retrived later on using \code{\link[=get_dataset]{get_dataset()}}
 }
+\seealso{
+Other datasets: 
+\code{\link{get_dataset}()}
+}
 \author{
 Thomas Neitmann
 }
+\concept{datasets}
+\keyword{datasets}

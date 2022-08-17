@@ -44,3 +44,4 @@ Should be a character vector of length 2.}
 The \verb{*_join()} functions from {dplyr} without a warning on different attributes
 in datasets.
 }
+\keyword{joins}

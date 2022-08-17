@@ -7,6 +7,9 @@
 #'
 #' @author Thomas Neitmann
 #'
+#' @keywords datasets
+#' @family datasets
+#'
 #' @details
 #' The object passed to the `dataset` argument will be assigned to `name` in
 #' the `.datasets` environment. It can be retrived later on using [get_dataset()]
@@ -24,6 +27,9 @@ set_dataset <- function(dataset, name) {
 #' @param name The name of the dataset to retrieve
 #'
 #' @author Thomas Neitmann
+#'
+#' @keywords datasets
+#' @family datasets
 #'
 #' @export
 get_dataset <- function(name) {

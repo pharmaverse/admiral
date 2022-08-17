@@ -7,6 +7,8 @@
 #'
 #' @return `data.frame`
 #'
+#' @keywords joins
+#'
 #' @rdname joins
 #' @export
 anti_join <- function(x, y, by = NULL, copy = FALSE, ...) {

@@ -12,6 +12,12 @@ get_dataset(name)
 \description{
 Retrieve a Dataset from the \code{.datasets} environment
 }
+\seealso{
+Other datasets: 
+\code{\link{set_dataset}()}
+}
 \author{
 Thomas Neitmann
 }
+\concept{datasets}
+\keyword{datasets}
