@@ -16,11 +16,12 @@
 #' @export
 #'
 #' @examples
-#' library(dplyr)
-#' data(admiral_adsl)
-#' adsl <- admiral_adsl
-#' tmp_var <- get_new_tmp_var(adsl)
-#' mutate(adsl, !!tmp_var := NA)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(admiral.test)
+#' data(admiral_dm)
+#'
+#' tmp_var <- get_new_tmp_var(admiral_dm)
+#' mutate(admiral_dm, !!tmp_var := NA)
 get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
   assert_data_frame(dataset, optional = TRUE)
   assert_character_scalar(prefix)
