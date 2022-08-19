@@ -58,3 +58,28 @@ test_that("age in weeks", {
     3
   )
 })
+
+test_that("duration in hours", {
+  expect_equal(
+    compute_duration(
+      ymd_hms("2020-12-06T9:00:00"),
+      ymd_hms("2020-12-06T13:30:00"),
+      out_unit = "hours",
+      floor_in = FALSE,
+      add_one = FALSE
+    ),
+    4.5
+  )
+})
+
+test_that("duration in days after imputation", {
+  expect_equal(
+    compute_duration(
+      convert_dtc_to_dt("2020-12", date_imputation = "first"),
+      ymd("2020-12-10"),
+      out_unit = "days"
+    ),
+    10
+  )
+})
+

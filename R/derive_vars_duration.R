@@ -89,6 +89,7 @@
 #' library(lubridate)
 #' library(tibble)
 #'
+#' # derive age in years
 #' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
 #'   ymd("1984-09-06"), ymd("2020-02-24"),
@@ -105,6 +106,42 @@
 #'   out_unit = "years",
 #'   add_one = FALSE,
 #'   trunc_out = TRUE
+#' )
+#'
+#' # derive adverse event duration in days
+#' data <- tribble(
+#'   ~ASTDT, ~AENDT,
+#'   ymd("2021-03-05"), ymd("2021-03-02"),
+#'   ymd("2019-09-18"), ymd("2019-09-18"),
+#'   ymd("1985-01-01"), NA,
+#'   NA, NA
+#' )
+#'
+#' derive_vars_duration(data,
+#'   new_var = ADURN,
+#'   new_var_unit = ADURU,
+#'   start_date = ASTDT,
+#'   end_date = AENDT,
+#'   out_unit = "days"
+#' )
+#'
+#' # derive adverse event duration in minutes
+#' data <- tribble(
+#'   ~ADTM,                         ~TRTSDTM,
+#'   ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-09T05:00:00"),
+#'   ymd_hms("2019-11-11T10:30:00"), ymd_hms("2019-11-11T11:30:00"),
+#'   ymd("2019-11-11"),              ymd_hms("2019-11-11T04:00:00"),
+#'   NA,                             ymd_hms("2019-11-11T12:34:56"),
+#' )
+#'
+#' derive_vars_duration(data,
+#'   new_var = ADURN,
+#'   new_var_unit = ADURU,
+#'   start_date = ADTM,
+#'   end_date = TRTSDTM,
+#'   in_unit = "minutes",
+#'   out_unit = "minutes",
+#'   add_one = FALSE
 #' )
 derive_vars_duration <- function(dataset,
                                  new_var,
