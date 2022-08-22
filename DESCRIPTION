@@ -74,7 +74,6 @@ Suggests:
     testthat,
     methods,
     miniUI,
-    readxl,
     rmarkdown,
     roxygen2,
     spelling,
