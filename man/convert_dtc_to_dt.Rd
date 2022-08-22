@@ -6,35 +6,53 @@
 \usage{
 convert_dtc_to_dt(
   dtc,
-  date_imputation = NULL,
+  highest_imputation = "n",
+  date_imputation = "first",
   min_dates = NULL,
   max_dates = NULL,
   preserve = FALSE
 )
 }
 \arguments{
-\item{dtc}{The --DTC date to convert.
+\item{dtc}{The --DTC date to convert.}
 
-A character date is expected in a format like yyyy-mm-dd or yyyy-mm-ddThh:mm:ss.
-A partial date will return a NA date and a warning will be issued:
-'All formats failed to parse. No formats found.'.
-Note: you can use impute_dtc function to build a complete date.}
+\item{highest_imputation}{Highest imputation level
+
+The \code{highest_imputation} argument controls which components of the DTC
+value are imputed if they are missing. All components up to the specified
+level are imputed.
+
+If a component at a higher level than the highest imputation level is
+missing, \code{NA_character_} is returned. For example, for \code{highest_imputation = "D"} \code{"2020"} results in \code{NA_character_} because the month is missing.
+
+If \code{"n"} is specified no imputation is performed, i.e., if any component is
+missing, \code{NA_character_} is returned.
+
+If \code{"Y"} is specified, \code{date_imputation} should be \code{"first"} or \code{"last"}
+and \code{min_dates} or \code{max_dates} should be specified respectively. Otherwise,
+\code{NA_character_} is returned if the year component is missing.
+
+\emph{Default}: \code{"n"}
+
+\emph{Permitted Values}: \code{"Y"} (year, highest level), \code{"M"} (month), \code{"D"}
+(day), \code{"n"} (none, lowest level)}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
-\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
-of June,
-\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the
+15th of June (The year can not be specified; for imputing the year
+\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
+be used (see examples).),
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
 
-Default is \code{NULL}.}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
+\emph{Default}: \code{"first"}}
 
 \item{min_dates}{Minimum dates
 
@@ -47,13 +65,13 @@ ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
 For example
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -91,8 +109,19 @@ Usually this computation function can not be used with \verb{\%>\%}.
 convert_dtc_to_dt("2019-07-18")
 convert_dtc_to_dt("2019-07")
 }
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_duration}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc_dtm}()},
+\code{\link{impute_dtc_dt}()}
+}
 \author{
 Samia Kabi
 }
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

@@ -9,7 +9,8 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords warning
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -36,16 +37,14 @@ warn_if_vars_exist <- function(dataset, vars) {
 }
 
 is_valid_dtc <- function(arg) {
-  pattern <- paste(
-    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
-    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
-    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
-    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
-    "^(\\d{4})-(\\d{2})-(\\d{2})$",
-    "^(\\d{4})-(\\d{2})$",
-    "^(\\d{4})$",
-    "^(\\d{4})---(\\d{2})$",
-    sep = "|"
+  twod <- "(\\d{2}|-)"
+  pattern <- paste0(
+    "^(\\d{4}|-)?",
+    "(-", twod, ")?",
+    "(-", twod, ")?",
+    "(T", twod, ")?",
+    "(:", twod, ")?",
+    "(:", twod, "(.(\\d{1,5}))?)?$"
   )
 
   grepl(pattern, arg) | arg == "" | is.na(arg)
@@ -63,7 +62,8 @@ is_valid_dtc <- function(arg) {
 #'
 #' @author Samia Kabi
 #'
-#' @keywords warning
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -146,7 +146,8 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 #'
 #' @return a `warning` if the 2 lists have different names or length
 #'
-#' @keywords warning
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -196,7 +197,8 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @return Return value of the expression
 #'
-#' @keywords warning
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @details
 #' All warnings which are issued by the expression and match the regular expression

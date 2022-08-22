@@ -22,4 +22,12 @@ print(death_event)
 }
 \seealso{
 \code{\link[=derivation_slice]{derivation_slice()}}
+
+Higher Order Functions: 
+\code{\link{call_derivation}()},
+\code{\link{derivation_slice}()},
+\code{\link{restrict_derivation}()},
+\code{\link{slice_derivation}()}
 }
+\concept{high_order_function}
+\keyword{high_order_function}

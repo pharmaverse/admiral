@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with the character shift variable added
 #'
-#' @keywords adam bds adlb derivation
+#' @family der_bds_findings
+#' @keywords der_bds_findings
 #'
 #' @export
 #'

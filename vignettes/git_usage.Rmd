@@ -20,14 +20,16 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. Finally, we provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. 
+This article will give you an overview of how the `{admiral}` project is utilizing the version-control software `git` and the website GitHub while working with RStudio. We will go over the primary branches that house the source code for the `{admiral}` project as well as how we use **Feature** branches to address **Issues**.  Issues can range from bugs to enhancement that have been identified or requested by developers, users or testers. We also provide the bare minimum of `git` commands needed to get up and running. Please refer to the [Resource](#github_resources) section for more in-depth guidance on using `git` and GitHub. Finally, we discuss the release process and schedule for `{admiral}`.
 
 # Branches
 
 -	The `main` branch contains the latest **released** version and should not be used for development. You can find the released versions [here](https://GitHub.com/pharmaverse/admiral/releases) 
--	The `devel` branch contains the latest development version of the package. You will mostly likely be branching off and pulling into the `devel` branch.
+-	The `devel` branch contains the latest development version of the package. You will always be branching off and pulling into the `devel` branch.
 - The `gh-pages` branches contains the code used to render this website you are looking at right now!
-- The `main`, `devel` and `gh-pages` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
+- The `patch` branch is reserved for special hot fixes to address bugs. More info in [ Hot Fix Release](#hot-fix-release)
+- The `pre-release` branch is used to as an intermediate step to releasing the package from `main`.  More info in [Quarterly Release section](#quarterly-release)
+- The `main`, `devel`, `gh-pages`, `patch` and `pre-release` branches are under protection. If you try and push changes to these branches you will get an error unless you are an administrator. 
 
 -	**Feature** branches are where actual development related to a specific issue happens. Feature branches are merged into `devel` once a pull request is merged. Check out the [Pull Request Review Guidance](pr_review_guidance.html).
 
@@ -40,8 +42,11 @@ Feature Branches are where most developers will work when addressing Issues.
 
 Each feature branch must be related to an issue.
 
-**Name:**  
-The name of the branch must be prefixed with the issue number and be meaningful, e.g. issue #94 "Program function to derive `LSTALVDT`", the Branch name would be: `94_lstalvdt`.
+### Naming Branches
+
+The name of the branch must be prefixed with the issue number, followed by a short but meaningful description and the `@<target_branch>` suffix. The latter would be `@devel` in most cases. As an example, given an issue #94 "Program function to derive `LSTALVDT`", the branch name would be `94_derive_var_lstalvdt@devel`.
+
+The `@<target_branch>` suffix is used in our CI/CD pipelines, e.g. when running `R CMD check`. It ensures that {admiral}'s upstream dependencies such as {admiral.test} are installed from the specified target branch. So when the target branch is set to `@devel` the upstream dependencies will be installed from the `devel` branch rather than installing the latest released version. This ensures that we test the development version of {admiral} against the development versions of its upstream dependencies. That way all packages are kept in sync.
 
 ### Create a New Feature Branch from the Terminal (from `devel`)
 
@@ -174,6 +179,38 @@ knitr::include_graphics("github_conflicts.png", dpi = 144)
 
 * [GitHub and RStudio](https://resources.github.com/whitepapers/github-and-rstudio/)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
-* [Git and GitHub from the R Package Manual](https://r-pkgs.org/git.html)
+
+# Package Release
+
+## Quarterly Release
+
+A package release is done in five parts:
+
+1) Create a Pull Request from `devel` into the `pre-release` branch.  Issues identified in this Pull Request should have work done in separate branches and merged into the `pre-release` branch and **NOT** `devel`.
+1) Verify that all CI/CD checks are passing for the `devel` into the `pre-release` Pull Request, merge and then bundle up and send off to CRAN.
+1) Once the package is available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the GitHub action to rebuild the `{admiral}` website with all the updates for this release.
+1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference. 
+1) Any issues fixed in the `pre-release/main` branches should be merged back into `devel`.  
+
+**Quarterly Release:**  `devel >> pre-release >> main` 
+
+## Hot Fix Release
+
+Occasionally we will need to release a hot fix to address a package breaking bug.  A hot fix release is done in 6 parts:
+
+1) Identify all the bugs that need to be fixed for this hot fix release and label with hot fix label.
+1) Branches addressing the bugs should have Pull Requests merged into the `patch` branch **NOT** the `devel` branch.
+1) Create a Pull Request from `patch` into the `pre-release` branch.  Verify that all CI/CD checks are passing, merge and bundle up and send off to CRAN.
+1) Once package is approved and available on CRAN, another Pull Request is created for merging the `pre-release` branch into the `main` branch.  This will trigger the action to rebuild the `{admiral}` website with all the updates for this hot fix release.
+1) Use the release button on GitHub to "release" the package onto GitHub.  This release onto Github archives the version of code within the `main` branch, attaches the News/Changelog file, bundles the code into a `tar.gz` file and makes a validation report via the GitHub action `validation` from [insightsengineering/validatoR](https://github.com/insightsengineering/thevalidatoR).  Please see past [admiral releases](https://github.com/pharmaverse/admiral/releases) for reference.
+1) These hot fixes should then be merged into the `devel` branch through an additional Pull Request.  
+
+**Hot Fix Release**: `patch >> pre-release >> main  >> devel`
+
+##  Release Schedule
+
+A release schedule is maintained on the [homepage](../index.html#release-schedule).  
+
+
 
 

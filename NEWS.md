@@ -2,14 +2,118 @@
 
 ## New Features
 
+- All admiral utility functions are exported now such that they can be used in
+admiral extension packages (#1079)
+
+- New function to map lookup table `derive_vars_merged_lookup()` (#940)
+
+- New function `filter_confirmation()` for filtering out confirmed observations
+(#1292) including supporting functions `count_vals()`, `min_cond()`, and
+`max_cond()`.
+
+- New function `derive_var_confirmation_flag()` for deriving a flag which
+depends on other observations of the input dataset (#1293)
+
 ## Updates of Existing Functions
+
+- `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
+
+- `list_all_templates()` and `use_ad_templates()` gain a `package` parameter which
+can be used to indicate in which package to look for templates (#1205)
+
+- Randomization Date `RANDDT` variable added to ADSL template and vignette (#1126)
+
+- Renamed `derive_derived_param()` to `derive_param_computed()` and added a 
+deprecation notice (#1229)
+
+- `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
+
+- `value_var` parameter added to `derive_vars_atc()` (#1120)
+
+- The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
+`convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
+users feedback (#1300):
+
+    - Partial dates with missing components in the middle like
+    `"2003-12-15T-:15:18"`, `"2003-12-15T13:-:19"`, `"2020-07--T00:00"` are
+    handled now.
+  
+    - The control of the level of imputation has been refined by adding the
+      `highest_imputation` argument. For example, `highest_imputation = "D"`
+      requests imputation for day and time but not for year and month.
+  
+      (For the `date_imputation` and the `time_imputation` argument `NULL` is no
+      longer a permitted value.)
+  
+    - It is now possible to impute completely missing dates by specifying
+    `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
 ## Breaking Changes
 
+- All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
+
+- Imputation related arguments have been deprecated for all functions except the
+imputation functions themselves (#1299). I.e., if a derivation like last known alive
+date is based on dates, DTC variables have to be converted to numeric date or
+datetime variables in a preprocessing step. For examples see the [ADSL
+vignette](https://pharmaverse.github.io/admiral/articles/adsl.html).
+
+  The following arguments were deprecated:
+
+  - `date_imputation`, `time_imputation`, and `preserve` in `date_source()`
+  
+  The following arguments no longer accept DTC variables:
+  
+  - `date` in `date_source()`, `dthcaus_source()`, `censor_source()`, and
+  `event_source()`
+  - `dose_date` and `analysis_date` in `derive_vars_last_dose()`,
+  `derive_var_last_dose_amt()`, `derive_var_last_dose_date()`,
+  `derive_var_last_dose_grp()`
+  
+  The following functions were deprecated:
+  
+  - `derive_vars_merged_dt()`
+  - `derive_vars_merged_dtm()`
+  
+- For the `date_imputation` and the `time_imputation` argument of the imputation
+functions (`derive_vars_dtm()`, `derive_vars_dt()`, `convert_dtc_to_dtm()`,
+`convert_dtc_to_dt()`) `NULL` is no longer a permitted value. The level of
+imputation can be controlled by the `highest_imputation` argument now.
+
+- The following functions, which were deprecated in previous {admiral} versions,
+have been removed:
+
+  - `derive_var_disposition_dt()`
+  - `derive_var_lstalvdt()`
+  - `lstalvdt_source()`
+  - `derive_var_trtedtm()`
+  - `derive_var_trtsdtm()`
+  
 ## Documentation
+
+- New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
+
+- Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
 ## Various
 
+- Restructured Reference page and updated **all** functions to use `family` tag 
+in roxygen headers for finding similar functions.  (#1105)
+
+# admiral 0.7.1
+
+- `derive_vars_last_dose()` no longer fails when a variable renamed in `new_vars` is supplied
+to the `dose_date` parameter (#1206)
+
+- `derive_vars_duration()` updated to not display units when there is missing
+duration (#1207)
+
+- `derive_param_first_event()` was updated (#1214) such that
+    - `AVAL` is derived instead of `AVALN` and
+    - all variables from the source dataset are kept.
+
+- `slice_derivation()` was updated such that it no longer fails if a slice is
+empty (#1309)
 
 # admiral 0.7.0
 

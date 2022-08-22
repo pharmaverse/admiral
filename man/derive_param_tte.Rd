@@ -96,9 +96,7 @@ first observation (with respect to \code{date}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
-the datepart is copied. If the source variable is a character variable, it
-is converted to a date. If the date is incomplete, it is imputed as the
-first possible date.
+the datepart is copied.
 
 \item The \code{CNSR} variable is added and set to the \code{censor} element.
 
@@ -119,9 +117,7 @@ last observation (with respect to \code{date}) is selected.
 
 \item The \code{ADT} variable is set to the variable specified by the
 \code{date} element. If the date variable is a datetime variable, only
-the datepart is copied. If the source variable is a character variable, it
-is converted to a date. If the date is incomplete, it is imputed as the
-first possible date.
+the datepart is copied.
 
 \item The \code{CNSR} variable is added and set to the \code{censor} element.
 
@@ -149,6 +145,7 @@ joined from the ADSL dataset,
 }
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 data("admiral_adsl")
@@ -190,14 +187,14 @@ derive_param_tte(
   filter(row_number() \%in\% 20:30)
 
 # derive time to adverse event for each preferred term #
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\%
   mutate(STUDYID = "AB42")
 
-ae <- tibble::tribble(
+ae <- tribble(
   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
   "01",     "2021-01-03T10:56", 1,      "Flu",
   "01",     "2021-03-04",       2,      "Cough",
@@ -205,9 +202,17 @@ ae <- tibble::tribble(
 ) \%>\%
   mutate(STUDYID = "AB42")
 
+ae_ext <- derive_vars_dt(
+  ae,
+  dtc = AESTDTC,
+  new_vars_prefix = "AEST",
+  highest_imputation = "M",
+  flag_imputation = "none"
+)
+
 ttae <- event_source(
   dataset_name = "ae",
-  date = AESTDTC,
+  date = AESTDT,
   set_values_to = vars(
     EVNTDESC = "AE",
     SRCDOM = "AE",
@@ -232,7 +237,7 @@ derive_param_tte(
   start_date = TRTSDT,
   event_conditions = list(ttae),
   censor_conditions = list(eos),
-  source_datasets = list(adsl = adsl, ae = ae),
+  source_datasets = list(adsl = adsl, ae = ae_ext),
   set_values_to = vars(
     PARAMCD = paste0("TTAE", as.numeric(as.factor(AEDECOD))),
     PARAM = paste("Time to First", AEDECOD, "Adverse Event"),
@@ -245,5 +250,5 @@ derive_param_tte(
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_prm_tte}
+\keyword{der_prm_tte}
