@@ -280,6 +280,9 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
 
+- `compute_qual_imputation()` derives impute values when qualifier exists in character result
+(#976)
+
 ## Updates of Existing Functions
 
 - The `derive_last_dose()` function has been split into a general function 

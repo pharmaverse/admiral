@@ -17,7 +17,7 @@
 #'             flatten every modify_at modify_if reduce compose
 #' @importFrom stringr str_c str_detect str_extract str_glue str_match
 #'   str_remove str_remove_all str_replace str_sub str_subset str_trim
-#'   str_to_lower str_to_title str_to_upper
+#'   str_to_lower str_to_title str_to_upper str_length str_locate
 #' @importFrom assertthat assert_that is.number on_failure<-
 #' @importFrom lubridate as_datetime ceiling_date date days duration floor_date is.Date is.instant
 #'             rollback time_length %--% ymd ymd_hms weeks years hours minutes
