@@ -31,7 +31,9 @@ test_that("duration and unit variable are added", {
     ymd("1985-01-01"), NA,
     NA, NA
   )
-  expected_output <- mutate(input, ADURN = c(-3, 1, NA, NA), ADURU = c("DAYS", "DAYS", NA, NA))
+  expected_output <- mutate(input,
+                            ADURN = c(-3, 1, NA, NA),
+                            ADURU = c("DAYS", "DAYS", NA_character_, NA_character_))
   actual_output <- derive_vars_duration(
     input,
     new_var = ADURN,
