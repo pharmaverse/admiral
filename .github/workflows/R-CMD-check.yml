@@ -49,28 +49,12 @@ jobs:
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('DESCRIPTION') }}
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}
 
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Install system dependencies
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-
-      - name: Install dependencies
-        run: |
-          options(repos = Sys.getenv("R_REPOS"))
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_github("openpharma/staged.dependencies")
-          deps <- staged.dependencies::dependency_table(fallback_branch = "devel")
-          staged.dependencies::install_deps(deps)
-        shell: Rscript {0}
+      - name: Run Staged Dependencies
+        uses: insightsengineering/staged-dependencies-action@v1
+        with:
+          run-system-dependencies: true
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check
         env:
