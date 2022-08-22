@@ -2,18 +2,18 @@
 % Please edit documentation in R/is.R
 \name{is_order_vars}
 \alias{is_order_vars}
-\title{Is order vars??}
+\title{Is order vars?}
 \usage{
 is_order_vars(arg)
 }
 \arguments{
-\item{arg}{something}
+\item{arg}{A<n R object}
 }
 \value{
-something
+A \code{logical} vector
 }
 \description{
-Is order vars??
+Is order vars?
 }
 \seealso{
 Identifies type of Object with return of TRUE/FALSE: 

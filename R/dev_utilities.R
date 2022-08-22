@@ -6,6 +6,8 @@
 #' @param x The values to be matched
 #' @param table The values to be matched against
 #'
+#' @return A `logical` vector
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
@@ -20,7 +22,7 @@
 #'
 #' @param dtm date or date-time
 #'
-#' @return character
+#' @return `character` vector
 #'
 #' @author Ondrej Slama
 #'
@@ -38,8 +40,11 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
+#' @return `character` vector
+#'
 #' @keywords dev_utility
 #' @family dev_utility
+#'
 #' @export
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -91,13 +96,20 @@ extract_vars <- function(x, side = "lhs") {
 }
 
 
-#' Or Guy - Update
+#' Or
 #'
-#' @param lhs something
-#' @param rhs something
+#' @param lhs Any valid R expression
+#' @param rhs Any valid R expression
 #'
-#' @return something
+#' @details
+#' The function evaluates the expression `lhs` and if this expression results
+#' in an error, it catches that error and proceeds with evaluating the expression
+#' `rhs` and returns that result.
+#'
+#' @return Either the result of evaluating `lhs`, `rhs` or an error
+#'
 #' @export
+#'
 #' @keywords dev_utility
 #' @family dev_utility
 `%or%` <- function(lhs, rhs) {
@@ -135,9 +147,14 @@ replace_values_by_names <- function(quosures) {
 #' @details
 #' This function is missing in earlier version of {rlang} which is why we re-
 #' implment it here.
-#' @param x something
+#'
+#' @param x A `quosure`
+#'
+#' @return A `character` vector
+#'
 #' @keywords dev_utility
 #' @family dev_utility
+#'
 #' @export
 as_name <- function(x) {
   if (is_quosure(x)) {
@@ -148,8 +165,10 @@ as_name <- function(x) {
 
 #' Valid Time Units
 #'
-#' @return something
+#' @return A `character` vector of valid time units
+#'
 #' @export
+#'
 #' @keywords dev_utility
 #' @family dev_utility
 valid_time_units <- function() {

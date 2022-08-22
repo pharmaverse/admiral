@@ -11,6 +11,9 @@ x \%notin\% table
 
 \item{table}{The values to be matched against}
 }
+\value{
+A \code{logical} vector
+}
 \description{
 Returns a \code{logical} vector indicating if there is \emph{no} match of the
 left operand in the right operand.

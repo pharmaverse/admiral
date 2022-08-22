@@ -7,10 +7,10 @@
 is_valid_dtc(arg)
 }
 \arguments{
-\item{arg}{something}
+\item{arg}{A \code{character} vector}
 }
 \value{
-something
+\code{TRUE} if the argument is a valid \code{--DTC} string, \code{FALSE} otherwise
 }
 \description{
 Is this string a valid DTC

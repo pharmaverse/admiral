@@ -9,6 +9,9 @@ arg_name(expr)
 \arguments{
 \item{expr}{An expression created inside a function using \code{substitute()}}
 }
+\value{
+\code{character} vector
+}
 \description{
 Extract Argument Name from an Expression
 }

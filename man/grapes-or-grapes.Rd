@@ -2,20 +2,25 @@
 % Please edit documentation in R/dev_utilities.R
 \name{\%or\%}
 \alias{\%or\%}
-\title{Or Guy - Update}
+\title{Or}
 \usage{
 lhs \%or\% rhs
 }
 \arguments{
-\item{lhs}{something}
+\item{lhs}{Any valid R expression}
 
-\item{rhs}{something}
+\item{rhs}{Any valid R expression}
 }
 \value{
-something
+Either the result of evaluating \code{lhs}, \code{rhs} or an error
 }
 \description{
-Or Guy - Update
+Or
+}
+\details{
+The function evaluates the expression \code{lhs} and if this expression results
+in an error, it catches that error and proceeds with evaluating the expression
+\code{rhs} and returns that result.
 }
 \seealso{
 Developer Utility Functions: 

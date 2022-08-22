@@ -1,8 +1,8 @@
 #' Is a named argument
 #'
-#' @param x something
+#' @param x Any R object
 #'
-#' @return something
+#' @return `TRUE` if the argument is named, `FALSE` otherwise
 #' @export
 #'
 #' @keywords is
@@ -261,11 +261,11 @@ on_failure(is_valid_month) <- function(call, env) {
   )
 }
 
-#' Is order vars??
+#' Is order vars?
 #'
-#' @param arg something
+#' @param arg A<n R object
 #'
-#' @return something
+#' @return A `logical` vector
 #' @export
 #'
 #' @keywords is
@@ -296,9 +296,9 @@ on_failure(is_order_vars) <- function(call, env) {
 
 #' Is this string a valid DTC
 #'
-#' @param arg something
+#' @param arg A `character` vector
 #'
-#' @return something
+#' @return `TRUE` if the argument is a valid `--DTC` string, `FALSE` otherwise
 #' @export
 #' @keywords is
 #' @family is

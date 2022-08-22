@@ -11,7 +11,7 @@ convert_dtm_to_dtc(dtm)
 \item{dtm}{date or date-time}
 }
 \value{
-character
+\code{character} vector
 }
 \description{
 Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format

@@ -7,7 +7,10 @@
 as_name(x)
 }
 \arguments{
-\item{x}{something}
+\item{x}{A \code{quosure}}
+}
+\value{
+A \code{character} vector
 }
 \description{
 Turn a Quosure into a String

@@ -7,7 +7,7 @@
 valid_time_units()
 }
 \value{
-something
+A \code{character} vector of valid time units
 }
 \description{
 Valid Time Units
