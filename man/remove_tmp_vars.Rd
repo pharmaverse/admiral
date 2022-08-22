@@ -9,6 +9,9 @@ remove_tmp_vars(dataset)
 \arguments{
 \item{dataset}{The input dataset}
 }
+\value{
+The input dataset with temporary variables removed
+}
 \description{
 Remove All Temporary Variables Created Within the Current Function Environment
 }

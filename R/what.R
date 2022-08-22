@@ -4,12 +4,20 @@
 #'
 #' @param x Any R object
 #'
+#' @return A `character` description of the type of `x`
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords what
 #' @family what
 #'
 #' @export
+#'
+#' @examples
+#' what_is_it("abc")
+#' what_is_it(1L)
+#' what_it_it(1:10)
+#' what_is_it(mtcars)
 what_is_it <- function(x) {
   if (is.null(x)) {
     "`NULL`"

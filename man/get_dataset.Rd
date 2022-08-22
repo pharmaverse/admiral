@@ -9,6 +9,9 @@ get_dataset(name)
 \arguments{
 \item{name}{The name of the dataset to retrieve}
 }
+\value{
+A \code{data.frame}
+}
 \description{
 Retrieve a Dataset from the \code{.datasets} environment
 }

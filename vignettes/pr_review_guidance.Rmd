@@ -117,7 +117,7 @@ Report summaries and badges for coverage are generated using a series of other G
 
 ### `links.yml`
 
-This workflow checks whether URLs embedded in code and documentation are valid. Invalid URLs reults in workflow failures. This workflow uses `lychee` to detect broken links.   Occasionally this check will detect false positives of urls that look like urls.  To remedy, please add this false positive to the `.lycheeignore` file.   
+This workflow checks whether URLs embedded in code and documentation are valid. Invalid URLs results in workflow failures. This workflow uses `lychee` to detect broken links.   Occasionally this check will detect false positives of urls that look like urls.  To remedy, please add this false positive to the `.lycheeignore` file.   
 
 ### `lintr.yml`
 

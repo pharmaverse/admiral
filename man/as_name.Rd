@@ -17,7 +17,7 @@ Turn a Quosure into a String
 }
 \details{
 This function is missing in earlier version of {rlang} which is why we re-
-implment it here.
+implement it here.
 }
 \seealso{
 Developer Utility Functions: 

@@ -92,10 +92,10 @@ warn_if_invalid_dtc <- function(dtc, is_valid = is_valid_dtc(dtc)) {
 
 #' Warn if incomplete dtc
 #'
-#' @param dtc something
-#' @param n something
+#' @param dtc A `character` vector of date-times in ISO 8601 format
+#' @param n A non-negative integer
 #'
-#' @return something
+#' @return A warning if `dtc` contains any partial dates
 #' @export
 #'
 #' @keywords warnings

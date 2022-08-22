@@ -5,6 +5,9 @@
 #' @param dataset A `data.frame`
 #' @param name A name for `dataset`
 #'
+#' @return
+#' No return value, called for side effects
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords datasets
@@ -12,7 +15,7 @@
 #'
 #' @details
 #' The object passed to the `dataset` argument will be assigned to `name` in
-#' the `.datasets` environment. It can be retrived later on using [get_dataset()]
+#' the `.datasets` environment. It can be retrieved later on using [get_dataset()]
 #'
 #' @export
 set_dataset <- function(dataset, name) {
@@ -25,6 +28,8 @@ set_dataset <- function(dataset, name) {
 #' Retrieve a Dataset from the `.datasets` environment
 #'
 #' @param name The name of the dataset to retrieve
+#'
+#' @return A `data.frame`
 #'
 #' @author Thomas Neitmann
 #'

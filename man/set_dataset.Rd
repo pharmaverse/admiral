@@ -11,12 +11,15 @@ set_dataset(dataset, name)
 
 \item{name}{A name for \code{dataset}}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Set a Dataset in the \code{.datasets} environment
 }
 \details{
 The object passed to the \code{dataset} argument will be assigned to \code{name} in
-the \code{.datasets} environment. It can be retrived later on using \code{\link[=get_dataset]{get_dataset()}}
+the \code{.datasets} environment. It can be retrieved later on using \code{\link[=get_dataset]{get_dataset()}}
 }
 \seealso{
 Other datasets: 

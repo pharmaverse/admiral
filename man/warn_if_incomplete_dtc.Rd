@@ -7,12 +7,12 @@
 warn_if_incomplete_dtc(dtc, n)
 }
 \arguments{
-\item{dtc}{something}
+\item{dtc}{A \code{character} vector of date-times in ISO 8601 format}
 
-\item{n}{something}
+\item{n}{A non-negative integer}
 }
 \value{
-something
+A warning if \code{dtc} contains any partial dates
 }
 \description{
 Warn if incomplete dtc

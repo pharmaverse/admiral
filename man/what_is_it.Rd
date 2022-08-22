@@ -9,8 +9,17 @@ what_is_it(x)
 \arguments{
 \item{x}{Any R object}
 }
+\value{
+A \code{character} description of the type of \code{x}
+}
 \description{
 Returns a string describing what kind of object the input is.
+}
+\examples{
+what_is_it("abc")
+what_is_it(1L)
+what_it_it(1:10)
+what_is_it(mtcars)
 }
 \author{
 Thomas Neitmann

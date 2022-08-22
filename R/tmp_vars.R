@@ -6,9 +6,11 @@
 #' @details
 #' The function returns a new unique temporary variable name to be used inside
 #' `dataset`. The temporary variable names have the structure `prefix_n` where
-#' `n` is an integer, e.g. `tmp_var_1`. If there is alredy a variable inside
+#' `n` is an integer, e.g. `tmp_var_1`. If there is already a variable inside
 #' `datset` with a given `prefix` then the suffix is increased by 1, e.g. if
 #' `tmp_var_1` already exists then `get_new_tmp_var()` will return `tmp_var_2`.
+#'
+#' @return The name of a new temporary variable as a symbol
 #'
 #' @keywords tmp_vars
 #' @seealso [remove_tmp_vars()]
@@ -61,6 +63,9 @@ get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
 #'
 #' @keywords tmp_vars
 #' @seealso [get_new_tmp_var()]
+#'
+#' @return
+#' The input dataset with temporary variables removed
 #'
 #' @examples
 #' library(dplyr)
