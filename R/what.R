@@ -16,7 +16,7 @@
 #' @examples
 #' what_is_it("abc")
 #' what_is_it(1L)
-#' what_it_it(1:10)
+#' what_is_it(1:10)
 #' what_is_it(mtcars)
 what_is_it <- function(x) {
   if (is.null(x)) {
