@@ -82,4 +82,3 @@ test_that("duration in days after imputation", {
     10
   )
 })
-

@@ -52,7 +52,9 @@ test_that("duration and unit variable are added", {
     ymd("2019-11-11"), ymd_hms("2019-11-11T04:00:00"),
     NA, ymd_hms("2019-11-11T12:34:56"),
   )
-  expected_output <- mutate(input, ADURN = c(30, 60, 240, NA), ADURU = c("MINUTES", "MINUTES", "MINUTES", NA))
+  expected_output <- mutate(input,
+                            ADURN = c(30, 60, 240, NA),
+                            ADURU = c("MINUTES", "MINUTES", "MINUTES", NA))
   actual_output <- derive_vars_duration(
     input,
     new_var = ADURN,

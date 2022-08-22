@@ -102,7 +102,7 @@
 #' )
 #'
 #' # derive duration in hours
-#'compute_duration(
+#' compute_duration(
 #'   start_date = lubridate::ymd_hms("2020-12-06T9:00:00"),
 #'   end_date = lubridate::ymd_hms("2020-12-06T13:30:00"),
 #'   out_unit = "hours",
