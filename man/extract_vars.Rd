@@ -24,8 +24,11 @@ Developer Utility Functions:
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
+\code{\link{filter_if}()},
+\code{\link{negate_vars}()},
 \code{\link{replace_values_by_names}()},
-\code{\link{valid_time_units}()}
+\code{\link{valid_time_units}()},
+\code{\link{vars2chr}()}
 }
 \author{
 Thomas Neitmann

@@ -57,7 +57,7 @@ reference:
   - has_keyword('datasets')
 
 - title: Quosure Helper Functions
-  desc: Helping yourquosure needs
+  desc: Helping your quosure needs
   contents:
   - has_keyword('quo')
 
@@ -75,11 +75,6 @@ reference:
   desc: Utilities without a theme
   contents:
   - has_keyword('dev_utility')
-
-- title: Unsure where these functions should live?
-  desc: Used with dataset_vignette and a few assert, is and get functions...
-  contents:
-  - has_keyword('remove_utility')
 
 navbar:
  components:
