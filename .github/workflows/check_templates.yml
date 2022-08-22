@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REF_NAME: ${{ github.ref_name }}
 
     steps:
       - uses: actions/cache@v2
@@ -44,8 +45,19 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          deps <- staged.dependencies::dependency_table(fallback_branch = "devel")
-          staged.dependencies::install_deps(deps)
+          ref <- if (Sys.getenv("GITHUB_REF_NAME") %in% c("main", "patch")) "main" else "devel"
+          remotes::install_github(
+            "pharmaverse/admiral.test",
+            ref = ref,
+            dependencies = FALSE,
+            upgrade = "never"
+          )
+          remotes::install_github(
+            "pharmaverse/admiraldev",
+            ref = ref,
+            dependencies = FALSE,
+            upgrade = "never"
+          )
         shell: Rscript {0}
 
       - name: Install package
