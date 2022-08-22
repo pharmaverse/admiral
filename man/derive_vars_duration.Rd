@@ -140,11 +140,11 @@ derive_vars_duration(data,
 
 # derive adverse event duration in minutes
 data <- tribble(
-  ~ADTM,                         ~TRTSDTM,
+  ~ADTM, ~TRTSDTM,
   ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-09T05:00:00"),
   ymd_hms("2019-11-11T10:30:00"), ymd_hms("2019-11-11T11:30:00"),
-  ymd("2019-11-11"),              ymd_hms("2019-11-11T04:00:00"),
-  NA,                             ymd_hms("2019-11-11T12:34:56"),
+  ymd("2019-11-11"), ymd_hms("2019-11-11T04:00:00"),
+  NA, ymd_hms("2019-11-11T12:34:56"),
 )
 
 derive_vars_duration(data,
