@@ -42,8 +42,9 @@
 #' @examples
 #' library(lubridate)
 #' library(dplyr)
+#' library(tibble)
 #'
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDTM, ~ASTDTM, ~AENDT,
 #'   "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
@@ -60,7 +61,7 @@
 #' )
 #'
 #' # specifying name of new variables
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDT, ~DTHDT,
 #'   "2014-01-17", "2014-02-01"
 #' ) %>%

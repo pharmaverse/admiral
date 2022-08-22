@@ -387,7 +387,7 @@ filter_confirmation <- function(dataset,
 #' library(tibble)
 #' library(dplyr)
 #' library(admiral)
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~AVISITN, ~AVALC,
 #'   "1",      1,        "PR",
 #'   "1",      2,        "CR",

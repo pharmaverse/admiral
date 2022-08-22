@@ -1,4 +1,5 @@
-adsl <- tibble::tribble(
+library(tibble)
+adsl <- tribble(
   ~USUBJID, ~DTHDT,
   "1",      ymd("2022-05-13"),
   "2",      ymd(""),
@@ -6,7 +7,7 @@ adsl <- tibble::tribble(
 ) %>%
   mutate(STUDYID = "XX1234")
 
-adrs <- tibble::tribble(
+adrs <- tribble(
   ~USUBJID, ~ADTC,        ~AVALC, ~PARAMCD,
   "1",      "2020-01-02", "PR",   "OVR",
   "1",      "2020-02-01", "CR",   "OVR",
@@ -32,6 +33,7 @@ adrs <- tibble::tribble(
 # derive_param_first_event ----
 ## derive_param_first_event Test 1: derive first PD date ----
 test_that("derive_param_first_event Test 1: derive first PD date", {
+  library(tibble)
   actual <- derive_param_first_event(
     adrs,
     dataset_adsl = adsl,
@@ -46,7 +48,7 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
 
   expected <- bind_rows(
     adrs,
-    tibble::tribble(
+    tribble(
       ~USUBJID, ~ADT,              ~AVALC, ~AVAL,
       "1",      ymd(""),           "N",    0,
       "2",      ymd("2021-07-16"), "Y",    1,
@@ -68,6 +70,7 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
 
 ## derive_param_first_event Test 2: derive death date parameter ----
 test_that("derive_param_first_event Test 2: derive death date parameter", {
+  library(tibble)
   actual <- derive_param_first_event(
     dataset = adrs,
     dataset_adsl = adsl,
@@ -82,7 +85,7 @@ test_that("derive_param_first_event Test 2: derive death date parameter", {
 
   expected <- bind_rows(
     adrs,
-    tibble::tribble(
+    tribble(
       ~USUBJID, ~ADT,              ~AVALC, ~AVAL, ~DTHDT,
       "1",      ymd("2022-05-13"), "Y",    1,     ymd("2022-05-13"),
       "2",      ymd(""),           "N",    0,     ymd(""),

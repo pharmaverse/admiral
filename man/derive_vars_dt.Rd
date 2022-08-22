@@ -114,8 +114,9 @@ a warning is issued and \code{'--DTF'} will be overwritten.
 }
 \examples{
 library(lubridate)
+library(tibble)
 
-mhdt <- tibble::tribble(
+mhdt <- tribble(
   ~MHSTDTC,
   "2019-07-18T15:25:40",
   "2019-07-18T15:25",
@@ -172,7 +173,7 @@ derive_vars_dt(
 
 # Impute AE start date to the first date and ensure that the imputed date
 # is not before the treatment start date
-adae <- tibble::tribble(
+adae <- tribble(
   ~AESTDTC, ~TRTSDTM,
   "2020-12", ymd_hms("2020-12-06T12:12:12"),
   "2020-11", ymd_hms("2020-12-06T12:12:12")

@@ -1,5 +1,6 @@
 test_that("records are duplicated across different `BASETYPE` values", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
     "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
     "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -13,7 +14,7 @@ test_that("records are duplicated across different `BASETYPE` values", {
     "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
     "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
   )
-  expect_output <- tibble::tribble(
+  expect_output <- tribble(
     ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL, ~BASETYPE,
     "P01",    "RUN-IN",       "PARAM01",     1,  10.0, "RUN-IN",
     "P01",    "RUN-IN",       "PARAM01",     2,   9.8, "RUN-IN",
@@ -52,7 +53,8 @@ test_that("records are duplicated across different `BASETYPE` values", {
 })
 
 test_that("records that do not match any condition are kept", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
     "P01",    "SCREENING",    "PARAM01",     1,  10.2,
     "P01",    "RUN-IN",       "PARAM01",     2,  10.0,
@@ -68,7 +70,7 @@ test_that("records that do not match any condition are kept", {
     "P02",    "OPEN-LABEL",   "PARAM01",     5,  11.4,
     "P02",    "OPEN-LABEL",   "PARAM01",     6,  10.8
   )
-  expect_output <- tibble::tribble(
+  expect_output <- tribble(
     ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL, ~BASETYPE,
     "P01",    "SCREENING",    "PARAM01",     1,  10.2, NA,
     "P01",    "RUN-IN",       "PARAM01",     2,  10.0, "RUN-IN",

@@ -85,7 +85,9 @@ white blood cell absolute value (identified by \code{wbc_code}) and the white bl
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-test_lb <- tibble::tribble(
+library(tibble, warn.conflicts = FALSE)
+
+test_lb <- tribble(
   ~USUBJID, ~PARAMCD, ~AVAL, ~PARAM, ~VISIT,
   "P01", "WBC", 33, "Leukocyte Count (10^9/L)", "CYCLE 1 DAY 1",
   "P01", "WBC", 38, "Leukocyte Count (10^9/L)", "CYCLE 2 DAY 1",

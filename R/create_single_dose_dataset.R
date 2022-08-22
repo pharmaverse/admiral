@@ -252,8 +252,9 @@ dose_freq_lookup <- tibble::tribble(
 #' # Example with default lookup
 #'
 #' library(lubridate)
+#' library(tibble)
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDT, ~AENDT,
 #'   "P01", "Q2D", ymd("2021-01-01"), ymd("2021-01-07"),
 #'   "P01", "Q3D", ymd("2021-01-08"), ymd("2021-01-15"),
@@ -264,13 +265,13 @@ dose_freq_lookup <- tibble::tribble(
 #'
 #' # Example with custom lookup
 #'
-#' custom_lookup <- tibble::tribble(
+#' custom_lookup <- tribble(
 #'   ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
 #'   "Q30MIN", (1 / 30), "MINUTE", 1,
 #'   "Q90MIN", (1 / 90), "MINUTE", 1
 #' )
 #'
-#' data <- tibble::tribble(
+#' data <- tribble(
 #'   ~USUBJID, ~EXDOSFRQ, ~ASTDTM, ~AENDTM,
 #'   "P01", "Q30MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T07:00:00"),
 #'   "P02", "Q90MIN", ymd_hms("2021-01-01T06:00:00"), ymd_hms("2021-01-01T09:00:00")

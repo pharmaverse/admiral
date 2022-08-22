@@ -107,7 +107,8 @@ are set to \code{NA}.
 }
 \examples{
 # Example 1: Derive MAP
-advs <- tibble::tribble(
+library(tibble)
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
   "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
@@ -132,7 +133,7 @@ derive_param_computed(
 )
 
 # Example 2: Derive BMI where height is measured only once
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
   "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
   "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",

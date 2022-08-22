@@ -135,6 +135,8 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
+#' library(tibble)
+#'
 #' data("admiral_adsl")
 #'
 #' adsl <- admiral_adsl
@@ -174,14 +176,14 @@
 #'   filter(row_number() %in% 20:30)
 #'
 #' # derive time to adverse event for each preferred term #
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",
@@ -454,15 +456,16 @@ derive_param_tte <- function(dataset = NULL,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
+#' library(tibble)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",
@@ -601,15 +604,16 @@ filter_date_sources <- function(sources,
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
+#' library(tibble)
 #'
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
 #'   mutate(STUDYID = "AB42")
 #'
-#' ae <- tibble::tribble(
+#' ae <- tribble(
 #'   ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
 #'   "01",     "2021-01-03T10:56", 1,      "Flu",
 #'   "01",     "2021-03-04",       2,      "Cough",

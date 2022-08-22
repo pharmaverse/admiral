@@ -651,8 +651,9 @@ compute_tmf <- function(dtc,
 #'
 #' @examples
 #' library(lubridate)
+#' library(tibble)
 #'
-#' mhdt <- tibble::tribble(
+#' mhdt <- tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
@@ -709,7 +710,7 @@ compute_tmf <- function(dtc,
 #'
 #' # Impute AE start date to the first date and ensure that the imputed date
 #' # is not before the treatment start date
-#' adae <- tibble::tribble(
+#' adae <- tribble(
 #'   ~AESTDTC, ~TRTSDTM,
 #'   "2020-12", ymd_hms("2020-12-06T12:12:12"),
 #'   "2020-11", ymd_hms("2020-12-06T12:12:12")
@@ -842,8 +843,9 @@ derive_vars_dt <- function(dataset,
 #'
 #' @examples
 #' library(lubridate)
+#' library(tibble)
 #'
-#' mhdt <- tibble::tribble(
+#' mhdt <- tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25:40",
 #'   "2019-07-18T15:25",
@@ -864,7 +866,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' # Impute AE end date to the last date and ensure that the imputed date is not
 #' # after the death or data cut off date
-#' adae <- tibble::tribble(
+#' adae <- tribble(
 #'   ~AEENDTC, ~DTHDT, ~DCUTDT,
 #'   "2020-12", ymd("2020-12-06"), ymd("2020-12-24"),
 #'   "2020-11", ymd("2020-12-06"), ymd("2020-12-24")
@@ -881,7 +883,7 @@ derive_vars_dt <- function(dataset,
 #'
 #' # Seconds has been removed from the input dataset.  Function now uses
 #' # ignore_seconds_flag to remove the 'S' from the --TMF variable.
-#' mhdt <- tibble::tribble(
+#' mhdt <- tribble(
 #'   ~MHSTDTC,
 #'   "2019-07-18T15:25",
 #'   "2019-07-18T15:25",

@@ -1,5 +1,5 @@
-
-adsl <- tibble::tribble(
+library(tibble)
+adsl <- tribble(
   ~USUBJID, ~SEX, ~COUNTRY,
   "ST42-1", "F",  "AUT",
   "ST42-2", "M",  "MWI",
@@ -7,7 +7,7 @@ adsl <- tibble::tribble(
   "ST42-4", "F",  "UGA"
 ) %>% mutate(STUDYID = "ST42")
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
   "ST42-1", "WEIGHT", "BASELINE", 66,
   "ST42-1", "WEIGHT", "Week 2",   68,
@@ -16,7 +16,7 @@ advs <- tibble::tribble(
   "ST42-3", "WEIGHT", "Week 4",   50
 ) %>% mutate(STUDYID = "ST42")
 
-ex <- tibble::tribble(
+ex <- tribble(
   ~USUBJID, ~EXSTDTC,
   "ST42-1", "2020-12-07",
   "ST42-1", "2020-12-14",
@@ -25,7 +25,7 @@ ex <- tibble::tribble(
   "ST42-3", "2021-03-02"
 ) %>% mutate(STUDYID = "ST42")
 
-vs <- tibble::tribble(
+vs <- tribble(
   ~USUBJID, ~VSTESTCD, ~VSTEST, ~VSORRES, ~VSSEQ,
   "ST42-1", "DIABP", "Diastolic Blood Pressure", 64, 1,
   "ST42-1", "DIABP", "Diastolic Blood Pressure", 83, 2,
@@ -343,7 +343,8 @@ test_that("derive_var_merged_character Test 4: merge character variable, title c
 
 ## derive_vars_merged_lookup: merge lookup table
 test_that("derive_vars_merged_lookup Test 1: merge lookup table", {
-  param_lookup <- tibble::tribble(
+  library(tibble)
+  param_lookup <- tribble(
     ~VSTESTCD, ~VSTEST, ~PARAMCD, ~DESCRIPTION,
     "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
     "HEIGHT", "Height", "HEIGHT", "Height (cm)",

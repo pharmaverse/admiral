@@ -133,9 +133,10 @@
 #' @examples
 #' library(dplyr)
 #' library(lubridate)
+#' library(tibble)
 #'
 #' # Derive a new parameter for measurable disease at baseline
-#' adsl <- tibble::tribble(
+#' adsl <- tribble(
 #'   ~USUBJID,
 #'   "1",
 #'   "2",
@@ -143,7 +144,7 @@
 #' ) %>%
 #'   mutate(STUDYID = "XX1234")
 #'
-#' tu <- tibble::tribble(
+#' tu <- tribble(
 #'   ~USUBJID, ~VISIT,      ~TUSTRESC,
 #'   "1",      "SCREENING", "TARGET",
 #'   "1",      "WEEK 1",    "TARGET",

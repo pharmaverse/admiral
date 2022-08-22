@@ -22,8 +22,9 @@
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
+#' library(tibble)
 #'
-#' adcm <- tibble::tribble(
+#' adcm <- tribble(
 #'   ~USUBJID, ~TRTSDTM,              ~ASTDTM,               ~AENDTM,
 #'   "PAT01",  "2012-02-25 23:00:00", "2012-02-28 19:00:00", "2012-02-25 23:00:00",
 #'   "PAT01",  NA,                    "2012-02-28 19:00:00", NA,

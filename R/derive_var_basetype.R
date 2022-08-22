@@ -39,7 +39,8 @@
 #' @export
 #'
 #' @examples
-#' bds <- tibble::tribble(
+#' library(tibble)
+#' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
 #'   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
@@ -72,7 +73,7 @@
 #'
 #' # An example where all parameter records need to be included for 2 different
 #' # baseline type derivations (such as LAST and WORST)
-#' bds <- tibble::tribble(
+#' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
 #'   "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
 #'   "P01",    "RUN-IN",       "PARAM01",     2,   9.8,

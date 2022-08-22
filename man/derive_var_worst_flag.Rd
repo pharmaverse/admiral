@@ -79,7 +79,8 @@ and for others the worst is the lowest value.
 }
 \examples{
 
-input <- tibble::tribble(
+library(tibble)
+input <- tribble(
   ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,
   "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,

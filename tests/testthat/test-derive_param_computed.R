@@ -1,5 +1,6 @@
 test_that("new observations are derived correctly", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
@@ -44,7 +45,8 @@ test_that("new observations are derived correctly", {
 })
 
 test_that("new observations are derived correctly with constant parameters", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "HEIGHT", "Height (cm)", 147, "cm", "SCREENING",
     "01-701-1015", "WEIGHT", "Weight (kg)", 54.0, "kg", "SCREENING",
@@ -91,7 +93,8 @@ test_that("new observations are derived correctly with constant parameters", {
 })
 
 test_that("no new observations are added if filtered dataset is empty", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",
@@ -124,7 +127,8 @@ test_that("no new observations are added if filtered dataset is empty", {
 })
 
 test_that("no new observations are added if a parameter is missing", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",

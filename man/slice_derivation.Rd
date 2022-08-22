@@ -47,7 +47,8 @@ output dataset but the derivation is not called for them.
 \examples{
 
 library(stringr)
-advs <- tibble::tribble(
+library(tibble)
+advs <- tribble(
   ~USUBJID, ~VSDTC,       ~VSTPT,
   "1",      "2020-04-16", NA_character_,
   "1",      "2020-04-16", "BEFORE TREATMENT"

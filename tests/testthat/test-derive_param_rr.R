@@ -1,5 +1,6 @@
 test_that("new observations are derived correctly", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU,      ~VISIT,
     "01-701-1015", "HR",     "Heart Rate",  70.14, "beats/min", "BASELINE",
     "01-701-1015", "QT",     "QT Duration", 370,   "msec",      "WEEK 2",

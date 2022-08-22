@@ -34,7 +34,8 @@ get_sdg <- function(sdg_select,
   }
 }
 
-cqterms <- tibble::tribble(
+library(tibble)
+cqterms <- tribble(
   ~TERM_NAME, ~TERM_ID,
   "APPLICATION SITE ERYTHEMA", 10003041L,
   "APPLICATION SITE PRURITUS", 10003053L

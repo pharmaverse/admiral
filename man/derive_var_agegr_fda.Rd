@@ -42,6 +42,8 @@ will be split in categories: <18, 18-64, >=65.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
+library(tibble, warn.conflicts = FALSE)
 library(admiral.test)
 data(admiral_dm)
 
@@ -49,9 +51,9 @@ admiral_dm \%>\%
   derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
   select(SUBJID, AGE, AGEGR1)
 
-data <- tibble::tribble(
+data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24")
 )
 
 data \%>\%

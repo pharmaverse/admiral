@@ -58,7 +58,8 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' adeg <- tibble::tribble(
+#' library(tibble, warn.conflicts = FALSE)
+#' adeg <- tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
 #'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
 #'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",
@@ -89,7 +90,7 @@
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
 #'
-#' advs <- tibble::tribble(
+#' advs <- tribble(
 #'   ~USUBJID, ~VSSEQ, ~PARAM, ~AVAL, ~VSSTRESU, ~VISIT, ~VSDTC,
 #'   "XYZ-001-001", 1164, "Weight", 99, "kg", "Screening", "2018-03-19",
 #'   "XYZ-001-001", 1165, "Weight", 101, "kg", "Run-In", "2018-03-26",
@@ -116,7 +117,7 @@
 #'   )
 #'
 #' # Sample ADEG dataset with triplicate record for only AVISIT = 'Baseline'
-#' adeg <- tibble::tribble(
+#' adeg <- tribble(
 #'   ~USUBJID, ~EGSEQ, ~PARAM, ~AVISIT, ~EGDTC, ~AVAL, ~TRTA,
 #'   "XYZ-1001", 1, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:50", 385, "",
 #'   "XYZ-1001", 2, "QTcF Int. (msec)", "Baseline", "2016-02-24T07:52", 399, "",

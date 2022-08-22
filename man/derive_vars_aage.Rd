@@ -54,9 +54,11 @@ The age is derived as the integer part of the duration from start to
 end date in the specified unit.
 }
 \examples{
-data <- tibble::tribble(
+library(lubridate)
+library(tibble)
+data <- tribble(
   ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
+  ymd("1984-09-06"), ymd("2020-02-24")
 )
 
 derive_vars_aage(data)

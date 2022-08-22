@@ -1,5 +1,6 @@
 test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     1, 3, 9,
@@ -27,7 +28,8 @@ test_that("a warning is issued when using `derive_var_extreme_flag()` with `filt
 })
 
 test_that("a warning is issued when using `derive_var_worst_flag()` with `filter` argument", {
-  input_worst_flag <- tibble::tribble(
+  library(tibble)
+  input_worst_flag <- tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
     "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
     "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
@@ -78,7 +80,8 @@ test_that("a warning is issued when using `derive_var_worst_flag()` with `filter
 })
 
 test_that("derive_var_ady() Test 1: A warning is issued when using `derive_var_ady()`", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~TRTSDT, ~ADT,
     ymd("2020-01-01"), ymd("2020-02-24"),
     ymd("2020-01-01"), ymd("2020-01-01"),
@@ -93,7 +96,8 @@ test_that("derive_var_ady() Test 1: A warning is issued when using `derive_var_a
 })
 
 test_that("derive_var_aendy Test 1: A warning is issued when using `derive_var_aendy()`", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~TRTSDT, ~AENDT,
     ymd("2020-01-01"), ymd("2020-02-24"),
     ymd("2020-01-01"), ymd("2020-01-01"),
@@ -108,7 +112,8 @@ test_that("derive_var_aendy Test 1: A warning is issued when using `derive_var_a
 })
 
 test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_astdy()`", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~TRTSDT, ~ASTDT,
     ymd("2020-01-01"), ymd("2020-02-24"),
     ymd("2020-01-01"), ymd("2020-01-01"),
@@ -123,8 +128,9 @@ test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_a
 })
 
 test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var_trtedtm()`", {
-  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tibble::tribble(
+  library(tibble)
+  adsl <- tibble(STUDYID = "STUDY", USUBJID = 1:3)
+  ex <- tribble(
     ~USUBJID, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
     1L, "2020-01-01", 1, 12, "ACTIVE",
     1L, "2020-02-03", 2, 9, "ACTIVE",
@@ -144,8 +150,9 @@ test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var
 })
 
 test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var_trtsdtm()`", {
-  adsl <- tibble::tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tibble::tribble(
+  library(tibble)
+  adsl <- tibble(STUDYID = "STUDY", USUBJID = 1:3)
+  ex <- tribble(
     ~USUBJID, ~EXSTDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
     1L, "2020-01-01", 1, 12, "ACTIVE",
     1L, "2020-02-03", 2, 9, "ACTIVE",
@@ -165,13 +172,14 @@ test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var
 })
 
 test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", { # nolint
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
     "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
@@ -199,7 +207,9 @@ test_that("derive_var_disposition Test 1: A warning is issued when using `derive
 })
 
 test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
-  input <- tibble::tribble(
+  library(lubridate)
+  library(tibble)
+  input <- tribble(
     ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM, ~ASTTMF, # nolint
     "TEST01", "PAT01", "2012-02-25 23:00:00", "2012-03-28 19:00:00", "2012-05-25 23:00:00", "",
     "TEST01", "PAT01", "", "2012-02-28 19:00:00", "", "",
@@ -207,9 +217,9 @@ test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_
     "TEST01", "PAT01", "2017-02-25 23:00:00", "2017-02-25 14:00:00", "2017-03-25 23:00:00", "m",
     "TEST01", "PAT01", "2017-02-25 23:00:00", "2017-01-25 14:00:00", "2018-04-29 14:00:00", "",
   ) %>% mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM)
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM)
   )
 
   expect_warning(
@@ -233,7 +243,8 @@ test_that("derive_vars_suppqual Test 1: An error is thrown if `derive_vars_suppq
 })
 
 test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_param()` is called", { # nolint
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT,
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 51, "mmHg", "BASELINE",
     "01-701-1015", "DIABP", "Diastolic Blood Pressure (mmHg)", 50, "mmHg", "WEEK 2",

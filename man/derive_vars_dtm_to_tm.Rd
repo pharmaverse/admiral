@@ -28,8 +28,9 @@ using the {hms} package.
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
+library(tibble)
 
-adcm <- tibble::tribble(
+adcm <- tribble(
   ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
   "PAT01", "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
   "PAT01", "", "2012-02-28 19:00:00", "",
