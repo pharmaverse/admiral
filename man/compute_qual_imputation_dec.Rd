@@ -27,8 +27,13 @@ Derive an imputed value
 compute_qual_imputation_dec("<40.1")
 }
 \seealso{
-Other com_bds_findings: 
-\code{\link{compute_qual_imputation}()}
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bmi}()},
+\code{\link{compute_bsa}()},
+\code{\link{compute_map}()},
+\code{\link{compute_qtc}()},
+\code{\link{compute_qual_imputation}()},
+\code{\link{compute_rr}()}
 }
 \author{
 Alice Ehmann Ojesh Upadhyay
