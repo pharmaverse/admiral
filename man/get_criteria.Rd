@@ -7,7 +7,7 @@
 get_criteria()
 }
 \value{
-Dataset with gradoimng criteria
+Dataset with grading criteria
 }
 \description{
 Reads in excel file and creates metadata data set
@@ -39,7 +39,13 @@ are from the source document on NCI-CTC website defining the grading criteria.
 From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 tracability only.
 }
+\seealso{
+Other bds-findings: 
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_atoxgr}()}
+}
 \author{
 Gordon Miller
 }
-\keyword{adlb}
+\concept{bds-findings}
+\keyword{bds-findings}

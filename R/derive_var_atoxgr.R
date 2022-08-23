@@ -56,7 +56,9 @@
 #'
 #' @return The input dataset with the character grade added
 #'
-#' @keywords adlb
+#' @keywords bds-findings
+#'
+#' @family bds-findings
 #'
 #' @export
 #'
@@ -224,7 +226,9 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' @return The input data set with the character grade added
 #'
-#' @keywords adlb
+#' @keywords bds-findings
+#'
+#' @family bds-findings
 #'
 #' @export
 #'

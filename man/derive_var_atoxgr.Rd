@@ -48,7 +48,13 @@ adlb <- tibble::tribble(
 
 derive_var_atoxgr(adlb)
 }
+\seealso{
+Other bds-findings: 
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{get_criteria}()}
+}
 \author{
 Gordon Miller
 }
-\keyword{adlb}
+\concept{bds-findings}
+\keyword{bds-findings}

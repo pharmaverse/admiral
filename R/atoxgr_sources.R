@@ -30,15 +30,17 @@
 #'
 #' @author Gordon Miller
 #'
-#' @return Dataset with gradoimng criteria
+#' @return Dataset with grading criteria
 #'
-#' @keywords adlb
+#' @keywords bds-findings
+#'
+#' @family bds-findings
 #'
 #' @export
 
 get_criteria <- function() {
 
-  dataset <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
+  atoxgr_criteria_ctcv4 <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
     read_excel(sheet = "NCICTCAEv4") %>%
     mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
 }

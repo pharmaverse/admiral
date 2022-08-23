@@ -111,7 +111,13 @@ derive_var_atoxgr_dir(data,
   get_unit_expr = extract_unit(PARAM)
 )
 }
+\seealso{
+Other bds-findings: 
+\code{\link{derive_var_atoxgr}()},
+\code{\link{get_criteria}()}
+}
 \author{
 Gordon Miller
 }
-\keyword{adlb}
+\concept{bds-findings}
+\keyword{bds-findings}
