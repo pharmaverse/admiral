@@ -1,17 +1,19 @@
 test_that("Derive CQ and SMQ variables with two term levels", {
   # nolint start
-  queries <- tibble::tribble(
+  library(dplyr)
+  library(tibble)
+  queries <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~QUERY_ID, ~QUERY_SCOPE, ~QUERY_SCOPE_NUM, ~TERM_LEVEL, ~TERM_NAME,
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "ALANINE AMINOTRANSFERASE ABNORMAL",
     "CQ01", "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW", 1, "AEDECOD", "AMMONIA ABNORMALL",
     "SMQ03", "Immune-Mediated Hypothyroidism", 20000161, "NARROW", 1, "AEDECOD", "BASEDOW'S DISEASE",
     "SMQ05", "Immune-Mediated Pneumonitis", NA, "NARROW", 1, "AEDECOD", "ALVEOLAR PROTEINOSIS",
     "CQ06", "Some query", 11111, NA, NA, "AELLT", "SOME TERM"
-  ) %>% dplyr::mutate(
+  ) %>% mutate(
     TERM_ID = as.integer(as.factor(.data$TERM_NAME))
   )
 
-  adae <- tibble::tribble(
+  adae <- tribble(
     ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,
     "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,
     "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA,
@@ -19,7 +21,7 @@ test_that("Derive CQ and SMQ variables with two term levels", {
     "05", "2020-06-09 23:59:59",              "ALVEOLAR PROTEINOSIS",      7,              "Alveolar proteinosis",          NA
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID,           ~ASTDTM,                             ~AETERM, ~AESEQ,                            ~AEDECOD,      ~AELLT,                        ~SMQ03NAM, ~SMQ03CD, ~SMQ03SC, ~SMQ03SCN,                     ~SMQ05NAM, ~SMQ05SC, ~SMQ05SCN,                                                      ~CQ01NAM,  ~CQ01CD,  ~CQ01SC, ~CQ01SCN,     ~CQ06NAM, ~CQ06CD,
     "01", "2020-06-02 23:59:59", "ALANINE AMINOTRANSFERASE ABNORMAL",      3, "Alanine aminotransferase abnormal",          NA,                               NA,       NA,       NA,        NA,                            NA,       NA,        NA, "Immune-Mediated Hepatitis (Diagnosis and Lab Abnormalities)", 20000008, "NARROW",        1,           NA,      NA,
     "02", "2020-06-05 23:59:59",                 "BASEDOW'S DISEASE",      5,                 "Basedow's disease",          NA, "Immune-Mediated Hypothyroidism", 20000161, "NARROW",         1,                            NA,       NA,        NA,                                                            NA,       NA,       NA,       NA,           NA,      NA,
@@ -34,13 +36,14 @@ test_that("Derive CQ and SMQ variables with two term levels", {
 })
 
 test_that("Derive when dataset does not have a unique key when excluding `TERM_LEVEL` columns", {
-  query <- tibble::tribble(
+  library(tibble)
+  query <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", 1, NA_real_,
     "CQ42", "My Query", "AELLT", "LLTSI", 1, NA_real_
   )
 
-  my_ae <- tibble::tribble(
+  my_ae <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
     "1", 1, "PTSI", "other",
     "1", 2, "something", "LLTSI",
@@ -48,7 +51,7 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
     "1", 2, "something", "other"
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM, ~CQ42CD,
     "1", 1, "PTSI", "other", "My Query", 1,
     "1", 2, "something", "LLTSI", "My Query", 1,
@@ -62,13 +65,14 @@ test_that("Derive when dataset does not have a unique key when excluding `TERM_L
 })
 
 test_that("Derive when an adverse event is in multiple baskets", {
-  query <- tibble::tribble(
+  library(tibble)
+  query <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA_real_,
     "CQ42", "My Query 2", "AELLT", "LLTSI", 2, NA_real_
   )
 
-  my_ae <- tibble::tribble(
+  my_ae <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
     "1", 1, "PTSI", "other",
     "1", 2, "something", "LLTSI",
@@ -76,7 +80,7 @@ test_that("Derive when an adverse event is in multiple baskets", {
     "1", 2, "something", "other"
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
     "1", 1, "PTSI", "other", "My Query 1", 1, NA_character_, NA_integer_,
     "1", 2, "something", "LLTSI", NA_character_, NA_integer_, "My Query 2", 2,
@@ -91,13 +95,14 @@ test_that("Derive when an adverse event is in multiple baskets", {
 
 
 test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE column", {
-  query <- tibble::tribble(
+  library(tibble)
+  query <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~TERM_ID,
     "CQ42", "My Query", "AEDECOD", "PTSI", NA_real_,
     "CQ42", "My Query", "AELLT", "LLTSI", NA_real_
   )
 
-  my_ae <- tibble::tribble(
+  my_ae <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT,
     "1", 1, "PTSI", "other",
     "1", 2, "something", "LLTSI",
@@ -107,7 +112,7 @@ test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE colum
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~CQ42NAM,
     "1", 1, "PTSI", "other", "My Query",
     "1", 2, "something", "LLTSI", "My Query",
@@ -119,13 +124,14 @@ test_that("Derive when query dataset does not have QUERY_ID or QUERY_SCOPE colum
 })
 
 test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the variable", {
-  query <- tibble::tribble(
+  library(tibble)
+  query <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1
   )
 
-  my_ae <- tibble::tribble(
+  my_ae <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD,
     "1", 1, "PTSI", "other", NA,
     "1", 2, "PTSI", "LLTSI", NA,
@@ -134,7 +140,7 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
 
   actual_output <- derive_vars_query(my_ae, dataset_queries = query)
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~ASTDY, ~AEDECOD, ~AELLT, ~AELLTCD, ~CQ40NAM, ~CQ40CD, ~CQ42NAM, ~CQ42CD,
     "1", 1, "PTSI", "other", NA, "My Query 1", 1, NA, NA,
     "1", 2, "PTSI", "LLTSI", NA, "My Query 1", 1, NA, NA,
@@ -151,7 +157,8 @@ test_that("Derive decides between TERM_NAME and TERM_ID based on the type of the
 
 
 test_that("assert_valid_queries checks VAR_PREFIX values", {
-  query <- tibble::tribble(
+  library(tibble)
+  query <- tribble(
     ~VAR_PREFIX, ~QUERY_NAME, ~TERM_LEVEL, ~TERM_NAME, ~QUERY_ID, ~TERM_ID,
     "CQ40", "My Query 1", "AEDECOD", "PTSI", 1, NA,
     "CQ42", "My Query 2", "AELLTCD", NA_character_, 2, 1

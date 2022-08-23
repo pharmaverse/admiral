@@ -1,4 +1,6 @@
+library(lubridate)
 library(tibble)
+
 input <- tribble(
   ~STUDYID, ~USUBJID, ~TRTSDTM, ~ASTDTM, ~AENDTM,
   "TEST01", "PAT01", "2012-02-25 23:41:10", "2012-02-28 19:03:00", "2013-02-25 23:32:16",
@@ -8,9 +10,9 @@ input <- tribble(
   "TEST01", "PAT01", "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45",
 ) %>%
   mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM)
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM)
   )
 
 # nolint start
@@ -24,9 +26,9 @@ expected_output <- tribble(
   "TEST01", "PAT01", "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45", "16:05:17", "14:20:00", "14:06:45",
 ) %>%
   mutate(
-    TRTSDTM = lubridate::as_datetime(TRTSDTM),
-    ASTDTM = lubridate::as_datetime(ASTDTM),
-    AENDTM = lubridate::as_datetime(AENDTM),
+    TRTSDTM = as_datetime(TRTSDTM),
+    ASTDTM = as_datetime(ASTDTM),
+    AENDTM = as_datetime(AENDTM),
     TRTSTM = as_hms(TRTSTM),
     ASTTM = as_hms(ASTTM),
     AENTM = as_hms(AENTM)
@@ -40,9 +42,9 @@ expected_output2 <- tribble(
   "TEST01", "PAT01", "2017-02-25 16:00:00", "2017-02-25 14:25:00", "2017-03-25 23:00:00", "16:00:00",
   "TEST01", "PAT01", "2017-02-25 16:05:17", "2017-02-25 14:20:00", "2018-04-29 14:06:45", "16:05:17",
 ) %>% mutate(
-  TRTSDTM = lubridate::as_datetime(TRTSDTM),
-  ASTDTM = lubridate::as_datetime(ASTDTM),
-  AENDTM = lubridate::as_datetime(AENDTM),
+  TRTSDTM = as_datetime(TRTSDTM),
+  ASTDTM = as_datetime(ASTDTM),
+  AENDTM = as_datetime(AENDTM),
   TRTSTM = as_hms(TRTSTM),
 )
 # nolint end

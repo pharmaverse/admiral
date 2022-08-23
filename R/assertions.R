@@ -23,6 +23,7 @@
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -31,7 +32,7 @@
 #'
 #' example_fun(admiral_dm)
 #'
-#' try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+#' try(example_fun(select(admiral_dm, -STUDYID)))
 #'
 #' try(example_fun("Not a dataset"))
 assert_data_frame <- function(arg,
@@ -307,11 +308,12 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
 #'   var <- assert_symbol(rlang::enquo(var))
-#'   dplyr::select(dat, !!var)
+#'   select(dat, !!var)
 #' }
 #'
 #' example_fun(admiral_dm, USUBJID)
@@ -387,12 +389,13 @@ assert_expr <- function(arg, optional = FALSE) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(dplyr)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
 #' example_fun <- function(dat, x) {
 #'   x <- assert_filter_cond(rlang::enquo(x))
-#'   dplyr::filter(dat, !!x)
+#'   filter(dat, !!x)
 #' }
 #'
 #' example_fun(admiral_dm, AGE == 64)

@@ -21,6 +21,7 @@ data <- tribble(
 # filter_relative ----
 ## filter_relative Test 1: mode = first, selection = before, inclusive = TRUE ----
 test_that("filter_relative Test 1: mode = first, selection = before, inclusive = TRUE", {
+  library(tibble)
   actual <- filter_relative(
     data,
     by_vars = vars(USUBJID),
@@ -31,7 +32,7 @@ test_that("filter_relative Test 1: mode = first, selection = before, inclusive =
     inclusive = TRUE
   )
 
-  expected <- tibble::tribble(
+  expected <- tribble(
     ~USUBJID, ~AVISITN, ~AVALC,
     "1",      1,        "PR",
     "1",      2,        "CR",

@@ -32,6 +32,7 @@ a set of required variables
 }
 \examples{
 library(admiral.test)
+library(dplyr)
 data(admiral_dm)
 
 example_fun <- function(dataset) {
@@ -40,7 +41,7 @@ example_fun <- function(dataset) {
 
 example_fun(admiral_dm)
 
-try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
+try(example_fun(select(admiral_dm, -STUDYID)))
 
 try(example_fun("Not a dataset"))
 }

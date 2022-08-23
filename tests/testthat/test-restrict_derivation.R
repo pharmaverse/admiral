@@ -1,7 +1,8 @@
 # restrict_derivation ----
 ## restrict_derivation Test 1: restrict derivation with parameters ----
 test_that("restrict_derivation Test 1: restrict derivation with parameters", {
-  adlb <- tibble::tribble(
+  library(tibble)
+  adlb <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,
     "1",            -1,   113, NA_character_,
     "1",             0,   113, "Y",
@@ -30,7 +31,8 @@ test_that("restrict_derivation Test 1: restrict derivation with parameters", {
 
 ## restrict_derivation Test 2: restrict derivation without parameters ----
 test_that("restrict_derivation Test 2: restrict derivation without parameters", {
-  adlb <- tibble::tribble(
+  library(tibble)
+  adlb <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL, ~ABLFL,        ~BASE,
     "1",            -1,   113, NA_character_,    NA,
     "1",             0,   113, "Y",             113,

@@ -1,5 +1,6 @@
 test_that("first observation for each group are selected", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     1, 3, 9,
@@ -8,7 +9,7 @@ test_that("first observation for each group are selected", {
     3, 3, 10
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     2, 2, 42,
@@ -30,7 +31,8 @@ test_that("first observation for each group are selected", {
 })
 
 test_that("first observation is selected without grouping", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     1, 3, 9,
@@ -39,7 +41,7 @@ test_that("first observation is selected without grouping", {
     3, 3, 10
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12
   )

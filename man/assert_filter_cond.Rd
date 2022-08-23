@@ -24,12 +24,13 @@ functions like \code{subset} or \code{dplyr::filter}.
 }
 \examples{
 library(admiral.test)
+library(dplyr)
 data(admiral_dm)
 
 # typical usage in a function as a parameter check
 example_fun <- function(dat, x) {
   x <- assert_filter_cond(rlang::enquo(x))
-  dplyr::filter(dat, !!x)
+  filter(dat, !!x)
 }
 
 example_fun(admiral_dm, AGE == 64)

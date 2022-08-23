@@ -13,8 +13,9 @@
 #' @noRd
 #'
 #' @examples
-#' refdate <- lubridate::ymd("2020-01-02")
-#' date <- lubridate::ymd("2020-02-03")
+#' library(lubridate)
+#' refdate <- ymd("2020-01-02")
+#' date <- ymd("2020-02-03")
 #' assertthat::assert_that(admiral:::is_date(refdate), admiral:::is_date(date))
 is_date <- function(arg) {
   is.instant(arg)

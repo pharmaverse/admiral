@@ -21,11 +21,12 @@ Checks if an argument is a symbol
 }
 \examples{
 library(admiral.test)
+library(dplyr)
 data(admiral_dm)
 
 example_fun <- function(dat, var) {
   var <- assert_symbol(rlang::enquo(var))
-  dplyr::select(dat, !!var)
+  select(dat, !!var)
 }
 
 example_fun(admiral_dm, USUBJID)
