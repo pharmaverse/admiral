@@ -90,13 +90,13 @@ start to end date in the specified unit. If the end date is before the start
 date, the duration is negative.
 }
 \examples{
-# derive duration in days (integer), i.e., relative day
+# Derive duration in days (integer), i.e., relative day
 compute_duration(
   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
   end_date = lubridate::ymd_hms("2020-12-24T08:15:00")
 )
 
-# derive duration in days (float)
+# Derive duration in days (float)
 compute_duration(
   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
   end_date = lubridate::ymd_hms("2020-12-24T08:15:00"),
@@ -104,7 +104,7 @@ compute_duration(
   add_one = FALSE
 )
 
-# derive age
+# Derive age
 compute_duration(
   start_date = lubridate::ymd("1984-09-06"),
   end_date = lubridate::ymd("2020-02-24"),
@@ -113,7 +113,7 @@ compute_duration(
   add_one = FALSE
 )
 
-# derive duration in hours
+# Derive duration in hours
 compute_duration(
   start_date = lubridate::ymd_hms("2020-12-06T9:00:00"),
   end_date = lubridate::ymd_hms("2020-12-06T13:30:00"),
@@ -122,7 +122,7 @@ compute_duration(
   add_one = FALSE,
 )
 
-# derive duration in days after imputation
+# Derive duration in days after imputation
 compute_duration(
   start_date = convert_dtc_to_dt("2020-12", date_imputation = "first"),
   end_date = lubridate::ymd("2020-12-10"),

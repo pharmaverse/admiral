@@ -1,4 +1,4 @@
-test_that("default duration, i.e., relative day", {
+test_that("compute_duration Test 1: Default duration, i.e., relative day", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T15:00:00"),
@@ -8,7 +8,7 @@ test_that("default duration, i.e., relative day", {
   )
 })
 
-test_that("fractional duration", {
+test_that("compute_duration Test 2: Fractional duration", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T15:00:00"),
@@ -20,7 +20,7 @@ test_that("fractional duration", {
   )
 })
 
-test_that("age in years", {
+test_that("compute_duration Test 3: Age in years", {
   expect_equal(
     compute_duration(
       ymd("1984-09-06"),
@@ -33,7 +33,7 @@ test_that("age in years", {
   )
 })
 
-test_that("age in months", {
+test_that("compute_duration Test 4: Age in months", {
   expect_equal(
     compute_duration(
       ymd("1984-09-06"),
@@ -46,7 +46,7 @@ test_that("age in months", {
   )
 })
 
-test_that("age in weeks", {
+test_that("compute_duration Test 5: Age in weeks", {
   expect_equal(
     compute_duration(
       ymd("2020-02-03"),
@@ -59,7 +59,7 @@ test_that("age in weeks", {
   )
 })
 
-test_that("duration in hours", {
+test_that("compute_duration Test 6: Duration in hours", {
   expect_equal(
     compute_duration(
       ymd_hms("2020-12-06T9:00:00"),
@@ -72,7 +72,7 @@ test_that("duration in hours", {
   )
 })
 
-# test_that("duration in days after imputation", {
+# test_that("compute_duration Test 7: Duration in days after imputation", {
 #   actual <- compute_duration(
 #     convert_dtc_to_dt("2020-12", date_imputation = "first"),
 #     ymd("2020-12-10"),

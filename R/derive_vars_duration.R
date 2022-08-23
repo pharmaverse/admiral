@@ -89,7 +89,7 @@
 #' library(lubridate)
 #' library(tibble)
 #'
-#' # derive age in years
+#' # Derive age in years
 #' data <- tribble(
 #'   ~BRTHDT, ~RANDDT,
 #'   ymd("1984-09-06"), ymd("2020-02-24"),
@@ -108,7 +108,7 @@
 #'   trunc_out = TRUE
 #' )
 #'
-#' # derive adverse event duration in days
+#' # Derive adverse event duration in days
 #' data <- tribble(
 #'   ~ASTDT, ~AENDT,
 #'   ymd("2021-03-05"), ymd("2021-03-02"),
@@ -125,7 +125,7 @@
 #'   out_unit = "days"
 #' )
 #'
-#' # derive adverse event duration in minutes
+#' # Derive adverse event duration in minutes
 #' data <- tribble(
 #'   ~ADTM, ~TRTSDTM,
 #'   ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-09T05:00:00"),

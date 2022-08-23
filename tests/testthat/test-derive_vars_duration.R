@@ -1,7 +1,7 @@
 library(tibble)
 library(lubridate)
 
-test_that("duration and unit variable are added", {
+test_that("derive_vars_duration Test 1: Duration and unit variable are added", {
   input <- tribble(
     ~BRTHDT, ~RANDDT,
     ymd("1984-09-06"), ymd("2020-02-24"),
@@ -23,7 +23,7 @@ test_that("duration and unit variable are added", {
   expect_equal(actual_output, expected_output)
 })
 
-test_that("duration and unit variable are added", {
+test_that("derive_vars_duration Test 2: Duration and unit variable are added", {
   input <- tribble(
     ~ASTDT, ~AENDT,
     ymd("2021-03-05"), ymd("2021-03-02"),
@@ -32,8 +32,9 @@ test_that("duration and unit variable are added", {
     NA, NA
   )
   expected_output <- mutate(input,
-                            ADURN = c(-3, 1, NA, NA),
-                            ADURU = c("DAYS", "DAYS", NA_character_, NA_character_))
+    ADURN = c(-3, 1, NA, NA),
+    ADURU = c("DAYS", "DAYS", NA_character_, NA_character_)
+  )
   actual_output <- derive_vars_duration(
     input,
     new_var = ADURN,
@@ -46,7 +47,7 @@ test_that("duration and unit variable are added", {
   expect_equal(actual_output, expected_output)
 })
 
-test_that("duration and unit variable are added", {
+test_that("derive_vars_duration Test 3: Duration and unit variable are added", {
   input <- tribble(
     ~ADTM, ~TRTSDTM,
     ymd_hms("2019-08-09T04:30:56"), ymd_hms("2019-08-09T05:00:00"),
