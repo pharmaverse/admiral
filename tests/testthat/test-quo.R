@@ -13,7 +13,3 @@ test_that("Test 11 : `quo_not_missing` throws and Error if missing argument", {
   }
   expect_error(test_fun()) # missing argument -> throws error
 })
-
-test_that("Test 11 : `quo_not_missing` throws and Error if missing argument", {
- # quo_c test here
-})
