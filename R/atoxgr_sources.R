@@ -28,15 +28,18 @@
 #' From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 #' tracability only.
 #'
-#' @format NULL
+#' @author Gordon Miller
+#'
+#' @return Dataset with gradoimng criteria
+#'
+#' @keywords adlb
 #'
 #' @export
-#'
-#' @keywords atoxgr_sources
-#'
-#' @rdname atoxgr_sources
-#'
 
-atoxgr_criteria_ctcv4 <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
-  readxl::read_excel(sheet = "NCICTCAEv4") %>%
-  mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
+get_criteria <- function() {
+
+  dataset <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
+    read_excel(sheet = "NCICTCAEv4") %>%
+    mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
+}
+

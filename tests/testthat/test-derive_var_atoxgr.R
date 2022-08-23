@@ -91,6 +91,7 @@ test_that("derive_var_atoxgr: Test 4 ATOXGR < 0 (HYPO)", {
 })
 
 # derive_var_atoxgr_dir - NCICTCAEv4 ----
+atoxgr_criteria_ctcv4 <- get_criteria()
 
 ## Blood and lymphatic system disorders ----
 ## Grade 3: <80 g/L

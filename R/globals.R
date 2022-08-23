@@ -124,5 +124,6 @@ globalVariables(c(
   "SI_UNIT_UPPER",
   "VAR_CHECK",
   "TERM",
-  "TERM_UPPER"
+  "TERM_UPPER",
+  "atoxgr_criteria_ctcv4"
 ))

@@ -83,6 +83,8 @@ data <- tibble::tribble(
   "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)",
 )
 
+atoxgr_criteria_ctcv4 <- get_criteria()
+
 derive_var_atoxgr_dir(data,
   new_var = ATOXGRL,
   tox_description_var = ATOXDSCL,
