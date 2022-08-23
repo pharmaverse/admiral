@@ -128,17 +128,21 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
   input_ctcv4_1 <- exp_out_ctcv4_1 %>%
     select(-ATOXGRL)
 
-  expect_equal(
-    derive_var_atoxgr_dir(
-      input_ctcv4_1,
-      new_var = ATOXGRL,
-      meta_criteria = atoxgr_criteria_ctcv4,
-      tox_description_var = ATOXDSCL,
-      criteria_direction = "L",
-      get_unit_expr = AVALU
-    ),
-    exp_out_ctcv4_1
+  actual_output <- derive_var_atoxgr_dir(
+    input_ctcv4_1,
+    new_var = ATOXGRL,
+    meta_criteria = atoxgr_criteria_ctcv4,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = AVALU
   )
+
+  expect_dfs_equal(
+    base = exp_out_ctcv4_1,
+    compare = actual_output,
+    keys = c("ATOXDSL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+    )
+
 })
 
 ### 2. Leukocytosis ----
