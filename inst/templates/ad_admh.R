@@ -26,11 +26,11 @@ mh <- convert_blanks_to_na(mh)
 
 # Creating a look-up table for assigning MHTERMN (for derivation of company specific variable)
 # (this is set to align with the order of pre-printed terms on the CRF)
-mhtermn_lookup <-tibble::tribble(
+mhtermn_lookup <- tibble::tribble(
   ~MHTERM, ~MHTERMN,
   "ALZHEIMER'S DISEASE", 1
 )
-
+git stat
 
 # ---- Derivations ----
 
@@ -44,48 +44,40 @@ admh <- mh %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-
   # Derive analysis start date and flag
   derive_vars_dt(
     dtc = MHSTDTC,
     new_vars_prefix = "AST",
-    date_imputation  = "first"
+    date_imputation = "first"
   ) %>%
-
   # Derive analysis end date and flag
-   derive_vars_dt(
-     dtc = MHENDTC,
-     new_vars_prefix = "AEN",
-     date_imputation = "last",
-     max_dates = vars(DTHDT, EOSDT)
-   ) %>%
-
-
+  derive_vars_dt(
+    dtc = MHENDTC,
+    new_vars_prefix = "AEN",
+    date_imputation = "last",
+    max_dates = vars(DTHDT, EOSDT)
+  ) %>%
   # Derive analysis start relative day and analysis end relative day
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ASTDT, AENDT)
   ) %>%
-
   # Derive analysis date of medical history collection - ADT (company specific variable derivation)
   derive_vars_dt(
     dtc = MHDTC,
     new_vars_prefix = "A"
   ) %>%
-
   # Derive analysis relative day - ADY (company specific variable derivation)
   derive_vars_dy(
     reference_date = TRTSDT,
     source_vars = vars(ADT)
   ) %>%
-
   # Assign the AHIST (company specific variable derivation)
-  mutate(AHIST = case_when(MHENRF == 'BEFORE' ~ 'Past',
-                           MHENRF %in% c('DURING', 'AFTER') ~ 'Current',
-                           MHSTAT == 'Not Done' ~ "Not Assessed")
-  ) %>%
-
-
+  mutate(AHIST = case_when(
+    MHENRF == "BEFORE" ~ "Past",
+    MHENRF %in% c("DURING", "AFTER") ~ "Current",
+    MHSTAT == "Not Done" ~ "Not Assessed"
+  )) %>%
   # Derive occurrence flags
   derive_var_extreme_flag(
     by_vars = vars(USUBJID),
@@ -93,22 +85,18 @@ admh <- mh %>%
     new_var = AOCCFL,
     mode = "first"
   ) %>%
-
   derive_var_extreme_flag(
     by_vars = vars(USUBJID, MHBODSYS),
     order = vars(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCSFL,
     mode = "first"
   ) %>%
-
   derive_var_extreme_flag(
     by_vars = vars(USUBJID, MHDECOD),
     order = vars(USUBJID, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCCPFL,
     mode = "first"
   ) %>%
-
-
   # (company specific occurrence flag variables derivation)
   derive_var_extreme_flag(
     by_vars = vars(USUBJID),
@@ -116,41 +104,37 @@ admh <- mh %>%
     new_var = AOCPFL,
     mode = "first"
   ) %>%
-
   derive_var_extreme_flag(
     by_vars = vars(USUBJID, MHBODSYS),
     order = vars(USUBJID, AHIST, MHBODSYS, MHCAT, ASTDT, MHSEQ),
     new_var = AOCPSFL,
     mode = "first"
   ) %>%
-
   derive_var_extreme_flag(
     by_vars = vars(USUBJID, MHDECOD),
     order = vars(USUBJID, AHIST, MHBODSYS, MHCAT, MHDECOD, MHTERM, ASTDT, MHSEQ),
     new_var = AOCPPFL,
     mode = "first"
   ) %>%
-
   # Derive analysis flag (company specific variable derivation)
-   mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_)) %>%
-
+  mutate(ANL01FL = ifelse(MHOCCUR != "N", "Y", NA_character_)) %>%
   # Assign TRTA, TRTP (company specific variables derivation)
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-
   # Assign APHASE and APHASEN Variable (company specific variable derivation)
   mutate(
     APHASE = case_when(
       ADT < TRTSDT ~ "Screening",
       ADT > TRTEDT ~ "Post-Treatment",
-      ADT <= TRTSDT & ADT >= TRTEDT ~ "On-Treatment"),
-
+      ADT <= TRTSDT & ADT >= TRTEDT ~ "On-Treatment"
+    ),
     APHASEN = case_when(
       ADT < TRTSDT ~ 1,
       ADT > TRTEDT ~ 2,
-      ADT <= TRTSDT & ADT >= TRTEDT ~ 3)
+      ADT <= TRTSDT & ADT >= TRTEDT ~ 3
+    )
   )
 
 # Derive MHTERMN (company specific variable derivation)
@@ -162,9 +146,9 @@ admh <- admh %>%
     by_vars = vars(MHTERM)
   )
 
-admh <-admh %>%
+admh <- admh %>%
   filter(is.na(MHPRESP) | MHPRESP != "Y") %>%
-  mutate(MHTERMN=NA) %>%
+  mutate(MHTERMN = NA) %>%
   bind_rows(admh)
 
 
@@ -185,4 +169,3 @@ admh <- admh %>%
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(admh, file = file.path(dir, "admh.rda"), compress = "bzip2")
-

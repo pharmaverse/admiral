@@ -51,7 +51,10 @@ Derives analysis age (\code{AAGE}) and analysis age unit (\code{AAGEU})
 }
 \details{
 The age is derived as the integer part of the duration from start to
-end date in the specified unit.
+end date in the specified unit. When 'years' or 'months' are specified in the \code{out_unit}
+parameter, because of the underlying \code{lubridate::time_length()} function that is used
+here, results are calculated based on the actual calendar length of months or years
+rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 }
 \examples{
 data <- tibble::tribble(
@@ -63,7 +66,18 @@ derive_vars_aage(data)
 }
 \seealso{
 \code{\link[=derive_vars_duration]{derive_vars_duration()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_var_extreme_dt}()},
+\code{\link{derive_vars_disposition_reason}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{der_adsl}
+\keyword{der_adsl}

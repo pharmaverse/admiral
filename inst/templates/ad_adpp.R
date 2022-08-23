@@ -12,7 +12,7 @@ library(lubridate)
 library(stringr)
 
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -22,9 +22,14 @@ library(stringr)
 data("admiral_pp")
 data("admiral_adsl")
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 pp <- convert_blanks_to_na(admiral_pp)
 
-# ---- Lookup tables ----
+# Lookup tables ----
 param_lookup <- tibble::tribble(
   ~PPTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
   "AUCALL", "AUCALL", "AUC All", 1,
@@ -58,7 +63,7 @@ avalcat_lookup <- tibble::tribble(
 
 attr(param_lookup$PPTESTCD, "label") <- "Parameter Short Name"
 
-# ---- User defined functions ----
+# User defined functions ----
 
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate`.
@@ -70,7 +75,7 @@ format_avalcat1n <- function(param, aval) {
   )
 }
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, DTHDT, EOSDT, TRT01P, TRT01A)
@@ -81,7 +86,7 @@ adpp <- pp %>%
     select(admiral_adsl, STUDYID, USUBJID, !!!adsl_vars),
     by = c("STUDYID", "USUBJID")
   ) %>%
-  # Calculate ADT, ADY
+  ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = PPRFDTC
@@ -89,12 +94,12 @@ adpp <- pp %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adpp <- adpp %>%
-  # Add PARAMCD only - add PARAM etc later
+  ## Add PARAMCD only - add PARAM etc later ----
   left_join(
     select(param_lookup, PPTESTCD, PARAMCD),
     by = "PPTESTCD"
   ) %>%
-  # Calculate AVAL and AVALC
+  ## Calculate AVAL and AVALC ----
   mutate(
     AVAL = PPSTRESN,
     AVALC = PPSTRESC
@@ -109,7 +114,7 @@ adpp <- adpp %>%
   ) %>%
   select(-DOMAIN, -PPSEQ)
 
-# get visit info
+## Get visit info ----
 adpp <- adpp %>%
   # Derive Timing
   mutate(
@@ -122,12 +127,12 @@ adpp <- adpp %>%
     ),
     AVISITN = VISITNUM
   ) %>%
-  # Assign TRTA, TRTP
+  ## Assign TRTA, TRTP ----
   mutate(
     TRTP = TRT01P,
     TRTA = TRT01A
   ) %>%
-  # Derive AVALCA1N and AVALCAT1
+  ## Derive AVALCA1N and AVALCAT1 ----
   mutate(AVALCA1N = format_avalcat1n(param = PARAMCD, aval = AVAL)) %>%
   derive_vars_merged(dataset_add = avalcat_lookup, by_vars = vars(PARAMCD, AVALCA1N))
 
@@ -140,7 +145,7 @@ adpp <- adpp %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adpp, file = file.path(dir, "adpp.rda"), compress = "bzip2")

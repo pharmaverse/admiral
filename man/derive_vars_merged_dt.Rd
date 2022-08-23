@@ -87,29 +87,30 @@ If the \code{order} parameter is not specified, the \code{mode} parameter is ign
 \item{dtc}{The \code{'--DTC'} date to impute
 
 A character date is expected in a format like \code{yyyy-mm-dd} or
-\code{yyyy-mm-ddThh:mm:ss}. If the year part is not recorded (missing date), no
-imputation is performed.}
+\code{yyyy-mm-ddThh:mm:ss}. Trailing components can be omitted and \code{-} is a
+valid "missing" value for any component.}
 
 \item{date_imputation}{The value to impute the day/month when a datepart is
 missing.
 
-If \code{NULL}: no date imputation is performed and partial dates are returned as
-missing.
-
-Otherwise, a character value is expected, either as a
+A character value is expected, either as a
 \itemize{
-\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the 15th
-of June,
-\item or as a keyword: \code{"FIRST"}, \code{"MID"}, \code{"LAST"} to impute to the first/mid/last
+\item format with month and day specified as \code{"mm-dd"}: e.g. \code{"06-15"} for the
+15th of June (The year can not be specified; for imputing the year
+\code{"first"} or \code{"last"} together with \code{min_dates} or \code{max_dates} argument can
+be used (see examples).),
+\item or as a keyword: \code{"first"}, \code{"mid"}, \code{"last"} to impute to the first/mid/last
 day/month.
 }
 
-Default is \code{NULL}.}
+The argument is ignored if \code{highest_imputation} is less then \code{"D"}.
+
+\emph{Default}: \code{"first"}}
 
 \item{flag_imputation}{Whether the date imputation flag must also be derived.
 
 If \code{"auto"} is specified, the date imputation flag is derived if the
-\code{date_imputation} parameter is not null.
+\code{date_imputation} argument is not null.
 
 \emph{Default}: \code{"auto"}
 
@@ -124,13 +125,13 @@ range of possible dates of the \code{dtc} value are considered. The possible dat
 are defined by the missing parts of the \code{dtc} date (see example below). This
 ensures that the non-missing parts of the \code{dtc} date are not changed.
 A date or date-time object is expected.
-For example\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc(
-"2020-11",
-min_dates = list(
- ymd_hms("2020-12-06T12:12:12"),
- ymd_hms("2020-11-11T11:11:11")
-),
-date_imputation = "first"
+For example\if{html}{\out{<div class="sourceCode r">}}\preformatted{impute_dtc_dtm(
+  "2020-11",
+  min_dates = list(
+   ymd_hms("2020-12-06T12:12:12"),
+   ymd_hms("2020-11-11T11:11:11")
+  ),
+  highest_imputation = "M"
 )
 }\if{html}{\out{</div>}}
 
@@ -180,6 +181,11 @@ optionally the variable \verb{<new_vars_prefix>DTF} derived from the additional
 dataset (\code{dataset_add}).
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This function is \emph{deprecated}, please use \code{derive_vars_dt()} and
+\code{derive_vars_merged()} instead.
+
 Merge a imputed date variable and date imputation  flag from a dataset to the
 input dataset. The observations to merge can be selected by a condition
 and/or selecting the first or last observation for each by group.
@@ -195,38 +201,7 @@ the additional dataset.
 \item The date and flag variables are merged to the input dataset.
 }
 }
-\examples{
-library(admiral.test)
-library(dplyr, warn.conflicts = FALSE)
-data("admiral_dm")
-data("admiral_ex")
-
-# derive treatment start date (TRTSDT)
-derive_vars_merged_dt(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTS",
-  dtc = EXSTDTC,
-  date_imputation = "first",
-  order = vars(TRTSDT),
-  mode = "first"
-)
-
-# derive treatment end date (TRTEDT) (without imputation)
-derive_vars_merged_dt(
-  select(admiral_dm, STUDYID, USUBJID),
-  dataset_add = admiral_ex,
-  by_vars = vars(STUDYID, USUBJID),
-  new_vars_prefix = "TRTE",
-  dtc = EXENDTC,
-  order = vars(TRTEDT),
-  mode = "last"
-)
-}
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{timing}
+\keyword{deprecated}

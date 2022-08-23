@@ -19,7 +19,9 @@
 #'
 #' @return A `data.frame` or `NULL`
 #'
-#' @keywords user_utility
+#' @family utils_ds_chk
+#'
+#' @keywords utils_ds_chk
 #'
 #' @examples
 #' data(admiral_adsl)
@@ -43,7 +45,9 @@ get_duplicates_dataset <- function() {
 #' @return A `data.frame` of duplicate records within `dataset`
 #'
 #' @export
-#' @keywords dev_utility
+#' @family utils_ds_chk
+#'
+#' @keywords utils_ds_chk
 #' @author Thomas Neitmann
 #'
 #' @examples
@@ -82,7 +86,8 @@ extract_duplicate_records <- function(dataset, by_vars) {
 #' @return No return value, called for side effects
 #'
 #' @export
-#' @keywords dev_utility
+#' @family utils_help
+#' @keywords utils_help
 #' @author Thomas Neitmann
 #'
 #' @examples

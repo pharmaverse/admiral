@@ -46,6 +46,4 @@ start date is 1.
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
-\keyword{timing}
+\keyword{deprecated}
