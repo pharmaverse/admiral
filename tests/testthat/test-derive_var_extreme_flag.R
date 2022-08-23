@@ -1,4 +1,5 @@
-input_worst_flag <- tibble::tribble(
+library(tibble)
+input_worst_flag <- tribble(
   ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT, ~ADT, ~AVAL,
   "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0,
   "TEST01", "PAT01", "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0,
@@ -28,7 +29,7 @@ input_worst_flag <- tibble::tribble(
 )
 
 test_that("first observation for each group is flagged", {
-  input <- tibble::tribble(
+  input <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     1, 3, 9,
@@ -55,7 +56,8 @@ test_that("first observation for each group is flagged", {
 })
 
 test_that("last observation for each group is flagged", {
-  input <- tibble::tribble(
+  library(tibble)
+  input <- tribble(
     ~USUBJID, ~AVISITN, ~AVAL,
     1, 1, 12,
     1, 3, 9,

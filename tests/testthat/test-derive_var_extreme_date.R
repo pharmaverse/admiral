@@ -1,11 +1,12 @@
-adsl <- tibble::tribble(
+library(tibble)
+adsl <- tribble(
   ~STUDYID, ~USUBJID, ~TRTEDTM, ~DTHDTC,
   "STUDY01", "1", ymd_hms("2020-01-01T12:00:00"), NA_character_,
   "STUDY01", "2", NA, "2020-06",
   "STUDY01", "3", ymd_hms("2020-04-12T13:15:00"), NA_character_
 )
 
-ae <- tibble::tribble(
+ae <- tribble(
   ~STUDYID, ~USUBJID, ~AESTDTC, ~AEENDTC, ~AESEQ,
   "STUDY01", "1", "2019-11", "2019-11-23", 1,
   "STUDY01", "1", "2020-02", "2020-02", 2,
@@ -58,7 +59,8 @@ test_that("derive_var_extreme_dt: LSTALVDT is derived", {
 
 ## derive_var_extreme_dt: LSTALVDT is derived for Date class as well ----
 test_that("derive_var_extreme_dt: LSTALVDT is derived for Date class as well", {
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID,  ~USUBJID, ~TRTEDTM,
     "STUDY01", "1",      ymd_hms("2020-01-01T12:00:00"),
     "STUDY01", "2",      as.POSIXct(ymd("2020-02-03")),
