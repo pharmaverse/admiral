@@ -140,7 +140,7 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
   expect_dfs_equal(
     base = exp_out_ctcv4_1,
     compare = actual_output,
-    keys = c("ATOXDSL", "AVAL", "ANRLO", "ANRHI", "AVALU")
+    keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
     )
 
 })
