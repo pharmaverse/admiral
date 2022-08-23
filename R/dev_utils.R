@@ -298,6 +298,7 @@ what_is_it <- function(x) {
 #'
 #' @examples
 #' library(admiral.test)
+#' library(tidyselect)
 #' data(admiral_vs)
 #'
 #' get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
@@ -305,7 +306,7 @@ what_is_it <- function(x) {
 #' get_constant_vars(
 #'   admiral_vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
-#'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
+#'   ignore_vars = vars(DOMAIN, starts_with("VS"))
 #' )
 get_constant_vars <- function(dataset, by_vars, ignore_vars = NULL) {
   non_by_vars <- setdiff(names(dataset), vars2chr(by_vars))
@@ -517,11 +518,12 @@ valid_time_units <- function() {
 #'
 #' @examples
 #'
+#' library(dplyr)
 #' contains_vars(rlang::expr(AVAL))
-#' contains_vars(dplyr::vars(AVAL))
-#' contains_vars(dplyr::vars(1))
-#' contains_vars(dplyr::vars(AVAL, ID = 1))
-#' contains_vars(dplyr::vars(AVAL, CHG = AVAL - BASE))
+#' contains_vars(vars(AVAL))
+#' contains_vars(vars(1))
+#' contains_vars(vars(AVAL, ID = 1))
+#' contains_vars(vars(AVAL, CHG = AVAL - BASE))
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
 }

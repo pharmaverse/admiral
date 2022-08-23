@@ -40,6 +40,7 @@ expression. Then, all subsets are stacked. Records which do not match any
 condition are kept and \code{BASETYPE} is set to \code{NA}.
 }
 \examples{
+library(dplyr)
 library(tibble)
 bds <- tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
@@ -70,7 +71,7 @@ bds_with_basetype <- derive_var_basetype(
 # bds_with_basetype
 print(bds_with_basetype, n = Inf)
 
-dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+count(bds_with_basetype, BASETYPE, name = "Number of Records")
 
 # An example where all parameter records need to be included for 2 different
 # baseline type derivations (such as LAST and WORST)
@@ -92,7 +93,7 @@ bds_with_basetype <- derive_var_basetype(
 
 print(bds_with_basetype, n = Inf)
 
-dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+count(bds_with_basetype, BASETYPE, name = "Number of Records")
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 

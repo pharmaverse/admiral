@@ -140,7 +140,7 @@
 #' derive_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
-#'   filter = dplyr::n() > 2,
+#'   filter = n() > 2,
 #'   analysis_var = AVAL,
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")

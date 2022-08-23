@@ -39,6 +39,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' library(tibble)
 #' bds <- tribble(
 #'   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
@@ -69,7 +70,7 @@
 #' # bds_with_basetype
 #' print(bds_with_basetype, n = Inf)
 #'
-#' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 #'
 #' # An example where all parameter records need to be included for 2 different
 #' # baseline type derivations (such as LAST and WORST)
@@ -91,7 +92,7 @@
 #'
 #' print(bds_with_basetype, n = Inf)
 #'
-#' dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
+#' count(bds_with_basetype, BASETYPE, name = "Number of Records")
 derive_var_basetype <- function(dataset, basetypes) {
   assert_data_frame(dataset)
   assert_named_exprs(basetypes)

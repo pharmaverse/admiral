@@ -23,11 +23,12 @@ Returns If Argument is a Vector of Symbols or Named Expressions
 }
 \examples{
 
+library(dplyr)
 contains_vars(rlang::expr(AVAL))
-contains_vars(dplyr::vars(AVAL))
-contains_vars(dplyr::vars(1))
-contains_vars(dplyr::vars(AVAL, ID = 1))
-contains_vars(dplyr::vars(AVAL, CHG = AVAL - BASE))
+contains_vars(vars(AVAL))
+contains_vars(vars(1))
+contains_vars(vars(AVAL, ID = 1))
+contains_vars(vars(AVAL, CHG = AVAL - BASE))
 }
 \seealso{
 Functions moved to admiraldev package: 

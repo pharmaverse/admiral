@@ -3,6 +3,7 @@ data(admiral_ae)
 data(admiral_vs)
 
 test_that("call_derivation works", {
+  library(dplyr)
   input <- admiral_vs[sample(seq_len(nrow(admiral_vs)), 1000), ]
 
   expected_output <- input %>%
@@ -11,21 +12,21 @@ test_that("call_derivation works", {
       analysis_var = VSSTRESN,
       summary_fun = function(x) mean(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "AVERAGE"),
-      filter = dplyr::n() >= 2L
+      filter = n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = vars(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
       summary_fun = function(x) max(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "MAXIMUM"),
-      filter = dplyr::n() >= 2L
+      filter = n() >= 2L
     ) %>%
     derive_summary_records(
       by_vars = vars(USUBJID, VSTESTCD),
       analysis_var = VSSTRESN,
       summary_fun = function(x) min(x, na.rm = TRUE),
       set_values_to = vars(DTYPE = "MINIMUM"),
-      filter = dplyr::n() >= 2L
+      filter = n() >= 2L
     )
 
   actual_output <- call_derivation(
@@ -47,7 +48,7 @@ test_that("call_derivation works", {
     ),
     by_vars = vars(USUBJID, VSTESTCD),
     analysis_var = VSSTRESN,
-    filter = dplyr::n() >= 2L
+    filter = n() >= 2L
   )
 
   expect_dfs_equal(

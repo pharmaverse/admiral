@@ -112,7 +112,7 @@
 #'     dose_date = EXENDTC,
 #'     analysis_date = AESTDTC,
 #'     single_dose_condition = (EXSTDTC == EXENDTC),
-#'     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
+#'     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
 #'   ) %>%
 #'   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 derive_vars_last_dose <- function(dataset,

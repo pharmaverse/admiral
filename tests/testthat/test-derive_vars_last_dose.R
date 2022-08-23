@@ -51,9 +51,10 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
 
 
 test_that("derive_vars_last_dose Test 2: function checks validity of start and end dose inputs", {
+  library(dplyr)
   library(tibble)
 
-  input_ex_wrong <- dplyr::bind_rows(
+  input_ex_wrong <- bind_rows(
     input_ex,
     tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -78,6 +79,7 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
 
 
 test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
+  library(dplyr)
   expected_output <- mutate(
     input_ae,
     EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
@@ -98,7 +100,7 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
     dose_date = EXENDTC,
     analysis_date = AESTDTC,
     single_dose_condition = (EXSTDTC == EXENDTC),
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
 
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
@@ -106,9 +108,10 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
 
 
 test_that("derive_vars_last_dose Test 4: function errors when multiple doses are on same date", {
+  library(dplyr)
   library(tibble)
 
-  input_ex_dup <- dplyr::bind_rows(
+  input_ex_dup <- bind_rows(
     input_ex,
     tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,

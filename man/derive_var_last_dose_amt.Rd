@@ -101,7 +101,7 @@ admiral_ae \%>\%
     single_dose_condition = (EXSTDTC == EXENDTC),
     new_var = LDOSE,
     dose_var = EXDOSE,
-    traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
+    traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR, LDOSE)
 }
