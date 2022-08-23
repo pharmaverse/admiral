@@ -9,19 +9,20 @@ test_that("error on a dthcaus_source object with invalid mode", {
 })
 
 test_that("DTHCAUS is added from AE and DS", {
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02",
     "TEST01", "PAT03"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -51,7 +52,7 @@ test_that("DTHCAUS is added from AE and DS", {
     dthcaus = DSTERM
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01", "DEATH DUE TO PROGRESSION OF DISEASE",
     "TEST01", "PAT02", NA,
@@ -68,18 +69,19 @@ test_that("DTHCAUS is added from AE and DS", {
 })
 
 test_that("`dthcaus` handles symbols and string literals correctly", {
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-02",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -106,7 +108,7 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
     dthcaus = DSTERM
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01", "Adverse Event",
     "TEST01", "PAT02", "DEATH DUE TO PROGRESSION OF DISEASE"
@@ -122,19 +124,20 @@ test_that("`dthcaus` handles symbols and string literals correctly", {
 })
 
 test_that("DTHCAUS and traceability variables are added from AE and DS", {
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02",
     "TEST01", "PAT03"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -166,7 +169,7 @@ test_that("DTHCAUS and traceability variables are added from AE and DS", {
     traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS, ~DTHDOM, ~DTHSEQ,
     "TEST01", "PAT01", "DEATH DUE TO PROGRESSION OF DISEASE", "DS", 4,
     "TEST01", "PAT02", NA, NA, NA,
@@ -183,20 +186,21 @@ test_that("DTHCAUS and traceability variables are added from AE and DS", {
 })
 
 test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 input datasets", {
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02",
     "TEST01", "PAT03"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 14, "SUDDEN DEATH", "FATAL", "2021-04-04",
     "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -228,7 +232,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
     traceability_vars = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS, ~DTHDOM, ~DTHSEQ,
     "TEST01", "PAT01", "DEATH DUE TO PROGRESSION OF DISEASE", "DS", 4,
     "TEST01", "PAT02", NA, NA, NA,
@@ -245,20 +249,21 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
 })
 
 test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 input datasets, partial dates", { # nolint
-  adsl <- tibble::tribble(
+  library(tibble)
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02",
     "TEST01", "PAT03"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT01", 14, "SUDDEN DEATH", "FATAL", "2021-05",
     "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -290,7 +295,7 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
     traceability = vars(DTHDOM = "DS", DTHSEQ = DSSEQ)
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS, ~DTHDOM, ~DTHSEQ,
     "TEST01", "PAT01", "DEATH DUE TO PROGRESSION OF DISEASE", "DS", 4,
     "TEST01", "PAT02", NA, NA, NA,
@@ -309,19 +314,21 @@ test_that("DTHCAUS/traceabiity are added from AE and DS, info available in 2 inp
 test_that("DTHCAUS is added from AE and DS if filter is not specified", {
   # test based on covr report - the case for unspecified filter has not been tested
 
-  adsl <- tibble::tribble(
+  library(tibble)
+
+  adsl <- tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
     "TEST01", "PAT02",
     "TEST01", "PAT03"
   )
 
-  ae <- tibble::tribble(
+  ae <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEDECOD, ~AEOUT, ~AEDTHDTC,
     "TEST01", "PAT03", 12, "SUDDEN DEATH", "FATAL", "2021-04-04"
   )
 
-  ds <- tibble::tribble(
+  ds <- tribble(
     ~STUDYID, ~USUBJID, ~DSSEQ, ~DSDECOD, ~DSTERM, ~DSSTDTC,
     "TEST01", "PAT01", 1, "INFORMED CONSENT OBTAINED", "INFORMED CONSENT OBTAINED", "2021-04-01",
     "TEST01", "PAT01", 2, "RANDOMIZATION", "RANDOMIZATION", "2021-04-11",
@@ -351,7 +358,7 @@ test_that("DTHCAUS is added from AE and DS if filter is not specified", {
     dthcaus = DSTERM
   )
 
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~DTHCAUS,
     "TEST01", "PAT01", "INFORMED CONSENT OBTAINED",
     "TEST01", "PAT02", "INFORMED CONSENT OBTAINED",

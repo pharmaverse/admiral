@@ -1,4 +1,5 @@
-dm <- tibble::tribble(
+library(tibble)
+dm <- tribble(
   ~STUDYID, ~USUBJID,
   "TEST01", "PAT01",
   "TEST01", "PAT02",
@@ -6,7 +7,7 @@ dm <- tibble::tribble(
   "TEST01", "PAT04"
 )
 
-ds <- tibble::tribble(
+ds <- tribble(
   ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
   "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
@@ -27,7 +28,8 @@ ds <- tibble::tribble(
 
 
 test_that("Derive EOSSTT using default mapping", {
-  expected_output <- tibble::tribble(
+  library(tibble)
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~EOSSTT,
     "TEST01", "PAT01", "DISCONTINUED",
     "TEST01", "PAT02", "COMPLETED",
@@ -51,6 +53,7 @@ test_that("Derive EOSSTT using default mapping", {
 })
 
 test_that("Derive EOTSTT using a study specific mapping", {
+  library(tibble)
   format_eosstt <- function(x) {
     case_when(
       x == "COMPLETED" ~ "COMPLETED",
@@ -59,7 +62,7 @@ test_that("Derive EOTSTT using a study specific mapping", {
       TRUE ~ "ONGOING"
     )
   }
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~EOSSTT,
     "TEST01", "PAT01", "DISCONTINUED DUE TO AE",
     "TEST01", "PAT02", "COMPLETED",
