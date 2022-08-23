@@ -1,4 +1,5 @@
-input_ae <- tibble::tribble(
+library(tibble)
+input_ae <- tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
   "my_study", "subject1", 2, "2020-08-31",
@@ -8,7 +9,7 @@ input_ae <- tibble::tribble(
   "my_study", "subject4", 1, "2020-11-02"
 )
 
-input_ex <- tibble::tribble(
+input_ex <- tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
   "my_study", "subject1", "2020-01-01", "2020-01-01", 1, 1, "treatment",
   "my_study", "subject1", "2020-08-29", "2020-08-29", 2, 3, "treatment",
@@ -22,7 +23,7 @@ input_ex <- tibble::tribble(
 
 
 test_that("derive_last_dose_date works as expected", {
-  expected_output <- tibble::tribble(
+  expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDGRP,
     "my_study", "subject1", 1, "2020-01-02", "G1",
     "my_study", "subject1", 2, "2020-08-31", "G1",
