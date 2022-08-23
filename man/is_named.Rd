@@ -7,10 +7,10 @@
 is_named(x)
 }
 \arguments{
-\item{x}{something}
+\item{x}{Any R object}
 }
 \value{
-something
+\code{TRUE} if the argument is named, \code{FALSE} otherwise
 }
 \description{
 Is a named argument

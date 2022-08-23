@@ -6,6 +6,8 @@
 #' @param x The values to be matched
 #' @param table The values to be matched against
 #'
+#' @return A `logical` vector
+#'
 #' @author Thomas Neitmann
 #'
 #' @keywords dev_utility
@@ -20,7 +22,7 @@
 #'
 #' @param dtm date or date-time
 #'
-#' @return character
+#' @return `character` vector
 #'
 #' @author Ondrej Slama
 #'
@@ -38,8 +40,11 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
+#' @return `character` vector
+#'
 #' @keywords dev_utility
 #' @family dev_utility
+#'
 #' @export
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -91,13 +96,20 @@ extract_vars <- function(x, side = "lhs") {
 }
 
 
-#' Or Guy - Update
+#' Or
 #'
-#' @param lhs something
-#' @param rhs something
+#' @param lhs Any valid R expression
+#' @param rhs Any valid R expression
 #'
-#' @return something
+#' @details
+#' The function evaluates the expression `lhs` and if this expression results
+#' in an error, it catches that error and proceeds with evaluating the expression
+#' `rhs` and returns that result.
+#'
+#' @return Either the result of evaluating `lhs`, `rhs` or an error
+#'
 #' @export
+#'
 #' @keywords dev_utility
 #' @family dev_utility
 `%or%` <- function(lhs, rhs) {
@@ -134,10 +146,15 @@ replace_values_by_names <- function(quosures) {
 #'
 #' @details
 #' This function is missing in earlier version of {rlang} which is why we re-
-#' implment it here.
-#' @param x something
+#' implement it here.
+#'
+#' @param x A `quosure`
+#'
+#' @return A `character` vector
+#'
 #' @keywords dev_utility
 #' @family dev_utility
+#'
 #' @export
 as_name <- function(x) {
   if (is_quosure(x)) {
@@ -148,8 +165,10 @@ as_name <- function(x) {
 
 #' Valid Time Units
 #'
-#' @return something
+#' @return A `character` vector of valid time units
+#'
 #' @export
+#'
 #' @keywords dev_utility
 #' @family dev_utility
 valid_time_units <- function() {
@@ -158,4 +177,83 @@ valid_time_units <- function() {
 
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
+}
+
+#' Turn a List of Quosures into a Character Vector
+#'
+#' @param quosures A `list` of `quosures` created using [`vars()`]
+#'
+#' @return A character vector
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#' @family dev_utility
+#'
+#' @examples
+#' vars2chr(vars(USUBJID, AVAL))
+vars2chr <- function(quosures) {
+  rlang::set_names(
+    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
+    names(quosures)
+  )
+}
+
+#' Negate List of Variables
+#'
+#' The function adds a minus sign as prefix to each variable.
+#'
+#' This is useful if a list of variables should be removed from a dataset,
+#' e.g., `select(!!!negate_vars(by_vars))` removes all by variables.
+#'
+#' @param vars List of variables created by `vars()`
+#'
+#' @return A list of `quosures`
+#'
+#' @author Stefan Bundfuss
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#' @family dev_utility
+#'
+#' @examples
+#' negate_vars(vars(USUBJID, STUDYID))
+negate_vars <- function(vars = NULL) {
+  assert_vars(vars, optional = TRUE)
+  if (is.null(vars)) {
+    NULL
+  } else {
+    lapply(vars, function(var) expr(-!!quo_get_expr(var)))
+  }
+}
+
+#' Optional Filter
+#'
+#' Filters the input dataset if the provided expression is not `NULL`
+#'
+#' @param dataset Input dataset
+#' @param filter A filter condition. Must be a quosure.
+#'
+#' @return A `data.frame` containing all rows in `dataset` matching `filter` or
+#' just `dataset` if `filter` is `NULL`
+#'
+#' @author Thomas Neitmann
+#'
+#' @export
+#'
+#' @keywords dev_utility
+#' @family dev_utility
+#'
+filter_if <- function(dataset, filter) {
+  assert_data_frame(dataset)
+  assert_filter_cond(filter, optional = TRUE)
+
+  if (quo_is_null(filter)) {
+    dataset
+  } else {
+    filter(dataset, !!filter)
+  }
 }

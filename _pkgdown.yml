@@ -46,8 +46,18 @@ reference:
   contents:
   - has_keyword('test_helper')
 
+- title: Temporary Variables
+  desc: Tools for creating and removing temporary variables within a dataset
+  contents:
+  - has_keyword('tmp_vars')
+
+- title: Getting and Setting Datasets
+  desc: Assign or retrieve a dataset into/from the `.datasets` enironment
+  contents:
+  - has_keyword('datasets')
+
 - title: Quosure Helper Functions
-  desc: Helping yourquosure needs
+  desc: Helping your quosure needs
   contents:
   - has_keyword('quo')
 
@@ -56,15 +66,15 @@ reference:
   contents:
   - has_keyword('quote')
 
+- title: Join Functions
+  desc: dplyr join function without warning about different attributes
+  contents:
+  - has_keyword('joins')
+
 - title: Miscellaneous
   desc: Utilities without a theme
   contents:
   - has_keyword('dev_utility')
-
-- title: Unsure where these functions should live?
-  desc: Used with dataset_vignette and a few assert, is and get functions...
-  contents:
-  - has_keyword('remove_utility')
 
 navbar:
  components:

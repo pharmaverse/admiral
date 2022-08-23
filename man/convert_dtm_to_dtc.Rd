@@ -11,7 +11,7 @@ convert_dtm_to_dtc(dtm)
 \item{dtm}{date or date-time}
 }
 \value{
-character
+\code{character} vector
 }
 \description{
 Helper Function to Convert Date (or Date-time) Objects to Characters of dtc Format
@@ -24,8 +24,11 @@ Developer Utility Functions:
 \code{\link{arg_name}()},
 \code{\link{as_name}()},
 \code{\link{extract_vars}()},
+\code{\link{filter_if}()},
+\code{\link{negate_vars}()},
 \code{\link{replace_values_by_names}()},
-\code{\link{valid_time_units}()}
+\code{\link{valid_time_units}()},
+\code{\link{vars2chr}()}
 }
 \author{
 Ondrej Slama

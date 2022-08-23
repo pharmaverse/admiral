@@ -9,6 +9,9 @@ arg_name(expr)
 \arguments{
 \item{expr}{An expression created inside a function using \code{substitute()}}
 }
+\value{
+\code{character} vector
+}
 \description{
 Extract Argument Name from an Expression
 }
@@ -19,8 +22,11 @@ Developer Utility Functions:
 \code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
+\code{\link{filter_if}()},
+\code{\link{negate_vars}()},
 \code{\link{replace_values_by_names}()},
-\code{\link{valid_time_units}()}
+\code{\link{valid_time_units}()},
+\code{\link{vars2chr}()}
 }
 \author{
 Thomas Neitmann, Ondrej Slama

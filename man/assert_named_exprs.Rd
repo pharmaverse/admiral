@@ -2,20 +2,22 @@
 % Please edit documentation in R/assertions.R
 \name{assert_named_exprs}
 \alias{assert_named_exprs}
-\title{Named Something}
+\title{Assert Argument is a Named List of Expressions}
 \usage{
 assert_named_exprs(arg, optional = FALSE)
 }
 \arguments{
-\item{arg}{something}
+\item{arg}{A function argument to be checked}
 
-\item{optional}{something}
+\item{optional}{Is the checked parameter optional? If set to \code{FALSE} and \code{arg}
+is \code{NULL} then an error is thrown}
 }
 \value{
-something
+The function throws an error if \code{arg} is not a named \code{list} of expression or
+returns the input invisibly otherwise
 }
 \description{
-Named Something
+Assert Argument is a Named List of Expressions
 }
 \seealso{
 Checks for valid input and returns warning or errors messages: 

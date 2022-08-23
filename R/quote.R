@@ -6,6 +6,8 @@
 #'
 #' @author Thomas Neitmann
 #'
+#' @return A `character` vector
+#'
 #' @keywords quote
 #' @family quote
 #'
@@ -28,6 +30,8 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @author Thomas Neitmann
 #'
+#' @return A `character` vector
+#'
 #' @keywords quote
 #' @family quote
 #'
@@ -41,6 +45,8 @@ backquote <- function(x) {
 #' @param x A `character` vector
 #'
 #' @author Thomas Neitmann
+#'
+#' @return A `character` vector
 #'
 #' @keywords quote
 #' @family quote
@@ -64,6 +70,7 @@ squote <- function(x) {
 #'
 #' @keywords quote
 #' @family quote
+#'
 #' @export
 dquote <- function(x) {
   if (is.null(x)) {

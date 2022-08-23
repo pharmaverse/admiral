@@ -9,6 +9,9 @@ backquote(x)
 \arguments{
 \item{x}{A \code{character} vector}
 }
+\value{
+A \code{character} vector
+}
 \description{
 Wrap a String in Backquotes
 }

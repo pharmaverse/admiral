@@ -341,15 +341,18 @@ assert_symbol <- function(arg, optional = FALSE) {
   invisible(arg)
 }
 
-#' Expression Something
+#' Assert Argument is an Expression
 #'
-#' @param arg something
-#' @param optional something
+#' @inheritParams assert_data_frame
+#'
 #' @keywords assertion
 #' @family assertion
-#' @return something
-#' @export
 #'
+#' @return
+#' The function throws an error if `arg` is not an expression, i.e. either
+#' a symbol or a call, or returns the input invisibly otherwise
+#'
+#' @export
 assert_expr <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -761,16 +764,18 @@ assert_list_of <- function(arg, class, optional = TRUE) {
   invisible(arg)
 }
 
-#' Named Something
+#' Assert Argument is a Named List of Expressions
 #'
-#' @param arg something
-#' @param optional something
+#' @inheritParams assert_data_frame
 #'
 #' @keywords assertion
 #' @family assertion
-#' @return something
-#' @export
 #'
+#' @return
+#' The function throws an error if `arg` is not a named `list` of expression or
+#' returns the input invisibly otherwise
+#'
+#' @export
 assert_named_exprs <- function(arg, optional = FALSE) {
   assert_logical_scalar(optional)
 
@@ -908,17 +913,28 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
   invisible(arg)
 }
 
-#' Function Parameters
+#' Assert Argument is a Parameter of a Function
 #'
-#' @param arg something
-#' @param params something
+#' @param arg The name of a function passed as a string
+#' @param params A character vector of function parameters
 #'
 #' @keywords assertion
 #' @family assertion
 #'
-#' @return something
+#' @return
+#' The function throws an error if any elements of `params` is not a parameter of
+#' the function given by `arg`
+#'
 #' @export
 #'
+#' @examples
+#' hello <- function(name) {
+#'   print(sprintf("Hello %s", name))
+#' }
+#'
+#' assert_function_param("hello", "name")
+#'
+#' try(assert_function_param("hello", "surname"))
 assert_function_param <- function(arg, params) {
   assert_character_scalar(arg)
   assert_character_vector(params)
@@ -1028,8 +1044,8 @@ assert_unit <- function(dataset, param, required_unit, get_unit_expr) {
 #'
 #' @keywords assertion
 #' @family assertion
-#' @examples
 #'
+#' @examples
 #' library(tibble)
 #' advs <- tribble(
 #'   ~USUBJID, ~VSTESTCD, ~VSTRESN, ~VSSTRESU, ~PARAMCD, ~AVAL,
@@ -1292,7 +1308,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars1)
   if (nrow(one_to_many) > 0) {
-    .datasets$one_to_many <- one_to_many
+    set_dataset(one_to_many, "one_to_many")
     abort(
       paste0(
         "For some values of ",
@@ -1308,7 +1324,7 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
     filter(n() > 1) %>%
     arrange(!!!vars2)
   if (nrow(many_to_one) > 0) {
-    .datasets$many_to_one <- many_to_one
+    set_dataset(many_to_one, "many_to_one")
     abort(
       paste0(
         "There is more than one value of ",
@@ -1318,5 +1334,93 @@ assert_one_to_one <- function(dataset, vars1, vars2) {
         ".\nCall `get_many_to_one_dataset()` to get all many to one values."
       )
     )
+  }
+}
+
+#' Is a Variable in a Dataset a Date or Datetime Variable?
+#'
+#' Checks if a variable in a dataset is a date or datetime variable
+#'
+#' @param dataset The dataset where the variable is expected
+#'
+#' @param var The variable to check
+#'
+#' @param dataset_name The name of the dataset. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @param var_name The name of the variable. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @return
+#' The function throws an error if `var` is not a date or datetime variable in
+#' `dataset` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' library(tibble)
+#' library(lubridate)
+#' library(rlang)
+#'
+#' example_fun <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(dataset = dataset, var = !!var)
+#' }
+#'
+#' my_data <- tribble(
+#'   ~USUBJID, ~ADT,
+#'   "1",      ymd("2020-12-06"),
+#'   "2",      ymd("")
+#' )
+#'
+#' example_fun(
+#'   dataset = my_data,
+#'   var = ADT
+#' )
+#'
+#' try(example_fun(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+#'
+#' example_fun2 <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(
+#'     dataset = dataset,
+#'     var = !!var,
+#'     dataset_name = "your_data",
+#'     var_name = "your_var"
+#'   )
+#' }
+#'
+#' try(example_fun2(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
+  var <- assert_symbol(enquo(var))
+  assert_data_frame(dataset, required_vars = vars(!!var))
+  assert_character_scalar(dataset_name, optional = TRUE)
+  assert_character_scalar(var_name, optional = TRUE)
+  column <- pull(dataset, !!var)
+  if (is.null(dataset_name)) {
+    dataset_name <- arg_name(substitute(dataset))
+  }
+  if (is.null(var_name)) {
+    var_name <- as_label(var)
+  }
+  if (!is.instant(column)) {
+    abort(paste0(
+      "`",
+      var_name,
+      "` in dataset `",
+      dataset_name,
+      "` is not a date or datetime variable but is ",
+      friendly_type_of(column)
+    ))
   }
 }

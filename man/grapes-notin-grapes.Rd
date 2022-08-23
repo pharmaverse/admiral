@@ -11,6 +11,9 @@ x \%notin\% table
 
 \item{table}{The values to be matched against}
 }
+\value{
+A \code{logical} vector
+}
 \description{
 Returns a \code{logical} vector indicating if there is \emph{no} match of the
 left operand in the right operand.
@@ -22,8 +25,11 @@ Developer Utility Functions:
 \code{\link{as_name}()},
 \code{\link{convert_dtm_to_dtc}()},
 \code{\link{extract_vars}()},
+\code{\link{filter_if}()},
+\code{\link{negate_vars}()},
 \code{\link{replace_values_by_names}()},
-\code{\link{valid_time_units}()}
+\code{\link{valid_time_units}()},
+\code{\link{vars2chr}()}
 }
 \author{
 Thomas Neitmann
