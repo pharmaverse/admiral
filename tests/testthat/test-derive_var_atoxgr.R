@@ -181,39 +181,37 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
 ### Grade 2: >1.5 - 2.5 x ULN
 ### Grade 1: >ULN - 1.5 x ULN
 
-test_that(
-  "derive_var_atoxgr_dir: Test 3 NCICTCAEv4 Activated partial thromboplastin time prolonged", {
-    exp_out_ctcv4_3 <- tibble::tribble(
-      ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
-      "Not a term",                                      80,     100,     NA_character_,  NA,
-      NA_character_,                                     60,     100,     NA_character_,  NA,
-      "Activated partial thromboplastin time prolonged", 251,    100,     NA_character_,  "3",
-      "Activated Partial thromboplastin time prolonged", 250,    100,     NA_character_,  "2",
-      "Activated partial Thromboplastin time prolonged", 151,    100,     NA_character_,  "2",
-      "Activated partial thromboplastin time prolonged", 150,    100,     NA_character_,  "1",
-      "Activated partial thromboplastin Time prolonged", 101,    100,     NA_character_,  "1",
-      "Activated partial thromboplastin time prolonged", 100,    100,     NA_character_,  "0",
-      # ANRHI missing - cannot grade
-      "Activated partial thromboplastin time prolonged", 100,    NA,      NA_character_,  NA,
-      # AVAL missing cannot grade
-      "Activated partial thromboplastin time prolonged", NA,     100,     NA_character_,  NA,
-    )
-    input_ctcv4_3 <- exp_out_ctcv4_3 %>%
-      select(-ATOXGRH)
+test_that("derive_var_atoxgr_dir: Test 3 CTCAEv4 Activated partial thromboplastin time prolonged", {
+  exp_out_ctcv4_3 <- tibble::tribble(
+    ~ATOXDSCH,                                         ~AVAL,  ~ANRHI,  ~AVALU,         ~ATOXGRH,
+    "Not a term",                                      80,     100,     NA_character_,  NA,
+    NA_character_,                                     60,     100,     NA_character_,  NA,
+    "Activated partial thromboplastin time prolonged", 251,    100,     NA_character_,  "3",
+    "Activated Partial thromboplastin time prolonged", 250,    100,     NA_character_,  "2",
+    "Activated partial Thromboplastin time prolonged", 151,    100,     NA_character_,  "2",
+    "Activated partial thromboplastin time prolonged", 150,    100,     NA_character_,  "1",
+    "Activated partial thromboplastin Time prolonged", 101,    100,     NA_character_,  "1",
+    "Activated partial thromboplastin time prolonged", 100,    100,     NA_character_,  "0",
+    # ANRHI missing - cannot grade
+    "Activated partial thromboplastin time prolonged", 100,    NA,      NA_character_,  NA,
+    # AVAL missing cannot grade
+    "Activated partial thromboplastin time prolonged", NA,     100,     NA_character_,  NA,
+  )
+  input_ctcv4_3 <- exp_out_ctcv4_3 %>%
+    select(-ATOXGRH)
 
-    expect_equal(
-      derive_var_atoxgr_dir(
-        input_ctcv4_3,
-        new_var = ATOXGRH,
-        meta_criteria = atoxgr_criteria_ctcv4,
-        tox_description_var = ATOXDSCH,
-        criteria_direction = "H",
-        get_unit_expr = AVALU
-      ),
-      exp_out_ctcv4_3
-    )
-  }
-)
+  expect_equal(
+    derive_var_atoxgr_dir(
+      input_ctcv4_3,
+      new_var = ATOXGRH,
+      meta_criteria = atoxgr_criteria_ctcv4,
+      tox_description_var = ATOXDSCH,
+      criteria_direction = "H",
+      get_unit_expr = AVALU
+    ),
+    exp_out_ctcv4_3
+  )
+})
 
 ### 4. Alanine aminotransferase increased ----
 ### Grade 4: >20.0 x ULN
