@@ -13,8 +13,8 @@ A toolbox for developers working on pharmaverse admiral packages. Package contai
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pharmaverse.github.io/admiraldev}
-  \item \url{https://github.com/pharmaverse/admiraldev}
+  \item \url{https://pharmaverse.github.io/admiraldev/main/}
+  \item \url{https://github.com/pharmaverse/admiraldev/}
 }
 
 }
