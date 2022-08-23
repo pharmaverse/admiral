@@ -26,9 +26,6 @@ Authors:
   \item Stefan Bundfuss
   \item Thomas Neitmann
   \item Samia Kabi
-  \item Ross Farrugia
-  \item Annie Yang
-  \item Robin Koeger
   \item Pooja Kumari
   \item Syed Mubasheer
 }
