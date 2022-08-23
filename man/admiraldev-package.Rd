@@ -4,11 +4,11 @@
 \name{admiraldev-package}
 \alias{admiraldev}
 \alias{admiraldev-package}
-\title{admiraldev: Development Tools for the ADaM in R Asset Library}
+\title{admiraldev: Development Tools for the admiral package family}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A toolbox for developers working on pharmaverse admiral packages. Package contains functions that are used internally to admiral and admiral extension packages to check data, variables and conditions. Package also contains utility functions to help developer with documentation, testing and general upkeep of admiral and admiral extension packages.
+A toolbox for developers working on admiral packages. Package contains functions that are used internally to admiral and admiral extension packages to check data, variables and conditions. Package also contains utility functions to help developer with documentation, testing and general upkeep of admiral and admiral extension packages.
 }
 \seealso{
 Useful links:
