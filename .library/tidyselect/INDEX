@@ -1,0 +1,8 @@
+eval_rename             Evaluate an expression with tidyselect
+                        semantics
+faq-external-vector     FAQ - Note: Using an external vector in
+                        selections is ambiguous
+faq-selection-context   FAQ - Error: Must be used within a _selecting_
+                        function
+peek_vars               Peek at variables in the selection context
+select_helpers          Select helpers

@@ -1,0 +1,21 @@
+Package: xmlparsedata
+Title: Parse Data of 'R' Code as an 'XML' Tree
+Version: 1.0.3
+Author: Gábor Csárdi
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
+Description: Convert the output of 'utils::getParseData()' to an 'XML'
+    tree, that one can search via 'XPath', and easier to manipulate in
+    general.
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/r-lib/xmlparsedata#readme
+BugReports: https://github.com/r-lib/xmlparsedata/issues
+RoxygenNote: 6.0.1
+Suggests: covr, testthat, xml2
+Depends: R (>= 3.0.0)
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2019-09-27 11:26:57 UTC; gaborcsardi
+Repository: CRAN
+Date/Publication: 2019-09-27 11:40:02 UTC
+Built: R 3.6.3; ; 2022-08-22 13:12:26 UTC; unix

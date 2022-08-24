@@ -92,7 +92,7 @@
 #'   add_one = FALSE
 #' )
 #'
-#' # Derive age
+#' # Derive age in years
 #' compute_duration(
 #'   start_date = lubridate::ymd("1984-09-06"),
 #'   end_date = lubridate::ymd("2020-02-24"),
@@ -108,13 +108,6 @@
 #'   out_unit = "hours",
 #'   floor_in = FALSE,
 #'   add_one = FALSE,
-#' )
-#'
-#' # Derive duration in days after imputation
-#' compute_duration(
-#'   start_date = convert_dtc_to_dt("2020-12", date_imputation = "first"),
-#'   end_date = lubridate::ymd("2020-12-10"),
-#'   out_unit = "days"
 #' )
 compute_duration <- function(start_date,
                              end_date,

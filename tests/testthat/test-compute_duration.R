@@ -71,13 +71,3 @@ test_that("compute_duration Test 6: Duration in hours", {
     4.5
   )
 })
-
-# test_that("compute_duration Test 7: Duration in days after imputation", {
-#   actual <- compute_duration(
-#     convert_dtc_to_dt("2020-12", date_imputation = "first"),
-#     ymd("2020-12-10"),
-#     out_unit = "days"
-#   )
-#   expected <- 10
-#   expect_equal(actual, expected)
-# })

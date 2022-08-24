@@ -1,0 +1,24 @@
+# BBcode language definition file
+#
+# Author: Andre Simon
+#   Mail: andre.simon1@gmx.de
+#   Date: 29.03.2010
+# ------------------------------------------
+# This file is a part of highlight, a free source code converter released under the GPL.
+#
+# The file is used to describe keywords and special symbols of programming languages.
+# See README in the highlight directory for details.
+#
+# New definition files for future releases of highlight are always appreciated ;)
+# ----------
+# andre.simon1@gmx.de
+# http:/www.andre-simon.de/
+
+$DESCRIPTION=BBcode
+
+$KEYWORDS(kwa)=regex(\[\/?\w+|\], 0)
+
+$KEYWORDS(kwb)=regex(#\p{XDigit}{6})
+
+#$STRINGDELIMITERS="
+$IGNORECASE=true

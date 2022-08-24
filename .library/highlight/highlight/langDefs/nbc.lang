@@ -1,0 +1,96 @@
+# NBC language definition file
+#
+# Author: Andre Simon
+#   Mail: andre.simon@gmx.de
+#   Date: 25.02.2010
+# ------------------------------------------
+# This file is a part of highlight, a free source code converter released under the GPL.
+#
+# The file is used to describe keywords and special symbols of programming languages.
+# See README in the highlight directory for details.
+#
+# New definition files for future releases of highlight are always appreciated ;)
+#
+# ----------
+# andre.simon@gmx.de
+# http:/www.andre-simon.de/
+
+$DESCRIPTION=NeXT Byte Codes 
+
+$KEYWORDS(kwa)=add sub neg mul div mod and 
+or xor not cmp tst index replace arrsize arrbuild arrsubset arrinit mov 
+set flatten unflatten numtostr strtonum strcat strsubset strtoarr 
+arrtostr jmp brcmp brtst syscall stop exit exitto acquire release 
+subcall subret setin setout getin getout wait gettick thread endt 
+subroutine follows precedes segment ends typedef struct dd void waitv 
+call return abs sign strindex strreplace strlen shl shr sizeof compchk 
+compif compelse compend valueof isconst asl asr lsl lsr rotl rotr start 
+stopthread priority cmnt fmtnum compchktype 
+
+$KEYWORDS(kwb)=byte ubyte db sbyte word uword dw sword dword udword dd 
+sdword long ulong slong mutex 
+
+$KEYWORDS(kwc)=tan sin cos sinh cosh arctan cotan arg exp ln log log 
+logn sqr sqrt trunc int ceil floor heav abs sign zero ph rnd random max 
+min power intpower InputIOType InputIOInputMode InputIORawValue 
+InputIONormalizedValue InputIOScaledValue InputIOInvalidData 
+OutputIOUpdateFlags OutputIOOutputMode OutputIOPower OutputIOActualSpeed 
+OutputIOTachoCount OutputIOTachoLimit OutputIORunState OutputIOTurnRatio 
+OutputIORegMode OutputIOOverload OutputIORegPValue OutputIORegIValue 
+OutputIORegDValue OutputIOBlockTachoCount OutputIORotationCount 
+FileOpenRead FileOpenWrite FileOpenAppend FileRead FileWrite FileClose 
+FileResolveHandle FileRename FileDelete SoundPlayFile SoundPlayTone 
+SoundGetState SoundSetState DrawText DrawPoint DrawLine DrawCircle 
+DrawRect DrawGraphic SetScreenMode ReadButton CommLSWrite CommLSRead 
+CommLSCheckStatus RandomNumber GetStartTick MessageWrite MessageRead 
+CommBTCheckStatus CommBTWrite KeepAlive IOMapRead IOMapWrite 
+IOMapReadByID IOMapWriteByID DisplayExecuteFunction CommExecuteFunction 
+LoaderExecuteFunction 
+Type
+InputMode
+RawValue
+NormalizedValue
+ScaledValue
+InvalidData
+UpdateFlags 
+OutputMode 
+Power 
+ActualSpeed 
+TachoCount 
+TachoLimit 
+RunState 
+TurnRatio 
+RegMode 
+Overload 
+RegPValue 
+RegIValue 
+RegDValue 
+BlockTachoCount
+RotationCount
+
+$KEYWORDS(kwd)=regex((\w+)\s*\()
+
+$KEYWORDS(kwd)=regex(^(\w+)\:)
+
+$STRINGDELIMITERS=" '
+
+$SL_COMMENT=// ;
+
+$ML_COMMENT=/* */
+
+$ALLOWNESTEDCOMMENTS=false
+
+$IGNORECASE=false
+
+$DIRECTIVE=#
+
+$ESCCHAR=regex(\\\d{}|\\x\p{XDigit}{}|\\[ntvbrfa\\\?'"])
+
+$SYMBOLS= ( ) [ ] { } , ; . : & | < > !  = / *  %  + - ~
+
+$CONTINUATIONSYMBOL=\
+
+$REFORMATTING=true
+
+
+$DIGIT=regex((?:x|X)[-a-fA-F]+|\d*[\.]?\d+(?:[eE][\-\+]\\d+)?[lLuU]*)

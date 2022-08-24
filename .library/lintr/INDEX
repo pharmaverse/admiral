@@ -1,0 +1,23 @@
+Lint                    Create a 'Lint' object
+T_and_F_symbol_linter   linters
+all_undesirable_functions
+                        Default undesirable functions and operators
+checkstyle_output       Checkstyle Report for lint results
+clear_cache             Clear the lintr cache
+default_linters         Default linters
+default_settings        Default lintr settings
+exclude                 Exclude lines or files from linting
+expect_lint             Lint expectation
+expect_lint_free        Test that the package is lint free
+get_source_expressions
+                        Parsed sourced file from a filename
+ids_with_token          Get parsed IDs by token
+lint_dir                Lint a directory
+lint_file               Lint a file
+lint_package            Lint a package
+lintr                   Lintr
+lintr-deprecated        Deprecated functions
+parse_exclusions        read a source file and parse all the excluded
+                        lines from it
+read_settings           Read lintr settings
+with_defaults           Modify lintr defaults

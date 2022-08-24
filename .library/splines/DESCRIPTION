@@ -1,0 +1,13 @@
+Package: splines
+Version: 3.6.3
+Priority: base
+Imports: graphics, stats
+Title: Regression Spline Functions and Classes
+Author: Douglas M. Bates <bates@stat.wisc.edu> and
+ William N. Venables <Bill.Venables@csiro.au>
+Maintainer: R Core Team <R-core@r-project.org>
+Description: Regression spline functions and classes.
+License: Part of R 3.6.3
+Suggests: Matrix, methods
+NeedsCompilation: yes
+Built: R 3.6.3; x86_64-pc-linux-gnu; 2022-04-29 23:55:33 UTC; unix

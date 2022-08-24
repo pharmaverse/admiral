@@ -1,0 +1,4 @@
+parse_text              Text Parsers
+spell_check_files       Spell Check
+spell_check_package     Package Spell Checking
+wordlist                The WORDLIST file

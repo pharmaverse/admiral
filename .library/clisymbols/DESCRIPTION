@@ -1,0 +1,25 @@
+Package: clisymbols
+Title: Unicode Symbols at the R Prompt
+Version: 1.2.0
+Authors@R: c(
+    person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = c("aut", "cre")),
+    person("Sindre", "Sorhus", role = "aut")
+    )
+Description: A small subset of Unicode symbols, that are useful
+    when building command line applications. They fall back to
+    alternatives on terminals that do not support Unicode.
+    Many symbols were taken from the 'figures' 'npm' package
+    (see <https://github.com/sindresorhus/figures>).
+License: MIT + file LICENSE
+URL: https://github.com/gaborcsardi/clisymbols
+BugReports: https://github.com/gaborcsardi/clisymbols/issues
+Suggests: testthat
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2017-05-21 10:41:16 UTC; gaborcsardi
+Author: Gábor Csárdi [aut, cre],
+  Sindre Sorhus [aut]
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
+Repository: CRAN
+Date/Publication: 2017-05-21 17:19:19 UTC
+Built: R 3.6.3; ; 2022-08-22 13:11:09 UTC; unix

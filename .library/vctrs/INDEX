@@ -1,0 +1,31 @@
+%0%                     Default value for empty vectors
+internal-faq-ptype2-identity
+                        Internal FAQ - 'vec_ptype2()', 'NULL', and
+                        unspecified vectors
+list_of                 'list_of' S3 class for homogenous lists
+name_spec               Name specifications
+partial_factor          Partially specify a factor
+partial_frame           Partially specify columns of a data frame
+vec_as_names            Retrieve and repair names
+vec_assert              Assert an argument has known prototype and/or
+                        size
+vec_bind                Combine many data frames into one data frame
+vec_c                   Combine many vectors into one vector
+vec_chop                Repeatedly slice a vector
+vec_compare             Compare two vectors
+vec_count               Count unique values in a vector
+vec_data                Extract underlying data
+vec_default_cast        Default cast method
+vec_duplicate           Find duplicated values
+vec_equal               Test if two vectors are equal
+vec_init                Initialize a vector
+vec_is_list             Is the object a list?
+vec_match               Find matching observations across vectors
+vec_order               Order and sort vectors
+vec_ptype               Find the prototype of a set of vectors
+vec_recycle             Vector recycling
+vec_repeat              Expand the length of a vector
+vec_seq_along           Useful sequences
+vec_size                Number of observations
+vec_split               Split a vector into groups
+vec_unique              Find and count unique values

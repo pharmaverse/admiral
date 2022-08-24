@@ -1,0 +1,50 @@
+# Go language definition file
+#
+# Author: Andre Simon
+#   Mail: andre.simon1@gmx.de
+#   Date: 17.11.2009
+# ------------------------------------------
+# This file is a part of highlight, a free source code converter released under the GPL.
+#
+# The file is used to describe keywords and special symbols of programming languages.
+# See README in the highlight directory for details.
+#
+# New definition files for future releases of highlight are always appreciated ;)
+#
+# ----------
+# andre.simon1@gmx.de
+# http:/www.andre-simon.de/
+
+$DESCRIPTION=Go
+
+$KEYWORDS(kwa)=break default func interface select
+case defer go map struct
+chan else goto package switch
+const fallthrough if range type
+continue for import return var
+
+$KEYWORDS(kwb)=
+bool byte float32 float64 int8 int16 int32 int64   
+string uint8 uint16 uint32 uint64   
+float int uint uintptr  true false iota
+nil cap close closed len make new panic panicln print printlnr
+
+#$KEYWORDS(kwc)=
+
+$KEYWORDS(kwd)=regex((\w+)\s*\()
+
+# raw strings ` not implemented yet
+$STRINGDELIMITERS=" ' `
+
+$SL_COMMENT=//
+
+$ML_COMMENT=/* */
+
+$ALLOWNESTEDCOMMENTS=false
+
+$IGNORECASE=false
+
+$ESCCHAR=regex(\\\d{3}|\\x\p{XDigit}{2}|\\u\p{XDigit}{4}|\\U\p{XDigit}{8}|\\[ntvbrfa\\\?'"])
+
+$SYMBOLS= ( ) [ ] { } , ; . : & | < > !  = / *  %  + -  ^
+

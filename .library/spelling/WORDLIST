@@ -1,0 +1,9 @@
+AppVeyor
+CMD
+devtools
+hunspell
+pkg
+rmd
+rnw
+RStudio
+yaml
