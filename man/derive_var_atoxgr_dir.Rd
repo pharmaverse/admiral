@@ -39,6 +39,8 @@ eg. "Anemia" or "INR Increased". Note: the variable is case insensitive.
 value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
 \item \code{SI_UNIT_CHECK}: variable to hold unit of particular lab test. Used to check against input data
 if criteria is based on absolute values.
+\item \code{VAR_CHECK}: variable to hold comma separated list of variables used in criteria. Used to check
+against input data that variables exist.
 \item \code{GRADE_CRITERIA_CODE}: variable to hold code that creates grade based on defined criteria.
 }}
 
@@ -110,12 +112,23 @@ derive_var_atoxgr_dir(data,
 )
 }
 \seealso{
-Other bds-findings: 
+BDS-Findings Functions that returns variable appended to dataset: 
 \code{\link{atoxgr_criteria_ctcv4}},
-\code{\link{derive_var_atoxgr}()}
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_summary_records}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_ontrtfl}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
 }
 \author{
 Gordon Miller
 }
-\concept{bds-findings}
-\keyword{bds-findings}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

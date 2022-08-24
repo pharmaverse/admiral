@@ -29,6 +29,8 @@
 #'   value. "L" is for LOW values, "H" is for HIGH values. Note: the variable is case insensitive.
 #' - `SI_UNIT_CHECK`: variable to hold unit of particular lab test. Used to check against input data
 #'   if criteria is based on absolute values.
+#' - `VAR_CHECK`: variable to hold comma separated list of variables used in criteria. Used to check
+#'   against input data that variables exist.
 #' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
@@ -56,9 +58,9 @@
 #'
 #' @return The input dataset with the character grade added
 #'
-#' @keywords bds-findings
+#' @keywords der_bds_findings
 #'
-#' @family bds-findings
+#' @family der_bds_findings
 #'
 #' @export
 #'
@@ -224,9 +226,9 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' @return The input data set with the character grade added
 #'
-#' @keywords bds-findings
+#' @keywords der_bds_findings
 #'
-#' @family bds-findings
+#' @family der_bds_findings
 #'
 #' @export
 #'

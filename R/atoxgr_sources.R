@@ -32,9 +32,9 @@
 #'
 #' @return Dataset with grading criteria
 #'
-#' @keywords bds-findings
+#' @keywords der_bds_findings
 #'
-#' @family bds-findings
+#' @family der_bds_findings
 #'
 #' @rdname atoxgr_sources
 #'
