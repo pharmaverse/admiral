@@ -34,7 +34,8 @@ test_that("derive_vars_duration Test 2: Duration and unit variable are added", {
     "P03", ymd("1985-01-01"), NA,
     "P04", NA, NA
   )
-  expected_output <- mutate(input,
+  expected_output <- mutate(
+    input,
     ADURN = c(-3, 1, NA, NA),
     ADURU = c("DAYS", "DAYS", NA_character_, NA_character_)
   )
@@ -58,7 +59,8 @@ test_that("derive_vars_duration Test 3: Duration and unit variable are added", {
     "P03", ymd("2019-11-11"), ymd_hms("2019-11-11T04:00:00"),
     "P04", NA, ymd_hms("2019-11-11T12:34:56"),
   )
-  expected_output <- mutate(input,
+  expected_output <- mutate(
+    input,
     ADURN = c(30, 60, 240, NA),
     ADURU = c("MINUTES", "MINUTES", "MINUTES", NA_character_)
   )
