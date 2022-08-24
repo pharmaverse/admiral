@@ -50,8 +50,8 @@ derive_var_atoxgr(adlb)
 }
 \seealso{
 Other bds-findings: 
-\code{\link{derive_var_atoxgr_dir}()},
-\code{\link{get_criteria}()}
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{derive_var_atoxgr_dir}()}
 }
 \author{
 Gordon Miller
