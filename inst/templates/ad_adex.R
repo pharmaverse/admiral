@@ -11,6 +11,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
+# Load source datasets ----
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 #  as needed and assign to the variables below.
 # The CDISC pilot datasets are used for demonstration purpose.
@@ -19,6 +20,11 @@ data("admiral_ex")
 
 adsl <- admiral_adsl
 ex <- admiral_ex
+
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
 
 ex <- convert_blanks_to_na(ex)
 
@@ -46,7 +52,7 @@ ex <- ex %>%
   mutate(EXPLDOS = if_else(EXTRT == "PLACEBO", 0, 54))
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTSDTM, TRTEDTM)
@@ -60,22 +66,30 @@ adex0 <- ex %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ASTDTM, AENDTM using `derive_vars_dtm()`
-
-  derive_vars_dtm(dtc = EXSTDTC, date_imputation = "first", new_vars_prefix = "AST") %>%
-  derive_vars_dtm(dtc = EXENDTC, date_imputation = "last", new_vars_prefix = "AEN") %>%
-  # Calculate ASTDY, AENDY
+  ## Calculate ASTDTM, AENDTM using `derive_vars_dtm()` ----
+  derive_vars_dtm(
+    dtc = EXSTDTC,
+    highest_imputation = "M",
+    new_vars_prefix = "AST"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    highest_imputation = "M",
+    date_imputation = "last",
+    new_vars_prefix = "AEN"
+  ) %>%
+  ## Calculate ASTDY, AENDY ----
   derive_vars_dy(
     reference_date = TRTSDTM,
     source_vars = vars(ASTDTM, AENDTM)
   ) %>%
-  # add EXDUR, the duration of trt for each record
+  ## Add EXDUR, the duration of trt for each record ----
   derive_vars_duration(
     new_var = EXDURD,
     start_date = ASTDTM,
     end_date = AENDTM
   ) %>%
-  # Derive analysis end/start date
+  ## Derive analysis end/start date ----
   derive_vars_dtm_to_dt(vars(ASTDTM, AENDTM)) %>%
   mutate(
     # Compute the cumulative dose
@@ -83,8 +97,7 @@ adex0 <- ex %>%
     PDOSEO = EXPLDOS * EXDURD
   )
 
-# Part 2
-# 1:1 mapping
+# Part 2: 1:1 mapping ----
 
 adex <- bind_rows(
   adex0 %>% mutate(PARAMCD = "DURD", AVAL = EXDURD),
@@ -95,10 +108,10 @@ adex <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
-# Part 3
-# Derive summary parameters. Note that, for the functions `derive_param_exposure()`,
-# `derive_param_doseint()` and `derive_derived_param()`, only the variables specified
-# in `by_vars` will be populated in the newly created records.
+# Part 3: Derive summary parameters ----
+# Note that, for the functions `derive_param_exposure()`,
+# `derive_param_doseint()` and `derive_param_computed()`, only the variables
+# specified in `by_vars` will be populated in the newly created records.
 
 adex <- adex %>%
   # Overall exposure
@@ -189,7 +202,7 @@ adex <- adex %>%
   ) %>%
   # Overall/W2-24 Average daily dose
   call_derivation(
-    derivation = derive_derived_param,
+    derivation = derive_param_computed,
     variable_params = list(
       params(
         parameters = c("TDOSE", "TDURD"),
@@ -207,8 +220,7 @@ adex <- adex %>%
     )
   )
 
-# Part 4
-# Derive/Assign the last required variables
+# Part 4: Derive/Assign the last required variables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 # ---- Lookup tables ----
@@ -235,8 +247,7 @@ param_lookup <- tibble::tribble(
   "PDOSINT", "W2-24 dose intensity (%)", 91
 )
 
-
-# ---- User defined functions ----
+# User defined functions ----
 # Derive AVALCAT1
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate()`.
@@ -278,7 +289,7 @@ adex <- adex %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adex, file = file.path(dir, "adex.rda"), compress = "bzip2")

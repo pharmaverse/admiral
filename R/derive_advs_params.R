@@ -34,7 +34,7 @@
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -51,7 +51,9 @@
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -137,7 +139,7 @@ derive_param_map <- function(dataset,
     )
   }
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, diabp_code, hr_code),
@@ -177,7 +179,9 @@ derive_param_map <- function(dataset,
 #'
 #' @return A numeric vector of MAP values
 #'
-#' @keywords computation advs
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -247,7 +251,7 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -256,7 +260,9 @@ compute_map <- function(diabp, sysbp, hr = NULL) {
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -339,7 +345,7 @@ derive_param_bsa <- function(dataset,
     )
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(height_code, weight_code),
@@ -389,7 +395,9 @@ derive_param_bsa <- function(dataset,
 #'
 #' @return The BSA (Body Surface Area) in m^2.
 #'
-#' @keywords computation adam BSA
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'
@@ -472,7 +480,7 @@ compute_bsa <- function(height = height,
 #'
 #'   Permitted Values: character value
 #'
-#' @inheritParams derive_derived_param
+#' @inheritParams derive_param_computed
 #'
 #' @inheritParams derive_param_qtc
 #'
@@ -485,7 +493,9 @@ compute_bsa <- function(height = height,
 #' @return The input dataset with the new parameter added. Note, a variable will only
 #'    be populated in the new parameter rows if it is specified in `by_vars`.
 #'
-#' @keywords derivation advs
+#' @family der_prm_bds_findings
+#'
+#' @keywords der_prm_bds_findings
 #'
 #' @export
 #'
@@ -542,7 +552,7 @@ derive_param_bmi <- function(dataset,
     get_unit_expr = !!get_unit_expr
   )
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(weight_code, height_code),
@@ -577,7 +587,9 @@ derive_param_bmi <- function(dataset,
 #'
 #' @return The BMI (Body Mass Index Area) in kg/m^2.
 #'
-#' @keywords computation adam BMI
+#' @family com_bds_findings
+#'
+#' @keywords com_bds_findings
 #'
 #' @export
 #'

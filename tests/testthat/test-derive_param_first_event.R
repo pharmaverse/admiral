@@ -47,7 +47,7 @@ test_that("derive_param_first_event Test 1: derive first PD date", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVALC, ~AVALN,
+      ~USUBJID, ~ADT,              ~AVALC, ~AVAL,
       "1",      ymd(""),           "N",    0,
       "2",      ymd("2021-07-16"), "Y",    1,
       "3",      ymd(""),           "N",    0
@@ -83,10 +83,10 @@ test_that("derive_param_first_event Test 2: derive death date parameter", {
   expected <- bind_rows(
     adrs,
     tibble::tribble(
-      ~USUBJID, ~ADT,              ~AVALC, ~AVALN,
-      "1",      ymd("2022-05-13"), "Y",    1,
-      "2",      ymd(""),           "N",    0,
-      "3",      ymd(""),           "N",    0
+      ~USUBJID, ~ADT,              ~AVALC, ~AVAL, ~DTHDT,
+      "1",      ymd("2022-05-13"), "Y",    1,     ymd("2022-05-13"),
+      "2",      ymd(""),           "N",    0,     ymd(""),
+      "3",      ymd(""),           "N",    0,     ymd("")
     ) %>%
       mutate(
         STUDYID = "XX1234",

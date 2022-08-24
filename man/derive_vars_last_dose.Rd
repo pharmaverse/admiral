@@ -12,7 +12,7 @@ derive_vars_last_dose(
   dose_id = vars(),
   dose_date,
   analysis_date,
-  single_dose_condition = (EXDOSFRQ == "ONCE"),
+  single_dose_condition = EXDOSFRQ == "ONCE",
   new_vars = NULL,
   traceability_vars = NULL
 )
@@ -62,13 +62,10 @@ Input dataset with EX source variables from last dose added.
 Add EX source variables from last dose to the input dataset.
 }
 \details{
-All date (date-time) variables can be characters in standard ISO format or
-of date / date-time class.
-For ISO format, see \code{\link{impute_dtc}} - parameter \code{dtc} for further details.
 When doing date comparison to identify last dose, date-time imputations are done as follows:
 \itemize{
-\item \code{dose_date}: no date imputation, time imputation to \code{00:00:00} if time is missing.
-\item \code{analysis_date}: no date imputation, time imputation to \code{23:59:59} if time is missing.
+\item \code{dose_date}: time is imputed to \code{00:00:00} if the variable is a date variable
+\item \code{analysis_date}: time is imputed to \code{23:59:59} if the variable is a date variable
 }
 
 The last dose records are identified as follows:
@@ -89,9 +86,9 @@ sorted by \code{dose_id} will be used to identify last dose.
 }
 
 This function only works correctly for EX dataset with a structure of single dose per row.
-If your study EX dataset has multiple doses per row, use \verb{expansion_function_name??} to
+If your study EX dataset has multiple doses per row, use \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}} to
 transform the EX dataset into single dose per row structure before calling
-\code{derive_vars_last_dose}.
+\code{derive_vars_last_dose()}.
 
 If variables (other than those specified in \code{by_vars}) exist in both \code{dataset} and \code{dataset_ex},
 then join cannot be performed properly and an error is issued. To resolve the error, use
@@ -104,37 +101,67 @@ library(admiral.test)
 data(admiral_ae)
 data(ex_single)
 
-admiral_ae \%>\%
+# create datetime variables in input datasets
+ex_single <- derive_vars_dtm(
+  head(ex_single, 100),
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  flag_imputation = "none"
+)
+
+adae <- admiral_ae \%>\%
   head(100) \%>\%
+  derive_vars_dtm(
+    dtc = AESTDTC,
+    new_vars_prefix = "AST",
+    highest_imputation = "M"
+  )
+
+# add last dose vars
+adae \%>\%
   derive_vars_last_dose(
-    head(ex_single, 100),
+    dataset_ex = ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
+      !is.na(EXENDTM),
     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
-    dose_date = EXENDTC,
-    analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC)
+    dose_date = EXENDTM,
+    analysis_date = ASTDTM
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, EXSEQ, VISIT)
 
 # or with traceability variables
-admiral_ae \%>\%
-  head(100) \%>\%
+adae \%>\%
   derive_vars_last_dose(
-    head(ex_single, 100),
+    dataset_ex = ex_single,
     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-      nchar(EXENDTC) >= 10,
+      !is.na(EXENDTM),
     new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, VISIT),
-    dose_date = EXENDTC,
-    analysis_date = AESTDTC,
-    single_dose_condition = (EXSTDTC == EXENDTC),
+    dose_date = EXENDTM,
+    analysis_date = ASTDTM,
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
 }
+\seealso{
+\code{\link[=derive_var_last_dose_amt]{derive_var_last_dose_amt()}}, \code{\link[=derive_var_last_dose_date]{derive_var_last_dose_date()}},
+\code{\link[=derive_var_last_dose_grp]{derive_var_last_dose_grp()}}, \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
+
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_merged}()},
+\code{\link{derive_vars_transposed}()}
+}
 \author{
 Ondrej Slama, Annie Yang
 }
-\keyword{adam}
-\keyword{derivation}
-\keyword{user_utility}
+\concept{der_gen}
+\keyword{der_gen}

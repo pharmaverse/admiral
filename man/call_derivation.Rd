@@ -72,9 +72,15 @@ adae \%>\%
 }
 \seealso{
 \code{\link[=params]{params()}}
+
+Higher Order Functions: 
+\code{\link{derivation_slice}()},
+\code{\link{print.derivation_slice}()},
+\code{\link{restrict_derivation}()},
+\code{\link{slice_derivation}()}
 }
 \author{
 Thomas Neitmann, Stefan Bundfuss, Tracey Wang
 }
+\concept{high_order_function}
 \keyword{high_order_function}
-\keyword{user_utility}
