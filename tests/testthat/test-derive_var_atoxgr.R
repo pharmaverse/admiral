@@ -141,8 +141,7 @@ test_that("derive_var_atoxgr_dir: Test 1 NCICTCAEv4 Anemia", {
     base = exp_out_ctcv4_1,
     compare = actual_output_ctcv4_1,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
-    )
-
+  )
 })
 
 ### 2. Leukocytosis ----
@@ -180,7 +179,6 @@ test_that("derive_var_atoxgr_dir: Test 2 NCICTCAEv4 Leukocytosis", {
     compare = actual_output_ctcv4_2,
     keys = c("ATOXDSCL", "AVAL", "ANRLO", "ANRHI", "AVALU")
   )
-
 })
 
 ## Investigations ----
@@ -223,7 +221,6 @@ test_that("derive_var_atoxgr_dir: Test 3 CTCAEv4 Activated partial thromboplasti
     compare = actual_output_ctcv4_3,
     keys = c("ATOXDSCH", "AVAL", "ANRHI", "AVALU")
   )
-
 })
 
 ### 4. Alanine aminotransferase increased ----
@@ -1004,7 +1001,6 @@ test_that("derive_var_atoxgr_dir: Test 19 NCICTCAEv4 Lymphocyte count increased"
     compare = actual_output_ctcv4_19,
     keys = c("AVAL", "ANRLO", "ANRHI", "AVALU")
   )
-
 })
 
 ### 20. Neutrophil count decreased ----
@@ -1610,7 +1606,7 @@ test_that("derive_var_atoxgr_dir: Test 31 NCICTCAEv4 Hypertriglyceridemia", {
   expect_dfs_equal(
     base = exp_out_ctcv4_31,
     compare = actual_output_ctcv4_31,
-    keys = c("ATOXDSCH","AVAL","AVALU")
+    keys = c("ATOXDSCH", "AVAL", "AVALU")
   )
 })
 
