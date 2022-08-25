@@ -115,7 +115,7 @@ derive_var_atoxgr_dir <- function(dataset,
   # Check Grade description variable exists on input data set
   assert_data_frame(dataset, required_vars = vars(!!tox_description_var))
 
-  # check metadata data set has required variables
+  # Check metadata data set has required variables
   assert_data_frame(
     meta_criteria,
     required_vars = vars(TERM, GRADE_CRITERIA_CODE, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
