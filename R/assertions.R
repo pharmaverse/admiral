@@ -21,7 +21,7 @@
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dataset) {
@@ -116,12 +116,14 @@ assert_data_frame <- function(arg,
 #'
 #' # handling parameters case-insensitive
 #' example_fun2 <- function(msg_type) {
-#'   msg_type <- assert_character_scalar(msg_type,
-#'                                       values = c("warning", "error"),
-#'                                       case_sensitive = FALSE)
-#'  if (msg_type == "warning") {
-#'    print("A warning was requested.")
-#'  }
+#'   msg_type <- assert_character_scalar(
+#'     msg_type,
+#'     values = c("warning", "error"),
+#'     case_sensitive = FALSE
+#'   )
+#'   if (msg_type == "warning") {
+#'     print("A warning was requested.")
+#'   }
 #' }
 #'
 #' example_fun2("Warning")
@@ -219,11 +221,13 @@ assert_character_vector <- function(arg, values = NULL, optional = FALSE) {
   if (!is.null(values)) {
     mismatches <- unique(arg[!map_lgl(arg, `%in%`, values)])
     if (length(mismatches) > 0) {
-      abort(paste0("`", arg_name(substitute(arg)),
-                   "` contains invalid values:\n",
-                   enumerate(mismatches), "\n",
-                   "Valid values:\n",
-                   enumerate(values)))
+      abort(paste0(
+        "`", arg_name(substitute(arg)),
+        "` contains invalid values:\n",
+        enumerate(mismatches), "\n",
+        "Valid values:\n",
+        enumerate(values)
+      ))
     }
   }
 }
@@ -297,7 +301,7 @@ assert_logical_scalar <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' example_fun <- function(dat, var) {
@@ -376,7 +380,7 @@ assert_expr <- function(arg, optional = FALSE) {
 #' @author Ondrej Slama
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' # typical usage in a function as a parameter check
@@ -753,8 +757,8 @@ assert_named_exprs <- function(arg, optional = FALSE) {
   }
 
   if (!is.list(arg) ||
-      !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
-      any(names(arg) == "")) {
+    !all(map_lgl(arg, ~ is.language(.x) | is.logical(.x))) ||
+    any(names(arg) == "")) {
     err_msg <- sprintf(
       "`%s` must be a named list of expressions created using `rlang::exprs()` but is %s",
       arg_name(substitute(arg)),
@@ -774,8 +778,8 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
   }
 
   if (!is.list(arg) ||
-      !all(map_lgl(arg, ~is_formula(.x, lhs = TRUE))) ||
-      !all(map_lgl(arg, ~is.symbol(.x[[2L]])))) {
+    !all(map_lgl(arg, ~ is_formula(.x, lhs = TRUE))) ||
+    !all(map_lgl(arg, ~ is.symbol(.x[[2L]])))) {
     err_msg <- paste(
       backquote(arg_name(substitute(arg))),
       "must be a list of formulas where each formula's left-hand side is a single",
@@ -804,7 +808,7 @@ assert_list_of_formulas <- function(arg, optional = FALSE) {
 #' @keywords assertion
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' assert_has_variables(admiral_dm, "STUDYID")
@@ -862,7 +866,7 @@ assert_has_variables <- function(dataset, required_vars) {
 #' example_fun(mean)
 #'
 #' try(example_fun(1))
-
+#'
 #' try(example_fun(sum))
 assert_function <- function(arg, params = NULL, optional = FALSE) {
   assert_character_vector(params, optional = TRUE)
@@ -873,8 +877,10 @@ assert_function <- function(arg, params = NULL, optional = FALSE) {
   }
 
   if (missing(arg)) {
-    err_msg <- sprintf("Argument `%s` missing, with no default",
-                       arg_name(substitute(arg)))
+    err_msg <- sprintf(
+      "Argument `%s` missing, with no default",
+      arg_name(substitute(arg))
+    )
     abort(err_msg)
   }
 
@@ -1026,55 +1032,6 @@ assert_param_does_not_exist <- function(dataset, param) {
   invisible(dataset)
 }
 
-#' Helper Function to Check IDVAR per QNAM
-#'
-#' @param x A Supplemental Qualifier (SUPPQUAL) data set.
-#'
-#' @return If multiple IDVAR per QNAM are found, returns a user level message.
-#'
-#' @family suppqual
-#'
-#' @noRd
-assert_supp_idvar <- function(x) {
-  x <- unclass(x)
-  dup <- duplicated(x$QNAM)
-  if (any(dup)) {
-    message(
-      msg <- paste0(
-        str_glue("More than one IDVAR = '{x$IDVAR[dup]}' for a QNAM = '{x$QNAM[dup]}'."),
-        collapse = "\n")
-    )
-    inform(msg)
-  }
-}
-
-#' Helper Function to Check DOAMIN and RDOMAIN
-#'
-#' @param dataset A SDTM domain data set.
-#' @param dataset_suppqual A Supplemental Qualifier (SUPPQUAL) data set.
-#' @param domain Two letter domain value. Used when supplemental data set is
-#'   common across multiple SDTM domain.
-#'
-#' @noRd
-#'
-#' @return If DOMAIN & RDOMAIN are not equal, abort `derive_vars_suppqual`.
-#'
-#' @family suppqual
-assert_is_supp_domain <- function(parent, supp, .domain = NULL) {
-  parent <- unique(parent$DOMAIN)
-  supp <- unique(supp$RDOMAIN)
-
-  if (!is.null(.domain)) {
-    if (!.domain %in% supp) {
-      abort(str_glue("Can't find the domain `{.domain}` in `dataset_suppqual`."))
-    }
-  }
-
-  if (!parent %in% supp) {
-    abort("DOMAIN of `dataset` and RDOMAIN of `dataset_suppqual` do not match.")
-  }
-}
-
 #' Is an Argument a Variable-Value List?
 #'
 #' Checks if the argument is a list of `quosures` where the expressions are
@@ -1110,7 +1067,7 @@ assert_varval_list <- function(arg, # nolint
                                required_elements = NULL,
                                accept_expr = FALSE,
                                accept_var = FALSE,
-                               optional =  FALSE) {
+                               optional = FALSE) {
   assert_logical_scalar(accept_expr)
   assert_logical_scalar(accept_var)
   assert_logical_scalar(optional)
@@ -1270,21 +1227,24 @@ assert_varval_list <- function(arg, # nolint
 #'     SRCVAR = "LSTALVDT"
 #'   )
 #' )
-#'
+#' events <- list(death, lstalv)
 #' try(assert_list_element(
-#'   list = list(death, lstalv),
+#'   list = events,
 #'   element = "censor",
 #'   condition = censor == 0,
 #'   message_text = "For events the censor values must be zero."
 #' ))
 #'
+#' valid_datasets <- c("adrs", "adae")
 #' try(assert_list_element(
 #'   list = events,
 #'   element = "dataset_name",
-#'   condition = dataset_name %in% c("adrs", "adae"),
+#'   condition = dataset_name %in% valid_datasets,
 #'   valid_datasets = valid_datasets,
-#'   message_text = paste0("The dataset name must be one of the following:\n",
-#'                         paste(valid_datasets, collapse = ", "))
+#'   message_text = paste0(
+#'     "The dataset name must be one of the following:\n",
+#'     paste(valid_datasets, collapse = ", ")
+#'   )
 #' ))
 assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_s3_class(list, "list")
@@ -1293,9 +1253,11 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
   assert_character_scalar(message_text)
   # store elements of the lists/classes in a vector named as the element #
   rlang::env_poke(current_env(), eval(element), lapply(list, `[[`, element))
-  invalids <-  ! eval(quo_get_expr(condition),
-                      envir = list(...),
-                      enclos = current_env())
+  invalids <- !eval(
+    quo_get_expr(condition),
+    envir = list(...),
+    enclos = current_env()
+  )
   if (any(invalids)) {
     invalids_idx <- which(invalids)
     abort(
@@ -1340,7 +1302,7 @@ assert_list_element <- function(list, element, condition, message_text, ...) {
 #' @examples
 #' data(admiral_adsl)
 #' try(
-#'   assert_one_to_one(adsl, vars(SEX), vars(RACE))
+#'   assert_one_to_one(admiral_adsl, vars(SEX), vars(RACE))
 #' )
 assert_one_to_one <- function(dataset, vars1, vars2) {
   assert_vars(vars1)

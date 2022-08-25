@@ -4,7 +4,7 @@
 #
 # Input: dm, ex, ds
 library(admiral)
-library(admiraltest) # Contains example datasets from the CDISC pilot project
+library(admiral.test) # Contains example datasets from the CDISC pilot project
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -78,35 +78,51 @@ format_eoxxstt <- function(x) {
 adsl <- dm %>%
   # derive treatment variables (TRT01P, TRT01A)
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
-
   # derive treatment start date (TRTSDTM)
-  derive_var_trtsdtm(dataset_ex = ex) %>%
-
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) & nchar(EXSTDTC) >= 10,
+    new_vars_prefix = "TRTS",
+    dtc = EXSTDTC,
+    order = vars(TRTSDTM, EXSEQ),
+    mode = "first",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
   # derive treatment end date (TRTEDTM)
-  derive_var_trtedtm(dataset_ex = ex) %>%
-
+  derive_vars_merged_dtm(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 |
+      (EXDOSE == 0 &
+        str_detect(EXTRT, "PLACEBO"))) & nchar(EXENDTC) >= 10,
+    new_vars_prefix = "TRTE",
+    dtc = EXENDTC,
+    time_imputation = "last",
+    order = vars(TRTEDTM, EXSEQ),
+    mode = "last",
+    by_vars = vars(STUDYID, USUBJID)
+  ) %>%
   # Derive treatment end/start date TRTSDT/TRTEDT
-  derive_vars_dtm_to_dt(vars(TRTSDTM, TRTEDTM)) %>%
-
+  derive_vars_dtm_to_dt(source_vars = vars(TRTSDTM, TRTEDTM)) %>%
   # derive treatment duration (TRTDURD)
   derive_var_trtdurd() %>%
-
   # Disposition dates, status
   # Screen fail date
-  derive_var_disposition_dt(
-    dataset_ds = ds,
-    new_var = SCRFDT,
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "SCRF",
     dtc = DSSTDTC,
-    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD == "SCREEN FAILURE"
   ) %>%
-
-  derive_var_disposition_dt(
-    dataset_ds = ds,
-    new_var = EOSDT,
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "EOS",
     dtc = DSSTDTC,
-    filter_ds = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
+    filter_add = DSCAT == "DISPOSITION EVENT" & DSDECOD != "SCREEN FAILURE"
   ) %>%
-
   # EOS status
   derive_var_disposition_status(
     dataset_ds = ds,
@@ -115,29 +131,27 @@ adsl <- dm %>%
     format_new_var = format_eoxxstt,
     filter_ds = DSCAT == "DISPOSITION EVENT"
   ) %>%
-
   # Last retrieval date
-  derive_var_disposition_dt(
-    dataset_ds = ds,
-    new_var = FRVDT,
+  derive_vars_merged_dt(
+    dataset_add = ds,
+    by_vars = vars(STUDYID, USUBJID),
+    new_vars_prefix = "FRV",
     dtc = DSSTDTC,
-    filter_ds = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
+    filter_add = DSCAT == "OTHER EVENT" & DSDECOD == "FINAL RETRIEVAL VISIT"
   ) %>%
-
   # Death date - impute partial date to first day/month
   derive_vars_dt(
     new_vars_prefix = "DTH",
     dtc = DTHDTC,
+    flag_imputation = "none",
     date_imputation = "FIRST"
   ) %>%
-
   # Relative Day of Death
   derive_vars_duration(
     new_var = DTHADY,
     start_date = TRTSDT,
     end_date = DTHDT
   ) %>%
-
   # Elapsed Days from Last Dose to Death
   derive_vars_duration(
     new_var = LDDTHELD,
@@ -168,20 +182,17 @@ adsl_date <- date_source(
 )
 
 adsl <- adsl %>%
-
   derive_var_extreme_dt(
     new_var = LSTALVDT,
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(ae = ae, lb = lb, adsl = adsl),
     mode = "last"
   ) %>%
-
   # Age group
   derive_var_agegr_fda(
     age_var = AGE,
     new_var = AGEGR1
   ) %>%
-
   # Safety population
   derive_var_merged_exist_flag(
     dataset_add = ex,
@@ -189,7 +200,6 @@ adsl <- adsl %>%
     new_var = SAFFL,
     condition = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO")))
   ) %>%
-
   # Groupings and others variables
   mutate(
     RACEGR1 = format_racegr1(RACE),

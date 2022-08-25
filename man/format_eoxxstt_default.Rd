@@ -4,24 +4,27 @@
 \alias{format_eoxxstt_default}
 \title{Default Format for Disposition Status}
 \usage{
-format_eoxxstt_default(x)
+format_eoxxstt_default(status)
 }
 \arguments{
-\item{x}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
+\item{status}{the disposition variable used for the mapping (e.g. \code{DSDECOD}).}
 }
 \value{
-A \code{character} vector derived based on the values given in \code{x}:
-"COMPLETED" if \code{x} is "COMPLETED",
-"DISCONTINUED" if \code{x} is not "COMPLETED" nor NA,
+A \code{character} vector derived based on the values given in \code{status}:
+"COMPLETED" if \code{status} is "COMPLETED",
+"DISCONTINUED" if \code{status} is not "COMPLETED" nor NA,
 "ONGOING" otherwise.
 }
 \description{
 Define a function to map the disposition status. To be used as an input for
 \code{derive_var_disposition_status()}.
 }
+\details{
+Usually this function can not be used with \verb{\%>\%}.
+}
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_dm")
 data("admiral_ds")
 

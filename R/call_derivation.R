@@ -25,12 +25,12 @@
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
 #'
 #' adae <-
-#'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000),], USUBJID, AESTDTC, AEENDTC) %>%
+#'   select(admiral_ae[sample(1:nrow(admiral_ae), 1000), ], USUBJID, AESTDTC, AEENDTC) %>%
 #'   derive_vars_merged(
 #'     dataset_add = admiral_adsl,
 #'     new_vars = vars(TRTSDT, TRTEDT),
@@ -110,11 +110,11 @@ call_derivation <- function(dataset = NULL, derivation, variable_params, ...) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_ae)
 #' data(admiral_adsl)
 #'
-#' adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000),] %>%
+#' adae <- admiral_ae[sample(1:nrow(admiral_ae), 1000), ] %>%
 #'   select(USUBJID, AESTDTC, AEENDTC) %>%
 #'   derive_vars_merged(
 #'     dataset_add = admiral_adsl,

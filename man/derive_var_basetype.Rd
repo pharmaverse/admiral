@@ -42,17 +42,17 @@ condition are kept and \code{BASETYPE} is set to \code{NA}.
 \examples{
 bds <- tibble::tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01", 1,     10,
-  "P01",    "RUN-IN",       "PARAM01", 2,      9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01", 3,      9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01", 4,     10.1,
-  "P01",    "OPEN-LABEL",   "PARAM01", 5,     10.4,
-  "P01",    "OPEN-LABEL",   "PARAM01", 6,      9.9,
-  "P02",    "RUN-IN",       "PARAM01", 1,     12.1,
-  "P02",    "DOUBLE-BLIND", "PARAM01", 2,     10.2,
-  "P02",    "DOUBLE-BLIND", "PARAM01", 3,     10.8,
-  "P02",    "OPEN-LABEL",   "PARAM01", 4,     11.4,
-  "P02",    "OPEN-LABEL",   "PARAM01", 5,     10.8
+  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
+  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1,
+  "P01",    "OPEN-LABEL",   "PARAM01",     5,  10.4,
+  "P01",    "OPEN-LABEL",   "PARAM01",     6,   9.9,
+  "P02",    "RUN-IN",       "PARAM01",     1,  12.1,
+  "P02",    "DOUBLE-BLIND", "PARAM01",     2,  10.2,
+  "P02",    "DOUBLE-BLIND", "PARAM01",     3,  10.8,
+  "P02",    "OPEN-LABEL",   "PARAM01",     4,  11.4,
+  "P02",    "OPEN-LABEL",   "PARAM01",     5,  10.8
 )
 
 bds_with_basetype <- derive_var_basetype(
@@ -67,7 +67,7 @@ bds_with_basetype <- derive_var_basetype(
 
 # Below print statement will print all 23 records in the data frame
 # bds_with_basetype
-print(bds_with_basetype, n=Inf)
+print(bds_with_basetype, n = Inf)
 
 dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
 
@@ -75,10 +75,10 @@ dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
 # baseline type derivations (such as LAST and WORST)
 bds <- tibble::tribble(
   ~USUBJID, ~EPOCH,         ~PARAMCD,  ~ASEQ, ~AVAL,
-  "P01",    "RUN-IN",       "PARAM01", 1,     10,
-  "P01",    "RUN-IN",       "PARAM01", 2,      9.8,
-  "P01",    "DOUBLE-BLIND", "PARAM01", 3,      9.2,
-  "P01",    "DOUBLE-BLIND", "PARAM01", 4,     10.1
+  "P01",    "RUN-IN",       "PARAM01",     1,  10.0,
+  "P01",    "RUN-IN",       "PARAM01",     2,   9.8,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     3,   9.2,
+  "P01",    "DOUBLE-BLIND", "PARAM01",     4,  10.1
 )
 
 bds_with_basetype <- derive_var_basetype(
@@ -89,7 +89,7 @@ bds_with_basetype <- derive_var_basetype(
   )
 )
 
-print(bds_with_basetype, n=Inf)
+print(bds_with_basetype, n = Inf)
 
 dplyr::count(bds_with_basetype, BASETYPE, name = "Number of Records")
 }

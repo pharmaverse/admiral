@@ -32,13 +32,13 @@ is less than or equal \code{A1HI}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_vs)
 
 ref_ranges <- tibble::tribble(
   ~PARAMCD, ~ANRLO, ~ANRHI, ~A1LO, ~A1HI,
-  "DIABP",  60,      80,    40,     90,
-  "PULSE",  60,     100,    40,    110
+  "DIABP",      60,     80,    40,    90,
+  "PULSE",      60,    100,    40,   110
 )
 
 admiral_vs \%>\%

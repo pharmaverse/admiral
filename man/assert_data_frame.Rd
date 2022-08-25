@@ -31,7 +31,7 @@ Checks if an argument is a data frame and (optionally) whether is contains
 a set of required variables
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 data(admiral_dm)
 
 example_fun <- function(dataset) {

@@ -39,7 +39,7 @@ If \code{"warning"} or \code{"error"} is specified, the specified message is iss
 if the observations of the input dataset are not unique with respect to the
 by variables and the order.
 
-\emph{Default:} \code{"none"}
+\emph{Default:} \code{"warning"}
 
 \emph{Permitted Values:} \code{"none"}, \code{"warning"}, \code{"error"}}
 }
@@ -57,7 +57,7 @@ order specified for the \code{order} parameter and the mode specified for the
 }
 \examples{
 library(dplyr, warn.conflict = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_ex")
 
 # Select first dose for each patient
@@ -84,3 +84,4 @@ admiral_ex \%>\%
 Stefan Bundfuss
 }
 \keyword{adam}
+\keyword{user_utility}

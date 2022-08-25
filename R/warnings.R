@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_dm)
 #'
 #' ## No warning as `AAGE` doesn't exist in `dm`
@@ -40,7 +40,7 @@ is_valid_dtc <- function(arg) {
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$",
-     "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
+    "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})$",
     "^(\\d{4})-(\\d{2})-(\\d{2})$",
     "^(\\d{4})-(\\d{2})$",
     "^(\\d{4})$",
@@ -109,8 +109,7 @@ warn_if_incomplete_dtc <- function(dtc, n) {
   if (n == 10) {
     dt_dtm <- "date"
     funtext <- "convert_dtc_to_dt"
-  }
-  else if (n == 19) {
+  } else if (n == 19) {
     dt_dtm <- "datetime"
     funtext <- "convert_dtc_to_dtm"
   }
@@ -167,8 +166,9 @@ warn_if_incomplete_dtc <- function(dtc, n) {
 warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
   if (paste(sort(names(base)), collapse = " ") != paste(sort(names(compare)), collapse = " ")) {
     warn(
-      paste0("The variables used for traceability in `", list_name,
-             "` are not consistent, please check:\n",
+      paste0(
+        "The variables used for traceability in `", list_name,
+        "` are not consistent, please check:\n",
         paste(
           "source", i - 1, ", Variables are given as:",
           paste(sort(names(base)), collapse = " "), "\n"
@@ -206,7 +206,7 @@ warn_if_inconsistent_list <- function(base, compare, list_name, i = 2) {
 #'
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_adsl)
 #' data(admiral_vs)
 #'

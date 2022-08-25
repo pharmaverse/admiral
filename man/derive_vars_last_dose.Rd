@@ -100,7 +100,7 @@ variables from \code{dataset_ex} (e.g. \code{new_vars = vars(LSTEXVIS = VISIT)})
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data(admiral_ae)
 data(ex_single)
 
@@ -131,7 +131,6 @@ admiral_ae \%>\%
     traceability_vars = dplyr::vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXENDTC")
   ) \%>\%
   select(STUDYID, USUBJID, AESEQ, AESTDTC, EXDOSE, EXTRT, EXENDTC, LDOSEDOM, LDOSESEQ, LDOSEVAR)
-
 }
 \author{
 Ondrej Slama, Annie Yang

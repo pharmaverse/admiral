@@ -107,15 +107,17 @@ first or last observation for each by group.
 }
 }
 \examples{
-library(admiraltest)
+library(admiral.test)
 library(dplyr, warn.conflicts = FALSE)
 data("admiral_dm")
 data("admiral_vs")
 
 wgt_cat <- function(wgt) {
-  case_when(wgt < 50 ~ "low",
-            wgt > 90 ~ "high",
-            TRUE ~ "normal")
+  case_when(
+    wgt < 50 ~ "low",
+    wgt > 90 ~ "high",
+    TRUE ~ "normal"
+  )
 }
 
 derive_var_merged_cat(
@@ -123,13 +125,13 @@ derive_var_merged_cat(
   dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
+  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
   new_var = WGTBLCAT,
   source_var = VSSTRESN,
   cat_fun = wgt_cat,
   mode = "last"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
+  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 
 # defining a value for missing VS data
 derive_var_merged_cat(
@@ -137,14 +139,14 @@ derive_var_merged_cat(
   dataset_add = admiral_vs,
   by_vars = vars(STUDYID, USUBJID),
   order = vars(VSDTC, VSSEQ),
-  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING" ,
+  filter_add = VSTESTCD == "WEIGHT" & substr(VISIT, 1, 9) == "SCREENING",
   new_var = WGTBLCAT,
   source_var = VSSTRESN,
   cat_fun = wgt_cat,
   mode = "last",
   missing_value = "MISSING"
 ) \%>\%
-select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
+  select(STUDYID, USUBJID, AGE, AGEU, WGTBLCAT)
 }
 \author{
 Stefan Bundfuss

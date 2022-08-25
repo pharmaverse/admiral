@@ -5,7 +5,7 @@ output:
     toc: true
     toc_depth: 6
 vignette: >
-  %\VignetteIndexEntry{Guidance for git Usage}
+  %\VignetteIndexEntry{Guidance for git and GitHub Usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -59,7 +59,7 @@ You can also create a feature branch in GitHub.
 - Be Sure to Pull down newly created branch into RStudio
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_feature_branch.png", dpi = 144)
+knitr::include_graphics("github_feature_branch.png", dpi = 144)
 ```
 
 
@@ -74,7 +74,7 @@ Lastly, you should push your changes up to GitHub using `git push origin <branch
 You can also make use of the Git Tab within RStudio to commit your changes. A benefit of using this Tab is being able to see your changes to the file with red and green highlighting. Just like in the terminal, start the message with the issue number and add a meaningful and succinct sentence.  Hit the Commit button and then Push up to GitHub.  
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_committ.png", dpi = 144)
+knitr::include_graphics("github_committ.png", dpi = 144)
 ```
 
 
@@ -93,13 +93,13 @@ The issue must be linked to the pull request in the "Development" field of the
 Pull Request.
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_linked_issues_dark.png", dpi = 144)
+knitr::include_graphics("github_linked_issues_dark.png", dpi = 144)
 ```
 
 Once you have completed the Pull Request you will see all committed changes are then available for the reviewer.  A reviewer must be specified in the Pull Request. It is recommended to write a brief summary to your reviewers so they can quickly come up to speed on your Pull Request.  Pictures are nice too, which are easy to do in GitHub!  Use any Screen Capture software and Copy and Paste into your summary. 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_create_pr.png", dpi = 144)
+knitr::include_graphics("github_create_pr.png", dpi = 144)
 ```
 
 ### Reviewing/Closing an Issue
@@ -122,7 +122,7 @@ merged into the `main` branch.
 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_done.png", dpi = 144)
+knitr::include_graphics("github_done.png", dpi = 144)
 ```
 
 ### Solving Merge Conflicts in the Terminal on RStudio
@@ -151,7 +151,7 @@ git push
 For simple merge conflicts, developers can make use of the GitHub interface to solve them. GitHub will show the number of conflicts between the two branches. In the below image, GitHub has found 3 conflicts, but we only display the first one.  Just like in the terminal, GitHub will make use of the `<<<<<<<`, `=======`, and `>>>>>>>` to highlight the conflicting sections.  You will need to make the decision on whether to keep the code from the base or the feature branch.  Once you have decided, go into the code and remove the section you no longer wish to keep.  Be sure to remove the `<<<<<<<`, `=======`, and `>>>>>>>` as well!  Once you work through the conflicts you will mark as **Resolved and Commit your changes**.  It is recommended to pull your branch back down to RStudio to make sure no untoward effects have happen to your branch. 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("github_conflicts.png", dpi = 144)
+knitr::include_graphics("github_conflicts.png", dpi = 144)
 ```
 
 

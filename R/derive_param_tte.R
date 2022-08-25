@@ -38,16 +38,6 @@
 #'   If the specified variable is imputed, the corresponding date imputation
 #'   flag must specified for `start_imputation_flag`.
 #'
-#' @param start_date_imputation_flag Date imputation flag for start date
-#'
-#'   If the start date is imputed, the corresponding date imputation flag must
-#'   be specified. The variable `STARTDTF` is set to the specified variable.
-#'
-#' @param start_time_imputation_flag Time imputation flag for start date
-#'
-#'   If the start time is imputed, the corresponding time imputation flag must
-#'   be specified. The variable `STARTTMF` is set to the specified variable.
-#'
 #' @param event_conditions Sources and conditions defining events
 #'
 #'   A list of `event_source()` objects is expected.
@@ -239,8 +229,6 @@ derive_param_tte <- function(dataset = NULL,
                              source_datasets,
                              by_vars = NULL,
                              start_date = TRTSDT,
-                             start_date_imputation_flag = NULL,
-                             start_time_imputation_flag = NULL,
                              event_conditions,
                              censor_conditions,
                              create_datetime = FALSE,
@@ -250,22 +238,7 @@ derive_param_tte <- function(dataset = NULL,
   assert_data_frame(dataset, optional = TRUE)
   assert_vars(by_vars, optional = TRUE)
   start_date <- assert_symbol(enquo(start_date))
-  start_date_imputation_flag <- assert_symbol(
-    enquo(start_date_imputation_flag),
-    optional = TRUE
-  )
-  start_time_imputation_flag <- assert_symbol(
-    enquo(start_time_imputation_flag),
-    optional = TRUE
-  )
-  assert_data_frame(
-    dataset_adsl,
-    required_vars = quo_c(
-      start_date,
-      start_date_imputation_flag,
-      start_time_imputation_flag
-    )
-  )
+  assert_data_frame(dataset_adsl, required_vars = vars(!!start_date))
   assert_vars(subject_keys)
   assert_list_of(event_conditions, "event_source")
   assert_list_of(censor_conditions, "censor_source")
@@ -301,11 +274,10 @@ derive_param_tte <- function(dataset = NULL,
     assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
   }
   if (!is.null(by_vars)) {
-    source_datasets <-
-      extend_source_datasets(
-        source_datasets = source_datasets,
-        by_vars = by_vars
-      )
+    source_datasets <- extend_source_datasets(
+      source_datasets = source_datasets,
+      by_vars = by_vars
+    )
   }
 
   # determine events #
@@ -342,18 +314,25 @@ derive_param_tte <- function(dataset = NULL,
     !!!subject_keys,
     !!start_var := !!start_date
   )
-  if (!quo_is_null(start_date_imputation_flag)) {
+
+  start_date_imputation_flag <- gsub("(DT|DTM)$", "DTF", as_name(start_date))
+  if (start_date_imputation_flag %in% colnames(dataset_adsl) &
+    as_name(start_date) != start_date_imputation_flag) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTDTF = !!start_date_imputation_flag
+      STARTDTF = !!sym(start_date_imputation_flag)
     )
   }
-  if (!quo_is_null(start_time_imputation_flag)) {
+
+  start_time_imputation_flag <- gsub("DTM$", "TMF", as_name(start_date))
+  if (start_time_imputation_flag %in% colnames(dataset_adsl) &
+    as_name(start_date) != start_time_imputation_flag) {
     adsl_vars <- vars(
       !!!adsl_vars,
-      STARTTMF = !!start_time_imputation_flag
+      STARTTMF = !!sym(start_time_imputation_flag)
     )
   }
+
   adsl <- dataset_adsl %>%
     select(!!!adsl_vars)
 
@@ -508,7 +487,6 @@ derive_param_tte <- function(dataset = NULL,
 #'   subject_keys = vars(STUDYID, USUBJID),
 #'   mode = "first"
 #' )
-#'
 #' @export
 filter_date_sources <- function(sources,
                                 source_datasets,
@@ -564,7 +542,8 @@ filter_date_sources <- function(sources,
           !!date_var := convert_dtc_to_dt(
             !!date,
             date_imputation = "first"
-        ))
+          )
+        )
       }
     }
 
@@ -621,7 +600,7 @@ filter_date_sources <- function(sources,
 #' library(lubridate)
 #'
 #' adsl <- tibble::tribble(
-#' ~USUBJID, ~TRTSDT,           ~EOSDT,
+#'   ~USUBJID, ~TRTSDT,           ~EOSDT,
 #'   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
 #'   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 #' ) %>%
@@ -639,7 +618,6 @@ filter_date_sources <- function(sources,
 #'   source_datasets = list(adsl = adsl, ae = ae),
 #'   by_vars = vars(AEDECOD)
 #' )
-#'
 #' @export
 extend_source_datasets <- function(source_datasets,
                                    by_vars) {
@@ -662,8 +640,7 @@ extend_source_datasets <- function(source_datasets,
             source_datasets[[i]], !!!by_vars
           )))
         )
-    }
-    else if (!setequal(by_vars_chr, missing_by_vars)) {
+    } else if (!setequal(by_vars_chr, missing_by_vars)) {
       # only some of the by variables are included in the source dataset #
       abort(paste(
         "Only",
@@ -672,8 +649,7 @@ extend_source_datasets <- function(source_datasets,
         names(source_datasets)[[i]],
         ".\n The source dataset must include all or none of the by variables."
       ))
-    }
-    else {
+    } else {
       extend[[i]] <- TRUE
     }
   }
@@ -716,7 +692,7 @@ extend_source_datasets <- function(source_datasets,
 #'   a datetime, or a character variable containing ISO 8601 dates can be
 #'   specified. An unquoted symbol is expected.
 #'
-#'   Refer to `derive_var_dt()` to impute and derive a date from a date
+#'   Refer to `derive_vars_dt()` to impute and derive a date from a date
 #'   character vector to a date object.
 #'
 #' @param censor Censoring value
@@ -870,7 +846,12 @@ print.tte_source <- function(x, ...) {
 }
 
 list_tte_source_objects <- function() {
-  objects <- grep("_(event|censor)$", getNamespaceExports("admiral"), value = TRUE)
+  # Get all tte_source objects exported by admiral
+  exported <- getNamespaceExports("admiral")
+  objects <-
+    exported[map_lgl(exported, function(obj_name) {
+      inherits(get(obj_name), "tte_source")
+    })]
 
   rows <- lapply(objects, function(obj_name) {
     obj <- get(obj_name)

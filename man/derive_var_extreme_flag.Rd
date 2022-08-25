@@ -73,7 +73,7 @@ parameter the first or last record will be flagged across the whole dataset.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-library(admiraltest)
+library(admiral.test)
 data("admiral_vs")
 
 # Flag last value for each patient, test, and visit, baseline observations are ignored
@@ -84,7 +84,8 @@ admiral_vs \%>\%
       by_vars = vars(USUBJID, VSTESTCD, VISIT),
       order = vars(VSTPTNUM),
       new_var = LASTFL,
-      mode = "last"),
+      mode = "last"
+    ),
     filter = VISIT != "BASELINE"
   ) \%>\%
   arrange(USUBJID, VSTESTCD, VISITNUM, VSTPTNUM) \%>\%
@@ -93,30 +94,27 @@ admiral_vs \%>\%
 # Baseline (ABLFL) examples:
 
 input <- tibble::tribble(
-  ~STUDYID, ~USUBJID, ~PARAMCD,  ~AVISIT,    ~ADT,                 ~AVAL, ~DTYPE,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT01",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-
-  "TEST01", "PAT02",  "PARAM01", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "BASELINE", as.Date("2021-04-23"), 15.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "WEEK 1",   as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT02",  "PARAM01", "WEEK 2",   as.Date("2021-04-30"), 12.0, "AVERAGE",
-
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-25"), 14.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "SCREENING",as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT01",  "PARAM02", "BASELINE", as.Date("2021-04-27"), 10.0, "AVERAGE",
-  "TEST01", "PAT01",  "PARAM02", "WEEK 2",   as.Date("2021-04-30"), 12.0, NA,
-
-  "TEST01", "PAT02",  "PARAM02", "SCREENING",as.Date("2021-04-27"), 15.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-25"), 14.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-23"), 15.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "WEEK 1",   as.Date("2021-04-27"), 10.0, NA,
-  "TEST01", "PAT02",  "PARAM02", "BASELINE", as.Date("2021-04-30"), 12.0, NA
+  ~STUDYID, ~USUBJID,  ~PARAMCD,     ~AVISIT,                  ~ADT, ~AVAL,    ~DTYPE,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-27"),  15.0,        NA,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+  "TEST01",  "PAT01", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+  "TEST01",  "PAT02", "PARAM01", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-25"),  14.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",  "BASELINE", as.Date("2021-04-23"),  15.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 1", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT02", "PARAM01",    "WEEK 2", as.Date("2021-04-30"),  12.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-25"),  14.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02", "SCREENING", as.Date("2021-04-23"),  15.0,        NA,
+  "TEST01",  "PAT01", "PARAM02",  "BASELINE", as.Date("2021-04-27"),  10.0, "AVERAGE",
+  "TEST01",  "PAT01", "PARAM02",    "WEEK 2", as.Date("2021-04-30"),  12.0,        NA,
+  "TEST01",  "PAT02", "PARAM02", "SCREENING", as.Date("2021-04-27"),  15.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-25"),  14.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-23"),  15.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",    "WEEK 1", as.Date("2021-04-27"),  10.0,        NA,
+  "TEST01",  "PAT02", "PARAM02",  "BASELINE", as.Date("2021-04-30"),  12.0,        NA
 )
 
 # Last observation
@@ -127,7 +125,8 @@ restrict_derivation(
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT),
     new_var = ABLFL,
-    mode = "last"),
+    mode = "last"
+  ),
   filter = AVISIT == "BASELINE"
 )
 
@@ -139,7 +138,8 @@ restrict_derivation(
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(AVAL, ADT),
     new_var = ABLFL,
-    mode = "last"),
+    mode = "last"
+  ),
   filter = AVISIT == "BASELINE"
 )
 
@@ -151,7 +151,8 @@ restrict_derivation(
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(desc(AVAL), ADT),
     new_var = ABLFL,
-    mode = "last"),
+    mode = "last"
+  ),
   filter = AVISIT == "BASELINE"
 )
 
@@ -163,7 +164,8 @@ restrict_derivation(
     by_vars = vars(USUBJID, PARAMCD),
     order = vars(ADT, desc(AVAL)),
     new_var = ABLFL,
-    mode = "last"),
+    mode = "last"
+  ),
   filter = AVISIT == "BASELINE" & DTYPE == "AVERAGE"
 )
 
@@ -172,8 +174,10 @@ data("admiral_ae")
 
 # Most severe AE first occurrence per patient
 admiral_ae \%>\%
-  mutate(TEMP_AESEVN =
-         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  mutate(
+    TEMP_AESEVN =
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+  ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCIFL,
     by_vars = vars(USUBJID),
@@ -185,8 +189,10 @@ admiral_ae \%>\%
 
 # Most severe AE first occurrence per patient per body system
 admiral_ae \%>\%
-  mutate(TEMP_AESEVN =
-         as.integer(factor(AESEV, levels = c("SEVERE","MODERATE","MILD")))) \%>\%
+  mutate(
+    TEMP_AESEVN =
+      as.integer(factor(AESEV, levels = c("SEVERE", "MODERATE", "MILD")))
+  ) \%>\%
   derive_var_extreme_flag(
     new_var = AOCCSIFL,
     by_vars = vars(USUBJID, AEBODSYS),

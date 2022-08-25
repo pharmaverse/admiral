@@ -14,7 +14,7 @@
 #' vars2chr(vars(USUBJID, AVAL))
 vars2chr <- function(quosures) {
   rlang::set_names(
-    map_chr(quosures, ~as_string(quo_get_expr(.x))),
+    map_chr(quosures, ~ as_string(quo_get_expr(.x))),
     names(quosures)
   )
 }
@@ -64,11 +64,11 @@ negate_vars <- function(vars = NULL) {
 #' @keywords user_utility
 #'
 #' @examples
-#' library(admiraltest)
+#' library(admiral.test)
 #' data(admiral_vs)
 #'
-#' filter_if(admiral_vs, rlang::quo(NULL))
-#' filter_if(admiral_vs, rlang::quo(VSTESTCD == "Weight"))
+#' admiral::filter_if(admiral_vs, rlang::quo(NULL))
+#' admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 filter_if <- function(dataset, filter) {
   assert_data_frame(dataset)
   assert_filter_cond(filter, optional = TRUE)
@@ -189,7 +189,7 @@ convert_blanks_to_na.data.frame <- function(x) { # nolint
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(adsl, vars(STUDYID), vars(SITEID))
+#'   assert_one_to_one(admiral_adsl, vars(STUDYID), vars(SITEID))
 #' )
 #'
 #' get_one_to_many_dataset()
@@ -221,7 +221,7 @@ get_one_to_many_dataset <- function() {
 #' data(admiral_adsl)
 #'
 #' try(
-#'   assert_one_to_one(adsl, vars(SITEID), vars(STUDYID))
+#'   assert_one_to_one(admiral_adsl, vars(SITEID), vars(STUDYID))
 #' )
 #'
 #' get_many_to_one_dataset()

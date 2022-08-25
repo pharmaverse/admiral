@@ -29,13 +29,13 @@ Default is \code{ONTRTFL}.}
 \item{start_date}{The start date (e.g. \code{AESDT}) or assessment date (e.g.
 \code{ADT}) Required; A date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{end_date}{The end date of assessment/event (e.g. \code{AENDT}) A date or
 date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Optional; Default is null. If the used and date value is missing on an
@@ -45,13 +45,13 @@ to \code{"Y"}.}
 \item{ref_start_date}{The lower bound of the on-treatment period Required; A
 date or date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
 
 \item{ref_end_date}{The upper bound of the on-treatment period A date or
 date-time object column is expected.
 
-Refer to \code{derive_var_dt()} to impute and derive a date from a date
+Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.
 
 Optional; This can be null and everything after \code{ref_start_date} will be
@@ -107,6 +107,7 @@ If the \code{span_period} is specified as \code{"Y"}, this allows the user to as
 Any date imputations needed should be done prior to calling this function.
 }
 \examples{
+library(dplyr)
 library(lubridate, warn.conflict = FALSE)
 
 advs <- tibble::tribble(
@@ -137,11 +138,12 @@ derive_var_ontrtfl(
 )
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ADTM,                ~TRTSDTM,                   ~TRTEDTM,                   ~TPT,
-  "P01", ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA,
-  "P02", ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), "PRE",
-  "P03", ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"), NA
-)
+  ~USUBJID, ~ADTM,                   ~TRTSDTM,                   ~TRTEDTM,
+  "P01",    ymd("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P02",    ymd("2020-01-01"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P03",    ymd("2019-12-31"),       ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+) \%>\%
+  mutate(TPT = c(NA, "PRE", NA))
 derive_var_ontrtfl(
   advs,
   start_date = ADTM,
@@ -151,35 +153,35 @@ derive_var_ontrtfl(
 )
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ASTDT,              ~TRTSDT,           ~TRTEDT,           ~AENDT,
+  ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,           ~AENDT,
   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
 derive_var_ontrtfl(
- advs,
- start_date = ASTDT,
- end_date = AENDT,
- ref_start_date = TRTSDT,
- ref_end_date = TRTEDT,
- ref_end_window = 60,
- span_period = "Y"
+  advs,
+  start_date = ASTDT,
+  end_date = AENDT,
+  ref_start_date = TRTSDT,
+  ref_end_date = TRTEDT,
+  ref_end_window = 60,
+  span_period = "Y"
 )
 
 advs <- tibble::tribble(
-  ~USUBJID, ~ASTDT,              ~AP01SDT,           ~AP01EDT,           ~AENDT,
+  ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,          ~AENDT,
   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
   "P03",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), NA,
 )
 derive_var_ontrtfl(
- advs,
- new_var = ONTR01FL,
- start_date = ASTDT,
- end_date = AENDT,
- ref_start_date = AP01SDT,
- ref_end_date = AP01EDT,
- span_period = "Y"
+  advs,
+  new_var = ONTR01FL,
+  start_date = ASTDT,
+  end_date = AENDT,
+  ref_start_date = AP01SDT,
+  ref_end_date = AP01EDT,
+  span_period = "Y"
 )
 }
 \author{

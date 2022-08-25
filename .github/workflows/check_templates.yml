@@ -44,7 +44,7 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          remotes::install_github("pharmaverse/admiraltest", ref = "devel")
+          remotes::install_github("pharmaverse/admiral.test", ref = "devel")
         shell: Rscript {0}
 
       - name: Install package
