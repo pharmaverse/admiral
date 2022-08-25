@@ -97,6 +97,15 @@ dataset_vignette(
 )
 ```
 
+Using CDISC data we can map these lab tests to the correct terms:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM),
+  filter = !is.na(TERM)
+)
+```
 
 
 
