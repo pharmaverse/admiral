@@ -34,11 +34,17 @@
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @details The age is derived as the integer part of the duration from start to
-#'   end date in the specified unit.
+#'   end date in the specified unit. When 'years' or 'months' are specified in the `out_unit`
+#'   parameter, because of the underlying `lubridate::time_length()` function that is used
+#'   here, results are calculated based on the actual calendar length of months or years
+#'   rather than assuming equal days every month (30.4375 days) or every year (365.25 days).
 #'
 #' @author Stefan Bundfuss
 #'
 #' @return The input dataset with ``AAGE`` and ``AAGEU`` added
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @export
 #'
@@ -92,6 +98,9 @@ derive_vars_aage <- function(dataset,
 #'   Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'
 #'
 #' @param new_var New AGE variable to be created in years.
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @author Michael Thorpe
 #'
@@ -212,6 +221,9 @@ derive_var_age_years <- function(dataset, age_var, age_unit = NULL, new_var) {
 #'
 #' @param new_var New variable to be created.
 #'
+#' @family der_adsl
+#' @keywords der_adsl
+#'
 #' @return `dataset` with new column `new_var` of class factor.
 #'
 #' @author Ondrej Slama
@@ -273,6 +285,9 @@ derive_var_agegr_fda <- function(dataset, age_var, age_unit = NULL, new_var) {
 }
 
 #' @rdname derive_var_agegr_fda
+#'
+#' @family der_adsl
+#' @keywords der_adsl
 #'
 #' @export
 #'

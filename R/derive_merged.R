@@ -1,3 +1,4 @@
+.temp <- new.env(parent = emptyenv())
 #' Add New Variable(s) to the Input Dataset Based on Variables from Another
 #' Dataset
 #'
@@ -128,7 +129,8 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -138,7 +140,7 @@
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
-#' # merging all dm variables to vs
+#' # Merging all dm variables to vs
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
@@ -146,7 +148,7 @@
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
-#' # merge last weight to adsl
+#' # Merge last weight to adsl
 #' data("admiral_adsl")
 #' derive_vars_merged(
 #'   admiral_adsl,
@@ -159,6 +161,69 @@
 #'   match_flag = vsdatafl
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+#'
+#' # Derive treatment start datetime (TRTSDTM)
+#' data(admiral_ex)
+#'
+#' ## Impute exposure start date to first date/time
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXSTDTC,
+#'   new_vars_prefix = "EXST",
+#'   highest_imputation = "M",
+#' )
+#'
+#' ## Add first exposure datetime and imputation flags to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = vars(EXSTDTM),
+#'   mode = "first"
+#' )
+#'
+#' # Derive treatment start datetime (TRTSDTM)
+#' data(admiral_ex)
+#'
+#' ## Impute exposure start date to first date/time
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXSTDTC,
+#'   new_vars_prefix = "EXST",
+#'   highest_imputation = "M",
+#' )
+#'
+#' ## Add first exposure datetime and imputation flags to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   filter_add = !is.na(EXSTDTM),
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = vars(EXSTDTM),
+#'   mode = "first"
+#' )
+#'
+#' # Derive treatment end datetime (TRTEDTM)
+#' ## Impute exposure end datetime to last time, no date imputation
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXENDTC,
+#'   new_vars_prefix = "EXEN",
+#'   time_imputation = "last",
+#' )
+#'
+#' ## Add last exposure datetime and imputation flag to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   filter_add = !is.na(EXENDTM),
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+#'   order = vars(EXENDTM),
+#'   mode = "last"
+#' )
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -234,6 +299,12 @@ derive_vars_merged <- function(dataset,
 
 #' Merge a (Imputed) Date Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dt()` and
+#' `derive_vars_merged()` instead.
+#'
 #' Merge a imputed date variable and date imputation  flag from a dataset to the
 #' input dataset. The observations to merge can be selected by a condition
 #' and/or selecting the first or last observation for each by group.
@@ -283,38 +354,10 @@ derive_vars_merged <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @keywords deprecated
 #'
 #' @export
 #'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ex")
-#'
-#' # derive treatment start date (TRTSDT)
-#' derive_vars_merged_dt(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTS",
-#'   dtc = EXSTDTC,
-#'   date_imputation = "first",
-#'   order = vars(TRTSDT),
-#'   mode = "first"
-#' )
-#'
-#' # derive treatment end date (TRTEDT) (without imputation)
-#' derive_vars_merged_dt(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTE",
-#'   dtc = EXENDTC,
-#'   order = vars(TRTEDT),
-#'   mode = "last"
-#' )
 derive_vars_merged_dt <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -335,11 +378,24 @@ derive_vars_merged_dt <- function(dataset,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
+  deprecate_warn(
+    "0.8.0",
+    "derive_vars_merged_dt()",
+    details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
+  )
+
   old_vars <- names(dataset_add)
+  if (is.null(date_imputation)) {
+    highest_imputation <- "n"
+    date_imputation <- "first"
+  } else {
+    highest_imputation <- "M"
+  }
   add_data <- filter_if(dataset_add, filter_add) %>%
     derive_vars_dt(
       new_vars_prefix = new_vars_prefix,
       dtc = !!dtc,
+      highest_imputation = highest_imputation,
       date_imputation = date_imputation,
       flag_imputation = flag_imputation,
       min_dates = min_dates,
@@ -360,6 +416,12 @@ derive_vars_merged_dt <- function(dataset,
 }
 
 #' Merge a (Imputed) Datetime Variable
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dtm()` and
+#' `derive_vars_merged()` instead.
 #'
 #' Merge a imputed datetime variable, date imputation  flag, and time imputation
 #' flag from a dataset to the input dataset. The observations to merge can be
@@ -406,40 +468,10 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam timing
+#' @keywords deprecated
 #'
 #' @export
 #'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ex")
-#'
-#' # derive treatment start datetime (TRTSDTM)
-#' derive_vars_merged_dtm(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTS",
-#'   dtc = EXSTDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first",
-#'   order = vars(TRTSDTM),
-#'   mode = "first"
-#' )
-#'
-#' # derive treatment end datetime (TRTEDTM) (without date imputation)
-#' derive_vars_merged_dtm(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTE",
-#'   dtc = EXENDTC,
-#'   time_imputation = "last",
-#'   order = vars(TRTEDTM),
-#'   mode = "last"
-#' )
 derive_vars_merged_dtm <- function(dataset,
                                    dataset_add,
                                    by_vars,
@@ -461,11 +493,28 @@ derive_vars_merged_dtm <- function(dataset,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
+  deprecate_warn(
+    "0.8.0",
+    "derive_vars_merged_dtm()",
+    details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
+  )
+
   old_vars <- names(dataset_add)
+  if (is.null(date_imputation)) {
+    highest_imputation <- "h"
+    date_imputation <- "first"
+  } else {
+    highest_imputation <- "M"
+  }
+  if (is.null(time_imputation)) {
+    highest_imputation <- "n"
+    time_imputation <- "first"
+  }
   add_data <- filter_if(dataset_add, filter = filter_add) %>%
     derive_vars_dtm(
       new_vars_prefix = new_vars_prefix,
       dtc = !!dtc,
+      highest_imputation = highest_imputation,
       date_imputation = date_imputation,
       time_imputation = time_imputation,
       flag_imputation = flag_imputation,
@@ -536,7 +585,8 @@ derive_vars_merged_dtm <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -684,7 +734,8 @@ derive_var_merged_cat <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -799,7 +850,8 @@ derive_var_merged_exist_flag <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -864,4 +916,124 @@ derive_var_merged_character <- function(dataset,
   ) %>%
     mutate(!!new_var := if_else(temp_match_flag, !!new_var, missing_value, missing_value)) %>%
     select(-temp_match_flag)
+}
+
+
+#' Merge Lookup Table with Source Dataset
+#'
+#' Merge user-defined lookup table with the input dataset. Optionally print a
+#' list of records from the input dataset that do not have corresponding
+#' mapping from the lookup table.
+#'
+#' @param dataset_add Lookup table
+#'
+#' The variables specified by the `by_vars` parameter are expected.
+#'
+#' @param print_not_mapped Print a list of unique `by_vars` values that do not
+#' have corresponding records from the lookup table?
+#'
+#' *Default*: `TRUE`
+#'
+#' *Permitted Values*: `TRUE`, `FALSE`
+#'
+#' @inheritParams derive_vars_merged
+#'
+#'
+#' @return The output dataset contains all observations and variables of the
+#' input dataset, and add the variables specified in `new_vars` from the lookup
+#' table specified in `dataset_add`. Optionally prints a list of unique
+#' `by_vars` values that do not have corresponding records
+#' from the lookup table (by specifying `print_not_mapped = TRUE`).
+#'
+#' @author Annie Yang
+#'
+#' @keywords der_gen
+#' @family der_gen
+#'
+#' @export
+#'
+#' @examples
+#' library(admiral.test)
+#' library(dplyr, warn.conflicts = FALSE)
+#' data("admiral_vs")
+#' param_lookup <- tibble::tribble(
+#'   ~VSTESTCD, ~VSTEST, ~PARAMCD, ~PARAM,
+#'   "SYSBP", "Systolic Blood Pressure", "SYSBP", "Systolic Blood Pressure (mmHg)",
+#'   "WEIGHT", "Weight", "WEIGHT", "Weight (kg)",
+#'   "HEIGHT", "Height", "HEIGHT", "Height (cm)",
+#'   "TEMP", "Temperature", "TEMP", "Temperature (C)",
+#'   "MAP", "Mean Arterial Pressure", "MAP", "Mean Arterial Pressure (mmHg)",
+#'   "BMI", "Body Mass Index", "BMI", "Body Mass Index(kg/m^2)",
+#'   "BSA", "Body Surface Area", "BSA", "Body Surface Area(m^2)"
+#' )
+#' derive_vars_merged_lookup(
+#'   dataset = admiral_vs,
+#'   dataset_add = param_lookup,
+#'   by_vars = vars(VSTESTCD),
+#'   new_vars = vars(PARAMCD),
+#'   print_not_mapped = TRUE
+#' )
+derive_vars_merged_lookup <- function(dataset,
+                                      dataset_add,
+                                      by_vars,
+                                      order = NULL,
+                                      new_vars = NULL,
+                                      mode = NULL,
+                                      filter_add = NULL,
+                                      check_type = "warning",
+                                      duplicate_msg = NULL,
+                                      print_not_mapped = TRUE) {
+  assert_logical_scalar(print_not_mapped)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+
+  res <- derive_vars_merged(
+    dataset,
+    dataset_add,
+    by_vars = by_vars,
+    order = order,
+    new_vars = new_vars,
+    mode = mode,
+    filter_add = !!filter_add,
+    match_flag = temp_match_flag,
+    check_type = check_type,
+    duplicate_msg = duplicate_msg
+  )
+
+  if (print_not_mapped) {
+    temp_not_mapped <- res %>%
+      filter(is.na(temp_match_flag)) %>%
+      distinct(!!!by_vars)
+
+    if (nrow(temp_not_mapped) > 0) {
+      .temp$nmap <- structure(
+        temp_not_mapped,
+        class = union("nmap", class(temp_not_mapped)),
+        by_vars = vars2chr(by_vars)
+      )
+
+      message(
+        "List of ", enumerate(vars2chr(by_vars)), " not mapped: ", "\n",
+        paste0(capture.output(temp_not_mapped), collapse = "\n"),
+        "\nRun `get_not_mapped()` to access the full list"
+      )
+    } else if (nrow(temp_not_mapped) == 0) {
+      message(
+        "All ", enumerate(vars2chr(by_vars)), " are mapped."
+      )
+    }
+  }
+
+  res %>% select(-temp_match_flag)
+}
+
+#' Get list of records not mapped from the lookup table.
+#'
+#' @export
+#'
+#' @return A `data.frame` or `NULL`
+#'
+#' @keywords utils_help
+#' @family utils_help
+get_not_mapped <- function() {
+  .temp$nmap
 }

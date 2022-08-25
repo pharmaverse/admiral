@@ -8,9 +8,9 @@ date_source(
   dataset_name,
   filter = NULL,
   date,
-  date_imputation = NULL,
-  time_imputation = NULL,
-  preserve = FALSE,
+  date_imputation = deprecated(),
+  time_imputation = deprecated(),
+  preserve = deprecated(),
   traceability_vars = NULL
 )
 }
@@ -20,18 +20,17 @@ the date.}
 
 \item{filter}{An unquoted condition for filtering \code{dataset}.}
 
-\item{date}{A variable providing a date. A date, a datetime, or a character
-variable containing ISO 8601 dates can be specified. An unquoted symbol is
-expected.}
+\item{date}{A variable providing a date. A date or a datetime can be
+specified. An unquoted symbol is expected.}
 
-\item{date_imputation}{A string defining the date imputation for \code{date}.
-See \code{date_imputation} parameter of \code{impute_dtc()} for valid values.}
+\item{date_imputation}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to
+convert DTC variables to datetime variables in the dataset.}
 
-\item{time_imputation}{A string defining the time imputation for \code{date}.
-See \code{time_imputation} parameter of \code{impute_dtc()} for valid values.}
+\item{time_imputation}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to
+convert DTC variables to datetime variables in the dataset.}
 
-\item{preserve}{Should day be preserved if month is imputed for \code{date}.
-See \code{preserve} parameter of \code{impute_dtc()} for details.}
+\item{preserve}{\emph{Deprecated}, please use \code{derive_vars_dtm()} to convert DTC
+variables to datetime variables in the dataset.}
 
 \item{traceability_vars}{A named list returned by \code{vars()} defining the
 traceability variables, e.g. \code{vars(LALVDOM = "AE", LALVSEQ = AESEQ, LALVVAR = "AESTDTC")}. The values must be a symbol, a character string, a numeric,
@@ -46,8 +45,22 @@ Create a \code{date_source} object as input for \code{derive_var_extreme_dt()} a
 }
 \seealso{
 \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_var_extreme_dt]{derive_var_extreme_dt()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{death_event}},
+\code{\link{dthcaus_source}()},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

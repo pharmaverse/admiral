@@ -61,9 +61,17 @@ compute_bsa(
   method = "DuBois-DuBois"
 )
 }
+\seealso{
+BDS-Findings Functions that returns a vector: 
+\code{\link{compute_bmi}()},
+\code{\link{compute_map}()},
+\code{\link{compute_qtc}()},
+\code{\link{compute_qual_imputation_dec}()},
+\code{\link{compute_qual_imputation}()},
+\code{\link{compute_rr}()}
+}
 \author{
 Eric Simms
 }
-\keyword{BSA}
-\keyword{adam}
-\keyword{computation}
+\concept{com_bds_findings}
+\keyword{com_bds_findings}

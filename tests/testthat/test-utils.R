@@ -109,6 +109,14 @@ test_that("blank strings are turned into `NA` inside data frames", {
   expect_identical(convert_blanks_to_na(input), expected_output)
 })
 
+test_that("`convert_blanks_to_na.list` produces a lists", {
+  x <- c("", "", "")
+  expected_output <- lapply(x, convert_blanks_to_na)
+  actual_output <- convert_blanks_to_na.list(x)
+
+  expect_equal(expected_output, actual_output)
+})
+
 test_that("negate_vars returns list of negated variables", {
   expect_identical(negate_vars(vars(var1, var2)), rlang::exprs(-var1, -var2))
 })

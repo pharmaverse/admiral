@@ -34,7 +34,8 @@
 #' @return The input dataset with `--DY` corresponding to the `--DTM` or `--DT`
 #'   source variable(s) added
 #'
-#' @keywords derivation ADaM timing
+#' @family der_date_time
+#' @keywords der_gen der_date_time
 #'
 #' @export
 #'

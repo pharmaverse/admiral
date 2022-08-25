@@ -30,7 +30,8 @@
 #'
 #' @return The input dataset with transposed variables from `dataset_merge` added
 #'
-#' @keywords derivation adam
+#' @family der_gen
+#' @keywords der_gen
 #'
 #' @export
 #'
@@ -105,18 +106,24 @@ derive_vars_transposed <- function(dataset,
 #'
 #' @param dataset_facm FACM dataset
 #'
-#'   The variables specified by the `by_vars` parameter, `FAGRPID`, `FATESTCD` and
-#'   `FASTRESC` are required
+#'   The variables specified by the `by_vars` and `value_var` parameters,
+#'   `FAGRPID` and `FATESTCD` are required
 #'
 #' @param by_vars Keys used to merge `dataset_facm` with `dataset`
 #'
 #'   *Permitted Values:* list of variables
 #'
+#' @param value_var The variable of `dataset_facm` containing the values of the
+#'   transposed variables
+#'
+#'   Default: `FASTRESC`
+#'
 #' @author Thomas Neitmann
 #'
 #' @return The input dataset with ATC variables added
 #'
-#' @keywords derivation adcm
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @export
 #'
@@ -154,17 +161,19 @@ derive_vars_transposed <- function(dataset,
 #' derive_vars_atc(cm, facm)
 derive_vars_atc <- function(dataset,
                             dataset_facm,
-                            by_vars = vars(USUBJID, CMREFID = FAREFID)) {
+                            by_vars = vars(USUBJID, CMREFID = FAREFID),
+                            value_var = FASTRESC) {
+  value_var <- assert_symbol(enquo(value_var))
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
-  assert_data_frame(dataset_facm, required_vars = vars(!!!by_vars, FAGRPID, FATESTCD, FASTRESC))
+  assert_data_frame(dataset_facm, required_vars = vars(!!!by_vars, !!value_var, FAGRPID, FATESTCD))
 
   dataset %>%
     derive_vars_transposed(
-      select(dataset_facm, !!!unname(by_vars), FAGRPID, FATESTCD, FASTRESC),
+      select(dataset_facm, !!!unname(by_vars), !!value_var, FAGRPID, FATESTCD),
       by_vars = by_vars,
       key_var = FATESTCD,
-      value_var = FASTRESC,
+      value_var = !!value_var,
       filter = str_detect(FATESTCD, "^CMATC[1-4](CD)?$")
     ) %>%
     select(-starts_with("FA")) %>%

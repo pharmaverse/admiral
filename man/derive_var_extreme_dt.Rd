@@ -52,11 +52,6 @@ The following steps are performed to create the output dataset:
 element are selected. Then for each patient the first or last observation
 (with respect to \code{date} and \code{mode}) is selected.
 \item The new variable is set to the variable specified by the \code{date} element.
-If the date variable is a date variable, the time is imputed as
-\code{time_imputation = "first"}. If the source variable is a character
-variable, it is converted to a datetime. If the date is incomplete, it is
-imputed as specified by the \code{date_imputation} element and with
-\code{time_imputation = "first"}.
 \item The variables specified by the \code{traceability_vars} element are added.
 \item The selected observations of all source datasets are combined into a
 single dataset.
@@ -77,19 +72,37 @@ data("admiral_adsl")
 # derive last known alive date (LSTALVDT)
 ae_start <- date_source(
   dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "first",
+  date = AESTDT
 )
 ae_end <- date_source(
   dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "first",
+  date = AEENDT
 )
+
+ae_ext <- admiral_ae \%>\%
+  derive_vars_dt(
+    dtc = AESTDTC,
+    new_vars_prefix = "AEST",
+    highest_imputation = "M"
+  ) \%>\%
+  derive_vars_dt(
+    dtc = AEENDTC,
+    new_vars_prefix = "AEEN",
+    highest_imputation = "M"
+  )
+
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTC,
-  filter = nchar(LBDTC) >= 10,
+  date = LBDT,
+  filter = !is.na(LBDT),
 )
+
+lb_ext <- derive_vars_dt(
+  admiral_lb,
+  dtc = LBDTC,
+  new_vars_prefix = "LB"
+)
+
 adsl_date <- date_source(dataset_name = "adsl", date = TRTEDT)
 
 admiral_dm \%>\%
@@ -98,7 +111,8 @@ admiral_dm \%>\%
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(
       adsl = admiral_adsl,
-      ae = admiral_ae, lb = admiral_lb
+      ae = ae_ext,
+      lb = lb_ext
     ),
     mode = "last"
   ) \%>\%
@@ -107,8 +121,7 @@ admiral_dm \%>\%
 # derive last alive date and traceability variables
 ae_start <- date_source(
   dataset_name = "ae",
-  date = AESTDTC,
-  date_imputation = "first",
+  date = AESTDT,
   traceability_vars = vars(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
@@ -118,8 +131,7 @@ ae_start <- date_source(
 
 ae_end <- date_source(
   dataset_name = "ae",
-  date = AEENDTC,
-  date_imputation = "first",
+  date = AEENDT,
   traceability_vars = vars(
     LALVDOM = "AE",
     LALVSEQ = AESEQ,
@@ -128,8 +140,8 @@ ae_end <- date_source(
 )
 lb_date <- date_source(
   dataset_name = "lb",
-  date = LBDTC,
-  filter = nchar(LBDTC) >= 10,
+  date = LBDT,
+  filter = !is.na(LBDT),
   traceability_vars = vars(
     LALVDOM = "LB",
     LALVSEQ = LBSEQ,
@@ -153,19 +165,27 @@ admiral_dm \%>\%
     ae_start, ae_end, lb_date, adsl_date,
     source_datasets = list(
       adsl = admiral_adsl,
-      ae = admiral_ae, lb = admiral_lb
+      ae = ae_ext,
+      lb = lb_ext
     ),
     mode = "last"
   ) \%>\%
   select(USUBJID, LSTALVDT, LALVDOM, LALVSEQ, LALVVAR)
 }
 \seealso{
-\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}},
-\code{\link[=derive_vars_merged_dt]{derive_vars_merged_dt()}}, \code{\link[=derive_vars_merged_dtm]{derive_vars_merged_dtm()}},
-\code{\link[=derive_vars_merged]{derive_vars_merged()}}
+\code{\link[=date_source]{date_source()}}, \code{\link[=derive_var_extreme_dtm]{derive_var_extreme_dtm()}}, \code{\link[=derive_vars_merged]{derive_vars_merged()}}
+
+ADSL Functions that returns variable appended to dataset: 
+\code{\link{derive_var_age_years}()},
+\code{\link{derive_var_agegr_fda}()},
+\code{\link{derive_var_disposition_status}()},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{derive_var_extreme_dtm}()},
+\code{\link{derive_vars_aage}()},
+\code{\link{derive_vars_disposition_reason}()}
 }
 \author{
 Stefan Bundfuss, Thomas Neitmann
 }
-\keyword{adsl}
-\keyword{derivation}
+\concept{der_adsl}
+\keyword{der_adsl}

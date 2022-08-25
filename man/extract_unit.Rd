@@ -27,4 +27,20 @@ extract_unit("Height (cm)")
 
 extract_unit("Diastolic Blood Pressure (mmHg)")
 }
-\keyword{user_utility}
+\seealso{
+Utilities used within Derivation functions: 
+\code{\link{call_user_fun}()},
+\code{\link{get_not_mapped}()},
+\code{\link{negate_vars}()},
+\code{\link{signal_duplicate_records}()},
+\code{\link{vars2chr}()}
+
+Utilities used within Derivation functions: 
+\code{\link{call_user_fun}()},
+\code{\link{get_not_mapped}()},
+\code{\link{negate_vars}()},
+\code{\link{signal_duplicate_records}()},
+\code{\link{vars2chr}()}
+}
+\concept{utils_help}
+\keyword{utils_help}

@@ -40,10 +40,13 @@ admiral_dm \%>\%
 }
 \seealso{
 \code{\link[=derive_var_disposition_status]{derive_var_disposition_status()}}
+
+Utilities for Formatting Observations: 
+\code{\link{convert_blanks_to_na}()},
+\code{\link{format_reason_default}()}
 }
 \author{
 Samia Kabi
 }
-\keyword{adsl}
-\keyword{computation}
-\keyword{user_utility}
+\concept{utils_fmt}
+\keyword{utils_fmt}
