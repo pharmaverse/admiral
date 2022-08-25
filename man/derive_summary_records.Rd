@@ -157,6 +157,7 @@ derive_summary_records(
 }
 \seealso{
 \code{get_summary_records()}
+
 BDS-Findings Functions that returns variable appended to dataset: 
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_param_rr}()},

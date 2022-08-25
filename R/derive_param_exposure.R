@@ -184,8 +184,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(ASTDTM, !!tmp_start),
-        AENDTM = coalesce(AENDTM, !!tmp_end)
+        ASTDTM = !!tmp_start,
+        AENDTM = !!tmp_end
       ) %>%
       remove_tmp_vars()
 
@@ -204,8 +204,8 @@ derive_param_exposure <- function(dataset,
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDT = coalesce(ASTDT, !!tmp_start),
-        AENDT = coalesce(AENDT, !!tmp_end)
+        ASTDT = !!tmp_start,
+        AENDT = !!tmp_end
       ) %>%
       remove_tmp_vars()
   }

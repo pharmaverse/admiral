@@ -50,7 +50,9 @@
 #'
 #' @return A data frame of derived records.
 #'
-#' @keywords adam user_utility.
+#' @family der_gen
+#'
+#' @keywords der_gen
 #'
 #' @seealso `derive_summary_records()`
 #'
