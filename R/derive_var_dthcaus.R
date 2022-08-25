@@ -27,7 +27,7 @@
 #' @keywords der_adsl
 #'
 #' @author
-#' Shimeng Huang, Samia Kabi, Thomas Neitmann
+#' Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
 #'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'

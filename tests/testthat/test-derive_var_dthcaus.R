@@ -359,7 +359,8 @@ test_that("dthcaus_source Test 7: error on a dthcaus_source object with invalid 
   ))
 })
 
-test_that("`dataset` is sorted using the `order` parameter", {
+## Test 8: dataset` is sorted using the `order` parameter ----
+test_that("derive_var_dthcaus Test 8: `dataset` is sorted using the `order` parameter", {
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID,
     "TEST01", "PAT01",
