@@ -18,12 +18,11 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' testthat::test_that("a missing row is detected", {
-#'   data(dm)
-#'   expect_dfs_equal(dm, dm[-1L, ], keys = "USUBJID")
-#' })
-#' }
+#' library(admiral.test)
+#' \donttest{(testthat::test_that("a missing row is detected", {
+#'   data(admiral_dm)
+#'   expect_dfs_equal(admiral_dm, admiral_dm[-1L, ], keys = "USUBJID")
+#' })}
 expect_dfs_equal <- function(base, compare, keys, ...) {
   diff <- diffdf::diffdf(base, compare, keys, suppress_warnings = TRUE, ...)
   if (diffdf::diffdf_has_issues(diff)) {

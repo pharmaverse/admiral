@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A toolbox for developers working on admiral packages. Package contains functions that are used internally to admiral and admiral extension packages to check data, variables and conditions. Package also contains utility functions to help developer with documentation, testing and general upkeep of admiral and admiral extension packages.
+Utility functions to check data, variables and conditions for functions used in 'admiral' and 'admiral' extension packages. Additional utility helper functions to to assist developers with maintaining documentation, testing and general upkeep of 'admiral' and 'admiral' extension packages.
 }
 \seealso{
 Useful links:

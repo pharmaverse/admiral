@@ -23,12 +23,11 @@ An error if \code{base} and \code{compare} do not match or \code{NULL} invisibly
 Uses \code{\link[diffdf:diffdf]{diffdf::diffdf()}} to compares 2 datasets for any differences
 }
 \examples{
-\dontrun{
-testthat::test_that("a missing row is detected", {
-  data(dm)
-  expect_dfs_equal(dm, dm[-1L, ], keys = "USUBJID")
-})
-}
+library(admiral.test)
+\donttest{(testthat::test_that("a missing row is detected", {
+  data(admiral_dm)
+  expect_dfs_equal(admiral_dm, admiral_dm[-1L, ], keys = "USUBJID")
+})}
 }
 \author{
 Thomas Neitmann
