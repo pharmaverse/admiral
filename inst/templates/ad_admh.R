@@ -30,7 +30,6 @@ mhtermn_lookup <- tibble::tribble(
   ~MHTERM, ~MHTERMN,
   "ALZHEIMER'S DISEASE", 1
 )
-git stat
 
 # ---- Derivations ----
 
