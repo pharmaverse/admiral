@@ -40,7 +40,7 @@
 #'
 #'   The result is used to check the units of the input parameters.
 #'
-#'   Permitted Values: a variable containing unit from the input dataset, or a function call,
+#'   Permitted Values: A variable containing unit from the input dataset, or a function call,
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
 #'
 #'
