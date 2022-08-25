@@ -19,7 +19,8 @@ Queries Dataset
 \seealso{
 Other datasets: 
 \code{\link{admiral_adsl}},
-\code{\link{ex_single}}
+\code{\link{ex_single}},
+\code{\link{queries_mh}}
 }
 \concept{datasets}
 \keyword{datasets}
