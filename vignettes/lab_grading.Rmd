@@ -14,12 +14,31 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r message=FALSE}
+library(admiral)
+library(dplyr)
+library(admiral.test)
+library(stringr)
+library(tibble)
+
+data("admiral_lb")
+
+adsl <- admiral_adsl
+lb <- admiral_lb
+
+lb <- convert_blanks_to_na(lb)
+```
+```{r echo=FALSE}
+lb <- filter(lb, USUBJID %in% c("01-701-1015", "01-701-1023", "01-703-1086", "01-703-1096", "01-707-1037", "01-716-1024"))
+```
+
+
 # Introduction
 
 For the ADLB VAD there is a concept of lab grading, where there is a set of criteria 
 for particular lab tests that grades the severity or abnormality of a lab value. The 
 grades are from 1 to 4, and grade 0 can be viewed generally as a “NORMAL” value. The
-higher the grade the more severe or more abnormal the lab value is.There are several 
+higher the grade the more severe or more abnormal the lab value is. There are several 
 sets of lab grading criteria, but for the initial implementation of lab grading we will
 look at NCI-CTCAEv4. (In future releases we will look to implement further grading criteria,
 for example NCI-CTCAEv5)
@@ -62,7 +81,28 @@ Variable | Scope |  Type | Example Value
 **COMMENT** | Description of any decisions made by {admiral} to implement grading criteria | Character | "Take worst case and assume on anticoagulation".
 
 
+# Creating the lab grade
+
+## Mapping ADLB VAD to the TERM variable in the {admiral} metadata data set
+
+Each company needs to map their lab test to a term that describes the criteria being applied
+to the lab test. The list of terms defined in the {admiral} metadata to implement NCI-CTCAEv4
+is below:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM),
+  filter = !is.na(TERM)
+)
+```
+
+
+
+
 # NCI-CTCAEV4 implementation
+
+## Terms graded
 
 Grading is implemented for those lab tests where a lab value is included in the grading definition,
 we do NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
@@ -117,8 +157,77 @@ From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.
   + Anemia
   + Leukocytosis
 
+## Updates made to TERM
+
+For terms "Hypocalcemia" and "Hypercalcemia" the criteria is provided for Calcium and Ionized Calcium,
+therefore {admiral} created a row for each in the metadata, this is noted in the COMMENT variable of
+the metadata:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, COMMENT),
+  filter = str_detect(TERM, 'calcemia')
+)
+```
+
+Similarly, there is criteria applicable to Fasting Glucose as well as non-Fasting Glucose for "Hyperglycemia"
+so again this was split into 2 rows, and noted in the COMMENT variable. Note "Hypoglycemia" does not require to
+be split into 2 rows:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, COMMENT),
+  filter = str_detect(TERM, 'glycemia')
+)
+```
+
+## Assumptions made when grading
+
+For term "INR Increased" there is the following criteria:
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, Grade_1),
+  filter = str_detect(TERM, 'INR')
+)
+```
+
+{admiral} assumed worst case and graded on both parts of the criteria for grading,
+so looking at lab value against ULN and also BASE. The decision made was put in the
+COMMENT field.
+
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, COMMENT),
+  filter = str_detect(TERM, 'INR')
+)
+```
+
+For TERM "Hyperuricemia", the criteria for Grade 1 and Grade 3 is the same with respect
+to the lab value, so take worse case and assume its a grade 3.
 
 
+and "Hypokalemia"
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, Grade_1, Grade_3, COMMENT),
+  filter = str_detect(TERM, 'Hypouricemia')
+)
+```
 
+A similar approach was taken for TERM "Hypokalemia" where Grade 1 and Grade 2 criteria
+is the same with respect to the lab value, so take worse case and assume its a grade 2.
 
+```{r, eval=TRUE, echo=FALSE}
+dataset_vignette(
+  atoxgr_criteria_ctcv4,
+  display_vars = vars(TERM, Grade_1, Grade_2, COMMENT),
+  filter = str_detect(TERM, 'Hypokalemia')
+)
+```
