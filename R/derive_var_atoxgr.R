@@ -11,7 +11,7 @@
 #' or `ATOXGRL`.
 #'
 #' @param tox_description_var Variable containing the description of the grading
-#' criteria. for example. "Anemia" or "INR Increased".
+#' criteria. For example: "Anemia" or "INR Increased".
 #'
 #' @param meta_criteria metadata data set holding the criteria (normally a case statement)
 #'
