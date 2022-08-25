@@ -34,15 +34,28 @@
 #' data(admiral_ae)
 #' data(ex_single)
 #'
-#' admiral_ae %>%
+#' ex_single <- derive_vars_dtm(
+#'   head(ex_single, 100),
+#'   dtc = EXENDTC,
+#'   new_vars_prefix = "EXEN",
+#'   flag_imputation = "none"
+#' )
+#'
+#' adae <- admiral_ae %>%
 #'   head(100) %>%
+#'   derive_vars_dtm(
+#'     dtc = AESTDTC,
+#'     new_vars_prefix = "AST",
+#'     highest_imputation = "M"
+#'   )
+#'
+#' adae %>%
 #'   derive_var_last_dose_date(
-#'     head(ex_single, 100),
+#'     dataset_ex = ex_single,
 #'     filter_ex = (EXDOSE > 0 | (EXDOSE == 0 & grepl("PLACEBO", EXTRT))) &
-#'       nchar(EXENDTC) >= 10,
-#'     dose_date = EXENDTC,
-#'     analysis_date = AESTDTC,
-#'     single_dose_condition = (EXSTDTC == EXENDTC),
+#'       !is.na(EXENDTM),
+#'     dose_date = EXENDTM,
+#'     analysis_date = ASTDTM,
 #'     new_var = LDOSEDTM,
 #'     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXDOSE")
 #'   ) %>%

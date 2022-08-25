@@ -173,21 +173,23 @@ derive_param_exposure <- function(dataset,
     filter(PARAMCD == quo_get_expr(set_values_to$PARAMCD))
 
   # add the dates for the derived parameters
+  tmp_start <- get_new_tmp_var(dataset)
+  tmp_end <- get_new_tmp_var(dataset)
   if (all(dtm)) {
     dates <- subset_ds %>%
       group_by(!!!by_vars) %>%
       summarise(
-        temp_start = min(ASTDTM, na.rm = TRUE),
-        temp_end = max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
+        !!tmp_start := min(ASTDTM, na.rm = TRUE),
+        !!tmp_end := max(coalesce(AENDTM, ASTDTM), na.rm = TRUE)
       ) %>%
       ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDTM = coalesce(ASTDTM, temp_start),
-        AENDTM = coalesce(AENDTM, temp_end)
+        ASTDTM = coalesce(ASTDTM, !!tmp_start),
+        AENDTM = coalesce(AENDTM, !!tmp_end)
       ) %>%
-      select(-starts_with("temp_"))
+      remove_tmp_vars()
 
     if (all(dt)) {
       expo_data <- expo_data %>%
@@ -197,25 +199,18 @@ derive_param_exposure <- function(dataset,
     dates <- subset_ds %>%
       group_by(!!!by_vars) %>%
       summarise(
-        temp_start = min(ASTDT, na.rm = TRUE),
-        temp_end = max(coalesce(AENDT, ASTDT), na.rm = TRUE)
+        !!tmp_start := min(ASTDT, na.rm = TRUE),
+        !!tmp_end := max(coalesce(AENDT, ASTDT), na.rm = TRUE)
       ) %>%
       ungroup()
     expo_data <- add_data %>%
       derive_vars_merged(dataset_add = dates, by_vars = by_vars) %>%
       mutate(
-        ASTDT = coalesce(ASTDT, temp_start),
-        AENDT = coalesce(AENDT, temp_end)
+        ASTDT = coalesce(ASTDT, !!tmp_start),
+        AENDT = coalesce(AENDT, !!tmp_end)
       ) %>%
-      select(-starts_with("temp_"))
+      remove_tmp_vars()
   }
 
-  all_data <- bind_rows(dataset, expo_data)
-
-  if (all(dtm)) {
-    attr(all_data$ASTDTM, "tzone") <- "UTC"
-    attr(all_data$AENDTM, "tzone") <- "UTC"
-  }
-
-  all_data
+  bind_rows(dataset, expo_data)
 }

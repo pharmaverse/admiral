@@ -1,6 +1,9 @@
-test_that("new observations with analysis date are derived correctly", {
-  library(tibble)
+library(tibble)
+library(lubridate)
 
+# derive_param_tte ----
+## Test 1: new observations with analysis date are derived correctly ----
+test_that("derive_param_tte Test 1: new observations with analysis date are derived correctly", {
   adsl <- tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~LSTALVDT,         ~TRTSDT,           ~TRTSDTF,
     "03",     "Y",    ymd("2021-08-21"), ymd("2021-08-21"), ymd("2021-08-10"), NA,
@@ -61,9 +64,8 @@ test_that("new observations with analysis date are derived correctly", {
   )
 })
 
-test_that("new observations with analysis datetime are derived correctly", {
-  library(tibble)
-
+## Test 2: new parameter with analysis datetime is derived correctly ----
+test_that("derive_param_tte Test 2: new parameter with analysis datetime is derived correctly", {
   adsl <- tribble(
     ~USUBJID, ~DTHFL, ~DTHDT,            ~TRTSDTM,                       ~TRTSDTF, ~TRTSTMF,
     "01",     "Y",    ymd("2021-06-12"), ymd_hms("2021-01-01 00:00:00"), "M",      "H",
@@ -171,9 +173,8 @@ test_that("new observations with analysis datetime are derived correctly", {
   )
 })
 
-test_that("new observations based on DTC variables are derived correctly", {
-  library(tibble)
-
+## Test 3: error is issued if DTC variables specified for date ----
+test_that("derive_param_tte Test 3: error is issued if DTC variables specified for date", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -211,19 +212,7 @@ test_that("new observations based on DTC variables are derived correctly", {
     )
   )
 
-  expected_output <- tribble(
-    ~USUBJID, ~ADT,              ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd("2021-01-01"), 0L,    "AE",           "AE",    "AESTDTC", 3,
-    "02",     ymd("2021-02-03"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
-  ) %>%
-    mutate(
-      STUDYID = "AB42",
-      PARAMCD = "TTAE",
-      PARAM = "Time to First Adverse Event"
-    ) %>%
-    left_join(select(adsl, USUBJID, STARTDT = TRTSDT), by = "USUBJID")
-
-  expect_dfs_equal(
+  expect_error(
     derive_param_tte(
       dataset_adsl = adsl,
       start_date = TRTSDT,
@@ -235,14 +224,12 @@ test_that("new observations based on DTC variables are derived correctly", {
         PARAM = "Time to First Adverse Event"
       )
     ),
-    expected_output,
-    keys = c("USUBJID", "PARAMCD")
+    regexp = "`AESTDTC` in dataset `ae` is not a date or datetime variable but is a character vector" # nolint
   )
 })
 
-test_that("by_vars parameter works correctly", {
-  library(tibble)
-
+## Test 4: by_vars parameter works correctly ----
+test_that("derive_param_tte Test 4: by_vars parameter works correctly", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -251,16 +238,19 @@ test_that("by_vars parameter works correctly", {
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03T10:56", 1,      "Flu",
-    "01",     "2021-03-04",       2,      "Cough",
-    "01",     "2021",             3,      "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -316,9 +306,8 @@ test_that("by_vars parameter works correctly", {
   )
 })
 
-test_that("an error is issued if some of the by variables are missing", {
-  library(tibble)
-
+## Test 5: an error is issued if some of the by variables are missing ----
+test_that("derive_param_tte Test 5: an error is issued if some of the by variables are missing", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -327,16 +316,19 @@ test_that("an error is issued if some of the by variables are missing", {
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03T10:56", 1,      "Flu",
-    "01",     "2021-03-04",       2,      "Cough",
-    "01",     "2021",             3,      "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -374,9 +366,9 @@ test_that("an error is issued if some of the by variables are missing", {
     regexp = "^Only AEDECOD are included in source dataset.*"
   )
 })
-test_that("an error is issued all by variables are missing in all source datasets", {
-  library(tibble)
 
+## Test 6: errors if all by vars are missing in all source datasets ----
+test_that("derive_param_tte Test 6: errors if all by vars are missing in all source datasets", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -385,16 +377,19 @@ test_that("an error is issued all by variables are missing in all source dataset
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03T10:56", 1,      "Flu",
-    "01",     "2021-03-04",       2,      "Cough",
-    "01",     "2021",             3,      "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -434,9 +429,8 @@ test_that("an error is issued all by variables are missing in all source dataset
   )
 })
 
-test_that("an error is issued if there is no one to one mapping between PARAMCD and by_vars", {
-  library(tibble)
-
+## Test 7: errors if PARAMCD and by_vars are not one to one ----
+test_that("derive_param_tte Test 7: errors if PARAMCD and by_vars are not one to one", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -445,16 +439,19 @@ test_that("an error is issued if there is no one to one mapping between PARAMCD 
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03T10:56", 1,      "Flu",
-    "01",     "2021-03-04",       2,      "Cough",
-    "01",     "2021",             3,      "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -495,9 +492,8 @@ test_that("an error is issued if there is no one to one mapping between PARAMCD 
   )
 })
 
-test_that("an error if issued set_values_to contains invalid expressions", {
-  library(tibble)
-
+## Test 8: errors if set_values_to contains invalid expressions ----
+test_that("derive_param_tte Test 8: errors if set_values_to contains invalid expressions", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -506,16 +502,19 @@ test_that("an error if issued set_values_to contains invalid expressions", {
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-    "01",     "2021-01-03T10:56", 1,      "Flu",
-    "01",     "2021-03-04",       2,      "Cough",
-    "01",     "2021",             3,      "Flu"
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -564,81 +563,8 @@ test_that("an error if issued set_values_to contains invalid expressions", {
   )
 })
 
-test_that("new observations analysis datetime based on DTC variables are derived correctly", {
-  library(tibble)
-
-  adsl <- tribble(
-    ~USUBJID, ~TRTSDTM,                       ~EOSDT,
-    "01",     ymd_hms("2020-12-06 14:23:00"), ymd("2021-03-06"),
-    "02",     ymd_hms("2021-01-16 13:09:00"), ymd("2021-02-03")
-  ) %>%
-    mutate(STUDYID = "AB42")
-
-  ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ,
-    "01",     "2021-01-03T10:56", 1,
-    "01",     "2021-03-04",       2,
-    "01",     "2021-03",          3
-  ) %>%
-    mutate(STUDYID = "AB42")
-
-  ttae <- event_source(
-    dataset_name = "ae",
-    date = AESTDTC,
-    set_values_to = vars(
-      EVENTDESC = "AE",
-      SRCDOM = "AE",
-      SRCVAR = "AESTDTC",
-      SRCSEQ = AESEQ
-    )
-  )
-
-  eos <- censor_source(
-    dataset_name = "adsl",
-    date = EOSDT,
-    censor = 1,
-    set_values_to = vars(
-      EVENTDESC = "END OF STUDY",
-      SRCDOM = "ADSL",
-      SRCVAR = "EOSDT"
-    )
-  )
-
-  expected_output <- tribble(
-    ~USUBJID, ~ADTM,                          ~CNSR, ~EVENTDESC,     ~SRCDOM, ~SRCVAR,   ~SRCSEQ,
-    "01",     ymd_hms("2021-01-03 10:56:00"), 0L,    "AE",           "AE",    "AESTDTC", 1,
-    "02",     ymd_hms("2021-02-03 00:00:00"), 1L,    "END OF STUDY", "ADSL",  "EOSDT",   NA
-  ) %>%
-    mutate(
-      STUDYID = "AB42",
-      PARAMCD = "TTAE",
-      PARAM = "Time to First Adverse Event"
-    ) %>%
-    left_join(select(adsl, USUBJID, STARTDTM = TRTSDTM), by = "USUBJID")
-
-  actual_output <- derive_param_tte(
-    dataset_adsl = adsl,
-    start_date = TRTSDTM,
-    event_conditions = list(ttae),
-    censor_conditions = list(eos),
-    source_datasets = list(adsl = adsl, ae = ae),
-    create_datetime = TRUE,
-    set_values_to = vars(
-      PARAMCD = "TTAE",
-      PARAM = "Time to First Adverse Event"
-    )
-  )
-
-  expect_dfs_equal(
-    actual_output,
-    expected_output,
-    keys = c("USUBJID", "PARAMCD")
-  )
-})
-
-test_that("error is issued if parameter code already exists", {
-  library(tibble)
-
+## Test 9: error is issued if parameter code already exists ----
+test_that("derive_param_tte Test 9: error is issued if parameter code already exists", {
   adsl <- tribble(
     ~USUBJID, ~TRTSDT,           ~EOSDT,
     "01",     ymd("2020-12-06"), ymd("2021-03-06"),
@@ -647,16 +573,19 @@ test_that("error is issued if parameter code already exists", {
     mutate(STUDYID = "AB42")
 
   ae <- tribble(
-    ~USUBJID, ~AESTDTC,           ~AESEQ,
-    "01",     "2021-01-03T10:56", 1,
-    "01",     "2021-03-04",       2,
-    "01",     "2021",             3
+    ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+    "01",     "2021-01-03", 1,      "Flu",
+    "01",     "2021-03-04", 2,      "Cough",
+    "01",     "2021-01-01", 3,      "Flu"
   ) %>%
-    mutate(STUDYID = "AB42")
+    mutate(
+      STUDYID = "AB42",
+      AESTDT = ymd(AESTDTC)
+    )
 
   ttae <- event_source(
     dataset_name = "ae",
-    date = AESTDTC,
+    date = AESTDT,
     set_values_to = vars(
       EVENTDESC = "AE",
       SRCDOM = "AE",
@@ -705,7 +634,9 @@ test_that("error is issued if parameter code already exists", {
   )
 })
 
-test_that("`tte_source` objects are printed as intended", {
+# print.tte_source ----
+## Test 10: tte_source` objects are printed as intended ----
+test_that("`print.tte_source Test 10: tte_source` objects are printed as intended", {
   ttae <- event_source(
     dataset_name = "ae",
     date = AESTDTC,

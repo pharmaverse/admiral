@@ -172,7 +172,7 @@
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords adam derivation
+#' @keywords der_gen
 #'
 #' @seealso [filter_confirmation()]
 #'
@@ -316,10 +316,12 @@ derive_var_confirmation_flag <- function(dataset,
   new_var <- assert_symbol(enquo(new_var))
   first_cond <- assert_filter_cond(enquo(first_cond), optional = TRUE)
   filter <- assert_filter_cond(enquo(filter))
+  assert_data_frame(dataset)
 
+  tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")
   data <- derive_var_obs_number(
     dataset,
-    new_var = tmp_obs_nr_var_conf_flag
+    new_var = !!tmp_obs_nr
   )
 
   data_filtered <- filter_confirmation(
@@ -336,12 +338,12 @@ derive_var_confirmation_flag <- function(dataset,
   derive_var_merged_exist_flag(
     data,
     dataset_add = data_filtered,
-    by_vars = vars(tmp_obs_nr_var_conf_flag),
+    by_vars = vars(!!tmp_obs_nr),
     new_var = !!new_var,
     condition = TRUE,
     true_value = true_value,
     false_value = false_value,
     missing_value = false_value
   ) %>%
-    select(-tmp_obs_nr_var_conf_flag)
+    remove_tmp_vars()
 }

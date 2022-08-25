@@ -654,6 +654,93 @@ assert_numeric_vector <- function(arg, optional = FALSE) {
   }
 }
 
+#' Is a Variable in a Dataset a Date or Datetime Variable?
+#'
+#' Checks if a variable in a dataset is a date or datetime variable
+#'
+#' @param dataset The dataset where the variable is expected
+#'
+#' @param var The variable to check
+#'
+#' @param dataset_name The name of the dataset. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @param var_name The name of the variable. If the argument is specified, the
+#'   specified name is displayed in the error message.
+#'
+#' @return
+#' The function throws an error if `var` is not a date or datetime variable in
+#' `dataset` and returns the input invisibly otherwise.
+#'
+#' @export
+#'
+#' @author Stefan Bundfuss
+#'
+#' @keywords assertion
+#'
+#' @examples
+#' library(tibble)
+#' library(lubridate)
+#' library(rlang)
+#'
+#' example_fun <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(dataset = dataset, var = !!var)
+#' }
+#'
+#' my_data <- tribble(
+#'   ~USUBJID, ~ADT,
+#'   "1",      ymd("2020-12-06"),
+#'   "2",      ymd("")
+#' )
+#'
+#' example_fun(
+#'   dataset = my_data,
+#'   var = ADT
+#' )
+#'
+#' try(example_fun(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+#'
+#' example_fun2 <- function(dataset, var) {
+#'   var <- assert_symbol(enquo(var))
+#'   assert_date_var(
+#'     dataset = dataset,
+#'     var = !!var,
+#'     dataset_name = "your_data",
+#'     var_name = "your_var"
+#'   )
+#' }
+#'
+#' try(example_fun2(
+#'   dataset = my_data,
+#'   var = USUBJID
+#' ))
+assert_date_var <- function(dataset, var, dataset_name = NULL, var_name = NULL) {
+  var <- assert_symbol(enquo(var))
+  assert_data_frame(dataset, required_vars = vars(!!var))
+  assert_character_scalar(dataset_name, optional = TRUE)
+  assert_character_scalar(var_name, optional = TRUE)
+  column <- pull(dataset, !!var)
+  if (is.null(dataset_name)) {
+    dataset_name <- arg_name(substitute(dataset))
+  }
+  if (is.null(var_name)) {
+    var_name <- as_label(var)
+  }
+  if (!is.instant(column)) {
+    abort(paste0(
+      "`",
+      var_name,
+      "` in dataset `",
+      dataset_name,
+      "` is not a date or datetime variable but is ",
+      friendly_type_of(column)
+    ))
+  }
+}
 
 #' Is an Argument an Object of a Specific S3 Class?
 #'

@@ -140,7 +140,7 @@
 #' data("admiral_vs")
 #' data("admiral_dm")
 #'
-#' # merging all dm variables to vs
+#' # Merging all dm variables to vs
 #' derive_vars_merged(
 #'   admiral_vs,
 #'   dataset_add = select(admiral_dm, -DOMAIN),
@@ -148,7 +148,7 @@
 #' ) %>%
 #'   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 #'
-#' # merge last weight to adsl
+#' # Merge last weight to adsl
 #' data("admiral_adsl")
 #' derive_vars_merged(
 #'   admiral_adsl,
@@ -161,6 +161,69 @@
 #'   match_flag = vsdatafl
 #' ) %>%
 #'   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+#'
+#' # Derive treatment start datetime (TRTSDTM)
+#' data(admiral_ex)
+#'
+#' ## Impute exposure start date to first date/time
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXSTDTC,
+#'   new_vars_prefix = "EXST",
+#'   highest_imputation = "M",
+#' )
+#'
+#' ## Add first exposure datetime and imputation flags to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = vars(EXSTDTM),
+#'   mode = "first"
+#' )
+#'
+#' # Derive treatment start datetime (TRTSDTM)
+#' data(admiral_ex)
+#'
+#' ## Impute exposure start date to first date/time
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXSTDTC,
+#'   new_vars_prefix = "EXST",
+#'   highest_imputation = "M",
+#' )
+#'
+#' ## Add first exposure datetime and imputation flags to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   filter_add = !is.na(EXSTDTM),
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+#'   order = vars(EXSTDTM),
+#'   mode = "first"
+#' )
+#'
+#' # Derive treatment end datetime (TRTEDTM)
+#' ## Impute exposure end datetime to last time, no date imputation
+#' ex_ext <- derive_vars_dtm(
+#'   admiral_ex,
+#'   dtc = EXENDTC,
+#'   new_vars_prefix = "EXEN",
+#'   time_imputation = "last",
+#' )
+#'
+#' ## Add last exposure datetime and imputation flag to adsl
+#' derive_vars_merged(
+#'   select(admiral_dm, STUDYID, USUBJID),
+#'   dataset_add = ex_ext,
+#'   filter_add = !is.na(EXENDTM),
+#'   by_vars = vars(STUDYID, USUBJID),
+#'   new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+#'   order = vars(EXENDTM),
+#'   mode = "last"
+#' )
 derive_vars_merged <- function(dataset,
                                dataset_add,
                                by_vars,
@@ -236,6 +299,12 @@ derive_vars_merged <- function(dataset,
 
 #' Merge a (Imputed) Date Variable
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dt()` and
+#' `derive_vars_merged()` instead.
+#'
 #' Merge a imputed date variable and date imputation  flag from a dataset to the
 #' input dataset. The observations to merge can be selected by a condition
 #' and/or selecting the first or last observation for each by group.
@@ -285,40 +354,10 @@ derive_vars_merged <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @family der_date_time
-#'
-#' @keywords der_gen der_date_time
+#' @keywords deprecated
 #'
 #' @export
 #'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ex")
-#'
-#' # derive treatment start date (TRTSDT)
-#' derive_vars_merged_dt(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTS",
-#'   dtc = EXSTDTC,
-#'   date_imputation = "first",
-#'   order = vars(TRTSDT),
-#'   mode = "first"
-#' )
-#'
-#' # derive treatment end date (TRTEDT) (without imputation)
-#' derive_vars_merged_dt(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTE",
-#'   dtc = EXENDTC,
-#'   order = vars(TRTEDT),
-#'   mode = "last"
-#' )
 derive_vars_merged_dt <- function(dataset,
                                   dataset_add,
                                   by_vars,
@@ -339,11 +378,24 @@ derive_vars_merged_dt <- function(dataset,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
+  deprecate_warn(
+    "0.8.0",
+    "derive_vars_merged_dt()",
+    details = "Please use `derive_vars_dt()` and `derive_vars_merged()` instead."
+  )
+
   old_vars <- names(dataset_add)
+  if (is.null(date_imputation)) {
+    highest_imputation <- "n"
+    date_imputation <- "first"
+  } else {
+    highest_imputation <- "M"
+  }
   add_data <- filter_if(dataset_add, filter_add) %>%
     derive_vars_dt(
       new_vars_prefix = new_vars_prefix,
       dtc = !!dtc,
+      highest_imputation = highest_imputation,
       date_imputation = date_imputation,
       flag_imputation = flag_imputation,
       min_dates = min_dates,
@@ -364,6 +416,12 @@ derive_vars_merged_dt <- function(dataset,
 }
 
 #' Merge a (Imputed) Datetime Variable
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' This function is *deprecated*, please use `derive_vars_dtm()` and
+#' `derive_vars_merged()` instead.
 #'
 #' Merge a imputed datetime variable, date imputation  flag, and time imputation
 #' flag from a dataset to the input dataset. The observations to merge can be
@@ -410,42 +468,10 @@ derive_vars_merged_dt <- function(dataset,
 #'
 #' @author Stefan Bundfuss
 #'
-#' @family der_date_time
-#'
-#' @keywords der_gen der_date_time
+#' @keywords deprecated
 #'
 #' @export
 #'
-#' @examples
-#' library(admiral.test)
-#' library(dplyr, warn.conflicts = FALSE)
-#' data("admiral_dm")
-#' data("admiral_ex")
-#'
-#' # derive treatment start datetime (TRTSDTM)
-#' derive_vars_merged_dtm(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTS",
-#'   dtc = EXSTDTC,
-#'   date_imputation = "first",
-#'   time_imputation = "first",
-#'   order = vars(TRTSDTM),
-#'   mode = "first"
-#' )
-#'
-#' # derive treatment end datetime (TRTEDTM) (without date imputation)
-#' derive_vars_merged_dtm(
-#'   select(admiral_dm, STUDYID, USUBJID),
-#'   dataset_add = admiral_ex,
-#'   by_vars = vars(STUDYID, USUBJID),
-#'   new_vars_prefix = "TRTE",
-#'   dtc = EXENDTC,
-#'   time_imputation = "last",
-#'   order = vars(TRTEDTM),
-#'   mode = "last"
-#' )
 derive_vars_merged_dtm <- function(dataset,
                                    dataset_add,
                                    by_vars,
@@ -467,11 +493,28 @@ derive_vars_merged_dtm <- function(dataset,
   filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = quo_c(by_vars, dtc))
 
+  deprecate_warn(
+    "0.8.0",
+    "derive_vars_merged_dtm()",
+    details = "Please use `derive_vars_dtm()` and `derive_vars_merged()` instead."
+  )
+
   old_vars <- names(dataset_add)
+  if (is.null(date_imputation)) {
+    highest_imputation <- "h"
+    date_imputation <- "first"
+  } else {
+    highest_imputation <- "M"
+  }
+  if (is.null(time_imputation)) {
+    highest_imputation <- "n"
+    time_imputation <- "first"
+  }
   add_data <- filter_if(dataset_add, filter = filter_add) %>%
     derive_vars_dtm(
       new_vars_prefix = new_vars_prefix,
       dtc = !!dtc,
+      highest_imputation = highest_imputation,
       date_imputation = date_imputation,
       time_imputation = time_imputation,
       flag_imputation = flag_imputation,

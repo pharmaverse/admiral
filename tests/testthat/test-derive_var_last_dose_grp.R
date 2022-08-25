@@ -1,4 +1,6 @@
 library(tibble)
+library(dplyr)
+library(lubridate)
 input_ae <- tribble(
   ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC,
   "my_study", "subject1", 1, "2020-01-02",
@@ -7,7 +9,10 @@ input_ae <- tribble(
   "my_study", "subject2", 2, "2020-02-20",
   "my_study", "subject3", 1, "2020-03-02",
   "my_study", "subject4", 1, "2020-11-02"
-)
+) %>%
+  mutate(
+    AESTDT = ymd(AESTDTC)
+  )
 
 input_ex <- tribble(
   ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -19,10 +24,11 @@ input_ex <- tribble(
   "my_study", "subject3", "2020-01-20", "2020-01-20", 2, 7, "placebo",
   "my_study", "subject4", "2020-03-15", "2020-03-15", 1, 13, "treatment"
 ) %>%
-  mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
+  mutate(EXSTDT = as.Date(EXSTDTC), EXENDT = as.Date(EXENDTC))
 
-
-test_that("derive_last_dose_date works as expected", {
+# derive_var_last_dose_grp
+## Test 1: works as expected ----
+test_that("derive_var_last_dose_grp Test 1: works as expected", {
   expected_output <- tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AESTDTC, ~LDGRP,
     "my_study", "subject1", 1, "2020-01-02", "G1",
@@ -31,19 +37,21 @@ test_that("derive_last_dose_date works as expected", {
     "my_study", "subject2", 2, "2020-02-20", "G2",
     "my_study", "subject3", 1, "2020-03-02", "G2",
     "my_study", "subject4", 1, "2020-11-02", "G3"
-  )
-
+  ) %>%
+    mutate(
+      AESTDT = ymd(AESTDTC)
+    )
 
   res <- derive_var_last_dose_grp(input_ae,
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_date = EXENDTC,
+    dose_date = EXENDT,
     new_var = LDGRP,
     grp_brks = c(1, 5, 10, 15),
     grp_lbls = c("G1", "G2", "G3"),
     dose_var = EXDOSE,
-    analysis_date = AESTDTC,
+    analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )

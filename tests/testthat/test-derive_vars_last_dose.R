@@ -1,5 +1,6 @@
 library(tibble)
-
+library(dplyr)
+library(lubridate)
 input_ae <- tribble(
   ~STUDYID,   ~USUBJID,   ~AESEQ, ~AESTDTC,
   "my_study", "subject1",      1, "2020-01-02",
@@ -9,7 +10,10 @@ input_ae <- tribble(
   "my_study", "subject2",      2, "2020-02-20",
   "my_study", "subject3",      1, "2020-03-02",
   "my_study", "subject4",      1, "2020-11-02"
-)
+) %>%
+  mutate(
+    AESTDT = ymd(AESTDTC)
+  )
 
 input_ex <- tribble(
   ~STUDYID,   ~USUBJID,   ~EXSTDTC,     ~EXENDTC,    ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -21,14 +25,15 @@ input_ex <- tribble(
   "my_study", "subject2", "2020-01-20", "2020-01-20",     2,       0, "placebo",
   "my_study", "subject3", "2020-03-15", "2020-03-15",     1,      10, "treatment"
 ) %>%
-  mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
+  mutate(EXSTDT = as.Date(EXSTDTC), EXENDT = as.Date(EXENDTC))
 
-
+# derive_vars_last_dose ----
+## Test 1: function works as expected ----
 test_that("derive_vars_last_dose Test 1: function works as expected", {
   expected_output <- mutate(
     input_ae,
-    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
-    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXSTDT = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXENDT = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
     EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
@@ -39,9 +44,9 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_date = EXENDTC,
-    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, EXSTDTC),
-    analysis_date = AESTDTC,
+    dose_date = EXENDT,
+    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
+    analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
@@ -49,17 +54,18 @@ test_that("derive_vars_last_dose Test 1: function works as expected", {
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
-
+## Test 2: function checks validity of start and end dose inputs ----
 test_that("derive_vars_last_dose Test 2: function checks validity of start and end dose inputs", {
-  library(dplyr)
-  library(tibble)
-
   input_ex_wrong <- bind_rows(
     input_ex,
     tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-      "my_study", "subject4", as.Date("2020-11-05"), as.Date("2020-11-06"), 1, 10, "treatment"
-    )
+      "my_study", "subject4", "2020-11-05", "2020-11-06", 1, 10, "treatment"
+    ) %>%
+      mutate(
+        EXENDT = ymd(EXENDTC),
+        EXSTDT = ymd(EXSTDTC)
+      )
   )
 
   expect_error(
@@ -68,8 +74,8 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
       input_ex_wrong,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
-      dose_date = EXENDTC,
-      analysis_date = AESTDTC,
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
@@ -77,13 +83,15 @@ test_that("derive_vars_last_dose Test 2: function checks validity of start and e
   )
 })
 
-
+## Test 3: function returns traceability vars ----
 test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
   library(dplyr)
   expected_output <- mutate(
     input_ae,
-    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
-    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXSTDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
+    EXENDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
+    EXENDT = ymd(EXENDTC),
+    EXSTDT = ymd(EXSTDTC),
     EXSEQ = c(1, 2, 3, NA, 2, NA, NA),
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA),
@@ -97,8 +105,8 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
     input_ex,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_date = EXENDTC,
-    analysis_date = AESTDTC,
+    dose_date = EXENDT,
+    analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = vars(LDOSEDOM = "EX", LDOSESEQ = EXSEQ, LDOSEVAR = "EXSTDTC")
   )
@@ -106,23 +114,26 @@ test_that("derive_vars_last_dose Test 3: function returns traceability vars", {
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
-
+## Test 4: function errors when multiple doses are on same date ----
 test_that("derive_vars_last_dose Test 4: function errors when multiple doses are on same date", {
-  library(dplyr)
-  library(tibble)
-
   input_ex_dup <- bind_rows(
     input_ex,
     tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-      "my_study", "subject2", as.Date("2020-01-20"), as.Date("2020-01-20"), 3, 0, "placebo"
-    )
+      "my_study", "subject2", "2020-01-20", "2020-01-20", 3, 0, "placebo"
+    ) %>%
+      mutate(
+        EXSTDT = ymd(EXSTDTC),
+        EXENDT = ymd(EXENDTC)
+      )
   )
 
   expected_output <- mutate(
     input_ae,
-    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
-    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXSTDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
+    EXENDTC = c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA),
+    EXSTDT = ymd(EXSTDTC),
+    EXENDT = ymd(EXENDTC),
     EXSEQ = c(1, 2, 3, NA, 3, NA, NA),
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
@@ -134,8 +145,8 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
       input_ex_dup,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
-      dose_date = EXENDTC,
-      analysis_date = AESTDTC,
+      dose_date = EXENDT,
+      analysis_date = AESTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
@@ -143,23 +154,23 @@ test_that("derive_vars_last_dose Test 4: function errors when multiple doses are
   )
 })
 
-
+## Test 5: multiple doses on same date - dose_id supplied ----
 test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id supplied", {
-  library(tibble)
-  library(dplyr)
-
   input_ex_dup <- bind_rows(
     input_ex,
     tribble(
       ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-      "my_study", "subject2", as.Date("2020-01-20"), as.Date("2020-01-20"), 3, 0, "placebo"
+      "my_study", "subject2", "2020-01-20", "2020-01-20", 3, 0, "placebo"
+    ) %>% mutate(
+      EXSTDT = ymd(EXSTDTC),
+      EXENDT = ymd(EXENDTC)
     )
   )
 
   expected_output <- mutate(
     input_ae,
-    EXSTDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
-    EXENDTC = as.Date(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXSTDT = ymd(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
+    EXENDT = ymd(c("2020-01-01", "2020-08-29", "2020-09-02", NA, "2020-01-20", NA, NA)),
     EXSEQ = c(1, 2, 3, NA, 3, NA, NA),
     EXDOSE = c(10, 10, 10, NA, 0, NA, NA),
     EXTRT = c("treatment", "treatment", "treatment", NA, "placebo", NA, NA)
@@ -170,10 +181,10 @@ test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id s
     input_ex_dup,
     filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
     by_vars = vars(STUDYID, USUBJID),
-    dose_date = EXENDTC,
+    dose_date = EXENDT,
     dose_id = vars(EXSEQ),
-    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXSTDTC, EXENDTC),
-    analysis_date = AESTDTC,
+    new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXSTDT, EXENDT),
+    analysis_date = AESTDT,
     single_dose_condition = (EXSTDTC == EXENDTC),
     traceability_vars = NULL
   )
@@ -181,10 +192,8 @@ test_that("derive_vars_last_dose Test 5: multiple doses on same date - dose_id s
   expect_dfs_equal(expected_output, res, keys = c("STUDYID", "USUBJID", "AESEQ", "AESTDTC"))
 })
 
-
-test_that("derive_vars_last_dose Test 6: error is issued if same variable is found in both input datasets ", { # nolint
-  library(tibble)
-
+## Test 6: error is issued if same variable is found in both input datasets ----
+test_that("derive_vars_last_dose Test 6: error is issued if same variable is found in both input datasets", { # nolint
   input_ae <- tribble(
     ~STUDYID,   ~USUBJID,   ~AESEQ, ~EXSTDTC,
     "my_study", "subject1",      1, "2020-01-02",
@@ -194,7 +203,10 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
     "my_study", "subject2",      2, "2020-02-20",
     "my_study", "subject3",      1, "2020-03-02",
     "my_study", "subject4",      1, "2020-11-02"
-  )
+  ) %>%
+    mutate(
+      EXSTDT = ymd(EXSTDTC)
+    )
 
   input_ex <- tribble(
     ~STUDYID, ~USUBJID, ~EXSTDTC, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
@@ -206,7 +218,10 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
     "my_study", "subject2", "2020-01-20", "2020-01-20", 2, 0, "placebo",
     "my_study", "subject3", "2020-03-15", "2020-03-15", 1, 10, "treatment"
   ) %>%
-    mutate(EXSTDTC = as.Date(EXSTDTC), EXENDTC = as.Date(EXENDTC))
+    mutate(
+      EXSTDT = as.Date(EXSTDTC),
+      EXENDT = as.Date(EXENDTC)
+    )
 
   expect_error(
     derive_vars_last_dose(
@@ -214,20 +229,19 @@ test_that("derive_vars_last_dose Test 6: error is issued if same variable is fou
       input_ex,
       filter_ex = (EXDOSE > 0) | (EXDOSE == 0 & EXTRT == "placebo"),
       by_vars = vars(STUDYID, USUBJID),
-      dose_date = EXENDTC,
-      new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDTC, EXSTDTC),
-      analysis_date = EXSTDTC,
+      dose_date = EXENDT,
+      new_vars = vars(EXDOSE, EXTRT, EXSEQ, EXENDT, EXSTDT),
+      analysis_date = EXSTDT,
       single_dose_condition = (EXSTDTC == EXENDTC),
       traceability_vars = NULL
     ),
-    "Variable(s) `EXSTDTC` found in both datasets, cannot perform join",
+    "Variable(s) `EXSTDT` found in both datasets, cannot perform join",
     fixed = TRUE
   )
 })
 
+## Test 7: no error is raised when setting `dose_date` to a renamed variable ----
 test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_date` to a renamed variable", { # nolint
-  library(tibble)
-
   adae <- tribble(
     ~USUBJID, ~AESTDTC, ~AENDTC, ~ASTDT, ~AENDT, ~AEDECOD,
     "P01", "2022-01-10", "2022-01-12", ymd("2022-01-10"), ymd("2022-01-12"), "Nausea",
@@ -249,7 +263,7 @@ test_that("derive_vars_last_dose Test 7: no error is raised when setting `dose_d
       adex_single,
       by_vars = vars(USUBJID),
       dose_date = EXSTDT,
-      analysis_date = AESTDTC,
+      analysis_date = ASTDT,
       new_vars = vars(EXSTDT = ASTDT)
     ),
     NA

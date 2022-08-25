@@ -1,3 +1,5 @@
+library(tibble)
+
 test_that("a warning is issued when using `derive_var_extreme_flag()` with `filter` argument", {
   library(tibble)
   input <- tribble(
@@ -127,85 +129,6 @@ test_that("derive_var_astdy Test 1: A warning is issued when using `derive_var_a
   )
 })
 
-test_that("derive_var_trtedtm Test 1: A warning is issued when using `derive_var_trtedtm()`", {
-  library(tibble)
-  adsl <- tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tribble(
-    ~USUBJID, ~EXENDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-    1L, "2020-01-01", 1, 12, "ACTIVE",
-    1L, "2020-02-03", 2, 9, "ACTIVE",
-    2L, "2020-01-02", 1, 0, "PLACEBO",
-    3L, "2020-03-13", 1, 14, "ACTIVE",
-    3L, "2020-03-21", 2, 0, "ACTIVE"
-  )
-
-  expect_warning(derive_var_trtedtm(
-    adsl,
-    dataset_ex = ex,
-    subject_keys = vars(USUBJID)
-  ),
-  "deprecated",
-  fixed = TRUE
-  )
-})
-
-test_that("derive_var_trtsdtm Test 1: A warning is issued when using `derive_var_trtsdtm()`", {
-  library(tibble)
-  adsl <- tibble(STUDYID = "STUDY", USUBJID = 1:3)
-  ex <- tribble(
-    ~USUBJID, ~EXSTDTC, ~EXSEQ, ~EXDOSE, ~EXTRT,
-    1L, "2020-01-01", 1, 12, "ACTIVE",
-    1L, "2020-02-03", 2, 9, "ACTIVE",
-    2L, "2020-01-02", 1, 0, "PLACEBO",
-    3L, "2020-03-13", 1, 14, "ACTIVE",
-    3L, "2020-03-21", 2, 0, "ACTIVE"
-  )
-
-  expect_warning(derive_var_trtsdtm(
-    adsl,
-    dataset_ex = ex,
-    subject_keys = vars(USUBJID)
-  ),
-  "deprecated",
-  fixed = TRUE
-  )
-})
-
-test_that("derive_var_disposition Test 1: A warning is issued when using `derive_var_disposition_dt()`", { # nolint
-  library(tibble)
-  adsl <- tribble(
-    ~STUDYID, ~USUBJID,
-    "TEST01", "PAT01",
-    "TEST01", "PAT02"
-  )
-
-  ds <- tribble(
-    ~STUDYID, ~USUBJID, ~DSCAT, ~DSDECOD, ~DSSTDTC,
-    "TEST01", "PAT01", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-01",
-    "TEST01", "PAT01", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
-    "TEST01", "PAT01", "DISPOSITION EVENT", "ADVERSE EVENT", "2021-12-01",
-    "TEST01", "PAT01", "OTHER EVENT", "DEATH", "2022-02-01",
-    "TEST01", "PAT02", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-02",
-    "TEST01", "PAT02", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
-    "TEST01", "PAT02", "DISPOSITION EVENT", "COMPLETED", "2021-12-01",
-    "TEST01", "PAT02", "OTHER EVENT", "DEATH", "2022-04"
-  )
-
-  expect_warning(
-    derive_var_disposition_dt(
-      adsl,
-      dataset_ds = ds,
-      new_var = RFICDT,
-      dtc = DSSTDTC,
-      filter = DSCAT == "PROTOCOL MILESTONE" &
-        DSDECOD == "INFORMED CONSENT OBTAINED",
-      date_imputation = NULL
-    ),
-    "deprecated",
-    fixed = TRUE
-  )
-})
-
 test_that("derive_var_atirel Test 1: A warning is issued when using `derive_var_atirel()`", {
   library(lubridate)
   library(tibble)
@@ -270,5 +193,99 @@ test_that("derive_derived_param Test 1: A warning is issued if `derive_derived_p
     ),
     "deprecated",
     fixed = TRUE
+  )
+})
+
+adsl <- tribble(
+  ~USUBJID, ~SEX, ~COUNTRY,
+  "ST42-1", "F",  "AUT",
+  "ST42-2", "M",  "MWI",
+  "ST42-3", "M",  "NOR",
+  "ST42-4", "F",  "UGA"
+) %>% mutate(STUDYID = "ST42")
+
+ex <- tribble(
+  ~USUBJID, ~EXSTDTC,
+  "ST42-1", "2020-12-07",
+  "ST42-1", "2020-12-14",
+  "ST42-2", "2021-01-12T12:00:00",
+  "ST42-2", "2021-01-26T13:21",
+  "ST42-3", "2021-03-02"
+) %>% mutate(STUDYID = "ST42")
+
+test_that("derive_vars_merged_dt: a deprecation warning is issued", {
+  expect_warning(
+    derive_vars_merged_dt(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDT),
+      flag_imputation = "date",
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      mode = "first"
+    ),
+    "deprecated"
+  )
+})
+
+test_that("derive_vars_merged_dtm: a deprecation warning is issued", {
+  expect_warning(
+    derive_vars_merged_dtm(
+      adsl,
+      dataset_add = ex,
+      order = vars(TRTSDTM),
+      by_vars = vars(STUDYID, USUBJID),
+      dtc = EXSTDTC,
+      new_vars_prefix = "TRTS",
+      time_imputation = "first",
+      mode = "first"
+    ),
+    "deprecated"
+  )
+})
+
+test_that("date_source: errors when date_imputation is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      date_imputation = "first"
+    ),
+    paste(
+      "The `date_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
+      sep = "\n"
+    )
+  )
+})
+
+test_that("date_source: errors when time_imputation is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      time_imputation = "first"
+    ),
+    paste(
+      "The `time_imputation` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
+      sep = "\n"
+    )
+  )
+})
+
+test_that("date_source: errors when preserve is specified", {
+  expect_error(
+    date_source(
+      dataset_name = "ae",
+      date = ASTDTM,
+      preserve = TRUE
+    ),
+    paste(
+      "The `preserve` argument of `date_source\\(\\)` .* deprecated .* admiral 0.8.0.*",
+      "Please use `derive_vars_dtm\\(\\)` to convert DTC variables to datetime variables in the dataset.", # nolint
+      sep = "\n"
+    )
   )
 })
