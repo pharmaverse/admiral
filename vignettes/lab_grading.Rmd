@@ -1,0 +1,124 @@
+---
+title: "Lab grading"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab grading}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+For the ADLB VAD there is a concept of lab grading, where there is a set of criteria 
+for particular lab tests that grades the severity or abnormality of a lab value. The 
+grades are from 1 to 4, and grade 0 can be viewed generally as a “NORMAL” value. The
+higher the grade the more severe or more abnormal the lab value is.There are several 
+sets of lab grading criteria, but for the initial implementation of lab grading we will
+look at NCI-CTCAEv4. (In future releases we will look to implement further grading criteria,
+for example NCI-CTCAEv5)
+
+The NCI-CTCAE version 4 and 5 grading criteria can be found 
+here: https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm .
+
+The NCI-CTCAEv4 criteria can be found under the heading
+**Common Terminology Criteria for Adverse Events (CTCAE) v4.0**
+
+
+# Grading metadata
+
+{admiral} will store a metadata data set with required variables and optional variables, the
+optional variables are purely for transparency, and will contain detailed information about
+the grading criteria. The required variables are those used by {admiral} to create the grade.
+
+## Structure of metadata data set
+
+The metadata data set has the following structure for the required variables:
+
+Variable | Scope |  Type | Example Value
+------- | -------- | ------ | -------- 
+**TERM** | term describing the criteria applied to a particular lab test.|  Character |  "Anemia" 
+**DIRECTION** | the direction of the abnormality of a particular lab test value|   Character | "L" or "H".
+**SI_UNIT_CHECK** | unit of lab test, to check against input data if criteria is based on absolute values. |  Character | "mmol/L"
+**VAR_CHECK** | comma separated list of variables used in criteria, to check input data that variables exist. |  Character | "AVAL, ANRLO"
+**GRADE_CRITERIA_CODE** | variable to hold code that creates grade based on defined criteria. |  Character |A valid case statement within a `mutate` function call
+
+The metadata data set has the following structure for the optional variables:
+
+Variable | Scope |  Type | Example Value
+------- | -------- | ------ | -------- 
+**SOC** | System Organ Class the lab test belongs to.|  Character |  "Investigations" 
+**GRADE 1** | Grade 1 criteria for lab test, normally straight from document.|   Character | ">ULN - 3.0 x ULN".
+**GRADE 2** | Grade 2 criteria for lab test, normally straight from document.|   Character | ">3.0 - 5.0 x ULN".
+**GRADE 3** | Grade 3 criteria for lab test, normally straight from document.|   Character | ">5.0 - 20.0 x ULN".
+**GRADE 4** | Grade 4 criteria for lab test, normally straight from document.|   Character | ">20.0 x ULN".
+**DEFINITION** | Definition of abnormality, normally from source document.|  Character | "A finding based on laboratory test results that indicate an increase in the level of alanine aminotransferase (ALT or SGPT) in the blood specimen.".
+**COMMENT** | Description of any decisions made by {admiral} to implement grading criteria | Character | "Take worst case and assume on anticoagulation".
+
+
+# NCI-CTCAEV4 implementation
+
+Grading is implemented for those lab tests where a lab value is included in the grading definition,
+we do NOT try to read any other data to determine the grade, and only the ADLB VAD is used.
+The following CTCAE v4.0 SOC values were identified for grading, these are “Investigations", 
+“Metabolism and nutrition disorders” and “Blood and lymphatic system disorders”.
+
+From these SOC values the following terms criteria is implemented in {admiral} 
+
+From SOC = “Investigations" there are 21 CTCAE v4.0 Terms:
+
+  + Activated partial thromboplastin time prolonged
+  + Alanine aminotransferase increased
+  + Alkaline phosphatase increased
+  + Aspartate aminotransferase increased
+  + Blood bilirubin increased
+  + CD4 lymphocytes decreased
+  + Cholesterol high
+  + CPK increased
+  + Creatinine increased
+  + Fibrinogen decreased
+  + GGT increased
+  + Haptoglobin decreased
+  + Hemoglobin increased
+  + INR increased
+  + Lipase increased
+  + Lymphocyte count decreased
+  + Lymphocyte count increased
+  + Neutrophil count decreased
+  + Platelet count decreased
+  + Serum amylase increased
+  + White blood cell decreased
+
+From the SOC =  “Metabolism and nutrition disorders” there are 14 CTCAE v4.0 Terms:
+
+  + Hypercalcemia
+  + Hyperglycemia
+  + Hyperkalemia
+  + Hypermagnesemia
+  + Hypernatremia
+  + Hypertriglyceridemia
+  + Hyperuricemia
+  + Hypoalbuminemia
+  + Hypocalcemia
+  + Hypoglycemia
+  + Hypokalemia
+  + Hypomagnesemia
+  + Hyponatremia
+  + Hypophosphatemia
+
+From the SOC =  “Blood and lymphatic system disorders” there are 2 CTCAE v4.0 Terms:
+
+  + Anemia
+  + Leukocytosis
+
+
+
+
+
+
