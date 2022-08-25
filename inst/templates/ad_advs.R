@@ -93,7 +93,7 @@ advs <- vs %>%
 
 advs <- advs %>%
   ## Add PARAMCD only - add PARAM etc later ----
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(VSTESTCD)
