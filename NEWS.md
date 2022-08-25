@@ -30,6 +30,8 @@ deprecation notice (#1229)
 
 - `value_var` parameter added to `derive_vars_atc()` (#1120)
 
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+
 - The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
 `convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
 users feedback (#1300):
