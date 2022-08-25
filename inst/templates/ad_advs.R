@@ -93,8 +93,8 @@ advs <- vs %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 advs <- advs %>%
-  # Add PARAMCD only - add PARAM etc later
-  derive_vars_merged(
+  ## Add PARAMCD only - add PARAM etc later ----
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(VSTESTCD)
