@@ -125,14 +125,18 @@ The input dataset is joined with itself by the variables specified for
 specified for \code{join_vars} are kept. The suffix ".join" is added to these
 variables.
 
-For example, for \code{by_vars = USUBJID}, \code{join_vars = vars(AVISITN, AVALC)} and input dataset\if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
+For example, for \code{by_vars = USUBJID}, \code{join_vars = vars(AVISITN, AVALC)} and input dataset
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# A tibble: 2 x 4
 USUBJID AVISITN AVALC  AVAL
 <chr>     <dbl> <chr> <dbl>
 1             1 Y         1
 1             2 N         0
 }\if{html}{\out{</div>}}
 
-the joined dataset is\if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
+the joined dataset is
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
 1             1 Y         1            1 Y
@@ -147,7 +151,9 @@ USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 The joined dataset is restricted to observations with respect to
 \code{join_type} and \code{order}.
 
-The dataset from the example in the previous step with \code{join_type = "after"} and \code{order = vars(AVISITN)} is restricted to\if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
+The dataset from the example in the previous step with \code{join_type = "after"} and \code{order = vars(AVISITN)} is restricted to
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{A tibble: 4 x 6
 USUBJID AVISITN AVALC  AVAL AVISITN.join AVALC.join
 <chr>     <dbl> <chr> <dbl>        <dbl> <chr>
 1             1 Y         1            2 N
