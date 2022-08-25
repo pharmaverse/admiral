@@ -28,7 +28,28 @@ deprecation notice (#1229)
 
 - `derive_vars_duration()` updated to not display units when there is missing duration (#1207)
 
-- `value_var` parameter added to `derive_vars_atc()` (#1120) 
+- `value_var` parameter added to `derive_vars_atc()` (#1120)
+
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+
+- The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
+`convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
+users feedback (#1300):
+
+    - Partial dates with missing components in the middle like
+    `"2003-12-15T-:15:18"`, `"2003-12-15T13:-:19"`, `"2020-07--T00:00"` are
+    handled now.
+  
+    - The control of the level of imputation has been refined by adding the
+      `highest_imputation` argument. For example, `highest_imputation = "D"`
+      requests imputation for day and time but not for year and month.
+  
+      (For the `date_imputation` and the `time_imputation` argument `NULL` is no
+      longer a permitted value.)
+  
+    - It is now possible to impute completely missing dates by specifying
+    `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
+
 
 ## Breaking Changes
 

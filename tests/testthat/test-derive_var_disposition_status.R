@@ -4,7 +4,8 @@ dm <- tribble(
   "TEST01", "PAT01",
   "TEST01", "PAT02",
   "TEST01", "PAT03",
-  "TEST01", "PAT04"
+  "TEST01", "PAT04",
+  "TEST01", "PAT05"
 )
 
 ds <- tribble(
@@ -22,7 +23,8 @@ ds <- tribble(
   "TEST01", "PAT03", "DISPOSITION EVENT", "PROGRESSIVE DISEASE", "2021-05-01",
   "TEST01", "PAT03", "OTHER EVENT", "DEATH", "2022-04",
   "TEST01", "PAT04", "PROTOCOL MILESTONE", "INFORMED CONSENT OBTAINED", "2021-04-02",
-  "TEST01", "PAT04", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11"
+  "TEST01", "PAT04", "PROTOCOL MILESTONE", "RANDOMIZATION", "2021-04-11",
+  "TEST01", "PAT05", "DISPOSITION EVENT", "SCREEN FAILURE", "2021-03-01"
 )
 
 
@@ -34,7 +36,8 @@ test_that("Derive EOSSTT using default mapping", {
     "TEST01", "PAT01", "DISCONTINUED",
     "TEST01", "PAT02", "COMPLETED",
     "TEST01", "PAT03", "DISCONTINUED",
-    "TEST01", "PAT04", "ONGOING"
+    "TEST01", "PAT04", "ONGOING",
+    "TEST01", "PAT05", "NOT STARTED"
   )
 
   actual_output <- derive_var_disposition_status(
@@ -56,9 +59,11 @@ test_that("Derive EOTSTT using a study specific mapping", {
   library(tibble)
   format_eosstt <- function(x) {
     case_when(
+      x == "SCREEN FAILURE" ~ "NOT STARTED",
       x == "COMPLETED" ~ "COMPLETED",
       x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-      x %notin% c("ADVERSE EVENT", "COMPLETED") & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+      x %notin% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE") &
+        !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
       TRUE ~ "ONGOING"
     )
   }
@@ -67,7 +72,8 @@ test_that("Derive EOTSTT using a study specific mapping", {
     "TEST01", "PAT01", "DISCONTINUED DUE TO AE",
     "TEST01", "PAT02", "COMPLETED",
     "TEST01", "PAT03", "DISCONTINUED NOT DUE TO AE",
-    "TEST01", "PAT04", "ONGOING"
+    "TEST01", "PAT04", "ONGOING",
+    "TEST01", "PAT05", "NOT STARTED"
   )
 
   actual_output <- derive_var_disposition_status(

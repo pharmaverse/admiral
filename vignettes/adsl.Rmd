@@ -231,8 +231,9 @@ dataset_vignette(adsl, display_vars = vars(USUBJID, EOSDT, EOSSTT))
 
 This call would return the input dataset with the column `EOSSTT` added. 
 
-By default, the function will derive `EOSSTT` as 
+By default, the function will derive `EOSSTT` as
 
+- `"NOT STARTED"` if `DSDECOD` is `"SCREEN FAILURE"` or `"SCREENING NOT COMPLETED"`
 - `"COMPLETED"` if `DSDECOD == "COMPLETED"`
 - `"DISCONTINUED"` if `DSDECOD` is not `"COMPLETED"` or `NA`
 - `"ONGOING"` otherwise
