@@ -8,7 +8,6 @@ dthcaus_source(
   dataset_name,
   filter,
   date,
-  date_imputation = NULL,
   order = NULL,
   mode = "first",
   dthcaus,
@@ -23,23 +22,10 @@ the death cause.}
 
 \item{date}{A date or datetime variable to be used for sorting \code{dataset}.}
 
-\item{date_imputation}{The value to impute the day/month when a datepart is missing.
-
-If \code{NULL}: no date imputation is performed and partial dates are returned as missing.
-
-Otherwise, a character value is expected, either as a
-\itemize{
-\item format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
-of June
-\item or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-}
-
-Default is \code{NULL}}
-
 \item{order}{Sort order
 
 Additional variables to be used for sorting the \code{dataset} which is ordered by the
-(imputed) \code{date} and \code{order}. Can be used to avoid duplicate record warning.
+\code{date} and \code{order}. Can be used to avoid duplicate record warning.
 
 \emph{Default}: \code{NULL}
 

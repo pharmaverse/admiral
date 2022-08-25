@@ -165,9 +165,7 @@ derive_var_dthcaus <- function(dataset,
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
     add_data[[ii]] <- source_dataset %>%
-      filter_if(sources[[ii]]$filter) %>%
-      mutate(temp_date = impute_dtc(dtc = !!sources[[ii]]$date,
-                                    date_imputation = sources[[ii]]$date_imputation))
+      filter_if(sources[[ii]]$filter)
 
     assert_date_var(
       dataset = add_data[[ii]],
@@ -180,7 +178,7 @@ derive_var_dthcaus <- function(dataset,
     tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = c(vars(temp_date), sources[[ii]]$order),
+        order = vars(!!sources[[ii]]$date, !!!sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
@@ -236,21 +234,10 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param date A date or datetime variable to be used for sorting `dataset`.
 #'
-#' @param date_imputation The value to impute the day/month when a datepart is missing.
-#'
-#'   If `NULL`: no date imputation is performed and partial dates are returned as missing.
-#'
-#'   Otherwise, a character value is expected, either as a
-#'   - format with day and month specified as 'mm-dd': e.g. '06-15' for the 15th
-#'   of June
-#'   - or as a keyword: 'FIRST', 'MID', 'LAST' to impute to the first/mid/last day/month.
-#'
-#'   Default is `NULL`
-#'
 #' @param order Sort order
 #'
 #'   Additional variables to be used for sorting the `dataset` which is ordered by the
-#'   (imputed) `date` and `order`. Can be used to avoid duplicate record warning.
+#'   `date` and `order`. Can be used to avoid duplicate record warning.
 #'
 #'   *Default*: `NULL`
 #'
@@ -288,7 +275,6 @@ derive_var_dthcaus <- function(dataset,
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
-                           date_imputation = NULL,
                            order = NULL,
                            mode = "first",
                            dthcaus,
@@ -297,7 +283,6 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
-    date_imputation = assert_character_scalar(date_imputation, optional = TRUE),
     order = assert_order_vars(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
