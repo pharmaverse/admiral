@@ -30,6 +30,8 @@ deprecation notice (#1229)
 
 - `value_var` parameter added to `derive_vars_atc()` (#1120)
 
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+
 - The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
 `convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
 users feedback (#1300):
@@ -47,6 +49,7 @@ users feedback (#1300):
   
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
+
 
 ## Breaking Changes
 
@@ -281,6 +284,9 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
+
+- `compute_qual_imputation()` derives impute values when qualifier exists in character result
+(#976)
 
 ## Updates of Existing Functions
 

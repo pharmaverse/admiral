@@ -35,7 +35,7 @@ eg <- convert_blanks_to_na(eg)
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
   ~EGTESTCD, ~PARAMCD, ~PARAM, ~PARAMN,
-  "EGINTP", "EGINTP", "ECG Interpretation", 1,
+  "ECGINT", "EGINTP", "ECG Interpretation", 1,
   "HR", "HR", "Heart Rate (beats/min)", 2,
   "RR", "RR", "RR Duration (msec)", 3,
   "RRR", "RRR", "RR Duration Rederived (msec)", 4,
@@ -116,7 +116,7 @@ adeg <- eg %>%
 
 adeg <- adeg %>%
   ## Add PARAMCD only (add PARAM, etc later) ----
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(EGTESTCD)
