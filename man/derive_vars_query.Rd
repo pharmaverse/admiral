@@ -28,12 +28,10 @@ This function can be used to derive CDISC variables such as
 \code{SMQzzNAM}, \code{SMQzzCD}, \code{SMQzzSC}, \code{SMQzzSCN}, and \code{CQzzNAM} in ADAE and
 ADMH, and variables such as \code{SDGzzNAM}, \code{SDGzzCD}, and \code{SDGzzSC} in ADCM.
 An example usage of this function can be found in the
-\link{OCCDS vignette}(https://pharmaverse.github.io/
-admiral/articles/occds.html).
+\href{../articles/occds.html}{OCCDS vignette}.
 
 A query dataset is expected as an input to this function. See the
-\link{Queries Dataset Documentation vignette}(https://pharmaverse.github.io/
-admiral/articles/queries_dataset.html)
+\href{../articles/queries_dataset.html}{Queries Dataset Documentation vignette}
 for descriptions, or call \code{data("queries")} for an example of a query dataset.
 
 For each unique element in \code{VAR_PREFIX}, the corresponding "NAM"

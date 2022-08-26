@@ -4,12 +4,10 @@
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
 #'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
 #'   An example usage of this function can be found in the
-#'   [OCCDS vignette](https://pharmaverse.github.io/
-#'   admiral/articles/occds.html).
+#'   [OCCDS vignette](../articles/occds.html).
 #'
 #'   A query dataset is expected as an input to this function. See the
-#'   [Queries Dataset Documentation vignette](https://pharmaverse.github.io/
-#'   admiral/articles/queries_dataset.html)
+#'   [Queries Dataset Documentation vignette](../articles/queries_dataset.html)
 #'   for descriptions, or call `data("queries")` for an example of a query dataset.
 #'
 #'   For each unique element in `VAR_PREFIX`, the corresponding "NAM"
