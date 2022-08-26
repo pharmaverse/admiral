@@ -23,7 +23,7 @@ test_that("A warning is issued when a variable to be derived already exists in t
 
 test_that("A warning is issued when a vector contain unknown datetime format", {
   expect_warning(
-    warn_if_invalid_dtc(dtc = "2021-04-06T-:30:30")
+    warn_if_invalid_dtc(dtc = "20210406T12:30:30")
   )
 })
 

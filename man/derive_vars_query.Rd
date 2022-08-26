@@ -57,10 +57,15 @@ derive_vars_query(adae, queries)
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}} \code{\link[=assert_valid_queries]{assert_valid_queries()}}
+
+OCCDS Functions: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_vars_atc}()},
+\code{\link{get_terms_from_db}()}
 }
 \author{
 Ondrej Slama, Shimeng Huang
 }
-\keyword{adae}
-\keyword{adcm}
-\keyword{derivation}
+\concept{der_occds}
+\keyword{der_occds}

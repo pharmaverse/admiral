@@ -25,7 +25,17 @@ data(admiral_vs)
 admiral::filter_if(admiral_vs, rlang::quo(NULL))
 admiral::filter_if(admiral_vs, rlang::quo(VSTESTCD == "WEIGHT"))
 }
+\seealso{
+Utilities for Filtering Observations: 
+\code{\link{count_vals}()},
+\code{\link{filter_confirmation}()},
+\code{\link{filter_extreme}()},
+\code{\link{filter_relative}()},
+\code{\link{max_cond}()},
+\code{\link{min_cond}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_fil}
+\keyword{utils_fil}

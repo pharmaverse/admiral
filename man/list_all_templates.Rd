@@ -4,7 +4,10 @@
 \alias{list_all_templates}
 \title{List All Available ADaM Templates}
 \usage{
-list_all_templates()
+list_all_templates(package = "admiral")
+}
+\arguments{
+\item{package}{The R package in which to look for templates. By default \code{"admiral"}.}
 }
 \value{
 A \code{character} vector of all available templates
@@ -15,7 +18,12 @@ List All Available ADaM Templates
 \examples{
 list_all_templates()
 }
+\seealso{
+Utilities used for examples and template scripts: 
+\code{\link{use_ad_template}()}
+}
 \author{
 Shimeng Huang, Thomas Neitmann
 }
-\keyword{user_utility}
+\concept{utils_examples}
+\keyword{utils_examples}

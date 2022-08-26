@@ -9,7 +9,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. `haven::read_sas()` to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -21,9 +21,14 @@ data("admiral_adsl")
 adsl <- admiral_adsl
 vs <- admiral_vs
 
+# When SAS datasets are imported into R using haven::read_sas(), missing
+# character values from SAS appear as "" characters in R, instead of appearing
+# as NA values. Further details can be obtained via the following link:
+# https://pharmaverse.github.io/admiral/articles/admiral.html#handling-of-missing-values
+
 vs <- convert_blanks_to_na(vs)
 
-# ---- Lookup tables ----
+# Lookup tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -56,7 +61,7 @@ avalcat_lookup <- tibble::tribble(
   "HEIGHT", 2, "<= 100 cm"
 )
 
-# ---- User defined functions ----
+# User defined functions ----
 
 # Here are some examples of how you can create your own functions that
 #  operates on vectors, which can be used in `mutate()`.
@@ -67,7 +72,7 @@ format_avalcat1n <- function(param, aval) {
   )
 }
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
@@ -79,29 +84,29 @@ advs <- vs %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADT, ADY
+  ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
-    dtc = VSDTC,
-    flag_imputation = "none"
+    dtc = VSDTC
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 advs <- advs %>%
-  # Add PARAMCD only - add PARAM etc later
-  derive_vars_merged(
+  ## Add PARAMCD only - add PARAM etc later ----
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(VSTESTCD)
   ) %>%
-  # Calculate AVAL and AVALC
+  ## Calculate AVAL and AVALC ----
   mutate(
     AVAL = VSSTRESN,
     AVALC = VSSTRESC
   ) %>%
-  # Derive new parameters based on existing records. Note that, for the following
-  # three `derive_param_*()` functions, only the variables specified in `by_vars` will
-  # be populated in the newly created records.
+  ## Derive new parameters based on existing records ----
+  # Note that, for the following three `derive_param_*()` functions, only the
+  # variables specified in `by_vars` will be populated in the newly created
+  # records.
 
   # Derive Mean Arterial Pressure
   derive_param_map(
@@ -118,7 +123,7 @@ advs <- advs %>%
     get_unit_expr = VSSTRESU,
     filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   ) %>%
-  # Derive Body Surface Area
+  # Derive Body Mass Index
   derive_param_bmi(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
     set_values_to = vars(PARAMCD = "BMI"),
@@ -127,7 +132,7 @@ advs <- advs %>%
   )
 
 
-# get visit info
+## Get visit info ----
 advs <- advs %>%
   # Derive Timing
   mutate(
@@ -145,7 +150,7 @@ advs <- advs %>%
     ))
   )
 
-# Derive a new record as a summary record (e.g. mean of the triplicates at each time point)
+## Derive a new record as a summary record (e.g. mean of the triplicates at each time point) ----
 advs <- advs %>%
   derive_summary_records(
     by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, PARAMCD, AVISITN, AVISIT, ADT, ADY),
@@ -156,7 +161,7 @@ advs <- advs %>%
   )
 
 advs <- advs %>%
-  # Calculate ONTRTFL
+  ## Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
@@ -164,14 +169,14 @@ advs <- advs %>%
     filter_pre_timepoint = AVISIT == "Baseline"
   )
 
-# Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
+## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 # Also accommodates the ranges A1LO, A1HI
 advs <- advs %>%
   derive_vars_merged(dataset_add = range_lookup, by_vars = vars(PARAMCD)) %>%
   # Calculate ANRIND
   derive_var_anrind()
 
-# Derive baseline flags
+## Derive baseline flags ----
 advs <- advs %>%
   # Calculate BASETYPE
   derive_var_basetype(
@@ -195,7 +200,7 @@ advs <- advs %>%
       ADT <= TRTSDT & !is.na(BASETYPE) & is.na(DTYPE))
   )
 
-# Derive baseline information
+## Derive baseline information ----
 advs <- advs %>%
   # Calculate BASE
   derive_var_base(
@@ -221,7 +226,7 @@ advs <- advs %>%
   derive_var_pchg()
 
 
-# ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records
+## ANL01FL: Flag last result within an AVISIT and ATPT for post-baseline records ----
 advs <- advs %>%
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -234,7 +239,7 @@ advs <- advs %>%
     filter = !is.na(AVISITN) & ONTRTFL == "Y"
   )
 
-# Get treatment information
+## Get treatment information ----
 advs <- advs %>%
   # Assign TRTA, TRTP
   mutate(
@@ -261,7 +266,7 @@ advs <- advs %>%
   union_all(advs) %>%
   select(-EOTFL)
 
-# Get ASEQ and AVALCATx and add PARAM/PARAMN
+## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -288,7 +293,7 @@ advs <- advs %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(advs, file = file.path(dir, "advs.rda"), compress = "bzip2")

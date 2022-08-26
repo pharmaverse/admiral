@@ -95,6 +95,9 @@ fulfilled is selected.
 subjects with event \code{AVALC} is set to \code{"Y"}, \code{AVAL} to \code{1}, and \code{ADT} to
 the first date where the event condition is fulfilled. For all other
 subjects \code{AVALC} is set to \code{"N"}, \code{AVAL} to \code{0}, and \code{ADT} to \code{NA}.
+For subjects with event all variables from \code{dataset_source} are kept. For
+subjects without event all variables which are in both \code{dataset_adsl} and
+\code{dataset_source} are kept.
 \item The variables specified by the \code{set_values_to} parameter are added to
 the new observations.
 \item The new observations are added to input dataset.
@@ -159,8 +162,21 @@ derive_param_first_event(
   )
 )
 }
+\seealso{
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_wbc_abs}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}

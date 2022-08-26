@@ -7,7 +7,8 @@
 derive_vars_atc(
   dataset,
   dataset_facm,
-  by_vars = vars(USUBJID, CMREFID = FAREFID)
+  by_vars = vars(USUBJID, CMREFID = FAREFID),
+  value_var = FASTRESC
 )
 }
 \arguments{
@@ -17,12 +18,17 @@ The variables specified by the \code{by_vars} parameter are required}
 
 \item{dataset_facm}{FACM dataset
 
-The variables specified by the \code{by_vars} parameter, \code{FAGRPID}, \code{FATESTCD} and
-\code{FASTRESC} are required}
+The variables specified by the \code{by_vars} and \code{value_var} parameters,
+\code{FAGRPID} and \code{FATESTCD} are required}
 
 \item{by_vars}{Keys used to merge \code{dataset_facm} with \code{dataset}
 
 \emph{Permitted Values:} list of variables}
+
+\item{value_var}{The variable of \code{dataset_facm} containing the values of the
+transposed variables
+
+Default: \code{FASTRESC}}
 }
 \value{
 The input dataset with ATC variables added
@@ -63,8 +69,15 @@ facm <- tibble::tribble(
 
 derive_vars_atc(cm, facm)
 }
+\seealso{
+OCCDS Functions: 
+\code{\link{create_query_data}()},
+\code{\link{create_single_dose_dataset}()},
+\code{\link{derive_vars_query}()},
+\code{\link{get_terms_from_db}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{adcm}
-\keyword{derivation}
+\concept{der_occds}
+\keyword{der_occds}

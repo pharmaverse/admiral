@@ -45,7 +45,4 @@ the Analysis Start Time Imputation Flag is 'H' or 'M',
 \author{
 Teckla Akinyi
 }
-\keyword{ADaM}
-\keyword{ATIREL}
-\keyword{Relationship}
-\keyword{Var}
+\keyword{deprecated}
