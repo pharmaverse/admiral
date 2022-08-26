@@ -14,7 +14,7 @@ input <- tibble::tribble(
   "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 65.55, "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
   "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 44.62, "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y"
   # nolint end
-  )
+)
 
 test_that("derive_param_framingham Test 1: New observations are derived correctly", {
   new_obs <- select(
