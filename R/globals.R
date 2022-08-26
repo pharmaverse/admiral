@@ -118,4 +118,17 @@ globalVariables(c(
   "SMOKEFL",
   "DIABETFL",
   "TRTHYPFL"
+  "ATOXGR",
+  "ATOXGRL",
+  "ATOXGRH",
+  "ATOXDSCL",
+  "ATOXDSCH",
+  "GRADE_CRITERIA_CODE",
+  "DIRECTION",
+  "SI_UNIT_CHECK",
+  "SI_UNIT_UPPER",
+  "VAR_CHECK",
+  "TERM",
+  "TERM_UPPER",
+  "atoxgr_criteria_ctcv4"
 ))
