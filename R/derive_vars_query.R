@@ -4,10 +4,13 @@
 #'   `SMQzzNAM`, `SMQzzCD`, `SMQzzSC`, `SMQzzSCN`, and `CQzzNAM` in ADAE and
 #'   ADMH, and variables such as `SDGzzNAM`, `SDGzzCD`, and `SDGzzSC` in ADCM.
 #'   An example usage of this function can be found in the
-#'   [OCCDS vignette](https://r.roche.com/s/71c86bafe62a4200fced1/files/Projects/Roche_GSK_Admiral/docs/articles/occds.html).
+#'   [OCCDS vignette](https://r.roche.com/s/71c86bafe62a4200fced1/files
+#'   /Projects/Roche_GSK_Admiral/docs/articles/occds.html).
 #'
 #'   A query dataset is expected as an input to this function. See the
-#'   [Queries Dataset Documentation vignette](https://r.roche.com/s/71c86bafe62a4200fced1/files/Projects/Roche_GSK_Admiral/docs/articles/queries_dataset.html)
+#'   [Queries Dataset Documentation vignette](https://r.roche.com/s/
+#'   71c86bafe62a4200fced1/files/Projects/Roche_GSK_Admiral/docs/
+#'   articles/queries_dataset.html)
 #'   for descriptions, or call `data("queries")` for an example of a query dataset.
 #'
 #'   For each unique element in `VAR_PREFIX`, the corresponding "NAM"
