@@ -12,7 +12,7 @@ derive_param_framingham(
   sysbp_code = "SYSBP",
   chol_code = "CHOL",
   cholhdl_code = "CHOLHDL",
-  age = AGE,
+  age = AGEdev,
   sex = SEX,
   smokefl = SMOKEFL,
   diabetfl = DIABETFL,
@@ -35,7 +35,8 @@ and \code{hdl_code}.}
 \item{by_vars}{Grouping variables
 
 For each group defined by \code{by_vars} an observation is added to the output
-dataset.
+dataset. Only variables specified in \code{by_vars} will be populated
+in the newly created records.
 
 \emph{Permitted Values:} list of variables}
 
@@ -202,7 +203,7 @@ adcvrisk <- tibble::tribble(
   "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 292.01,
   "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
   "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 246.73,
-  "mg/dL", "WEEK 2", 55,  "M", "Y", "Y", "Y",
+  "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y",
   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 65.55,
   "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
   "01-701-1028", "CHOLHDL", "Cholesterol/HDL-Cholesterol (mg/dL)", 44.62,
@@ -229,8 +230,6 @@ derive_param_framingham(
   ),
   get_unit_expr = extract_unit(PARAM)
 )
-
-
 }
 \seealso{
 \code{\link[=compute_framingham]{compute_framingham()}}

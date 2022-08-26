@@ -102,12 +102,15 @@ Risk Period \tab 0.88936 \cr
 \deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
 }
 \examples{
-compute_framingham(sysbp = 133, chol = 216.16, cholhdl = 54.91, age=53,
-                   sex = "M", smokefl = "N", diabetfl = "N", trthypfl = "N")
+compute_framingham(
+  sysbp = 133, chol = 216.16, cholhdl = 54.91, age = 53,
+  sex = "M", smokefl = "N", diabetfl = "N", trthypfl = "N"
+)
 
-compute_framingham(sysbp = 161, chol = 186.39, cholhdl = 64.19, age=52,
-                   sex = "F", smokefl = "Y", diabetfl = "N", trthypfl = "Y")
-
+compute_framingham(
+  sysbp = 161, chol = 186.39, cholhdl = 64.19, age = 52,
+  sex = "F", smokefl = "Y", diabetfl = "N", trthypfl = "Y"
+)
 }
 \seealso{
 \code{\link[=derive_param_framingham]{derive_param_framingham()}}
