@@ -228,6 +228,52 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
+## Calculate lab grading ----
+
+# Assign ATOXDSCL and ATOXDSCH to hold lab grading terms
+# ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+grade_lookup <- tibble::tribble(
+  ~PARAMCD, ~ATOXDSCL,                      ~ATOXDSCH,
+  "ALB",     "Hypoalbuminemia",             NA_character_,
+  "ALKPH",   NA_character_,                 "Alkaline phosphatase increased",
+  "ALT",     NA_character_,                 "Alanine aminotransferase increased",
+  "AST",     NA_character_,                 "Aspartate aminotransferase increased",
+  "BILI",    NA_character_,                 "Blood bilirubin increased",
+  "CA",      "Hypocalcemia",                "Hypercalcemia",
+  "CHOLES",  NA_character_,                 "Cholesterol high",
+  "CK",      NA_character_,                 "CPK increased",
+  "CREAT",   NA_character_,                 "Creatinine increased",
+  "GGT",     NA_character_,                 "GGT increased",
+  "GLUC",    "Hypoglycemia",                "Hyperglycemia",
+  "HGB",     "Anemia",                      "Hemoglobin increased",
+  "POTAS",   "Hypokalemia",                 "Hyperkalemia",
+  "LYMPH",   "CD4 lymphocytes decreased",   NA_character_,
+  "PHOS",    "Hypophosphatemia",            NA_character_,
+  "PLAT",    "Platelet count decreased",    NA_character_,
+  "SODIUM",  "Hyponatremia",                "Hypernatremia",
+  "WBC",     "White blood cell decreased",  "Leukocytosis",
+)
+adlb1 <- adlb %>%
+  derive_vars_merged(
+    dataset_add = grade_lookup,
+    by_vars = vars(PARAMCD),
+  )
+
+adlb2 <- adlb1 %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRL,
+    tox_description_var = ATOXDSCL,
+    criteria_direction = "L",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRH,
+    tox_description_var = ATOXDSCH,
+    criteria_direction = "H",
+    get_unit_expr = LBSTRESU
+  )
+
+
 ## Calculate R2BASE, R2ANRLO and R2ANRHI ----
 adlb <- adlb %>%
   derive_var_analysis_ratio(
