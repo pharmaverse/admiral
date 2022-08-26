@@ -37,7 +37,7 @@ Authors@R: c(
     person("Shan", "Lee", role = "ctb"),
     person("Bill", "Denney", role = "ctb"),
     person("Syed", "Mubasheer", role = "ctb"),
-    person("Wendy", "Liu", role = "ctb"),
+    person("Wenyi", "Liu", role = "ctb"),
     person("Dinakar", "Kulkarni", role = "ctb"),
     person("Tamara", "Senior", role = "ctb"),
     person("Jordanna", "Morrish", role = "ctb"),
