@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_atoxgr.R
 \name{derive_var_atoxgr_dir}
 \alias{derive_var_atoxgr_dir}
-\title{Derive Lab toxicity grade 0 - 4}
+\title{Derive Lab Toxicity Grade 0 - 4}
 \usage{
 derive_var_atoxgr_dir(
   dataset,
@@ -22,9 +22,9 @@ The columns specified by \code{tox_description_var} parameter is expected.}
 or \code{ATOXGRL}.}
 
 \item{tox_description_var}{Variable containing the description of the grading
-criteria. for example. "Anemia" or "INR Increased".}
+criteria. For example: "Anemia" or "INR Increased".}
 
-\item{meta_criteria}{metadata data set holding the criteria (normally a case statement)
+\item{meta_criteria}{Metadata data set holding the criteria (normally a case statement)
 
 Default: \code{atoxgr_criteria_ctcv4}
 
@@ -45,17 +45,18 @@ against input data that variables exist.
 }}
 
 \item{criteria_direction}{Direction (L= Low, H = High) of toxicity grade.
+
 Permitted Values: "L", "H"}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
 The result is used to check the units of the input parameters.
 
-Permitted Values: a variable containing unit from the input dataset, or a function call,
+Permitted Values: A variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
 }
 \value{
-The input dataset with the character grade added
+The input dataset with the character variable added
 }
 \description{
 Derives a character lab grade based on severity/toxicity criteria.

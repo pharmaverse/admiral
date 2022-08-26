@@ -1,4 +1,4 @@
-#' Derive Lab toxicity grade 0 - 4
+#' Derive Lab Toxicity Grade 0 - 4
 #'
 #' @description
 #' Derives a character lab grade based on severity/toxicity criteria.
@@ -34,6 +34,7 @@
 #' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
+#'
 #' Permitted Values: "L", "H"
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
@@ -56,7 +57,7 @@
 #'
 #' @author Gordon Miller
 #'
-#' @return The input dataset with the character grade added
+#' @return The input dataset with the character variable added
 #'
 #' @keywords der_bds_findings
 #'
@@ -195,11 +196,11 @@ derive_var_atoxgr_dir <- function(dataset,
     out_data <- bind_rows(out_data, grade_this_term)
   }
 
-  all_data <- out_data
+  out_data
 }
 
 
-#' Derive Lab High toxicity grade 0 - 4 and Low toxicity grades 0 - (-4)
+#' Derive Lab High toxicity Grade 0 - 4 and Low Toxicity Grades 0 - (-4)
 #'
 #' @description
 #'
@@ -224,7 +225,7 @@ derive_var_atoxgr_dir <- function(dataset,
 #'
 #' @author Gordon Miller
 #'
-#' @return The input data set with the character grade added
+#' @return The input data set with the character variable added
 #'
 #' @keywords der_bds_findings
 #'

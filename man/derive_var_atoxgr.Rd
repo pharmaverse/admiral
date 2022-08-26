@@ -2,7 +2,7 @@
 % Please edit documentation in R/derive_var_atoxgr.R
 \name{derive_var_atoxgr}
 \alias{derive_var_atoxgr}
-\title{Derive Lab High toxicity grade 0 - 4 and Low toxicity grades 0 - (-4)}
+\title{Derive Lab High toxicity Grade 0 - 4 and Low Toxicity Grades 0 - (-4)}
 \usage{
 derive_var_atoxgr(
   dataset,
@@ -23,7 +23,7 @@ for low values, eg. "Anemia"}
 for low values, eg. "Hemoglobin Increased".}
 }
 \value{
-The input data set with the character grade added
+The input data set with the character variable added
 }
 \description{
 Derives character lab grade based on high and low severity/toxicity grade(s).

@@ -3,7 +3,7 @@
 \docType{data}
 \name{atoxgr_criteria_ctcv4}
 \alias{atoxgr_criteria_ctcv4}
-\title{Create metadata holding grading criteria for NCI-CTCAEv4}
+\title{Create Metadata Holding Grading Criteria for NCI-CTCAEv4}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 40 rows and 13 columns.
 }
@@ -38,7 +38,7 @@ value. 'L' is for LOW values, 'H' is for HIGH values. Note: the variable is case
 \item \code{COMMENT}: Holds any information regarding rationale behind implementation of grading criteria.
 }
 
-Note: Variables 'SOC', 'TERM', \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
+Note: Variables \code{SOC}, \code{TERM}, \verb{Grade 1}, \verb{Grade 2},\verb{Grade 3},\verb{Grade 4},\verb{Grade 5}, \code{Definition}
 are from the source document on NCI-CTC website defining the grading criteria.
 From these variables only 'TERM' is used in the {admiral} code, the rest are for information and
 tracability only.
