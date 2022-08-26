@@ -1,4 +1,5 @@
-test_that("Framingham Equation - Male, Treated for Hypertension = N", {
+test_that("compute_framingham Test 1: Framingham Equation - Male,
+          Treated for Hypertension = N", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -19,7 +20,8 @@ test_that("Framingham Equation - Male, Treated for Hypertension = N", {
   )
 })
 
-test_that("Framingham Equation - Male, Treated for Hypertension = Y", {
+test_that("compute_framingham Test 2: Framingham Equation - Male,
+          Treated for Hypertension = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -40,7 +42,8 @@ test_that("Framingham Equation - Male, Treated for Hypertension = Y", {
   )
 })
 
-test_that("Framingham Equation - Male, Treated for Hypertension = N, Diabetic = Y", {
+test_that("compute_framingham Test 3: Framingham Equation - Male,
+          Treated for Hypertension = N, Diabetic = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -62,7 +65,8 @@ test_that("Framingham Equation - Male, Treated for Hypertension = N, Diabetic = 
   )
 })
 
-test_that("Framingham Equation - Male, Treated for Hypertension = N, Smoker = Y", {
+test_that("compute_framingham Test 4: Framingham Equation - Male,
+          Treated for Hypertension = N, Smoker = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -84,7 +88,8 @@ test_that("Framingham Equation - Male, Treated for Hypertension = N, Smoker = Y"
   )
 })
 
-test_that("Framingham Equation - FeMale, Treated for Hypertension = N", {
+test_that("compute_framingham Test 5: Framingham Equation - FeMale,
+          Treated for Hypertension = N", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -105,7 +110,8 @@ test_that("Framingham Equation - FeMale, Treated for Hypertension = N", {
   )
 })
 
-test_that("Framingham Equation - FeMale, Treated for Hypertension = Y", {
+test_that("compute_framingham Test 6: Framingham Equation - FeMale,
+          Treated for Hypertension = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -126,7 +132,8 @@ test_that("Framingham Equation - FeMale, Treated for Hypertension = Y", {
   )
 })
 
-test_that("Framingham Equation - FeMale, Treated for Hypertension = N, Diabetic = Y", {
+test_that("compute_framingham Test 7: Framingham Equation - FeMale,
+          Treated for Hypertension = N, Diabetic = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,
@@ -148,7 +155,8 @@ test_that("Framingham Equation - FeMale, Treated for Hypertension = N, Diabetic 
   )
 })
 
-test_that("Framingham Equation - FMale, Treated for Hypertension = N, Diabetic = Y", {
+test_that("compute_framingham Test 8: Framingham Equation - FeMale,
+          Treated for Hypertension = N, Diabetic = Y", {
   expect_equal(
     compute_framingham(
       sysbp = 133,

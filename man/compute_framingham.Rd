@@ -55,7 +55,7 @@ and treated for hypertension flag.
 \details{
 The predicted probability of having cardiovascular disease (CVD)
 within 10-years according to Framingham formula
-\href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is:
+\href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # nolint
 
 \strong{For Women:}
 

@@ -129,11 +129,9 @@ Adds a record for framingham score (FCVD101) for each by group
 \details{
 The values of \code{age}, \code{sex}, \code{smokefl}, \code{diabetfl} and \code{trthypfl} will be
 added to the \code{by_vars} list.
-
 The predicted probability of having cardiovascular disease (CVD)
 within 10-years according to Framingham formula
-\href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is:
-
+\href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # no lint
 \strong{For Women:}
 
 \tabular{rr}{
@@ -176,7 +174,7 @@ Risk Period \tab 0.88936 \cr
 + (log(SysBP) * SysBPFactor) + Smoker
 + Diabetes Present - AvgRisk}
 
-\deqn{Risk = 100 * (1 - RiskPeriodFactor^exp(RiskFactors))}
+\deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -250,6 +248,7 @@ BDS-Findings Functions for adding Parameters:
 \author{
 Alice Ehmann
 Jack McGavigan
+Ben Straub
 }
 \concept{der_prm_bds_findings}
 \keyword{der_prm_bds_findings}

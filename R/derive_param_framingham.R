@@ -78,11 +78,9 @@
 #' @details
 #' The values of `age`, `sex`, `smokefl`, `diabetfl` and `trthypfl` will be
 #' added to the `by_vars` list.
-#'
 #' The predicted probability of having cardiovascular disease (CVD)
 #' within 10-years according to Framingham formula
-#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # nolint
-#'
+#' \href{https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.107.699579}{D'Agostino, 2008} is: # no lint
 #' \strong{For Women:}
 #'
 #' \tabular{rr}{
@@ -125,11 +123,12 @@
 #' + (log(SysBP) * SysBPFactor) + Smoker
 #' + Diabetes Present - AvgRisk}
 #'
-#' \deqn{Risk = 100 * (1 - RiskPeriodFactor^exp(RiskFactors))}
+#' \deqn{Risk = 100 * (1 - RiskPeriodFactor^{RiskFactors})}
 #'
 #' @author
 #' Alice Ehmann
 #' Jack McGavigan
+#' Ben Straub
 #'
 #' @return The input dataset with the new parameter added
 #'
@@ -207,16 +206,16 @@ derive_param_framingham <- function(dataset,
                                     filter = NULL) {
   assert_vars(by_vars)
 
-  assert_data_frame(dataset,
-    required_vars =
-      quo_c(
-        vars(!!!by_vars, PARAMCD, AVAL),
-        enquo(age),
-        enquo(sex),
-        enquo(smokefl),
-        enquo(diabetfl),
-        enquo(trthypfl)
-      )
+  assert_data_frame(
+    dataset,
+    required_vars = quo_c(
+      vars(!!!by_vars, PARAMCD, AVAL),
+      enquo(age),
+      enquo(sex),
+      enquo(smokefl),
+      enquo(diabetfl),
+      enquo(trthypfl)
+    )
   )
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
