@@ -50,7 +50,8 @@ Permitted Values: "L", "H"}
 
 \item{get_unit_expr}{An expression providing the unit of the parameter
 
-The result is used to check the units of the input parameters.
+The result is used to check the units of the input parameters. Compared with
+\code{SI_UNIT_CHECK} in metadata (see \code{meta_criteria} parameter).
 
 Permitted Values: A variable containing unit from the input dataset, or a function call,
 for example, \code{get_unit_expr = extract_unit(PARAM)}.}
@@ -83,7 +84,7 @@ data <- tibble::tribble(
   "Anemia",                      129,    120,      180,    "Hemoglobin (g/L)",
   "White blood cell decreased",  10,     5,        20,     "White blood cell (10^9/L)",
   "White blood cell decreased",  15,     5,        20,     "White blood cell (10^9/L)",
-  "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)",
+  "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)"
 )
 
 derive_var_atoxgr_dir(data,
@@ -101,7 +102,7 @@ data <- tibble::tribble(
   "GGT increased",               129,    0,        30,     "Gamma Glutamyl Transferase (U/L)",
   "Lymphocyte count increased",  4,      1,        4,      "Lymphocytes Abs (10^9/L)",
   "Lymphocyte count increased",  2,      1,        4,      "Lymphocytes Abs (10^9/L)",
-  "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)",
+  "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)"
 )
 
 derive_var_atoxgr_dir(data,

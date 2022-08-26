@@ -33,6 +33,16 @@ Created variable \code{ATOXGR} will contain values "-4", "-3", "-2", "-1" for lo
 and "1", "2", "3", "4" for high values, and will contain "0" if value is gradable
 and does not satisfy any of the criteria for high or low values. ATOXGR is set to
 missing if information not available to give a grade.
+
+Function applies the following rules:
+\itemize{
+\item High and low missing - overall missing
+\item Low grade not missing and > 0 - overall holds low grade
+\item High grade not missing and > 0 - overall holds high grade
+\item (Only high direction OR low direction is NORMAL) and high grade normal - overall NORMAL
+\item (Only low direction OR high direction is NORMAL) and low grade normal - overall NORMAL
+\item otherwise set to missing
+}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -43,7 +53,7 @@ adlb <- tibble::tribble(
   "Hypoglycemia",     "Hyperglycemia",  "0",           "1",
   "Hypoglycemia",     "Hyperglycemia",  "0",           "0",
   NA_character_,      "INR Increased",  NA_character_, "0",
-  "Hypophosphatemia", NA_character_,    "1",           NA_character_,
+  "Hypophosphatemia", NA_character_,    "1",           NA_character_
 )
 
 derive_var_atoxgr(adlb)
