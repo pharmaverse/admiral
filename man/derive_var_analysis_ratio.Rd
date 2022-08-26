@@ -67,10 +67,13 @@ data \%>\%
 }
 \seealso{
 BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{atoxgr_criteria_ctcv4}},
 \code{\link{derive_extreme_records}()},
 \code{\link{derive_param_rr}()},
 \code{\link{derive_summary_records}()},
 \code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_atoxgr}()},
 \code{\link{derive_var_basetype}()},
 \code{\link{derive_var_base}()},
 \code{\link{derive_var_chg}()},
