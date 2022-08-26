@@ -117,7 +117,7 @@ globalVariables(c(
   "SEX",
   "SMOKEFL",
   "DIABETFL",
-  "TRTHYPFL"
+  "TRTHYPFL",
   "ATOXGR",
   "ATOXGRL",
   "ATOXGRH",
