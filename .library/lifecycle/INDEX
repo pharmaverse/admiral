@@ -1,5 +1,0 @@
-badge                   Embed a lifecycle badge in documentation
-deprecate_soft          Deprecate functions and arguments
-deprecated              Mark an argument as deprecated
-last_warnings           Display last deprecation warnings
-verbosity               Control the verbosity of deprecation signals

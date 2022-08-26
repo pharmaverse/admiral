@@ -1,4 +1,0 @@
-cyclocomp               Cyclomatic Complexity of R Code
-cyclocomp_package       Cyclomatic complexity of the objects in an
-                        installed package
-cyclocomp_package_dir   Cyclomatic complexity of a local package

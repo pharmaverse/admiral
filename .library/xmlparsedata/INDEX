@@ -1,4 +1,0 @@
-xml_parse_data          Convert R parse data to XML
-xml_parse_token_map     Map token names of the R parser to token names
-                        in 'xml_parse_data'
-xmlparsedata            Parse Data of R Code as an 'XML' Tree
