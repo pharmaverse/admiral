@@ -122,8 +122,7 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
   assert_character_vector(diabetfl, values = c("Y", "N"))
   assert_character_vector(trthypfl, values = c("Y", "N"))
 
-  aval <- case_when(
-    sex == "F" ~
+  aval <- if_else(sex == "F",
     1 - (0.95012^exp((2.32888 * log(age))
     + (1.20904 * log(chol))
       - (0.70833 * log(cholhdl))
@@ -132,7 +131,6 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
       + (0.52873 * (if_else(smokefl == "Y", 1, 0)))
       + (0.69154 * (if_else(diabetfl == "Y", 1, 0)))
       - 26.1931)),
-    sex == "M" ~
     1 - (0.88936^exp((3.06117 * log(age))
     + (1.12370 * log(chol))
       - (0.93263 * log(cholhdl))
