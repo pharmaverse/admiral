@@ -133,8 +133,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords der_bds_findings
-#' @family der_bds_findings
+#' @keywords der_prm_bds_findings
+#' @family der_prm_bds_findings
 #'
 #' @export
 #'
@@ -260,7 +260,7 @@ derive_param_framingham <- function(dataset,
   )
 
 
-  derive_derived_param(
+  derive_param_computed(
     dataset,
     filter = !!filter,
     parameters = c(sysbp_code, chol_code, cholhdl_code),

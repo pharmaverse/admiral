@@ -234,22 +234,22 @@ derive_param_framingham(
 \seealso{
 \code{\link[=compute_framingham]{compute_framingham()}}
 
-BDS-Findings Functions that returns variable appended to dataset: 
-\code{\link{derive_extreme_records}()},
-\code{\link{derive_param_rr}()},
-\code{\link{derive_summary_records}()},
-\code{\link{derive_var_analysis_ratio}()},
-\code{\link{derive_var_anrind}()},
-\code{\link{derive_var_basetype}()},
-\code{\link{derive_var_base}()},
-\code{\link{derive_var_chg}()},
-\code{\link{derive_var_ontrtfl}()},
-\code{\link{derive_var_pchg}()},
-\code{\link{derive_var_shift}()}
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_computed}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_wbc_abs}()}
 }
 \author{
 Alice Ehmann
 Jack McGavigan
 }
-\concept{der_bds_findings}
-\keyword{der_bds_findings}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}
