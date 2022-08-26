@@ -133,7 +133,8 @@
 #'
 #' @return The input dataset with the new parameter added
 #'
-#' @keywords derivation bds
+#' @keywords der_bds_findings
+#' @family der_bds_findings
 #'
 #' @export
 #'
@@ -204,19 +205,19 @@ derive_param_framingham <- function(dataset,
                                     trthypfl = TRTHYPFL,
                                     get_unit_expr,
                                     filter = NULL) {
-
   assert_vars(by_vars)
 
   assert_data_frame(dataset,
-                    required_vars =
-                      quo_c(
-                        vars(!!!by_vars, PARAMCD, AVAL),
-                        enquo(age),
-                        enquo(sex),
-                        enquo(smokefl),
-                        enquo(diabetfl),
-                        enquo(trthypfl)
-                      ))
+    required_vars =
+      quo_c(
+        vars(!!!by_vars, PARAMCD, AVAL),
+        enquo(age),
+        enquo(sex),
+        enquo(smokefl),
+        enquo(diabetfl),
+        enquo(trthypfl)
+      )
+  )
 
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, quo_get_expr(set_values_to$PARAMCD))
@@ -256,7 +257,7 @@ derive_param_framingham <- function(dataset,
       diabetfl = !!enquo(diabetfl),
       trthypfl = !!enquo(trthypfl)
     )
-    )
+  )
 
 
   derive_derived_param(
@@ -275,4 +276,3 @@ derive_param_framingham <- function(dataset,
     set_values_to = set_values_to
   )
 }
-

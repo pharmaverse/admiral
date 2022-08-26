@@ -94,7 +94,8 @@
 #'
 #' @return A numeric vector of Framingham values
 #'
-#' @keywords computation adam
+#' @keywords com_bds_findings
+#' @family com_bds_findings
 #'
 #' @export
 #'
@@ -123,23 +124,23 @@ compute_framingham <- function(sysbp, chol, cholhdl, age, sex, smokefl,
 
   aval <- case_when(
     sex == "F" ~
-      1 - (0.95012^exp((2.32888 * log(age))
-                       + (1.20904 * log(chol))
-                       - (0.70833 * log(cholhdl))
-                       + (2.76157 * log(if_else(trthypfl == "N", sysbp, 1)))
-                       + (2.82263 * log(if_else(trthypfl == "Y", sysbp, 1)))
-                       + (0.52873 * (if_else(smokefl == "Y", 1, 0)))
-                       + (0.69154 * (if_else(diabetfl == "Y", 1, 0)))
-                       - 26.1931)),
+    1 - (0.95012^exp((2.32888 * log(age))
+    + (1.20904 * log(chol))
+      - (0.70833 * log(cholhdl))
+      + (2.76157 * log(if_else(trthypfl == "N", sysbp, 1)))
+      + (2.82263 * log(if_else(trthypfl == "Y", sysbp, 1)))
+      + (0.52873 * (if_else(smokefl == "Y", 1, 0)))
+      + (0.69154 * (if_else(diabetfl == "Y", 1, 0)))
+      - 26.1931)),
     sex == "M" ~
-      1 - (0.88936^exp((3.06117 * log(age))
-                       + (1.12370 * log(chol))
-                       - (0.93263 * log(cholhdl))
-                       + (1.93303 * log(if_else(trthypfl == "N", sysbp, 1)))
-                       + (1.99881 * log(if_else(trthypfl == "Y", sysbp, 1)))
-                       + (0.65451 * (if_else(smokefl == "Y", 1, 0)))
-                       + (0.57367 * (if_else(diabetfl == "Y", 1, 0)))
-                       - 23.9802))
+    1 - (0.88936^exp((3.06117 * log(age))
+    + (1.12370 * log(chol))
+      - (0.93263 * log(cholhdl))
+      + (1.93303 * log(if_else(trthypfl == "N", sysbp, 1)))
+      + (1.99881 * log(if_else(trthypfl == "Y", sysbp, 1)))
+      + (0.65451 * (if_else(smokefl == "Y", 1, 0)))
+      + (0.57367 * (if_else(diabetfl == "Y", 1, 0)))
+      - 23.9802))
   )
 
 
