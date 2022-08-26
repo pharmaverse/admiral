@@ -204,7 +204,6 @@ derive_param_framingham <- function(dataset,
                                     trthypfl = TRTHYPFL,
                                     get_unit_expr,
                                     filter = NULL) {
-  assert
 
   assert_vars(by_vars)
 
