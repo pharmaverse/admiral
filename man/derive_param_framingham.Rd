@@ -176,7 +176,7 @@ Risk Period \tab 0.88936 \cr
 + (log(SysBP) * SysBPFactor) + Smoker
 + Diabetes Present - AvgRisk}
 
-\deqn{Risk = 100 * (1 - RiskPeriodFactor ^ exp(RiskFactors))}
+\deqn{Risk = 100 * (1 - RiskPeriodFactor^exp(RiskFactors))}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

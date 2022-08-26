@@ -112,5 +112,10 @@ globalVariables(c(
   "temp_flag",
   "tmp_obs_nr_filter_confirmation",
   "tmp_obs_nr_filter_confirmation.join",
-  "tmp_obs_nr_var_conf_flag"
+  "tmp_obs_nr_var_conf_flag",
+  "AGE",
+  "SEX",
+  "SMOKEFL",
+  "DIABETFL",
+  "TRTHYPFL"
 ))

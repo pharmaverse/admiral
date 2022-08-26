@@ -1,25 +1,31 @@
 input <- tibble::tribble(
-  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL,
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE", 44, "F", "N", "N", "N",
-  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 115, "mmHg", "WEEK 2", 44, "F", "N", "N", "Y",
-  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 216.16, "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
-  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 210.78, "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
-  "01-701-1015", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 54.91, "mg/dL", "BASELINE", 44, "F", "N", "N", "N",
-  "01-701-1015", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 26.72, "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 119, "mmHg", "BASELINE", 55, "M", "Y", "Y", "Y",
-  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 101, "mmHg", "WEEK 2", 55, "M", "Y", "Y", "Y",
-  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 292.01, "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
-  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 246.73, "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y",
-  "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 65.55, "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y",
-  "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 44.62, "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y"
+  ~USUBJID, ~PARAMCD, ~PARAM, ~AVAL, ~AVALU, ~VISIT, ~AGE, ~SEX, ~SMOKEFL, ~DIABETFL, ~TRTHYPFL, # nolint
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 121, "mmHg", "BASELINE", 44, "F", "N", "N", "N", # nolint
+  "01-701-1015", "SYSBP", "Systolic Blood Pressure (mmHg)", 115, "mmHg", "WEEK 2", 44, "F", "N", "N", "Y", # nolint
+  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 216.16, "mg/dL", "BASELINE", 44, "F", "N", "N", "N", # nolint
+  "01-701-1015", "CHOL", "Total Cholesterol (mg/dL)", 210.78, "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y", # nolint
+  "01-701-1015", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 54.91, "mg/dL", "BASELINE", 44, "F", "N", "N", "N", # nolint
+  "01-701-1015", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 26.72, "mg/dL", "WEEK 2", 44, "F", "N", "N", "Y", # nolint
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 119, "mmHg", "BASELINE", 55, "M", "Y", "Y", "Y", # nolint
+  "01-701-1028", "SYSBP", "Systolic Blood Pressure (mmHg)", 101, "mmHg", "WEEK 2", 55, "M", "Y", "Y", "Y", # nolint
+  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 292.01, "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y", # nolint
+  "01-701-1028", "CHOL", "Total Cholesterol (mg/dL)", 246.73, "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y", # nolint
+  "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 65.55, "mg/dL", "BASELINE", 55, "M", "Y", "Y", "Y", # nolint
+  "01-701-1028", "CHOLHDL", "Cholesteral/HDL-Cholesterol (mg/dL)", 44.62, "mg/dL", "WEEK 2", 55, "M", "Y", "Y", "Y" # nolint
 )
 
 test_that("New observations are derived correctly", {
-  new_obs <- select(filter(input, PARAMCD == "SYSBP"), USUBJID, VISIT, AVAL, AVALU, AGE, SEX, SMOKEFL, DIABETFL, TRTHYPFL) %>%
+  new_obs <- select(
+    filter(input, PARAMCD == "SYSBP"), USUBJID, VISIT, AVAL, AVALU, AGE, SEX, SMOKEFL, DIABETFL, TRTHYPFL # nolint
+  ) %>%
     rename(AVAL_SYSBP = AVAL) %>%
-    left_join(select(filter(input, PARAMCD == "CHOL"), USUBJID, VISIT, AVAL), by = c("USUBJID", "VISIT")) %>%
+    left_join(select(
+      filter(input, PARAMCD == "CHOL"), USUBJID, VISIT, AVAL
+    ), by = c("USUBJID", "VISIT")) %>%
     rename(AVAL_CHOL = AVAL) %>%
-    left_join(select(filter(input, PARAMCD == "CHOLHDL"), USUBJID, VISIT, AVAL), by = c("USUBJID", "VISIT")) %>%
+    left_join(select(
+      filter(input, PARAMCD == "CHOLHDL"), USUBJID, VISIT, AVAL
+    ), by = c("USUBJID", "VISIT")) %>%
     rename(AVAL_CHOLHDL = AVAL) %>%
     mutate(
       AVAL = compute_framingham(
