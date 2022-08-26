@@ -159,6 +159,7 @@ therefore want any module to be understandable to all, not only the `{admiral}` 
 ## References and Documentation
 
 * Please go to [Get Started](https://pharmaverse.github.io/admiral/articles/admiral.html) section to start using `{admiral}`
+* Please see the [pharmaverse youtube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) for videos related to `{admiral}`.
 * Please see the [Programming Strategy](https://pharmaverse.github.io/admiral/articles/programming_strategy.html) to understand how functions are created
 * Please see the [FAQ](https://pharmaverse.github.io/admiral/articles/faq.html) for the most frequent questions
 * Please see the [Contribution Model](https://pharmaverse.github.io/admiral/articles/contribution_model.html) for how to get involved with making contributions
