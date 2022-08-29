@@ -2,6 +2,10 @@
 
 ## New Features
 
+- New function `derive_param_framingham()`, which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+
+- New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
+
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
 
@@ -41,6 +45,8 @@ deprecation notice (#1229)
 
 - `value_var` parameter added to `derive_vars_atc()` (#1120)
 
+- `format_eoxxstt_default()` - Updated the default value of EOSSTT for screen failure patients  (#885)
+
 - The imputation functions (`derive_vars_dtm()`, `derive_vars_dt()`,
 `convert_dtc_to_dtm()`, `convert_dtc_to_dt()`) have been enhanced to address
 users feedback (#1300):
@@ -59,9 +65,12 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
+
 ## Breaking Changes
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
+
+- `derive_var_agegr_ema()` and `derive_var_agegr_fda()` have been deprecated (#1333)
 
 - Imputation related arguments have been deprecated for all functions except the
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
@@ -99,7 +108,7 @@ have been removed:
   - `lstalvdt_source()`
   - `derive_var_trtedtm()`
   - `derive_var_trtsdtm()`
-  
+
 ## Documentation
 
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
@@ -291,8 +300,6 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
 
-- `compute_qual_imputation()` derives impute values when qualifier exists in character result
-(#976)
 
 ## Updates of Existing Functions
 

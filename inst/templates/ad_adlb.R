@@ -105,7 +105,7 @@ adlb <- lb %>%
 adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
   # Replace with PARAMCD lookup function
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD)
@@ -117,6 +117,43 @@ adlb <- adlb %>%
     AVALC = LBSTRESC,
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
+  )
+
+# Derive Absolute values from fractional Differentials using WBC
+# Only derive where absolute values do not already exist
+# Need to populate ANRLO and ANRHI for newly created records
+adlb <- adlb %>%
+  # Derive absolute Basophils
+  derive_param_wbc_abs(
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = vars(
+      PARAMCD = "BASO",
+      PARAM = "Basophils Abs (GI/L)",
+      PARAMN = 6,
+      DTYPE = "CALCULATION",
+      PARCAT1 = "HEMATOLOGY"
+    ),
+    get_unit_expr = extract_unit(PARAM),
+    wbc_code = "WBC",
+    wbc_unit = "GI/L",
+    diff_code = "BASOLE",
+    diff_type = "fraction"
+  ) %>%
+  # Derive absolute Lymphocytes
+  derive_param_wbc_abs(
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = vars(
+      PARAMCD = "LYMPH",
+      PARAM = "Lymphocytes Abs (GI/L)",
+      PARAMN = 25,
+      DTYPE = "CALCULATION",
+      PARCAT1 = "HEMATOLOGY"
+    ),
+    get_unit_expr = extract_unit(PARAM),
+    wbc_code = "WBC",
+    wbc_unit = "GI/L",
+    diff_code = "LYMPHLE",
+    diff_type = "fraction"
   )
 
 ## Get Visit Info ----

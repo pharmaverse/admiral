@@ -1,4 +1,4 @@
-#' Derive Lab toxicity grade 0 - 4
+#' Derive Lab Toxicity Grade 0 - 4
 #'
 #' @description
 #' Derives a character lab grade based on severity/toxicity criteria.
@@ -11,9 +11,9 @@
 #' or `ATOXGRL`.
 #'
 #' @param tox_description_var Variable containing the description of the grading
-#' criteria. for example. "Anemia" or "INR Increased".
+#' criteria. For example: "Anemia" or "INR Increased".
 #'
-#' @param meta_criteria metadata data set holding the criteria (normally a case statement)
+#' @param meta_criteria Metadata data set holding the criteria (normally a case statement)
 #'
 #'   Default: `atoxgr_criteria_ctcv4`
 #'
@@ -34,13 +34,15 @@
 #' - `GRADE_CRITERIA_CODE`: variable to hold code that creates grade based on defined criteria.
 #'
 #' @param criteria_direction Direction (L= Low, H = High) of toxicity grade.
+#'
 #' Permitted Values: "L", "H"
 #'
 #' @param get_unit_expr An expression providing the unit of the parameter
 #'
-#'   The result is used to check the units of the input parameters.
+#'   The result is used to check the units of the input parameters. Compared with
+#'   `SI_UNIT_CHECK` in metadata (see `meta_criteria` parameter).
 #'
-#'   Permitted Values: a variable containing unit from the input dataset, or a function call,
+#'   Permitted Values: A variable containing unit from the input dataset, or a function call,
 #'   for example, `get_unit_expr = extract_unit(PARAM)`.
 #'
 #'
@@ -56,7 +58,7 @@
 #'
 #' @author Gordon Miller
 #'
-#' @return The input dataset with the character grade added
+#' @return The input dataset with the character variable added
 #'
 #' @keywords der_bds_findings
 #'
@@ -74,7 +76,7 @@
 #'   "Anemia",                      129,    120,      180,    "Hemoglobin (g/L)",
 #'   "White blood cell decreased",  10,     5,        20,     "White blood cell (10^9/L)",
 #'   "White blood cell decreased",  15,     5,        20,     "White blood cell (10^9/L)",
-#'   "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)",
+#'   "Anemia",                      140,    120,      180,    "Hemoglobin (g/L)"
 #' )
 #'
 #' derive_var_atoxgr_dir(data,
@@ -92,7 +94,7 @@
 #'   "GGT increased",               129,    0,        30,     "Gamma Glutamyl Transferase (U/L)",
 #'   "Lymphocyte count increased",  4,      1,        4,      "Lymphocytes Abs (10^9/L)",
 #'   "Lymphocyte count increased",  2,      1,        4,      "Lymphocytes Abs (10^9/L)",
-#'   "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)",
+#'   "GGT increased",               140,    120,      180,    "Gamma Glutamyl Transferase (U/L)"
 #' )
 #'
 #' derive_var_atoxgr_dir(data,
@@ -112,17 +114,19 @@ derive_var_atoxgr_dir <- function(dataset,
   tox_description_var <- assert_symbol(enquo(tox_description_var))
   get_unit_expr <- assert_expr(enquo(get_unit_expr))
 
+  # check input parameter has correct value
+  assert_character_scalar(criteria_direction, values = c("L", "H"))
+
   # Check Grade description variable exists on input data set
   assert_data_frame(dataset, required_vars = vars(!!tox_description_var))
 
-  # check metadata data set has required variables
+  # Check metadata data set has required variables
   assert_data_frame(
     meta_criteria,
     required_vars = vars(TERM, GRADE_CRITERIA_CODE, DIRECTION, SI_UNIT_CHECK, VAR_CHECK)
   )
-
-  # check input parameter has correct value
-  assert_character_scalar(criteria_direction, values = c("L", "H"))
+  # check DIRECTION has expected values L or H
+  assert_character_vector(meta_criteria$DIRECTION, values = c("L", "H"))
 
 
   # Get list of terms from criteria metadata with particular direction
@@ -195,11 +199,11 @@ derive_var_atoxgr_dir <- function(dataset,
     out_data <- bind_rows(out_data, grade_this_term)
   }
 
-  all_data <- out_data
+  out_data
 }
 
 
-#' Derive Lab High toxicity grade 0 - 4 and Low toxicity grades 0 - (-4)
+#' Derive Lab High toxicity Grade 0 - 4 and Low Toxicity Grades 0 - (-4)
 #'
 #' @description
 #'
@@ -222,9 +226,17 @@ derive_var_atoxgr_dir <- function(dataset,
 #' and does not satisfy any of the criteria for high or low values. ATOXGR is set to
 #' missing if information not available to give a grade.
 #'
+#' Function applies the following rules:
+#' - High and low missing - overall missing
+#' - Low grade not missing and > 0 - overall holds low grade
+#' - High grade not missing and > 0 - overall holds high grade
+#' - (Only high direction OR low direction is NORMAL) and high grade normal - overall NORMAL
+#' - (Only low direction OR high direction is NORMAL) and low grade normal - overall NORMAL
+#' - otherwise set to missing
+#'
 #' @author Gordon Miller
 #'
-#' @return The input data set with the character grade added
+#' @return The input data set with the character variable added
 #'
 #' @keywords der_bds_findings
 #'
@@ -241,7 +253,7 @@ derive_var_atoxgr_dir <- function(dataset,
 #'   "Hypoglycemia",     "Hyperglycemia",  "0",           "1",
 #'   "Hypoglycemia",     "Hyperglycemia",  "0",           "0",
 #'   NA_character_,      "INR Increased",  NA_character_, "0",
-#'   "Hypophosphatemia", NA_character_,    "1",           NA_character_,
+#'   "Hypophosphatemia", NA_character_,    "1",           NA_character_
 #' )
 #'
 #' derive_var_atoxgr(adlb)
