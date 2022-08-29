@@ -2,8 +2,11 @@
 
 ## New Features
 
-- New function available (#525): 
-  - `get_summary_records()` - creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations.
+- New function `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+
+- New function `derive_param_framingham()` which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+
+- New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
 - All admiral utility functions are exported now such that they can be used in
 admiral extension packages (#1079)
@@ -299,8 +302,6 @@ Address [CRAN comments](https://github.com/pharmaverse/admiral/issues/918) raise
 - `derive_vars_dy()` derives the analysis day from one or more `--DT(M)` variables
 (#700)
 
-- `compute_qual_imputation()` derives impute values when qualifier exists in character result
-(#976)
 
 ## Updates of Existing Functions
 

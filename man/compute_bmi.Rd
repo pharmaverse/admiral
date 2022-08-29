@@ -34,6 +34,7 @@ compute_bmi(height = 170, weight = 75)
 \seealso{
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bsa}()},
+\code{\link{compute_framingham}()},
 \code{\link{compute_map}()},
 \code{\link{compute_qtc}()},
 \code{\link{compute_qual_imputation_dec}()},
