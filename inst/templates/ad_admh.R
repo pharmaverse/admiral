@@ -72,7 +72,7 @@ admh <- mh %>%
     reference_date = TRTSDT,
     source_vars = vars(ADT)
   ) %>%
-  # derive query variables
+  # Derive query variables
   derive_vars_query(queries_mh) %>%
   # Assign the AHIST (company specific variable derivation)
   mutate(AHIST = case_when(
