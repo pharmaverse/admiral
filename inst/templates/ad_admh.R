@@ -15,6 +15,7 @@ library(lubridate)
 # For illustration purposes read in admiral test data
 data("admiral_mh")
 data("admiral_adsl")
+data("queries_mh")
 
 adsl <- admiral_adsl
 mh <- admiral_mh
@@ -71,6 +72,8 @@ admh <- mh %>%
     reference_date = TRTSDT,
     source_vars = vars(ADT)
   ) %>%
+  # derive query variables
+  derive_vars_query(queries_mh) %>%
   # Assign the AHIST (company specific variable derivation)
   mutate(AHIST = case_when(
     MHENRF == "BEFORE" ~ "Past",
