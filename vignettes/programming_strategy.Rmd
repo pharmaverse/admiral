@@ -296,8 +296,9 @@ An example is given below:
 #' @examples
 #' library(lubridate)
 #' library(dplyr)
+#' library(tibble)
 #'
-#' datain <- tibble::tribble(
+#' datain <- tribble(
 #'   ~TRTSDTM,             ~ASTDTM,               ~AENDT,
 #'  "2014-01-17T23:59:59", "2014-01-18T13:09:O9", "2014-01-20"
 #' ) %>%
@@ -329,7 +330,7 @@ Any newly added variable(-s) should be mentioned here.
 * `@examples`: A fully self-contained example of how to use the function. 
 Self-contained means that, if this code is executed in a new R session, it will run without errors. 
 That means any packages need to be loaded with `library()` and any datasets needed either to be created directly inside the example code or loaded using `data()`.
-If a dataset is created in the example, it should be done so using the function `tibble::tribble()`. 
+If a dataset is created in the example, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function).  
 Make sure to align columns as this ensures quick code readability. 
 
 Copying descriptions should be avoided as it makes the documentation hard to

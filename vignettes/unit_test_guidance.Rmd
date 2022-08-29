@@ -134,7 +134,9 @@ the testing framework used is testthat and has the following format :
 
 ```
 test_that("<function_name> Test 1: <Explanation of the test>", {
-  input <- tibble::tribble(
+  library(tibble)
+  
+  input <- tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -158,7 +160,9 @@ Open the newly created file "test-all_funcs.R" and use the following format:
 
 ```
 test_that("my_new_func Test 1: <Explanation of the test>", {
-  input <- tibble::tribble(
+  library(tibble)
+  
+  input <- tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -177,7 +181,7 @@ The input and expected output for the unit tests must follow the following rules
 * Values should be hard-coded whenever possible.
 * If values need to be derived, only unit tested functions can be used.
 
-If a dataset needs to be created for testing purpose, it should be done so using the function `tibble::tribble()`. 
+If a dataset needs to be created for testing purpose, it should be done so using the function `tribble()` (specify `library(tibble)` before calling this function). 
 Make sure to align columns as well. This ensures quick code readability.
 
 Ensure you give a meaningful explanation of the test in the testthat call, as 
