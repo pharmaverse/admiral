@@ -40,8 +40,10 @@ Default: \code{format_eoxxstt_default()} defined as:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{format_eoxxstt_default <- function(status) \{
   case_when(
+    status \%in\% c("SCREEN FAILURE", "SCREENING NOT COMPLETED") ~ "NOT STARTED",
     status == "COMPLETED" ~ "COMPLETED",
-    status != "COMPLETED" & !is.na(status) ~ "DISCONTINUED",
+    !status \%in\% c("COMPLETED", "SCREEN FAILURE", "SCREENING NOT COMPLETED")
+    & !is.na(status) ~ "DISCONTINUED",
     TRUE ~ "ONGOING"
   )
 \}
@@ -65,8 +67,10 @@ The input dataset with the disposition status (\code{new_var}) added.
 \code{new_var} is derived based on the values given in \code{status_var} and according to the format
 defined by \code{format_new_var} (e.g. when the default format is used, the function will derive
 \code{new_var} as:
+"NOT STARTED" if \code{status} is "SCREEN FAILURE" or "SCREENING NOT COMPLETED",
 "COMPLETED" if \code{status_var} == "COMPLETED",
-"DISCONTINUED" if \code{status_var} is not "COMPLETED" nor NA,
+"DISCONTINUED" if \code{status} is not in ("COMPLETED","SCREEN FAILURE",
+"SCREENING NOT COMPLETED") nor NA,
 "ONGOING" otherwise).
 }
 \description{
@@ -79,8 +83,10 @@ data("admiral_dm")
 data("admiral_ds")
 
 # Default derivation: EOSSTT =
-#- COMPLETED when status_var = COMPLETED
-#- DISCONTINUED when status_var is not COMPLETED nor NA
+#- NOT STARTED when status_var is SCREEN FAILURE or SCREENING NOT COMPLETED
+#- COMPLETED when status_var is COMPLETED
+#- DISCONTINUED when status_var is not COMPLETED nor SCREEN FAILURE nor
+#  SCREENING NOT COMPLETED nor NA
 #- ONGOING otherwise
 
 admiral_dm \%>\%
@@ -93,16 +99,20 @@ admiral_dm \%>\%
   select(STUDYID, USUBJID, EOSSTT)
 
 # Specific derivation: EOSSTT =
+#- NOT STARTED when status_var = SCREEN FAILURE
 #- COMPLETED when status_var = COMPLETED
 #- DISCONTINUED DUE TO AE when status_var = ADVERSE EVENT
-#- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED nor missing
+#- DISCONTINUED NOT DUE TO AE when status_var != ADVERSE EVENT nor COMPLETED
+#  nor SCREEN FAILURE nor missing
 #- ONGOING otherwise
 
 format_eoxxstt1 <- function(x) {
   case_when(
+    x == "SCREEN FAILURE" ~ "NOT STARTED",
     x == "COMPLETED" ~ "COMPLETED",
     x == "ADVERSE EVENT" ~ "DISCONTINUED DUE TO AE",
-    !(x \%in\% c("ADVERSE EVENT", "COMPLETED")) & !is.na(x) ~ "DISCONTINUED NOT DUE TO AE",
+    !(x \%in\% c("ADVERSE EVENT", "COMPLETED", "SCREEN FAILURE")) & !is.na(x) ~
+    "DISCONTINUED NOT DUE TO AE",
     TRUE ~ "ONGOING"
   )
 }
@@ -120,7 +130,6 @@ admiral_dm \%>\%
 \seealso{
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
-\code{\link{derive_var_agegr_fda}()},
 \code{\link{derive_var_dthcaus}()},
 \code{\link{derive_var_extreme_dtm}()},
 \code{\link{derive_var_extreme_dt}()},

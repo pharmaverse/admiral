@@ -69,7 +69,7 @@ An object of class \code{query}.
 }
 \description{
 A \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to \code{create_query_data()}.
 }
 \examples{

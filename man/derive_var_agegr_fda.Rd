@@ -10,91 +10,20 @@ derive_var_agegr_fda(dataset, age_var, age_unit = NULL, new_var)
 derive_var_agegr_ema(dataset, age_var, age_unit = NULL, new_var)
 }
 \arguments{
-\item{dataset}{Input dataset.}
+\item{dataset}{Input dataset}
 
-\item{age_var}{AGE variable.}
+\item{age_var}{AGE variable}
 
-\item{age_unit}{AGE unit variable.
+\item{age_unit}{AGE unit variable}
 
-The AGE unit variable is used to convert AGE to 'years' so that grouping can occur.
-This is only used when the age_var variable does not have a corresponding unit in the dataset.
-
-Default: NULL
-
-Permitted Values: 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'}
-
-\item{new_var}{New variable to be created.}
-}
-\value{
-\code{dataset} with new column \code{new_var} of class factor.
+\item{new_var}{New variable to create inside \code{dataset}}
 }
 \description{
-Functions for deriving standardized age groups.
-}
-\details{
-\code{derive_var_agegr_fda()} derives age groups according to FDA guidance. \code{age_var}
-will be split in categories: <18, 18-64, >=65.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\code{derive_var_agegr_ema()} derives age groups according to EMA guidance.
-\code{age_var} will be split into categories: 0-27 days (Newborns), 28 days to
-23 months (Infants and Toddlers), 2-11 (Children), 12-17 (Adolescents), 18-64,
-65-84, >=85.
-}
-\examples{
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_dm)
-
-admiral_dm \%>\%
-  derive_var_agegr_fda(age_var = AGE, new_var = AGEGR1) \%>\%
-  select(SUBJID, AGE, AGEGR1)
-
-data <- tibble::tribble(
-  ~BRTHDT, ~RANDDT,
-  lubridate::ymd("1984-09-06"), lubridate::ymd("2020-02-24")
-)
-
-data \%>\%
-  derive_vars_aage(unit = "months") \%>\%
-  derive_var_agegr_fda(AAGE, age_unit = NULL, AGEGR1)
-
-data.frame(AGE = 1:100) \%>\%
-  derive_var_agegr_fda(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-library(dplyr, warn.conflicts = FALSE)
-library(admiral.test)
-data(admiral_dm)
-
-admiral_dm \%>\%
-  derive_var_agegr_ema(age_var = AGE, new_var = AGEGR1) \%>\%
-  select(SUBJID, AGE, AGEGR1)
-
-data.frame(AGE = 1:100) \%>\%
-  derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-
-data.frame(AGE = 1:20) \%>\%
-  derive_var_agegr_ema(age_var = AGE, age_unit = "years", new_var = AGEGR1)
-}
-\seealso{
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
-\code{\link{derive_var_disposition_status}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
-
-ADSL Functions that returns variable appended to dataset: 
-\code{\link{derive_var_age_years}()},
-\code{\link{derive_var_disposition_status}()},
-\code{\link{derive_var_dthcaus}()},
-\code{\link{derive_var_extreme_dtm}()},
-\code{\link{derive_var_extreme_dt}()},
-\code{\link{derive_vars_aage}()},
-\code{\link{derive_vars_disposition_reason}()}
+These functions are \emph{deprecated}.
 }
 \author{
 Ondrej Slama
 }
-\concept{der_adsl}
-\keyword{der_adsl}
+\keyword{deprecated}

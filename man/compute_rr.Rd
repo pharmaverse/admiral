@@ -29,8 +29,11 @@ compute_rr(hr = 70.14)
 BDS-Findings Functions that returns a vector: 
 \code{\link{compute_bmi}()},
 \code{\link{compute_bsa}()},
+\code{\link{compute_framingham}()},
 \code{\link{compute_map}()},
-\code{\link{compute_qtc}()}
+\code{\link{compute_qtc}()},
+\code{\link{compute_qual_imputation_dec}()},
+\code{\link{compute_qual_imputation}()}
 }
 \author{
 Stefan Bundfuss
