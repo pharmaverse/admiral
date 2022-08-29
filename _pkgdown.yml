@@ -78,9 +78,13 @@ reference:
 - subtitle: Utilities for Filtering Observations
 - contents:
   - has_keyword('utils_fil')
+- subtitle: Utilities used for Date Imputation
+- contents:
+  - has_keyword('utils_impute')
 - subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')
+
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets

@@ -844,8 +844,8 @@ impute_dtc_dt <- function(dtc,
 #' @author Stefan Bundfuss
 #'
 #' @family utils_impute
-#'
 #' @keywords utils_impute
+#'
 dt_level <- function(level) {
   out <-
     factor(
