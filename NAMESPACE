@@ -130,11 +130,7 @@ export(get_duplicates_dataset)
 export(get_many_to_one_dataset)
 export(get_not_mapped)
 export(get_one_to_many_dataset)
-<<<<<<< HEAD
-export(get_source_vars)
 export(get_summary_records)
-=======
->>>>>>> #1231 Removed dev utils function.  keyword confrimation and yn functions.
 export(impute_dtc_dt)
 export(impute_dtc_dtm)
 export(lastalive_censor)
