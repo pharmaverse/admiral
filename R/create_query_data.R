@@ -140,7 +140,8 @@
 #' @return A dataset to be used as input dataset to the `dataset_queries`
 #'   argument in `derive_vars_query()`
 #'
-#' @keywords adae adcm user_utility
+#' @family der_occds
+#' @keywords der_occds
 #'
 #' @seealso [derive_vars_query()], [query()], [smq_select()], [sdg_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
@@ -381,6 +382,9 @@ create_query_data <- function(queries,
 #'
 #'   *Permitted Values*: `"smq"`, `"sdg"`
 #'
+#' @family der_occds
+#' @keywords der_occds
+#'
 #' @return Output dataset of the access function
 #'
 #' @author Stefan Bundfuss
@@ -452,6 +456,9 @@ get_terms_from_db <- function(version,
 #'
 #' Should be `"SMQ`" or `"SDG"`.
 #'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
 #' @return An error is issued if `version` or `fun` is null.
 #'
 #' @author Stefan Bundfuss
@@ -495,7 +502,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' Create an `query` object
 #'
 #' A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-#' Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+#' Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 #' as input to `create_query_data()`.
 #'
 #' @param prefix The value is used to populate `VAR_PREFIX` in the output
@@ -562,6 +569,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' @seealso [create_query_data()], [smq_select()], [sdg_select()], [Queries Dataset
 #' Documentation](../articles/queries_dataset.html)
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -653,6 +661,9 @@ query <- function(prefix,
 #' @param obj An object to be validated.
 #'
 #' @author Stefan Bundfuss
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @seealso [query()]
 #'
@@ -795,7 +806,8 @@ validate_query <- function(obj) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
-#' @keywords assertion
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @author Stefan Bundfuss
 assert_terms <- function(terms,
@@ -885,6 +897,7 @@ assert_terms <- function(terms,
 #'
 #' @seealso [create_query_data()], [query()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -905,6 +918,9 @@ smq_select <- function(name = NULL,
 #' @param obj An object to be validated.
 #'
 #' @seealso [smq_select()]
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @author Stefan Bundfuss
 #'
@@ -951,7 +967,8 @@ validate_smq_select <- function(obj) {
 #'
 #' @seealso [smq_select()]
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -986,6 +1003,7 @@ format.smq_select <- function(x, ...) {
 #'
 #' @seealso [create_query_data()], [query()]
 #'
+#' @family source_specifications
 #' @keywords source_specifications
 #'
 #' @export
@@ -1006,6 +1024,9 @@ sdg_select <- function(name = NULL,
 #' @author Stefan Bundfuss
 #'
 #' @seealso [sdg_select()]
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'
@@ -1045,7 +1066,8 @@ validate_sdg_select <- function(obj) {
 #'
 #' @seealso [sdg_select()]
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @export
 #'

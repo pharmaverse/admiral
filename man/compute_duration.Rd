@@ -20,14 +20,18 @@ compute_duration(
 A date or date-time object is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 \item{end_date}{The end date
 
 A date or date-time object is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
-character vector to a date object.}
+character vector to a date object.
+
+Refer to \code{convert_dtc_to_dt()} to obtain a vector of imputed dates.}
 
 \item{in_unit}{Input unit
 
@@ -86,13 +90,13 @@ start to end date in the specified unit. If the end date is before the start
 date, the duration is negative.
 }
 \examples{
-# derive duration in days (integer), i.e., relative day
+# Derive duration in days (integer), i.e., relative day
 compute_duration(
   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
   end_date = lubridate::ymd_hms("2020-12-24T08:15:00")
 )
 
-# derive duration in days (float)
+# Derive duration in days (float)
 compute_duration(
   start_date = lubridate::ymd_hms("2020-12-06T15:00:00"),
   end_date = lubridate::ymd_hms("2020-12-24T08:15:00"),
@@ -100,7 +104,7 @@ compute_duration(
   add_one = FALSE
 )
 
-# derive age
+# Derive age in years
 compute_duration(
   start_date = lubridate::ymd("1984-09-06"),
   end_date = lubridate::ymd("2020-02-24"),
@@ -108,10 +112,29 @@ compute_duration(
   out_unit = "years",
   add_one = FALSE
 )
+
+# Derive duration in hours
+compute_duration(
+  start_date = lubridate::ymd_hms("2020-12-06T9:00:00"),
+  end_date = lubridate::ymd_hms("2020-12-06T13:30:00"),
+  out_unit = "hours",
+  floor_in = FALSE,
+  add_one = FALSE,
+)
+}
+\seealso{
+Date/Time Computation Functions that returns a vector: 
+\code{\link{compute_dtf}()},
+\code{\link{compute_tmf}()},
+\code{\link{convert_date_to_dtm}()},
+\code{\link{convert_dtc_to_dtm}()},
+\code{\link{convert_dtc_to_dt}()},
+\code{\link{convert_dtm_to_dtc}()},
+\code{\link{impute_dtc_dtm}()},
+\code{\link{impute_dtc_dt}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{computation}
-\keyword{timing}
+\concept{com_date_time}
+\keyword{com_date_time}

@@ -43,4 +43,5 @@ To see the entire table in the console, run \code{print(dose_freq_lookup)}.
 \seealso{
 \code{\link[=create_single_dose_dataset]{create_single_dose_dataset()}}
 }
+\concept{metadata}
 \keyword{metadata}

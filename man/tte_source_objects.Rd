@@ -15,31 +15,6 @@
 \alias{ae_sev_event}
 \alias{ae_wd_event}
 \title{Pre-Defined Time-to-Event Source Objects}
-\format{
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{censor_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-
-An object of class \code{event_source} (inherits from \code{tte_source}, \code{source}, \code{list}) of length 5.
-}
 \usage{
 death_event
 
@@ -66,13 +41,37 @@ ae_sev_event
 ae_wd_event
 }
 \description{
-These pre-defined \code{tte_source} objects can be used as input to \code{derive_param_tte()}.
+These pre-defined \code{tte_source} objects can be used as input to \code{\link[=derive_param_tte]{derive_param_tte()}}.
 }
 \details{
 To see the definition of the various objects simply print the object in the
-R console, e.g. \code{print(death_event)}.
+R console, e.g. \code{print(death_event)}. For details of how to use these objects
+please refer to \code{\link[=derive_param_tte]{derive_param_tte()}}.
+}
+\examples{
+# This shows the definition of all pre-defined `tte_source` objects that ship
+# with {admiral}
+for (obj in list_tte_source_objects()$object) {
+  cat(obj, "\n")
+  print(get(obj))
+  cat("\n")
+}
 }
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=tte_source]{tte_source()}}, \code{\link[=event_source]{event_source()}}, \code{\link[=censor_source]{censor_source()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{dthcaus_source}()},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
-\keyword{tte_source}
+\concept{source_specifications}
+\keyword{source_specifications}

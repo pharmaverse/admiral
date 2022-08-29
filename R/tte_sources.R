@@ -1,19 +1,31 @@
 #' Pre-Defined Time-to-Event Source Objects
 #'
-#' These pre-defined `tte_source` objects can be used as input to `derive_param_tte()`.
+#' These pre-defined `tte_source` objects can be used as input to [derive_param_tte()].
 #'
 #' @details
 #' To see the definition of the various objects simply print the object in the
-#' R console, e.g. `print(death_event)`.
+#' R console, e.g. `print(death_event)`. For details of how to use these objects
+#' please refer to [derive_param_tte()].
 #'
 #' @seealso [derive_param_tte()], [tte_source()], [event_source()], [censor_source()]
 #'
+#' @format NULL
+#'
 #' @export
 #'
-#' @keywords tte_source
+#' @family source_specifications
+#' @keywords source_specifications
 #'
 #' @rdname tte_source_objects
 #'
+#' @examples
+#' # This shows the definition of all pre-defined `tte_source` objects that ship
+#' # with {admiral}
+#' for (obj in list_tte_source_objects()$object) {
+#'   cat(obj, "\n")
+#'   print(get(obj))
+#'   cat("\n")
+#' }
 death_event <- event_source(
   dataset_name = "adsl",
   filter = DTHFL == "Y",
@@ -25,8 +37,9 @@ death_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 lastalive_censor <- censor_source(
   dataset_name = "adsl",
@@ -38,8 +51,9 @@ lastalive_censor <- censor_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_event <- event_source(
   dataset_name = "adae",
@@ -53,8 +67,9 @@ ae_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_ser_event <- event_source(
   dataset_name = "adae",
@@ -68,8 +83,9 @@ ae_ser_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr1_event <- event_source(
   dataset_name = "adae",
@@ -83,8 +99,9 @@ ae_gr1_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr2_event <- event_source(
   dataset_name = "adae",
@@ -98,8 +115,9 @@ ae_gr2_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr3_event <- event_source(
   dataset_name = "adae",
@@ -113,8 +131,9 @@ ae_gr3_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr4_event <- event_source(
   dataset_name = "adae",
@@ -128,8 +147,9 @@ ae_gr4_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr5_event <- event_source(
   dataset_name = "adae",
@@ -143,8 +163,9 @@ ae_gr5_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_gr35_event <- event_source(
   dataset_name = "adae",
@@ -158,8 +179,9 @@ ae_gr35_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_sev_event <- event_source(
   dataset_name = "adae",
@@ -173,8 +195,9 @@ ae_sev_event <- event_source(
   )
 )
 
-#' @keywords tte_source
+#' @keywords source_specifications
 #' @rdname tte_source_objects
+#' @format NULL
 #' @export
 ae_wd_event <- event_source(
   dataset_name = "adae",

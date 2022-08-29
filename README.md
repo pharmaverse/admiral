@@ -32,6 +32,25 @@ remotes::install_github("pharmaverse/admiral.test", ref = "devel") # This is a r
 remotes::install_github("pharmaverse/admiral", ref = "devel")
 ```
 
+## Release Schedule
+
+`{admiral}` releases are targeted for the first Monday of the last month of each quarter.  Pull Requests will be frozen the week before a release. 
+The `admiral` family has several downstream and upstream dependencies and so this release shall be done in three
+Phases:  
+
+* Phase 1 release is for `{admiraldev}` and `{admiral.test}`, which feed into all `admiral` packages
+* Phase 2 release is only for core `{admiral}`
+* Phase 3 release is extension packages, e.g. `{admiralonco}`
+
+| Release Schedule           | Phase 1- Date and Packages   |  Phase 2- Date and Packages | Phase 3- Date and Packages   |
+|----------------------------|------------------------------|---------------------------- |------------------------------|
+| Q3-2022                    |    August 29th               |   September 5th             |  September 12th              |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             |           |
+| Q4-2022                    |    November 28th             |   December 5th              |  December 12th               |  
+|                            |   `{admiraldev}`             |  `{admiral}`                | `{admiralonco}`              |
+|                            |   `{admiral.test}`           |                             |              |
+
 ## Main Goal
 
 Provide users with an open source, modularized toolbox with which to create ADaM datasets
@@ -40,7 +59,7 @@ automate ADaM._
 
 One of the key aspects of `{admiral}` is its development by the users for the users.
 It gives an entry point for all to collaborate, co-create and contribute to a
-harmonised approach of developing ADaMs in R across the pharmaceutical industry.
+harmonized approach of developing ADaMs in R across the pharmaceutical industry.
 
 ## Scope
 
@@ -75,7 +94,7 @@ specific to algorithms and requirements for that particular TA (e.g. `{admiralon
 
 ## Admiral Manifesto
 
-For `{admiral}` and all extension packages, we prioritise providing our users with a **simple to adopt** toolkit
+For `{admiral}` and all extension packages, we prioritize providing our users with a **simple to adopt** toolkit
 that enables them to produce **readable** and **easily constructible** ADaM programs. The following explains
 our philosophy, which we try to adhere to across the `{admiral}` family of packages.
 There isn’t always a clear single, straightforward rule, but there are guiding principles we adhere to for `{admiral}`.
@@ -116,7 +135,7 @@ so this needs to be considered carefully to keep the nesting of 3-4 functions an
 
 All `{admiral}` functions are easily findable.
 
-* In a growing codebase, across a family of packages, we make every effort to make our functions easily findable.
+* In a growing code base, across a family of packages, we make every effort to make our functions easily findable.
 * We use consistent naming conventions across all our functions, and provide vignettes and ADaM templates that
 help users to get started and build familiarity. Each `{admiral}` family package website is searchable.
 * We avoid repetitive functions that will do similar tasks (as explained above with study day example).
@@ -133,7 +152,7 @@ that all our developers and contributors must follow, so that all our code has a
 we try to limit nesting of too many dependencies or functions.
 * Modularity is a focus---we don’t try to achieve too many steps in one.
 * All code has to be well commented.
-* We recognise that a user or a Health Authority reviewer may have the wish to delve into the codebase (especially
+* We recognize that a user or a Health Authority reviewer may have the wish to delve into the code base (especially
 given this open source setting), or users may need to extend/adapt the code for their study specific needs. We
 therefore want any module to be understandable to all, not only the `{admiral}` developers.
 

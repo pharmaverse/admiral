@@ -6,16 +6,17 @@
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_enumerate
+#' @export
 #'
 #' @examples
-#' admiral:::enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
-#' admiral:::enumerate(letters[1:6], quote_fun = admiral:::squote)
-#' admiral:::enumerate(
+#' enumerate(c("STUDYID", "USUBJID", "PARAMCD"))
+#' enumerate(letters[1:6], quote_fun = squote)
+#' enumerate(
 #'   c("date", "time", "both"),
-#'   quote_fun = admiral:::squote,
+#'   quote_fun = squote,
 #'   conjunction = "or"
 #' )
 enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
@@ -36,12 +37,13 @@ enumerate <- function(x, quote_fun = backquote, conjunction = "and") {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_backquote
+#' @export
 #'
 #' @examples
-#' admiral:::backquote("USUBJID")
+#' backquote("USUBJID")
 backquote <- function(x) {
   paste0("`", x, "`")
 }
@@ -52,12 +54,12 @@ backquote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
-#'
-#' @rdname dev_util_squote
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#' @export
 #'
 #' @examples
-#' admiral:::squote("foo")
+#' squote("foo")
 squote <- function(x) {
   paste0("'", x, "'")
 }
@@ -74,11 +76,14 @@ squote <- function(x) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
+#' @export
 #'
 #' @examples
-#' admiral:::dquote("foo")
-#' admiral:::dquote(NULL)
+#' dquote("foo")
+#' dquote(NULL)
 dquote <- function(x) {
   if (is.null(x)) {
     "NULL"
@@ -97,12 +102,11 @@ dquote <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
 #'
-#' @rdname dev_util_notin
+#' @export
 #'
 #' @examples
-#' `%notin%` <- admiral:::`%notin%`
 #' "a" %notin% c("b", "v", "k")
 `%notin%` <- function(x, table) { # nolint
   !(x %in% table)
@@ -117,13 +121,14 @@ dquote <- function(x) {
 #'
 #' @author Ondrej Slama
 #'
-#' @keywords dev_utility
+#' @keywords com_date_time
+#' @family com_date_time
 #'
-#' @rdname dev_util_convert_dtm_to_dtc
+#' @export
 #'
 #' @examples
-#' admiral:::convert_dtm_to_dtc(as.POSIXct(Sys.time()))
-#' admiral:::convert_dtm_to_dtc(as.Date(Sys.time()))
+#' convert_dtm_to_dtc(as.POSIXct(Sys.time()))
+#' convert_dtm_to_dtc(as.Date(Sys.time()))
 convert_dtm_to_dtc <- function(dtm) {
   stopifnot(lubridate::is.instant(dtm))
   format(dtm, "%Y-%m-%dT%H:%M:%S")
@@ -135,18 +140,19 @@ convert_dtm_to_dtc <- function(dtm) {
 #'
 #' @author Thomas Neitmann, Ondrej Slama
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_arg_name
+#' @export
 #'
 #' @examples
 #' test_fun <- function(something) {
-#'   admiral:::arg_name(substitute(something))
+#'   arg_name(substitute(something))
 #' }
 #'
 #' inner_function <- function(x) x
 #' test_fun2 <- function(something) {
-#'   admiral:::arg_name(substitute(inner_function(something)))
+#'   arg_name(substitute(inner_function(something)))
 #' }
 arg_name <- function(expr) { # nolint
   if (length(expr) == 1L && is.symbol(expr)) {
@@ -173,12 +179,13 @@ arg_name <- function(expr) { # nolint
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_extract_vars
+#' @export
 #'
 #' @examples
-#' admiral:::extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
+#' extract_vars(vars(STUDYID, USUBJID, desc(ADTM)))
 extract_vars <- function(x, side = "lhs") {
   if (is.null(x)) {
     NULL
@@ -208,15 +215,16 @@ extract_vars <- function(x, side = "lhs") {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_quo_c
+#' @export
 #'
 #' @examples
-#' admiral:::quo_c(rlang::quo(USUBJID))
-#' admiral:::quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
-#' admiral:::quo_c(vars(USUBJID, ADTM))
-#' admiral:::quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
+#' quo_c(rlang::quo(USUBJID))
+#' quo_c(rlang::quo(STUDYID), rlang::quo(USUBJID))
+#' quo_c(vars(USUBJID, ADTM))
+#' quo_c(rlang::quo(BASETYPE), vars(USUBJID, PARAM), rlang::quo(ADTM))
 quo_c <- function(...) {
   inputs <- unlist(list(...), recursive = TRUE)
   stopifnot(all(map_lgl(inputs, is_quosure)))
@@ -232,16 +240,17 @@ quo_c <- function(...) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
-#' @rdname dev_util_what_is_it
+#' @export
 #'
 #' @examples
-#' admiral:::what_is_it(mtcars)
-#' admiral:::what_is_it(NA)
-#' admiral:::what_is_it(TRUE)
-#' admiral:::what_is_it(lm(hp ~ mpg, data = mtcars))
-#' admiral:::what_is_it(letters)
+#' what_is_it(mtcars)
+#' what_is_it(NA)
+#' what_is_it(TRUE)
+#' what_is_it(lm(hp ~ mpg, data = mtcars))
+#' what_is_it(letters)
 what_is_it <- function(x) {
   if (is.null(x)) {
     "`NULL`"
@@ -280,19 +289,20 @@ what_is_it <- function(x) {
 #'   *Permitted Values:* A list of variable names or selector function calls
 #'   like `starts_with("EX")`
 #'
-#' @keywords dev_utility
-#'
-#' @rdname dev_util_get_constant_vars
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return Variable vector.
+#'
+#' @export
 #'
 #' @examples
 #' library(admiral.test)
 #' data(admiral_vs)
 #'
-#' admiral:::get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
+#' get_constant_vars(admiral_vs, by_vars = vars(USUBJID, VSTESTCD))
 #'
-#' admiral:::get_constant_vars(
+#' get_constant_vars(
 #'   admiral_vs,
 #'   by_vars = vars(USUBJID, VSTESTCD),
 #'   ignore_vars = vars(DOMAIN, tidyselect::starts_with("VS"))
@@ -338,14 +348,15 @@ is_named <- function(x) {
 #'
 #' @author Thomas Neitmann
 #'
-#' @keywords dev_utility
-#'
-#' @rdname dev_util_replace_values_by_names
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return A list of quosures
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
+#' replace_values_by_names(vars(USUBJID, TEST = VSTESTCD))
 replace_values_by_names <- function(quosures) {
   vars <- map2(quosures, names(quosures), function(q, n) {
     if (n == "") {
@@ -359,6 +370,23 @@ replace_values_by_names <- function(quosures) {
   structure(vars, class = "quosures", names = NULL)
 }
 
+
+#' Returns Duplicated Values of a Vector
+#'
+#' Returns all values which occur more than once in the vector
+#'
+#' @param x Input vector
+#'
+#' @return A vector of the values which occur more than once in the input vector
+#'
+#' @export
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
+#' @examples
+#'
+#' get_duplicates(c(1, 2, 1, 3, 1, 2, 4))
 get_duplicates <- function(x) {
   unique(x[duplicated(x)])
 }
@@ -371,7 +399,8 @@ get_duplicates <- function(x) {
 #'
 #' @export
 #'
-#' @keywords user_utility
+#' @family utils_help
+#' @keywords utils_help
 #'
 #' @examples
 #' extract_unit("Height (cm)")
@@ -394,13 +423,16 @@ extract_unit <- function(x) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords check
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
+#' @export
 #'
 #' @examples
 #'
 #' example_fun <- function(arg) {
 #'   arg <- rlang::enquo(arg)
-#'   if (admiral:::is_auto(arg)) {
+#'   if (is_auto(arg)) {
 #'     "auto keyword was specified"
 #'   } else {
 #'     arg
@@ -420,14 +452,15 @@ is_auto <- function(arg) {
 #'
 #' @author Stefan Bundfuss
 #'
-#' @keywords dev_utility
-#'
-#' @rdname dev_util_get_source_vars
+#' @keywords move_adm_dev
+#' @family move_adm_dev
 #'
 #' @return A list of quosures
 #'
+#' @export
+#'
 #' @examples
-#' admiral:::get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
+#' get_source_vars(vars(USUBJID, AVISIT = VISIT, SRCDOM = "EX"))
 get_source_vars <- function(quosures) {
   quo_c(quosures)[lapply(quo_c(quosures), quo_is_symbol) == TRUE]
 }
@@ -446,10 +479,151 @@ as_name <- function(x) {
   as_string(x)
 }
 
+#' Returns Valid Time Units
+#'
+#' Returns valid time units as expected for arguments expecting a time unit
+#'
+#' @return A vector of valid time units
+#'
+#' @export
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
+#' @examples
+#'
+#' valid_time_units()
 valid_time_units <- function() {
   c("years", "months", "days", "hours", "minutes", "seconds")
 }
 
+#' Returns If Argument is a Vector of Symbols or Named Expressions
+#'
+#' Returns If Argument is a Vector of Symbols or Named Expressions
+#'
+#' @param arg Input vector
+#'
+#' @return `TRUE` if
+#'   - The vector is a vector of quosures and
+#'   - all elements are a symbol or a named expression like `CHG = AVAL - BASE`
+#'
+#'   `FALSE` otherwise
+#'
+#'
+#' @export
+#'
+#' @keywords move_adm_dev
+#' @family move_adm_dev
+#'
+#' @examples
+#'
+#' contains_vars(rlang::expr(AVAL))
+#' contains_vars(dplyr::vars(AVAL))
+#' contains_vars(dplyr::vars(1))
+#' contains_vars(dplyr::vars(AVAL, ID = 1))
+#' contains_vars(dplyr::vars(AVAL, CHG = AVAL - BASE))
 contains_vars <- function(arg) {
   inherits(arg, "quosures") && all(map_lgl(arg, quo_is_symbol) | names(arg) != "")
+}
+
+#' Get a New Temporary Variable Name for a Dataset
+#'
+#' @param dataset The input dataset
+#' @param prefix The prefix of the new temporary variable name to create
+#'
+#' @details
+#' The function returns a new unique temporary variable name to be used inside
+#' `dataset`. The temporary variable names have the structure `prefix_n` where
+#' `n` is an integer, e.g. `tmp_var_1`. If there is already a variable inside
+#' `datset` with a given `prefix` then the suffix is increased by 1, e.g. if
+#' `tmp_var_1` already exists then `get_new_tmp_var()` will return `tmp_var_2`.
+#'
+#' @seealso [remove_tmp_vars()]
+#'
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#' data(admiral_adsl)
+#' adsl <- admiral_adsl
+#' tmp_var <- get_new_tmp_var(adsl)
+#' mutate(adsl, !!tmp_var := NA)
+get_new_tmp_var <- function(dataset, prefix = "tmp_var") {
+  assert_data_frame(dataset, optional = TRUE)
+  assert_character_scalar(prefix)
+  if (!str_detect(prefix, "^tmp_")) {
+    abort("`prefix` must start with 'tmp_'")
+  }
+
+  caller_env <- parent.frame()
+
+  if (is.null(dataset)) {
+    colnames_with_prefix <- vector("character")
+  } else {
+    regexp <- str_c("^", prefix, "_[0-9]{1,}$")
+    colnames_with_prefix <- str_subset(colnames(dataset), regexp)
+  }
+  if (!is.null(caller_env$.tmp_vars)) {
+    suffices <- str_extract(caller_env$.tmp_vars, "[0-9]{1,}$")
+    counter <- max(as.integer(suffices)) + 1L
+  } else if (length(colnames_with_prefix) > 0L) {
+    suffices <- str_extract(colnames_with_prefix, "[0-9]{1,}$")
+    counter <- max(as.integer(suffices)) + 1L
+  } else {
+    counter <- 1L
+  }
+
+  new_tmp_var <- str_c(prefix, counter, sep = "_")
+  caller_env$.tmp_vars <- c(caller_env$.tmp_vars, new_tmp_var)
+
+  sym(new_tmp_var)
+}
+
+#' Remove All Temporary Variables Created Within the Current Function Environment
+#'
+#' @param dataset The input dataset
+#'
+#' @export
+#'
+#' @seealso [get_new_tmp_var()]
+#'
+#' @examples
+#' library(dplyr)
+#' library(admiral.test)
+#' data(admiral_dm)
+#' dm <- select(admiral_dm, USUBJID)
+#' tmp_var <- get_new_tmp_var(dm)
+#' dm <- mutate(dm, !!tmp_var := NA)
+#'
+#' ## This function creates two new temporary variables which are removed when calling
+#' ## `remove_tmp_vars()`. Note that any temporary variable created outside this
+#' ## function is **not** removed
+#' do_something <- function(dataset) {
+#'   tmp_var_1 <- get_new_tmp_var(dm)
+#'   tmp_var_2 <- get_new_tmp_var(dm)
+#'   dm %>%
+#'     mutate(!!tmp_var_1 := NA, !!tmp_var_2 := NA) %>%
+#'     print() %>%
+#'     remove_tmp_vars()
+#' }
+#'
+#' do_something(dm)
+remove_tmp_vars <- function(dataset) {
+  # In order to find the "correct" calling environment we have to make sure to
+  # exclude all calls relating to the use of `%>%` from the call stack
+  calls <- lapply(sys.calls(), function(x) paste(deparse(x), collapse = " "))
+  contains_pipe <- map_lgl(calls, str_detect, "%>%")
+
+  if (any(contains_pipe)) {
+    last_pipe <- max(which(contains_pipe))
+    tmp_vars <- sys.frame(last_pipe - 1L)$.tmp_vars
+  } else {
+    tmp_vars <- parent.frame()$.tmp_vars
+  }
+
+  if (is.null(tmp_vars)) {
+    dataset
+  } else {
+    dataset[, colnames(dataset) %notin% tmp_vars]
+  }
 }

@@ -107,10 +107,11 @@ If the \code{span_period} is specified as \code{"Y"}, this allows the user to as
 Any date imputations needed should be done prior to calling this function.
 }
 \examples{
+library(tibble)
 library(dplyr)
 library(lubridate, warn.conflict = FALSE)
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
   "P01",    ymd("2020-02-24"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P02",    ymd("2020-01-01"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -123,7 +124,7 @@ derive_var_ontrtfl(
   ref_end_date = TRTEDT
 )
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~ADT,              ~TRTSDT,           ~TRTEDT,
   "P01",    ymd("2020-07-01"), ymd("2020-01-01"), ymd("2020-03-01"),
   "P02",    ymd("2020-04-30"), ymd("2020-01-01"), ymd("2020-03-01"),
@@ -137,11 +138,11 @@ derive_var_ontrtfl(
   ref_end_window = 60
 )
 
-advs <- tibble::tribble(
-  ~USUBJID, ~ADTM, ~TRTSDTM, ~TRTEDTM,
-  "P01", ymd_hm("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
-  "P02", ymd("2020-01-01"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
-  "P03", ymd("2019-12-31"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+advs <- tribble(
+  ~USUBJID, ~ADTM,                      ~TRTSDTM,                   ~TRTEDTM,
+  "P01",    ymd_hm("2020-01-02T12:00"), ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P02",    ymd("2020-01-01"),          ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
+  "P03",    ymd("2019-12-31"),          ymd_hm("2020-01-01T12:00"), ymd_hm("2020-03-01T12:00"),
 ) \%>\%
   mutate(TPT = c(NA, "PRE", NA))
 derive_var_ontrtfl(
@@ -152,7 +153,7 @@ derive_var_ontrtfl(
   filter_pre_timepoint = TPT == "PRE"
 )
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~ASTDT,            ~TRTSDT,           ~TRTEDT,           ~AENDT,
   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
@@ -168,7 +169,7 @@ derive_var_ontrtfl(
   span_period = "Y"
 )
 
-advs <- tibble::tribble(
+advs <- tribble(
   ~USUBJID, ~ASTDT,            ~AP01SDT,          ~AP01EDT,          ~AENDT,
   "P01",    ymd("2020-03-15"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-12-01"),
   "P02",    ymd("2019-04-30"), ymd("2020-01-01"), ymd("2020-03-01"), ymd("2020-03-15"),
@@ -184,8 +185,24 @@ derive_var_ontrtfl(
   span_period = "Y"
 )
 }
+\seealso{
+BDS-Findings Functions that returns variable appended to dataset: 
+\code{\link{atoxgr_criteria_ctcv4}},
+\code{\link{derive_extreme_records}()},
+\code{\link{derive_param_rr}()},
+\code{\link{derive_summary_records}()},
+\code{\link{derive_var_analysis_ratio}()},
+\code{\link{derive_var_anrind}()},
+\code{\link{derive_var_atoxgr_dir}()},
+\code{\link{derive_var_atoxgr}()},
+\code{\link{derive_var_basetype}()},
+\code{\link{derive_var_base}()},
+\code{\link{derive_var_chg}()},
+\code{\link{derive_var_pchg}()},
+\code{\link{derive_var_shift}()}
+}
 \author{
 Alice Ehmann, Teckla Akinyi
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_bds_findings}
+\keyword{der_bds_findings}

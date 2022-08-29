@@ -7,6 +7,7 @@
 assert_data_frame(
   arg,
   required_vars = NULL,
+  accept_grouped = FALSE,
   check_is_grouped = TRUE,
   optional = FALSE
 )
@@ -15,6 +16,9 @@ assert_data_frame(
 \item{arg}{A function argument to be checked}
 
 \item{required_vars}{A list of variables created using \code{vars()}}
+
+\item{accept_grouped}{Is the data frame grouped? Defaults to \code{FALSE}. If set to \code{TRUE} then
+the check on grouped data frames is skipped}
 
 \item{check_is_grouped}{Throw an error is \code{dataset} is grouped? Defaults to \code{TRUE}.}
 
@@ -25,6 +29,8 @@ is \code{NULL} then an error is thrown}
 The function throws an error if \code{arg} is not a data frame or if \code{arg}
 is a data frame but misses any variable specified in \code{required_vars}. Otherwise,
 the input is returned invisibly.
+The function will also return an error if \code{arg}is a grouped data frame and
+\code{accept_grouped} is not set to \code{TRUE}.
 }
 \description{
 Checks if an argument is a data frame and (optionally) whether is contains
@@ -44,7 +50,59 @@ try(example_fun(dplyr::select(admiral_dm, -STUDYID)))
 
 try(example_fun("Not a dataset"))
 }
+\seealso{
+Functions moved to admiraldev package: 
+\code{\link{arg_name}()},
+\code{\link{assert_character_scalar}()},
+\code{\link{assert_character_vector}()},
+\code{\link{assert_db_requirements}()},
+\code{\link{assert_filter_cond}()},
+\code{\link{assert_function}()},
+\code{\link{assert_has_variables}()},
+\code{\link{assert_integer_scalar}()},
+\code{\link{assert_list_element}()},
+\code{\link{assert_list_of}()},
+\code{\link{assert_logical_scalar}()},
+\code{\link{assert_numeric_vector}()},
+\code{\link{assert_one_to_one}()},
+\code{\link{assert_order_vars}()},
+\code{\link{assert_param_does_not_exist}()},
+\code{\link{assert_s3_class}()},
+\code{\link{assert_symbol}()},
+\code{\link{assert_terms}()},
+\code{\link{assert_unit}()},
+\code{\link{assert_valid_queries}()},
+\code{\link{assert_vars}()},
+\code{\link{assert_varval_list}()},
+\code{\link{backquote}()},
+\code{\link{contains_vars}()},
+\code{\link{dataset_vignette}()},
+\code{\link{dquote}()},
+\code{\link{enumerate}()},
+\code{\link{expect_dfs_equal}()},
+\code{\link{extend_source_datasets}()},
+\code{\link{extract_vars}()},
+\code{\link{format.sdg_select}()},
+\code{\link{format.smq_select}()},
+\code{\link{get_constant_vars}()},
+\code{\link{get_duplicates}()},
+\code{\link{get_source_vars}()},
+\code{\link{is_auto}()},
+\code{\link{quo_c}()},
+\code{\link{replace_values_by_names}()},
+\code{\link{squote}()},
+\code{\link{suppress_warning}()},
+\code{\link{valid_time_units}()},
+\code{\link{validate_query}()},
+\code{\link{validate_sdg_select}()},
+\code{\link{validate_smq_select}()},
+\code{\link{warn_if_inconsistent_list}()},
+\code{\link{warn_if_invalid_dtc}()},
+\code{\link{warn_if_vars_exist}()},
+\code{\link{what_is_it}()}
+}
 \author{
 Thomas Neitmann
 }
-\keyword{assertion}
+\concept{move_adm_dev}
+\keyword{move_adm_dev}

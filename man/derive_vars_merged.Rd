@@ -149,7 +149,7 @@ library(dplyr, warn.conflicts = FALSE)
 data("admiral_vs")
 data("admiral_dm")
 
-# merging all dm variables to vs
+# Merging all dm variables to vs
 derive_vars_merged(
   admiral_vs,
   dataset_add = select(admiral_dm, -DOMAIN),
@@ -157,7 +157,7 @@ derive_vars_merged(
 ) \%>\%
   select(STUDYID, USUBJID, VSTESTCD, VISIT, VSTPT, VSSTRESN, AGE, AGEU)
 
-# merge last weight to adsl
+# Merge last weight to adsl
 data("admiral_adsl")
 derive_vars_merged(
   admiral_adsl,
@@ -170,9 +170,88 @@ derive_vars_merged(
   match_flag = vsdatafl
 ) \%>\%
   select(STUDYID, USUBJID, AGE, AGEU, LASTWGT, LASTWGTU, vsdatafl)
+
+# Derive treatment start datetime (TRTSDTM)
+data(admiral_ex)
+
+## Impute exposure start date to first date/time
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M",
+)
+
+## Add first exposure datetime and imputation flags to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = vars(EXSTDTM),
+  mode = "first"
+)
+
+# Derive treatment start datetime (TRTSDTM)
+data(admiral_ex)
+
+## Impute exposure start date to first date/time
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXSTDTC,
+  new_vars_prefix = "EXST",
+  highest_imputation = "M",
+)
+
+## Add first exposure datetime and imputation flags to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  filter_add = !is.na(EXSTDTM),
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTSDTM = EXSTDTM, TRTSDTF = EXSTDTF, TRTSTMF = EXSTTMF),
+  order = vars(EXSTDTM),
+  mode = "first"
+)
+
+# Derive treatment end datetime (TRTEDTM)
+## Impute exposure end datetime to last time, no date imputation
+ex_ext <- derive_vars_dtm(
+  admiral_ex,
+  dtc = EXENDTC,
+  new_vars_prefix = "EXEN",
+  time_imputation = "last",
+)
+
+## Add last exposure datetime and imputation flag to adsl
+derive_vars_merged(
+  select(admiral_dm, STUDYID, USUBJID),
+  dataset_add = ex_ext,
+  filter_add = !is.na(EXENDTM),
+  by_vars = vars(STUDYID, USUBJID),
+  new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+  order = vars(EXENDTM),
+  mode = "last"
+)
+}
+\seealso{
+General Derivation Functions for all ADaMs that returns variable appended to dataset:
+\code{\link{derive_var_extreme_flag}()},
+\code{\link{derive_var_last_dose_amt}()},
+\code{\link{derive_var_last_dose_date}()},
+\code{\link{derive_var_last_dose_grp}()},
+\code{\link{derive_var_merged_cat}()},
+\code{\link{derive_var_merged_character}()},
+\code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_obs_number}()},
+\code{\link{derive_var_worst_flag}()},
+\code{\link{derive_vars_last_dose}()},
+\code{\link{derive_vars_merged_lookup}()},
+\code{\link{derive_vars_transposed}()},
+\code{\link{get_summary_records}()}
 }
 \author{
 Stefan Bundfuss
 }
-\keyword{adam}
-\keyword{derivation}
+\concept{der_gen}
+\keyword{der_gen}
