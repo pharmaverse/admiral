@@ -114,6 +114,7 @@ BDS-Findings Functions for adding Parameters:
 \code{\link{derive_param_exist_flag}()},
 \code{\link{derive_param_exposure}()},
 \code{\link{derive_param_first_event}()},
+\code{\link{derive_param_framingham}()},
 \code{\link{derive_param_map}()},
 \code{\link{derive_param_qtc}()},
 \code{\link{derive_param_wbc_abs}()}
