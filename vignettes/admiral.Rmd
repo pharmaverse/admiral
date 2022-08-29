@@ -56,7 +56,7 @@ adsl <- dm %>%
 The function `derive_vars_dtm()` can be used to convert the DTC variables from
 `EX` to numeric datetime variable and impute missing components. The function
 call returns the original data frame with the column `EXSTDTM`, `EXENDTM` and
-corresponing time imputation  flag variables `EXSTTMF` and  `EXENTMF` added to
+corresponding time imputation  flag variables `EXSTTMF` and  `EXENTMF` added to
 the end of the dataframe. Exposure observations with an incomplete date are
 ignored. We impute missing time to be 23:59:59 using `time_imputation = "last"`.
 The required imputation flags are determined automatically by the function. Here

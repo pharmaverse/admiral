@@ -465,7 +465,7 @@ must be marked as deprecated. This deprecation is done in three phases over our 
 
 -  **Phase 2:** In the next release an error will be thrown using `deprecate_stop()`
 
--  **Phase 3:** Finally in the 3rd release thereafterthe function will be removed from the package altogether
+-  **Phase 3:** Finally in the 3rd release thereafter the function will be removed from the package altogether
 
 Information about deprecation timelines must be added to the warning/error message.
 
