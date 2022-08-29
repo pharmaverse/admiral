@@ -114,6 +114,8 @@ VSTESTCD
 WBC
 XXXXXXXX
 XYZ
+adam
+adamig
 adeg
 adex
 adlb
@@ -127,6 +129,7 @@ basetypes
 bds
 behaviour
 breaks’
+cdisc
 censorings
 chk
 constructible
@@ -156,6 +159,7 @@ funder
 github
 groupwise
 hms
+https
 insightsengineering
 labelled
 lapply
@@ -201,6 +205,7 @@ unstyled
 useR
 usethis
 validatoR
+www
 xportr
 xpt
 xxxx
