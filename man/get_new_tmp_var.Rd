@@ -17,7 +17,7 @@ Get a New Temporary Variable Name for a Dataset
 \details{
 The function returns a new unique temporary variable name to be used inside
 \code{dataset}. The temporary variable names have the structure \code{prefix_n} where
-\code{n} is an integer, e.g. \code{tmp_var_1}. If there is alredy a variable inside
+\code{n} is an integer, e.g. \code{tmp_var_1}. If there is already a variable inside
 \code{datset} with a given \code{prefix} then the suffix is increased by 1, e.g. if
 \code{tmp_var_1} already exists then \code{get_new_tmp_var()} will return \code{tmp_var_2}.
 }
