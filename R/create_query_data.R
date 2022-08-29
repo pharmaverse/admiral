@@ -502,7 +502,7 @@ assert_db_requirements <- function(version, version_arg_name, fun, fun_arg_name,
 #' Create an `query` object
 #'
 #' A `query` object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-#' Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+#' Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 #' as input to `create_query_data()`.
 #'
 #' @param prefix The value is used to populate `VAR_PREFIX` in the output
