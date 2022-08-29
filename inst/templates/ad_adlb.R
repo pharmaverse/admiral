@@ -248,20 +248,20 @@ grade_lookup <- tibble::tribble(
   "WBC",     "White blood cell decreased",  "Leukocytosis",
 )
 
-# add ATOXDSCL and ATOXDSCH
+# Add ATOXDSCL and ATOXDSCH
 adlb <- adlb %>%
   derive_vars_merged(
     dataset_add = grade_lookup,
     by_vars = vars(PARAMCD),
   ) %>%
-  # derive toxicity grade for low values ATOXGRL
+  # Derive toxicity grade for low values ATOXGRL
   derive_var_atoxgr_dir(
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
     criteria_direction = "L",
     get_unit_expr = extract_unit(PARAM)
   ) %>%
-  # derive toxicity grade for low values ATOXGRH
+  # Derive toxicity grade for low values ATOXGRH
   derive_var_atoxgr_dir(
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
@@ -270,19 +270,19 @@ adlb <- adlb %>%
   ) %>%
   # (Optional) derive overall grade ATOXGR (combining ATOXGRL and ATOXGRH)
   derive_var_atoxgr() %>%
-  # derive baseline toxicity grade for low values BTOXGRL
+  # Derive baseline toxicity grade for low values BTOXGRL
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGRL,
     new_var = BTOXGRL
   ) %>%
-  # derive baseline toxicity grade for high values BTOXGRH
+  # Derive baseline toxicity grade for high values BTOXGRH
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGRH,
     new_var = BTOXGRH
   ) %>%
-  # derive baseline toxicity grade for for overall grade BTOXGR
+  # Derive baseline toxicity grade for for overall grade BTOXGR
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGR,
@@ -307,13 +307,13 @@ adlb <- adlb %>%
 
 ## SHIFT derivation ----
 adlb <- adlb %>%
-  # derive shift from baseline for analysis indicator
+  # Derive shift from baseline for analysis indicator
   derive_var_shift(
     new_var = SHIFT1,
     from_var = BNRIND,
     to_var = ANRIND
   ) %>%
-  # derive shift from baseline for overall grade
+  # Derive shift from baseline for overall grade
   restrict_derivation(
     derivation = derive_var_shift,
     args = params(
