@@ -158,7 +158,8 @@ get_summary_records <- function(dataset,
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,
-    required_vars = quo_c(by_vars, analysis_var)
+    required_vars = quo_c(by_vars, analysis_var),
+    check_is_grouped = FALSE
   )
   if (!is.null(set_values_to)) {
     assert_varval_list(set_values_to, optional = TRUE)
