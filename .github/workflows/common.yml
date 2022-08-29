@@ -15,7 +15,6 @@ on:
       - main
       - devel
       - pre-release
-      - test
   # 'pull_request' events are triggered when PRs are
   # created against one of these target branches.
   pull_request:
@@ -23,7 +22,6 @@ on:
       - main
       - devel
       - pre-release
-      - test
   # 'release' events are triggered when...
   # you guessed it - when releases are made.
   release:
@@ -100,13 +98,6 @@ jobs:
       # Setting to 'false' will require you to create
       # an orphan branch called 'badges' in your repository
       skip-coverage-badges: false
-  templates:
-    name: Check Templates
-    uses: pharmaverse/admiralci/.github/workflows/check-templates.yml@main
-    if: >
-      github.event_name == 'push' || github.event_name == 'pull_request'
-    with:
-      r-version: $R_VERSION
   man-pages:
     name: Man Pages
     uses: pharmaverse/admiralci/.github/workflows/man-pages.yml@main

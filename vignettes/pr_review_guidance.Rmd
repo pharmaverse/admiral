@@ -101,7 +101,7 @@ Most workflows have a `BEGIN boilerplate steps` and `END boilerplate steps` sect
 
 The underlying mechanisms for installing R and Pandoc are defined in `r-lib/actions`, while the installation of system dependencies and R package dependencies is managed via the Staged Dependencies GitHub Action]. The latter is used in conjunction with the `staged_dependencies.yaml` file in order to install dependencies that are in the _same stage of development_ as the current package. 
 
-Following the installation of system dependencies, R, and package dependencies, each workflow checks the integrity of a specific component of the admiral codebase.
+Following the installation of system dependencies, R, and package dependencies, each workflow checks the integrity of a specific component of the admiral code base.
 
 ### `check-templates.yml`
 
@@ -109,7 +109,7 @@ This workflow checks for issues within template scripts.  For example, in the ad
 
 ### `code-coverage.yml`
 
-This workflow measures code coverage for unit tests and reports the code coverage as a percentage of the _total number of lines covered by unit tests_ vs. the _total number of lines in the codebase_.
+This workflow measures code coverage for unit tests and reports the code coverage as a percentage of the _total number of lines covered by unit tests_ vs. the _total number of lines in the code base_.
 
 The `{covr}` R package is used to calculate the coverage.
 
@@ -145,7 +145,7 @@ When a new release of the package is made, this workflow executes to create a va
 
 ### `readme-render.yml`
 
-If your codebase uses a [`README.Rmd` file](../../README.Rmd), then this workflow will automatically render a `README.md` and commit it to your branch.
+If your code base uses a [`README.Rmd` file](../../README.Rmd), then this workflow will automatically render a `README.md` and commit it to your branch.
 
 ### `spellcheck.yml`
 
