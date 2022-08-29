@@ -67,6 +67,9 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
+- `order` parameter added to `dthcaus_source()` which allows an additional 
+character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
+updated to process additional parameter (#1125)
 
 ## Breaking Changes
 
