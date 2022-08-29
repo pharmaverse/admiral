@@ -2,7 +2,9 @@
 
 ## New Features
 
-- New function `derive_param_framingham()`, which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+- New function `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+
+- New function `derive_param_framingham()` which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
