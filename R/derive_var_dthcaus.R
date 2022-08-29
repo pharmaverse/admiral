@@ -27,7 +27,7 @@
 #' @keywords der_adsl
 #'
 #' @author
-#' Shimeng Huang, Samia Kabi, Thomas Neitmann
+#' Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
 #'
 #' @return The input dataset with `DTHCAUS` variable added.
 #'
@@ -164,12 +164,8 @@ derive_var_dthcaus <- function(dataset,
   for (ii in seq_along(sources)) {
     source_dataset_name <- sources[[ii]]$dataset_name
     source_dataset <- source_datasets[[source_dataset_name]]
-    if (!quo_is_null(sources[[ii]]$filter)) {
-      add_data[[ii]] <- source_dataset %>%
-        filter(!!sources[[ii]]$filter)
-    } else {
-      add_data[[ii]] <- source_dataset
-    }
+    add_data[[ii]] <- source_dataset %>%
+      filter_if(sources[[ii]]$filter)
 
     assert_date_var(
       dataset = add_data[[ii]],
@@ -182,7 +178,7 @@ derive_var_dthcaus <- function(dataset,
     tmp_date <- get_new_tmp_var(dataset)
     add_data[[ii]] <- add_data[[ii]] %>%
       filter_extreme(
-        order = vars(!!sources[[ii]]$date),
+        order = vars(!!sources[[ii]]$date, !!!sources[[ii]]$order),
         by_vars = subject_keys,
         mode = sources[[ii]]$mode
       ) %>%
@@ -193,7 +189,7 @@ derive_var_dthcaus <- function(dataset,
       )
 
     # add traceability param if required
-    # inconsitent traceability lists issue a warning
+    # inconsistent traceability lists issue a warning
     if (ii > 1) {
       warn_if_inconsistent_list(
         base = sources[[ii - 1]]$traceability,
@@ -238,6 +234,16 @@ derive_var_dthcaus <- function(dataset,
 #'
 #' @param date A date or datetime variable to be used for sorting `dataset`.
 #'
+#' @param order Sort order
+#'
+#'   Additional variables to be used for sorting the `dataset` which is ordered by the
+#'   `date` and `order`. Can be used to avoid duplicate record warning.
+#'
+#'   *Default*: `NULL`
+#'
+#'   *Permitted Values*: list of variables or `desc(<variable>)` function calls
+#'   created by `vars()`, e.g., `vars(ADT, desc(AVAL))` or `NULL`
+#'
 #' @param mode One of `"first"` or `"last"`.
 #' Either the `"first"` or `"last"` observation is preserved from the `dataset`
 #' which is ordered by `date`.
@@ -269,6 +275,7 @@ derive_var_dthcaus <- function(dataset,
 dthcaus_source <- function(dataset_name,
                            filter,
                            date,
+                           order = NULL,
                            mode = "first",
                            dthcaus,
                            traceability_vars = NULL) {
@@ -276,6 +283,7 @@ dthcaus_source <- function(dataset_name,
     dataset_name = assert_character_scalar(dataset_name),
     filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enquo(date)),
+    order = assert_order_vars(order, optional = TRUE),
     mode = assert_character_scalar(mode, values = c("first", "last"), case_sensitive = FALSE),
     dthcaus = assert_symbol(enquo(dthcaus)) %or% assert_character_scalar(dthcaus),
     traceability = assert_varval_list(traceability_vars, optional = TRUE)
