@@ -62,7 +62,8 @@ Imports:
     rlang,
     stringr,
     tidyr,
-    tidyselect
+    tidyselect,
+    readxl
 Suggests:
     admiral.test,
     devtools,

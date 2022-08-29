@@ -17,6 +17,17 @@ admiral extension packages (#1079)
 - New function `derive_var_confirmation_flag()` for deriving a flag which
 depends on other observations of the input dataset (#1293)
 
+- New metadata data set called `atoxgr_criteria_ctcv4` which holds criteria for lab grading
+based on [Common Terminology Criteria for Adverse Events (CTCAE) v4.0](https://ctep.cancer.gov/protocoldevelopment/electronic_applications/ctc.htm)
+
+- New function `derive_var_atoxgr_dir()` for deriving lab toxicity/severity grade for low
+lab values (`ATOXGRL`) or for high lab values (`ATOXGRH`). The grading is created from
+metadata.
+
+- New function `derive_var_atoxgr()` that derives lab toxicity/severity grade `ATOXGR`
+from `ATOXGRL` and `ATOXGRH`. `ATOXGRL` holds toxicity/severity grade for low lab values,
+and `ATOXGRH` holds toxicity/severity grade for high lab values.
+
 ## Updates of Existing Functions
 
 - `list_tte_source_objects()` gains a `package` parameter and is now exported (#1212)
@@ -58,6 +69,8 @@ users feedback (#1300):
 
 - All ADaM datasets but `admiral_adsl` have been removed from the package (#1234)
 
+- `derive_var_agegr_ema()` and `derive_var_agegr_fda()` have been deprecated (#1333)
+
 - Imputation related arguments have been deprecated for all functions except the
 imputation functions themselves (#1299). I.e., if a derivation like last known alive
 date is based on dates, DTC variables have to be converted to numeric date or
@@ -94,7 +107,7 @@ have been removed:
   - `lstalvdt_source()`
   - `derive_var_trtedtm()`
   - `derive_var_trtsdtm()`
-  
+
 ## Documentation
 
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
