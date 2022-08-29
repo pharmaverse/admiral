@@ -96,8 +96,11 @@ reference:
   - has_keyword("deprecated")
 navbar:
   structure:
-    left: [reference, articles, community, news]
+    left: [getstarted, reference, articles, community, news]
   components:
+    getstarted:
+      text: Get Started
+      href: articles/admiral.html
     reference:
       text: Functions
       href: reference/index.html
@@ -115,7 +118,7 @@ navbar:
       menu:
       - text: Getting Started
       - text: Creating a basic ADSL
-        href: articles/admiral.html
+        href: articles/adsl.html
       - text: FAQ
         href: articles/faq.html
       - text: -------
