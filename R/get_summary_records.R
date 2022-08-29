@@ -1,4 +1,4 @@
-#' Add New Records Within By Groups Using Aggregation Functions
+#' Create Summary Records
 #'
 #' @description
 #' It is not uncommon to have an analysis need whereby one needs to derive an
@@ -7,9 +7,9 @@
 #' records has been added to a dataset.
 #'
 #' @details
-#' When all records have same values within `by_vars` then this function will
-#' retain those common values in the newly derived records. Otherwise new value
-#' will be set to `NA`.
+#' This function only creates derived observations and does not append them
+#' to the original dataset observations. If you would like to this instead,
+#' see the `derive_summary_records()` function.
 #'
 #' @param dataset A data frame.
 #'
@@ -24,9 +24,9 @@
 #'
 #'   For example,
 #'
-#'   + `filter = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all `AVAL`
-#'   values greater than mean of `AVAL` with in `by_vars`.
-#'   + `filter = (dplyr::n() > 2)` will filter n count of `by_vars` greater
+#'   + `filter_rows = (AVAL > mean(AVAL, na.rm = TRUE))` will filter all AVAL
+#'   values greater than mean of AVAL with in `by_vars`.
+#'   + `filter_rows = (dplyr::n() > 2)` will filter n count of `by_vars` greater
 #'   than 2.
 #'
 #' @param analysis_var Analysis variable.
@@ -36,25 +36,25 @@
 #'   This can include built-in functions as well as user defined functions,
 #'   for example `mean` or `function(x) mean(x, na.rm = TRUE)`.
 #'
-#' @param set_values_to Variables to be set
+#' @param set_values_to A list of variable name-value pairs. Use this argument
+#'   if you need to change the values of any newly derived records.
 #'
-#'   The specified variables are set to the specified values for the new
-#'   observations.
+#'   Set a list of variables to some specified value for the new observation(s)
+#'   + LHS refer to a variable.
+#'   + RHS refers to the values to set to the variable. This can be a string, a symbol, a numeric
+#'   value or NA.
+#'   (e.g.  `vars(PARAMCD = "TDOSE",PARCAT1 = "OVERALL")`).
+#'   More general expression are not allowed.
 #'
-#'   A list of variable name-value pairs is expected.
-#'   + LHS refers to a variable.
-#'   + RHS refers to the values to set to the variable. This can be a string, a
-#'   symbol, a numeric value or `NA`, e.g., `vars(PARAMCD = "TDOSE", PARCAT1 =
-#'   "OVERALL")`. More general expression are not allowed.
+#' @author Pavan Kumar, updated by Alana Harris
 #'
-#' @author Vignesh Thanikachalam, Ondrej Slama
+#' @return A data frame of derived records.
 #'
-#' @return A data frame with derived records appended to original dataset.
+#' @family der_gen
 #'
-#' @family der_bds_findings
-#' @keywords der_bds_findings
+#' @keywords der_gen
 #'
-#' @seealso `get_summary_records()`
+#' @seealso `derive_summary_records()`
 #'
 #' @export
 #'
@@ -83,7 +83,7 @@
 #' )
 #'
 #' # Summarize the average of the triplicate ECG interval values (AVAL)
-#' derive_summary_records(
+#' get_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
 #'   analysis_var = AVAL,
@@ -103,14 +103,14 @@
 #'
 #' # Set new values to any variable. Here, `DTYPE = MAXIMUM` refers to `max()` records
 #' # and `DTYPE = AVERAGE` refers to `mean()` records.
-#' derive_summary_records(
+#' get_summary_records(
 #'   advs,
 #'   by_vars = vars(USUBJID, PARAM),
 #'   analysis_var = AVAL,
 #'   summary_fun = max,
 #'   set_values_to = vars(DTYPE = "MAXIMUM")
 #' ) %>%
-#'   derive_summary_records(
+#'   get_summary_records(
 #'     by_vars = vars(USUBJID, PARAM),
 #'     analysis_var = AVAL,
 #'     summary_fun = mean,
@@ -138,7 +138,7 @@
 #'
 #' # Compute the average of AVAL only if there are more than 2 records within the
 #' # by group
-#' derive_summary_records(
+#' get_summary_records(
 #'   adeg,
 #'   by_vars = vars(USUBJID, PARAM, AVISIT),
 #'   filter = dplyr::n() > 2,
@@ -146,12 +146,12 @@
 #'   summary_fun = function(x) mean(x, na.rm = TRUE),
 #'   set_values_to = vars(DTYPE = "AVERAGE")
 #' )
-derive_summary_records <- function(dataset,
-                                   by_vars,
-                                   filter = NULL,
-                                   analysis_var,
-                                   summary_fun,
-                                   set_values_to = NULL) {
+get_summary_records <- function(dataset,
+                                by_vars,
+                                filter = NULL,
+                                analysis_var,
+                                summary_fun,
+                                set_values_to) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enquo(analysis_var))
   filter <- assert_filter_cond(enquo(filter), optional = TRUE)
@@ -164,16 +164,11 @@ derive_summary_records <- function(dataset,
     assert_varval_list(set_values_to, optional = TRUE)
   }
 
-  # Summarise the analysis value and bind to the original dataset
-  bind_rows(
-    dataset,
-    get_summary_records(
-      dataset,
-      by_vars = by_vars,
-      filter = !!filter,
-      analysis_var = !!analysis_var,
-      summary_fun = summary_fun,
-      set_values_to = set_values_to
-    )
-  )
+  # Summarise the analysis value
+  dataset %>%
+    group_by(!!!by_vars) %>%
+    filter_if(filter) %>%
+    summarise(!!analysis_var := summary_fun(!!analysis_var)) %>%
+    mutate(!!!set_values_to) %>%
+    ungroup()
 }
