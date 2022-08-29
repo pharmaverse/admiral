@@ -159,7 +159,8 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_last_dose}()},
 \code{\link{derive_vars_merged}()},
-\code{\link{derive_vars_transposed}()}
+\code{\link{derive_vars_transposed}()},
+\code{\link{get_summary_records}()}
 }
 \author{
 Annie Yang

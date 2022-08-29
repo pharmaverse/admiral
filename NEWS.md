@@ -2,7 +2,9 @@
 
 ## New Features
 
-- New function `derive_param_framingham()`, which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
+- New function `get_summary_records()` creates summary records e.g. derive analysis value (`AVAL`) from multiple records, only keeping the derived observations (#525)
+
+- New function `derive_param_framingham()` which adds a Parameter for Framingham Heart Study Cardiovascular Disease 10-Year Risk Score (#977)
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
@@ -65,6 +67,9 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
+- `order` parameter added to `dthcaus_source()` which allows an additional 
+character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
+updated to process additional parameter (#1125)
 
 ## Breaking Changes
 
