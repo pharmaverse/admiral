@@ -93,7 +93,7 @@ advs <- vs %>%
 
 advs <- advs %>%
   ## Add PARAMCD only - add PARAM etc later ----
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD),
     by_vars = vars(VSTESTCD)
@@ -242,10 +242,6 @@ advs <- advs %>%
 ## Get treatment information ----
 advs <- advs %>%
   # Assign TRTA, TRTP
-  mutate(
-    TRTP = TRT01P,
-    TRTA = TRT01A
-  ) %>%
   # Create End of Treatment Record
   restrict_derivation(
     derivation = derive_var_extreme_flag,
@@ -264,7 +260,11 @@ advs <- advs %>%
     AVISITN = 99
   ) %>%
   union_all(advs) %>%
-  select(-EOTFL)
+  select(-EOTFL) %>%
+  mutate(
+    TRTP = TRT01P,
+    TRTA = TRT01A
+  )
 
 ## Get ASEQ and AVALCATx and add PARAM/PARAMN ----
 advs <- advs %>%

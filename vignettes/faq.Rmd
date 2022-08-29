@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
   * Building ADaMs like a modular building blocks, everyone can contribute and each module has a clear input and output to enable re-usable solutions 
   * Users can “slot in” their own modules to address specific company/TA/Molecule/Study requirements
   * TA specific requirements can be open sourced again and transformed into a common ADaM approach for such analysis
-  * the long-term gain of a consistent way of producing ADaM and a wider community of across-industry developers contributing to grow the codebase to cover the infinite array of possibilities
+  * the long-term gain of a consistent way of producing ADaM and a wider community of across-industry developers contributing to grow the code base to cover the infinite array of possibilities
   * Contributors: An option to make a name for yourself in the Pharma open-source community & an avenue to collaborate with other like-minded people across the industry
   * Imagine if ADaMs are built in a consistent manner with the same code from openly maintained functions and its impact on the Health Authorities, readable code, QC, talent flow  
 
