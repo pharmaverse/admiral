@@ -9,7 +9,7 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-# ---- Load source datasets ----
+# Load source datasets ----
 
 # Use e.g. haven::read_sas to read in .sas7bdat, or other suitable functions
 # as needed and assign to the variables below.
@@ -28,7 +28,7 @@ adsl <- admiral_adsl
 
 lb <- convert_blanks_to_na(lb)
 
-# ---- Look-up tables ----
+# Look-up tables ----
 
 # Assign PARAMCD, PARAM, and PARAMN
 param_lookup <- tibble::tribble(
@@ -39,47 +39,51 @@ param_lookup <- tibble::tribble(
   "ANISO", "ANISO", "Anisocytes", 4,
   "AST", "AST", "Aspartate Aminotransferase (U/L)", 5,
   "BASO", "BASO", "Basophils (GI/L)", 6,
-  "BILI", "BILI", "Bilirubin (umol/L)", 7,
-  "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 8,
-  "CA", "CA", "Calcium (mmol/L)", 9,
-  "CHOLES", "CHOLES", "Cholesterol (mmol/L)", 10,
-  "CK", "CK", "Creatinine Kinase (U/L)", 11,
-  "CL", "CL", "Chloride (mmol/L)", 12,
-  "COLOR", "COLOR", "Color", 13,
-  "CREAT", "CREAT", "Creatinine (umol/L)", 14,
-  "EOS", "EOS", "Eosinophils (GI/L)", 15,
-  "GGT", "GGT", "Gamma Glutamyl Transferase (U/L)", 16,
-  "GLUC", "GLUC", "Glucose (mmol/L)", 17,
-  "HBA1C", "HBA1C", "Hemoglobin A1C (1)", 18,
-  "HCT", "HCT", "Hematocrit (1)", 19,
-  "HGB", "HGB", "Hemoglobin (mmol/L)", 20,
-  "K", "POTAS", "Potassium (mmol/L)", 21,
-  "KETONES", "KETON", "Ketones", 22,
-  "LYM", "LYMPH", "Lymphocytes (GI/L)", 23,
-  "MACROCY", "MACROC", "Macrocytes", 24,
-  "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 25,
-  "MCHC", "MCHC", "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 26,
-  "MCV", "MCV", "Ery. Mean Corpuscular Volume (f/L)", 27,
-  "MICROCY", "MICROC", "Microcytes", 28,
-  "MONO", "MONO", "Monocytes (GI/L)", 29,
-  "PH", "PH", "pH", 30,
-  "PHOS", "PHOS", "Phosphate (mmol/L)", 31,
-  "PLAT", "PLAT", "Platelet (GI/L)", 32,
-  "POIKILO", "POIKIL", "Poikilocytes", 33,
-  "POLYCHR", "POLYCH", "Polychromasia", 34,
-  "PROT", "PROT", "Protein (g/L)", 35,
-  "RBC", "RBC", "Erythrocytes (TI/L)", 36,
-  "SODIUM", "SODIUM", "Sodium (mmol/L)", 37,
-  "SPGRAV", "SPGRAV", "Specific Gravity", 38,
-  "TSH", "TSH", "Thyrotropin (mU/L)", 39,
-  "URATE", "URATE", "Urate (umol/L)", 40,
-  "UROBIL", "UROBIL", "Urobilinogen", 41,
-  "VITB12", "VITB12", "Vitamin B12 (pmol/L)", 42,
-  "WBC", "WBC", "Leukocytes (GI/L)", 43
+  "BASOLE", "BASOLE", "Basophils/Leukocytes (FRACTION)", 7,
+  "BILI", "BILI", "Bilirubin (umol/L)", 8,
+  "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 9,
+  "CA", "CA", "Calcium (mmol/L)", 10,
+  "CHOL", "CHOLES", "Cholesterol (mmol/L)", 11,
+  "CK", "CK", "Creatinine Kinase (U/L)", 12,
+  "CL", "CL", "Chloride (mmol/L)", 13,
+  "COLOR", "COLOR", "Color", 14,
+  "CREAT", "CREAT", "Creatinine (umol/L)", 15,
+  "EOS", "EOS", "Eosinophils (GI/L)", 16,
+  "EOSLE", "EOSLE", "Eosinophils/Leukocytes (FRACTION)", 17,
+  "GGT", "GGT", "Gamma Glutamyl Transferase (U/L)", 18,
+  "GLUC", "GLUC", "Glucose (mmol/L)", 19,
+  "HBA1C", "HBA1C", "Hemoglobin A1C (1)", 20,
+  "HCT", "HCT", "Hematocrit (1)", 21,
+  "HGB", "HGB", "Hemoglobin (mmol/L)", 22,
+  "K", "POTAS", "Potassium (mmol/L)", 23,
+  "KETONES", "KETON", "Ketones", 24,
+  "LYM", "LYMPH", "Lymphocytes (GI/L)", 25,
+  "LYMLE", "LYMPHLE", "Lymphocytes/Leukocytes (FRACTION)", 26,
+  "MACROCY", "MACROC", "Macrocytes", 27,
+  "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 28,
+  "MCHC", "MCHC", "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 29,
+  "MCV", "MCV", "Ery. Mean Corpuscular Volume (f/L)", 30,
+  "MICROCY", "MICROC", "Microcytes", 31,
+  "MONO", "MONO", "Monocytes (GI/L)", 32,
+  "MONOLE", "MONOLE", "Monocytes/Leukocytes (FRACTION)", 33,
+  "PH", "PH", "pH", 34,
+  "PHOS", "PHOS", "Phosphate (mmol/L)", 35,
+  "PLAT", "PLAT", "Platelet (GI/L)", 36,
+  "POIKILO", "POIKIL", "Poikilocytes", 37,
+  "POLYCHR", "POLYCH", "Polychromasia", 38,
+  "PROT", "PROT", "Protein (g/L)", 39,
+  "RBC", "RBC", "Erythrocytes (TI/L)", 40,
+  "SODIUM", "SODIUM", "Sodium (mmol/L)", 41,
+  "SPGRAV", "SPGRAV", "Specific Gravity", 42,
+  "TSH", "TSH", "Thyrotropin (mU/L)", 43,
+  "URATE", "URATE", "Urate (umol/L)", 44,
+  "UROBIL", "UROBIL", "Urobilinogen", 45,
+  "VITB12", "VITB12", "Vitamin B12 (pmol/L)", 46,
+  "WBC", "WBC", "Leukocytes (GI/L)", 47
 )
 
 
-# ---- Derivations ----
+# Derivations ----
 
 # Get list of ADSL vars required for derivations
 adsl_vars <- vars(TRTSDT, TRTEDT, TRT01A, TRT01P)
@@ -91,7 +95,7 @@ adlb <- lb %>%
     new_vars = adsl_vars,
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  # Calculate ADT, ADY
+  ## Calculate ADT, ADY ----
   derive_vars_dt(
     new_vars_prefix = "A",
     dtc = LBDTC
@@ -99,14 +103,14 @@ adlb <- lb %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
 adlb <- adlb %>%
-  # Add PARAMCD PARAM and PARAMN - from LOOK-UP table
+  ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
   # Replace with PARAMCD lookup function
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD)
   ) %>%
-  # Calculate PARCAT1 AVAL AVALC ANRLO ANRHI
+  ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(
     PARCAT1 = LBCAT,
     AVAL = LBSTRESN,
@@ -115,7 +119,44 @@ adlb <- adlb %>%
     ANRHI = LBSTNRHI
   )
 
-# Get Visit Info
+# Derive Absolute values from fractional Differentials using WBC
+# Only derive where absolute values do not already exist
+# Need to populate ANRLO and ANRHI for newly created records
+adlb <- adlb %>%
+  # Derive absolute Basophils
+  derive_param_wbc_abs(
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = vars(
+      PARAMCD = "BASO",
+      PARAM = "Basophils Abs (GI/L)",
+      PARAMN = 6,
+      DTYPE = "CALCULATION",
+      PARCAT1 = "HEMATOLOGY"
+    ),
+    get_unit_expr = extract_unit(PARAM),
+    wbc_code = "WBC",
+    wbc_unit = "GI/L",
+    diff_code = "BASOLE",
+    diff_type = "fraction"
+  ) %>%
+  # Derive absolute Lymphocytes
+  derive_param_wbc_abs(
+    by_vars = vars(STUDYID, USUBJID, !!!adsl_vars, DOMAIN, VISIT, VISITNUM, ADT, ADY),
+    set_values_to = vars(
+      PARAMCD = "LYMPH",
+      PARAM = "Lymphocytes Abs (GI/L)",
+      PARAMN = 25,
+      DTYPE = "CALCULATION",
+      PARCAT1 = "HEMATOLOGY"
+    ),
+    get_unit_expr = extract_unit(PARAM),
+    wbc_code = "WBC",
+    wbc_unit = "GI/L",
+    diff_code = "LYMPHLE",
+    diff_type = "fraction"
+  )
+
+## Get Visit Info ----
 adlb <- adlb %>%
   # Derive Timing
   mutate(
@@ -131,7 +172,7 @@ adlb <- adlb %>%
   )
 
 adlb <- adlb %>%
-  # Calculate ONTRTFL
+  ## Calculate ONTRTFL ----
   derive_var_ontrtfl(
     start_date = ADT,
     ref_start_date = TRTSDT,
@@ -139,11 +180,11 @@ adlb <- adlb %>%
     filter_pre_timepoint = AVISIT == "Baseline"
   )
 
-# Calculate ANRIND : requires the reference ranges ANRLO, ANRHI
+## Calculate ANRIND : requires the reference ranges ANRLO, ANRHI ----
 adlb <- adlb %>%
   derive_var_anrind()
 
-# Derive baseline flags
+## Derive baseline flags ----
 adlb <- adlb %>%
   # Calculate BASETYPE
   mutate(
@@ -161,7 +202,7 @@ adlb <- adlb %>%
     filter = (!is.na(AVAL) & ADT <= TRTSDT & !is.na(BASETYPE))
   )
 
-# Derive baseline information
+## Derive baseline information ----
 adlb <- adlb %>%
   # Calculate BASE
   derive_var_base(
@@ -187,7 +228,7 @@ adlb <- adlb %>%
   derive_var_pchg()
 
 
-# Calculate R2BASE, R2ANRLO and R2ANRHI
+## Calculate R2BASE, R2ANRLO and R2ANRHI ----
 adlb <- adlb %>%
   derive_var_analysis_ratio(
     numer_var = AVAL,
@@ -202,7 +243,7 @@ adlb <- adlb %>%
     denom_var = ANRHI
   )
 
-# SHIFT derivation
+## SHIFT derivation ----
 adlb <- adlb %>%
   derive_var_shift(
     new_var = SHIFT1,
@@ -210,6 +251,7 @@ adlb <- adlb %>%
     to_var = ANRIND
   )
 
+## Flag variables (ANL01FL, LVOTFL) ----
 # ANL01FL: Flag last result within an AVISIT for post-baseline records
 # LVOTFL: Flag last valid on-treatment record
 adlb <- adlb %>%
@@ -234,7 +276,7 @@ adlb <- adlb %>%
     filter = ONTRTFL == "Y"
   )
 
-# Get treatment information
+## Get treatment information ----
 adlb <- adlb %>%
   # Assign TRTA, TRTP
   mutate(
@@ -242,7 +284,7 @@ adlb <- adlb %>%
     TRTA = TRT01A
   )
 
-# Get extreme values
+## Get extreme values ----
 adlb <- adlb %>%
   # get MINIMUM value
   derive_extreme_records(
@@ -284,7 +326,7 @@ adlb <- adlb %>%
     )
   )
 
-# Get ASEQ
+## Get ASEQ ----
 adlb <- adlb %>%
   # Calculate ASEQ
   derive_var_obs_number(
@@ -305,7 +347,7 @@ adlb <- adlb %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
-# ---- Save output ----
+# Save output ----
 
 dir <- tempdir() # Change to whichever directory you want to save the dataset in
 save(adlb, file = file.path(dir, "adlb.rda"), compress = "bzip2")

@@ -19,7 +19,7 @@ Once you’ve familiarized yourself with the `{admiral}` [contribution
 model](contribution_model.html) and you’re ready to make your first code
 contribution, this development process step-by-step guide will help tie all the
 other detailed vignettes together to give you the simplest experience of helping
-to grow and enhance our codebase.
+to grow and enhance our code base.
 
 1. To start, you will have either created an issue or commented on an existing
 issue to notify that you’d like to contribute code. Then one of the `{admiral}`
@@ -48,7 +48,7 @@ add a comment that the pull request is ready for review and add the
 _Finally, just a note to say from the core developers that we hugely appreciate
 you taking the time to contribute to `{admiral}`. Don’t be offended if during
 review we send requests back to you, as the expectations are high so that we can
-ensure the `{admiral}` codebase remains robust and consistent. The best way to learn
+ensure the `{admiral}` code base remains robust and consistent. The best way to learn
 here is always to jump in and get involved, so please don’t be afraid you’ll
 make mistakes along the way – we all have and continue to do so, and that’s what
 the reviews are for. Also if ever you get stuck don't hesitate to reach out for

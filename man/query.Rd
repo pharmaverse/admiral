@@ -69,7 +69,7 @@ An object of class \code{query}.
 }
 \description{
 A \code{query} object defines a query, e.g., a Standard MedDRA Query (SMQ), a
-Standardised Drug Grouping (SDG), or a customized query (CQ). It is used
+Standardized Drug Grouping (SDG), or a customized query (CQ). It is used
 as input to \code{create_query_data()}.
 }
 \examples{
@@ -130,8 +130,22 @@ query(
 }
 \seealso{
 \code{\link[=create_query_data]{create_query_data()}}, \code{\link[=smq_select]{smq_select()}}, \code{\link[=sdg_select]{sdg_select()}}, \href{../articles/queries_dataset.html}{Queries Dataset Documentation}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

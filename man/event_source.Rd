@@ -16,8 +16,7 @@ of \code{derive_param_tte()}.}
 \code{dataset} which are events or possible censoring time points.}
 
 \item{date}{A variable providing the date of the event or censoring. A date,
-a datetime, or a character variable containing ISO 8601 dates can be
-specified. An unquoted symbol is expected.
+or a datetime can be specified. An unquoted symbol is expected.
 
 Refer to \code{derive_vars_dt()} to impute and derive a date from a date
 character vector to a date object.}
@@ -48,8 +47,22 @@ event_source(
 }
 \seealso{
 \code{\link[=derive_param_tte]{derive_param_tte()}}, \code{\link[=censor_source]{censor_source()}}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Stefan Bundfuss
 }
+\concept{source_specifications}
 \keyword{source_specifications}

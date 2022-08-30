@@ -34,6 +34,18 @@ Authors@R: c(
     person("Ondrej", "Slama", role = "ctb"),
     person("Shimeng", "Huang", role = "ctb"),
     person("James", "Kim", role = "ctb"),
+    person("Shan", "Lee", role = "ctb"),
+    person("Bill", "Denney", role = "ctb"),
+    person("Syed", "Mubasheer", role = "ctb"),
+    person("Wenyi", "Liu", role = "ctb"),
+    person("Dinakar", "Kulkarni", role = "ctb"),
+    person("Tamara", "Senior", role = "ctb"),
+    person("Jordanna", "Morrish", role = "ctb"),
+    person("Anthony", "Howard", role = "ctb"),
+    person("Barbara", "O'Reilly", role = "ctb"),
+    person("John", "Kirkpatrick", role = "ctb"),
+    person("James", "Black", role = "ctb"),
+    person("Leena", "Khatri", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("GlaxoSmithKline LLC", role = c("cph", "fnd"))
     )
@@ -62,7 +74,8 @@ Imports:
     rlang,
     stringr,
     tidyr,
-    tidyselect
+    tidyselect,
+    readxl
 Suggests:
     admiral.test,
     DT,

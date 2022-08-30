@@ -158,8 +158,22 @@ derive_param_computed(
   constant_by_vars = vars(USUBJID)
 )
 }
+\seealso{
+BDS-Findings Functions for adding Parameters: 
+\code{\link{default_qtc_paramcd}()},
+\code{\link{derive_param_bmi}()},
+\code{\link{derive_param_bsa}()},
+\code{\link{derive_param_doseint}()},
+\code{\link{derive_param_exist_flag}()},
+\code{\link{derive_param_exposure}()},
+\code{\link{derive_param_first_event}()},
+\code{\link{derive_param_framingham}()},
+\code{\link{derive_param_map}()},
+\code{\link{derive_param_qtc}()},
+\code{\link{derive_param_wbc_abs}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{bds}
-\keyword{derivation}
+\concept{der_prm_bds_findings}
+\keyword{der_prm_bds_findings}

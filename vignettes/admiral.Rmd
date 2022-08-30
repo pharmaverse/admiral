@@ -53,33 +53,52 @@ adsl <- dm %>%
 
 ## Derive/Impute Numeric Treatment Date/Time and Flag Variables (`TRTSDTM`, `TRTEDTM`, `TRTSTMF`, `TRTETMF`) {#trtdatetimegs}
 
-The function `derive_vars_merged_dtm()` can be used to derive the treatment
-start and end date/times using the `EX` domain. This function call returns the original data frame with the column `TRTSDTM`, `TRTEDTM` and flag variables `TRTSTMF`, `TRTETMF` added to the end of the dataframe. Exposure observations with an incomplete date are ignored. We impute time to to be 23:59:59 using `time_imputation = "last"`, which will append 23:59:59 to our `TRTSDTM`, `TRTEDTM` variables.  Additionally, we set `flag_imputation = "time"` to get appropriate flag variables `TRTSTMF`, `TRTETMF`.
+The function `derive_vars_dtm()` can be used to convert the DTC variables from
+`EX` to numeric datetime variable and impute missing components. The function
+call returns the original data frame with the column `EXSTDTM`, `EXENDTM` and
+corresponding time imputation  flag variables `EXSTTMF` and  `EXENTMF` added to
+the end of the dataframe. Exposure observations with an incomplete date are
+ignored. We impute missing time to be 23:59:59 using `time_imputation = "last"`.
+The required imputation flags are determined automatically by the function. Here
+only time imputation flags are derived because time is imputed but date is not
+imputed.
 
-Don't be intimidated by the number of arguments! We try to make our arguments self-explanatory, e.g. the `new_vars_prefix` places `TRTS` at the start of the `--DTM` variable and `time_imputation = "last"` appends 23:59:59.  However, this is not always possible to make every argument self-explanatory.  If you click on the function, `derive_vars_merged_dtm()`, you can bring up the reference documentation and learn more about each argument.  
+Don't be intimidated by the number of arguments! We try to make our arguments
+self-explanatory, e.g. the `new_vars_prefix` places `EXST` at the start of the
+`--DTM` variable and `time_imputation = "last"` appends 23:59:59.  However, this
+is not always possible to make every argument self-explanatory.  If you click on
+the function, `derive_vars_dtm()`, you can bring up the reference documentation
+and learn more about each argument.
 
 ```{r, eval=TRUE}
 # Derive treatment variables
-adsl <- adsl %>%
-  derive_vars_merged_dtm(
-    dataset_add = ex,
-    filter_add = nchar(EXSTDTC) >= 10,
-    new_vars_prefix = "TRTS",
+## Impute time of exposure dates (creates numeric datetime and time imputation flag variables)
+ex_ext <- ex %>%
+  derive_vars_dtm(
     dtc = EXSTDTC,
-    order = vars(TRTSDTM, EXSEQ),
-    time_imputation = "last",
-    flag_imputation = "time",
+    new_vars_prefix = "EXST"
+  ) %>%
+  derive_vars_dtm(
+    dtc = EXENDTC,
+    new_vars_prefix = "EXEN",
+    time_imputation = "last"
+  )
+
+## derive variables for first/last treatment date and time imputation flags
+adsl <- adsl %>%
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add = !is.na(EXSTDTM),
+    new_vars = vars(TRTSDTM = EXSTDTM, TRTSTMF = EXSTTMF),
+    order = vars(EXSTDTM, EXSEQ),
     mode = "first",
     by_vars = vars(STUDYID, USUBJID)
   ) %>%
-  derive_vars_merged_dtm(
-    dataset_add = ex,
-    filter_add = nchar(EXENDTC) >= 10,
-    new_vars_prefix = "TRTE",
-    dtc = EXENDTC,
-    time_imputation = "last",
-    flag_imputation = "time",
-    order = vars(TRTEDTM, EXSEQ),
+  derive_vars_merged(
+    dataset_add = ex_ext,
+    filter_add = !is.na(EXENDTM),
+    new_vars = vars(TRTEDTM = EXENDTM, TRTETMF = EXENTMF),
+    order = vars(EXENDTM, EXSEQ),
     mode = "last",
     by_vars = vars(STUDYID, USUBJID)
   )
@@ -98,14 +117,16 @@ adsl <- adsl %>%
 ## Derive Treatment Duration (`TRTDURD`) {#trtdurgs}
 
 Now, that `TRTSDT` and `TRTEDT` are derived, the function `derive_var_trtdurd()`
-can be used to calculate the Treatment duration (`TRTDURD`).  Notice the lack of inputs.  The function defaults are set to `TRTSDT` and `TRTEDT`.  Clicking on `derive_var_trtdurd()` will bring up the reference documentation where you can see the **Default** arguments.  
+can be used to calculate the Treatment duration (`TRTDURD`).  Notice the lack of inputs.  The function defaults are set to `TRTSDT` and `TRTEDT`.  Clicking on `derive_var_trtdurd()` will bring up the reference documentation where you can see the **default** arguments.  
 
 ```{r eval=TRUE}
 adsl <- adsl %>%
   derive_var_trtdurd()
 ```
 
-Amazing! With one `{dplyr}` function and 3 `{admiral}` functions we successfully created 9 new variables for our `ADSL` dataset. Let's take a look at all our newly derived variables.
+Amazing! With one `{dplyr}` function and four `{admiral}` functions we
+successfully created nine new variables for our `ADSL` dataset. Let's take a
+look at all our newly derived variables.
 
 ```{r, eval=TRUE, echo=FALSE}
 dataset_vignette(
@@ -118,7 +139,7 @@ dataset_vignette(
 )
 ```
 
-**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed. You can use the **Choose Columns to Display** button to add more variables into the Table.  
+**Note:** We only display variables that were derived.  A user running this code will have additional adsl variables displayed. You can use the **Choose Columns to Display** button to add more variables into the table.  
 
 # Derivations
 
@@ -131,8 +152,9 @@ operator.
 Functions which derive a dedicated variable start with `derive_var_` followed by
 the variable name, e.g., `derive_var_trtdurd()` derives the `TRTDURD` variable.
 
-Functions which can derive multiple variables start with `derive_vars_` followed by
-the variable name, e.g., `derive_vars_merged_dtm` can derive both the `TRTSDT` and `TRTEDT` variables.
+Functions which can derive multiple variables start with `derive_vars_` followed
+by the variable name, e.g., `derive_vars_dtm()` can derive both the `TRTSDTM`
+and `TRTSTMF` variables.
 
 Functions which derive a dedicated parameter start with `derive_param_` followed by
 the parameter name, e.g., `derive_param_bmi()` derives the `BMI` parameter.

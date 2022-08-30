@@ -22,7 +22,13 @@ print(death_event)
 }
 \seealso{
 \code{\link[=tte_source]{tte_source()}}, \code{\link[=censor_source]{censor_source()}}, \code{\link[=event_source]{event_source()}}
+
+Other internal: 
+\code{\link{admiral}},
+\code{\link{print.adam_templates}()}
 }
 \author{
 Thomas Neitmann
 }
+\concept{internal}
+\keyword{internal}

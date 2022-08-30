@@ -76,27 +76,31 @@ single dataset.
 \code{ADT} variable) from the single dataset is selected. }
 }
 \examples{
+library(tibble)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
-adsl <- tibble::tribble(
+adsl <- tribble(
   ~USUBJID, ~TRTSDT,           ~EOSDT,
   "01",     ymd("2020-12-06"), ymd("2021-03-06"),
   "02",     ymd("2021-01-16"), ymd("2021-02-03")
 ) \%>\%
   mutate(STUDYID = "AB42")
 
-ae <- tibble::tribble(
-  ~USUBJID, ~AESTDTC,           ~AESEQ, ~AEDECOD,
-  "01",     "2021-01-03T10:56", 1,      "Flu",
-  "01",     "2021-03-04",       2,      "Cough",
-  "01",     "2021",             3,      "Flu"
+ae <- tribble(
+  ~USUBJID, ~AESTDTC,     ~AESEQ, ~AEDECOD,
+  "01",     "2021-01-03", 1,      "Flu",
+  "01",     "2021-03-04", 2,      "Cough",
+  "01",     "2021-01-01", 3,      "Flu"
 ) \%>\%
-  mutate(STUDYID = "AB42")
+  mutate(
+    STUDYID = "AB42",
+    AESTDT = ymd(AESTDTC)
+  )
 
 ttae <- event_source(
   dataset_name = "ae",
-  date = AESTDTC,
+  date = AESTDT,
   set_values_to = vars(
     EVNTDESC = "AE",
     SRCDOM = "AE",
@@ -114,7 +118,22 @@ filter_date_sources(
   mode = "first"
 )
 }
+\seealso{
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{derive_var_dthcaus}()},
+\code{\link{event_source}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
+}
 \author{
 Stefan Bundfuss
 }
-\keyword{dev_utility}
+\concept{source_specifications}
+\keyword{source_specifications}
