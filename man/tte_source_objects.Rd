@@ -63,7 +63,7 @@ for (obj in list_tte_source_objects()$object) {
 Source Specifications: 
 \code{\link{censor_source}()},
 \code{\link{date_source}()},
-\code{\link{dthcaus_source}()},
+\code{\link{derive_var_dthcaus}()},
 \code{\link{event_source}()},
 \code{\link{filter_date_sources}()},
 \code{\link{list_tte_source_objects}()},
