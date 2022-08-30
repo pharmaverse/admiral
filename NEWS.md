@@ -71,7 +71,7 @@ users feedback (#1300):
 character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
 updated to process additional parameter (#1125)
 
-- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
+- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset (#1224)
 
 ## Breaking Changes
 
