@@ -8,11 +8,7 @@
 
 - New function `compute_qual_imputation()` which imputes values when qualifier exists in character result (#976)
 
-- All admiral utility functions are exported now such that they can be used in
-admiral extension packages (#1079)
-
-- Moved all developer-facing functions to `{admiraldev}`. This supersedes above (#1079)
- update (#1231)
+- Moved all developer-facing functions to `{admiraldev}` (#1231)
 
 - New function to map lookup table `derive_vars_merged_lookup()` (#940)
 
