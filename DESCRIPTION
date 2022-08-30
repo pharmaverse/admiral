@@ -74,8 +74,7 @@ Imports:
     rlang,
     stringr,
     tidyr,
-    tidyselect,
-    readxl
+    tidyselect
 Suggests:
     admiral.test,
     devtools,
@@ -86,6 +85,7 @@ Suggests:
     testthat,
     methods,
     miniUI,
+    readxl,
     rmarkdown,
     roxygen2,
     spelling,

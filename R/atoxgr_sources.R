@@ -39,7 +39,9 @@
 #' @rdname atoxgr_sources
 #'
 #' @export
-
 atoxgr_criteria_ctcv4 <- system.file("adlb_grading_spec.xlsx", package = "admiral") %>%
-  read_excel(sheet = "NCICTCAEv4") %>%
+  # Contrary to our usual convention the use of `::` here is explicit. This way we
+  # avoid having to list {readxl} in "Imports" and instead get away with just
+  # listing it in "Depends".
+  readxl::read_excel(sheet = "NCICTCAEv4") %>%
   mutate(GRADE_CRITERIA_CODE = gsub("[\r\n]", " ", GRADE_CRITERIA_CODE))
