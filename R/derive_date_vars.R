@@ -1101,7 +1101,8 @@ convert_date_to_dtm <- function(dt,
 #' compute_dtf(dtc = "2019-07", dt = as.Date("2019-07-18"))
 #' compute_dtf(dtc = "2019", dt = as.Date("2019-07-18"))
 compute_dtf <- function(dtc, dt) {
-  assert_that(is.character(dtc), is_date(dt))
+  assert_character_vector(dtc)
+  assert_that(is_date(dt))
 
   is_na <- is.na(dt)
   n_chr <- nchar(dtc)
