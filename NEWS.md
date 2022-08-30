@@ -120,6 +120,8 @@ have been removed:
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
 
+- Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
+
 ## Various
 
 - Restructured Reference page and updated **all** functions to use `family` tag 
