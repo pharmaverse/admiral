@@ -108,7 +108,9 @@ adlb <- adlb %>%
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
-    by_vars = vars(LBTESTCD)
+    by_vars = vars(LBTESTCD),
+    check_type = "none",
+    print_not_mapped = FALSE
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(

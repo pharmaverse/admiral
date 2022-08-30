@@ -173,6 +173,7 @@
 #' @author Stefan Bundfuss
 #'
 #' @keywords der_gen
+#' @family der_gen
 #'
 #' @seealso [filter_confirmation()]
 #'

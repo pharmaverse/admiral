@@ -287,7 +287,6 @@ filter_confirmation(
 Utilities for Filtering Observations: 
 \code{\link{count_vals}()},
 \code{\link{filter_extreme}()},
-\code{\link{filter_if}()},
 \code{\link{filter_relative}()},
 \code{\link{max_cond}()},
 \code{\link{min_cond}()}

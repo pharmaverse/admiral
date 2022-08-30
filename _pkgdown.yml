@@ -4,17 +4,6 @@ template:
   bootstrap: 5
   params:
     bootswatch: flatly
-  includes:
-    in_header: |
-       <!-- Global site tag (gtag.js) - Google Analytics -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-574L344W3R"#' ></script>
-       <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
-
-         gtag('config', '{YOUR TRACKING ID}');
-       </script>
 search:
   exclude: ['news/index.html']
 repo:
@@ -26,7 +15,6 @@ repo:
 news:
   cran_dates: true
 reference:
-
 - title: Derivations for Adding Variables
 - subtitle: All ADaMs
 - contents:
@@ -44,10 +32,10 @@ reference:
   desc: Derivation Functions helpful for building the OCCDS datasets (e.g. adae, adcm, admh)
 - contents:
   - has_keyword("der_occds")
-- subtitle: TTE-specific
-  desc: Derivations add one or more variables to an ADaM and return the extended dataset.
-- contents:
-  - has_keyword("der_tte")
+# - subtitle: TTE-specific
+#   desc: Derivations add one or more variables to an ADaM and return the extended dataset.
+# - contents:
+#   - has_keyword("der_tte")
 
 - title: Derivations for Adding Parameters
 - subtitle: BDS-specific
@@ -90,12 +78,13 @@ reference:
 - subtitle: Utilities for Filtering Observations
 - contents:
   - has_keyword('utils_fil')
+- subtitle: Utilities used for Date Imputation
+- contents:
+  - has_keyword('utils_impute')
 - subtitle: Utilities used for Examples and Template Scripts
 - contents:
   - has_keyword('utils_examples')
-- subtitle: Utilities used by Imputation Functions
-- contents:
-  - has_keyword('utils_impute')
+
 
 - title: Example Datasets
   desc: You can run `use_ad_template()` to produce additional datasets
@@ -109,29 +98,47 @@ reference:
 - subtitle: Deprecated
 - contents:
   - has_keyword("deprecated")
-
-articles:
-- title: User Guides
-  navbar: User Guides
-  contents:
-  - admiral
-  - adsl
-  - occds
-  - bds_finding
-  - bds_exposure
-  - bds_tte
-  - higher_order
-  - imputation
-  - queries_dataset
-  - faq
-
-- title: Developer Guides
-  navbar: Developer Guides
-  contents:
-  - contribution_model
-  - development_process
-  - programming_strategy
-  - git_usage
-  - writing_vignettes
-  - pr_review_guidance
-  - unit_test_guidance
+navbar:
+  structure:
+    left: [getstarted, reference, articles, community, news]
+  components:
+    getstarted:
+      text: Get Started
+      href: articles/admiral.html
+    reference:
+      text: Functions
+      href: reference/index.html
+    community:
+      text: Community
+      menu:
+      - text: Contribute to admiral
+        href: articles/contribution_model.html
+      - text: Find us on Slack
+        href: https://app.slack.com/client/T028PB489D3/C02M8KN8269
+      - text: Welcome to the Pharmaverse
+        href: https://pharmaverse.org/
+    articles:
+      text: User Guides
+      menu:
+      - text: Getting Started
+      - text: Creating a basic ADSL
+        href: articles/adsl.html
+      - text: FAQ
+        href: articles/faq.html
+      - text: -------
+      - text: "Deep Dives on ADaMs"
+      - text: Creating an OCCDS ADaM
+        href: articles/occds.html
+      - text: Creating a BDS Findings ADAM
+        href: articles/bds_finding.html
+      - text: Creating a BDS Exposure ADaM
+        href: articles/bds_exposure.html
+      - text: Creating a BDS Time-to-Event ADaM
+        href: articles/bds_tte.html
+      - text: "Advanced User Guides"
+      - text: Date and Time Imputation
+        href: articles/imputation.html
+      - text: Higher Order Functions
+        href: articles/higher_order.html
+      - text: Queries Dataset Documentation
+        href: articles/queries_dataset.html
