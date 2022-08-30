@@ -2,6 +2,7 @@
 % Please edit documentation in R/derive_var_dthcaus.R
 \name{derive_var_dthcaus}
 \alias{derive_var_dthcaus}
+\alias{dthcaus_source}
 \title{Derive Death Cause}
 \usage{
 derive_var_dthcaus(
@@ -9,6 +10,16 @@ derive_var_dthcaus(
   ...,
   source_datasets,
   subject_keys = vars(STUDYID, USUBJID)
+)
+
+dthcaus_source(
+  dataset_name,
+  filter,
+  date,
+  order = NULL,
+  mode = "first",
+  dthcaus,
+  traceability_vars = NULL
 )
 }
 \arguments{
@@ -25,9 +36,45 @@ death cause}
 
 A list of quosures where the expressions are symbols as returned by
 \code{vars()} is expected.}
+
+\item{dataset_name}{The name of the dataset, i.e. a string, used to search for
+the death cause.}
+
+\item{filter}{An expression used for filtering \code{dataset}.}
+
+\item{date}{A date or datetime variable to be used for sorting \code{dataset}.}
+
+\item{order}{Sort order
+
+Additional variables to be used for sorting the \code{dataset} which is ordered by the
+\code{date} and \code{order}. Can be used to avoid duplicate record warning.
+
+\emph{Default}: \code{NULL}
+
+\emph{Permitted Values}: list of variables or \verb{desc(<variable>)} function calls
+created by \code{vars()}, e.g., \code{vars(ADT, desc(AVAL))} or \code{NULL}}
+
+\item{mode}{One of \code{"first"} or \code{"last"}.
+Either the \code{"first"} or \code{"last"} observation is preserved from the \code{dataset}
+which is ordered by \code{date}.}
+
+\item{dthcaus}{A variable name or a string literal --- if a variable name, e.g., \code{AEDECOD},
+it is the variable in the source dataset to be used to assign values to
+\code{DTHCAUS}; if a string literal, e.g. \code{"Adverse Event"}, it is the fixed value
+to be assigned to \code{DTHCAUS}.}
+
+\item{traceability_vars}{A named list returned by \code{\link[=vars]{vars()}} listing the traceability variables,
+e.g. \code{vars(DTHDOM = "DS", DTHSEQ = DSSEQ)}.
+The left-hand side (names of the list elements) gives the names of the traceability variables
+in the returned dataset.
+The right-hand side (values of the list elements) gives the values of the traceability variables
+in the returned dataset.
+These can be either strings or symbols referring to existing variables.}
 }
 \value{
-The input dataset with \code{DTHCAUS} variable added.
+\code{derive_var_dthcaus()} returns the input dataset with \code{DTHCAUS} variable added.
+
+\code{dthcaus_source()} returns an object of class "dthcaus_source".
 }
 \description{
 Derive death cause (\code{DTHCAUS}) and add traceability variables if required.
@@ -39,6 +86,11 @@ the one from the source with the earliest death date will be used. If dates are
 equivalent, the first source will be kept, so the user should provide the inputs in
 the preferred order.
 }
+\section{Functions}{
+\itemize{
+\item \code{dthcaus_source}: Create objects of class "dthcaus_source"
+}}
+
 \examples{
 library(tibble)
 library(dplyr)
@@ -139,8 +191,6 @@ src_ds_post <- dthcaus_source(
 derive_var_dthcaus(adsl, src_ae, src_ds, src_ds_post, source_datasets = list(ae = ae, ds = ds))
 }
 \seealso{
-\code{\link[=dthcaus_source]{dthcaus_source()}}
-
 ADSL Functions that returns variable appended to dataset: 
 \code{\link{derive_var_age_years}()},
 \code{\link{derive_var_disposition_status}()},
@@ -148,9 +198,24 @@ ADSL Functions that returns variable appended to dataset:
 \code{\link{derive_var_extreme_dt}()},
 \code{\link{derive_vars_aage}()},
 \code{\link{derive_vars_disposition_reason}()}
+
+Source Specifications: 
+\code{\link{censor_source}()},
+\code{\link{date_source}()},
+\code{\link{death_event}},
+\code{\link{event_source}()},
+\code{\link{filter_date_sources}()},
+\code{\link{list_tte_source_objects}()},
+\code{\link{params}()},
+\code{\link{query}()},
+\code{\link{sdg_select}()},
+\code{\link{smq_select}()},
+\code{\link{tte_source}()}
 }
 \author{
 Shimeng Huang, Samia Kabi, Thomas Neitmann, Tamara Senior
 }
 \concept{der_adsl}
+\concept{source_specifications}
 \keyword{der_adsl}
+\keyword{source_specifications}
