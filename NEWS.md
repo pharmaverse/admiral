@@ -67,6 +67,9 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
+- `order` parameter added to `dthcaus_source()` which allows an additional 
+character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
+updated to process additional parameter (#1125)
 
 ## Breaking Changes
 
@@ -116,6 +119,8 @@ have been removed:
 - New vignette [Higher Order Functions](https://pharmaverse.github.io/admiral/articles/higher_order.html) (#1047)
 
 - Fixed `derive_var_disposition_status()` argument to render correctly (#1268)
+
+- Added link to [pharmaverse YouTube channel](https://www.youtube.com/channel/UCxQFEv8HNqM01DXzdQLCy6Q) to README
 
 ## Various
 
