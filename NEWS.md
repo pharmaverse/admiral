@@ -67,11 +67,10 @@ users feedback (#1300):
     - It is now possible to impute completely missing dates by specifying
     `highest_imputation = "Y"` and the `min_dates` or `max_dates` argument.
 
-<<<<<<< HEAD
-- `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
 - `order` parameter added to `dthcaus_source()` which allows an additional 
 character vector to be used for sorting the `dataset`, `derive_vars_dthcaus()` 
 updated to process additional parameter (#1125)
+
 - `create_single_dose_dataset()` Fixed bug where ASTDTM and AENDTM were not updated when start_date=ASTDT and end_date=AENDT. The function has been amended to now require start_datetime and end_datetime parameters in addition to start_date and end_date.The keep_source_vars has been added to specify the variables to be retained from the source dataset.
 
 ## Breaking Changes
