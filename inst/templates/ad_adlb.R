@@ -102,14 +102,15 @@ adlb <- lb %>%
   ) %>%
   derive_vars_dy(reference_date = TRTSDT, source_vars = vars(ADT))
 
-suppressMessages(adlb <- adlb %>%
+adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
   # Replace with PARAMCD lookup function
   derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD),
-    check_type = "none"
+    check_type = "none",
+    print_not_mapped = FALSE
   ) %>%
   ## Calculate PARCAT1 AVAL AVALC ANRLO ANRHI ----
   mutate(
@@ -118,7 +119,7 @@ suppressMessages(adlb <- adlb %>%
     AVALC = LBSTRESC,
     ANRLO = LBSTNRLO,
     ANRHI = LBSTNRHI
-  ))
+  )
 
 # Derive Absolute values from fractional Differentials using WBC
 # Only derive where absolute values do not already exist
