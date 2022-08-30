@@ -255,6 +255,7 @@ adlb <- adlb %>%
     by_vars = vars(PARAMCD)
   ) %>%
   # Derive toxicity grade for low values ATOXGRL
+  # default metadata atoxgr_criteria_ctcv4 used
   derive_var_atoxgr_dir(
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
@@ -262,6 +263,7 @@ adlb <- adlb %>%
     get_unit_expr = extract_unit(PARAM)
   ) %>%
   # Derive toxicity grade for low values ATOXGRH
+  # default metadata atoxgr_criteria_ctcv4 used
   derive_var_atoxgr_dir(
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
